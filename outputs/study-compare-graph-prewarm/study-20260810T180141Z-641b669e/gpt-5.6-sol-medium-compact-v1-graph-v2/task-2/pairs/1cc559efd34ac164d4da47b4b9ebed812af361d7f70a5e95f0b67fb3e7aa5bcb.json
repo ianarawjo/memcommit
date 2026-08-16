@@ -1,0 +1,242 @@
+{
+  "coverage": {
+    "expected": 23,
+    "observed": 23
+  },
+  "created_at": "2026-08-11T00:16:01.692748Z",
+  "description_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+  "issues": [],
+  "kind": "STUDY_COMPARE_GRAPH_PAIR",
+  "left": {
+    "context_digest": "dd57f5a09e0271c33b7dccbe4935bf1a8d5be14dc7c618906e8af51709bbea89",
+    "context_uid": "b0c4b50c-f70b-5b0c-a1eb-0fd63e0531bf",
+    "memory_count": 11,
+    "name": "task-2/advisor1/claim-evidence"
+  },
+  "method": "COMPACT_DECISION_VECTOR_V1",
+  "operation": "COMPARE",
+  "pair_key": "1cc559efd34ac164d4da47b4b9ebed812af361d7f70a5e95f0b67fb3e7aa5bcb",
+  "provider": {
+    "condition": "COMPACT_DECISION_VECTOR",
+    "contract_valid": true,
+    "elapsed_seconds": 66.27344062499469,
+    "error_type": null,
+    "failure_category": null,
+    "operation": "compare_contexts_compact_ab_v1",
+    "prompt_chars": 9011,
+    "provider_calls": 1,
+    "provider_run": {
+      "completion_tokens": null,
+      "identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "operation": "compare_contexts_compact_ab_v1",
+      "prompt_tokens": null,
+      "upstream_model": "gpt-5.6-sol",
+      "upstream_provider": "openai-codex"
+    },
+    "provider_seconds": 66.27253270799702,
+    "response_bytes": 641,
+    "response_chars": 635,
+    "schema_chars": 1382,
+    "validation_error": null,
+    "validation_seconds": 0.0008964159933384508
+  },
+  "relations": [
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "06f6c673-ea0c-5657-89d2-3f8711097cd7",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "cd475113-5354-5f80-b063-7628e4359afc",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "86fe1306-7650-58cc-a3df-79870c61784d",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000001",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "58991ce7-d394-5087-b14f-0b014b0ec6ad",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000002",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "f5adf029-a750-5a3a-8eb8-d68e43bb5c13",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000003",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "b2a7ff8a-dfca-5857-8733-fe03cbd943ec",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000004",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "The reference requires per-choice traceability to user needs, while the compared frame requires submission-stage review of broader problem–intervention–study–contribution coherence.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "1f0c95f4-69bb-5764-a358-d428ff7019d2",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "0dda8eb3-3287-5bb6-9b26-b1c00cc038d9",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "0f89ab25-d9ee-5669-aa99-a0fe07803915",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000005",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "5d022e45-09c0-515e-98f1-68b2aec686bc",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "ec54ce10-07db-5ae3-94a5-8f3621fed4a9",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "48a91d19-cc68-5400-8971-8125236f3fbf",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000006",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "9939e9e8-d97d-57db-974a-750566ca9e2b",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "8dae0ad6-2a6d-5d99-98db-b0d48a1140e5",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "02f8ddd8-32b0-5e3b-b358-5e0472a6e0d2",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "d17ba26c-187e-57bc-8468-c9c053fc303d",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000007",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "EQUIVALENT",
+      "members": [
+        {
+          "memory_uid": "41060e8e-95ff-58c1-8b71-36a501a9bd23",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "877015ae-ab0b-561c-9fe3-3abb2d0aaa4e",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000008",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "c8e0c9dd-dc4a-5a7d-9a82-e7ee449a4b25",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "3e4a9a3b-abc2-54ed-9b87-f81abf61b541",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000009",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "f93c5baa-3c2b-5e37-b07b-0b00e8b22ab9",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "fb785649-1947-5e7d-aafb-308f14fb21b4",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000010",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "774341c9-b92d-53a5-a24c-59c75e39756b",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000011",
+      "status": "RESOLVED"
+    }
+  ],
+  "right": {
+    "context_digest": "adcb1ff51b2facc8282e8a56d8fec5150dd8e7376b7889d21013f71fee66b9b8",
+    "context_uid": "57ec8c37-1a0a-5f3b-82e9-51adad82677c",
+    "memory_count": 12,
+    "name": "task-2/advisor1/review"
+  },
+  "schema_version": 1,
+  "semantic_content_in_participant_report": false,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

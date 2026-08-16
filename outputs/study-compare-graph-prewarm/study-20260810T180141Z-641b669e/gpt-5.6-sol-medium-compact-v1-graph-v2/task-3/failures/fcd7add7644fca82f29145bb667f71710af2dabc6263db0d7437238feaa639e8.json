@@ -1,0 +1,12 @@
+{
+  "attempt_count": 2,
+  "created_at": "2026-08-11T00:47:38.061413Z",
+  "error": "Codex compare returned a cross-source relation without both PEER sides.",
+  "error_type": "ComparisonProviderError",
+  "kind": "STUDY_COMPARE_GRAPH_PAIR_FAILURE",
+  "left": "task-3/local/guardrails/downstream-use",
+  "pair_key": "fcd7add7644fca82f29145bb667f71710af2dabc6263db0d7437238feaa639e8",
+  "right": "task-3/local/personal-memory/2024",
+  "schema_version": 1,
+  "task": "task-3"
+}

@@ -1,0 +1,406 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:46:57.750485+00:00",
+      "frames": [
+        {
+          "context_digest": "492e513a553a9191e2c646cca49364b336ae6d163de5688eeca8cc661bbbdb32",
+          "context_name": "task-3/local/personal-memory/2024/11",
+          "context_uid": "0d5e1eef-1669-5589-94ba-b46c9c2080dc",
+          "memories": [
+            {
+              "content": "The user changed their schedule once in November 2024 because of their mother's hospital visit.",
+              "content_digest": "f08f07dda1b468ab191a59d87e7ceb8068189964edee2010abdae6e525d6103f",
+              "position": 0,
+              "uid": "bb17c696-0c1c-516f-8ad9-68a4b159ce22"
+            },
+            {
+              "content": "After seeing the reason for the schedule change written in a calendar invitation, the user asked for it to be removed.",
+              "content_digest": "7bfc906526c255f90a85b6dcc4b28ea1b0a9389e9f17ba989a4ce098280578c8",
+              "position": 1,
+              "uid": "195ba5ab-3ee0-5594-a859-9f2b5eadf9ea"
+            },
+            {
+              "content": "The user was able to reschedule the appointment after providing only a new time, without a reason.",
+              "content_digest": "14f1bd0410c76aa3a0eb28a2212fd06558ab23b6dc012aa5529980a67efe3e2b",
+              "position": 2,
+              "uid": "4c8759cc-66aa-527c-a9d5-197d39b5d2b7"
+            },
+            {
+              "content": "On a day the user traveled in their father's car, they photographed the parking location.",
+              "content_digest": "111e71af27be5d109557440569352964544e9b702810741445172a6cf51f94f5",
+              "position": 3,
+              "uid": "d4b27ea7-d329-5dc7-b7ca-91d0cd50a958"
+            },
+            {
+              "content": "On the next visit, when the user did not take a photo, they walked one circuit of the parking garage while looking for the exit.",
+              "content_digest": "6d61d67e35552cb739d0220e480189706ec5bbac74f93b87149a6948d9ac2805",
+              "position": 4,
+              "uid": "32a19a57-9b04-5f86-92ba-202a9ac803e4"
+            },
+            {
+              "content": "After hearing preparation items from their mother by phone, the user omitted two items.",
+              "content_digest": "449dc73aad797f5acd3d898292cf9942f7d3b65b9faf52769ae5b3332285b4f3",
+              "position": 5,
+              "uid": "0eeffd8c-acd6-57bf-950d-20cfa1fe62b3"
+            },
+            {
+              "content": "After receiving the preparation items again by text, the user put all of them in their bag.",
+              "content_digest": "9539ab90f598a96d97a73b7954db8834d3106861ba6ecc814e579a348e0145d6",
+              "position": 6,
+              "uid": "07ea3801-8666-581d-b846-2f45bf99ca19"
+            },
+            {
+              "content": "The user's mother does not want the reason for her visit disclosed in the user's external schedule.",
+              "content_digest": "b1aff7bb5b5df1ec773fd8875205cd9fdfa2fd5b520cf91b7c84c9e3054b4feb",
+              "position": 7,
+              "uid": "9e70b92e-1d8d-51ef-962d-bd9b348a56d5"
+            },
+            {
+              "content": "Do not include the mother's reason for a visit when conveying the user's availability externally.",
+              "content_digest": "b9473919c63f233fc66c49bbf00b20a8ab9532bcb1b8ce3896c442afed4229d9",
+              "position": 8,
+              "uid": "d76686fd-9f1d-5d94-931b-4b49c86a8f4e"
+            },
+            {
+              "content": "Some daily-life services may operate for shorter hours during the year-end holiday period.",
+              "content_digest": "48d4487aba4c395527f9dfeac9488f45556d1bd89475f8620b0a64d84e4479fc",
+              "position": 9,
+              "uid": "820a5de9-9e08-52c7-8747-5155fe341bb4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "f1cf54d0-059d-41b1-a580-44e2de39663b"
+        },
+        {
+          "context_digest": "d28031209c5edc768a592166e26351dd5bce0c7568d379fcaceab173450041c8",
+          "context_name": "task-3/local/personal-memory/2026/02",
+          "context_uid": "7ffcbc10-1703-54b0-9545-99742b51d333",
+          "memories": [
+            {
+              "content": "The user keeps basic repair tools in a box beneath the sink.",
+              "content_digest": "c2a23bace63735c502081b19682a8ceb3e37156b9aadd6f7739e2005c20469d6",
+              "position": 0,
+              "uid": "7d3daf76-a21e-5117-a534-6175ab2d2861"
+            },
+            {
+              "content": "On a day the faucet leaked, the user placed only a towel beneath it, and the floor became wet as well.",
+              "content_digest": "ad6baa7e1848e4e61bdaf22bc5c8665122330b5c70c8ae192216abbba17c6134",
+              "position": 1,
+              "uid": "70a6d9f5-180f-5174-b247-690e10baa23e"
+            },
+            {
+              "content": "After sending a photo to building management, the user finalized the time for a repair visit.",
+              "content_digest": "82b36c7a95e51a0dfa32768c2a437d509b75c0f93bc51a99a636f2c9739a20da",
+              "position": 2,
+              "uid": "9fcd922c-147c-517b-82b3-180fdfb13f33"
+            },
+            {
+              "content": "Before the technician's visit, the user emptied the area beneath the sink so work could begin immediately.",
+              "content_digest": "dbc3b48e5bc4b406dc17067dd93d92e845e3706f47c8706f9a5d5ef17bf64617",
+              "position": 3,
+              "uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5"
+            },
+            {
+              "content": "On a day the user wrote the visit time only in the calendar and turned off the reminder, they heard the doorbell late.",
+              "content_digest": "95fab6bcab815dd8bdd5fecb867f84c6d2f1a901771603b1dbf197cde3c1d19d",
+              "position": 4,
+              "uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65"
+            },
+            {
+              "content": "For the next visit, the user enabled a reminder 30 minutes beforehand and answered immediately at the entrance.",
+              "content_digest": "818783ff21b2d369935b9994c17b28f93f84ea7558dab9f2de20d0aad21f86a3",
+              "position": 5,
+              "uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a"
+            },
+            {
+              "content": "After the repair, the user called their maternal aunt to confirm that the spare key entrusted to her was still there.",
+              "content_digest": "ac01b9816dda2d6bf16f22b41157120b7ffdd75d19638f6313a88e1ce6e7a1f1",
+              "position": 6,
+              "uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441"
+            },
+            {
+              "content": "The user's maternal aunt considers it unsafe to hand the spare key to a repair technician without the user's explicit request.",
+              "content_digest": "f7c7c0306c81cc6de9f02aa1aed7d411db3f29757d024e7d5a1679b1ff308948",
+              "position": 7,
+              "uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd"
+            },
+            {
+              "content": "Obtain the user's reconfirmation before scheduling an external worker to enter the residential unit.",
+              "content_digest": "34382e40f4907bea82728787fdeb150e299d46a0079ae2847d4eda6d6d892d22",
+              "position": 8,
+              "uid": "4716a67b-8602-564c-9e89-85cd4ee158f9"
+            },
+            {
+              "content": "A multi-unit residential building's repair schedule may change because of emergency work or parts availability.",
+              "content_digest": "d701fdd1ffbf17ff0890c583b5bf39849e3c6e3cc296fde7e00d3d1ecc0ef196",
+              "position": 9,
+              "uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "56db9efe-6bf0-4927-8ca8-7c56bc07cb35"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate operational domains. The reference centers on privacy-preserving schedule changes, practical memory aids, and holiday service hours; the compared frame centers on home repairs, visit reminders, residential access safeguards, and repair timing uncertainty. Broad structural parallels do not establish shared claims.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f1cf54d0-059d-41b1-a580-44e2de39663b",
+              "memory_uid": "bb17c696-0c1c-516f-8ad9-68a4b159ce22"
+            }
+          ],
+          "reason": "This is independently useful historical context found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A November 2024 schedule change occurred because of the user's mother's hospital visit.",
+          "uid": "55345c57-b399-505f-bedb-db4b5b300e47"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f1cf54d0-059d-41b1-a580-44e2de39663b",
+              "memory_uid": "195ba5ab-3ee0-5594-a859-9f2b5eadf9ea"
+            },
+            {
+              "frame_uid": "f1cf54d0-059d-41b1-a580-44e2de39663b",
+              "memory_uid": "9e70b92e-1d8d-51ef-962d-bd9b348a56d5"
+            },
+            {
+              "frame_uid": "f1cf54d0-059d-41b1-a580-44e2de39663b",
+              "memory_uid": "d76686fd-9f1d-5d94-931b-4b49c86a8f4e"
+            }
+          ],
+          "reason": "The removal request, stated preference, and outward-communication rule express one reference-only privacy claim.",
+          "status": "RESOLVED",
+          "summary": "The mother's visit reason should be withheld from the user's externally visible scheduling details.",
+          "uid": "7dc6375b-b4e9-5442-8168-b2b806ca436d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f1cf54d0-059d-41b1-a580-44e2de39663b",
+              "memory_uid": "4c8759cc-66aa-527c-a9d5-197d39b5d2b7"
+            }
+          ],
+          "reason": "This is a reference-only procedural capability distinct from the privacy preference itself.",
+          "status": "RESOLVED",
+          "summary": "The appointment could be rescheduled by supplying a new time without disclosing a reason.",
+          "uid": "4aa821ee-2938-505d-bf68-00b9d0a88be2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f1cf54d0-059d-41b1-a580-44e2de39663b",
+              "memory_uid": "d4b27ea7-d329-5dc7-b7ca-91d0cd50a958"
+            },
+            {
+              "frame_uid": "f1cf54d0-059d-41b1-a580-44e2de39663b",
+              "memory_uid": "32a19a57-9b04-5f86-92ba-202a9ac803e4"
+            }
+          ],
+          "reason": "The two reference memories form one contrasted episode about a parking-location memory aid.",
+          "status": "RESOLVED",
+          "summary": "Recording the parking location by photo was associated with easier navigation than a later visit without a photo.",
+          "uid": "456a680a-82df-589f-8c2d-932909ca21ce"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f1cf54d0-059d-41b1-a580-44e2de39663b",
+              "memory_uid": "0eeffd8c-acd6-57bf-950d-20cfa1fe62b3"
+            },
+            {
+              "frame_uid": "f1cf54d0-059d-41b1-a580-44e2de39663b",
+              "memory_uid": "07ea3801-8666-581d-b846-2f45bf99ca19"
+            }
+          ],
+          "reason": "The two reference memories split one contrasted episode about delivery format and task completion.",
+          "status": "RESOLVED",
+          "summary": "Receiving preparation items in writing supported packing them completely, unlike hearing them only by phone.",
+          "uid": "b649e644-710d-5221-89f0-689259b7bbd2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f1cf54d0-059d-41b1-a580-44e2de39663b",
+              "memory_uid": "820a5de9-9e08-52c7-8747-5155fe341bb4"
+            }
+          ],
+          "reason": "This reference-only service-hours qualification has no operational counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Daily-life services may have shorter operating hours during the year-end holiday period.",
+          "uid": "f8fa95f2-65cb-5e59-96d1-0166ebf4ad04"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "56db9efe-6bf0-4927-8ca8-7c56bc07cb35",
+              "memory_uid": "7d3daf76-a21e-5117-a534-6175ab2d2861"
+            }
+          ],
+          "reason": "This is independently useful household-location information found only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user stores basic repair tools in a box beneath the sink.",
+          "uid": "fbef3bf8-b2ec-51fc-9901-14663a9cf48c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "56db9efe-6bf0-4927-8ca8-7c56bc07cb35",
+              "memory_uid": "70a6d9f5-180f-5174-b247-690e10baa23e"
+            }
+          ],
+          "reason": "This compared-only incident records the result of a specific leak response.",
+          "status": "RESOLVED",
+          "summary": "Using only a towel beneath a leaking faucet did not prevent the floor from becoming wet.",
+          "uid": "7a9b8603-a62c-5341-a55a-c8b1136d331d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "56db9efe-6bf0-4927-8ca8-7c56bc07cb35",
+              "memory_uid": "9fcd922c-147c-517b-82b3-180fdfb13f33"
+            }
+          ],
+          "reason": "This compared-only repair coordination sequence is operationally separate from the reference scheduling claims.",
+          "status": "RESOLVED",
+          "summary": "The user finalized a repair-visit time after sending building management a photo.",
+          "uid": "500e791f-34d9-5fb7-af62-4b747761992c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "56db9efe-6bf0-4927-8ca8-7c56bc07cb35",
+              "memory_uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5"
+            }
+          ],
+          "reason": "This is a compared-only preparation practice for repair access.",
+          "status": "RESOLVED",
+          "summary": "The user cleared the area beneath the sink before the technician arrived so work could start immediately.",
+          "uid": "2d00e803-edf0-5f02-b48d-ca584d56a497"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "56db9efe-6bf0-4927-8ca8-7c56bc07cb35",
+              "memory_uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65"
+            },
+            {
+              "frame_uid": "56db9efe-6bf0-4927-8ca8-7c56bc07cb35",
+              "memory_uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a"
+            }
+          ],
+          "reason": "The two compared memories form one contrasted episode about reminders and timely response.",
+          "status": "RESOLVED",
+          "summary": "A 30-minute reminder was associated with answering a repair visit promptly, unlike relying on an unreminded calendar entry.",
+          "uid": "95d79408-d97f-5220-8e08-a7159cec6d05"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "56db9efe-6bf0-4927-8ca8-7c56bc07cb35",
+              "memory_uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441"
+            }
+          ],
+          "reason": "This compared-only confirmation event is independently useful key-custody information.",
+          "status": "RESOLVED",
+          "summary": "After the repair, the user confirmed that the spare key entrusted to their maternal aunt remained with her.",
+          "uid": "d2aeb406-642a-515f-889e-13dbb3b5f5fd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "56db9efe-6bf0-4927-8ca8-7c56bc07cb35",
+              "memory_uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd"
+            }
+          ],
+          "reason": "This is a compared-only safeguard specifically governing release of the spare key.",
+          "status": "RESOLVED",
+          "summary": "The maternal aunt considers giving the spare key to a repair technician unsafe without the user's explicit request.",
+          "uid": "b458684a-9cae-5151-8a25-eeca945a0fcc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "56db9efe-6bf0-4927-8ca8-7c56bc07cb35",
+              "memory_uid": "4716a67b-8602-564c-9e89-85cd4ee158f9"
+            }
+          ],
+          "reason": "This compared-only policy governs authorization for residential entry, a different decision from transferring a spare key.",
+          "status": "RESOLVED",
+          "summary": "The user's confirmation should be obtained again before scheduling an external worker to enter the residential unit.",
+          "uid": "b92e09ef-ac79-5b7d-8b21-a8f40aab974a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "56db9efe-6bf0-4927-8ca8-7c56bc07cb35",
+              "memory_uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+            }
+          ],
+          "reason": "This compared-only contingency concerns repair scheduling rather than holiday service hours.",
+          "status": "RESOLVED",
+          "summary": "Emergency work or parts availability may change a multi-unit building's repair schedule.",
+          "uid": "ade4ec69-25aa-5e68-a6bd-cf6d963679ed"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame describes leak and repair handling, technician-visit reminders, spare-key and entry safeguards, and possible repair-schedule changes.",
+        "differences": "",
+        "reference_only": "The reference describes schedule-change privacy, parking-location photos, written preparation lists, and possible holiday service-hour reductions."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "a3784b49-2b8b-4f9e-a08c-0ec74d4ad4ca"
+    },
+    "analysis_digest": "7a49dbbb87023a033d3f053e4e7a99201f6fed6ae7595290e986273e3baafc9d",
+    "key": "f5a82c9eeffcbf37c425f25c42fc7cc062cd2cdb3beb04648ebc31c67cb20288",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 64.4270369170008,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "f5a82c9eeffcbf37c425f25c42fc7cc062cd2cdb3beb04648ebc31c67cb20288",
+  "created_at": "2026-08-13T18:48:02.177133Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/11",
+  "pair_key": "ffe5239efbab94cb30ba0ffdc1faa4150e7eeb3e68e908b687162da93b9d209c",
+  "provider_seconds": 64.4270369170008,
+  "right": "task-3/local/personal-memory/2026/02",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

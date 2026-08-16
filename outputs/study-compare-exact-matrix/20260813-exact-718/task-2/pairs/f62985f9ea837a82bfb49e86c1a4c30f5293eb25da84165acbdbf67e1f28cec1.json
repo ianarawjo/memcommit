@@ -1,0 +1,322 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:20:07.411923+00:00",
+      "frames": [
+        {
+          "context_digest": "42df7e2f7640040d1d6f6f6e566e80d178668a05ab6918b64eed91b91a41b7fb",
+          "context_name": "task-2/advisor1/evaluation",
+          "context_uid": "30568e2f-ce17-50ce-a25b-1cc4bdb94689",
+          "memories": [
+            {
+              "content": "Specify a single representative measure that serves as the criterion for retaining, modifying, or discarding compared design alternatives.",
+              "content_digest": "53aa7c1f81a4fac9e76985be094717aa122e7077a6fcfde46946babd5929d390",
+              "position": 0,
+              "uid": "a50f6ecb-de38-5769-8a6e-23b84a7eb35c"
+            },
+            {
+              "content": "HCI review panels verify whether clear criteria for judging design alternatives are established using the declared primary measure.",
+              "content_digest": "fabd83103e5c3474f56de113c477f7ced5e863a508ec39bd4ae23653d63ad354",
+              "position": 1,
+              "uid": "44c61beb-24a2-584a-ad96-e622690d8171"
+            },
+            {
+              "content": "Collect process measures to diagnose interaction steps where problems occurred, alongside the primary outcome measure.",
+              "content_digest": "6cc2fedef1b0af1c594e48610e08a169f3bca2405bf8773945eca33396aecb36",
+              "position": 2,
+              "uid": "23202824-b576-5d77-b591-8b4cc0757632"
+            },
+            {
+              "content": "Interpret evaluation results as differences between compared design alternatives rather than as success or failure of a single prototype.",
+              "content_digest": "5c578d52a7dbbf4e4b646e707bbee4ac37bcd23bceb0b4d5e09ef3c08df9c2f4",
+              "position": 3,
+              "uid": "65ae88bf-8002-5ada-8590-eaf345b38863"
+            },
+            {
+              "content": "Check boundary cases to verify whether the derived design principles retain explanatory power for adjacent situations not included in the comparison.",
+              "content_digest": "3edc3e181a8086233d889f35cb98c9448875fe3fee915467f712ca3eb2886de1",
+              "position": 4,
+              "uid": "79af5e5f-4868-5e76-bcd5-3f8e1d6a0bd1"
+            },
+            {
+              "content": "Controlled evaluation environments do not reproduce time pressure, peer intervention, or voluntary termination conditions found in daily use.",
+              "content_digest": "e58a1bc6a423874525aca9f864b9b0dbd1e3ef9961410608c5837c88f1153d9b",
+              "position": 5,
+              "uid": "3a65fc8b-a5b4-50fc-a60e-fc6f3fc44547"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "6907f3c3-5aec-41ba-a109-0e3d223a7702"
+        },
+        {
+          "context_digest": "bf5136a518ce85246184349a0194e446748710ed6da95e5c97d4a31d74ddc1b9",
+          "context_name": "task-2/advisor2/review",
+          "context_uid": "3398ba87-f01e-56bd-9da2-0ed0894524fa",
+          "memories": [
+            {
+              "content": "Conduct one review prior to submission focusing solely on the validity of user problems, system interventions, and field evaluation logic.",
+              "content_digest": "9b0b5596ec5924a6141926bfc337ec6e23d77dfb7b65facb26b42109f05f1fe4",
+              "position": 0,
+              "uid": "6d203c86-b6e0-586a-b896-b654fa319ed1"
+            },
+            {
+              "content": "Cross-check whether research questions align with the core functions of the system.",
+              "content_digest": "f7f9f49efe539881dae49a96adce0ec349435e4cc7f55229c88097e54fe03f93",
+              "position": 1,
+              "uid": "6b75bfb1-67f5-50bb-9e0c-04026062de96"
+            },
+            {
+              "content": "Cross-check whether field tasks align with representative measures.",
+              "content_digest": "3e993f6c978e14b5b0f6e8ada40d8a0067981e943c67636e9599fb652dca44a4",
+              "position": 2,
+              "uid": "3abfda89-82ab-5cc5-bdcd-5e2f274fd727"
+            },
+            {
+              "content": "Cross-check whether the evidence to be collected aligns with the design and operational decisions to be changed.",
+              "content_digest": "a4761a8dac6c60a2132619c8c8e963aca0d61216d689786b18574f5e30f1f3aa",
+              "position": 3,
+              "uid": "f14f1974-9035-5a2c-931a-89a5004a2567"
+            },
+            {
+              "content": "Finally verify that the user problem, system intervention, field evaluation, and expected contribution form one coherent logical flow.",
+              "content_digest": "47198a770770dc805e0f40a5f9b9c34ae1999f39ec2f9fa1c34b3280f21f5477",
+              "position": 4,
+              "uid": "6ba1d344-5d98-5c25-ba1e-b28c08d39747"
+            },
+            {
+              "content": "HCI reviewers view the validity of design interventions as low if research questions do not connect to system functions.",
+              "content_digest": "ffa754352dfecc597f84cff7cbf8607a12bbfd99ac22250cc84392bd85e37e73",
+              "position": 5,
+              "uid": "4a85ebbd-a4ee-5c88-9e93-5fc545f41c64"
+            },
+            {
+              "content": "HCI reviewers view the validity of evaluation plans as low if field tasks fail to generate representative measures.",
+              "content_digest": "f29eb5429d767b0fa171b7e9862b3d8d06dfd388739e95acd67b2321aaf1a91e",
+              "position": 6,
+              "uid": "75c4c71d-28e3-559c-99d1-f0dccc31a9e2"
+            },
+            {
+              "content": "HCI reviewers view the practical utility of contributions as low if collected evidence cannot change design or operational decisions.",
+              "content_digest": "6b9ae0bc59cda995d674479dfe95f43359ff04e68cb07633957885ee5cf1336c",
+              "position": 7,
+              "uid": "577e5506-78e8-5768-b288-7a5986347cce"
+            },
+            {
+              "content": "Before submission, conduct a sequential walkthrough with field liaisons of installation failures, operational interruptions, and recovery scenarios.",
+              "content_digest": "115fa1f22eb7f55918620418f89def51ba84bd36e102875a5f5e560de5305dda",
+              "position": 8,
+              "uid": "9ce34a9a-4ba2-5b32-a1de-b0469ddc3f95"
+            },
+            {
+              "content": "Verify in one sentence how each proposed contribution could actually alter specific design or operational decisions.",
+              "content_digest": "1c6ef38e42f40e9cd6ab5323deaa825efb1136b926b66af9337ea6debaf8600e",
+              "position": 9,
+              "uid": "f8253f92-c60c-57e1-a630-6b31abe080ae"
+            },
+            {
+              "content": "The user must distinguish unconfirmed field partners and equipment from finalized ones so remaining execution risks can be assessed.",
+              "content_digest": "c2eb0936c09d8796092950aba699664f79f2222f27523e37a1af5feabe2b8058",
+              "position": 10,
+              "uid": "f5ad6933-3e22-5c47-bdaf-bacc9c9a5b3c"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "74f7ea64-82cf-4471-a099-153cb679a6f1"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "Both frames promote decision-relevant measurement, reviewer scrutiny, and attention to real-world operating conditions. The reference additionally covers diagnostic measures, comparative interpretation, and boundary testing, while the compared frame adds submission-level coherence, function alignment, and execution-risk checks.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "6907f3c3-5aec-41ba-a109-0e3d223a7702",
+              "memory_uid": "a50f6ecb-de38-5769-8a6e-23b84a7eb35c"
+            },
+            {
+              "frame_uid": "74f7ea64-82cf-4471-a099-153cb679a6f1",
+              "memory_uid": "f14f1974-9035-5a2c-931a-89a5004a2567"
+            },
+            {
+              "frame_uid": "74f7ea64-82cf-4471-a099-153cb679a6f1",
+              "memory_uid": "577e5506-78e8-5768-b288-7a5986347cce"
+            },
+            {
+              "frame_uid": "74f7ea64-82cf-4471-a099-153cb679a6f1",
+              "memory_uid": "f8253f92-c60c-57e1-a630-6b31abe080ae"
+            }
+          ],
+          "reason": "The reference establishes a representative measure as the criterion for choosing among alternatives, while the compared material checks whether evidence and contributions can alter specific decisions; these are complementary parts of the same decision-relevance policy.",
+          "status": "RESOLVED",
+          "summary": "Evaluation criteria, evidence, and stated contributions should connect explicitly to concrete design or operational decisions.",
+          "uid": "e394f1d0-dee1-5dcc-97a5-420e971d1b10"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "6907f3c3-5aec-41ba-a109-0e3d223a7702",
+              "memory_uid": "44c61beb-24a2-584a-ad96-e622690d8171"
+            },
+            {
+              "frame_uid": "74f7ea64-82cf-4471-a099-153cb679a6f1",
+              "memory_uid": "3abfda89-82ab-5cc5-bdcd-5e2f274fd727"
+            },
+            {
+              "frame_uid": "74f7ea64-82cf-4471-a099-153cb679a6f1",
+              "memory_uid": "75c4c71d-28e3-559c-99d1-f0dccc31a9e2"
+            }
+          ],
+          "reason": "One side requires review of criteria grounded in the declared primary measure, while the other requires field tasks to generate representative measures and treats failure to do so as weakening the evaluation plan.",
+          "status": "RESOLVED",
+          "summary": "Reviewers should verify that evaluation tasks and judging criteria are traceable to representative measures.",
+          "uid": "f92afdc6-69bd-5bbe-90af-9b68763ebc7e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6907f3c3-5aec-41ba-a109-0e3d223a7702",
+              "memory_uid": "23202824-b576-5d77-b591-8b4cc0757632"
+            }
+          ],
+          "reason": "This diagnostic measurement requirement appears only in the reference frame and is independently useful beyond selecting a representative outcome measure.",
+          "status": "RESOLVED",
+          "summary": "Process measures should accompany the primary outcome measure to locate problematic interaction steps.",
+          "uid": "264d6e15-d649-5b72-bb5e-a84b4255845f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6907f3c3-5aec-41ba-a109-0e3d223a7702",
+              "memory_uid": "65ae88bf-8002-5ada-8590-eaf345b38863"
+            }
+          ],
+          "reason": "Only the reference frame specifies this comparative interpretation rule.",
+          "status": "RESOLVED",
+          "summary": "Evaluation findings should be interpreted as differences among design alternatives rather than as isolated prototype success or failure.",
+          "uid": "38bdb09b-61ee-58ca-a31e-715c859d0fbf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6907f3c3-5aec-41ba-a109-0e3d223a7702",
+              "memory_uid": "79af5e5f-4868-5e76-bcd5-3f8e1d6a0bd1"
+            }
+          ],
+          "reason": "Only the reference frame addresses the explanatory generalization of design principles through adjacent-case testing.",
+          "status": "RESOLVED",
+          "summary": "Boundary cases should test whether derived design principles explain adjacent situations outside the original comparison.",
+          "uid": "0a16238f-322c-57b9-bc6e-9df36c20625d"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "6907f3c3-5aec-41ba-a109-0e3d223a7702",
+              "memory_uid": "3a65fc8b-a5b4-50fc-a60e-fc6f3fc44547"
+            },
+            {
+              "frame_uid": "74f7ea64-82cf-4471-a099-153cb679a6f1",
+              "memory_uid": "9ce34a9a-4ba2-5b32-a1de-b0469ddc3f95"
+            }
+          ],
+          "reason": "The reference identifies missing daily-use pressures and termination conditions, while the compared frame prescribes walkthroughs of failures, interruptions, and recovery; both materially support assessment of operational realism.",
+          "status": "RESOLVED",
+          "summary": "Evaluation planning should account for operational disruptions and use conditions that controlled evaluation may omit.",
+          "uid": "88c86ce9-4132-5826-93f0-5c7ff7e8d73c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "74f7ea64-82cf-4471-a099-153cb679a6f1",
+              "memory_uid": "6d203c86-b6e0-586a-b896-b654fa319ed1"
+            },
+            {
+              "frame_uid": "74f7ea64-82cf-4471-a099-153cb679a6f1",
+              "memory_uid": "6ba1d344-5d98-5c25-ba1e-b28c08d39747"
+            }
+          ],
+          "reason": "The compared memories split one underlying review requirement into its review procedure and its end-to-end coherence test, with no corresponding requirement in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A focused pre-submission review should verify the coherent logic linking user problems, interventions, field evaluation, and expected contributions.",
+          "uid": "6fa0481d-9bf2-5614-ac69-05b6757d01ed"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "74f7ea64-82cf-4471-a099-153cb679a6f1",
+              "memory_uid": "6b75bfb1-67f5-50bb-9e0c-04026062de96"
+            },
+            {
+              "frame_uid": "74f7ea64-82cf-4471-a099-153cb679a6f1",
+              "memory_uid": "4a85ebbd-a4ee-5c88-9e93-5fc545f41c64"
+            }
+          ],
+          "reason": "The compared memories state the alignment check and its reviewer consequence as two parts of one underlying claim absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Research questions should connect to core system functions, because disconnection weakens the validity of design interventions.",
+          "uid": "1198fc83-03ac-5d14-917a-df44bbd579cb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "74f7ea64-82cf-4471-a099-153cb679a6f1",
+              "memory_uid": "f5ad6933-3e22-5c47-bdaf-bacc9c9a5b3c"
+            }
+          ],
+          "reason": "Only the compared frame requires explicit disclosure of unresolved field dependencies.",
+          "status": "RESOLVED",
+          "summary": "Unconfirmed field partners and equipment should be distinguished from finalized resources so execution risks remain assessable.",
+          "uid": "742f4b00-e776-5ba9-bd9b-6e840a306e13"
+        }
+      ],
+      "reports": {
+        "both": "Both require representative measures to support concrete decisions, scrutiny of task-to-measure alignment, and consideration of operational conditions beyond controlled evaluation.",
+        "compared_only": "The compared frame uniquely requires a coherent pre-submission logic review, alignment between research questions and system functions, and disclosure of unresolved partner and equipment risks.",
+        "differences": "",
+        "reference_only": "The reference uniquely addresses process diagnostics, comparative rather than single-prototype interpretation, and testing whether principles generalize to adjacent cases."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "20bd402d-ea2d-49f7-9193-5b0103454446"
+    },
+    "analysis_digest": "86e8bee904785f12f7ffe57f8cedf3055f83835ebf410562854f3331b9ffb354",
+    "key": "e58fee002b124990e36082f78f8aae1950cadfd815c023fd49adaeb78abb2f78",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 66.65552537499752,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "e58fee002b124990e36082f78f8aae1950cadfd815c023fd49adaeb78abb2f78",
+  "created_at": "2026-08-13T18:21:14.066897Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/evaluation",
+  "pair_key": "f62985f9ea837a82bfb49e86c1a4c30f5293eb25da84165acbdbf67e1f28cec1",
+  "provider_seconds": 66.65552537499752,
+  "right": "task-2/advisor2/review",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

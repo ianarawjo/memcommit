@@ -1,0 +1,406 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:36:35.582959+00:00",
+      "frames": [
+        {
+          "context_digest": "9fdb8cdfae14edf54f7410c0e8dd59527179de290b3d7c5f1b0f58494275b076",
+          "context_name": "task-3/local/personal-memory/2024/03",
+          "context_uid": "97c5905c-359b-5497-956f-b92db9ddbd2f",
+          "memories": [
+            {
+              "content": "The instructions for one medication the user takes say to take it after the evening meal.",
+              "content_digest": "32bba9f2936e560ddd5f4c5515895f2954b9c8722fcd501644569d1ff4f7b97c",
+              "position": 0,
+              "uid": "12ba4249-9450-5f2e-b648-5369a7997b26"
+            },
+            {
+              "content": "On a day with a morning appointment, the user miscalculated the fasting period and checked again at the reception desk.",
+              "content_digest": "532396ed2265321fbd4ca28ed1de2962211a357195bc9839503330c6cb0ab281",
+              "position": 1,
+              "uid": "051e79ff-5363-5160-9a13-46568fd13306"
+            },
+            {
+              "content": "For an afternoon visit, the user felt less rushed while preparing to travel than for a morning visit.",
+              "content_digest": "276fa255e4a4945f1475fa66129069ea33514bc24c98a246e9ab0d0000c156fa",
+              "position": 2,
+              "uid": "e7f1fcf7-ee2f-57d8-98cb-781e31e481e8"
+            },
+            {
+              "content": "On a day there was no waiting chair, the user stood for 20 minutes and their back became uncomfortable.",
+              "content_digest": "1c412785950057f01b1e7c10b716977cdb8bfb2b0605ef5bfdbdc6e349f6aaf8",
+              "position": 3,
+              "uid": "18d58666-2cfa-5959-8da9-2745bed56e11"
+            },
+            {
+              "content": "On a day medication instructions were explained all at once and at length, the user failed to write down an important time.",
+              "content_digest": "f3629bba06d053fa20712982f70b8dfd574b41a1b5ecd29d7c29f1b60742f647",
+              "position": 4,
+              "uid": "8fdede6e-64ed-5e4c-81f4-7a1075165568"
+            },
+            {
+              "content": "On a day medication times were confirmed one line at a time, the user copied them directly into their schedule after returning home.",
+              "content_digest": "acade505d6c0cdfddae0d169dea81c06a757aa7d7d2c760f6cdc253b06af5ded",
+              "position": 5,
+              "uid": "21f679f7-7d75-5c01-b6c3-b0d4bea5f2f0"
+            },
+            {
+              "content": "On a visit when their younger brother drove them, the user did not have to find a separate route home.",
+              "content_digest": "5e17c1227c7cbee7e995728edd17b4301903dfdc7a7bdc5f5ff3e06edfd357b3",
+              "position": 6,
+              "uid": "3ec03d39-3240-56d1-80da-313f79f2bf3a"
+            },
+            {
+              "content": "The user's younger brother prefers to receive a request for weekday-afternoon transportation two days beforehand rather than on the day itself.",
+              "content_digest": "7d1bf920ff730ddff86f328aaa3c3edf9d424170044bcd789a3ac55bffb5a839",
+              "position": 7,
+              "uid": "3069baac-fa68-5e94-8ba3-e888cf622f8c"
+            },
+            {
+              "content": "The local agent cannot determine the current prescription or whether use continues from medication notes alone.",
+              "content_digest": "89990815daa01f70a77b970b6a38cb9063f32fed898bd36e39a85551a1ad6200",
+              "position": 8,
+              "uid": "d7f215c6-57ea-561a-9627-3ce94203d507"
+            },
+            {
+              "content": "The waiting area at that clinic has too few chairs, so there may be periods when people must wait standing.",
+              "content_digest": "66c27ba4d6f3fb0d16b322a6de6d8afeb5c650fbe04162006a3288dd886ce1f0",
+              "position": 9,
+              "uid": "e6023aed-938d-5954-b8a7-8cb01340ee37"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "480677f0-f50c-445a-b93e-7590728f6517"
+        },
+        {
+          "context_digest": "b727ef7cf1cb7ca0f00ea3598d36577397e092dcb632f55c3eafb942850922d7",
+          "context_name": "task-3/local/personal-memory/2025/04",
+          "context_uid": "720d2021-1ec5-52ab-ace4-a93e02b05ad9",
+          "memories": [
+            {
+              "content": "The user keeps the shared laundry-room access card in an entrance drawer.",
+              "content_digest": "3c98e367c99e0867f1217c891dc5d982c115fd9d1b4bc3957cca6dbb6338203b",
+              "position": 0,
+              "uid": "a1c67646-6a75-504a-9508-d69e1d04b3e5"
+            },
+            {
+              "content": "The user went downstairs 25 minutes after the laundry finished and received a note from another household.",
+              "content_digest": "44968f6f10c0ae2d1dd775eb066564dada6346c6f59bdacf90d687c57e6c1e0f",
+              "position": 1,
+              "uid": "9479e799-95d7-50d2-af62-d1e0914a389b"
+            },
+            {
+              "content": "For the next load, the user set a reminder five minutes before the end and removed the laundry immediately.",
+              "content_digest": "bc77b81f6126e44bbffeb4ae2dfbb641d31a9742b7a196a106ac385321b48958",
+              "position": 2,
+              "uid": "528cb5ea-8c36-5206-beaa-19432250ec4d"
+            },
+            {
+              "content": "The user washed light-colored clothes with new jeans, and color transferred onto white socks.",
+              "content_digest": "ed0f36cf5ebe8f9542ad39ba45fc109634d72f1cb2b266c15dfe6655e3df3add",
+              "position": 3,
+              "uid": "85fb1639-2176-5329-b490-3325ff030db4"
+            },
+            {
+              "content": "The user later washed the new jeans separately, and the color of the other clothes did not change.",
+              "content_digest": "6e47fe1a02ac39064ea9db2d06d8a1f01f80302825bbe412df745401612e4a84",
+              "position": 4,
+              "uid": "431d170a-863f-596d-97c0-0c9634524ee5"
+            },
+            {
+              "content": "On a day the user did not check the dryer filter, the clothes needed another drying cycle.",
+              "content_digest": "8127e9f3ea34724673517f1e260a73acfb70e287a7e7de84e196ad1cb815f5a7",
+              "position": 5,
+              "uid": "4df33adc-cfba-50f2-b141-e2ebed38b81c"
+            },
+            {
+              "content": "On the next use, after emptying the filter, the user finished drying in one cycle.",
+              "content_digest": "932cfb8fc93277783d8990dad62cfd3e1c9a86e39ad1bd019ce00dac632c53d5",
+              "position": 6,
+              "uid": "ba7daae9-938d-55a1-af20-21cd10d395d8"
+            },
+            {
+              "content": "The building manager judges that not leaving finished laundry for a long time is fair to other households.",
+              "content_digest": "5eabe2d3dff252bb250abcde8fe2d528362afb0e73e7628e839715c3e8a3cd56",
+              "position": 7,
+              "uid": "abbf8742-38e3-5810-b222-fe91e3340962"
+            },
+            {
+              "content": "When creating a shared laundry-room reminder, base it on the end time of the machine the user started.",
+              "content_digest": "e00bc6fe09fea6fde6a27817bd6824a141c1ac4a656b9659067b7e1af9881b1f",
+              "position": 8,
+              "uid": "06273d22-0b42-5c55-9d70-eda14084219a"
+            },
+            {
+              "content": "Even if the local agent knows where the card is kept, it cannot know which machines in the shared laundry room are currently available.",
+              "content_digest": "d03f5583c9e4c686307af90ff00ff54e5ac0990e34296b3d241e4f299d15f4b7",
+              "position": 9,
+              "uid": "03ac930e-d745-5c29-8c24-5ced669817f9"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "34fdf4fc-d377-42bd-8ff9-ee0c9856cd29"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames contain independent practical knowledge in separate domains: the reference covers medication handling, clinic visits, waiting conditions, and transportation, while the compared frame covers shared-laundry access, timing, sorting, drying, etiquette, reminders, and availability limits. No cross-frame claim governs the same operational decision.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "480677f0-f50c-445a-b93e-7590728f6517",
+              "memory_uid": "12ba4249-9450-5f2e-b648-5369a7997b26"
+            }
+          ],
+          "reason": "This medication-timing instruction is independently useful and has no counterpart addressing that decision in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "One medication carries an instruction to be taken after the evening meal.",
+          "uid": "8efa9d65-5ce1-56f1-8fbb-47944f7ba835"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "480677f0-f50c-445a-b93e-7590728f6517",
+              "memory_uid": "051e79ff-5363-5160-9a13-46568fd13306"
+            }
+          ],
+          "reason": "This appointment-preparation episode is independently useful and is not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A morning appointment involved a fasting-period miscalculation that the user rechecked at reception.",
+          "uid": "33ec96f4-1ca2-5960-91df-dad53c6cc141"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "480677f0-f50c-445a-b93e-7590728f6517",
+              "memory_uid": "e7f1fcf7-ee2f-57d8-98cb-781e31e481e8"
+            }
+          ],
+          "reason": "This scheduling preference is independently useful and has no operational counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Preparing to travel for an afternoon visit felt less rushed than preparing for a morning visit.",
+          "uid": "12038d20-26ed-5ce3-b186-9eb5e15d446d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "480677f0-f50c-445a-b93e-7590728f6517",
+              "memory_uid": "18d58666-2cfa-5959-8da9-2745bed56e11"
+            },
+            {
+              "frame_uid": "480677f0-f50c-445a-b93e-7590728f6517",
+              "memory_uid": "e6023aed-938d-5954-b8a7-8cb01340ee37"
+            }
+          ],
+          "reason": "The memories split one clinic-waiting claim into the recurring seating shortage and its demonstrated effect on the user; the compared frame does not address it.",
+          "status": "RESOLVED",
+          "summary": "Insufficient clinic seating can require standing, which caused the user back discomfort during one extended wait.",
+          "uid": "beaed251-356c-51ec-9572-91226460336e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "480677f0-f50c-445a-b93e-7590728f6517",
+              "memory_uid": "8fdede6e-64ed-5e4c-81f4-7a1075165568"
+            },
+            {
+              "frame_uid": "480677f0-f50c-445a-b93e-7590728f6517",
+              "memory_uid": "21f679f7-7d75-5c01-b6c3-b0d4bea5f2f0"
+            }
+          ],
+          "reason": "The memories describe contrasting delivery conditions for one underlying medication-instruction comprehension claim, absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Medication times were captured successfully when confirmed line by line, whereas a long all-at-once explanation led to an important time being missed.",
+          "uid": "ecfa9ce8-c2b1-5fcf-8557-2dcf741758b9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "480677f0-f50c-445a-b93e-7590728f6517",
+              "memory_uid": "3ec03d39-3240-56d1-80da-313f79f2bf3a"
+            }
+          ],
+          "reason": "This transportation benefit is independently useful and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "When the user's younger brother drove, the user did not need to arrange a separate route home.",
+          "uid": "23df3a1b-d1fd-56cb-a288-de4b46a9cdd5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "480677f0-f50c-445a-b93e-7590728f6517",
+              "memory_uid": "3069baac-fa68-5e94-8ba3-e888cf622f8c"
+            }
+          ],
+          "reason": "This advance-notice preference independently governs ride coordination and is absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user's younger brother prefers two days' notice for weekday-afternoon transportation requests.",
+          "uid": "02373e48-b9e8-5c17-aa90-c055ea8c1171"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "480677f0-f50c-445a-b93e-7590728f6517",
+              "memory_uid": "d7f215c6-57ea-561a-9627-3ce94203d507"
+            }
+          ],
+          "reason": "This limitation concerns inferring prescription status and is operationally independent of the compared frame's laundry-availability limitation.",
+          "status": "RESOLVED",
+          "summary": "Medication notes alone do not establish the current prescription or whether its use continues.",
+          "uid": "e3685bba-bff1-515f-ab72-44737dd9edcf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "34fdf4fc-d377-42bd-8ff9-ee0c9856cd29",
+              "memory_uid": "a1c67646-6a75-504a-9508-d69e1d04b3e5"
+            }
+          ],
+          "reason": "This access-location fact is independently useful and has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The shared laundry-room access card is kept in an entrance drawer.",
+          "uid": "bf16870a-22d3-56a4-bac9-db663836d9ef"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "34fdf4fc-d377-42bd-8ff9-ee0c9856cd29",
+              "memory_uid": "9479e799-95d7-50d2-af62-d1e0914a389b"
+            },
+            {
+              "frame_uid": "34fdf4fc-d377-42bd-8ff9-ee0c9856cd29",
+              "memory_uid": "528cb5ea-8c36-5206-beaa-19432250ec4d"
+            }
+          ],
+          "reason": "The memories split one shared-machine collection-timing claim into a problem episode and a successful reminder-assisted episode, absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Delayed laundry collection drew a note from another household, while an advance reminder enabled immediate removal on the next load.",
+          "uid": "2ae84d19-c274-5ca7-b2fe-7f4b618194ba"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "34fdf4fc-d377-42bd-8ff9-ee0c9856cd29",
+              "memory_uid": "85fb1639-2176-5329-b490-3325ff030db4"
+            },
+            {
+              "frame_uid": "34fdf4fc-d377-42bd-8ff9-ee0c9856cd29",
+              "memory_uid": "431d170a-863f-596d-97c0-0c9634524ee5"
+            }
+          ],
+          "reason": "The memories provide contrasting outcomes for one laundry-sorting claim, which the reference frame does not address.",
+          "status": "RESOLVED",
+          "summary": "Washing new jeans with light clothes transferred color, while washing the jeans separately avoided color changes to other clothes.",
+          "uid": "23b215f5-afd5-5ed2-85c2-e17af66def9b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "34fdf4fc-d377-42bd-8ff9-ee0c9856cd29",
+              "memory_uid": "4df33adc-cfba-50f2-b141-e2ebed38b81c"
+            },
+            {
+              "frame_uid": "34fdf4fc-d377-42bd-8ff9-ee0c9856cd29",
+              "memory_uid": "ba7daae9-938d-55a1-af20-21cd10d395d8"
+            }
+          ],
+          "reason": "The memories provide contrasting outcomes for one dryer-filter claim, absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Skipping the dryer-filter check required another cycle, while emptying the filter was followed by drying in one cycle.",
+          "uid": "e0f4c856-702d-51f1-bea8-2c065981cf20"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "34fdf4fc-d377-42bd-8ff9-ee0c9856cd29",
+              "memory_uid": "abbf8742-38e3-5810-b222-fe91e3340962"
+            }
+          ],
+          "reason": "This shared-laundry etiquette judgment is independently useful and has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The building manager considers avoiding long delays in removing finished laundry fair to other households.",
+          "uid": "376091e9-4791-5405-86fd-a9ca29148c08"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "34fdf4fc-d377-42bd-8ff9-ee0c9856cd29",
+              "memory_uid": "06273d22-0b42-5c55-9d70-eda14084219a"
+            }
+          ],
+          "reason": "This reminder-construction rule independently governs laundry timing and is absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A shared laundry-room reminder should be based on the end time of the machine the user started.",
+          "uid": "03e1c3a6-5052-5704-b36f-34cdeeb4c47e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "34fdf4fc-d377-42bd-8ff9-ee0c9856cd29",
+              "memory_uid": "03ac930e-d745-5c29-8c24-5ced669817f9"
+            }
+          ],
+          "reason": "This limitation concerns live machine availability and is operationally independent of the reference frame's prescription-status limitation.",
+          "status": "RESOLVED",
+          "summary": "Knowing where the laundry-room access card is kept does not reveal which machines are currently available.",
+          "uid": "ed4026ed-83c4-5068-8630-04d6e354276f"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only material covers laundry-room access, prompt collection, color separation, dryer-filter effects, shared-room fairness, reminder timing, and uncertainty about machine availability.",
+        "differences": "",
+        "reference_only": "Reference-only material covers medication timing and communication, appointment preparation, clinic seating, brother-assisted transportation, and uncertainty about current prescriptions."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "85dc0aae-1f6c-4f07-be12-a61f3e768fa0"
+    },
+    "analysis_digest": "61c53e4c2a16242703acf887fa83dc61e96e9dc5e97dbb9fa8e1fa5a8c6bb3e9",
+    "key": "dda2cb4c857f50aae80c3599be3652405b778a3f2616472af7bb7e4af1ad25bd",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 49.06254529199941,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "dda2cb4c857f50aae80c3599be3652405b778a3f2616472af7bb7e4af1ad25bd",
+  "created_at": "2026-08-13T18:37:24.645000Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/03",
+  "pair_key": "7995a90e86cecd8c8482c0d69b5acacceacd7924ccfe05308e8db3a4aee6cf0a",
+  "provider_seconds": 49.06254529199941,
+  "right": "task-3/local/personal-memory/2025/04",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

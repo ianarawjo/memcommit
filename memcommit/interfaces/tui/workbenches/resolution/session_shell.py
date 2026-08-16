@@ -300,7 +300,9 @@ def session_todo_view(
     read_only: bool,
     whole_set_available: bool = True,
     read_only_handoff: SessionTodoView | None = None,
-    item_handoff: SessionTodoView | None = None,
+    item_handoff: (
+        SessionTodoView | Callable[[], SessionTodoView | None] | None
+    ) = None,
 ) -> SessionTodoView:
     """Derive one honest next action without creating semantic authority."""
 
@@ -2406,6 +2408,11 @@ def run_resolution_workbench_shell(
         current_navigation.sync(view)
         return view
 
+    def current_item_handoff() -> SessionTodoView | None:
+        """Resolve operation-owned dynamic handoffs from current draft state."""
+
+        return item_handoff() if callable(item_handoff) else item_handoff
+
     session_navigation = workbench_navigation or SessionWorkbenchNavigation()
     viewer_controller = SemanticViewerController(session_navigation)
     destination_available = (
@@ -2722,7 +2729,7 @@ def run_resolution_workbench_shell(
             read_only=read_only,
             whole_set_available=bool(global_strategies),
             read_only_handoff=read_only_handoff,
-            item_handoff=item_handoff,
+            item_handoff=current_item_handoff(),
         )
 
     def split_view_fragments():
@@ -3504,7 +3511,7 @@ def run_resolution_workbench_shell(
             read_only=read_only,
             whole_set_available=bool(global_strategies),
             read_only_handoff=read_only_handoff,
-            item_handoff=item_handoff,
+            item_handoff=current_item_handoff(),
         )
         if todo.kind not in {"REVIEW AND APPLY", "RESOLVE ALL"}:
             if todo.unresolved_item_uids:
@@ -3874,7 +3881,7 @@ def run_resolution_workbench_shell(
                     read_only=read_only,
                     whole_set_available=bool(global_strategies),
                     read_only_handoff=read_only_handoff,
-                    item_handoff=item_handoff,
+                    item_handoff=current_item_handoff(),
                 ).unresolved_item_uids
             ):
                 todo = session_todo_view(
@@ -3884,10 +3891,10 @@ def run_resolution_workbench_shell(
                     read_only=read_only,
                     whole_set_available=bool(global_strategies),
                     read_only_handoff=read_only_handoff,
-                    item_handoff=item_handoff,
+                    item_handoff=current_item_handoff(),
                 )
                 open_split_item(todo.unresolved_item_uids[0])
-            elif kind == "TODO" and item_handoff is not None:
+            elif kind == "TODO" and current_item_handoff() is not None:
                 item = current_navigation.current_item(active_view)
                 if item is None:
                     set_status("There is no finding to hand off.")
@@ -3919,7 +3926,7 @@ def run_resolution_workbench_shell(
                     read_only=read_only,
                     whole_set_available=bool(global_strategies),
                     read_only_handoff=read_only_handoff,
-                    item_handoff=item_handoff,
+                    item_handoff=current_item_handoff(),
                 ).kind
                 == "COMPLETE"
             ):
@@ -4746,7 +4753,7 @@ def run_resolution_workbench_shell(
             read_only=read_only,
             whole_set_available=bool(global_strategies),
             read_only_handoff=read_only_handoff,
-            item_handoff=item_handoff,
+            item_handoff=current_item_handoff(),
         )
         if todo.kind != "REVIEW AND APPLY":
             return False

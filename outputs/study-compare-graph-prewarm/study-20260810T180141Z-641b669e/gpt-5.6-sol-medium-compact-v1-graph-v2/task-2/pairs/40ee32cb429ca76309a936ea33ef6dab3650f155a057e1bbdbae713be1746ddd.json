@@ -1,0 +1,202 @@
+{
+  "coverage": {
+    "expected": 13,
+    "observed": 13
+  },
+  "created_at": "2026-08-11T00:28:56.621074Z",
+  "description_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+  "issues": [],
+  "kind": "STUDY_COMPARE_GRAPH_PAIR",
+  "left": {
+    "context_digest": "673626cf0c3650052d63b04173d43516860e2035d7038878998898bc5bebb2e3",
+    "context_uid": "6e9f8ad5-a43d-5dfd-99a3-604f2757da0d",
+    "memory_count": 7,
+    "name": "task-2/advisor2/evaluation"
+  },
+  "method": "COMPACT_DECISION_VECTOR_V1",
+  "operation": "COMPARE",
+  "pair_key": "40ee32cb429ca76309a936ea33ef6dab3650f155a057e1bbdbae713be1746ddd",
+  "provider": {
+    "condition": "COMPACT_DECISION_VECTOR",
+    "contract_valid": true,
+    "elapsed_seconds": 18.94254987500608,
+    "error_type": null,
+    "failure_category": null,
+    "operation": "compare_contexts_compact_ab_v1",
+    "prompt_chars": 6766,
+    "provider_calls": 1,
+    "provider_run": {
+      "completion_tokens": null,
+      "identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "operation": "compare_contexts_compact_ab_v1",
+      "prompt_tokens": null,
+      "upstream_model": "gpt-5.6-sol",
+      "upstream_provider": "openai-codex"
+    },
+    "provider_seconds": 18.941970500003663,
+    "response_bytes": 562,
+    "response_chars": 562,
+    "schema_chars": 1378,
+    "validation_error": null,
+    "validation_seconds": 0.0005686250078724697
+  },
+  "relations": [
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "f27576c7-6f53-5412-901c-19df7e1d5e2e",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000001",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "8608bdf3-49d7-54d0-a2fb-c883c24e40ef",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000002",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "General lifecycle decision thresholds and harm, disruption, or anomaly cessation thresholds govern explicitly different trigger scopes.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "b06bb706-f911-5767-8e27-b64c74d0e592",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "a3270872-1901-5d24-8ef1-374833599bf9",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000003",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "473ec6e8-29f0-5c83-b36d-b7d32eeb25a3",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000004",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "935cf79f-3e67-567d-ab55-35e8fad7eb37",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000005",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "bea0e97f-1217-507b-87a7-09ce85bae9fe",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000006",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "dbe435ff-fe32-54fe-a2e6-7b46694ce151",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000007",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "ceb095a9-3068-55ea-a06f-d954c121e007",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "962d7645-02b3-5611-8415-4370794c10d4",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000008",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "f6dd1368-0d90-5f1a-97d0-56594ce8f4b3",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000009",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "342e4697-873f-56a8-b4a4-896efe910144",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000010",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "6c4e9175-4590-5689-ae2b-678f0eb930b9",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000011",
+      "status": "RESOLVED"
+    }
+  ],
+  "right": {
+    "context_digest": "b598a4ff3268ef8c6c0d7bc5ff34af370074bcdd30d61bd3623fcdfb167f37d6",
+    "context_uid": "4283d797-6a33-5f39-b7f6-f4dbd3264389",
+    "memory_count": 6,
+    "name": "task-2/advisor2/safety"
+  },
+  "schema_version": 1,
+  "semantic_content_in_participant_report": false,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

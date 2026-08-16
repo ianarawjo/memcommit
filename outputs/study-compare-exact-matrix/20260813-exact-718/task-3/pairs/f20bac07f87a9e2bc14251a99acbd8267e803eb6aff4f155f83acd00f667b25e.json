@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:41:12.142135+00:00",
+      "frames": [
+        {
+          "context_digest": "6cb54691fcd12037c24daa71882bad82cd67c16ea72979f2a41e1e1b8eae22a8",
+          "context_name": "task-3/local/personal-memory/2024/06",
+          "context_uid": "8c641e5b-01d9-560c-a8c0-b52cee7402c8",
+          "memories": [
+            {
+              "content": "The user stores copies of identity documents in an encrypted folder.",
+              "content_digest": "83efe427335c1415d4a8d601d6e1c5d7a129c6962b74468d313b123e045b052f",
+              "position": 0,
+              "uid": "79576c1e-fa88-5d6e-b5e2-3d4ec11c3e06"
+            },
+            {
+              "content": "On a day the user transferred between buses twice, they rested for an hour after the trip.",
+              "content_digest": "907b9cc4c16b4b3fe53c2323d31afc83347ddc63775bd865bc42b62ca539f5bb",
+              "position": 1,
+              "uid": "28a1ff0b-e2d4-5cb6-9c26-949d86f76bac"
+            },
+            {
+              "content": "On a day the user took a direct route with a similar travel time, they remained seated to the destination.",
+              "content_digest": "0c0d1b12aa0ad393ac43982fe7d36d08f75d9e634c933593ef6a0a96614bb9ea",
+              "position": 2,
+              "uid": "0ad4a1f9-e3e9-517e-8cfc-f8e6307f1d3e"
+            },
+            {
+              "content": "After arriving at an entrance with stairs only, the user went around to an entrance on the other side of the building.",
+              "content_digest": "775d4c0a211f4509a0488cb3b2a790ae22c1b2ba2e96ed6b9100ae3cfb454315",
+              "position": 3,
+              "uid": "f772b0c7-502f-55b7-b431-ee6b20518d38"
+            },
+            {
+              "content": "On a day the user checked the accessible entrance location in advance, they arrived before the agreed time.",
+              "content_digest": "4e087a4e0ca48a3414580ce0d974da4b2221b304302de01cf305945866320a6a",
+              "position": 4,
+              "uid": "0b2d800b-a4ab-5422-bf06-56d17b98f604"
+            },
+            {
+              "content": "On a rainy day, the user's clothes became wet while crossing an uncovered section at a transfer stop.",
+              "content_digest": "dad5c9f35f0469edc528091e47f22365c1cb5de1b32e70335826d67a576fb47d",
+              "position": 5,
+              "uid": "b233f332-4927-549b-8dab-b554977fe363"
+            },
+            {
+              "content": "On a day the user traveled with their maternal uncle, they agreed to meet at an entrance near the elevator.",
+              "content_digest": "c81b012ae6686f47d54809c50ab559077b0e170d54792d34038f0f8fc32c6a96",
+              "position": 6,
+              "uid": "b38d0d63-c4b0-5955-857d-03cbcfd27f5b"
+            },
+            {
+              "content": "The user's maternal uncle prefers an aisle seat from which it is easy to stand during long-distance travel.",
+              "content_digest": "3ea31753296866c1bf438b51eba4110b0c6ed2e907e86dc21796166ed19d82df",
+              "position": 7,
+              "uid": "4668d326-b11c-5467-bca4-e8d5e242e375"
+            },
+            {
+              "content": "The local agent cannot know whether an accessible entrance is operating that day from past route records alone.",
+              "content_digest": "00fc09badcb1d569e3cb1e392ad18406a032d17749f71b44ed7bc121d5d72b4c",
+              "position": 8,
+              "uid": "a77c985c-3986-5141-9805-e3321b3cfa2c"
+            },
+            {
+              "content": "The transfer route the user takes has more boarding and alighting events and walking segments than the direct route.",
+              "content_digest": "f9320e36494ea5beb854d6bbe38a817ae73cd9fe68b75977438d35e44fb38fe6",
+              "position": 9,
+              "uid": "988926a1-3e28-5b3e-a41c-d9338971643e"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "854b9907-33e0-4ca1-8248-9bb83f3b1193"
+        },
+        {
+          "context_digest": "df0924e320cd14a29eaed60f78e82fd509c4062949b35706b2a7cb94571fb599",
+          "context_name": "task-3/local/personal-memory/2026/04",
+          "context_uid": "16e860a8-7a90-5b7a-adc3-1c487ef97e03",
+          "memories": [
+            {
+              "content": "The user collects clothes for donation in a large bag beside the entrance.",
+              "content_digest": "39f2f01c59b7fa4ca7529d510e1b0a6ffab6706861042f771cfe97f6f806efac",
+              "position": 0,
+              "uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            },
+            {
+              "content": "After emptying an entire drawer at once, the user could not find a charger they needed.",
+              "content_digest": "674c33ba6475f42b29b03e6f8711e0216f983f3d37fee3dacf9336e3bb4596bf",
+              "position": 1,
+              "uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            },
+            {
+              "content": "During the next organizing session, the user sorted items by type and put only items to be discarded in the bag.",
+              "content_digest": "63104b5a7fd380f818c8758c51f9550c7a7fa41ff91f1dd314225d1824b69643",
+              "position": 2,
+              "uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            },
+            {
+              "content": "Even after photographing unworn clothes, the user did not take them out again for one month.",
+              "content_digest": "519f131096440719dcd3412f4439c5cfe44b7f402684170209708040692dc5fd",
+              "position": 3,
+              "uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            },
+            {
+              "content": "After moving those clothes to the donation bag, the user cleared one closet compartment.",
+              "content_digest": "45db58ae108a299344d982d8606fff26f733252da691cf01417e760909ff6057",
+              "position": 4,
+              "uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            },
+            {
+              "content": "The user nearly discarded an important paper with advertising and checked the recycling box again.",
+              "content_digest": "6bf928f67944656e5f3c68d8869c0cefd039a588f0ba735f94520231ef58017c",
+              "position": 5,
+              "uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            },
+            {
+              "content": "During the next organizing session, the user kept a separate document box and did not mix the papers.",
+              "content_digest": "adac8d4266c6b11e15d29c484665bc5dcc915f9aa319198b6a69d0e7b0131bb3",
+              "position": 6,
+              "uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            },
+            {
+              "content": "The user's mother asks the user to check whether she needs kitchen items in good condition before discarding them.",
+              "content_digest": "0752bc2ac00c0b1301c45ab4c2e73f63c57e6ebc4255dcc1c13330ffda906612",
+              "position": 7,
+              "uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            },
+            {
+              "content": "Confirm with the user before marking a personal document or another person's property as a disposal candidate.",
+              "content_digest": "17062e2cd4738619e81e211cb2f53d14e78c5f4eab9ae49053ce7e06935a7db5",
+              "position": 8,
+              "uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            },
+            {
+              "content": "The local agent cannot determine an object's emotional meaning from frequency of use alone.",
+              "content_digest": "9c86bcfe2b209bf7957dced0eab000b42f97b6a435d705ccaccb15e49be3691d",
+              "position": 9,
+              "uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "82665bb3-9c8f-4e4b-bcde-ea079f68f7e7"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover independent domains: the reference records travel accessibility, route burden, and document storage, while the compared frame records organizing outcomes, disposal safeguards, family-property checks, and limits on inferring sentimental value. No claims govern the same operational decision closely enough for a cross-frame relation.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "854b9907-33e0-4ca1-8248-9bb83f3b1193",
+              "memory_uid": "79576c1e-fa88-5d6e-b5e2-3d4ec11c3e06"
+            }
+          ],
+          "reason": "This is independently useful information about secure document storage, with no compared-side claim addressing that practice.",
+          "status": "RESOLVED",
+          "summary": "The user keeps copies of identity documents in encrypted storage.",
+          "uid": "4a6cca85-d03a-5ee7-82d8-1dce409c9af9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "854b9907-33e0-4ca1-8248-9bb83f3b1193",
+              "memory_uid": "28a1ff0b-e2d4-5cb6-9c26-949d86f76bac"
+            }
+          ],
+          "reason": "This is a one-sided observation about recovery after a transfer-heavy journey, not an organizing or disposal claim.",
+          "status": "RESOLVED",
+          "summary": "The user rested for an hour after a trip involving two bus transfers.",
+          "uid": "2f9a7130-f6aa-5c49-b334-ea294a2a2cd8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "854b9907-33e0-4ca1-8248-9bb83f3b1193",
+              "memory_uid": "0ad4a1f9-e3e9-517e-8cfc-f8e6307f1d3e"
+            }
+          ],
+          "reason": "This is independently useful evidence about the direct-route experience and has no compared-side operational counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user remained seated throughout a direct trip of similar duration.",
+          "uid": "95afa327-1b53-5cff-ac0d-77c22e0e326f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "854b9907-33e0-4ca1-8248-9bb83f3b1193",
+              "memory_uid": "f772b0c7-502f-55b7-b431-ee6b20518d38"
+            }
+          ],
+          "reason": "This records a one-sided accessibility-navigation experience not addressed in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A stairs-only entrance caused the user to go around the building to another entrance.",
+          "uid": "ce95e341-a24d-5587-ac89-1a13c02a541a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "854b9907-33e0-4ca1-8248-9bb83f3b1193",
+              "memory_uid": "0b2d800b-a4ab-5422-bf06-56d17b98f604"
+            }
+          ],
+          "reason": "This is independently useful information about advance accessibility planning and punctuality, absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "After checking the accessible entrance location in advance, the user arrived early.",
+          "uid": "43738228-8aff-51a7-bab7-a8d676721e33"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "854b9907-33e0-4ca1-8248-9bb83f3b1193",
+              "memory_uid": "b233f332-4927-549b-8dab-b554977fe363"
+            }
+          ],
+          "reason": "This is a one-sided observation about weather exposure on a transit route, unrelated to the compared frame’s decisions.",
+          "status": "RESOLVED",
+          "summary": "The user became wet while crossing an uncovered part of a transfer stop in rain.",
+          "uid": "542409c1-9243-5dd1-96b7-eae1f1d63021"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "854b9907-33e0-4ca1-8248-9bb83f3b1193",
+              "memory_uid": "b38d0d63-c4b0-5955-857d-03cbcfd27f5b"
+            }
+          ],
+          "reason": "This is independently useful travel coordination information with no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "When traveling with their maternal uncle, the user arranged to meet near an elevator entrance.",
+          "uid": "7a9654e2-50ea-5ac4-8b44-5a7a6849b491"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "854b9907-33e0-4ca1-8248-9bb83f3b1193",
+              "memory_uid": "4668d326-b11c-5467-bca4-e8d5e242e375"
+            }
+          ],
+          "reason": "This is a one-sided seating preference and does not materially address any compared-side organizing policy.",
+          "status": "RESOLVED",
+          "summary": "The user’s maternal uncle prefers an aisle seat that permits easy standing on long trips.",
+          "uid": "e5c49931-4b9d-5fed-aa5c-65f0fd674e83"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "854b9907-33e0-4ca1-8248-9bb83f3b1193",
+              "memory_uid": "a77c985c-3986-5141-9805-e3321b3cfa2c"
+            }
+          ],
+          "reason": "This is independently useful uncertainty about current accessibility status, with no compared-side claim about that decision.",
+          "status": "RESOLVED",
+          "summary": "Past route records alone cannot establish whether an accessible entrance is operating on a given day.",
+          "uid": "55a4701d-da97-50a0-b79b-79b5ef5087a5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "854b9907-33e0-4ca1-8248-9bb83f3b1193",
+              "memory_uid": "988926a1-3e28-5b3e-a41c-d9338971643e"
+            }
+          ],
+          "reason": "This is a one-sided structural comparison of transit routes and has no operational counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The transfer route requires more boarding, alighting, and walking than the direct route.",
+          "uid": "30208293-c99d-5014-84d1-5b4821691ee5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "82665bb3-9c8f-4e4b-bcde-ea079f68f7e7",
+              "memory_uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            }
+          ],
+          "reason": "This is independently useful information about donation staging, with no reference-side claim addressing that practice.",
+          "status": "RESOLVED",
+          "summary": "The user collects donation clothes in a large bag beside the entrance.",
+          "uid": "18c49da6-8c08-5939-96e2-f472980d99c3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "82665bb3-9c8f-4e4b-bcde-ea079f68f7e7",
+              "memory_uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            }
+          ],
+          "reason": "This records a one-sided organizing consequence not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "After emptying a whole drawer at once, the user could not find a needed charger.",
+          "uid": "1ca6569e-1fe8-5c1a-b07c-c4f608931a96"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "82665bb3-9c8f-4e4b-bcde-ea079f68f7e7",
+              "memory_uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            }
+          ],
+          "reason": "This is independently useful information about a revised sorting method, with no reference-side operational counterpart.",
+          "status": "RESOLVED",
+          "summary": "In a later organizing session, the user sorted by item type and bagged only items for discard.",
+          "uid": "5bc92166-b614-5f8c-a3bc-de19bce1ac95"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "82665bb3-9c8f-4e4b-bcde-ea079f68f7e7",
+              "memory_uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            }
+          ],
+          "reason": "This is a one-sided observation about continued nonuse after photographing clothes and is absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user did not retrieve photographed unworn clothes during the following month.",
+          "uid": "9639d049-4996-5e50-a0c9-4a5f760157ec"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "82665bb3-9c8f-4e4b-bcde-ea079f68f7e7",
+              "memory_uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            }
+          ],
+          "reason": "This is independently useful evidence of a decluttering outcome, with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Moving the unworn clothes into the donation bag cleared a closet compartment.",
+          "uid": "b912a92f-0188-52cc-8a30-87ec5b6b0dfc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "82665bb3-9c8f-4e4b-bcde-ea079f68f7e7",
+              "memory_uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            }
+          ],
+          "reason": "This records a one-sided disposal error and corrective check; secure storage of identity-document copies does not govern the same disposal decision.",
+          "status": "RESOLVED",
+          "summary": "The user nearly recycled an important paper with advertising and rechecked the recycling box.",
+          "uid": "e8d75acb-1268-57f5-8aad-644bc186db82"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "82665bb3-9c8f-4e4b-bcde-ea079f68f7e7",
+              "memory_uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            }
+          ],
+          "reason": "This is independently useful information about paper sorting and does not duplicate the reference-side encrypted storage claim.",
+          "status": "RESOLVED",
+          "summary": "In a later organizing session, the user kept papers separate in a document box.",
+          "uid": "b1585c38-736e-5042-8f31-b91e73e1331f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "82665bb3-9c8f-4e4b-bcde-ea079f68f7e7",
+              "memory_uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            }
+          ],
+          "reason": "This is a one-sided family-property disposal preference with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user’s mother asks to be consulted before usable kitchen items are discarded.",
+          "uid": "b2f9a27b-6948-5a7c-a79d-e84cee9546a7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "82665bb3-9c8f-4e4b-bcde-ea079f68f7e7",
+              "memory_uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            }
+          ],
+          "reason": "This is an independently useful disposal safeguard; the reference frame supplies neither an equivalent nor a scope-varying disposal policy.",
+          "status": "RESOLVED",
+          "summary": "The agent should confirm with the user before treating personal documents or another person’s property as disposal candidates.",
+          "uid": "cb6a9f77-20ff-5da6-8d5c-b1ee85964559"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "82665bb3-9c8f-4e4b-bcde-ea079f68f7e7",
+              "memory_uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "reason": "This is a one-sided limit on disposal-related inference, with no reference-side claim addressing sentimental assessment.",
+          "status": "RESOLVED",
+          "summary": "Frequency of use alone does not reveal an object’s emotional meaning.",
+          "uid": "e0f664b4-006f-5b0b-9a93-e760d5ffb9ac"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame describes decluttering experiences and outcomes, safer sorting practices, donation handling, document and shared-property disposal checks, and uncertainty about sentimental value.",
+        "differences": "",
+        "reference_only": "The reference describes encrypted identity-document storage, mobility and weather experiences across transit routes, entrance planning, a relative’s travel preferences, and limits of historical accessibility data."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "152d64b0-a8d3-4c6c-87db-fcaaf3f4fbc6"
+    },
+    "analysis_digest": "eb8643010bede3f1456240c1fc5ad42d90f0977391c2bb8748260372f57e4da8",
+    "key": "6454e904111868f2fd2c20e041400437a4f8ffa776d167110c2f9515c691b588",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 40.271900250001636,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "6454e904111868f2fd2c20e041400437a4f8ffa776d167110c2f9515c691b588",
+  "created_at": "2026-08-13T18:41:52.413493Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/06",
+  "pair_key": "f20bac07f87a9e2bc14251a99acbd8267e803eb6aff4f155f83acd00f667b25e",
+  "provider_seconds": 40.271900250001636,
+  "right": "task-3/local/personal-memory/2026/04",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

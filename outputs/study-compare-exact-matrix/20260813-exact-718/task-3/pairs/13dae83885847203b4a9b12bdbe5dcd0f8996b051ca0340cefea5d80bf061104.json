@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:54:11.331785+00:00",
+      "frames": [
+        {
+          "context_digest": "0af669f138c2617a4b35c0974627a23c7e5cb2405da5e306648b130efac7fbdf",
+          "context_name": "task-3/local/personal-memory/2025/12",
+          "context_uid": "c54e9dde-005a-5d20-b41b-1313b4713061",
+          "memories": [
+            {
+              "content": "The user stores wrapping paper and empty gift boxes on the upper shelf of the bedroom closet.",
+              "content_digest": "8f3b67dea69e1fa656f1e42e39700a71ebc250c4f6ec18dc4d4f88d467e86ad2",
+              "position": 0,
+              "uid": "bd69b616-6e7c-5440-8b29-586de68bcff6"
+            },
+            {
+              "content": "From photographs, the user discovered that they had given their mother the same type of kitchen item two years in a row.",
+              "content_digest": "6962b8dc03fd90e1c8badfda0d827008cc675b940e5975a5833ebe504af7d635",
+              "position": 1,
+              "uid": "90c60e57-d7db-5783-9ca8-2fd27b94d847"
+            },
+            {
+              "content": "This year, the user went to the market with their mother and let her choose a needed item directly.",
+              "content_digest": "9a27aa187ad2964f985ffcf376490f4b69d3c83f2034591187273bd89f61637a",
+              "position": 2,
+              "uid": "53bc23b2-8242-58b5-b496-a45c70bb8e41"
+            },
+            {
+              "content": "The user once ordered a gift late and had it delivered the day after the gathering.",
+              "content_digest": "245bb316eb5d0b0203c63eb9a2832c6cf73cb9e7e368bdb48a08bb6b702642d7",
+              "position": 3,
+              "uid": "3b097446-2c73-5414-8c06-6bacdf00a4c1"
+            },
+            {
+              "content": "The next year, the user checked the expected delivery date and ordered one week before the gathering.",
+              "content_digest": "97aed11c6b4f7d03bd6a55e27ef34ef539da85204787bb0468f1e2df51d958fc",
+              "position": 4,
+              "uid": "ce18c7a5-d1e9-5e5c-8739-b14fa7298feb"
+            },
+            {
+              "content": "The user did not put names on wrapped boxes and handed their older sister and younger brother each other's gifts.",
+              "content_digest": "48464eb29ee2d2e01cda00f0e3a13d116d4aa121d424aecc59644431e89f8957",
+              "position": 5,
+              "uid": "7657f424-cd24-54dd-8409-e04974dd1531"
+            },
+            {
+              "content": "The next time the user wrapped gifts, they wrote the recipient on the bottom of each box.",
+              "content_digest": "551e74aebf85d4ffee86b960c520b17f3f7e4d50428493934831a774d9e31db6",
+              "position": 6,
+              "uid": "d8e82ad3-902e-5f0c-aa8e-b23ce874982a"
+            },
+            {
+              "content": "The user's younger brother welcomes a snack the family can share immediately more than an item for his use alone.",
+              "content_digest": "ec32111520e2f12afc684c6441c075dcc0715fc450d0ce8f20408dfb955634a9",
+              "position": 7,
+              "uid": "8a941bf1-73bd-51d3-a069-62ecc9d56439"
+            },
+            {
+              "content": "The local agent can find past gift records and flag duplicates but cannot know what is needed this year.",
+              "content_digest": "f7574c7f91999992680a7e88e79270747fd744a46355800012c63319c286d731",
+              "position": 8,
+              "uid": "036edf8f-4680-5822-924e-0fdc691c8135"
+            },
+            {
+              "content": "Year-end deliveries may take longer than usual or have their expected dates changed.",
+              "content_digest": "cc0955e132cf6f4bec7f416e54ed2ffdbac22169adeeae7372a6ddc496da4b9e",
+              "position": 9,
+              "uid": "b9e9e222-a559-56e3-93b5-1f49a0e0d3ab"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "eaa04c80-cbcf-4e5f-9c16-fc1277cba33f"
+        },
+        {
+          "context_digest": "d28031209c5edc768a592166e26351dd5bce0c7568d379fcaceab173450041c8",
+          "context_name": "task-3/local/personal-memory/2026/02",
+          "context_uid": "7ffcbc10-1703-54b0-9545-99742b51d333",
+          "memories": [
+            {
+              "content": "The user keeps basic repair tools in a box beneath the sink.",
+              "content_digest": "c2a23bace63735c502081b19682a8ceb3e37156b9aadd6f7739e2005c20469d6",
+              "position": 0,
+              "uid": "7d3daf76-a21e-5117-a534-6175ab2d2861"
+            },
+            {
+              "content": "On a day the faucet leaked, the user placed only a towel beneath it, and the floor became wet as well.",
+              "content_digest": "ad6baa7e1848e4e61bdaf22bc5c8665122330b5c70c8ae192216abbba17c6134",
+              "position": 1,
+              "uid": "70a6d9f5-180f-5174-b247-690e10baa23e"
+            },
+            {
+              "content": "After sending a photo to building management, the user finalized the time for a repair visit.",
+              "content_digest": "82b36c7a95e51a0dfa32768c2a437d509b75c0f93bc51a99a636f2c9739a20da",
+              "position": 2,
+              "uid": "9fcd922c-147c-517b-82b3-180fdfb13f33"
+            },
+            {
+              "content": "Before the technician's visit, the user emptied the area beneath the sink so work could begin immediately.",
+              "content_digest": "dbc3b48e5bc4b406dc17067dd93d92e845e3706f47c8706f9a5d5ef17bf64617",
+              "position": 3,
+              "uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5"
+            },
+            {
+              "content": "On a day the user wrote the visit time only in the calendar and turned off the reminder, they heard the doorbell late.",
+              "content_digest": "95fab6bcab815dd8bdd5fecb867f84c6d2f1a901771603b1dbf197cde3c1d19d",
+              "position": 4,
+              "uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65"
+            },
+            {
+              "content": "For the next visit, the user enabled a reminder 30 minutes beforehand and answered immediately at the entrance.",
+              "content_digest": "818783ff21b2d369935b9994c17b28f93f84ea7558dab9f2de20d0aad21f86a3",
+              "position": 5,
+              "uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a"
+            },
+            {
+              "content": "After the repair, the user called their maternal aunt to confirm that the spare key entrusted to her was still there.",
+              "content_digest": "ac01b9816dda2d6bf16f22b41157120b7ffdd75d19638f6313a88e1ce6e7a1f1",
+              "position": 6,
+              "uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441"
+            },
+            {
+              "content": "The user's maternal aunt considers it unsafe to hand the spare key to a repair technician without the user's explicit request.",
+              "content_digest": "f7c7c0306c81cc6de9f02aa1aed7d411db3f29757d024e7d5a1679b1ff308948",
+              "position": 7,
+              "uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd"
+            },
+            {
+              "content": "Obtain the user's reconfirmation before scheduling an external worker to enter the residential unit.",
+              "content_digest": "34382e40f4907bea82728787fdeb150e299d46a0079ae2847d4eda6d6d892d22",
+              "position": 8,
+              "uid": "4716a67b-8602-564c-9e89-85cd4ee158f9"
+            },
+            {
+              "content": "A multi-unit residential building's repair schedule may change because of emergency work or parts availability.",
+              "content_digest": "d701fdd1ffbf17ff0890c583b5bf39849e3c6e3cc296fde7e00d3d1ecc0ef196",
+              "position": 9,
+              "uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "a34652f4-9d62-49c5-98a2-40e534c28d28"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate practical domains: gift preparation and selection in the reference frame, and residential repair access and coordination in the compared frame. Their superficially similar timing lessons govern different decisions, so neither shared claims nor scope-aligned disagreements are established.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eaa04c80-cbcf-4e5f-9c16-fc1277cba33f",
+              "memory_uid": "bd69b616-6e7c-5440-8b29-586de68bcff6"
+            }
+          ],
+          "reason": "This location-specific gift-storage information has no counterpart in the compared repair frame.",
+          "status": "RESOLVED",
+          "summary": "Wrapping supplies and empty gift boxes are stored on the bedroom closet’s upper shelf.",
+          "uid": "bea5e51b-2ce0-5069-80fa-0eaa61ba56fc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eaa04c80-cbcf-4e5f-9c16-fc1277cba33f",
+              "memory_uid": "90c60e57-d7db-5783-9ca8-2fd27b94d847"
+            }
+          ],
+          "reason": "The compared frame contains no corresponding gift-history or duplicate-gift claim.",
+          "status": "RESOLVED",
+          "summary": "Photographs revealed that the user gave their mother the same kind of kitchen item in consecutive years.",
+          "uid": "0f669dbe-6c51-52b8-b5fe-c142b0bbb33e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eaa04c80-cbcf-4e5f-9c16-fc1277cba33f",
+              "memory_uid": "53bc23b2-8242-58b5-b496-a45c70bb8e41"
+            }
+          ],
+          "reason": "This gift-selection practice is independently useful and absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user let their mother directly select a needed market item this year.",
+          "uid": "b29d951d-9a93-5eb5-ab76-36fe0dc9e8fc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eaa04c80-cbcf-4e5f-9c16-fc1277cba33f",
+              "memory_uid": "3b097446-2c73-5414-8c06-6bacdf00a4c1"
+            }
+          ],
+          "reason": "This specific past gift-delivery failure has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A gift ordered late arrived one day after the gathering.",
+          "uid": "b14677fe-de21-5f7a-8f68-28b5402ce19f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eaa04c80-cbcf-4e5f-9c16-fc1277cba33f",
+              "memory_uid": "ce18c7a5-d1e9-5e5c-8739-b14fa7298feb"
+            }
+          ],
+          "reason": "This gift-ordering response governs purchasing lead time, not repair attendance or scheduling.",
+          "status": "RESOLVED",
+          "summary": "For the next gathering, the user checked the delivery estimate and ordered one week in advance.",
+          "uid": "2ac584d8-0db2-5cab-b056-d269be9ed368"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eaa04c80-cbcf-4e5f-9c16-fc1277cba33f",
+              "memory_uid": "7657f424-cd24-54dd-8409-e04974dd1531"
+            }
+          ],
+          "reason": "The compared frame contains no recipient-identification or gift-distribution claim.",
+          "status": "RESOLVED",
+          "summary": "Unlabeled wrapped boxes caused the older sister’s and younger brother’s gifts to be exchanged.",
+          "uid": "36e1cf8d-2db3-515e-8f21-e3069a03b9cf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eaa04c80-cbcf-4e5f-9c16-fc1277cba33f",
+              "memory_uid": "d8e82ad3-902e-5f0c-aa8e-b23ce874982a"
+            }
+          ],
+          "reason": "This gift-labeling practice is independently useful and has no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user later wrote each recipient’s name on the bottom of the wrapped box.",
+          "uid": "a969c59e-4c74-5560-aa54-1deb6f8253b7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eaa04c80-cbcf-4e5f-9c16-fc1277cba33f",
+              "memory_uid": "8a941bf1-73bd-51d3-a069-62ecc9d56439"
+            }
+          ],
+          "reason": "This recipient preference is unique to the gift context and absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The younger brother prefers an immediately shareable family snack over an item solely for himself.",
+          "uid": "8f2dcd48-4f64-50ff-a959-1f3afb7ce9a4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eaa04c80-cbcf-4e5f-9c16-fc1277cba33f",
+              "memory_uid": "036edf8f-4680-5822-924e-0fdc691c8135"
+            }
+          ],
+          "reason": "The compared frame provides no corresponding claim about an assistant’s capabilities or limits.",
+          "status": "RESOLVED",
+          "summary": "The local agent can detect duplicate past gifts but cannot determine current needs.",
+          "uid": "6ccd87b5-ec14-5773-8d3a-a024c613aed6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eaa04c80-cbcf-4e5f-9c16-fc1277cba33f",
+              "memory_uid": "b9e9e222-a559-56e3-93b5-1f49a0e0d3ab"
+            }
+          ],
+          "reason": "Although the compared frame also mentions schedule uncertainty, delivery estimates and repair appointments affect different operational decisions and do not form one shared policy.",
+          "status": "RESOLVED",
+          "summary": "Year-end deliveries can be delayed or receive revised expected dates.",
+          "uid": "672e1ecc-3c55-5f01-89a5-9a7693b84150"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a34652f4-9d62-49c5-98a2-40e534c28d28",
+              "memory_uid": "7d3daf76-a21e-5117-a534-6175ab2d2861"
+            }
+          ],
+          "reason": "This repair-tool storage location has no counterpart in the reference gift frame.",
+          "status": "RESOLVED",
+          "summary": "Basic repair tools are kept in a box beneath the sink.",
+          "uid": "241c7ada-1bca-501d-8279-cf50a5b9fc87"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a34652f4-9d62-49c5-98a2-40e534c28d28",
+              "memory_uid": "70a6d9f5-180f-5174-b247-690e10baa23e"
+            }
+          ],
+          "reason": "The reference frame contains no leak-containment or household-damage claim.",
+          "status": "RESOLVED",
+          "summary": "Using only a towel beneath a leaking faucet allowed the floor to become wet.",
+          "uid": "23c3c88a-7fde-54f2-a943-22a1d93c9fb8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a34652f4-9d62-49c5-98a2-40e534c28d28",
+              "memory_uid": "9fcd922c-147c-517b-82b3-180fdfb13f33"
+            }
+          ],
+          "reason": "This repair-reporting and appointment-coordination information is absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user sent building management a photo and finalized a repair-visit time.",
+          "uid": "d8caf307-00ee-503e-a871-7c8e90fc7356"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a34652f4-9d62-49c5-98a2-40e534c28d28",
+              "memory_uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5"
+            }
+          ],
+          "reason": "This work-area preparation practice has no gift-context counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user cleared the space beneath the sink before the technician arrived.",
+          "uid": "6549d2d4-35fc-5c23-8404-c633d2cfa5a5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a34652f4-9d62-49c5-98a2-40e534c28d28",
+              "memory_uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65"
+            }
+          ],
+          "reason": "This appointment-attendance failure is independently useful and not addressed by the reference frame’s delivery-timing claims.",
+          "status": "RESOLVED",
+          "summary": "Recording a visit only in the calendar and disabling its reminder led to a late response to the doorbell.",
+          "uid": "b9cb0413-1757-55e8-8744-1b088937d683"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a34652f4-9d62-49c5-98a2-40e534c28d28",
+              "memory_uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a"
+            }
+          ],
+          "reason": "This repair-visit attendance practice has no corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A reminder enabled 30 minutes before the next visit helped the user answer the entrance immediately.",
+          "uid": "84489f7e-5345-5bc4-a7f1-f6d22b650970"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a34652f4-9d62-49c5-98a2-40e534c28d28",
+              "memory_uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441"
+            }
+          ],
+          "reason": "The reference frame contains no spare-key custody or verification information.",
+          "status": "RESOLVED",
+          "summary": "After the repair, the user confirmed with their maternal aunt that she still held the entrusted spare key.",
+          "uid": "dd98f12b-6dae-50c3-9944-ece91e497be2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a34652f4-9d62-49c5-98a2-40e534c28d28",
+              "memory_uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd"
+            }
+          ],
+          "reason": "This key-release safety judgment is unique to the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The maternal aunt regards giving a repair technician the spare key without the user’s explicit request as unsafe.",
+          "uid": "de074a15-bb7b-5cc1-b868-1d23d4e15f66"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a34652f4-9d62-49c5-98a2-40e534c28d28",
+              "memory_uid": "4716a67b-8602-564c-9e89-85cd4ee158f9"
+            }
+          ],
+          "reason": "This residential-entry authorization policy has no counterpart in the reference gift frame.",
+          "status": "RESOLVED",
+          "summary": "The user must reconfirm before an external worker is scheduled to enter the residence.",
+          "uid": "f4066097-7ec3-560d-a6dc-94eff5453623"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a34652f4-9d62-49c5-98a2-40e534c28d28",
+              "memory_uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+            }
+          ],
+          "reason": "Although the reference frame also notes timing uncertainty, repair appointments and parcel deliveries govern different operational decisions and do not establish a shared policy.",
+          "status": "RESOLVED",
+          "summary": "Emergency work or parts availability can alter a multi-unit building’s repair schedule.",
+          "uid": "607f6f47-89fd-5750-ac55-e4973221e738"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame records leak response, repair preparation and reminders, spare-key safeguards, entry authorization, tool storage, and repair-schedule uncertainty.",
+        "differences": "",
+        "reference_only": "The reference frame records gift storage, selection, delivery planning, recipient labeling, family preferences, and limits of duplicate-detection assistance."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "f145b524-d0dc-4bc1-817e-6a18e7d0d7a2"
+    },
+    "analysis_digest": "c78f134da9fea3cbf5612127e285f9ef6dbd228d1b67e8667e4832e375947332",
+    "key": "3c21bab750b9a9ad9632a325084bbcc0275b0ef5eb59659bdffaea01c3c23bac",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 43.691362832996674,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "3c21bab750b9a9ad9632a325084bbcc0275b0ef5eb59659bdffaea01c3c23bac",
+  "created_at": "2026-08-13T18:54:55.022711Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/12",
+  "pair_key": "13dae83885847203b4a9b12bdbe5dcd0f8996b051ca0340cefea5d80bf061104",
+  "provider_seconds": 43.691362832996674,
+  "right": "task-3/local/personal-memory/2026/02",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

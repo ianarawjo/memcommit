@@ -1,0 +1,366 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:17:06.681186+00:00",
+      "frames": [
+        {
+          "context_digest": "e76b6eea5af0e4d970d4db385b4100a788a8b1ed5ef6e68709bd92c943ab3b6b",
+          "context_name": "task-2/advisor1/compensation",
+          "context_uid": "7ba75d6b-cef6-5c8b-9b17-d3901e168d24",
+          "memories": [
+            {
+              "content": "Calculate user study compensation budgets based on estimated participation burden, combining session time and preparation effort.",
+              "content_digest": "2dc18d8ddeb900741b2a8f936a59d5fc72423e2d3144e8b2232a6435dc9a68f1",
+              "position": 0,
+              "uid": "0ae46268-cca7-57d5-a0ee-6eb3b85cda84"
+            },
+            {
+              "content": "Compensate for required travel time in face-to-face user studies as well.",
+              "content_digest": "688ba9df95e18254a5a33ab6c0e59066cf0674137b6802178e3fb8eae4ba38e5",
+              "position": 1,
+              "uid": "bdda6e22-ea06-5a13-8854-67f7521724db"
+            },
+            {
+              "content": "Compensate for the actual time participants spent in sessions, regardless of research modality.",
+              "content_digest": "8673c2b5b5913f0e8bcf0035eea4bc87430bb1fcf8ffb27b354bde0ca3a7ae4e",
+              "position": 2,
+              "uid": "f49b1d0a-7a1a-53b5-b7fc-815cc2cc134a"
+            },
+            {
+              "content": "Leave cash payment as an available compensation method for face-to-face studies.",
+              "content_digest": "72f9e1b33de0c05bb711c2d8162ab62f382a75871a710db37b858125eae6fcde",
+              "position": 3,
+              "uid": "1f4d05e4-2a79-572c-8050-beb1464fb781"
+            },
+            {
+              "content": "If compensation equity is explained, do not require finalizing the payment method at the proposal stage.",
+              "content_digest": "6945260e986651e7992034801b6151a3f93184013fea77d17b630f55fcdc943b",
+              "position": 4,
+              "uid": "abcba764-6f35-5dae-bb3d-7860fb72ccf2"
+            },
+            {
+              "content": "Apply the same base hourly rate to face-to-face and remote studies if task burden is equal.",
+              "content_digest": "144477b358e6e8931042d1793a5ffd10f56d69aa90523d69d20a622528a9dad0",
+              "position": 5,
+              "uid": "c6a28f37-1a7c-5dbd-b75c-c829f0461504"
+            },
+            {
+              "content": "Participants judge compensation fairness based on the total burden, combining session time with required travel and preparation time.",
+              "content_digest": "54e8900c7049e048484db8b523a41e98cbb911b45be2adbd103fd2f1635bf026",
+              "position": 6,
+              "uid": "874de649-9c04-5960-b3a9-e68356ef666c"
+            },
+            {
+              "content": "Account in compensation for the burden of rescheduling iterations and returning for multiple formative evaluation sessions.",
+              "content_digest": "f09be004defb4019ba7476919b6780cc2b6bbac088f79dbd0ec66bf2753af27d",
+              "position": 7,
+              "uid": "529559f5-850d-5920-8e27-0b1e7138dc36"
+            },
+            {
+              "content": "Compensate participants for time already invested even if a session is terminated early due to prototype errors.",
+              "content_digest": "64b65cc0b307b48d64641d126594a5b8a9258518c3aa27d7846be2306c25a9f4",
+              "position": 8,
+              "uid": "c8be56ee-860a-5f6c-abbf-02c8dbc59eb5"
+            },
+            {
+              "content": "The author of this proposal tends to exclude preparation burden between sessions when calculating compensation for iterative studies.",
+              "content_digest": "177f041fcb9fe768dcc1c476b592e99c8609d06ebf727aeca1379d21256b43d8",
+              "position": 9,
+              "uid": "bdac8cf8-dd11-5794-b4b2-9774ff344436"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "03c6ca39-47f8-405c-8209-2a55179c9167"
+        },
+        {
+          "context_digest": "b598a4ff3268ef8c6c0d7bc5ff34af370074bcdd30d61bd3623fcdfb167f37d6",
+          "context_name": "task-2/advisor2/safety",
+          "context_uid": "4283d797-6a33-5f39-b7f6-f4dbd3264389",
+          "memories": [
+            {
+              "content": "List whom to notify and in what order if serious discomfort is reported during the study.",
+              "content_digest": "3453feb8597fb15c827f22297d58dc804fdc1d8080b9e93ba35b85a4425092b6",
+              "position": 0,
+              "uid": "ceb095a9-3068-55ea-a06f-d954c121e007"
+            },
+            {
+              "content": "Field staff rely on the pre-defined contact sequence when serious discomfort is reported.",
+              "content_digest": "ba38f8a5c993c810e19b9120f4492c3accf962c8b8fd7642539ac24f363099e0",
+              "position": 1,
+              "uid": "962d7645-02b3-5611-8415-4370794c10d4"
+            },
+            {
+              "content": "Define the thresholds for participant harm, operational disruption, and data anomalies at which deployment and data collection must cease.",
+              "content_digest": "7f7f124d266efd8255c4615ebc7eb375447047ed5a2b96327f28f8f17d048813",
+              "position": 2,
+              "uid": "a3270872-1901-5d24-8ef1-374833599bf9"
+            },
+            {
+              "content": "Establish procedures to restore existing systems and workflow states after suspending field deployment.",
+              "content_digest": "1a5f7636ec45e60df11db8b0d3763345c0bfaf9a92c1e5d581e6b36452c31208",
+              "position": 3,
+              "uid": "f6dd1368-0d90-5f1a-97d0-56594ce8f4b3"
+            },
+            {
+              "content": "The user's stop plan can be judged feasible only when it identifies who has authority to order recovery and who is responsible for carrying it out.",
+              "content_digest": "3fa05bd19fdeeb320a37cfb89ad853a868b64055f7b21eb182798b0119f6620c",
+              "position": 4,
+              "uid": "342e4697-873f-56a8-b4a4-896efe910144"
+            },
+            {
+              "content": "In organizations where error reporting is linked to individual performance evaluations, safety signal records may be separated from research decision logs, potentially breaking the traceability path for the same incident.",
+              "content_digest": "2bf13ff8ab1a778e8a793ede627b28d40798ae40d25c7a6d25eb5e2e79dd8e97",
+              "position": 5,
+              "uid": "6c4e9175-4590-5689-ae2b-678f0eb930b9"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "b0a8540a-e190-48d5-adf2-adeeafc5ab43"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate operational domains. The reference frame covers equitable participant compensation and burden accounting, while the compared frame covers safety escalation, stopping criteria, recovery governance, and incident traceability; neither contains a scope-aligned counterpart to the other’s claims.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "03c6ca39-47f8-405c-8209-2a55179c9167",
+              "memory_uid": "0ae46268-cca7-57d5-a0ee-6eb3b85cda84"
+            }
+          ],
+          "reason": "This is an independently useful burden-based budgeting policy with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Compensation budgets should combine expected session time and preparation effort.",
+          "uid": "a672a56a-13ba-549d-9618-c142781b5dcb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "03c6ca39-47f8-405c-8209-2a55179c9167",
+              "memory_uid": "bdda6e22-ea06-5a13-8854-67f7521724db"
+            }
+          ],
+          "reason": "This is a specific compensation requirement absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Required travel time should be compensated in face-to-face studies.",
+          "uid": "2b6eb088-f141-59f1-a269-386cc0854e7b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "03c6ca39-47f8-405c-8209-2a55179c9167",
+              "memory_uid": "f49b1d0a-7a1a-53b5-b7fc-815cc2cc134a"
+            }
+          ],
+          "reason": "This modality-neutral payment rule has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Actual session time should be compensated regardless of study modality.",
+          "uid": "77b86003-fac6-5c4a-a44b-2da5be0b59fb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "03c6ca39-47f8-405c-8209-2a55179c9167",
+              "memory_uid": "1f4d05e4-2a79-572c-8050-beb1464fb781"
+            }
+          ],
+          "reason": "This payment-method policy is independently useful and absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Cash should remain an available payment method for face-to-face studies.",
+          "uid": "244f93a8-19ba-5a8d-84b9-6856e61d57ce"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "03c6ca39-47f8-405c-8209-2a55179c9167",
+              "memory_uid": "abcba764-6f35-5dae-bb3d-7860fb72ccf2"
+            }
+          ],
+          "reason": "This conditional proposal-stage flexibility rule has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "An explained equity approach permits the payment method to remain undecided at proposal time.",
+          "uid": "6e4de41e-1625-5f1e-aaa9-9b946bbd21ce"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "03c6ca39-47f8-405c-8209-2a55179c9167",
+              "memory_uid": "c6a28f37-1a7c-5dbd-b75c-c829f0461504"
+            }
+          ],
+          "reason": "This cross-modality rate-equity policy is absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Equal task burden should receive the same base hourly rate across face-to-face and remote studies.",
+          "uid": "bced5ac6-d2eb-571e-8df2-7257b8334928"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "03c6ca39-47f8-405c-8209-2a55179c9167",
+              "memory_uid": "874de649-9c04-5960-b3a9-e68356ef666c"
+            }
+          ],
+          "reason": "This participant-centered fairness claim is independently useful and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Participants assess compensation fairness using total session, travel, and preparation burden.",
+          "uid": "3b26e131-cfac-5e54-92f9-62b13dfd4905"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "03c6ca39-47f8-405c-8209-2a55179c9167",
+              "memory_uid": "529559f5-850d-5920-8e27-0b1e7138dc36"
+            }
+          ],
+          "reason": "This iterative-study burden policy is absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Compensation should account for rescheduling and repeated attendance in formative evaluations.",
+          "uid": "a39e390b-8620-5bbb-9dae-7f30f581117e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "03c6ca39-47f8-405c-8209-2a55179c9167",
+              "memory_uid": "c8be56ee-860a-5f6c-abbf-02c8dbc59eb5"
+            }
+          ],
+          "reason": "This early-termination compensation rule has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Participants should be paid for invested time when prototype errors terminate a session early.",
+          "uid": "eb23299c-090f-5352-9fda-54316878d6cd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "03c6ca39-47f8-405c-8209-2a55179c9167",
+              "memory_uid": "bdac8cf8-dd11-5794-b4b2-9774ff344436"
+            }
+          ],
+          "reason": "This specific practice risk is independently useful and absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to omit between-session preparation burden from iterative-study compensation.",
+          "uid": "d3c1afa3-7f53-55e6-98ff-47146a88c54d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b0a8540a-e190-48d5-adf2-adeeafc5ab43",
+              "memory_uid": "ceb095a9-3068-55ea-a06f-d954c121e007"
+            },
+            {
+              "frame_uid": "b0a8540a-e190-48d5-adf2-adeeafc5ab43",
+              "memory_uid": "962d7645-02b3-5611-8415-4370794c10d4"
+            }
+          ],
+          "reason": "The two memories state complementary policy and operational-use aspects of one escalation-sequence claim, which has no reference-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "Serious discomfort should trigger a predefined notification sequence that field staff can follow.",
+          "uid": "ccdb72ec-a937-5d43-8d04-ac3dc2652f9d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b0a8540a-e190-48d5-adf2-adeeafc5ab43",
+              "memory_uid": "a3270872-1901-5d24-8ef1-374833599bf9"
+            }
+          ],
+          "reason": "This mandatory stopping-criteria policy is absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Cease-deployment and data-collection thresholds should be defined for harm, disruption, and data anomalies.",
+          "uid": "3a833ae6-b968-5009-941f-5de13d7a3feb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b0a8540a-e190-48d5-adf2-adeeafc5ab43",
+              "memory_uid": "f6dd1368-0d90-5f1a-97d0-56594ce8f4b3"
+            }
+          ],
+          "reason": "This operational recovery-procedure requirement has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Procedures should restore prior systems and workflow states after field deployment is suspended.",
+          "uid": "3d45ebf2-4b8b-5cbc-998e-98bd154f2f03"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b0a8540a-e190-48d5-adf2-adeeafc5ab43",
+              "memory_uid": "342e4697-873f-56a8-b4a4-896efe910144"
+            }
+          ],
+          "reason": "This recovery-governance criterion is independently useful and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A feasible stop plan identifies both recovery-ordering authority and execution responsibility.",
+          "uid": "634cb4bf-68cd-5cb4-b752-8c25c3b896a3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b0a8540a-e190-48d5-adf2-adeeafc5ab43",
+              "memory_uid": "6c4e9175-4590-5689-ae2b-678f0eb930b9"
+            }
+          ],
+          "reason": "This organizational traceability risk has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Performance-linked error reporting can separate safety records from research logs and break incident traceability.",
+          "uid": "79c45de6-7fba-5546-b514-fa873633993e"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame addresses discomfort escalation, mandatory stop thresholds, system restoration, recovery authority and responsibility, and organizational risks to incident traceability.",
+        "differences": "",
+        "reference_only": "The reference frame addresses compensation budgeting, burden components, modality equity, payment flexibility, iterative participation, early termination, and a preparation-time omission risk."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "e15f621f-9287-4833-892a-dcdd545cf6de"
+    },
+    "analysis_digest": "671429e6d24b04b86b9b8bb61367e699deb586ca3990396c7b68d2e04d810c63",
+    "key": "c473aac1ce2037e66ddedef5e8bcb6447b666669104ac43cd4ebeb239b4dc549",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 38.08604079200086,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "c473aac1ce2037e66ddedef5e8bcb6447b666669104ac43cd4ebeb239b4dc549",
+  "created_at": "2026-08-13T18:17:44.766860Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/compensation",
+  "pair_key": "de967c4338b5ec90107598a6a33cc1b382e2884b905ae84ca17e4d567ed97c09",
+  "provider_seconds": 38.08604079200086,
+  "right": "task-2/advisor2/safety",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

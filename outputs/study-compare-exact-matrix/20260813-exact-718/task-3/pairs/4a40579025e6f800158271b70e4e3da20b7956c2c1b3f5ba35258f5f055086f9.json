@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:37:18.907158+00:00",
+      "frames": [
+        {
+          "context_digest": "9fdb8cdfae14edf54f7410c0e8dd59527179de290b3d7c5f1b0f58494275b076",
+          "context_name": "task-3/local/personal-memory/2024/03",
+          "context_uid": "97c5905c-359b-5497-956f-b92db9ddbd2f",
+          "memories": [
+            {
+              "content": "The instructions for one medication the user takes say to take it after the evening meal.",
+              "content_digest": "32bba9f2936e560ddd5f4c5515895f2954b9c8722fcd501644569d1ff4f7b97c",
+              "position": 0,
+              "uid": "12ba4249-9450-5f2e-b648-5369a7997b26"
+            },
+            {
+              "content": "On a day with a morning appointment, the user miscalculated the fasting period and checked again at the reception desk.",
+              "content_digest": "532396ed2265321fbd4ca28ed1de2962211a357195bc9839503330c6cb0ab281",
+              "position": 1,
+              "uid": "051e79ff-5363-5160-9a13-46568fd13306"
+            },
+            {
+              "content": "For an afternoon visit, the user felt less rushed while preparing to travel than for a morning visit.",
+              "content_digest": "276fa255e4a4945f1475fa66129069ea33514bc24c98a246e9ab0d0000c156fa",
+              "position": 2,
+              "uid": "e7f1fcf7-ee2f-57d8-98cb-781e31e481e8"
+            },
+            {
+              "content": "On a day there was no waiting chair, the user stood for 20 minutes and their back became uncomfortable.",
+              "content_digest": "1c412785950057f01b1e7c10b716977cdb8bfb2b0605ef5bfdbdc6e349f6aaf8",
+              "position": 3,
+              "uid": "18d58666-2cfa-5959-8da9-2745bed56e11"
+            },
+            {
+              "content": "On a day medication instructions were explained all at once and at length, the user failed to write down an important time.",
+              "content_digest": "f3629bba06d053fa20712982f70b8dfd574b41a1b5ecd29d7c29f1b60742f647",
+              "position": 4,
+              "uid": "8fdede6e-64ed-5e4c-81f4-7a1075165568"
+            },
+            {
+              "content": "On a day medication times were confirmed one line at a time, the user copied them directly into their schedule after returning home.",
+              "content_digest": "acade505d6c0cdfddae0d169dea81c06a757aa7d7d2c760f6cdc253b06af5ded",
+              "position": 5,
+              "uid": "21f679f7-7d75-5c01-b6c3-b0d4bea5f2f0"
+            },
+            {
+              "content": "On a visit when their younger brother drove them, the user did not have to find a separate route home.",
+              "content_digest": "5e17c1227c7cbee7e995728edd17b4301903dfdc7a7bdc5f5ff3e06edfd357b3",
+              "position": 6,
+              "uid": "3ec03d39-3240-56d1-80da-313f79f2bf3a"
+            },
+            {
+              "content": "The user's younger brother prefers to receive a request for weekday-afternoon transportation two days beforehand rather than on the day itself.",
+              "content_digest": "7d1bf920ff730ddff86f328aaa3c3edf9d424170044bcd789a3ac55bffb5a839",
+              "position": 7,
+              "uid": "3069baac-fa68-5e94-8ba3-e888cf622f8c"
+            },
+            {
+              "content": "The local agent cannot determine the current prescription or whether use continues from medication notes alone.",
+              "content_digest": "89990815daa01f70a77b970b6a38cb9063f32fed898bd36e39a85551a1ad6200",
+              "position": 8,
+              "uid": "d7f215c6-57ea-561a-9627-3ce94203d507"
+            },
+            {
+              "content": "The waiting area at that clinic has too few chairs, so there may be periods when people must wait standing.",
+              "content_digest": "66c27ba4d6f3fb0d16b322a6de6d8afeb5c650fbe04162006a3288dd886ce1f0",
+              "position": 9,
+              "uid": "e6023aed-938d-5954-b8a7-8cb01340ee37"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "ccacaa8b-f029-4899-95ee-073c21ed5f93"
+        },
+        {
+          "context_digest": "0af669f138c2617a4b35c0974627a23c7e5cb2405da5e306648b130efac7fbdf",
+          "context_name": "task-3/local/personal-memory/2025/12",
+          "context_uid": "c54e9dde-005a-5d20-b41b-1313b4713061",
+          "memories": [
+            {
+              "content": "The user stores wrapping paper and empty gift boxes on the upper shelf of the bedroom closet.",
+              "content_digest": "8f3b67dea69e1fa656f1e42e39700a71ebc250c4f6ec18dc4d4f88d467e86ad2",
+              "position": 0,
+              "uid": "bd69b616-6e7c-5440-8b29-586de68bcff6"
+            },
+            {
+              "content": "From photographs, the user discovered that they had given their mother the same type of kitchen item two years in a row.",
+              "content_digest": "6962b8dc03fd90e1c8badfda0d827008cc675b940e5975a5833ebe504af7d635",
+              "position": 1,
+              "uid": "90c60e57-d7db-5783-9ca8-2fd27b94d847"
+            },
+            {
+              "content": "This year, the user went to the market with their mother and let her choose a needed item directly.",
+              "content_digest": "9a27aa187ad2964f985ffcf376490f4b69d3c83f2034591187273bd89f61637a",
+              "position": 2,
+              "uid": "53bc23b2-8242-58b5-b496-a45c70bb8e41"
+            },
+            {
+              "content": "The user once ordered a gift late and had it delivered the day after the gathering.",
+              "content_digest": "245bb316eb5d0b0203c63eb9a2832c6cf73cb9e7e368bdb48a08bb6b702642d7",
+              "position": 3,
+              "uid": "3b097446-2c73-5414-8c06-6bacdf00a4c1"
+            },
+            {
+              "content": "The next year, the user checked the expected delivery date and ordered one week before the gathering.",
+              "content_digest": "97aed11c6b4f7d03bd6a55e27ef34ef539da85204787bb0468f1e2df51d958fc",
+              "position": 4,
+              "uid": "ce18c7a5-d1e9-5e5c-8739-b14fa7298feb"
+            },
+            {
+              "content": "The user did not put names on wrapped boxes and handed their older sister and younger brother each other's gifts.",
+              "content_digest": "48464eb29ee2d2e01cda00f0e3a13d116d4aa121d424aecc59644431e89f8957",
+              "position": 5,
+              "uid": "7657f424-cd24-54dd-8409-e04974dd1531"
+            },
+            {
+              "content": "The next time the user wrapped gifts, they wrote the recipient on the bottom of each box.",
+              "content_digest": "551e74aebf85d4ffee86b960c520b17f3f7e4d50428493934831a774d9e31db6",
+              "position": 6,
+              "uid": "d8e82ad3-902e-5f0c-aa8e-b23ce874982a"
+            },
+            {
+              "content": "The user's younger brother welcomes a snack the family can share immediately more than an item for his use alone.",
+              "content_digest": "ec32111520e2f12afc684c6441c075dcc0715fc450d0ce8f20408dfb955634a9",
+              "position": 7,
+              "uid": "8a941bf1-73bd-51d3-a069-62ecc9d56439"
+            },
+            {
+              "content": "The local agent can find past gift records and flag duplicates but cannot know what is needed this year.",
+              "content_digest": "f7574c7f91999992680a7e88e79270747fd744a46355800012c63319c286d731",
+              "position": 8,
+              "uid": "036edf8f-4680-5822-924e-0fdc691c8135"
+            },
+            {
+              "content": "Year-end deliveries may take longer than usual or have their expected dates changed.",
+              "content_digest": "cc0955e132cf6f4bec7f416e54ed2ffdbac22169adeeae7372a6ddc496da4b9e",
+              "position": 9,
+              "uid": "b9e9e222-a559-56e3-93b5-1f49a0e0d3ab"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "8a0eae58-4bcb-4c76-8e10-e453b77a6a5a"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate operational domains: the reference concerns medication handling, clinic visits, accessibility, and transportation, while the compared frame concerns gift selection, ordering, labeling, storage, and delivery. No claims address the same decision closely enough for a cross-frame semantic relation.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ccacaa8b-f029-4899-95ee-073c21ed5f93",
+              "memory_uid": "12ba4249-9450-5f2e-b648-5369a7997b26"
+            }
+          ],
+          "reason": "This medication-timing instruction is independently useful and has no counterpart concerning the same operational decision in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "One medication carries an after-evening-meal instruction.",
+          "uid": "832f525b-1bf5-5ff8-be58-b2588342520a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ccacaa8b-f029-4899-95ee-073c21ed5f93",
+              "memory_uid": "051e79ff-5363-5160-9a13-46568fd13306"
+            }
+          ],
+          "reason": "This appointment-preparation episode has no counterpart concerning fasting or check-in confirmation in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A fasting-period miscalculation for a morning appointment prompted confirmation at reception.",
+          "uid": "93499a19-5f97-5bba-9b8c-49714d927ea0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ccacaa8b-f029-4899-95ee-073c21ed5f93",
+              "memory_uid": "e7f1fcf7-ee2f-57d8-98cb-781e31e481e8"
+            }
+          ],
+          "reason": "This time-of-day travel experience has no counterpart concerning appointment scheduling or travel pace in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Preparing to travel for an afternoon visit felt less rushed than for a morning visit.",
+          "uid": "1d544949-e070-56f9-95d1-97f48b31596b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ccacaa8b-f029-4899-95ee-073c21ed5f93",
+              "memory_uid": "18d58666-2cfa-5959-8da9-2745bed56e11"
+            }
+          ],
+          "reason": "This individual accessibility consequence has no counterpart concerning waiting conditions or physical discomfort in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Lack of a waiting chair led to prolonged standing and back discomfort.",
+          "uid": "f1d893c9-aacc-5060-bea7-4ae0e31462f9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ccacaa8b-f029-4899-95ee-073c21ed5f93",
+              "memory_uid": "8fdede6e-64ed-5e4c-81f4-7a1075165568"
+            }
+          ],
+          "reason": "This communication-failure episode has no counterpart concerning medication instruction delivery in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A lengthy all-at-once medication explanation contributed to missing an important time in written notes.",
+          "uid": "1395f720-f37b-5322-a336-d7e1cfd7fd3c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ccacaa8b-f029-4899-95ee-073c21ed5f93",
+              "memory_uid": "21f679f7-7d75-5c01-b6c3-b0d4bea5f2f0"
+            }
+          ],
+          "reason": "This successful medication-recording method has no counterpart concerning instruction confirmation or scheduling in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Line-by-line confirmation enabled medication times to be copied into the user's schedule at home.",
+          "uid": "30cb631d-7b98-5236-acd1-95046ae3fe96"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ccacaa8b-f029-4899-95ee-073c21ed5f93",
+              "memory_uid": "3ec03d39-3240-56d1-80da-313f79f2bf3a"
+            }
+          ],
+          "reason": "This transportation outcome has no counterpart concerning travel assistance in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A visit driven by the younger brother eliminated the need to arrange another route home.",
+          "uid": "bd0a58b3-d537-533d-b875-1e9515c6def6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ccacaa8b-f029-4899-95ee-073c21ed5f93",
+              "memory_uid": "3069baac-fa68-5e94-8ba3-e888cf622f8c"
+            }
+          ],
+          "reason": "This transportation-notice preference is operationally different from the compared frame's gift preference, despite involving the same family role.",
+          "status": "RESOLVED",
+          "summary": "The younger brother prefers two days' notice for weekday-afternoon transportation requests.",
+          "uid": "028b348e-06f7-5ffc-9d04-94419fe5f2a0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ccacaa8b-f029-4899-95ee-073c21ed5f93",
+              "memory_uid": "d7f215c6-57ea-561a-9627-3ce94203d507"
+            }
+          ],
+          "reason": "This domain-specific inference limit concerns medication status, not the compared frame's distinct uncertainty about current gift needs.",
+          "status": "RESOLVED",
+          "summary": "Medication notes alone do not establish the current prescription or whether use continues.",
+          "uid": "086679e9-6812-531f-9f0a-c9ac7a3763f7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ccacaa8b-f029-4899-95ee-073c21ed5f93",
+              "memory_uid": "e6023aed-938d-5954-b8a7-8cb01340ee37"
+            }
+          ],
+          "reason": "This general clinic accessibility condition is independently useful and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The clinic's insufficient seating can require people to wait while standing.",
+          "uid": "68224d86-a19b-5444-ac00-a83e2c47d7b0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8a0eae58-4bcb-4c76-8e10-e453b77a6a5a",
+              "memory_uid": "bd69b616-6e7c-5440-8b29-586de68bcff6"
+            }
+          ],
+          "reason": "This storage-location fact has no counterpart concerning gift supplies or household storage in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Wrapping paper and empty gift boxes are stored on the bedroom closet's upper shelf.",
+          "uid": "b709f13e-70b9-5d6c-a070-cb0f20480d37"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8a0eae58-4bcb-4c76-8e10-e453b77a6a5a",
+              "memory_uid": "90c60e57-d7db-5783-9ca8-2fd27b94d847"
+            }
+          ],
+          "reason": "This duplicate-gift discovery has no counterpart concerning gift history in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Photographs revealed that the user's mother received the same type of kitchen item in consecutive years.",
+          "uid": "2029dd65-1edf-5593-9abf-106dc91a0050"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8a0eae58-4bcb-4c76-8e10-e453b77a6a5a",
+              "memory_uid": "53bc23b2-8242-58b5-b496-a45c70bb8e41"
+            }
+          ],
+          "reason": "This gift-selection approach has no counterpart concerning recipient-guided choice in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user let their mother directly choose a needed market item this year.",
+          "uid": "61cbf3e6-9d63-5f7a-be42-e83312d3c0d5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8a0eae58-4bcb-4c76-8e10-e453b77a6a5a",
+              "memory_uid": "3b097446-2c73-5414-8c06-6bacdf00a4c1"
+            }
+          ],
+          "reason": "This late-order consequence has no counterpart concerning purchasing or delivery timing in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A gift ordered late arrived after the gathering.",
+          "uid": "7947feca-dad9-5656-b88e-c4c6210fd33d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8a0eae58-4bcb-4c76-8e10-e453b77a6a5a",
+              "memory_uid": "ce18c7a5-d1e9-5e5c-8739-b14fa7298feb"
+            }
+          ],
+          "reason": "This advance-ordering practice has no counterpart concerning purchasing or delivery planning in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The following year, the user checked delivery expectations and ordered one week before the gathering.",
+          "uid": "fa33ed5a-fd40-56d4-876a-a27632f0352a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8a0eae58-4bcb-4c76-8e10-e453b77a6a5a",
+              "memory_uid": "7657f424-cd24-54dd-8409-e04974dd1531"
+            }
+          ],
+          "reason": "This recipient-identification failure has no counterpart concerning labeling or gift distribution in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Unlabeled wrapped boxes caused the older sister and younger brother to receive each other's gifts.",
+          "uid": "5cecc4fe-0e01-5d28-9eb2-596229b5d831"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8a0eae58-4bcb-4c76-8e10-e453b77a6a5a",
+              "memory_uid": "d8e82ad3-902e-5f0c-aa8e-b23ce874982a"
+            }
+          ],
+          "reason": "This gift-labeling practice has no counterpart concerning package identification in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "On a later occasion, the recipient's name was written on the bottom of each wrapped box.",
+          "uid": "4a00e6f5-94b3-51dd-b66d-74841b830746"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8a0eae58-4bcb-4c76-8e10-e453b77a6a5a",
+              "memory_uid": "8a941bf1-73bd-51d3-a069-62ecc9d56439"
+            }
+          ],
+          "reason": "This gift preference is operationally different from the reference frame's transportation-notice preference, despite involving the same family role.",
+          "status": "RESOLVED",
+          "summary": "The younger brother prefers an immediately shareable family snack over an item solely for himself.",
+          "uid": "d6b8d539-4454-505b-b5f4-88f06406fba4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8a0eae58-4bcb-4c76-8e10-e453b77a6a5a",
+              "memory_uid": "036edf8f-4680-5822-924e-0fdc691c8135"
+            }
+          ],
+          "reason": "This domain-specific inference limit concerns current gift needs, not the reference frame's distinct uncertainty about prescription status.",
+          "status": "RESOLVED",
+          "summary": "Past gift records can reveal duplicates but cannot establish what is needed this year.",
+          "uid": "464ae9ff-8c97-5c4d-b43c-e37475244854"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8a0eae58-4bcb-4c76-8e10-e453b77a6a5a",
+              "memory_uid": "b9e9e222-a559-56e3-93b5-1f49a0e0d3ab"
+            }
+          ],
+          "reason": "This seasonal delivery risk has no counterpart concerning shipping or fulfillment in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Year-end deliveries may be delayed or have their expected dates revised.",
+          "uid": "911bf1cf-edbd-5921-a2fd-565e8bc022bc"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame records gift storage, selection, duplicate avoidance, ordering and delivery timing, recipient labeling, family preferences, and limits on inferring current needs.",
+        "differences": "",
+        "reference_only": "The reference records medication timing and communication, appointment preparation, clinic seating constraints, travel support, and limits on inferring current prescriptions."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "005ca090-ed9c-4312-8df6-f67b09b65309"
+    },
+    "analysis_digest": "d545973612bbe41a1a554342ee81ca03f4741167c77c755c43f7dc4cb2025a03",
+    "key": "bf906224086a1593e8dfbab54e65293380249da75fa5665ca4408ad2fdcfe829",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 43.41852137499882,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "bf906224086a1593e8dfbab54e65293380249da75fa5665ca4408ad2fdcfe829",
+  "created_at": "2026-08-13T18:38:02.325079Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/03",
+  "pair_key": "4a40579025e6f800158271b70e4e3da20b7956c2c1b3f5ba35258f5f055086f9",
+  "provider_seconds": 43.41852137499882,
+  "right": "task-3/local/personal-memory/2025/12",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

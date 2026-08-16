@@ -1,0 +1,415 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:52:32.640291+00:00",
+      "frames": [
+        {
+          "context_digest": "ac4f93d71b525f6156f0b669075a833a2a41161be6abe677ec382bff6e6060e8",
+          "context_name": "task-3/local/personal-memory/2025/08",
+          "context_uid": "ed84de75-8e18-5bec-908c-a1ff9827b3e3",
+          "memories": [
+            {
+              "content": "The user keeps packing tape for returns in an upper kitchen drawer.",
+              "content_digest": "ed359d883caffd7ce4daddc297ddcc9d26da233dc2a36dc4dbc96e300b2248e9",
+              "position": 0,
+              "uid": "15c3941e-ed44-508f-ae30-b51456b5ba86"
+            },
+            {
+              "content": "The user arrived ten minutes before the post office closed and found that numbered-ticket intake had ended.",
+              "content_digest": "3c4609eea9455bbd46a6f238aa750f61f348ce7b2cf421a4d123f1b707b52550",
+              "position": 1,
+              "uid": "84d1fd1c-9508-5f05-9a7c-1d5f20ecf4a4"
+            },
+            {
+              "content": "Before the next visit, the user checked the operating hours and arrived one hour before closing.",
+              "content_digest": "b2997262abf4ba476c63de3550e54269ef7d61bb56d3adb5b6d9f54ba13fc078",
+              "position": 2,
+              "uid": "8946f9da-e325-59c3-9260-2d2f590d3701"
+            },
+            {
+              "content": "The user went to the counter without closing a return box and had to go back to the packing station.",
+              "content_digest": "759122c3f88ca71b992a725e357beab72f9820de872a7bd895b808c2df21f2b2",
+              "position": 3,
+              "uid": "67e8b160-a57d-56e5-a766-741b7ce0e939"
+            },
+            {
+              "content": "For the next return, the user sealed the box at home and completed intake in one attempt.",
+              "content_digest": "007fcec32ea3788854161e68c95c2aaba90e94a721d03b350e1619afc54840e3",
+              "position": 4,
+              "uid": "efd0706b-600a-5ac1-926e-cc0602ca0086"
+            },
+            {
+              "content": "The user scheduled bank and post-office errands for the same day, but they took a long time because the destinations were in different directions.",
+              "content_digest": "000e1975fde79f4d6caf36adad0c2e481a032537cfa410e46649866d985567c2",
+              "position": 5,
+              "uid": "1e8a6f7e-0911-5a34-ad82-172479d1a7a4"
+            },
+            {
+              "content": "The following week, after checking the locations on a map, the user visited nearby branches in sequence.",
+              "content_digest": "c3de08c5b6074dff2b3f6303f5efc3740cc430b634cb365a5d570061a30a53fa",
+              "position": 6,
+              "uid": "a8670161-257e-51ab-8e30-0e282952278f"
+            },
+            {
+              "content": "Postal staff expect a return-label barcode to arrive affixed flat, without a fold.",
+              "content_digest": "6293ace2d67781644694976af71d5696cad28979d9641718ccd59f16b3397a47",
+              "position": 7,
+              "uid": "2db70f53-99ee-556c-a8c1-b809881cbebd"
+            },
+            {
+              "content": "Before grouping errands into one outing, check each institution's location and operating hours that day.",
+              "content_digest": "7fef923f9ed507db5aad6cf65eaee2c965075e51fef0ff73fa669f1e7f69314a",
+              "position": 8,
+              "uid": "38d60cc4-2f91-5cc2-b511-55cdbbe12c32"
+            },
+            {
+              "content": "Postal and financial counters may operate on different hours than usual around public holidays.",
+              "content_digest": "2d5dc709c468405ea894f343e922dc2546b826ed7488e613f4d4dd730bccccfd",
+              "position": 9,
+              "uid": "1272087c-a535-5612-8c7a-1bc257183788"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "c424ce63-55ee-44c4-a40a-daf88697a259"
+        },
+        {
+          "context_digest": "d28031209c5edc768a592166e26351dd5bce0c7568d379fcaceab173450041c8",
+          "context_name": "task-3/local/personal-memory/2026/02",
+          "context_uid": "7ffcbc10-1703-54b0-9545-99742b51d333",
+          "memories": [
+            {
+              "content": "The user keeps basic repair tools in a box beneath the sink.",
+              "content_digest": "c2a23bace63735c502081b19682a8ceb3e37156b9aadd6f7739e2005c20469d6",
+              "position": 0,
+              "uid": "7d3daf76-a21e-5117-a534-6175ab2d2861"
+            },
+            {
+              "content": "On a day the faucet leaked, the user placed only a towel beneath it, and the floor became wet as well.",
+              "content_digest": "ad6baa7e1848e4e61bdaf22bc5c8665122330b5c70c8ae192216abbba17c6134",
+              "position": 1,
+              "uid": "70a6d9f5-180f-5174-b247-690e10baa23e"
+            },
+            {
+              "content": "After sending a photo to building management, the user finalized the time for a repair visit.",
+              "content_digest": "82b36c7a95e51a0dfa32768c2a437d509b75c0f93bc51a99a636f2c9739a20da",
+              "position": 2,
+              "uid": "9fcd922c-147c-517b-82b3-180fdfb13f33"
+            },
+            {
+              "content": "Before the technician's visit, the user emptied the area beneath the sink so work could begin immediately.",
+              "content_digest": "dbc3b48e5bc4b406dc17067dd93d92e845e3706f47c8706f9a5d5ef17bf64617",
+              "position": 3,
+              "uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5"
+            },
+            {
+              "content": "On a day the user wrote the visit time only in the calendar and turned off the reminder, they heard the doorbell late.",
+              "content_digest": "95fab6bcab815dd8bdd5fecb867f84c6d2f1a901771603b1dbf197cde3c1d19d",
+              "position": 4,
+              "uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65"
+            },
+            {
+              "content": "For the next visit, the user enabled a reminder 30 minutes beforehand and answered immediately at the entrance.",
+              "content_digest": "818783ff21b2d369935b9994c17b28f93f84ea7558dab9f2de20d0aad21f86a3",
+              "position": 5,
+              "uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a"
+            },
+            {
+              "content": "After the repair, the user called their maternal aunt to confirm that the spare key entrusted to her was still there.",
+              "content_digest": "ac01b9816dda2d6bf16f22b41157120b7ffdd75d19638f6313a88e1ce6e7a1f1",
+              "position": 6,
+              "uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441"
+            },
+            {
+              "content": "The user's maternal aunt considers it unsafe to hand the spare key to a repair technician without the user's explicit request.",
+              "content_digest": "f7c7c0306c81cc6de9f02aa1aed7d411db3f29757d024e7d5a1679b1ff308948",
+              "position": 7,
+              "uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd"
+            },
+            {
+              "content": "Obtain the user's reconfirmation before scheduling an external worker to enter the residential unit.",
+              "content_digest": "34382e40f4907bea82728787fdeb150e299d46a0079ae2847d4eda6d6d892d22",
+              "position": 8,
+              "uid": "4716a67b-8602-564c-9e89-85cd4ee158f9"
+            },
+            {
+              "content": "A multi-unit residential building's repair schedule may change because of emergency work or parts availability.",
+              "content_digest": "d701fdd1ffbf17ff0890c583b5bf39849e3c6e3cc296fde7e00d3d1ecc0ef196",
+              "position": 9,
+              "uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "e5b3e29d-6cd1-49d7-83a0-5c22bb2af342"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate operational domains: postal-return and errand practices versus residential-repair coordination and access safety. Neither frame supplies a claim that materially governs the same decision as a claim in the other, and no contradiction or ambiguity requires resolution.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c424ce63-55ee-44c4-a40a-daf88697a259",
+              "memory_uid": "15c3941e-ed44-508f-ae30-b51456b5ba86"
+            }
+          ],
+          "reason": "This is independently useful reference-side information about return-supply storage, with no materially related compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "Packing tape for returns is stored in an upper kitchen drawer.",
+          "uid": "493f167b-34f7-5ea6-9f4b-6c195cbf3677"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c424ce63-55ee-44c4-a40a-daf88697a259",
+              "memory_uid": "84d1fd1c-9508-5f05-9a7c-1d5f20ecf4a4"
+            },
+            {
+              "frame_uid": "c424ce63-55ee-44c4-a40a-daf88697a259",
+              "memory_uid": "8946f9da-e325-59c3-9260-2d2f590d3701"
+            }
+          ],
+          "reason": "These reference-side memories jointly describe the operational effect of arrival timing on postal intake; the compared frame does not address that decision.",
+          "status": "RESOLVED",
+          "summary": "The user's postal experiences show that arriving near closing can miss intake, while arriving substantially earlier can enable service.",
+          "uid": "1df6f9df-2333-57d2-ad5d-e1350fa7f0db"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c424ce63-55ee-44c4-a40a-daf88697a259",
+              "memory_uid": "67e8b160-a57d-56e5-a766-741b7ce0e939"
+            },
+            {
+              "frame_uid": "c424ce63-55ee-44c4-a40a-daf88697a259",
+              "memory_uid": "efd0706b-600a-5ac1-926e-cc0602ca0086"
+            }
+          ],
+          "reason": "These reference-side memories are failure and success instances of one packaging-preparation claim, absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user's return experiences show that sealing the box before reaching the counter avoids a second packing step.",
+          "uid": "e3e51282-a998-5628-be53-970d5e5d0363"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c424ce63-55ee-44c4-a40a-daf88697a259",
+              "memory_uid": "1e8a6f7e-0911-5a34-ad82-172479d1a7a4"
+            },
+            {
+              "frame_uid": "c424ce63-55ee-44c4-a40a-daf88697a259",
+              "memory_uid": "a8670161-257e-51ab-8e30-0e282952278f"
+            }
+          ],
+          "reason": "These reference-side memories jointly support one routing claim for grouped errands, with no materially related compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "The user's errand experiences show that checking a map and choosing nearby branches can avoid inefficient travel between institutions.",
+          "uid": "a0fcc10e-cad9-53e6-af8e-479c89061e70"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c424ce63-55ee-44c4-a40a-daf88697a259",
+              "memory_uid": "2db70f53-99ee-556c-a8c1-b809881cbebd"
+            }
+          ],
+          "reason": "This is an independently useful postal-label requirement found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Postal staff expect return-label barcodes to be affixed flat and unfolded.",
+          "uid": "aef949f9-4acf-5c6a-9ddb-05e2d8e03696"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c424ce63-55ee-44c4-a40a-daf88697a259",
+              "memory_uid": "38d60cc4-2f91-5cc2-b511-55cdbbe12c32"
+            }
+          ],
+          "reason": "This is a distinct reference-side planning policy for grouped errands; the compared frame concerns residential repair scheduling instead.",
+          "status": "RESOLVED",
+          "summary": "Locations and same-day operating hours should be checked before combining institutional errands into one outing.",
+          "uid": "932fc560-62e0-5bbc-bbd4-2a909ffaa64c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c424ce63-55ee-44c4-a40a-daf88697a259",
+              "memory_uid": "1272087c-a535-5612-8c7a-1bc257183788"
+            }
+          ],
+          "reason": "This is independently useful reference-side information about holiday variability, with no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "Postal and financial counter hours may differ around public holidays.",
+          "uid": "f0099bd0-7b5c-5f04-a2f2-4096684c0131"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e5b3e29d-6cd1-49d7-83a0-5c22bb2af342",
+              "memory_uid": "7d3daf76-a21e-5117-a534-6175ab2d2861"
+            }
+          ],
+          "reason": "This is independently useful compared-side information about tool storage, unrelated to the reference frame's return supplies.",
+          "status": "RESOLVED",
+          "summary": "Basic repair tools are stored in a box beneath the sink.",
+          "uid": "9cd5fff6-8144-58a6-a983-9fc3958d7e3d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e5b3e29d-6cd1-49d7-83a0-5c22bb2af342",
+              "memory_uid": "70a6d9f5-180f-5174-b247-690e10baa23e"
+            }
+          ],
+          "reason": "This is a compared-side observation about inadequate leak containment, absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Using only a towel beneath a leaking faucet failed to prevent the floor from becoming wet.",
+          "uid": "a6a123d8-e7ad-579e-a11c-0e299a69593a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e5b3e29d-6cd1-49d7-83a0-5c22bb2af342",
+              "memory_uid": "9fcd922c-147c-517b-82b3-180fdfb13f33"
+            }
+          ],
+          "reason": "This is independently useful compared-side information about repair coordination, with no matching reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "The user finalized a repair-visit time after sending building management a photo.",
+          "uid": "3e0179de-301f-5e42-8102-147ae2b01e59"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e5b3e29d-6cd1-49d7-83a0-5c22bb2af342",
+              "memory_uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5"
+            }
+          ],
+          "reason": "This is a distinct compared-side preparation practice for repair access, not the same operational decision as preparing a postal return.",
+          "status": "RESOLVED",
+          "summary": "The user cleared the area beneath the sink before the technician arrived so work could begin immediately.",
+          "uid": "65262345-e7ac-563b-a91f-0bb66321e6f2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e5b3e29d-6cd1-49d7-83a0-5c22bb2af342",
+              "memory_uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65"
+            },
+            {
+              "frame_uid": "e5b3e29d-6cd1-49d7-83a0-5c22bb2af342",
+              "memory_uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a"
+            }
+          ],
+          "reason": "These compared-side memories are contrasting instances of one appointment-reminder claim, which the reference frame does not address.",
+          "status": "RESOLVED",
+          "summary": "The user's visit experiences show that an advance reminder supports answering promptly, whereas disabling it can lead to a late response.",
+          "uid": "023817a8-c211-5a5f-a4d1-574f065d9a98"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e5b3e29d-6cd1-49d7-83a0-5c22bb2af342",
+              "memory_uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441"
+            }
+          ],
+          "reason": "This is independently useful compared-side information about spare-key custody, absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "After the repair, the user confirmed with their maternal aunt that she still held the entrusted spare key.",
+          "uid": "094c2365-8da0-5a39-9be2-8cc152389233"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e5b3e29d-6cd1-49d7-83a0-5c22bb2af342",
+              "memory_uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd"
+            }
+          ],
+          "reason": "This is a distinct compared-side safety position concerning key release, with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user's maternal aunt considers releasing the spare key to a repair technician unsafe without the user's explicit request.",
+          "uid": "d1a0dc97-d103-50ed-b64c-bdb397ef72a4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e5b3e29d-6cd1-49d7-83a0-5c22bb2af342",
+              "memory_uid": "4716a67b-8602-564c-9e89-85cd4ee158f9"
+            }
+          ],
+          "reason": "This is an independently useful compared-side residential-entry policy; the reference frame contains no claim governing worker access.",
+          "status": "RESOLVED",
+          "summary": "The user's reconfirmation should be obtained before scheduling an external worker to enter the residential unit.",
+          "uid": "bb879b3c-eef0-5d1c-a212-bfed2aeeb30e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e5b3e29d-6cd1-49d7-83a0-5c22bb2af342",
+              "memory_uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+            }
+          ],
+          "reason": "This is distinct compared-side information about repair-schedule uncertainty, with no corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "Repair schedules in multi-unit residential buildings may change because of emergency work or parts availability.",
+          "uid": "999d787a-a728-527a-9531-ee353e69e52b"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers repair-tool storage, leak containment, visit coordination and preparation, reminders, spare-key safeguards, entry reconfirmation, and possible repair-schedule changes.",
+        "differences": "",
+        "reference_only": "The reference covers return supplies and packaging, postal intake timing and barcode handling, efficient errand routing, and checks for location or holiday-hour changes."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "f14e60f3-f791-4f5d-9865-81ac1da89a3f"
+    },
+    "analysis_digest": "b10ded0b7cd7b0350ee65c420a918d4e73bcb7646fc5ee4c70e4e89043f4f0e3",
+    "key": "b0be713869f6718c5e4fc368eccf191b23a214515e906be0aae3f18ffec36e64",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 45.192664041998796,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "b0be713869f6718c5e4fc368eccf191b23a214515e906be0aae3f18ffec36e64",
+  "created_at": "2026-08-13T18:53:17.832494Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/08",
+  "pair_key": "888cb52dcb8d147a399330b46d328e14194ad420886d3dc6df75588ed09c628c",
+  "provider_seconds": 45.192664041998796,
+  "right": "task-3/local/personal-memory/2026/02",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

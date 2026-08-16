@@ -1,0 +1,406 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:37:59.024394+00:00",
+      "frames": [
+        {
+          "context_digest": "db438345c3ec4b3f69562a274c9f81a93bd6e6df97bc89b60abcd193dc89b562",
+          "context_name": "task-3/local/personal-memory/2024/04",
+          "context_uid": "206e1cd3-93da-5341-bda3-95cde4814c20",
+          "memories": [
+            {
+              "content": "The user completed a routine dental checkup in April 2024.",
+              "content_digest": "bbaa093f8dee5b5ee42c4a180e683fce00bc9364f5a009b9fa1e7f2ac233bc01",
+              "position": 0,
+              "uid": "9cea83cd-e39f-53bd-9e79-d30aa465ad02"
+            },
+            {
+              "content": "When the user heard three checkup questions in succession, they asked for the first question again.",
+              "content_digest": "e1b76973991f009295489249af1a7cd0fa7957f24f330e39337e01e5b1acdcbb",
+              "position": 1,
+              "uid": "51f8326f-60d4-5ba3-ba32-a04331dcb930"
+            },
+            {
+              "content": "At the next visit, when questions were asked one at a time, the user answered each without omission.",
+              "content_digest": "30c943f2e043f485a7a7e1ac19343c753ed8f834d00716725322505e28e0b15a",
+              "position": 2,
+              "uid": "cd0bce79-71d5-5d46-9c68-8a1d096dd53a"
+            },
+            {
+              "content": "The user called to reschedule an appointment at lunchtime but did not reach anyone.",
+              "content_digest": "1d4bd2122c160d35080b232ebb8ae5080c2ce34124645b3ec8040d7d29af9752",
+              "position": 3,
+              "uid": "71e27b0c-5c10-5102-aeac-98b0841723f2"
+            },
+            {
+              "content": "After returning home, the user kept a photo of the paper instructions received at the clinic.",
+              "content_digest": "68cddec62167a3910122a129dcfdb3c5604a4fea996d01f870734739dd3b0221",
+              "position": 4,
+              "uid": "86ad5410-0cc7-5876-8e3a-a3f0dd1680c7"
+            },
+            {
+              "content": "On a day the user put only the visit address in the calendar, they had to search again for the floor.",
+              "content_digest": "0d6926aba2c90930bfa984d7af1b12c60f35e53ba9916dfbee2c2391961db1a9",
+              "position": 5,
+              "uid": "aab36950-7e2b-588f-bb7c-d3bd6e36c501"
+            },
+            {
+              "content": "On a day the user shared the checkup time with their older sister, the sister called to check in after the user returned home.",
+              "content_digest": "b7d0fea8e8f2fc13126453039dcedebcda3c67ce2ea96c4a2d5b60365448e0e3",
+              "position": 6,
+              "uid": "50ac9268-9259-56fd-8678-1dfc8f919efb"
+            },
+            {
+              "content": "The scheduling staff at that clinic expect requests to change appointments to arrive by telephone.",
+              "content_digest": "28eec4f0ef0b96764a3f7ea54ee3db9fd4d5f1b62a5a2fa29d0a6193f1d8a18c",
+              "position": 7,
+              "uid": "5141ca66-9860-5ec5-b028-ac8670f586ca"
+            },
+            {
+              "content": "Before adding a follow-up visit to the calendar, confirm the date, time, address, and floor with the user.",
+              "content_digest": "0555c837f721fccd5918b2275086bb39c75e016e27574027185cfbada1c766af",
+              "position": 8,
+              "uid": "e265e637-fa41-53d0-aa9b-0102e9962f9a"
+            },
+            {
+              "content": "The local agent can track completed checkups and scheduled appointments but cannot determine whether a follow-up visit is needed.",
+              "content_digest": "be24b47ccb071438fd01bb99b11af3c63f22e260312a26d901824e6bb0d4cd89",
+              "position": 9,
+              "uid": "7aece7ae-b327-537e-9cef-fe24ee8fc618"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "be7d4ed9-d5e2-449a-8a44-28191be92a19"
+        },
+        {
+          "context_digest": "43b741cd1df20a084f3517aec7f886d4e5022812f0536eb126a6caf2d5570489",
+          "context_name": "task-3/local/personal-memory/2025/05",
+          "context_uid": "1f913bb6-790c-5490-a20d-127c7aab5892",
+          "memories": [
+            {
+              "content": "The user keeps two potted herbs beside a south-facing window.",
+              "content_digest": "b79056c033f208bb02b99fef1c011e5537e2ea8c19c3894863c3a5ad56054e08",
+              "position": 0,
+              "uid": "cb09b8ab-c7c4-51bb-a227-039c7cdfae5d"
+            },
+            {
+              "content": "During a week when the user watered every day based only on the soil surface, the leaves of one plant turned yellow.",
+              "content_digest": "042f4be9fd5481a7252d1c0065e95085e11e81e475531afe45b9f1d268d4c5b4",
+              "position": 1,
+              "uid": "95978183-0070-5b12-b117-be39bb343a5e"
+            },
+            {
+              "content": "During a week when the user checked below the soil surface with a finger before watering, the plant grew new leaves.",
+              "content_digest": "06ca2ec53f03677fdfd78bb1d391f197d3f49b974f6e812f25ba49ce34f74249",
+              "position": 2,
+              "uid": "8c610ce5-1eb7-52e5-ad81-e8062d23cd19"
+            },
+            {
+              "content": "On a day the user left the window open for a long time, strong wind knocked over one pot.",
+              "content_digest": "914f67a75fdf73cee064a465a9f0e6ee9ba012f1a40c614e199a9354756203a8",
+              "position": 3,
+              "uid": "3f886c0c-071b-5f2d-adad-da01345d702f"
+            },
+            {
+              "content": "The next day, the user moved the pot inward from the windowsill so the same wind would not knock it over.",
+              "content_digest": "f190916b360b6543865ced49cf5d9a987e96c9147966181e5920342bb41ba50c",
+              "position": 4,
+              "uid": "afe855b8-f5ad-559c-a63f-6f655ba371a2"
+            },
+            {
+              "content": "The user put a plant-name label in a small pot received from their maternal aunt.",
+              "content_digest": "82284f0102305db41eaaecafe86bc05833090853320f2ebb8e5f44abb2d78a63",
+              "position": 5,
+              "uid": "384c4f5f-b15c-5742-ac79-20106d0dd30b"
+            },
+            {
+              "content": "The user confused the care instructions for an unlabeled pot with those for another plant.",
+              "content_digest": "824267db866253690527d5ab08166f4228401443ed903708d33ac22542811750",
+              "position": 6,
+              "uid": "48dc89af-ed9d-51a5-a4b1-b809fd818143"
+            },
+            {
+              "content": "The user's maternal aunt considers understanding the sunlight at a pot's location more important than watering frequency when caring for it.",
+              "content_digest": "8a24f6df4a58db3e538f77e572a3cf152b7a4aff3527ec3d8616e85a675bc7c0",
+              "position": 7,
+              "uid": "a2426820-65d6-5c78-ac50-0f32b366ae47"
+            },
+            {
+              "content": "Before creating a plant-care reminder, check each plant's name and most recent watering date.",
+              "content_digest": "ecd7ef911951f3c2383cd916a4efbd94bdf439f63de1687c2f637a161ac8a60d",
+              "position": 8,
+              "uid": "efd51196-ed48-5699-a0f4-c5b8e149d11c"
+            },
+            {
+              "content": "The soil in the user's potted herbs beside the south-facing window dries at different rates depending on the season and amount of sunlight.",
+              "content_digest": "f716b16e802d30d4c2d1ed4bff855812682e53a9fc4e29988e2662ae321d0a4f",
+              "position": 9,
+              "uid": "4c93eeff-566e-5a1a-afb9-035c97fb9c73"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "c4f8394b-ef0e-44b7-bd60-38119da52921"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate domains: the reference records dental-visit history, communication needs, scheduling practices, support, and agent limits, while the compared frame records plant-care conditions, observations, precautions, identification, and reminder guidance. Neither frame contains a scope-aligned counterpart to the other.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "be7d4ed9-d5e2-449a-8a44-28191be92a19",
+              "memory_uid": "9cea83cd-e39f-53bd-9e79-d30aa465ad02"
+            }
+          ],
+          "reason": "This is independently useful dental-history information with no plant-care counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user completed a routine dental checkup in April 2024.",
+          "uid": "b29735c3-b689-5838-93cd-4b5ab226b026"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "be7d4ed9-d5e2-449a-8a44-28191be92a19",
+              "memory_uid": "51f8326f-60d4-5ba3-ba32-a04331dcb930"
+            },
+            {
+              "frame_uid": "be7d4ed9-d5e2-449a-8a44-28191be92a19",
+              "memory_uid": "cd0bce79-71d5-5d46-9c68-8a1d096dd53a"
+            }
+          ],
+          "reason": "The paired observations express one one-sided claim about question pacing and response completeness, with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user handled checkup questions completely when they were presented individually, unlike a three-question sequence that prompted a request to repeat the first.",
+          "uid": "fbbe5a34-fc0c-5439-9965-5b8653a6494e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "be7d4ed9-d5e2-449a-8a44-28191be92a19",
+              "memory_uid": "71e27b0c-5c10-5102-aeac-98b0841723f2"
+            }
+          ],
+          "reason": "This is a specific access observation not addressed by the plant-care frame.",
+          "status": "RESOLVED",
+          "summary": "A lunchtime telephone attempt to reschedule an appointment did not reach anyone.",
+          "uid": "f2bead5c-f2af-5ac6-bb63-272dd255d215"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "be7d4ed9-d5e2-449a-8a44-28191be92a19",
+              "memory_uid": "86ad5410-0cc7-5876-8e3a-a3f0dd1680c7"
+            }
+          ],
+          "reason": "This independently useful record-retention behavior has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user retained a photograph of the clinic’s paper instructions after returning home.",
+          "uid": "7bb5695d-497b-5638-9708-03f210bb5f14"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "be7d4ed9-d5e2-449a-8a44-28191be92a19",
+              "memory_uid": "aab36950-7e2b-588f-bb7c-d3bd6e36c501"
+            },
+            {
+              "frame_uid": "be7d4ed9-d5e2-449a-8a44-28191be92a19",
+              "memory_uid": "e265e637-fa41-53d0-aa9b-0102e9962f9a"
+            }
+          ],
+          "reason": "The observation and guidance split one one-sided claim about complete visit details, without a compared-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "Follow-up calendar entries should be confirmed with the user for date, time, address, and floor; recording only the address previously required another floor search.",
+          "uid": "ac3addcc-cac6-53d1-bcaf-66ba8b436be1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "be7d4ed9-d5e2-449a-8a44-28191be92a19",
+              "memory_uid": "50ac9268-9259-56fd-8678-1dfc8f919efb"
+            }
+          ],
+          "reason": "This family-support event is independently useful and absent from the plant-care subject matter.",
+          "status": "RESOLVED",
+          "summary": "After receiving the checkup time, the user’s older sister called to check in once the user returned home.",
+          "uid": "d7bcfa98-e6f3-545d-992b-a17ca889a7a3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "be7d4ed9-d5e2-449a-8a44-28191be92a19",
+              "memory_uid": "5141ca66-9860-5ec5-b028-ac8670f586ca"
+            }
+          ],
+          "reason": "This clinic communication policy has no operational counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The clinic’s scheduling staff expect appointment-change requests by telephone.",
+          "uid": "23101c63-6f26-5895-8316-fed4c8890b17"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "be7d4ed9-d5e2-449a-8a44-28191be92a19",
+              "memory_uid": "7aece7ae-b327-537e-9cef-fe24ee8fc618"
+            }
+          ],
+          "reason": "This capability boundary is independently useful and not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The local agent can track completed checkups and scheduled appointments but cannot determine whether follow-up care is needed.",
+          "uid": "287f9718-bd68-53be-807e-871b889d689c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c4f8394b-ef0e-44b7-bd60-38119da52921",
+              "memory_uid": "cb09b8ab-c7c4-51bb-a227-039c7cdfae5d"
+            }
+          ],
+          "reason": "This plant inventory and location information has no dental-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user keeps two potted herbs beside a south-facing window.",
+          "uid": "4dca4b87-d1fa-5dd6-b5f3-ec2b3d6476d2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c4f8394b-ef0e-44b7-bd60-38119da52921",
+              "memory_uid": "95978183-0070-5b12-b117-be39bb343a5e"
+            },
+            {
+              "frame_uid": "c4f8394b-ef0e-44b7-bd60-38119da52921",
+              "memory_uid": "8c610ce5-1eb7-52e5-ad81-e8062d23cd19"
+            }
+          ],
+          "reason": "The contrasting observations form one one-sided claim about moisture assessment and watering outcomes, with no reference-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "Daily watering based only on surface appearance coincided with yellowing, whereas checking below the surface before watering coincided with new leaf growth.",
+          "uid": "5b2598e0-971d-5443-a7ec-42aabe263b9b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c4f8394b-ef0e-44b7-bd60-38119da52921",
+              "memory_uid": "3f886c0c-071b-5f2d-adad-da01345d702f"
+            },
+            {
+              "frame_uid": "c4f8394b-ef0e-44b7-bd60-38119da52921",
+              "memory_uid": "afe855b8-f5ad-559c-a63f-6f655ba371a2"
+            }
+          ],
+          "reason": "The incident and response split one one-sided claim about wind-safe pot placement, absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "After strong wind through an open window knocked over a pot, the user moved it inward to prevent recurrence.",
+          "uid": "716b0830-59d1-5048-8513-1b8e89541f62"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c4f8394b-ef0e-44b7-bd60-38119da52921",
+              "memory_uid": "384c4f5f-b15c-5742-ac79-20106d0dd30b"
+            },
+            {
+              "frame_uid": "c4f8394b-ef0e-44b7-bd60-38119da52921",
+              "memory_uid": "48dc89af-ed9d-51a5-a4b1-b809fd818143"
+            }
+          ],
+          "reason": "The labeling action and confusion observation express one one-sided plant-identification claim with no dental counterpart.",
+          "status": "RESOLVED",
+          "summary": "Plant-name labeling supports correct identification, while an unlabeled pot previously led the user to confuse its care instructions with another plant’s.",
+          "uid": "f803c421-d54a-541a-9dea-50c6cdd7814d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c4f8394b-ef0e-44b7-bd60-38119da52921",
+              "memory_uid": "a2426820-65d6-5c78-ac50-0f32b366ae47"
+            }
+          ],
+          "reason": "This care-priority viewpoint is independently useful and unaddressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s maternal aunt considers understanding sunlight at a pot’s location more important than watering frequency.",
+          "uid": "70b76aa0-6021-59e3-8986-f8edf8a6da7c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c4f8394b-ef0e-44b7-bd60-38119da52921",
+              "memory_uid": "efd51196-ed48-5699-a0f4-c5b8e149d11c"
+            }
+          ],
+          "reason": "This reminder-creation policy has no scope-aligned counterpart in the dental frame.",
+          "status": "RESOLVED",
+          "summary": "Before creating a plant-care reminder, each plant’s name and most recent watering date should be checked.",
+          "uid": "fd651d5d-b711-5fa6-ab32-8339b0edbd0b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c4f8394b-ef0e-44b7-bd60-38119da52921",
+              "memory_uid": "4c93eeff-566e-5a1a-afb9-035c97fb9c73"
+            }
+          ],
+          "reason": "This environmental care condition is independently useful and not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The herbs’ soil drying rate varies with season and the amount of sunlight.",
+          "uid": "fe96f38b-ebe3-565b-bc23-d1c96cdcd2a8"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame uniquely covers household herbs, moisture-sensitive watering, wind protection, plant labeling, a relative’s care priority, reminder inputs, and seasonal sunlight effects on soil drying.",
+        "differences": "",
+        "reference_only": "The reference uniquely covers dental attendance, question pacing, rescheduling access, retained instructions, complete location details, family check-ins, clinic practices, and limits on determining follow-up need."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "c919a9b9-0321-4cd2-8e1d-b77fb3f071cd"
+    },
+    "analysis_digest": "e765002ad41ab42df6c9a1582961a83725423bfb2aaa136ab9d1280c061010f5",
+    "key": "f13930734427f80136c5a6d828d44094363a1ee8cef56185faeb61ca672a6bd4",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 54.365727832999255,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "f13930734427f80136c5a6d828d44094363a1ee8cef56185faeb61ca672a6bd4",
+  "created_at": "2026-08-13T18:38:53.389543Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/04",
+  "pair_key": "6127eb46703b40f40587f40d250c1ef3e6434873a4b2c33da880034509337eaf",
+  "provider_seconds": 54.365727832999255,
+  "right": "task-3/local/personal-memory/2025/05",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

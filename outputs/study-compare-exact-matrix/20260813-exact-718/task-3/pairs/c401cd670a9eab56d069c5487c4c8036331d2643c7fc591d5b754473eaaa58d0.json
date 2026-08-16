@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:47:53.862685+00:00",
+      "frames": [
+        {
+          "context_digest": "0b8af0ea4e580cc332939d026149e543e9251c54de246e3eabb83c941e6c12f2",
+          "context_name": "task-3/local/personal-memory/2024/12",
+          "context_uid": "66c3e5de-61bb-5795-8e5a-4e28f64be857",
+          "memories": [
+            {
+              "content": "The user used an accessible entrance at a clinic in December 2024.",
+              "content_digest": "a940bc9fb7423a1bdb9dde547cd39eb8ad66d4fa3051649c62b042fc63935263",
+              "position": 0,
+              "uid": "a6923620-267d-5129-b8c4-cd9b1e1a1e7b"
+            },
+            {
+              "content": "On a day snow had accumulated and blocked the main-entrance ramp, the user went to a side entrance.",
+              "content_digest": "460c05d8e8b4b7443ff42cbeead66e07201846394bcbe5948f63e585a197006f",
+              "position": 1,
+              "uid": "fb0e1d1f-0ef5-5214-b6d7-f6ca5c68f582"
+            },
+            {
+              "content": "The user learned on site that the elevator was under inspection and delayed the appointment.",
+              "content_digest": "b5efa024c597b57651178431d22173d4ca1242c3a4c9607f8bd5a7ff681af6f4",
+              "position": 2,
+              "uid": "4cb45120-4376-5c7b-ae92-faa9e4b9330c"
+            },
+            {
+              "content": "The day before the next visit, the user called to check whether the elevator would be operating.",
+              "content_digest": "93c66066de480a4d2f30b7b7c4d955acfceb227ac898766b6375829804b580eb",
+              "position": 3,
+              "uid": "479f4434-879c-5335-b0c9-c0bfa19ecdcd"
+            },
+            {
+              "content": "The user waited for their turn in front of a ticket machine near the waiting chairs.",
+              "content_digest": "fada8c09d46af2e1bcbd2b1e97d9cb786ceca83fc13d1240627639dd6cb96e65",
+              "position": 4,
+              "uid": "0f2c78a7-8f92-573d-af8a-a360ceb77b24"
+            },
+            {
+              "content": "On a day the user waited in a corridor without chairs, they leaned against the wall and changed position several times.",
+              "content_digest": "0037afaeb85d94f985b1628b7b8f8194fb00d7d7e72e1746c6bae2c2ba66fe6f",
+              "position": 5,
+              "uid": "7b9197ac-4263-5169-8d3b-d34f5d893d36"
+            },
+            {
+              "content": "On a day their older sister accompanied them, the user found a place to sit immediately after reception.",
+              "content_digest": "1ae59de552a922fd3b4d39e7e5dc1ec65ff08ee68e3448f2152f27dfec710a5a",
+              "position": 6,
+              "uid": "7b0b7571-f29c-56e5-a27a-82d69a4a6982"
+            },
+            {
+              "content": "Reception staff expect that a first-time visitor may ask where the accessible entrance is.",
+              "content_digest": "7dc3300dc630b737c0f7b437eba30179aa6aaa03efd61c968604ee505a43aa73",
+              "position": 7,
+              "uid": "e9515d6b-10d9-579f-abf7-5030db64218a"
+            },
+            {
+              "content": "The local agent cannot infer the user's condition from a record of using an accessible route alone.",
+              "content_digest": "2d8a50f62f32c43ca62e1e23b75c34361ece43fd8367964174fdc73d66795df4",
+              "position": 8,
+              "uid": "8e57141d-c603-56cd-ab9e-c14b4e944b45"
+            },
+            {
+              "content": "Snow accumulation and snow-removal work can temporarily block an entrance route used under ordinary conditions.",
+              "content_digest": "4fb152c120860688789bdd4b825de45799e9fa00c0c18c334492dd4b274adde9",
+              "position": 9,
+              "uid": "a6076438-307c-56fe-9d2c-848181846ce5"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "68364c1a-2afd-434a-8124-d96eaef02b86"
+        },
+        {
+          "context_digest": "0af669f138c2617a4b35c0974627a23c7e5cb2405da5e306648b130efac7fbdf",
+          "context_name": "task-3/local/personal-memory/2025/12",
+          "context_uid": "c54e9dde-005a-5d20-b41b-1313b4713061",
+          "memories": [
+            {
+              "content": "The user stores wrapping paper and empty gift boxes on the upper shelf of the bedroom closet.",
+              "content_digest": "8f3b67dea69e1fa656f1e42e39700a71ebc250c4f6ec18dc4d4f88d467e86ad2",
+              "position": 0,
+              "uid": "bd69b616-6e7c-5440-8b29-586de68bcff6"
+            },
+            {
+              "content": "From photographs, the user discovered that they had given their mother the same type of kitchen item two years in a row.",
+              "content_digest": "6962b8dc03fd90e1c8badfda0d827008cc675b940e5975a5833ebe504af7d635",
+              "position": 1,
+              "uid": "90c60e57-d7db-5783-9ca8-2fd27b94d847"
+            },
+            {
+              "content": "This year, the user went to the market with their mother and let her choose a needed item directly.",
+              "content_digest": "9a27aa187ad2964f985ffcf376490f4b69d3c83f2034591187273bd89f61637a",
+              "position": 2,
+              "uid": "53bc23b2-8242-58b5-b496-a45c70bb8e41"
+            },
+            {
+              "content": "The user once ordered a gift late and had it delivered the day after the gathering.",
+              "content_digest": "245bb316eb5d0b0203c63eb9a2832c6cf73cb9e7e368bdb48a08bb6b702642d7",
+              "position": 3,
+              "uid": "3b097446-2c73-5414-8c06-6bacdf00a4c1"
+            },
+            {
+              "content": "The next year, the user checked the expected delivery date and ordered one week before the gathering.",
+              "content_digest": "97aed11c6b4f7d03bd6a55e27ef34ef539da85204787bb0468f1e2df51d958fc",
+              "position": 4,
+              "uid": "ce18c7a5-d1e9-5e5c-8739-b14fa7298feb"
+            },
+            {
+              "content": "The user did not put names on wrapped boxes and handed their older sister and younger brother each other's gifts.",
+              "content_digest": "48464eb29ee2d2e01cda00f0e3a13d116d4aa121d424aecc59644431e89f8957",
+              "position": 5,
+              "uid": "7657f424-cd24-54dd-8409-e04974dd1531"
+            },
+            {
+              "content": "The next time the user wrapped gifts, they wrote the recipient on the bottom of each box.",
+              "content_digest": "551e74aebf85d4ffee86b960c520b17f3f7e4d50428493934831a774d9e31db6",
+              "position": 6,
+              "uid": "d8e82ad3-902e-5f0c-aa8e-b23ce874982a"
+            },
+            {
+              "content": "The user's younger brother welcomes a snack the family can share immediately more than an item for his use alone.",
+              "content_digest": "ec32111520e2f12afc684c6441c075dcc0715fc450d0ce8f20408dfb955634a9",
+              "position": 7,
+              "uid": "8a941bf1-73bd-51d3-a069-62ecc9d56439"
+            },
+            {
+              "content": "The local agent can find past gift records and flag duplicates but cannot know what is needed this year.",
+              "content_digest": "f7574c7f91999992680a7e88e79270747fd744a46355800012c63319c286d731",
+              "position": 8,
+              "uid": "036edf8f-4680-5822-924e-0fdc691c8135"
+            },
+            {
+              "content": "Year-end deliveries may take longer than usual or have their expected dates changed.",
+              "content_digest": "cc0955e132cf6f4bec7f416e54ed2ffdbac22169adeeae7372a6ddc496da4b9e",
+              "position": 9,
+              "uid": "b9e9e222-a559-56e3-93b5-1f49a0e0d3ab"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "d6dd7199-c26a-4aed-a7c2-af355f47532b"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate domains: clinic accessibility experiences and precautions versus gift selection, preparation, delivery, and family preferences. Their similarly patterned lessons do not address the same operational decisions, so all supplied information remains independently useful and one-sided.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "68364c1a-2afd-434a-8124-d96eaef02b86",
+              "memory_uid": "a6923620-267d-5129-b8c4-cd9b1e1a1e7b"
+            }
+          ],
+          "reason": "Only the reference frame records this dated use of an accessible clinic entrance.",
+          "status": "RESOLVED",
+          "summary": "The user used a clinic’s accessible entrance in December 2024.",
+          "uid": "ef9138c2-74db-5e1d-8b9d-08fa694dcbe5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "68364c1a-2afd-434a-8124-d96eaef02b86",
+              "memory_uid": "fb0e1d1f-0ef5-5214-b6d7-f6ca5c68f582"
+            }
+          ],
+          "reason": "Only the reference frame describes this snow-related route change at the clinic.",
+          "status": "RESOLVED",
+          "summary": "The user used a side entrance when accumulated snow blocked the main-entrance ramp.",
+          "uid": "06a3d884-22b1-565b-9111-09f0438025e1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "68364c1a-2afd-434a-8124-d96eaef02b86",
+              "memory_uid": "4cb45120-4376-5c7b-ae92-faa9e4b9330c"
+            }
+          ],
+          "reason": "Only the reference frame records this elevator disruption and appointment delay.",
+          "status": "RESOLVED",
+          "summary": "An elevator inspection discovered on site delayed the user’s appointment.",
+          "uid": "8d55c4d9-e417-52db-b4ad-98fef49e4bbe"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "68364c1a-2afd-434a-8124-d96eaef02b86",
+              "memory_uid": "479f4434-879c-5335-b0c9-c0bfa19ecdcd"
+            }
+          ],
+          "reason": "Only the reference frame records this advance accessibility check.",
+          "status": "RESOLVED",
+          "summary": "Before a later visit, the user called to confirm whether the elevator would operate.",
+          "uid": "3146d301-4980-5e57-949c-79b48d70632b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "68364c1a-2afd-434a-8124-d96eaef02b86",
+              "memory_uid": "0f2c78a7-8f92-573d-af8a-a360ceb77b24"
+            }
+          ],
+          "reason": "Only the reference frame describes this waiting location and arrangement.",
+          "status": "RESOLVED",
+          "summary": "The user waited for their turn by a ticket machine near waiting chairs.",
+          "uid": "bb626a45-72b6-5421-965b-5d20ec871a1a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "68364c1a-2afd-434a-8124-d96eaef02b86",
+              "memory_uid": "7b9197ac-4263-5169-8d3b-d34f5d893d36"
+            }
+          ],
+          "reason": "Only the reference frame records this response to unavailable seating.",
+          "status": "RESOLVED",
+          "summary": "While waiting in a chairless corridor, the user leaned on the wall and repeatedly changed position.",
+          "uid": "b047a03f-4777-5a76-83b9-c72736fb045b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "68364c1a-2afd-434a-8124-d96eaef02b86",
+              "memory_uid": "7b0b7571-f29c-56e5-a27a-82d69a4a6982"
+            }
+          ],
+          "reason": "Only the reference frame describes this accompanied visit and immediate seating outcome.",
+          "status": "RESOLVED",
+          "summary": "When accompanied by an older sister, the user found seating immediately after reception.",
+          "uid": "da1de595-f8ed-5de3-9254-da900de9248f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "68364c1a-2afd-434a-8124-d96eaef02b86",
+              "memory_uid": "e9515d6b-10d9-579f-abf7-5030db64218a"
+            }
+          ],
+          "reason": "Only the reference frame states this staff expectation about accessible-entry guidance.",
+          "status": "RESOLVED",
+          "summary": "Reception staff anticipate that first-time visitors may request directions to the accessible entrance.",
+          "uid": "44fe0e7d-79c3-5b40-b760-a31c9e0a7aca"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "68364c1a-2afd-434a-8124-d96eaef02b86",
+              "memory_uid": "8e57141d-c603-56cd-ab9e-c14b4e944b45"
+            }
+          ],
+          "reason": "Only the reference frame defines this inference limitation concerning accessible-route records.",
+          "status": "RESOLVED",
+          "summary": "Using an accessible route alone does not allow the local agent to infer the user’s condition.",
+          "uid": "b1e074dc-394b-559f-a0c9-d5a1f221def8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "68364c1a-2afd-434a-8124-d96eaef02b86",
+              "memory_uid": "a6076438-307c-56fe-9d2c-848181846ce5"
+            }
+          ],
+          "reason": "Only the reference frame states this general accessibility-route contingency.",
+          "status": "RESOLVED",
+          "summary": "Snow accumulation and removal work can temporarily obstruct a normally used entrance route.",
+          "uid": "62a81fa3-740b-5f1d-865e-efd42d266b40"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6dd7199-c26a-4aed-a7c2-af355f47532b",
+              "memory_uid": "bd69b616-6e7c-5440-8b29-586de68bcff6"
+            }
+          ],
+          "reason": "Only the compared frame records this gift-material storage practice.",
+          "status": "RESOLVED",
+          "summary": "The user stores wrapping paper and empty gift boxes on an upper closet shelf.",
+          "uid": "714ff9d5-4944-5a27-80fc-d2fb8847ba22"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6dd7199-c26a-4aed-a7c2-af355f47532b",
+              "memory_uid": "90c60e57-d7db-5783-9ca8-2fd27b94d847"
+            }
+          ],
+          "reason": "Only the compared frame records this discovery of repeated gifts.",
+          "status": "RESOLVED",
+          "summary": "Photographs revealed that the user gave their mother the same kind of kitchen item in consecutive years.",
+          "uid": "ff27071b-1be2-5efe-b2eb-d71296bf3941"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6dd7199-c26a-4aed-a7c2-af355f47532b",
+              "memory_uid": "53bc23b2-8242-58b5-b496-a45c70bb8e41"
+            }
+          ],
+          "reason": "Only the compared frame describes this gift-selection approach.",
+          "status": "RESOLVED",
+          "summary": "This year, the user let their mother directly choose a needed market item.",
+          "uid": "155e518f-fab6-5f92-add9-3f60f520f8c9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6dd7199-c26a-4aed-a7c2-af355f47532b",
+              "memory_uid": "3b097446-2c73-5414-8c06-6bacdf00a4c1"
+            }
+          ],
+          "reason": "Only the compared frame records this late-order delivery outcome.",
+          "status": "RESOLVED",
+          "summary": "A gift ordered late arrived the day after the gathering.",
+          "uid": "074e8bb3-9864-5039-a224-5bc4fd88a538"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6dd7199-c26a-4aed-a7c2-af355f47532b",
+              "memory_uid": "ce18c7a5-d1e9-5e5c-8739-b14fa7298feb"
+            }
+          ],
+          "reason": "Only the compared frame records this later advance-ordering precaution.",
+          "status": "RESOLVED",
+          "summary": "The following year, the user checked delivery expectations and ordered a week before the gathering.",
+          "uid": "9b8b7c93-6801-527a-bce7-e879197e6240"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6dd7199-c26a-4aed-a7c2-af355f47532b",
+              "memory_uid": "7657f424-cd24-54dd-8409-e04974dd1531"
+            }
+          ],
+          "reason": "Only the compared frame records this gift-identification mistake.",
+          "status": "RESOLVED",
+          "summary": "Unlabeled wrapped boxes caused the user to swap gifts intended for an older sister and younger brother.",
+          "uid": "0ae5e5e0-625b-5fa4-a0c3-aad6fa8ee2bd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6dd7199-c26a-4aed-a7c2-af355f47532b",
+              "memory_uid": "d8e82ad3-902e-5f0c-aa8e-b23ce874982a"
+            }
+          ],
+          "reason": "Only the compared frame records this later gift-labeling practice.",
+          "status": "RESOLVED",
+          "summary": "On the next occasion, the user wrote each recipient’s name on the bottom of the box.",
+          "uid": "08afe960-4306-5d6d-9e65-b8c60a8a88e2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6dd7199-c26a-4aed-a7c2-af355f47532b",
+              "memory_uid": "8a941bf1-73bd-51d3-a069-62ecc9d56439"
+            }
+          ],
+          "reason": "Only the compared frame states this recipient preference.",
+          "status": "RESOLVED",
+          "summary": "The user’s younger brother prefers an immediately shareable family snack over an item solely for himself.",
+          "uid": "b9d4f5bc-5a2f-5293-9daf-651e854f5ee5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6dd7199-c26a-4aed-a7c2-af355f47532b",
+              "memory_uid": "036edf8f-4680-5822-924e-0fdc691c8135"
+            }
+          ],
+          "reason": "Only the compared frame defines this capability and knowledge limit for gift records.",
+          "status": "RESOLVED",
+          "summary": "The local agent can detect duplicate past gifts but cannot determine what is currently needed.",
+          "uid": "ead97253-b3a5-5c58-b938-3192eba0d0d3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6dd7199-c26a-4aed-a7c2-af355f47532b",
+              "memory_uid": "b9e9e222-a559-56e3-93b5-1f49a0e0d3ab"
+            }
+          ],
+          "reason": "Only the compared frame states this seasonal delivery contingency.",
+          "status": "RESOLVED",
+          "summary": "Year-end deliveries can be slower than usual or have changing expected dates.",
+          "uid": "570133e0-9e71-5942-b1e0-126b568defb0"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame describes gift storage, selection, delivery timing, labeling, family preferences, duplicate detection, and seasonal shipping uncertainty.",
+        "differences": "",
+        "reference_only": "The reference describes accessible clinic routes, temporary barriers, elevator checks, waiting and seating experiences, staff expectations, and limits on inferring a user’s condition."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "69be7ca8-31f2-4602-a3fd-3c464e479872"
+    },
+    "analysis_digest": "2bdf6f06a08452879be0b716ff530fbffc6a6eeb7aa6bfaa9dc736e8f1ba33cc",
+    "key": "0f083ff63a39496319a5c46fe75591d9b15b2774b5080835ced261b2f0074163",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 35.797841167001025,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "0f083ff63a39496319a5c46fe75591d9b15b2774b5080835ced261b2f0074163",
+  "created_at": "2026-08-13T18:48:29.660129Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/12",
+  "pair_key": "c401cd670a9eab56d069c5487c4c8036331d2643c7fc591d5b754473eaaa58d0",
+  "provider_seconds": 35.797841167001025,
+  "right": "task-3/local/personal-memory/2025/12",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

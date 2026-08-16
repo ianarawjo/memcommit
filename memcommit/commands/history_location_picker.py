@@ -6,7 +6,7 @@ from collections.abc import Callable, Mapping, Sequence
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.commands.context_picker import (
+from memcommit.context_targeting.tui.picker import (
     ContextMemoryRow,
     ContextSubtreeSelection,
     choose_context,

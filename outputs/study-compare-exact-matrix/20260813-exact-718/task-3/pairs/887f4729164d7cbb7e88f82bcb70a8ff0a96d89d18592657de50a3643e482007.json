@@ -1,0 +1,361 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:46:56.319852+00:00",
+      "frames": [
+        {
+          "context_digest": "492e513a553a9191e2c646cca49364b336ae6d163de5688eeca8cc661bbbdb32",
+          "context_name": "task-3/local/personal-memory/2024/11",
+          "context_uid": "0d5e1eef-1669-5589-94ba-b46c9c2080dc",
+          "memories": [
+            {
+              "content": "The user changed their schedule once in November 2024 because of their mother's hospital visit.",
+              "content_digest": "f08f07dda1b468ab191a59d87e7ceb8068189964edee2010abdae6e525d6103f",
+              "position": 0,
+              "uid": "bb17c696-0c1c-516f-8ad9-68a4b159ce22"
+            },
+            {
+              "content": "After seeing the reason for the schedule change written in a calendar invitation, the user asked for it to be removed.",
+              "content_digest": "7bfc906526c255f90a85b6dcc4b28ea1b0a9389e9f17ba989a4ce098280578c8",
+              "position": 1,
+              "uid": "195ba5ab-3ee0-5594-a859-9f2b5eadf9ea"
+            },
+            {
+              "content": "The user was able to reschedule the appointment after providing only a new time, without a reason.",
+              "content_digest": "14f1bd0410c76aa3a0eb28a2212fd06558ab23b6dc012aa5529980a67efe3e2b",
+              "position": 2,
+              "uid": "4c8759cc-66aa-527c-a9d5-197d39b5d2b7"
+            },
+            {
+              "content": "On a day the user traveled in their father's car, they photographed the parking location.",
+              "content_digest": "111e71af27be5d109557440569352964544e9b702810741445172a6cf51f94f5",
+              "position": 3,
+              "uid": "d4b27ea7-d329-5dc7-b7ca-91d0cd50a958"
+            },
+            {
+              "content": "On the next visit, when the user did not take a photo, they walked one circuit of the parking garage while looking for the exit.",
+              "content_digest": "6d61d67e35552cb739d0220e480189706ec5bbac74f93b87149a6948d9ac2805",
+              "position": 4,
+              "uid": "32a19a57-9b04-5f86-92ba-202a9ac803e4"
+            },
+            {
+              "content": "After hearing preparation items from their mother by phone, the user omitted two items.",
+              "content_digest": "449dc73aad797f5acd3d898292cf9942f7d3b65b9faf52769ae5b3332285b4f3",
+              "position": 5,
+              "uid": "0eeffd8c-acd6-57bf-950d-20cfa1fe62b3"
+            },
+            {
+              "content": "After receiving the preparation items again by text, the user put all of them in their bag.",
+              "content_digest": "9539ab90f598a96d97a73b7954db8834d3106861ba6ecc814e579a348e0145d6",
+              "position": 6,
+              "uid": "07ea3801-8666-581d-b846-2f45bf99ca19"
+            },
+            {
+              "content": "The user's mother does not want the reason for her visit disclosed in the user's external schedule.",
+              "content_digest": "b1aff7bb5b5df1ec773fd8875205cd9fdfa2fd5b520cf91b7c84c9e3054b4feb",
+              "position": 7,
+              "uid": "9e70b92e-1d8d-51ef-962d-bd9b348a56d5"
+            },
+            {
+              "content": "Do not include the mother's reason for a visit when conveying the user's availability externally.",
+              "content_digest": "b9473919c63f233fc66c49bbf00b20a8ab9532bcb1b8ce3896c442afed4229d9",
+              "position": 8,
+              "uid": "d76686fd-9f1d-5d94-931b-4b49c86a8f4e"
+            },
+            {
+              "content": "Some daily-life services may operate for shorter hours during the year-end holiday period.",
+              "content_digest": "48d4487aba4c395527f9dfeac9488f45556d1bd89475f8620b0a64d84e4479fc",
+              "position": 9,
+              "uid": "820a5de9-9e08-52c7-8747-5155fe341bb4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "19826ea4-e85a-473d-8d8d-55eb1a6dab92"
+        },
+        {
+          "context_digest": "1d47d83944d91bc0316a61894412e9b4361758603b9532687cf68473f1d30198",
+          "context_name": "task-3/local/personal-memory/2026/01",
+          "context_uid": "e48e6eac-20f7-599d-9f76-4238bd9dd96d",
+          "memories": [
+            {
+              "content": "The user keeps gloves and scarves in a basket inside the entrance.",
+              "content_digest": "df54c52cb6bc89e2e66c747df9807c6892db272c2a23ac5ac91e3f64aaa2a5da",
+              "position": 0,
+              "uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409"
+            },
+            {
+              "content": "On a day the user could not find their gloves, they walked with their hands in their pockets and missed the bus.",
+              "content_digest": "d4205aee5fe3f2c18adc3622930cc7f74de231de9812ca594dbd95a0af7199ff",
+              "position": 1,
+              "uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5"
+            },
+            {
+              "content": "Before the next outing, the user put the gloves in the entrance basket the night before and left on time.",
+              "content_digest": "23a7026d7d1a7edd3278e7b8aa147ef0d315059663f78da5498ad6c1b4a5407c",
+              "position": 2,
+              "uid": "a11f0943-8ee1-5305-87fb-64982fb36f82"
+            },
+            {
+              "content": "On a snowy day, the user chose a shorter route but turned back at stairs that had not been cleared of snow.",
+              "content_digest": "e9e241d2bc4d7c2fa9a44471aa6d1c16d42d50fe2ed99ccfb50713107714be9b",
+              "position": 3,
+              "uid": "f623f245-cdd5-5080-8869-b52cf2914076"
+            },
+            {
+              "content": "The next day, the user took a cleared sidewalk along the main road and avoided slippery sections.",
+              "content_digest": "62c8ec8b38778e9922cf433af4ceb4d59f60bee52dc758e3b88bb1163637f108",
+              "position": 4,
+              "uid": "17ac56f1-1302-5350-99d5-b95ef7feb768"
+            },
+            {
+              "content": "The user fell asleep with the heat turned up, became too warm before dawn, and woke twice.",
+              "content_digest": "912dbbc88a0f4a174b714a794793781f4d2f6c889f73cd7f825338addcab5d6c",
+              "position": 5,
+              "uid": "96988fa9-44b1-511e-8c99-4372f902cfe3"
+            },
+            {
+              "content": "The next night, the user turned down the heat and used one additional thin blanket.",
+              "content_digest": "3d12a4609d4731ebe71bacc841c979ac3497553238c3b5c2191842bbf075ba89",
+              "position": 6,
+              "uid": "b628acaa-50da-552c-8665-244dc4ab8263"
+            },
+            {
+              "content": "On a morning with heavy snow, the user's father expects the user will worry about road conditions and sends a text before departure.",
+              "content_digest": "dcd6bcb23bee46e49813bb14dd8dcb91983d5830f0536d7f23fcdb3a8af0667c",
+              "position": 7,
+              "uid": "08dfb937-7b28-55b5-801c-c0da00cbd414"
+            },
+            {
+              "content": "Before proposing a winter travel route, check recent snow-clearing conditions and accessible entrances.",
+              "content_digest": "dcab87102a9979c51dd369d5ba5ed00b7445c8ccd14450edcb8bec7859689606",
+              "position": 8,
+              "uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d"
+            },
+            {
+              "content": "The local agent cannot know the actual condition of the sidewalk the user will take from a weather forecast alone.",
+              "content_digest": "6b4bcc2f2f508f130c047ff677cadae0eae5b4cc5e5dd6bb3a1fb3784d7793b1",
+              "position": 9,
+              "uid": "802c4031-57de-592a-9bc8-6ee3d54921c8"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "4cc36fc8-8405-4d08-b111-f743b1a43f81"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames contain separate, noncompeting domains. Reference centers on schedule privacy, practical memory aids, and holiday service hours; Compared centers on winter preparation, route safety, temperature adjustment, and anticipatory travel communication. No shared operational claim or scope-dependent disagreement is established.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "19826ea4-e85a-473d-8d8d-55eb1a6dab92",
+              "memory_uid": "bb17c696-0c1c-516f-8ad9-68a4b159ce22"
+            }
+          ],
+          "reason": "This is a one-sided historical circumstance with no counterpart addressing the same event or decision.",
+          "status": "RESOLVED",
+          "summary": "A November 2024 schedule change was caused by the user’s mother visiting the hospital.",
+          "uid": "91823e4d-a2af-5437-8b20-1bc33ab5e5e0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "19826ea4-e85a-473d-8d8d-55eb1a6dab92",
+              "memory_uid": "195ba5ab-3ee0-5594-a859-9f2b5eadf9ea"
+            },
+            {
+              "frame_uid": "19826ea4-e85a-473d-8d8d-55eb1a6dab92",
+              "memory_uid": "4c8759cc-66aa-527c-a9d5-197d39b5d2b7"
+            }
+          ],
+          "reason": "Both memories split one experience showing that the reason was unwanted and unnecessary for rescheduling; Compared contains no corresponding scheduling claim.",
+          "status": "RESOLVED",
+          "summary": "The user removed a disclosed schedule-change reason and successfully rescheduled by supplying only a new time.",
+          "uid": "a3bf1886-3a81-5ec8-8d2b-761f15f99314"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "19826ea4-e85a-473d-8d8d-55eb1a6dab92",
+              "memory_uid": "9e70b92e-1d8d-51ef-962d-bd9b348a56d5"
+            },
+            {
+              "frame_uid": "19826ea4-e85a-473d-8d8d-55eb1a6dab92",
+              "memory_uid": "d76686fd-9f1d-5d94-931b-4b49c86a8f4e"
+            }
+          ],
+          "reason": "The memories state the same one-sided privacy preference and its operational instruction, without a corresponding Compared policy.",
+          "status": "RESOLVED",
+          "summary": "The mother’s visit reason should not be disclosed when the user’s availability is conveyed externally.",
+          "uid": "e2dc29b0-8f3f-5078-aba6-c2119aa426ea"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "19826ea4-e85a-473d-8d8d-55eb1a6dab92",
+              "memory_uid": "d4b27ea7-d329-5dc7-b7ca-91d0cd50a958"
+            },
+            {
+              "frame_uid": "19826ea4-e85a-473d-8d8d-55eb1a6dab92",
+              "memory_uid": "32a19a57-9b04-5f86-92ba-202a9ac803e4"
+            }
+          ],
+          "reason": "The memories form one parking-navigation episode contrasting documentation with its absence; Compared has no claim about parking-location recall.",
+          "status": "RESOLVED",
+          "summary": "Photographing a parking location is contrasted with a later visit when no photo was taken and the user searched the garage for the exit.",
+          "uid": "55654a42-3149-5597-b5a4-b7319e5bd3ad"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "19826ea4-e85a-473d-8d8d-55eb1a6dab92",
+              "memory_uid": "0eeffd8c-acd6-57bf-950d-20cfa1fe62b3"
+            },
+            {
+              "frame_uid": "19826ea4-e85a-473d-8d8d-55eb1a6dab92",
+              "memory_uid": "07ea3801-8666-581d-b846-2f45bf99ca19"
+            }
+          ],
+          "reason": "The memories split one contrast about spoken versus written preparation reminders, with no matching Compared claim.",
+          "status": "RESOLVED",
+          "summary": "Phone-delivered preparation items were incompletely packed, whereas the same items sent by text were all placed in the bag.",
+          "uid": "9f78a62f-c2c2-581d-8b54-3539e53eecb1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "19826ea4-e85a-473d-8d8d-55eb1a6dab92",
+              "memory_uid": "820a5de9-9e08-52c7-8747-5155fe341bb4"
+            }
+          ],
+          "reason": "This one-sided service-availability caution is independently useful and has no counterpart in Compared.",
+          "status": "RESOLVED",
+          "summary": "Daily-life services may have reduced hours during the year-end holiday period.",
+          "uid": "1c0f6983-8693-55fa-8044-068761a404e4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4cc36fc8-8405-4d08-b111-f743b1a43f81",
+              "memory_uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409"
+            },
+            {
+              "frame_uid": "4cc36fc8-8405-4d08-b111-f743b1a43f81",
+              "memory_uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5"
+            },
+            {
+              "frame_uid": "4cc36fc8-8405-4d08-b111-f743b1a43f81",
+              "memory_uid": "a11f0943-8ee1-5305-87fb-64982fb36f82"
+            }
+          ],
+          "reason": "The memories split one winter-clothing preparation pattern, including the consequence of missing gloves and the successful staging response; Reference has no corresponding claim.",
+          "status": "RESOLVED",
+          "summary": "Keeping or staging gloves in the entrance basket supports finding them before departure and leaving on time.",
+          "uid": "20ec6e62-d933-567c-86d9-7e50691ee086"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4cc36fc8-8405-4d08-b111-f743b1a43f81",
+              "memory_uid": "f623f245-cdd5-5080-8869-b52cf2914076"
+            },
+            {
+              "frame_uid": "4cc36fc8-8405-4d08-b111-f743b1a43f81",
+              "memory_uid": "17ac56f1-1302-5350-99d5-b95ef7feb768"
+            },
+            {
+              "frame_uid": "4cc36fc8-8405-4d08-b111-f743b1a43f81",
+              "memory_uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d"
+            },
+            {
+              "frame_uid": "4cc36fc8-8405-4d08-b111-f743b1a43f81",
+              "memory_uid": "802c4031-57de-592a-9bc8-6ee3d54921c8"
+            }
+          ],
+          "reason": "The memories jointly develop one snow-route planning claim through failed and successful routes, an operational check, and an information limitation; Reference has no corresponding route policy.",
+          "status": "RESOLVED",
+          "summary": "Winter routes should be selected using recent clearing and entrance-access conditions because uncleared features can block travel and forecasts alone cannot establish sidewalk conditions.",
+          "uid": "7b66ca49-3f69-5dde-99d2-eee6d22da0a5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4cc36fc8-8405-4d08-b111-f743b1a43f81",
+              "memory_uid": "96988fa9-44b1-511e-8c99-4372f902cfe3"
+            },
+            {
+              "frame_uid": "4cc36fc8-8405-4d08-b111-f743b1a43f81",
+              "memory_uid": "b628acaa-50da-552c-8665-244dc4ab8263"
+            }
+          ],
+          "reason": "The two memories split one temperature-adjustment episode, with no corresponding Reference claim.",
+          "status": "RESOLVED",
+          "summary": "After excessive heat disrupted sleep, the user lowered the heat and added a thin blanket the following night.",
+          "uid": "2ae04b00-0389-5428-a2f9-2a1a4518288d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4cc36fc8-8405-4d08-b111-f743b1a43f81",
+              "memory_uid": "08dfb937-7b28-55b5-801c-c0da00cbd414"
+            }
+          ],
+          "reason": "This one-sided anticipatory communication pattern is independently useful and has no counterpart in Reference.",
+          "status": "RESOLVED",
+          "summary": "On heavily snowy mornings, the user’s father anticipates road-condition worry and texts before departure.",
+          "uid": "a13a1f4e-33cb-5a6b-9838-ecfc838e4275"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared records staging winter clothing, snow-aware route selection with limits on forecast knowledge, cooler sleep arrangements, and a father’s pre-departure road-condition reassurance.",
+        "differences": "",
+        "reference_only": "Reference records privacy-preserving schedule handling, contrasting outcomes from parking photos and written preparation lists, and possible year-end service-hour reductions."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "1eb70336-be5b-438d-b139-fb33ef71c6d7"
+    },
+    "analysis_digest": "f932a6e42d631bc76ae9e359b562cd41ae8c5ed38edc0598daef15de5a7315bf",
+    "key": "fc17c90ebc2df8a8bfe932eac15b3e8649fef6258465c0cab8653d7a9c405752",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 44.410393166002905,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "fc17c90ebc2df8a8bfe932eac15b3e8649fef6258465c0cab8653d7a9c405752",
+  "created_at": "2026-08-13T18:47:40.729942Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/11",
+  "pair_key": "887f4729164d7cbb7e88f82bcb70a8ff0a96d89d18592657de50a3643e482007",
+  "provider_seconds": 44.410393166002905,
+  "right": "task-3/local/personal-memory/2026/01",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

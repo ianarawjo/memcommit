@@ -1,0 +1,253 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:25:23.417185+00:00",
+      "frames": [
+        {
+          "context_digest": "3dd1208c3f947a57bc5f1d490a28c999913d43cad775b2b01e50c6059d6b660e",
+          "context_name": "task-2/advisor1/safety",
+          "context_uid": "cd6c1fab-786a-52ea-9437-9a4d209ba419",
+          "memories": [
+            {
+              "content": "Specify the order and recipients for reporting serious discomfort during the study.",
+              "content_digest": "1de38a3ec5fc3267ebeb35482a458d4aaf50d2aea44c6dba334f184e50ddddd2",
+              "position": 0,
+              "uid": "9d6f5228-d182-571a-83d2-6a67becb7736"
+            },
+            {
+              "content": "Field staff rely on a pre-defined contact sequence when serious discomfort is reported.",
+              "content_digest": "ed3a3b19d92a50c7dd324981b702bac31e0130fda38fe37150e500481ed11d84",
+              "position": 1,
+              "uid": "00ed485d-66c2-59ad-9c5b-9ae445412690"
+            },
+            {
+              "content": "Establish criteria for halting the use of a design alternative if recurring severe errors appear during formative evaluation.",
+              "content_digest": "dcca56df756b89f89a0a9dbf2bf45aee6480392b368c9cf3402223d3084b801b",
+              "position": 2,
+              "uid": "9c6e1561-f671-52cb-aa67-245cc4987ad4"
+            },
+            {
+              "content": "Do not include a design alternative halted for safety reasons in subsequent evaluation iterations without modification.",
+              "content_digest": "01668098161666622f4d7ed8298e3e63a06fa9b10a4cfd53b200d820f96f5c50",
+              "position": 3,
+              "uid": "2381ecf7-2b11-583d-91d9-0a5cfc279ba1"
+            },
+            {
+              "content": "Even in controlled environments, delayed prototype recovery procedures increase session interruption time and alter data collection conditions for the same task.",
+              "content_digest": "fd0f364ef66cfa7be937779ed4ce3ffb1a406bc227d09c26b288a751c5e0d427",
+              "position": 4,
+              "uid": "c5ce1b00-36d9-5cdd-a318-93b88ca0e322"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "4d3f0d26-c8f2-46a4-a897-ee05498ef399"
+        },
+        {
+          "context_digest": "b598a4ff3268ef8c6c0d7bc5ff34af370074bcdd30d61bd3623fcdfb167f37d6",
+          "context_name": "task-2/advisor2/safety",
+          "context_uid": "4283d797-6a33-5f39-b7f6-f4dbd3264389",
+          "memories": [
+            {
+              "content": "List whom to notify and in what order if serious discomfort is reported during the study.",
+              "content_digest": "3453feb8597fb15c827f22297d58dc804fdc1d8080b9e93ba35b85a4425092b6",
+              "position": 0,
+              "uid": "ceb095a9-3068-55ea-a06f-d954c121e007"
+            },
+            {
+              "content": "Field staff rely on the pre-defined contact sequence when serious discomfort is reported.",
+              "content_digest": "ba38f8a5c993c810e19b9120f4492c3accf962c8b8fd7642539ac24f363099e0",
+              "position": 1,
+              "uid": "962d7645-02b3-5611-8415-4370794c10d4"
+            },
+            {
+              "content": "Define the thresholds for participant harm, operational disruption, and data anomalies at which deployment and data collection must cease.",
+              "content_digest": "7f7f124d266efd8255c4615ebc7eb375447047ed5a2b96327f28f8f17d048813",
+              "position": 2,
+              "uid": "a3270872-1901-5d24-8ef1-374833599bf9"
+            },
+            {
+              "content": "Establish procedures to restore existing systems and workflow states after suspending field deployment.",
+              "content_digest": "1a5f7636ec45e60df11db8b0d3763345c0bfaf9a92c1e5d581e6b36452c31208",
+              "position": 3,
+              "uid": "f6dd1368-0d90-5f1a-97d0-56594ce8f4b3"
+            },
+            {
+              "content": "The user's stop plan can be judged feasible only when it identifies who has authority to order recovery and who is responsible for carrying it out.",
+              "content_digest": "3fa05bd19fdeeb320a37cfb89ad853a868b64055f7b21eb182798b0119f6620c",
+              "position": 4,
+              "uid": "342e4697-873f-56a8-b4a4-896efe910144"
+            },
+            {
+              "content": "In organizations where error reporting is linked to individual performance evaluations, safety signal records may be separated from research decision logs, potentially breaking the traceability path for the same incident.",
+              "content_digest": "2bf13ff8ab1a778e8a793ede627b28d40798ae40d25c7a6d25eb5e2e79dd8e97",
+              "position": 5,
+              "uid": "6c4e9175-4590-5689-ae2b-678f0eb930b9"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "19db6e35-ae1f-496b-9cb6-c1c29e066752"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "Both frames align on serious-discomfort notification planning and staff reliance on its contact sequence. They address stopping criteria at different evaluation stages, while separately contributing rules for safe reuse, recovery timing and governance, system restoration, and incident traceability.",
+      "relations": [
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            {
+              "frame_uid": "4d3f0d26-c8f2-46a4-a897-ee05498ef399",
+              "memory_uid": "9d6f5228-d182-571a-83d2-6a67becb7736"
+            },
+            {
+              "frame_uid": "19db6e35-ae1f-496b-9cb6-c1c29e066752",
+              "memory_uid": "ceb095a9-3068-55ea-a06f-d954c121e007"
+            }
+          ],
+          "reason": "The wording differs, but the required trigger, recipients, and ordering are operationally the same.",
+          "status": "RESOLVED",
+          "summary": "Both require specifying whom to notify and in what order when serious discomfort is reported during the study.",
+          "uid": "1dd1ee21-ce26-5c54-baea-dfc2812b1391"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            {
+              "frame_uid": "4d3f0d26-c8f2-46a4-a897-ee05498ef399",
+              "memory_uid": "00ed485d-66c2-59ad-9c5b-9ae445412690"
+            },
+            {
+              "frame_uid": "19db6e35-ae1f-496b-9cb6-c1c29e066752",
+              "memory_uid": "962d7645-02b3-5611-8415-4370794c10d4"
+            }
+          ],
+          "reason": "They make the same operational claim under the same staff, event, and procedure scope.",
+          "status": "RESOLVED",
+          "summary": "Both state that field staff rely on a predefined contact sequence for reports of serious discomfort.",
+          "uid": "6922ba66-34e8-56af-9b04-b77dfc60f631"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "4d3f0d26-c8f2-46a4-a897-ee05498ef399",
+              "memory_uid": "9c6e1561-f671-52cb-aa67-245cc4987ad4"
+            },
+            {
+              "frame_uid": "19db6e35-ae1f-496b-9cb6-c1c29e066752",
+              "memory_uid": "a3270872-1901-5d24-8ef1-374833599bf9"
+            }
+          ],
+          "reason": "The formative scope uses recurring severe errors to halt an alternative, whereas the deployment scope covers participant harm, operational disruption, and data anomalies requiring broader cessation.",
+          "status": "RESOLVED",
+          "summary": "Both call for predefined stopping criteria, scoped respectively to formative evaluation of a design alternative and to field deployment and data collection.",
+          "uid": "d1badd2a-5bda-579c-8cd1-518d0d5ce353"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4d3f0d26-c8f2-46a4-a897-ee05498ef399",
+              "memory_uid": "2381ecf7-2b11-583d-91d9-0a5cfc279ba1"
+            }
+          ],
+          "reason": "This independently useful rule about subsequent reuse appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A design alternative halted for safety reasons must not enter later evaluation iterations unchanged.",
+          "uid": "eb7f1ef5-94f5-53c7-96fe-0b2949540a99"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4d3f0d26-c8f2-46a4-a897-ee05498ef399",
+              "memory_uid": "c5ce1b00-36d9-5cdd-a318-93b88ca0e322"
+            }
+          ],
+          "reason": "This causal observation about recovery delay during sessions appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Delayed prototype recovery can lengthen session interruptions and alter data-collection conditions even in controlled environments.",
+          "uid": "bf5f88ed-fdd4-5727-8762-443d81204dc5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "19db6e35-ae1f-496b-9cb6-c1c29e066752",
+              "memory_uid": "f6dd1368-0d90-5f1a-97d0-56594ce8f4b3"
+            }
+          ],
+          "reason": "This independently useful restoration requirement appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Procedures should restore existing systems and workflow states after field deployment is suspended.",
+          "uid": "c4c42e2f-e85e-5ca0-a70b-b5c1685f0a3b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "19db6e35-ae1f-496b-9cb6-c1c29e066752",
+              "memory_uid": "342e4697-873f-56a8-b4a4-896efe910144"
+            }
+          ],
+          "reason": "This independently useful governance criterion appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A stop plan is feasible only if it identifies both who may order recovery and who must execute it.",
+          "uid": "80d3dd61-1c17-5b5b-954d-b84173cce0c9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "19db6e35-ae1f-496b-9cb6-c1c29e066752",
+              "memory_uid": "6c4e9175-4590-5689-ae2b-678f0eb930b9"
+            }
+          ],
+          "reason": "This conditional organizational risk appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Performance-linked error reporting may separate safety records from research decision logs and break incident traceability.",
+          "uid": "70e125ca-b41e-5b08-8b8a-22d747b7e2f1"
+        }
+      ],
+      "reports": {
+        "both": "Both require an ordered serious-discomfort notification list and recognize that field staff rely on the predefined sequence.",
+        "compared_only": "The compared frame adds restoration procedures, recovery authority and responsibility, and a traceability risk when safety records are separated from research decision logs.",
+        "differences": "Stopping criteria apply to recurring severe errors in formative design evaluation on one side, but to harm, disruption, and data-anomaly thresholds during deployment and collection on the other.",
+        "reference_only": "The reference adds a restriction on unmodified reuse of safety-halted alternatives and describes how delayed prototype recovery disrupts sessions and data conditions."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "7954e5cf-059a-42b2-8be3-82715e1cc458"
+    },
+    "analysis_digest": "613f8b066399fe260f7f22ec9d2392451850a6c68460f01e3f279da04235b73c",
+    "key": "c558497a1e1a38b58625a4fcc4d1d0d14b01ab16c5b249a0cc8310c0ff1d2950",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 31.7334984170011,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "c558497a1e1a38b58625a4fcc4d1d0d14b01ab16c5b249a0cc8310c0ff1d2950",
+  "created_at": "2026-08-13T18:25:55.150238Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/safety",
+  "pair_key": "f310c23da7f844231e7775107632ac8575d54fb646eae885c56677b7155baa05",
+  "provider_seconds": 31.7334984170011,
+  "right": "task-2/advisor2/safety",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

@@ -1,0 +1,340 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:16:31.814336+00:00",
+      "frames": [
+        {
+          "context_digest": "e76b6eea5af0e4d970d4db385b4100a788a8b1ed5ef6e68709bd92c943ab3b6b",
+          "context_name": "task-2/advisor1/compensation",
+          "context_uid": "7ba75d6b-cef6-5c8b-9b17-d3901e168d24",
+          "memories": [
+            {
+              "content": "Calculate user study compensation budgets based on estimated participation burden, combining session time and preparation effort.",
+              "content_digest": "2dc18d8ddeb900741b2a8f936a59d5fc72423e2d3144e8b2232a6435dc9a68f1",
+              "position": 0,
+              "uid": "0ae46268-cca7-57d5-a0ee-6eb3b85cda84"
+            },
+            {
+              "content": "Compensate for required travel time in face-to-face user studies as well.",
+              "content_digest": "688ba9df95e18254a5a33ab6c0e59066cf0674137b6802178e3fb8eae4ba38e5",
+              "position": 1,
+              "uid": "bdda6e22-ea06-5a13-8854-67f7521724db"
+            },
+            {
+              "content": "Compensate for the actual time participants spent in sessions, regardless of research modality.",
+              "content_digest": "8673c2b5b5913f0e8bcf0035eea4bc87430bb1fcf8ffb27b354bde0ca3a7ae4e",
+              "position": 2,
+              "uid": "f49b1d0a-7a1a-53b5-b7fc-815cc2cc134a"
+            },
+            {
+              "content": "Leave cash payment as an available compensation method for face-to-face studies.",
+              "content_digest": "72f9e1b33de0c05bb711c2d8162ab62f382a75871a710db37b858125eae6fcde",
+              "position": 3,
+              "uid": "1f4d05e4-2a79-572c-8050-beb1464fb781"
+            },
+            {
+              "content": "If compensation equity is explained, do not require finalizing the payment method at the proposal stage.",
+              "content_digest": "6945260e986651e7992034801b6151a3f93184013fea77d17b630f55fcdc943b",
+              "position": 4,
+              "uid": "abcba764-6f35-5dae-bb3d-7860fb72ccf2"
+            },
+            {
+              "content": "Apply the same base hourly rate to face-to-face and remote studies if task burden is equal.",
+              "content_digest": "144477b358e6e8931042d1793a5ffd10f56d69aa90523d69d20a622528a9dad0",
+              "position": 5,
+              "uid": "c6a28f37-1a7c-5dbd-b75c-c829f0461504"
+            },
+            {
+              "content": "Participants judge compensation fairness based on the total burden, combining session time with required travel and preparation time.",
+              "content_digest": "54e8900c7049e048484db8b523a41e98cbb911b45be2adbd103fd2f1635bf026",
+              "position": 6,
+              "uid": "874de649-9c04-5960-b3a9-e68356ef666c"
+            },
+            {
+              "content": "Account in compensation for the burden of rescheduling iterations and returning for multiple formative evaluation sessions.",
+              "content_digest": "f09be004defb4019ba7476919b6780cc2b6bbac088f79dbd0ec66bf2753af27d",
+              "position": 7,
+              "uid": "529559f5-850d-5920-8e27-0b1e7138dc36"
+            },
+            {
+              "content": "Compensate participants for time already invested even if a session is terminated early due to prototype errors.",
+              "content_digest": "64b65cc0b307b48d64641d126594a5b8a9258518c3aa27d7846be2306c25a9f4",
+              "position": 8,
+              "uid": "c8be56ee-860a-5f6c-abbf-02c8dbc59eb5"
+            },
+            {
+              "content": "The author of this proposal tends to exclude preparation burden between sessions when calculating compensation for iterative studies.",
+              "content_digest": "177f041fcb9fe768dcc1c476b592e99c8609d06ebf727aeca1379d21256b43d8",
+              "position": 9,
+              "uid": "bdac8cf8-dd11-5794-b4b2-9774ff344436"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "d23fe078-f208-4329-ab14-465f88e869d2"
+        },
+        {
+          "context_digest": "e70e4eaff26e4baf1b346a4ecd2b44ed9f9ccac9e205b7b82572dc8ef0e217c4",
+          "context_name": "task-2/advisor2/emphasis",
+          "context_uid": "398f9930-3a0f-5de0-a339-ceba7dd5d1c6",
+          "memories": [
+            {
+              "content": "Do not exceed two primary HCI contributions that readers must remember.",
+              "content_digest": "59786866cf953172c2697f09398356a861e8ea448093102c32c9149f16b2e5c5",
+              "position": 0,
+              "uid": "d59dc83b-ce6a-5ac7-ab64-e5436df1f945"
+            },
+            {
+              "content": "Present each design or operational contribution as a single named sentence.",
+              "content_digest": "e0de5a9f1c1ca585fe062d7e11f8d2536cbe5ec4eefc16da6f7a0b62c0247d45",
+              "position": 1,
+              "uid": "328de462-17a4-551f-9f74-cb3118519e45"
+            },
+            {
+              "content": "In studies recruiting organizational members, emphasize workflow constraints.",
+              "content_digest": "c46efadebd89f3d757993baea79a5ef1386bbf6b4769ae3704ae62102397fc3b",
+              "position": 2,
+              "uid": "eab1dac5-8b61-5793-a56f-c4e3e64af190"
+            },
+            {
+              "content": "In studies recruiting organizational members, emphasize manager approval constraints.",
+              "content_digest": "2387fb9f3ab907e671fc9dcc2e7f067a84bdf1f5713d8385a32e39eb1e14751d",
+              "position": 3,
+              "uid": "f90e616a-d5a4-5cc2-86e4-62534a1faf83"
+            },
+            {
+              "content": "HCI reviewers find it difficult to identify primary contributions when named design and operational contributions exceed two.",
+              "content_digest": "04e080bfdf7277d04f0efc1b1d6775d06cba88aab5ff78bfd430674b004722a5",
+              "position": 4,
+              "uid": "78a1c87a-6936-516c-b578-8e97dc2e91f4"
+            },
+            {
+              "content": "Highlight one primary field operational decision to be changed by evaluation results as the central claim.",
+              "content_digest": "9a6bda883e68a2553a1238114d5de2746dc220948aebc1c2965cbb435318fe9c",
+              "position": 5,
+              "uid": "7af2db41-9091-5452-9beb-8fd7b48b7872"
+            },
+            {
+              "content": "Specify prototype features unnecessary for reviewing the primary field problem as secondary scope.",
+              "content_digest": "419ed0b0bccf1af7b30e0351f5e87b9e37e469cfa567e684695ffe4b6d39178a",
+              "position": 6,
+              "uid": "2312f35d-c17d-5af3-b84f-d2e671d7663f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "4588808f-450f-4e61-afb0-46d0890fad5c"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate operational domains: participant compensation and HCI contribution framing. No cross-frame claim materially governs the same decision, so the ledger preserves each side’s independent policies, rationales, and observed practice without treating topical absence as disagreement.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d23fe078-f208-4329-ab14-465f88e869d2",
+              "memory_uid": "0ae46268-cca7-57d5-a0ee-6eb3b85cda84"
+            },
+            {
+              "frame_uid": "d23fe078-f208-4329-ab14-465f88e869d2",
+              "memory_uid": "bdda6e22-ea06-5a13-8854-67f7521724db"
+            },
+            {
+              "frame_uid": "d23fe078-f208-4329-ab14-465f88e869d2",
+              "memory_uid": "f49b1d0a-7a1a-53b5-b7fc-815cc2cc134a"
+            },
+            {
+              "frame_uid": "d23fe078-f208-4329-ab14-465f88e869d2",
+              "memory_uid": "874de649-9c04-5960-b3a9-e68356ef666c"
+            },
+            {
+              "frame_uid": "d23fe078-f208-4329-ab14-465f88e869d2",
+              "memory_uid": "529559f5-850d-5920-8e27-0b1e7138dc36"
+            }
+          ],
+          "reason": "These reference-side claims state complementary components and rationale for one burden-based compensation principle, while the compared frame contains no claim about compensation calculation.",
+          "status": "RESOLVED",
+          "summary": "Compensation should reflect participants’ total burden, including session time, preparation, face-to-face travel, and iterative rescheduling or return visits, consistent with how participants assess fairness.",
+          "uid": "40a831b8-4217-5d74-9825-ee4d3cee2998"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d23fe078-f208-4329-ab14-465f88e869d2",
+              "memory_uid": "1f4d05e4-2a79-572c-8050-beb1464fb781"
+            }
+          ],
+          "reason": "This is an independent reference-side policy about payment method, a decision not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Cash should remain an available compensation method for face-to-face studies.",
+          "uid": "67294996-a77c-5534-b86c-b140ac39d6f3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d23fe078-f208-4329-ab14-465f88e869d2",
+              "memory_uid": "abcba764-6f35-5dae-bb3d-7860fb72ccf2"
+            }
+          ],
+          "reason": "This is an independent reference-side policy about when payment-method details must be settled, which the compared frame does not address.",
+          "status": "RESOLVED",
+          "summary": "A proposal need not finalize the payment method when compensation equity is explained.",
+          "uid": "5ef11ad4-07b9-5722-bb34-974c953c3484"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d23fe078-f208-4329-ab14-465f88e869d2",
+              "memory_uid": "c6a28f37-1a7c-5dbd-b75c-c829f0461504"
+            }
+          ],
+          "reason": "This reference-side claim independently governs modality-based rate parity; the compared frame has no corresponding compensation-rate policy.",
+          "status": "RESOLVED",
+          "summary": "Face-to-face and remote studies should use the same base hourly rate when task burden is equal.",
+          "uid": "805f20a3-44d3-5405-9434-ddf6e31dc154"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d23fe078-f208-4329-ab14-465f88e869d2",
+              "memory_uid": "c8be56ee-860a-5f6c-abbf-02c8dbc59eb5"
+            }
+          ],
+          "reason": "This is an independent reference-side rule for failed sessions, with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Participants should be compensated for time already invested when prototype errors terminate a session early.",
+          "uid": "61eb096b-790d-5972-a576-72907e0fef06"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d23fe078-f208-4329-ab14-465f88e869d2",
+              "memory_uid": "bdac8cf8-dd11-5794-b4b2-9774ff344436"
+            }
+          ],
+          "reason": "This reference-side observation describes a specific calculation tendency rather than establishing the general burden policy, and the compared frame contains no related practice claim.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to omit between-session preparation burden from iterative-study compensation calculations.",
+          "uid": "1ee0cb23-0622-5a09-a498-36f03d41abfc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4588808f-450f-4e61-afb0-46d0890fad5c",
+              "memory_uid": "d59dc83b-ce6a-5ac7-ab64-e5436df1f945"
+            },
+            {
+              "frame_uid": "4588808f-450f-4e61-afb0-46d0890fad5c",
+              "memory_uid": "78a1c87a-6936-516c-b578-8e97dc2e91f4"
+            }
+          ],
+          "reason": "These compared-side claims express one contribution-count rule and its rationale; the reference frame does not address contribution framing.",
+          "status": "RESOLVED",
+          "summary": "Primary HCI contributions should be limited to two because reviewers struggle to identify them when more design and operational contributions are named.",
+          "uid": "d2b9400c-0653-520e-9c97-034fc343ede5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4588808f-450f-4e61-afb0-46d0890fad5c",
+              "memory_uid": "328de462-17a4-551f-9f74-cb3118519e45"
+            }
+          ],
+          "reason": "This is an independent compared-side presentation rule absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Each design or operational contribution should be presented as a single named sentence.",
+          "uid": "1c76b5b5-4b38-5079-9605-c6c7c22cd5a8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4588808f-450f-4e61-afb0-46d0890fad5c",
+              "memory_uid": "eab1dac5-8b61-5793-a56f-c4e3e64af190"
+            },
+            {
+              "frame_uid": "4588808f-450f-4e61-afb0-46d0890fad5c",
+              "memory_uid": "f90e616a-d5a4-5cc2-86e4-62534a1faf83"
+            }
+          ],
+          "reason": "These compared-side claims split one organizational-recruitment emphasis into two constraint types; the reference frame contains no organizational-recruitment guidance.",
+          "status": "RESOLVED",
+          "summary": "Studies recruiting organizational members should emphasize workflow and manager-approval constraints.",
+          "uid": "35fd8937-903e-542f-8ae8-434fd18dceed"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4588808f-450f-4e61-afb0-46d0890fad5c",
+              "memory_uid": "7af2db41-9091-5452-9beb-8fd7b48b7872"
+            }
+          ],
+          "reason": "This is an independent compared-side rule for selecting the central claim, not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The central claim should identify one primary field operational decision that evaluation results are intended to change.",
+          "uid": "8f960990-3237-57fc-b5b4-64515710b0d5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4588808f-450f-4e61-afb0-46d0890fad5c",
+              "memory_uid": "2312f35d-c17d-5af3-b84f-d2e671d7663f"
+            }
+          ],
+          "reason": "This independent compared-side scoping rule has no corresponding prototype-scope claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Prototype features unnecessary for reviewing the primary field problem should be designated as secondary scope.",
+          "uid": "dd28a19b-10f6-588e-83a0-3246197e2d91"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers limiting and naming HCI contributions, centering an actionable field decision, emphasizing organizational constraints, and relegating unnecessary prototype features to secondary scope.",
+        "differences": "",
+        "reference_only": "The reference covers burden-based participant compensation, modality-neutral rates, payment-method flexibility, proposal timing, repeated or failed sessions, and a noted tendency to omit between-session preparation."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "f06191ef-e6e9-45c2-936b-45fdf4ad5d20"
+    },
+    "analysis_digest": "4aecf560e55287dfe29156ed3e15a69bd1c159d24d2726ed068a22b650f862f4",
+    "key": "2e69f7535501819da5ef698ab252ea2f84879b7ee88990acdc9ec49e6d70928f",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 41.50218812499952,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "2e69f7535501819da5ef698ab252ea2f84879b7ee88990acdc9ec49e6d70928f",
+  "created_at": "2026-08-13T18:17:13.315770Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/compensation",
+  "pair_key": "ceb4af97296af0ae1438f05db3fc6471ee66431697c35a1d716229840a0cc5f4",
+  "provider_seconds": 41.50218812499952,
+  "right": "task-2/advisor2/emphasis",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

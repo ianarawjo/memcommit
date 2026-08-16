@@ -1,0 +1,417 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:15:41.557019+00:00",
+      "frames": [
+        {
+          "context_digest": "dd57f5a09e0271c33b7dccbe4935bf1a8d5be14dc7c618906e8af51709bbea89",
+          "context_name": "task-2/advisor1/claim-evidence",
+          "context_uid": "b0c4b50c-f70b-5b0c-a1eb-0fd63e0531bf",
+          "memories": [
+            {
+              "content": "Attach adjacent evidence or citations to verifiable claims about user behavior or technology effects.",
+              "content_digest": "3a856fbbda53df425705aaaff741896f5f5460a8feeb8fb8a73c03e592a80c62",
+              "position": 0,
+              "uid": "06f6c673-ea0c-5657-89d2-3f8711097cd7"
+            },
+            {
+              "content": "Distinguish between results observed in the pilot and expectations to be confirmed in the main user study using different expressions.",
+              "content_digest": "9117c0fd3d9cb713f035f9ae95118ae785af5fcf8909485b097f128ef8e12586",
+              "position": 1,
+              "uid": "58991ce7-d394-5087-b14f-0b014b0ec6ad"
+            },
+            {
+              "content": "Do not use verbs that imply proving causation if the design does not support causal inference.",
+              "content_digest": "5ee12e489ec1fd1af46a49cb05cc9447ed3fbf33ad7b4d8ce52ea700926ea29c",
+              "position": 2,
+              "uid": "f5adf029-a750-5a3a-8eb8-d68e43bb5c13"
+            },
+            {
+              "content": "For topics with sufficient HCI research evidence, prioritize citing recent comprehensive studies over listing individual cases.",
+              "content_digest": "2519cd2fca364ac6eef8577892b03d0a83509f6032874e30c30f36fb1e3dde5a",
+              "position": 3,
+              "uid": "b2a7ff8a-dfca-5857-8733-fe03cbd943ec"
+            },
+            {
+              "content": "Explain how each design choice was derived to address specific user needs.",
+              "content_digest": "fee6e06dfe0489b55ae0d75fe4e7b62facf78052a3136b7120d065e100f3b567",
+              "position": 4,
+              "uid": "1f0c95f4-69bb-5764-a358-d428ff7019d2"
+            },
+            {
+              "content": "Support each core claim with evidence that directly examined it rather than with indirect summaries.",
+              "content_digest": "372e0abff6997b041103fd71719c55549c2e3e0a3a5cdf2d4a1a24ec6538cbff",
+              "position": 5,
+              "uid": "cd475113-5354-5f80-b063-7628e4359afc"
+            },
+            {
+              "content": "Reviewers first check the direct evidence placed closest to the core claim.",
+              "content_digest": "61baa516115e1a5bf4f377358ead7c45bab5e666208b9cd6cd87426007493a49",
+              "position": 6,
+              "uid": "86fe1306-7650-58cc-a3df-79870c61784d"
+            },
+            {
+              "content": "Connect the proposed conceptual design principle to at least one observable user behavior.",
+              "content_digest": "d6c6f9dddd0cd99694df2f232e8a71957d53f77e8d10faf324927af679312acc",
+              "position": 7,
+              "uid": "5d022e45-09c0-515e-98f1-68b2aec686bc"
+            },
+            {
+              "content": "Identify which design judgment—retain, modify, or discard—each piece of evidence from formative evaluation supports.",
+              "content_digest": "a507db0052a4d9196c774a5df74c60fe9225bef49c5d9aece328bfb8dca48035",
+              "position": 8,
+              "uid": "9939e9e8-d97d-57db-974a-750566ca9e2b"
+            },
+            {
+              "content": "Results from controlled formative studies do not directly prove effects in actual long-term use.",
+              "content_digest": "aeeca3701d4ba297e928efc2034c474a2ae78101e440d515a57901e6814321a0",
+              "position": 9,
+              "uid": "41060e8e-95ff-58c1-8b71-36a501a9bd23"
+            },
+            {
+              "content": "The user can have an explanation approved as a conceptual contribution only if it is falsifiable with observable data.",
+              "content_digest": "171f4eeae9df2a0a739f90ed451a34a092093b9f6b0db7c6af04012bea734c5f",
+              "position": 10,
+              "uid": "ec54ce10-07db-5ae3-94a5-8f3621fed4a9"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "3e005b91-4b25-4725-a691-9ce2e0d8087e"
+        },
+        {
+          "context_digest": "b379636c1034c71339b717628e5e233c5f245d0452c487967c8e881d38e4b4a7",
+          "context_name": "task-2/advisor2/feasibility",
+          "context_uid": "2a4a102a-14f5-53bb-88ef-681448ebecff",
+          "memories": [
+            {
+              "content": "Mark unverified schedule assumptions as such.",
+              "content_digest": "d4cdcdbcdb51d96f9a7435e72c2e4ef25a3e3822a765a88afafeca5194bda96e",
+              "position": 0,
+              "uid": "5c9755f8-78bd-5654-a3c7-8be0864e4f12"
+            },
+            {
+              "content": "Mark unverified recruitment assumptions as such.",
+              "content_digest": "4cc28528fee1c7b09f709638e2b57d3bc9efe635d20500ee98567f8f59b8cf21",
+              "position": 1,
+              "uid": "75af48aa-b39e-5b55-95d9-f7f7d2becbad"
+            },
+            {
+              "content": "Mark unverified technical assumptions as such.",
+              "content_digest": "8942e49cd46e3e9746330349df11e49d4a6c9250c7aa4c52c2d9ade1c97c735c",
+              "position": 2,
+              "uid": "292e33b0-4bfd-5e3a-9379-0fbf3619c42d"
+            },
+            {
+              "content": "Trace back the resources required for each core prototype feature and field research procedure.",
+              "content_digest": "b1ac088b664c62c3c1cfb96f6bb31a3ab5fc0fd77d0d1fba58e1da621b5dd56a",
+              "position": 3,
+              "uid": "c0c1fd8d-1aae-51a3-a1d4-66c1481d7b48"
+            },
+            {
+              "content": "Operations reviewers judge feasibility by examining the personnel required for each procedure.",
+              "content_digest": "3199aba38f58f677147b94eca54221e4d0add145a2a58194c3851efcc22e8fab",
+              "position": 4,
+              "uid": "7be25c27-6d67-50fe-90b5-76fca32a93d8"
+            },
+            {
+              "content": "Operations reviewers judge feasibility by examining the equipment required for each procedure.",
+              "content_digest": "13f9b86391d66cf558fc6eead29969c80acdf78d2164c96aa99641bf6c2891fd",
+              "position": 5,
+              "uid": "1aae182f-4eb3-58b7-b8cd-5ce517ead36a"
+            },
+            {
+              "content": "Operations reviewers judge feasibility by examining the time required for each procedure.",
+              "content_digest": "29efef51e7b8e35c459099af93b8ea90d019d83de3cf894e04b184078619fff4",
+              "position": 6,
+              "uid": "84f6e5e3-96b4-538b-a633-1b656204a296"
+            },
+            {
+              "content": "Document separately the commitments and confirmation status of field partners required for recruitment, installation, and operational support.",
+              "content_digest": "ba0ceb0fa886251bfe2b5a83154500862f8c2d4a82ed74fc9ddb3600010cc0b3",
+              "position": 7,
+              "uid": "16a461c4-d90d-5d0f-bfd0-4c1a116ec2be"
+            },
+            {
+              "content": "Designate a responsible party for software updates, equipment inspections, and user support during the deployment period.",
+              "content_digest": "54caa62836c502faf35561d45fba1d02a059c8ed6436ce714114bd392cb3bc9d",
+              "position": 8,
+              "uid": "0ce26892-666f-5ebe-95b2-c6f48915f18b"
+            },
+            {
+              "content": "The user's deployment readiness can be assessed only when dependencies on external services and field personnel are visible.",
+              "content_digest": "931fa67dd8ea84954ce3f0b9631301c320fdcf1bf46fb7fda0214e77636c8c1c",
+              "position": 9,
+              "uid": "4f35fd0c-005a-56a7-b33a-d74bde2d65eb"
+            },
+            {
+              "content": "Field schedules and assigned personnel may change due to operational factors beyond the researcher’s control.",
+              "content_digest": "71739481ce3043f342d9c7c52297c7644931a0a096215fc15150915b74968d84",
+              "position": 10,
+              "uid": "3b96bf66-59e4-5dbf-98d3-937402abc67b"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "aa3f0c20-1e46-4f0d-a062-154da96cea12"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address complementary but independent concerns. The reference frame governs evidentiary rigor, inference boundaries, design rationale, and empirically testable contributions, while the compared frame governs operational assumptions, resource feasibility, partner dependencies, deployment ownership, and field uncertainty.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3e005b91-4b25-4725-a691-9ce2e0d8087e",
+              "memory_uid": "06f6c673-ea0c-5657-89d2-3f8711097cd7"
+            },
+            {
+              "frame_uid": "3e005b91-4b25-4725-a691-9ce2e0d8087e",
+              "memory_uid": "cd475113-5354-5f80-b063-7628e4359afc"
+            },
+            {
+              "frame_uid": "3e005b91-4b25-4725-a691-9ce2e0d8087e",
+              "memory_uid": "86fe1306-7650-58cc-a3df-79870c61784d"
+            }
+          ],
+          "reason": "These memories split one reference-only policy covering evidentiary directness and placement, including the stated reviewer focus on nearby direct evidence.",
+          "status": "RESOLVED",
+          "summary": "Verifiable core claims should be supported by nearby evidence that directly examined them.",
+          "uid": "2d969621-3109-529f-9f8a-de89713f80b2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3e005b91-4b25-4725-a691-9ce2e0d8087e",
+              "memory_uid": "58991ce7-d394-5087-b14f-0b014b0ec6ad"
+            }
+          ],
+          "reason": "This is an independent reference-only rule for separating observed findings from prospective expectations.",
+          "status": "RESOLVED",
+          "summary": "Pilot observations and expectations awaiting confirmation in the main study should use clearly different language.",
+          "uid": "ca6b2829-1948-5fb0-ab9f-d392110aea5b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3e005b91-4b25-4725-a691-9ce2e0d8087e",
+              "memory_uid": "f5adf029-a750-5a3a-8eb8-d68e43bb5c13"
+            },
+            {
+              "frame_uid": "3e005b91-4b25-4725-a691-9ce2e0d8087e",
+              "memory_uid": "41060e8e-95ff-58c1-8b71-36a501a9bd23"
+            }
+          ],
+          "reason": "These memories express one reference-only limitation on inference, with controlled formative studies providing a specific case.",
+          "status": "RESOLVED",
+          "summary": "Claims must avoid unsupported causal or real-world longitudinal implications when the study design cannot establish them.",
+          "uid": "9594d35c-0091-5d6d-b18c-06a72af01d94"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3e005b91-4b25-4725-a691-9ce2e0d8087e",
+              "memory_uid": "b2a7ff8a-dfca-5857-8733-fe03cbd943ec"
+            }
+          ],
+          "reason": "This is an independent reference-only source-selection policy.",
+          "status": "RESOLVED",
+          "summary": "Where HCI evidence is sufficient, recent comprehensive studies should be preferred to lists of individual cases.",
+          "uid": "1771c298-fc0d-586a-a018-fed762aba386"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3e005b91-4b25-4725-a691-9ce2e0d8087e",
+              "memory_uid": "1f0c95f4-69bb-5764-a358-d428ff7019d2"
+            }
+          ],
+          "reason": "This is an independent reference-only requirement for design rationale traceability.",
+          "status": "RESOLVED",
+          "summary": "Each design choice should be explained as a response to specific user needs.",
+          "uid": "3bc56810-a420-5d26-82b3-e02b8d9fa71d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3e005b91-4b25-4725-a691-9ce2e0d8087e",
+              "memory_uid": "5d022e45-09c0-515e-98f1-68b2aec686bc"
+            }
+          ],
+          "reason": "This is an independent reference-only requirement linking design principles to behavioral observation.",
+          "status": "RESOLVED",
+          "summary": "A proposed conceptual design principle should be connected to observable user behavior.",
+          "uid": "2f78a704-975b-553c-a176-9d0ea2344bee"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3e005b91-4b25-4725-a691-9ce2e0d8087e",
+              "memory_uid": "9939e9e8-d97d-57db-974a-750566ca9e2b"
+            }
+          ],
+          "reason": "This is an independent reference-only rule for mapping evaluation evidence to design judgments.",
+          "status": "RESOLVED",
+          "summary": "Each item of formative evidence should identify whether it supports retaining, modifying, or discarding a design.",
+          "uid": "acfa6a48-f788-576b-ae88-9f1ed539b6a7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3e005b91-4b25-4725-a691-9ce2e0d8087e",
+              "memory_uid": "ec54ce10-07db-5ae3-94a5-8f3621fed4a9"
+            }
+          ],
+          "reason": "This is an independent reference-only criterion for conceptual contribution claims.",
+          "status": "RESOLVED",
+          "summary": "A conceptual explanation qualifies as a contribution only when observable data could falsify it.",
+          "uid": "7cbf6102-24f9-5bb9-a858-d55f877d1c17"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "aa3f0c20-1e46-4f0d-a062-154da96cea12",
+              "memory_uid": "5c9755f8-78bd-5654-a3c7-8be0864e4f12"
+            },
+            {
+              "frame_uid": "aa3f0c20-1e46-4f0d-a062-154da96cea12",
+              "memory_uid": "75af48aa-b39e-5b55-95d9-f7f7d2becbad"
+            },
+            {
+              "frame_uid": "aa3f0c20-1e46-4f0d-a062-154da96cea12",
+              "memory_uid": "292e33b0-4bfd-5e3a-9379-0fbf3619c42d"
+            }
+          ],
+          "reason": "These memories split one compared-only policy across three operational assumption domains.",
+          "status": "RESOLVED",
+          "summary": "Unverified schedule, recruitment, and technical assumptions should be explicitly labeled.",
+          "uid": "3d6e095b-ab8c-5ac4-9994-15ffc9c4e78a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "aa3f0c20-1e46-4f0d-a062-154da96cea12",
+              "memory_uid": "c0c1fd8d-1aae-51a3-a1d4-66c1481d7b48"
+            },
+            {
+              "frame_uid": "aa3f0c20-1e46-4f0d-a062-154da96cea12",
+              "memory_uid": "7be25c27-6d67-50fe-90b5-76fca32a93d8"
+            },
+            {
+              "frame_uid": "aa3f0c20-1e46-4f0d-a062-154da96cea12",
+              "memory_uid": "1aae182f-4eb3-58b7-b8cd-5ce517ead36a"
+            },
+            {
+              "frame_uid": "aa3f0c20-1e46-4f0d-a062-154da96cea12",
+              "memory_uid": "84f6e5e3-96b4-538b-a633-1b656204a296"
+            }
+          ],
+          "reason": "These memories express one compared-only resource-feasibility claim and its review dimensions.",
+          "status": "RESOLVED",
+          "summary": "Resource requirements for prototype features and field procedures should be traceable, with procedure feasibility examined through personnel, equipment, and time needs.",
+          "uid": "df3f9a5e-9423-5fbd-848f-00f4ad2fc7f8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "aa3f0c20-1e46-4f0d-a062-154da96cea12",
+              "memory_uid": "16a461c4-d90d-5d0f-bfd0-4c1a116ec2be"
+            }
+          ],
+          "reason": "This is an independent compared-only requirement for partner dependency documentation.",
+          "status": "RESOLVED",
+          "summary": "Field-partner commitments and confirmation status should be documented separately for recruitment, installation, and operational support.",
+          "uid": "12076bd6-6e6c-5eb5-b099-b69b3544f4bc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "aa3f0c20-1e46-4f0d-a062-154da96cea12",
+              "memory_uid": "0ce26892-666f-5ebe-95b2-c6f48915f18b"
+            }
+          ],
+          "reason": "This is an independent compared-only operational ownership requirement.",
+          "status": "RESOLVED",
+          "summary": "Responsible parties should be designated for software updates, equipment inspections, and user support during deployment.",
+          "uid": "df1dc624-6cb0-5f82-a5e7-a29acd4ac775"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "aa3f0c20-1e46-4f0d-a062-154da96cea12",
+              "memory_uid": "4f35fd0c-005a-56a7-b33a-d74bde2d65eb"
+            }
+          ],
+          "reason": "This is an independent compared-only readiness criterion concerning external dependencies.",
+          "status": "RESOLVED",
+          "summary": "Deployment readiness assessment requires visible dependencies on external services and field personnel.",
+          "uid": "c4edc687-5ce1-5e7c-bb22-fe45ea097077"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "aa3f0c20-1e46-4f0d-a062-154da96cea12",
+              "memory_uid": "3b96bf66-59e4-5dbf-98d3-937402abc67b"
+            }
+          ],
+          "reason": "This is independent compared-only information about uncertainty in field execution.",
+          "status": "RESOLVED",
+          "summary": "Field schedules and personnel assignments may change because of operational factors outside researcher control.",
+          "uid": "4deaac3d-78ae-5bc9-9864-f0e533f5adb0"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only guidance covers labeled operational assumptions, resource-based feasibility review, partner commitments, deployment responsibilities, visible external dependencies, and changeable field plans.",
+        "differences": "",
+        "reference_only": "Reference-only guidance covers direct and adjacent evidence, careful causal and study-stage language, research synthesis, user-need traceability, formative design judgments, observable behavior, and falsifiability."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "65b5a176-8c1c-44b5-9a4f-30f2d7a2d97e"
+    },
+    "analysis_digest": "331bc9d5038c2980250d33aee8043103ba4aeb9665e4d30922a3f2e377fdfdb1",
+    "key": "bfe97081735c095d009ac7d2ad9a3d9d90f242f4706cc191e18532761c91b8be",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 43.75022874999922,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "bfe97081735c095d009ac7d2ad9a3d9d90f242f4706cc191e18532761c91b8be",
+  "created_at": "2026-08-13T18:16:25.306766Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/claim-evidence",
+  "pair_key": "358cc36f301bf1ba70e391607fa46e59ff18c462aa9e9f4d4701c0e5fa6e7062",
+  "provider_seconds": 43.75022874999922,
+  "right": "task-2/advisor2/feasibility",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

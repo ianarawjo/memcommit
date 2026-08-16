@@ -1,0 +1,379 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:52:44.107300+00:00",
+      "frames": [
+        {
+          "context_digest": "ac4f93d71b525f6156f0b669075a833a2a41161be6abe677ec382bff6e6060e8",
+          "context_name": "task-3/local/personal-memory/2025/08",
+          "context_uid": "ed84de75-8e18-5bec-908c-a1ff9827b3e3",
+          "memories": [
+            {
+              "content": "The user keeps packing tape for returns in an upper kitchen drawer.",
+              "content_digest": "ed359d883caffd7ce4daddc297ddcc9d26da233dc2a36dc4dbc96e300b2248e9",
+              "position": 0,
+              "uid": "15c3941e-ed44-508f-ae30-b51456b5ba86"
+            },
+            {
+              "content": "The user arrived ten minutes before the post office closed and found that numbered-ticket intake had ended.",
+              "content_digest": "3c4609eea9455bbd46a6f238aa750f61f348ce7b2cf421a4d123f1b707b52550",
+              "position": 1,
+              "uid": "84d1fd1c-9508-5f05-9a7c-1d5f20ecf4a4"
+            },
+            {
+              "content": "Before the next visit, the user checked the operating hours and arrived one hour before closing.",
+              "content_digest": "b2997262abf4ba476c63de3550e54269ef7d61bb56d3adb5b6d9f54ba13fc078",
+              "position": 2,
+              "uid": "8946f9da-e325-59c3-9260-2d2f590d3701"
+            },
+            {
+              "content": "The user went to the counter without closing a return box and had to go back to the packing station.",
+              "content_digest": "759122c3f88ca71b992a725e357beab72f9820de872a7bd895b808c2df21f2b2",
+              "position": 3,
+              "uid": "67e8b160-a57d-56e5-a766-741b7ce0e939"
+            },
+            {
+              "content": "For the next return, the user sealed the box at home and completed intake in one attempt.",
+              "content_digest": "007fcec32ea3788854161e68c95c2aaba90e94a721d03b350e1619afc54840e3",
+              "position": 4,
+              "uid": "efd0706b-600a-5ac1-926e-cc0602ca0086"
+            },
+            {
+              "content": "The user scheduled bank and post-office errands for the same day, but they took a long time because the destinations were in different directions.",
+              "content_digest": "000e1975fde79f4d6caf36adad0c2e481a032537cfa410e46649866d985567c2",
+              "position": 5,
+              "uid": "1e8a6f7e-0911-5a34-ad82-172479d1a7a4"
+            },
+            {
+              "content": "The following week, after checking the locations on a map, the user visited nearby branches in sequence.",
+              "content_digest": "c3de08c5b6074dff2b3f6303f5efc3740cc430b634cb365a5d570061a30a53fa",
+              "position": 6,
+              "uid": "a8670161-257e-51ab-8e30-0e282952278f"
+            },
+            {
+              "content": "Postal staff expect a return-label barcode to arrive affixed flat, without a fold.",
+              "content_digest": "6293ace2d67781644694976af71d5696cad28979d9641718ccd59f16b3397a47",
+              "position": 7,
+              "uid": "2db70f53-99ee-556c-a8c1-b809881cbebd"
+            },
+            {
+              "content": "Before grouping errands into one outing, check each institution's location and operating hours that day.",
+              "content_digest": "7fef923f9ed507db5aad6cf65eaee2c965075e51fef0ff73fa669f1e7f69314a",
+              "position": 8,
+              "uid": "38d60cc4-2f91-5cc2-b511-55cdbbe12c32"
+            },
+            {
+              "content": "Postal and financial counters may operate on different hours than usual around public holidays.",
+              "content_digest": "2d5dc709c468405ea894f343e922dc2546b826ed7488e613f4d4dd730bccccfd",
+              "position": 9,
+              "uid": "1272087c-a535-5612-8c7a-1bc257183788"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "a7e26395-e168-4ae8-8124-a614069b8f83"
+        },
+        {
+          "context_digest": "4eadf16a0c655a266bec3ebe56b056075c55e7f716f6879a0b6a905fe34136df",
+          "context_name": "task-3/local/personal-memory/2026/05",
+          "context_uid": "fd476504-4d4e-54d9-80b8-3dc2b18555d8",
+          "memories": [
+            {
+              "content": "The user keeps a picnic mat on the bottom shelf of the entrance storage cabinet.",
+              "content_digest": "c17479bd6a0f978f71b106b562507e702c3b84af5119be6bce48e4ee1664e728",
+              "position": 0,
+              "uid": "a9da4cfc-a6aa-51ae-9ec4-0de5c7a09227"
+            },
+            {
+              "content": "On a day the user went to the riverside, they sat in a place without shade and moved after an hour.",
+              "content_digest": "f9ab1da828ca5af06cb8bf54fe85136e316f503dab465fad514ab5a3f8243633",
+              "position": 1,
+              "uid": "fa2735e1-f4af-57d3-a18c-795715b6715b"
+            },
+            {
+              "content": "At the next outdoor meal, the user chose a place near a large tree and stayed for two hours.",
+              "content_digest": "189b7d85561df45986a6b7c9fe681b5ef53b22ca1f5e83fa8d64a7d93b35a577",
+              "position": 2,
+              "uid": "3bd8b8f2-c5b4-5004-8b9e-e388cc26ea7a"
+            },
+            {
+              "content": "On a hot day when the user brought only one bottle of water, they bought another drink partway through the outing.",
+              "content_digest": "92aa494a12664105a4bffc50a9026fadbec78332f750636093ea82ecc68e9597",
+              "position": 3,
+              "uid": "c7c4b494-39a6-5f5c-b37f-51c5061ac926"
+            },
+            {
+              "content": "On the next outing, the user brought two small bottles of water after freezing them.",
+              "content_digest": "69b3035b57b58b1aa778bd0da75dc806c1c449e7e35dc448aff92f7499c3148d",
+              "position": 4,
+              "uid": "dd9f5b3c-9c2e-5dbc-bf6e-eb7761eeb075"
+            },
+            {
+              "content": "When meeting their maternal uncle at a park, the user and the uncle waited at different entrances for 15 minutes.",
+              "content_digest": "9785e87b9fe79813762eb2e19e6d4f256a55f4799c92d095aaf695a8a1de5851",
+              "position": 5,
+              "uid": "2ed2a41c-f6ae-54d6-875c-a195d8fdacee"
+            },
+            {
+              "content": "For the next meeting, the user sent a photo of the entrance sign, and they met at the same place.",
+              "content_digest": "de40b6b7df84784639b97cf7ce153ad8af6e77320d75f3869979e5e3d39169e2",
+              "position": 6,
+              "uid": "23f3a4fc-d51e-5d0b-87f0-d5be407a57f3"
+            },
+            {
+              "content": "For a park meeting, the user's maternal uncle prefers an entrance that requires less walking from the parking area.",
+              "content_digest": "552a43b869c6f06cbf571f794106727406d87841d43addc92f31a3532f73d6f3",
+              "position": 7,
+              "uid": "e9f459f3-8ff0-5a0e-b78b-eda8d18b914e"
+            },
+            {
+              "content": "When making an outdoor plan, confirm the exact entrance and an alternative location in case of rain.",
+              "content_digest": "a265a6364c182de35363b58135b1da60d11595d1e3e0029f6851ac272261a959",
+              "position": 8,
+              "uid": "70277b86-d5db-5b58-8a94-e77372d15a4c"
+            },
+            {
+              "content": "Some park restrooms and drinking fountains may be closed seasonally.",
+              "content_digest": "8e5c4f5f85d4d27dc2211f46e3ab3bbed7f3d9687070b9028992b670986b09ca",
+              "position": 9,
+              "uid": "5a54437b-9b0e-5103-860d-d878be70b3ef"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "57facf8a-45c0-427c-be3a-14809b556346"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate practical domains: postal and financial errands versus outdoor outings and park meetings. Each records storage details, lessons from setbacks, improved preparation, and planning cautions, but none governs the same operational decision closely enough for a cross-frame relation.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a7e26395-e168-4ae8-8124-a614069b8f83",
+              "memory_uid": "15c3941e-ed44-508f-ae30-b51456b5ba86"
+            }
+          ],
+          "reason": "This is a one-sided storage fact about return supplies; the compared frame's storage fact concerns a different object, place, and activity.",
+          "status": "RESOLVED",
+          "summary": "Packing tape used for returns is stored in an upper kitchen drawer.",
+          "uid": "346f32f1-3d05-5ac0-830e-4c21197fb21f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a7e26395-e168-4ae8-8124-a614069b8f83",
+              "memory_uid": "84d1fd1c-9508-5f05-9a7c-1d5f20ecf4a4"
+            },
+            {
+              "frame_uid": "a7e26395-e168-4ae8-8124-a614069b8f83",
+              "memory_uid": "8946f9da-e325-59c3-9260-2d2f590d3701"
+            },
+            {
+              "frame_uid": "a7e26395-e168-4ae8-8124-a614069b8f83",
+              "memory_uid": "1272087c-a535-5612-8c7a-1bc257183788"
+            }
+          ],
+          "reason": "The late-arrival failure, improved early arrival, and holiday-hours caution jointly express one timing-preparation claim absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Postal-counter access requires checking current hours and allowing sufficient time before closing, especially when schedules may vary.",
+          "uid": "a2ac62f0-1e14-5db5-a3d2-4010fb200af8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a7e26395-e168-4ae8-8124-a614069b8f83",
+              "memory_uid": "67e8b160-a57d-56e5-a766-741b7ce0e939"
+            },
+            {
+              "frame_uid": "a7e26395-e168-4ae8-8124-a614069b8f83",
+              "memory_uid": "efd0706b-600a-5ac1-926e-cc0602ca0086"
+            }
+          ],
+          "reason": "The failed and improved attempts form one return-packaging lesson with no counterpart governing outdoor preparation.",
+          "status": "RESOLVED",
+          "summary": "Sealing a return box before reaching the counter avoids a second trip to the packing station.",
+          "uid": "8f1a9787-5a4c-58b1-9c0f-d3cc4e4597c4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a7e26395-e168-4ae8-8124-a614069b8f83",
+              "memory_uid": "1e8a6f7e-0911-5a34-ad82-172479d1a7a4"
+            },
+            {
+              "frame_uid": "a7e26395-e168-4ae8-8124-a614069b8f83",
+              "memory_uid": "a8670161-257e-51ab-8e30-0e282952278f"
+            }
+          ],
+          "reason": "The inefficient trip and mapped follow-up describe one route-planning improvement specific to institutional errands.",
+          "status": "RESOLVED",
+          "summary": "Checking branch locations before combined errands enables a more efficient nearby sequence.",
+          "uid": "dc3267ac-f91a-5ddf-8b54-ba762c5fa246"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a7e26395-e168-4ae8-8124-a614069b8f83",
+              "memory_uid": "2db70f53-99ee-556c-a8c1-b809881cbebd"
+            }
+          ],
+          "reason": "This postal intake requirement is independently useful and has no operational counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A return-label barcode should be affixed flat and without a fold.",
+          "uid": "c19f883f-50c1-5450-a4b7-4df30128e649"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a7e26395-e168-4ae8-8124-a614069b8f83",
+              "memory_uid": "38d60cc4-2f91-5cc2-b511-55cdbbe12c32"
+            }
+          ],
+          "reason": "This integrated outing policy covers both routing and availability and is broader than either supporting lesson, while remaining unique to institutional errands.",
+          "status": "RESOLVED",
+          "summary": "Before combining institutional errands, check each destination's location and operating hours for that day.",
+          "uid": "52c694ee-d405-55a7-9d94-61168491ddf0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "57facf8a-45c0-427c-be3a-14809b556346",
+              "memory_uid": "a9da4cfc-a6aa-51ae-9ec4-0de5c7a09227"
+            }
+          ],
+          "reason": "This is a one-sided storage fact about outdoor equipment; the reference frame's storage fact concerns a different object, place, and activity.",
+          "status": "RESOLVED",
+          "summary": "A picnic mat is stored on the bottom shelf of the entrance storage cabinet.",
+          "uid": "b870e094-37d1-54a6-9995-b2a37b1772b2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "57facf8a-45c0-427c-be3a-14809b556346",
+              "memory_uid": "fa2735e1-f4af-57d3-a18c-795715b6715b"
+            },
+            {
+              "frame_uid": "57facf8a-45c0-427c-be3a-14809b556346",
+              "memory_uid": "3bd8b8f2-c5b4-5004-8b9e-e388cc26ea7a"
+            }
+          ],
+          "reason": "The unshaded outing and improved tree-side choice form one site-selection lesson absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Choosing a shaded outdoor-meal location supports a longer, more comfortable stay.",
+          "uid": "f9f45e47-deea-5432-962e-885113aefd60"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "57facf8a-45c0-427c-be3a-14809b556346",
+              "memory_uid": "c7c4b494-39a6-5f5c-b37f-51c5061ac926"
+            },
+            {
+              "frame_uid": "57facf8a-45c0-427c-be3a-14809b556346",
+              "memory_uid": "dd9f5b3c-9c2e-5dbc-bf6e-eb7761eeb075"
+            }
+          ],
+          "reason": "The inadequate-water experience and adjusted preparation describe one outdoor hydration lesson with no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Bringing two frozen water bottles improves hydration preparation for a hot outing.",
+          "uid": "9e319ce3-464c-5d93-a33c-3e5a376d7730"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "57facf8a-45c0-427c-be3a-14809b556346",
+              "memory_uid": "2ed2a41c-f6ae-54d6-875c-a195d8fdacee"
+            },
+            {
+              "frame_uid": "57facf8a-45c0-427c-be3a-14809b556346",
+              "memory_uid": "23f3a4fc-d51e-5d0b-87f0-d5be407a57f3"
+            },
+            {
+              "frame_uid": "57facf8a-45c0-427c-be3a-14809b556346",
+              "memory_uid": "70277b86-d5db-5b58-8a94-e77372d15a4c"
+            }
+          ],
+          "reason": "The entrance mix-up, successful photo-based coordination, and planning policy jointly express one park-meeting location claim absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Outdoor meeting plans should identify the exact entrance clearly and include an alternative location for rain.",
+          "uid": "706650fe-8674-5a7a-a220-5c640c10ce48"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "57facf8a-45c0-427c-be3a-14809b556346",
+              "memory_uid": "e9f459f3-8ff0-5a0e-b78b-eda8d18b914e"
+            }
+          ],
+          "reason": "This participant-specific accessibility preference is independently useful and appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user's maternal uncle prefers a park entrance requiring less walking from the parking area.",
+          "uid": "2453e3b9-3da3-57b5-9209-177ec19d86e3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "57facf8a-45c0-427c-be3a-14809b556346",
+              "memory_uid": "5a54437b-9b0e-5103-860d-d878be70b3ef"
+            }
+          ],
+          "reason": "This outdoor-facility availability caution is one-sided and does not govern the institutional operating-hours cases in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Park restrooms and drinking fountains may be unavailable because of seasonal closures.",
+          "uid": "069c76c3-75c8-5431-a957-f7808ef296da"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers picnic storage, shade and hydration preparation, precise park meeting coordination, an accessibility preference, rain alternatives, and seasonal facility closures.",
+        "differences": "",
+        "reference_only": "The reference covers return supplies and packaging, postal timing and barcode requirements, efficient branch routing, and checks for institution locations and variable operating hours."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "39c3bcf2-b6c8-4e38-be55-6c7ac4e600d3"
+    },
+    "analysis_digest": "3e92f6be5f891cc6542f33bb6b6539cce5886401d121885165da22d5a3751941",
+    "key": "c351aa3d4acd08e56d89fe2afa704eb387802e6b5440e84677c20a5a754fb98b",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 42.82886641599907,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "c351aa3d4acd08e56d89fe2afa704eb387802e6b5440e84677c20a5a754fb98b",
+  "created_at": "2026-08-13T18:53:26.935728Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/08",
+  "pair_key": "75b9b72aff808ea38c2df473219d55911cbc8d49f26a92bac99c021cb2a7a7e1",
+  "provider_seconds": 42.82886641599907,
+  "right": "task-3/local/personal-memory/2026/05",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

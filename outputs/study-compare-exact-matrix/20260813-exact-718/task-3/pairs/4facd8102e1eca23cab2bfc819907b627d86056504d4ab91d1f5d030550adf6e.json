@@ -1,0 +1,388 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:50:33.762715+00:00",
+      "frames": [
+        {
+          "context_digest": "14adbc31fc3a2dc50b7b980d1e24569b16fff058104a812c7f3b4e1542b7abf0",
+          "context_name": "task-3/local/personal-memory/2025/03",
+          "context_uid": "913e0bfd-f6d9-579e-9a37-ba5daa9d17f1",
+          "memories": [
+            {
+              "content": "The user stores prepared meals on the second shelf of the freezer.",
+              "content_digest": "cd837b62b643f752da54b21de2f4f7a3d963a7c658d5b83dff39d1d92e0fdbad",
+              "position": 0,
+              "uid": "5d989bab-c471-5de9-bb73-29cabc4753dd"
+            },
+            {
+              "content": "The user went to the market without a shopping list and bought onions that were already at home.",
+              "content_digest": "f667c860e046bb27662b26d7cc4ed083ee48d9d7915237dc4b92ec378481a093",
+              "position": 1,
+              "uid": "d1725ae4-3fd3-5250-92b3-73d84d9152a7"
+            },
+            {
+              "content": "On a day the user shopped after checking a refrigerator photo, they did not make a duplicate purchase.",
+              "content_digest": "7283d4afe58c0ab05d9cb426bb80bed0e26e0b1783ff7cdd00a5f6e89d21861b",
+              "position": 2,
+              "uid": "904ff225-26df-5424-8a82-23d733649106"
+            },
+            {
+              "content": "On a day the user made a spicy stew, they left part of one bowl uneaten.",
+              "content_digest": "2765ec701f8e058d35ddee4a485c40221523ee2d9b56301ec1658ec4e419cbc2",
+              "position": 3,
+              "uid": "67a003c7-648a-59dc-8e82-03f9e452ffce"
+            },
+            {
+              "content": "The next time the user cooked it, they used half as much chili powder and finished the meal.",
+              "content_digest": "bdd7df7c762bbce31a40a45c2124e49ae3a6439dfc2133c574443d7eb3a7b1bb",
+              "position": 4,
+              "uid": "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9"
+            },
+            {
+              "content": "When cooking with their younger brother, the user assigned the cooking sequence only verbally and they did the same task twice.",
+              "content_digest": "bd92611cfc05fd42bb5d25e8dd7838ca1b2f6d99869bf1f61921b46950a4b532",
+              "position": 5,
+              "uid": "64bf4401-e972-5d15-a526-21ca901a6a9f"
+            },
+            {
+              "content": "The next time, the user and their younger brother split ingredient preparation and heat control and finished the meal 20 minutes earlier.",
+              "content_digest": "c3a28e7256d781ecb2d8710145880ffe79495e32d47ae1949c4be54e52a44555",
+              "position": 6,
+              "uid": "57e09ea5-54ff-5fce-aada-68daffbacc8b"
+            },
+            {
+              "content": "When cooking together, the user's younger brother prefers to divide the cooking and dishwashing roles in advance.",
+              "content_digest": "3bbc428c4f3b4e28a8e2341206ac78b39240eea53a9862192528029b0a57d12b",
+              "position": 7,
+              "uid": "0a5d054f-94bd-5955-bdb7-9b5427e2260b"
+            },
+            {
+              "content": "The local agent can compare responses across several meals, but it cannot conclude from one unfinished food item that the user dislikes that ingredient.",
+              "content_digest": "5787c1636d9dd4a5cb5bd70533b7dd44b2d6cff1047f5c408f5bcaa1b6577fe1",
+              "position": 8,
+              "uid": "1f94b78b-1635-551c-b90c-bea2a67ca595"
+            },
+            {
+              "content": "The condition of frozen prepared food may vary with its packaging and storage duration.",
+              "content_digest": "84bdac276dce5b50b19bc0c7c471468a22cc9945b1da7357700a58c157cf4ca1",
+              "position": 9,
+              "uid": "f64ef6c4-7665-5574-9d58-fc124b0bfe3f"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "6bdc8eb6-24fc-49da-8230-0ef78ef6e11c"
+        },
+        {
+          "context_digest": "df0924e320cd14a29eaed60f78e82fd509c4062949b35706b2a7cb94571fb599",
+          "context_name": "task-3/local/personal-memory/2026/04",
+          "context_uid": "16e860a8-7a90-5b7a-adc3-1c487ef97e03",
+          "memories": [
+            {
+              "content": "The user collects clothes for donation in a large bag beside the entrance.",
+              "content_digest": "39f2f01c59b7fa4ca7529d510e1b0a6ffab6706861042f771cfe97f6f806efac",
+              "position": 0,
+              "uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            },
+            {
+              "content": "After emptying an entire drawer at once, the user could not find a charger they needed.",
+              "content_digest": "674c33ba6475f42b29b03e6f8711e0216f983f3d37fee3dacf9336e3bb4596bf",
+              "position": 1,
+              "uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            },
+            {
+              "content": "During the next organizing session, the user sorted items by type and put only items to be discarded in the bag.",
+              "content_digest": "63104b5a7fd380f818c8758c51f9550c7a7fa41ff91f1dd314225d1824b69643",
+              "position": 2,
+              "uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            },
+            {
+              "content": "Even after photographing unworn clothes, the user did not take them out again for one month.",
+              "content_digest": "519f131096440719dcd3412f4439c5cfe44b7f402684170209708040692dc5fd",
+              "position": 3,
+              "uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            },
+            {
+              "content": "After moving those clothes to the donation bag, the user cleared one closet compartment.",
+              "content_digest": "45db58ae108a299344d982d8606fff26f733252da691cf01417e760909ff6057",
+              "position": 4,
+              "uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            },
+            {
+              "content": "The user nearly discarded an important paper with advertising and checked the recycling box again.",
+              "content_digest": "6bf928f67944656e5f3c68d8869c0cefd039a588f0ba735f94520231ef58017c",
+              "position": 5,
+              "uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            },
+            {
+              "content": "During the next organizing session, the user kept a separate document box and did not mix the papers.",
+              "content_digest": "adac8d4266c6b11e15d29c484665bc5dcc915f9aa319198b6a69d0e7b0131bb3",
+              "position": 6,
+              "uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            },
+            {
+              "content": "The user's mother asks the user to check whether she needs kitchen items in good condition before discarding them.",
+              "content_digest": "0752bc2ac00c0b1301c45ab4c2e73f63c57e6ebc4255dcc1c13330ffda906612",
+              "position": 7,
+              "uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            },
+            {
+              "content": "Confirm with the user before marking a personal document or another person's property as a disposal candidate.",
+              "content_digest": "17062e2cd4738619e81e211cb2f53d14e78c5f4eab9ae49053ce7e06935a7db5",
+              "position": 8,
+              "uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            },
+            {
+              "content": "The local agent cannot determine an object's emotional meaning from frequency of use alone.",
+              "content_digest": "9c86bcfe2b209bf7957dced0eab000b42f97b6a435d705ccaccb15e49be3691d",
+              "position": 9,
+              "uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "43dac2b0-416c-422b-b262-a92a941b6c51"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate household domains: food storage, shopping, cooking, and meal interpretation versus decluttering, donation, document handling, and disposal safeguards. Their only substantive overlap is a shared caution against inferring latent attitudes from limited behavior, with each frame preserving a different application scope.",
+      "relations": [
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "6bdc8eb6-24fc-49da-8230-0ef78ef6e11c",
+              "memory_uid": "1f94b78b-1635-551c-b90c-bea2a67ca595"
+            },
+            {
+              "frame_uid": "43dac2b0-416c-422b-b262-a92a941b6c51",
+              "memory_uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "reason": "The food claim concerns inferring ingredient dislike from one unfinished item, whereas the organizing claim concerns inferring emotional meaning from frequency of use; these explicit scopes must be preserved.",
+          "status": "RESOLVED",
+          "summary": "Both frames restrict the local agent from inferring a latent attitude solely from limited behavioral evidence, under different domains and evidence patterns.",
+          "uid": "27e1b98e-0d22-5b43-80c2-bf35e16ce936"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6bdc8eb6-24fc-49da-8230-0ef78ef6e11c",
+              "memory_uid": "5d989bab-c471-5de9-bb73-29cabc4753dd"
+            }
+          ],
+          "reason": "This food-storage location is independently useful and has no substantively corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Prepared meals are stored on the freezer’s second shelf.",
+          "uid": "152aeaf2-ab73-58f6-a389-c974fd8a1db9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6bdc8eb6-24fc-49da-8230-0ef78ef6e11c",
+              "memory_uid": "d1725ae4-3fd3-5250-92b3-73d84d9152a7"
+            },
+            {
+              "frame_uid": "6bdc8eb6-24fc-49da-8230-0ef78ef6e11c",
+              "memory_uid": "904ff225-26df-5424-8a82-23d733649106"
+            }
+          ],
+          "reason": "The paired observations express one reference-only claim about inventory awareness and duplicate purchasing, with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Checking a refrigerator photo before shopping is associated with avoiding the duplicate purchase experienced when shopping without a list.",
+          "uid": "39452761-bd81-5209-b361-0bd5b2770694"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6bdc8eb6-24fc-49da-8230-0ef78ef6e11c",
+              "memory_uid": "67a003c7-648a-59dc-8e82-03f9e452ffce"
+            },
+            {
+              "frame_uid": "6bdc8eb6-24fc-49da-8230-0ef78ef6e11c",
+              "memory_uid": "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9"
+            }
+          ],
+          "reason": "These observations form one reference-only account of a recipe adjustment and changed meal outcome, absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "After leaving part of a spicy stew uneaten, the user halved the chili powder on the next attempt and finished the meal.",
+          "uid": "eab9c8d0-9dc8-532f-8fe9-8bc268295cba"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6bdc8eb6-24fc-49da-8230-0ef78ef6e11c",
+              "memory_uid": "64bf4401-e972-5d15-a526-21ca901a6a9f"
+            },
+            {
+              "frame_uid": "6bdc8eb6-24fc-49da-8230-0ef78ef6e11c",
+              "memory_uid": "57e09ea5-54ff-5fce-aada-68daffbacc8b"
+            }
+          ],
+          "reason": "The memories split one reference-only claim about improving coordination with the younger brother, with no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "Replacing verbal-only sequencing with divided preparation and heat-control responsibilities avoided duplicated work and shortened shared cooking.",
+          "uid": "bbd6bb55-8fc8-5c76-b4c0-5f52a54959bb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6bdc8eb6-24fc-49da-8230-0ef78ef6e11c",
+              "memory_uid": "0a5d054f-94bd-5955-bdb7-9b5427e2260b"
+            }
+          ],
+          "reason": "This specific collaboration preference is independently useful and is not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The younger brother prefers cooking and dishwashing roles to be divided before cooking together.",
+          "uid": "85fff6c3-157a-503f-b9e1-145027d54d8c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6bdc8eb6-24fc-49da-8230-0ef78ef6e11c",
+              "memory_uid": "f64ef6c4-7665-5574-9d58-fc124b0bfe3f"
+            }
+          ],
+          "reason": "This qualification about frozen-food condition has no substantively matching compared-side information.",
+          "status": "RESOLVED",
+          "summary": "Packaging and storage duration may affect the condition of frozen prepared food.",
+          "uid": "05c82737-1988-5bc0-8f73-496f90479adf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "43dac2b0-416c-422b-b262-a92a941b6c51",
+              "memory_uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            }
+          ],
+          "reason": "This organizing location and purpose appear only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Clothes intended for donation are collected in a large bag beside the entrance.",
+          "uid": "cc7b0f2f-a96c-5cfd-ae5b-da5051fda064"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "43dac2b0-416c-422b-b262-a92a941b6c51",
+              "memory_uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            },
+            {
+              "frame_uid": "43dac2b0-416c-422b-b262-a92a941b6c51",
+              "memory_uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            }
+          ],
+          "reason": "The memories form one compared-only account of changing the organizing method after a retrieval problem, without a reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "After losing track of a needed charger when emptying a whole drawer, the user later sorted by type and bagged only discard items.",
+          "uid": "9e9e6505-f96d-5314-b58b-555dcae91962"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "43dac2b0-416c-422b-b262-a92a941b6c51",
+              "memory_uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            },
+            {
+              "frame_uid": "43dac2b0-416c-422b-b262-a92a941b6c51",
+              "memory_uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            }
+          ],
+          "reason": "These observations split one compared-only claim about acting on persistently unused clothes and the resulting space gain.",
+          "status": "RESOLVED",
+          "summary": "Photographing unworn clothes did not prompt reuse, while moving them to the donation bag cleared closet space.",
+          "uid": "ddd969a3-a0d6-53f2-8f3e-a717da570165"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "43dac2b0-416c-422b-b262-a92a941b6c51",
+              "memory_uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            },
+            {
+              "frame_uid": "43dac2b0-416c-422b-b262-a92a941b6c51",
+              "memory_uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            }
+          ],
+          "reason": "The memories express one compared-only document-sorting safeguard and its motivating incident.",
+          "status": "RESOLVED",
+          "summary": "After nearly discarding an important paper with advertising, the user used a separate document box and avoided mixing papers.",
+          "uid": "4e44b5c1-6827-52fc-b5ae-ad0a9e4e701c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "43dac2b0-416c-422b-b262-a92a941b6c51",
+              "memory_uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            }
+          ],
+          "reason": "This family-specific reuse check is independently useful and has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user’s mother asks to be consulted about whether she needs usable kitchen items before they are discarded.",
+          "uid": "00e5bd7a-89a2-51c0-832b-afaf03f8d17b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "43dac2b0-416c-422b-b262-a92a941b6c51",
+              "memory_uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            }
+          ],
+          "reason": "This disposal-confirmation policy for sensitive or externally owned items appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The agent should confirm with the user before marking personal documents or another person’s property as disposal candidates.",
+          "uid": "b8d2777f-99ac-58d5-b5a0-93c996273273"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame uniquely covers donation storage, staged sorting, moving unused clothes, separating documents, checking family reuse needs, and obtaining confirmation before treating sensitive or others’ property as disposable.",
+        "differences": "Both limit behavioral inference, but one concerns ingredient dislike after an unfinished serving while the other concerns emotional meaning inferred from use frequency.",
+        "reference_only": "The reference uniquely records freezer practices, duplicate-shopping prevention, spice adjustment, shared-cooking coordination, the brother’s role preference, and packaging or duration effects on frozen food."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "2f0e7aaa-0c6a-4996-8f21-ae1b5dce72df"
+    },
+    "analysis_digest": "0fcb006819dd28cd55cb2f06491a27e9681f14f1e3bf7d0b56341d6499c3107c",
+    "key": "1a77bce0cf3f27d0326f4e5c4165263b6adbc54546f6020e705ecc9e602f4a05",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 45.80205504100013,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "1a77bce0cf3f27d0326f4e5c4165263b6adbc54546f6020e705ecc9e602f4a05",
+  "created_at": "2026-08-13T18:51:19.564972Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/03",
+  "pair_key": "4facd8102e1eca23cab2bfc819907b627d86056504d4ab91d1f5d030550adf6e",
+  "provider_seconds": 45.80205504100013,
+  "right": "task-3/local/personal-memory/2026/04",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

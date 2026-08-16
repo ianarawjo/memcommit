@@ -1,0 +1,379 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:49:07.381642+00:00",
+      "frames": [
+        {
+          "context_digest": "e56d4062f59b72f23e5414f759cd9f2b09c659d820a29a979fe2edb8bfc3e7a4",
+          "context_name": "task-3/local/personal-memory/2025/01",
+          "context_uid": "2ce7ce06-145c-50c7-bfb4-cb175b9a5255",
+          "memories": [
+            {
+              "content": "One of the user's identity documents needs renewal in the second half of 2025.",
+              "content_digest": "0ade63adc8aedc4dbc0003f2cbc2759010c8bf2645a95fedd3db28b7cfbe0daa",
+              "position": 0,
+              "uid": "50911f7e-75a1-5099-99f1-e471bb8e6cb6"
+            },
+            {
+              "content": "The user postponed an application until the next day after spending time looking for document photos in scattered folders.",
+              "content_digest": "fa1703848374c3364cf49be01e115e08897e16a4ccda3c9edef1212189159ce6",
+              "position": 1,
+              "uid": "d5bd9f79-7295-5014-9668-83b7cffc78e2"
+            },
+            {
+              "content": "After gathering the necessary copies in one folder, the user completed the renewal form in one sitting.",
+              "content_digest": "133721b244e02fce2fe24312b703e59225c023d65bea31bf65decb36a18b4ba5",
+              "position": 2,
+              "uid": "5f92f6a3-1739-580c-bd63-1a936098ccd0"
+            },
+            {
+              "content": "The user entered an abbreviated name on an official form and then discovered that it differed from the supporting document.",
+              "content_digest": "d32485dcfd1311d0739bf9887a330f25bf9b3f47f077c56ec7cdb667bde20a55",
+              "position": 3,
+              "uid": "929107ac-c62d-5920-9f71-12d4c9a102e9"
+            },
+            {
+              "content": "On the next application, after comparing the name with the source document, the user did not receive a correction request.",
+              "content_digest": "e6aa9e63c72f762c00824787c3b971f2cdf76a343c336f329e5b28b0f164d02d",
+              "position": 4,
+              "uid": "df8b90c2-4310-5e89-b979-508309bf6b04"
+            },
+            {
+              "content": "The user put only the submission deadline in the calendar and missed the application deadline by one day because they did not check the issuance period.",
+              "content_digest": "995703686975cdd718d999557d4b5ca13a95c3c1eabfbb73808bb5150eda824b",
+              "position": 5,
+              "uid": "306b9df1-d713-5413-b448-e2b42376d827"
+            },
+            {
+              "content": "On the next application, the user recorded the expected issuance date separately in the calendar.",
+              "content_digest": "b83c9061bf30d64e48b74959513fd37e7ab043446dae7e4fd284102a249a1240",
+              "position": 6,
+              "uid": "870b57b5-4cdb-54fc-b17f-8ffb86dad802"
+            },
+            {
+              "content": "Staff at a public-service counter expect a person requesting identity verification to bring an original as well as a copy.",
+              "content_digest": "eae3721b7f1d905172c169c5a483d2af74aa40bced23d1bbcb8d571ab27df706",
+              "position": 7,
+              "uid": "a0fe456c-0794-5bce-8ef9-9558e9833471"
+            },
+            {
+              "content": "When planning an official application, put both the submission deadline and expected issuance date in the calendar and verify them.",
+              "content_digest": "c5b37d86ef85d5023b60578e7f5f6af1bc49711e32ecc0255bc826a743dce0e1",
+              "position": 8,
+              "uid": "111972b9-e05f-5e1b-b121-ef9e51572d1d"
+            },
+            {
+              "content": "The local agent cannot determine the current validity of an identity document without its expiration date.",
+              "content_digest": "ebc9f4fe21d4ad7e53681d32ded2c049c7d4bf57e24ef71213a5ebdbaaaee521",
+              "position": 9,
+              "uid": "c9872898-ec4f-576e-b154-ff6fda581a1a"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "63abf049-23b2-4169-8914-086a925a080d"
+        },
+        {
+          "context_digest": "df0924e320cd14a29eaed60f78e82fd509c4062949b35706b2a7cb94571fb599",
+          "context_name": "task-3/local/personal-memory/2026/04",
+          "context_uid": "16e860a8-7a90-5b7a-adc3-1c487ef97e03",
+          "memories": [
+            {
+              "content": "The user collects clothes for donation in a large bag beside the entrance.",
+              "content_digest": "39f2f01c59b7fa4ca7529d510e1b0a6ffab6706861042f771cfe97f6f806efac",
+              "position": 0,
+              "uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            },
+            {
+              "content": "After emptying an entire drawer at once, the user could not find a charger they needed.",
+              "content_digest": "674c33ba6475f42b29b03e6f8711e0216f983f3d37fee3dacf9336e3bb4596bf",
+              "position": 1,
+              "uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            },
+            {
+              "content": "During the next organizing session, the user sorted items by type and put only items to be discarded in the bag.",
+              "content_digest": "63104b5a7fd380f818c8758c51f9550c7a7fa41ff91f1dd314225d1824b69643",
+              "position": 2,
+              "uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            },
+            {
+              "content": "Even after photographing unworn clothes, the user did not take them out again for one month.",
+              "content_digest": "519f131096440719dcd3412f4439c5cfe44b7f402684170209708040692dc5fd",
+              "position": 3,
+              "uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            },
+            {
+              "content": "After moving those clothes to the donation bag, the user cleared one closet compartment.",
+              "content_digest": "45db58ae108a299344d982d8606fff26f733252da691cf01417e760909ff6057",
+              "position": 4,
+              "uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            },
+            {
+              "content": "The user nearly discarded an important paper with advertising and checked the recycling box again.",
+              "content_digest": "6bf928f67944656e5f3c68d8869c0cefd039a588f0ba735f94520231ef58017c",
+              "position": 5,
+              "uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            },
+            {
+              "content": "During the next organizing session, the user kept a separate document box and did not mix the papers.",
+              "content_digest": "adac8d4266c6b11e15d29c484665bc5dcc915f9aa319198b6a69d0e7b0131bb3",
+              "position": 6,
+              "uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            },
+            {
+              "content": "The user's mother asks the user to check whether she needs kitchen items in good condition before discarding them.",
+              "content_digest": "0752bc2ac00c0b1301c45ab4c2e73f63c57e6ebc4255dcc1c13330ffda906612",
+              "position": 7,
+              "uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            },
+            {
+              "content": "Confirm with the user before marking a personal document or another person's property as a disposal candidate.",
+              "content_digest": "17062e2cd4738619e81e211cb2f53d14e78c5f4eab9ae49053ce7e06935a7db5",
+              "position": 8,
+              "uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            },
+            {
+              "content": "The local agent cannot determine an object's emotional meaning from frequency of use alone.",
+              "content_digest": "9c86bcfe2b209bf7957dced0eab000b42f97b6a435d705ccaccb15e49be3691d",
+              "position": 9,
+              "uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "131c4cd4-3014-4c40-93b6-4244fae3b854"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate domains: identity-document renewal and household decluttering. Each contains practical lessons, observed outcomes, safeguards, and limits on local-agent inference, but none govern the same operational decision closely enough to support a cross-frame semantic relation.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "63abf049-23b2-4169-8914-086a925a080d",
+              "memory_uid": "50911f7e-75a1-5099-99f1-e471bb8e6cb6"
+            }
+          ],
+          "reason": "Only the reference frame supplies the document-renewal timeframe.",
+          "status": "RESOLVED",
+          "summary": "An identity document requires renewal during the latter half of 2025.",
+          "uid": "261494e6-b589-56a4-94e5-a18eda441d01"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "63abf049-23b2-4169-8914-086a925a080d",
+              "memory_uid": "d5bd9f79-7295-5014-9668-83b7cffc78e2"
+            },
+            {
+              "frame_uid": "63abf049-23b2-4169-8914-086a925a080d",
+              "memory_uid": "5f92f6a3-1739-580c-bd63-1a936098ccd0"
+            }
+          ],
+          "reason": "These observations form one reference-only account of how organizing application copies affected completion.",
+          "status": "RESOLVED",
+          "summary": "Scattered document photos delayed the application, while consolidating the necessary copies enabled completion in one sitting.",
+          "uid": "8fd3620b-7e99-5806-91b0-0d0feadc82b6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "63abf049-23b2-4169-8914-086a925a080d",
+              "memory_uid": "929107ac-c62d-5920-9f71-12d4c9a102e9"
+            },
+            {
+              "frame_uid": "63abf049-23b2-4169-8914-086a925a080d",
+              "memory_uid": "df8b90c2-4310-5e89-b979-508309bf6b04"
+            }
+          ],
+          "reason": "These memories describe one reference-only application-data verification lesson and its observed outcome.",
+          "status": "RESOLVED",
+          "summary": "Checking the entered name against the supporting document avoids the mismatch previously caused by using an abbreviated name.",
+          "uid": "28278147-685d-5025-a04f-570ae12ad50e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "63abf049-23b2-4169-8914-086a925a080d",
+              "memory_uid": "306b9df1-d713-5413-b448-e2b42376d827"
+            },
+            {
+              "frame_uid": "63abf049-23b2-4169-8914-086a925a080d",
+              "memory_uid": "870b57b5-4cdb-54fc-b17f-8ffb86dad802"
+            },
+            {
+              "frame_uid": "63abf049-23b2-4169-8914-086a925a080d",
+              "memory_uid": "111972b9-e05f-5e1b-b121-ef9e51572d1d"
+            }
+          ],
+          "reason": "The reference alone links a missed deadline to incomplete calendar planning and records the resulting two-date practice.",
+          "status": "RESOLVED",
+          "summary": "Official applications should be planned by separately recording and verifying both the submission deadline and expected issuance date.",
+          "uid": "19bad1d7-1319-5ddf-9b16-cb79b830d5fb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "63abf049-23b2-4169-8914-086a925a080d",
+              "memory_uid": "a0fe456c-0794-5bce-8ef9-9558e9833471"
+            }
+          ],
+          "reason": "Only the reference frame states this counter-document expectation.",
+          "status": "RESOLVED",
+          "summary": "Identity verification at a public-service counter is expected to require both an original document and a copy.",
+          "uid": "e5275609-41de-55f2-aa40-317247af7df8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "63abf049-23b2-4169-8914-086a925a080d",
+              "memory_uid": "c9872898-ec4f-576e-b154-ff6fda581a1a"
+            }
+          ],
+          "reason": "Only the reference frame states this information requirement and inference limit.",
+          "status": "RESOLVED",
+          "summary": "A local agent cannot assess an identity document's current validity without its expiration date.",
+          "uid": "76fb9b71-69e2-5f56-b9a4-53362a76117b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "131c4cd4-3014-4c40-93b6-4244fae3b854",
+              "memory_uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            }
+          ],
+          "reason": "Only the compared frame describes this standing donation-collection arrangement.",
+          "status": "RESOLVED",
+          "summary": "The user accumulates clothes for donation in a large bag beside the entrance.",
+          "uid": "47752a56-c14d-5b21-9c44-560ab82c2908"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "131c4cd4-3014-4c40-93b6-4244fae3b854",
+              "memory_uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            },
+            {
+              "frame_uid": "131c4cd4-3014-4c40-93b6-4244fae3b854",
+              "memory_uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            }
+          ],
+          "reason": "These compared-only memories form one account of the risk of bulk emptying and the subsequent sorting practice.",
+          "status": "RESOLVED",
+          "summary": "Emptying a whole drawer caused a needed charger to become hard to find, while sorting by type and bagging only discard items provided a safer organizing method.",
+          "uid": "38fd46e8-dcb4-5b2f-bc4b-d13d0f7f2987"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "131c4cd4-3014-4c40-93b6-4244fae3b854",
+              "memory_uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            },
+            {
+              "frame_uid": "131c4cd4-3014-4c40-93b6-4244fae3b854",
+              "memory_uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            }
+          ],
+          "reason": "These compared-only observations describe one contrast between passive documentation and physical donation follow-through.",
+          "status": "RESOLVED",
+          "summary": "Photographing unworn clothes did not prompt action, whereas moving them into the donation bag cleared closet space.",
+          "uid": "04e9924b-d06c-5a12-ada3-0f8b48f2348a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "131c4cd4-3014-4c40-93b6-4244fae3b854",
+              "memory_uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            },
+            {
+              "frame_uid": "131c4cd4-3014-4c40-93b6-4244fae3b854",
+              "memory_uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            }
+          ],
+          "reason": "These memories express one compared-only paper-disposal risk and the subsequent separation practice.",
+          "status": "RESOLVED",
+          "summary": "After an important paper was nearly discarded with advertising, keeping a separate document box prevented papers from being mixed during later organizing.",
+          "uid": "ab43baed-9021-5927-9a88-93c207067398"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "131c4cd4-3014-4c40-93b6-4244fae3b854",
+              "memory_uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            },
+            {
+              "frame_uid": "131c4cd4-3014-4c40-93b6-4244fae3b854",
+              "memory_uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            }
+          ],
+          "reason": "The compared frame alone establishes confirmation as a safeguard where document importance or another person's interest may affect disposal.",
+          "status": "RESOLVED",
+          "summary": "Potential disposal of personal documents or property another person may want should be confirmed before the item is marked or discarded.",
+          "uid": "fdf9e52f-cfc7-5a61-bcba-f676ec5ea7c4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "131c4cd4-3014-4c40-93b6-4244fae3b854",
+              "memory_uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "reason": "Only the compared frame states this limit on evaluating an object's significance.",
+          "status": "RESOLVED",
+          "summary": "A local agent cannot infer an object's emotional meaning from frequency of use alone.",
+          "uid": "8ee4ff61-b016-5e7f-bf1b-f189bc500a5a"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers safer decluttering, donation follow-through, document and ownership safeguards, sorting methods, and limits on inferring emotional value from use.",
+        "differences": "",
+        "reference_only": "The reference covers renewal timing, document preparation, exact-name verification, calendar planning, counter requirements, and the need for an expiration date to assess validity."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "0df4e89f-20d5-4e70-b96a-eb1acd569faf"
+    },
+    "analysis_digest": "3dc56bc4ebda5f156a5bb7eebb44142d9073a796272e2c69ddb608b3f0425e90",
+    "key": "5addac97d31f6c9dc88c09de7e7509282beb09fff7a625f3c251df6734935555",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 38.25961662500049,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "5addac97d31f6c9dc88c09de7e7509282beb09fff7a625f3c251df6734935555",
+  "created_at": "2026-08-13T18:49:45.640831Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/01",
+  "pair_key": "0e4c1b5f12f5867637f82a7941ed0917cbe89a9d1e31fc0c3c76fb958eaecc9e",
+  "provider_seconds": 38.25961662500049,
+  "right": "task-3/local/personal-memory/2026/04",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

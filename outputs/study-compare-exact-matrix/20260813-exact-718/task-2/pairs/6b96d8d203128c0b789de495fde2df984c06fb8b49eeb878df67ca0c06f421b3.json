@@ -1,0 +1,351 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:20:17.774728+00:00",
+      "frames": [
+        {
+          "context_digest": "42df7e2f7640040d1d6f6f6e566e80d178668a05ab6918b64eed91b91a41b7fb",
+          "context_name": "task-2/advisor1/evaluation",
+          "context_uid": "30568e2f-ce17-50ce-a25b-1cc4bdb94689",
+          "memories": [
+            {
+              "content": "Specify a single representative measure that serves as the criterion for retaining, modifying, or discarding compared design alternatives.",
+              "content_digest": "53aa7c1f81a4fac9e76985be094717aa122e7077a6fcfde46946babd5929d390",
+              "position": 0,
+              "uid": "a50f6ecb-de38-5769-8a6e-23b84a7eb35c"
+            },
+            {
+              "content": "HCI review panels verify whether clear criteria for judging design alternatives are established using the declared primary measure.",
+              "content_digest": "fabd83103e5c3474f56de113c477f7ced5e863a508ec39bd4ae23653d63ad354",
+              "position": 1,
+              "uid": "44c61beb-24a2-584a-ad96-e622690d8171"
+            },
+            {
+              "content": "Collect process measures to diagnose interaction steps where problems occurred, alongside the primary outcome measure.",
+              "content_digest": "6cc2fedef1b0af1c594e48610e08a169f3bca2405bf8773945eca33396aecb36",
+              "position": 2,
+              "uid": "23202824-b576-5d77-b591-8b4cc0757632"
+            },
+            {
+              "content": "Interpret evaluation results as differences between compared design alternatives rather than as success or failure of a single prototype.",
+              "content_digest": "5c578d52a7dbbf4e4b646e707bbee4ac37bcd23bceb0b4d5e09ef3c08df9c2f4",
+              "position": 3,
+              "uid": "65ae88bf-8002-5ada-8590-eaf345b38863"
+            },
+            {
+              "content": "Check boundary cases to verify whether the derived design principles retain explanatory power for adjacent situations not included in the comparison.",
+              "content_digest": "3edc3e181a8086233d889f35cb98c9448875fe3fee915467f712ca3eb2886de1",
+              "position": 4,
+              "uid": "79af5e5f-4868-5e76-bcd5-3f8e1d6a0bd1"
+            },
+            {
+              "content": "Controlled evaluation environments do not reproduce time pressure, peer intervention, or voluntary termination conditions found in daily use.",
+              "content_digest": "e58a1bc6a423874525aca9f864b9b0dbd1e3ef9961410608c5837c88f1153d9b",
+              "position": 5,
+              "uid": "3a65fc8b-a5b4-50fc-a60e-fc6f3fc44547"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "be99243b-a46d-4605-bc9c-bc5cca82e0f0"
+        },
+        {
+          "context_digest": "7842b257aa1d32e6e598b019791827a580a1864e19e05d9101413b11d5b0227d",
+          "context_name": "task-2/advisor2/style",
+          "context_uid": "f0ea0447-bfe6-503c-89da-e90f24af6e2d",
+          "memories": [
+            {
+              "content": "Use an em dash only for a deliberate interruption or sharp contrast; otherwise split the sentence or choose ordinary punctuation.",
+              "content_digest": "3c37a896774ebccbec1e4bb3ad4a4e61ece1bb4ae246226c93b1d78c651bee7b",
+              "position": 0,
+              "uid": "9bd2a9da-9720-5001-b958-f7a2a2658f87"
+            },
+            {
+              "content": "In procedural passages, begin each sentence with the action, condition, or output instead of repeating “we” so the steps remain easy to follow and reuse.",
+              "content_digest": "c61f6b8ae3612497403f306de2cbe4e6a25db285109e89f74d61439abf5fae30",
+              "position": 1,
+              "uid": "e3e20261-e03c-52fb-be9e-04f5f9b1294d"
+            },
+            {
+              "content": "Write system behaviors confirmed in the actual usage environment as observed states.",
+              "content_digest": "972e1f5ba9188f1a423c2b47782e1a3938749419e8c170fabc97e6dd4f86cab2",
+              "position": 2,
+              "uid": "8d8d0e8d-dad1-50b5-9438-049052748a6a"
+            },
+            {
+              "content": "Write system behaviors not yet confirmed in the field as conditional plans.",
+              "content_digest": "9b7f3fffb87af8004e9645b6494bd2b990a1f1bfb054ca0efecea2bfb74d850d",
+              "position": 3,
+              "uid": "8c74ba87-822b-5ce2-9a3a-3adc02ab9744"
+            },
+            {
+              "content": "Readers can reconstruct a sequence more accurately when each sentence begins with the action or condition rather than the author.",
+              "content_digest": "e6748d23d892cb074ac5259f3c733727746640973a5b62c0ed1b7c6a684e9db8",
+              "position": 4,
+              "uid": "1f29de31-5429-5dfc-ab27-01779fa16704"
+            },
+            {
+              "content": "Do not mechanically split connected thoughts into separate short sentences when doing so destroys the intended reading rhythm.",
+              "content_digest": "754be36b29f7b647390c9308fb7a1cfd9e3228ab0f875c8d53e01febbbb3fd8c",
+              "position": 5,
+              "uid": "1d181223-f750-57d2-97a5-b79f276a589f"
+            },
+            {
+              "content": "Preserve a longer sentence when its clauses form one continuous movement that is easier to follow together than apart.",
+              "content_digest": "074e374f77a4fa6f559e3d69746ab3c706d2b1f3d2e4b98a21e8d1e4d59ef087",
+              "position": 6,
+              "uid": "a5ce5f9f-8852-5080-ae35-21abcf4a0973"
+            },
+            {
+              "content": "The user understands that short sentences are easier to scan but feels that uniformly segmented prose loses its reading rhythm.",
+              "content_digest": "acf7ca20f09995c87c51434dc2ff489efc886ada5b2282dc4bc4014befd8fdc0",
+              "position": 7,
+              "uid": "888ce8af-a36e-5e74-9a0c-604aac48d3b7"
+            },
+            {
+              "content": "Write procedural sentences so their opening phrase can be reused as a checklist item without changing the step's meaning.",
+              "content_digest": "7fd5b55fc09e74df05628f1c61bd543b39b906847b86e7f09337a67b47553156",
+              "position": 8,
+              "uid": "ddf40413-3274-5662-ba5e-d6cae2a1e546"
+            },
+            {
+              "content": "The user should choose “I” as an individual author or “we” for a named team and should not mix them when describing the same responsible party.",
+              "content_digest": "951763104930e99be0182b59dbaa6d7d7a20fd23fe968e39a15bd0798a1bd1b7",
+              "position": 9,
+              "uid": "6b7aaddf-5bbd-5015-811d-9f4d7a4b4ad1"
+            },
+            {
+              "content": "Action-first procedural sentences can be reordered or copied into a checklist more easily because their subject is the step rather than the proposal author.",
+              "content_digest": "397e3c0b9262e13d94969669930081ac76d4967adec4c5fd1f681869b613bc36",
+              "position": 10,
+              "uid": "89c2ce30-d6aa-5762-bf17-c697caac68e4"
+            },
+            {
+              "content": "The user can explain whether an em dash marks an intentional interruption or contrast rather than using it decoratively.",
+              "content_digest": "ec27bb0d2ba0656602348660944cb483789dfaec189d6e32ad6145c8e17f81b2",
+              "position": 11,
+              "uid": "9f1b647a-bd2b-50df-8141-5b8c142c0fa5"
+            },
+            {
+              "content": "An em dash creates a stronger interruption than a comma and can make a deliberate contrast easier to hear in the sentence.",
+              "content_digest": "aa3c3cdb31d26aeeb33b047a22860bf1dbe0819e9cc93f03da112b04367b844e",
+              "position": 12,
+              "uid": "49a42872-adcc-5bf8-9029-1d134cac6267"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "190e0d4a-e89b-4f81-a7d6-74adb98ab45b"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate operational domains: the reference frame governs comparative HCI evaluation, while the compared frame governs prose style, evidence-sensitive wording, procedural structure, sentence rhythm, and authorial voice. No cross-frame claim materially addresses the same decision, and no conflict or ambiguity is present.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "be99243b-a46d-4605-bc9c-bc5cca82e0f0",
+              "memory_uid": "a50f6ecb-de38-5769-8a6e-23b84a7eb35c"
+            },
+            {
+              "frame_uid": "be99243b-a46d-4605-bc9c-bc5cca82e0f0",
+              "memory_uid": "44c61beb-24a2-584a-ad96-e622690d8171"
+            }
+          ],
+          "reason": "These memories split one one-sided policy between specifying the governing measure and verifying that review criteria use it; the compared frame has no corresponding evaluation policy.",
+          "status": "RESOLVED",
+          "summary": "Design-alternative reviews use a declared primary measure to establish and verify decision criteria.",
+          "uid": "60916a58-d879-5588-9292-f755d40aabac"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "be99243b-a46d-4605-bc9c-bc5cca82e0f0",
+              "memory_uid": "23202824-b576-5d77-b591-8b4cc0757632"
+            }
+          ],
+          "reason": "This is independently useful guidance about diagnostic evaluation data, with no materially related claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Process measures accompany the primary outcome measure to locate problematic interaction steps.",
+          "uid": "a69df35e-9174-5ce4-af5a-9296fb6b35b8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "be99243b-a46d-4605-bc9c-bc5cca82e0f0",
+              "memory_uid": "65ae88bf-8002-5ada-8590-eaf345b38863"
+            }
+          ],
+          "reason": "This is an independent rule for interpreting comparative evaluations, absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Evaluation results are interpreted as differences among design alternatives rather than as a single prototype's success or failure.",
+          "uid": "98d58bfe-85c7-5dfd-ac87-d375fa6c840a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "be99243b-a46d-4605-bc9c-bc5cca82e0f0",
+              "memory_uid": "79af5e5f-4868-5e76-bcd5-3f8e1d6a0bd1"
+            }
+          ],
+          "reason": "This is independent guidance about external explanatory reach, with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Adjacent boundary cases test whether derived design principles retain explanatory power beyond the original comparison.",
+          "uid": "068e0cfa-3848-5761-9223-649c8fa89008"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "be99243b-a46d-4605-bc9c-bc5cca82e0f0",
+              "memory_uid": "3a65fc8b-a5b4-50fc-a60e-fc6f3fc44547"
+            }
+          ],
+          "reason": "This independently records an ecological-validity limitation not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Controlled evaluations omit important daily-use conditions such as time pressure, peer intervention, and voluntary termination.",
+          "uid": "17406828-49a7-50b1-8865-0e102ba13198"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "190e0d4a-e89b-4f81-a7d6-74adb98ab45b",
+              "memory_uid": "9bd2a9da-9720-5001-b958-f7a2a2658f87"
+            },
+            {
+              "frame_uid": "190e0d4a-e89b-4f81-a7d6-74adb98ab45b",
+              "memory_uid": "9f1b647a-bd2b-50df-8141-5b8c142c0fa5"
+            },
+            {
+              "frame_uid": "190e0d4a-e89b-4f81-a7d6-74adb98ab45b",
+              "memory_uid": "49a42872-adcc-5bf8-9029-1d134cac6267"
+            }
+          ],
+          "reason": "These memories state, explain, and test one one-sided punctuation standard; the reference frame contains no related writing rule.",
+          "status": "RESOLVED",
+          "summary": "Em dashes serve deliberate, strong interruption or contrast and should be recognizable and justifiable rather than decorative.",
+          "uid": "437c86fd-6e02-5c8c-a920-9db1282f4eeb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "190e0d4a-e89b-4f81-a7d6-74adb98ab45b",
+              "memory_uid": "e3e20261-e03c-52fb-be9e-04f5f9b1294d"
+            },
+            {
+              "frame_uid": "190e0d4a-e89b-4f81-a7d6-74adb98ab45b",
+              "memory_uid": "1f29de31-5429-5dfc-ab27-01779fa16704"
+            },
+            {
+              "frame_uid": "190e0d4a-e89b-4f81-a7d6-74adb98ab45b",
+              "memory_uid": "ddf40413-3274-5662-ba5e-d6cae2a1e546"
+            },
+            {
+              "frame_uid": "190e0d4a-e89b-4f81-a7d6-74adb98ab45b",
+              "memory_uid": "89c2ce30-d6aa-5762-bf17-c697caac68e4"
+            }
+          ],
+          "reason": "These memories restate and elaborate one procedural-writing principle and its reuse benefits; no reference memory governs procedural sentence structure.",
+          "status": "RESOLVED",
+          "summary": "Action- or condition-first procedural sentences improve step-centered clarity and support accurate reuse as checklist items.",
+          "uid": "29f6cc09-5354-5428-a3db-b1c6e84325fc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "190e0d4a-e89b-4f81-a7d6-74adb98ab45b",
+              "memory_uid": "8d8d0e8d-dad1-50b5-9438-049052748a6a"
+            },
+            {
+              "frame_uid": "190e0d4a-e89b-4f81-a7d6-74adb98ab45b",
+              "memory_uid": "8c74ba87-822b-5ce2-9a3a-3adc02ab9744"
+            }
+          ],
+          "reason": "The memories are complementary branches of one evidence-sensitive wording rule, which has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Field-confirmed system behaviors are written as observed states, while unconfirmed behaviors are written as conditional plans.",
+          "uid": "90fb57ea-caa2-5a39-80b4-d19695165bf3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "190e0d4a-e89b-4f81-a7d6-74adb98ab45b",
+              "memory_uid": "1d181223-f750-57d2-97a5-b79f276a589f"
+            },
+            {
+              "frame_uid": "190e0d4a-e89b-4f81-a7d6-74adb98ab45b",
+              "memory_uid": "a5ce5f9f-8852-5080-ae35-21abcf4a0973"
+            },
+            {
+              "frame_uid": "190e0d4a-e89b-4f81-a7d6-74adb98ab45b",
+              "memory_uid": "888ce8af-a36e-5e74-9a0c-604aac48d3b7"
+            }
+          ],
+          "reason": "These memories express one preference and policy against mechanically segmenting connected prose; the reference frame does not address sentence rhythm.",
+          "status": "RESOLVED",
+          "summary": "Sentence length balances scanability with reading rhythm by preserving connected clauses when splitting would disrupt continuous movement.",
+          "uid": "f64aea19-f68a-5f99-966e-20651ca287e4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "190e0d4a-e89b-4f81-a7d6-74adb98ab45b",
+              "memory_uid": "6b7aaddf-5bbd-5015-811d-9f4d7a4b4ad1"
+            }
+          ],
+          "reason": "This is an independent authorship and voice rule absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "An author chooses “I” for an individual or “we” for a named team and uses that choice consistently for the same responsible party.",
+          "uid": "56ca7644-2cca-5490-af2e-7643ff7596ed"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers deliberate em-dash use, action-first reusable procedures, field-evidence-sensitive wording, preservation of sentence rhythm, and consistent authorial pronouns.",
+        "differences": "",
+        "reference_only": "The reference covers primary evaluation criteria, diagnostic process measures, comparative interpretation, boundary-case testing, and limits of controlled environments."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "45cea5c6-fc7e-4187-a792-a52c42f9413e"
+    },
+    "analysis_digest": "136cfb531cc65f54b25ce39081c3b81ac88f7e1befc8f5a36f48aa498c161e2e",
+    "key": "c690680f59b0e7f2c7ef3085c67e2962dce5ba18dd600ca542714833c8bfd595",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 40.06986075000168,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "c690680f59b0e7f2c7ef3085c67e2962dce5ba18dd600ca542714833c8bfd595",
+  "created_at": "2026-08-13T18:20:57.843998Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/evaluation",
+  "pair_key": "6b96d8d203128c0b789de495fde2df984c06fb8b49eeb878df67ca0c06f421b3",
+  "provider_seconds": 40.06986075000168,
+  "right": "task-2/advisor2/style",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

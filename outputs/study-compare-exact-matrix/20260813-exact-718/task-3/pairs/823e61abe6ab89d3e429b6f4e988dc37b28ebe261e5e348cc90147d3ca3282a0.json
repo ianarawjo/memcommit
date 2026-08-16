@@ -1,0 +1,397 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:49:46.024734+00:00",
+      "frames": [
+        {
+          "context_digest": "3e738289251b9bdf3deb1c7a7540e6ce811b09e26a020af3a76d47b4c85c7ab1",
+          "context_name": "task-3/local/personal-memory/2025/02",
+          "context_uid": "ce7367b8-8532-5f43-972a-1665ca8e3e80",
+          "memories": [
+            {
+              "content": "The user reviewed their emergency-contact list in February 2025.",
+              "content_digest": "b2f108376dbbf53e8885b9c61080d4c873209d8c6e399c37412fa507fec08b0b",
+              "position": 0,
+              "uid": "3ff046b1-5810-51ca-8d43-c99ef6a90b41"
+            },
+            {
+              "content": "When preparation instructions arrived as a long paragraph, the user missed two items.",
+              "content_digest": "43bde452a403f85bcffa6f7ba6b3142ed45604730083327c6f57092b98f397aa",
+              "position": 1,
+              "uid": "e2a304e5-6100-5a5f-b508-0a7f28f6bda7"
+            },
+            {
+              "content": "After changing the same content into a checklist, the user marked every item they had prepared.",
+              "content_digest": "0f8115061b489894115fd252f079ee673504ed09dea4d88d558e64ed6189f1be",
+              "position": 2,
+              "uid": "51d03bff-3e33-5f68-9df6-ed7efa8e3de9"
+            },
+            {
+              "content": "The user called their mother on a weekend evening, but they spoke only briefly because the mother was out.",
+              "content_digest": "a9a1e7d87532667781677f4760beeb086f1e423365a915a0ec0b494892cbb361",
+              "position": 3,
+              "uid": "0987293e-3e21-5cbc-bb46-59245a5fa041"
+            },
+            {
+              "content": "The user called again on Saturday morning the following week and spoke for 40 minutes.",
+              "content_digest": "f08c9f170345686b2091e3b0ecd49f049e245d584886da62d586185010f713bf",
+              "position": 4,
+              "uid": "dc3de6ad-56ea-528a-a9b7-349e79af2326"
+            },
+            {
+              "content": "The user sent a text to an old number for an emergency contact and saw that delivery failed.",
+              "content_digest": "692321e996b9ac8e3500a2da7765f77e0d14c6f040cf2c33944cbdcb39c706de",
+              "position": 5,
+              "uid": "6546d41b-3d5b-5802-a9e7-ac028405e3f2"
+            },
+            {
+              "content": "After confirming the new number with their older sister, the user updated the contact list.",
+              "content_digest": "8d2e954a978e35c1da92948ccc8e45f38fcc25ea3fafe7c389ef546f6eda1ae1",
+              "position": 6,
+              "uid": "ea6eb9d2-9b01-5330-a4d5-886d4bc6cd85"
+            },
+            {
+              "content": "For nonurgent contact, the user's older sister prefers to reply by text when available rather than take a call immediately.",
+              "content_digest": "86639aee50903bc3261e6f88ac7d649c8197927fe214d5d17e0e6f5b3d69a59d",
+              "position": 7,
+              "uid": "12fe7e64-192e-5359-8f96-d2875f7e5399"
+            },
+            {
+              "content": "Before using an emergency contact, reconfirm the number and relationship information with the user.",
+              "content_digest": "78e41f61ba99eaf8840d5d318d08327ca6bb087addd6e22269e8b63281bb67c7",
+              "position": 8,
+              "uid": "e6f89ded-5687-5c25-8df8-88f288d450c6"
+            },
+            {
+              "content": "The user feels that a reminder the day before an appointment gives them enough time to recheck preparation items.",
+              "content_digest": "1a9fcc01df362c76b6d9c8e4fa2d33229a2ae2762c0c6d25e0fc89312a6e0ed4",
+              "position": 9,
+              "uid": "f9197c33-ff93-5215-a3a5-e4087bea2a0d"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "89fb3e4f-39e7-4235-b44b-bc0217219220"
+        },
+        {
+          "context_digest": "4b8dc68a205171fe661b04620d0fba2bbb386ff21d494699c34a74dc2ab86080",
+          "context_name": "task-3/local/personal-memory/2026/03",
+          "context_uid": "97d36150-4792-5a5c-9332-5eb1de8bcf04",
+          "memories": [
+            {
+              "content": "The user stores tax-related receipts in digital folders by year.",
+              "content_digest": "778f983547572b31798b7041899812a7b0b574d74b585baf6883e94919dee6ec",
+              "position": 0,
+              "uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393"
+            },
+            {
+              "content": "The user found three paper receipts late and recalculated the expense total already prepared.",
+              "content_digest": "542368a141ec82a1bd7da4b534d88ea62c487d16a37f454569bf6400cbc749e9",
+              "position": 1,
+              "uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878"
+            },
+            {
+              "content": "Starting the next month, the user photographed receipts on the day they were received and reduced omissions.",
+              "content_digest": "b95e0a1afa1196a9bff117bf12b1630edcc4eb65bfdfeb3128ae5937563a492e",
+              "position": 2,
+              "uid": "ff436ea5-1b3e-55df-8302-bd8a96740671"
+            },
+            {
+              "content": "The user named every file with only the photo date and spent a long time looking for a needed receipt.",
+              "content_digest": "c3aa33e0b7e007bdfc5c12dcda659e2a52938548fbf53d5a1ab034487a528857",
+              "position": 3,
+              "uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e"
+            },
+            {
+              "content": "The user later included the expense category in the filename and found the receipt immediately through search.",
+              "content_digest": "cdae97761f614b932d3b330723627bee8b0e3d033e2bf1061b721367237acee1",
+              "position": 4,
+              "uid": "89d6fa9a-b795-59df-be34-1c05a9861d35"
+            },
+            {
+              "content": "While reviewing documents just before submission, the user discovered one blank signature field.",
+              "content_digest": "a525c117b97eec82c678f276b319158703bf9cc558fb83cb81c0820d5c9e3174",
+              "position": 5,
+              "uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2"
+            },
+            {
+              "content": "Before submitting an administrative document, the user checks the signature field as the final item on the checklist.",
+              "content_digest": "542bec3cbc3fc8b22c95da274e479e96bfbf061a3b644d0d7f213de5a030dbd5",
+              "position": 6,
+              "uid": "5551622f-66cf-5542-8c47-1cddadab5c02"
+            },
+            {
+              "content": "Staff at a tax-support counter expect to receive an electronic copy in which every item is legible rather than a blurred or cropped photo.",
+              "content_digest": "d328ca248fdeecf0756e23b1202e7007bc8c3c25ae769439b0fd2efdbbe47580",
+              "position": 7,
+              "uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f"
+            },
+            {
+              "content": "The local agent can organize receipts by date and category but cannot determine whether an expense is deductible.",
+              "content_digest": "bcc769721a99b099ca20e5e527fa8904d54ecbaf9ae7d7616b95e1adaf1f89a9",
+              "position": 8,
+              "uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094"
+            },
+            {
+              "content": "The accepted scope and submission deadlines for administrative documents may vary under that year's guidance.",
+              "content_digest": "1ab61126b8efb0c2a9c6114c367018158f2e136bafa87e33f60aadb0686d0537",
+              "position": 9,
+              "uid": "de398064-3179-590b-8c62-effb17060115"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "3038310f-1c73-41fc-8355-d314ae8e5b6b"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames contain independently useful guidance and observations in separate domains. The reference covers appointment preparation, family communication, and emergency-contact maintenance; the compared frame covers receipt handling, document submission, service expectations, and limits that vary with annual guidance.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "89fb3e4f-39e7-4235-b44b-bc0217219220",
+              "memory_uid": "3ff046b1-5810-51ca-8d43-c99ef6a90b41"
+            }
+          ],
+          "reason": "This is a one-sided historical maintenance fact with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user reviewed their emergency-contact list in February 2025.",
+          "uid": "3df66f30-6590-5a22-85f1-91847fa0e060"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "89fb3e4f-39e7-4235-b44b-bc0217219220",
+              "memory_uid": "e2a304e5-6100-5a5f-b508-0a7f28f6bda7"
+            },
+            {
+              "frame_uid": "89fb3e4f-39e7-4235-b44b-bc0217219220",
+              "memory_uid": "51d03bff-3e33-5f68-9df6-ed7efa8e3de9"
+            }
+          ],
+          "reason": "These observations jointly describe one format-related preparation outcome, which has no counterpart addressing the same operational decision in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Presenting preparation instructions as a checklist enabled complete tracking after paragraph formatting led to missed items.",
+          "uid": "9ae9b994-f635-566d-8278-c4fc88440956"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "89fb3e4f-39e7-4235-b44b-bc0217219220",
+              "memory_uid": "0987293e-3e21-5cbc-bb46-59245a5fa041"
+            },
+            {
+              "frame_uid": "89fb3e4f-39e7-4235-b44b-bc0217219220",
+              "memory_uid": "dc3de6ad-56ea-528a-a9b7-349e79af2326"
+            }
+          ],
+          "reason": "The calls form one family-contact timing episode, and the compared frame contains no corresponding family-communication claim.",
+          "status": "RESOLVED",
+          "summary": "Two calls to the user's mother had different durations under different availability and timing circumstances.",
+          "uid": "4c6151c2-155f-57b9-b539-0c9a5bddaff5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "89fb3e4f-39e7-4235-b44b-bc0217219220",
+              "memory_uid": "6546d41b-3d5b-5802-a9e7-ac028405e3f2"
+            },
+            {
+              "frame_uid": "89fb3e4f-39e7-4235-b44b-bc0217219220",
+              "memory_uid": "ea6eb9d2-9b01-5330-a4d5-886d4bc6cd85"
+            }
+          ],
+          "reason": "These events form one contact-correction episode without a corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A failed text exposed an outdated emergency-contact number, which the user corrected after confirming the replacement with their older sister.",
+          "uid": "a521fd78-bb6a-5a6f-b4ef-a98428ef1a6e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "89fb3e4f-39e7-4235-b44b-bc0217219220",
+              "memory_uid": "12fe7e64-192e-5359-8f96-d2875f7e5399"
+            }
+          ],
+          "reason": "This is an independently useful communication preference absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "For nonurgent contact, the user's older sister prefers replying by text when available instead of taking an immediate call.",
+          "uid": "f5e75787-696e-513c-8b8a-acd4e5a07015"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "89fb3e4f-39e7-4235-b44b-bc0217219220",
+              "memory_uid": "e6f89ded-5687-5c25-8df8-88f288d450c6"
+            }
+          ],
+          "reason": "This is a one-sided operational safeguard with no counterpart governing emergency contacts in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Emergency-contact numbers and relationships should be reconfirmed with the user before use.",
+          "uid": "f3a90379-7588-58c6-a8b3-cc0394a15200"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "89fb3e4f-39e7-4235-b44b-bc0217219220",
+              "memory_uid": "f9197c33-ff93-5215-a3a5-e4087bea2a0d"
+            }
+          ],
+          "reason": "This is a one-sided reminder-timing preference not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A reminder one day before an appointment gives the user enough time to recheck preparation items.",
+          "uid": "f1a1f6a9-481d-51af-888d-2d62c5d0efd6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3038310f-1c73-41fc-8355-d314ae8e5b6b",
+              "memory_uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393"
+            }
+          ],
+          "reason": "This is a one-sided filing practice with no corresponding receipt-storage claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user stores tax-related receipts in digital folders organized by year.",
+          "uid": "f9dc442c-09be-593b-b8a0-3d568553127f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3038310f-1c73-41fc-8355-d314ae8e5b6b",
+              "memory_uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878"
+            },
+            {
+              "frame_uid": "3038310f-1c73-41fc-8355-d314ae8e5b6b",
+              "memory_uid": "ff436ea5-1b3e-55df-8302-bd8a96740671"
+            }
+          ],
+          "reason": "These observations jointly describe one receipt-capture problem and improvement, which the reference frame does not address.",
+          "status": "RESOLVED",
+          "summary": "After late paper receipts forced recalculation, photographing receipts on receipt day reduced omissions.",
+          "uid": "8db7135e-25d2-5388-a43a-32d99077c7d6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3038310f-1c73-41fc-8355-d314ae8e5b6b",
+              "memory_uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e"
+            },
+            {
+              "frame_uid": "3038310f-1c73-41fc-8355-d314ae8e5b6b",
+              "memory_uid": "89d6fa9a-b795-59df-be34-1c05a9861d35"
+            }
+          ],
+          "reason": "These observations jointly describe one file-naming and searchability outcome absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Adding expense categories to receipt filenames improved retrieval compared with date-only filenames.",
+          "uid": "483acc3e-5098-5fe6-b104-399f92882725"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3038310f-1c73-41fc-8355-d314ae8e5b6b",
+              "memory_uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2"
+            },
+            {
+              "frame_uid": "3038310f-1c73-41fc-8355-d314ae8e5b6b",
+              "memory_uid": "5551622f-66cf-5542-8c47-1cddadab5c02"
+            }
+          ],
+          "reason": "The discovery and resulting control form one document-submission claim with no counterpart under the same scope in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "After a blank signature field was found during final review, signature verification became the final checklist item before administrative-document submission.",
+          "uid": "a8f539e8-9210-5a66-92c1-3fd7fc18bf42"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3038310f-1c73-41fc-8355-d314ae8e5b6b",
+              "memory_uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f"
+            }
+          ],
+          "reason": "This is a one-sided submission-quality expectation absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Tax-support staff expect electronic copies whose contents are fully legible rather than blurred or cropped.",
+          "uid": "2690ec94-badd-5c19-aae0-f0e08523b17d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3038310f-1c73-41fc-8355-d314ae8e5b6b",
+              "memory_uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094"
+            }
+          ],
+          "reason": "This is an independently useful capability boundary with no corresponding agent-scope claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The local agent can organize receipts by date and category but cannot determine expense deductibility.",
+          "uid": "f6e56ea0-6aa9-5dad-a164-26144ea26703"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3038310f-1c73-41fc-8355-d314ae8e5b6b",
+              "memory_uid": "de398064-3179-590b-8c62-effb17060115"
+            }
+          ],
+          "reason": "This is a one-sided annual-guidance qualification not addressed in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Accepted document scope and submission deadlines may vary according to the applicable year's guidance.",
+          "uid": "c6d0e21a-b5d3-5035-b8bf-39af4cfcd7e7"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame describes receipt capture, storage, naming and retrieval; signature and legibility checks; limits on deductible-expense judgments; and annually variable document scope and deadlines.",
+        "differences": "",
+        "reference_only": "The reference describes checklist-based appointment preparation, reminder timing, family calling and texting patterns, and reviewing, correcting, and reconfirming emergency-contact information."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "803ce27d-4215-4338-8864-22f35ba6df9e"
+    },
+    "analysis_digest": "13679a3e908bd57d6929f92b9829c9c525d84b1d0735de5272e5d737a62ace51",
+    "key": "3b3155bde31c67f95525a8797c776974aa7c12ea5408a51fd6d1d745326733a8",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 50.55856262499947,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "3b3155bde31c67f95525a8797c776974aa7c12ea5408a51fd6d1d745326733a8",
+  "created_at": "2026-08-13T18:50:36.582759Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/02",
+  "pair_key": "823e61abe6ab89d3e429b6f4e988dc37b28ebe261e5e348cc90147d3ca3282a0",
+  "provider_seconds": 50.55856262499947,
+  "right": "task-3/local/personal-memory/2026/03",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

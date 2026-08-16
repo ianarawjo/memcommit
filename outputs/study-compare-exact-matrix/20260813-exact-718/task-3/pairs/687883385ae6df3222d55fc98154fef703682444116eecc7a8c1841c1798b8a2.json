@@ -1,0 +1,397 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:45:45.640140+00:00",
+      "frames": [
+        {
+          "context_digest": "17b940da39446a9f934dff43ea7db561d14060561065852a34658fe4aaa1702f",
+          "context_name": "task-3/local/personal-memory/2024/10",
+          "context_uid": "7c55b789-a7d0-5070-9cf8-6f5e205415dc",
+          "memories": [
+            {
+              "content": "The user renewed their local library membership in October 2024.",
+              "content_digest": "eb9209032856bdbc69fbfa67e053bf8cd2bc23f8e8e25c0be9a5aa3f7e05f4e9",
+              "position": 0,
+              "uid": "04711182-acef-52a9-bd58-7fe98a54854a"
+            },
+            {
+              "content": "On an evening walk, the user saw an unlit street and took a detour along a main road.",
+              "content_digest": "62d001de1c6c4599e51c4e0713f577a2838e95e03f26064778e64542f390a599",
+              "position": 1,
+              "uid": "0229d0b1-750c-521b-a126-22c9d9d001c4"
+            },
+            {
+              "content": "On a day the user chose a well-lit pedestrian route, the walk took 12 minutes longer than usual.",
+              "content_digest": "ad3770626bef71bc9a29ec7772aeebeb70231e89b417b05b4da9c62a65b89afe",
+              "position": 2,
+              "uid": "e310fe87-8cde-5399-be00-9f8d7ec44e94"
+            },
+            {
+              "content": "On a day the user sat by the library window, they heard vehicle noise with every page they read.",
+              "content_digest": "090a190c68a5166d84cde1eed20f9a03c2b99722ed383eb3b5703489c01d85e0",
+              "position": 3,
+              "uid": "4f37306b-08cd-512a-b92e-ca6761da1a5b"
+            },
+            {
+              "content": "On the next visit, the user sat farther inside and did not move for an hour.",
+              "content_digest": "a071b4c7699fe17f63f0ab6263da1259aea00ad635169a313d4821f57071a86a",
+              "position": 4,
+              "uid": "5897ffa4-cfc6-5012-8931-15420ec5cf7c"
+            },
+            {
+              "content": "The user wrote the due date of a borrowed book on paper and then lost the paper.",
+              "content_digest": "43ef22512c79634cb9e3dc59006c7d06c3513a9d5d1f89eedbb392964cc34f02",
+              "position": 5,
+              "uid": "ce38bd13-3d51-5bff-9eba-ed70a8217356"
+            },
+            {
+              "content": "After entering the due date on their phone, the user saw a reminder the day before and put the book in their bag.",
+              "content_digest": "38782cba2f3bf260d62cf8e80c4a7e4a3a196d4d29ced3c4fe19d050e12c1e0a",
+              "position": 6,
+              "uid": "a304315b-bc0a-591b-b8c2-7eea5145819d"
+            },
+            {
+              "content": "Library staff expect a person requesting a replacement membership card to bring identity-verification material.",
+              "content_digest": "1ac59309aedbfa946661bf5bbc4d5141c420df059937893caba88725dfe77d24",
+              "position": 7,
+              "uid": "ef060b89-6c54-5c20-86be-c07766a35daa"
+            },
+            {
+              "content": "Check recent lighting and pedestrian conditions before proposing an evening walking route.",
+              "content_digest": "1b247adfb3723d14979b2cc7ecf6786c457d60e521b8708a6d08d38d3d1af437",
+              "position": 8,
+              "uid": "7669e5eb-c0fd-5182-ae9a-5f9ae95ddf2f"
+            },
+            {
+              "content": "The local agent can compare past reasons for detours but cannot directly observe current lighting and pedestrian conditions.",
+              "content_digest": "8a5f0e4cbb2fa6c19f2cb5d4e500ed460189b515604c87c6c2a4c8348c4efc44",
+              "position": 9,
+              "uid": "e96f7007-5814-5986-b121-4ce3b22506e1"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "75c40142-4285-4b50-91e2-964178bb2baf"
+        },
+        {
+          "context_digest": "d28031209c5edc768a592166e26351dd5bce0c7568d379fcaceab173450041c8",
+          "context_name": "task-3/local/personal-memory/2026/02",
+          "context_uid": "7ffcbc10-1703-54b0-9545-99742b51d333",
+          "memories": [
+            {
+              "content": "The user keeps basic repair tools in a box beneath the sink.",
+              "content_digest": "c2a23bace63735c502081b19682a8ceb3e37156b9aadd6f7739e2005c20469d6",
+              "position": 0,
+              "uid": "7d3daf76-a21e-5117-a534-6175ab2d2861"
+            },
+            {
+              "content": "On a day the faucet leaked, the user placed only a towel beneath it, and the floor became wet as well.",
+              "content_digest": "ad6baa7e1848e4e61bdaf22bc5c8665122330b5c70c8ae192216abbba17c6134",
+              "position": 1,
+              "uid": "70a6d9f5-180f-5174-b247-690e10baa23e"
+            },
+            {
+              "content": "After sending a photo to building management, the user finalized the time for a repair visit.",
+              "content_digest": "82b36c7a95e51a0dfa32768c2a437d509b75c0f93bc51a99a636f2c9739a20da",
+              "position": 2,
+              "uid": "9fcd922c-147c-517b-82b3-180fdfb13f33"
+            },
+            {
+              "content": "Before the technician's visit, the user emptied the area beneath the sink so work could begin immediately.",
+              "content_digest": "dbc3b48e5bc4b406dc17067dd93d92e845e3706f47c8706f9a5d5ef17bf64617",
+              "position": 3,
+              "uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5"
+            },
+            {
+              "content": "On a day the user wrote the visit time only in the calendar and turned off the reminder, they heard the doorbell late.",
+              "content_digest": "95fab6bcab815dd8bdd5fecb867f84c6d2f1a901771603b1dbf197cde3c1d19d",
+              "position": 4,
+              "uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65"
+            },
+            {
+              "content": "For the next visit, the user enabled a reminder 30 minutes beforehand and answered immediately at the entrance.",
+              "content_digest": "818783ff21b2d369935b9994c17b28f93f84ea7558dab9f2de20d0aad21f86a3",
+              "position": 5,
+              "uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a"
+            },
+            {
+              "content": "After the repair, the user called their maternal aunt to confirm that the spare key entrusted to her was still there.",
+              "content_digest": "ac01b9816dda2d6bf16f22b41157120b7ffdd75d19638f6313a88e1ce6e7a1f1",
+              "position": 6,
+              "uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441"
+            },
+            {
+              "content": "The user's maternal aunt considers it unsafe to hand the spare key to a repair technician without the user's explicit request.",
+              "content_digest": "f7c7c0306c81cc6de9f02aa1aed7d411db3f29757d024e7d5a1679b1ff308948",
+              "position": 7,
+              "uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd"
+            },
+            {
+              "content": "Obtain the user's reconfirmation before scheduling an external worker to enter the residential unit.",
+              "content_digest": "34382e40f4907bea82728787fdeb150e299d46a0079ae2847d4eda6d6d892d22",
+              "position": 8,
+              "uid": "4716a67b-8602-564c-9e89-85cd4ee158f9"
+            },
+            {
+              "content": "A multi-unit residential building's repair schedule may change because of emergency work or parts availability.",
+              "content_digest": "d701fdd1ffbf17ff0890c583b5bf39849e3c6e3cc296fde7e00d3d1ecc0ef196",
+              "position": 9,
+              "uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "5de87d57-733d-4392-9e4c-2ddc549f97d3"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames share a practical pattern in which active reminders improve timely follow-through. Otherwise, they preserve separate experience and guidance concerning library use and safer walking on one side, and residential repairs, access control, and scheduling on the other.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "75c40142-4285-4b50-91e2-964178bb2baf",
+              "memory_uid": "ce38bd13-3d51-5bff-9eba-ed70a8217356"
+            },
+            {
+              "frame_uid": "75c40142-4285-4b50-91e2-964178bb2baf",
+              "memory_uid": "a304315b-bc0a-591b-b8c2-7eea5145819d"
+            },
+            {
+              "frame_uid": "5de87d57-733d-4392-9e4c-2ddc549f97d3",
+              "memory_uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65"
+            },
+            {
+              "frame_uid": "5de87d57-733d-4392-9e4c-2ddc549f97d3",
+              "memory_uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a"
+            }
+          ],
+          "reason": "Both sides materially inform the decision to enable reminders for time-sensitive obligations, and their library-return and repair-visit examples can remain jointly applicable.",
+          "status": "RESOLVED",
+          "summary": "Effective reminders supported timely action, whereas recording an event without an effective reminder led to lost or delayed follow-through.",
+          "uid": "18385dbd-ccc8-5534-99c1-340e2ab5ed59"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "75c40142-4285-4b50-91e2-964178bb2baf",
+              "memory_uid": "04711182-acef-52a9-bd58-7fe98a54854a"
+            }
+          ],
+          "reason": "This is independently useful membership history supplied only by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user renewed their local library membership in October 2024.",
+          "uid": "6a3fd283-aca9-5f0b-bba3-1d19d39cf92d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "75c40142-4285-4b50-91e2-964178bb2baf",
+              "memory_uid": "0229d0b1-750c-521b-a126-22c9d9d001c4"
+            }
+          ],
+          "reason": "This is a one-sided observation about a past route-safety response.",
+          "status": "RESOLVED",
+          "summary": "An unlit street prompted the user to detour along a main road during an evening walk.",
+          "uid": "f5cb6811-62dd-5293-b227-d1665744868a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "75c40142-4285-4b50-91e2-964178bb2baf",
+              "memory_uid": "e310fe87-8cde-5399-be00-9f8d7ec44e94"
+            }
+          ],
+          "reason": "This independently records the travel-time cost of a safer route and appears only on the reference side.",
+          "status": "RESOLVED",
+          "summary": "Choosing a well-lit pedestrian route once added 12 minutes to the user's walk.",
+          "uid": "2c625741-5cd0-5e3f-bab7-9e609a9f8b18"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "75c40142-4285-4b50-91e2-964178bb2baf",
+              "memory_uid": "4f37306b-08cd-512a-b92e-ca6761da1a5b"
+            },
+            {
+              "frame_uid": "75c40142-4285-4b50-91e2-964178bb2baf",
+              "memory_uid": "5897ffa4-cfc6-5012-8931-15420ec5cf7c"
+            }
+          ],
+          "reason": "The two memories form one reference-only account of a seating adjustment following a noisy reading experience.",
+          "status": "RESOLVED",
+          "summary": "Vehicle noise by the library window led the user on the next visit to sit farther inside, where they remained for an hour.",
+          "uid": "4cb58d92-1fb3-502b-be42-4e6c43eab65c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "75c40142-4285-4b50-91e2-964178bb2baf",
+              "memory_uid": "ef060b89-6c54-5c20-86be-c07766a35daa"
+            }
+          ],
+          "reason": "This is an independently useful library procedure supplied only by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Library staff expect identity-verification material when a person requests a replacement membership card.",
+          "uid": "851e6d1d-f48b-5822-9238-638ece02f58a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "75c40142-4285-4b50-91e2-964178bb2baf",
+              "memory_uid": "7669e5eb-c0fd-5182-ae9a-5f9ae95ddf2f"
+            },
+            {
+              "frame_uid": "75c40142-4285-4b50-91e2-964178bb2baf",
+              "memory_uid": "e96f7007-5814-5986-b121-4ce3b22506e1"
+            }
+          ],
+          "reason": "The memories split one reference-only constraint: current route conditions must be checked beyond the agent's historical knowledge.",
+          "status": "RESOLVED",
+          "summary": "Evening route proposals require recent lighting and pedestrian information because the local agent can compare past detours but cannot directly observe current conditions.",
+          "uid": "871e74b5-e0c0-5a6e-8e5f-f464ad39da5b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5de87d57-733d-4392-9e4c-2ddc549f97d3",
+              "memory_uid": "7d3daf76-a21e-5117-a534-6175ab2d2861"
+            }
+          ],
+          "reason": "This is independently useful household-storage information supplied only by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user stores basic repair tools in a box beneath the sink.",
+          "uid": "444bb90c-3141-50e7-bea0-b410622e711d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5de87d57-733d-4392-9e4c-2ddc549f97d3",
+              "memory_uid": "70a6d9f5-180f-5174-b247-690e10baa23e"
+            }
+          ],
+          "reason": "This is a one-sided observation about an insufficient leak-containment response.",
+          "status": "RESOLVED",
+          "summary": "Using only a towel beneath a leaking faucet did not prevent the floor from becoming wet.",
+          "uid": "e99d4ae7-78d6-5946-a53c-ade886f655d8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5de87d57-733d-4392-9e4c-2ddc549f97d3",
+              "memory_uid": "9fcd922c-147c-517b-82b3-180fdfb13f33"
+            }
+          ],
+          "reason": "This independently records a repair-coordination step supplied only by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Sending building management a photo preceded finalizing the repair-visit time.",
+          "uid": "de1487a5-767f-5a70-afa5-6955eed2aa41"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5de87d57-733d-4392-9e4c-2ddc549f97d3",
+              "memory_uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5"
+            }
+          ],
+          "reason": "This is independently useful repair-preparation behavior supplied only by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user cleared the area beneath the sink before a technician arrived so work could begin immediately.",
+          "uid": "850e6937-72d3-57eb-8b0c-f3fe4475efcf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5de87d57-733d-4392-9e4c-2ddc549f97d3",
+              "memory_uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441"
+            },
+            {
+              "frame_uid": "5de87d57-733d-4392-9e4c-2ddc549f97d3",
+              "memory_uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd"
+            }
+          ],
+          "reason": "The memories split one compared-only claim about the spare key's custody and release restriction.",
+          "status": "RESOLVED",
+          "summary": "The user's maternal aunt retained the entrusted spare key and considers giving it to a repair technician unsafe without the user's explicit request.",
+          "uid": "ff5c581a-017b-5633-9866-ca9a5b93c335"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5de87d57-733d-4392-9e4c-2ddc549f97d3",
+              "memory_uid": "4716a67b-8602-564c-9e89-85cd4ee158f9"
+            }
+          ],
+          "reason": "This is an independently useful residential-access safeguard supplied only by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user's reconfirmation should be obtained before scheduling an external worker to enter the residential unit.",
+          "uid": "e7f734b4-422e-5ac1-a551-dca93a5e9884"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5de87d57-733d-4392-9e4c-2ddc549f97d3",
+              "memory_uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+            }
+          ],
+          "reason": "This is independently useful scheduling uncertainty supplied only by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Emergency work or parts availability may change a multi-unit residential building's repair schedule.",
+          "uid": "d161332d-4792-5e36-8955-8e30070c5f5d"
+        }
+      ],
+      "reports": {
+        "both": "Active reminders supported timely preparation or response, while records without an effective reminder led to missed or delayed follow-through.",
+        "compared_only": "The compared frame covers leak response, repair preparation and coordination, tool storage, spare-key safeguards, entry reconfirmation, and repair-schedule uncertainty.",
+        "differences": "",
+        "reference_only": "The reference covers library membership and seating, book-return logistics, replacement-card verification, and the safety, cost, and current-condition limits involved in evening route choices."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "96cdc4a1-3f96-4343-ba54-fd61e152bc71"
+    },
+    "analysis_digest": "79cc00b0e5fa9074c9d818074ef09364bd5ae3425388de194ec76824629c7e5f",
+    "key": "b15346d470ab221fc8f6cd2520cd43eac77dab77f824566a1af44767c5631017",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 43.9290860000001,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "b15346d470ab221fc8f6cd2520cd43eac77dab77f824566a1af44767c5631017",
+  "created_at": "2026-08-13T18:46:29.568858Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/10",
+  "pair_key": "687883385ae6df3222d55fc98154fef703682444116eecc7a8c1841c1798b8a2",
+  "provider_seconds": 43.9290860000001,
+  "right": "task-3/local/personal-memory/2026/02",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

@@ -1,0 +1,406 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:42:39.543181+00:00",
+      "frames": [
+        {
+          "context_digest": "4f6b609414f921ca470614699bdac42e9f2932482375026def79956485b0569e",
+          "context_name": "task-3/local/personal-memory/2024/08",
+          "context_uid": "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+          "memories": [
+            {
+              "content": "The user has set a monthly limit in their budget record for spending other than living expenses.",
+              "content_digest": "5c0df9500947f7e044a8755d66d58adccca01db3aed42b43ab9748b8c4f431e9",
+              "position": 0,
+              "uid": "5f80c7ec-e294-5905-abab-91027c9d827b"
+            },
+            {
+              "content": "In a week when the user went grocery shopping and visited the bank separately, they made the same round trip twice.",
+              "content_digest": "4e814adad1a4c201f6348f1c14b14950b5c549bba64bf70cfccd08ca9efc5bd3",
+              "position": 1,
+              "uid": "2428ab2c-37ce-5de1-84dc-abcdfc8ce062"
+            },
+            {
+              "content": "The following week, the user completed both errands in one outing and reduced travel time.",
+              "content_digest": "ad5555ca7daa9d977cfcf5eb4f476eb5730cead6d307c986497716d69f1145b0",
+              "position": 2,
+              "uid": "bf30d1ef-d7cd-5aa3-b65b-ff04aae647e7"
+            },
+            {
+              "content": "When a bill alert arrived on the due date, the user postponed payment until after a meeting.",
+              "content_digest": "c62dda61c680da9ac1fd5ab9124fa05635d20ad9e4bbb7aef36723d289c05102",
+              "position": 3,
+              "uid": "442672e1-2188-5aa3-ad38-5e9c16f25bd5"
+            },
+            {
+              "content": "In a month when the user received an alert three days before the deadline, they finished payment before dinner.",
+              "content_digest": "939ac83da176d5bb1b7e2196402b9faacb962d947b85b9a61c31854867c1e62e",
+              "position": 4,
+              "uid": "c7385cce-ec43-5902-973c-5b8af54c3557"
+            },
+            {
+              "content": "The user collected cash receipts in their wallet and entered all the amounts at once at the end of the month.",
+              "content_digest": "3171a8128ed3855ac9a4c2b542516333fc3728ed1d7260974888b94d0b32c3e6",
+              "position": 5,
+              "uid": "d926c45c-ea49-589c-a7e4-491c9a1514f8"
+            },
+            {
+              "content": "After recording one large expense, the user ate out two fewer times that week.",
+              "content_digest": "af55fd94b01e0ece728347e9349f96b5733c57dae752f9559dc4e08bef7a3320",
+              "position": 6,
+              "uid": "9433523f-8c4e-5424-b370-d325ba5154d1"
+            },
+            {
+              "content": "The user's older sister prefers to settle the jointly paid cost of a meal by electronic transfer rather than cash.",
+              "content_digest": "d84d2ea68add4202e8c421e9c1702c29ca88bd6ae838588bd415fdbd1980cb2b",
+              "position": 7,
+              "uid": "d9531336-ac5f-5ba0-bf26-9c69c854578f"
+            },
+            {
+              "content": "Confirm the amount and account with the user before creating an automatic payment schedule.",
+              "content_digest": "b1d0c16fd880f4ae2657415ddc8fe0f223ccdd931248bb4412a6c95754d4cce1",
+              "position": 8,
+              "uid": "9941d390-8b40-5fee-8bcf-df6f36befcb0"
+            },
+            {
+              "content": "The timing of payment processing and late-payment recording may differ by billing institution.",
+              "content_digest": "203e65e4eb8451ec7551fb166357f107d17b8c89a2341b32fc25a3fb67ec7f98",
+              "position": 9,
+              "uid": "79aea8fd-5d48-50f7-adf6-b7ebe33bfb08"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "45cdd79b-9663-487a-864d-b1e18b25d37b"
+        },
+        {
+          "context_digest": "14adbc31fc3a2dc50b7b980d1e24569b16fff058104a812c7f3b4e1542b7abf0",
+          "context_name": "task-3/local/personal-memory/2025/03",
+          "context_uid": "913e0bfd-f6d9-579e-9a37-ba5daa9d17f1",
+          "memories": [
+            {
+              "content": "The user stores prepared meals on the second shelf of the freezer.",
+              "content_digest": "cd837b62b643f752da54b21de2f4f7a3d963a7c658d5b83dff39d1d92e0fdbad",
+              "position": 0,
+              "uid": "5d989bab-c471-5de9-bb73-29cabc4753dd"
+            },
+            {
+              "content": "The user went to the market without a shopping list and bought onions that were already at home.",
+              "content_digest": "f667c860e046bb27662b26d7cc4ed083ee48d9d7915237dc4b92ec378481a093",
+              "position": 1,
+              "uid": "d1725ae4-3fd3-5250-92b3-73d84d9152a7"
+            },
+            {
+              "content": "On a day the user shopped after checking a refrigerator photo, they did not make a duplicate purchase.",
+              "content_digest": "7283d4afe58c0ab05d9cb426bb80bed0e26e0b1783ff7cdd00a5f6e89d21861b",
+              "position": 2,
+              "uid": "904ff225-26df-5424-8a82-23d733649106"
+            },
+            {
+              "content": "On a day the user made a spicy stew, they left part of one bowl uneaten.",
+              "content_digest": "2765ec701f8e058d35ddee4a485c40221523ee2d9b56301ec1658ec4e419cbc2",
+              "position": 3,
+              "uid": "67a003c7-648a-59dc-8e82-03f9e452ffce"
+            },
+            {
+              "content": "The next time the user cooked it, they used half as much chili powder and finished the meal.",
+              "content_digest": "bdd7df7c762bbce31a40a45c2124e49ae3a6439dfc2133c574443d7eb3a7b1bb",
+              "position": 4,
+              "uid": "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9"
+            },
+            {
+              "content": "When cooking with their younger brother, the user assigned the cooking sequence only verbally and they did the same task twice.",
+              "content_digest": "bd92611cfc05fd42bb5d25e8dd7838ca1b2f6d99869bf1f61921b46950a4b532",
+              "position": 5,
+              "uid": "64bf4401-e972-5d15-a526-21ca901a6a9f"
+            },
+            {
+              "content": "The next time, the user and their younger brother split ingredient preparation and heat control and finished the meal 20 minutes earlier.",
+              "content_digest": "c3a28e7256d781ecb2d8710145880ffe79495e32d47ae1949c4be54e52a44555",
+              "position": 6,
+              "uid": "57e09ea5-54ff-5fce-aada-68daffbacc8b"
+            },
+            {
+              "content": "When cooking together, the user's younger brother prefers to divide the cooking and dishwashing roles in advance.",
+              "content_digest": "3bbc428c4f3b4e28a8e2341206ac78b39240eea53a9862192528029b0a57d12b",
+              "position": 7,
+              "uid": "0a5d054f-94bd-5955-bdb7-9b5427e2260b"
+            },
+            {
+              "content": "The local agent can compare responses across several meals, but it cannot conclude from one unfinished food item that the user dislikes that ingredient.",
+              "content_digest": "5787c1636d9dd4a5cb5bd70533b7dd44b2d6cff1047f5c408f5bcaa1b6577fe1",
+              "position": 8,
+              "uid": "1f94b78b-1635-551c-b90c-bea2a67ca595"
+            },
+            {
+              "content": "The condition of frozen prepared food may vary with its packaging and storage duration.",
+              "content_digest": "84bdac276dce5b50b19bc0c7c471468a22cc9945b1da7357700a58c157cf4ca1",
+              "position": 9,
+              "uid": "f64ef6c4-7665-5574-9d58-fc124b0bfe3f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "ae675f81-c77e-479a-a282-78a38e3f2d56"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames contain independently useful guidance and observations in separate domains: budgeting, payments, and errands on one side; food storage, shopping, cooking, and meal inference on the other. No claims govern the same operational decision, and no conflict or unresolved ambiguity is present.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "45cdd79b-9663-487a-864d-b1e18b25d37b",
+              "memory_uid": "5f80c7ec-e294-5905-abab-91027c9d827b"
+            }
+          ],
+          "reason": "This is a standalone budgeting constraint with no compared-side claim addressing the same spending decision.",
+          "status": "RESOLVED",
+          "summary": "The user maintains a monthly spending limit for expenses outside living costs.",
+          "uid": "1ea6a7d0-3bb9-5cec-a0bb-c391a9734088"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "45cdd79b-9663-487a-864d-b1e18b25d37b",
+              "memory_uid": "2428ab2c-37ce-5de1-84dc-abcdfc8ce062"
+            },
+            {
+              "frame_uid": "45cdd79b-9663-487a-864d-b1e18b25d37b",
+              "memory_uid": "bf30d1ef-d7cd-5aa3-b65b-ff04aae647e7"
+            }
+          ],
+          "reason": "The two observations form one before-and-after claim about batching errands; no compared-side memory governs trip planning.",
+          "status": "RESOLVED",
+          "summary": "Combining grocery and banking errands into one outing avoided a repeated round trip and reduced travel time.",
+          "uid": "8d646879-f690-5fd6-9c17-053a3deeedfe"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "45cdd79b-9663-487a-864d-b1e18b25d37b",
+              "memory_uid": "442672e1-2188-5aa3-ad38-5e9c16f25bd5"
+            },
+            {
+              "frame_uid": "45cdd79b-9663-487a-864d-b1e18b25d37b",
+              "memory_uid": "c7385cce-ec43-5902-973c-5b8af54c3557"
+            }
+          ],
+          "reason": "These memories jointly describe how bill-alert timing corresponded with payment timing, a decision absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A due-date alert was followed by delayed payment, whereas an alert three days early was followed by payment before dinner.",
+          "uid": "1579af31-f442-52bf-ab0a-71d6357cbff4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "45cdd79b-9663-487a-864d-b1e18b25d37b",
+              "memory_uid": "d926c45c-ea49-589c-a7e4-491c9a1514f8"
+            }
+          ],
+          "reason": "This is an independent expense-recording practice with no counterpart concerning financial record entry.",
+          "status": "RESOLVED",
+          "summary": "The user accumulated cash receipts in a wallet and entered their amounts together at month end.",
+          "uid": "7cddff16-7e39-518c-a4d2-204210c8de4f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "45cdd79b-9663-487a-864d-b1e18b25d37b",
+              "memory_uid": "9433523f-8c4e-5424-b370-d325ba5154d1"
+            }
+          ],
+          "reason": "This independently records a behavioral response to expense awareness, not an operational claim made by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "After recording a large expense, the user ate out less during that week.",
+          "uid": "03b30479-06dd-5d07-8fbb-75e30606ad07"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "45cdd79b-9663-487a-864d-b1e18b25d37b",
+              "memory_uid": "d9531336-ac5f-5ba0-bf26-9c69c854578f"
+            }
+          ],
+          "reason": "This payment-method preference is independently useful and does not address the compared frame’s cooking-role preference.",
+          "status": "RESOLVED",
+          "summary": "The user’s older sister prefers electronic transfer over cash when settling a jointly paid meal cost.",
+          "uid": "f6c0ab6d-56c7-5e0d-a830-d458504a5b4d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "45cdd79b-9663-487a-864d-b1e18b25d37b",
+              "memory_uid": "9941d390-8b40-5fee-8bcf-df6f36befcb0"
+            }
+          ],
+          "reason": "This is a specific authorization safeguard for automatic payments, with no compared-side policy about that operation.",
+          "status": "RESOLVED",
+          "summary": "The amount and account should be confirmed with the user before an automatic payment schedule is created.",
+          "uid": "9c89b580-209c-5b88-9512-f7440407e6e3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "45cdd79b-9663-487a-864d-b1e18b25d37b",
+              "memory_uid": "79aea8fd-5d48-50f7-adf6-b7ebe33bfb08"
+            }
+          ],
+          "reason": "This institution-dependent billing qualification has no compared-side claim about payment processing.",
+          "status": "RESOLVED",
+          "summary": "Payment-processing and late-payment recording timing can vary by billing institution.",
+          "uid": "7ce95d26-d385-54be-b4af-fc0f8c424189"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ae675f81-c77e-479a-a282-78a38e3f2d56",
+              "memory_uid": "5d989bab-c471-5de9-bb73-29cabc4753dd"
+            }
+          ],
+          "reason": "This is an independent storage-location fact with no reference-side claim about food placement.",
+          "status": "RESOLVED",
+          "summary": "The user stores prepared meals on the freezer’s second shelf.",
+          "uid": "a5638bd8-ad9b-5da7-af56-8f51e481b8e4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ae675f81-c77e-479a-a282-78a38e3f2d56",
+              "memory_uid": "d1725ae4-3fd3-5250-92b3-73d84d9152a7"
+            },
+            {
+              "frame_uid": "ae675f81-c77e-479a-a282-78a38e3f2d56",
+              "memory_uid": "904ff225-26df-5424-8a82-23d733649106"
+            }
+          ],
+          "reason": "The memories form one before-and-after claim about inventory awareness in shopping; the reference frame does not govern purchase-list decisions.",
+          "status": "RESOLVED",
+          "summary": "Shopping without inventory information led to a duplicate onion purchase, while checking a refrigerator photo preceded avoiding duplication.",
+          "uid": "1f8550ed-4011-597b-bb2e-ea5f3ca84e44"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ae675f81-c77e-479a-a282-78a38e3f2d56",
+              "memory_uid": "67a003c7-648a-59dc-8e82-03f9e452ffce"
+            },
+            {
+              "frame_uid": "ae675f81-c77e-479a-a282-78a38e3f2d56",
+              "memory_uid": "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9"
+            }
+          ],
+          "reason": "These observations jointly describe a recipe adjustment and its outcome, with no reference-side claim about food preparation.",
+          "status": "RESOLVED",
+          "summary": "After leaving spicy stew unfinished, the user halved the chili powder the next time and finished the meal.",
+          "uid": "95fb5944-5cd6-57cd-912c-1958cba79511"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ae675f81-c77e-479a-a282-78a38e3f2d56",
+              "memory_uid": "64bf4401-e972-5d15-a526-21ca901a6a9f"
+            },
+            {
+              "frame_uid": "ae675f81-c77e-479a-a282-78a38e3f2d56",
+              "memory_uid": "57e09ea5-54ff-5fce-aada-68daffbacc8b"
+            }
+          ],
+          "reason": "The memories form one before-and-after claim about coordinating shared cooking tasks; reference-side errand batching concerns a different operational decision.",
+          "status": "RESOLVED",
+          "summary": "Verbal-only cooking coordination produced duplicated work, while dividing preparation and heat control preceded finishing twenty minutes earlier.",
+          "uid": "4cafa7b7-d3c4-5239-8eba-eecb776d70b0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ae675f81-c77e-479a-a282-78a38e3f2d56",
+              "memory_uid": "0a5d054f-94bd-5955-bdb7-9b5427e2260b"
+            }
+          ],
+          "reason": "This is an independently useful collaborator preference, distinct from both cooking-performance observations and the reference-side payment preference.",
+          "status": "RESOLVED",
+          "summary": "The user’s younger brother prefers assigning cooking and dishwashing roles in advance when cooking together.",
+          "uid": "fb0d6ab1-8872-5858-9d22-fcf635369ab4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ae675f81-c77e-479a-a282-78a38e3f2d56",
+              "memory_uid": "1f94b78b-1635-551c-b90c-bea2a67ca595"
+            }
+          ],
+          "reason": "This is a specific evidentiary limit on preference inference with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The local agent may compare responses across meals but should not infer ingredient dislike from one unfinished item.",
+          "uid": "25d78e61-2660-5e35-adda-a36fc6426d08"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ae675f81-c77e-479a-a282-78a38e3f2d56",
+              "memory_uid": "f64ef6c4-7665-5574-9d58-fc124b0bfe3f"
+            }
+          ],
+          "reason": "This storage-condition qualification is independent of freezer shelf location and has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The condition of frozen prepared food may depend on packaging and storage duration.",
+          "uid": "49274a65-6637-52e0-8406-29db9ec7cccb"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers freezer storage, inventory-aware shopping, recipe adjustment, coordinated cooking, a sibling’s role preference, cautious inference from unfinished food, and storage-related food condition.",
+        "differences": "",
+        "reference_only": "The reference covers spending limits, efficient errand batching, bill-alert timing, expense recording and behavior, shared-meal settlement, automatic-payment confirmation, and institution-dependent payment processing."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "0d3e6e77-b371-4063-bf6b-94d632d50174"
+    },
+    "analysis_digest": "9b71bee6970b533500d883a912253c3fd0aa8ba43d62ca71800e3d1f3b18f5cf",
+    "key": "e63c85012f78b07bb595e6e30268b63619665d1a3c674dd40303fff16935847f",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 44.043041624998295,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "e63c85012f78b07bb595e6e30268b63619665d1a3c674dd40303fff16935847f",
+  "created_at": "2026-08-13T18:43:23.585843Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/08",
+  "pair_key": "409721ad7d630036175f972c2a8ec857deb1cd9c2582c98025d0ad5ece5f63e7",
+  "provider_seconds": 44.043041624998295,
+  "right": "task-3/local/personal-memory/2025/03",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

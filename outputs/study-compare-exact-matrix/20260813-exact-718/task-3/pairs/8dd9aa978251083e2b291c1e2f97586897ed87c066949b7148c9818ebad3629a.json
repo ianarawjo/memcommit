@@ -1,0 +1,406 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:43:01.343986+00:00",
+      "frames": [
+        {
+          "context_digest": "4f6b609414f921ca470614699bdac42e9f2932482375026def79956485b0569e",
+          "context_name": "task-3/local/personal-memory/2024/08",
+          "context_uid": "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+          "memories": [
+            {
+              "content": "The user has set a monthly limit in their budget record for spending other than living expenses.",
+              "content_digest": "5c0df9500947f7e044a8755d66d58adccca01db3aed42b43ab9748b8c4f431e9",
+              "position": 0,
+              "uid": "5f80c7ec-e294-5905-abab-91027c9d827b"
+            },
+            {
+              "content": "In a week when the user went grocery shopping and visited the bank separately, they made the same round trip twice.",
+              "content_digest": "4e814adad1a4c201f6348f1c14b14950b5c549bba64bf70cfccd08ca9efc5bd3",
+              "position": 1,
+              "uid": "2428ab2c-37ce-5de1-84dc-abcdfc8ce062"
+            },
+            {
+              "content": "The following week, the user completed both errands in one outing and reduced travel time.",
+              "content_digest": "ad5555ca7daa9d977cfcf5eb4f476eb5730cead6d307c986497716d69f1145b0",
+              "position": 2,
+              "uid": "bf30d1ef-d7cd-5aa3-b65b-ff04aae647e7"
+            },
+            {
+              "content": "When a bill alert arrived on the due date, the user postponed payment until after a meeting.",
+              "content_digest": "c62dda61c680da9ac1fd5ab9124fa05635d20ad9e4bbb7aef36723d289c05102",
+              "position": 3,
+              "uid": "442672e1-2188-5aa3-ad38-5e9c16f25bd5"
+            },
+            {
+              "content": "In a month when the user received an alert three days before the deadline, they finished payment before dinner.",
+              "content_digest": "939ac83da176d5bb1b7e2196402b9faacb962d947b85b9a61c31854867c1e62e",
+              "position": 4,
+              "uid": "c7385cce-ec43-5902-973c-5b8af54c3557"
+            },
+            {
+              "content": "The user collected cash receipts in their wallet and entered all the amounts at once at the end of the month.",
+              "content_digest": "3171a8128ed3855ac9a4c2b542516333fc3728ed1d7260974888b94d0b32c3e6",
+              "position": 5,
+              "uid": "d926c45c-ea49-589c-a7e4-491c9a1514f8"
+            },
+            {
+              "content": "After recording one large expense, the user ate out two fewer times that week.",
+              "content_digest": "af55fd94b01e0ece728347e9349f96b5733c57dae752f9559dc4e08bef7a3320",
+              "position": 6,
+              "uid": "9433523f-8c4e-5424-b370-d325ba5154d1"
+            },
+            {
+              "content": "The user's older sister prefers to settle the jointly paid cost of a meal by electronic transfer rather than cash.",
+              "content_digest": "d84d2ea68add4202e8c421e9c1702c29ca88bd6ae838588bd415fdbd1980cb2b",
+              "position": 7,
+              "uid": "d9531336-ac5f-5ba0-bf26-9c69c854578f"
+            },
+            {
+              "content": "Confirm the amount and account with the user before creating an automatic payment schedule.",
+              "content_digest": "b1d0c16fd880f4ae2657415ddc8fe0f223ccdd931248bb4412a6c95754d4cce1",
+              "position": 8,
+              "uid": "9941d390-8b40-5fee-8bcf-df6f36befcb0"
+            },
+            {
+              "content": "The timing of payment processing and late-payment recording may differ by billing institution.",
+              "content_digest": "203e65e4eb8451ec7551fb166357f107d17b8c89a2341b32fc25a3fb67ec7f98",
+              "position": 9,
+              "uid": "79aea8fd-5d48-50f7-adf6-b7ebe33bfb08"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "0eaa9fd1-7215-42d3-8b06-c5de9887f55a"
+        },
+        {
+          "context_digest": "5e42fc3dcfbf5576148277f6841977ca8a5cabd4a3fc67a5581f6f6cc816c900",
+          "context_name": "task-3/local/personal-memory/2025/10",
+          "context_uid": "8130b676-dc51-5c31-b7dc-185afdf9cf07",
+          "memories": [
+            {
+              "content": "The user keeps waterproof shoes for rainy days to the left of the entrance.",
+              "content_digest": "5b9e5a20153c7865010318800d740a410faef0c13fe2278c20ce984a89b7dea5",
+              "position": 0,
+              "uid": "82c1e806-de3a-5633-8a08-175487e69fd6"
+            },
+            {
+              "content": "On a day the user walked in the rain wearing thin shoes, their socks became wet and they changed them after arrival.",
+              "content_digest": "fdbdab8c08a4b1d933ff8ac3ddedee8541ddf070e8c6e6020b6c1d14b992c621",
+              "position": 1,
+              "uid": "25df6384-836f-5f8e-bd97-73a1fb171c48"
+            },
+            {
+              "content": "On the next rainy day, the user wore waterproof shoes and their feet remained dry.",
+              "content_digest": "0e87d74fb93fe062cd12efe2f5a04fbae5ce13a60491fd9ad04c4e006acbd87f",
+              "position": 2,
+              "uid": "55abae4f-206a-586e-8b35-406d7525c0a1"
+            },
+            {
+              "content": "On a day the user walked for a long time in new shoes, their heel chafed and they shortened the route home.",
+              "content_digest": "aeb369b995cdf17ea73ae8546b454eab70f33bf6d3c67a09aee2805c1c598b6d",
+              "position": 3,
+              "uid": "c6d21ec4-6bdf-55df-b4d4-05cb531bf4bd"
+            },
+            {
+              "content": "The user wore the same shoes on two short outings before using them on a long walk.",
+              "content_digest": "0d7ed5656f35f4fe025c6ba80e4c829f5b9851c193f981de9a461f848317d60a",
+              "position": 4,
+              "uid": "a6424854-e51e-5afc-8b9f-9e2f0273f70e"
+            },
+            {
+              "content": "On a day the user dried an umbrella outside the entrance, they found it immediately before the next outing.",
+              "content_digest": "dbc2453ca5f895e2cfe7f58e5624cf4c5d6793468af3b25df7e9a4ddb7d50159",
+              "position": 5,
+              "uid": "1b436b46-3d1f-5aa2-99e3-94b7c2412bfd"
+            },
+            {
+              "content": "On a day the user put a folded wet umbrella in their bag, documents inside became wet.",
+              "content_digest": "1f63fbc8c6b491a734f0f7a4190e26aec22826c1ff839242e0ca71d933312c9c",
+              "position": 6,
+              "uid": "ccd1f422-6130-5f19-869e-681102a3a1fa"
+            },
+            {
+              "content": "When rain is forecast, the user's mother expects the user may forget an umbrella and sets out a spare at the entrance.",
+              "content_digest": "80bdfaefb6f781aa91ef7217331e75f09b4766650c2b078dfadf592b2eb27b08",
+              "position": 7,
+              "uid": "c69a8e87-2b6f-5514-ab0d-0037531592f8"
+            },
+            {
+              "content": "When proposing a long-distance walking plan, check both the weather that day and recent records of shoe discomfort.",
+              "content_digest": "f54a546d423099c3abbb65bb49e4ddf773a8191dcffbb8b3d5153dfd70553b73",
+              "position": 8,
+              "uid": "4567ea9f-1800-51ed-bfac-f4cdf674d4cf"
+            },
+            {
+              "content": "Even if the local agent knows a shoe's location, it cannot know its current condition or whether it is usable.",
+              "content_digest": "28202c222ca800a5e19dbaebea2b3c992748f530a695517cf123b10187a31bc8",
+              "position": 9,
+              "uid": "a4ff1b76-755d-530a-b24c-8655115e4fbe"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "5b20f2d6-b468-4f6b-bba7-b6469e271a59"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate operational domains: the reference concerns budgeting, errands, bills, expense tracking, shared payments, and payment safeguards, while the compared frame concerns rain gear, footwear, umbrella handling, walking plans, and limits on item-condition knowledge. No cross-frame claim materially addresses the same decision.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0eaa9fd1-7215-42d3-8b06-c5de9887f55a",
+              "memory_uid": "5f80c7ec-e294-5905-abab-91027c9d827b"
+            }
+          ],
+          "reason": "Only the reference frame provides this independently useful budgeting constraint.",
+          "status": "RESOLVED",
+          "summary": "The user maintains a monthly limit for non-living spending.",
+          "uid": "1cac262d-b53b-5d5d-8234-39321615ba84"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0eaa9fd1-7215-42d3-8b06-c5de9887f55a",
+              "memory_uid": "2428ab2c-37ce-5de1-84dc-abcdfc8ce062"
+            },
+            {
+              "frame_uid": "0eaa9fd1-7215-42d3-8b06-c5de9887f55a",
+              "memory_uid": "bf30d1ef-d7cd-5aa3-b65b-ff04aae647e7"
+            }
+          ],
+          "reason": "The paired observations jointly express one reference-only claim about the travel benefit of grouping errands.",
+          "status": "RESOLVED",
+          "summary": "Combining grocery and banking errands into one outing reduced travel compared with making the same round trip separately.",
+          "uid": "cf9c7d7e-048f-5845-af69-3fc33215b0c3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0eaa9fd1-7215-42d3-8b06-c5de9887f55a",
+              "memory_uid": "442672e1-2188-5aa3-ad38-5e9c16f25bd5"
+            },
+            {
+              "frame_uid": "0eaa9fd1-7215-42d3-8b06-c5de9887f55a",
+              "memory_uid": "c7385cce-ec43-5902-973c-5b8af54c3557"
+            }
+          ],
+          "reason": "The observations jointly form one reference-only claim contrasting payment behavior under different alert timing.",
+          "status": "RESOLVED",
+          "summary": "Earlier bill alerts were associated with earlier completion, whereas a due-date alert was followed by postponement.",
+          "uid": "f079c2f1-1595-51b5-9c38-5321da5a031e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0eaa9fd1-7215-42d3-8b06-c5de9887f55a",
+              "memory_uid": "d926c45c-ea49-589c-a7e4-491c9a1514f8"
+            }
+          ],
+          "reason": "Only the reference frame describes this expense-recording workflow.",
+          "status": "RESOLVED",
+          "summary": "The user accumulated cash receipts and entered their amounts together at month end.",
+          "uid": "b450389a-0a99-5f77-be91-0a6ee0b2f385"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0eaa9fd1-7215-42d3-8b06-c5de9887f55a",
+              "memory_uid": "9433523f-8c4e-5424-b370-d325ba5154d1"
+            }
+          ],
+          "reason": "Only the reference frame provides this behavioral response to expense visibility.",
+          "status": "RESOLVED",
+          "summary": "Recording a large expense was followed by fewer restaurant outings that week.",
+          "uid": "cb33cc7b-e8d6-54ad-98ce-650d01d1bdcd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0eaa9fd1-7215-42d3-8b06-c5de9887f55a",
+              "memory_uid": "d9531336-ac5f-5ba0-bf26-9c69c854578f"
+            }
+          ],
+          "reason": "Only the reference frame states this payment-method preference.",
+          "status": "RESOLVED",
+          "summary": "The user's older sister prefers electronic transfer over cash for settling jointly paid meal costs.",
+          "uid": "ab4f729b-4e34-5a75-8a9c-5d1c242e2033"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0eaa9fd1-7215-42d3-8b06-c5de9887f55a",
+              "memory_uid": "9941d390-8b40-5fee-8bcf-df6f36befcb0"
+            }
+          ],
+          "reason": "Only the reference frame supplies this pre-automation safeguard.",
+          "status": "RESOLVED",
+          "summary": "The amount and account should be confirmed with the user before creating an automatic payment schedule.",
+          "uid": "4085845d-ca8e-5bd1-b84d-cabdd40635fe"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0eaa9fd1-7215-42d3-8b06-c5de9887f55a",
+              "memory_uid": "79aea8fd-5d48-50f7-adf6-b7ebe33bfb08"
+            }
+          ],
+          "reason": "Only the reference frame identifies this institution-dependent payment uncertainty.",
+          "status": "RESOLVED",
+          "summary": "Payment-processing and late-recording timing can vary across billing institutions.",
+          "uid": "60bf818d-0c1f-5629-add5-43a3ef8022bb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5b20f2d6-b468-4f6b-bba7-b6469e271a59",
+              "memory_uid": "82c1e806-de3a-5633-8a08-175487e69fd6"
+            }
+          ],
+          "reason": "Only the compared frame provides this item-location information.",
+          "status": "RESOLVED",
+          "summary": "The user stores rainy-day waterproof shoes to the left of the entrance.",
+          "uid": "f9061226-d928-5663-91c5-44e0d1855f5a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5b20f2d6-b468-4f6b-bba7-b6469e271a59",
+              "memory_uid": "25df6384-836f-5f8e-bd97-73a1fb171c48"
+            },
+            {
+              "frame_uid": "5b20f2d6-b468-4f6b-bba7-b6469e271a59",
+              "memory_uid": "55abae4f-206a-586e-8b35-406d7525c0a1"
+            }
+          ],
+          "reason": "The observations jointly express one compared-only claim about footwear choice and rain protection.",
+          "status": "RESOLVED",
+          "summary": "Thin shoes led to wet socks in rain, while waterproof shoes kept the user's feet dry on a later rainy day.",
+          "uid": "d0b50078-c7cc-5fa5-9c68-b67cd5104928"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5b20f2d6-b468-4f6b-bba7-b6469e271a59",
+              "memory_uid": "c6d21ec4-6bdf-55df-b4d4-05cb531bf4bd"
+            },
+            {
+              "frame_uid": "5b20f2d6-b468-4f6b-bba7-b6469e271a59",
+              "memory_uid": "a6424854-e51e-5afc-8b9f-9e2f0273f70e"
+            }
+          ],
+          "reason": "The observations jointly express one compared-only pattern of responding to long-walk discomfort by breaking in the shoes gradually.",
+          "status": "RESOLVED",
+          "summary": "After new shoes caused heel chafing on a long walk, the user wore them on short outings before another long walk.",
+          "uid": "6abd7c45-b823-55b8-a2ef-970a945e055f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5b20f2d6-b468-4f6b-bba7-b6469e271a59",
+              "memory_uid": "1b436b46-3d1f-5aa2-99e3-94b7c2412bfd"
+            },
+            {
+              "frame_uid": "5b20f2d6-b468-4f6b-bba7-b6469e271a59",
+              "memory_uid": "ccd1f422-6130-5f19-869e-681102a3a1fa"
+            }
+          ],
+          "reason": "The observations jointly express one compared-only claim about consequences of different wet-umbrella handling practices.",
+          "status": "RESOLVED",
+          "summary": "Leaving a wet umbrella to dry outside the entrance aided later retrieval, while folding one into a bag caused documents to become wet.",
+          "uid": "97c06997-35bf-59cb-be81-8226e32e898f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5b20f2d6-b468-4f6b-bba7-b6469e271a59",
+              "memory_uid": "c69a8e87-2b6f-5514-ab0d-0037531592f8"
+            }
+          ],
+          "reason": "Only the compared frame describes this family preparation practice.",
+          "status": "RESOLVED",
+          "summary": "When rain is forecast, the user's mother sets out a spare umbrella because she expects the user may forget one.",
+          "uid": "347e2d39-b631-5467-884b-c05ee4a73449"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5b20f2d6-b468-4f6b-bba7-b6469e271a59",
+              "memory_uid": "4567ea9f-1800-51ed-bfac-f4cdf674d4cf"
+            }
+          ],
+          "reason": "Only the compared frame supplies this planning requirement.",
+          "status": "RESOLVED",
+          "summary": "Long-distance walking proposals should account for both current weather and recent shoe-discomfort records.",
+          "uid": "20c0d956-a3d9-53bc-8865-4d53c05fc8b8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5b20f2d6-b468-4f6b-bba7-b6469e271a59",
+              "memory_uid": "a4ff1b76-755d-530a-b24c-8655115e4fbe"
+            }
+          ],
+          "reason": "Only the compared frame states this limitation on local knowledge.",
+          "status": "RESOLVED",
+          "summary": "Knowing where shoes are does not establish their current condition or usability.",
+          "uid": "6dc6b844-67a5-56b0-a724-cf7203cf2648"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame uniquely describes rain-ready footwear and umbrellas, shoe break-in and discomfort, family preparation for rain, weather-aware walking checks, and uncertainty about whether located shoes remain usable.",
+        "differences": "",
+        "reference_only": "The reference uniquely describes spending limits and tracking effects, travel-efficient errand grouping, bill-alert timing, meal-cost settlement, and safeguards and institutional uncertainty around payments."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "4e39f282-6ea2-49ef-be7d-2821da24eba5"
+    },
+    "analysis_digest": "2bdfc93ffd816a4d8a47fbc982bf428bed2e8657542b3e5aa617e47fe3d3ef41",
+    "key": "e2fd9aa4bb77258fd8aa7bba31628d25fba1bd84812b4e60063ad2994d992452",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 38.28290774999914,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "e2fd9aa4bb77258fd8aa7bba31628d25fba1bd84812b4e60063ad2994d992452",
+  "created_at": "2026-08-13T18:43:39.626579Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/08",
+  "pair_key": "8dd9aa978251083e2b291c1e2f97586897ed87c066949b7148c9818ebad3629a",
+  "provider_seconds": 38.28290774999914,
+  "right": "task-3/local/personal-memory/2025/10",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

@@ -1,0 +1,406 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:43:13.622693+00:00",
+      "frames": [
+        {
+          "context_digest": "4f6b609414f921ca470614699bdac42e9f2932482375026def79956485b0569e",
+          "context_name": "task-3/local/personal-memory/2024/08",
+          "context_uid": "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+          "memories": [
+            {
+              "content": "The user has set a monthly limit in their budget record for spending other than living expenses.",
+              "content_digest": "5c0df9500947f7e044a8755d66d58adccca01db3aed42b43ab9748b8c4f431e9",
+              "position": 0,
+              "uid": "5f80c7ec-e294-5905-abab-91027c9d827b"
+            },
+            {
+              "content": "In a week when the user went grocery shopping and visited the bank separately, they made the same round trip twice.",
+              "content_digest": "4e814adad1a4c201f6348f1c14b14950b5c549bba64bf70cfccd08ca9efc5bd3",
+              "position": 1,
+              "uid": "2428ab2c-37ce-5de1-84dc-abcdfc8ce062"
+            },
+            {
+              "content": "The following week, the user completed both errands in one outing and reduced travel time.",
+              "content_digest": "ad5555ca7daa9d977cfcf5eb4f476eb5730cead6d307c986497716d69f1145b0",
+              "position": 2,
+              "uid": "bf30d1ef-d7cd-5aa3-b65b-ff04aae647e7"
+            },
+            {
+              "content": "When a bill alert arrived on the due date, the user postponed payment until after a meeting.",
+              "content_digest": "c62dda61c680da9ac1fd5ab9124fa05635d20ad9e4bbb7aef36723d289c05102",
+              "position": 3,
+              "uid": "442672e1-2188-5aa3-ad38-5e9c16f25bd5"
+            },
+            {
+              "content": "In a month when the user received an alert three days before the deadline, they finished payment before dinner.",
+              "content_digest": "939ac83da176d5bb1b7e2196402b9faacb962d947b85b9a61c31854867c1e62e",
+              "position": 4,
+              "uid": "c7385cce-ec43-5902-973c-5b8af54c3557"
+            },
+            {
+              "content": "The user collected cash receipts in their wallet and entered all the amounts at once at the end of the month.",
+              "content_digest": "3171a8128ed3855ac9a4c2b542516333fc3728ed1d7260974888b94d0b32c3e6",
+              "position": 5,
+              "uid": "d926c45c-ea49-589c-a7e4-491c9a1514f8"
+            },
+            {
+              "content": "After recording one large expense, the user ate out two fewer times that week.",
+              "content_digest": "af55fd94b01e0ece728347e9349f96b5733c57dae752f9559dc4e08bef7a3320",
+              "position": 6,
+              "uid": "9433523f-8c4e-5424-b370-d325ba5154d1"
+            },
+            {
+              "content": "The user's older sister prefers to settle the jointly paid cost of a meal by electronic transfer rather than cash.",
+              "content_digest": "d84d2ea68add4202e8c421e9c1702c29ca88bd6ae838588bd415fdbd1980cb2b",
+              "position": 7,
+              "uid": "d9531336-ac5f-5ba0-bf26-9c69c854578f"
+            },
+            {
+              "content": "Confirm the amount and account with the user before creating an automatic payment schedule.",
+              "content_digest": "b1d0c16fd880f4ae2657415ddc8fe0f223ccdd931248bb4412a6c95754d4cce1",
+              "position": 8,
+              "uid": "9941d390-8b40-5fee-8bcf-df6f36befcb0"
+            },
+            {
+              "content": "The timing of payment processing and late-payment recording may differ by billing institution.",
+              "content_digest": "203e65e4eb8451ec7551fb166357f107d17b8c89a2341b32fc25a3fb67ec7f98",
+              "position": 9,
+              "uid": "79aea8fd-5d48-50f7-adf6-b7ebe33bfb08"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "316b4553-7746-4b70-9df9-a2ecabdb7458"
+        },
+        {
+          "context_digest": "0af669f138c2617a4b35c0974627a23c7e5cb2405da5e306648b130efac7fbdf",
+          "context_name": "task-3/local/personal-memory/2025/12",
+          "context_uid": "c54e9dde-005a-5d20-b41b-1313b4713061",
+          "memories": [
+            {
+              "content": "The user stores wrapping paper and empty gift boxes on the upper shelf of the bedroom closet.",
+              "content_digest": "8f3b67dea69e1fa656f1e42e39700a71ebc250c4f6ec18dc4d4f88d467e86ad2",
+              "position": 0,
+              "uid": "bd69b616-6e7c-5440-8b29-586de68bcff6"
+            },
+            {
+              "content": "From photographs, the user discovered that they had given their mother the same type of kitchen item two years in a row.",
+              "content_digest": "6962b8dc03fd90e1c8badfda0d827008cc675b940e5975a5833ebe504af7d635",
+              "position": 1,
+              "uid": "90c60e57-d7db-5783-9ca8-2fd27b94d847"
+            },
+            {
+              "content": "This year, the user went to the market with their mother and let her choose a needed item directly.",
+              "content_digest": "9a27aa187ad2964f985ffcf376490f4b69d3c83f2034591187273bd89f61637a",
+              "position": 2,
+              "uid": "53bc23b2-8242-58b5-b496-a45c70bb8e41"
+            },
+            {
+              "content": "The user once ordered a gift late and had it delivered the day after the gathering.",
+              "content_digest": "245bb316eb5d0b0203c63eb9a2832c6cf73cb9e7e368bdb48a08bb6b702642d7",
+              "position": 3,
+              "uid": "3b097446-2c73-5414-8c06-6bacdf00a4c1"
+            },
+            {
+              "content": "The next year, the user checked the expected delivery date and ordered one week before the gathering.",
+              "content_digest": "97aed11c6b4f7d03bd6a55e27ef34ef539da85204787bb0468f1e2df51d958fc",
+              "position": 4,
+              "uid": "ce18c7a5-d1e9-5e5c-8739-b14fa7298feb"
+            },
+            {
+              "content": "The user did not put names on wrapped boxes and handed their older sister and younger brother each other's gifts.",
+              "content_digest": "48464eb29ee2d2e01cda00f0e3a13d116d4aa121d424aecc59644431e89f8957",
+              "position": 5,
+              "uid": "7657f424-cd24-54dd-8409-e04974dd1531"
+            },
+            {
+              "content": "The next time the user wrapped gifts, they wrote the recipient on the bottom of each box.",
+              "content_digest": "551e74aebf85d4ffee86b960c520b17f3f7e4d50428493934831a774d9e31db6",
+              "position": 6,
+              "uid": "d8e82ad3-902e-5f0c-aa8e-b23ce874982a"
+            },
+            {
+              "content": "The user's younger brother welcomes a snack the family can share immediately more than an item for his use alone.",
+              "content_digest": "ec32111520e2f12afc684c6441c075dcc0715fc450d0ce8f20408dfb955634a9",
+              "position": 7,
+              "uid": "8a941bf1-73bd-51d3-a069-62ecc9d56439"
+            },
+            {
+              "content": "The local agent can find past gift records and flag duplicates but cannot know what is needed this year.",
+              "content_digest": "f7574c7f91999992680a7e88e79270747fd744a46355800012c63319c286d731",
+              "position": 8,
+              "uid": "036edf8f-4680-5822-924e-0fdc691c8135"
+            },
+            {
+              "content": "Year-end deliveries may take longer than usual or have their expected dates changed.",
+              "content_digest": "cc0955e132cf6f4bec7f416e54ed2ffdbac22169adeeae7372a6ddc496da4b9e",
+              "position": 9,
+              "uid": "b9e9e222-a559-56e3-93b5-1f49a0e0d3ab"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "0ecd3b85-2bf4-4882-962e-77fc781c2807"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames contain independent personal-finance and gift-planning knowledge. The reference covers budgeting, errands, bill handling, expense recording, payment preferences, and payment safeguards; the compared frame covers gift storage, selection, ordering, labeling, recipient preferences, record-search limits, and delivery uncertainty.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "316b4553-7746-4b70-9df9-a2ecabdb7458",
+              "memory_uid": "5f80c7ec-e294-5905-abab-91027c9d827b"
+            }
+          ],
+          "reason": "This is independently useful budgeting information found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user maintains a monthly cap for non-living expenses.",
+          "uid": "e3871336-16a4-5ff5-ba12-b25e37c78b46"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "316b4553-7746-4b70-9df9-a2ecabdb7458",
+              "memory_uid": "2428ab2c-37ce-5de1-84dc-abcdfc8ce062"
+            },
+            {
+              "frame_uid": "316b4553-7746-4b70-9df9-a2ecabdb7458",
+              "memory_uid": "bf30d1ef-d7cd-5aa3-b65b-ff04aae647e7"
+            }
+          ],
+          "reason": "The two reference memories form one before-and-after account of consolidating errands, with no corresponding compared-frame claim.",
+          "status": "RESOLVED",
+          "summary": "Combining grocery and bank errands into one outing reduced travel compared with making the same trip twice.",
+          "uid": "aaba6ef1-5677-568b-a700-a050b9c5178f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "316b4553-7746-4b70-9df9-a2ecabdb7458",
+              "memory_uid": "442672e1-2188-5aa3-ad38-5e9c16f25bd5"
+            },
+            {
+              "frame_uid": "316b4553-7746-4b70-9df9-a2ecabdb7458",
+              "memory_uid": "c7385cce-ec43-5902-973c-5b8af54c3557"
+            }
+          ],
+          "reason": "The two reference memories jointly describe how bill-alert lead time related to payment timing, a topic absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "An advance bill alert supported earlier payment, whereas a due-date alert was followed by postponement until after a meeting.",
+          "uid": "09b0a3cd-8390-5cf1-9ed8-6c85f510d6d1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "316b4553-7746-4b70-9df9-a2ecabdb7458",
+              "memory_uid": "d926c45c-ea49-589c-a7e4-491c9a1514f8"
+            }
+          ],
+          "reason": "This expense-recording habit appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user accumulated cash receipts and entered their amounts together at month end.",
+          "uid": "bdab8073-a74f-5037-a863-6a5f7a68685a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "316b4553-7746-4b70-9df9-a2ecabdb7458",
+              "memory_uid": "9433523f-8c4e-5424-b370-d325ba5154d1"
+            }
+          ],
+          "reason": "This behavioral response to expense awareness appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "After recording a large expense, the user reduced restaurant visits that week.",
+          "uid": "4ce5c4d3-4264-57a5-9e9d-e7028a5ee972"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "316b4553-7746-4b70-9df9-a2ecabdb7458",
+              "memory_uid": "d9531336-ac5f-5ba0-bf26-9c69c854578f"
+            }
+          ],
+          "reason": "This person-specific reimbursement preference has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s older sister prefers electronic transfer to cash when settling her share of a meal.",
+          "uid": "9fd704af-708c-5b5e-8099-b3e087eea8d4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "316b4553-7746-4b70-9df9-a2ecabdb7458",
+              "memory_uid": "9941d390-8b40-5fee-8bcf-df6f36befcb0"
+            }
+          ],
+          "reason": "This payment-automation safeguard appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The amount and account should be confirmed with the user before an automatic payment schedule is created.",
+          "uid": "a88c826e-3b37-5f52-aded-694fe0e003a8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "316b4553-7746-4b70-9df9-a2ecabdb7458",
+              "memory_uid": "79aea8fd-5d48-50f7-adf6-b7ebe33bfb08"
+            }
+          ],
+          "reason": "This billing-specific timing qualification appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Payment-processing and late-recording timing can vary among billing institutions.",
+          "uid": "fd016b82-92a3-5a4e-8617-964ac00b958f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0ecd3b85-2bf4-4882-962e-77fc781c2807",
+              "memory_uid": "bd69b616-6e7c-5440-8b29-586de68bcff6"
+            }
+          ],
+          "reason": "This storage-location information appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user stores wrapping paper and empty gift boxes on the upper bedroom-closet shelf.",
+          "uid": "3da58765-5df5-5150-9455-2672c471e568"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0ecd3b85-2bf4-4882-962e-77fc781c2807",
+              "memory_uid": "90c60e57-d7db-5783-9ca8-2fd27b94d847"
+            },
+            {
+              "frame_uid": "0ecd3b85-2bf4-4882-962e-77fc781c2807",
+              "memory_uid": "53bc23b2-8242-58b5-b496-a45c70bb8e41"
+            }
+          ],
+          "reason": "The two compared memories form one before-and-after account of improving gift selection, with no corresponding reference-frame claim.",
+          "status": "RESOLVED",
+          "summary": "After discovering repeated gifts from photographs, the user later let their mother directly choose a needed market item.",
+          "uid": "70cc37aa-7b2e-5bbd-a32a-31e9407e987b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0ecd3b85-2bf4-4882-962e-77fc781c2807",
+              "memory_uid": "3b097446-2c73-5414-8c06-6bacdf00a4c1"
+            },
+            {
+              "frame_uid": "0ecd3b85-2bf4-4882-962e-77fc781c2807",
+              "memory_uid": "ce18c7a5-d1e9-5e5c-8739-b14fa7298feb"
+            }
+          ],
+          "reason": "The two compared memories form one before-and-after account of improving gift-order timing, a topic absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "After a late gift arrived after a gathering, the user later checked delivery timing and ordered a week in advance.",
+          "uid": "6d722423-23d5-5ca0-bb79-ec7a82ed4dbf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0ecd3b85-2bf4-4882-962e-77fc781c2807",
+              "memory_uid": "7657f424-cd24-54dd-8409-e04974dd1531"
+            },
+            {
+              "frame_uid": "0ecd3b85-2bf4-4882-962e-77fc781c2807",
+              "memory_uid": "d8e82ad3-902e-5f0c-aa8e-b23ce874982a"
+            }
+          ],
+          "reason": "The two compared memories form one before-and-after account of preventing gift mix-ups, with no reference-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "After unlabeled boxes caused sibling gifts to be exchanged, the user labeled each recipient on the bottom the next time.",
+          "uid": "77b30a79-14d3-5f8d-87cc-546bcdbcacbc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0ecd3b85-2bf4-4882-962e-77fc781c2807",
+              "memory_uid": "8a941bf1-73bd-51d3-a069-62ecc9d56439"
+            }
+          ],
+          "reason": "This person-specific gift preference appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s younger brother prefers an immediately shareable family snack to an item solely for himself.",
+          "uid": "55541b44-59af-5e07-8bad-56bf17c671ad"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0ecd3b85-2bf4-4882-962e-77fc781c2807",
+              "memory_uid": "036edf8f-4680-5822-924e-0fdc691c8135"
+            }
+          ],
+          "reason": "This capability boundary for gift assistance appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The local agent can detect duplicate past gifts from records but cannot determine current needs.",
+          "uid": "d8ec335c-5f43-5968-83f1-7438ca6c47a1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0ecd3b85-2bf4-4882-962e-77fc781c2807",
+              "memory_uid": "b9e9e222-a559-56e3-93b5-1f49a0e0d3ab"
+            }
+          ],
+          "reason": "This seasonal delivery qualification appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Year-end deliveries can be delayed or have expected dates changed.",
+          "uid": "6c7e484e-ebcd-53ca-ac4f-aa61e91cc21f"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame describes gift storage and improved selection, ordering and labeling practices, a sibling’s gift preference, limits of duplicate detection, and uncertain year-end delivery timing.",
+        "differences": "",
+        "reference_only": "The reference describes budgeting and expense habits, more efficient errands and bill timing, a sibling’s reimbursement preference, an automatic-payment safeguard, and institution-dependent processing."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "122005b6-1bdf-4a02-b082-5d9f676375af"
+    },
+    "analysis_digest": "cfd844fa4557cbc3335062ba08f2fa0293f4b6effc2400c4980dae8b73460e82",
+    "key": "a2f05f3e23deff03928c592b6472f6dc8360acd6525fafd88434ccafa1c222fd",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 40.15326466699844,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "a2f05f3e23deff03928c592b6472f6dc8360acd6525fafd88434ccafa1c222fd",
+  "created_at": "2026-08-13T18:43:53.775785Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/08",
+  "pair_key": "832d5969172cdeaaad7565782346e089faddfd841ba3320da37b03b34e164cd9",
+  "provider_seconds": 40.15326466699844,
+  "right": "task-3/local/personal-memory/2025/12",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

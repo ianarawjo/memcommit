@@ -1,0 +1,397 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:35:00.959965+00:00",
+      "frames": [
+        {
+          "context_digest": "2f00e067f4f35600b73e87b5555d405e2801a33ba18a54c91e63e23a79f27a4c",
+          "context_name": "task-3/local/personal-memory/2024/01",
+          "context_uid": "cbd2e4d6-2601-5d3f-8bf2-2f66b755b007",
+          "memories": [
+            {
+              "content": "The user's mother's birthday falls in the third week of January.",
+              "content_digest": "d635ded9b470acdd462156515700e66c23dcb513a7034bb365be0ac139ec0422",
+              "position": 0,
+              "uid": "2cd0229d-b7f1-581b-8019-25bdb485afd9"
+            },
+            {
+              "content": "At the user's last family meal out, noise from the next table made conversation nearly impossible.",
+              "content_digest": "dc337d32e4b09167289e19a6b1c8fe970e7eaa6fdd6868ed1c7c300e018fcd15",
+              "position": 1,
+              "uid": "c62f1669-11c9-5a81-b5f5-304acce69c23"
+            },
+            {
+              "content": "At a barbecue at home in the same month, the user was comfortable because no one had to raise their voice.",
+              "content_digest": "63763b293a491200bf1f7a251467c1fa8c2cb8d4d8450732c01666dcdea183e3",
+              "position": 2,
+              "uid": "674f4bdf-27c3-5870-a68e-91e4a093dd93"
+            },
+            {
+              "content": "During their mother's birthday meal, the user left a restaurant with loud music after 30 minutes.",
+              "content_digest": "560755c6f051ec6f85e32dc4ee9447dfc97418fca6f9f414f6910c518a52c2c0",
+              "position": 3,
+              "uid": "21509788-2e3d-548b-8303-f34cfea68c9b"
+            },
+            {
+              "content": "When discussing postponed matters with family, the user prefers a quiet, one-on-one dining environment.",
+              "content_digest": "f22bedcf60a64b3666a7e4363d6a55c48547535492010fcb205a182c1ee920a8",
+              "position": 4,
+              "uid": "74eaea9d-7640-51ba-aa77-9c050581dc46"
+            },
+            {
+              "content": "At a large banquet hall reserved by their older sister, the user remembered the surrounding noise more than the food.",
+              "content_digest": "566e443c69410f1672ab209ba2257604e373cd305ab27243a39574481407af71",
+              "position": 5,
+              "uid": "1384df1d-2173-5673-96f5-a4d86835d404"
+            },
+            {
+              "content": "On a day the user ate grilled food at home with their younger brother, conversation was easy to continue, so the user stayed another hour after the meal.",
+              "content_digest": "c93ccbe3524946f1def05a1b385fbe3387945f51164b00c56f1ff80b477d011f",
+              "position": 6,
+              "uid": "3cf68c8e-5da9-51d3-a402-c10f4137b1f4"
+            },
+            {
+              "content": "The user's mother considers having the whole family eat at the same time more important than receiving a birthday gift.",
+              "content_digest": "d302cf7db2b83b103ea11323ab1b9d36168d224b405d4d0dd51b46b494014291",
+              "position": 7,
+              "uid": "a1984768-d20d-59cd-84c9-cb08c6b7affb"
+            },
+            {
+              "content": "When proposing a birthday meal for the user's mother, check the schedule and attendees; if conversation is the purpose, first consider a low-noise location, then confirm the final choice with the user.",
+              "content_digest": "481169c62cf6fae6b4f29184ffacef9c3c9d825a34d1545ca592bc35537bc65c",
+              "position": 8,
+              "uid": "f52d11e2-2449-5c9d-887b-96c8b5cd0184"
+            },
+            {
+              "content": "The local agent can compare past dining environments and the user's responses, but those records alone cannot determine the location of the next gathering.",
+              "content_digest": "b05fef8420abe3c47c2cd9f2de9149c9c6bda7dca301f09ac7f94eac1a29d2fa",
+              "position": 9,
+              "uid": "c8fccfbe-7756-5d62-9cd7-403dd6741915"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "c75398c4-8504-417b-aad1-04821791f8a3"
+        },
+        {
+          "context_digest": "d28031209c5edc768a592166e26351dd5bce0c7568d379fcaceab173450041c8",
+          "context_name": "task-3/local/personal-memory/2026/02",
+          "context_uid": "7ffcbc10-1703-54b0-9545-99742b51d333",
+          "memories": [
+            {
+              "content": "The user keeps basic repair tools in a box beneath the sink.",
+              "content_digest": "c2a23bace63735c502081b19682a8ceb3e37156b9aadd6f7739e2005c20469d6",
+              "position": 0,
+              "uid": "7d3daf76-a21e-5117-a534-6175ab2d2861"
+            },
+            {
+              "content": "On a day the faucet leaked, the user placed only a towel beneath it, and the floor became wet as well.",
+              "content_digest": "ad6baa7e1848e4e61bdaf22bc5c8665122330b5c70c8ae192216abbba17c6134",
+              "position": 1,
+              "uid": "70a6d9f5-180f-5174-b247-690e10baa23e"
+            },
+            {
+              "content": "After sending a photo to building management, the user finalized the time for a repair visit.",
+              "content_digest": "82b36c7a95e51a0dfa32768c2a437d509b75c0f93bc51a99a636f2c9739a20da",
+              "position": 2,
+              "uid": "9fcd922c-147c-517b-82b3-180fdfb13f33"
+            },
+            {
+              "content": "Before the technician's visit, the user emptied the area beneath the sink so work could begin immediately.",
+              "content_digest": "dbc3b48e5bc4b406dc17067dd93d92e845e3706f47c8706f9a5d5ef17bf64617",
+              "position": 3,
+              "uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5"
+            },
+            {
+              "content": "On a day the user wrote the visit time only in the calendar and turned off the reminder, they heard the doorbell late.",
+              "content_digest": "95fab6bcab815dd8bdd5fecb867f84c6d2f1a901771603b1dbf197cde3c1d19d",
+              "position": 4,
+              "uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65"
+            },
+            {
+              "content": "For the next visit, the user enabled a reminder 30 minutes beforehand and answered immediately at the entrance.",
+              "content_digest": "818783ff21b2d369935b9994c17b28f93f84ea7558dab9f2de20d0aad21f86a3",
+              "position": 5,
+              "uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a"
+            },
+            {
+              "content": "After the repair, the user called their maternal aunt to confirm that the spare key entrusted to her was still there.",
+              "content_digest": "ac01b9816dda2d6bf16f22b41157120b7ffdd75d19638f6313a88e1ce6e7a1f1",
+              "position": 6,
+              "uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441"
+            },
+            {
+              "content": "The user's maternal aunt considers it unsafe to hand the spare key to a repair technician without the user's explicit request.",
+              "content_digest": "f7c7c0306c81cc6de9f02aa1aed7d411db3f29757d024e7d5a1679b1ff308948",
+              "position": 7,
+              "uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd"
+            },
+            {
+              "content": "Obtain the user's reconfirmation before scheduling an external worker to enter the residential unit.",
+              "content_digest": "34382e40f4907bea82728787fdeb150e299d46a0079ae2847d4eda6d6d892d22",
+              "position": 8,
+              "uid": "4716a67b-8602-564c-9e89-85cd4ee158f9"
+            },
+            {
+              "content": "A multi-unit residential building's repair schedule may change because of emergency work or parts availability.",
+              "content_digest": "d701fdd1ffbf17ff0890c583b5bf39849e3c6e3cc296fde7e00d3d1ecc0ef196",
+              "position": 9,
+              "uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "7027ccca-2301-4291-ab13-b37aeef62792"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate domains: one concerns planning the mother’s birthday meal around attendance, conversation, and noise; the other concerns residential repair preparation, access, reminders, and schedule uncertainty. Neither frame supplies a claim that semantically overlaps or conflicts with the other.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c75398c4-8504-417b-aad1-04821791f8a3",
+              "memory_uid": "2cd0229d-b7f1-581b-8019-25bdb485afd9"
+            }
+          ],
+          "reason": "This is independently useful calendar information found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s mother’s birthday occurs in the third week of January.",
+          "uid": "c336dff5-ea4c-5b5c-9efc-ada24668fe76"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c75398c4-8504-417b-aad1-04821791f8a3",
+              "memory_uid": "c62f1669-11c9-5a81-b5f5-304acce69c23"
+            },
+            {
+              "frame_uid": "c75398c4-8504-417b-aad1-04821791f8a3",
+              "memory_uid": "674f4bdf-27c3-5870-a68e-91e4a093dd93"
+            },
+            {
+              "frame_uid": "c75398c4-8504-417b-aad1-04821791f8a3",
+              "memory_uid": "21509788-2e3d-548b-8303-f34cfea68c9b"
+            },
+            {
+              "frame_uid": "c75398c4-8504-417b-aad1-04821791f8a3",
+              "memory_uid": "74eaea9d-7640-51ba-aa77-9c050581dc46"
+            },
+            {
+              "frame_uid": "c75398c4-8504-417b-aad1-04821791f8a3",
+              "memory_uid": "1384df1d-2173-5673-96f5-a4d86835d404"
+            },
+            {
+              "frame_uid": "c75398c4-8504-417b-aad1-04821791f8a3",
+              "memory_uid": "3cf68c8e-5da9-51d3-a402-c10f4137b1f4"
+            }
+          ],
+          "reason": "These reference-side memories provide complementary examples and an explicit preference expressing one underlying claim about conversational dining noise.",
+          "status": "RESOLVED",
+          "summary": "The user favors quiet dining for sustained family conversation and has experienced noisy venues as disruptive while quiet home meals supported comfort and longer conversation.",
+          "uid": "25b62ac1-c69a-5953-be78-298d1802cbf3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c75398c4-8504-417b-aad1-04821791f8a3",
+              "memory_uid": "a1984768-d20d-59cd-84c9-cb08c6b7affb"
+            }
+          ],
+          "reason": "This is an independently useful birthday priority stated only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s mother values having the whole family eat together more than receiving a birthday gift.",
+          "uid": "d0a5dd23-2b6d-5f70-b796-e892d6a43b32"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c75398c4-8504-417b-aad1-04821791f8a3",
+              "memory_uid": "f52d11e2-2449-5c9d-887b-96c8b5cd0184"
+            }
+          ],
+          "reason": "This is a distinct planning policy supplied only by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A proposed birthday meal should account for schedules and attendees, prioritize low noise when conversation is the purpose, and leave the final choice for user confirmation.",
+          "uid": "9de1fe1c-28c0-57c6-82f6-64d48eacde03"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c75398c4-8504-417b-aad1-04821791f8a3",
+              "memory_uid": "c8fccfbe-7756-5d62-9cd7-403dd6741915"
+            }
+          ],
+          "reason": "This is a distinct limitation on venue inference found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Past dining environments and user responses can be compared but cannot alone determine the next gathering’s location.",
+          "uid": "e8999e28-c2a0-5b8a-9676-c056206d64d8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7027ccca-2301-4291-ab13-b37aeef62792",
+              "memory_uid": "7d3daf76-a21e-5117-a534-6175ab2d2861"
+            }
+          ],
+          "reason": "This is independently useful household-location information found only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user stores basic repair tools in a box beneath the sink.",
+          "uid": "fb236ba5-5111-50de-88c8-d897c8437960"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7027ccca-2301-4291-ab13-b37aeef62792",
+              "memory_uid": "70a6d9f5-180f-5174-b247-690e10baa23e"
+            }
+          ],
+          "reason": "This is an independently useful account of inadequate leak containment stated only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Using only a towel beneath a leaking faucet failed to prevent the floor from becoming wet.",
+          "uid": "5c928e23-f9a5-5aed-9480-6b97d8020dc8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7027ccca-2301-4291-ab13-b37aeef62792",
+              "memory_uid": "9fcd922c-147c-517b-82b3-180fdfb13f33"
+            }
+          ],
+          "reason": "This is a distinct repair-scheduling event found only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user finalized a repair-visit time after sending building management a photo.",
+          "uid": "109e9cc3-7fa9-5111-9063-70a3e10ed738"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7027ccca-2301-4291-ab13-b37aeef62792",
+              "memory_uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5"
+            }
+          ],
+          "reason": "This is a distinct preparation practice supplied only by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user cleared the area beneath the sink before a technician arrived so work could start immediately.",
+          "uid": "9b7d4137-3b06-51ff-89f2-e1214144272e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7027ccca-2301-4291-ab13-b37aeef62792",
+              "memory_uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65"
+            },
+            {
+              "frame_uid": "7027ccca-2301-4291-ab13-b37aeef62792",
+              "memory_uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a"
+            }
+          ],
+          "reason": "These compared-side memories contrast two instances expressing one underlying claim about reminders and timely reception of visitors.",
+          "status": "RESOLVED",
+          "summary": "A calendar entry without an active reminder led to a late response, whereas a reminder 30 minutes before the next visit supported an immediate response.",
+          "uid": "8bc60c3a-008f-552d-93c1-8f46658e5b9b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7027ccca-2301-4291-ab13-b37aeef62792",
+              "memory_uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441"
+            }
+          ],
+          "reason": "This is an independently useful key-custody event found only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "After the repair, the user confirmed with their maternal aunt that she still held the entrusted spare key.",
+          "uid": "7757c6cf-811b-5465-8540-74451f1a1216"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7027ccca-2301-4291-ab13-b37aeef62792",
+              "memory_uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd"
+            }
+          ],
+          "reason": "This is a distinct access-safety judgment supplied only by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s maternal aunt considers giving a repair technician the spare key unsafe without the user’s explicit request.",
+          "uid": "a442ea90-7776-5b11-aacd-c4989dc00cc0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7027ccca-2301-4291-ab13-b37aeef62792",
+              "memory_uid": "4716a67b-8602-564c-9e89-85cd4ee158f9"
+            }
+          ],
+          "reason": "This is a distinct authorization policy found only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user should reconfirm before an external worker is scheduled to enter the residential unit.",
+          "uid": "fe4b2b92-0024-5882-adc2-c55cb9e041d3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7027ccca-2301-4291-ab13-b37aeef62792",
+              "memory_uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+            }
+          ],
+          "reason": "This is independently useful scheduling uncertainty stated only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Repair schedules in multi-unit residential buildings may change because of emergency work or parts availability.",
+          "uid": "c10f8278-ef02-5080-9e78-e479a6119108"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame describes leak and repair logistics, preparation and reminder practices, spare-key and worker-access safeguards, and possible repair-schedule changes.",
+        "differences": "",
+        "reference_only": "The reference describes birthday timing and priorities, the user’s strong preference for quiet conversational dining, a confirmation-based meal-planning process, and limits on inferring the next venue from past experiences."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "88b49bd8-777d-4f72-9324-845cbd7d3abb"
+    },
+    "analysis_digest": "a141582793ae8f61d0f7d98fdc16e4b9a6bdadfbac992abdeb3039eef2b1d58d",
+    "key": "10968fbf39effce2d38e72ed25927ee314f74cf727a6ea7e6c57cdd2a355c90b",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 38.5809287919983,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "10968fbf39effce2d38e72ed25927ee314f74cf727a6ea7e6c57cdd2a355c90b",
+  "created_at": "2026-08-13T18:35:39.540483Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/01",
+  "pair_key": "a4e797ae8f3531f676823e42ffb40a4e9643b7c53b1b1141baca9e9dc2c0890d",
+  "provider_seconds": 38.5809287919983,
+  "right": "task-3/local/personal-memory/2026/02",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

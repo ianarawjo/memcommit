@@ -1,0 +1,1216 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:09:08.243056+00:00",
+      "frames": [
+        {
+          "context_digest": "80256d7a38586a5329f8b8f1b148ff24397d7d81aa6838223fa038e21b7198bd",
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memories": [
+            {
+              "content": "The Campus Store on the first floor of the Main Building operates from 7:00 a.m. to 11:00 p.m. even during recess.",
+              "content_digest": "9edb86a7d86f91386ece78d41a974f39ae698b1baab09ce24f7ede49da335f43",
+              "position": 0,
+              "uid": "9e6dcc99-d2d7-54bd-adbf-ca20ebf22f83"
+            },
+            {
+              "content": "The Engineering Building Campus Store's usual operating hours during recess are from 9:00 a.m. to 6:00 p.m.",
+              "content_digest": "ddacef8a6a2a6b764ca302ea1e0d12beda78770ddf74e93e4fc904d5594a3ca5",
+              "position": 1,
+              "uid": "3ecf1523-62fe-5bb1-be29-2b4a9b3384df"
+            },
+            {
+              "content": "The cafe on the first floor of the Main Building operates during summer break as well.",
+              "content_digest": "b5909a19f888f55a1c2e10ffd9bdd7a11d52e8e2854b35f6d825350bbcb1e41b",
+              "position": 2,
+              "uid": "2e45bd48-390e-5b77-9082-fec388b4bd9f"
+            },
+            {
+              "content": "The dining area on the first floor of the Main Building operates during summer break as well.",
+              "content_digest": "0994673ed38e3edc1e4f38c0e641c92bf6177b7045c02684905ba4d0e742b0e5",
+              "position": 3,
+              "uid": "5f686fb7-fc7a-5698-8cc5-d5ccff25dfe1"
+            },
+            {
+              "content": "There is a coffee machine inside the Innovation Hub on the first floor of the Main Building.",
+              "content_digest": "55fa9f8fc872549fd910ddb4b9ae1ce396f0555b828c72bdea8030486482cf9d",
+              "position": 4,
+              "uid": "df0dbcfb-86c8-52a0-b303-71a6e2dfa4c6"
+            },
+            {
+              "content": "Only staff may use the coffee machine inside the Innovation Hub on the first floor of the Main Building.",
+              "content_digest": "3163361891f978a1c943217ee58b33fa647f86b29af099fa80ecf73ec37f3b92",
+              "position": 5,
+              "uid": "65a4b93f-f1da-52c0-b013-34c876391794"
+            },
+            {
+              "content": "The ATM in the West Complex is separate from the ATM inside the Main Building.",
+              "content_digest": "149e64a9d48672d156f0cdf559554b8294aedaa4035d950ec482c51a8b4d2510",
+              "position": 6,
+              "uid": "ed7db155-c6c8-5a91-a574-fc44b081a92a"
+            },
+            {
+              "content": "The ATM in the West Complex is in the building next to Outdoor Parking Lot A.",
+              "content_digest": "d2f74fe3213e832af2b8f4ea898aee8cdca792369bd355b6f2383e7219c7fda5",
+              "position": 7,
+              "uid": "ce4dd3c2-790f-5ef7-b851-e693f750c1ef"
+            },
+            {
+              "content": "Students who need cash in the evening often expect that they can use the Main Building ATM at any time.",
+              "content_digest": "a5efc1d65204723095735bf0b06f3853c043fcb4abfe7c788523d45f49020d7e",
+              "position": 8,
+              "uid": "46192dec-18a4-5404-b3fe-5c0c42be97da"
+            },
+            {
+              "content": "Students who need basic items late at night expect the 24-hour store in the Main Building to be open.",
+              "content_digest": "fac728be12c74f12d8f260fcf3284743aea5a3b33a9864acfb24671791ed7fc3",
+              "position": 9,
+              "uid": "644d9c0b-c300-51e4-b680-4318328aa4b9"
+            },
+            {
+              "content": "Identify and provide guidance to an alternative location of the same type as the closed facility.",
+              "content_digest": "5da8ed85cec925b18402597e69ff089e7dc4c6bb6f59db3618674964982d3f76",
+              "position": 10,
+              "uid": "b03652e7-6a61-5dd6-8484-f19f93536d59"
+            },
+            {
+              "content": "Do not treat the facilities in the West Complex and the facilities in the Main Building as the same place.",
+              "content_digest": "44100766ec4f442861282134b0f4550daa7efdd7e01ffb9b63ed1ecfab1bffd4",
+              "position": 11,
+              "uid": "5f43f896-6a76-51f2-b034-221955b4165f"
+            },
+            {
+              "content": "The amenities information agent can answer with posted locations.",
+              "content_digest": "f240f49012fca40f5920be8e9d2062d59a2d5c049e014d0b737f42913938b485",
+              "position": 12,
+              "uid": "b0fa660c-d579-5c27-bf74-c9b3839fd36d"
+            },
+            {
+              "content": "The amenities information agent can answer with posted operating hours.",
+              "content_digest": "559e54fbea56d05bb856a37ae96495646215182723fc8bf6a6ce3e7b6fe7f133",
+              "position": 13,
+              "uid": "16efed59-7583-5467-828e-b856ccf7c5e1"
+            },
+            {
+              "content": "The amenities information agent cannot check product inventory.",
+              "content_digest": "d69c180b69bb551850197b9875e434e9eff39942ab04c52595d1ccdf1e74d92d",
+              "position": 14,
+              "uid": "150a226f-2cfb-523a-ae59-a37becaa4310"
+            },
+            {
+              "content": "The amenities information agent cannot check whether payment is available.",
+              "content_digest": "0feed38bdd3fec80b5b2bc9952da01ffcf4f02ec2b6635d66f633debfb6d844c",
+              "position": 15,
+              "uid": "0147df04-89c5-56a0-b119-5b6baf57bb29"
+            },
+            {
+              "content": "The amenities information agent cannot check unexpected closures on the day.",
+              "content_digest": "7c47019a3636f8641401c1b90b87da60c8c592bcc7873e94df9ddbae45034c7d",
+              "position": 16,
+              "uid": "91791ba2-e7cc-5437-9855-e10726378d20"
+            },
+            {
+              "content": "The Campus Store contractor incorporates students' tendency to use the Main Building ATM and the 24-hour store together in the evening into demand planning.",
+              "content_digest": "50c6eb6e2fd420cbc21607d2f0e63414305970e3abb3f4bbfcfda55058795cc0",
+              "position": 17,
+              "uid": "39b4d014-8b9d-55ac-a5c2-ccc3e948a721"
+            },
+            {
+              "content": "The Engineering Building Campus Store sells school supplies and basic household goods.",
+              "content_digest": "e081913293cdf46e949a89518179f079f560d101a96df0c5c8dc169f1ebc6258",
+              "position": 18,
+              "uid": "6248ac88-de59-5039-b01e-328669694909"
+            },
+            {
+              "content": "The return conditions for the Main Building Campus Store are posted in the store's receipt guidance.",
+              "content_digest": "f2d70b003de0f6a285b75770d85e1aa47525ff4fb55e01590ee8768db8ed927d",
+              "position": 19,
+              "uid": "a64be11d-06da-56b0-9dcb-9c26b75a1cbb"
+            },
+            {
+              "content": "Each store determines the prices of products sold at the Campus Store.",
+              "content_digest": "85e1cf50f007b273fc6b70bdee33bc44e37f68bc902a1915f1f2b48dd44ac8f7",
+              "position": 20,
+              "uid": "cf273ead-e557-5449-bc44-28b3fa5c1dc3"
+            },
+            {
+              "content": "The Main Building dining area's menu for the day is posted on the menu board at the entrance.",
+              "content_digest": "107f2a9a8e26980492529b0a0b342671eeb1f6ab78971e43e14c9615c7fa3698",
+              "position": 21,
+              "uid": "124a8981-a1c3-518a-a2cf-8c128b2e0c73"
+            },
+            {
+              "content": "Labels for major allergens in the dining menu can be found on the menu board.",
+              "content_digest": "4b30618be0ba1133259101292bdc2338fee50ad6626728a4473615ef743d8594",
+              "position": 22,
+              "uid": "451e08d8-5b71-5655-af71-94e99eb46cb2"
+            },
+            {
+              "content": "The food and beverage information agent cannot guarantee that there is no cross-contact in the food preparation area.",
+              "content_digest": "f1f3b3416deb302077882cf0c8056ada431edde0e9d6d86b8d28496da3e61c59",
+              "position": 23,
+              "uid": "ad2ae9ae-4630-5d1d-8930-ff5e61469bed"
+            },
+            {
+              "content": "Vegetarian options are indicated by dietary symbols on the menu board for the day.",
+              "content_digest": "1f7b4799d424912c9a2ed7e66d205fca0c813a917eb8e158748bf1b865c2732f",
+              "position": 24,
+              "uid": "5b24402f-f130-5110-aa9b-3d7d781d43f9"
+            },
+            {
+              "content": "There is a water fountain for filling personal water bottles on the first floor of the Main Building.",
+              "content_digest": "d233629a498190866588034ddcfd7f7c66003b10c1110cddaec36e07da1d0af8",
+              "position": 25,
+              "uid": "4b9bdbce-dc56-5ed3-b79c-a5dfc5bf586e"
+            },
+            {
+              "content": "General seating at the Main Building cafe cannot be reserved individually.",
+              "content_digest": "9f2c2107ac4938a1bb6cf916b905b0082f0b6d605809aae685cab690b3ef9b2a",
+              "position": 26,
+              "uid": "d0fb793a-0864-5db7-a568-3fc424ae126a"
+            },
+            {
+              "content": "The common lounge in the Student Centre has a microwave that users can use.",
+              "content_digest": "f79ca6a1786af6effe8f9cccf1af4d4697adfdee049feb30cc07315816f9fb58",
+              "position": 27,
+              "uid": "3b64fba2-0530-5ec2-87f0-858e0b15445a"
+            },
+            {
+              "content": "There is a beverage vending machine on the second floor of the Main Building.",
+              "content_digest": "c84e2478818151fee3f272ddfb0cdeec4c46464efca1f603b0fd063c5fff19d4",
+              "position": 28,
+              "uid": "7930a9bc-37f3-5344-8aef-9111f1007813"
+            },
+            {
+              "content": "There is a snack vending machine on the fifth floor of the Main Building.",
+              "content_digest": "1d1f0683763711568fb5f3a1cd7b5f5c7d6a8dabaff6e8749543fa5065d93a1b",
+              "position": 29,
+              "uid": "3e06443d-ca8e-5f52-8500-e4c961bd45b7"
+            },
+            {
+              "content": "The ATMs in the Main Building and the West Complex are managed by different operators.",
+              "content_digest": "0944e57d7001fb24450cafa9daae222a869f17170a9e9d46fab0aace147e0171",
+              "position": 30,
+              "uid": "815ce86f-370a-51d0-8cb9-82aed0352946"
+            },
+            {
+              "content": "The amenities information agent cannot access ATM transaction history or determine the cause of transaction errors.",
+              "content_digest": "34e82661f871116c61cec1b0aa0863d23223ad9fc8c5940d7caccece02291c56",
+              "position": 31,
+              "uid": "07312b3b-fe85-51cf-8f96-b11cb830a5dd"
+            },
+            {
+              "content": "Contact the operator of the relevant ATM regarding a retained ATM card or transaction error.",
+              "content_digest": "4f48124ba360b3c9738e8e55d91e2fb1b0ae09fbb0c4f73b788656e30ffa05ea",
+              "position": 32,
+              "uid": "56b07b71-d6b0-5cde-b3ca-e165ea0275f5"
+            },
+            {
+              "content": "The operating hours of the visitor services desk are posted on the Main Building information page.",
+              "content_digest": "3bb08ec098adfc498e08ba43e619c7f89f071293177215b57ec352781fc8a043",
+              "position": 33,
+              "uid": "dc4bb95b-4196-552e-91c0-1f788dc081f7"
+            },
+            {
+              "content": "The visitor services desk provides campus maps and public facility information.",
+              "content_digest": "157374c5da0e8be88b82d04718d6433c4461e44a9007aba74c44e12cf49f6eaf",
+              "position": 34,
+              "uid": "eb08465c-7591-57d2-a932-ae4db8b73ef2"
+            },
+            {
+              "content": "General facility inquiries can be submitted through the public online inquiry form.",
+              "content_digest": "1fcd4e6b087a832a797fe717f3204495f7ec6bab83a1d2295ada83675c190bfe",
+              "position": 35,
+              "uid": "8a8f4943-ef7d-54d2-b797-25037a7b9ad7"
+            },
+            {
+              "content": "Student support services that handle personal records require identity verification.",
+              "content_digest": "4f21773327ba875d2de786e3fe851c9dc318b71630a88d54d2ca74a3c6b730ba",
+              "position": 36,
+              "uid": "53aa3f6e-1be2-5ccc-80c7-003286636621"
+            },
+            {
+              "content": "Visitors can use the campus's public guest network.",
+              "content_digest": "a6163f109b8173523cef0441f1f44d0defc262b519e267b501e4ef2ab048df23",
+              "position": 37,
+              "uid": "3b187e27-31b2-543f-8c62-6b43135e7b40"
+            },
+            {
+              "content": "Instructions for connecting to the guest network are posted in the visitor services information.",
+              "content_digest": "252580a4b90a70216039d79c08e3dca50ccf3980236321707a018fc18778c54d",
+              "position": 38,
+              "uid": "fdbea8e9-d79b-5b0e-9742-406883f5aef6"
+            },
+            {
+              "content": "The Engineering Building Campus Store is in a separate building from the Main Building and can be reached by a public pedestrian route that does not pass through the Main Building.",
+              "content_digest": "4142f4969b2c6fc1171314c5953e7e90dfff3ed667090c569535aa57ed13df2d",
+              "position": 39,
+              "uid": "209ddf18-2029-5fd1-82bf-e382dda2cf01"
+            },
+            {
+              "content": "The amenities information agent cannot access a user's purchase history.",
+              "content_digest": "c1dc01d50dcc16d3a527e8ba1a74ef38a80a7895dd2646d00132ee185f46013a",
+              "position": 40,
+              "uid": "8d71aef9-b9e7-5ee5-914a-95a943c18090"
+            },
+            {
+              "content": "The food and beverage information agent must not infer ingredient composition that is not listed on the menu.",
+              "content_digest": "e713cb35fe1e2d5226af23f378a3b616fa24240d8d4186c7fdffddbff3ba3d76",
+              "position": 41,
+              "uid": "fa47663f-27a3-5962-ac4d-b2f7a905ec6d"
+            },
+            {
+              "content": "The operating hours of each campus shop and food and beverage facility may vary on public holidays.",
+              "content_digest": "53648adbf27ab2ed1b93944965fddd42c99598c83d905486b2b0be0b4bcaa951",
+              "position": 42,
+              "uid": "cf4cd9ec-c404-5fd8-bf58-2a68bd406fd0"
+            },
+            {
+              "content": "Check the relevant store's official notice for extended operating hours during exam periods.",
+              "content_digest": "80ec54da072c82a2cd034aed563fe6e6cc40cef9bbcffab5b15f0ecebc48b680",
+              "position": 43,
+              "uid": "1ff36f44-d288-52db-9f58-aa17a80a6259"
+            },
+            {
+              "content": "The store operator determines product inventory and availability for sale.",
+              "content_digest": "17505448ae75dd91725853540c3ffc4ed1f4af0c010eb876b4b61611257effd9",
+              "position": 44,
+              "uid": "3534e0d3-d005-50cc-bafa-887b1e0918fc"
+            },
+            {
+              "content": "Students with long intervals between classes prefer the dining area on the first floor of the Main Building as a comfortable place to wait.",
+              "content_digest": "63fef4abe8668eca2b52bfd9e4d4c499dccf31b423e89aa13b87c1fcdb17de64",
+              "position": 45,
+              "uid": "027bc3db-3b45-5d27-829d-678ecb2fed9e"
+            },
+            {
+              "content": "External visitors often expect to be able to use a cafe in the same building as a public event.",
+              "content_digest": "10a6880537388a33ddfbc20d2bef4d37cb980759e0dab1193b13f2c9f33c336a",
+              "position": 46,
+              "uid": "45b26dcc-e2bc-554a-aeae-91aac780b121"
+            },
+            {
+              "content": "The reusable container return bin is next to the exit of the dining area on the first floor of the Main Building.",
+              "content_digest": "a8af15002a637cc622f39ffde3666b17a8ee11fc8fdb91ccdba717dc6716b0f4",
+              "position": 47,
+              "uid": "c66e27a1-f73d-5da2-abfb-c14b76e2bd2d"
+            },
+            {
+              "content": "The Main Building dining area has wheelchair-accessible seating.",
+              "content_digest": "07247bb0b1febf03e0b1d26bcb6819833c9a9f9a43e211e22af4a72e538bca9e",
+              "position": 48,
+              "uid": "0dfe62b6-7d78-5dc4-8ef0-e1fa8227dee5"
+            },
+            {
+              "content": "Direct users to report service issues to the relevant facility's posted contact point.",
+              "content_digest": "5990f8550feab3aeda81b8327962d323b3dc26b8701a04d793d0c7380a534e25",
+              "position": 49,
+              "uid": "5ea2bbd5-fc53-5bae-aaac-30aaa3e785da"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26"
+        },
+        {
+          "context_digest": "cac927d9dd76aea18cdd253e7bc7d3aa834c869b31d6cd37670037149629db5f",
+          "context_name": "task-1/participant/construction-updates/temporary-parking",
+          "context_uid": "b392133c-278c-5c86-aaf9-5791ed5e9cd4",
+          "memories": [
+            {
+              "content": "Modify campus-wiki/temporary-parking: During the construction period, the underground parking garage cannot be used for general parking.",
+              "content_digest": "699e90beb6a821858ed341065ef08ae6078682978522015ae642a2f940e4133c",
+              "position": 0,
+              "uid": "84196dc5-9ae8-5663-866a-048024119fd2"
+            },
+            {
+              "content": "Modify campus-wiki/temporary-parking: During the construction period, the pedestrian entrance door to the underground parking garage is kept locked.",
+              "content_digest": "378dcc9513846605fa191a67f43571feadac5eef2e8cf34852683ca659961ed9",
+              "position": 1,
+              "uid": "fdffd727-3579-5edc-8433-1f1f372b7576"
+            },
+            {
+              "content": "Add campus-wiki/temporary-parking: During the construction period, instruct staff to use a physical access card to pass through the locked pedestrian entrance door to the underground parking garage.",
+              "content_digest": "2e524ab307c36b59e7ebf980f91305a7c9600efa86f4c62dd6336fab3c6121ef",
+              "position": 2,
+              "uid": "6dc791c0-f2a0-5e5e-a1ae-4ec35d7159a4"
+            },
+            {
+              "content": "Add campus-wiki/temporary-parking: Instruct construction/facilities personnel to access the underground parking garage through the controlled on-site access procedure that has been approved.",
+              "content_digest": "2662ccea22001a499114935be2f4daf58bf440d31a5ac167e62fbd2ca84c07e9",
+              "position": 3,
+              "uid": "fb0765f1-92fa-50b6-ab78-35ca165ab2e6"
+            },
+            {
+              "content": "Modify campus-wiki/temporary-parking: The stairs from the Main Building down to the underground parking garage are closed to all users.",
+              "content_digest": "4ef59f8b5c113637f29f837969a2850cd75a5b96c6ab62af3c79a887bdfb52c5",
+              "position": 4,
+              "uid": "5a4dd86f-bead-50bb-b6e8-45c176b6d65f"
+            },
+            {
+              "content": "Add campus-wiki/temporary-parking: The underground parking garage is used as a temporary storage area for construction materials.",
+              "content_digest": "836456fc236a8899840e25cd165b2319715b0648a9a08d394a8a551d721252d9",
+              "position": 5,
+              "uid": "32e116a4-526b-5cd1-af16-4872680376b5"
+            },
+            {
+              "content": "Add campus-wiki/temporary-parking: After the clear-out, personal items left in the underground parking garage were moved to the lost and found center.",
+              "content_digest": "33aeb86f229c6537deb904f027df389b066cc48f424c621e2a756e96ef3cc3ca",
+              "position": 6,
+              "uid": "8fa46317-ba39-54bb-8cf0-f85770bd5032"
+            },
+            {
+              "content": "Add campus-wiki/temporary-parking: Outdoor Parking Lot A connected to the Main Building is closed during the construction period.",
+              "content_digest": "8ad4d8911e825afbe55c1419a7737b657cd01755e8742cc30d2b3bb275d7bb7e",
+              "position": 7,
+              "uid": "cc5f97c1-ce8c-5ac0-8f3e-ecdc6df597fc"
+            },
+            {
+              "content": "Modify campus-wiki/temporary-parking: During the construction period, Outdoor Parking Lot C operates as a temporary alternative parking lot for vehicles visiting the Main Building.",
+              "content_digest": "6452da6c8a876b2a6b6a92a0ecbe4cb363b9531554f2c10a4efd2aa495ccc454",
+              "position": 8,
+              "uid": "9b8a7458-4ebc-5b82-be5b-522268680f63"
+            },
+            {
+              "content": "Add campus-wiki/temporary-parking: Outdoor Parking Lot A is planned to reopen immediately after construction on the Main Building ends.",
+              "content_digest": "29795909ab403254614692703e97024e9a18ae36371b94f1ea94d045de4b17cd",
+              "position": 9,
+              "uid": "d47493d3-5b50-53d0-a5b9-5dedbdb268a4"
+            },
+            {
+              "content": "Modify campus-wiki/temporary-parking: During the construction period, the sloped access road connecting Outdoor Parking Lot A and the Main Building underground parking garage is blocked.",
+              "content_digest": "24bd7afa84efacd6ee13d6700ca365bd8d7c50fdc7a8e83131c07b8b527b18be",
+              "position": 10,
+              "uid": "91de6da4-a9f4-5e2a-a585-14609a8d8497"
+            },
+            {
+              "content": "Modify campus-wiki/temporary-parking: Based on posted information, the parking guidance agent may explain the closures of the underground parking garage and Outdoor Parking Lot A and the alternative use of Outdoor Parking Lot C during the construction period.",
+              "content_digest": "5fe65a3cc020b1872ab67d16e4fb2aa7f267f09aaa59e195337572a7db26fbdd",
+              "position": 11,
+              "uid": "71a5daa6-e289-51bf-bf1f-051d9958091e"
+            },
+            {
+              "content": "Modify campus-wiki/temporary-parking: During the construction period, the parking guidance agent may explain the location of Outdoor Parking Lot C but cannot check or guarantee available spaces at the time of an inquiry.",
+              "content_digest": "0e3717d6aea1b5c03d83bb54ba113c30c96e7929ad6b15ee62c4948ddd83a000",
+              "position": 12,
+              "uid": "7f72387d-58fc-511c-84c3-940933217e9d"
+            },
+            {
+              "content": "Modify campus-wiki/temporary-parking: A visitor accustomed to parking at the Main Building may expect to be able to enter the underground parking garage or Outdoor Parking Lot A during the construction period, drive as far as the closed access road, and then search again for Outdoor Parking Lot C.",
+              "content_digest": "9b958122bff8481d9cdcd1cbea92d3a9240ba5b6787a5c221365461f129efe44",
+              "position": 13,
+              "uid": "85518d54-4515-5bc0-ad8c-f5dd4e2b7d51"
+            },
+            {
+              "content": "Modify campus-wiki/temporary-parking: Delivery drivers and external maintenance contractors accustomed to unloading in Outdoor Parking Lot A may approach the same point during the construction period and then reconfirm the delivery time or unloading location at the control line.",
+              "content_digest": "e364b4117634e6861aab264d21adbc31215f65cb55a3d712891cb985bbb23f3a",
+              "position": 14,
+              "uid": "ceffae14-e966-566e-83b2-df46680d4582"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "14884285-251b-4be6-923f-c1aa3dddaad9"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames largely cover separate operational domains: standing campus amenities versus temporary construction parking. Their meaningful overlap concerns directing users to an alternative when a facility closes and providing posted location information, with construction and agent-specific scopes preserved.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "9e6dcc99-d2d7-54bd-adbf-ca20ebf22f83"
+            }
+          ],
+          "reason": "This is independently useful store-hours information with no corresponding construction-parking claim.",
+          "status": "RESOLVED",
+          "summary": "The Main Building Campus Store has stated recess operating hours.",
+          "uid": "9841840a-666b-558b-bc88-ddee0627c3b5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "3ecf1523-62fe-5bb1-be29-2b4a9b3384df"
+            }
+          ],
+          "reason": "This concerns a separate store and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The Engineering Building Campus Store has stated recess operating hours.",
+          "uid": "3e0b7f57-334f-546f-9aba-ad1c54808102"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "2e45bd48-390e-5b77-9082-fec388b4bd9f"
+            }
+          ],
+          "reason": "This is one-sided seasonal cafe information.",
+          "status": "RESOLVED",
+          "summary": "The Main Building cafe continues operating during summer break.",
+          "uid": "fe6b0ffd-d21d-58ce-87be-9e6c39b70880"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "5f686fb7-fc7a-5698-8cc5-d5ccff25dfe1"
+            }
+          ],
+          "reason": "This is one-sided seasonal dining information.",
+          "status": "RESOLVED",
+          "summary": "The Main Building dining area continues operating during summer break.",
+          "uid": "a5015bab-3864-5bfe-93a0-77e9cae1893a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "df0dbcfb-86c8-52a0-b303-71a6e2dfa4c6"
+            }
+          ],
+          "reason": "The compared frame contains no corresponding amenity-location claim.",
+          "status": "RESOLVED",
+          "summary": "A coffee machine is located inside the Main Building Innovation Hub.",
+          "uid": "261f9c79-b4ec-59d1-a2c9-c5805dfb36d6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "65a4b93f-f1da-52c0-b013-34c876391794"
+            }
+          ],
+          "reason": "This is an independent access rule for an amenity.",
+          "status": "RESOLVED",
+          "summary": "Use of the Innovation Hub coffee machine is restricted to staff.",
+          "uid": "7bc692ec-dccf-5208-b6da-86885dc10559"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "ed7db155-c6c8-5a91-a574-fc44b081a92a"
+            },
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "815ce86f-370a-51d0-8cb9-82aed0352946"
+            }
+          ],
+          "reason": "The memories split one underlying ATM-separation claim into physical identity and management.",
+          "status": "RESOLVED",
+          "summary": "The Main Building and West Complex ATMs are separate facilities managed by different operators.",
+          "uid": "7b29efa6-2d13-5ea6-a2ac-ae866f5ad556"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "ce4dd3c2-790f-5ef7-b851-e693f750c1ef"
+            }
+          ],
+          "reason": "Mention of the same parking lot does not make this ATM-location fact operationally comparable to temporary parking closures.",
+          "status": "RESOLVED",
+          "summary": "The West Complex ATM is in the building next to Outdoor Parking Lot A.",
+          "uid": "35030e07-3205-5d69-a02b-6e91cc99c549"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "46192dec-18a4-5404-b3fe-5c0c42be97da"
+            }
+          ],
+          "reason": "This user expectation concerns ATM access, not construction-period parking behavior.",
+          "status": "RESOLVED",
+          "summary": "Students may expect unrestricted evening access to the Main Building ATM.",
+          "uid": "259dcd1e-7116-5665-a9d0-d37c27ffcb1c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "644d9c0b-c300-51e4-b680-4318328aa4b9"
+            }
+          ],
+          "reason": "This is a one-sided store-user expectation.",
+          "status": "RESOLVED",
+          "summary": "Students may expect a Main Building store described as 24-hour to be open late at night.",
+          "uid": "2f7be123-71d1-570d-9045-acb69f7dc09c"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "b03652e7-6a61-5dd6-8484-f19f93536d59"
+            },
+            {
+              "frame_uid": "14884285-251b-4be6-923f-c1aa3dddaad9",
+              "memory_uid": "cc5f97c1-ce8c-5ac0-8f3e-ecdc6df597fc"
+            },
+            {
+              "frame_uid": "14884285-251b-4be6-923f-c1aa3dddaad9",
+              "memory_uid": "9b8a7458-4ebc-5b82-be5b-522268680f63"
+            },
+            {
+              "frame_uid": "14884285-251b-4be6-923f-c1aa3dddaad9",
+              "memory_uid": "d47493d3-5b50-53d0-a5b9-5dedbdb268a4"
+            },
+            {
+              "frame_uid": "14884285-251b-4be6-923f-c1aa3dddaad9",
+              "memory_uid": "71a5daa6-e289-51bf-bf1f-051d9958091e"
+            }
+          ],
+          "reason": "The claims govern the same alternative-location decision, while the compared frame explicitly limits its detailed implementation to Main Building construction parking.",
+          "status": "RESOLVED",
+          "summary": "General guidance to identify a same-type alternative for a closed facility is instantiated for construction-period closure of Lot A, use of Lot C, subsequent reopening, and posted parking explanations.",
+          "uid": "aaa45b04-c20f-5af4-abba-7b22044caeb9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "5f43f896-6a76-51f2-b034-221955b4165f"
+            }
+          ],
+          "reason": "This is a one-sided location-disambiguation policy.",
+          "status": "RESOLVED",
+          "summary": "West Complex and Main Building facilities must not be treated as the same place.",
+          "uid": "76cd5256-616e-5f42-931e-e2516ccc722f"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "b0fa660c-d579-5c27-bf74-c9b3839fd36d"
+            },
+            {
+              "frame_uid": "14884285-251b-4be6-923f-c1aa3dddaad9",
+              "memory_uid": "7f72387d-58fc-511c-84c3-940933217e9d"
+            }
+          ],
+          "reason": "Both address location answers from posted information, but the compared claim has an explicit parking, construction-period, and availability-check scope.",
+          "status": "RESOLVED",
+          "summary": "An information agent may provide posted locations, with the parking-specific version covering Lot C during construction and disclaiming live space availability.",
+          "uid": "ecbbf902-cd87-53c4-8f24-590ed4098201"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "16efed59-7583-5467-828e-b856ccf7c5e1"
+            }
+          ],
+          "reason": "The compared parking frame contains no operating-hours guidance.",
+          "status": "RESOLVED",
+          "summary": "The amenities information agent may answer with posted operating hours.",
+          "uid": "4e3c83f3-e16a-56c7-9ec1-989dc9f290ed"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "150a226f-2cfb-523a-ae59-a37becaa4310"
+            }
+          ],
+          "reason": "Product inventory is distinct from checking parking-space availability.",
+          "status": "RESOLVED",
+          "summary": "The amenities information agent cannot check product inventory.",
+          "uid": "9a533f0a-d25b-52cf-82db-4224785095f7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "0147df04-89c5-56a0-b119-5b6baf57bb29"
+            }
+          ],
+          "reason": "This is a one-sided information-access limitation.",
+          "status": "RESOLVED",
+          "summary": "The amenities information agent cannot check whether payment is available.",
+          "uid": "dfe3d1ec-ec03-5075-ab8a-53071620799f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "91791ba2-e7cc-5437-9855-e10726378d20"
+            }
+          ],
+          "reason": "This does not contradict the compared agent's ability to explain planned, posted construction closures.",
+          "status": "RESOLVED",
+          "summary": "The amenities information agent cannot verify unexpected same-day closures.",
+          "uid": "0fc59a97-d848-5503-b1fb-47d4721c1272"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "39b4d014-8b9d-55ac-a5c2-ccc3e948a721"
+            }
+          ],
+          "reason": "This is a one-sided demand-planning claim.",
+          "status": "RESOLVED",
+          "summary": "Campus Store demand planning considers linked evening use of the Main Building ATM and store.",
+          "uid": "ec156958-d419-5c35-bbf5-7067a54b31ae"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "6248ac88-de59-5039-b01e-328669694909"
+            }
+          ],
+          "reason": "This product-range information has no parking counterpart.",
+          "status": "RESOLVED",
+          "summary": "The Engineering Building Campus Store sells school supplies and basic household goods.",
+          "uid": "b6339669-83df-5d40-a34e-1e1d511b1e57"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "a64be11d-06da-56b0-9dcb-9c26b75a1cbb"
+            }
+          ],
+          "reason": "This is one-sided retail policy information.",
+          "status": "RESOLVED",
+          "summary": "Main Building Campus Store return conditions are posted in receipt guidance.",
+          "uid": "f1f72549-f8f1-55c5-b8fb-af36de71e8b2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "cf273ead-e557-5449-bc44-28b3fa5c1dc3"
+            }
+          ],
+          "reason": "This is an independent retail-governance claim.",
+          "status": "RESOLVED",
+          "summary": "Each Campus Store determines its own product prices.",
+          "uid": "9cf623a9-f962-5815-9387-392b84ad7638"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "124a8981-a1c3-518a-a2cf-8c128b2e0c73"
+            }
+          ],
+          "reason": "This is one-sided dining information.",
+          "status": "RESOLVED",
+          "summary": "The Main Building dining area's daily menu is posted at its entrance.",
+          "uid": "fb20fad2-709a-5fc9-9553-2bd72fadef04"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "451e08d8-5b71-5655-af71-94e99eb46cb2"
+            }
+          ],
+          "reason": "This is independent food-safety information.",
+          "status": "RESOLVED",
+          "summary": "Major-allergen labels appear on the dining menu board.",
+          "uid": "d6a134b9-f195-5dd1-abe6-0ad264c63fc6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "ad2ae9ae-4630-5d1d-8930-ff5e61469bed"
+            }
+          ],
+          "reason": "This is a one-sided food-safety limitation.",
+          "status": "RESOLVED",
+          "summary": "The food and beverage information agent cannot guarantee absence of preparation-area cross-contact.",
+          "uid": "eb2cd848-38b4-5ed8-988a-a8a395f6d3f3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "5b24402f-f130-5110-aa9b-3d7d781d43f9"
+            }
+          ],
+          "reason": "This is one-sided dietary information.",
+          "status": "RESOLVED",
+          "summary": "Daily vegetarian options are identified by menu-board dietary symbols.",
+          "uid": "b3c6ebb6-8a61-58a4-ab16-1859f41f264f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "4b9bdbce-dc56-5ed3-b79c-a5dfc5bf586e"
+            }
+          ],
+          "reason": "This amenity has no compared-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "A bottle-filling water fountain is available on the Main Building's first floor.",
+          "uid": "72fa2664-d98f-50c0-83c6-4e16078624d3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "d0fb793a-0864-5db7-a568-3fc424ae126a"
+            }
+          ],
+          "reason": "This is an independent seating policy.",
+          "status": "RESOLVED",
+          "summary": "General Main Building cafe seating cannot be individually reserved.",
+          "uid": "dee159e0-2b39-50ae-975f-b149276c066c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "3b64fba2-0530-5ec2-87f0-858e0b15445a"
+            }
+          ],
+          "reason": "This is a one-sided amenity claim.",
+          "status": "RESOLVED",
+          "summary": "Users may use a microwave in the Student Centre common lounge.",
+          "uid": "ccacfa00-a5b6-5177-bec7-9b94f45d4d8e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "7930a9bc-37f3-5344-8aef-9111f1007813"
+            }
+          ],
+          "reason": "This facility-location fact has no corresponding compared claim.",
+          "status": "RESOLVED",
+          "summary": "A beverage vending machine is on the Main Building's second floor.",
+          "uid": "8f7c095f-59df-5f3e-bb04-22dcfc16297c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "3e06443d-ca8e-5f52-8500-e4c961bd45b7"
+            }
+          ],
+          "reason": "This is an independent facility-location fact.",
+          "status": "RESOLVED",
+          "summary": "A snack vending machine is on the Main Building's fifth floor.",
+          "uid": "438e4e13-658e-5735-8915-ac9deef28dbb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "07312b3b-fe85-51cf-8f96-b11cb830a5dd"
+            },
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "56b07b71-d6b0-5cde-b3ca-e165ea0275f5"
+            }
+          ],
+          "reason": "The memories split one ATM-support boundary into capability and escalation guidance.",
+          "status": "RESOLVED",
+          "summary": "The amenities agent cannot diagnose ATM transactions, and retained-card or transaction-error cases should go to the relevant operator.",
+          "uid": "290c1582-8520-59cd-acb4-daed7ee3a394"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "dc4bb95b-4196-552e-91c0-1f788dc081f7"
+            }
+          ],
+          "reason": "This is one-sided visitor-services information.",
+          "status": "RESOLVED",
+          "summary": "Visitor-services desk hours are posted on the Main Building information page.",
+          "uid": "a10f860f-563a-56e7-9480-5bed5eb5906b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "eb08465c-7591-57d2-a932-ae4db8b73ef2"
+            }
+          ],
+          "reason": "This is an independent description of visitor services.",
+          "status": "RESOLVED",
+          "summary": "The visitor-services desk provides campus maps and public-facility information.",
+          "uid": "28346066-f6b7-5e85-930a-127731950d50"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "8a8f4943-ef7d-54d2-b797-25037a7b9ad7"
+            }
+          ],
+          "reason": "This is a one-sided inquiry channel.",
+          "status": "RESOLVED",
+          "summary": "General facility inquiries may be submitted through a public online form.",
+          "uid": "cdd7bb4b-099f-5547-906e-2624ac21863a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "53aa3f6e-1be2-5ccc-80c7-003286636621"
+            }
+          ],
+          "reason": "This personal-records rule is unrelated to physical parking access credentials.",
+          "status": "RESOLVED",
+          "summary": "Student support services handling personal records require identity verification.",
+          "uid": "41318223-4952-5c4a-8c89-be1653d11ddb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "3b187e27-31b2-543f-8c62-6b43135e7b40"
+            },
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "fdbea8e9-d79b-5b0e-9742-406883f5aef6"
+            }
+          ],
+          "reason": "The memories describe access to one service and its associated instructions.",
+          "status": "RESOLVED",
+          "summary": "Visitors may use the public guest network, with connection instructions posted in visitor-services information.",
+          "uid": "c3d7c625-5a66-5145-9fe0-f7f5e0891dfd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "209ddf18-2029-5fd1-82bf-e382dda2cf01"
+            }
+          ],
+          "reason": "This route concerns a store in another building, not garage construction access.",
+          "status": "RESOLVED",
+          "summary": "The Engineering Building Campus Store is separate from the Main Building and reachable by a public pedestrian route avoiding it.",
+          "uid": "aa064313-a5d5-5f75-9e08-19b4983f3cb0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "8d71aef9-b9e7-5ee5-914a-95a943c18090"
+            }
+          ],
+          "reason": "This is a one-sided privacy and capability boundary.",
+          "status": "RESOLVED",
+          "summary": "The amenities information agent cannot access a user's purchase history.",
+          "uid": "2a253bca-676d-5637-804b-30636e9466fe"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "fa47663f-27a3-5962-ac4d-b2f7a905ec6d"
+            }
+          ],
+          "reason": "This is an independent food-information rule.",
+          "status": "RESOLVED",
+          "summary": "The food and beverage information agent must not infer unlisted ingredients.",
+          "uid": "c325acb9-c4b1-5c96-ac6e-7242f30d71c6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "cf4cd9ec-c404-5fd8-bf58-2a68bd406fd0"
+            }
+          ],
+          "reason": "This is one-sided calendar-specific operating guidance.",
+          "status": "RESOLVED",
+          "summary": "Campus shop and food-service hours may vary on public holidays.",
+          "uid": "c2e4c3d3-3861-5c3d-93a4-669e5a2c927b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "1ff36f44-d288-52db-9f58-aa17a80a6259"
+            }
+          ],
+          "reason": "This is an independent source-of-truth instruction.",
+          "status": "RESOLVED",
+          "summary": "Official store notices should be checked for exam-period extended hours.",
+          "uid": "c3d8f557-ea8b-5d76-9a10-fd6d7c5ffe72"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "3534e0d3-d005-50cc-bafa-887b1e0918fc"
+            }
+          ],
+          "reason": "This retail-governance claim is distinct from parking capacity.",
+          "status": "RESOLVED",
+          "summary": "Store operators determine product inventory and sale availability.",
+          "uid": "fa05e425-79c2-5928-be4d-62bb4e6be598"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "027bc3db-3b45-5d27-829d-678ecb2fed9e"
+            }
+          ],
+          "reason": "This is a one-sided user-preference claim.",
+          "status": "RESOLVED",
+          "summary": "Students with long gaps between classes prefer the Main Building dining area as a waiting place.",
+          "uid": "d6a8eace-25cb-5531-b7ae-4147efa8625c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "45b26dcc-e2bc-554a-aeae-91aac780b121"
+            }
+          ],
+          "reason": "This expectation concerns cafe availability rather than parking access.",
+          "status": "RESOLVED",
+          "summary": "External visitors may expect a cafe in the building hosting a public event.",
+          "uid": "02e65c7f-e6d2-5e1d-917b-d1719302add4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "c66e27a1-f73d-5da2-abfb-c14b76e2bd2d"
+            }
+          ],
+          "reason": "This is a one-sided facility-location fact.",
+          "status": "RESOLVED",
+          "summary": "A reusable-container return bin is next to the Main Building dining-area exit.",
+          "uid": "124eddf7-1a8b-53ac-bd08-4868e5db0a74"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "0dfe62b6-7d78-5dc4-8ef0-e1fa8227dee5"
+            }
+          ],
+          "reason": "This is independent accessibility information.",
+          "status": "RESOLVED",
+          "summary": "The Main Building dining area provides wheelchair-accessible seating.",
+          "uid": "4b8254ef-ad9e-5c62-bd11-97fee34eac1b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4103101c-9f4f-4fb4-99dd-20da1299cf26",
+              "memory_uid": "5ea2bbd5-fc53-5bae-aaac-30aaa3e785da"
+            }
+          ],
+          "reason": "This general escalation rule has no matching parking-service issue claim.",
+          "status": "RESOLVED",
+          "summary": "Service issues should be reported through the relevant facility's posted contact point.",
+          "uid": "b3fef241-20d0-5cdb-bca1-5c6845a4387f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "14884285-251b-4be6-923f-c1aa3dddaad9",
+              "memory_uid": "84196dc5-9ae8-5663-866a-048024119fd2"
+            },
+            {
+              "frame_uid": "14884285-251b-4be6-923f-c1aa3dddaad9",
+              "memory_uid": "32e116a4-526b-5cd1-af16-4872680376b5"
+            }
+          ],
+          "reason": "The memories split one temporary repurposing of the garage into its restriction and new use.",
+          "status": "RESOLVED",
+          "summary": "During construction, the underground garage is unavailable for general parking and serves as construction-material storage.",
+          "uid": "a0ae89f8-c555-5189-b2ef-73650bcc970c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "14884285-251b-4be6-923f-c1aa3dddaad9",
+              "memory_uid": "fdffd727-3579-5edc-8433-1f1f372b7576"
+            },
+            {
+              "frame_uid": "14884285-251b-4be6-923f-c1aa3dddaad9",
+              "memory_uid": "6dc791c0-f2a0-5e5e-a1ae-4ec35d7159a4"
+            }
+          ],
+          "reason": "The memories jointly define one door-access rule and its staff exception.",
+          "status": "RESOLVED",
+          "summary": "During construction, the garage pedestrian door remains locked while staff may pass using physical access cards.",
+          "uid": "dd2eb605-4833-516d-900b-92efe591695d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "14884285-251b-4be6-923f-c1aa3dddaad9",
+              "memory_uid": "fb0765f1-92fa-50b6-ab78-35ca165ab2e6"
+            }
+          ],
+          "reason": "This is a separate role-specific access procedure.",
+          "status": "RESOLVED",
+          "summary": "Construction and facilities personnel must use the approved controlled procedure to access the garage.",
+          "uid": "7cc5ac86-1908-53a9-8865-19231a508dc1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "14884285-251b-4be6-923f-c1aa3dddaad9",
+              "memory_uid": "5a4dd86f-bead-50bb-b6e8-45c176b6d65f"
+            }
+          ],
+          "reason": "This is an independent route-closure rule.",
+          "status": "RESOLVED",
+          "summary": "The stairs from the Main Building to the underground garage are closed to everyone.",
+          "uid": "be88ba28-a2bf-5a27-929a-088dfac1c41e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "14884285-251b-4be6-923f-c1aa3dddaad9",
+              "memory_uid": "8fa46317-ba39-54bb-8cf0-f85770bd5032"
+            }
+          ],
+          "reason": "This is a one-sided disposition-of-property claim.",
+          "status": "RESOLVED",
+          "summary": "Personal items remaining after the garage clear-out were moved to lost and found.",
+          "uid": "0112dca4-a82d-5acb-bbe2-1a4ee320b208"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "14884285-251b-4be6-923f-c1aa3dddaad9",
+              "memory_uid": "91de6da4-a9f4-5e2a-a585-14609a8d8497"
+            }
+          ],
+          "reason": "This is an independent vehicle-route closure.",
+          "status": "RESOLVED",
+          "summary": "During construction, the sloped road between Lot A and the underground garage is blocked.",
+          "uid": "5b37810f-a195-570c-9bf6-cc2433183c36"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "14884285-251b-4be6-923f-c1aa3dddaad9",
+              "memory_uid": "85518d54-4515-5bc0-ad8c-f5dd4e2b7d51"
+            }
+          ],
+          "reason": "This is a construction-specific visitor navigation expectation with no counterpart.",
+          "status": "RESOLVED",
+          "summary": "Visitors accustomed to Main Building parking may reach closed approaches before searching again for Lot C.",
+          "uid": "744877c4-6144-50d3-8c02-e204f8adf0db"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "14884285-251b-4be6-923f-c1aa3dddaad9",
+              "memory_uid": "ceffae14-e966-566e-83b2-df46680d4582"
+            }
+          ],
+          "reason": "This is a separate construction-specific logistics expectation.",
+          "status": "RESOLVED",
+          "summary": "Delivery and maintenance drivers accustomed to Lot A may reach the control line and need to reconfirm timing or unloading location.",
+          "uid": "685fe807-2299-54d2-a2f1-35d388ad5314"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame details construction-period garage and parking closures, controlled access, material storage, lost property, reopening plans, blocked routes, and likely visitor or delivery-driver behavior.",
+        "differences": "General alternative-facility and posted-location guidance is specialized into construction-period parking guidance, including Lot C and limits on live space information.",
+        "reference_only": "The reference covers stores, food services, ATMs, visitor services, connectivity, accessibility, user expectations, information-agent limits, and facility contacts."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "ec1f0c5c-c329-47e5-ac46-8762e363ed6f"
+    },
+    "analysis_digest": "f3487a503e82a034987f715af58a9da2d24b0d77009f03c9e3c7a581c16abc7b",
+    "key": "229126778d0ece367042ab6f58b6641165f1ab0f40fe95b06ddf1b10cf5dcc5c",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 116.94624750000003,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-1",
+    "task_description": {
+      "context_digest": "17a794e48857a8178811052488c3bd4cc66e9029847f2ce038825e49ed5afcc8",
+      "context_uid": "e2c67cf1-c2a8-5aef-a2cb-583a9fd8d6c6",
+      "name": "task-1/description"
+    }
+  },
+  "artifact_key": "229126778d0ece367042ab6f58b6641165f1ab0f40fe95b06ddf1b10cf5dcc5c",
+  "created_at": "2026-08-13T18:11:05.188669Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-1/campus-wiki/shop-updates",
+  "pair_key": "54f52b86835551231029593ebb2c01dd543663edc3f2ff0dccae5eee672c3cef",
+  "provider_seconds": 116.94624750000003,
+  "right": "task-1/participant/construction-updates/temporary-parking",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-1"
+}

@@ -1,0 +1,318 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:17:03.175214+00:00",
+      "frames": [
+        {
+          "context_digest": "e76b6eea5af0e4d970d4db385b4100a788a8b1ed5ef6e68709bd92c943ab3b6b",
+          "context_name": "task-2/advisor1/compensation",
+          "context_uid": "7ba75d6b-cef6-5c8b-9b17-d3901e168d24",
+          "memories": [
+            {
+              "content": "Calculate user study compensation budgets based on estimated participation burden, combining session time and preparation effort.",
+              "content_digest": "2dc18d8ddeb900741b2a8f936a59d5fc72423e2d3144e8b2232a6435dc9a68f1",
+              "position": 0,
+              "uid": "0ae46268-cca7-57d5-a0ee-6eb3b85cda84"
+            },
+            {
+              "content": "Compensate for required travel time in face-to-face user studies as well.",
+              "content_digest": "688ba9df95e18254a5a33ab6c0e59066cf0674137b6802178e3fb8eae4ba38e5",
+              "position": 1,
+              "uid": "bdda6e22-ea06-5a13-8854-67f7521724db"
+            },
+            {
+              "content": "Compensate for the actual time participants spent in sessions, regardless of research modality.",
+              "content_digest": "8673c2b5b5913f0e8bcf0035eea4bc87430bb1fcf8ffb27b354bde0ca3a7ae4e",
+              "position": 2,
+              "uid": "f49b1d0a-7a1a-53b5-b7fc-815cc2cc134a"
+            },
+            {
+              "content": "Leave cash payment as an available compensation method for face-to-face studies.",
+              "content_digest": "72f9e1b33de0c05bb711c2d8162ab62f382a75871a710db37b858125eae6fcde",
+              "position": 3,
+              "uid": "1f4d05e4-2a79-572c-8050-beb1464fb781"
+            },
+            {
+              "content": "If compensation equity is explained, do not require finalizing the payment method at the proposal stage.",
+              "content_digest": "6945260e986651e7992034801b6151a3f93184013fea77d17b630f55fcdc943b",
+              "position": 4,
+              "uid": "abcba764-6f35-5dae-bb3d-7860fb72ccf2"
+            },
+            {
+              "content": "Apply the same base hourly rate to face-to-face and remote studies if task burden is equal.",
+              "content_digest": "144477b358e6e8931042d1793a5ffd10f56d69aa90523d69d20a622528a9dad0",
+              "position": 5,
+              "uid": "c6a28f37-1a7c-5dbd-b75c-c829f0461504"
+            },
+            {
+              "content": "Participants judge compensation fairness based on the total burden, combining session time with required travel and preparation time.",
+              "content_digest": "54e8900c7049e048484db8b523a41e98cbb911b45be2adbd103fd2f1635bf026",
+              "position": 6,
+              "uid": "874de649-9c04-5960-b3a9-e68356ef666c"
+            },
+            {
+              "content": "Account in compensation for the burden of rescheduling iterations and returning for multiple formative evaluation sessions.",
+              "content_digest": "f09be004defb4019ba7476919b6780cc2b6bbac088f79dbd0ec66bf2753af27d",
+              "position": 7,
+              "uid": "529559f5-850d-5920-8e27-0b1e7138dc36"
+            },
+            {
+              "content": "Compensate participants for time already invested even if a session is terminated early due to prototype errors.",
+              "content_digest": "64b65cc0b307b48d64641d126594a5b8a9258518c3aa27d7846be2306c25a9f4",
+              "position": 8,
+              "uid": "c8be56ee-860a-5f6c-abbf-02c8dbc59eb5"
+            },
+            {
+              "content": "The author of this proposal tends to exclude preparation burden between sessions when calculating compensation for iterative studies.",
+              "content_digest": "177f041fcb9fe768dcc1c476b592e99c8609d06ebf727aeca1379d21256b43d8",
+              "position": 9,
+              "uid": "bdac8cf8-dd11-5794-b4b2-9774ff344436"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "748cc97b-44b7-4030-a6fb-def48663a702"
+        },
+        {
+          "context_digest": "bb54539faeedf2db9ada09643c11270aabf235d8e3e6df98500f90f9b82aed49",
+          "context_name": "task-2/advisor2/reproducibility",
+          "context_uid": "5f2f3c0f-4cb1-5151-b381-847df75b6457",
+          "memories": [
+            {
+              "content": "HCI reviewers find it difficult to assess result reproducibility if the system version used in the field deployment is not disclosed.",
+              "content_digest": "83ac18cb56f74dbeb7834909b999669bb9a46d320b288bf38fb7b6c9bd0812f2",
+              "position": 0,
+              "uid": "40f11374-d91b-546a-9e93-fcf98a0fde98"
+            },
+            {
+              "content": "Record changes in system configurations, field procedures, and data collection tools during deployment, along with their timestamps and rationales.",
+              "content_digest": "ac399146f49e6ae5d21272de0cd13db6346d4cd67b096ecfa9bd314b026f403e",
+              "position": 1,
+              "uid": "cc72ad54-4cf3-56cd-9119-46776f5b2184"
+            },
+            {
+              "content": "The history of deployment versions and configuration changes provides necessary evidence for interpreting results from different field sites.",
+              "content_digest": "39ae70de900b646362a96cfa7d734a6404604b468398b09da9fb05783b389d25",
+              "position": 2,
+              "uid": "75f22b45-fb1b-568c-bb05-080fdacdcab2"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "ccf8f125-647a-43ac-8d47-ed4d5f6c38fe"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate operational domains: the reference concerns equitable participant compensation, while the compared frame concerns deployment documentation and reproducibility. Neither frame supplies a counterpart governing the other’s decisions, and no cross-frame conflict or unresolved ambiguity is evident.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "748cc97b-44b7-4030-a6fb-def48663a702",
+              "memory_uid": "0ae46268-cca7-57d5-a0ee-6eb3b85cda84"
+            }
+          ],
+          "reason": "Only the reference frame states a budgeting rule based on combined participation effort.",
+          "status": "RESOLVED",
+          "summary": "Compensation budgets should reflect estimated session and preparation burden.",
+          "uid": "091763a8-907f-511c-bd8b-c4d7ba13f6c1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "748cc97b-44b7-4030-a6fb-def48663a702",
+              "memory_uid": "bdda6e22-ea06-5a13-8854-67f7521724db"
+            }
+          ],
+          "reason": "Only the reference frame establishes compensation for travel burden.",
+          "status": "RESOLVED",
+          "summary": "Required travel time should be compensated in face-to-face studies.",
+          "uid": "14e5d174-05bf-51e2-a4fd-efdec5dcc00a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "748cc97b-44b7-4030-a6fb-def48663a702",
+              "memory_uid": "f49b1d0a-7a1a-53b5-b7fc-815cc2cc134a"
+            }
+          ],
+          "reason": "Only the reference frame establishes modality-independent payment for time spent in sessions.",
+          "status": "RESOLVED",
+          "summary": "Actual session time should be compensated regardless of study modality.",
+          "uid": "e3b3f2f6-af78-517a-8e0f-c2276a0767f8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "748cc97b-44b7-4030-a6fb-def48663a702",
+              "memory_uid": "1f4d05e4-2a79-572c-8050-beb1464fb781"
+            }
+          ],
+          "reason": "Only the reference frame addresses retaining cash as a compensation option.",
+          "status": "RESOLVED",
+          "summary": "Cash should remain an available payment method for face-to-face studies.",
+          "uid": "3f47fe6f-eea5-54c0-a9ac-db451c74b31f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "748cc97b-44b7-4030-a6fb-def48663a702",
+              "memory_uid": "abcba764-6f35-5dae-bb3d-7860fb72ccf2"
+            }
+          ],
+          "reason": "Only the reference frame governs when the payment method must be finalized.",
+          "status": "RESOLVED",
+          "summary": "A proposal need not finalize the payment method when compensation equity is explained.",
+          "uid": "3ba363e1-f3ea-54cb-a048-2afacef92ed0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "748cc97b-44b7-4030-a6fb-def48663a702",
+              "memory_uid": "c6a28f37-1a7c-5dbd-b75c-c829f0461504"
+            }
+          ],
+          "reason": "Only the reference frame sets a cross-modality base-rate rule.",
+          "status": "RESOLVED",
+          "summary": "Equal task burden should receive the same base hourly rate across face-to-face and remote studies.",
+          "uid": "e3cf0089-781e-5f43-885d-dab9fe006a5f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "748cc97b-44b7-4030-a6fb-def48663a702",
+              "memory_uid": "874de649-9c04-5960-b3a9-e68356ef666c"
+            }
+          ],
+          "reason": "Only the reference frame states how participants evaluate compensation fairness.",
+          "status": "RESOLVED",
+          "summary": "Participants assess compensation fairness using session, travel, and preparation burden together.",
+          "uid": "c476961d-ccf0-5d0c-960c-021a5f0ecb9d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "748cc97b-44b7-4030-a6fb-def48663a702",
+              "memory_uid": "529559f5-850d-5920-8e27-0b1e7138dc36"
+            }
+          ],
+          "reason": "Only the reference frame addresses burdens created by iterative participation.",
+          "status": "RESOLVED",
+          "summary": "Compensation should account for rescheduling and repeated attendance in formative evaluation.",
+          "uid": "734def42-4a95-532c-8291-6fd4e8bc452d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "748cc97b-44b7-4030-a6fb-def48663a702",
+              "memory_uid": "c8be56ee-860a-5f6c-abbf-02c8dbc59eb5"
+            }
+          ],
+          "reason": "Only the reference frame governs compensation after error-driven early termination.",
+          "status": "RESOLVED",
+          "summary": "Participants should be paid for time already invested when prototype errors end a session early.",
+          "uid": "415333a5-6f18-5bb4-bbee-bef98b38deac"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "748cc97b-44b7-4030-a6fb-def48663a702",
+              "memory_uid": "bdac8cf8-dd11-5794-b4b2-9774ff344436"
+            }
+          ],
+          "reason": "Only the reference frame records this author-specific calculation tendency.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to omit between-session preparation burden from iterative-study compensation.",
+          "uid": "8e7d2cb2-7295-5816-896e-2daf40be3520"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ccf8f125-647a-43ac-8d47-ed4d5f6c38fe",
+              "memory_uid": "40f11374-d91b-546a-9e93-fcf98a0fde98"
+            }
+          ],
+          "reason": "Only the compared frame links system-version disclosure to reproducibility review.",
+          "status": "RESOLVED",
+          "summary": "Failure to disclose the deployed system version impedes reviewers’ assessment of reproducibility.",
+          "uid": "041b8b6b-a284-5685-b56c-b1502e078668"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ccf8f125-647a-43ac-8d47-ed4d5f6c38fe",
+              "memory_uid": "cc72ad54-4cf3-56cd-9119-46776f5b2184"
+            }
+          ],
+          "reason": "Only the compared frame specifies the contents of a deployment change log.",
+          "status": "RESOLVED",
+          "summary": "Deployment changes to configurations, procedures, and collection tools should be recorded with timestamps and rationales.",
+          "uid": "01196231-2a5d-53e8-9f8d-eefd39dc0ec8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ccf8f125-647a-43ac-8d47-ed4d5f6c38fe",
+              "memory_uid": "75f22b45-fb1b-568c-bb05-080fdacdcab2"
+            }
+          ],
+          "reason": "Only the compared frame states the interpretive value of deployment histories across sites.",
+          "status": "RESOLVED",
+          "summary": "Version and configuration histories provide necessary evidence for interpreting results across field sites.",
+          "uid": "c69d3200-be2b-55fc-a301-37cff367e85f"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers disclosure of deployed system versions and timestamped change histories needed to assess reproducibility and interpret results across field sites.",
+        "differences": "",
+        "reference_only": "The reference covers burden-based compensation, modality equity, payment flexibility, repeated or disrupted participation, and a tendency to omit between-session preparation."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "bcfd2b70-5491-481e-8b95-d4fab9686205"
+    },
+    "analysis_digest": "134a98234d6cff301defe781d2dcef7b0b4b712d389f042e16caf8655b7b7051",
+    "key": "3474bd99fc21ec46aaa220dbb9c75cced8f3b17426761c8ac5d74751316088f1",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 29.20624908299942,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "3474bd99fc21ec46aaa220dbb9c75cced8f3b17426761c8ac5d74751316088f1",
+  "created_at": "2026-08-13T18:17:32.381302Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/compensation",
+  "pair_key": "6250ded78cc0bd797cf6ea0853a1b42957f2a199f11d330d23f0517e95bdba9b",
+  "provider_seconds": 29.20624908299942,
+  "right": "task-2/advisor2/reproducibility",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

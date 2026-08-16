@@ -1,0 +1,294 @@
+{
+  "coverage": {
+    "expected": 20,
+    "observed": 20
+  },
+  "created_at": "2026-08-11T01:10:33.112134Z",
+  "description_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+  "issues": [],
+  "kind": "STUDY_COMPARE_GRAPH_PAIR",
+  "left": {
+    "context_digest": "5e42fc3dcfbf5576148277f6841977ca8a5cabd4a3fc67a5581f6f6cc816c900",
+    "context_uid": "8130b676-dc51-5c31-b7dc-185afdf9cf07",
+    "memory_count": 10,
+    "name": "task-3/local/personal-memory/2025/10"
+  },
+  "method": "COMPACT_DECISION_VECTOR_V1",
+  "operation": "COMPARE",
+  "pair_key": "b02b877b844916fbde58b0f4530a047b662c3a9fb9da3b4f6fa504388d830035",
+  "provider": {
+    "condition": "COMPACT_DECISION_VECTOR",
+    "contract_valid": true,
+    "elapsed_seconds": 19.636230874995817,
+    "error_type": null,
+    "failure_category": null,
+    "operation": "compare_contexts_compact_ab_v1",
+    "prompt_chars": 7994,
+    "provider_calls": 1,
+    "provider_run": {
+      "completion_tokens": null,
+      "identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "operation": "compare_contexts_compact_ab_v1",
+      "prompt_tokens": null,
+      "upstream_model": "gpt-5.6-sol",
+      "upstream_provider": "openai-codex"
+    },
+    "provider_seconds": 19.635455416995683,
+    "response_bytes": 693,
+    "response_chars": 693,
+    "schema_chars": 1382,
+    "validation_error": null,
+    "validation_seconds": 0.0007583330007037148
+  },
+  "relations": [
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "82c1e806-de3a-5633-8a08-175487e69fd6",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000001",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "25df6384-836f-5f8e-bd97-73a1fb171c48",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000002",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "55abae4f-206a-586e-8b35-406d7525c0a1",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000003",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "c6d21ec4-6bdf-55df-b4d4-05cb531bf4bd",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000004",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "a6424854-e51e-5afc-8b9f-9e2f0273f70e",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000005",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "1b436b46-3d1f-5aa2-99e3-94b7c2412bfd",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000006",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "ccd1f422-6130-5f19-869e-681102a3a1fa",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000007",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "c69a8e87-2b6f-5514-ab0d-0037531592f8",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000008",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "4567ea9f-1800-51ed-bfac-f4cdf674d4cf",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "70277b86-d5db-5b58-8a94-e77372d15a4c",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000009",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "a4ff1b76-755d-530a-b24c-8655115e4fbe",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000010",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "a9da4cfc-a6aa-51ae-9ec4-0de5c7a09227",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000011",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "fa2735e1-f4af-57d3-a18c-795715b6715b",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000012",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "3bd8b8f2-c5b4-5004-8b9e-e388cc26ea7a",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000013",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "c7c4b494-39a6-5f5c-b37f-51c5061ac926",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000014",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "dd9f5b3c-9c2e-5dbc-bf6e-eb7761eeb075",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000015",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "2ed2a41c-f6ae-54d6-875c-a195d8fdacee",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000016",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "23f3a4fc-d51e-5d0b-87f0-d5be407a57f3",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000017",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "e9f459f3-8ff0-5a0e-b78b-eda8d18b914e",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000018",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "5a54437b-9b0e-5103-860d-d878be70b3ef",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000019",
+      "status": "RESOLVED"
+    }
+  ],
+  "right": {
+    "context_digest": "4eadf16a0c655a266bec3ebe56b056075c55e7f716f6879a0b6a905fe34136df",
+    "context_uid": "fd476504-4d4e-54d9-80b8-3dc2b18555d8",
+    "memory_count": 10,
+    "name": "task-3/local/personal-memory/2026/05"
+  },
+  "schema_version": 1,
+  "semantic_content_in_participant_report": false,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

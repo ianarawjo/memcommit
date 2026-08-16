@@ -1,0 +1,370 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:46:12.744809+00:00",
+      "frames": [
+        {
+          "context_digest": "492e513a553a9191e2c646cca49364b336ae6d163de5688eeca8cc661bbbdb32",
+          "context_name": "task-3/local/personal-memory/2024/11",
+          "context_uid": "0d5e1eef-1669-5589-94ba-b46c9c2080dc",
+          "memories": [
+            {
+              "content": "The user changed their schedule once in November 2024 because of their mother's hospital visit.",
+              "content_digest": "f08f07dda1b468ab191a59d87e7ceb8068189964edee2010abdae6e525d6103f",
+              "position": 0,
+              "uid": "bb17c696-0c1c-516f-8ad9-68a4b159ce22"
+            },
+            {
+              "content": "After seeing the reason for the schedule change written in a calendar invitation, the user asked for it to be removed.",
+              "content_digest": "7bfc906526c255f90a85b6dcc4b28ea1b0a9389e9f17ba989a4ce098280578c8",
+              "position": 1,
+              "uid": "195ba5ab-3ee0-5594-a859-9f2b5eadf9ea"
+            },
+            {
+              "content": "The user was able to reschedule the appointment after providing only a new time, without a reason.",
+              "content_digest": "14f1bd0410c76aa3a0eb28a2212fd06558ab23b6dc012aa5529980a67efe3e2b",
+              "position": 2,
+              "uid": "4c8759cc-66aa-527c-a9d5-197d39b5d2b7"
+            },
+            {
+              "content": "On a day the user traveled in their father's car, they photographed the parking location.",
+              "content_digest": "111e71af27be5d109557440569352964544e9b702810741445172a6cf51f94f5",
+              "position": 3,
+              "uid": "d4b27ea7-d329-5dc7-b7ca-91d0cd50a958"
+            },
+            {
+              "content": "On the next visit, when the user did not take a photo, they walked one circuit of the parking garage while looking for the exit.",
+              "content_digest": "6d61d67e35552cb739d0220e480189706ec5bbac74f93b87149a6948d9ac2805",
+              "position": 4,
+              "uid": "32a19a57-9b04-5f86-92ba-202a9ac803e4"
+            },
+            {
+              "content": "After hearing preparation items from their mother by phone, the user omitted two items.",
+              "content_digest": "449dc73aad797f5acd3d898292cf9942f7d3b65b9faf52769ae5b3332285b4f3",
+              "position": 5,
+              "uid": "0eeffd8c-acd6-57bf-950d-20cfa1fe62b3"
+            },
+            {
+              "content": "After receiving the preparation items again by text, the user put all of them in their bag.",
+              "content_digest": "9539ab90f598a96d97a73b7954db8834d3106861ba6ecc814e579a348e0145d6",
+              "position": 6,
+              "uid": "07ea3801-8666-581d-b846-2f45bf99ca19"
+            },
+            {
+              "content": "The user's mother does not want the reason for her visit disclosed in the user's external schedule.",
+              "content_digest": "b1aff7bb5b5df1ec773fd8875205cd9fdfa2fd5b520cf91b7c84c9e3054b4feb",
+              "position": 7,
+              "uid": "9e70b92e-1d8d-51ef-962d-bd9b348a56d5"
+            },
+            {
+              "content": "Do not include the mother's reason for a visit when conveying the user's availability externally.",
+              "content_digest": "b9473919c63f233fc66c49bbf00b20a8ab9532bcb1b8ce3896c442afed4229d9",
+              "position": 8,
+              "uid": "d76686fd-9f1d-5d94-931b-4b49c86a8f4e"
+            },
+            {
+              "content": "Some daily-life services may operate for shorter hours during the year-end holiday period.",
+              "content_digest": "48d4487aba4c395527f9dfeac9488f45556d1bd89475f8620b0a64d84e4479fc",
+              "position": 9,
+              "uid": "820a5de9-9e08-52c7-8747-5155fe341bb4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "0f3b6465-8a9a-4b5f-909c-6fa6749f2dd1"
+        },
+        {
+          "context_digest": "14adbc31fc3a2dc50b7b980d1e24569b16fff058104a812c7f3b4e1542b7abf0",
+          "context_name": "task-3/local/personal-memory/2025/03",
+          "context_uid": "913e0bfd-f6d9-579e-9a37-ba5daa9d17f1",
+          "memories": [
+            {
+              "content": "The user stores prepared meals on the second shelf of the freezer.",
+              "content_digest": "cd837b62b643f752da54b21de2f4f7a3d963a7c658d5b83dff39d1d92e0fdbad",
+              "position": 0,
+              "uid": "5d989bab-c471-5de9-bb73-29cabc4753dd"
+            },
+            {
+              "content": "The user went to the market without a shopping list and bought onions that were already at home.",
+              "content_digest": "f667c860e046bb27662b26d7cc4ed083ee48d9d7915237dc4b92ec378481a093",
+              "position": 1,
+              "uid": "d1725ae4-3fd3-5250-92b3-73d84d9152a7"
+            },
+            {
+              "content": "On a day the user shopped after checking a refrigerator photo, they did not make a duplicate purchase.",
+              "content_digest": "7283d4afe58c0ab05d9cb426bb80bed0e26e0b1783ff7cdd00a5f6e89d21861b",
+              "position": 2,
+              "uid": "904ff225-26df-5424-8a82-23d733649106"
+            },
+            {
+              "content": "On a day the user made a spicy stew, they left part of one bowl uneaten.",
+              "content_digest": "2765ec701f8e058d35ddee4a485c40221523ee2d9b56301ec1658ec4e419cbc2",
+              "position": 3,
+              "uid": "67a003c7-648a-59dc-8e82-03f9e452ffce"
+            },
+            {
+              "content": "The next time the user cooked it, they used half as much chili powder and finished the meal.",
+              "content_digest": "bdd7df7c762bbce31a40a45c2124e49ae3a6439dfc2133c574443d7eb3a7b1bb",
+              "position": 4,
+              "uid": "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9"
+            },
+            {
+              "content": "When cooking with their younger brother, the user assigned the cooking sequence only verbally and they did the same task twice.",
+              "content_digest": "bd92611cfc05fd42bb5d25e8dd7838ca1b2f6d99869bf1f61921b46950a4b532",
+              "position": 5,
+              "uid": "64bf4401-e972-5d15-a526-21ca901a6a9f"
+            },
+            {
+              "content": "The next time, the user and their younger brother split ingredient preparation and heat control and finished the meal 20 minutes earlier.",
+              "content_digest": "c3a28e7256d781ecb2d8710145880ffe79495e32d47ae1949c4be54e52a44555",
+              "position": 6,
+              "uid": "57e09ea5-54ff-5fce-aada-68daffbacc8b"
+            },
+            {
+              "content": "When cooking together, the user's younger brother prefers to divide the cooking and dishwashing roles in advance.",
+              "content_digest": "3bbc428c4f3b4e28a8e2341206ac78b39240eea53a9862192528029b0a57d12b",
+              "position": 7,
+              "uid": "0a5d054f-94bd-5955-bdb7-9b5427e2260b"
+            },
+            {
+              "content": "The local agent can compare responses across several meals, but it cannot conclude from one unfinished food item that the user dislikes that ingredient.",
+              "content_digest": "5787c1636d9dd4a5cb5bd70533b7dd44b2d6cff1047f5c408f5bcaa1b6577fe1",
+              "position": 8,
+              "uid": "1f94b78b-1635-551c-b90c-bea2a67ca595"
+            },
+            {
+              "content": "The condition of frozen prepared food may vary with its packaging and storage duration.",
+              "content_digest": "84bdac276dce5b50b19bc0c7c471468a22cc9945b1da7357700a58c157cf4ca1",
+              "position": 9,
+              "uid": "f64ef6c4-7665-5574-9d58-fc124b0bfe3f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "b0d17700-d6d1-4ba0-bdd9-0f0658a5990b"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate domains. The reference frame concerns schedule privacy, practical memory aids, preparation, and holiday service hours; the compared frame concerns food storage, shopping checks, recipe adjustment, collaborative cooking, and limits on preference inference. No cross-frame operational claim is shared or opposed.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0f3b6465-8a9a-4b5f-909c-6fa6749f2dd1",
+              "memory_uid": "bb17c696-0c1c-516f-8ad9-68a4b159ce22"
+            },
+            {
+              "frame_uid": "0f3b6465-8a9a-4b5f-909c-6fa6749f2dd1",
+              "memory_uid": "195ba5ab-3ee0-5594-a859-9f2b5eadf9ea"
+            },
+            {
+              "frame_uid": "0f3b6465-8a9a-4b5f-909c-6fa6749f2dd1",
+              "memory_uid": "4c8759cc-66aa-527c-a9d5-197d39b5d2b7"
+            }
+          ],
+          "reason": "These memories form one reference-only scheduling episode showing both the unwanted disclosure and that the reason was unnecessary for rescheduling.",
+          "status": "RESOLVED",
+          "summary": "A November 2024 schedule change initially disclosed the mother's hospital visit, after which the user requested removal of the reason and successfully rescheduled using only a new time.",
+          "uid": "d86f3ce4-f85f-51b0-a46e-c19f2dafa83f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0f3b6465-8a9a-4b5f-909c-6fa6749f2dd1",
+              "memory_uid": "9e70b92e-1d8d-51ef-962d-bd9b348a56d5"
+            },
+            {
+              "frame_uid": "0f3b6465-8a9a-4b5f-909c-6fa6749f2dd1",
+              "memory_uid": "d76686fd-9f1d-5d94-931b-4b49c86a8f4e"
+            }
+          ],
+          "reason": "These memories state the same reference-only privacy preference and its operational communication rule.",
+          "status": "RESOLVED",
+          "summary": "The mother's visit reason should not be disclosed when the user's availability is communicated externally.",
+          "uid": "94b0b82d-68d5-5949-acb8-6ad8ae8315ed"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0f3b6465-8a9a-4b5f-909c-6fa6749f2dd1",
+              "memory_uid": "d4b27ea7-d329-5dc7-b7ca-91d0cd50a958"
+            },
+            {
+              "frame_uid": "0f3b6465-8a9a-4b5f-909c-6fa6749f2dd1",
+              "memory_uid": "32a19a57-9b04-5f86-92ba-202a9ac803e4"
+            }
+          ],
+          "reason": "These memories describe a connected reference-only sequence about using, then omitting, a visual parking aid.",
+          "status": "RESOLVED",
+          "summary": "The user photographed a parking location on one visit and, on the next visit without a photo, made a circuit of the garage while seeking the exit.",
+          "uid": "9dcc8b40-67bc-55f2-8f9e-491edcc556ad"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0f3b6465-8a9a-4b5f-909c-6fa6749f2dd1",
+              "memory_uid": "0eeffd8c-acd6-57bf-950d-20cfa1fe62b3"
+            },
+            {
+              "frame_uid": "0f3b6465-8a9a-4b5f-909c-6fa6749f2dd1",
+              "memory_uid": "07ea3801-8666-581d-b846-2f45bf99ca19"
+            }
+          ],
+          "reason": "These memories form one reference-only contrast between spoken and written preparation instructions.",
+          "status": "RESOLVED",
+          "summary": "The user omitted preparation items received verbally but packed every item after receiving the information by text.",
+          "uid": "b1474c90-c0f4-5d68-ac92-27150db64429"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0f3b6465-8a9a-4b5f-909c-6fa6749f2dd1",
+              "memory_uid": "820a5de9-9e08-52c7-8747-5155fe341bb4"
+            }
+          ],
+          "reason": "This is an independently useful reference-only caution about seasonal service availability.",
+          "status": "RESOLVED",
+          "summary": "Some daily-life services may have shorter operating hours during the year-end holiday period.",
+          "uid": "84000496-287f-5b69-9a56-07add42cc831"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b0d17700-d6d1-4ba0-bdd9-0f0658a5990b",
+              "memory_uid": "5d989bab-c471-5de9-bb73-29cabc4753dd"
+            }
+          ],
+          "reason": "This is an independently useful compared-only storage-location fact.",
+          "status": "RESOLVED",
+          "summary": "The user stores prepared meals on the freezer's second shelf.",
+          "uid": "48c145b7-1db4-50e8-8788-e948c9a1f696"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b0d17700-d6d1-4ba0-bdd9-0f0658a5990b",
+              "memory_uid": "d1725ae4-3fd3-5250-92b3-73d84d9152a7"
+            },
+            {
+              "frame_uid": "b0d17700-d6d1-4ba0-bdd9-0f0658a5990b",
+              "memory_uid": "904ff225-26df-5424-8a82-23d733649106"
+            }
+          ],
+          "reason": "These memories form one compared-only contrast about using inventory information before shopping.",
+          "status": "RESOLVED",
+          "summary": "The user made a duplicate purchase without a list but avoided one after checking a refrigerator photo.",
+          "uid": "d3a50f12-41e8-54a6-a388-e3101d9213e7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b0d17700-d6d1-4ba0-bdd9-0f0658a5990b",
+              "memory_uid": "67a003c7-648a-59dc-8e82-03f9e452ffce"
+            },
+            {
+              "frame_uid": "b0d17700-d6d1-4ba0-bdd9-0f0658a5990b",
+              "memory_uid": "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9"
+            }
+          ],
+          "reason": "These memories describe one compared-only recipe-adjustment sequence and its observed meal outcome.",
+          "status": "RESOLVED",
+          "summary": "After leaving spicy stew unfinished, the user used half as much chili powder the next time and finished the meal.",
+          "uid": "5cd07e93-1257-5464-99fd-9e128448c1ea"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b0d17700-d6d1-4ba0-bdd9-0f0658a5990b",
+              "memory_uid": "64bf4401-e972-5d15-a526-21ca901a6a9f"
+            },
+            {
+              "frame_uid": "b0d17700-d6d1-4ba0-bdd9-0f0658a5990b",
+              "memory_uid": "57e09ea5-54ff-5fce-aada-68daffbacc8b"
+            },
+            {
+              "frame_uid": "b0d17700-d6d1-4ba0-bdd9-0f0658a5990b",
+              "memory_uid": "0a5d054f-94bd-5955-bdb7-9b5427e2260b"
+            }
+          ],
+          "reason": "These memories jointly describe one compared-only claim about advance division of collaborative cooking responsibilities.",
+          "status": "RESOLVED",
+          "summary": "Verbal-only task sequencing with the younger brother caused duplicated work, while explicitly splitting preparation and heat control finished cooking earlier and aligns with his preference for advance role division.",
+          "uid": "e9c56415-fd51-51ea-b807-a32da57eac4c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b0d17700-d6d1-4ba0-bdd9-0f0658a5990b",
+              "memory_uid": "1f94b78b-1635-551c-b90c-bea2a67ca595"
+            }
+          ],
+          "reason": "This is an independently useful compared-only constraint on drawing food-preference conclusions.",
+          "status": "RESOLVED",
+          "summary": "Food responses may be compared across several meals, but one unfinished item does not establish that the user dislikes an ingredient.",
+          "uid": "145b1042-a858-59fa-baa7-8965cd00b1e8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b0d17700-d6d1-4ba0-bdd9-0f0658a5990b",
+              "memory_uid": "f64ef6c4-7665-5574-9d58-fc124b0bfe3f"
+            }
+          ],
+          "reason": "This is an independently useful compared-only qualification about frozen-food condition.",
+          "status": "RESOLVED",
+          "summary": "The condition of frozen prepared food may depend on packaging and storage duration.",
+          "uid": "dc5d2909-0bd1-59de-94bc-bf08c4afa336"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only material covers freezer storage, shopping checks, recipe adjustment, cooking-role coordination, cautious food-preference inference, and frozen-food variability.",
+        "differences": "",
+        "reference_only": "Reference-only material covers private scheduling reasons, parking and packing memory aids, and possible year-end service-hour reductions."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "29c32802-1823-4e39-bd84-a37e12a548a2"
+    },
+    "analysis_digest": "fdc946ef0fcedc8f8b6b2949f6522b76ba807d4ceccafe43824101c6d1dd2685",
+    "key": "998711ce597149902a723e572360ca6ed5e8f63db89bda2fb3b8fa7da82a4fc9",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 43.546463499998936,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "998711ce597149902a723e572360ca6ed5e8f63db89bda2fb3b8fa7da82a4fc9",
+  "created_at": "2026-08-13T18:46:56.290676Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/11",
+  "pair_key": "eb615ff50329d3edf9db7b06581d7c2486d40576b7660f35bc512d4e4c24bc56",
+  "provider_seconds": 43.546463499998936,
+  "right": "task-3/local/personal-memory/2025/03",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

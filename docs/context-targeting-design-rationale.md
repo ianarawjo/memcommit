@@ -46,15 +46,16 @@ there is intentionally no profile-wide “last Scope” preference.
 - `tui/rendering.py` owns pointer, marker-slot, indentation, branch, escaping,
   annotation, and line-break grammar while operations supply semantic markers.
 - `tui/name_editor.py` owns the optional existing-parent locator and composes it
-  with the operation-neutral exact-name input from `commands.tui_primitives`.
+  with the operation-neutral interface-owned exact-name input.
   Callers supply labels such as Save Location, New Context, or Branch Name.
 
 Find, ordinary Query, the common endpoint setup used by
-Compare/Update/Meld/Atomize, and Sever import these controls directly. The
-older `commands/context_picker.py` keeps
-its established public and test-facing tree names as imports from the new
-module because it still owns full picker receipts, Memory preview rendering,
-and terminal orchestration. Its operation-neutral preview controller is also
+Compare/Update/Meld/Atomize, and Sever import these controls directly. The full
+picker, receipts, Memory preview rendering, clipboard projection, and terminal
+orchestration now live in `context_targeting/tui/picker.py`.
+`commands/context_picker.py` keeps its established public and test-facing names
+as behavior-free compatibility imports only; production callers import the
+neutral owner directly. Its operation-neutral preview controller is also
 composed into the common endpoint setup and Sever setup trees: it owns lazy
 caches, `m`/`M` visibility, and Memory viewport anchors. A caller must opt a
 role and mode into direct-Memory selection before one of those anchors may

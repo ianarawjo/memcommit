@@ -98,6 +98,13 @@
         ],
         "reason": "Direct-Memory Fit repair exposes CLI, TUI, public, agent, and MCP projections over one typed analysis, exact replay, authority, and checkpointed Apply boundary."
       },
+      "dedup": {
+        "evidence": [
+          "docs/dedup-design-rationale.md",
+          "docs/resolution-lifecycle-design-rationale.md"
+        ],
+        "reason": "Confirmed duplicate handoffs enter one provider-free component plan with CLI, TUI, Python, agent, and MCP projections over exact survivor review, Grant revalidation, reference blocking, and one checkpointed Apply boundary."
+      },
       "sever": {
         "evidence": [
           "docs/sever-application-boundary-matrix.md"
@@ -109,6 +116,12 @@
           "docs/summarize-application-boundary-matrix.md"
         ],
         "reason": "Direct and recursive reads share one terminal-independent application result with independent plain and TUI presenters."
+      },
+      "switch": {
+        "evidence": [
+          "docs/switch-application-boundary-matrix.md"
+        ],
+        "reason": "Explicit CLI, interactive picker, and checkout-compatible selection share one typed global/relative locator, READ authorization, target validation, and current-pointer CAS boundary."
       }
     },
     "MIXED": {
@@ -166,7 +179,6 @@
       "shell-init",
       "show",
       "status",
-      "switch",
       "trace",
       "translate",
       "undo",

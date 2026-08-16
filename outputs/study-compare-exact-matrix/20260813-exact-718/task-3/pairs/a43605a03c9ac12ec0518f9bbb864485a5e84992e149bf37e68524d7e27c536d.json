@@ -1,0 +1,388 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:36:32.401779+00:00",
+      "frames": [
+        {
+          "context_digest": "9fdb8cdfae14edf54f7410c0e8dd59527179de290b3d7c5f1b0f58494275b076",
+          "context_name": "task-3/local/personal-memory/2024/03",
+          "context_uid": "97c5905c-359b-5497-956f-b92db9ddbd2f",
+          "memories": [
+            {
+              "content": "The instructions for one medication the user takes say to take it after the evening meal.",
+              "content_digest": "32bba9f2936e560ddd5f4c5515895f2954b9c8722fcd501644569d1ff4f7b97c",
+              "position": 0,
+              "uid": "12ba4249-9450-5f2e-b648-5369a7997b26"
+            },
+            {
+              "content": "On a day with a morning appointment, the user miscalculated the fasting period and checked again at the reception desk.",
+              "content_digest": "532396ed2265321fbd4ca28ed1de2962211a357195bc9839503330c6cb0ab281",
+              "position": 1,
+              "uid": "051e79ff-5363-5160-9a13-46568fd13306"
+            },
+            {
+              "content": "For an afternoon visit, the user felt less rushed while preparing to travel than for a morning visit.",
+              "content_digest": "276fa255e4a4945f1475fa66129069ea33514bc24c98a246e9ab0d0000c156fa",
+              "position": 2,
+              "uid": "e7f1fcf7-ee2f-57d8-98cb-781e31e481e8"
+            },
+            {
+              "content": "On a day there was no waiting chair, the user stood for 20 minutes and their back became uncomfortable.",
+              "content_digest": "1c412785950057f01b1e7c10b716977cdb8bfb2b0605ef5bfdbdc6e349f6aaf8",
+              "position": 3,
+              "uid": "18d58666-2cfa-5959-8da9-2745bed56e11"
+            },
+            {
+              "content": "On a day medication instructions were explained all at once and at length, the user failed to write down an important time.",
+              "content_digest": "f3629bba06d053fa20712982f70b8dfd574b41a1b5ecd29d7c29f1b60742f647",
+              "position": 4,
+              "uid": "8fdede6e-64ed-5e4c-81f4-7a1075165568"
+            },
+            {
+              "content": "On a day medication times were confirmed one line at a time, the user copied them directly into their schedule after returning home.",
+              "content_digest": "acade505d6c0cdfddae0d169dea81c06a757aa7d7d2c760f6cdc253b06af5ded",
+              "position": 5,
+              "uid": "21f679f7-7d75-5c01-b6c3-b0d4bea5f2f0"
+            },
+            {
+              "content": "On a visit when their younger brother drove them, the user did not have to find a separate route home.",
+              "content_digest": "5e17c1227c7cbee7e995728edd17b4301903dfdc7a7bdc5f5ff3e06edfd357b3",
+              "position": 6,
+              "uid": "3ec03d39-3240-56d1-80da-313f79f2bf3a"
+            },
+            {
+              "content": "The user's younger brother prefers to receive a request for weekday-afternoon transportation two days beforehand rather than on the day itself.",
+              "content_digest": "7d1bf920ff730ddff86f328aaa3c3edf9d424170044bcd789a3ac55bffb5a839",
+              "position": 7,
+              "uid": "3069baac-fa68-5e94-8ba3-e888cf622f8c"
+            },
+            {
+              "content": "The local agent cannot determine the current prescription or whether use continues from medication notes alone.",
+              "content_digest": "89990815daa01f70a77b970b6a38cb9063f32fed898bd36e39a85551a1ad6200",
+              "position": 8,
+              "uid": "d7f215c6-57ea-561a-9627-3ce94203d507"
+            },
+            {
+              "content": "The waiting area at that clinic has too few chairs, so there may be periods when people must wait standing.",
+              "content_digest": "66c27ba4d6f3fb0d16b322a6de6d8afeb5c650fbe04162006a3288dd886ce1f0",
+              "position": 9,
+              "uid": "e6023aed-938d-5954-b8a7-8cb01340ee37"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "5ef01d19-8ecc-4490-bfb1-a23307c03d4a"
+        },
+        {
+          "context_digest": "3e738289251b9bdf3deb1c7a7540e6ce811b09e26a020af3a76d47b4c85c7ab1",
+          "context_name": "task-3/local/personal-memory/2025/02",
+          "context_uid": "ce7367b8-8532-5f43-972a-1665ca8e3e80",
+          "memories": [
+            {
+              "content": "The user reviewed their emergency-contact list in February 2025.",
+              "content_digest": "b2f108376dbbf53e8885b9c61080d4c873209d8c6e399c37412fa507fec08b0b",
+              "position": 0,
+              "uid": "3ff046b1-5810-51ca-8d43-c99ef6a90b41"
+            },
+            {
+              "content": "When preparation instructions arrived as a long paragraph, the user missed two items.",
+              "content_digest": "43bde452a403f85bcffa6f7ba6b3142ed45604730083327c6f57092b98f397aa",
+              "position": 1,
+              "uid": "e2a304e5-6100-5a5f-b508-0a7f28f6bda7"
+            },
+            {
+              "content": "After changing the same content into a checklist, the user marked every item they had prepared.",
+              "content_digest": "0f8115061b489894115fd252f079ee673504ed09dea4d88d558e64ed6189f1be",
+              "position": 2,
+              "uid": "51d03bff-3e33-5f68-9df6-ed7efa8e3de9"
+            },
+            {
+              "content": "The user called their mother on a weekend evening, but they spoke only briefly because the mother was out.",
+              "content_digest": "a9a1e7d87532667781677f4760beeb086f1e423365a915a0ec0b494892cbb361",
+              "position": 3,
+              "uid": "0987293e-3e21-5cbc-bb46-59245a5fa041"
+            },
+            {
+              "content": "The user called again on Saturday morning the following week and spoke for 40 minutes.",
+              "content_digest": "f08c9f170345686b2091e3b0ecd49f049e245d584886da62d586185010f713bf",
+              "position": 4,
+              "uid": "dc3de6ad-56ea-528a-a9b7-349e79af2326"
+            },
+            {
+              "content": "The user sent a text to an old number for an emergency contact and saw that delivery failed.",
+              "content_digest": "692321e996b9ac8e3500a2da7765f77e0d14c6f040cf2c33944cbdcb39c706de",
+              "position": 5,
+              "uid": "6546d41b-3d5b-5802-a9e7-ac028405e3f2"
+            },
+            {
+              "content": "After confirming the new number with their older sister, the user updated the contact list.",
+              "content_digest": "8d2e954a978e35c1da92948ccc8e45f38fcc25ea3fafe7c389ef546f6eda1ae1",
+              "position": 6,
+              "uid": "ea6eb9d2-9b01-5330-a4d5-886d4bc6cd85"
+            },
+            {
+              "content": "For nonurgent contact, the user's older sister prefers to reply by text when available rather than take a call immediately.",
+              "content_digest": "86639aee50903bc3261e6f88ac7d649c8197927fe214d5d17e0e6f5b3d69a59d",
+              "position": 7,
+              "uid": "12fe7e64-192e-5359-8f96-d2875f7e5399"
+            },
+            {
+              "content": "Before using an emergency contact, reconfirm the number and relationship information with the user.",
+              "content_digest": "78e41f61ba99eaf8840d5d318d08327ca6bb087addd6e22269e8b63281bb67c7",
+              "position": 8,
+              "uid": "e6f89ded-5687-5c25-8df8-88f288d450c6"
+            },
+            {
+              "content": "The user feels that a reminder the day before an appointment gives them enough time to recheck preparation items.",
+              "content_digest": "1a9fcc01df362c76b6d9c8e4fa2d33229a2ae2762c0c6d25e0fc89312a6e0ed4",
+              "position": 9,
+              "uid": "f9197c33-ff93-5215-a3a5-e4087bea2a0d"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "36bbee1c-01ab-45b4-af4c-0b88e2e3ffa7"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "Both frames support presenting instructions in discrete, manageable steps rather than dense blocks. Otherwise, they contribute separate information about appointments, medication, clinic access, transportation, family communication, and emergency-contact maintenance, without a substantive contradiction or unresolved ambiguity.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "5ef01d19-8ecc-4490-bfb1-a23307c03d4a",
+              "memory_uid": "8fdede6e-64ed-5e4c-81f4-7a1075165568"
+            },
+            {
+              "frame_uid": "5ef01d19-8ecc-4490-bfb1-a23307c03d4a",
+              "memory_uid": "21f679f7-7d75-5c01-b6c3-b0d4bea5f2f0"
+            },
+            {
+              "frame_uid": "36bbee1c-01ab-45b4-af4c-0b88e2e3ffa7",
+              "memory_uid": "e2a304e5-6100-5a5f-b508-0a7f28f6bda7"
+            },
+            {
+              "frame_uid": "36bbee1c-01ab-45b4-af4c-0b88e2e3ffa7",
+              "memory_uid": "51d03bff-3e33-5f68-9df6-ed7efa8e3de9"
+            }
+          ],
+          "reason": "The medication and appointment-preparation examples address the same operational choice about instruction format, consistently favoring separately actionable items without asserting identical contexts or outcomes.",
+          "status": "RESOLVED",
+          "summary": "Dense presentation contributed to missed instructions, while discrete itemization supported successful recording or completion.",
+          "uid": "0212f29b-50e0-534e-ba09-5816e2f3b5f9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5ef01d19-8ecc-4490-bfb1-a23307c03d4a",
+              "memory_uid": "12ba4249-9450-5f2e-b648-5369a7997b26"
+            }
+          ],
+          "reason": "This is independently useful reference-side dosing information with no compared-side claim about medication timing.",
+          "status": "RESOLVED",
+          "summary": "A medication note instructs the user to take one medication after the evening meal.",
+          "uid": "b2ba400b-7260-5c05-adee-16e6530b79cc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5ef01d19-8ecc-4490-bfb1-a23307c03d4a",
+              "memory_uid": "051e79ff-5363-5160-9a13-46568fd13306"
+            }
+          ],
+          "reason": "This reference-side event concerns fasting calculation and same-day verification, neither of which the compared frame directly addresses.",
+          "status": "RESOLVED",
+          "summary": "The user miscalculated fasting for a morning appointment and sought confirmation at reception.",
+          "uid": "f3cb011d-b129-59f8-b6b5-dd5b485203d2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5ef01d19-8ecc-4490-bfb1-a23307c03d4a",
+              "memory_uid": "e7f1fcf7-ee2f-57d8-98cb-781e31e481e8"
+            }
+          ],
+          "reason": "This reference-side observation independently concerns appointment-time effects on travel preparation.",
+          "status": "RESOLVED",
+          "summary": "The user felt less rushed preparing to travel for an afternoon visit than for a morning visit.",
+          "uid": "cf04ba17-ac5c-5776-a888-9b3731770408"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5ef01d19-8ecc-4490-bfb1-a23307c03d4a",
+              "memory_uid": "18d58666-2cfa-5959-8da9-2745bed56e11"
+            },
+            {
+              "frame_uid": "5ef01d19-8ecc-4490-bfb1-a23307c03d4a",
+              "memory_uid": "e6023aed-938d-5954-b8a7-8cb01340ee37"
+            }
+          ],
+          "reason": "The reference-side memories describe the same accessibility problem through the clinic condition and one resulting experience; the compared frame has no seating claim.",
+          "status": "RESOLVED",
+          "summary": "Insufficient clinic seating can require standing long enough to cause the user back discomfort.",
+          "uid": "e36124ff-ed47-5b25-be0f-9cd7f186e0ec"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5ef01d19-8ecc-4490-bfb1-a23307c03d4a",
+              "memory_uid": "3ec03d39-3240-56d1-80da-313f79f2bf3a"
+            }
+          ],
+          "reason": "This is a reference-only transportation benefit, distinct from communication or preparation topics in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A ride from the younger brother removed the need to arrange a separate route home.",
+          "uid": "d7e15008-97a9-5dfe-9453-b68980b97bb0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5ef01d19-8ecc-4490-bfb1-a23307c03d4a",
+              "memory_uid": "3069baac-fa68-5e94-8ba3-e888cf622f8c"
+            }
+          ],
+          "reason": "This is an independently useful reference-only scheduling preference for arranging transportation.",
+          "status": "RESOLVED",
+          "summary": "The younger brother prefers two days' notice for weekday-afternoon transportation requests.",
+          "uid": "850b6fa8-f337-5109-871f-872c26c0eba9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5ef01d19-8ecc-4490-bfb1-a23307c03d4a",
+              "memory_uid": "d7f215c6-57ea-561a-9627-3ce94203d507"
+            }
+          ],
+          "reason": "This reference-only reliability limitation is separate from the note's stated dosing time and has no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Medication notes alone do not establish the current prescription or whether use continues.",
+          "uid": "cec253db-0ae1-586f-bdfa-4a302026a18a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "36bbee1c-01ab-45b4-af4c-0b88e2e3ffa7",
+              "memory_uid": "3ff046b1-5810-51ca-8d43-c99ef6a90b41"
+            }
+          ],
+          "reason": "This dated compared-side maintenance event has no reference-side claim about emergency-contact review.",
+          "status": "RESOLVED",
+          "summary": "The user reviewed the emergency-contact list in February 2025.",
+          "uid": "6db060e3-d1b3-5191-a710-76638b3bc804"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "36bbee1c-01ab-45b4-af4c-0b88e2e3ffa7",
+              "memory_uid": "0987293e-3e21-5cbc-bb46-59245a5fa041"
+            },
+            {
+              "frame_uid": "36bbee1c-01ab-45b4-af4c-0b88e2e3ffa7",
+              "memory_uid": "dc3de6ad-56ea-528a-a9b7-349e79af2326"
+            }
+          ],
+          "reason": "The two compared-side events jointly describe how the mother's availability differed between those explicit calling occasions.",
+          "status": "RESOLVED",
+          "summary": "A weekend-evening call with the user's mother was brief because she was out, whereas a Saturday-morning call the following week lasted 40 minutes.",
+          "uid": "9ea936b9-c08f-50e2-8509-6f82eca12af4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "36bbee1c-01ab-45b4-af4c-0b88e2e3ffa7",
+              "memory_uid": "6546d41b-3d5b-5802-a9e7-ac028405e3f2"
+            },
+            {
+              "frame_uid": "36bbee1c-01ab-45b4-af4c-0b88e2e3ffa7",
+              "memory_uid": "ea6eb9d2-9b01-5330-a4d5-886d4bc6cd85"
+            },
+            {
+              "frame_uid": "36bbee1c-01ab-45b4-af4c-0b88e2e3ffa7",
+              "memory_uid": "e6f89ded-5687-5c25-8df8-88f288d450c6"
+            }
+          ],
+          "reason": "These compared-side memories form one contact-currency claim linking the observed failure, corrective update, and operational verification policy.",
+          "status": "RESOLVED",
+          "summary": "An obsolete emergency-contact number failed, was corrected after confirmation with the older sister, and contact details should be reconfirmed before use.",
+          "uid": "fe98e4ae-641d-5e37-a9a9-50605ea9ccb1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "36bbee1c-01ab-45b4-af4c-0b88e2e3ffa7",
+              "memory_uid": "12fe7e64-192e-5359-8f96-d2875f7e5399"
+            }
+          ],
+          "reason": "This is an independently useful compared-only communication preference.",
+          "status": "RESOLVED",
+          "summary": "For nonurgent contact, the older sister prefers replying by text when available instead of taking an immediate call.",
+          "uid": "98681c64-7a65-5c06-a7a1-a67f1b860524"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "36bbee1c-01ab-45b4-af4c-0b88e2e3ffa7",
+              "memory_uid": "f9197c33-ff93-5215-a3a5-e4087bea2a0d"
+            }
+          ],
+          "reason": "This compared-only reminder preference does not establish the cause of the reference-side fasting error or directly govern transportation notice.",
+          "status": "RESOLVED",
+          "summary": "The user considers a day-before appointment reminder sufficient for rechecking preparation items.",
+          "uid": "b01fba71-9e2b-5f22-abb0-3e8e9fe75f5b"
+        }
+      ],
+      "reports": {
+        "both": "Dense instruction delivery led to omissions, while itemized formats supported accurate capture and preparation.",
+        "compared_only": "The compared frame covers emergency-contact accuracy, family availability and communication preferences, and advance preparation reminders.",
+        "differences": "",
+        "reference_only": "The reference covers medication-note limits, appointment timing and fasting, seating access, and transportation by the younger brother."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "a9f82977-a29b-4f1f-ade5-24870c4998ef"
+    },
+    "analysis_digest": "06a776fb8f14ecba810353622a019921f57a9732d76de658172730878f2a79ab",
+    "key": "878a8d8b552d482577c16e7581ee9077e866bbf38ad0acb4c493f4479ee76424",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 73.63187220799955,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "878a8d8b552d482577c16e7581ee9077e866bbf38ad0acb4c493f4479ee76424",
+  "created_at": "2026-08-13T18:37:46.033132Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/03",
+  "pair_key": "a43605a03c9ac12ec0518f9bbb864485a5e84992e149bf37e68524d7e27c536d",
+  "provider_seconds": 73.63187220799955,
+  "right": "task-3/local/personal-memory/2025/02",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

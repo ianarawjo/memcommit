@@ -1,0 +1,312 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:25:19.064153+00:00",
+      "frames": [
+        {
+          "context_digest": "3dd1208c3f947a57bc5f1d490a28c999913d43cad775b2b01e50c6059d6b660e",
+          "context_name": "task-2/advisor1/safety",
+          "context_uid": "cd6c1fab-786a-52ea-9437-9a4d209ba419",
+          "memories": [
+            {
+              "content": "Specify the order and recipients for reporting serious discomfort during the study.",
+              "content_digest": "1de38a3ec5fc3267ebeb35482a458d4aaf50d2aea44c6dba334f184e50ddddd2",
+              "position": 0,
+              "uid": "9d6f5228-d182-571a-83d2-6a67becb7736"
+            },
+            {
+              "content": "Field staff rely on a pre-defined contact sequence when serious discomfort is reported.",
+              "content_digest": "ed3a3b19d92a50c7dd324981b702bac31e0130fda38fe37150e500481ed11d84",
+              "position": 1,
+              "uid": "00ed485d-66c2-59ad-9c5b-9ae445412690"
+            },
+            {
+              "content": "Establish criteria for halting the use of a design alternative if recurring severe errors appear during formative evaluation.",
+              "content_digest": "dcca56df756b89f89a0a9dbf2bf45aee6480392b368c9cf3402223d3084b801b",
+              "position": 2,
+              "uid": "9c6e1561-f671-52cb-aa67-245cc4987ad4"
+            },
+            {
+              "content": "Do not include a design alternative halted for safety reasons in subsequent evaluation iterations without modification.",
+              "content_digest": "01668098161666622f4d7ed8298e3e63a06fa9b10a4cfd53b200d820f96f5c50",
+              "position": 3,
+              "uid": "2381ecf7-2b11-583d-91d9-0a5cfc279ba1"
+            },
+            {
+              "content": "Even in controlled environments, delayed prototype recovery procedures increase session interruption time and alter data collection conditions for the same task.",
+              "content_digest": "fd0f364ef66cfa7be937779ed4ce3ffb1a406bc227d09c26b288a751c5e0d427",
+              "position": 4,
+              "uid": "c5ce1b00-36d9-5cdd-a318-93b88ca0e322"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "6670de67-5a76-4f35-82f3-a522facaddfc"
+        },
+        {
+          "context_digest": "bf5136a518ce85246184349a0194e446748710ed6da95e5c97d4a31d74ddc1b9",
+          "context_name": "task-2/advisor2/review",
+          "context_uid": "3398ba87-f01e-56bd-9da2-0ed0894524fa",
+          "memories": [
+            {
+              "content": "Conduct one review prior to submission focusing solely on the validity of user problems, system interventions, and field evaluation logic.",
+              "content_digest": "9b0b5596ec5924a6141926bfc337ec6e23d77dfb7b65facb26b42109f05f1fe4",
+              "position": 0,
+              "uid": "6d203c86-b6e0-586a-b896-b654fa319ed1"
+            },
+            {
+              "content": "Cross-check whether research questions align with the core functions of the system.",
+              "content_digest": "f7f9f49efe539881dae49a96adce0ec349435e4cc7f55229c88097e54fe03f93",
+              "position": 1,
+              "uid": "6b75bfb1-67f5-50bb-9e0c-04026062de96"
+            },
+            {
+              "content": "Cross-check whether field tasks align with representative measures.",
+              "content_digest": "3e993f6c978e14b5b0f6e8ada40d8a0067981e943c67636e9599fb652dca44a4",
+              "position": 2,
+              "uid": "3abfda89-82ab-5cc5-bdcd-5e2f274fd727"
+            },
+            {
+              "content": "Cross-check whether the evidence to be collected aligns with the design and operational decisions to be changed.",
+              "content_digest": "a4761a8dac6c60a2132619c8c8e963aca0d61216d689786b18574f5e30f1f3aa",
+              "position": 3,
+              "uid": "f14f1974-9035-5a2c-931a-89a5004a2567"
+            },
+            {
+              "content": "Finally verify that the user problem, system intervention, field evaluation, and expected contribution form one coherent logical flow.",
+              "content_digest": "47198a770770dc805e0f40a5f9b9c34ae1999f39ec2f9fa1c34b3280f21f5477",
+              "position": 4,
+              "uid": "6ba1d344-5d98-5c25-ba1e-b28c08d39747"
+            },
+            {
+              "content": "HCI reviewers view the validity of design interventions as low if research questions do not connect to system functions.",
+              "content_digest": "ffa754352dfecc597f84cff7cbf8607a12bbfd99ac22250cc84392bd85e37e73",
+              "position": 5,
+              "uid": "4a85ebbd-a4ee-5c88-9e93-5fc545f41c64"
+            },
+            {
+              "content": "HCI reviewers view the validity of evaluation plans as low if field tasks fail to generate representative measures.",
+              "content_digest": "f29eb5429d767b0fa171b7e9862b3d8d06dfd388739e95acd67b2321aaf1a91e",
+              "position": 6,
+              "uid": "75c4c71d-28e3-559c-99d1-f0dccc31a9e2"
+            },
+            {
+              "content": "HCI reviewers view the practical utility of contributions as low if collected evidence cannot change design or operational decisions.",
+              "content_digest": "6b9ae0bc59cda995d674479dfe95f43359ff04e68cb07633957885ee5cf1336c",
+              "position": 7,
+              "uid": "577e5506-78e8-5768-b288-7a5986347cce"
+            },
+            {
+              "content": "Before submission, conduct a sequential walkthrough with field liaisons of installation failures, operational interruptions, and recovery scenarios.",
+              "content_digest": "115fa1f22eb7f55918620418f89def51ba84bd36e102875a5f5e560de5305dda",
+              "position": 8,
+              "uid": "9ce34a9a-4ba2-5b32-a1de-b0469ddc3f95"
+            },
+            {
+              "content": "Verify in one sentence how each proposed contribution could actually alter specific design or operational decisions.",
+              "content_digest": "1c6ef38e42f40e9cd6ab5323deaa825efb1136b926b66af9337ea6debaf8600e",
+              "position": 9,
+              "uid": "f8253f92-c60c-57e1-a630-6b31abe080ae"
+            },
+            {
+              "content": "The user must distinguish unconfirmed field partners and equipment from finalized ones so remaining execution risks can be assessed.",
+              "content_digest": "c2eb0936c09d8796092950aba699664f79f2222f27523e37a1af5feabe2b8058",
+              "position": 10,
+              "uid": "f5ad6933-3e22-5c47-bdaf-bacc9c9a5b3c"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "c7992cc8-3e02-4d47-8cf6-f66376b916ba"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames converge on anticipating operational interruptions and recovery, while otherwise contributing complementary material. The reference emphasizes participant-discomfort escalation and safety controls for design alternatives; the compared frame emphasizes submission logic, evaluation alignment, decision-relevant contributions, and unresolved execution dependencies.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "6670de67-5a76-4f35-82f3-a522facaddfc",
+              "memory_uid": "c5ce1b00-36d9-5cdd-a318-93b88ca0e322"
+            },
+            {
+              "frame_uid": "c7992cc8-3e02-4d47-8cf6-f66376b916ba",
+              "memory_uid": "9ce34a9a-4ba2-5b32-a1de-b0469ddc3f95"
+            }
+          ],
+          "reason": "The reference explains the consequences of delayed prototype recovery, while the compared frame prescribes a pre-submission walkthrough of interruption and recovery scenarios; both materially support recovery planning without imposing inconsistent requirements.",
+          "status": "RESOLVED",
+          "summary": "Operational recovery preparedness should account for interruptions and recovery scenarios that can affect field-session continuity and data conditions.",
+          "uid": "d282f15f-d8a9-5345-ae51-d3d15e54b236"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6670de67-5a76-4f35-82f3-a522facaddfc",
+              "memory_uid": "9d6f5228-d182-571a-83d2-6a67becb7736"
+            },
+            {
+              "frame_uid": "6670de67-5a76-4f35-82f3-a522facaddfc",
+              "memory_uid": "00ed485d-66c2-59ad-9c5b-9ae445412690"
+            }
+          ],
+          "reason": "These reference memories state complementary parts of one escalation-protocol claim, and the compared frame contains no corresponding participant-discomfort reporting policy.",
+          "status": "RESOLVED",
+          "summary": "Serious discomfort reports require a predefined sequence identifying the order and recipients for escalation by field staff.",
+          "uid": "ae8a9dd9-1814-5038-af4a-6a18dee32f01"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6670de67-5a76-4f35-82f3-a522facaddfc",
+              "memory_uid": "9c6e1561-f671-52cb-aa67-245cc4987ad4"
+            }
+          ],
+          "reason": "This is a standalone reference-side rule governing the decision to stop an alternative, with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Formative evaluation should define criteria for halting a design alternative when severe errors recur.",
+          "uid": "63ba3e7a-3034-5fdc-aed6-f91a9a0d9057"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6670de67-5a76-4f35-82f3-a522facaddfc",
+              "memory_uid": "2381ecf7-2b11-583d-91d9-0a5cfc279ba1"
+            }
+          ],
+          "reason": "This independently governs reentry after a safety halt rather than the initial stopping decision, and the compared frame provides no corresponding rule.",
+          "status": "RESOLVED",
+          "summary": "A design alternative halted for safety reasons must be modified before it returns to later evaluation iterations.",
+          "uid": "158baac7-1744-53e0-91e2-cde1b5fed202"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c7992cc8-3e02-4d47-8cf6-f66376b916ba",
+              "memory_uid": "6d203c86-b6e0-586a-b896-b654fa319ed1"
+            },
+            {
+              "frame_uid": "c7992cc8-3e02-4d47-8cf6-f66376b916ba",
+              "memory_uid": "6ba1d344-5d98-5c25-ba1e-b28c08d39747"
+            }
+          ],
+          "reason": "These compared memories provide the review instruction and its overarching coherence test as parts of one submission-logic claim absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A focused pre-submission review should verify a coherent logical flow among the user problem, system intervention, field evaluation, and expected contribution.",
+          "uid": "b211f4ab-4686-53f5-bd3f-d20a8ee64d2b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c7992cc8-3e02-4d47-8cf6-f66376b916ba",
+              "memory_uid": "6b75bfb1-67f5-50bb-9e0c-04026062de96"
+            },
+            {
+              "frame_uid": "c7992cc8-3e02-4d47-8cf6-f66376b916ba",
+              "memory_uid": "4a85ebbd-a4ee-5c88-9e93-5fc545f41c64"
+            }
+          ],
+          "reason": "The compared memories pair an alignment check with its review consequence, forming one claim not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Research questions should align with core system functions because disconnection weakens the perceived validity of design interventions.",
+          "uid": "0669c4f5-a9e7-533e-a8f6-e202900dd19e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c7992cc8-3e02-4d47-8cf6-f66376b916ba",
+              "memory_uid": "3abfda89-82ab-5cc5-bdcd-5e2f274fd727"
+            },
+            {
+              "frame_uid": "c7992cc8-3e02-4d47-8cf6-f66376b916ba",
+              "memory_uid": "75c4c71d-28e3-559c-99d1-f0dccc31a9e2"
+            }
+          ],
+          "reason": "The compared memories pair an evaluation-alignment check with its review consequence, and the reference frame has no equivalent policy.",
+          "status": "RESOLVED",
+          "summary": "Field tasks should generate representative measures because failure to do so weakens the perceived validity of the evaluation plan.",
+          "uid": "e58e04e7-bdf7-5a35-a968-55dcd1916079"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c7992cc8-3e02-4d47-8cf6-f66376b916ba",
+              "memory_uid": "f14f1974-9035-5a2c-931a-89a5004a2567"
+            },
+            {
+              "frame_uid": "c7992cc8-3e02-4d47-8cf6-f66376b916ba",
+              "memory_uid": "577e5506-78e8-5768-b288-7a5986347cce"
+            },
+            {
+              "frame_uid": "c7992cc8-3e02-4d47-8cf6-f66376b916ba",
+              "memory_uid": "f8253f92-c60c-57e1-a630-6b31abe080ae"
+            }
+          ],
+          "reason": "These compared memories express the alignment requirement, its practical-utility consequence, and a concise verification method as parts of one decision-relevance claim absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Collected evidence and proposed contributions should be explicitly connected to specific design or operational decisions they could alter.",
+          "uid": "401a4fec-86b7-5daf-b1e5-5f8a0129549d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c7992cc8-3e02-4d47-8cf6-f66376b916ba",
+              "memory_uid": "f5ad6933-3e22-5c47-bdaf-bacc9c9a5b3c"
+            }
+          ],
+          "reason": "This is an independently useful compared-side disclosure requirement concerning field readiness, with no corresponding information in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Unconfirmed field partners and equipment must be distinguished from finalized resources so remaining execution risks can be assessed.",
+          "uid": "602f5a83-8dd6-5bbc-87ff-7a9dfc8b4fd5"
+        }
+      ],
+      "reports": {
+        "both": "Both address recovery readiness by linking operational interruptions and recovery scenarios to the integrity of field sessions and their data conditions.",
+        "compared_only": "The compared frame covers pre-submission coherence review, alignment among questions, functions, tasks, measures, evidence and decisions, contribution utility, and disclosure of unconfirmed field resources.",
+        "differences": "",
+        "reference_only": "The reference specifies discomfort-reporting escalation, safety-based stopping criteria, and restrictions on reusing halted alternatives without modification."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "57b614ba-0560-4129-9a9f-8651215091da"
+    },
+    "analysis_digest": "f6d0cd6e8b73b2db2e0b6be8c2deac9a846d9ed653d19cbdcef8a7c2f421271e",
+    "key": "f44aac04e073f9415c8c25c69b40392f9ab8b1fd48b9a441cb3d05d897644f3f",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 48.527307750002365,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "f44aac04e073f9415c8c25c69b40392f9ab8b1fd48b9a441cb3d05d897644f3f",
+  "created_at": "2026-08-13T18:26:07.591066Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/safety",
+  "pair_key": "07c9a6d1a3c2074862c781960c97dc8d768dceaf2166bd79377ed0b2011539d6",
+  "provider_seconds": 48.527307750002365,
+  "right": "task-2/advisor2/review",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

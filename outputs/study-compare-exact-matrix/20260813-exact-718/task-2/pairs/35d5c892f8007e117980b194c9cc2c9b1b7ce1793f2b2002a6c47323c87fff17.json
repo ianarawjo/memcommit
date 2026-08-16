@@ -1,0 +1,396 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:28:41.240094+00:00",
+      "frames": [
+        {
+          "context_digest": "587a9d2fb6abf2b486ccfc50ff85ae7280d7d7bd4003d85ce5877a4edfc9293f",
+          "context_name": "task-2/advisor1/terminology",
+          "context_uid": "7699c7c5-e48b-5548-b0aa-256d793c6c06",
+          "memories": [
+            {
+              "content": "Use the same term throughout the proposal for the same interaction concept or interface element.",
+              "content_digest": "2f11d02134609c6397d8f60105cc452e34129bc1c427a512455247e54951f18a",
+              "position": 0,
+              "uid": "949a884d-b348-5fa0-b1dd-adbebafe10a9"
+            },
+            {
+              "content": "Use abbreviations only for recurring terms of three or more words.",
+              "content_digest": "dcceb4407d24df4034dceca613413471bb46898a487aed0cc0905e48ede482e7",
+              "position": 1,
+              "uid": "2f484151-b5fc-51a9-8a88-b30a403617b3"
+            },
+            {
+              "content": "Present the full name and abbreviation together when using an abbreviation for the first time.",
+              "content_digest": "02e1b2b4cbc8f9a61e299bf1500663ae8cd4036155b2a7dec8c2ce40087ac29b",
+              "position": 2,
+              "uid": "21131a6f-d35c-51e3-895f-46cd21a3b566"
+            },
+            {
+              "content": "Prioritize the research role over diagnostic labels or deficits when referring to participants.",
+              "content_digest": "7b99c6ec90abdbb68d4af8e95a03df3149b9d2d4d637fbd33a70a2acf7073a12",
+              "position": 3,
+              "uid": "e02c3110-05c4-58a4-8d76-c8fd2426a0d5"
+            },
+            {
+              "content": "Reviewers from different subfields struggle to infer undefined abbreviations from context alone.",
+              "content_digest": "13af5eb9fe88f3f2d73192adfb48f7a20de09e22e777a952daa83ca1c030f9ee",
+              "position": 4,
+              "uid": "af028910-e48b-5605-b92b-9378bdfa525c"
+            },
+            {
+              "content": "Use the term formative evaluation for studies seeking design modification evidence, and distinguish it from final efficacy judgments.",
+              "content_digest": "4ba9bca850286ff6286cf4b3bf44395d608ec700c46acd8cd26c54e26d43b378",
+              "position": 5,
+              "uid": "39792d18-2be0-5135-a063-c5213247d330"
+            },
+            {
+              "content": "The user can have contribution labels such as principles, models, or guidelines approved only if they align with the abstraction level of the actual deliverables.",
+              "content_digest": "efed93b748ce74e3e9ed96949bf539c809ea4c36ae77bbb54670285f691f74e9",
+              "position": 6,
+              "uid": "bcaa8c30-ca6e-5b9f-af93-88513a2f16b1"
+            },
+            {
+              "content": "Design principles describe the relationship between conditions and outcomes rather than serving as instructions that merely replicate a single screen layout.",
+              "content_digest": "22385c2bb345db07d19c442e5d99a5c527c2795848b9e29fe198d0ede6255d6f",
+              "position": 7,
+              "uid": "82ad9fe2-4063-5e89-9097-c975aa2920cb"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "bbd56c4a-3337-404d-a5a7-d3565814d43b"
+        },
+        {
+          "context_digest": "b379636c1034c71339b717628e5e233c5f245d0452c487967c8e881d38e4b4a7",
+          "context_name": "task-2/advisor2/feasibility",
+          "context_uid": "2a4a102a-14f5-53bb-88ef-681448ebecff",
+          "memories": [
+            {
+              "content": "Mark unverified schedule assumptions as such.",
+              "content_digest": "d4cdcdbcdb51d96f9a7435e72c2e4ef25a3e3822a765a88afafeca5194bda96e",
+              "position": 0,
+              "uid": "5c9755f8-78bd-5654-a3c7-8be0864e4f12"
+            },
+            {
+              "content": "Mark unverified recruitment assumptions as such.",
+              "content_digest": "4cc28528fee1c7b09f709638e2b57d3bc9efe635d20500ee98567f8f59b8cf21",
+              "position": 1,
+              "uid": "75af48aa-b39e-5b55-95d9-f7f7d2becbad"
+            },
+            {
+              "content": "Mark unverified technical assumptions as such.",
+              "content_digest": "8942e49cd46e3e9746330349df11e49d4a6c9250c7aa4c52c2d9ade1c97c735c",
+              "position": 2,
+              "uid": "292e33b0-4bfd-5e3a-9379-0fbf3619c42d"
+            },
+            {
+              "content": "Trace back the resources required for each core prototype feature and field research procedure.",
+              "content_digest": "b1ac088b664c62c3c1cfb96f6bb31a3ab5fc0fd77d0d1fba58e1da621b5dd56a",
+              "position": 3,
+              "uid": "c0c1fd8d-1aae-51a3-a1d4-66c1481d7b48"
+            },
+            {
+              "content": "Operations reviewers judge feasibility by examining the personnel required for each procedure.",
+              "content_digest": "3199aba38f58f677147b94eca54221e4d0add145a2a58194c3851efcc22e8fab",
+              "position": 4,
+              "uid": "7be25c27-6d67-50fe-90b5-76fca32a93d8"
+            },
+            {
+              "content": "Operations reviewers judge feasibility by examining the equipment required for each procedure.",
+              "content_digest": "13f9b86391d66cf558fc6eead29969c80acdf78d2164c96aa99641bf6c2891fd",
+              "position": 5,
+              "uid": "1aae182f-4eb3-58b7-b8cd-5ce517ead36a"
+            },
+            {
+              "content": "Operations reviewers judge feasibility by examining the time required for each procedure.",
+              "content_digest": "29efef51e7b8e35c459099af93b8ea90d019d83de3cf894e04b184078619fff4",
+              "position": 6,
+              "uid": "84f6e5e3-96b4-538b-a633-1b656204a296"
+            },
+            {
+              "content": "Document separately the commitments and confirmation status of field partners required for recruitment, installation, and operational support.",
+              "content_digest": "ba0ceb0fa886251bfe2b5a83154500862f8c2d4a82ed74fc9ddb3600010cc0b3",
+              "position": 7,
+              "uid": "16a461c4-d90d-5d0f-bfd0-4c1a116ec2be"
+            },
+            {
+              "content": "Designate a responsible party for software updates, equipment inspections, and user support during the deployment period.",
+              "content_digest": "54caa62836c502faf35561d45fba1d02a059c8ed6436ce714114bd392cb3bc9d",
+              "position": 8,
+              "uid": "0ce26892-666f-5ebe-95b2-c6f48915f18b"
+            },
+            {
+              "content": "The user's deployment readiness can be assessed only when dependencies on external services and field personnel are visible.",
+              "content_digest": "931fa67dd8ea84954ce3f0b9631301c320fdcf1bf46fb7fda0214e77636c8c1c",
+              "position": 9,
+              "uid": "4f35fd0c-005a-56a7-b33a-d74bde2d65eb"
+            },
+            {
+              "content": "Field schedules and assigned personnel may change due to operational factors beyond the researcher’s control.",
+              "content_digest": "71739481ce3043f342d9c7c52297c7644931a0a096215fc15150915b74968d84",
+              "position": 10,
+              "uid": "3b96bf66-59e4-5dbf-98d3-937402abc67b"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "4351d00f-1dd0-452e-97ce-5b1a563c6170"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The reference frame concentrates on terminology, participant-centered language, evaluation naming, and contribution abstraction. The compared frame instead addresses feasibility, assumption transparency, resourcing, partner commitments, deployment ownership, dependencies, and operational uncertainty; neither frame supplies a scope-aligned counterpart to the other’s claims.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbd56c4a-3337-404d-a5a7-d3565814d43b",
+              "memory_uid": "949a884d-b348-5fa0-b1dd-adbebafe10a9"
+            }
+          ],
+          "reason": "Only the reference frame provides this independently useful terminology-consistency rule.",
+          "status": "RESOLVED",
+          "summary": "The proposal should use one consistent term for each interaction concept or interface element.",
+          "uid": "c360862d-8735-5789-a6f3-b12e821f5264"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbd56c4a-3337-404d-a5a7-d3565814d43b",
+              "memory_uid": "2f484151-b5fc-51a9-8a88-b30a403617b3"
+            }
+          ],
+          "reason": "Only the reference frame defines when a term is eligible for abbreviation.",
+          "status": "RESOLVED",
+          "summary": "Abbreviations should be reserved for recurring terms containing at least three words.",
+          "uid": "13201a55-8400-5251-a472-b61ca8bb3114"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbd56c4a-3337-404d-a5a7-d3565814d43b",
+              "memory_uid": "21131a6f-d35c-51e3-895f-46cd21a3b566"
+            }
+          ],
+          "reason": "Only the reference frame establishes this first-use presentation requirement.",
+          "status": "RESOLVED",
+          "summary": "An abbreviation’s first use should present it together with its full name.",
+          "uid": "eb7ce16d-dc06-5fbe-a704-127e76182015"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbd56c4a-3337-404d-a5a7-d3565814d43b",
+              "memory_uid": "e02c3110-05c4-58a4-8d76-c8fd2426a0d5"
+            }
+          ],
+          "reason": "Only the reference frame supplies this participant-language policy.",
+          "status": "RESOLVED",
+          "summary": "Participant references should foreground the research role rather than diagnoses or deficits.",
+          "uid": "21096542-c539-5192-a691-9c05a57ed269"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbd56c4a-3337-404d-a5a7-d3565814d43b",
+              "memory_uid": "af028910-e48b-5605-b92b-9378bdfa525c"
+            }
+          ],
+          "reason": "Only the reference frame records this cross-subfield comprehension problem.",
+          "status": "RESOLVED",
+          "summary": "Reviewers across subfields cannot reliably infer undefined abbreviations from context.",
+          "uid": "000f203b-47b0-5fe8-9a99-c6264e7ebf4a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbd56c4a-3337-404d-a5a7-d3565814d43b",
+              "memory_uid": "39792d18-2be0-5135-a063-c5213247d330"
+            }
+          ],
+          "reason": "Only the reference frame defines this evaluation terminology and boundary.",
+          "status": "RESOLVED",
+          "summary": "Studies seeking evidence for design modification should be called formative evaluations and distinguished from final efficacy judgments.",
+          "uid": "24c26a6a-b2f4-5ad4-aece-448077fa4248"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbd56c4a-3337-404d-a5a7-d3565814d43b",
+              "memory_uid": "bcaa8c30-ca6e-5b9f-af93-88513a2f16b1"
+            }
+          ],
+          "reason": "Only the reference frame establishes this approval criterion for labels such as principles, models, or guidelines.",
+          "status": "RESOLVED",
+          "summary": "Contribution labels should be approved only when their abstraction matches the actual deliverables.",
+          "uid": "2a894112-6f78-56c3-b2ec-ae348756d3d9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbd56c4a-3337-404d-a5a7-d3565814d43b",
+              "memory_uid": "82ad9fe2-4063-5e89-9097-c975aa2920cb"
+            }
+          ],
+          "reason": "Only the reference frame defines the appropriate abstraction and function of design principles.",
+          "status": "RESOLVED",
+          "summary": "Design principles should express condition–outcome relationships rather than instructions reproducing one screen layout.",
+          "uid": "d4a31ec3-1e45-5f21-ba78-66d74ce3bc87"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4351d00f-1dd0-452e-97ce-5b1a563c6170",
+              "memory_uid": "5c9755f8-78bd-5654-a3c7-8be0864e4f12"
+            },
+            {
+              "frame_uid": "4351d00f-1dd0-452e-97ce-5b1a563c6170",
+              "memory_uid": "75af48aa-b39e-5b55-95d9-f7f7d2becbad"
+            },
+            {
+              "frame_uid": "4351d00f-1dd0-452e-97ce-5b1a563c6170",
+              "memory_uid": "292e33b0-4bfd-5e3a-9379-0fbf3619c42d"
+            }
+          ],
+          "reason": "The compared memories split one underlying one-sided transparency rule across three assumption domains.",
+          "status": "RESOLVED",
+          "summary": "Unverified schedule, recruitment, and technical assumptions should be explicitly marked.",
+          "uid": "b41c2bda-678d-5c60-821c-a92538614987"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4351d00f-1dd0-452e-97ce-5b1a563c6170",
+              "memory_uid": "c0c1fd8d-1aae-51a3-a1d4-66c1481d7b48"
+            }
+          ],
+          "reason": "Only the compared frame requires feature- and procedure-level resource traceability.",
+          "status": "RESOLVED",
+          "summary": "Required resources should be traced to each core prototype feature and field research procedure.",
+          "uid": "86a8ed4a-e5da-5d82-9bcb-d6607c988340"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4351d00f-1dd0-452e-97ce-5b1a563c6170",
+              "memory_uid": "7be25c27-6d67-50fe-90b5-76fca32a93d8"
+            },
+            {
+              "frame_uid": "4351d00f-1dd0-452e-97ce-5b1a563c6170",
+              "memory_uid": "1aae182f-4eb3-58b7-b8cd-5ce517ead36a"
+            },
+            {
+              "frame_uid": "4351d00f-1dd0-452e-97ce-5b1a563c6170",
+              "memory_uid": "84f6e5e3-96b4-538b-a633-1b656204a296"
+            }
+          ],
+          "reason": "The compared memories split one underlying feasibility criterion across its principal resource inputs.",
+          "status": "RESOLVED",
+          "summary": "Operational feasibility review should examine the personnel, equipment, and time required for each procedure.",
+          "uid": "dea7c8f6-973c-5701-bd82-7a57a99dfbce"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4351d00f-1dd0-452e-97ce-5b1a563c6170",
+              "memory_uid": "16a461c4-d90d-5d0f-bfd0-4c1a116ec2be"
+            }
+          ],
+          "reason": "Only the compared frame specifies this partner-commitment documentation.",
+          "status": "RESOLVED",
+          "summary": "Field-partner commitments and confirmation status should be documented separately for recruitment, installation, and operational support.",
+          "uid": "544c5dc0-1196-525d-9d13-4e4fa58634a7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4351d00f-1dd0-452e-97ce-5b1a563c6170",
+              "memory_uid": "0ce26892-666f-5ebe-95b2-c6f48915f18b"
+            }
+          ],
+          "reason": "Only the compared frame assigns ownership for these deployment-period functions.",
+          "status": "RESOLVED",
+          "summary": "Responsible parties should be designated for software updates, equipment inspections, and user support during deployment.",
+          "uid": "0b03cff0-09ea-579c-beec-317a4ea7adc7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4351d00f-1dd0-452e-97ce-5b1a563c6170",
+              "memory_uid": "4f35fd0c-005a-56a7-b33a-d74bde2d65eb"
+            }
+          ],
+          "reason": "Only the compared frame states this prerequisite for assessing deployment readiness.",
+          "status": "RESOLVED",
+          "summary": "Deployment readiness assessment requires visible dependencies on external services and field personnel.",
+          "uid": "34406476-de6b-5a42-9513-360da41e0399"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4351d00f-1dd0-452e-97ce-5b1a563c6170",
+              "memory_uid": "3b96bf66-59e4-5dbf-98d3-937402abc67b"
+            }
+          ],
+          "reason": "Only the compared frame records this operational contingency.",
+          "status": "RESOLVED",
+          "summary": "Field schedules and assigned personnel may change because of operational factors outside researcher control.",
+          "uid": "cc2f73ab-1198-56ae-8c66-bfaa45196aa1"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame uniquely covers flagged assumptions, resource and feasibility analysis, partner commitments, deployment responsibilities, dependency visibility, and operational schedule or staffing changes.",
+        "differences": "",
+        "reference_only": "The reference uniquely governs consistent terminology, abbreviation use and explanation, participant-centered wording, formative-evaluation naming, and abstraction-appropriate contribution labels and design principles."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "c381aaa9-41d3-4755-850d-e9f8d26bb43a"
+    },
+    "analysis_digest": "b3660c237af02d20e6bfc50943997bb033a8a7335f3bbd4f2065637ea00ed90a",
+    "key": "134ccd0653337405a40557ce0f8a065e39d34876a2767eb981eab0c3a7087924",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 42.8611046670012,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "134ccd0653337405a40557ce0f8a065e39d34876a2767eb981eab0c3a7087924",
+  "created_at": "2026-08-13T18:29:24.100570Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/terminology",
+  "pair_key": "35d5c892f8007e117980b194c9cc2c9b1b7ce1793f2b2002a6c47323c87fff17",
+  "provider_seconds": 42.8611046670012,
+  "right": "task-2/advisor2/feasibility",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

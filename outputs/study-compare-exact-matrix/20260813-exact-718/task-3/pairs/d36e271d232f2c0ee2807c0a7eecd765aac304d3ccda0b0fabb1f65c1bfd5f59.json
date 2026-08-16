@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:47:46.609985+00:00",
+      "frames": [
+        {
+          "context_digest": "0b8af0ea4e580cc332939d026149e543e9251c54de246e3eabb83c941e6c12f2",
+          "context_name": "task-3/local/personal-memory/2024/12",
+          "context_uid": "66c3e5de-61bb-5795-8e5a-4e28f64be857",
+          "memories": [
+            {
+              "content": "The user used an accessible entrance at a clinic in December 2024.",
+              "content_digest": "a940bc9fb7423a1bdb9dde547cd39eb8ad66d4fa3051649c62b042fc63935263",
+              "position": 0,
+              "uid": "a6923620-267d-5129-b8c4-cd9b1e1a1e7b"
+            },
+            {
+              "content": "On a day snow had accumulated and blocked the main-entrance ramp, the user went to a side entrance.",
+              "content_digest": "460c05d8e8b4b7443ff42cbeead66e07201846394bcbe5948f63e585a197006f",
+              "position": 1,
+              "uid": "fb0e1d1f-0ef5-5214-b6d7-f6ca5c68f582"
+            },
+            {
+              "content": "The user learned on site that the elevator was under inspection and delayed the appointment.",
+              "content_digest": "b5efa024c597b57651178431d22173d4ca1242c3a4c9607f8bd5a7ff681af6f4",
+              "position": 2,
+              "uid": "4cb45120-4376-5c7b-ae92-faa9e4b9330c"
+            },
+            {
+              "content": "The day before the next visit, the user called to check whether the elevator would be operating.",
+              "content_digest": "93c66066de480a4d2f30b7b7c4d955acfceb227ac898766b6375829804b580eb",
+              "position": 3,
+              "uid": "479f4434-879c-5335-b0c9-c0bfa19ecdcd"
+            },
+            {
+              "content": "The user waited for their turn in front of a ticket machine near the waiting chairs.",
+              "content_digest": "fada8c09d46af2e1bcbd2b1e97d9cb786ceca83fc13d1240627639dd6cb96e65",
+              "position": 4,
+              "uid": "0f2c78a7-8f92-573d-af8a-a360ceb77b24"
+            },
+            {
+              "content": "On a day the user waited in a corridor without chairs, they leaned against the wall and changed position several times.",
+              "content_digest": "0037afaeb85d94f985b1628b7b8f8194fb00d7d7e72e1746c6bae2c2ba66fe6f",
+              "position": 5,
+              "uid": "7b9197ac-4263-5169-8d3b-d34f5d893d36"
+            },
+            {
+              "content": "On a day their older sister accompanied them, the user found a place to sit immediately after reception.",
+              "content_digest": "1ae59de552a922fd3b4d39e7e5dc1ec65ff08ee68e3448f2152f27dfec710a5a",
+              "position": 6,
+              "uid": "7b0b7571-f29c-56e5-a27a-82d69a4a6982"
+            },
+            {
+              "content": "Reception staff expect that a first-time visitor may ask where the accessible entrance is.",
+              "content_digest": "7dc3300dc630b737c0f7b437eba30179aa6aaa03efd61c968604ee505a43aa73",
+              "position": 7,
+              "uid": "e9515d6b-10d9-579f-abf7-5030db64218a"
+            },
+            {
+              "content": "The local agent cannot infer the user's condition from a record of using an accessible route alone.",
+              "content_digest": "2d8a50f62f32c43ca62e1e23b75c34361ece43fd8367964174fdc73d66795df4",
+              "position": 8,
+              "uid": "8e57141d-c603-56cd-ab9e-c14b4e944b45"
+            },
+            {
+              "content": "Snow accumulation and snow-removal work can temporarily block an entrance route used under ordinary conditions.",
+              "content_digest": "4fb152c120860688789bdd4b825de45799e9fa00c0c18c334492dd4b274adde9",
+              "position": 9,
+              "uid": "a6076438-307c-56fe-9d2c-848181846ce5"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "e3f295d1-fa45-4999-aba6-b8308506118e"
+        },
+        {
+          "context_digest": "a2ea3c6aa8c1680fcf9a7dd71d0dbff822c6af5493b34b79022f5e740bb35259",
+          "context_name": "task-3/local/personal-memory/2025/07",
+          "context_uid": "5c264a7f-0300-587c-ad1c-0439cedc7737",
+          "memories": [
+            {
+              "content": "The user keeps a travel power bank in the first drawer beneath the desk.",
+              "content_digest": "deb13f4eae5e32bc035da0558fa1b290f4bac0dfa5ca350d5abd0456af07ab7f",
+              "position": 0,
+              "uid": "447bfd8d-1490-5404-a2b4-13b4587e6aba"
+            },
+            {
+              "content": "The user packed three pairs of shoes for a two-night trip but wore only one pair.",
+              "content_digest": "097601b179049e1c4dd6b20a2fe2703ffb0d4a89d5ae15a763d339b989da50d8",
+              "position": 1,
+              "uid": "3ab0326a-a006-51ea-9348-7ada19a23bce"
+            },
+            {
+              "content": "For the next two-night trip, the user packed only one pair of walking shoes and reduced the bag's weight.",
+              "content_digest": "afd02b05250a60ad461e01132a94f0105d419521803082d1057205a2bc9a92ad",
+              "position": 2,
+              "uid": "ef467ab6-8ba6-5f81-8f12-578ec1824e09"
+            },
+            {
+              "content": "On a trip when the user forgot a charging cable, they bought a new one after arrival.",
+              "content_digest": "bbe1ac80a2311e0e631446b811d799494dc5ca4db408fc63d1cb09a01e2cd105",
+              "position": 3,
+              "uid": "aa4defc3-2b65-5688-accb-aaa49f2430b6"
+            },
+            {
+              "content": "Before the next trip, the user checked charging items against a photo and packed all of them.",
+              "content_digest": "cc2663db793bec80657023ccd545add403ec7dcc6dc39da4d03a95b5a9f65ff9",
+              "position": 4,
+              "uid": "2d937b4b-d73d-5382-abbe-3cd4e596b3a5"
+            },
+            {
+              "content": "The user packed toiletries on the departure day and arrived 15 minutes late at the meeting place.",
+              "content_digest": "1f5f7eb4cf651ee44244315e52de31cbd7bffe70489315bda287d1ca3cb9a8d4",
+              "position": 5,
+              "uid": "0be8b327-0a06-5241-b98d-daa6b0a4aa50"
+            },
+            {
+              "content": "The next time, the user closed the bag the night before and departed on time.",
+              "content_digest": "61f6c02e4637501f5ad9b1a9f668e298e566558a3d9e611a8b521c17256513b7",
+              "position": 6,
+              "uid": "90059fcc-436d-5453-98f0-a9b23a08faf1"
+            },
+            {
+              "content": "The user's older sister considers it safer to pack an extra cable even for a short trip to avoid charging problems.",
+              "content_digest": "f06b38b34e0f27bc01d8a79733173673d37a209e8619ad3df816a73718ffd89f",
+              "position": 7,
+              "uid": "12ef03f9-8cda-5ed7-be83-891b4702f872"
+            },
+            {
+              "content": "When creating a travel preparation list, confirm the trip length and actual activities with the user.",
+              "content_digest": "f34a0a341cd8ce9c641c16b780c4e53ccae4b6dca2c8f176be7579f5b0115654",
+              "position": 8,
+              "uid": "54136935-a460-573d-ac40-f5edb0ca7e6c"
+            },
+            {
+              "content": "The local agent cannot establish what the next trip requires from the luggage used on the previous trip alone.",
+              "content_digest": "4accbe60aa4e53ff75a18cc0291a870f106ac69a10a2cff96147c2dbd74892e3",
+              "position": 9,
+              "uid": "029c0777-bdbb-5d48-9309-1b1e6c7d88f4"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "8f9dac75-f67b-46a0-bd40-c778f1956352"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address unrelated domains: clinic accessibility and waiting experiences versus travel packing and preparation. No claim governs the same operational decision across both frames, so each independently useful claim remains one-sided without conflict or ambiguity.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e3f295d1-fa45-4999-aba6-b8308506118e",
+              "memory_uid": "a6923620-267d-5129-b8c4-cd9b1e1a1e7b"
+            }
+          ],
+          "reason": "This is a specific clinic-access event with no counterpart concerning the same event or decision in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user used a clinic’s accessible entrance in December 2024.",
+          "uid": "ee623ffd-385f-5a19-9e5c-8e0a2d1d6ce3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e3f295d1-fa45-4999-aba6-b8308506118e",
+              "memory_uid": "fb0e1d1f-0ef5-5214-b6d7-f6ca5c68f582"
+            }
+          ],
+          "reason": "This records a particular route obstruction and detour absent from the travel-preparation material.",
+          "status": "RESOLVED",
+          "summary": "When snow blocked the clinic’s main-entrance ramp, the user used a side entrance.",
+          "uid": "bf7bc730-475c-5ae5-afde-1e400c7f58ed"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e3f295d1-fa45-4999-aba6-b8308506118e",
+              "memory_uid": "4cb45120-4376-5c7b-ae92-faa9e4b9330c"
+            }
+          ],
+          "reason": "This clinic-access disruption is independently useful and has no same-scope counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "An elevator inspection discovered on site delayed the user’s appointment.",
+          "uid": "fa653566-c352-55f6-9a93-9198d7aaee4a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e3f295d1-fa45-4999-aba6-b8308506118e",
+              "memory_uid": "479f4434-879c-5335-b0c9-c0bfa19ecdcd"
+            }
+          ],
+          "reason": "This advance accessibility check concerns a different operational decision from all travel-packing claims.",
+          "status": "RESOLVED",
+          "summary": "Before a subsequent clinic visit, the user called to verify elevator operation.",
+          "uid": "8cf8ac9e-272c-5cd0-ab7c-860f3ef01a2c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e3f295d1-fa45-4999-aba6-b8308506118e",
+              "memory_uid": "0f2c78a7-8f92-573d-af8a-a360ceb77b24"
+            }
+          ],
+          "reason": "This describes a clinic waiting arrangement not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user waited near the waiting chairs for a turn at a ticket machine.",
+          "uid": "caf89ffc-50a2-5560-83e1-a8d2c2424341"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e3f295d1-fa45-4999-aba6-b8308506118e",
+              "memory_uid": "7b9197ac-4263-5169-8d3b-d34f5d893d36"
+            }
+          ],
+          "reason": "This specific waiting experience has no semantic counterpart concerning the same situation in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "While waiting in a corridor without chairs, the user leaned against a wall and repeatedly changed position.",
+          "uid": "8c760612-e493-5cef-a12e-2c8fdc5d5b80"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e3f295d1-fa45-4999-aba6-b8308506118e",
+              "memory_uid": "7b0b7571-f29c-56e5-a27a-82d69a4a6982"
+            }
+          ],
+          "reason": "This is a distinct accompanied clinic-waiting event; the sister’s packing opinion elsewhere does not address the same claim.",
+          "status": "RESOLVED",
+          "summary": "When accompanied by an older sister, the user found seating immediately after clinic reception.",
+          "uid": "f2ceac15-621b-5779-b90b-f27da8346087"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e3f295d1-fa45-4999-aba6-b8308506118e",
+              "memory_uid": "e9515d6b-10d9-579f-abf7-5030db64218a"
+            }
+          ],
+          "reason": "This staff expectation governs clinic navigation and is unrelated to travel preparation decisions.",
+          "status": "RESOLVED",
+          "summary": "Reception staff expect first-time visitors may ask where the accessible entrance is.",
+          "uid": "d41eac20-fd1e-54bb-98c6-8419aa5f48ff"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e3f295d1-fa45-4999-aba6-b8308506118e",
+              "memory_uid": "8e57141d-c603-56cd-ab9e-c14b4e944b45"
+            }
+          ],
+          "reason": "This inference limit concerns health or condition attribution, whereas the compared frame’s inference limit concerns future trip requirements.",
+          "status": "RESOLVED",
+          "summary": "Using an accessible route alone does not establish the user’s condition.",
+          "uid": "754a6088-e943-5b3f-a260-a9f950dd65a2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e3f295d1-fa45-4999-aba6-b8308506118e",
+              "memory_uid": "a6076438-307c-56fe-9d2c-848181846ce5"
+            }
+          ],
+          "reason": "This general accessibility condition has no counterpart about the same environment or operational decision.",
+          "status": "RESOLVED",
+          "summary": "Snow accumulation and removal work can temporarily block an ordinarily used entrance route.",
+          "uid": "be7952d1-ac52-5d00-8e1d-faf0aa947beb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8f9dac75-f67b-46a0-bd40-c778f1956352",
+              "memory_uid": "447bfd8d-1490-5404-a2b4-13b4587e6aba"
+            }
+          ],
+          "reason": "This storage-location fact is independently useful and absent from the clinic-focused reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user stores a travel power bank in the first drawer beneath the desk.",
+          "uid": "f428e3be-b652-5afb-8557-c60c412f7231"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8f9dac75-f67b-46a0-bd40-c778f1956352",
+              "memory_uid": "3ab0326a-a006-51ea-9348-7ada19a23bce"
+            }
+          ],
+          "reason": "This packing-experience claim has no same-scope counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user packed three shoe pairs for a two-night trip but used only one.",
+          "uid": "7006a205-b995-51de-a804-5d65758110dc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8f9dac75-f67b-46a0-bd40-c778f1956352",
+              "memory_uid": "ef467ab6-8ba6-5f81-8f12-578ec1824e09"
+            }
+          ],
+          "reason": "This later packing choice and outcome are not addressed by any clinic-access claim.",
+          "status": "RESOLVED",
+          "summary": "For a later two-night trip, the user packed one walking-shoe pair and reduced bag weight.",
+          "uid": "789e9c73-2093-5f2a-ab5f-1e7873700d80"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8f9dac75-f67b-46a0-bd40-c778f1956352",
+              "memory_uid": "aa4defc3-2b65-5688-accb-aaa49f2430b6"
+            }
+          ],
+          "reason": "This travel charging incident has no counterpart concerning the same event or decision in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "After forgetting a charging cable on a trip, the user bought a replacement after arrival.",
+          "uid": "5148cd97-8650-5f7f-88ec-fa195da20289"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8f9dac75-f67b-46a0-bd40-c778f1956352",
+              "memory_uid": "2d937b4b-d73d-5382-abbe-3cd4e596b3a5"
+            }
+          ],
+          "reason": "This preparation method is independently useful and absent from the clinic-focused material.",
+          "status": "RESOLVED",
+          "summary": "Before a later trip, the user checked charging items against a photo and packed them all.",
+          "uid": "674ab909-7d26-5454-a0e5-eb69cc983d30"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8f9dac75-f67b-46a0-bd40-c778f1956352",
+              "memory_uid": "0be8b327-0a06-5241-b98d-daa6b0a4aa50"
+            }
+          ],
+          "reason": "This timing experience concerns travel preparation rather than any clinic-access or waiting decision.",
+          "status": "RESOLVED",
+          "summary": "Packing toiletries on departure day preceded the user’s arrival fifteen minutes late.",
+          "uid": "3a55f3cd-9844-5d01-8fce-611a10798a63"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8f9dac75-f67b-46a0-bd40-c778f1956352",
+              "memory_uid": "90059fcc-436d-5453-98f0-a9b23a08faf1"
+            }
+          ],
+          "reason": "This preparation practice and outcome have no semantic counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "On the next occasion, the user closed the bag the night before and departed on time.",
+          "uid": "37a8abc9-4c21-5d13-b789-f1dedc287b91"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8f9dac75-f67b-46a0-bd40-c778f1956352",
+              "memory_uid": "12ef03f9-8cda-5ed7-be83-891b4702f872"
+            }
+          ],
+          "reason": "This is a travel-packing preference; the sister’s presence during a clinic visit does not materially address that policy.",
+          "status": "RESOLVED",
+          "summary": "The user’s older sister considers an extra cable safer even for short trips to avoid charging problems.",
+          "uid": "de5bf2d3-843e-5a65-8459-392a527b3c51"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8f9dac75-f67b-46a0-bd40-c778f1956352",
+              "memory_uid": "54136935-a460-573d-ac40-f5edb0ca7e6c"
+            }
+          ],
+          "reason": "This preparation policy governs trip-specific requirements and has no counterpart governing the same decision in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Travel-list creation should confirm trip length and actual activities with the user.",
+          "uid": "718062b8-9906-53b7-a258-f40f5004b594"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8f9dac75-f67b-46a0-bd40-c778f1956352",
+              "memory_uid": "029c0777-bdbb-5d48-9309-1b1e6c7d88f4"
+            }
+          ],
+          "reason": "This inference limit concerns future travel needs, not the reference frame’s distinct limit on inferring a user’s condition from route use.",
+          "status": "RESOLVED",
+          "summary": "Previous luggage alone does not establish what the user’s next trip requires.",
+          "uid": "19f3f9f2-f624-5792-8121-10781b22a065"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers storage and packing experiences, lighter and more reliable preparation practices, a sister’s extra-cable preference, contextual list-making, and limits on predicting future trip needs.",
+        "differences": "",
+        "reference_only": "The reference covers accessible clinic routes, temporary snow and elevator disruptions, varied waiting conditions, staff expectations, and limits on inferring a user’s condition."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "4e012e8d-72b9-471e-ba55-9232759b77a9"
+    },
+    "analysis_digest": "1ef0188980c232210fe7c6dae55b66d64ce2bce73e847565033e1c08856d2f92",
+    "key": "347fc54f0459e5b9ad077c6f58c74fd4cad665969b3f05286898deb404bd210b",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 51.16499837499941,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "347fc54f0459e5b9ad077c6f58c74fd4cad665969b3f05286898deb404bd210b",
+  "created_at": "2026-08-13T18:48:37.774691Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/12",
+  "pair_key": "d36e271d232f2c0ee2807c0a7eecd765aac304d3ccda0b0fabb1f65c1bfd5f59",
+  "provider_seconds": 51.16499837499941,
+  "right": "task-3/local/personal-memory/2025/07",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

@@ -258,6 +258,7 @@ async def _exercise_stdio(command: str, root: Path, workdir: Path) -> dict[str, 
         "memcommit_elaborate",
         "memcommit_fit",
         "memcommit_resolve",
+        "memcommit_dedup",
     ]
     assert help_result.is_error is False
     assert help_result.structured_content["result"]["operation"]["name"] == "compare"

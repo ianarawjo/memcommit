@@ -1,0 +1,374 @@
+{
+  "coverage": {
+    "expected": 26,
+    "observed": 26
+  },
+  "created_at": "2026-08-11T00:08:31.504560Z",
+  "description_digest": "17a794e48857a8178811052488c3bd4cc66e9029847f2ce038825e49ed5afcc8",
+  "issues": [],
+  "kind": "STUDY_COMPARE_GRAPH_PAIR",
+  "left": {
+    "context_digest": "fb04a858e6072cc336b54c00ec7a569d457114431b9675e13e2342d1b0d21d2b",
+    "context_uid": "5a66e0ec-3497-5ccf-9d8f-08c966647677",
+    "memory_count": 11,
+    "name": "task-1/participant/construction-updates/building-access"
+  },
+  "method": "COMPACT_DECISION_VECTOR_V1",
+  "operation": "COMPARE",
+  "pair_key": "a540b24d6e32a05a7f04afd0b6f45dd5a1f6c51ece70f5828b7baf26307d01a9",
+  "provider": {
+    "condition": "COMPACT_DECISION_VECTOR",
+    "contract_valid": true,
+    "elapsed_seconds": 16.576893500008737,
+    "error_type": null,
+    "failure_category": null,
+    "operation": "compare_contexts_compact_ab_v1",
+    "prompt_chars": 11777,
+    "provider_calls": 1,
+    "provider_run": {
+      "completion_tokens": null,
+      "identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "operation": "compare_contexts_compact_ab_v1",
+      "prompt_tokens": null,
+      "upstream_model": "gpt-5.6-sol",
+      "upstream_provider": "openai-codex"
+    },
+    "provider_seconds": 16.575691249992815,
+    "response_bytes": 920,
+    "response_chars": 920,
+    "schema_chars": 1382,
+    "validation_error": null,
+    "validation_seconds": 0.001190374998259358
+  },
+  "relations": [
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "8b077f2a-6a9f-50f0-ae91-f6536fb226cb",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000001",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "56c34a24-0954-5c64-9fd4-880995e6e53c",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000002",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "84a45a62-09c7-5187-8fa6-ff7063f9e8d0",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000003",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "89e6f853-8c98-51ba-98cc-ad5c84580a53",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000004",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "f9d7eb4e-221f-5b5f-a237-213a31e04093",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000005",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "f1b7843e-2c8a-5434-94a4-1383534abb3a",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000006",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "be002fc9-b9e0-5d73-9c15-622c0688c73c",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000007",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "2d8e8c75-1dad-5dbc-9eaa-04cd522410f0",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000008",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "50fb8bfa-2764-5b4f-a83c-80bf2d3a73d0",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000009",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "ebc1d272-2f9a-5b2e-a5a4-6c0539f46527",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000010",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "31f5b67b-40f8-5690-b772-b329ce50e443",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000011",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "84196dc5-9ae8-5663-866a-048024119fd2",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000012",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "fdffd727-3579-5edc-8433-1f1f372b7576",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000013",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "6dc791c0-f2a0-5e5e-a1ae-4ec35d7159a4",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000014",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "fb0765f1-92fa-50b6-ab78-35ca165ab2e6",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000015",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "5a4dd86f-bead-50bb-b6e8-45c176b6d65f",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000016",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "32e116a4-526b-5cd1-af16-4872680376b5",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000017",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "8fa46317-ba39-54bb-8cf0-f85770bd5032",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000018",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "cc5f97c1-ce8c-5ac0-8f3e-ecdc6df597fc",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000019",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "9b8a7458-4ebc-5b82-be5b-522268680f63",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000020",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "d47493d3-5b50-53d0-a5b9-5dedbdb268a4",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000021",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "91de6da4-a9f4-5e2a-a585-14609a8d8497",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000022",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "71a5daa6-e289-51bf-bf1f-051d9958091e",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000023",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "7f72387d-58fc-511c-84c3-940933217e9d",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000024",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "85518d54-4515-5bc0-ad8c-f5dd4e2b7d51",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000025",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "ceffae14-e966-566e-83b2-df46680d4582",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000026",
+      "status": "RESOLVED"
+    }
+  ],
+  "right": {
+    "context_digest": "cac927d9dd76aea18cdd253e7bc7d3aa834c869b31d6cd37670037149629db5f",
+    "context_uid": "b392133c-278c-5c86-aaf9-5791ed5e9cd4",
+    "memory_count": 15,
+    "name": "task-1/participant/construction-updates/temporary-parking"
+  },
+  "schema_version": 1,
+  "semantic_content_in_participant_report": false,
+  "state": "EXACT_PREWARM",
+  "task": "task-1"
+}

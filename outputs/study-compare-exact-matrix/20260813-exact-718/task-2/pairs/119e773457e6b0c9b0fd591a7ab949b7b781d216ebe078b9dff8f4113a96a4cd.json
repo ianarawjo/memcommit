@@ -1,0 +1,272 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:25:06.634434+00:00",
+      "frames": [
+        {
+          "context_digest": "3dd1208c3f947a57bc5f1d490a28c999913d43cad775b2b01e50c6059d6b660e",
+          "context_name": "task-2/advisor1/safety",
+          "context_uid": "cd6c1fab-786a-52ea-9437-9a4d209ba419",
+          "memories": [
+            {
+              "content": "Specify the order and recipients for reporting serious discomfort during the study.",
+              "content_digest": "1de38a3ec5fc3267ebeb35482a458d4aaf50d2aea44c6dba334f184e50ddddd2",
+              "position": 0,
+              "uid": "9d6f5228-d182-571a-83d2-6a67becb7736"
+            },
+            {
+              "content": "Field staff rely on a pre-defined contact sequence when serious discomfort is reported.",
+              "content_digest": "ed3a3b19d92a50c7dd324981b702bac31e0130fda38fe37150e500481ed11d84",
+              "position": 1,
+              "uid": "00ed485d-66c2-59ad-9c5b-9ae445412690"
+            },
+            {
+              "content": "Establish criteria for halting the use of a design alternative if recurring severe errors appear during formative evaluation.",
+              "content_digest": "dcca56df756b89f89a0a9dbf2bf45aee6480392b368c9cf3402223d3084b801b",
+              "position": 2,
+              "uid": "9c6e1561-f671-52cb-aa67-245cc4987ad4"
+            },
+            {
+              "content": "Do not include a design alternative halted for safety reasons in subsequent evaluation iterations without modification.",
+              "content_digest": "01668098161666622f4d7ed8298e3e63a06fa9b10a4cfd53b200d820f96f5c50",
+              "position": 3,
+              "uid": "2381ecf7-2b11-583d-91d9-0a5cfc279ba1"
+            },
+            {
+              "content": "Even in controlled environments, delayed prototype recovery procedures increase session interruption time and alter data collection conditions for the same task.",
+              "content_digest": "fd0f364ef66cfa7be937779ed4ce3ffb1a406bc227d09c26b288a751c5e0d427",
+              "position": 4,
+              "uid": "c5ce1b00-36d9-5cdd-a318-93b88ca0e322"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "9e2d66a1-1f1c-4dd8-95d8-7ef56850be16"
+        },
+        {
+          "context_digest": "673626cf0c3650052d63b04173d43516860e2035d7038878998898bc5bebb2e3",
+          "context_name": "task-2/advisor2/evaluation",
+          "context_uid": "6e9f8ad5-a43d-5dfd-99a3-604f2757da0d",
+          "memories": [
+            {
+              "content": "Specify a single representative measure that will drive operational decisions to maintain, modify, or discontinue the deployed design.",
+              "content_digest": "dd9abb7bbbdf6846921a984789426b27a45df60ce38408422b6b0774835b44f8",
+              "position": 0,
+              "uid": "f27576c7-6f53-5412-901c-19df7e1d5e2e"
+            },
+            {
+              "content": "The HCI review panel verifies whether operational decisions can be made based on the declared primary measure.",
+              "content_digest": "1d88ce414bdbfcf9565c712f8f0d72378569d723c0c5b5c6007dc18a96f6378f",
+              "position": 1,
+              "uid": "8608bdf3-49d7-54d0-a2fb-c883c24e40ef"
+            },
+            {
+              "content": "Establish decision thresholds indicating at what levels key metrics trigger maintaining, modifying, or discontinuing the design.",
+              "content_digest": "866bad632421bfd3487fba69b855ccb36aeb9e31c6208b339db22301bdd3fc28",
+              "position": 2,
+              "uid": "b06bb706-f911-5767-8e27-b64c74d0e592"
+            },
+            {
+              "content": "Evaluate whether reducing workload for one role creates new tasks for other roles through the proposed design changes.",
+              "content_digest": "6b38b84cdc2a78f61f3163cccd787dec39167596f4f720788ec4c930f698fa9f",
+              "position": 3,
+              "uid": "473ec6e8-29f0-5c83-b36d-b7d32eeb25a3"
+            },
+            {
+              "content": "Distinguish usability from organizational adoption intent as separate evaluation outcomes.",
+              "content_digest": "7328bf54063078377068871ee3970709d9a8763204c2c3a08321e025e028868c",
+              "position": 4,
+              "uid": "935cf79f-3e67-567d-ab55-35e8fad7eb37"
+            },
+            {
+              "content": "Implementation fidelity indicates whether planned features and operational procedures were delivered in the field according to intended specifications.",
+              "content_digest": "b04d0bc0590dd77d3bc0bde581481992d57ad48c14517a2a1d63f996e51290b2",
+              "position": 5,
+              "uid": "bea0e97f-1217-507b-87a7-09ce85bae9fe"
+            },
+            {
+              "content": "Initial evaluations and long-term operation do not share identical measurement conditions due to differences in system exposure duration and frequency of repeated use.",
+              "content_digest": "49e90b293b90d173b11d1bb89e85f688c55cb923c2a19eb2058a539388327715",
+              "position": 6,
+              "uid": "dbe435ff-fe32-54fe-a2e6-7b46694ce151"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "8178ae09-8ebd-49d3-b515-a0447667fb19"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address complementary evaluation governance but emphasize different stages and concerns. Shared themes are scoped rather than equivalent: design-disposition thresholds differ by evaluation context, while measurement conditions vary for different causes. The remaining material covers distinct safety, oversight, workload, adoption, and implementation concerns.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9e2d66a1-1f1c-4dd8-95d8-7ef56850be16",
+              "memory_uid": "9d6f5228-d182-571a-83d2-6a67becb7736"
+            },
+            {
+              "frame_uid": "9e2d66a1-1f1c-4dd8-95d8-7ef56850be16",
+              "memory_uid": "00ed485d-66c2-59ad-9c5b-9ae445412690"
+            }
+          ],
+          "reason": "The two reference memories split one underlying one-sided claim between defining the contact sequence and describing staff reliance on it.",
+          "status": "RESOLVED",
+          "summary": "Serious-discomfort reports follow a specified sequence of recipients used by field staff.",
+          "uid": "9c34b0c4-c2a5-5f39-846c-c1c03bf05d44"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "9e2d66a1-1f1c-4dd8-95d8-7ef56850be16",
+              "memory_uid": "9c6e1561-f671-52cb-aa67-245cc4987ad4"
+            },
+            {
+              "frame_uid": "8178ae09-8ebd-49d3-b515-a0447667fb19",
+              "memory_uid": "b06bb706-f911-5767-8e27-b64c74d0e592"
+            }
+          ],
+          "reason": "Both establish threshold-based disposition decisions, but the explicit evaluation stage, trigger type, and range of resulting actions must be preserved.",
+          "status": "RESOLVED",
+          "summary": "Design-disposition thresholds are scoped respectively to recurring severe errors during formative evaluation and to key-metric levels for maintaining, modifying, or discontinuing a design.",
+          "uid": "c2e0beb3-5f8f-509d-a534-836cd0908ad6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9e2d66a1-1f1c-4dd8-95d8-7ef56850be16",
+              "memory_uid": "2381ecf7-2b11-583d-91d9-0a5cfc279ba1"
+            }
+          ],
+          "reason": "This is an independently useful reference-only restriction with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A design halted for safety reasons must be modified before entering a later evaluation iteration.",
+          "uid": "ccf576ce-124d-5814-ae69-93ad79b33d03"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "9e2d66a1-1f1c-4dd8-95d8-7ef56850be16",
+              "memory_uid": "c5ce1b00-36d9-5cdd-a318-93b88ca0e322"
+            },
+            {
+              "frame_uid": "8178ae09-8ebd-49d3-b515-a0447667fb19",
+              "memory_uid": "dbe435ff-fe32-54fe-a2e6-7b46694ce151"
+            }
+          ],
+          "reason": "Both caution against treating data-collection conditions as invariant, but each identifies a different explicit circumstance whose scope is material.",
+          "status": "RESOLVED",
+          "summary": "Measurement conditions change under specified circumstances: delayed prototype recovery disrupts a controlled session, while exposure duration and repeated use distinguish initial evaluation from long-term operation.",
+          "uid": "ae62fd57-9afa-59cd-ac89-395f1351adc8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8178ae09-8ebd-49d3-b515-a0447667fb19",
+              "memory_uid": "f27576c7-6f53-5412-901c-19df7e1d5e2e"
+            }
+          ],
+          "reason": "This compared-only requirement independently defines the primary basis for operational design decisions.",
+          "status": "RESOLVED",
+          "summary": "A single representative measure drives decisions to maintain, modify, or discontinue a deployed design.",
+          "uid": "f8a3ce04-96ea-55a1-82dd-2818205b2d2a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8178ae09-8ebd-49d3-b515-a0447667fb19",
+              "memory_uid": "8608bdf3-49d7-54d0-a2fb-c883c24e40ef"
+            }
+          ],
+          "reason": "This compared-only claim assigns a distinct oversight responsibility rather than merely restating the requirement to select a measure.",
+          "status": "RESOLVED",
+          "summary": "An HCI review panel verifies that the declared primary measure supports operational decisions.",
+          "uid": "ab7b601b-9c13-5714-89cf-1464685c7c22"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8178ae09-8ebd-49d3-b515-a0447667fb19",
+              "memory_uid": "473ec6e8-29f0-5c83-b36d-b7d32eeb25a3"
+            }
+          ],
+          "reason": "This is a distinct compared-only assessment of cross-role consequences.",
+          "status": "RESOLVED",
+          "summary": "Evaluation should test whether workload reduction for one role creates tasks for other roles.",
+          "uid": "aef7c083-8741-5844-80aa-e55ec0ed744d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8178ae09-8ebd-49d3-b515-a0447667fb19",
+              "memory_uid": "935cf79f-3e67-567d-ab55-35e8fad7eb37"
+            }
+          ],
+          "reason": "This compared-only claim establishes an independent outcome distinction.",
+          "status": "RESOLVED",
+          "summary": "Usability and organizational adoption intent are separate evaluation outcomes.",
+          "uid": "be7bf798-61b8-5115-93f8-f03ddfe6ee29"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8178ae09-8ebd-49d3-b515-a0447667fb19",
+              "memory_uid": "bea0e97f-1217-507b-87a7-09ce85bae9fe"
+            }
+          ],
+          "reason": "This compared-only claim supplies an independent field-delivery evaluation concept.",
+          "status": "RESOLVED",
+          "summary": "Implementation fidelity reflects whether fielded features and procedures match intended specifications.",
+          "uid": "7e8e293c-c3d4-5444-b2ee-5203ebe68aa9"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame uniquely covers primary-measure governance, panel review, workload redistribution, separate adoption outcomes, and implementation fidelity.",
+        "differences": "Both address design-disposition thresholds under different evaluation scopes and warn that measurement conditions change under different operational circumstances.",
+        "reference_only": "The reference uniquely covers serious-discomfort escalation and restrictions on reusing an unchanged design halted for safety."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "198c530f-1220-4de0-914a-4df91584ee50"
+    },
+    "analysis_digest": "034123ad08f6e101f54c4e06528d52633d15d5a7982718914601cb46a1a1415a",
+    "key": "0f019283ecfdc8cea5f0ee001586ee8b345b00baa1515ce04b64b53975aa2201",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 46.46002020800006,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "0f019283ecfdc8cea5f0ee001586ee8b345b00baa1515ce04b64b53975aa2201",
+  "created_at": "2026-08-13T18:25:53.093999Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/safety",
+  "pair_key": "119e773457e6b0c9b0fd591a7ab949b7b781d216ebe078b9dff8f4113a96a4cd",
+  "provider_seconds": 46.46002020800006,
+  "right": "task-2/advisor2/evaluation",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

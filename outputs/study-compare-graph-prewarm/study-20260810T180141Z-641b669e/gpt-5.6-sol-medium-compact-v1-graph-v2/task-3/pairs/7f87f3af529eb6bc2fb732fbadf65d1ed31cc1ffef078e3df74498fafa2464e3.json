@@ -1,0 +1,214 @@
+{
+  "coverage": {
+    "expected": 14,
+    "observed": 14
+  },
+  "created_at": "2026-08-11T00:38:29.330437Z",
+  "description_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+  "issues": [],
+  "kind": "STUDY_COMPARE_GRAPH_PAIR",
+  "left": {
+    "context_digest": "aff4ec893e484fc17a9e7aca11e2cf6b401b6040f1b757c70fd9b3e64e0f0b9c",
+    "context_uid": "34f4d62a-2433-54cd-8374-2d0a81357e57",
+    "memory_count": 8,
+    "name": "task-3/local/guardrails/channel-and-format"
+  },
+  "method": "COMPACT_DECISION_VECTOR_V1",
+  "operation": "COMPARE",
+  "pair_key": "7f87f3af529eb6bc2fb732fbadf65d1ed31cc1ffef078e3df74498fafa2464e3",
+  "provider": {
+    "condition": "COMPACT_DECISION_VECTOR",
+    "contract_valid": true,
+    "elapsed_seconds": 24.776560667000012,
+    "error_type": null,
+    "failure_category": null,
+    "operation": "compare_contexts_compact_ab_v1",
+    "prompt_chars": 6496,
+    "provider_calls": 1,
+    "provider_run": {
+      "completion_tokens": null,
+      "identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "operation": "compare_contexts_compact_ab_v1",
+      "prompt_tokens": null,
+      "upstream_model": "gpt-5.6-sol",
+      "upstream_provider": "openai-codex"
+    },
+    "provider_seconds": 24.775697458011564,
+    "response_bytes": 745,
+    "response_chars": 745,
+    "schema_chars": 1378,
+    "validation_error": null,
+    "validation_seconds": 0.0008531249914085492
+  },
+  "relations": [
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "6e6f2c1f-18e8-56ab-b7e9-af5f1ef15b6e",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000001",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "c11769a3-cb4c-589d-91fc-48a7fc5f4b28",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000002",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Both require removing unnecessary identifying information, scoped respectively to document metadata and nonessential third-party contact details.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "d75604e1-1e25-5c2b-8316-3db4224965bf",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "67035ffd-3709-592a-9d42-601fffb9ff79",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000003",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "The general requirement to protect sensitive items is narrowed to generalization when rare detail combinations could enable re-identification.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "c6dd9cd4-bbc5-55a6-922f-2b78f2f37c20",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "4af0efc1-3442-580c-b2da-7725249adbbd",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000004",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "b40d9699-8a5f-552e-97db-1a9ae59a9c34",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000005",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "e0c0f0bb-e602-5597-8b7b-27e8b06ce7ff",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000006",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "69e95464-217e-5620-8ffc-c5d0f20afc46",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000007",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "f9492eaf-c1e8-5adc-9987-e58fcf527ed6",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000008",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "47174c75-1951-5f0f-be2f-e79315d88b91",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000009",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "73411861-8d89-5bf4-9987-f7757e403089",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000010",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "5cd7bde0-0d4f-5946-a551-65836f41cb3e",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000011",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "eafc4a2b-8e2a-5e58-9813-f1346bbdc2ad",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000012",
+      "status": "RESOLVED"
+    }
+  ],
+  "right": {
+    "context_digest": "9e11f33b9619a9eda81da9aea4a85fb5ae35ae17ef83ddb6f2611920c825e3bb",
+    "context_uid": "755575aa-19e8-5649-83d1-2b7b6499f2e5",
+    "memory_count": 6,
+    "name": "task-3/local/guardrails/privacy-and-others"
+  },
+  "schema_version": 1,
+  "semantic_content_in_participant_report": false,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

@@ -1,0 +1,282 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:19:42.666910+00:00",
+      "frames": [
+        {
+          "context_digest": "42df7e2f7640040d1d6f6f6e566e80d178668a05ab6918b64eed91b91a41b7fb",
+          "context_name": "task-2/advisor1/evaluation",
+          "context_uid": "30568e2f-ce17-50ce-a25b-1cc4bdb94689",
+          "memories": [
+            {
+              "content": "Specify a single representative measure that serves as the criterion for retaining, modifying, or discarding compared design alternatives.",
+              "content_digest": "53aa7c1f81a4fac9e76985be094717aa122e7077a6fcfde46946babd5929d390",
+              "position": 0,
+              "uid": "a50f6ecb-de38-5769-8a6e-23b84a7eb35c"
+            },
+            {
+              "content": "HCI review panels verify whether clear criteria for judging design alternatives are established using the declared primary measure.",
+              "content_digest": "fabd83103e5c3474f56de113c477f7ced5e863a508ec39bd4ae23653d63ad354",
+              "position": 1,
+              "uid": "44c61beb-24a2-584a-ad96-e622690d8171"
+            },
+            {
+              "content": "Collect process measures to diagnose interaction steps where problems occurred, alongside the primary outcome measure.",
+              "content_digest": "6cc2fedef1b0af1c594e48610e08a169f3bca2405bf8773945eca33396aecb36",
+              "position": 2,
+              "uid": "23202824-b576-5d77-b591-8b4cc0757632"
+            },
+            {
+              "content": "Interpret evaluation results as differences between compared design alternatives rather than as success or failure of a single prototype.",
+              "content_digest": "5c578d52a7dbbf4e4b646e707bbee4ac37bcd23bceb0b4d5e09ef3c08df9c2f4",
+              "position": 3,
+              "uid": "65ae88bf-8002-5ada-8590-eaf345b38863"
+            },
+            {
+              "content": "Check boundary cases to verify whether the derived design principles retain explanatory power for adjacent situations not included in the comparison.",
+              "content_digest": "3edc3e181a8086233d889f35cb98c9448875fe3fee915467f712ca3eb2886de1",
+              "position": 4,
+              "uid": "79af5e5f-4868-5e76-bcd5-3f8e1d6a0bd1"
+            },
+            {
+              "content": "Controlled evaluation environments do not reproduce time pressure, peer intervention, or voluntary termination conditions found in daily use.",
+              "content_digest": "e58a1bc6a423874525aca9f864b9b0dbd1e3ef9961410608c5837c88f1153d9b",
+              "position": 5,
+              "uid": "3a65fc8b-a5b4-50fc-a60e-fc6f3fc44547"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "b14906b8-e945-4955-86a7-b8203cb493c5"
+        },
+        {
+          "context_digest": "e70e4eaff26e4baf1b346a4ecd2b44ed9f9ccac9e205b7b82572dc8ef0e217c4",
+          "context_name": "task-2/advisor2/emphasis",
+          "context_uid": "398f9930-3a0f-5de0-a339-ceba7dd5d1c6",
+          "memories": [
+            {
+              "content": "Do not exceed two primary HCI contributions that readers must remember.",
+              "content_digest": "59786866cf953172c2697f09398356a861e8ea448093102c32c9149f16b2e5c5",
+              "position": 0,
+              "uid": "d59dc83b-ce6a-5ac7-ab64-e5436df1f945"
+            },
+            {
+              "content": "Present each design or operational contribution as a single named sentence.",
+              "content_digest": "e0de5a9f1c1ca585fe062d7e11f8d2536cbe5ec4eefc16da6f7a0b62c0247d45",
+              "position": 1,
+              "uid": "328de462-17a4-551f-9f74-cb3118519e45"
+            },
+            {
+              "content": "In studies recruiting organizational members, emphasize workflow constraints.",
+              "content_digest": "c46efadebd89f3d757993baea79a5ef1386bbf6b4769ae3704ae62102397fc3b",
+              "position": 2,
+              "uid": "eab1dac5-8b61-5793-a56f-c4e3e64af190"
+            },
+            {
+              "content": "In studies recruiting organizational members, emphasize manager approval constraints.",
+              "content_digest": "2387fb9f3ab907e671fc9dcc2e7f067a84bdf1f5713d8385a32e39eb1e14751d",
+              "position": 3,
+              "uid": "f90e616a-d5a4-5cc2-86e4-62534a1faf83"
+            },
+            {
+              "content": "HCI reviewers find it difficult to identify primary contributions when named design and operational contributions exceed two.",
+              "content_digest": "04e080bfdf7277d04f0efc1b1d6775d06cba88aab5ff78bfd430674b004722a5",
+              "position": 4,
+              "uid": "78a1c87a-6936-516c-b578-8e97dc2e91f4"
+            },
+            {
+              "content": "Highlight one primary field operational decision to be changed by evaluation results as the central claim.",
+              "content_digest": "9a6bda883e68a2553a1238114d5de2746dc220948aebc1c2965cbb435318fe9c",
+              "position": 5,
+              "uid": "7af2db41-9091-5452-9beb-8fd7b48b7872"
+            },
+            {
+              "content": "Specify prototype features unnecessary for reviewing the primary field problem as secondary scope.",
+              "content_digest": "419ed0b0bccf1af7b30e0351f5e87b9e37e469cfa567e684695ffe4b6d39178a",
+              "position": 6,
+              "uid": "2312f35d-c17d-5af3-b84f-d2e671d7663f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "2cc6829d-147b-4d2b-9f03-ff730c2a3df5"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "Both frames favor a sharply defined evaluation anchor, linking a declared primary measure to the field decision results should inform. The reference adds diagnostic, comparative, boundary, and ecological guidance, while the compared frame adds contribution-presentation rules, organizational constraints, and prototype-scope guidance.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "b14906b8-e945-4955-86a7-b8203cb493c5",
+              "memory_uid": "a50f6ecb-de38-5769-8a6e-23b84a7eb35c"
+            },
+            {
+              "frame_uid": "b14906b8-e945-4955-86a7-b8203cb493c5",
+              "memory_uid": "44c61beb-24a2-584a-ad96-e622690d8171"
+            },
+            {
+              "frame_uid": "2cc6829d-147b-4d2b-9f03-ff730c2a3df5",
+              "memory_uid": "7af2db41-9091-5452-9beb-8fd7b48b7872"
+            }
+          ],
+          "reason": "The reference specifies and verifies the primary evaluative criterion, while the compared frame identifies its operational decision target; these jointly govern evaluation focus without requiring a missing scope distinction.",
+          "status": "RESOLVED",
+          "summary": "Evaluation should use a declared primary measure as a clear criterion and connect it to the central field decision results are intended to change.",
+          "uid": "00ff35bd-6a9d-5f74-b8c6-28047f640cc2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b14906b8-e945-4955-86a7-b8203cb493c5",
+              "memory_uid": "23202824-b576-5d77-b591-8b4cc0757632"
+            }
+          ],
+          "reason": "This is independently useful diagnostic guidance supplied only by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Process measures should accompany the primary outcome measure to locate problematic interaction steps.",
+          "uid": "4202c210-bdd3-584a-ba49-8680ae2b0045"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b14906b8-e945-4955-86a7-b8203cb493c5",
+              "memory_uid": "65ae88bf-8002-5ada-8590-eaf345b38863"
+            }
+          ],
+          "reason": "This comparative interpretation rule is independently useful and appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Results should be interpreted as differences among alternatives rather than as pass-or-fail judgments of one prototype.",
+          "uid": "ba911192-7a28-5f81-8b4e-9350b34c48a8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b14906b8-e945-4955-86a7-b8203cb493c5",
+              "memory_uid": "79af5e5f-4868-5e76-bcd5-3f8e1d6a0bd1"
+            }
+          ],
+          "reason": "This guidance on checking explanatory reach is independently useful and appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Derived design principles should be tested against adjacent situations excluded from the original comparison.",
+          "uid": "f6040b71-e4b5-5064-a28a-b516d8fc1563"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b14906b8-e945-4955-86a7-b8203cb493c5",
+              "memory_uid": "3a65fc8b-a5b4-50fc-a60e-fc6f3fc44547"
+            }
+          ],
+          "reason": "This ecological-validity limitation is independently useful and appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Controlled evaluations omit daily-use conditions such as time pressure, peer intervention, and voluntary termination.",
+          "uid": "922bad43-bf5d-52c7-a38f-49e0c3950fb6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2cc6829d-147b-4d2b-9f03-ff730c2a3df5",
+              "memory_uid": "d59dc83b-ce6a-5ac7-ab64-e5436df1f945"
+            },
+            {
+              "frame_uid": "2cc6829d-147b-4d2b-9f03-ff730c2a3df5",
+              "memory_uid": "78a1c87a-6936-516c-b578-8e97dc2e91f4"
+            }
+          ],
+          "reason": "The compared-frame memories state the same one-sided policy from prescriptive and reviewer-difficulty perspectives.",
+          "status": "RESOLVED",
+          "summary": "Primary design and operational contributions intended for reviewers to remember should not exceed two.",
+          "uid": "9d03fa3c-a83b-5a16-9344-6612afc85b7e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2cc6829d-147b-4d2b-9f03-ff730c2a3df5",
+              "memory_uid": "328de462-17a4-551f-9f74-cb3118519e45"
+            }
+          ],
+          "reason": "This contribution-format rule is independently useful and appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Each design or operational contribution should be presented as one named sentence.",
+          "uid": "a0faa3aa-2ff2-560c-82f7-a477adb03094"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2cc6829d-147b-4d2b-9f03-ff730c2a3df5",
+              "memory_uid": "eab1dac5-8b61-5793-a56f-c4e3e64af190"
+            },
+            {
+              "frame_uid": "2cc6829d-147b-4d2b-9f03-ff730c2a3df5",
+              "memory_uid": "f90e616a-d5a4-5cc2-86e4-62534a1faf83"
+            }
+          ],
+          "reason": "The compared-frame memories split one one-sided requirement into workflow and manager-approval facets.",
+          "status": "RESOLVED",
+          "summary": "Studies recruiting organizational members should foreground institutional constraints affecting participation and use.",
+          "uid": "24e62021-37b4-5ca9-b6fc-a148684b0b5f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2cc6829d-147b-4d2b-9f03-ff730c2a3df5",
+              "memory_uid": "2312f35d-c17d-5af3-b84f-d2e671d7663f"
+            }
+          ],
+          "reason": "This prototype-scoping rule is independently useful and appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Prototype features unnecessary for reviewing the primary field problem should be identified as secondary scope.",
+          "uid": "be5fa773-9bdf-5059-b04e-01b680fe3cf6"
+        }
+      ],
+      "reports": {
+        "both": "Evaluation should center on a declared primary measure with clear review criteria and a primary field decision that results can change.",
+        "compared_only": "The compared frame limits and names primary contributions, foregrounds organizational constraints, and separates unnecessary prototype features into secondary scope.",
+        "differences": "",
+        "reference_only": "The reference adds process diagnostics, comparative interpretation, boundary-case testing, and limits of controlled environments."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "9d19afab-8956-4ed1-bb90-07b61103e1e8"
+    },
+    "analysis_digest": "fb45457b791602f07bfc89697493ae01f26b6932cae4f003ee367e3ca99b4fde",
+    "key": "62a37a593ea492358fa6dc829807fb86a7685c9e53fa71ba8c5bbf817c9a30f0",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 35.06940070800192,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "62a37a593ea492358fa6dc829807fb86a7685c9e53fa71ba8c5bbf817c9a30f0",
+  "created_at": "2026-08-13T18:20:17.735790Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/evaluation",
+  "pair_key": "1b1c40ccf242433bcdd070e52332dd987b8688877ed3e791163504b91aad7822",
+  "provider_seconds": 35.06940070800192,
+  "right": "task-2/advisor2/emphasis",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

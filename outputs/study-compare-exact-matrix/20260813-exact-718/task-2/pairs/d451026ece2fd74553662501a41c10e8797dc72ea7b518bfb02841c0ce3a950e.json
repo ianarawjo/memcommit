@@ -1,0 +1,284 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:13:57.103332+00:00",
+      "frames": [
+        {
+          "context_digest": "30f0425cad991a5bb1b473f7e73c2c039db2d91dc0c95116413d0a8e7b6fed29",
+          "context_name": "task-2/advisor1/budget",
+          "context_uid": "d6d3ee9e-eb0f-5c28-9463-7a680d53b470",
+          "memories": [
+            {
+              "content": "Keep the total, major cost categories, and one-line estimate basis in the main text so the resource argument can be understood without leaving the proposal.",
+              "content_digest": "5dc9db0be6499fc408063be04c9e1cc344986512f4d24d5697f5c53a08529c9a",
+              "position": 0,
+              "uid": "05e0261e-5c52-5030-8176-0f02d4522931"
+            },
+            {
+              "content": "Place each major cost beside the activity or deliverable it enables in the main text.",
+              "content_digest": "b97219830051faf46cff7c9541c331012571866926740ed4d6a7925c12fb21a8",
+              "position": 1,
+              "uid": "1083e9b3-698a-57b1-91ab-ce04cec1e5e5"
+            },
+            {
+              "content": "State the quantity and unit-rate basis for each major cost in the same paragraph that requests it.",
+              "content_digest": "5ce37d95d9d037bbab71276fa8f0e8e383b472d0122817ab7b711c971b8cbf5d",
+              "position": 2,
+              "uid": "3652f268-d86f-55d6-935d-d3bdc487aae6"
+            },
+            {
+              "content": "Readers may question a proposed priority when its cost cannot be checked on the same page as the claimed benefit.",
+              "content_digest": "26fa14ff80ece7682cb51c7356a47a8e60e94edd4551f59ecd2fa3017bd9bffd",
+              "position": 3,
+              "uid": "4e1e1201-94b8-5a7a-8737-edc4c62881ff"
+            },
+            {
+              "content": "Update the cost sentence whenever the related activity changes so the narrative and requested amount cannot drift apart.",
+              "content_digest": "343c11198b38874476e0cda3707dd07436699852db0934e2e8f8c95a7ea3c3ea",
+              "position": 4,
+              "uid": "2f5f9039-e038-51c1-8af0-21a78772c512"
+            },
+            {
+              "content": "Accept a denser main-text paragraph when the estimate basis is essential to deciding whether the request is proportionate.",
+              "content_digest": "59ca1aafc11b37b097251b4b7c6b15e249262304f79b261bd4351d3ca89cb5fe",
+              "position": 5,
+              "uid": "f7a16d08-fbe2-5508-890d-cdbf70c1146e"
+            },
+            {
+              "content": "The user tends to revise the work plan but forget a detached budget table unless the key amount is repeated beside the activity.",
+              "content_digest": "393651043824d9e9c528e5de7618854b71970967d172ee1e9bc3c77aec3baab0",
+              "position": 6,
+              "uid": "2ca1d5a1-d78a-55b2-ab21-fd6ad73366b4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "cd305649-0152-4d28-98a0-7da5b82cb4e3"
+        },
+        {
+          "context_digest": "4efbf2f6c096022137cee2c075c75219bb4fd0f441579901b8445bb2d92101f5",
+          "context_name": "task-2/advisor2/budget",
+          "context_uid": "ae02c2b2-49d3-5c30-b686-81ea17a8a87e",
+          "memories": [
+            {
+              "content": "Keep the main text to the total and major categories, and place quantities, unit rates, and assumptions in one compact budget table or appendix.",
+              "content_digest": "2e0d76a9c09d14facdf93e8b82cb1c4f583b8a6063b74552f2c23b7d37224e9c",
+              "position": 0,
+              "uid": "d614b55d-d9f6-5347-8d02-2d219d621a09"
+            },
+            {
+              "content": "Give each cost category, quantity, unit rate, and subtotal a stable row in the separate budget table.",
+              "content_digest": "ecd8aa50fc469bb763f36784d140b871b82a283b39f30f46e9e166776321c602",
+              "position": 1,
+              "uid": "24500129-4b07-564f-ba67-39e40d7d7860"
+            },
+            {
+              "content": "Put the estimate basis in a dedicated table column so one assumption can be checked or revised without rewriting the narrative.",
+              "content_digest": "6ed604ab2ca300f215d13f18cb5344e9322635ad047ce36c08242765e7fb09f4",
+              "position": 2,
+              "uid": "07bad409-af9c-512a-b829-7ceb28273f91"
+            },
+            {
+              "content": "Readers can verify arithmetic and compare categories faster in a consistent table than in amounts distributed across prose.",
+              "content_digest": "1dc966a0ade3af3bc636cb99d456edbdb918c2a23efd4a5792db9f8ede061195",
+              "position": 3,
+              "uid": "abf6d361-c2eb-512f-87e0-f3af9c5eb677"
+            },
+            {
+              "content": "Revise one table row and its subtotal when an estimate changes instead of repeating the new amount across several prose paragraphs.",
+              "content_digest": "dcd7d010f7d2c1898fffe71ccc7a0067233dcbcf66fe4b429043b1900d097f84",
+              "position": 4,
+              "uid": "473cf3ca-9832-5d9c-97df-974f1d9b0d1b"
+            },
+            {
+              "content": "Keep detailed arithmetic out of the main argument when readers can reach the complete table from a clear reference.",
+              "content_digest": "940a8cdee63c326d9c9be89cc07e7f223f239e3537113d32c098f711bd816cf7",
+              "position": 5,
+              "uid": "675956de-2c61-53e1-bb89-9b49d92558ba"
+            },
+            {
+              "content": "The user tends to interrupt the argument with long cost enumerations when no separate budget table is available.",
+              "content_digest": "2c0715ec3cfa247a35c3acc854b0716dca764619050aa635c0c242a5b56aa2f1",
+              "position": 6,
+              "uid": "f4371f72-f222-5066-b2f4-0a6be5d6865e"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "fdc528a7-64cf-4bea-8a38-f36115d1adb3"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [
+        {
+          "options": [
+            {
+              "label": "Main text",
+              "text": "Require the essential detail beside the activity in the narrative.",
+              "uid": "053b0bb9-da1b-560f-b395-c09b71e2fb33"
+            },
+            {
+              "label": "Separate table",
+              "text": "Keep the detail in the clearly referenced table or appendix.",
+              "uid": "9583f926-c526-5a82-b14d-0a48e7c85240"
+            },
+            {
+              "label": "Both locations",
+              "text": "Repeat essential detail in the narrative while retaining the complete table.",
+              "uid": "907d9960-c692-5994-b120-974de1a5ad81"
+            }
+          ],
+          "priority": "REQUIRED",
+          "question": "When estimate detail is essential to judging proportionality and a complete table is clearly reachable, where must quantities, unit rates, and estimate bases appear?",
+          "relation_uids": [
+            "52180138-c04a-519c-a134-83ecb333fdd6"
+          ],
+          "title": "Ground the detail-location rule",
+          "uid": "072cfb23-01db-5179-b53a-173d76e0e645",
+          "why_it_matters": "This overlapping case determines whether the two placement rules can govern one proposal without contradictory drafting requirements."
+        }
+      ],
+      "overview": "Both frames value checkable costs and a readable argument, but they diverge on whether estimate detail belongs beside activities or in a separate table. They also identify complementary reader and authoring risks, while distinguishing maintenance actions for different kinds of change.",
+      "relations": [
+        {
+          "kind": "CONFLICT",
+          "members": [
+            {
+              "frame_uid": "cd305649-0152-4d28-98a0-7da5b82cb4e3",
+              "memory_uid": "05e0261e-5c52-5030-8176-0f02d4522931"
+            },
+            {
+              "frame_uid": "cd305649-0152-4d28-98a0-7da5b82cb4e3",
+              "memory_uid": "1083e9b3-698a-57b1-91ab-ce04cec1e5e5"
+            },
+            {
+              "frame_uid": "cd305649-0152-4d28-98a0-7da5b82cb4e3",
+              "memory_uid": "3652f268-d86f-55d6-935d-d3bdc487aae6"
+            },
+            {
+              "frame_uid": "cd305649-0152-4d28-98a0-7da5b82cb4e3",
+              "memory_uid": "f7a16d08-fbe2-5508-890d-cdbf70c1146e"
+            },
+            {
+              "frame_uid": "fdc528a7-64cf-4bea-8a38-f36115d1adb3",
+              "memory_uid": "d614b55d-d9f6-5347-8d02-2d219d621a09"
+            },
+            {
+              "frame_uid": "fdc528a7-64cf-4bea-8a38-f36115d1adb3",
+              "memory_uid": "07bad409-af9c-512a-b829-7ceb28273f91"
+            },
+            {
+              "frame_uid": "fdc528a7-64cf-4bea-8a38-f36115d1adb3",
+              "memory_uid": "675956de-2c61-53e1-bb89-9b49d92558ba"
+            }
+          ],
+          "reason": "The reference claims favor keeping major costs, quantities, rates, and estimate bases beside the narrative activity, including when that makes prose denser; the compared claims place those details in a separate table or appendix and keep them out of the main argument when the table is clearly reachable. These rules can govern the same request and then cannot both determine the detail’s primary location.",
+          "status": "UNRESOLVED",
+          "summary": "The frames prescribe opposing locations for the cost detail needed to assess a request.",
+          "uid": "52180138-c04a-519c-a134-83ecb333fdd6"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "cd305649-0152-4d28-98a0-7da5b82cb4e3",
+              "memory_uid": "4e1e1201-94b8-5a7a-8737-edc4c62881ff"
+            },
+            {
+              "frame_uid": "fdc528a7-64cf-4bea-8a38-f36115d1adb3",
+              "memory_uid": "abf6d361-c2eb-512f-87e0-f3af9c5eb677"
+            }
+          ],
+          "reason": "Checking cost near the claimed benefit and comparing arithmetic in a consistent table can both be supported, for example when the table is presented on the relevant page; neither claim requires abandoning the other verification aid.",
+          "status": "RESOLVED",
+          "summary": "Both frames seek to make costs easy for readers to verify against the proposal.",
+          "uid": "65689337-0ee0-51ce-88a1-49449eadbaac"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "cd305649-0152-4d28-98a0-7da5b82cb4e3",
+              "memory_uid": "2f5f9039-e038-51c1-8af0-21a78772c512"
+            },
+            {
+              "frame_uid": "fdc528a7-64cf-4bea-8a38-f36115d1adb3",
+              "memory_uid": "473cf3ca-9832-5d9c-97df-974f1d9b0d1b"
+            }
+          ],
+          "reason": "An activity change triggers synchronization of its narrative cost sentence, whereas an estimate change triggers revision of the affected table row and subtotal. The explicit triggers and affected artifacts explain the difference and must be preserved.",
+          "status": "RESOLVED",
+          "summary": "Maintenance guidance differs according to whether the related activity changes or an estimate changes.",
+          "uid": "4ae04891-ae51-5cbc-aea5-0a15ee91c6b6"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "cd305649-0152-4d28-98a0-7da5b82cb4e3",
+              "memory_uid": "2ca1d5a1-d78a-55b2-ab21-fd6ad73366b4"
+            },
+            {
+              "frame_uid": "fdc528a7-64cf-4bea-8a38-f36115d1adb3",
+              "memory_uid": "f4371f72-f222-5066-b2f4-0a6be5d6865e"
+            }
+          ],
+          "reason": "Forgetting a detached budget after revising the work plan and interrupting the argument when no separate table exists can both occur. Together they materially inform a presentation policy that uses a table while retaining a key amount beside the activity.",
+          "status": "RESOLVED",
+          "summary": "The frames identify complementary authoring risks from relying exclusively on either detached tables or prose cost enumerations.",
+          "uid": "eeeda3e9-2830-5a7d-9b32-d3a845d35950"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fdc528a7-64cf-4bea-8a38-f36115d1adb3",
+              "memory_uid": "24500129-4b07-564f-ba67-39e40d7d7860"
+            }
+          ],
+          "reason": "This is independently useful table-schema guidance with no corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The compared frame specifies a stable row structure for each cost category, quantity, unit rate, and subtotal.",
+          "uid": "81bc6240-360e-586c-bac9-1fffa438d450"
+        }
+      ],
+      "reports": {
+        "both": "Both emphasize verifiability and recognize complementary risks: detached budgets may be forgotten, while prose-only costing may disrupt the argument.",
+        "compared_only": "The compared frame additionally specifies stable table rows for categories, quantities, rates, and subtotals.",
+        "differences": "They conflict over placing major costs and estimate bases in prose versus a separate table, while prescribing different maintenance actions for activity changes and estimate changes.",
+        "reference_only": ""
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "a7355ecc-b4d3-4faf-bdbc-87b268847067"
+    },
+    "analysis_digest": "5ba8a43d9a2a2e7245653f0454dfad4e8086fb2b4f9cbf8a94696abb695fbc18",
+    "key": "85b615005adfb79593f29a05e320c4d35f5379c4e679d7808cc6ecc00cbfd8f2",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 55.727138292000745,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "85b615005adfb79593f29a05e320c4d35f5379c4e679d7808cc6ecc00cbfd8f2",
+  "created_at": "2026-08-13T18:14:52.830138Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/budget",
+  "pair_key": "d451026ece2fd74553662501a41c10e8797dc72ea7b518bfb02841c0ce3a950e",
+  "provider_seconds": 55.727138292000745,
+  "right": "task-2/advisor2/budget",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

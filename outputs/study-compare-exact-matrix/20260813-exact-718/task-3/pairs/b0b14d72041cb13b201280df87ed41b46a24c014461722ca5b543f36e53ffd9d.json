@@ -1,0 +1,424 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:51:17.301860+00:00",
+      "frames": [
+        {
+          "context_digest": "43b741cd1df20a084f3517aec7f886d4e5022812f0536eb126a6caf2d5570489",
+          "context_name": "task-3/local/personal-memory/2025/05",
+          "context_uid": "1f913bb6-790c-5490-a20d-127c7aab5892",
+          "memories": [
+            {
+              "content": "The user keeps two potted herbs beside a south-facing window.",
+              "content_digest": "b79056c033f208bb02b99fef1c011e5537e2ea8c19c3894863c3a5ad56054e08",
+              "position": 0,
+              "uid": "cb09b8ab-c7c4-51bb-a227-039c7cdfae5d"
+            },
+            {
+              "content": "During a week when the user watered every day based only on the soil surface, the leaves of one plant turned yellow.",
+              "content_digest": "042f4be9fd5481a7252d1c0065e95085e11e81e475531afe45b9f1d268d4c5b4",
+              "position": 1,
+              "uid": "95978183-0070-5b12-b117-be39bb343a5e"
+            },
+            {
+              "content": "During a week when the user checked below the soil surface with a finger before watering, the plant grew new leaves.",
+              "content_digest": "06ca2ec53f03677fdfd78bb1d391f197d3f49b974f6e812f25ba49ce34f74249",
+              "position": 2,
+              "uid": "8c610ce5-1eb7-52e5-ad81-e8062d23cd19"
+            },
+            {
+              "content": "On a day the user left the window open for a long time, strong wind knocked over one pot.",
+              "content_digest": "914f67a75fdf73cee064a465a9f0e6ee9ba012f1a40c614e199a9354756203a8",
+              "position": 3,
+              "uid": "3f886c0c-071b-5f2d-adad-da01345d702f"
+            },
+            {
+              "content": "The next day, the user moved the pot inward from the windowsill so the same wind would not knock it over.",
+              "content_digest": "f190916b360b6543865ced49cf5d9a987e96c9147966181e5920342bb41ba50c",
+              "position": 4,
+              "uid": "afe855b8-f5ad-559c-a63f-6f655ba371a2"
+            },
+            {
+              "content": "The user put a plant-name label in a small pot received from their maternal aunt.",
+              "content_digest": "82284f0102305db41eaaecafe86bc05833090853320f2ebb8e5f44abb2d78a63",
+              "position": 5,
+              "uid": "384c4f5f-b15c-5742-ac79-20106d0dd30b"
+            },
+            {
+              "content": "The user confused the care instructions for an unlabeled pot with those for another plant.",
+              "content_digest": "824267db866253690527d5ab08166f4228401443ed903708d33ac22542811750",
+              "position": 6,
+              "uid": "48dc89af-ed9d-51a5-a4b1-b809fd818143"
+            },
+            {
+              "content": "The user's maternal aunt considers understanding the sunlight at a pot's location more important than watering frequency when caring for it.",
+              "content_digest": "8a24f6df4a58db3e538f77e572a3cf152b7a4aff3527ec3d8616e85a675bc7c0",
+              "position": 7,
+              "uid": "a2426820-65d6-5c78-ac50-0f32b366ae47"
+            },
+            {
+              "content": "Before creating a plant-care reminder, check each plant's name and most recent watering date.",
+              "content_digest": "ecd7ef911951f3c2383cd916a4efbd94bdf439f63de1687c2f637a161ac8a60d",
+              "position": 8,
+              "uid": "efd51196-ed48-5699-a0f4-c5b8e149d11c"
+            },
+            {
+              "content": "The soil in the user's potted herbs beside the south-facing window dries at different rates depending on the season and amount of sunlight.",
+              "content_digest": "f716b16e802d30d4c2d1ed4bff855812682e53a9fc4e29988e2662ae321d0a4f",
+              "position": 9,
+              "uid": "4c93eeff-566e-5a1a-afb9-035c97fb9c73"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "41992d3e-8143-48d6-9cb7-2b9ce05bed70"
+        },
+        {
+          "context_digest": "d28031209c5edc768a592166e26351dd5bce0c7568d379fcaceab173450041c8",
+          "context_name": "task-3/local/personal-memory/2026/02",
+          "context_uid": "7ffcbc10-1703-54b0-9545-99742b51d333",
+          "memories": [
+            {
+              "content": "The user keeps basic repair tools in a box beneath the sink.",
+              "content_digest": "c2a23bace63735c502081b19682a8ceb3e37156b9aadd6f7739e2005c20469d6",
+              "position": 0,
+              "uid": "7d3daf76-a21e-5117-a534-6175ab2d2861"
+            },
+            {
+              "content": "On a day the faucet leaked, the user placed only a towel beneath it, and the floor became wet as well.",
+              "content_digest": "ad6baa7e1848e4e61bdaf22bc5c8665122330b5c70c8ae192216abbba17c6134",
+              "position": 1,
+              "uid": "70a6d9f5-180f-5174-b247-690e10baa23e"
+            },
+            {
+              "content": "After sending a photo to building management, the user finalized the time for a repair visit.",
+              "content_digest": "82b36c7a95e51a0dfa32768c2a437d509b75c0f93bc51a99a636f2c9739a20da",
+              "position": 2,
+              "uid": "9fcd922c-147c-517b-82b3-180fdfb13f33"
+            },
+            {
+              "content": "Before the technician's visit, the user emptied the area beneath the sink so work could begin immediately.",
+              "content_digest": "dbc3b48e5bc4b406dc17067dd93d92e845e3706f47c8706f9a5d5ef17bf64617",
+              "position": 3,
+              "uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5"
+            },
+            {
+              "content": "On a day the user wrote the visit time only in the calendar and turned off the reminder, they heard the doorbell late.",
+              "content_digest": "95fab6bcab815dd8bdd5fecb867f84c6d2f1a901771603b1dbf197cde3c1d19d",
+              "position": 4,
+              "uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65"
+            },
+            {
+              "content": "For the next visit, the user enabled a reminder 30 minutes beforehand and answered immediately at the entrance.",
+              "content_digest": "818783ff21b2d369935b9994c17b28f93f84ea7558dab9f2de20d0aad21f86a3",
+              "position": 5,
+              "uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a"
+            },
+            {
+              "content": "After the repair, the user called their maternal aunt to confirm that the spare key entrusted to her was still there.",
+              "content_digest": "ac01b9816dda2d6bf16f22b41157120b7ffdd75d19638f6313a88e1ce6e7a1f1",
+              "position": 6,
+              "uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441"
+            },
+            {
+              "content": "The user's maternal aunt considers it unsafe to hand the spare key to a repair technician without the user's explicit request.",
+              "content_digest": "f7c7c0306c81cc6de9f02aa1aed7d411db3f29757d024e7d5a1679b1ff308948",
+              "position": 7,
+              "uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd"
+            },
+            {
+              "content": "Obtain the user's reconfirmation before scheduling an external worker to enter the residential unit.",
+              "content_digest": "34382e40f4907bea82728787fdeb150e299d46a0079ae2847d4eda6d6d892d22",
+              "position": 8,
+              "uid": "4716a67b-8602-564c-9e89-85cd4ee158f9"
+            },
+            {
+              "content": "A multi-unit residential building's repair schedule may change because of emergency work or parts availability.",
+              "content_digest": "d701fdd1ffbf17ff0890c583b5bf39849e3c6e3cc296fde7e00d3d1ecc0ef196",
+              "position": 9,
+              "uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "d24678bf-d2d5-47c5-bb9d-a9ea75f6f11d"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The reference frame concerns herb care, watering cues, pot identification, and window-related risks. The compared frame independently concerns leak response, repair-visit preparation and reminders, spare-key security, entry authorization, and scheduling uncertainty. No claims address the same operational policy closely enough for a cross-frame relation.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "41992d3e-8143-48d6-9cb7-2b9ce05bed70",
+              "memory_uid": "cb09b8ab-c7c4-51bb-a227-039c7cdfae5d"
+            }
+          ],
+          "reason": "This is independently useful plant-location context with no counterpart concerning the same subject or decision.",
+          "status": "RESOLVED",
+          "summary": "The user keeps potted herbs beside a south-facing window.",
+          "uid": "870c7094-f8cf-5ed3-8715-fedc7ae12fdd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "41992d3e-8143-48d6-9cb7-2b9ce05bed70",
+              "memory_uid": "95978183-0070-5b12-b117-be39bb343a5e"
+            },
+            {
+              "frame_uid": "41992d3e-8143-48d6-9cb7-2b9ce05bed70",
+              "memory_uid": "8c610ce5-1eb7-52e5-ad81-e8062d23cd19"
+            }
+          ],
+          "reason": "The observations split one one-sided claim about selecting a watering cue, while the compared frame contains no plant-watering policy.",
+          "status": "RESOLVED",
+          "summary": "Observed plant outcomes favor checking moisture below the soil surface over watering daily from surface appearance alone.",
+          "uid": "b129e3a2-67b8-5e69-82d4-e8e744c1da0c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "41992d3e-8143-48d6-9cb7-2b9ce05bed70",
+              "memory_uid": "3f886c0c-071b-5f2d-adad-da01345d702f"
+            },
+            {
+              "frame_uid": "41992d3e-8143-48d6-9cb7-2b9ce05bed70",
+              "memory_uid": "afe855b8-f5ad-559c-a63f-6f655ba371a2"
+            }
+          ],
+          "reason": "The incident and response form one plant-placement safety claim without a counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "After an open-window wind knocked over a pot, the user moved it inward to prevent recurrence.",
+          "uid": "10ada817-17ed-53c8-b015-40e3ed0b1cf2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "41992d3e-8143-48d6-9cb7-2b9ce05bed70",
+              "memory_uid": "384c4f5f-b15c-5742-ac79-20106d0dd30b"
+            }
+          ],
+          "reason": "This plant-identification fact is independently useful and does not correspond to the compared frame's unrelated references to the aunt.",
+          "status": "RESOLVED",
+          "summary": "The user labeled a small plant pot received from their maternal aunt.",
+          "uid": "acc9a899-874c-5974-8365-cfabf986eb44"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "41992d3e-8143-48d6-9cb7-2b9ce05bed70",
+              "memory_uid": "48dc89af-ed9d-51a5-a4b1-b809fd818143"
+            }
+          ],
+          "reason": "This records a distinct consequence of missing plant identification, absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "An unlabeled pot caused the user to confuse care instructions between plants.",
+          "uid": "fdd3af63-4e9a-5e58-8743-2dc36e3e76a8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "41992d3e-8143-48d6-9cb7-2b9ce05bed70",
+              "memory_uid": "a2426820-65d6-5c78-ac50-0f32b366ae47"
+            }
+          ],
+          "reason": "This is a one-sided plant-care preference; the compared aunt's views concern access security instead.",
+          "status": "RESOLVED",
+          "summary": "The user's maternal aunt prioritizes understanding a pot's sunlight over watering frequency.",
+          "uid": "f88a3b27-6e1b-5e05-8106-90d36b963650"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "41992d3e-8143-48d6-9cb7-2b9ce05bed70",
+              "memory_uid": "efd51196-ed48-5699-a0f4-c5b8e149d11c"
+            }
+          ],
+          "reason": "This governs plant-reminder creation, whereas the compared reminder information governs attendance at repair visits.",
+          "status": "RESOLVED",
+          "summary": "Plant-care reminders should be preceded by checking the plant name and latest watering date.",
+          "uid": "967acd49-f5bd-5462-89c4-c3a5de0b2aa8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "41992d3e-8143-48d6-9cb7-2b9ce05bed70",
+              "memory_uid": "4c93eeff-566e-5a1a-afb9-035c97fb9c73"
+            }
+          ],
+          "reason": "This is independent environmental context for plant care with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The herbs' soil dries at rates that vary with season and sunlight.",
+          "uid": "3efefa01-4140-5881-8dfd-7ca08ffbac26"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d24678bf-d2d5-47c5-bb9d-a9ea75f6f11d",
+              "memory_uid": "7d3daf76-a21e-5117-a534-6175ab2d2861"
+            }
+          ],
+          "reason": "This is independently useful repair-resource context absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user stores basic repair tools beneath the sink.",
+          "uid": "234a4664-dac3-5297-a7c5-52ac1159a6cc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d24678bf-d2d5-47c5-bb9d-a9ea75f6f11d",
+              "memory_uid": "70a6d9f5-180f-5174-b247-690e10baa23e"
+            }
+          ],
+          "reason": "This one-sided leak-response observation has no plant-care counterpart.",
+          "status": "RESOLVED",
+          "summary": "Using only a towel beneath a leaking faucet failed to keep the floor dry.",
+          "uid": "aeb7730c-f871-5d1b-a823-9019a0759a79"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d24678bf-d2d5-47c5-bb9d-a9ea75f6f11d",
+              "memory_uid": "9fcd922c-147c-517b-82b3-180fdfb13f33"
+            }
+          ],
+          "reason": "This describes repair coordination not addressed in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user finalized a repair-visit time after sending building management a photo.",
+          "uid": "3a4e037f-03e2-50f7-baf0-8c0bc723bc47"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d24678bf-d2d5-47c5-bb9d-a9ea75f6f11d",
+              "memory_uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5"
+            }
+          ],
+          "reason": "This is a distinct preparation practice for repair access with no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user cleared the area beneath the sink before the technician arrived.",
+          "uid": "88841043-0e13-5d15-9249-d82b891dda42"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d24678bf-d2d5-47c5-bb9d-a9ea75f6f11d",
+              "memory_uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65"
+            },
+            {
+              "frame_uid": "d24678bf-d2d5-47c5-bb9d-a9ea75f6f11d",
+              "memory_uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a"
+            }
+          ],
+          "reason": "The contrasting outcomes split one claim about timely response to repair visits; reference reminders serve a different operational purpose.",
+          "status": "RESOLVED",
+          "summary": "Repair-visit experience favors enabling a reminder 30 minutes beforehand rather than relying only on a calendar entry.",
+          "uid": "5cec8f2b-3a4c-54ec-927e-48e385f4e0ff"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d24678bf-d2d5-47c5-bb9d-a9ea75f6f11d",
+              "memory_uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441"
+            }
+          ],
+          "reason": "This key-custody check is independently useful and unrelated to the reference frame's aunt-associated plant facts.",
+          "status": "RESOLVED",
+          "summary": "After the repair, the user verified with their maternal aunt that she still held the entrusted spare key.",
+          "uid": "5db79841-ef86-55b7-ac2c-0e5898960b33"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d24678bf-d2d5-47c5-bb9d-a9ea75f6f11d",
+              "memory_uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd"
+            }
+          ],
+          "reason": "This is a specific key-handoff security policy absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user's maternal aunt considers giving a technician the spare key unsafe without the user's explicit request.",
+          "uid": "fa41bd60-8349-54db-8dcb-7b40259dd5cf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d24678bf-d2d5-47c5-bb9d-a9ea75f6f11d",
+              "memory_uid": "4716a67b-8602-564c-9e89-85cd4ee158f9"
+            }
+          ],
+          "reason": "This governs authorization for residential entry and has no corresponding operational policy in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user's reconfirmation should be obtained before scheduling an external worker to enter the residence.",
+          "uid": "0a1fcd1f-ac89-5433-84f9-024dbac583c0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d24678bf-d2d5-47c5-bb9d-a9ea75f6f11d",
+              "memory_uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+            }
+          ],
+          "reason": "This is independent scheduling context not present in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Repair schedules in multi-unit buildings may change because of emergencies or parts availability.",
+          "uid": "0edd040c-edc5-5782-99f7-e113d5993717"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame describes leak handling, repair coordination and preparation, visit reminders, spare-key safeguards, worker-entry confirmation, and schedule variability.",
+        "differences": "",
+        "reference_only": "The reference describes south-window herbs, moisture-sensitive watering, seasonal drying, wind protection, plant labels, care priorities, and reminder prerequisites."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "654dcbf0-4c3a-409c-bb1e-ed14b0a33bba"
+    },
+    "analysis_digest": "646db493c8c8c83b63e57f817a97ee4cfbe582d96358fdc61c1f23f34c973989",
+    "key": "25f3f6e41821331744183ee492fcc7353ff3b1a90f078bab3d43514de07c7bee",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 51.8994609170004,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "25f3f6e41821331744183ee492fcc7353ff3b1a90f078bab3d43514de07c7bee",
+  "created_at": "2026-08-13T18:52:09.200835Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/05",
+  "pair_key": "b0b14d72041cb13b201280df87ed41b46a24c014461722ca5b543f36e53ffd9d",
+  "provider_seconds": 51.8994609170004,
+  "right": "task-3/local/personal-memory/2026/02",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

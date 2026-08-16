@@ -1,0 +1,302 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:28:40.363802+00:00",
+      "frames": [
+        {
+          "context_digest": "587a9d2fb6abf2b486ccfc50ff85ae7280d7d7bd4003d85ce5877a4edfc9293f",
+          "context_name": "task-2/advisor1/terminology",
+          "context_uid": "7699c7c5-e48b-5548-b0aa-256d793c6c06",
+          "memories": [
+            {
+              "content": "Use the same term throughout the proposal for the same interaction concept or interface element.",
+              "content_digest": "2f11d02134609c6397d8f60105cc452e34129bc1c427a512455247e54951f18a",
+              "position": 0,
+              "uid": "949a884d-b348-5fa0-b1dd-adbebafe10a9"
+            },
+            {
+              "content": "Use abbreviations only for recurring terms of three or more words.",
+              "content_digest": "dcceb4407d24df4034dceca613413471bb46898a487aed0cc0905e48ede482e7",
+              "position": 1,
+              "uid": "2f484151-b5fc-51a9-8a88-b30a403617b3"
+            },
+            {
+              "content": "Present the full name and abbreviation together when using an abbreviation for the first time.",
+              "content_digest": "02e1b2b4cbc8f9a61e299bf1500663ae8cd4036155b2a7dec8c2ce40087ac29b",
+              "position": 2,
+              "uid": "21131a6f-d35c-51e3-895f-46cd21a3b566"
+            },
+            {
+              "content": "Prioritize the research role over diagnostic labels or deficits when referring to participants.",
+              "content_digest": "7b99c6ec90abdbb68d4af8e95a03df3149b9d2d4d637fbd33a70a2acf7073a12",
+              "position": 3,
+              "uid": "e02c3110-05c4-58a4-8d76-c8fd2426a0d5"
+            },
+            {
+              "content": "Reviewers from different subfields struggle to infer undefined abbreviations from context alone.",
+              "content_digest": "13af5eb9fe88f3f2d73192adfb48f7a20de09e22e777a952daa83ca1c030f9ee",
+              "position": 4,
+              "uid": "af028910-e48b-5605-b92b-9378bdfa525c"
+            },
+            {
+              "content": "Use the term formative evaluation for studies seeking design modification evidence, and distinguish it from final efficacy judgments.",
+              "content_digest": "4ba9bca850286ff6286cf4b3bf44395d608ec700c46acd8cd26c54e26d43b378",
+              "position": 5,
+              "uid": "39792d18-2be0-5135-a063-c5213247d330"
+            },
+            {
+              "content": "The user can have contribution labels such as principles, models, or guidelines approved only if they align with the abstraction level of the actual deliverables.",
+              "content_digest": "efed93b748ce74e3e9ed96949bf539c809ea4c36ae77bbb54670285f691f74e9",
+              "position": 6,
+              "uid": "bcaa8c30-ca6e-5b9f-af93-88513a2f16b1"
+            },
+            {
+              "content": "Design principles describe the relationship between conditions and outcomes rather than serving as instructions that merely replicate a single screen layout.",
+              "content_digest": "22385c2bb345db07d19c442e5d99a5c527c2795848b9e29fe198d0ede6255d6f",
+              "position": 7,
+              "uid": "82ad9fe2-4063-5e89-9097-c975aa2920cb"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "37c484d1-8f28-430f-8876-86b84f6faa0b"
+        },
+        {
+          "context_digest": "4371a72e6fb939731cb550ca5363a3b5210680482f84c18b36ba933f4454ecc1",
+          "context_name": "task-2/advisor2/expression",
+          "context_uid": "cf8e8baf-292e-57c3-8e2c-3f9b3d52f3d3",
+          "memories": [
+            {
+              "content": "Use a sequence table rather than a flow diagram when the procedure is likely to change repeatedly during drafting.",
+              "content_digest": "575bb4530af1e93b215ea57f0fd63e1e09136554da98aecf87288cc39ea9697c",
+              "position": 0,
+              "uid": "4264c20d-3e44-578d-866e-7787cc7b59e2"
+            },
+            {
+              "content": "The visual fidelity of a prototype and its level of connection to actual data and services may differ.",
+              "content_digest": "9478cb005a07ca7edfa924579b3d5221b1fa1143b5d8327369e7ee799b76aa9f",
+              "position": 1,
+              "uid": "70a8c3f0-0f6a-5881-abd6-29f52833b7bd"
+            },
+            {
+              "content": "Service flow diagrams indicate human-system transitions that are not revealed by individual screens alone.",
+              "content_digest": "5e3e18a38b1e62724d2ae0445549e214a219d205a80735bc6b4c0e643a96b8b3",
+              "position": 2,
+              "uid": "b410aa8d-db87-586b-a1cd-4af5767a9f7a"
+            },
+            {
+              "content": "HCI reviewers often scan system structure and service flow diagrams before the main text.",
+              "content_digest": "22a46440a6aeda0cb7d39cc6fedf6bbff6cac91232ec0cb163bf1fc17ff257d4",
+              "position": 3,
+              "uid": "a385fbb1-85b4-5132-bbc7-8fd8daedb715"
+            },
+            {
+              "content": "Give each step, actor, condition, and outcome a stable row in the sequence table.",
+              "content_digest": "2a073bf2ec4c5592ddc405d83cb438a5ed880699d3c157f310fb3dbff7851622",
+              "position": 4,
+              "uid": "22254f16-4628-5fd9-b1af-6e66dc2572b3"
+            },
+            {
+              "content": "Updating one row in a sequence table is usually faster than redrawing a branching diagram after a procedural change.",
+              "content_digest": "cf97dbf66018a6be1ee42dfc79ff8de44e8742db2b42c9d1ef70b3f252805a39",
+              "position": 5,
+              "uid": "32028269-5d43-5a65-b22b-9e570ceabfde"
+            },
+            {
+              "content": "Readers can check sequence tables step by step but may find the overall branching shape less immediate.",
+              "content_digest": "18b5de0cdd22ef1774151332afdbc408f9f591cf889e51271f81a372f74ef86d",
+              "position": 6,
+              "uid": "939ee3d0-b611-574a-a25b-82708394bd5e"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "a5f266b8-27ed-4066-bb19-4bd8a741dae7"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate aspects of proposal quality. The reference frame governs terminology, participant language, evaluation naming, and contribution labels, while the compared frame focuses on prototype dimensions and selecting, structuring, and interpreting procedural representations.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "37c484d1-8f28-430f-8876-86b84f6faa0b",
+              "memory_uid": "949a884d-b348-5fa0-b1dd-adbebafe10a9"
+            }
+          ],
+          "reason": "Only the reference frame supplies this terminology-consistency rule.",
+          "status": "RESOLVED",
+          "summary": "Use consistent terminology for each interaction concept or interface element throughout a proposal.",
+          "uid": "86ade43f-63ff-5b6d-8101-fcf398e949e4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "37c484d1-8f28-430f-8876-86b84f6faa0b",
+              "memory_uid": "2f484151-b5fc-51a9-8a88-b30a403617b3"
+            },
+            {
+              "frame_uid": "37c484d1-8f28-430f-8876-86b84f6faa0b",
+              "memory_uid": "21131a6f-d35c-51e3-895f-46cd21a3b566"
+            },
+            {
+              "frame_uid": "37c484d1-8f28-430f-8876-86b84f6faa0b",
+              "memory_uid": "af028910-e48b-5605-b92b-9378bdfa525c"
+            }
+          ],
+          "reason": "These reference-side statements jointly define and motivate one abbreviation-clarity policy absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Restrict abbreviations to recurring multiword terms and introduce them with their full names so diverse reviewers need not infer their meaning.",
+          "uid": "b9dc9f8f-ccf6-507c-9ed0-d4b899879853"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "37c484d1-8f28-430f-8876-86b84f6faa0b",
+              "memory_uid": "e02c3110-05c4-58a4-8d76-c8fd2426a0d5"
+            }
+          ],
+          "reason": "Only the reference frame supplies this participant-language policy.",
+          "status": "RESOLVED",
+          "summary": "Refer to participants by their research role rather than foregrounding diagnoses or deficits.",
+          "uid": "1b02933e-39f1-57d3-a68d-e940a298d539"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "37c484d1-8f28-430f-8876-86b84f6faa0b",
+              "memory_uid": "39792d18-2be0-5135-a063-c5213247d330"
+            }
+          ],
+          "reason": "Only the reference frame supplies this evaluation-naming distinction.",
+          "status": "RESOLVED",
+          "summary": "Call design-modification studies formative evaluations and distinguish them from final efficacy judgments.",
+          "uid": "cf26e160-52de-542c-86ef-2ef1ae6a1e90"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "37c484d1-8f28-430f-8876-86b84f6faa0b",
+              "memory_uid": "bcaa8c30-ca6e-5b9f-af93-88513a2f16b1"
+            },
+            {
+              "frame_uid": "37c484d1-8f28-430f-8876-86b84f6faa0b",
+              "memory_uid": "82ad9fe2-4063-5e89-9097-c975aa2920cb"
+            }
+          ],
+          "reason": "These reference-side statements jointly define one abstraction-aligned contribution-labeling policy absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Contribution labels must reflect the deliverables’ abstraction level, with design principles expressing condition–outcome relationships rather than screen-specific replication instructions.",
+          "uid": "250473e2-fa79-53c6-806f-e7e3c81fb1bd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a5f266b8-27ed-4066-bb19-4bd8a741dae7",
+              "memory_uid": "4264c20d-3e44-578d-866e-7787cc7b59e2"
+            },
+            {
+              "frame_uid": "a5f266b8-27ed-4066-bb19-4bd8a741dae7",
+              "memory_uid": "22254f16-4628-5fd9-b1af-6e66dc2572b3"
+            },
+            {
+              "frame_uid": "a5f266b8-27ed-4066-bb19-4bd8a741dae7",
+              "memory_uid": "32028269-5d43-5a65-b22b-9e570ceabfde"
+            },
+            {
+              "frame_uid": "a5f266b8-27ed-4066-bb19-4bd8a741dae7",
+              "memory_uid": "939ee3d0-b611-574a-a25b-82708394bd5e"
+            }
+          ],
+          "reason": "These compared-side statements jointly describe the structure, maintenance rationale, inspection benefit, and visual tradeoff of one procedural-representation choice absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "For frequently changing procedures, sequence tables use stable rows to support quick updates and stepwise checking, though they make overall branching less immediate.",
+          "uid": "5b6b6db1-ea0d-5fee-80f9-ed531c7734ef"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a5f266b8-27ed-4066-bb19-4bd8a741dae7",
+              "memory_uid": "70a8c3f0-0f6a-5881-abd6-29f52833b7bd"
+            }
+          ],
+          "reason": "Only the compared frame supplies this distinction between prototype dimensions.",
+          "status": "RESOLVED",
+          "summary": "A prototype’s visual fidelity can vary independently from its connection to real data and services.",
+          "uid": "5d1ac465-cd18-526e-b5e6-5a4f2475907e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a5f266b8-27ed-4066-bb19-4bd8a741dae7",
+              "memory_uid": "b410aa8d-db87-586b-a1cd-4af5767a9f7a"
+            }
+          ],
+          "reason": "Only the compared frame supplies this functional account of service flow diagrams.",
+          "status": "RESOLVED",
+          "summary": "Service flow diagrams reveal human–system transitions that individual screens do not show.",
+          "uid": "2bc57379-436c-5245-96ed-1c36e27e8671"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a5f266b8-27ed-4066-bb19-4bd8a741dae7",
+              "memory_uid": "a385fbb1-85b4-5132-bbc7-8fd8daedb715"
+            }
+          ],
+          "reason": "Only the compared frame supplies this reviewer-behavior observation.",
+          "status": "RESOLVED",
+          "summary": "HCI reviewers often inspect system-structure and service-flow diagrams before reading the main text.",
+          "uid": "8a6eddac-fafc-5422-818c-5b867ef73bd8"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame uniquely covers prototype fidelity dimensions, service-flow value and reviewer behavior, and sequence tables as maintainable but less visually immediate procedural representations.",
+        "differences": "",
+        "reference_only": "The reference uniquely covers consistent terminology, abbreviation clarity, role-first participant language, formative evaluation naming, and abstraction-appropriate contribution labels."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "77417b3a-a3a2-48a7-a511-77c56a762072"
+    },
+    "analysis_digest": "ee12b23b2cf4b56e07643f6b71f04f1de83215f2d4ba65ebc5f31de1c2c2fb36",
+    "key": "56b1ad95556533864664d63c83c27031b8f360758461a9cbb0d08fc498124653",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 29.81102275000012,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "56b1ad95556533864664d63c83c27031b8f360758461a9cbb0d08fc498124653",
+  "created_at": "2026-08-13T18:29:10.173864Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/terminology",
+  "pair_key": "7b8aaabce21c8927b638fa33133f4ce8f6b4d99b823c9649b025b5095936766e",
+  "provider_seconds": 29.81102275000012,
+  "right": "task-2/advisor2/expression",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

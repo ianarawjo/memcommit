@@ -1,0 +1,2364 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:10:52.591147+00:00",
+      "frames": [
+        {
+          "context_digest": "2556a96d4bda4852f4209077e6c423e62f31bb63bf1eb9afadfa89c7e0659b13",
+          "context_name": "task-2/advisor1",
+          "context_uid": "fdc991fe-01c0-5949-85b3-1937c4ea1fbe",
+          "memories": [
+            {
+              "content": "[task-2/advisor1/structure] Complete the problem framing within the first two sentences so the reader reaches the proposal's central issue before any supporting background.",
+              "content_digest": "d3c94a09a3087027cced21f85e784109eec0aa50bbf3d301ee4df230dbab2403",
+              "position": 0,
+              "uid": "44249c8a-e84f-5c20-a9cd-a55457e98511"
+            },
+            {
+              "content": "[task-2/advisor1/structure] Use the first sentence for the concrete problem and the second for its consequence; reserve later sentences for the proposed response.",
+              "content_digest": "35f75da3a5908bd4974cf67fbb1f058fdbce81e099e0987429ebbba18279bfe9",
+              "position": 1,
+              "uid": "21371c6c-c74f-5791-8f9b-6d099306bfb5"
+            },
+            {
+              "content": "[task-2/advisor1/structure] Specify the user, context, and interaction to be explored in the primary HCI research question.",
+              "content_digest": "4893a865e61b1fdfcb25ead225b6838073895e3709f8b471db5c00664b487d9c",
+              "position": 2,
+              "uid": "f69ea80c-0d56-5fe8-9d24-8793eefa6643"
+            },
+            {
+              "content": "[task-2/advisor1/structure] Provide one compact visual summary when proposing an unfamiliar interaction procedure.",
+              "content_digest": "b90eaa04a325972c7267fe3e495ceab8a0b231e282ab7fd53a7307fa3777c2bb",
+              "position": 3,
+              "uid": "18ebdcbc-cf5a-5e6c-b2cd-b4cd07d7e59e"
+            },
+            {
+              "content": "[task-2/advisor1/structure] Mark the conditions that move an unfamiliar interaction procedure from one step to the next in its visual summary.",
+              "content_digest": "9b3fba718d9d434c7169ce7d2ae708f1338332f4a0510129dbf3ae029a476b6d",
+              "position": 4,
+              "uid": "5ab99a77-8836-50cf-8377-fdd23a208bc4"
+            },
+            {
+              "content": "[task-2/advisor1/structure] Present the master’s research schedule as phased periods for exploration, design, prototyping, and user evaluation.",
+              "content_digest": "b69ac417f92be314fe76ee70a2979ead13b6966f270f5b6157708fa6cb04931d",
+              "position": 5,
+              "uid": "b9b7932b-85c1-5a14-80f7-0983dbf22380"
+            },
+            {
+              "content": "[task-2/advisor1/structure] Link one reviewable deliverable to each phase of the master’s research.",
+              "content_digest": "021b969513efec26aa71fa9ec2e4fb751572bfd54154dc3d9460b5a3378debe2",
+              "position": 6,
+              "uid": "fc0a3a72-2da2-5843-be3a-a4ff2adf8fac"
+            },
+            {
+              "content": "[task-2/advisor1/structure] Place the gap left by HCI-related research and the proposed design and empirical contributions in close proximity.",
+              "content_digest": "2c519da7e07e97dfcf7e7c82c55c6a7245b5917f9197a12df4eeefbc36560309",
+              "position": 7,
+              "uid": "2f7092a7-2625-5d27-bd76-a13ee5809cc2"
+            },
+            {
+              "content": "[task-2/advisor1/structure] Divide a two-page proposal with short descriptive subheadings so a reader can jump directly to the problem, proposed response, and next steps.",
+              "content_digest": "606f0467a0e2e988b32f478778c819b4f9eb71e4f7ebe15a62e80376871877f7",
+              "position": 8,
+              "uid": "a1857f07-36cd-5a6c-946d-a308e712e9eb"
+            },
+            {
+              "content": "[task-2/advisor1/structure] Give the problem and proposed response their own descriptive subheadings instead of relying only on paragraph transitions.",
+              "content_digest": "3efb4b798e4e8132d477126bdbac45f9c07a167214d8fb7740a658ea3dad904d",
+              "position": 9,
+              "uid": "895b5ac9-1aa4-51d2-b89a-94e9fe5b869d"
+            },
+            {
+              "content": "[task-2/advisor1/structure] Give the next steps and requested support their own descriptive subheading so they remain easy to find on a return visit.",
+              "content_digest": "5e64be4e7a7ac865477465210cf8bb51d5839ac742cc845218577a8208bda903",
+              "position": 10,
+              "uid": "3005f4c5-e17b-531b-b9bf-c9d69411c71f"
+            },
+            {
+              "content": "[task-2/advisor1/structure] Place pilot observation or initial prototype results near sentences supporting feasibility claims.",
+              "content_digest": "c8b01163ad974a325f2a9c0dd46b535886d74b79d495718c36f185cc289e7434",
+              "position": 11,
+              "uid": "4913f63e-ceb9-587a-ade9-494fc8f28849"
+            },
+            {
+              "content": "[task-2/advisor1/structure] Readers often decide what a proposal is about from its first two sentences before scanning the rest of the page.",
+              "content_digest": "70496b8ca944e326c0fbe52303d1ca64284b1ddaaa6caf2a0d795081a8a55358",
+              "position": 12,
+              "uid": "8ecaec22-7c25-5a39-a85b-56db9c3b607e"
+            },
+            {
+              "content": "[task-2/advisor1/structure] When setup continues past the second sentence, readers who are skimming often retain the background topic but miss the exact problem being proposed.",
+              "content_digest": "e99259f493a2c6c92c5cddca83bdeba9828cdbde6f4b365938756d25bc863626",
+              "position": 13,
+              "uid": "a4536b84-40f2-57db-84e4-024c97c9fecb"
+            },
+            {
+              "content": "[task-2/advisor1/structure] Reuse the same short subheadings in discussion so a reader can return to a section without searching through the whole page.",
+              "content_digest": "2be64916e8b63a3e84e6cbf3ced8fcf8ce041e2386a18d21a1fbbc9c2922bde0",
+              "position": 14,
+              "uid": "2312cb6e-4f50-56f5-b725-ba5e45697a73"
+            },
+            {
+              "content": "[task-2/advisor1/structure] Use visible subheadings as a completeness check: an empty or missing section makes an omitted part of the proposal immediately apparent.",
+              "content_digest": "d904509f30c9fc7bd847b457dfc0b3894e0b48eaf9d2119167b01925b1bc4942",
+              "position": 15,
+              "uid": "1d90043b-f010-5a14-9493-77f636c13975"
+            },
+            {
+              "content": "[task-2/advisor1/structure] Readers often scan section labels before deciding which paragraph to read closely.",
+              "content_digest": "d8bbc143aa271749535990c6fce63d7d13af4fada91f5d5056a53771349da274",
+              "position": 16,
+              "uid": "b77fe6ec-676b-5bb9-9119-45aefea2aa27"
+            },
+            {
+              "content": "[task-2/advisor1/emphasis] Do not exceed two primary HCI contributions.",
+              "content_digest": "f1533d0ccff7eb618eca43cc64e46c9cadeef788da967a43b2da93b9040b2280",
+              "position": 17,
+              "uid": "4a1de8df-6f03-5a3d-bbfa-7c1144d2ec5c"
+            },
+            {
+              "content": "[task-2/advisor1/emphasis] Name each design or empirical contribution and present it in a single sentence.",
+              "content_digest": "f5c01a5a6a8751e2c50ee0586133820bb64322553616af993df0c8820269c41a",
+              "position": 18,
+              "uid": "b5b6a901-9047-5482-a0e1-d29e5f7171e8"
+            },
+            {
+              "content": "[task-2/advisor1/emphasis] In studies recruiting community participants, emphasize the time burden associated with participation.",
+              "content_digest": "4e820f9d6572fd550f0d364957e33066115c62c5460a8cfbe539f5fbe2856895",
+              "position": 19,
+              "uid": "e89de514-48a5-5e9b-96ca-f194c0ed79ab"
+            },
+            {
+              "content": "[task-2/advisor1/emphasis] In studies recruiting community participants, emphasize the travel burden associated with participation.",
+              "content_digest": "f91fec248e3355a54a2ece24409fc2431cc48493740a90b4c4824db441598a9a",
+              "position": 20,
+              "uid": "f7025cbb-4005-53c6-9031-e33f04a86b92"
+            },
+            {
+              "content": "[task-2/advisor1/emphasis] HCI reviewers find it difficult to identify primary contributions when named design or empirical contributions exceed two.",
+              "content_digest": "7c34ca542e565357941c569fecd1dd97cf03af4d22bd99d2d65fb2c9394100bd",
+              "position": 21,
+              "uid": "a42891a1-b674-5747-a77c-43699b0b9723"
+            },
+            {
+              "content": "[task-2/advisor1/emphasis] Emphasize the core design decisions that formative evaluation will change rather than a polished product demonstration.",
+              "content_digest": "35a5876a2f986d939d069e20e6add544dd918519c46ac51400de6c0572499ef5",
+              "position": 22,
+              "uid": "9d7169d5-058f-5f7c-b1ac-30cabd8ba02e"
+            },
+            {
+              "content": "[task-2/advisor1/emphasis] Emphasize design principles transferable to other similar interactions as the primary contribution, rather than the performance of a specific prototype.",
+              "content_digest": "360da007dbbee8677add4777c02ee317f6a3767111fb2fe4a9b5392219c5ff3f",
+              "position": 23,
+              "uid": "f8931b4e-9656-548d-84a1-f2f2c3eb47b1"
+            },
+            {
+              "content": "[task-2/advisor1/emphasis] Formative evaluation creates grounds for modification in subsequent iterations rather than definitively determining the superiority of design alternatives.",
+              "content_digest": "e2dde861ac4998c39bf44a0be85c767ce7928f09385404bc12983ae21b1d7832",
+              "position": 24,
+              "uid": "9bf9e735-7598-5977-abe2-87b2c9c38a24"
+            },
+            {
+              "content": "[task-2/advisor1/style] Avoid em dashes in the proposal; split the sentence or use more ordinary punctuation instead.",
+              "content_digest": "abbfd72a0ae61514d345dfc39cc02edbd0b0cee6b5c18fd9dd1fde3f425edd58",
+              "position": 25,
+              "uid": "33503d41-7b99-5526-a028-0a1a20652c0d"
+            },
+            {
+              "content": "[task-2/advisor1/style] The user tends to place several independently reviewable claims in one long sentence.",
+              "content_digest": "ac79cca57e08ec8e09057148d5ca518ffc3e60da1c4d039b83691a00690704b2",
+              "position": 26,
+              "uid": "79437c17-1f08-5188-8177-c622429dc4f9"
+            },
+            {
+              "content": "[task-2/advisor1/style] Use first-person active voice for choices and commitments owned by the proposal author so responsibility remains explicit throughout the work plan.",
+              "content_digest": "0b734f348c6cd16b45f227391a5d6b543c364d5867c2fc1c035a70cfbd963791",
+              "position": 27,
+              "uid": "807a906c-d519-59b1-8406-43c8015ef068"
+            },
+            {
+              "content": "[task-2/advisor1/style] Describe prototype operations that have already been implemented and verified as observed states.",
+              "content_digest": "59c54435d47ad9f656217eaee0f423670161491e56944c0577396ed90bea1054",
+              "position": 28,
+              "uid": "e463a3b5-263f-58da-9895-242965892e60"
+            },
+            {
+              "content": "[task-2/advisor1/style] Describe prototype operations not yet implemented or evaluated as plans or expectations.",
+              "content_digest": "9097de84c02c9e2dc26bddb99987ec7f0f8d4335027a4aafa30ff4a7f0ed1699",
+              "position": 29,
+              "uid": "fef78af8-1774-5da0-8345-571eb8c9cc3c"
+            },
+            {
+              "content": "[task-2/advisor1/style] When a commitment is phrased passively, readers may interpret it as uncertainty, evasiveness, or reluctance to take responsibility.",
+              "content_digest": "fbeaa3db8c471838e9e55015528b61d839304c9d4c90dd3900e3ff15549dfe4e",
+              "position": 30,
+              "uid": "ff8f0b12-9df4-5968-90b2-cd8d971dcc1b"
+            },
+            {
+              "content": "[task-2/advisor1/style] Use “we” only for decisions and commitments the authors control, not for external facts or actions owned by another party.",
+              "content_digest": "ad2ffe1cf4b319233a0064d6ee3490a2f552207c4c1394f16d0ee75fab7c31d0",
+              "position": 31,
+              "uid": "6c282ef7-4326-5d69-a7c4-d3f4f3a3a508"
+            },
+            {
+              "content": "[task-2/advisor1/style] The user should use one first-person pronoun consistently for the same authorial role and should not alternate between “I” and “we” unless the responsible party actually changes.",
+              "content_digest": "60bdf874031779caf735df21923567cd5b4c3c24660f770663a2bfc8f7cedccd",
+              "position": 32,
+              "uid": "58565355-bec5-5b2b-89ed-f0b8cab0351a"
+            },
+            {
+              "content": "[task-2/advisor1/style] The user tends to hide unsettled commitments behind passive phrases such as “will be considered” or “is expected.”",
+              "content_digest": "daf5293ffa6a6f7a4f4366a3c374ce1585369975c430c8665633355f23bdbe71",
+              "position": 33,
+              "uid": "bec16e02-b267-50b8-9c0e-964184f2a6b4"
+            },
+            {
+              "content": "[task-2/advisor1/style] Split proposal prose into short sentences when a sentence contains more than one independently reviewable claim.",
+              "content_digest": "4eff43bb44357fdadb591ff32421b465982ac8dc23703417dd222fc5f4a869ea",
+              "position": 34,
+              "uid": "cc860653-ad91-52f8-91db-5b26371dca0a"
+            },
+            {
+              "content": "[task-2/advisor1/style] Keep one main claim in each sentence so a reviewer can locate and assess it quickly.",
+              "content_digest": "586c907058b08a33ec7e0bafe1fc5a7c9598ee059d4e2eaf62ac4e9778c1a16a",
+              "position": 35,
+              "uid": "af0d191d-d23e-562b-997b-b1024dacefda"
+            },
+            {
+              "content": "[task-2/advisor1/style] The user tends to repeat em dashes when a sentence already contains several clauses.",
+              "content_digest": "12e62687bc2f5118b8b2ca5bb4add3a855890ca279dbd7235f51f6d0961b439c",
+              "position": 36,
+              "uid": "13dc50e1-ecaa-504e-a602-7a10a09d5484"
+            },
+            {
+              "content": "[task-2/advisor1/style] Repeated em dashes can shift a reviewer’s attention from the proposal’s argument to suspicion that its prose was generated by AI.",
+              "content_digest": "bb47f85e810d95b5744c6800ce313f2b1d98779a4b38cf93e96e5eba05cb73de",
+              "position": 37,
+              "uid": "358230d3-9ff0-51b9-9bf6-0752a2d9845a"
+            },
+            {
+              "content": "[task-2/advisor1/claim-evidence] Attach adjacent evidence or citations to verifiable claims about user behavior or technology effects.",
+              "content_digest": "80e6fd903c14a3b0fdbef9872afe1b216b75b60266e5e9d6995435903b71bd6a",
+              "position": 38,
+              "uid": "06f6c673-ea0c-5657-89d2-3f8711097cd7"
+            },
+            {
+              "content": "[task-2/advisor1/claim-evidence] Distinguish between results observed in the pilot and expectations to be confirmed in the main user study using different expressions.",
+              "content_digest": "716bd6b081c12e227f44a38543fd809cb1a51087c150108f8c568f252b170bdb",
+              "position": 39,
+              "uid": "58991ce7-d394-5087-b14f-0b014b0ec6ad"
+            },
+            {
+              "content": "[task-2/advisor1/claim-evidence] Do not use verbs that imply proving causation if the design does not support causal inference.",
+              "content_digest": "05edaa72a849ba30c5baa4fe39d9e14d3f6290c92acd6c6087a6ef996b5f51ea",
+              "position": 40,
+              "uid": "f5adf029-a750-5a3a-8eb8-d68e43bb5c13"
+            },
+            {
+              "content": "[task-2/advisor1/claim-evidence] For topics with sufficient HCI research evidence, prioritize citing recent comprehensive studies over listing individual cases.",
+              "content_digest": "ae04218fbeea84a715540ac03bf64793c56eb2064c9d43dc34c031f2bd752f09",
+              "position": 41,
+              "uid": "b2a7ff8a-dfca-5857-8733-fe03cbd943ec"
+            },
+            {
+              "content": "[task-2/advisor1/claim-evidence] Explain how each design choice was derived to address specific user needs.",
+              "content_digest": "2a03a53521d73b9e21c3a9b113f84ea5985cbdd27594384f1b43003bdabbdca0",
+              "position": 42,
+              "uid": "1f0c95f4-69bb-5764-a358-d428ff7019d2"
+            },
+            {
+              "content": "[task-2/advisor1/claim-evidence] Support each core claim with evidence that directly examined it rather than with indirect summaries.",
+              "content_digest": "66fea7db58599fb218b323d51e03bbc0965620b91068ee02d845a21ab3346cf5",
+              "position": 43,
+              "uid": "cd475113-5354-5f80-b063-7628e4359afc"
+            },
+            {
+              "content": "[task-2/advisor1/claim-evidence] Reviewers first check the direct evidence placed closest to the core claim.",
+              "content_digest": "911cc9dea661a4e1c221585c749ecf4cc8f112899ef68ffe1ef9ca57cb6d88f8",
+              "position": 44,
+              "uid": "86fe1306-7650-58cc-a3df-79870c61784d"
+            },
+            {
+              "content": "[task-2/advisor1/claim-evidence] Connect the proposed conceptual design principle to at least one observable user behavior.",
+              "content_digest": "b71f0816974899b63b4fa56bd7bc935d4d64e770c64a27251e1dd6802a2b1105",
+              "position": 45,
+              "uid": "5d022e45-09c0-515e-98f1-68b2aec686bc"
+            },
+            {
+              "content": "[task-2/advisor1/claim-evidence] Identify which design judgment—retain, modify, or discard—each piece of evidence from formative evaluation supports.",
+              "content_digest": "e0a5793099bed49c60e40c858d8ead2e5a2a87867986ce3f9d50b91e35760c5a",
+              "position": 46,
+              "uid": "9939e9e8-d97d-57db-974a-750566ca9e2b"
+            },
+            {
+              "content": "[task-2/advisor1/claim-evidence] Results from controlled formative studies do not directly prove effects in actual long-term use.",
+              "content_digest": "295f3df938b6cd405ece97447f3fc03c48d217cfbbfabdde8f3eff5173a042cc",
+              "position": 47,
+              "uid": "41060e8e-95ff-58c1-8b71-36a501a9bd23"
+            },
+            {
+              "content": "[task-2/advisor1/claim-evidence] The user can have an explanation approved as a conceptual contribution only if it is falsifiable with observable data.",
+              "content_digest": "21b1712000eef36c413fc6ec56d2288b5f23359d9ac7901fc4efcc04de23a393",
+              "position": 48,
+              "uid": "ec54ce10-07db-5ae3-94a5-8f3621fed4a9"
+            },
+            {
+              "content": "[task-2/advisor1/expression] Use a flow diagram rather than a sequence table when alternate procedural branches lead to different outcomes.",
+              "content_digest": "ef96197fa08ffe435f4ebfa7e93929b4b7d95479568f28a357e7a64f98911ae8",
+              "position": 49,
+              "uid": "51fa3fcc-9d5f-52f0-809d-62d7cdd8a865"
+            },
+            {
+              "content": "[task-2/advisor1/expression] Draw alternate branches and their resulting outcomes in the same flow diagram so readers can compare them at once.",
+              "content_digest": "5688e2b2457b150c03929b3fdd217644524e56c6c4ea603e9dfbdf71cde0f5b1",
+              "position": 50,
+              "uid": "e686bd4d-3ebd-5e55-ba39-f26971247965"
+            },
+            {
+              "content": "[task-2/advisor1/expression] The visual fidelity of a prototype may differ from its functional fidelity.",
+              "content_digest": "81628eb7f60a9acacf242ea764451e3df0001ce32ade737c3f47a7a668a0e0bb",
+              "position": 51,
+              "uid": "019662a9-6f03-527f-9b6d-be5a2966d9e9"
+            },
+            {
+              "content": "[task-2/advisor1/expression] A flow diagram can make alternate branches and their different outcomes visible in one view.",
+              "content_digest": "80420fa994fdd3d1246833b988feb79315ffc3acf0259c23c68c9eb1a7a9df84",
+              "position": 52,
+              "uid": "a6dfe9a7-1df8-561f-8d3e-fc19518beca9"
+            },
+            {
+              "content": "[task-2/advisor1/expression] HCI reviewers often skim prototype screens and interaction flow diagrams before reading the main text.",
+              "content_digest": "6a8af99675c4b7bd4ebbe926ee5d300f0fe64ede7987c8352daf394ba2389a1c",
+              "position": 53,
+              "uid": "7047a23d-45b3-5d5c-a00b-c12552e9680d"
+            },
+            {
+              "content": "[task-2/advisor1/expression] Readers can understand the overall branching shape of a procedure more quickly from a flow diagram than from rows read one at a time.",
+              "content_digest": "6119c0595aaa6fd58288b477eefb6614afb3b7541ead5c0e18670f2a15f751cf",
+              "position": 54,
+              "uid": "50a71968-7e3f-5b99-b3fa-769af386d0c0"
+            },
+            {
+              "content": "[task-2/advisor1/expression] Redrawing a branching flow diagram after a procedural change usually takes longer than updating one row in a table.",
+              "content_digest": "d7c0ddd2528ddd9ba17f887d6ce97004aa826fe6511b5ce86a9a6bf39a7cb483",
+              "position": 55,
+              "uid": "ae1610f6-a855-56c1-a0fb-fd3207dab615"
+            },
+            {
+              "content": "[task-2/advisor1/expression] Reviewers often inspect the proposal’s main visual before reading the procedural explanation in full.",
+              "content_digest": "5f3cdd6881c344a0240de266d9b79d797cc333c7f9c4d3aa8c25e84c5eb6c61b",
+              "position": 56,
+              "uid": "d2825b84-b4a6-58c9-8f8e-9e19c6192a03"
+            },
+            {
+              "content": "[task-2/advisor1/terminology] Use the same term throughout the proposal for the same interaction concept or interface element.",
+              "content_digest": "5ae72dd9edc3139253f8ed7c6c41310175f8b360598d7e639a5890c6e7b32e9a",
+              "position": 57,
+              "uid": "949a884d-b348-5fa0-b1dd-adbebafe10a9"
+            },
+            {
+              "content": "[task-2/advisor1/terminology] Use abbreviations only for recurring terms of three or more words.",
+              "content_digest": "5ba8cefa9ef1b7e1c4e2f1b8fa5fb66c2c826d899e5caa02ad304eaedd0fcc48",
+              "position": 58,
+              "uid": "2f484151-b5fc-51a9-8a88-b30a403617b3"
+            },
+            {
+              "content": "[task-2/advisor1/terminology] Present the full name and abbreviation together when using an abbreviation for the first time.",
+              "content_digest": "5dfcd2577e50007200b6210caff3b8a30e2a413e2eda097da52daf473caf367a",
+              "position": 59,
+              "uid": "21131a6f-d35c-51e3-895f-46cd21a3b566"
+            },
+            {
+              "content": "[task-2/advisor1/terminology] Prioritize the research role over diagnostic labels or deficits when referring to participants.",
+              "content_digest": "cd29a166cc3033a19e041e4940580f67cb6435931dd114d691c0ed5bf2a05756",
+              "position": 60,
+              "uid": "e02c3110-05c4-58a4-8d76-c8fd2426a0d5"
+            },
+            {
+              "content": "[task-2/advisor1/terminology] Reviewers from different subfields struggle to infer undefined abbreviations from context alone.",
+              "content_digest": "28e73ebeac100446f1dc2471e582fbfc22c04463b3d0c69d7a00727dfc26f858",
+              "position": 61,
+              "uid": "af028910-e48b-5605-b92b-9378bdfa525c"
+            },
+            {
+              "content": "[task-2/advisor1/terminology] Use the term formative evaluation for studies seeking design modification evidence, and distinguish it from final efficacy judgments.",
+              "content_digest": "29a058d0ace6311bc67f0e33ea52359e71c2fdcdf0a2c29cc0f7fe7553768b8f",
+              "position": 62,
+              "uid": "39792d18-2be0-5135-a063-c5213247d330"
+            },
+            {
+              "content": "[task-2/advisor1/terminology] The user can have contribution labels such as principles, models, or guidelines approved only if they align with the abstraction level of the actual deliverables.",
+              "content_digest": "29ed99c8d24364cc7da739a57916b280f9662094aa424679e6141129645a0df0",
+              "position": 63,
+              "uid": "bcaa8c30-ca6e-5b9f-af93-88513a2f16b1"
+            },
+            {
+              "content": "[task-2/advisor1/terminology] Design principles describe the relationship between conditions and outcomes rather than serving as instructions that merely replicate a single screen layout.",
+              "content_digest": "9363ba2d5bb9d6c78e2a8ce3bd0a767d19e373becfe47fc84f57c4d5c1e790c7",
+              "position": 64,
+              "uid": "82ad9fe2-4063-5e89-9097-c975aa2920cb"
+            },
+            {
+              "content": "[task-2/advisor1/methods] Link each HCI research question directly to corresponding user data and analysis procedures.",
+              "content_digest": "a697fe66f5437c101306121638f5ef727d4d23b17ef5a7f62e161859f98aacbc",
+              "position": 65,
+              "uid": "c8bcefee-c64a-5a1f-911c-502cc4522701"
+            },
+            {
+              "content": "[task-2/advisor1/methods] In preregistered studies, specify the conditions under which deviations from the plan are permissible.",
+              "content_digest": "472ce4b4a076cdb6b448e96ebbc87d594be3b1659c4cfa8d0f4ed08b892c75cf",
+              "position": 66,
+              "uid": "8747b27e-6c2b-5498-9eac-c403e26101a6"
+            },
+            {
+              "content": "[task-2/advisor1/methods] In preregistered studies, specify how to record content that deviates from the plan.",
+              "content_digest": "9fc100e9572e520c740481a743e2b6467594ab016fa2667b9ed2910b2624a2df",
+              "position": 67,
+              "uid": "c3ad4ad8-4c5c-54c5-8d65-2dae15fa69a0"
+            },
+            {
+              "content": "[task-2/advisor1/methods] Commit to one exact target number of participants so the schedule, workload, and budget can be checked against the same quantity.",
+              "content_digest": "aad73de2137dd832d646086a9c630c1e31e22cfa604919c37eb3206eab8825d9",
+              "position": 68,
+              "uid": "df53a41c-2fbf-532a-a5b0-560a196bf5cb"
+            },
+            {
+              "content": "[task-2/advisor1/methods] Specify the interview protocols, recording devices, or log tools used to collect each type of user data.",
+              "content_digest": "075616526450632fcc0626823d8b9b5da9e2a840e89535f17c3927263c8a5015",
+              "position": 69,
+              "uid": "24d49198-fd7b-5810-bc56-1910a796f76e"
+            },
+            {
+              "content": "[task-2/advisor1/methods] Specify whether each type of user data is collected before, during, or after the interaction.",
+              "content_digest": "eb92827873f72fd6b380c5cdb6f63846fd7631d22a400e51edcfead0fdb1d916",
+              "position": 70,
+              "uid": "2f367cf3-50c5-59bc-972e-6173e56343ac"
+            },
+            {
+              "content": "[task-2/advisor1/methods] Readers cannot tell whether the schedule and budget agree when different sections imply different target counts.",
+              "content_digest": "c6dc733ddee65459198cede71cdbb927566324ee5cc61c332512a62c2fe7dde0",
+              "position": 71,
+              "uid": "91db3bd1-4417-5db6-b7a6-3e79c87ebe88"
+            },
+            {
+              "content": "[task-2/advisor1/methods] In formative evaluation prototypes, implementation instability exists as an independent cause of task failure alongside design choices.",
+              "content_digest": "0a024e88daa2220758fecad86d792b2cba7cf558d57b29d967db55821a4514bc",
+              "position": 72,
+              "uid": "49746579-92d7-51ea-b158-7d770443d101"
+            },
+            {
+              "content": "[task-2/advisor1/methods] If a prototype safety signal occurs during formative evaluation, existing institutional safety procedures take precedence over planned data collection.",
+              "content_digest": "9433b255f7825d1909d685caa6d8c063116ad9063702c59c1cec815bb6587d79",
+              "position": 73,
+              "uid": "20d116ab-f9cc-5f61-808b-8555da09d707"
+            },
+            {
+              "content": "[task-2/advisor1/methods] Reviewers judge answerability by tracing the path from each research question to the data and analysis.",
+              "content_digest": "ef0adfacebaecc93a923bfb36ba61ebdc651ecaa082467801b48304e74f69a48",
+              "position": 74,
+              "uid": "881bc037-c099-50e4-b7e0-d38fba5146c9"
+            },
+            {
+              "content": "[task-2/advisor1/methods] The author of this proposal tends to present implemented feature lists directly as design contributions.",
+              "content_digest": "e68febb76c450125c0367af34a0ab8b21e1fddc157737cc78ca70030caa63da7",
+              "position": 75,
+              "uid": "9a969676-6093-5fac-bda8-92ebdac70c37"
+            },
+            {
+              "content": "[task-2/advisor1/methods] Calculate the required sessions, facilitator hours, and participant payments from the same exact target rather than from separate rough estimates.",
+              "content_digest": "093150567221129e330cbb2236182adbef9040c31519e470a90849a3b557c182",
+              "position": 76,
+              "uid": "0ecc319a-ae60-5510-883d-52e613138164"
+            },
+            {
+              "content": "[task-2/advisor1/methods] If recruitment falls below the exact target, state the shortfall explicitly and revise the affected schedule or deliverable.",
+              "content_digest": "ac4ff8291c1ea70f45a43f9ecbca267b37eeae4ef292bfd6e5ded56ab82752be",
+              "position": 77,
+              "uid": "c4dfdb65-e673-52c0-a40c-e909d6014e00"
+            },
+            {
+              "content": "[task-2/advisor1/methods] Do not use a wide range merely to postpone choosing the quantity that the rest of the proposal must support.",
+              "content_digest": "6da18cc85dd34929229af5b84f6231efe3fa0cddf492c75348d9edd62043be49",
+              "position": 78,
+              "uid": "a7c3a123-3f05-52e0-b33e-c450d1a070ac"
+            },
+            {
+              "content": "[task-2/advisor1/evaluation] Specify a single representative measure that serves as the criterion for retaining, modifying, or discarding compared design alternatives.",
+              "content_digest": "faf56a2d266fab88dc61a394e2dc1d944fe8f78f02c5f8d22d7d197f1c1e16e2",
+              "position": 79,
+              "uid": "a50f6ecb-de38-5769-8a6e-23b84a7eb35c"
+            },
+            {
+              "content": "[task-2/advisor1/evaluation] HCI review panels verify whether clear criteria for judging design alternatives are established using the declared primary measure.",
+              "content_digest": "57cd60497315939f593f4c065b904bdf812bffa127e31f8c92d5372b010456d7",
+              "position": 80,
+              "uid": "44c61beb-24a2-584a-ad96-e622690d8171"
+            },
+            {
+              "content": "[task-2/advisor1/evaluation] Collect process measures to diagnose interaction steps where problems occurred, alongside the primary outcome measure.",
+              "content_digest": "b298575c5bc46ea34874a3a144ff1d1cabc84061c7383dba565770fffa9e296b",
+              "position": 81,
+              "uid": "23202824-b576-5d77-b591-8b4cc0757632"
+            },
+            {
+              "content": "[task-2/advisor1/evaluation] Interpret evaluation results as differences between compared design alternatives rather than as success or failure of a single prototype.",
+              "content_digest": "013cb34df941ddb401804c97aa14ae34825667f0e3fceae42abb29a09da562bf",
+              "position": 82,
+              "uid": "65ae88bf-8002-5ada-8590-eaf345b38863"
+            },
+            {
+              "content": "[task-2/advisor1/evaluation] Check boundary cases to verify whether the derived design principles retain explanatory power for adjacent situations not included in the comparison.",
+              "content_digest": "5fa0d63a970cfca5b3b222c4b418c873c94fd66c7269ad7f86b4d8b8fc88db89",
+              "position": 83,
+              "uid": "79af5e5f-4868-5e76-bcd5-3f8e1d6a0bd1"
+            },
+            {
+              "content": "[task-2/advisor1/evaluation] Controlled evaluation environments do not reproduce time pressure, peer intervention, or voluntary termination conditions found in daily use.",
+              "content_digest": "5e0ba724eb0009f6c2bc4b155b6e1043a9c3f0acffd663a8a872787404f50d85",
+              "position": 84,
+              "uid": "3a65fc8b-a5b4-50fc-a60e-fc6f3fc44547"
+            },
+            {
+              "content": "[task-2/advisor1/ethics] Link expected participant burden in each user study task to its corresponding mitigation strategy.",
+              "content_digest": "ff314c231bce1d5c90373b0fc81b0d3001cbcddea054fd00c9213ac88f75da45",
+              "position": 85,
+              "uid": "e93ea2ee-a8b0-5f3d-b6fd-c76f385eef50"
+            },
+            {
+              "content": "[task-2/advisor1/ethics] Specify the accommodations necessary for participants to access the prototype and research tasks.",
+              "content_digest": "707c48ada3d678dee5ebc11eff7101035ae0ee5e12abf8b450bdbbc90e8dab15",
+              "position": 86,
+              "uid": "6ecf6a7b-f4e9-5d96-a52c-520197d4a2a6"
+            },
+            {
+              "content": "[task-2/advisor1/ethics] Specify how accessibility accommodations will be provided during user study sessions.",
+              "content_digest": "e77e8effe3e7ac9b6cbc691862a95602a0618a8b685b61f724536614551e5c81",
+              "position": 87,
+              "uid": "bc41fce0-dbfc-5d23-9d97-9f81531c098c"
+            },
+            {
+              "content": "[task-2/advisor1/ethics] Describe how personal identifiers will be separated from research data immediately after collection.",
+              "content_digest": "af730b7da8954444ffcc75a94ee9f0ebbca3b20a4aa309c9590cc312ebf200e4",
+              "position": 88,
+              "uid": "9768e0d9-ef46-52a4-af04-8f6ca3c176c5"
+            },
+            {
+              "content": "[task-2/advisor1/ethics] Specify the equipment to be loaned to participants who lack necessary devices.",
+              "content_digest": "835f8994f2d598393dc093acaa6461c8b782350fdc22209012f2e7fc180d874e",
+              "position": 89,
+              "uid": "e874407e-4d36-55a6-949e-44e5944f1bb4"
+            },
+            {
+              "content": "[task-2/advisor1/ethics] Describe the procedure for returning equipment loaned to participants.",
+              "content_digest": "2a57b61adacd1726c94496f663cc12d3e434bce3e2fa5c4dc5e3bca0f9265431",
+              "position": 90,
+              "uid": "df16dca6-0b48-5753-aa18-7e5524187a1e"
+            },
+            {
+              "content": "[task-2/advisor1/ethics] HCI ethics reviewers verify that expected burdens and mitigation strategies correspond to each user study task.",
+              "content_digest": "6a4ce6f6cf81ba83fe24113f3ff82dea5f4756acc89ad7259369f2a5dc038dcb",
+              "position": 91,
+              "uid": "7d0b3072-7bac-5bc6-9c79-acc808c38f1f"
+            },
+            {
+              "content": "[task-2/advisor1/ethics] Inform participants that the formative evaluation prototype is not a finished service.",
+              "content_digest": "88884b27a746dcbc417dcc3c9419743329d5e39db4c3e933c20aea4c785989fc",
+              "position": 92,
+              "uid": "407a4c1c-c333-5764-8d89-252bed150f99"
+            },
+            {
+              "content": "[task-2/advisor1/ethics] Set an upper limit on cumulative task burden when requesting repeated evaluations from the same participant.",
+              "content_digest": "883417689608873fe025fae8845bc0595b2367dfffa9da27824c0b49bfec51ad",
+              "position": 93,
+              "uid": "28646fd3-54af-51f9-97da-ad9489ecda79"
+            },
+            {
+              "content": "[task-2/advisor1/ethics] The author of this proposal tends to emphasize expected benefits of the prototype over participant burden.",
+              "content_digest": "54a67800e83fc639a94129f5950affc215a28ca8dbe19c3a8a1d4d60e74637c1",
+              "position": 94,
+              "uid": "218aafb6-9332-5693-a2e7-c7777dc64de7"
+            },
+            {
+              "content": "[task-2/advisor1/ethics] In organizations where leaders or institutional staff handle recruitment, recruitment authority and academic or professional evaluation authority may be combined in the same role.",
+              "content_digest": "1d234d4f196b3af8913371f0787f654784597f82f62aea1c795443a0b24ecbb9",
+              "position": 95,
+              "uid": "1ecb7268-f77a-5643-a456-357df6cd8f6e"
+            },
+            {
+              "content": "[task-2/advisor1/scope] Define in one sentence the user groups and usage contexts to which the design knowledge does not apply.",
+              "content_digest": "f98f89459269eb77b159ca1d905cc08dd64db0f17382433b9745911bb4c30570",
+              "position": 96,
+              "uid": "e594a6ab-81e9-5e5f-8ef5-e6bb8f3760d7"
+            },
+            {
+              "content": "[task-2/advisor1/scope] Reviewers judge the generalization boundary of results through explicitly excluded targets and situations.",
+              "content_digest": "fab475f5cb7f82185dc1b0c725f295cfb55334a9bf6d44dbaf8b66ae041bad19",
+              "position": 97,
+              "uid": "31cdacff-7c49-547d-9f97-598a07b67fb6"
+            },
+            {
+              "content": "[task-2/advisor1/scope] Specify user goals, interaction conditions, and technological constraints under which the proposed design knowledge can be transferred.",
+              "content_digest": "7b59edc836cee2fd6b86abe5945ff34604ece05dcfd8da05443de3d11eacdee2",
+              "position": 98,
+              "uid": "1459d986-4dc9-51f3-bf13-dbb0b07045c8"
+            },
+            {
+              "content": "[task-2/advisor1/scope] Small-scale formative studies can support analytic generalization distinct from statistical representativeness when results are expressed in terms of design conditions and mechanisms.",
+              "content_digest": "8d222e669574a5147a6ee58e92589324dec97c15599850bec07ddcbe7e23c089",
+              "position": 99,
+              "uid": "1db5fcd6-f93c-5630-9810-053c10b5ceba"
+            },
+            {
+              "content": "[task-2/advisor1/scope] The author of this proposal tends to apply design knowledge derived from an accessible sample to a broader user population.",
+              "content_digest": "245b34f24c7bf859ff20abba3fb465c97221c5a857233587515c93900bc14a3f",
+              "position": 100,
+              "uid": "fd29c315-521f-53c0-add5-c668ec318a43"
+            },
+            {
+              "content": "[task-2/advisor1/safety] Specify the order and recipients for reporting serious discomfort during the study.",
+              "content_digest": "5fca9f1ccc87da34f8e82d39e53b3d2481e1ea0b72ba272bc6976a5fe468e1e4",
+              "position": 101,
+              "uid": "9d6f5228-d182-571a-83d2-6a67becb7736"
+            },
+            {
+              "content": "[task-2/advisor1/safety] Field staff rely on a pre-defined contact sequence when serious discomfort is reported.",
+              "content_digest": "b5f58dde9239a43e5c564761b2bccc9a8b3dfb712d97d37556a6e9e1e8aca789",
+              "position": 102,
+              "uid": "00ed485d-66c2-59ad-9c5b-9ae445412690"
+            },
+            {
+              "content": "[task-2/advisor1/safety] Establish criteria for halting the use of a design alternative if recurring severe errors appear during formative evaluation.",
+              "content_digest": "06e6dfc416a3d638e70dd3ceaee81ea4a64c3805d9739ae75824a18eb1b070ff",
+              "position": 103,
+              "uid": "9c6e1561-f671-52cb-aa67-245cc4987ad4"
+            },
+            {
+              "content": "[task-2/advisor1/safety] Do not include a design alternative halted for safety reasons in subsequent evaluation iterations without modification.",
+              "content_digest": "010fa6bf500775f19aa6fae8947928436042d1ecff7cf6a2e868ca91fbb7a473",
+              "position": 104,
+              "uid": "2381ecf7-2b11-583d-91d9-0a5cfc279ba1"
+            },
+            {
+              "content": "[task-2/advisor1/safety] Even in controlled environments, delayed prototype recovery procedures increase session interruption time and alter data collection conditions for the same task.",
+              "content_digest": "4bb8d29099fb27e2bd34debe3c766fefe25165fc113d565da5c9bd35874caa43",
+              "position": 105,
+              "uid": "c5ce1b00-36d9-5cdd-a318-93b88ca0e322"
+            },
+            {
+              "content": "[task-2/advisor1/feasibility] Mark unverified schedule assumptions as such.",
+              "content_digest": "e5110b5487e4452006aea4079ce3328400788f80db6474940e49660c456dd2b6",
+              "position": 106,
+              "uid": "b150c774-27f6-5ec8-8cb9-9a00be19ce9b"
+            },
+            {
+              "content": "[task-2/advisor1/feasibility] Mark unverified recruitment assumptions as such.",
+              "content_digest": "ada8e991c683598321a5a5224957e8f963f589252b2b541eca95a3c3864bba09",
+              "position": 107,
+              "uid": "6c7d14ed-67e5-56ff-befb-7648b95aa7a3"
+            },
+            {
+              "content": "[task-2/advisor1/feasibility] Mark unverified technical assumptions as such.",
+              "content_digest": "777b89ea7115e9f6997b74aa084d36e75268b3430bcf07a731978c064196c5ca",
+              "position": 108,
+              "uid": "00bf39b5-fe97-5fd0-b579-a5c13b5e6af7"
+            },
+            {
+              "content": "[task-2/advisor1/feasibility] Clarify which stage of prototype fabrication or user study each requested resource is used for.",
+              "content_digest": "3b4d106f271a26c31f620182dca3741f0f101236225ed72be3afd247880d4522",
+              "position": 109,
+              "uid": "3ae97c88-7537-5733-b48d-e02c9283f486"
+            },
+            {
+              "content": "[task-2/advisor1/feasibility] Operations reviewers judge feasibility based on the personnel assigned to each procedure.",
+              "content_digest": "a532d1eb9a61549a54ae6b1bff2325a5c277df7eadda5c8d3a531c97579b4574",
+              "position": 110,
+              "uid": "e2b5c1f0-97c2-5d46-af80-993d8d5606c9"
+            },
+            {
+              "content": "[task-2/advisor1/feasibility] Operations reviewers judge feasibility based on the equipment assigned to each procedure.",
+              "content_digest": "7f1e3d3eb4f9b8bc27ea9c71e0a47f6686e247487c9215ac77d3ca0a9537df49",
+              "position": 111,
+              "uid": "f636b400-d3a2-5873-bf5b-c990b0f7ea42"
+            },
+            {
+              "content": "[task-2/advisor1/feasibility] Operations reviewers judge feasibility based on the time allocated to each procedure.",
+              "content_digest": "903f93aa87315d5d77244f7860e50839991e2c6e4b505300db461c412164fee6",
+              "position": 112,
+              "uid": "49385488-2315-51bc-bea0-749a1aea52f1"
+            },
+            {
+              "content": "[task-2/advisor1/feasibility] Verify that the planned number of formative evaluation iterations is feasible within the time for prototype modification and recruitment resources.",
+              "content_digest": "4cb427b5c1a884158aa4dbcdaebf081de84f2404f7065ae354d44f17bc934993",
+              "position": 113,
+              "uid": "f1c22a48-9d8d-5e82-9837-690d66e719db"
+            },
+            {
+              "content": "[task-2/advisor1/feasibility] Include only the minimum functionality required to compare primary design assumptions in the scope of the formative evaluation prototype.",
+              "content_digest": "4e502fa4c4aea3d0496ac10859ffa39725e8e0498107e37c61c4a169b07a7b3f",
+              "position": 114,
+              "uid": "4d69f030-0dc0-5df7-a153-0b595a3f68de"
+            },
+            {
+              "content": "[task-2/advisor1/feasibility] The user's iterative design plan can be judged feasible only if time and personnel are allocated for modifying the prototype between iterations.",
+              "content_digest": "8569b0ab5e6d48873070d8e75f02dd9e71022e4903e1e6db83dccc5abade26d6",
+              "position": 115,
+              "uid": "152f8621-f5fb-5c5e-a961-1fde77ed0bb3"
+            },
+            {
+              "content": "[task-2/advisor1/feasibility] Delays in participant recruitment can compress the time available for prototype modification between formative evaluations.",
+              "content_digest": "3a4b29644f29ca2c8215333134b02d944ee3fb74ee5e66bb99ad353547127fd6",
+              "position": 116,
+              "uid": "1877a138-31f6-59a5-b666-ae57985f540d"
+            },
+            {
+              "content": "[task-2/advisor1/reproducibility] HCI reviewers find it difficult to assess the reproducibility of results if the prototype version used in the evaluation is not disclosed.",
+              "content_digest": "bae891fe618b9da7a701e6f6708a1c62fed1ec6bbcfe97f4a724554f3257148f",
+              "position": 117,
+              "uid": "fb400759-63ed-568a-b94e-5f0c2fe94b67"
+            },
+            {
+              "content": "[task-2/advisor1/reproducibility] Record the manipulated and fixed elements of compared design alternatives so that other researchers can reconstruct them.",
+              "content_digest": "e14b3691c4d1bfb137de72ae4fb99cd9d870fe225a8ad430520ef3bd90ec54af",
+              "position": 118,
+              "uid": "e52e8470-6419-5306-9ddd-00a86003dcf3"
+            },
+            {
+              "content": "[task-2/advisor1/reproducibility] Records of formative evaluation decisions enable the reconstruction of connections between raw data, interpretation, and design modifications.",
+              "content_digest": "2da8817f8358c99cc3fbf3393a1befa5c8cff5f4f1b6c462e77ce8f13d435bef",
+              "position": 119,
+              "uid": "8f4edf8c-491d-56fe-bde4-d9ce25d6de50"
+            },
+            {
+              "content": "[task-2/advisor1/reproducibility] The user must make it possible to trace which observations each prototype version reflects so the process of deriving design knowledge can be reviewed.",
+              "content_digest": "4ca69d5a8ee66d3c06239e4af71c70fdf5fb75e2062d7ba9746053a1d81dfd6f",
+              "position": 120,
+              "uid": "87662a7e-ffc7-521a-a06c-7db8184377e8"
+            },
+            {
+              "content": "[task-2/advisor1/budget] Keep the total, major cost categories, and one-line estimate basis in the main text so the resource argument can be understood without leaving the proposal.",
+              "content_digest": "876f820e867805c3f564cda421e5fa28aeb2a85bb02c045cdfac714f8c15794f",
+              "position": 121,
+              "uid": "05e0261e-5c52-5030-8176-0f02d4522931"
+            },
+            {
+              "content": "[task-2/advisor1/budget] Place each major cost beside the activity or deliverable it enables in the main text.",
+              "content_digest": "13c31618c4d4104460c134dd0da63753522b62c151ebe11e6545be85b113f7ad",
+              "position": 122,
+              "uid": "1083e9b3-698a-57b1-91ab-ce04cec1e5e5"
+            },
+            {
+              "content": "[task-2/advisor1/budget] State the quantity and unit-rate basis for each major cost in the same paragraph that requests it.",
+              "content_digest": "d3eeb217ec886e0ff707530a7e33068328544985d182d50ca8a720348eb2ceb0",
+              "position": 123,
+              "uid": "3652f268-d86f-55d6-935d-d3bdc487aae6"
+            },
+            {
+              "content": "[task-2/advisor1/budget] Readers may question a proposed priority when its cost cannot be checked on the same page as the claimed benefit.",
+              "content_digest": "5ee9e0406d413e2c06a6c366612e27fe93b0d4b71835d38bacfa88977458c6d1",
+              "position": 124,
+              "uid": "4e1e1201-94b8-5a7a-8737-edc4c62881ff"
+            },
+            {
+              "content": "[task-2/advisor1/budget] Update the cost sentence whenever the related activity changes so the narrative and requested amount cannot drift apart.",
+              "content_digest": "5f4a12621948a8f35bec94c39321a2674c8069db2609e48937d0c45a78515763",
+              "position": 125,
+              "uid": "2f5f9039-e038-51c1-8af0-21a78772c512"
+            },
+            {
+              "content": "[task-2/advisor1/budget] Accept a denser main-text paragraph when the estimate basis is essential to deciding whether the request is proportionate.",
+              "content_digest": "c9774ccc7378db1f0a2d5a8ab4d446b7a43884cc320f0d95878d853c17c498b6",
+              "position": 126,
+              "uid": "f7a16d08-fbe2-5508-890d-cdbf70c1146e"
+            },
+            {
+              "content": "[task-2/advisor1/budget] The user tends to revise the work plan but forget a detached budget table unless the key amount is repeated beside the activity.",
+              "content_digest": "01d0682d9777af5f464c242dfa5c910b319620d00d129417df0e8779b534f15b",
+              "position": 127,
+              "uid": "2ca1d5a1-d78a-55b2-ab21-fd6ad73366b4"
+            },
+            {
+              "content": "[task-2/advisor1/compensation] Calculate user study compensation budgets based on estimated participation burden, combining session time and preparation effort.",
+              "content_digest": "37f48d1717a25d735bd32d95c6c7d02470c63b133c17d1595be0301a81b7ad5b",
+              "position": 128,
+              "uid": "0ae46268-cca7-57d5-a0ee-6eb3b85cda84"
+            },
+            {
+              "content": "[task-2/advisor1/compensation] Compensate for required travel time in face-to-face user studies as well.",
+              "content_digest": "8b1e4f6aafdcb275db443b185f2bc4b26bc8a94264086e0fced5c9a9e732b6f4",
+              "position": 129,
+              "uid": "bdda6e22-ea06-5a13-8854-67f7521724db"
+            },
+            {
+              "content": "[task-2/advisor1/compensation] Compensate for the actual time participants spent in sessions, regardless of research modality.",
+              "content_digest": "d30ff2f4848a4e86397fa8ded2a73e0d77eaed65029157393dcf1f57d937c839",
+              "position": 130,
+              "uid": "f49b1d0a-7a1a-53b5-b7fc-815cc2cc134a"
+            },
+            {
+              "content": "[task-2/advisor1/compensation] Leave cash payment as an available compensation method for face-to-face studies.",
+              "content_digest": "01f3e69b3bd6ed0c828da274d2efdfd7c0cfab1eb9f2e6d75c6853b572c91eb5",
+              "position": 131,
+              "uid": "1f4d05e4-2a79-572c-8050-beb1464fb781"
+            },
+            {
+              "content": "[task-2/advisor1/compensation] If compensation equity is explained, do not require finalizing the payment method at the proposal stage.",
+              "content_digest": "d4e0b32bfdfe1e8238d51d68cf6df7e6468a4450ae4f4f1e828d7ac1f76e003c",
+              "position": 132,
+              "uid": "abcba764-6f35-5dae-bb3d-7860fb72ccf2"
+            },
+            {
+              "content": "[task-2/advisor1/compensation] Apply the same base hourly rate to face-to-face and remote studies if task burden is equal.",
+              "content_digest": "2a776ee00f4b3b69b8686040bb9ff0bbae335d45cb272b41e1e9248a4349fb00",
+              "position": 133,
+              "uid": "c6a28f37-1a7c-5dbd-b75c-c829f0461504"
+            },
+            {
+              "content": "[task-2/advisor1/compensation] Participants judge compensation fairness based on the total burden, combining session time with required travel and preparation time.",
+              "content_digest": "911fc0156b047807a21867f26bc1fe92fce19773b0044df62aa396edfd964b36",
+              "position": 134,
+              "uid": "874de649-9c04-5960-b3a9-e68356ef666c"
+            },
+            {
+              "content": "[task-2/advisor1/compensation] Account in compensation for the burden of rescheduling iterations and returning for multiple formative evaluation sessions.",
+              "content_digest": "0fc8493416961b485fdd9be7e6ade3511af925a821fd83a9caf8580cf15544ae",
+              "position": 135,
+              "uid": "529559f5-850d-5920-8e27-0b1e7138dc36"
+            },
+            {
+              "content": "[task-2/advisor1/compensation] Compensate participants for time already invested even if a session is terminated early due to prototype errors.",
+              "content_digest": "a11a806829cffcec7895e74f7f8da5021a60f41256db82d270f0b36e0f46f6be",
+              "position": 136,
+              "uid": "c8be56ee-860a-5f6c-abbf-02c8dbc59eb5"
+            },
+            {
+              "content": "[task-2/advisor1/compensation] The author of this proposal tends to exclude preparation burden between sessions when calculating compensation for iterative studies.",
+              "content_digest": "3218a4a51c139572aee5933c87a111cd29978b171f238ab7222d45fb77868947",
+              "position": 137,
+              "uid": "bdac8cf8-dd11-5794-b4b2-9774ff344436"
+            },
+            {
+              "content": "[task-2/advisor1/review] Conduct one review prior to submission focusing solely on the validity of user problems, design interventions, and evaluation logic.",
+              "content_digest": "7710432718a805a6a3411f6fb5349a9ab9abb5035025eaa55cacda3cc50045d1",
+              "position": 138,
+              "uid": "0dda8eb3-3287-5bb6-9b26-b1c00cc038d9"
+            },
+            {
+              "content": "[task-2/advisor1/review] Cross-check whether research questions align with the core functions of the prototype.",
+              "content_digest": "38fdad647cbcaf2eec012b00662604fd3f46b23da7bbdc1ffa2c5d1aaa7e9a78",
+              "position": 139,
+              "uid": "c8e0c9dd-dc4a-5a7d-9a82-e7ee449a4b25"
+            },
+            {
+              "content": "[task-2/advisor1/review] Cross-check whether evaluation tasks align with representative measures.",
+              "content_digest": "9106b51509ba22b9f45bc37858be7eb168797043b2b5fc981680aaa3a261e216",
+              "position": 140,
+              "uid": "f93c5baa-3c2b-5e37-b07b-0b00e8b22ab9"
+            },
+            {
+              "content": "[task-2/advisor1/review] Cross-check whether collected evidence aligns with design and operational decisions to be changed.",
+              "content_digest": "60ca7b1d5fc23af7149e5a6f0f06e51da5876a4bb02ca35ec4c24b2caf1d8848",
+              "position": 141,
+              "uid": "8dae0ad6-2a6d-5d99-98db-b0d48a1140e5"
+            },
+            {
+              "content": "[task-2/advisor1/review] Verify at the end that user problems, design interventions, user studies, and expected contributions form a coherent logical flow.",
+              "content_digest": "695dea68bac3e8d3f70986af199abc57fa382779c14a5ebf48e7d050d76ae91b",
+              "position": 142,
+              "uid": "0f89ab25-d9ee-5669-aa99-a0fe07803915"
+            },
+            {
+              "content": "[task-2/advisor1/review] HCI reviewers view the validity of design interventions as low if research questions are not linked to prototype functions.",
+              "content_digest": "d2368958aaf8dfe28516cd18b73bd47da40631f3129c9de78fd63666c9eb7415",
+              "position": 143,
+              "uid": "3e4a9a3b-abc2-54ed-9b87-f81abf61b541"
+            },
+            {
+              "content": "[task-2/advisor1/review] HCI reviewers view the validity of evaluation plans as low if evaluation tasks do not produce representative measures.",
+              "content_digest": "71500ff0d6860f61e4e1922cbbc5eb3177c012495daf3bc5c7501d7f589eeb4b",
+              "position": 144,
+              "uid": "fb785649-1947-5e7d-aafb-308f14fb21b4"
+            },
+            {
+              "content": "[task-2/advisor1/review] HCI reviewers view the practicality of contributions as low if collected evidence cannot change design or operational decisions.",
+              "content_digest": "9b130900d9e0e50643ed362a9217745a7de83d7e1d545f5538856b4515353dbb",
+              "position": 145,
+              "uid": "02f8ddd8-32b0-5e3b-b358-5e0472a6e0d2"
+            },
+            {
+              "content": "[task-2/advisor1/review] Cross-check at the end whether each research question, formative evaluation data, and design modification judgment are seamlessly connected.",
+              "content_digest": "e64ffdfaceaa83cbc4580963518305c12fa2c7aff4488da0dbbbaa415d5389ad",
+              "position": 146,
+              "uid": "d17ba26c-187e-57bc-8468-c9c053fc303d"
+            },
+            {
+              "content": "[task-2/advisor1/review] Review whether the application conditions of proposed design principles and boundary cases of failure are presented together.",
+              "content_digest": "7ad202bbca831c4681151aba6ff3702f4db1f0c693ff65a276ac6e0931f15402",
+              "position": 147,
+              "uid": "48a91d19-cc68-5400-8971-8125236f3fbf"
+            },
+            {
+              "content": "[task-2/advisor1/review] The user can have contributions reviewed only if prototype outcomes and the transferable design knowledge derived from them are separated.",
+              "content_digest": "5fdc57f9e613ad05404fd40e63650ec57fe2bca3a7d7db9d65636fd201eeb87f",
+              "position": 148,
+              "uid": "774341c9-b92d-53a5-a24c-59c75e39756b"
+            },
+            {
+              "content": "[task-2/advisor1/review] The scope of observation in controlled formative evaluations does not include long-term adaptation and operational changes in real-world usage contexts.",
+              "content_digest": "5c7632b83a49e6ba13e40969756ccb779121e0d914f5d4b4020a270913ce3e95",
+              "position": 149,
+              "uid": "877015ae-ab0b-561c-9fe3-3abb2d0aaa4e"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3"
+        },
+        {
+          "context_digest": "74ec0b91876efe6caed2938aaf4a0b06272de678fbf74dc9da1c217aa0bd042f",
+          "context_name": "task-2/advisor2/compensation",
+          "context_uid": "4ffbd453-7d61-56f7-90ad-34d77b485ef8",
+          "memories": [
+            {
+              "content": "Calculate user research compensation budgets based on the estimated participation burden, combining session time with required technical and travel preparation.",
+              "content_digest": "ba439fe3920339f56e377d8f82a64ab3ad27fb25e0eec3c65b610c81af53d175",
+              "position": 0,
+              "uid": "be9e402b-8d3b-58da-9766-2cf2ec25b9ae"
+            },
+            {
+              "content": "Compensate participants who withdraw from the study midway for their actual participation time.",
+              "content_digest": "599f542ec6f4a5a1a61f5c1a31547088e015439978a64b268879b5a2b65c9be4",
+              "position": 1,
+              "uid": "85157c57-410f-5c7d-8183-b37d61eebf8a"
+            },
+            {
+              "content": "Compensate for the time actually spent in sessions, regardless of the research modality.",
+              "content_digest": "b19b9dbece5d564de69e703491018fbd78ab834149eed0590a552773526b6e29",
+              "position": 2,
+              "uid": "8abeab95-3e41-5378-8409-08200aee9d58"
+            },
+            {
+              "content": "Allow the issuance of gift cards of equivalent value to participants in remote studies who cannot use electronic transfers.",
+              "content_digest": "8ac881488d0064f4b4c6143e2d8c69ab9806b419044adef266c50738c7afb291",
+              "position": 3,
+              "uid": "9b59c6ed-5dbe-5ccc-87b5-6be31f414e68"
+            },
+            {
+              "content": "Do not treat an unresolved payment method as a deficiency at the proposal stage.",
+              "content_digest": "80109274870eb1023e4cbcc6861a906a4d94db5dab2b2659bcebccde125c9ac3",
+              "position": 4,
+              "uid": "5c6c461d-05e5-5b0c-b801-245de2f9c8d7"
+            },
+            {
+              "content": "Allow differential compensation amounts for on-site and remote studies when participation burden varies due to travel or technical preparation.",
+              "content_digest": "556c5e49f7996a651a64825df2389f070629b9bc664c758d934f308c7fd6eea2",
+              "position": 5,
+              "uid": "44abc098-8c9f-5abb-bc49-9deb25066d93"
+            },
+            {
+              "content": "Participants judge the fairness of compensation based on the combined burden of session time and required technical and travel preparation.",
+              "content_digest": "80dd84e8b183e02f1fd772890b48712bb04a04852055eece98957a0c9028288c",
+              "position": 6,
+              "uid": "2a252668-f3f2-5582-b248-43ad81c54a48"
+            },
+            {
+              "content": "In longitudinal studies requiring diary entries and repeated reporting, include out-of-session recording time in compensation calculations.",
+              "content_digest": "7d103d93741e40d54c8df8347f2ce648a1cd96e19589663fa515bfb24b5bd844",
+              "position": 7,
+              "uid": "7e647a83-81b0-52d6-9362-e513dc2a5032"
+            },
+            {
+              "content": "Distinguish between participant research compensation and labor costs for field staff performing installation and operational support as part of their duties.",
+              "content_digest": "b1566527e9c1d7d3f93631d1503b08ddb4a6818daa570c118f265b47603592f0",
+              "position": 8,
+              "uid": "d77affab-60c8-5403-b189-17022b484640"
+            },
+            {
+              "content": "The user tends to count session time but omit participants’ advance setup and follow-up reporting time.",
+              "content_digest": "98911b7db2d8c3962d7ef48919265f40cdb61a711062e5459a4f6d43f71d6fd9",
+              "position": 9,
+              "uid": "0c470c6b-26a6-5501-93ac-c51fecd708ae"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "0af5941f-63bd-4b73-b557-9e7a39c454eb"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "Both frames align on burden-based compensation, actual session time, modality-sensitive rates, and proposal-stage payment flexibility. They differ through explicit study circumstances such as withdrawal, prototype failure, repeated participation, longitudinal reporting, and preparation. The reference additionally covers comprehensive HCI proposal design; the compared frame adds gift-card and staff-cost guidance.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "44249c8a-e84f-5c20-a9cd-a55457e98511"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "21371c6c-c74f-5791-8f9b-6d099306bfb5"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "8ecaec22-7c25-5a39-a85b-56db9c3b607e"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "a4536b84-40f2-57db-84e4-024c97c9fecb"
+            }
+          ],
+          "reason": "These reference-only statements split one framing rule and explain the skimming behavior motivating it.",
+          "status": "RESOLVED",
+          "summary": "Put the concrete problem and its consequence within the proposal’s first two sentences.",
+          "uid": "4e35dfcd-be1e-5495-a9b0-997a2af6f6ce"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "f69ea80c-0d56-5fe8-9d24-8793eefa6643"
+            }
+          ],
+          "reason": "Only the reference states this research-question formulation requirement.",
+          "status": "RESOLVED",
+          "summary": "Specify the user, context, and interaction in the primary HCI research question.",
+          "uid": "5a20759c-700b-523c-8edd-45d678855824"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "18ebdcbc-cf5a-5e6c-b2cd-b4cd07d7e59e"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "5ab99a77-8836-50cf-8377-fdd23a208bc4"
+            }
+          ],
+          "reason": "The reference memories split one requirement for a compact, interpretable procedural visual.",
+          "status": "RESOLVED",
+          "summary": "Summarize an unfamiliar interaction procedure visually, including its step-transition conditions.",
+          "uid": "013672ba-57ff-5621-b68b-26b49cad5489"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "b9b7932b-85c1-5a14-80f7-0983dbf22380"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "fc0a3a72-2da2-5843-be3a-a4ff2adf8fac"
+            }
+          ],
+          "reason": "Only the reference connects phased planning to phase-specific deliverables.",
+          "status": "RESOLVED",
+          "summary": "Present the research schedule in phases with a reviewable deliverable for each phase.",
+          "uid": "11e3c891-36a6-5ca2-a111-5bc7d91960d0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "2f7092a7-2625-5d27-bd76-a13ee5809cc2"
+            }
+          ],
+          "reason": "Only the reference addresses this local arrangement of gap and contribution claims.",
+          "status": "RESOLVED",
+          "summary": "Place the research gap close to the proposed design and empirical contributions.",
+          "uid": "e8094d27-707f-5f53-8c2e-0175e57e4edf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "a1857f07-36cd-5a6c-946d-a308e712e9eb"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "895b5ac9-1aa4-51d2-b89a-94e9fe5b869d"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "3005f4c5-e17b-531b-b9bf-c9d69411c71f"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "2312cb6e-4f50-56f5-b725-ba5e45697a73"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "1d90043b-f010-5a14-9493-77f636c13975"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "b77fe6ec-676b-5bb9-9119-45aefea2aa27"
+            }
+          ],
+          "reason": "The reference memories elaborate one subheading system and its scanning, return-navigation, and omission-detection functions.",
+          "status": "RESOLVED",
+          "summary": "Use reusable descriptive subheadings for the problem, response, and next steps to support navigation and completeness checking.",
+          "uid": "4fd8e939-f2a6-5b20-b719-01b102c3f417"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "4913f63e-ceb9-587a-ade9-494fc8f28849"
+            }
+          ],
+          "reason": "Only the reference states this evidence-placement rule for feasibility.",
+          "status": "RESOLVED",
+          "summary": "Place pilot observations or prototype results near feasibility claims.",
+          "uid": "d923cd2a-b975-5f9e-9edf-534017138991"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "4a1de8df-6f03-5a3d-bbfa-7c1144d2ec5c"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "b5b6a901-9047-5482-a0e1-d29e5f7171e8"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "a42891a1-b674-5747-a77c-43699b0b9723"
+            }
+          ],
+          "reason": "The reference memories express one contribution-count and presentation rule, including its reviewer rationale.",
+          "status": "RESOLVED",
+          "summary": "Name no more than two primary HCI contributions and state each in one sentence.",
+          "uid": "42471a69-04a6-5afb-a7f6-a8bc8181e793"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "e89de514-48a5-5e9b-96ca-f194c0ed79ab"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "f7025cbb-4005-53c6-9031-e33f04a86b92"
+            }
+          ],
+          "reason": "Only the reference addresses which participation burdens recruitment descriptions should emphasize.",
+          "status": "RESOLVED",
+          "summary": "Emphasize both time and travel burdens when recruiting community participants.",
+          "uid": "78c4418d-169a-5ee9-9c85-7b56df4696bf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "9d7169d5-058f-5f7c-b1ac-30cabd8ba02e"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "9bf9e735-7598-5977-abe2-87b2c9c38a24"
+            }
+          ],
+          "reason": "The reference memories restate the change-oriented purpose of formative evaluation.",
+          "status": "RESOLVED",
+          "summary": "Frame formative evaluation around design modification rather than polished demonstration or definitive superiority.",
+          "uid": "527a5f8b-c6eb-5f4c-9bae-ca7420edb1c0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "f8931b4e-9656-548d-84a1-f2f2c3eb47b1"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "bcaa8c30-ca6e-5b9f-af93-88513a2f16b1"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "82ad9fe2-4063-5e89-9097-c975aa2920cb"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "9a969676-6093-5fac-bda8-92ebdac70c37"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "774341c9-b92d-53a5-a24c-59c75e39756b"
+            }
+          ],
+          "reason": "The reference memories develop one distinction between implementation artifacts and appropriately abstract, transferable contributions.",
+          "status": "RESOLVED",
+          "summary": "Separate prototype features and outcomes from transferable design knowledge, and match contribution labels to actual abstraction.",
+          "uid": "0b29e9fd-247e-517c-b8a5-70b6f1a3f314"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "33503d41-7b99-5526-a028-0a1a20652c0d"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "13dc50e1-ecaa-504e-a602-7a10a09d5484"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "358230d3-9ff0-51b9-9bf6-0752a2d9845a"
+            }
+          ],
+          "reason": "The reference alone identifies this recurring style tendency and its possible effect on reviewer attention.",
+          "status": "RESOLVED",
+          "summary": "Avoid repeated em dashes, especially in clause-heavy proposal sentences.",
+          "uid": "525f0c71-a7d9-57cd-b067-f2eab3145c85"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "79437c17-1f08-5188-8177-c622429dc4f9"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "cc860653-ad91-52f8-91db-5b26371dca0a"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "af0d191d-d23e-562b-997b-b1024dacefda"
+            }
+          ],
+          "reason": "The reference memories state one sentence-level readability rule and the author tendency motivating it.",
+          "status": "RESOLVED",
+          "summary": "Split long prose so each sentence carries one independently reviewable claim.",
+          "uid": "d24e78ba-9a53-5cce-af64-e11b50efa322"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "807a906c-d519-59b1-8406-43c8015ef068"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "ff8f0b12-9df4-5968-90b2-cd8d971dcc1b"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "bec16e02-b267-50b8-9c0e-964184f2a6b4"
+            }
+          ],
+          "reason": "The reference alone links explicit authorial responsibility to active phrasing and warns against passive commitments.",
+          "status": "RESOLVED",
+          "summary": "Use first-person active voice for author-owned choices and commitments.",
+          "uid": "eb323e9b-521f-597c-8e40-c62449648af5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "e463a3b5-263f-58da-9895-242965892e60"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "fef78af8-1774-5da0-8345-571eb8c9cc3c"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "58991ce7-d394-5087-b14f-0b014b0ec6ad"
+            }
+          ],
+          "reason": "The reference memories express one epistemic-status distinction across prototypes and study results.",
+          "status": "RESOLVED",
+          "summary": "Use different language for implemented or pilot-observed states and for unimplemented plans or study expectations.",
+          "uid": "12bd4de6-29c0-540d-9ab8-9f3ca0124dc7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "6c282ef7-4326-5d69-a7c4-d3f4f3a3a508"
+            }
+          ],
+          "reason": "Only the reference defines this ownership boundary for the pronoun.",
+          "status": "RESOLVED",
+          "summary": "Use “we” only for decisions and commitments controlled by the authors.",
+          "uid": "1eccfae9-86de-5d48-8b85-6cfc6546c499"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "58565355-bec5-5b2b-89ed-f0b8cab0351a"
+            }
+          ],
+          "reason": "Only the reference states this consistency rule.",
+          "status": "RESOLVED",
+          "summary": "Keep one first-person pronoun for the same authorial role unless responsibility changes.",
+          "uid": "a091058a-bde9-535f-af59-a56218509ce6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "06f6c673-ea0c-5657-89d2-3f8711097cd7"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "cd475113-5354-5f80-b063-7628e4359afc"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "86fe1306-7650-58cc-a3df-79870c61784d"
+            }
+          ],
+          "reason": "The reference memories restate one directness-and-proximity standard for claim support.",
+          "status": "RESOLVED",
+          "summary": "Support verifiable core claims with directly relevant evidence or citations placed nearby.",
+          "uid": "aa4aa2de-7943-5b46-82a6-d9ce40b8a6d2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "f5adf029-a750-5a3a-8eb8-d68e43bb5c13"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "41060e8e-95ff-58c1-8b71-36a501a9bd23"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "3a65fc8b-a5b4-50fc-a60e-fc6f3fc44547"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "877015ae-ab0b-561c-9fe3-3abb2d0aaa4e"
+            }
+          ],
+          "reason": "The reference memories describe related inference limits arising from noncausal designs and controlled settings.",
+          "status": "RESOLVED",
+          "summary": "Avoid unsupported causal or real-world claims from controlled formative evaluations.",
+          "uid": "12a01b06-e137-5887-9d92-9f739afa1856"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "b2a7ff8a-dfca-5857-8733-fe03cbd943ec"
+            }
+          ],
+          "reason": "Only the reference gives this source-selection priority.",
+          "status": "RESOLVED",
+          "summary": "Prefer recent comprehensive studies when a topic already has sufficient HCI evidence.",
+          "uid": "a21f090e-d8fd-5e4e-8fc9-8cf2b76193f4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "1f0c95f4-69bb-5764-a358-d428ff7019d2"
+            }
+          ],
+          "reason": "Only the reference states this design-rationale requirement.",
+          "status": "RESOLVED",
+          "summary": "Explain how each design choice derives from specific user needs.",
+          "uid": "3d2d341b-2474-5211-8113-9127c76ecb4e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "5d022e45-09c0-515e-98f1-68b2aec686bc"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "ec54ce10-07db-5ae3-94a5-8f3621fed4a9"
+            }
+          ],
+          "reason": "The reference memories state one observability requirement for conceptual contributions.",
+          "status": "RESOLVED",
+          "summary": "Connect conceptual design principles to observable behavior and make explanatory contributions falsifiable.",
+          "uid": "b6d079bd-1478-57f8-8923-74d0b1e51c15"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "9939e9e8-d97d-57db-974a-750566ca9e2b"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "8dae0ad6-2a6d-5d99-98db-b0d48a1140e5"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "02f8ddd8-32b0-5e3b-b358-5e0472a6e0d2"
+            }
+          ],
+          "reason": "The reference memories restate one evidence-to-decision traceability requirement, including final review.",
+          "status": "RESOLVED",
+          "summary": "Trace formative evidence to specific retain, modify, or discard decisions.",
+          "uid": "9cc01252-18f8-5a63-b0d7-f63699a3aa80"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "51fa3fcc-9d5f-52f0-809d-62d7cdd8a865"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "e686bd4d-3ebd-5e55-ba39-f26971247965"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "a6dfe9a7-1df8-561f-8d3e-fc19518beca9"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "50a71968-7e3f-5b99-b3fa-769af386d0c0"
+            }
+          ],
+          "reason": "The reference memories express one visual-form choice and its comparative readability rationale.",
+          "status": "RESOLVED",
+          "summary": "Use one flow diagram to show alternate procedural branches and their outcomes.",
+          "uid": "4cfb926a-cd0f-5019-9e60-a59c4eac1aef"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "019662a9-6f03-527f-9b6d-be5a2966d9e9"
+            }
+          ],
+          "reason": "Only the reference states this distinction.",
+          "status": "RESOLVED",
+          "summary": "Treat visual and functional prototype fidelity as potentially different.",
+          "uid": "14471293-a8c8-5196-a4cc-81802d05ec79"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "7047a23d-45b3-5d5c-a00b-c12552e9680d"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "d2825b84-b4a6-58c9-8f8e-9e19c6192a03"
+            }
+          ],
+          "reason": "The reference memories restate the priority reviewers often give screens and flow visuals.",
+          "status": "RESOLVED",
+          "summary": "Design the main prototype visual for reviewers who inspect it before reading the full explanation.",
+          "uid": "fbf0d9dc-493c-5d5d-85b9-245abbebb206"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "ae1610f6-a855-56c1-a0fb-fd3207dab615"
+            }
+          ],
+          "reason": "Only the reference identifies this maintenance tradeoff.",
+          "status": "RESOLVED",
+          "summary": "Account for the greater update cost of redrawing a branching flow diagram.",
+          "uid": "2fbb28ab-ecbd-5758-a9b0-66291c13fdd4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "949a884d-b348-5fa0-b1dd-adbebafe10a9"
+            }
+          ],
+          "reason": "Only the reference states this terminology rule.",
+          "status": "RESOLVED",
+          "summary": "Use one consistent term for each interaction concept or interface element.",
+          "uid": "ab0977da-b34a-546c-bf90-f056e5dbdc11"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "2f484151-b5fc-51a9-8a88-b30a403617b3"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "21131a6f-d35c-51e3-895f-46cd21a3b566"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "af028910-e48b-5605-b92b-9378bdfa525c"
+            }
+          ],
+          "reason": "The reference memories form one abbreviation policy and explain why definitions are needed.",
+          "status": "RESOLVED",
+          "summary": "Reserve abbreviations for recurring multiword terms and define each at first use.",
+          "uid": "20571c23-e6e5-5a25-bad1-15c40db006fb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "e02c3110-05c4-58a4-8d76-c8fd2426a0d5"
+            }
+          ],
+          "reason": "Only the reference supplies this participant-language guidance.",
+          "status": "RESOLVED",
+          "summary": "Prioritize participants’ research role over diagnostic labels or deficits.",
+          "uid": "5935596b-9142-5111-b9e0-5bb62ecf642f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "39792d18-2be0-5135-a063-c5213247d330"
+            }
+          ],
+          "reason": "Only the reference defines this methodological terminology.",
+          "status": "RESOLVED",
+          "summary": "Use “formative evaluation” for studies seeking modification evidence, distinct from final efficacy judgments.",
+          "uid": "33054334-8a70-5c2d-a683-f5b4bb2d6815"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "c8bcefee-c64a-5a1f-911c-502cc4522701"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "881bc037-c099-50e4-b7e0-d38fba5146c9"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "d17ba26c-187e-57bc-8468-c9c053fc303d"
+            }
+          ],
+          "reason": "The reference memories restate one answerability and end-to-end traceability requirement.",
+          "status": "RESOLVED",
+          "summary": "Link each research question to corresponding data, analysis, and design-modification judgments.",
+          "uid": "eaf3b955-5dfd-5e6f-a694-79b7fdd2b238"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "8747b27e-6c2b-5498-9eac-c403e26101a6"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "c3ad4ad8-4c5c-54c5-8d65-2dae15fa69a0"
+            }
+          ],
+          "reason": "The reference memories split one deviation-governance requirement.",
+          "status": "RESOLVED",
+          "summary": "Predefine permissible preregistration deviations and how they will be recorded.",
+          "uid": "48b26986-633d-50af-8ad9-425e76880584"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "df53a41c-2fbf-532a-a5b0-560a196bf5cb"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "91db3bd1-4417-5db6-b7a6-3e79c87ebe88"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "0ecc319a-ae60-5510-883d-52e613138164"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "c4dfdb65-e673-52c0-a40c-e909d6014e00"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "a7c3a123-3f05-52e0-b33e-c450d1a070ac"
+            }
+          ],
+          "reason": "The reference memories elaborate one quantity-consistency policy and reject postponing it through a wide range.",
+          "status": "RESOLVED",
+          "summary": "Use one exact participant target consistently across recruitment, schedule, workload, budget, and shortfall revisions.",
+          "uid": "430ade2c-3145-538d-8d6a-6461ad9d309e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "24d49198-fd7b-5810-bc56-1910a796f76e"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "2f367cf3-50c5-59bc-972e-6173e56343ac"
+            }
+          ],
+          "reason": "The reference memories split one data-collection specification requirement.",
+          "status": "RESOLVED",
+          "summary": "Specify the instrument and interaction timing for each type of user data.",
+          "uid": "aa9ec159-a96b-5b04-9791-e6e8c1c07fe1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "49746579-92d7-51ea-b158-7d770443d101"
+            }
+          ],
+          "reason": "Only the reference states this methodological confound.",
+          "status": "RESOLVED",
+          "summary": "Treat prototype instability as a possible cause of task failure independent of design choices.",
+          "uid": "17e482c7-8c23-59c9-b67c-57cc9e3c1c75"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "20d116ab-f9cc-5f61-808b-8555da09d707"
+            }
+          ],
+          "reason": "Only the reference establishes this precedence rule.",
+          "status": "RESOLVED",
+          "summary": "Let institutional safety procedures override planned data collection when a prototype safety signal occurs.",
+          "uid": "30c61d2a-7132-525b-b892-db7d854136ff"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "a50f6ecb-de38-5769-8a6e-23b84a7eb35c"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "44c61beb-24a2-584a-ad96-e622690d8171"
+            }
+          ],
+          "reason": "The reference memories restate one decision-criterion requirement and its review significance.",
+          "status": "RESOLVED",
+          "summary": "Declare one representative primary measure as the criterion for retaining, modifying, or discarding alternatives.",
+          "uid": "704ee8fa-6773-5b2b-a2f0-a5b05bcd0420"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "23202824-b576-5d77-b591-8b4cc0757632"
+            }
+          ],
+          "reason": "Only the reference requires these diagnostic measures.",
+          "status": "RESOLVED",
+          "summary": "Collect process measures alongside the primary outcome to locate interaction problems.",
+          "uid": "422cd9e2-86d7-595d-94e9-03475460c232"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "65ae88bf-8002-5ada-8590-eaf345b38863"
+            }
+          ],
+          "reason": "Only the reference states this comparative interpretation rule.",
+          "status": "RESOLVED",
+          "summary": "Interpret evaluation results as differences among design alternatives rather than success or failure of one prototype.",
+          "uid": "5c0cd2ae-24ea-5cd5-b17b-01fe359cf4dc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "79af5e5f-4868-5e76-bcd5-3f8e1d6a0bd1"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "48a91d19-cc68-5400-8971-8125236f3fbf"
+            }
+          ],
+          "reason": "The reference memories express one boundary-case validation and review requirement.",
+          "status": "RESOLVED",
+          "summary": "Test and present design-principle application conditions together with adjacent boundary failures.",
+          "uid": "f49a8714-a8ea-5e7c-afd1-c5a6e8a74615"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "e93ea2ee-a8b0-5f3d-b6fd-c76f385eef50"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "7d0b3072-7bac-5bc6-9c79-acc808c38f1f"
+            }
+          ],
+          "reason": "The reference memories state one task-level ethics mapping and its reviewer rationale.",
+          "status": "RESOLVED",
+          "summary": "Link the expected burden of each study task to a corresponding mitigation.",
+          "uid": "9f52760c-411d-5c23-ac0e-cfc4dfdc3b4d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "6ecf6a7b-f4e9-5d96-a52c-520197d4a2a6"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "bc41fce0-dbfc-5d23-9d97-9f81531c098c"
+            }
+          ],
+          "reason": "The reference memories split one accommodation-planning requirement.",
+          "status": "RESOLVED",
+          "summary": "Specify necessary accessibility accommodations and how sessions will provide them.",
+          "uid": "296ab139-7f5d-56ee-903e-b79287b07bb7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "9768e0d9-ef46-52a4-af04-8f6ca3c176c5"
+            }
+          ],
+          "reason": "Only the reference states this data-handling procedure.",
+          "status": "RESOLVED",
+          "summary": "Describe immediate separation of personal identifiers from research data.",
+          "uid": "070febb1-5166-5318-a7af-411df407917c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "e874407e-4d36-55a6-949e-44e5944f1bb4"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "df16dca6-0b48-5753-aa18-7e5524187a1e"
+            }
+          ],
+          "reason": "The reference memories split one equipment-access and recovery process.",
+          "status": "RESOLVED",
+          "summary": "Specify equipment loans for participants lacking devices and the return procedure.",
+          "uid": "7b1a9a34-43ac-594d-92e3-95a15c0daba6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "407a4c1c-c333-5764-8d89-252bed150f99"
+            }
+          ],
+          "reason": "Only the reference states this disclosure requirement.",
+          "status": "RESOLVED",
+          "summary": "Tell participants that a formative prototype is not a finished service.",
+          "uid": "051ab71b-6efa-59ce-bafa-c05971e9a621"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "28646fd3-54af-51f9-97da-ad9489ecda79"
+            }
+          ],
+          "reason": "Only the reference establishes this participant-protection limit.",
+          "status": "RESOLVED",
+          "summary": "Set an upper limit on cumulative burden for repeated evaluations.",
+          "uid": "7508eb19-83fe-5237-a1e0-d296a63c7a8f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "218aafb6-9332-5693-a2e7-c7777dc64de7"
+            }
+          ],
+          "reason": "Only the reference records this author-specific tendency.",
+          "status": "RESOLVED",
+          "summary": "Recognize the author’s tendency to emphasize prototype benefits over participant burden.",
+          "uid": "e5c307a3-4c52-5fd9-94e7-22a85d5556a3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "1ecb7268-f77a-5643-a456-357df6cd8f6e"
+            }
+          ],
+          "reason": "Only the reference identifies this potential concentration of authority.",
+          "status": "RESOLVED",
+          "summary": "Recognize that institutional recruiters may also hold evaluative authority over participants.",
+          "uid": "3a8889d9-e414-510a-8a38-aef0d8b45091"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "e594a6ab-81e9-5e5f-8ef5-e6bb8f3760d7"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "31cdacff-7c49-547d-9f97-598a07b67fb6"
+            }
+          ],
+          "reason": "The reference memories express one explicit-exclusion requirement and its reviewer rationale.",
+          "status": "RESOLVED",
+          "summary": "State which users and contexts fall outside the design knowledge’s generalization boundary.",
+          "uid": "fae2bb70-2c01-53eb-b6d4-f4a0b3790346"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "1459d986-4dc9-51f3-bf13-dbb0b07045c8"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "1db5fcd6-f93c-5630-9810-053c10b5ceba"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "fd29c315-521f-53c0-add5-c668ec318a43"
+            }
+          ],
+          "reason": "The reference memories develop one transfer-scope policy and identify the author’s overgeneralization tendency.",
+          "status": "RESOLVED",
+          "summary": "Ground analytic generalization in specified goals, interaction conditions, constraints, and mechanisms rather than sample breadth.",
+          "uid": "b9bdbf51-d843-5ea0-845f-afd2577414cb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "9d6f5228-d182-571a-83d2-6a67becb7736"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "00ed485d-66c2-59ad-9c5b-9ae445412690"
+            }
+          ],
+          "reason": "The reference memories state one escalation-sequence requirement and its operational rationale.",
+          "status": "RESOLVED",
+          "summary": "Predefine the order and recipients for reporting serious participant discomfort.",
+          "uid": "4c89f3fd-483a-5169-b97a-f768a6095a9a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "9c6e1561-f671-52cb-aa67-245cc4987ad4"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "2381ecf7-2b11-583d-91d9-0a5cfc279ba1"
+            }
+          ],
+          "reason": "The reference memories split one safety-based stopping and reentry policy.",
+          "status": "RESOLVED",
+          "summary": "Define severe-error halt criteria and modify a safety-halted alternative before reusing it.",
+          "uid": "4d002614-141e-5dbf-a96a-4593fcb1faf1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "c5ce1b00-36d9-5cdd-a318-93b88ca0e322"
+            }
+          ],
+          "reason": "Only the reference states this operational consequence.",
+          "status": "RESOLVED",
+          "summary": "Account for how delayed prototype recovery changes session time and data-collection conditions.",
+          "uid": "d4b8d896-0d8b-568a-ab99-182c3e962ed6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "b150c774-27f6-5ec8-8cb9-9a00be19ce9b"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "6c7d14ed-67e5-56ff-befb-7648b95aa7a3"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "00bf39b5-fe97-5fd0-b579-a5c13b5e6af7"
+            }
+          ],
+          "reason": "The reference memories split one uncertainty-marking requirement across three feasibility domains.",
+          "status": "RESOLVED",
+          "summary": "Label unverified schedule, recruitment, and technical assumptions.",
+          "uid": "b629b8e5-3d0a-529e-b42e-172fcc9ffd60"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "3ae97c88-7537-5733-b48d-e02c9283f486"
+            }
+          ],
+          "reason": "Only the reference states this resource-timing requirement.",
+          "status": "RESOLVED",
+          "summary": "Identify the fabrication or study stage where each requested resource is used.",
+          "uid": "adacb1a0-0bd9-56c4-8081-eb265fdf10f3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "e2b5c1f0-97c2-5d46-af80-993d8d5606c9"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "f636b400-d3a2-5873-bf5b-c990b0f7ea42"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "49385488-2315-51bc-bea0-749a1aea52f1"
+            }
+          ],
+          "reason": "The reference memories split one operational-feasibility test across its principal resource dimensions.",
+          "status": "RESOLVED",
+          "summary": "Show the personnel, equipment, and time assigned to each procedure.",
+          "uid": "e097d96b-c260-5ffe-82d9-65728e5e0d30"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "f1c22a48-9d8d-5e82-9837-690d66e719db"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "152f8621-f5fb-5c5e-a961-1fde77ed0bb3"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "1877a138-31f6-59a5-b666-ae57985f540d"
+            }
+          ],
+          "reason": "The reference memories describe one iteration-feasibility constraint and the recruitment delays that threaten it.",
+          "status": "RESOLVED",
+          "summary": "Ensure iterative evaluation plans leave sufficient modification time, personnel, and recruitment capacity.",
+          "uid": "e606392e-9491-593a-8523-9ff1c449250e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "4d69f030-0dc0-5df7-a153-0b595a3f68de"
+            }
+          ],
+          "reason": "Only the reference states this scope-control rule.",
+          "status": "RESOLVED",
+          "summary": "Limit the formative prototype to functionality needed to compare primary design assumptions.",
+          "uid": "d4e5159e-c2c7-5e60-ac03-5334e621c8a6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "fb400759-63ed-568a-b94e-5f0c2fe94b67"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "e52e8470-6419-5306-9ddd-00a86003dcf3"
+            }
+          ],
+          "reason": "The reference memories express one reproducibility requirement for reconstructing evaluated designs.",
+          "status": "RESOLVED",
+          "summary": "Disclose the evaluated prototype version and record fixed and manipulated elements of alternatives.",
+          "uid": "e18aa8c0-cd6a-5a03-8947-a20c52b420da"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "8f4edf8c-491d-56fe-bde4-d9ce25d6de50"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "87662a7e-ffc7-521a-a06c-7db8184377e8"
+            }
+          ],
+          "reason": "The reference memories restate one auditable design-history requirement.",
+          "status": "RESOLVED",
+          "summary": "Trace prototype versions and design modifications back to formative observations and interpretations.",
+          "uid": "15c69ce3-d348-596a-a061-dd29a869e9d5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "05e0261e-5c52-5030-8176-0f02d4522931"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "4e1e1201-94b8-5a7a-8737-edc4c62881ff"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "f7a16d08-fbe2-5508-890d-cdbf70c1146e"
+            }
+          ],
+          "reason": "The reference memories state one same-page resource-argument policy, including when denser prose is justified.",
+          "status": "RESOLVED",
+          "summary": "Keep totals, major categories, and essential estimate bases in the main text near claimed benefits.",
+          "uid": "c5495709-8eb5-5cac-8943-d7add0d3e398"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "1083e9b3-698a-57b1-91ab-ce04cec1e5e5"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "2f5f9039-e038-51c1-8af0-21a78772c512"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "2ca1d5a1-d78a-55b2-ab21-fd6ad73366b4"
+            }
+          ],
+          "reason": "The reference memories express one linkage designed to prevent narrative and budget drift.",
+          "status": "RESOLVED",
+          "summary": "Place major costs beside enabled activities and update them whenever the work plan changes.",
+          "uid": "84390752-bd1f-5381-8d6b-1e02e0b6079b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "3652f268-d86f-55d6-935d-d3bdc487aae6"
+            }
+          ],
+          "reason": "Only the reference states this cost-checking requirement.",
+          "status": "RESOLVED",
+          "summary": "State the quantity and unit-rate basis for each major requested cost.",
+          "uid": "af706789-dce5-5d61-ad74-97c7f15ac4b6"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "0ae46268-cca7-57d5-a0ee-6eb3b85cda84"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "bdda6e22-ea06-5a13-8854-67f7521724db"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "874de649-9c04-5960-b3a9-e68356ef666c"
+            },
+            {
+              "frame_uid": "0af5941f-63bd-4b73-b557-9e7a39c454eb",
+              "memory_uid": "be9e402b-8d3b-58da-9766-2cf2ec25b9ae"
+            },
+            {
+              "frame_uid": "0af5941f-63bd-4b73-b557-9e7a39c454eb",
+              "memory_uid": "2a252668-f3f2-5582-b248-43ad81c54a48"
+            }
+          ],
+          "reason": "Both frames materially support burden-based compensation; the compared wording makes technical preparation explicit without displacing the reference’s broader preparation rule.",
+          "status": "RESOLVED",
+          "summary": "Base compensation budgets and fairness on total burden, including session, preparation, and travel time.",
+          "uid": "0f971435-09b9-5d44-8472-a20d731b58be"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "c8be56ee-860a-5f6c-abbf-02c8dbc59eb5"
+            },
+            {
+              "frame_uid": "0af5941f-63bd-4b73-b557-9e7a39c454eb",
+              "memory_uid": "85157c57-410f-5c7d-8183-b37d61eebf8a"
+            }
+          ],
+          "reason": "The reference specifies early termination caused by prototype errors, while the compared frame specifies participant withdrawal; the conditions explain and preserve the difference.",
+          "status": "RESOLVED",
+          "summary": "Pay for time already invested when participation ends early, with different stated termination circumstances.",
+          "uid": "57c9d73e-3b9e-5114-84ef-eab336d018b0"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "f49b1d0a-7a1a-53b5-b7fc-815cc2cc134a"
+            },
+            {
+              "frame_uid": "0af5941f-63bd-4b73-b557-9e7a39c454eb",
+              "memory_uid": "8abeab95-3e41-5378-8409-08200aee9d58"
+            }
+          ],
+          "reason": "Both frames state the same operational compensation rule under the same modality scope.",
+          "status": "RESOLVED",
+          "summary": "Compensate actual time spent in sessions regardless of research modality.",
+          "uid": "846a392a-56fb-505b-9e02-a8850e7f359a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "1f4d05e4-2a79-572c-8050-beb1464fb781"
+            }
+          ],
+          "reason": "Only the reference preserves this specific payment option.",
+          "status": "RESOLVED",
+          "summary": "Keep cash available as a compensation method for face-to-face studies.",
+          "uid": "dbd6f4cc-f16d-5571-bd30-b1f085ad2fff"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "abcba764-6f35-5dae-bb3d-7860fb72ccf2"
+            },
+            {
+              "frame_uid": "0af5941f-63bd-4b73-b557-9e7a39c454eb",
+              "memory_uid": "5c6c461d-05e5-5b0c-b801-245de2f9c8d7"
+            }
+          ],
+          "reason": "The frames address the same proposal-stage judgment, but only the reference states the explicit compensation-equity condition.",
+          "status": "RESOLVED",
+          "summary": "An unresolved payment method need not undermine a proposal, with the reference expressly conditioning this on an equity explanation.",
+          "uid": "a3379db0-0eda-5829-96ec-434261976baa"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "c6a28f37-1a7c-5dbd-b75c-c829f0461504"
+            },
+            {
+              "frame_uid": "0af5941f-63bd-4b73-b557-9e7a39c454eb",
+              "memory_uid": "44abc098-8c9f-5abb-bc49-9deb25066d93"
+            }
+          ],
+          "reason": "The frames govern complementary conditions of the same rate-setting decision: equal burden and unequal travel or technical-preparation burden.",
+          "status": "RESOLVED",
+          "summary": "Use equal base rates when burdens are equal and allow modality-specific amounts when burdens differ.",
+          "uid": "a09579a4-4bc9-58b4-807c-88fee0882c98"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "529559f5-850d-5920-8e27-0b1e7138dc36"
+            },
+            {
+              "frame_uid": "0af5941f-63bd-4b73-b557-9e7a39c454eb",
+              "memory_uid": "7e647a83-81b0-52d6-9362-e513dc2a5032"
+            }
+          ],
+          "reason": "The reference names rescheduling and return visits in iterative evaluation, while the compared frame names diary and repeated-reporting time in longitudinal studies.",
+          "status": "RESOLVED",
+          "summary": "Include burdens outside the session when studies require repeated participation, with study-specific activities identified.",
+          "uid": "0632e4a2-f768-56ba-9c20-be2197ae183c"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "bdac8cf8-dd11-5794-b4b2-9774ff344436"
+            },
+            {
+              "frame_uid": "0af5941f-63bd-4b73-b557-9e7a39c454eb",
+              "memory_uid": "0c470c6b-26a6-5501-93ac-c51fecd708ae"
+            }
+          ],
+          "reason": "The reference identifies between-session preparation in iterative studies; the compared frame identifies advance setup and follow-up reporting.",
+          "status": "RESOLVED",
+          "summary": "The user tends to omit participant work outside session time, with different omitted activities emphasized.",
+          "uid": "18013c37-c0fa-59ba-b0fa-969708c924bc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0af5941f-63bd-4b73-b557-9e7a39c454eb",
+              "memory_uid": "9b59c6ed-5dbe-5ccc-87b5-6be31f414e68"
+            }
+          ],
+          "reason": "Only the compared frame supplies this payment-method contingency.",
+          "status": "RESOLVED",
+          "summary": "Allow equivalent-value gift cards for remote participants unable to use electronic transfers.",
+          "uid": "aeaf9f41-8247-5006-a996-ad637c789670"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0af5941f-63bd-4b73-b557-9e7a39c454eb",
+              "memory_uid": "d77affab-60c8-5403-b189-17022b484640"
+            }
+          ],
+          "reason": "Only the compared frame distinguishes these two budget categories.",
+          "status": "RESOLVED",
+          "summary": "Separate participant compensation from installation and operational-support labor costs for field staff.",
+          "uid": "6dbdba2f-d0c9-51d2-85c8-8e48d52c31e8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "0dda8eb3-3287-5bb6-9b26-b1c00cc038d9"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "0f89ab25-d9ee-5669-aa99-a0fe07803915"
+            }
+          ],
+          "reason": "The reference memories state one focused validity review and its end-to-end coherence check.",
+          "status": "RESOLVED",
+          "summary": "Conduct a dedicated pre-submission review of the logical flow among problems, interventions, studies, and contributions.",
+          "uid": "d0bf8ed7-3642-59ae-afbb-40d882dcb5c2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "c8e0c9dd-dc4a-5a7d-9a82-e7ee449a4b25"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "3e4a9a3b-abc2-54ed-9b87-f81abf61b541"
+            }
+          ],
+          "reason": "The reference memories state one alignment test and the validity consequence of failing it.",
+          "status": "RESOLVED",
+          "summary": "Cross-check research questions against core prototype functions.",
+          "uid": "fb44a1af-8743-5617-8dd6-2e6633e2df19"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "f93c5baa-3c2b-5e37-b07b-0b00e8b22ab9"
+            },
+            {
+              "frame_uid": "1373f92e-2cde-4ea1-a76d-b71b587634c3",
+              "memory_uid": "fb785649-1947-5e7d-aafb-308f14fb21b4"
+            }
+          ],
+          "reason": "The reference memories state one alignment test and the evaluation-validity consequence of failing it.",
+          "status": "RESOLVED",
+          "summary": "Cross-check evaluation tasks against representative measures.",
+          "uid": "2b875a44-ddcd-53ad-ba0a-b7ff30c6d010"
+        }
+      ],
+      "reports": {
+        "both": "Both support compensation based on total participation burden, actual session time, and burden-sensitive treatment across research modalities.",
+        "compared_only": "The compared frame adds remote gift cards of equivalent value and separation of participant compensation from field-staff labor costs.",
+        "differences": "The frames preserve different conditions for interrupted participation, unresolved payment methods, repeated or longitudinal work, and commonly omitted preparation or reporting time.",
+        "reference_only": "The reference provides broad guidance on proposal structure, evidence, methods, evaluation, ethics, safety, feasibility, reproducibility, budgeting, and review, plus cash payment availability."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "641ee157-af22-4412-83ed-fc25ee60e048"
+    },
+    "analysis_digest": "84f04469feb8309497d700f79cb10a0ac38cc10afe442b2decee72cf5043f0e5",
+    "key": "855d273ea17eb7077593602dedb6c785a3b7deba7944526df14fd5fbd58ff722",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 166.39678070800073,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "855d273ea17eb7077593602dedb6c785a3b7deba7944526df14fd5fbd58ff722",
+  "created_at": "2026-08-13T18:13:38.984052Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1",
+  "pair_key": "78f10bb98efee86015cddf001a9dfa5b2b67c1e975c5034f5347fa96d6222106",
+  "provider_seconds": 166.39678070800073,
+  "right": "task-2/advisor2/compensation",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

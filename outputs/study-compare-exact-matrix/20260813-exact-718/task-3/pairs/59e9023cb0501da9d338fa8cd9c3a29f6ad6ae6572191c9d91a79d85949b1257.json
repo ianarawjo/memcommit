@@ -1,0 +1,397 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:39:32.014964+00:00",
+      "frames": [
+        {
+          "context_digest": "3f1b018c2a3a8594d00bffba053626a876fef4893e678dd9600986d9d41c0f31",
+          "context_name": "task-3/local/personal-memory/2024/05",
+          "context_uid": "683986e6-d517-5a53-9dc1-16b69cf0d12e",
+          "memories": [
+            {
+              "content": "The user keeps a small table fan beside the bedroom window.",
+              "content_digest": "b8a464f5e2a33edcef1259af4a412b047ba190bae9cfe42aaf1dbd722efc7f0c",
+              "position": 0,
+              "uid": "3088c235-435c-52ee-9ffc-26cf85ec196e"
+            },
+            {
+              "content": "On a day the user drank coffee late in the afternoon, they could not fall asleep until dawn.",
+              "content_digest": "ef4cf019ebc163fc24f03b8bd505599cd13fc83f33565d51ffb4379dc21d72b8",
+              "position": 1,
+              "uid": "7811ed66-2f22-54d8-a215-62a843264ba5"
+            },
+            {
+              "content": "On a day the user drank coffee before 2 p.m., they fell asleep at their usual time.",
+              "content_digest": "046ac3f8454da623f73d1293fb954b72a3ea056642fd9ee7948c35f110e77669",
+              "position": 2,
+              "uid": "d0f94a56-5cf8-5215-9cfa-5993b3b781be"
+            },
+            {
+              "content": "On a tired day, the user ate dinner out and postponed even washing the dishes after returning home.",
+              "content_digest": "ac36f6c1039dc74f764b4671f718f1e124823dc75fd45abda010285523280b71",
+              "position": 3,
+              "uid": "fc19394a-6634-5aae-bfa5-bba91e707954"
+            },
+            {
+              "content": "In the same week, on a day the user made simple noodles at home, they rested immediately after the meal.",
+              "content_digest": "45bb543f6c6ca213b856683b3c53448ac0d044bcf24f694eda292d6c4923ac5c",
+              "position": 4,
+              "uid": "be7aa7f3-1b67-5677-950d-9942ca337a99"
+            },
+            {
+              "content": "On a night the window was left open, street noise woke the user twice.",
+              "content_digest": "13f3dd86b869b25ee75e1b80d9cdb890b79434fa976fbd7246e89ba808f1a6c6",
+              "position": 5,
+              "uid": "47faaefd-2d60-5693-9847-2c1d5d2f9092"
+            },
+            {
+              "content": "On a night the table fan was running, the user was not too warm even with the window closed.",
+              "content_digest": "96ce23df1cf4f913e3b4c339cc3a857a6a8776e3f3f48e865eae65f02297bba8",
+              "position": 6,
+              "uid": "d6eea310-1313-5a51-b032-f3f518620610"
+            },
+            {
+              "content": "The user's father prefers to have coffee available after dinner and believes it will not cause a sleep problem.",
+              "content_digest": "197616278309e370f0d0e633700b1bde2c6e4395dbc8ed2b942e14fb6c1c9cc5",
+              "position": 7,
+              "uid": "056defa1-8256-561d-a2b4-a70df4058c33"
+            },
+            {
+              "content": "When making a sleep-related suggestion, do not treat one or two records as a general lifestyle habit.",
+              "content_digest": "963795e89a1e2365dd81abf463fb9a80c1c22b9c0e59b121681f89c09860e583",
+              "position": 8,
+              "uid": "7cecee60-fabd-55a3-998b-78810bd9eaf4"
+            },
+            {
+              "content": "The user tends to go to bed much later after drinking coffee late in the afternoon.",
+              "content_digest": "e54652939c104807d5c501753f85aee97883cc55e1d056787b86857cd5b8292d",
+              "position": 9,
+              "uid": "9ace13d3-d881-5720-bfd5-f7884db67756"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "6b349557-2209-4910-a257-dd787c5181cd"
+        },
+        {
+          "context_digest": "0af669f138c2617a4b35c0974627a23c7e5cb2405da5e306648b130efac7fbdf",
+          "context_name": "task-3/local/personal-memory/2025/12",
+          "context_uid": "c54e9dde-005a-5d20-b41b-1313b4713061",
+          "memories": [
+            {
+              "content": "The user stores wrapping paper and empty gift boxes on the upper shelf of the bedroom closet.",
+              "content_digest": "8f3b67dea69e1fa656f1e42e39700a71ebc250c4f6ec18dc4d4f88d467e86ad2",
+              "position": 0,
+              "uid": "bd69b616-6e7c-5440-8b29-586de68bcff6"
+            },
+            {
+              "content": "From photographs, the user discovered that they had given their mother the same type of kitchen item two years in a row.",
+              "content_digest": "6962b8dc03fd90e1c8badfda0d827008cc675b940e5975a5833ebe504af7d635",
+              "position": 1,
+              "uid": "90c60e57-d7db-5783-9ca8-2fd27b94d847"
+            },
+            {
+              "content": "This year, the user went to the market with their mother and let her choose a needed item directly.",
+              "content_digest": "9a27aa187ad2964f985ffcf376490f4b69d3c83f2034591187273bd89f61637a",
+              "position": 2,
+              "uid": "53bc23b2-8242-58b5-b496-a45c70bb8e41"
+            },
+            {
+              "content": "The user once ordered a gift late and had it delivered the day after the gathering.",
+              "content_digest": "245bb316eb5d0b0203c63eb9a2832c6cf73cb9e7e368bdb48a08bb6b702642d7",
+              "position": 3,
+              "uid": "3b097446-2c73-5414-8c06-6bacdf00a4c1"
+            },
+            {
+              "content": "The next year, the user checked the expected delivery date and ordered one week before the gathering.",
+              "content_digest": "97aed11c6b4f7d03bd6a55e27ef34ef539da85204787bb0468f1e2df51d958fc",
+              "position": 4,
+              "uid": "ce18c7a5-d1e9-5e5c-8739-b14fa7298feb"
+            },
+            {
+              "content": "The user did not put names on wrapped boxes and handed their older sister and younger brother each other's gifts.",
+              "content_digest": "48464eb29ee2d2e01cda00f0e3a13d116d4aa121d424aecc59644431e89f8957",
+              "position": 5,
+              "uid": "7657f424-cd24-54dd-8409-e04974dd1531"
+            },
+            {
+              "content": "The next time the user wrapped gifts, they wrote the recipient on the bottom of each box.",
+              "content_digest": "551e74aebf85d4ffee86b960c520b17f3f7e4d50428493934831a774d9e31db6",
+              "position": 6,
+              "uid": "d8e82ad3-902e-5f0c-aa8e-b23ce874982a"
+            },
+            {
+              "content": "The user's younger brother welcomes a snack the family can share immediately more than an item for his use alone.",
+              "content_digest": "ec32111520e2f12afc684c6441c075dcc0715fc450d0ce8f20408dfb955634a9",
+              "position": 7,
+              "uid": "8a941bf1-73bd-51d3-a069-62ecc9d56439"
+            },
+            {
+              "content": "The local agent can find past gift records and flag duplicates but cannot know what is needed this year.",
+              "content_digest": "f7574c7f91999992680a7e88e79270747fd744a46355800012c63319c286d731",
+              "position": 8,
+              "uid": "036edf8f-4680-5822-924e-0fdc691c8135"
+            },
+            {
+              "content": "Year-end deliveries may take longer than usual or have their expected dates changed.",
+              "content_digest": "cc0955e132cf6f4bec7f416e54ed2ffdbac22169adeeae7372a6ddc496da4b9e",
+              "position": 9,
+              "uid": "b9e9e222-a559-56e3-93b5-1f49a0e0d3ab"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "8b6624e2-628c-48a8-82c6-66918cd75a04"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover independent domains: the reference records sleep, coffee timing, bedroom comfort, and tired-evening behavior, while the compared records gift selection, preparation, delivery, family preferences, and agent limits. No claims address the same operational decision closely enough for a cross-frame relation.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6b349557-2209-4910-a257-dd787c5181cd",
+              "memory_uid": "3088c235-435c-52ee-9ffc-26cf85ec196e"
+            }
+          ],
+          "reason": "This bedroom-equipment detail is independently useful and has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user keeps a small table fan beside the bedroom window.",
+          "uid": "0f605589-7218-5fa4-a1fe-bbdb9787ec86"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6b349557-2209-4910-a257-dd787c5181cd",
+              "memory_uid": "7811ed66-2f22-54d8-a215-62a843264ba5"
+            },
+            {
+              "frame_uid": "6b349557-2209-4910-a257-dd787c5181cd",
+              "memory_uid": "d0f94a56-5cf8-5215-9cfa-5993b3b781be"
+            },
+            {
+              "frame_uid": "6b349557-2209-4910-a257-dd787c5181cd",
+              "memory_uid": "9ace13d3-d881-5720-bfd5-f7884db67756"
+            }
+          ],
+          "reason": "These memories jointly describe the timing-sensitive coffee-and-sleep pattern, which the compared frame does not address.",
+          "status": "RESOLVED",
+          "summary": "The user’s records associate late-afternoon coffee with much later sleep, while coffee before 2 p.m. coincided with usual sleep timing.",
+          "uid": "00581357-d348-5a82-a6b1-98aee04a9007"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6b349557-2209-4910-a257-dd787c5181cd",
+              "memory_uid": "fc19394a-6634-5aae-bfa5-bba91e707954"
+            }
+          ],
+          "reason": "This specific tired-evening behavior is independently useful and absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "On a tired day, eating dinner out was followed by postponing even the dishes after returning home.",
+          "uid": "8fb7253d-ee02-52ae-be37-1d462e64636c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6b349557-2209-4910-a257-dd787c5181cd",
+              "memory_uid": "be7aa7f3-1b67-5677-950d-9942ca337a99"
+            }
+          ],
+          "reason": "This separate meal-and-rest observation is independently useful and has no compared-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "On another day that week, making simple noodles at home allowed the user to rest immediately after eating.",
+          "uid": "31ef003a-5e21-5073-9350-388d16af3ca0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6b349557-2209-4910-a257-dd787c5181cd",
+              "memory_uid": "47faaefd-2d60-5693-9847-2c1d5d2f9092"
+            }
+          ],
+          "reason": "This sleep-environment observation is not materially addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Leaving the bedroom window open on one night exposed the user to street noise that woke them twice.",
+          "uid": "236dfff7-061e-52ad-8d34-96bb292b9bb8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6b349557-2209-4910-a257-dd787c5181cd",
+              "memory_uid": "d6eea310-1313-5a51-b032-f3f518620610"
+            }
+          ],
+          "reason": "This cooling observation is independently useful and has no corresponding compared-frame claim.",
+          "status": "RESOLVED",
+          "summary": "Running the table fan kept the user from becoming too warm while the window remained closed.",
+          "uid": "f0730afb-eabe-5fb8-b19b-9b7cabfd7037"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6b349557-2209-4910-a257-dd787c5181cd",
+              "memory_uid": "056defa1-8256-561d-a2b4-a70df4058c33"
+            }
+          ],
+          "reason": "This family preference and belief is unique to the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s father wants coffee available after dinner and believes it will not impair sleep.",
+          "uid": "df207f9a-03f6-59bd-b623-522128f52f1d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6b349557-2209-4910-a257-dd787c5181cd",
+              "memory_uid": "7cecee60-fabd-55a3-998b-78810bd9eaf4"
+            }
+          ],
+          "reason": "This evidence-handling policy is independently useful and is not addressed in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Sleep-related suggestions should not generalize one or two records into a lifestyle habit.",
+          "uid": "d8e65e53-59b3-52d1-b1ec-eee07bfaed9b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8b6624e2-628c-48a8-82c6-66918cd75a04",
+              "memory_uid": "bd69b616-6e7c-5440-8b29-586de68bcff6"
+            }
+          ],
+          "reason": "This gift-supply storage detail is unique to the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user stores wrapping paper and empty gift boxes on the upper bedroom-closet shelf.",
+          "uid": "051b4e53-c735-59c3-a10d-d687897dfc02"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8b6624e2-628c-48a8-82c6-66918cd75a04",
+              "memory_uid": "90c60e57-d7db-5783-9ca8-2fd27b94d847"
+            },
+            {
+              "frame_uid": "8b6624e2-628c-48a8-82c6-66918cd75a04",
+              "memory_uid": "53bc23b2-8242-58b5-b496-a45c70bb8e41"
+            }
+          ],
+          "reason": "These memories form one gift-selection lesson about avoiding repeated or unneeded choices, with no reference-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "After photographs revealed repeated kitchen-item gifts for the user’s mother, the user later let her choose a needed market item directly.",
+          "uid": "9f909014-1801-572c-83f7-42717872f691"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8b6624e2-628c-48a8-82c6-66918cd75a04",
+              "memory_uid": "3b097446-2c73-5414-8c06-6bacdf00a4c1"
+            },
+            {
+              "frame_uid": "8b6624e2-628c-48a8-82c6-66918cd75a04",
+              "memory_uid": "ce18c7a5-d1e9-5e5c-8739-b14fa7298feb"
+            },
+            {
+              "frame_uid": "8b6624e2-628c-48a8-82c6-66918cd75a04",
+              "memory_uid": "b9e9e222-a559-56e3-93b5-1f49a0e0d3ab"
+            }
+          ],
+          "reason": "These memories jointly describe delivery-timing risk and the user’s subsequent planning response, which the reference frame does not address.",
+          "status": "RESOLVED",
+          "summary": "After one gift arrived a day late, the user later checked the expected date and ordered a week early; year-end delivery estimates can still lengthen or change.",
+          "uid": "00e3d07c-9e3f-558a-9500-0bdf5cd38de5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8b6624e2-628c-48a8-82c6-66918cd75a04",
+              "memory_uid": "7657f424-cd24-54dd-8409-e04974dd1531"
+            },
+            {
+              "frame_uid": "8b6624e2-628c-48a8-82c6-66918cd75a04",
+              "memory_uid": "d8e82ad3-902e-5f0c-aa8e-b23ce874982a"
+            }
+          ],
+          "reason": "These memories jointly describe a labeling failure and its later corrective practice, with no reference-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "After unlabeled boxes caused sibling gifts to be swapped, the user wrote each recipient’s name on the bottom during the next wrapping occasion.",
+          "uid": "b83c5e48-e5d1-5125-8b73-c9f7f665ec28"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8b6624e2-628c-48a8-82c6-66918cd75a04",
+              "memory_uid": "8a941bf1-73bd-51d3-a069-62ecc9d56439"
+            }
+          ],
+          "reason": "This recipient preference is unique to the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s younger brother prefers an immediately shareable family snack over an item solely for himself.",
+          "uid": "bd9fc377-d678-5a92-9a8e-f2a90be6265f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8b6624e2-628c-48a8-82c6-66918cd75a04",
+              "memory_uid": "036edf8f-4680-5822-924e-0fdc691c8135"
+            }
+          ],
+          "reason": "This capability boundary is independently useful and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The local agent can retrieve past gift records and flag duplicates but cannot determine current needs.",
+          "uid": "3de297fe-6f51-5c85-9f9a-eaadb49accce"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only information concerns gift storage, selection and family preferences, avoiding duplicate gifts, delivery planning, recipient labeling, and limits of historical gift records.",
+        "differences": "",
+        "reference_only": "Reference-only information concerns coffee-related sleep patterns and caution in generalizing them, bedroom cooling and noise, a father’s coffee preference, and behavior on tired evenings."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "21ad4846-7e6b-4d9e-a3cc-962399623929"
+    },
+    "analysis_digest": "b3a480dc93c9975a6105c143712f507a9a72cc775e20dc43f4204925717bd1e2",
+    "key": "aec29f505fd2c28317a69f01978ea38fa8d2ea4cb27d597d3861ceba9130398d",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 38.231548583000404,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "aec29f505fd2c28317a69f01978ea38fa8d2ea4cb27d597d3861ceba9130398d",
+  "created_at": "2026-08-13T18:40:10.246095Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/05",
+  "pair_key": "59e9023cb0501da9d338fa8cd9c3a29f6ad6ae6572191c9d91a79d85949b1257",
+  "provider_seconds": 38.231548583000404,
+  "right": "task-3/local/personal-memory/2025/12",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

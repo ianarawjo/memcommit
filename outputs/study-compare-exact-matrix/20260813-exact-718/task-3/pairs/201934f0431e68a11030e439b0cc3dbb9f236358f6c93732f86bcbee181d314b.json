@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:48:22.658656+00:00",
+      "frames": [
+        {
+          "context_digest": "0b8af0ea4e580cc332939d026149e543e9251c54de246e3eabb83c941e6c12f2",
+          "context_name": "task-3/local/personal-memory/2024/12",
+          "context_uid": "66c3e5de-61bb-5795-8e5a-4e28f64be857",
+          "memories": [
+            {
+              "content": "The user used an accessible entrance at a clinic in December 2024.",
+              "content_digest": "a940bc9fb7423a1bdb9dde547cd39eb8ad66d4fa3051649c62b042fc63935263",
+              "position": 0,
+              "uid": "a6923620-267d-5129-b8c4-cd9b1e1a1e7b"
+            },
+            {
+              "content": "On a day snow had accumulated and blocked the main-entrance ramp, the user went to a side entrance.",
+              "content_digest": "460c05d8e8b4b7443ff42cbeead66e07201846394bcbe5948f63e585a197006f",
+              "position": 1,
+              "uid": "fb0e1d1f-0ef5-5214-b6d7-f6ca5c68f582"
+            },
+            {
+              "content": "The user learned on site that the elevator was under inspection and delayed the appointment.",
+              "content_digest": "b5efa024c597b57651178431d22173d4ca1242c3a4c9607f8bd5a7ff681af6f4",
+              "position": 2,
+              "uid": "4cb45120-4376-5c7b-ae92-faa9e4b9330c"
+            },
+            {
+              "content": "The day before the next visit, the user called to check whether the elevator would be operating.",
+              "content_digest": "93c66066de480a4d2f30b7b7c4d955acfceb227ac898766b6375829804b580eb",
+              "position": 3,
+              "uid": "479f4434-879c-5335-b0c9-c0bfa19ecdcd"
+            },
+            {
+              "content": "The user waited for their turn in front of a ticket machine near the waiting chairs.",
+              "content_digest": "fada8c09d46af2e1bcbd2b1e97d9cb786ceca83fc13d1240627639dd6cb96e65",
+              "position": 4,
+              "uid": "0f2c78a7-8f92-573d-af8a-a360ceb77b24"
+            },
+            {
+              "content": "On a day the user waited in a corridor without chairs, they leaned against the wall and changed position several times.",
+              "content_digest": "0037afaeb85d94f985b1628b7b8f8194fb00d7d7e72e1746c6bae2c2ba66fe6f",
+              "position": 5,
+              "uid": "7b9197ac-4263-5169-8d3b-d34f5d893d36"
+            },
+            {
+              "content": "On a day their older sister accompanied them, the user found a place to sit immediately after reception.",
+              "content_digest": "1ae59de552a922fd3b4d39e7e5dc1ec65ff08ee68e3448f2152f27dfec710a5a",
+              "position": 6,
+              "uid": "7b0b7571-f29c-56e5-a27a-82d69a4a6982"
+            },
+            {
+              "content": "Reception staff expect that a first-time visitor may ask where the accessible entrance is.",
+              "content_digest": "7dc3300dc630b737c0f7b437eba30179aa6aaa03efd61c968604ee505a43aa73",
+              "position": 7,
+              "uid": "e9515d6b-10d9-579f-abf7-5030db64218a"
+            },
+            {
+              "content": "The local agent cannot infer the user's condition from a record of using an accessible route alone.",
+              "content_digest": "2d8a50f62f32c43ca62e1e23b75c34361ece43fd8367964174fdc73d66795df4",
+              "position": 8,
+              "uid": "8e57141d-c603-56cd-ab9e-c14b4e944b45"
+            },
+            {
+              "content": "Snow accumulation and snow-removal work can temporarily block an entrance route used under ordinary conditions.",
+              "content_digest": "4fb152c120860688789bdd4b825de45799e9fa00c0c18c334492dd4b274adde9",
+              "position": 9,
+              "uid": "a6076438-307c-56fe-9d2c-848181846ce5"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "0eb3fd76-967a-42e2-8951-dbb4a41499be"
+        },
+        {
+          "context_digest": "df0924e320cd14a29eaed60f78e82fd509c4062949b35706b2a7cb94571fb599",
+          "context_name": "task-3/local/personal-memory/2026/04",
+          "context_uid": "16e860a8-7a90-5b7a-adc3-1c487ef97e03",
+          "memories": [
+            {
+              "content": "The user collects clothes for donation in a large bag beside the entrance.",
+              "content_digest": "39f2f01c59b7fa4ca7529d510e1b0a6ffab6706861042f771cfe97f6f806efac",
+              "position": 0,
+              "uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            },
+            {
+              "content": "After emptying an entire drawer at once, the user could not find a charger they needed.",
+              "content_digest": "674c33ba6475f42b29b03e6f8711e0216f983f3d37fee3dacf9336e3bb4596bf",
+              "position": 1,
+              "uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            },
+            {
+              "content": "During the next organizing session, the user sorted items by type and put only items to be discarded in the bag.",
+              "content_digest": "63104b5a7fd380f818c8758c51f9550c7a7fa41ff91f1dd314225d1824b69643",
+              "position": 2,
+              "uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            },
+            {
+              "content": "Even after photographing unworn clothes, the user did not take them out again for one month.",
+              "content_digest": "519f131096440719dcd3412f4439c5cfe44b7f402684170209708040692dc5fd",
+              "position": 3,
+              "uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            },
+            {
+              "content": "After moving those clothes to the donation bag, the user cleared one closet compartment.",
+              "content_digest": "45db58ae108a299344d982d8606fff26f733252da691cf01417e760909ff6057",
+              "position": 4,
+              "uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            },
+            {
+              "content": "The user nearly discarded an important paper with advertising and checked the recycling box again.",
+              "content_digest": "6bf928f67944656e5f3c68d8869c0cefd039a588f0ba735f94520231ef58017c",
+              "position": 5,
+              "uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            },
+            {
+              "content": "During the next organizing session, the user kept a separate document box and did not mix the papers.",
+              "content_digest": "adac8d4266c6b11e15d29c484665bc5dcc915f9aa319198b6a69d0e7b0131bb3",
+              "position": 6,
+              "uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            },
+            {
+              "content": "The user's mother asks the user to check whether she needs kitchen items in good condition before discarding them.",
+              "content_digest": "0752bc2ac00c0b1301c45ab4c2e73f63c57e6ebc4255dcc1c13330ffda906612",
+              "position": 7,
+              "uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            },
+            {
+              "content": "Confirm with the user before marking a personal document or another person's property as a disposal candidate.",
+              "content_digest": "17062e2cd4738619e81e211cb2f53d14e78c5f4eab9ae49053ce7e06935a7db5",
+              "position": 8,
+              "uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            },
+            {
+              "content": "The local agent cannot determine an object's emotional meaning from frequency of use alone.",
+              "content_digest": "9c86bcfe2b209bf7957dced0eab000b42f97b6a435d705ccaccb15e49be3691d",
+              "position": 9,
+              "uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "06cf8e00-1104-4f30-bf1d-87268f473eff"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover unrelated domains: the reference describes clinic accessibility, waiting, and inference limits, while the compared frame describes household organizing, disposal safeguards, and meaning-assessment limits. No claims address the same operational decision closely enough to form a cross-frame relation.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0eb3fd76-967a-42e2-8951-dbb4a41499be",
+              "memory_uid": "a6923620-267d-5129-b8c4-cd9b1e1a1e7b"
+            }
+          ],
+          "reason": "This is a one-sided historical clinic-access fact with no counterpart in the household-organizing frame.",
+          "status": "RESOLVED",
+          "summary": "The user used a clinic’s accessible entrance in December 2024.",
+          "uid": "e458afc1-f78c-58ed-a016-4a1b336637d4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0eb3fd76-967a-42e2-8951-dbb4a41499be",
+              "memory_uid": "fb0e1d1f-0ef5-5214-b6d7-f6ca5c68f582"
+            }
+          ],
+          "reason": "This specific access-route contingency is independently useful and absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Snow blocking the main ramp led the user to use a side entrance.",
+          "uid": "07091622-8769-5ba6-b76e-73e3795e2226"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0eb3fd76-967a-42e2-8951-dbb4a41499be",
+              "memory_uid": "4cb45120-4376-5c7b-ae92-faa9e4b9330c"
+            }
+          ],
+          "reason": "This clinic disruption and its consequence have no operational counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "An elevator inspection discovered on site delayed the user’s appointment.",
+          "uid": "8eb9fcb4-e79e-5a9e-9407-d9c86f4934fa"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0eb3fd76-967a-42e2-8951-dbb4a41499be",
+              "memory_uid": "479f4434-879c-5335-b0c9-c0bfa19ecdcd"
+            }
+          ],
+          "reason": "This advance accessibility check is a separate one-sided action.",
+          "status": "RESOLVED",
+          "summary": "Before a later visit, the user called to verify elevator operation.",
+          "uid": "d9026f30-7963-52c1-bb48-fb6c8e0fb259"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0eb3fd76-967a-42e2-8951-dbb4a41499be",
+              "memory_uid": "0f2c78a7-8f92-573d-af8a-a360ceb77b24"
+            }
+          ],
+          "reason": "This clinic waiting-location experience is not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user waited near waiting chairs in front of a ticket machine.",
+          "uid": "44f3a6c8-49b7-556d-ae32-3449da5dbc2a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0eb3fd76-967a-42e2-8951-dbb4a41499be",
+              "memory_uid": "7b9197ac-4263-5169-8d3b-d34f5d893d36"
+            }
+          ],
+          "reason": "This response to unavailable seating is independently useful one-sided information.",
+          "status": "RESOLVED",
+          "summary": "Without corridor chairs, the user leaned against a wall and repeatedly changed position.",
+          "uid": "5377103d-a255-53d0-9e7b-2feaf4d1694b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0eb3fd76-967a-42e2-8951-dbb4a41499be",
+              "memory_uid": "7b0b7571-f29c-56e5-a27a-82d69a4a6982"
+            }
+          ],
+          "reason": "This accompanied-visit seating experience has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "When accompanied by an older sister, the user found seating immediately after reception.",
+          "uid": "05d0c473-d9df-5cdc-9793-2f7289a22b44"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0eb3fd76-967a-42e2-8951-dbb4a41499be",
+              "memory_uid": "e9515d6b-10d9-579f-abf7-5030db64218a"
+            }
+          ],
+          "reason": "This staff expectation concerns clinic navigation alone.",
+          "status": "RESOLVED",
+          "summary": "Reception staff anticipate that first-time visitors may ask for the accessible entrance.",
+          "uid": "4ef684df-043b-5131-b5b1-995feb41ce7e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0eb3fd76-967a-42e2-8951-dbb4a41499be",
+              "memory_uid": "8e57141d-c603-56cd-ab9e-c14b4e944b45"
+            }
+          ],
+          "reason": "This inference boundary governs accessibility information, not object sorting or disposal.",
+          "status": "RESOLVED",
+          "summary": "Accessible-route use alone does not justify inferring the user’s condition.",
+          "uid": "a4ceb681-d529-5040-a7c8-7eaf3582f211"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0eb3fd76-967a-42e2-8951-dbb4a41499be",
+              "memory_uid": "a6076438-307c-56fe-9d2c-848181846ce5"
+            }
+          ],
+          "reason": "This general environmental access contingency appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Snow and snow removal can temporarily obstruct an ordinarily used entrance route.",
+          "uid": "f5da2909-97ca-5162-b035-b50acba88fd9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "06cf8e00-1104-4f30-bf1d-87268f473eff",
+              "memory_uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            }
+          ],
+          "reason": "This household donation practice has no counterpart in the clinic-access frame.",
+          "status": "RESOLVED",
+          "summary": "The user collects donation clothing in a large bag by the entrance.",
+          "uid": "1f108706-ea74-5da7-86e8-c2c0b07c579b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "06cf8e00-1104-4f30-bf1d-87268f473eff",
+              "memory_uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            }
+          ],
+          "reason": "This organizing mishap is independently useful one-sided information.",
+          "status": "RESOLVED",
+          "summary": "Emptying a whole drawer at once caused the user to lose track of a needed charger.",
+          "uid": "13156a0d-f1ed-516f-8c09-588ba83e38ad"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "06cf8e00-1104-4f30-bf1d-87268f473eff",
+              "memory_uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            }
+          ],
+          "reason": "This revised organizing method is absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "In a later session, the user sorted by type and bagged only discard items.",
+          "uid": "27ab144f-c45d-5553-b9ff-3d24c977b3dc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "06cf8e00-1104-4f30-bf1d-87268f473eff",
+              "memory_uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            }
+          ],
+          "reason": "This observation about clothing use and retention is unique to the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Photographing unworn clothes did not prompt the user to retrieve them for a month.",
+          "uid": "6e671d93-2ae6-5a19-9749-2b45fc7f7451"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "06cf8e00-1104-4f30-bf1d-87268f473eff",
+              "memory_uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            }
+          ],
+          "reason": "This concrete organizing outcome has no clinic-related counterpart.",
+          "status": "RESOLVED",
+          "summary": "Moving those clothes into the donation bag cleared a closet compartment.",
+          "uid": "7647cd58-2e12-58d8-b553-041a15b789a7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "06cf8e00-1104-4f30-bf1d-87268f473eff",
+              "memory_uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            }
+          ],
+          "reason": "This document-disposal incident is independently useful and one-sided.",
+          "status": "RESOLVED",
+          "summary": "After nearly discarding an important paper with advertising, the user rechecked recycling.",
+          "uid": "b2eb4e73-aeb4-5f9e-9369-0a994321b99e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "06cf8e00-1104-4f30-bf1d-87268f473eff",
+              "memory_uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            }
+          ],
+          "reason": "This revised paper-sorting practice appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "In a later session, the user separated documents into their own box.",
+          "uid": "4d6d6274-9c5b-585a-98ff-15c31cec602f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "06cf8e00-1104-4f30-bf1d-87268f473eff",
+              "memory_uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            }
+          ],
+          "reason": "This preference concerning another person’s possible property interest has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user’s mother requests consultation before usable kitchen items are discarded.",
+          "uid": "8192e414-ef8a-5ba6-94a2-a8ad76724c0e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "06cf8e00-1104-4f30-bf1d-87268f473eff",
+              "memory_uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            }
+          ],
+          "reason": "This disposal-confirmation policy governs a decision not addressed in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The agent should confirm before treating personal documents or another person’s property as disposable.",
+          "uid": "7187b1ec-1315-5098-ad63-33cdbd8ae32b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "06cf8e00-1104-4f30-bf1d-87268f473eff",
+              "memory_uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "reason": "This inference boundary concerns possessions and is operationally distinct from inferring a condition from route use.",
+          "status": "RESOLVED",
+          "summary": "Use frequency alone does not establish an object’s emotional meaning.",
+          "uid": "12d30b52-8b9a-50c2-993d-840d38a34994"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame uniquely covers donation and sorting practices, lessons from misplaced items and papers, family-property checks, disposal confirmation, and limits on inferring emotional meaning.",
+        "differences": "",
+        "reference_only": "The reference uniquely covers clinic access routes, elevator disruption and advance checking, waiting and seating experiences, staff expectations, and limits on inferring a user’s condition."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "f42f49c8-c372-43e8-93b5-4d5ee9531fa4"
+    },
+    "analysis_digest": "9e20c306aa6dab5db5ccbf6a07a3784dd3047cb3959992782363d37c039c94e8",
+    "key": "25e7de81908f1d84b200aace331cdfdf6f5cbce999225d1a7879a796555e0357",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 38.78464375000112,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "25e7de81908f1d84b200aace331cdfdf6f5cbce999225d1a7879a796555e0357",
+  "created_at": "2026-08-13T18:49:01.443328Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/12",
+  "pair_key": "201934f0431e68a11030e439b0cc3dbb9f236358f6c93732f86bcbee181d314b",
+  "provider_seconds": 38.78464375000112,
+  "right": "task-3/local/personal-memory/2026/04",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

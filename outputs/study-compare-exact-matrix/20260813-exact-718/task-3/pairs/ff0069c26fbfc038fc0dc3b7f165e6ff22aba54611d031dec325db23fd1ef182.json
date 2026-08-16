@@ -1,0 +1,388 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:51:06.432788+00:00",
+      "frames": [
+        {
+          "context_digest": "b727ef7cf1cb7ca0f00ea3598d36577397e092dcb632f55c3eafb942850922d7",
+          "context_name": "task-3/local/personal-memory/2025/04",
+          "context_uid": "720d2021-1ec5-52ab-ace4-a93e02b05ad9",
+          "memories": [
+            {
+              "content": "The user keeps the shared laundry-room access card in an entrance drawer.",
+              "content_digest": "3c98e367c99e0867f1217c891dc5d982c115fd9d1b4bc3957cca6dbb6338203b",
+              "position": 0,
+              "uid": "a1c67646-6a75-504a-9508-d69e1d04b3e5"
+            },
+            {
+              "content": "The user went downstairs 25 minutes after the laundry finished and received a note from another household.",
+              "content_digest": "44968f6f10c0ae2d1dd775eb066564dada6346c6f59bdacf90d687c57e6c1e0f",
+              "position": 1,
+              "uid": "9479e799-95d7-50d2-af62-d1e0914a389b"
+            },
+            {
+              "content": "For the next load, the user set a reminder five minutes before the end and removed the laundry immediately.",
+              "content_digest": "bc77b81f6126e44bbffeb4ae2dfbb641d31a9742b7a196a106ac385321b48958",
+              "position": 2,
+              "uid": "528cb5ea-8c36-5206-beaa-19432250ec4d"
+            },
+            {
+              "content": "The user washed light-colored clothes with new jeans, and color transferred onto white socks.",
+              "content_digest": "ed0f36cf5ebe8f9542ad39ba45fc109634d72f1cb2b266c15dfe6655e3df3add",
+              "position": 3,
+              "uid": "85fb1639-2176-5329-b490-3325ff030db4"
+            },
+            {
+              "content": "The user later washed the new jeans separately, and the color of the other clothes did not change.",
+              "content_digest": "6e47fe1a02ac39064ea9db2d06d8a1f01f80302825bbe412df745401612e4a84",
+              "position": 4,
+              "uid": "431d170a-863f-596d-97c0-0c9634524ee5"
+            },
+            {
+              "content": "On a day the user did not check the dryer filter, the clothes needed another drying cycle.",
+              "content_digest": "8127e9f3ea34724673517f1e260a73acfb70e287a7e7de84e196ad1cb815f5a7",
+              "position": 5,
+              "uid": "4df33adc-cfba-50f2-b141-e2ebed38b81c"
+            },
+            {
+              "content": "On the next use, after emptying the filter, the user finished drying in one cycle.",
+              "content_digest": "932cfb8fc93277783d8990dad62cfd3e1c9a86e39ad1bd019ce00dac632c53d5",
+              "position": 6,
+              "uid": "ba7daae9-938d-55a1-af20-21cd10d395d8"
+            },
+            {
+              "content": "The building manager judges that not leaving finished laundry for a long time is fair to other households.",
+              "content_digest": "5eabe2d3dff252bb250abcde8fe2d528362afb0e73e7628e839715c3e8a3cd56",
+              "position": 7,
+              "uid": "abbf8742-38e3-5810-b222-fe91e3340962"
+            },
+            {
+              "content": "When creating a shared laundry-room reminder, base it on the end time of the machine the user started.",
+              "content_digest": "e00bc6fe09fea6fde6a27817bd6824a141c1ac4a656b9659067b7e1af9881b1f",
+              "position": 8,
+              "uid": "06273d22-0b42-5c55-9d70-eda14084219a"
+            },
+            {
+              "content": "Even if the local agent knows where the card is kept, it cannot know which machines in the shared laundry room are currently available.",
+              "content_digest": "d03f5583c9e4c686307af90ff00ff54e5ac0990e34296b3d241e4f299d15f4b7",
+              "position": 9,
+              "uid": "03ac930e-d745-5c29-8c24-5ced669817f9"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "ff4e1dea-9543-476b-951c-51b33a2e8365"
+        },
+        {
+          "context_digest": "5a45aaafce189f861f7195d3a753aa86812f64c689213961136327ca721c9d3e",
+          "context_name": "task-3/local/personal-memory/2026/06",
+          "context_uid": "f2e6c2e0-886a-52d8-98d4-03009ea37991",
+          "memories": [
+            {
+              "content": "The user keeps four folding chairs for family barbecues in storage.",
+              "content_digest": "7e2bb593a723adbac468184af4063e0ef74420baa03d6249ef77a84f2e6bc9df",
+              "position": 0,
+              "uid": "cce43b8e-c1c1-5208-8d9a-ee665b805d4c"
+            },
+            {
+              "content": "When six family members gathered in a noisy indoor restaurant, the user asked several times for the person across from them to repeat what was said.",
+              "content_digest": "d858d40478a37bed08580523df1915b85b4e2217b2fc506acedacaca55d2158d",
+              "position": 1,
+              "uid": "e682f0fd-e92f-566e-b1ec-1d5ebf091b60"
+            },
+            {
+              "content": "The user held the next gathering in their father's yard and moved between seats while speaking with everyone.",
+              "content_digest": "44843518c924955fa15e245dc41763a6fe21a95f6f590bd395f7b8a2d6357256",
+              "position": 2,
+              "uid": "c1f2b53e-6184-552b-a321-9796bb121055"
+            },
+            {
+              "content": "On a day the user started the barbecue at midday, sunlight led them to finish the meal quickly.",
+              "content_digest": "f275c2211b4bd69f40351800db57965b8ba44afbadb6e90a0291acae4e7a541b",
+              "position": 3,
+              "uid": "56d5befe-d5f4-59df-82e4-a66ba868dfc2"
+            },
+            {
+              "content": "The next time, the user started at 6 p.m. and remained outside until sunset.",
+              "content_digest": "13c413fbf16ea0704c10d09c5ee065a49ab789b0a3dadb1fc5068631dd95b292",
+              "position": 4,
+              "uid": "83d73ede-6f5a-550e-ba1c-c146b73a9917"
+            },
+            {
+              "content": "Because the side dishes brought by the user's mother and older sister had no labels, the user opened the same container twice.",
+              "content_digest": "5cc4205a743f5d8adca15876d7b0dd864089595ce729f4e3c1cc9a2272c6849b",
+              "position": 5,
+              "uid": "cf0947e8-c133-5259-bac2-e8ee6d74929e"
+            },
+            {
+              "content": "At the next gathering, the user wrote each food's name and who brought it on a small piece of paper.",
+              "content_digest": "6a93e0b5f7e3da8eff2e5c69a3f86c28dfc1a39c1ba7602a61cc1f6a96b837f9",
+              "position": 6,
+              "uid": "d42e48ca-39de-529f-bba2-332b779bd6c2"
+            },
+            {
+              "content": "After a barbecue, the user's younger brother prefers to divide leftover food into small containers to take home rather than discard it.",
+              "content_digest": "9febf1dab1f5000cddc636cd753d3c418b84810cbc6e394df7e8917d3fa29b72",
+              "position": 7,
+              "uid": "3958627e-a0fa-5e32-9e87-7ee874fc6fe7"
+            },
+            {
+              "content": "The local agent can summarize preparation and responses from prior family barbecues but cannot know the next attendees or weather.",
+              "content_digest": "6be2ed6916fc8a6200a4646b5db3b5ea0df7650e664bd098f973fb5229257cec",
+              "position": 8,
+              "uid": "1f24b5c2-554c-5356-b335-c6879e53ba7f"
+            },
+            {
+              "content": "The user's father's yard receives strong direct sunlight at midday; after 6 p.m., shade and wind lower the felt temperature.",
+              "content_digest": "a0bf855f5bb0422568bbed468e5299d111143362d7b9fe2dcf35dbaf8bcbf4c6",
+              "position": 9,
+              "uid": "d88b1b21-c58f-51d5-a60b-54bb11473d96"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "963a2c0e-dca7-4296-bd6b-6e4af2675ff9"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate practical domains: shared-laundry routines and family-barbecue planning. Each contains experiences, adaptations, contextual facts, and limits on local-agent knowledge, but none addresses the same operational decision closely enough to form a cross-frame semantic relation.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ff4e1dea-9543-476b-951c-51b33a2e8365",
+              "memory_uid": "a1c67646-6a75-504a-9508-d69e1d04b3e5"
+            }
+          ],
+          "reason": "This one-sided location fact has no counterpart concerning access-card storage or laundry-room entry.",
+          "status": "RESOLVED",
+          "summary": "The shared laundry-room access card is kept in an entrance drawer.",
+          "uid": "0d0ee3ca-d032-5500-9e6c-9bfeeb4671da"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ff4e1dea-9543-476b-951c-51b33a2e8365",
+              "memory_uid": "9479e799-95d7-50d2-af62-d1e0914a389b"
+            },
+            {
+              "frame_uid": "ff4e1dea-9543-476b-951c-51b33a2e8365",
+              "memory_uid": "528cb5ea-8c36-5206-beaa-19432250ec4d"
+            }
+          ],
+          "reason": "These observations jointly describe the problem and demonstrated timing adaptation for collecting finished laundry; the compared frame contains no claim about that decision.",
+          "status": "RESOLVED",
+          "summary": "A delayed laundry pickup prompted a household note, while a later pre-end reminder enabled immediate removal.",
+          "uid": "87b9b380-d51a-5934-b1b8-9eb8109fb3dc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ff4e1dea-9543-476b-951c-51b33a2e8365",
+              "memory_uid": "85fb1639-2176-5329-b490-3325ff030db4"
+            },
+            {
+              "frame_uid": "ff4e1dea-9543-476b-951c-51b33a2e8365",
+              "memory_uid": "431d170a-863f-596d-97c0-0c9634524ee5"
+            }
+          ],
+          "reason": "These experiences jointly support a laundry-sorting distinction absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Washing new jeans with light clothes caused color transfer, whereas washing the jeans separately avoided changes to other clothes.",
+          "uid": "831df2b6-1e8a-52f3-9f76-41ff88e08c5e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ff4e1dea-9543-476b-951c-51b33a2e8365",
+              "memory_uid": "4df33adc-cfba-50f2-b141-e2ebed38b81c"
+            },
+            {
+              "frame_uid": "ff4e1dea-9543-476b-951c-51b33a2e8365",
+              "memory_uid": "ba7daae9-938d-55a1-af20-21cd10d395d8"
+            }
+          ],
+          "reason": "These paired outcomes concern dryer-filter maintenance and have no operational counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Drying required another cycle when the filter was not checked but finished in one cycle after the filter was emptied.",
+          "uid": "f1c55674-ec0d-52c7-bb9a-82f528280d3b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ff4e1dea-9543-476b-951c-51b33a2e8365",
+              "memory_uid": "abbf8742-38e3-5810-b222-fe91e3340962"
+            }
+          ],
+          "reason": "This shared-facility fairness judgment is independently useful and is not addressed by the barbecue frame.",
+          "status": "RESOLVED",
+          "summary": "The building manager considers prompt removal of finished laundry fair to other households.",
+          "uid": "4dbbb617-f595-5685-ac50-527183431c4a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ff4e1dea-9543-476b-951c-51b33a2e8365",
+              "memory_uid": "06273d22-0b42-5c55-9d70-eda14084219a"
+            }
+          ],
+          "reason": "This is a specific reminder-creation rule for laundry and has no corresponding operational instruction in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A shared laundry-room reminder should be based on the end time of the machine the user started.",
+          "uid": "bd6f3be7-a193-5b1a-ac49-49175c6c8bf9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ff4e1dea-9543-476b-951c-51b33a2e8365",
+              "memory_uid": "03ac930e-d745-5c29-8c24-5ced669817f9"
+            }
+          ],
+          "reason": "This capability boundary concerns live laundry-machine status, a different operational uncertainty from future barbecue attendance or weather.",
+          "status": "RESOLVED",
+          "summary": "Knowing the access card's location does not let the local agent know current shared-room machine availability.",
+          "uid": "08469c1b-54f1-50b9-bf09-6586fcb83e85"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "963a2c0e-dca7-4296-bd6b-6e4af2675ff9",
+              "memory_uid": "cce43b8e-c1c1-5208-8d9a-ee665b805d4c"
+            }
+          ],
+          "reason": "This one-sided equipment inventory has no counterpart concerning seating supplies or barbecue storage.",
+          "status": "RESOLVED",
+          "summary": "Four folding chairs for family barbecues are kept in storage.",
+          "uid": "6575baab-9811-5c35-8a46-bcfefab436f6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "963a2c0e-dca7-4296-bd6b-6e4af2675ff9",
+              "memory_uid": "e682f0fd-e92f-566e-b1ec-1d5ebf091b60"
+            },
+            {
+              "frame_uid": "963a2c0e-dca7-4296-bd6b-6e4af2675ff9",
+              "memory_uid": "c1f2b53e-6184-552b-a321-9796bb121055"
+            }
+          ],
+          "reason": "These experiences jointly describe how gathering setting affected conversational access; the reference frame contains no related operational decision.",
+          "status": "RESOLVED",
+          "summary": "A noisy indoor restaurant hindered conversation across a six-person gathering, while a later yard gathering allowed the user to move between seats and speak with everyone.",
+          "uid": "e7ab999a-81c9-5689-b2bd-447ce6de13b0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "963a2c0e-dca7-4296-bd6b-6e4af2675ff9",
+              "memory_uid": "56d5befe-d5f4-59df-82e4-a66ba868dfc2"
+            },
+            {
+              "frame_uid": "963a2c0e-dca7-4296-bd6b-6e4af2675ff9",
+              "memory_uid": "83d73ede-6f5a-550e-ba1c-c146b73a9917"
+            },
+            {
+              "frame_uid": "963a2c0e-dca7-4296-bd6b-6e4af2675ff9",
+              "memory_uid": "d88b1b21-c58f-51d5-a60b-54bb11473d96"
+            }
+          ],
+          "reason": "These observations and yard conditions jointly characterize time-sensitive outdoor comfort, which has no laundry-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "Strong midday sunlight shortened a barbecue, whereas a 6 p.m. start allowed the gathering to continue until sunset as shade and wind reduced the felt temperature.",
+          "uid": "ae4524cc-53fb-5a56-ac1f-071510f5a07e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "963a2c0e-dca7-4296-bd6b-6e4af2675ff9",
+              "memory_uid": "cf0947e8-c133-5259-bac2-e8ee6d74929e"
+            },
+            {
+              "frame_uid": "963a2c0e-dca7-4296-bd6b-6e4af2675ff9",
+              "memory_uid": "d42e48ca-39de-529f-bba2-332b779bd6c2"
+            }
+          ],
+          "reason": "These memories jointly describe a food-identification problem and its later adaptation, absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Unlabeled side dishes caused duplicate container opening, and the next gathering used labels naming each food and its contributor.",
+          "uid": "8248d4a9-45e5-5f52-aea8-498550f3e4c6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "963a2c0e-dca7-4296-bd6b-6e4af2675ff9",
+              "memory_uid": "3958627e-a0fa-5e32-9e87-7ee874fc6fe7"
+            }
+          ],
+          "reason": "This independently useful household preference has no counterpart concerning leftover handling or food disposal.",
+          "status": "RESOLVED",
+          "summary": "The user's younger brother prefers dividing barbecue leftovers into small take-home containers instead of discarding them.",
+          "uid": "e5456fa6-2976-58f1-bc55-4d5a06dc07a1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "963a2c0e-dca7-4296-bd6b-6e4af2675ff9",
+              "memory_uid": "1f24b5c2-554c-5356-b335-c6879e53ba7f"
+            }
+          ],
+          "reason": "This capability boundary concerns future gathering conditions, a different operational uncertainty from live laundry-machine availability.",
+          "status": "RESOLVED",
+          "summary": "The local agent can summarize prior barbecue preparation and responses but cannot know future attendees or weather.",
+          "uid": "9bcf47ec-d54f-517a-92e8-5411c7511caf"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers barbecue equipment, conversational setting, sunlight-sensitive scheduling, food labels, leftover handling, yard conditions, and uncertainty about future attendees and weather.",
+        "differences": "",
+        "reference_only": "The reference describes laundry access, prompt collection, color separation, dryer-filter use, shared-room fairness, reminder timing, and unavailable live machine-status knowledge."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "e81fa910-a9ba-4193-8284-1e3f2679f887"
+    },
+    "analysis_digest": "8f03088f3d52f08552761708e2b09026e44689348953d99c8462bad4fff6b048",
+    "key": "2375486c444f4d1cb96ec808557f4a10de96630f3a4769cd7bf53da1a65d6f6c",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 43.32751370900223,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "2375486c444f4d1cb96ec808557f4a10de96630f3a4769cd7bf53da1a65d6f6c",
+  "created_at": "2026-08-13T18:51:49.759834Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/04",
+  "pair_key": "ff0069c26fbfc038fc0dc3b7f165e6ff22aba54611d031dec325db23fd1ef182",
+  "provider_seconds": 43.32751370900223,
+  "right": "task-3/local/personal-memory/2026/06",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

@@ -1,0 +1,371 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:25:55.185228+00:00",
+      "frames": [
+        {
+          "context_digest": "d2c716d52357c4200adc8772d5823715ffd736eb766028c1c62bbb32852bc344",
+          "context_name": "task-2/advisor1/scope",
+          "context_uid": "6db29abe-5784-5eec-acaa-060bac0e11f1",
+          "memories": [
+            {
+              "content": "Define in one sentence the user groups and usage contexts to which the design knowledge does not apply.",
+              "content_digest": "3193ffe501a06d6148b39c333853b42bc0278b2ab3c3df88162b049548ff16bb",
+              "position": 0,
+              "uid": "e594a6ab-81e9-5e5f-8ef5-e6bb8f3760d7"
+            },
+            {
+              "content": "Reviewers judge the generalization boundary of results through explicitly excluded targets and situations.",
+              "content_digest": "a929649a7bd07f29f31a8cd1969a3c160ba5f61c0def76e204443c30234f84b0",
+              "position": 1,
+              "uid": "31cdacff-7c49-547d-9f97-598a07b67fb6"
+            },
+            {
+              "content": "Specify user goals, interaction conditions, and technological constraints under which the proposed design knowledge can be transferred.",
+              "content_digest": "6ae1bfaeadb1863db1997685527706d210a379a376a24d3de1168e952f847627",
+              "position": 2,
+              "uid": "1459d986-4dc9-51f3-bf13-dbb0b07045c8"
+            },
+            {
+              "content": "Small-scale formative studies can support analytic generalization distinct from statistical representativeness when results are expressed in terms of design conditions and mechanisms.",
+              "content_digest": "1963572a303acbf383890b7d97b52349f572df761e89ea3fd5116058cd2e1cea",
+              "position": 3,
+              "uid": "1db5fcd6-f93c-5630-9810-053c10b5ceba"
+            },
+            {
+              "content": "The author of this proposal tends to apply design knowledge derived from an accessible sample to a broader user population.",
+              "content_digest": "df2a7f1284c1994c6dec49eb7995acd1ed341a9e6b8f4b06c854d85fa9d77d6c",
+              "position": 4,
+              "uid": "fd29c315-521f-53c0-add5-c668ec318a43"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "4fd5ac67-ab44-4d78-95e8-5fc528c9899f"
+        },
+        {
+          "context_digest": "5f537c105ac26d5b710957c611c114c6834953adc14933beda6f44d0a404e410",
+          "context_name": "task-2/advisor2/methods",
+          "context_uid": "531f5f15-65f7-5315-8ccf-0cea6e53b76a",
+          "memories": [
+            {
+              "content": "Specify field and user data sources and analysis procedures corresponding to all HCI research questions.",
+              "content_digest": "0fecdff0f7b1204928239ca5665756cbf5dda44709758e5a093df8187927029e",
+              "position": 0,
+              "uid": "90be328f-1c05-5574-9657-1b0cc04a10b8"
+            },
+            {
+              "content": "In preregistered studies, clarify the criteria for judging plan changes.",
+              "content_digest": "5df2c60004dfd796d0af2a2e16e25f0804164517d00b4c393a65609a3dfb7534",
+              "position": 1,
+              "uid": "452ab231-3131-5697-a728-475289deafd0"
+            },
+            {
+              "content": "In preregistered studies, clarify the location for recording plan changes.",
+              "content_digest": "b05214535147a4c880d7500036b4640a0c479b0b05e2c1061ebfde88cb3c9866",
+              "position": 2,
+              "uid": "9c979f39-9660-5392-a1cd-0d1317af0e0f"
+            },
+            {
+              "content": "Use a justified minimum-to-maximum target range when confirmations can change, and tie the minimum and maximum to different workload and budget cases.",
+              "content_digest": "6c5e9bcd656dc10013c47e9c953409dbb20b06ee9ab758e1915d5f4d37d2604c",
+              "position": 3,
+              "uid": "8a49f598-804e-5a81-8e88-add7b665633a"
+            },
+            {
+              "content": "Specify the observation records, system logs, or interview tools used to collect each type of field and user data.",
+              "content_digest": "04c875971ca30ee5e3909e2c4e0632512d285401d5c9c4c1f42f4aaa592b34c1",
+              "position": 4,
+              "uid": "629cb159-6f6c-5476-870d-716ab573aef8"
+            },
+            {
+              "content": "Specify whether each type of field and user data will be collected before, during, or after deployment.",
+              "content_digest": "b105c5c373365987dff3fc4b709ffd88ba64c8358c179f81d780dc12d6b11bce",
+              "position": 5,
+              "uid": "b565c5c9-a0f7-5aff-a3b1-19696c4d3b39"
+            },
+            {
+              "content": "Readers cannot assess a target range unless both bounds have a stated consequence for schedule, workload, or cost.",
+              "content_digest": "308b499d832f2780b8a0c7d4acf0c9168ddc0e960b837a7f77e6e9574b235066",
+              "position": 6,
+              "uid": "251a4b3c-58fd-5d66-b5bc-74dcbeaa7a0d"
+            },
+            {
+              "content": "In field deployments, network and service instability exist as independent causes of task failure alongside design choices.",
+              "content_digest": "90f270d2544ce92c7ab245e0eb1eca5836f0a885ea652d40b6aad08c1572b039",
+              "position": 7,
+              "uid": "f150891e-7635-5c35-b986-d369bc630ef4"
+            },
+            {
+              "content": "If a safety signal occurs in the field system, existing institutional safety procedures take precedence over the research schedule and data collection plan.",
+              "content_digest": "96e1d7012cce82f901994e7b454d3f7e0a0b1dd18c5af6b9b14694e939356f25",
+              "position": 8,
+              "uid": "7860d9d6-5c2e-5969-b956-f71398218d02"
+            },
+            {
+              "content": "Reviewers judge answerability by tracing the path from each research question to its data sources and analysis procedures.",
+              "content_digest": "90ba5b91064c53361b4e6cf80cb4ec6a23aea3a02becfae03342046ffa2adf0d",
+              "position": 9,
+              "uid": "4fc24f87-e7b5-5d34-b850-f90cdc9b1ea2"
+            },
+            {
+              "content": "The user authoring this proposal tends to present implemented feature lists directly as design contributions.",
+              "content_digest": "d75cc3bb9bd2475fc87a88dc4a72de982101a5c9f03efaf823bcab6ca95dfe5d",
+              "position": 10,
+              "uid": "2db331a6-28d7-5c32-8372-7d3f8bc5b04a"
+            },
+            {
+              "content": "Define what can still be completed at the minimum target instead of treating every number inside the range as operationally identical.",
+              "content_digest": "b6cead2c6a19be091d8594da052baadd184eb3ef18580860e54b2aa337986354",
+              "position": 11,
+              "uid": "40f23f85-561e-55b3-825b-5000f9638f8a"
+            },
+            {
+              "content": "Use a bounded range to absorb expected confirmation changes without pretending that one early estimate is guaranteed.",
+              "content_digest": "1bc0df6bfbc6936b8a390368b5647a93ea8aab7316e9c7d233690b1206e6f17c",
+              "position": 12,
+              "uid": "9527ccb8-6662-58e3-8edd-daf7c0a713af"
+            },
+            {
+              "content": "Show how session count and facilitator time change at the minimum and maximum bounds.",
+              "content_digest": "2167c3e6d6bafad2818bb211b2c735f47ea040318a944c3402abea86b3faa316",
+              "position": 13,
+              "uid": "3ff9ec36-b70d-5dbd-9692-27fdf734fd20"
+            },
+            {
+              "content": "Define the additional workload or deliverable enabled at the maximum target so the upper bound is not an arbitrary cushion.",
+              "content_digest": "30d71498d24e6f7640b3f128824bf4c917f18c9317f164cd864f862f4c81e7fb",
+              "position": 14,
+              "uid": "9e1c3629-641f-5c09-915d-8a2ad1c8013a"
+            },
+            {
+              "content": "A bounded range preserves uncertainty honestly but makes the final workload and budget less certain than one fixed target.",
+              "content_digest": "c9015c18fd3140429386ae5ff3a0e45ffc86d009590772374f8354d4efb85234",
+              "position": 15,
+              "uid": "7ba672db-131e-5795-89c9-46f56344e7ed"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "9cf1ee21-86e3-4ca8-906a-1d4c93a8859e"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate proposal-quality concerns. The reference focuses on transfer boundaries, analytic generalization, and overgeneralization risk, while the compared frame covers research traceability, preregistration, flexible targets, deployment contingencies, safety precedence, and contribution framing.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4fd5ac67-ab44-4d78-95e8-5fc528c9899f",
+              "memory_uid": "e594a6ab-81e9-5e5f-8ef5-e6bb8f3760d7"
+            },
+            {
+              "frame_uid": "4fd5ac67-ab44-4d78-95e8-5fc528c9899f",
+              "memory_uid": "31cdacff-7c49-547d-9f97-598a07b67fb6"
+            }
+          ],
+          "reason": "These memories state the same one-sided requirement and its review rationale; the compared frame provides no corresponding claim.",
+          "status": "RESOLVED",
+          "summary": "Explicitly define excluded users and situations so reviewers can judge the generalization boundary.",
+          "uid": "4520413b-aeac-5a95-8040-679a97206393"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4fd5ac67-ab44-4d78-95e8-5fc528c9899f",
+              "memory_uid": "1459d986-4dc9-51f3-bf13-dbb0b07045c8"
+            }
+          ],
+          "reason": "This is an independently useful one-sided claim about positive transfer conditions, distinct from defining exclusions.",
+          "status": "RESOLVED",
+          "summary": "Specify the goals, interaction conditions, and technical constraints under which design knowledge transfers.",
+          "uid": "3b97444a-6c23-5e10-8be5-2560285d9487"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4fd5ac67-ab44-4d78-95e8-5fc528c9899f",
+              "memory_uid": "1db5fcd6-f93c-5630-9810-053c10b5ceba"
+            }
+          ],
+          "reason": "This is a one-sided methodological claim about the basis and limits of generalization.",
+          "status": "RESOLVED",
+          "summary": "Small formative studies may support analytic generalization through stated design conditions and mechanisms without statistical representativeness.",
+          "uid": "7c578ad7-44ba-5377-a81c-9714813314e6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4fd5ac67-ab44-4d78-95e8-5fc528c9899f",
+              "memory_uid": "fd29c315-521f-53c0-add5-c668ec318a43"
+            }
+          ],
+          "reason": "This is a one-sided diagnosis of an authoring tendency, not a shared policy or a counterpart to the compared frame's different contribution-framing tendency.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to generalize design knowledge from an accessible sample to a broader population.",
+          "uid": "79997e3e-a265-5e45-a506-c855cfba243b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9cf1ee21-86e3-4ca8-906a-1d4c93a8859e",
+              "memory_uid": "90be328f-1c05-5574-9657-1b0cc04a10b8"
+            },
+            {
+              "frame_uid": "9cf1ee21-86e3-4ca8-906a-1d4c93a8859e",
+              "memory_uid": "629cb159-6f6c-5476-870d-716ab573aef8"
+            },
+            {
+              "frame_uid": "9cf1ee21-86e3-4ca8-906a-1d4c93a8859e",
+              "memory_uid": "b565c5c9-a0f7-5aff-a3b1-19696c4d3b39"
+            },
+            {
+              "frame_uid": "9cf1ee21-86e3-4ca8-906a-1d4c93a8859e",
+              "memory_uid": "4fc24f87-e7b5-5d34-b850-f90cdc9b1ea2"
+            }
+          ],
+          "reason": "These memories split one documentation requirement into its rationale and the data-source, collection, timing, and analysis details needed for answerability.",
+          "status": "RESOLVED",
+          "summary": "Make each research question traceable to specified field or user data, collection instruments and timing, and analysis procedures.",
+          "uid": "41625b0c-19d6-531b-8e21-b95a228d2f35"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9cf1ee21-86e3-4ca8-906a-1d4c93a8859e",
+              "memory_uid": "452ab231-3131-5697-a728-475289deafd0"
+            },
+            {
+              "frame_uid": "9cf1ee21-86e3-4ca8-906a-1d4c93a8859e",
+              "memory_uid": "9c979f39-9660-5392-a1cd-0d1317af0e0f"
+            }
+          ],
+          "reason": "These memories express complementary parts of one one-sided policy for governing preregistration changes.",
+          "status": "RESOLVED",
+          "summary": "For preregistered studies, specify both how plan changes are judged and where they are recorded.",
+          "uid": "5a5d550c-c8ec-5bf2-b21c-da20f16dd37b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9cf1ee21-86e3-4ca8-906a-1d4c93a8859e",
+              "memory_uid": "8a49f598-804e-5a81-8e88-add7b665633a"
+            },
+            {
+              "frame_uid": "9cf1ee21-86e3-4ca8-906a-1d4c93a8859e",
+              "memory_uid": "251a4b3c-58fd-5d66-b5bc-74dcbeaa7a0d"
+            },
+            {
+              "frame_uid": "9cf1ee21-86e3-4ca8-906a-1d4c93a8859e",
+              "memory_uid": "40f23f85-561e-55b3-825b-5000f9638f8a"
+            },
+            {
+              "frame_uid": "9cf1ee21-86e3-4ca8-906a-1d4c93a8859e",
+              "memory_uid": "9527ccb8-6662-58e3-8edd-daf7c0a713af"
+            },
+            {
+              "frame_uid": "9cf1ee21-86e3-4ca8-906a-1d4c93a8859e",
+              "memory_uid": "3ff9ec36-b70d-5dbd-9692-27fdf734fd20"
+            },
+            {
+              "frame_uid": "9cf1ee21-86e3-4ca8-906a-1d4c93a8859e",
+              "memory_uid": "9e1c3629-641f-5c09-915d-8a2ad1c8013a"
+            },
+            {
+              "frame_uid": "9cf1ee21-86e3-4ca8-906a-1d4c93a8859e",
+              "memory_uid": "7ba672db-131e-5795-89c9-46f56344e7ed"
+            }
+          ],
+          "reason": "These memories restate and elaborate one policy: justify the range, define minimum and maximum consequences, quantify operational differences, and preserve uncertainty honestly.",
+          "status": "RESOLVED",
+          "summary": "Use a bounded target range for changing confirmations only when both bounds have explicit deliverable, workload, schedule, or budget implications and the uncertainty tradeoff is acknowledged.",
+          "uid": "94196264-384f-5b35-add7-3b966bf09af4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9cf1ee21-86e3-4ca8-906a-1d4c93a8859e",
+              "memory_uid": "f150891e-7635-5c35-b986-d369bc630ef4"
+            }
+          ],
+          "reason": "This is an independently useful one-sided causal consideration for field deployments.",
+          "status": "RESOLVED",
+          "summary": "Treat network and service instability as causes of field-task failure independent of design choices.",
+          "uid": "4ab45284-0ea6-58bf-9d95-e98443973901"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9cf1ee21-86e3-4ca8-906a-1d4c93a8859e",
+              "memory_uid": "7860d9d6-5c2e-5969-b956-f71398218d02"
+            }
+          ],
+          "reason": "This is an independently useful one-sided conditional precedence rule.",
+          "status": "RESOLVED",
+          "summary": "When a field-system safety signal occurs, institutional safety procedures override the research schedule and data plan.",
+          "uid": "43795af3-76cf-5a67-b065-e550079673c8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9cf1ee21-86e3-4ca8-906a-1d4c93a8859e",
+              "memory_uid": "2db331a6-28d7-5c32-8372-7d3f8bc5b04a"
+            }
+          ],
+          "reason": "This is a one-sided diagnosis concerning contribution framing, operationally different from the reference frame's population-overgeneralization tendency.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to present implemented feature lists directly as design contributions.",
+          "uid": "bba51124-6896-5fa6-a962-4a404e36ce31"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame emphasizes traceable data methods, documented preregistration changes, operationally justified target ranges, deployment failure causes, safety precedence, and avoiding feature lists as contributions.",
+        "differences": "",
+        "reference_only": "The reference defines exclusions and transfer conditions, distinguishes analytic from statistical generalization, and flags extrapolation from accessible samples."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "5d44d519-75ef-4b81-ae14-a2eed303ae0a"
+    },
+    "analysis_digest": "272b2fd53e0dd2b9f6679551d8429f6fd9d98ed4da367c716aa01033220665f6",
+    "key": "ffd7b9936767c1179e92979bc34b1a23ac7722b5fa06be9ef645e71344005be2",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 41.805858499999886,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "ffd7b9936767c1179e92979bc34b1a23ac7722b5fa06be9ef645e71344005be2",
+  "created_at": "2026-08-13T18:26:36.990585Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/scope",
+  "pair_key": "e98b274bd82481386ebbaef76a4e88c799c9813b11cdf57fd7c59342e60b835d",
+  "provider_seconds": 41.805858499999886,
+  "right": "task-2/advisor2/methods",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

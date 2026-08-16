@@ -1,0 +1,339 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:25:42.822503+00:00",
+      "frames": [
+        {
+          "context_digest": "d2c716d52357c4200adc8772d5823715ffd736eb766028c1c62bbb32852bc344",
+          "context_name": "task-2/advisor1/scope",
+          "context_uid": "6db29abe-5784-5eec-acaa-060bac0e11f1",
+          "memories": [
+            {
+              "content": "Define in one sentence the user groups and usage contexts to which the design knowledge does not apply.",
+              "content_digest": "3193ffe501a06d6148b39c333853b42bc0278b2ab3c3df88162b049548ff16bb",
+              "position": 0,
+              "uid": "e594a6ab-81e9-5e5f-8ef5-e6bb8f3760d7"
+            },
+            {
+              "content": "Reviewers judge the generalization boundary of results through explicitly excluded targets and situations.",
+              "content_digest": "a929649a7bd07f29f31a8cd1969a3c160ba5f61c0def76e204443c30234f84b0",
+              "position": 1,
+              "uid": "31cdacff-7c49-547d-9f97-598a07b67fb6"
+            },
+            {
+              "content": "Specify user goals, interaction conditions, and technological constraints under which the proposed design knowledge can be transferred.",
+              "content_digest": "6ae1bfaeadb1863db1997685527706d210a379a376a24d3de1168e952f847627",
+              "position": 2,
+              "uid": "1459d986-4dc9-51f3-bf13-dbb0b07045c8"
+            },
+            {
+              "content": "Small-scale formative studies can support analytic generalization distinct from statistical representativeness when results are expressed in terms of design conditions and mechanisms.",
+              "content_digest": "1963572a303acbf383890b7d97b52349f572df761e89ea3fd5116058cd2e1cea",
+              "position": 3,
+              "uid": "1db5fcd6-f93c-5630-9810-053c10b5ceba"
+            },
+            {
+              "content": "The author of this proposal tends to apply design knowledge derived from an accessible sample to a broader user population.",
+              "content_digest": "df2a7f1284c1994c6dec49eb7995acd1ed341a9e6b8f4b06c854d85fa9d77d6c",
+              "position": 4,
+              "uid": "fd29c315-521f-53c0-add5-c668ec318a43"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "aed1b034-f1b5-4f0e-bafd-fe677fadfe6f"
+        },
+        {
+          "context_digest": "0c296942d89f44af52c83dcba02568af2b56ed1016260f3d3b9c95e919a51339",
+          "context_name": "task-2/advisor2/ethics",
+          "context_uid": "fa36b485-422d-54c3-a145-0f60a077757c",
+          "memories": [
+            {
+              "content": "Link anticipated participant burden with its mitigation strategies for each field user study task.",
+              "content_digest": "120fdee3ad17815fe2e9aa806aab19843cf6597753cf0d35aa0618a3116a1bd2",
+              "position": 0,
+              "uid": "bc8c1327-993c-51ce-8f53-919dc253e0f8"
+            },
+            {
+              "content": "Specify the accommodations necessary for participants to access the field system and research tasks.",
+              "content_digest": "e09cce7cc60d904d618dffa5619cac9c44e4dbcc4f2a0d8547b9ede06586a82b",
+              "position": 1,
+              "uid": "578f6fdf-6bbc-5d1b-8f03-c7460a5cdc7b"
+            },
+            {
+              "content": "Specify how accessibility accommodations will be provided in the field user study.",
+              "content_digest": "98a13f5b544276eaafd5d0b1aea63b2e313ce327f5881f0e4bbcff19724e8c6e",
+              "position": 2,
+              "uid": "6804d5db-c872-5ded-bf68-14fd30e1b645"
+            },
+            {
+              "content": "Describe how personal identifiers will be separated from research data immediately upon collection.",
+              "content_digest": "0bf884cd31610ba663854e8c273ec6769666b38ee72714ba63f0b390d69b8ba3",
+              "position": 3,
+              "uid": "448f23d0-9607-5977-9d13-a99af48a6fc1"
+            },
+            {
+              "content": "List equipment to be loaned when participants lack necessary gear.",
+              "content_digest": "665d4e26cc8390ca2334d4740650e77977b60fd0e3eed2464ade0ca55a806eb2",
+              "position": 4,
+              "uid": "b97f3e2f-e132-5f6f-a748-f406a89a1bc5"
+            },
+            {
+              "content": "Describe the procedure for returning equipment loaned to participants.",
+              "content_digest": "100ffbad1288c3263bc4a1044b2d42da35c36a3f73786e58e4391fbac98c84f2",
+              "position": 5,
+              "uid": "d05964ea-0423-5642-86e1-9e9c19edffbe"
+            },
+            {
+              "content": "The HCI ethics reviewer verifies that anticipated burden and mitigation strategies correspond for each field user study task.",
+              "content_digest": "067bbafce95c77b4a9acc5ba9652db92dba6dc96e14588841db158919bf044b2",
+              "position": 6,
+              "uid": "26407eb8-5c02-551f-a960-1652eb080f90"
+            },
+            {
+              "content": "Ensure that participants can safely return to existing work procedures if they discontinue research participation.",
+              "content_digest": "213cff51d754811573c78ba0ca92f37e614e9fa4ae1080aa7fcfb550c85437fb",
+              "position": 7,
+              "uid": "7e0ba411-3fd9-53ec-8a3f-4499316c06bb"
+            },
+            {
+              "content": "Specify that organizational members who decline research participation will not face disadvantages in task assignment or performance evaluation.",
+              "content_digest": "46b2b0857255b48ed6001191b089c1d6ecba859690818cbff8fe7676fa1f860a",
+              "position": 8,
+              "uid": "a6fbea37-335c-544b-8bac-01f759bc3855"
+            },
+            {
+              "content": "The user's withdrawal risk can be adequately assessed only when a safe alternative procedure exists for field tasks.",
+              "content_digest": "604a38c44856b4407cf2b1d83df216510e77f84ce76ef4dbc7f9be21cd32393b",
+              "position": 9,
+              "uid": "885d1cf3-8bcd-513c-9591-a548fcbd3992"
+            },
+            {
+              "content": "The user tends to assume that a short session also entails little burden from work interruption and exposure to a manager.",
+              "content_digest": "0c48fd9dd3b393f73a8005db56bf2c11320d82b84040af105ca65c3ff9ce6f17",
+              "position": 10,
+              "uid": "520b4c9f-306e-5749-83b5-2218c97f89e6"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "bbcca98b-8055-49b6-8ba8-5328209b141a"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate dimensions of field-study quality. The reference frame defines defensible transfer and generalization boundaries, including overgeneralization risk, while the compared frame covers participant protections, accessibility, data handling, equipment, withdrawal safeguards, nonparticipation fairness, and burden assessment.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "aed1b034-f1b5-4f0e-bafd-fe677fadfe6f",
+              "memory_uid": "e594a6ab-81e9-5e5f-8ef5-e6bb8f3760d7"
+            },
+            {
+              "frame_uid": "aed1b034-f1b5-4f0e-bafd-fe677fadfe6f",
+              "memory_uid": "31cdacff-7c49-547d-9f97-598a07b67fb6"
+            }
+          ],
+          "reason": "Both memories express complementary author and reviewer aspects of one reference-only requirement to state exclusions that delimit applicability.",
+          "status": "RESOLVED",
+          "summary": "Explicitly excluded users and situations define and permit review of the generalization boundary.",
+          "uid": "d36ef018-2633-5199-b1dd-ce64693a2b6b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "aed1b034-f1b5-4f0e-bafd-fe677fadfe6f",
+              "memory_uid": "1459d986-4dc9-51f3-bf13-dbb0b07045c8"
+            }
+          ],
+          "reason": "This is an independently useful reference-only specification of the positive conditions under which design knowledge transfers.",
+          "status": "RESOLVED",
+          "summary": "Transferability should be bounded by user goals, interaction conditions, and technological constraints.",
+          "uid": "d80f5583-1cbc-56aa-83f1-70e253d7ccd7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "aed1b034-f1b5-4f0e-bafd-fe677fadfe6f",
+              "memory_uid": "1db5fcd6-f93c-5630-9810-053c10b5ceba"
+            }
+          ],
+          "reason": "This reference-only claim establishes a distinct basis and limitation for generalizing small-study results.",
+          "status": "RESOLVED",
+          "summary": "Small formative studies may support analytic generalization through stated design conditions and mechanisms without claiming statistical representativeness.",
+          "uid": "c0999d05-deab-5367-a97a-5a0af56d27f1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "aed1b034-f1b5-4f0e-bafd-fe677fadfe6f",
+              "memory_uid": "fd29c315-521f-53c0-add5-c668ec318a43"
+            }
+          ],
+          "reason": "This reference-only observation identifies a specific overgeneralization tendency rather than prescribing transfer boundaries.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to extrapolate design knowledge from an accessible sample to a broader population.",
+          "uid": "5c1fa518-93be-5864-8e50-eee83cc22bb8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbcca98b-8055-49b6-8ba8-5328209b141a",
+              "memory_uid": "bc8c1327-993c-51ce-8f53-919dc253e0f8"
+            },
+            {
+              "frame_uid": "bbcca98b-8055-49b6-8ba8-5328209b141a",
+              "memory_uid": "26407eb8-5c02-551f-a960-1652eb080f90"
+            }
+          ],
+          "reason": "Both memories state authoring and reviewer aspects of one compared-only requirement for task-level burden-to-mitigation correspondence.",
+          "status": "RESOLVED",
+          "summary": "Each field-study task should pair anticipated participant burden with corresponding mitigation strategies for ethics review.",
+          "uid": "617e30c3-b901-512a-a587-88df36942a61"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbcca98b-8055-49b6-8ba8-5328209b141a",
+              "memory_uid": "578f6fdf-6bbc-5d1b-8f03-c7460a5cdc7b"
+            },
+            {
+              "frame_uid": "bbcca98b-8055-49b6-8ba8-5328209b141a",
+              "memory_uid": "6804d5db-c872-5ded-bf68-14fd30e1b645"
+            }
+          ],
+          "reason": "The memories split one compared-only accommodation plan into what participants need and how the study will deliver it.",
+          "status": "RESOLVED",
+          "summary": "The study should identify necessary accessibility accommodations and explain how they will be provided for system and task access.",
+          "uid": "bd0cc632-8429-5070-aed8-8e774662f74b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbcca98b-8055-49b6-8ba8-5328209b141a",
+              "memory_uid": "448f23d0-9607-5977-9d13-a99af48a6fc1"
+            }
+          ],
+          "reason": "This is an independent compared-only data-handling safeguard.",
+          "status": "RESOLVED",
+          "summary": "Personal identifiers should be separated from research data immediately upon collection.",
+          "uid": "7c86d5ec-1dcf-57bd-a5fe-2172ab6a2df3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbcca98b-8055-49b6-8ba8-5328209b141a",
+              "memory_uid": "b97f3e2f-e132-5f6f-a748-f406a89a1bc5"
+            }
+          ],
+          "reason": "This is an independent compared-only provision concerning equipment availability.",
+          "status": "RESOLVED",
+          "summary": "The study should list equipment available for loan when participants lack required gear.",
+          "uid": "df5d2d50-831d-5e74-881c-0ea7953734ee"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbcca98b-8055-49b6-8ba8-5328209b141a",
+              "memory_uid": "d05964ea-0423-5642-86e1-9e9c19edffbe"
+            }
+          ],
+          "reason": "This is an independent compared-only operational requirement concerning equipment recovery.",
+          "status": "RESOLVED",
+          "summary": "The study should describe how participants return loaned equipment.",
+          "uid": "8e6423e8-650e-5213-a8c1-e95707ee35e9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbcca98b-8055-49b6-8ba8-5328209b141a",
+              "memory_uid": "7e0ba411-3fd9-53ec-8a3f-4499316c06bb"
+            },
+            {
+              "frame_uid": "bbcca98b-8055-49b6-8ba8-5328209b141a",
+              "memory_uid": "885d1cf3-8bcd-513c-9591-a548fcbd3992"
+            }
+          ],
+          "reason": "Both memories express one compared-only safeguard linking a safe fallback procedure to meaningful withdrawal protection.",
+          "status": "RESOLVED",
+          "summary": "Withdrawal risk assessment requires a safe alternative that lets participants resume existing field-work procedures after discontinuing participation.",
+          "uid": "27131f4c-3fd6-57a0-84ab-49c34f02dcb4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbcca98b-8055-49b6-8ba8-5328209b141a",
+              "memory_uid": "a6fbea37-335c-544b-8bac-01f759bc3855"
+            }
+          ],
+          "reason": "This is an independent compared-only protection against workplace consequences of nonparticipation.",
+          "status": "RESOLVED",
+          "summary": "Organizational members who decline participation should face no disadvantage in task assignment or performance evaluation.",
+          "uid": "4bb586b4-566c-5842-bc9d-54f1c9d9127d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbcca98b-8055-49b6-8ba8-5328209b141a",
+              "memory_uid": "520b4c9f-306e-5749-83b5-2218c97f89e6"
+            }
+          ],
+          "reason": "This compared-only observation identifies a specific tendency to underestimate workplace burden.",
+          "status": "RESOLVED",
+          "summary": "Short sessions may still impose substantial burdens through work interruption and exposure to a manager.",
+          "uid": "5e3b6db8-8cc7-58f1-9e68-d45e2fbb04fd"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame addresses task-specific burden mitigation, accessibility, identifier separation, equipment logistics, safe withdrawal, protection from nonparticipation penalties, and underestimated workplace burdens.",
+        "differences": "",
+        "reference_only": "The reference frame requires explicit exclusion and transfer conditions, supports analytic generalization through mechanisms, and flags extrapolation from accessible samples."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "1cd9af61-b87e-4cbd-8687-2edbfda683d4"
+    },
+    "analysis_digest": "559f8663c4ed30cb0aa004dbb30434b21b2b91a5e79c83523cdc24ec58a8f8ab",
+    "key": "1c77e3a8d83bd7a4610b7220a5c4ada30cc7b330773ecbf7ff3a6db96f9c9f57",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 36.9234586249986,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "1c77e3a8d83bd7a4610b7220a5c4ada30cc7b330773ecbf7ff3a6db96f9c9f57",
+  "created_at": "2026-08-13T18:26:19.745544Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/scope",
+  "pair_key": "95e9be7927fe48110d4e11771b48efe56af73e26639c2a948ded6920fdaa1487",
+  "provider_seconds": 36.9234586249986,
+  "right": "task-2/advisor2/ethics",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

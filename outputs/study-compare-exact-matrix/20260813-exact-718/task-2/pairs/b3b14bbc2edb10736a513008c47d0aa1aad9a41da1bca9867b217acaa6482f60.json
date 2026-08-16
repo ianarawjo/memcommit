@@ -1,0 +1,423 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:16:17.115043+00:00",
+      "frames": [
+        {
+          "context_digest": "dd57f5a09e0271c33b7dccbe4935bf1a8d5be14dc7c618906e8af51709bbea89",
+          "context_name": "task-2/advisor1/claim-evidence",
+          "context_uid": "b0c4b50c-f70b-5b0c-a1eb-0fd63e0531bf",
+          "memories": [
+            {
+              "content": "Attach adjacent evidence or citations to verifiable claims about user behavior or technology effects.",
+              "content_digest": "3a856fbbda53df425705aaaff741896f5f5460a8feeb8fb8a73c03e592a80c62",
+              "position": 0,
+              "uid": "06f6c673-ea0c-5657-89d2-3f8711097cd7"
+            },
+            {
+              "content": "Distinguish between results observed in the pilot and expectations to be confirmed in the main user study using different expressions.",
+              "content_digest": "9117c0fd3d9cb713f035f9ae95118ae785af5fcf8909485b097f128ef8e12586",
+              "position": 1,
+              "uid": "58991ce7-d394-5087-b14f-0b014b0ec6ad"
+            },
+            {
+              "content": "Do not use verbs that imply proving causation if the design does not support causal inference.",
+              "content_digest": "5ee12e489ec1fd1af46a49cb05cc9447ed3fbf33ad7b4d8ce52ea700926ea29c",
+              "position": 2,
+              "uid": "f5adf029-a750-5a3a-8eb8-d68e43bb5c13"
+            },
+            {
+              "content": "For topics with sufficient HCI research evidence, prioritize citing recent comprehensive studies over listing individual cases.",
+              "content_digest": "2519cd2fca364ac6eef8577892b03d0a83509f6032874e30c30f36fb1e3dde5a",
+              "position": 3,
+              "uid": "b2a7ff8a-dfca-5857-8733-fe03cbd943ec"
+            },
+            {
+              "content": "Explain how each design choice was derived to address specific user needs.",
+              "content_digest": "fee6e06dfe0489b55ae0d75fe4e7b62facf78052a3136b7120d065e100f3b567",
+              "position": 4,
+              "uid": "1f0c95f4-69bb-5764-a358-d428ff7019d2"
+            },
+            {
+              "content": "Support each core claim with evidence that directly examined it rather than with indirect summaries.",
+              "content_digest": "372e0abff6997b041103fd71719c55549c2e3e0a3a5cdf2d4a1a24ec6538cbff",
+              "position": 5,
+              "uid": "cd475113-5354-5f80-b063-7628e4359afc"
+            },
+            {
+              "content": "Reviewers first check the direct evidence placed closest to the core claim.",
+              "content_digest": "61baa516115e1a5bf4f377358ead7c45bab5e666208b9cd6cd87426007493a49",
+              "position": 6,
+              "uid": "86fe1306-7650-58cc-a3df-79870c61784d"
+            },
+            {
+              "content": "Connect the proposed conceptual design principle to at least one observable user behavior.",
+              "content_digest": "d6c6f9dddd0cd99694df2f232e8a71957d53f77e8d10faf324927af679312acc",
+              "position": 7,
+              "uid": "5d022e45-09c0-515e-98f1-68b2aec686bc"
+            },
+            {
+              "content": "Identify which design judgment—retain, modify, or discard—each piece of evidence from formative evaluation supports.",
+              "content_digest": "a507db0052a4d9196c774a5df74c60fe9225bef49c5d9aece328bfb8dca48035",
+              "position": 8,
+              "uid": "9939e9e8-d97d-57db-974a-750566ca9e2b"
+            },
+            {
+              "content": "Results from controlled formative studies do not directly prove effects in actual long-term use.",
+              "content_digest": "aeeca3701d4ba297e928efc2034c474a2ae78101e440d515a57901e6814321a0",
+              "position": 9,
+              "uid": "41060e8e-95ff-58c1-8b71-36a501a9bd23"
+            },
+            {
+              "content": "The user can have an explanation approved as a conceptual contribution only if it is falsifiable with observable data.",
+              "content_digest": "171f4eeae9df2a0a739f90ed451a34a092093b9f6b0db7c6af04012bea734c5f",
+              "position": 10,
+              "uid": "ec54ce10-07db-5ae3-94a5-8f3621fed4a9"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "fe15237c-7162-416f-9c44-da7b9b408289"
+        },
+        {
+          "context_digest": "1396f236b90acd99b836eb5367828f8319d0465ea25b66f696a7f583f4f5ecf6",
+          "context_name": "task-2/advisor2/terminology",
+          "context_uid": "a2976fe7-0e07-5045-9e91-6a214128a482",
+          "memories": [
+            {
+              "content": "Do not change names referring to the same user roles, system functions, or operational stages midway.",
+              "content_digest": "a0f821f4497e7518806857e9005d12e27f6043fda6dbd91ba33ef188e0a3be16",
+              "position": 0,
+              "uid": "e2ae95ed-9033-5625-9179-33f4cf4a95c1"
+            },
+            {
+              "content": "Use abbreviations only for long recurring terms in a two-page proposal.",
+              "content_digest": "e6cad365bd42a8327e3cac92b8cf49cc456fa3e2f5c6624797fa509c0aac6846",
+              "position": 1,
+              "uid": "4be60357-09fa-523d-8c8d-8e03ace8fde9"
+            },
+            {
+              "content": "Present the full term and abbreviation together when using an abbreviation for the first time.",
+              "content_digest": "7b7c1f90727c822edbc13af17d64d45552d1c7ddb5fa18e665369423fd93ffbe",
+              "position": 2,
+              "uid": "0dd5d707-7d13-5be0-8377-421507650cba"
+            },
+            {
+              "content": "Refer to participants based on the roles they perform in the study rather than their status.",
+              "content_digest": "d89feff6e3dad0eea0ba4b1b291b140048af9f0f89d84c8ac196ae547a7b03bd",
+              "position": 3,
+              "uid": "9b3f0cde-7c3e-5b6a-9500-855f31d65ef2"
+            },
+            {
+              "content": "Reviewers from different subfields find it difficult to infer an abbreviation from context alone when it is not defined at first use.",
+              "content_digest": "4ffe91fb52db337a4ad30dc56d0439e12851f17f411c414b6d673e79bd91e68b",
+              "position": 4,
+              "uid": "8c896114-85e6-5c3c-ae3f-6e8e6b59f2fe"
+            },
+            {
+              "content": "When introducing an operational role for the first time, define both the decisions it can make and the actions it performs.",
+              "content_digest": "916b66a818f988f69e2e3c90f0ed0dbb7d29fc9e030b3fc7f822b3817106cbc3",
+              "position": 5,
+              "uid": "dc9e3f25-7aac-500b-b431-f6d810dd09bb"
+            },
+            {
+              "content": "Individuals holding identical job titles may possess different system modification privileges and data access rights depending on their deployment site.",
+              "content_digest": "e0315abc2f42a8f2657aa52e04899096ce799ba790fcd77d22b4196f917790ac",
+              "position": 6,
+              "uid": "04956cab-eb3a-5b71-be45-b1edd6c4a216"
+            },
+            {
+              "content": "The user tends to group distinct field roles under the single label “user.”",
+              "content_digest": "ba75af998618324dbdfa225a2cd503c42888f77daf4d44eb4f79b3a7db8e4bbe",
+              "position": 7,
+              "uid": "fc8613e8-86ca-5322-bb5d-03dfbca71c46"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "50abf23f-278c-4ad6-8186-a2a25b8de353"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The reference frame focuses on evidentiary discipline, inference limits, and grounding design contributions in observable user needs and behavior. The compared frame independently focuses on stable role terminology, selective abbreviation use, and operationally precise descriptions of participants, permissions, decisions, and actions.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fe15237c-7162-416f-9c44-da7b9b408289",
+              "memory_uid": "06f6c673-ea0c-5657-89d2-3f8711097cd7"
+            }
+          ],
+          "reason": "Only the reference frame specifies proximity of citations for these verifiable claims.",
+          "status": "RESOLVED",
+          "summary": "Verifiable claims about behavior or technology effects should carry adjacent evidence or citations.",
+          "uid": "0aa576da-953c-5b36-b736-3de422547ea1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fe15237c-7162-416f-9c44-da7b9b408289",
+              "memory_uid": "58991ce7-d394-5087-b14f-0b014b0ec6ad"
+            }
+          ],
+          "reason": "Only the reference frame establishes this wording distinction between observed and anticipated findings.",
+          "status": "RESOLVED",
+          "summary": "Observed pilot results and expectations awaiting confirmation in the main study should use distinguishable language.",
+          "uid": "7127dac3-382a-5f4b-96e7-62b5be7b47d6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fe15237c-7162-416f-9c44-da7b9b408289",
+              "memory_uid": "f5adf029-a750-5a3a-8eb8-d68e43bb5c13"
+            }
+          ],
+          "reason": "Only the reference frame limits causal wording according to inferential support.",
+          "status": "RESOLVED",
+          "summary": "Causal verbs should be avoided when the study design cannot support causal inference.",
+          "uid": "f199c05a-53a1-5f7d-9fbb-bde69a13ef9b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fe15237c-7162-416f-9c44-da7b9b408289",
+              "memory_uid": "b2a7ff8a-dfca-5857-8733-fe03cbd943ec"
+            }
+          ],
+          "reason": "Only the reference frame establishes this source-selection preference.",
+          "status": "RESOLVED",
+          "summary": "Where sufficient HCI research exists, recent comprehensive studies should be preferred to lists of individual cases.",
+          "uid": "875783e0-6af7-5c4c-b179-41d4d781c67e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fe15237c-7162-416f-9c44-da7b9b408289",
+              "memory_uid": "1f0c95f4-69bb-5764-a358-d428ff7019d2"
+            }
+          ],
+          "reason": "Only the reference frame requires a user-need derivation for design choices.",
+          "status": "RESOLVED",
+          "summary": "Each design choice should be explained as a response to specific user needs.",
+          "uid": "0d298bf3-7db4-5d52-846b-9d57c22148f2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fe15237c-7162-416f-9c44-da7b9b408289",
+              "memory_uid": "cd475113-5354-5f80-b063-7628e4359afc"
+            }
+          ],
+          "reason": "Only the reference frame specifies directness of evidence for core claims.",
+          "status": "RESOLVED",
+          "summary": "Core claims should be supported by evidence that examined them directly rather than by indirect summaries.",
+          "uid": "3b7ae388-3f0e-5281-bc55-2f64d7dd2144"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fe15237c-7162-416f-9c44-da7b9b408289",
+              "memory_uid": "86fe1306-7650-58cc-a3df-79870c61784d"
+            }
+          ],
+          "reason": "Only the reference frame describes this reviewer evaluation behavior.",
+          "status": "RESOLVED",
+          "summary": "Reviewers initially inspect the direct evidence nearest a core claim.",
+          "uid": "03e01470-e600-53e0-a155-3c56a3955a44"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fe15237c-7162-416f-9c44-da7b9b408289",
+              "memory_uid": "5d022e45-09c0-515e-98f1-68b2aec686bc"
+            }
+          ],
+          "reason": "Only the reference frame requires this behavioral grounding of a design principle.",
+          "status": "RESOLVED",
+          "summary": "A proposed conceptual design principle should be connected to observable user behavior.",
+          "uid": "2060dfe2-e22b-5446-9e6a-f811b00e3fa8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fe15237c-7162-416f-9c44-da7b9b408289",
+              "memory_uid": "9939e9e8-d97d-57db-974a-750566ca9e2b"
+            }
+          ],
+          "reason": "Only the reference frame maps formative evidence to explicit design judgments.",
+          "status": "RESOLVED",
+          "summary": "Each formative-evaluation finding should identify whether it supports retaining, modifying, or discarding a design.",
+          "uid": "f3c58460-3eb6-53e8-be5b-ef10ecdc0338"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fe15237c-7162-416f-9c44-da7b9b408289",
+              "memory_uid": "41060e8e-95ff-58c1-8b71-36a501a9bd23"
+            }
+          ],
+          "reason": "Only the reference frame states this limitation on transferring controlled findings to long-term use.",
+          "status": "RESOLVED",
+          "summary": "Controlled formative-study results do not directly establish effects in actual long-term use.",
+          "uid": "c03a0f81-0649-50cc-b7f3-b96caaf4926d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fe15237c-7162-416f-9c44-da7b9b408289",
+              "memory_uid": "ec54ce10-07db-5ae3-94a5-8f3621fed4a9"
+            }
+          ],
+          "reason": "Only the reference frame imposes this falsifiability condition on conceptual contributions.",
+          "status": "RESOLVED",
+          "summary": "A conceptual explanation qualifies for approval as a contribution only when observable data can falsify it.",
+          "uid": "f1c6c9a0-e9f2-507e-8b7f-2d64c280d4d7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "50abf23f-278c-4ad6-8186-a2a25b8de353",
+              "memory_uid": "e2ae95ed-9033-5625-9179-33f4cf4a95c1"
+            }
+          ],
+          "reason": "Only the compared frame specifies terminological stability for these entities.",
+          "status": "RESOLVED",
+          "summary": "Names for unchanged user roles, system functions, and operational stages should remain consistent throughout.",
+          "uid": "396fc748-2c19-5b93-a128-7f01d64a4dce"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "50abf23f-278c-4ad6-8186-a2a25b8de353",
+              "memory_uid": "4be60357-09fa-523d-8c8d-8e03ace8fde9"
+            }
+          ],
+          "reason": "Only the compared frame limits abbreviation use according to document length, term length, and recurrence.",
+          "status": "RESOLVED",
+          "summary": "In a two-page proposal, abbreviations should be reserved for long terms that recur.",
+          "uid": "8245b0fb-1c0d-5adc-baa3-cc8514f5063b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "50abf23f-278c-4ad6-8186-a2a25b8de353",
+              "memory_uid": "0dd5d707-7d13-5be0-8377-421507650cba"
+            },
+            {
+              "frame_uid": "50abf23f-278c-4ad6-8186-a2a25b8de353",
+              "memory_uid": "8c896114-85e6-5c3c-ae3f-6e8e6b59f2fe"
+            }
+          ],
+          "reason": "Both members express the compared frame’s single first-use definition policy and its reader-comprehension rationale.",
+          "status": "RESOLVED",
+          "summary": "An abbreviation should be paired with its full term at first use because readers across subfields may not infer it from context.",
+          "uid": "1a44e3b0-c266-558e-92ad-633bd693a415"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "50abf23f-278c-4ad6-8186-a2a25b8de353",
+              "memory_uid": "9b3f0cde-7c3e-5b6a-9500-855f31d65ef2"
+            }
+          ],
+          "reason": "Only the compared frame establishes this basis for participant naming.",
+          "status": "RESOLVED",
+          "summary": "Participants should be described by the roles they perform in the study rather than by status.",
+          "uid": "afaf7acb-47fa-57d9-ab42-5a089cb66851"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "50abf23f-278c-4ad6-8186-a2a25b8de353",
+              "memory_uid": "dc9e3f25-7aac-500b-b431-f6d810dd09bb"
+            }
+          ],
+          "reason": "Only the compared frame requires these two dimensions when defining an operational role.",
+          "status": "RESOLVED",
+          "summary": "A newly introduced operational role should be defined by both its decision authority and its performed actions.",
+          "uid": "141413f6-6d75-5737-80bc-e0e963ceb37d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "50abf23f-278c-4ad6-8186-a2a25b8de353",
+              "memory_uid": "04956cab-eb3a-5b71-be45-b1edd6c4a216"
+            }
+          ],
+          "reason": "Only the compared frame identifies site-dependent authority differences beneath shared titles.",
+          "status": "RESOLVED",
+          "summary": "Identical job titles can carry different system-modification privileges and data-access rights across deployment sites.",
+          "uid": "1faffd1a-c91c-5067-b9ca-12ad01fb09c2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "50abf23f-278c-4ad6-8186-a2a25b8de353",
+              "memory_uid": "fc8613e8-86ca-5322-bb5d-03dfbca71c46"
+            }
+          ],
+          "reason": "Only the compared frame identifies this role-labeling tendency.",
+          "status": "RESOLVED",
+          "summary": "The user tends to collapse distinct field roles into the single label “user.”",
+          "uid": "2c5e1e62-309f-58e5-9dde-040ffd020f1d"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only guidance covers terminology consistency, restrained and defined abbreviations, role-based participant naming, explicit operational authority, site-dependent privileges, and avoiding the collapse of distinct field roles into “user.”",
+        "differences": "",
+        "reference_only": "Reference-only guidance covers evidence placement and quality, pilot-versus-main-study wording, causal and long-term inference limits, design rationale, formative-evidence decisions, and observable, falsifiable conceptual contributions."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "30f87e10-bd2f-456d-8573-b0a1b3e5ed01"
+    },
+    "analysis_digest": "d188aa3028a3b4d10a1fe1bc7f4d71032a6b79a057be2ba3d32842f76e438c2e",
+    "key": "63814844ffcb6a3c196c42c337de35669754d2e9a91180448db4acc00e7a8ef1",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 49.5388133330016,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "63814844ffcb6a3c196c42c337de35669754d2e9a91180448db4acc00e7a8ef1",
+  "created_at": "2026-08-13T18:17:06.653360Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/claim-evidence",
+  "pair_key": "b3b14bbc2edb10736a513008c47d0aa1aad9a41da1bca9867b217acaa6482f60",
+  "provider_seconds": 49.5388133330016,
+  "right": "task-2/advisor2/terminology",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

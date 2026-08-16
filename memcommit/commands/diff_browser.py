@@ -10,7 +10,7 @@ from memcommit.commands.checkpoint_diff import (
     checkpoint_diff_detail_renderer,
     checkpoint_restore_detail_renderer,
 )
-from memcommit.commands.context_picker import (
+from memcommit.context_targeting.tui.picker import (
     ContextMemoryRow,
     ContextSubtreeSelection,
 )

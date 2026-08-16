@@ -1,0 +1,470 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:15:33.042829+00:00",
+      "frames": [
+        {
+          "context_digest": "dd57f5a09e0271c33b7dccbe4935bf1a8d5be14dc7c618906e8af51709bbea89",
+          "context_name": "task-2/advisor1/claim-evidence",
+          "context_uid": "b0c4b50c-f70b-5b0c-a1eb-0fd63e0531bf",
+          "memories": [
+            {
+              "content": "Attach adjacent evidence or citations to verifiable claims about user behavior or technology effects.",
+              "content_digest": "3a856fbbda53df425705aaaff741896f5f5460a8feeb8fb8a73c03e592a80c62",
+              "position": 0,
+              "uid": "06f6c673-ea0c-5657-89d2-3f8711097cd7"
+            },
+            {
+              "content": "Distinguish between results observed in the pilot and expectations to be confirmed in the main user study using different expressions.",
+              "content_digest": "9117c0fd3d9cb713f035f9ae95118ae785af5fcf8909485b097f128ef8e12586",
+              "position": 1,
+              "uid": "58991ce7-d394-5087-b14f-0b014b0ec6ad"
+            },
+            {
+              "content": "Do not use verbs that imply proving causation if the design does not support causal inference.",
+              "content_digest": "5ee12e489ec1fd1af46a49cb05cc9447ed3fbf33ad7b4d8ce52ea700926ea29c",
+              "position": 2,
+              "uid": "f5adf029-a750-5a3a-8eb8-d68e43bb5c13"
+            },
+            {
+              "content": "For topics with sufficient HCI research evidence, prioritize citing recent comprehensive studies over listing individual cases.",
+              "content_digest": "2519cd2fca364ac6eef8577892b03d0a83509f6032874e30c30f36fb1e3dde5a",
+              "position": 3,
+              "uid": "b2a7ff8a-dfca-5857-8733-fe03cbd943ec"
+            },
+            {
+              "content": "Explain how each design choice was derived to address specific user needs.",
+              "content_digest": "fee6e06dfe0489b55ae0d75fe4e7b62facf78052a3136b7120d065e100f3b567",
+              "position": 4,
+              "uid": "1f0c95f4-69bb-5764-a358-d428ff7019d2"
+            },
+            {
+              "content": "Support each core claim with evidence that directly examined it rather than with indirect summaries.",
+              "content_digest": "372e0abff6997b041103fd71719c55549c2e3e0a3a5cdf2d4a1a24ec6538cbff",
+              "position": 5,
+              "uid": "cd475113-5354-5f80-b063-7628e4359afc"
+            },
+            {
+              "content": "Reviewers first check the direct evidence placed closest to the core claim.",
+              "content_digest": "61baa516115e1a5bf4f377358ead7c45bab5e666208b9cd6cd87426007493a49",
+              "position": 6,
+              "uid": "86fe1306-7650-58cc-a3df-79870c61784d"
+            },
+            {
+              "content": "Connect the proposed conceptual design principle to at least one observable user behavior.",
+              "content_digest": "d6c6f9dddd0cd99694df2f232e8a71957d53f77e8d10faf324927af679312acc",
+              "position": 7,
+              "uid": "5d022e45-09c0-515e-98f1-68b2aec686bc"
+            },
+            {
+              "content": "Identify which design judgment—retain, modify, or discard—each piece of evidence from formative evaluation supports.",
+              "content_digest": "a507db0052a4d9196c774a5df74c60fe9225bef49c5d9aece328bfb8dca48035",
+              "position": 8,
+              "uid": "9939e9e8-d97d-57db-974a-750566ca9e2b"
+            },
+            {
+              "content": "Results from controlled formative studies do not directly prove effects in actual long-term use.",
+              "content_digest": "aeeca3701d4ba297e928efc2034c474a2ae78101e440d515a57901e6814321a0",
+              "position": 9,
+              "uid": "41060e8e-95ff-58c1-8b71-36a501a9bd23"
+            },
+            {
+              "content": "The user can have an explanation approved as a conceptual contribution only if it is falsifiable with observable data.",
+              "content_digest": "171f4eeae9df2a0a739f90ed451a34a092093b9f6b0db7c6af04012bea734c5f",
+              "position": 10,
+              "uid": "ec54ce10-07db-5ae3-94a5-8f3621fed4a9"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "e302f20f-88b5-49eb-8ad8-59e085626d61"
+        },
+        {
+          "context_digest": "74ec0b91876efe6caed2938aaf4a0b06272de678fbf74dc9da1c217aa0bd042f",
+          "context_name": "task-2/advisor2/compensation",
+          "context_uid": "4ffbd453-7d61-56f7-90ad-34d77b485ef8",
+          "memories": [
+            {
+              "content": "Calculate user research compensation budgets based on the estimated participation burden, combining session time with required technical and travel preparation.",
+              "content_digest": "ba439fe3920339f56e377d8f82a64ab3ad27fb25e0eec3c65b610c81af53d175",
+              "position": 0,
+              "uid": "be9e402b-8d3b-58da-9766-2cf2ec25b9ae"
+            },
+            {
+              "content": "Compensate participants who withdraw from the study midway for their actual participation time.",
+              "content_digest": "599f542ec6f4a5a1a61f5c1a31547088e015439978a64b268879b5a2b65c9be4",
+              "position": 1,
+              "uid": "85157c57-410f-5c7d-8183-b37d61eebf8a"
+            },
+            {
+              "content": "Compensate for the time actually spent in sessions, regardless of the research modality.",
+              "content_digest": "b19b9dbece5d564de69e703491018fbd78ab834149eed0590a552773526b6e29",
+              "position": 2,
+              "uid": "8abeab95-3e41-5378-8409-08200aee9d58"
+            },
+            {
+              "content": "Allow the issuance of gift cards of equivalent value to participants in remote studies who cannot use electronic transfers.",
+              "content_digest": "8ac881488d0064f4b4c6143e2d8c69ab9806b419044adef266c50738c7afb291",
+              "position": 3,
+              "uid": "9b59c6ed-5dbe-5ccc-87b5-6be31f414e68"
+            },
+            {
+              "content": "Do not treat an unresolved payment method as a deficiency at the proposal stage.",
+              "content_digest": "80109274870eb1023e4cbcc6861a906a4d94db5dab2b2659bcebccde125c9ac3",
+              "position": 4,
+              "uid": "5c6c461d-05e5-5b0c-b801-245de2f9c8d7"
+            },
+            {
+              "content": "Allow differential compensation amounts for on-site and remote studies when participation burden varies due to travel or technical preparation.",
+              "content_digest": "556c5e49f7996a651a64825df2389f070629b9bc664c758d934f308c7fd6eea2",
+              "position": 5,
+              "uid": "44abc098-8c9f-5abb-bc49-9deb25066d93"
+            },
+            {
+              "content": "Participants judge the fairness of compensation based on the combined burden of session time and required technical and travel preparation.",
+              "content_digest": "80dd84e8b183e02f1fd772890b48712bb04a04852055eece98957a0c9028288c",
+              "position": 6,
+              "uid": "2a252668-f3f2-5582-b248-43ad81c54a48"
+            },
+            {
+              "content": "In longitudinal studies requiring diary entries and repeated reporting, include out-of-session recording time in compensation calculations.",
+              "content_digest": "7d103d93741e40d54c8df8347f2ce648a1cd96e19589663fa515bfb24b5bd844",
+              "position": 7,
+              "uid": "7e647a83-81b0-52d6-9362-e513dc2a5032"
+            },
+            {
+              "content": "Distinguish between participant research compensation and labor costs for field staff performing installation and operational support as part of their duties.",
+              "content_digest": "b1566527e9c1d7d3f93631d1503b08ddb4a6818daa570c118f265b47603592f0",
+              "position": 8,
+              "uid": "d77affab-60c8-5403-b189-17022b484640"
+            },
+            {
+              "content": "The user tends to count session time but omit participants’ advance setup and follow-up reporting time.",
+              "content_digest": "98911b7db2d8c3962d7ef48919265f40cdb61a711062e5459a4f6d43f71d6fd9",
+              "position": 9,
+              "uid": "0c470c6b-26a6-5501-93ac-c51fecd708ae"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "33edbe51-ff9b-4639-978f-c6cb709d6f43"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate operational domains. The reference frame governs evidence, causal language, design rationale, and conceptual contribution standards, while the compared frame governs participant compensation, burden accounting, payment methods, and distinctions from staff labor costs. Neither side supplies a scope-aligned counterpart to the other.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e302f20f-88b5-49eb-8ad8-59e085626d61",
+              "memory_uid": "06f6c673-ea0c-5657-89d2-3f8711097cd7"
+            }
+          ],
+          "reason": "This is a one-sided claim-support and evidence-placement rule with no compensation-policy counterpart.",
+          "status": "RESOLVED",
+          "summary": "Verifiable claims should have adjacent evidence or citations.",
+          "uid": "3cc6a7a4-a8cf-5707-9d77-8c554805b2b2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e302f20f-88b5-49eb-8ad8-59e085626d61",
+              "memory_uid": "58991ce7-d394-5087-b14f-0b014b0ec6ad"
+            }
+          ],
+          "reason": "This independently governs reporting across study stages and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Pilot observations and expectations for the main study should use distinguishable language.",
+          "uid": "7aa34eed-64bc-5de1-8275-9da49454a00e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e302f20f-88b5-49eb-8ad8-59e085626d61",
+              "memory_uid": "f5adf029-a750-5a3a-8eb8-d68e43bb5c13"
+            }
+          ],
+          "reason": "This is an independent evidentiary-language constraint absent from the compensation-focused frame.",
+          "status": "RESOLVED",
+          "summary": "Causal verbs should be avoided when the study design cannot support causal inference.",
+          "uid": "d57be08c-bd64-5e10-9a5c-0f6798857e36"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e302f20f-88b5-49eb-8ad8-59e085626d61",
+              "memory_uid": "b2a7ff8a-dfca-5857-8733-fe03cbd943ec"
+            }
+          ],
+          "reason": "This conditional source-selection policy has no scope-aligned counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Recent comprehensive HCI studies should be preferred when sufficient research evidence exists.",
+          "uid": "d3d7f052-f8de-5739-b1bc-2946b3e7239f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e302f20f-88b5-49eb-8ad8-59e085626d61",
+              "memory_uid": "1f0c95f4-69bb-5764-a358-d428ff7019d2"
+            }
+          ],
+          "reason": "This design-rationale requirement is independently useful and is not addressed by compensation guidance.",
+          "status": "RESOLVED",
+          "summary": "Each design choice should be traced to the user need it addresses.",
+          "uid": "e8635b1a-b210-5c0c-a608-61b9a46a6a74"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e302f20f-88b5-49eb-8ad8-59e085626d61",
+              "memory_uid": "cd475113-5354-5f80-b063-7628e4359afc"
+            }
+          ],
+          "reason": "This evidence-relevance standard has no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Core claims should be supported by evidence that directly examined them.",
+          "uid": "abee8731-f7ea-59ef-98fc-cecfda03de00"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e302f20f-88b5-49eb-8ad8-59e085626d61",
+              "memory_uid": "86fe1306-7650-58cc-a3df-79870c61784d"
+            }
+          ],
+          "reason": "This observation about reviewer behavior is independently useful and has no compensation-domain counterpart.",
+          "status": "RESOLVED",
+          "summary": "Reviewers examine nearby direct evidence first when evaluating a core claim.",
+          "uid": "5263611b-8e84-5f90-8607-6bea7d8192b4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e302f20f-88b5-49eb-8ad8-59e085626d61",
+              "memory_uid": "5d022e45-09c0-515e-98f1-68b2aec686bc"
+            }
+          ],
+          "reason": "This conceptual-grounding requirement is not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A proposed conceptual design principle should connect to observable user behavior.",
+          "uid": "3d3c8f5c-65a6-5875-a4a5-bc48322c1947"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e302f20f-88b5-49eb-8ad8-59e085626d61",
+              "memory_uid": "9939e9e8-d97d-57db-974a-750566ca9e2b"
+            }
+          ],
+          "reason": "This evidence-to-design-decision mapping rule has no scope-aligned counterpart.",
+          "status": "RESOLVED",
+          "summary": "Formative evidence should identify whether it supports retaining, modifying, or discarding a design.",
+          "uid": "eeb9f3c3-d2cc-5b4e-bd74-ba27c4fd4d2e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e302f20f-88b5-49eb-8ad8-59e085626d61",
+              "memory_uid": "41060e8e-95ff-58c1-8b71-36a501a9bd23"
+            }
+          ],
+          "reason": "This limitation on generalizing study results is independently useful and absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Controlled formative studies do not directly establish effects in actual long-term use.",
+          "uid": "37f7a18c-9fee-5ace-aebd-a032738439e6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e302f20f-88b5-49eb-8ad8-59e085626d61",
+              "memory_uid": "ec54ce10-07db-5ae3-94a5-8f3621fed4a9"
+            }
+          ],
+          "reason": "This acceptance criterion for conceptual contributions has no counterpart in the compensation guidance.",
+          "status": "RESOLVED",
+          "summary": "A conceptual explanation must be falsifiable through observable data to qualify as a conceptual contribution.",
+          "uid": "ac01360e-0859-5212-8cbe-7e698f993ef0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "33edbe51-ff9b-4639-978f-c6cb709d6f43",
+              "memory_uid": "be9e402b-8d3b-58da-9766-2cf2ec25b9ae"
+            }
+          ],
+          "reason": "This burden-based budgeting rule is a one-sided compensation claim with no evidence-reporting counterpart.",
+          "status": "RESOLVED",
+          "summary": "Compensation budgets should reflect session time plus required technical and travel preparation.",
+          "uid": "9a428324-6d94-5c72-8bdf-e937a8471ee3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "33edbe51-ff9b-4639-978f-c6cb709d6f43",
+              "memory_uid": "85157c57-410f-5c7d-8183-b37d61eebf8a"
+            }
+          ],
+          "reason": "This withdrawal-specific compensation policy is independently useful and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Participants who withdraw midway should be compensated for their actual participation time.",
+          "uid": "c259cfaf-0dfb-5952-8a9b-f7035ce4bdf6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "33edbe51-ff9b-4639-978f-c6cb709d6f43",
+              "memory_uid": "8abeab95-3e41-5378-8409-08200aee9d58"
+            }
+          ],
+          "reason": "This modality-independent compensation rule has no scope-aligned counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Actual session time should be compensated regardless of research modality.",
+          "uid": "428ada19-1265-57e9-9ca9-122d9d2ba614"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "33edbe51-ff9b-4639-978f-c6cb709d6f43",
+              "memory_uid": "9b59c6ed-5dbe-5ccc-87b5-6be31f414e68"
+            }
+          ],
+          "reason": "This conditional payment-method alternative is not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Equivalent-value gift cards may be used when remote participants cannot accept electronic transfers.",
+          "uid": "65ec693e-14b7-5827-809b-7e2e3ff524d7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "33edbe51-ff9b-4639-978f-c6cb709d6f43",
+              "memory_uid": "5c6c461d-05e5-5b0c-b801-245de2f9c8d7"
+            }
+          ],
+          "reason": "This proposal-stage evaluation policy is independently useful and has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "An unresolved payment method should not count as a proposal-stage deficiency.",
+          "uid": "88f8366b-096c-535f-a5ad-5183fbe27a4e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "33edbe51-ff9b-4639-978f-c6cb709d6f43",
+              "memory_uid": "44abc098-8c9f-5abb-bc49-9deb25066d93"
+            }
+          ],
+          "reason": "This burden-conditioned allowance for differential compensation is absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "On-site and remote compensation may differ when travel or technical preparation changes participant burden.",
+          "uid": "994973f4-3fc2-530e-90a3-a6ed036d025a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "33edbe51-ff9b-4639-978f-c6cb709d6f43",
+              "memory_uid": "2a252668-f3f2-5582-b248-43ad81c54a48"
+            }
+          ],
+          "reason": "This participant-behavior claim has no scope-aligned counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Participants assess compensation fairness using session, technical-preparation, and travel burdens together.",
+          "uid": "18e1081f-d5d2-5056-807b-6ecbeddfcbc4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "33edbe51-ff9b-4639-978f-c6cb709d6f43",
+              "memory_uid": "7e647a83-81b0-52d6-9362-e513dc2a5032"
+            }
+          ],
+          "reason": "This longitudinal burden-accounting rule is independently useful and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Longitudinal-study compensation should include time spent on diary entries and repeated reporting outside sessions.",
+          "uid": "58e51c88-d34a-5893-8b35-d796934a0e4c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "33edbe51-ff9b-4639-978f-c6cb709d6f43",
+              "memory_uid": "d77affab-60c8-5403-b189-17022b484640"
+            }
+          ],
+          "reason": "This cost-classification distinction has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Participant compensation should be distinguished from labor costs for field staff performing assigned support duties.",
+          "uid": "7c1de601-322f-5863-9657-06976dc20374"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "33edbe51-ff9b-4639-978f-c6cb709d6f43",
+              "memory_uid": "0c470c6b-26a6-5501-93ac-c51fecd708ae"
+            }
+          ],
+          "reason": "This observation about a recurring budgeting omission is independently useful and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Compensation planning tends to omit participants’ advance setup and follow-up reporting time.",
+          "uid": "8e3133d5-350f-5219-aa78-74a5f8437b5e"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame defines burden-based participant compensation, including withdrawal, modality, preparation, travel, diary work, payment alternatives, proposal-stage flexibility, fairness perceptions, common budgeting omissions, and separation from field-staff labor costs.",
+        "differences": "",
+        "reference_only": "The reference frame sets standards for claim support, evidence placement and quality, causal restraint, pilot-versus-main-study wording, design traceability, formative-evaluation judgments, and observable, falsifiable conceptual contributions."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "8e72bbb6-e91c-45e8-8cbe-6a823876f06b"
+    },
+    "analysis_digest": "43e381a952a0899216a39c663c00274f0fa62afb0110c3fc063d815bf3c47a6e",
+    "key": "ed85e04eac189cb816e6db545b8e82cd063a08105cc14543b7407c8e5264c35a",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 47.11513674999878,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "ed85e04eac189cb816e6db545b8e82cd063a08105cc14543b7407c8e5264c35a",
+  "created_at": "2026-08-13T18:16:20.157468Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/claim-evidence",
+  "pair_key": "708983d8c28003cbb5ca556ccedbadf6b2628b2e57c0394b87cdd559afeafd9c",
+  "provider_seconds": 47.11513674999878,
+  "right": "task-2/advisor2/compensation",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

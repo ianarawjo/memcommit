@@ -1,0 +1,442 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:40:05.786521+00:00",
+      "frames": [
+        {
+          "context_digest": "3f1b018c2a3a8594d00bffba053626a876fef4893e678dd9600986d9d41c0f31",
+          "context_name": "task-3/local/personal-memory/2024/05",
+          "context_uid": "683986e6-d517-5a53-9dc1-16b69cf0d12e",
+          "memories": [
+            {
+              "content": "The user keeps a small table fan beside the bedroom window.",
+              "content_digest": "b8a464f5e2a33edcef1259af4a412b047ba190bae9cfe42aaf1dbd722efc7f0c",
+              "position": 0,
+              "uid": "3088c235-435c-52ee-9ffc-26cf85ec196e"
+            },
+            {
+              "content": "On a day the user drank coffee late in the afternoon, they could not fall asleep until dawn.",
+              "content_digest": "ef4cf019ebc163fc24f03b8bd505599cd13fc83f33565d51ffb4379dc21d72b8",
+              "position": 1,
+              "uid": "7811ed66-2f22-54d8-a215-62a843264ba5"
+            },
+            {
+              "content": "On a day the user drank coffee before 2 p.m., they fell asleep at their usual time.",
+              "content_digest": "046ac3f8454da623f73d1293fb954b72a3ea056642fd9ee7948c35f110e77669",
+              "position": 2,
+              "uid": "d0f94a56-5cf8-5215-9cfa-5993b3b781be"
+            },
+            {
+              "content": "On a tired day, the user ate dinner out and postponed even washing the dishes after returning home.",
+              "content_digest": "ac36f6c1039dc74f764b4671f718f1e124823dc75fd45abda010285523280b71",
+              "position": 3,
+              "uid": "fc19394a-6634-5aae-bfa5-bba91e707954"
+            },
+            {
+              "content": "In the same week, on a day the user made simple noodles at home, they rested immediately after the meal.",
+              "content_digest": "45bb543f6c6ca213b856683b3c53448ac0d044bcf24f694eda292d6c4923ac5c",
+              "position": 4,
+              "uid": "be7aa7f3-1b67-5677-950d-9942ca337a99"
+            },
+            {
+              "content": "On a night the window was left open, street noise woke the user twice.",
+              "content_digest": "13f3dd86b869b25ee75e1b80d9cdb890b79434fa976fbd7246e89ba808f1a6c6",
+              "position": 5,
+              "uid": "47faaefd-2d60-5693-9847-2c1d5d2f9092"
+            },
+            {
+              "content": "On a night the table fan was running, the user was not too warm even with the window closed.",
+              "content_digest": "96ce23df1cf4f913e3b4c339cc3a857a6a8776e3f3f48e865eae65f02297bba8",
+              "position": 6,
+              "uid": "d6eea310-1313-5a51-b032-f3f518620610"
+            },
+            {
+              "content": "The user's father prefers to have coffee available after dinner and believes it will not cause a sleep problem.",
+              "content_digest": "197616278309e370f0d0e633700b1bde2c6e4395dbc8ed2b942e14fb6c1c9cc5",
+              "position": 7,
+              "uid": "056defa1-8256-561d-a2b4-a70df4058c33"
+            },
+            {
+              "content": "When making a sleep-related suggestion, do not treat one or two records as a general lifestyle habit.",
+              "content_digest": "963795e89a1e2365dd81abf463fb9a80c1c22b9c0e59b121681f89c09860e583",
+              "position": 8,
+              "uid": "7cecee60-fabd-55a3-998b-78810bd9eaf4"
+            },
+            {
+              "content": "The user tends to go to bed much later after drinking coffee late in the afternoon.",
+              "content_digest": "e54652939c104807d5c501753f85aee97883cc55e1d056787b86857cd5b8292d",
+              "position": 9,
+              "uid": "9ace13d3-d881-5720-bfd5-f7884db67756"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "69c731c3-c571-41d8-ac6d-84bea9447e0d"
+        },
+        {
+          "context_digest": "df0924e320cd14a29eaed60f78e82fd509c4062949b35706b2a7cb94571fb599",
+          "context_name": "task-3/local/personal-memory/2026/04",
+          "context_uid": "16e860a8-7a90-5b7a-adc3-1c487ef97e03",
+          "memories": [
+            {
+              "content": "The user collects clothes for donation in a large bag beside the entrance.",
+              "content_digest": "39f2f01c59b7fa4ca7529d510e1b0a6ffab6706861042f771cfe97f6f806efac",
+              "position": 0,
+              "uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            },
+            {
+              "content": "After emptying an entire drawer at once, the user could not find a charger they needed.",
+              "content_digest": "674c33ba6475f42b29b03e6f8711e0216f983f3d37fee3dacf9336e3bb4596bf",
+              "position": 1,
+              "uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            },
+            {
+              "content": "During the next organizing session, the user sorted items by type and put only items to be discarded in the bag.",
+              "content_digest": "63104b5a7fd380f818c8758c51f9550c7a7fa41ff91f1dd314225d1824b69643",
+              "position": 2,
+              "uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            },
+            {
+              "content": "Even after photographing unworn clothes, the user did not take them out again for one month.",
+              "content_digest": "519f131096440719dcd3412f4439c5cfe44b7f402684170209708040692dc5fd",
+              "position": 3,
+              "uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            },
+            {
+              "content": "After moving those clothes to the donation bag, the user cleared one closet compartment.",
+              "content_digest": "45db58ae108a299344d982d8606fff26f733252da691cf01417e760909ff6057",
+              "position": 4,
+              "uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            },
+            {
+              "content": "The user nearly discarded an important paper with advertising and checked the recycling box again.",
+              "content_digest": "6bf928f67944656e5f3c68d8869c0cefd039a588f0ba735f94520231ef58017c",
+              "position": 5,
+              "uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            },
+            {
+              "content": "During the next organizing session, the user kept a separate document box and did not mix the papers.",
+              "content_digest": "adac8d4266c6b11e15d29c484665bc5dcc915f9aa319198b6a69d0e7b0131bb3",
+              "position": 6,
+              "uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            },
+            {
+              "content": "The user's mother asks the user to check whether she needs kitchen items in good condition before discarding them.",
+              "content_digest": "0752bc2ac00c0b1301c45ab4c2e73f63c57e6ebc4255dcc1c13330ffda906612",
+              "position": 7,
+              "uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            },
+            {
+              "content": "Confirm with the user before marking a personal document or another person's property as a disposal candidate.",
+              "content_digest": "17062e2cd4738619e81e211cb2f53d14e78c5f4eab9ae49053ce7e06935a7db5",
+              "position": 8,
+              "uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            },
+            {
+              "content": "The local agent cannot determine an object's emotional meaning from frequency of use alone.",
+              "content_digest": "9c86bcfe2b209bf7957dced0eab000b42f97b6a435d705ccaccb15e49be3691d",
+              "position": 9,
+              "uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "f62d9292-3b82-4295-9911-5dcd88697371"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate domains: the reference records sleep, caffeine, meals, ventilation, and evidence caution, while the compared frame records decluttering experiences, safeguards, and household-property considerations. No shared operational policy, scope-dependent difference, or conflict is supported.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "69c731c3-c571-41d8-ac6d-84bea9447e0d",
+              "memory_uid": "3088c235-435c-52ee-9ffc-26cf85ec196e"
+            }
+          ],
+          "reason": "This is independently useful reference-only information about the bedroom setup, with no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "A small table fan is kept beside the bedroom window.",
+          "uid": "5e64b73c-bbb9-530d-a1cc-79cc3f558a68"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "69c731c3-c571-41d8-ac6d-84bea9447e0d",
+              "memory_uid": "7811ed66-2f22-54d8-a215-62a843264ba5"
+            },
+            {
+              "frame_uid": "69c731c3-c571-41d8-ac6d-84bea9447e0d",
+              "memory_uid": "9ace13d3-d881-5720-bfd5-f7884db67756"
+            }
+          ],
+          "reason": "The reference memories provide an observed episode and a stated tendency expressing the same one-sided caffeine-timing claim; the compared frame does not address it.",
+          "status": "RESOLVED",
+          "summary": "Late-afternoon coffee is associated with substantially delayed sleep for the user.",
+          "uid": "83c9b73d-e737-59d4-8fa4-5ef0de1cda5c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "69c731c3-c571-41d8-ac6d-84bea9447e0d",
+              "memory_uid": "d0f94a56-5cf8-5215-9cfa-5993b3b781be"
+            }
+          ],
+          "reason": "This is a distinct reference-only observation about an earlier coffee condition, unsupported and unopposed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Coffee consumed before 2 p.m. was followed by sleep at the user’s usual time on one recorded day.",
+          "uid": "ac98bf7b-b351-5182-85d4-264885db9dc1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "69c731c3-c571-41d8-ac6d-84bea9447e0d",
+              "memory_uid": "fc19394a-6634-5aae-bfa5-bba91e707954"
+            }
+          ],
+          "reason": "This is an independently useful reference-only episode about fatigue and chores, with no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "On a tired day, eating out was followed by postponing dishwashing at home.",
+          "uid": "ae900fa4-7902-5439-9dc7-c641771a1290"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "69c731c3-c571-41d8-ac6d-84bea9447e0d",
+              "memory_uid": "be7aa7f3-1b67-5677-950d-9942ca337a99"
+            }
+          ],
+          "reason": "This is a separate reference-only meal and recovery observation, not a restatement of another claim or a topic addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "After making simple noodles at home, the user rested immediately after eating.",
+          "uid": "17d321c8-1701-5efb-8af1-76a7b1484b8b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "69c731c3-c571-41d8-ac6d-84bea9447e0d",
+              "memory_uid": "47faaefd-2d60-5693-9847-2c1d5d2f9092"
+            }
+          ],
+          "reason": "This reference-only sleep-environment observation has no semantically corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "Leaving the window open was associated with two awakenings from street noise.",
+          "uid": "f956fbed-6bbe-59e9-ae33-cd30367b762f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "69c731c3-c571-41d8-ac6d-84bea9447e0d",
+              "memory_uid": "d6eea310-1313-5a51-b032-f3f518620610"
+            }
+          ],
+          "reason": "This is independently useful reference-only evidence about cooling under a closed-window condition.",
+          "status": "RESOLVED",
+          "summary": "Running the table fan kept the user from becoming too warm while the window was closed.",
+          "uid": "dceb9c51-8080-54d1-b4cb-f25dca4921e2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "69c731c3-c571-41d8-ac6d-84bea9447e0d",
+              "memory_uid": "056defa1-8256-561d-a2b4-a70df4058c33"
+            }
+          ],
+          "reason": "This is a one-sided family preference and belief; the compared frame contains no claim governing the same decision.",
+          "status": "RESOLVED",
+          "summary": "The user’s father prefers coffee to be available after dinner and believes it will not impair sleep.",
+          "uid": "ea99f909-79b2-5dec-967f-0196b8d7c96f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "69c731c3-c571-41d8-ac6d-84bea9447e0d",
+              "memory_uid": "7cecee60-fabd-55a3-998b-78810bd9eaf4"
+            }
+          ],
+          "reason": "This reference-only evidentiary safeguard governs sleep-related suggestions and does not materially address the compared frame’s disposal decisions.",
+          "status": "RESOLVED",
+          "summary": "Sleep suggestions should not turn one or two records into a general lifestyle habit.",
+          "uid": "5d508791-c69d-5fa3-8677-9a6c9f200eae"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f62d9292-3b82-4295-9911-5dcd88697371",
+              "memory_uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            }
+          ],
+          "reason": "This is independently useful compared-only information about donation storage, with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Clothes intended for donation are collected in a large bag beside the entrance.",
+          "uid": "3dd8fd0f-8041-596f-8409-839abac2a5ca"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f62d9292-3b82-4295-9911-5dcd88697371",
+              "memory_uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            }
+          ],
+          "reason": "This compared-only organizing failure is an independent episode not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Emptying an entire drawer at once resulted in the user being unable to find a needed charger.",
+          "uid": "34e8a7ad-6baf-55b5-8cc4-d441d44e8c74"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f62d9292-3b82-4295-9911-5dcd88697371",
+              "memory_uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            }
+          ],
+          "reason": "This is a compared-only organizing method with its own operational value and no reference-side match.",
+          "status": "RESOLVED",
+          "summary": "In a later organizing session, the user sorted by item type and reserved the bag for items to discard.",
+          "uid": "d59d2f25-06c4-5ca0-9e5b-56c5dce484ca"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f62d9292-3b82-4295-9911-5dcd88697371",
+              "memory_uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            }
+          ],
+          "reason": "This independently useful compared-only observation concerns an ineffective decluttering step.",
+          "status": "RESOLVED",
+          "summary": "Photographing unworn clothes did not lead the user to remove them during the following month.",
+          "uid": "66b5c7a9-ad36-578c-9717-66f7d5401b5f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f62d9292-3b82-4295-9911-5dcd88697371",
+              "memory_uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            }
+          ],
+          "reason": "This compared-only observation records a successful space-clearing action and has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Moving the unworn clothes into the donation bag cleared a closet compartment.",
+          "uid": "1291c47a-99f6-52cc-b562-38adb47f5efd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f62d9292-3b82-4295-9911-5dcd88697371",
+              "memory_uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            }
+          ],
+          "reason": "This is an independent compared-only disposal-risk episode rather than a claim found in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "An important paper was nearly discarded with advertising, prompting the user to recheck the recycling box.",
+          "uid": "b16a1f35-c2eb-58a6-8f8f-99b1638bb9b1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f62d9292-3b82-4295-9911-5dcd88697371",
+              "memory_uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            }
+          ],
+          "reason": "This compared-only document-handling practice is independently useful and unmatched on the reference side.",
+          "status": "RESOLVED",
+          "summary": "In a later organizing session, the user kept papers separate in a document box.",
+          "uid": "9beb861a-885e-55e7-81af-3cbc0bdde87c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f62d9292-3b82-4295-9911-5dcd88697371",
+              "memory_uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            }
+          ],
+          "reason": "This is a compared-only household-property preference with no reference-side claim about the same decision.",
+          "status": "RESOLVED",
+          "summary": "The user’s mother asks to be consulted about usable kitchen items before they are discarded.",
+          "uid": "e9c4e62a-bd16-5560-8be4-8fb075f3a737"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f62d9292-3b82-4295-9911-5dcd88697371",
+              "memory_uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            }
+          ],
+          "reason": "This compared-only safeguard governs sensitive disposal classifications and is operationally separate from the reference frame’s sleep-evidence caution.",
+          "status": "RESOLVED",
+          "summary": "The user should be consulted before personal documents or another person’s property are marked as disposal candidates.",
+          "uid": "5a3a7012-478a-5c63-987d-de8ba559b2ab"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f62d9292-3b82-4295-9911-5dcd88697371",
+              "memory_uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "reason": "This compared-only inference limit concerns sentimental value in organizing decisions and has no materially corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "An object’s emotional meaning cannot be determined from its frequency of use alone.",
+          "uid": "7aebe986-bed3-5b56-8231-f419e5d45236"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame describes donation storage, organizing failures and safer sorting methods, stalled and successful clothing removal, document-protection practices, consultation over another person’s property, and limits on inferring emotional value from use frequency.",
+        "differences": "",
+        "reference_only": "The reference describes bedroom cooling and noise, timing-sensitive coffee and sleep experiences, low-energy post-dinner behavior, a family coffee preference, and caution against generalizing from sparse records."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "76dddf94-b757-4661-a296-cb6f10858cda"
+    },
+    "analysis_digest": "25071485ec51a897ac6d301c2a568506cbc172adbe3414f12eb4e2d32108d32e",
+    "key": "4c03c762e08160e9da5a2a6a24640a990d34912874eb5379639550ac3b2caf51",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 72.23453079200044,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "4c03c762e08160e9da5a2a6a24640a990d34912874eb5379639550ac3b2caf51",
+  "created_at": "2026-08-13T18:41:18.020300Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/05",
+  "pair_key": "eb34210d25d9379bf80ae771b5c71cb46cfc82e1eebedd01f69b9043b0fbd336",
+  "provider_seconds": 72.23453079200044,
+  "right": "task-3/local/personal-memory/2026/04",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

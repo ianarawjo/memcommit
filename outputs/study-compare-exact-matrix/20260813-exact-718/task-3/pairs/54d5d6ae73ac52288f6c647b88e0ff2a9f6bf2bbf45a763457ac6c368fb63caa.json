@@ -1,0 +1,379 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:40:20.107466+00:00",
+      "frames": [
+        {
+          "context_digest": "6cb54691fcd12037c24daa71882bad82cd67c16ea72979f2a41e1e1b8eae22a8",
+          "context_name": "task-3/local/personal-memory/2024/06",
+          "context_uid": "8c641e5b-01d9-560c-a8c0-b52cee7402c8",
+          "memories": [
+            {
+              "content": "The user stores copies of identity documents in an encrypted folder.",
+              "content_digest": "83efe427335c1415d4a8d601d6e1c5d7a129c6962b74468d313b123e045b052f",
+              "position": 0,
+              "uid": "79576c1e-fa88-5d6e-b5e2-3d4ec11c3e06"
+            },
+            {
+              "content": "On a day the user transferred between buses twice, they rested for an hour after the trip.",
+              "content_digest": "907b9cc4c16b4b3fe53c2323d31afc83347ddc63775bd865bc42b62ca539f5bb",
+              "position": 1,
+              "uid": "28a1ff0b-e2d4-5cb6-9c26-949d86f76bac"
+            },
+            {
+              "content": "On a day the user took a direct route with a similar travel time, they remained seated to the destination.",
+              "content_digest": "0c0d1b12aa0ad393ac43982fe7d36d08f75d9e634c933593ef6a0a96614bb9ea",
+              "position": 2,
+              "uid": "0ad4a1f9-e3e9-517e-8cfc-f8e6307f1d3e"
+            },
+            {
+              "content": "After arriving at an entrance with stairs only, the user went around to an entrance on the other side of the building.",
+              "content_digest": "775d4c0a211f4509a0488cb3b2a790ae22c1b2ba2e96ed6b9100ae3cfb454315",
+              "position": 3,
+              "uid": "f772b0c7-502f-55b7-b431-ee6b20518d38"
+            },
+            {
+              "content": "On a day the user checked the accessible entrance location in advance, they arrived before the agreed time.",
+              "content_digest": "4e087a4e0ca48a3414580ce0d974da4b2221b304302de01cf305945866320a6a",
+              "position": 4,
+              "uid": "0b2d800b-a4ab-5422-bf06-56d17b98f604"
+            },
+            {
+              "content": "On a rainy day, the user's clothes became wet while crossing an uncovered section at a transfer stop.",
+              "content_digest": "dad5c9f35f0469edc528091e47f22365c1cb5de1b32e70335826d67a576fb47d",
+              "position": 5,
+              "uid": "b233f332-4927-549b-8dab-b554977fe363"
+            },
+            {
+              "content": "On a day the user traveled with their maternal uncle, they agreed to meet at an entrance near the elevator.",
+              "content_digest": "c81b012ae6686f47d54809c50ab559077b0e170d54792d34038f0f8fc32c6a96",
+              "position": 6,
+              "uid": "b38d0d63-c4b0-5955-857d-03cbcfd27f5b"
+            },
+            {
+              "content": "The user's maternal uncle prefers an aisle seat from which it is easy to stand during long-distance travel.",
+              "content_digest": "3ea31753296866c1bf438b51eba4110b0c6ed2e907e86dc21796166ed19d82df",
+              "position": 7,
+              "uid": "4668d326-b11c-5467-bca4-e8d5e242e375"
+            },
+            {
+              "content": "The local agent cannot know whether an accessible entrance is operating that day from past route records alone.",
+              "content_digest": "00fc09badcb1d569e3cb1e392ad18406a032d17749f71b44ed7bc121d5d72b4c",
+              "position": 8,
+              "uid": "a77c985c-3986-5141-9805-e3321b3cfa2c"
+            },
+            {
+              "content": "The transfer route the user takes has more boarding and alighting events and walking segments than the direct route.",
+              "content_digest": "f9320e36494ea5beb854d6bbe38a817ae73cd9fe68b75977438d35e44fb38fe6",
+              "position": 9,
+              "uid": "988926a1-3e28-5b3e-a41c-d9338971643e"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "484f8978-9e9f-4ccc-8e8e-778cfa702242"
+        },
+        {
+          "context_digest": "b727ef7cf1cb7ca0f00ea3598d36577397e092dcb632f55c3eafb942850922d7",
+          "context_name": "task-3/local/personal-memory/2025/04",
+          "context_uid": "720d2021-1ec5-52ab-ace4-a93e02b05ad9",
+          "memories": [
+            {
+              "content": "The user keeps the shared laundry-room access card in an entrance drawer.",
+              "content_digest": "3c98e367c99e0867f1217c891dc5d982c115fd9d1b4bc3957cca6dbb6338203b",
+              "position": 0,
+              "uid": "a1c67646-6a75-504a-9508-d69e1d04b3e5"
+            },
+            {
+              "content": "The user went downstairs 25 minutes after the laundry finished and received a note from another household.",
+              "content_digest": "44968f6f10c0ae2d1dd775eb066564dada6346c6f59bdacf90d687c57e6c1e0f",
+              "position": 1,
+              "uid": "9479e799-95d7-50d2-af62-d1e0914a389b"
+            },
+            {
+              "content": "For the next load, the user set a reminder five minutes before the end and removed the laundry immediately.",
+              "content_digest": "bc77b81f6126e44bbffeb4ae2dfbb641d31a9742b7a196a106ac385321b48958",
+              "position": 2,
+              "uid": "528cb5ea-8c36-5206-beaa-19432250ec4d"
+            },
+            {
+              "content": "The user washed light-colored clothes with new jeans, and color transferred onto white socks.",
+              "content_digest": "ed0f36cf5ebe8f9542ad39ba45fc109634d72f1cb2b266c15dfe6655e3df3add",
+              "position": 3,
+              "uid": "85fb1639-2176-5329-b490-3325ff030db4"
+            },
+            {
+              "content": "The user later washed the new jeans separately, and the color of the other clothes did not change.",
+              "content_digest": "6e47fe1a02ac39064ea9db2d06d8a1f01f80302825bbe412df745401612e4a84",
+              "position": 4,
+              "uid": "431d170a-863f-596d-97c0-0c9634524ee5"
+            },
+            {
+              "content": "On a day the user did not check the dryer filter, the clothes needed another drying cycle.",
+              "content_digest": "8127e9f3ea34724673517f1e260a73acfb70e287a7e7de84e196ad1cb815f5a7",
+              "position": 5,
+              "uid": "4df33adc-cfba-50f2-b141-e2ebed38b81c"
+            },
+            {
+              "content": "On the next use, after emptying the filter, the user finished drying in one cycle.",
+              "content_digest": "932cfb8fc93277783d8990dad62cfd3e1c9a86e39ad1bd019ce00dac632c53d5",
+              "position": 6,
+              "uid": "ba7daae9-938d-55a1-af20-21cd10d395d8"
+            },
+            {
+              "content": "The building manager judges that not leaving finished laundry for a long time is fair to other households.",
+              "content_digest": "5eabe2d3dff252bb250abcde8fe2d528362afb0e73e7628e839715c3e8a3cd56",
+              "position": 7,
+              "uid": "abbf8742-38e3-5810-b222-fe91e3340962"
+            },
+            {
+              "content": "When creating a shared laundry-room reminder, base it on the end time of the machine the user started.",
+              "content_digest": "e00bc6fe09fea6fde6a27817bd6824a141c1ac4a656b9659067b7e1af9881b1f",
+              "position": 8,
+              "uid": "06273d22-0b42-5c55-9d70-eda14084219a"
+            },
+            {
+              "content": "Even if the local agent knows where the card is kept, it cannot know which machines in the shared laundry room are currently available.",
+              "content_digest": "d03f5583c9e4c686307af90ff00ff54e5ac0990e34296b3d241e4f299d15f4b7",
+              "position": 9,
+              "uid": "03ac930e-d745-5c29-8c24-5ced669817f9"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "8ff7b3ba-5830-41a2-9c0c-7e69765a5e94"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate practical domains: the reference describes document security, accessible travel, route burden, and a relative’s preferences, while the compared frame describes shared-laundry access, timing, sorting, drying, fairness, and live machine uncertainty. No cross-frame operational claims align or conflict.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "484f8978-9e9f-4ccc-8e8e-778cfa702242",
+              "memory_uid": "79576c1e-fa88-5d6e-b5e2-3d4ec11c3e06"
+            }
+          ],
+          "reason": "This is independently useful reference-only information about document security, with no compared-side claim addressing that decision.",
+          "status": "RESOLVED",
+          "summary": "The user stores identity-document copies in an encrypted folder.",
+          "uid": "e39c63c8-0e67-57ee-a893-fb05a5046606"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "484f8978-9e9f-4ccc-8e8e-778cfa702242",
+              "memory_uid": "28a1ff0b-e2d4-5cb6-9c26-949d86f76bac"
+            },
+            {
+              "frame_uid": "484f8978-9e9f-4ccc-8e8e-778cfa702242",
+              "memory_uid": "0ad4a1f9-e3e9-517e-8cfc-f8e6307f1d3e"
+            },
+            {
+              "frame_uid": "484f8978-9e9f-4ccc-8e8e-778cfa702242",
+              "memory_uid": "988926a1-3e28-5b3e-a41c-d9338971643e"
+            }
+          ],
+          "reason": "The transfer-day recovery, seated direct journey, and structural route differences split one reference-only claim about relative travel burden; the compared frame contains no travel-routing counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user’s experiences distinguish the greater physical burden of a transfer route from a similarly timed direct route.",
+          "uid": "b6e6e3d4-8662-5875-8b07-b96d9309be42"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "484f8978-9e9f-4ccc-8e8e-778cfa702242",
+              "memory_uid": "f772b0c7-502f-55b7-b431-ee6b20518d38"
+            },
+            {
+              "frame_uid": "484f8978-9e9f-4ccc-8e8e-778cfa702242",
+              "memory_uid": "0b2d800b-a4ab-5422-bf06-56d17b98f604"
+            }
+          ],
+          "reason": "The reactive detour and successful advance check split one reference-only claim about accessible-entrance planning; no compared-side memory addresses building-entry navigation.",
+          "status": "RESOLVED",
+          "summary": "Accessible-entrance location affects the user’s navigation and punctuality.",
+          "uid": "317dc4b3-f3fc-54f7-a81e-80c900d0b5bf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "484f8978-9e9f-4ccc-8e8e-778cfa702242",
+              "memory_uid": "b233f332-4927-549b-8dab-b554977fe363"
+            }
+          ],
+          "reason": "This is independently useful reference-only information about weather exposure during travel.",
+          "status": "RESOLVED",
+          "summary": "An uncovered transfer-stop section exposed the user to rain and wet clothing.",
+          "uid": "aa45e5a9-ba87-5d6c-acf8-a94b017c50ff"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "484f8978-9e9f-4ccc-8e8e-778cfa702242",
+              "memory_uid": "b38d0d63-c4b0-5955-857d-03cbcfd27f5b"
+            }
+          ],
+          "reason": "This is independently useful reference-only information about travel meeting coordination.",
+          "status": "RESOLVED",
+          "summary": "When traveling together, the user and their maternal uncle agreed to meet near an elevator entrance.",
+          "uid": "96b48323-e7df-5c6c-b724-a77a8f4cbd1d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "484f8978-9e9f-4ccc-8e8e-778cfa702242",
+              "memory_uid": "4668d326-b11c-5467-bca4-e8d5e242e375"
+            }
+          ],
+          "reason": "This is independently useful reference-only information about the uncle’s seating preference.",
+          "status": "RESOLVED",
+          "summary": "The user’s maternal uncle prefers an aisle seat that makes standing easier on long-distance trips.",
+          "uid": "309b0514-bb0d-58f0-b889-6283d0437fdf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "484f8978-9e9f-4ccc-8e8e-778cfa702242",
+              "memory_uid": "a77c985c-3986-5141-9805-e3321b3cfa2c"
+            }
+          ],
+          "reason": "This is a reference-only limitation concerning live entrance status; machine availability in the compared frame governs a different operational decision.",
+          "status": "RESOLVED",
+          "summary": "Past route records cannot establish whether an accessible entrance is operating on a particular day.",
+          "uid": "f0492914-1e92-50db-b56c-7aa40de4e3cd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8ff7b3ba-5830-41a2-9c0c-7e69765a5e94",
+              "memory_uid": "a1c67646-6a75-504a-9508-d69e1d04b3e5"
+            }
+          ],
+          "reason": "This is independently useful compared-only information about access-card storage, distinct from storage of identity documents.",
+          "status": "RESOLVED",
+          "summary": "The shared laundry-room access card is kept in an entrance drawer.",
+          "uid": "8c083735-6cd1-57d6-b560-da60d872bce3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8ff7b3ba-5830-41a2-9c0c-7e69765a5e94",
+              "memory_uid": "9479e799-95d7-50d2-af62-d1e0914a389b"
+            },
+            {
+              "frame_uid": "8ff7b3ba-5830-41a2-9c0c-7e69765a5e94",
+              "memory_uid": "528cb5ea-8c36-5206-beaa-19432250ec4d"
+            },
+            {
+              "frame_uid": "8ff7b3ba-5830-41a2-9c0c-7e69765a5e94",
+              "memory_uid": "abbf8742-38e3-5810-b222-fe91e3340962"
+            },
+            {
+              "frame_uid": "8ff7b3ba-5830-41a2-9c0c-7e69765a5e94",
+              "memory_uid": "06273d22-0b42-5c55-9d70-eda14084219a"
+            }
+          ],
+          "reason": "The delayed collection, successful reminder, fairness judgment, and reminder rule split one compared-only claim about timely removal from shared machines.",
+          "status": "RESOLVED",
+          "summary": "Laundry reminders should follow the user’s machine end time so finished loads are removed promptly and fairly.",
+          "uid": "9e59a506-1188-5ebf-a7cb-68cbea0a60e0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8ff7b3ba-5830-41a2-9c0c-7e69765a5e94",
+              "memory_uid": "85fb1639-2176-5329-b490-3325ff030db4"
+            },
+            {
+              "frame_uid": "8ff7b3ba-5830-41a2-9c0c-7e69765a5e94",
+              "memory_uid": "431d170a-863f-596d-97c0-0c9634524ee5"
+            }
+          ],
+          "reason": "The contrasting washes jointly support one compared-only claim about separating new jeans to protect lighter clothes.",
+          "status": "RESOLVED",
+          "summary": "Washing new jeans separately prevented the color transfer seen when they were mixed with light clothing.",
+          "uid": "0bbccfd7-f073-5907-903f-2caec5207aea"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8ff7b3ba-5830-41a2-9c0c-7e69765a5e94",
+              "memory_uid": "4df33adc-cfba-50f2-b141-e2ebed38b81c"
+            },
+            {
+              "frame_uid": "8ff7b3ba-5830-41a2-9c0c-7e69765a5e94",
+              "memory_uid": "ba7daae9-938d-55a1-af20-21cd10d395d8"
+            }
+          ],
+          "reason": "The two uses split one compared-only claim about the filter’s relevance to drying performance.",
+          "status": "RESOLVED",
+          "summary": "Emptying the dryer filter was associated with finishing in one cycle rather than requiring another cycle.",
+          "uid": "2629b903-c200-5591-ad06-6ee725567205"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8ff7b3ba-5830-41a2-9c0c-7e69765a5e94",
+              "memory_uid": "03ac930e-d745-5c29-8c24-5ced669817f9"
+            }
+          ],
+          "reason": "This is a compared-only limitation concerning live machine availability; accessible-entrance operation in the reference frame governs a different decision.",
+          "status": "RESOLVED",
+          "summary": "Knowing the access-card location does not reveal which shared laundry machines are currently available.",
+          "uid": "b6ccc4b0-b28c-5f3d-8fd9-8e5d7375f595"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only information concerns laundry-room access, prompt and fair collection, color-safe sorting, dryer-filter effects, and uncertainty about current machine availability.",
+        "differences": "",
+        "reference_only": "Reference-only information concerns secure document storage, travel effort and weather exposure, accessible-entrance planning and uncertainty, and the maternal uncle’s meeting and seating preferences."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "663da21a-44b8-4c48-8274-db631a0603aa"
+    },
+    "analysis_digest": "b0b22527a2b8e978d1c138976f372064cb206e61d25092328471cfb8fbe81979",
+    "key": "692f65f865d5a26db3871096aec60a23a2fbd662db13b2ad3e522d8eb9283ba4",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 44.84664787499787,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "692f65f865d5a26db3871096aec60a23a2fbd662db13b2ad3e522d8eb9283ba4",
+  "created_at": "2026-08-13T18:41:04.953525Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/06",
+  "pair_key": "54d5d6ae73ac52288f6c647b88e0ff2a9f6bf2bbf45a763457ac6c368fb63caa",
+  "provider_seconds": 44.84664787499787,
+  "right": "task-3/local/personal-memory/2025/04",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

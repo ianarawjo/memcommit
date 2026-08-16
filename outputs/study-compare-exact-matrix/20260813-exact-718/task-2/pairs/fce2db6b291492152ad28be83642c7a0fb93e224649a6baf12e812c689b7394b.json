@@ -1,0 +1,414 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:28:22.865494+00:00",
+      "frames": [
+        {
+          "context_digest": "587a9d2fb6abf2b486ccfc50ff85ae7280d7d7bd4003d85ce5877a4edfc9293f",
+          "context_name": "task-2/advisor1/terminology",
+          "context_uid": "7699c7c5-e48b-5548-b0aa-256d793c6c06",
+          "memories": [
+            {
+              "content": "Use the same term throughout the proposal for the same interaction concept or interface element.",
+              "content_digest": "2f11d02134609c6397d8f60105cc452e34129bc1c427a512455247e54951f18a",
+              "position": 0,
+              "uid": "949a884d-b348-5fa0-b1dd-adbebafe10a9"
+            },
+            {
+              "content": "Use abbreviations only for recurring terms of three or more words.",
+              "content_digest": "dcceb4407d24df4034dceca613413471bb46898a487aed0cc0905e48ede482e7",
+              "position": 1,
+              "uid": "2f484151-b5fc-51a9-8a88-b30a403617b3"
+            },
+            {
+              "content": "Present the full name and abbreviation together when using an abbreviation for the first time.",
+              "content_digest": "02e1b2b4cbc8f9a61e299bf1500663ae8cd4036155b2a7dec8c2ce40087ac29b",
+              "position": 2,
+              "uid": "21131a6f-d35c-51e3-895f-46cd21a3b566"
+            },
+            {
+              "content": "Prioritize the research role over diagnostic labels or deficits when referring to participants.",
+              "content_digest": "7b99c6ec90abdbb68d4af8e95a03df3149b9d2d4d637fbd33a70a2acf7073a12",
+              "position": 3,
+              "uid": "e02c3110-05c4-58a4-8d76-c8fd2426a0d5"
+            },
+            {
+              "content": "Reviewers from different subfields struggle to infer undefined abbreviations from context alone.",
+              "content_digest": "13af5eb9fe88f3f2d73192adfb48f7a20de09e22e777a952daa83ca1c030f9ee",
+              "position": 4,
+              "uid": "af028910-e48b-5605-b92b-9378bdfa525c"
+            },
+            {
+              "content": "Use the term formative evaluation for studies seeking design modification evidence, and distinguish it from final efficacy judgments.",
+              "content_digest": "4ba9bca850286ff6286cf4b3bf44395d608ec700c46acd8cd26c54e26d43b378",
+              "position": 5,
+              "uid": "39792d18-2be0-5135-a063-c5213247d330"
+            },
+            {
+              "content": "The user can have contribution labels such as principles, models, or guidelines approved only if they align with the abstraction level of the actual deliverables.",
+              "content_digest": "efed93b748ce74e3e9ed96949bf539c809ea4c36ae77bbb54670285f691f74e9",
+              "position": 6,
+              "uid": "bcaa8c30-ca6e-5b9f-af93-88513a2f16b1"
+            },
+            {
+              "content": "Design principles describe the relationship between conditions and outcomes rather than serving as instructions that merely replicate a single screen layout.",
+              "content_digest": "22385c2bb345db07d19c442e5d99a5c527c2795848b9e29fe198d0ede6255d6f",
+              "position": 7,
+              "uid": "82ad9fe2-4063-5e89-9097-c975aa2920cb"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "d8295850-789d-41b0-8b42-a70426f8d485"
+        },
+        {
+          "context_digest": "0c296942d89f44af52c83dcba02568af2b56ed1016260f3d3b9c95e919a51339",
+          "context_name": "task-2/advisor2/ethics",
+          "context_uid": "fa36b485-422d-54c3-a145-0f60a077757c",
+          "memories": [
+            {
+              "content": "Link anticipated participant burden with its mitigation strategies for each field user study task.",
+              "content_digest": "120fdee3ad17815fe2e9aa806aab19843cf6597753cf0d35aa0618a3116a1bd2",
+              "position": 0,
+              "uid": "bc8c1327-993c-51ce-8f53-919dc253e0f8"
+            },
+            {
+              "content": "Specify the accommodations necessary for participants to access the field system and research tasks.",
+              "content_digest": "e09cce7cc60d904d618dffa5619cac9c44e4dbcc4f2a0d8547b9ede06586a82b",
+              "position": 1,
+              "uid": "578f6fdf-6bbc-5d1b-8f03-c7460a5cdc7b"
+            },
+            {
+              "content": "Specify how accessibility accommodations will be provided in the field user study.",
+              "content_digest": "98a13f5b544276eaafd5d0b1aea63b2e313ce327f5881f0e4bbcff19724e8c6e",
+              "position": 2,
+              "uid": "6804d5db-c872-5ded-bf68-14fd30e1b645"
+            },
+            {
+              "content": "Describe how personal identifiers will be separated from research data immediately upon collection.",
+              "content_digest": "0bf884cd31610ba663854e8c273ec6769666b38ee72714ba63f0b390d69b8ba3",
+              "position": 3,
+              "uid": "448f23d0-9607-5977-9d13-a99af48a6fc1"
+            },
+            {
+              "content": "List equipment to be loaned when participants lack necessary gear.",
+              "content_digest": "665d4e26cc8390ca2334d4740650e77977b60fd0e3eed2464ade0ca55a806eb2",
+              "position": 4,
+              "uid": "b97f3e2f-e132-5f6f-a748-f406a89a1bc5"
+            },
+            {
+              "content": "Describe the procedure for returning equipment loaned to participants.",
+              "content_digest": "100ffbad1288c3263bc4a1044b2d42da35c36a3f73786e58e4391fbac98c84f2",
+              "position": 5,
+              "uid": "d05964ea-0423-5642-86e1-9e9c19edffbe"
+            },
+            {
+              "content": "The HCI ethics reviewer verifies that anticipated burden and mitigation strategies correspond for each field user study task.",
+              "content_digest": "067bbafce95c77b4a9acc5ba9652db92dba6dc96e14588841db158919bf044b2",
+              "position": 6,
+              "uid": "26407eb8-5c02-551f-a960-1652eb080f90"
+            },
+            {
+              "content": "Ensure that participants can safely return to existing work procedures if they discontinue research participation.",
+              "content_digest": "213cff51d754811573c78ba0ca92f37e614e9fa4ae1080aa7fcfb550c85437fb",
+              "position": 7,
+              "uid": "7e0ba411-3fd9-53ec-8a3f-4499316c06bb"
+            },
+            {
+              "content": "Specify that organizational members who decline research participation will not face disadvantages in task assignment or performance evaluation.",
+              "content_digest": "46b2b0857255b48ed6001191b089c1d6ecba859690818cbff8fe7676fa1f860a",
+              "position": 8,
+              "uid": "a6fbea37-335c-544b-8bac-01f759bc3855"
+            },
+            {
+              "content": "The user's withdrawal risk can be adequately assessed only when a safe alternative procedure exists for field tasks.",
+              "content_digest": "604a38c44856b4407cf2b1d83df216510e77f84ce76ef4dbc7f9be21cd32393b",
+              "position": 9,
+              "uid": "885d1cf3-8bcd-513c-9591-a548fcbd3992"
+            },
+            {
+              "content": "The user tends to assume that a short session also entails little burden from work interruption and exposure to a manager.",
+              "content_digest": "0c48fd9dd3b393f73a8005db56bf2c11320d82b84040af105ca65c3ff9ce6f17",
+              "position": 10,
+              "uid": "520b4c9f-306e-5749-83b5-2218c97f89e6"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "05916683-d55a-4105-8726-d57749d4734e"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate proposal concerns: the reference addresses terminology, participant framing, study characterization, and contribution labeling, while the compared frame addresses field-study ethics, accessibility, privacy, equipment, burden, withdrawal, and nonparticipation protections. Neither frame supplies a scope-aligned counterpart to the other.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d8295850-789d-41b0-8b42-a70426f8d485",
+              "memory_uid": "949a884d-b348-5fa0-b1dd-adbebafe10a9"
+            }
+          ],
+          "reason": "The compared frame contains no terminology-consistency policy.",
+          "status": "RESOLVED",
+          "summary": "The reference alone requires consistent naming for the same interaction concept or interface element.",
+          "uid": "9868f85b-141e-518e-86da-72fd91ef36dd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d8295850-789d-41b0-8b42-a70426f8d485",
+              "memory_uid": "2f484151-b5fc-51a9-8a88-b30a403617b3"
+            }
+          ],
+          "reason": "The compared frame contains no rule governing when abbreviations are appropriate.",
+          "status": "RESOLVED",
+          "summary": "The reference alone limits abbreviations to recurring terms containing at least three words.",
+          "uid": "c738957c-b75c-55e6-8782-f74c0ca77b0b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d8295850-789d-41b0-8b42-a70426f8d485",
+              "memory_uid": "21131a6f-d35c-51e3-895f-46cd21a3b566"
+            }
+          ],
+          "reason": "The compared frame contains no first-use abbreviation rule.",
+          "status": "RESOLVED",
+          "summary": "The reference alone requires an abbreviation to accompany its full name at first use.",
+          "uid": "284bfead-7e74-5ed2-8201-09c9c913b347"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d8295850-789d-41b0-8b42-a70426f8d485",
+              "memory_uid": "e02c3110-05c4-58a4-8d76-c8fd2426a0d5"
+            }
+          ],
+          "reason": "The compared frame addresses participant protections and access, not how participants should be named.",
+          "status": "RESOLVED",
+          "summary": "The reference alone prioritizes participants' research role over diagnostic or deficit-based labels.",
+          "uid": "1a5c15a8-b840-5ba2-bdf6-0efc07b4a397"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d8295850-789d-41b0-8b42-a70426f8d485",
+              "memory_uid": "af028910-e48b-5605-b92b-9378bdfa525c"
+            }
+          ],
+          "reason": "The compared frame contains no claim about reviewer comprehension of abbreviations.",
+          "status": "RESOLVED",
+          "summary": "The reference alone identifies cross-subfield reviewers' difficulty inferring undefined abbreviations.",
+          "uid": "639a57c7-16a8-5c76-83f6-ca6f23cfe598"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d8295850-789d-41b0-8b42-a70426f8d485",
+              "memory_uid": "39792d18-2be0-5135-a063-c5213247d330"
+            }
+          ],
+          "reason": "The compared frame contains no study-characterization terminology.",
+          "status": "RESOLVED",
+          "summary": "The reference alone reserves formative evaluation for design-modification evidence and distinguishes it from final efficacy judgments.",
+          "uid": "ada967d7-237b-5c58-920a-7ce685756d81"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d8295850-789d-41b0-8b42-a70426f8d485",
+              "memory_uid": "bcaa8c30-ca6e-5b9f-af93-88513a2f16b1"
+            }
+          ],
+          "reason": "The compared frame contains no contribution-labeling policy.",
+          "status": "RESOLVED",
+          "summary": "The reference alone conditions approval of contribution labels on alignment with the deliverables' abstraction level.",
+          "uid": "56495be0-3feb-5a24-9f93-e20ae40cb91c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d8295850-789d-41b0-8b42-a70426f8d485",
+              "memory_uid": "82ad9fe2-4063-5e89-9097-c975aa2920cb"
+            }
+          ],
+          "reason": "The compared frame contains no definition of design principles.",
+          "status": "RESOLVED",
+          "summary": "The reference alone defines design principles as condition–outcome relationships rather than single-layout replication instructions.",
+          "uid": "82fb1925-5e92-586f-bcb3-b18eb029005b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "05916683-d55a-4105-8726-d57749d4734e",
+              "memory_uid": "bc8c1327-993c-51ce-8f53-919dc253e0f8"
+            },
+            {
+              "frame_uid": "05916683-d55a-4105-8726-d57749d4734e",
+              "memory_uid": "26407eb8-5c02-551f-a960-1652eb080f90"
+            }
+          ],
+          "reason": "The reference frame contains no field-study burden-and-mitigation policy.",
+          "status": "RESOLVED",
+          "summary": "The compared frame alone requires task-level correspondence between anticipated participant burden and mitigation strategies, including reviewer verification.",
+          "uid": "b40c0f0b-2b33-5de7-9dcd-1093456350ba"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "05916683-d55a-4105-8726-d57749d4734e",
+              "memory_uid": "578f6fdf-6bbc-5d1b-8f03-c7460a5cdc7b"
+            }
+          ],
+          "reason": "The reference frame contains no accessibility-accommodation requirement.",
+          "status": "RESOLVED",
+          "summary": "The compared frame alone requires identification of accommodations needed for access to the field system and research tasks.",
+          "uid": "7b4ffa15-ae14-562a-90c0-e00ec07e334e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "05916683-d55a-4105-8726-d57749d4734e",
+              "memory_uid": "6804d5db-c872-5ded-bf68-14fd30e1b645"
+            }
+          ],
+          "reason": "The reference frame contains no accommodation-delivery requirement.",
+          "status": "RESOLVED",
+          "summary": "The compared frame alone requires an account of how accessibility accommodations will be provided.",
+          "uid": "cf07370e-c157-5a0c-afd4-ad5489c902d8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "05916683-d55a-4105-8726-d57749d4734e",
+              "memory_uid": "448f23d0-9607-5977-9d13-a99af48a6fc1"
+            }
+          ],
+          "reason": "The reference frame contains no research-data privacy procedure.",
+          "status": "RESOLVED",
+          "summary": "The compared frame alone requires immediate separation of personal identifiers from research data at collection.",
+          "uid": "ae763f38-2252-5101-b217-8a26d07244c1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "05916683-d55a-4105-8726-d57749d4734e",
+              "memory_uid": "b97f3e2f-e132-5f6f-a748-f406a89a1bc5"
+            }
+          ],
+          "reason": "The reference frame contains no equipment-access provision.",
+          "status": "RESOLVED",
+          "summary": "The compared frame alone requires listing equipment that will be loaned to participants lacking necessary gear.",
+          "uid": "5a94519f-a15f-5a30-8fc5-49e7a3f9c259"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "05916683-d55a-4105-8726-d57749d4734e",
+              "memory_uid": "d05964ea-0423-5642-86e1-9e9c19edffbe"
+            }
+          ],
+          "reason": "The reference frame contains no equipment-return procedure.",
+          "status": "RESOLVED",
+          "summary": "The compared frame alone requires a return procedure for equipment loaned to participants.",
+          "uid": "61cd630f-a8d5-58ff-a52e-f942950bfaf7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "05916683-d55a-4105-8726-d57749d4734e",
+              "memory_uid": "7e0ba411-3fd9-53ec-8a3f-4499316c06bb"
+            },
+            {
+              "frame_uid": "05916683-d55a-4105-8726-d57749d4734e",
+              "memory_uid": "885d1cf3-8bcd-513c-9591-a548fcbd3992"
+            }
+          ],
+          "reason": "The reference frame contains no withdrawal or field-task fallback policy.",
+          "status": "RESOLVED",
+          "summary": "The compared frame alone requires a safe alternative work procedure for discontinued participation and treats that alternative as necessary for assessing withdrawal risk.",
+          "uid": "9fb84728-55bd-522f-8d76-ddbe17c4ea66"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "05916683-d55a-4105-8726-d57749d4734e",
+              "memory_uid": "a6fbea37-335c-544b-8bac-01f759bc3855"
+            }
+          ],
+          "reason": "The reference frame contains no organizational nonparticipation protection.",
+          "status": "RESOLVED",
+          "summary": "The compared frame alone protects organizational members who decline participation from disadvantages in task assignment or performance evaluation.",
+          "uid": "026191be-c589-593e-b027-349d91feb7be"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "05916683-d55a-4105-8726-d57749d4734e",
+              "memory_uid": "520b4c9f-306e-5749-83b5-2218c97f89e6"
+            }
+          ],
+          "reason": "The reference frame contains no claim about hidden sources of field-study burden.",
+          "status": "RESOLVED",
+          "summary": "The compared frame alone identifies a tendency to underestimate work-interruption and managerial-exposure burdens when sessions are short.",
+          "uid": "e0fa311e-1239-5088-ab08-ce6dbf6bdb85"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only guidance covers burden mitigation, accommodations, identifier separation, equipment loans, safe withdrawal, protection from nonparticipation penalties, and risks from work interruption or managerial exposure.",
+        "differences": "",
+        "reference_only": "Reference-only guidance covers consistent terminology, abbreviation discipline, participant-centered language, formative evaluation, and contribution labels grounded in deliverable abstraction."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "d2690774-e34c-4cf5-a042-412314fa4ce2"
+    },
+    "analysis_digest": "a0c032d864804185df7e1ad4d2ee35d3700328270c27cf6130b6661d9c064e0b",
+    "key": "be100502e01789a9e7425f24e20b8e43b95797a7d27b22ee5cb23fd1d4c845c9",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 47.25698320799711,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "be100502e01789a9e7425f24e20b8e43b95797a7d27b22ee5cb23fd1d4c845c9",
+  "created_at": "2026-08-13T18:29:10.122087Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/terminology",
+  "pair_key": "fce2db6b291492152ad28be83642c7a0fb93e224649a6baf12e812c689b7394b",
+  "provider_seconds": 47.25698320799711,
+  "right": "task-2/advisor2/ethics",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

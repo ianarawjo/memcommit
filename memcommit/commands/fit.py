@@ -57,7 +57,10 @@ def cmd(
         Optional[str],
         typer.Option(
             "--ground",
-            help="Use the revision-bound Ground Rule/Example adapter",
+            help=(
+                "Check one revision-bound Ground across Context, Goal, Rules, "
+                "and Examples"
+            ),
         ),
     ] = None,
     receipt: Annotated[
@@ -104,7 +107,7 @@ def cmd(
                         provider_factory=connect_semantic_provider,
                     )
                 with CommandProgress(
-                    "FIT", "judging every Ground Example", total=1
+                    "FIT", "checking the complete Ground graph", total=1
                 ) as progress:
                     result = run_fit_with_store(
                         request,

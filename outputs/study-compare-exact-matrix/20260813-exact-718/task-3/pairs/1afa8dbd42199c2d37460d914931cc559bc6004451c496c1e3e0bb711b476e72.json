@@ -1,0 +1,406 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:40:10.278408+00:00",
+      "frames": [
+        {
+          "context_digest": "3f1b018c2a3a8594d00bffba053626a876fef4893e678dd9600986d9d41c0f31",
+          "context_name": "task-3/local/personal-memory/2024/05",
+          "context_uid": "683986e6-d517-5a53-9dc1-16b69cf0d12e",
+          "memories": [
+            {
+              "content": "The user keeps a small table fan beside the bedroom window.",
+              "content_digest": "b8a464f5e2a33edcef1259af4a412b047ba190bae9cfe42aaf1dbd722efc7f0c",
+              "position": 0,
+              "uid": "3088c235-435c-52ee-9ffc-26cf85ec196e"
+            },
+            {
+              "content": "On a day the user drank coffee late in the afternoon, they could not fall asleep until dawn.",
+              "content_digest": "ef4cf019ebc163fc24f03b8bd505599cd13fc83f33565d51ffb4379dc21d72b8",
+              "position": 1,
+              "uid": "7811ed66-2f22-54d8-a215-62a843264ba5"
+            },
+            {
+              "content": "On a day the user drank coffee before 2 p.m., they fell asleep at their usual time.",
+              "content_digest": "046ac3f8454da623f73d1293fb954b72a3ea056642fd9ee7948c35f110e77669",
+              "position": 2,
+              "uid": "d0f94a56-5cf8-5215-9cfa-5993b3b781be"
+            },
+            {
+              "content": "On a tired day, the user ate dinner out and postponed even washing the dishes after returning home.",
+              "content_digest": "ac36f6c1039dc74f764b4671f718f1e124823dc75fd45abda010285523280b71",
+              "position": 3,
+              "uid": "fc19394a-6634-5aae-bfa5-bba91e707954"
+            },
+            {
+              "content": "In the same week, on a day the user made simple noodles at home, they rested immediately after the meal.",
+              "content_digest": "45bb543f6c6ca213b856683b3c53448ac0d044bcf24f694eda292d6c4923ac5c",
+              "position": 4,
+              "uid": "be7aa7f3-1b67-5677-950d-9942ca337a99"
+            },
+            {
+              "content": "On a night the window was left open, street noise woke the user twice.",
+              "content_digest": "13f3dd86b869b25ee75e1b80d9cdb890b79434fa976fbd7246e89ba808f1a6c6",
+              "position": 5,
+              "uid": "47faaefd-2d60-5693-9847-2c1d5d2f9092"
+            },
+            {
+              "content": "On a night the table fan was running, the user was not too warm even with the window closed.",
+              "content_digest": "96ce23df1cf4f913e3b4c339cc3a857a6a8776e3f3f48e865eae65f02297bba8",
+              "position": 6,
+              "uid": "d6eea310-1313-5a51-b032-f3f518620610"
+            },
+            {
+              "content": "The user's father prefers to have coffee available after dinner and believes it will not cause a sleep problem.",
+              "content_digest": "197616278309e370f0d0e633700b1bde2c6e4395dbc8ed2b942e14fb6c1c9cc5",
+              "position": 7,
+              "uid": "056defa1-8256-561d-a2b4-a70df4058c33"
+            },
+            {
+              "content": "When making a sleep-related suggestion, do not treat one or two records as a general lifestyle habit.",
+              "content_digest": "963795e89a1e2365dd81abf463fb9a80c1c22b9c0e59b121681f89c09860e583",
+              "position": 8,
+              "uid": "7cecee60-fabd-55a3-998b-78810bd9eaf4"
+            },
+            {
+              "content": "The user tends to go to bed much later after drinking coffee late in the afternoon.",
+              "content_digest": "e54652939c104807d5c501753f85aee97883cc55e1d056787b86857cd5b8292d",
+              "position": 9,
+              "uid": "9ace13d3-d881-5720-bfd5-f7884db67756"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "8faaa33e-24de-44fa-addb-6325a0c2f2c5"
+        },
+        {
+          "context_digest": "5a45aaafce189f861f7195d3a753aa86812f64c689213961136327ca721c9d3e",
+          "context_name": "task-3/local/personal-memory/2026/06",
+          "context_uid": "f2e6c2e0-886a-52d8-98d4-03009ea37991",
+          "memories": [
+            {
+              "content": "The user keeps four folding chairs for family barbecues in storage.",
+              "content_digest": "7e2bb593a723adbac468184af4063e0ef74420baa03d6249ef77a84f2e6bc9df",
+              "position": 0,
+              "uid": "cce43b8e-c1c1-5208-8d9a-ee665b805d4c"
+            },
+            {
+              "content": "When six family members gathered in a noisy indoor restaurant, the user asked several times for the person across from them to repeat what was said.",
+              "content_digest": "d858d40478a37bed08580523df1915b85b4e2217b2fc506acedacaca55d2158d",
+              "position": 1,
+              "uid": "e682f0fd-e92f-566e-b1ec-1d5ebf091b60"
+            },
+            {
+              "content": "The user held the next gathering in their father's yard and moved between seats while speaking with everyone.",
+              "content_digest": "44843518c924955fa15e245dc41763a6fe21a95f6f590bd395f7b8a2d6357256",
+              "position": 2,
+              "uid": "c1f2b53e-6184-552b-a321-9796bb121055"
+            },
+            {
+              "content": "On a day the user started the barbecue at midday, sunlight led them to finish the meal quickly.",
+              "content_digest": "f275c2211b4bd69f40351800db57965b8ba44afbadb6e90a0291acae4e7a541b",
+              "position": 3,
+              "uid": "56d5befe-d5f4-59df-82e4-a66ba868dfc2"
+            },
+            {
+              "content": "The next time, the user started at 6 p.m. and remained outside until sunset.",
+              "content_digest": "13c413fbf16ea0704c10d09c5ee065a49ab789b0a3dadb1fc5068631dd95b292",
+              "position": 4,
+              "uid": "83d73ede-6f5a-550e-ba1c-c146b73a9917"
+            },
+            {
+              "content": "Because the side dishes brought by the user's mother and older sister had no labels, the user opened the same container twice.",
+              "content_digest": "5cc4205a743f5d8adca15876d7b0dd864089595ce729f4e3c1cc9a2272c6849b",
+              "position": 5,
+              "uid": "cf0947e8-c133-5259-bac2-e8ee6d74929e"
+            },
+            {
+              "content": "At the next gathering, the user wrote each food's name and who brought it on a small piece of paper.",
+              "content_digest": "6a93e0b5f7e3da8eff2e5c69a3f86c28dfc1a39c1ba7602a61cc1f6a96b837f9",
+              "position": 6,
+              "uid": "d42e48ca-39de-529f-bba2-332b779bd6c2"
+            },
+            {
+              "content": "After a barbecue, the user's younger brother prefers to divide leftover food into small containers to take home rather than discard it.",
+              "content_digest": "9febf1dab1f5000cddc636cd753d3c418b84810cbc6e394df7e8917d3fa29b72",
+              "position": 7,
+              "uid": "3958627e-a0fa-5e32-9e87-7ee874fc6fe7"
+            },
+            {
+              "content": "The local agent can summarize preparation and responses from prior family barbecues but cannot know the next attendees or weather.",
+              "content_digest": "6be2ed6916fc8a6200a4646b5db3b5ea0df7650e664bd098f973fb5229257cec",
+              "position": 8,
+              "uid": "1f24b5c2-554c-5356-b335-c6879e53ba7f"
+            },
+            {
+              "content": "The user's father's yard receives strong direct sunlight at midday; after 6 p.m., shade and wind lower the felt temperature.",
+              "content_digest": "a0bf855f5bb0422568bbed468e5299d111143362d7b9fe2dcf35dbaf8bcbf4c6",
+              "position": 9,
+              "uid": "d88b1b21-c58f-51d5-a60b-54bb11473d96"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "29be1d5d-66c0-4e42-b77e-add9577057a4"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate domains: the reference records sleep, coffee timing, bedroom conditions, meals, and inference caution, while the compared frame records family-barbecue logistics, environmental timing, food handling, conversation conditions, and forecasting limits. No cross-frame operational claim materially overlaps or conflicts.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8faaa33e-24de-44fa-addb-6325a0c2f2c5",
+              "memory_uid": "3088c235-435c-52ee-9ffc-26cf85ec196e"
+            }
+          ],
+          "reason": "This standalone bedroom-equipment fact has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A table fan is kept beside the bedroom window.",
+          "uid": "a6db09ac-f2b2-55e6-9eac-5e755df86ac4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8faaa33e-24de-44fa-addb-6325a0c2f2c5",
+              "memory_uid": "7811ed66-2f22-54d8-a215-62a843264ba5"
+            },
+            {
+              "frame_uid": "8faaa33e-24de-44fa-addb-6325a0c2f2c5",
+              "memory_uid": "d0f94a56-5cf8-5215-9cfa-5993b3b781be"
+            },
+            {
+              "frame_uid": "8faaa33e-24de-44fa-addb-6325a0c2f2c5",
+              "memory_uid": "9ace13d3-d881-5720-bfd5-f7884db67756"
+            }
+          ],
+          "reason": "These memories jointly state and illustrate one timing-dependent coffee-and-sleep pattern absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Coffee timing is associated with the user's sleep timing, with late-afternoon coffee linked to delayed sleep and earlier coffee accompanying usual sleep.",
+          "uid": "52505500-b65f-5d82-b4ca-b3c09b62f82c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8faaa33e-24de-44fa-addb-6325a0c2f2c5",
+              "memory_uid": "fc19394a-6634-5aae-bfa5-bba91e707954"
+            }
+          ],
+          "reason": "This episode about fatigue and deferred household work has no materially corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "After eating out on a tired day, the user postponed washing dishes.",
+          "uid": "6b25cb90-47ab-5fea-aa1d-f1ef2b3e9a1a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8faaa33e-24de-44fa-addb-6325a0c2f2c5",
+              "memory_uid": "be7aa7f3-1b67-5677-950d-9942ca337a99"
+            }
+          ],
+          "reason": "This home-meal and post-meal-rest episode is independently useful and absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "After making simple noodles at home, the user rested immediately.",
+          "uid": "5e5b92a0-b80d-529a-bb85-58390685802b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8faaa33e-24de-44fa-addb-6325a0c2f2c5",
+              "memory_uid": "47faaefd-2d60-5693-9847-2c1d5d2f9092"
+            }
+          ],
+          "reason": "This sleep-environment observation has no materially corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "Street noise interrupted sleep when the bedroom window was open.",
+          "uid": "6c5f9651-098c-5de8-8847-34727001dd91"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8faaa33e-24de-44fa-addb-6325a0c2f2c5",
+              "memory_uid": "d6eea310-1313-5a51-b032-f3f518620610"
+            }
+          ],
+          "reason": "This bedroom-cooling observation has no materially corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "Running the table fan prevented excessive warmth while the window was closed.",
+          "uid": "894b1911-bdc3-5f7d-9a60-67eadedcb69c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8faaa33e-24de-44fa-addb-6325a0c2f2c5",
+              "memory_uid": "056defa1-8256-561d-a2b4-a70df4058c33"
+            }
+          ],
+          "reason": "This family preference and belief is absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user's father wants coffee available after dinner and expects no sleep problem from it.",
+          "uid": "ee60b289-20ef-5647-a44b-c1307855b1c2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8faaa33e-24de-44fa-addb-6325a0c2f2c5",
+              "memory_uid": "7cecee60-fabd-55a3-998b-78810bd9eaf4"
+            }
+          ],
+          "reason": "This explicit inference constraint applies to sleep-related guidance and has no materially corresponding operational rule in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Sleep suggestions should not convert one or two observations into a general lifestyle habit.",
+          "uid": "da480b5f-d9df-5fff-830e-576a83e5f4d2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "29be1d5d-66c0-4e42-b77e-add9577057a4",
+              "memory_uid": "cce43b8e-c1c1-5208-8d9a-ee665b805d4c"
+            }
+          ],
+          "reason": "This gathering-equipment fact has no materially corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "Four folding chairs are stored for family barbecues.",
+          "uid": "8cbdac62-0f62-579a-a466-fd5ad268d2d4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "29be1d5d-66c0-4e42-b77e-add9577057a4",
+              "memory_uid": "e682f0fd-e92f-566e-b1ec-1d5ebf091b60"
+            }
+          ],
+          "reason": "This observation about conversation under indoor noise is absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "In a noisy restaurant gathering, the user repeatedly needed speech from across the table repeated.",
+          "uid": "abb1295b-5dc2-5ef5-b5f4-e6b696eb35b1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "29be1d5d-66c0-4e42-b77e-add9577057a4",
+              "memory_uid": "c1f2b53e-6184-552b-a321-9796bb121055"
+            }
+          ],
+          "reason": "This gathering-behavior observation has no materially corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "At a later yard gathering, the user moved among seats to speak with everyone.",
+          "uid": "24abe5bc-1be7-511b-9cf0-e89ac1071fa9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "29be1d5d-66c0-4e42-b77e-add9577057a4",
+              "memory_uid": "56d5befe-d5f4-59df-82e4-a66ba868dfc2"
+            },
+            {
+              "frame_uid": "29be1d5d-66c0-4e42-b77e-add9577057a4",
+              "memory_uid": "83d73ede-6f5a-550e-ba1c-c146b73a9917"
+            },
+            {
+              "frame_uid": "29be1d5d-66c0-4e42-b77e-add9577057a4",
+              "memory_uid": "d88b1b21-c58f-51d5-a60b-54bb11473d96"
+            }
+          ],
+          "reason": "These memories jointly describe one time-dependent outdoor-gathering pattern absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Barbecue timing and yard conditions affected outdoor comfort and meal duration, with harsh midday sun contrasting with cooler, shaded evening conditions.",
+          "uid": "487ea4e4-406f-5684-9d07-5c6f6fd0d911"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "29be1d5d-66c0-4e42-b77e-add9577057a4",
+              "memory_uid": "cf0947e8-c133-5259-bac2-e8ee6d74929e"
+            },
+            {
+              "frame_uid": "29be1d5d-66c0-4e42-b77e-add9577057a4",
+              "memory_uid": "d42e48ca-39de-529f-bba2-332b779bd6c2"
+            }
+          ],
+          "reason": "Both memories form one problem-and-response claim about identifying contributed food, with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Confusion from unlabeled side dishes was followed at the next gathering by labels naming each food and contributor.",
+          "uid": "f6af39f0-af49-5721-a52c-01339f1e4f52"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "29be1d5d-66c0-4e42-b77e-add9577057a4",
+              "memory_uid": "3958627e-a0fa-5e32-9e87-7ee874fc6fe7"
+            }
+          ],
+          "reason": "This family leftover-handling preference is absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user's younger brother prefers portioning barbecue leftovers for taking home instead of discarding them.",
+          "uid": "d8d3d706-6ced-5dc3-b3e6-a93ae8af2714"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "29be1d5d-66c0-4e42-b77e-add9577057a4",
+              "memory_uid": "1f24b5c2-554c-5356-b335-c6879e53ba7f"
+            }
+          ],
+          "reason": "This barbecue-specific capability boundary has no materially corresponding operational claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Prior barbecues may be summarized, but future attendees and weather cannot be known from them.",
+          "uid": "bfb927cf-dc13-5424-a458-bcd8db40557c"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only material concerns barbecue seating, conversation difficulty, gathering behavior, time-dependent outdoor comfort, food labeling and leftovers, and limits on predicting future attendees or weather.",
+        "differences": "",
+        "reference_only": "Reference-only material concerns coffee-related sleep patterns, bedroom cooling and noise, low-effort meals, a family coffee preference, and caution against generalizing sparse observations."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "0859a250-68ae-4378-9f53-a1f0e4ba47e7"
+    },
+    "analysis_digest": "58b02933088e063c70a2237e9599e9a3db6418703e70d2b6863fec9754fc6ed9",
+    "key": "dbacae174acda79c83cd00ae3d1182ece1a05a27529e5cb2c7cbaf77ad0c19b9",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 61.833012084000075,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "dbacae174acda79c83cd00ae3d1182ece1a05a27529e5cb2c7cbaf77ad0c19b9",
+  "created_at": "2026-08-13T18:41:12.111029Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/05",
+  "pair_key": "1afa8dbd42199c2d37460d914931cc559bc6004451c496c1e3e0bb711b476e72",
+  "provider_seconds": 61.833012084000075,
+  "right": "task-3/local/personal-memory/2026/06",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

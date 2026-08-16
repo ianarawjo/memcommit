@@ -1,0 +1,406 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:35:52.361703+00:00",
+      "frames": [
+        {
+          "context_digest": "4c7d7890b4c8dbd807acc103affd0572c325fd2e0f58346a97c3ed49e48ba34e",
+          "context_name": "task-3/local/personal-memory/2024/02",
+          "context_uid": "7bedad96-d78b-5977-a4c9-71049dcfcec8",
+          "memories": [
+            {
+              "content": "The user's maternal aunt keeps one spare key to the user's home.",
+              "content_digest": "2e45c292a3cbc26a1c9928c4546c6029c7dcd2aa6aa0a45a7cfb4be7888dd5c6",
+              "position": 0,
+              "uid": "1c627e4c-c393-5bd3-a5ae-b3318821be73"
+            },
+            {
+              "content": "If the door is locked, the user is accustomed to contacting their maternal aunt, who has the spare key, before contacting building management.",
+              "content_digest": "709cc4a1ae26126bd3238ea8c0e343415d95d084ddaf022590ff4197003c7b81",
+              "position": 1,
+              "uid": "e80936de-87af-5dbb-ab94-d456bbfaab0a"
+            },
+            {
+              "content": "When going to collect the spare key from their maternal aunt, the user wants to give an arrival time first so neither person has to wait.",
+              "content_digest": "5dab57d537091a28848dfa3592d16e038d6e78eeb8159489c17475befeb62a53",
+              "position": 2,
+              "uid": "7c26cf33-0630-5138-910a-6d37d6ed2b63"
+            },
+            {
+              "content": "The user feels at ease only after returning a borrowed spare key in person on the same day.",
+              "content_digest": "d3b9e78e166fb3af3dc248bcddbf1c1df15d3eed57655991a52c23b4ebb6ba14",
+              "position": 3,
+              "uid": "c3f0f26c-8d89-55e3-8bf3-398271e417e7"
+            },
+            {
+              "content": "The user feels uneasy about writing down a new entrance passcode on paper.",
+              "content_digest": "fe40a50fb7f0b0e1514a2f7e6ea3748e73cbd76fa45b862b4880c9eba68a2312",
+              "position": 4,
+              "uid": "7d7d00a3-c5af-5441-bb50-9631fbfd7979"
+            },
+            {
+              "content": "The user found it difficult when a family member arrived without notice during a meeting and the user could not respond immediately.",
+              "content_digest": "30d2126eb016f1fab8b8bd670bc00ee6ac5182f28b0afe696b2c30f4d7bc128f",
+              "position": 5,
+              "uid": "2e0df581-bd54-54f5-94ef-b719427fc88c"
+            },
+            {
+              "content": "On a day their younger brother received a package for them, the user felt reassured after checking the delivery photo.",
+              "content_digest": "54eacbc39b057a6a18f8ddd8e1db587dbef231ecb10ed8cd84a46b3575ac470c",
+              "position": 6,
+              "uid": "9278b64e-7550-5eb6-bbfd-544a2ae4ec3d"
+            },
+            {
+              "content": "The user's maternal aunt wants confirmation that the user is coming in person before handing over the spare key.",
+              "content_digest": "5d780f2fb96eac2d3c65e7417ee00e64e29c2f8873c432b291e62773723182c9",
+              "position": 7,
+              "uid": "76fb9115-a3f2-5ce3-a445-c3d1e38e4253"
+            },
+            {
+              "content": "Confirm with the user before sharing the spare key's storage location or the maternal aunt's contact information.",
+              "content_digest": "ac00da1acd77d05fd277a0a92d2ab62cbefb3c334e6e7c2cb3b046fbea217a6c",
+              "position": 8,
+              "uid": "6fa50e1d-8bd1-557a-9b03-1e4a4dc664bd"
+            },
+            {
+              "content": "The management office of a multi-unit residential building does not hold a unit key without verifying identity.",
+              "content_digest": "841f44fddced7681d5c9b47aaa2536f14536f1309b1f73104df7cb44738efbd1",
+              "position": 9,
+              "uid": "b18ff5b4-4f0d-5b93-8c41-439e5b15c710"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "31c73411-3845-43f6-a9bf-f405fdeafeec"
+        },
+        {
+          "context_digest": "07c43eb0b8ecd9107f1d879a409b45289e236f48f620ff85f1d30ce594809149",
+          "context_name": "task-3/local/personal-memory/2025/09",
+          "context_uid": "5cd8ed5f-2f1f-5deb-8347-fc3bfa484d99",
+          "memories": [
+            {
+              "content": "The user keeps the book they are reading and a note-taking notebook on a small living-room desk.",
+              "content_digest": "d2c70cf4c27fe62f5915f2f5c669484c4a875e4ee21f8d7d89a5ff6746f14cf1",
+              "position": 0,
+              "uid": "3d3f7960-daf5-5a51-98b3-14261c5aa66c"
+            },
+            {
+              "content": "While reading in the living room with the television on, the user read the same paragraph three times.",
+              "content_digest": "00e41e6d5fe1dcfe961fa0f739860823ecf338dc55d5b9beea265ca823974582",
+              "position": 1,
+              "uid": "28714a4e-bc14-5703-b594-126471ae0585"
+            },
+            {
+              "content": "The next day, after turning off the television, the user read 40 pages without interruption.",
+              "content_digest": "c28ba9c872757b6683ab03d73e6ad61f71484d55986aae4c0976862a85e3a8b1",
+              "position": 2,
+              "uid": "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df"
+            },
+            {
+              "content": "On a day the phone was on the desk, the user stopped taking notes each time they checked a notification.",
+              "content_digest": "f95cb8b1b8abe89d7bf597ca5fb78f0862fe97a7cf0d8bc5a46c04026ebd6889",
+              "position": 3,
+              "uid": "1b1c9f90-2561-53d5-88fe-d54618450143"
+            },
+            {
+              "content": "During the next reading period, the user left the phone in another room and did not check it for an hour.",
+              "content_digest": "89dc50732e19b88a77657b285ce71c399d229b510265cc9adfbdf6ad706680cd",
+              "position": 4,
+              "uid": "076a7caa-5dcf-5f9d-8bee-efc952652efa"
+            },
+            {
+              "content": "A note attached to a paper book fell out, and the user had to find their place again.",
+              "content_digest": "723e48ceeba6c94e627c79af0518c811cfc8337f9eeae3a80ae388ec98786994",
+              "position": 5,
+              "uid": "1dad71ec-6a5d-550e-89d2-a86dc3dacb11"
+            },
+            {
+              "content": "With the next book, the user recorded the page number in the notebook and resumed reading immediately.",
+              "content_digest": "c74c2f80bf403da64f0a6de97ff04bc1f41cf68d0d33829fa926cc2549e8ea75",
+              "position": 6,
+              "uid": "58494743-fc7f-59e9-8e17-80b8a644470a"
+            },
+            {
+              "content": "The user's father expects that lowering the television volume while the user reads will make it easier for the user to concentrate.",
+              "content_digest": "281b1f8f55f8d22fbebdb2220405dc3e2300e29e0a568c1fac36d4bb1c39c186",
+              "position": 7,
+              "uid": "cce66589-892c-5d73-bdbc-2c6e94e0992e"
+            },
+            {
+              "content": "The local agent can summarize past reading environments and interruption records but cannot predict the next reading time.",
+              "content_digest": "50e5376e22f503048a7f1bf4055bfb31cb4aa3c75b1c816f2febce913716eb58",
+              "position": 8,
+              "uid": "20b2a27f-908f-5ed7-a288-f7c1030674fc"
+            },
+            {
+              "content": "The user feels that repeated notifications interrupt their flow of concentration.",
+              "content_digest": "d777b2a01cfac23e6ef7701c04c33592f8382fa78f8e307bae9ddbffc9a8e2ef",
+              "position": 9,
+              "uid": "310f4cfc-b117-5511-8e13-2bd2ebec9fe5"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "bb21e2db-6655-44c5-b339-84d87a897075"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate domains: the reference frame concerns home access, family coordination, privacy, and delivery reassurance, while the compared frame concerns reading environments, interruption control, place-keeping, and agent limits. Neither frame supplies a scope-aligned counterpart to the other.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "31c73411-3845-43f6-a9bf-f405fdeafeec",
+              "memory_uid": "1c627e4c-c393-5bd3-a5ae-b3318821be73"
+            }
+          ],
+          "reason": "Only the reference frame identifies custody of the user's spare home key.",
+          "status": "RESOLVED",
+          "summary": "The maternal aunt holds one spare key to the user's home.",
+          "uid": "bf702636-bdce-5b3d-b576-48c92ba41e31"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "31c73411-3845-43f6-a9bf-f405fdeafeec",
+              "memory_uid": "e80936de-87af-5dbb-ab94-d456bbfaab0a"
+            }
+          ],
+          "reason": "Only the reference frame provides this lockout contact order.",
+          "status": "RESOLVED",
+          "summary": "For a lockout, the user normally contacts the key-holding aunt before building management.",
+          "uid": "d41a096b-a351-595a-b63e-af2abf30de15"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "31c73411-3845-43f6-a9bf-f405fdeafeec",
+              "memory_uid": "7c26cf33-0630-5138-910a-6d37d6ed2b63"
+            }
+          ],
+          "reason": "Only the reference frame describes this advance timing preference for key collection.",
+          "status": "RESOLVED",
+          "summary": "The user wants to provide an arrival time before collecting the spare key.",
+          "uid": "2ed91092-29af-52f3-a4cc-d0dd0d7b2201"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "31c73411-3845-43f6-a9bf-f405fdeafeec",
+              "memory_uid": "c3f0f26c-8d89-55e3-8bf3-398271e417e7"
+            }
+          ],
+          "reason": "Only the reference frame states this return practice and associated feeling.",
+          "status": "RESOLVED",
+          "summary": "The user feels at ease after returning a borrowed spare key in person that same day.",
+          "uid": "c6fc6643-d178-5899-83e3-4705fbe82791"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "31c73411-3845-43f6-a9bf-f405fdeafeec",
+              "memory_uid": "7d7d00a3-c5af-5441-bb50-9631fbfd7979"
+            }
+          ],
+          "reason": "Only the reference frame supplies this passcode-handling concern.",
+          "status": "RESOLVED",
+          "summary": "The user is uneasy about recording a new entrance passcode on paper.",
+          "uid": "b25c9ecc-6cb0-5b24-8166-4210cef08145"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "31c73411-3845-43f6-a9bf-f405fdeafeec",
+              "memory_uid": "2e0df581-bd54-54f5-94ef-b719427fc88c"
+            }
+          ],
+          "reason": "Only the reference frame describes this difficulty with an unexpected visit.",
+          "status": "RESOLVED",
+          "summary": "An unannounced family arrival during a meeting was difficult because the user could not respond immediately.",
+          "uid": "cbe4b36b-335b-5108-bddc-7ea7c8a1ead7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "31c73411-3845-43f6-a9bf-f405fdeafeec",
+              "memory_uid": "9278b64e-7550-5eb6-bbfd-544a2ae4ec3d"
+            }
+          ],
+          "reason": "Only the reference frame records this package-related reassurance.",
+          "status": "RESOLVED",
+          "summary": "A delivery photo reassured the user after their younger brother received a package for them.",
+          "uid": "9fb1cda5-e64c-5abd-8b87-91c8f8faa325"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "31c73411-3845-43f6-a9bf-f405fdeafeec",
+              "memory_uid": "76fb9115-a3f2-5ce3-a445-c3d1e38e4253"
+            }
+          ],
+          "reason": "Only the reference frame states this handover condition.",
+          "status": "RESOLVED",
+          "summary": "The aunt requires confirmation of in-person collection before handing over the spare key.",
+          "uid": "87e656ce-70f2-5825-a672-e1c59b4ba0fe"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "31c73411-3845-43f6-a9bf-f405fdeafeec",
+              "memory_uid": "6fa50e1d-8bd1-557a-9b03-1e4a4dc664bd"
+            }
+          ],
+          "reason": "Only the reference frame establishes this disclosure safeguard.",
+          "status": "RESOLVED",
+          "summary": "User confirmation is required before sharing the spare-key location or the aunt's contact information.",
+          "uid": "ced54ce8-3a20-55fe-adfb-b0e177dc1ee0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "31c73411-3845-43f6-a9bf-f405fdeafeec",
+              "memory_uid": "b18ff5b4-4f0d-5b93-8c41-439e5b15c710"
+            }
+          ],
+          "reason": "Only the reference frame supplies this building-access policy.",
+          "status": "RESOLVED",
+          "summary": "A multi-unit building's management office verifies identity before providing a unit key.",
+          "uid": "113c4a55-96fa-5550-82d8-3169322b9ae2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bb21e2db-6655-44c5-b339-84d87a897075",
+              "memory_uid": "3d3f7960-daf5-5a51-98b3-14261c5aa66c"
+            }
+          ],
+          "reason": "Only the compared frame describes where these reading materials are kept.",
+          "status": "RESOLVED",
+          "summary": "The user keeps their current book and note-taking notebook on a small living-room desk.",
+          "uid": "cd6cd44d-a4c0-57ff-8b2e-7f0acf9811e9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bb21e2db-6655-44c5-b339-84d87a897075",
+              "memory_uid": "28714a4e-bc14-5703-b594-126471ae0585"
+            },
+            {
+              "frame_uid": "bb21e2db-6655-44c5-b339-84d87a897075",
+              "memory_uid": "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df"
+            },
+            {
+              "frame_uid": "bb21e2db-6655-44c5-b339-84d87a897075",
+              "memory_uid": "cce66589-892c-5d73-bdbc-2c6e94e0992e"
+            }
+          ],
+          "reason": "Only the compared frame supplies the television-on difficulty, television-off uninterrupted progress, and expectation that reduced volume improves concentration.",
+          "status": "RESOLVED",
+          "summary": "The observations and family expectation associate less television distraction with easier sustained reading.",
+          "uid": "84f7603e-6c87-5bce-a268-ae066e88d598"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bb21e2db-6655-44c5-b339-84d87a897075",
+              "memory_uid": "1b1c9f90-2561-53d5-88fe-d54618450143"
+            },
+            {
+              "frame_uid": "bb21e2db-6655-44c5-b339-84d87a897075",
+              "memory_uid": "076a7caa-5dcf-5f9d-8bee-efc952652efa"
+            },
+            {
+              "frame_uid": "bb21e2db-6655-44c5-b339-84d87a897075",
+              "memory_uid": "310f4cfc-b117-5511-8e13-2bd2ebec9fe5"
+            }
+          ],
+          "reason": "Only the compared frame supplies the interruption experience and the phone-separation observation.",
+          "status": "RESOLVED",
+          "summary": "Notifications disrupt the user's concentration and note-taking, while leaving the phone elsewhere prevents checking during reading.",
+          "uid": "95e72d06-77af-5100-8420-df928024bad9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bb21e2db-6655-44c5-b339-84d87a897075",
+              "memory_uid": "1dad71ec-6a5d-550e-89d2-a86dc3dacb11"
+            },
+            {
+              "frame_uid": "bb21e2db-6655-44c5-b339-84d87a897075",
+              "memory_uid": "58494743-fc7f-59e9-8e17-80b8a644470a"
+            }
+          ],
+          "reason": "Only the compared frame contrasts the failed loose-note method with successful notebook place-keeping.",
+          "status": "RESOLVED",
+          "summary": "Recording a page number in a notebook proved more reliable for resuming than attaching a loose note to the book.",
+          "uid": "f812733c-5adc-5ce9-8a1c-114a95fcbada"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bb21e2db-6655-44c5-b339-84d87a897075",
+              "memory_uid": "20b2a27f-908f-5ed7-a288-f7c1030674fc"
+            }
+          ],
+          "reason": "Only the compared frame defines this agent capability and limitation.",
+          "status": "RESOLVED",
+          "summary": "The local agent can summarize past reading conditions and interruptions but cannot predict the next reading time.",
+          "uid": "e485d5cb-25e3-5b7d-9aaa-0c929bdd3faa"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Reading details cover material placement, television and notification distractions, phone separation, reliable place-keeping, a family expectation about concentration, and limits on summarizing versus predicting reading activity.",
+        "differences": "",
+        "reference_only": "Home-access details cover spare-key custody and handling, collection coordination, privacy, management identity checks, passcode discomfort, unannounced visits, and delivery-photo reassurance."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "002a1c1c-c0ca-46bc-9025-ef89177d767d"
+    },
+    "analysis_digest": "2c6cead8acc90a98b04aaf13a26ae95b38da3947fc9e1123b6e2affd6103f6df",
+    "key": "c49485062832a72fafe4decea9a676fcbad209d679ea1fbf51d6272bee09ee6f",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 39.99650924999878,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "c49485062832a72fafe4decea9a676fcbad209d679ea1fbf51d6272bee09ee6f",
+  "created_at": "2026-08-13T18:36:32.357768Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/02",
+  "pair_key": "18902aed7ccb73e6280410b23884aa3f8425f39558b452474648a24146052b1d",
+  "provider_seconds": 39.99650924999878,
+  "right": "task-3/local/personal-memory/2025/09",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

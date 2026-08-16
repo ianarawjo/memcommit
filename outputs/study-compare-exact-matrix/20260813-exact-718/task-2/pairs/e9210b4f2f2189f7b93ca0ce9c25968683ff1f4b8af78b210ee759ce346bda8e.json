@@ -1,0 +1,496 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:24:33.560135+00:00",
+      "frames": [
+        {
+          "context_digest": "adcb1ff51b2facc8282e8a56d8fec5150dd8e7376b7889d21013f71fee66b9b8",
+          "context_name": "task-2/advisor1/review",
+          "context_uid": "57ec8c37-1a0a-5f3b-82e9-51adad82677c",
+          "memories": [
+            {
+              "content": "Conduct one review prior to submission focusing solely on the validity of user problems, design interventions, and evaluation logic.",
+              "content_digest": "3dd669e72e74416ccd0b8eaf32f6b24dc7400ceb50c133a18f3ff33f89075334",
+              "position": 0,
+              "uid": "0dda8eb3-3287-5bb6-9b26-b1c00cc038d9"
+            },
+            {
+              "content": "Cross-check whether research questions align with the core functions of the prototype.",
+              "content_digest": "b3fbab30f9c640c7b3f6424f2cbc7d66bfa1f455f937f7fb28a6cc8b3763597d",
+              "position": 1,
+              "uid": "c8e0c9dd-dc4a-5a7d-9a82-e7ee449a4b25"
+            },
+            {
+              "content": "Cross-check whether evaluation tasks align with representative measures.",
+              "content_digest": "1e49d1844cb2a0a66a3dec114e44713885299f7a80763ae4e9a416eba505d61f",
+              "position": 2,
+              "uid": "f93c5baa-3c2b-5e37-b07b-0b00e8b22ab9"
+            },
+            {
+              "content": "Cross-check whether collected evidence aligns with design and operational decisions to be changed.",
+              "content_digest": "bc977c73db48b06ad23b68fa58f2fa5f64b19d09856b0e80c8ddac0b039568f8",
+              "position": 3,
+              "uid": "8dae0ad6-2a6d-5d99-98db-b0d48a1140e5"
+            },
+            {
+              "content": "Verify at the end that user problems, design interventions, user studies, and expected contributions form a coherent logical flow.",
+              "content_digest": "8b8d84adb9296241a03a4e6b91acee829ff1eaea443f9dd0b132d7b64a53dcff",
+              "position": 4,
+              "uid": "0f89ab25-d9ee-5669-aa99-a0fe07803915"
+            },
+            {
+              "content": "HCI reviewers view the validity of design interventions as low if research questions are not linked to prototype functions.",
+              "content_digest": "e7e5bb6d9618adc9d4903a4d4cbbf53007381999a95e4ed2137e3705a988fa13",
+              "position": 5,
+              "uid": "3e4a9a3b-abc2-54ed-9b87-f81abf61b541"
+            },
+            {
+              "content": "HCI reviewers view the validity of evaluation plans as low if evaluation tasks do not produce representative measures.",
+              "content_digest": "b23af1197034e73ce7b5bf0c6870ee410e44a07810ebaae12259087f2c12f8f1",
+              "position": 6,
+              "uid": "fb785649-1947-5e7d-aafb-308f14fb21b4"
+            },
+            {
+              "content": "HCI reviewers view the practicality of contributions as low if collected evidence cannot change design or operational decisions.",
+              "content_digest": "3720d356aa625bea8226fb668004f599e61140f1ad1543b643eb72b7a39ec43d",
+              "position": 7,
+              "uid": "02f8ddd8-32b0-5e3b-b358-5e0472a6e0d2"
+            },
+            {
+              "content": "Cross-check at the end whether each research question, formative evaluation data, and design modification judgment are seamlessly connected.",
+              "content_digest": "f3b3d431c05e942ff3cea0ac2d239eeee33e224047a452debe0246c57472f74d",
+              "position": 8,
+              "uid": "d17ba26c-187e-57bc-8468-c9c053fc303d"
+            },
+            {
+              "content": "Review whether the application conditions of proposed design principles and boundary cases of failure are presented together.",
+              "content_digest": "28ab914aa4a03e8f1908176b235017a80838ed660d996773a44b3963b927bcb3",
+              "position": 9,
+              "uid": "48a91d19-cc68-5400-8971-8125236f3fbf"
+            },
+            {
+              "content": "The user can have contributions reviewed only if prototype outcomes and the transferable design knowledge derived from them are separated.",
+              "content_digest": "2deadd2cfeed19a3e544c81a345a40f2f3b4561a8d28b073b70400a5e82ae0cb",
+              "position": 10,
+              "uid": "774341c9-b92d-53a5-a24c-59c75e39756b"
+            },
+            {
+              "content": "The scope of observation in controlled formative evaluations does not include long-term adaptation and operational changes in real-world usage contexts.",
+              "content_digest": "76a1a3c03c7d93acc8a6aca832fd24ab9624ea9e53c8207876160ed1055682e2",
+              "position": 11,
+              "uid": "877015ae-ab0b-561c-9fe3-3abb2d0aaa4e"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "162842d5-87b8-4a2f-8d70-cf471991efe3"
+        },
+        {
+          "context_digest": "19032e7fed99072de4fcaeff084874da452865e9958a1301ec01260d60e01867",
+          "context_name": "task-2/advisor2/structure",
+          "context_uid": "09c95ce6-baa2-5823-a035-e4b0d323200b",
+          "memories": [
+            {
+              "content": "Allow the problem framing to extend through a third sentence when a concrete person, setting, or use situation is needed to make the issue understandable.",
+              "content_digest": "c027c1b4290ff04fe84e475af5aae8fa9e90dd839903b9fe772892e8b6b80323",
+              "position": 0,
+              "uid": "e32f543b-1637-572a-ab96-319d74ee7e21"
+            },
+            {
+              "content": "Use the third sentence for the specific setting and consequence rather than compressing them into an abstract two-sentence summary.",
+              "content_digest": "f02d2bd7ea21e7ebbaff85d3e77c77689dadead77276a3d472d2ad59f94ec5ff",
+              "position": 1,
+              "uid": "6bbb0f69-ca99-539a-a810-a0fb34fe9cc3"
+            },
+            {
+              "content": "Explicitly specify the users, operational stakeholders, and actual usage environment in the primary HCI research question.",
+              "content_digest": "3ab83046fede9de55435f98324226f435bcc4932d2a7440ef61fc21c2e0d71f3",
+              "position": 2,
+              "uid": "48e887dc-7fc8-5a23-9999-890acb870251"
+            },
+            {
+              "content": "Provide one compact visual summary when proposing an unfamiliar interaction procedure.",
+              "content_digest": "1e4299abe1691fbbfc826fc59d4276831d9a49abd3588820ba2f50311fd56d2c",
+              "position": 3,
+              "uid": "e34bce0c-7d07-5fe6-b03f-39faa801640b"
+            },
+            {
+              "content": "Mark the conditions that move an unfamiliar interaction procedure from one step to the next in its visual summary.",
+              "content_digest": "9e7d7547cac76b4b6665ea585fedd7678682c7f9a4eadf129202ac2ea2c6b2b8",
+              "position": 4,
+              "uid": "68ad56f9-6ca2-587a-9182-fd98a79d3d5c"
+            },
+            {
+              "content": "Present the master’s research schedule as phase-specific milestones for field understanding, system implementation, user study, and analysis.",
+              "content_digest": "035713de4f5d6577859b2602ae32a7561594bcbeca023049d4b0e2d4c930d94a",
+              "position": 5,
+              "uid": "eca301ff-9feb-502d-b955-055c48342542"
+            },
+            {
+              "content": "Link deliverables that determine entry into the next phase to each milestone of the master’s research.",
+              "content_digest": "dff2c02b66c97696644d04ee7e685c706443257101e7ee34182dcc5021aa8525",
+              "position": 6,
+              "uid": "cbd977cd-1b78-5ca6-823a-7a5b4b92d77a"
+            },
+            {
+              "content": "Directly connect the gap in the actual usage context with the proposed design and operational contributions in a single flow.",
+              "content_digest": "8da57ff6f210ec4a38d82a2550f96a6b30ba59b7f63f3f3c08e9dcec10dce381",
+              "position": 7,
+              "uid": "9283aedb-6818-5c99-8fe0-502b488acb66"
+            },
+            {
+              "content": "Avoid extra subheadings in a two-page proposal; use paragraph transitions to preserve one continuous argument from problem to proposed response and next steps.",
+              "content_digest": "f6dabe3ee8aba7aa81d707519ffc7d3839f3a74ddcd97fa61d14396e1581f69c",
+              "position": 8,
+              "uid": "c5c04ab1-10e8-52a3-98a1-aa9cbede57c1"
+            },
+            {
+              "content": "Begin each paragraph by connecting it to the previous claim so the short proposal reads as an argument rather than a stack of labeled fragments.",
+              "content_digest": "37d855da87b3b3437e6cc7d865a02d1852b7f7a01c3d7855b0584e399d086619",
+              "position": 9,
+              "uid": "87203bcf-6724-543a-ad19-60a2becc4598"
+            },
+            {
+              "content": "Place preliminary results from field observations or technical validations near sentences supporting feasibility claims.",
+              "content_digest": "8cb8b48f7f57c3248d28f4b82181c9ddbac16acb7b67435abdfb761233b3aecb",
+              "position": 10,
+              "uid": "c9591180-6f3a-5909-8695-31704b9b6f01"
+            },
+            {
+              "content": "Readers may misinterpret a compressed opening when the person, setting, or consequence is only implied.",
+              "content_digest": "2eb34b31c7da38508d152ae4d47ddb8b08479a2e28fbdb4a50c72e7f1999bbf2",
+              "position": 11,
+              "uid": "0ac685f9-e338-5549-bf91-32078cf36f15"
+            },
+            {
+              "content": "A two-sentence opening can become so general that readers understand the topic but cannot picture the situation the proposal intends to change.",
+              "content_digest": "21625e7040d1007bf6931fc1e3551dbbd46739ad339773d51cd00d9f21abf96e",
+              "position": 12,
+              "uid": "5567fb3c-de90-5363-af1b-62fb5b8e0bb1"
+            },
+            {
+              "content": "Use paragraph transitions instead of extra headings when the repeated labels would consume space needed for the argument itself.",
+              "content_digest": "50620b1c5db672532aea9ce8c9bfc11688a5b83bf5436bfc9a308a08fc719286",
+              "position": 13,
+              "uid": "32cef408-4c66-5ef2-9a59-eea6fc67b16e"
+            },
+            {
+              "content": "End each paragraph with the question or consequence that the next paragraph answers.",
+              "content_digest": "3d3639057c446bbd3d2bef5393bce0219451ba3c718d655c62dc51b1ea2df86f",
+              "position": 14,
+              "uid": "3579fcc0-c74e-5006-901b-6406a3106fa1"
+            },
+            {
+              "content": "A continuous sequence of problem, consequence, response, and next step makes the relationship among claims audible without repeating section labels.",
+              "content_digest": "8e1d12ba37953236e2f51510ac3e0382b75b43ff911190216550f82c5679eadf",
+              "position": 15,
+              "uid": "2c2aa1af-c450-5c8d-a907-042c5757d3ee"
+            },
+            {
+              "content": "Readers may experience very short headed sections as an outline because each new label interrupts the connection to the previous paragraph.",
+              "content_digest": "c355e847db92d4c27343283e9415debff2fbdb4b2b2c505d4e442dc78251578d",
+              "position": 16,
+              "uid": "1fb62d5b-532b-5664-842c-57622e3c8b9d"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "76ece4aa-be84-4d68-ab20-a01354683076"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "Both frames value a coherent path from the real-world problem to proposed interventions and contributions. The reference otherwise emphasizes validity checks, evidence-to-decision logic, contribution boundaries, and evaluation limits, while the compared frame concentrates on concise proposal framing, visual explanation, scheduling, transitions, and feasibility support.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "162842d5-87b8-4a2f-8d70-cf471991efe3",
+              "memory_uid": "0f89ab25-d9ee-5669-aa99-a0fe07803915"
+            },
+            {
+              "frame_uid": "76ece4aa-be84-4d68-ab20-a01354683076",
+              "memory_uid": "9283aedb-6818-5c99-8fe0-502b488acb66"
+            }
+          ],
+          "reason": "Both govern the proposal’s problem-to-response logic; the reference additionally includes user studies in the larger flow, while the compared claim focuses on the usage gap and design or operational contributions.",
+          "status": "RESOLVED",
+          "summary": "Connect the situated user problem directly and coherently to the proposed design response and intended contributions.",
+          "uid": "86bf5274-4fe5-5d50-b98e-82cf8744a8d1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "162842d5-87b8-4a2f-8d70-cf471991efe3",
+              "memory_uid": "0dda8eb3-3287-5bb6-9b26-b1c00cc038d9"
+            }
+          ],
+          "reason": "Only the reference specifies this dedicated review stage and its restricted focus.",
+          "status": "RESOLVED",
+          "summary": "Conduct a focused pre-submission review of problem, intervention, and evaluation validity.",
+          "uid": "8c6fe433-38c7-5cc2-af94-55d9fefe5765"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "162842d5-87b8-4a2f-8d70-cf471991efe3",
+              "memory_uid": "c8e0c9dd-dc4a-5a7d-9a82-e7ee449a4b25"
+            },
+            {
+              "frame_uid": "162842d5-87b8-4a2f-8d70-cf471991efe3",
+              "memory_uid": "3e4a9a3b-abc2-54ed-9b87-f81abf61b541"
+            }
+          ],
+          "reason": "The reference uniquely states both this alignment check and the reviewer-validity consequence of failing it.",
+          "status": "RESOLVED",
+          "summary": "Ensure research questions are linked to prototype functions so the intervention appears valid.",
+          "uid": "0dcba292-02a3-595a-8703-bfb9c4acd5bd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "162842d5-87b8-4a2f-8d70-cf471991efe3",
+              "memory_uid": "f93c5baa-3c2b-5e37-b07b-0b00e8b22ab9"
+            },
+            {
+              "frame_uid": "162842d5-87b8-4a2f-8d70-cf471991efe3",
+              "memory_uid": "fb785649-1947-5e7d-aafb-308f14fb21b4"
+            }
+          ],
+          "reason": "The reference uniquely pairs this evaluation alignment check with its reviewer-facing rationale.",
+          "status": "RESOLVED",
+          "summary": "Ensure evaluation tasks yield representative measures so the evaluation plan appears valid.",
+          "uid": "f4efc0b2-12fb-5cf5-8da1-629913781e93"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "162842d5-87b8-4a2f-8d70-cf471991efe3",
+              "memory_uid": "8dae0ad6-2a6d-5d99-98db-b0d48a1140e5"
+            },
+            {
+              "frame_uid": "162842d5-87b8-4a2f-8d70-cf471991efe3",
+              "memory_uid": "02f8ddd8-32b0-5e3b-b358-5e0472a6e0d2"
+            }
+          ],
+          "reason": "The reference uniquely treats decision-changing capacity as the basis for practical contribution value.",
+          "status": "RESOLVED",
+          "summary": "Ensure collected evidence can inform changes to design or operational decisions.",
+          "uid": "05eed890-f258-50b0-8efe-6c089e6a7a84"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "162842d5-87b8-4a2f-8d70-cf471991efe3",
+              "memory_uid": "d17ba26c-187e-57bc-8468-c9c053fc303d"
+            }
+          ],
+          "reason": "Only the reference specifies this particular formative-evaluation reasoning chain.",
+          "status": "RESOLVED",
+          "summary": "Check the end-to-end connection among research questions, formative evidence, and design-modification judgments.",
+          "uid": "9f7ca0c0-8af2-51d4-9560-ea0ec774787d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "162842d5-87b8-4a2f-8d70-cf471991efe3",
+              "memory_uid": "48a91d19-cc68-5400-8971-8125236f3fbf"
+            }
+          ],
+          "reason": "Only the reference requires explicit applicability and failure boundaries for proposed principles.",
+          "status": "RESOLVED",
+          "summary": "Present design-principle application conditions together with failure boundary cases.",
+          "uid": "d7f76a88-f884-5149-ac81-78046d73028c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "162842d5-87b8-4a2f-8d70-cf471991efe3",
+              "memory_uid": "774341c9-b92d-53a5-a24c-59c75e39756b"
+            }
+          ],
+          "reason": "Only the reference makes this separation a condition for contribution review.",
+          "status": "RESOLVED",
+          "summary": "Separate prototype outcomes from transferable design knowledge when presenting contributions.",
+          "uid": "1135dca2-6f7b-55a9-a25d-8ff25de0a769"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "162842d5-87b8-4a2f-8d70-cf471991efe3",
+              "memory_uid": "877015ae-ab0b-561c-9fe3-3abb2d0aaa4e"
+            }
+          ],
+          "reason": "Only the reference states this limitation on the evaluation’s observational scope.",
+          "status": "RESOLVED",
+          "summary": "Recognize that controlled formative evaluation does not observe long-term adaptation or real-world operational change.",
+          "uid": "dfbc1bff-57bb-5378-895d-24a1f777227e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "76ece4aa-be84-4d68-ab20-a01354683076",
+              "memory_uid": "e32f543b-1637-572a-ab96-319d74ee7e21"
+            },
+            {
+              "frame_uid": "76ece4aa-be84-4d68-ab20-a01354683076",
+              "memory_uid": "6bbb0f69-ca99-539a-a810-a0fb34fe9cc3"
+            },
+            {
+              "frame_uid": "76ece4aa-be84-4d68-ab20-a01354683076",
+              "memory_uid": "0ac685f9-e338-5549-bf91-32078cf36f15"
+            },
+            {
+              "frame_uid": "76ece4aa-be84-4d68-ab20-a01354683076",
+              "memory_uid": "5567fb3c-de90-5363-af1b-62fb5b8e0bb1"
+            }
+          ],
+          "reason": "The compared frame uniquely combines this writing rule with the risk that a compressed two-sentence opening remains abstract or easily misinterpreted.",
+          "status": "RESOLVED",
+          "summary": "Use a third opening sentence when necessary to make the person, setting, use situation, and consequence concrete.",
+          "uid": "a763ce78-cf90-5f58-b264-de0df84eb901"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "76ece4aa-be84-4d68-ab20-a01354683076",
+              "memory_uid": "48e887dc-7fc8-5a23-9999-890acb870251"
+            }
+          ],
+          "reason": "Only the compared frame specifies these contextual elements within the question itself.",
+          "status": "RESOLVED",
+          "summary": "Name users, operational stakeholders, and the actual usage environment in the primary research question.",
+          "uid": "1ea6d8cb-a84c-5a38-8d62-3742ae4f0e03"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "76ece4aa-be84-4d68-ab20-a01354683076",
+              "memory_uid": "e34bce0c-7d07-5fe6-b03f-39faa801640b"
+            },
+            {
+              "frame_uid": "76ece4aa-be84-4d68-ab20-a01354683076",
+              "memory_uid": "68ad56f9-6ca2-587a-9182-fd98a79d3d5c"
+            }
+          ],
+          "reason": "Only the compared frame requires this visual explanation and its conditional progression cues.",
+          "status": "RESOLVED",
+          "summary": "Provide a compact visual for an unfamiliar interaction procedure and mark its step-transition conditions.",
+          "uid": "8e6039fb-3c78-50b3-abcc-c58d5f6461ce"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "76ece4aa-be84-4d68-ab20-a01354683076",
+              "memory_uid": "eca301ff-9feb-502d-b955-055c48342542"
+            },
+            {
+              "frame_uid": "76ece4aa-be84-4d68-ab20-a01354683076",
+              "memory_uid": "cbd977cd-1b78-5ca6-823a-7a5b4b92d77a"
+            }
+          ],
+          "reason": "Only the compared frame defines both the phase-specific schedule and milestone-linked transition deliverables.",
+          "status": "RESOLVED",
+          "summary": "Organize the research schedule into phase milestones with deliverables that gate entry to subsequent phases.",
+          "uid": "f79dd57a-6333-5ede-97eb-9dfd9345a7cd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "76ece4aa-be84-4d68-ab20-a01354683076",
+              "memory_uid": "c5c04ab1-10e8-52a3-98a1-aa9cbede57c1"
+            },
+            {
+              "frame_uid": "76ece4aa-be84-4d68-ab20-a01354683076",
+              "memory_uid": "87203bcf-6724-543a-ad19-60a2becc4598"
+            },
+            {
+              "frame_uid": "76ece4aa-be84-4d68-ab20-a01354683076",
+              "memory_uid": "32cef408-4c66-5ef2-9a59-eea6fc67b16e"
+            },
+            {
+              "frame_uid": "76ece4aa-be84-4d68-ab20-a01354683076",
+              "memory_uid": "3579fcc0-c74e-5006-901b-6406a3106fa1"
+            },
+            {
+              "frame_uid": "76ece4aa-be84-4d68-ab20-a01354683076",
+              "memory_uid": "2c2aa1af-c450-5c8d-a907-042c5757d3ee"
+            },
+            {
+              "frame_uid": "76ece4aa-be84-4d68-ab20-a01354683076",
+              "memory_uid": "1fb62d5b-532b-5664-842c-57622e3c8b9d"
+            }
+          ],
+          "reason": "The compared frame uniquely develops this structural policy through opening and closing transitions and explains how repeated labels can fragment a short proposal.",
+          "status": "RESOLVED",
+          "summary": "Use paragraph-to-paragraph transitions instead of space-consuming headings to sustain a continuous problem, consequence, response, and next-step argument.",
+          "uid": "c5559e36-6bd4-5d21-b12e-2e74e04aea9e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "76ece4aa-be84-4d68-ab20-a01354683076",
+              "memory_uid": "c9591180-6f3a-5909-8695-31704b9b6f01"
+            }
+          ],
+          "reason": "Only the compared frame specifies local placement of preliminary evidence as support for feasibility.",
+          "status": "RESOLVED",
+          "summary": "Place preliminary field or technical results near the feasibility claims they support.",
+          "uid": "e6d7bc24-e7fe-5eb0-890f-91b93da8c181"
+        }
+      ],
+      "reports": {
+        "both": "Both call for a direct, coherent connection from the usage problem through the proposed design to its intended contributions.",
+        "compared_only": "The compared frame adds concrete opening context, stakeholder-aware questions, procedure visuals, milestone-gated scheduling, continuous paragraph structure, and proximity of preliminary evidence to feasibility claims.",
+        "differences": "",
+        "reference_only": "The reference adds submission-stage validity checks, research/evaluation alignment, actionable evidence, formative-study coherence, principle boundaries, contribution separation, and limits of controlled observation."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "aa344ec9-3620-4d47-9d67-3ca32dabed11"
+    },
+    "analysis_digest": "998383c9d6ef8afbbce4b230643e2349682f503671782b685070f80a96e3fac8",
+    "key": "e0ad893df780056cedea82d427965a90eb6add5a79d490ea5896f0f50424f73b",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 50.828087874997436,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "e0ad893df780056cedea82d427965a90eb6add5a79d490ea5896f0f50424f73b",
+  "created_at": "2026-08-13T18:25:24.387689Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/review",
+  "pair_key": "e9210b4f2f2189f7b93ca0ce9c25968683ff1f4b8af78b210ee759ce346bda8e",
+  "provider_seconds": 50.828087874997436,
+  "right": "task-2/advisor2/structure",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

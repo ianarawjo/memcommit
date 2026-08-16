@@ -1,0 +1,453 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:18:39.729443+00:00",
+      "frames": [
+        {
+          "context_digest": "89608fbad1167ce0da41a7a6312a1b4e92ee55ff6a7d97bb480a0c75d588a7f2",
+          "context_name": "task-2/advisor1/ethics",
+          "context_uid": "5cdea05f-b6ec-586d-a87f-5347d1d51f96",
+          "memories": [
+            {
+              "content": "Link expected participant burden in each user study task to its corresponding mitigation strategy.",
+              "content_digest": "3595c8f1662100b6c6345bb709c7b2eba285f1979f8d3a5b925c4f32ed9aa4dc",
+              "position": 0,
+              "uid": "e93ea2ee-a8b0-5f3d-b6fd-c76f385eef50"
+            },
+            {
+              "content": "Specify the accommodations necessary for participants to access the prototype and research tasks.",
+              "content_digest": "9879ddf2306813f412b89c1f67f4b1a4779ff9acf55b0b34942bc6f1f555f695",
+              "position": 1,
+              "uid": "6ecf6a7b-f4e9-5d96-a52c-520197d4a2a6"
+            },
+            {
+              "content": "Specify how accessibility accommodations will be provided during user study sessions.",
+              "content_digest": "cce1831f8b2bb3015bc4e69e64a2b1cd4ea6f7249daf28da6686eec262038dc5",
+              "position": 2,
+              "uid": "bc41fce0-dbfc-5d23-9d97-9f81531c098c"
+            },
+            {
+              "content": "Describe how personal identifiers will be separated from research data immediately after collection.",
+              "content_digest": "bd80d3a47e10f1c8a9aec0362cb51995bfe9ecd22f86be916cb0a9009b5f23bf",
+              "position": 3,
+              "uid": "9768e0d9-ef46-52a4-af04-8f6ca3c176c5"
+            },
+            {
+              "content": "Specify the equipment to be loaned to participants who lack necessary devices.",
+              "content_digest": "69991f284e369e31da55a2a23afef032bd50f43dfe66d417a816b242d10c9926",
+              "position": 4,
+              "uid": "e874407e-4d36-55a6-949e-44e5944f1bb4"
+            },
+            {
+              "content": "Describe the procedure for returning equipment loaned to participants.",
+              "content_digest": "100ffbad1288c3263bc4a1044b2d42da35c36a3f73786e58e4391fbac98c84f2",
+              "position": 5,
+              "uid": "df16dca6-0b48-5753-aa18-7e5524187a1e"
+            },
+            {
+              "content": "HCI ethics reviewers verify that expected burdens and mitigation strategies correspond to each user study task.",
+              "content_digest": "1ce06fdbd6b8c4542063ab2413ba80a40c86336dcc43ebb4e1590a246e76d968",
+              "position": 6,
+              "uid": "7d0b3072-7bac-5bc6-9c79-acc808c38f1f"
+            },
+            {
+              "content": "Inform participants that the formative evaluation prototype is not a finished service.",
+              "content_digest": "b02788b149a575392cc58dcba87c21026eec4d733f4e1ef0b3149fcc0e318e74",
+              "position": 7,
+              "uid": "407a4c1c-c333-5764-8d89-252bed150f99"
+            },
+            {
+              "content": "Set an upper limit on cumulative task burden when requesting repeated evaluations from the same participant.",
+              "content_digest": "9d8e4304568abc398445be0aeddc4d1c9945bf48e0295240d48c071dd979646e",
+              "position": 8,
+              "uid": "28646fd3-54af-51f9-97da-ad9489ecda79"
+            },
+            {
+              "content": "The author of this proposal tends to emphasize expected benefits of the prototype over participant burden.",
+              "content_digest": "ffb40ab90087893e20227797ee997e40803e3b812f8a1634e282ab9920cf28d4",
+              "position": 9,
+              "uid": "218aafb6-9332-5693-a2e7-c7777dc64de7"
+            },
+            {
+              "content": "In organizations where leaders or institutional staff handle recruitment, recruitment authority and academic or professional evaluation authority may be combined in the same role.",
+              "content_digest": "d7baf962a2cae0da6c9057f909918788101229b54d57340fb1d5aad459597c05",
+              "position": 10,
+              "uid": "1ecb7268-f77a-5643-a456-357df6cd8f6e"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "756e2f28-eb7a-43aa-8858-975f5f543c2e"
+        },
+        {
+          "context_digest": "6cd44802c5b4878ee84adef31f52231d09d37ccc0ef9a7256d0421114835a6bd",
+          "context_name": "task-2/advisor2/claim-evidence",
+          "context_uid": "1ca4b72a-fcbb-5997-a1b5-f764662460a5",
+          "memories": [
+            {
+              "content": "Place observational evidence or sources adjacent to claims regarding user needs or field effects.",
+              "content_digest": "513b102a6ed66a1dd3fb3380065f34552036a6dffed20d7101487342096021e3",
+              "position": 0,
+              "uid": "b39cf79f-d174-5ecb-98c9-b3f62ce0696a"
+            },
+            {
+              "content": "Distinguish at the sentence level between facts already confirmed in the field and predictions to be examined in the user study.",
+              "content_digest": "63a7fdcf7da5c4fa36a2c7a6f8542837956fa0dcdedee781593f399516501067",
+              "position": 1,
+              "uid": "b95e0185-f933-508d-8da7-41c65e2cc340"
+            },
+            {
+              "content": "Do not use verbs implying proof of causality if the design does not support causal inference.",
+              "content_digest": "0db514f790eb85ba0800c1f8c659cd4236136b9e36c034899c36f6116c040f04",
+              "position": 2,
+              "uid": "f82f1e1f-3f27-5668-a5a4-e64b0f88b44a"
+            },
+            {
+              "content": "Prioritize citations of recent systems and field research in rapidly changing HCI topics.",
+              "content_digest": "e8cd0847480ba8d07f971f21978873d13b6bd34d4e4625dd3dde8039afd5b88c",
+              "position": 3,
+              "uid": "b5461283-9001-510c-9a30-bb367f247b25"
+            },
+            {
+              "content": "Explain the user or operational stakeholder needs that each design choice aims to address.",
+              "content_digest": "59df6b478a0e200ceaa520bb7c4535b2078a8354efae0eec77a06cb6843bfab6",
+              "position": 4,
+              "uid": "87340c01-2e0f-5b82-9410-2133648022da"
+            },
+            {
+              "content": "Support each important conclusion with the closest evidence that directly examined it.",
+              "content_digest": "6731286cd67ee18644df531752f10913f4df9e7c7acf936da99caafacd597c0a",
+              "position": 5,
+              "uid": "8b15a9ad-aa53-5a54-beb2-f1cc8d6da846"
+            },
+            {
+              "content": "Reviewers first check direct evidence placed closest to important conclusions.",
+              "content_digest": "940880f0ee481e00ff7f935c9b76af8137d0f8a8664a2c53fb3d044681980c8f",
+              "position": 6,
+              "uid": "565a2263-e3bc-5379-9a80-64665b491c88"
+            },
+            {
+              "content": "Use field cases in which people completed tasks by working around existing tools as evidence for the need for the design.",
+              "content_digest": "4c731184cb33bda8ab315870713872842339013be68cf5f79c43a8b9f4e297d4",
+              "position": 7,
+              "uid": "27b58ee9-5cad-5872-8eb7-a694728d8e79"
+            },
+            {
+              "content": "Distinguish between problems reported by operational stakeholders and those directly observed by the researcher as separate forms of evidence.",
+              "content_digest": "39586ea932c540d6c7a1b0faff870d7ef6433052792defdc110beb513276ffe6",
+              "position": 8,
+              "uid": "cf7e9410-2144-53c4-a236-a16a7b5be494"
+            },
+            {
+              "content": "Field breakdown logs can reveal both system failures and user adaptive behaviors, including their timing and conditions.",
+              "content_digest": "331910b18eef90e53453e700a55b43143b3e8d07d3bb2c88bade31fddb0e5965",
+              "position": 9,
+              "uid": "ad643b33-fba1-5643-b57f-3bb8c3829122"
+            },
+            {
+              "content": "In field sites introducing new systems, formal procedures often coexist with existing manual routines for a period, making it difficult to isolate the effects of single design changes.",
+              "content_digest": "7def8e340a5ae1ad7cce9228e3e4279f499f47f0d2576bbe23e59f3703f04084",
+              "position": 10,
+              "uid": "546548e3-c47a-5a74-a04a-0a328602ead4"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "4552d029-560e-46d8-9f02-5d7abce90a4b"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate dimensions of HCI work. The reference frame concentrates on participant protection, access, study burden, and recruitment power, while the compared frame concentrates on evidentiary discipline, field observations, causal restraint, and justification of design decisions. No scope-aligned overlap or contradiction is established.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "756e2f28-eb7a-43aa-8858-975f5f543c2e",
+              "memory_uid": "e93ea2ee-a8b0-5f3d-b6fd-c76f385eef50"
+            },
+            {
+              "frame_uid": "756e2f28-eb7a-43aa-8858-975f5f543c2e",
+              "memory_uid": "7d0b3072-7bac-5bc6-9c79-acc808c38f1f"
+            }
+          ],
+          "reason": "These memories state the preparation and review aspects of one participant-burden safeguard, with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Expected burden and mitigation should correspond to each study task and be verified during ethics review.",
+          "uid": "f177f00a-9ff6-5169-9ec4-383fcf705c21"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "756e2f28-eb7a-43aa-8858-975f5f543c2e",
+              "memory_uid": "6ecf6a7b-f4e9-5d96-a52c-520197d4a2a6"
+            },
+            {
+              "frame_uid": "756e2f28-eb7a-43aa-8858-975f5f543c2e",
+              "memory_uid": "bc41fce0-dbfc-5d23-9d97-9f81531c098c"
+            }
+          ],
+          "reason": "These memories split one accommodation-planning requirement into what access support is needed and how it will be provided; the compared frame does not address it.",
+          "status": "RESOLVED",
+          "summary": "Necessary accessibility accommodations and their session-level delivery should be specified.",
+          "uid": "7327ede6-94e4-5f78-a958-43896f4a0e65"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "756e2f28-eb7a-43aa-8858-975f5f543c2e",
+              "memory_uid": "9768e0d9-ef46-52a4-af04-8f6ca3c176c5"
+            }
+          ],
+          "reason": "This is an independently useful privacy procedure absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Personal identifiers should be separated from research data immediately after collection.",
+          "uid": "fbc64837-8d06-5515-a960-c639c2af1c47"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "756e2f28-eb7a-43aa-8858-975f5f543c2e",
+              "memory_uid": "e874407e-4d36-55a6-949e-44e5944f1bb4"
+            },
+            {
+              "frame_uid": "756e2f28-eb7a-43aa-8858-975f5f543c2e",
+              "memory_uid": "df16dca6-0b48-5753-aa18-7e5524187a1e"
+            }
+          ],
+          "reason": "These memories describe complementary parts of one equipment-loan arrangement, which the compared frame does not address.",
+          "status": "RESOLVED",
+          "summary": "Participant equipment-loan arrangements should specify both the necessary devices and their return procedure.",
+          "uid": "570b8707-4bc4-5c7b-873c-1d74b1dd728e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "756e2f28-eb7a-43aa-8858-975f5f543c2e",
+              "memory_uid": "407a4c1c-c333-5764-8d89-252bed150f99"
+            }
+          ],
+          "reason": "This participant disclosure is independently useful and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Participants should be told that the formative prototype is not a finished service.",
+          "uid": "116fe2bb-97b1-5a90-9269-07aedc6582ee"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "756e2f28-eb7a-43aa-8858-975f5f543c2e",
+              "memory_uid": "28646fd3-54af-51f9-97da-ad9489ecda79"
+            }
+          ],
+          "reason": "This repeated-participation safeguard is absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Repeated evaluations with the same participant should have an upper limit on cumulative task burden.",
+          "uid": "558637ea-9922-5517-91fe-49ff6c23448d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "756e2f28-eb7a-43aa-8858-975f5f543c2e",
+              "memory_uid": "218aafb6-9332-5693-a2e7-c7777dc64de7"
+            }
+          ],
+          "reason": "This author-specific framing observation is independently useful and is not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to emphasize prototype benefits over participant burden.",
+          "uid": "1e48b990-6fc9-52a0-a027-e2e940a8f14f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "756e2f28-eb7a-43aa-8858-975f5f543c2e",
+              "memory_uid": "1ecb7268-f77a-5643-a456-357df6cd8f6e"
+            }
+          ],
+          "reason": "This recruitment-power condition is independently useful and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Recruitment and academic or professional evaluation authority may be combined when organizational leaders or staff recruit participants.",
+          "uid": "be026957-818d-5d63-a61a-874333579d01"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4552d029-560e-46d8-9f02-5d7abce90a4b",
+              "memory_uid": "b39cf79f-d174-5ecb-98c9-b3f62ce0696a"
+            }
+          ],
+          "reason": "This claim-placement rule is absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Evidence or sources should be placed adjacent to claims about user needs or field effects.",
+          "uid": "39f12924-3866-51e2-8d10-f6eea36366fb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4552d029-560e-46d8-9f02-5d7abce90a4b",
+              "memory_uid": "b95e0185-f933-508d-8da7-41c65e2cc340"
+            }
+          ],
+          "reason": "This evidentiary-status distinction is independently useful and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Confirmed field facts should be distinguished sentence by sentence from predictions to be tested.",
+          "uid": "6da4b5ed-3832-574c-8ce6-7fa0d60df040"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4552d029-560e-46d8-9f02-5d7abce90a4b",
+              "memory_uid": "f82f1e1f-3f27-5668-a5a4-e64b0f88b44a"
+            }
+          ],
+          "reason": "This inference-language constraint has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Causal language should not imply proof when the study design cannot support causal inference.",
+          "uid": "29702f3b-abbb-53cb-8b04-63c7aa537b64"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4552d029-560e-46d8-9f02-5d7abce90a4b",
+              "memory_uid": "b5461283-9001-510c-9a30-bb367f247b25"
+            }
+          ],
+          "reason": "This source-recency policy is independently useful and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Recent systems and field research should receive citation priority in rapidly changing HCI topics.",
+          "uid": "00216468-fd53-5841-aef5-90622a305e13"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4552d029-560e-46d8-9f02-5d7abce90a4b",
+              "memory_uid": "87340c01-2e0f-5b82-9410-2133648022da"
+            }
+          ],
+          "reason": "This design-rationale requirement has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Each design choice should be connected to the user or operational stakeholder need it addresses.",
+          "uid": "a75a3421-1cb7-5193-b962-1b96e1e52284"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4552d029-560e-46d8-9f02-5d7abce90a4b",
+              "memory_uid": "8b15a9ad-aa53-5a54-beb2-f1cc8d6da846"
+            },
+            {
+              "frame_uid": "4552d029-560e-46d8-9f02-5d7abce90a4b",
+              "memory_uid": "565a2263-e3bc-5379-9a80-64665b491c88"
+            }
+          ],
+          "reason": "These memories give the authoring and review aspects of one direct-evidence policy, absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Important conclusions should be supported by the closest direct evidence, which reviewers check first.",
+          "uid": "390a84b3-604e-5438-9ebc-0b2277148be4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4552d029-560e-46d8-9f02-5d7abce90a4b",
+              "memory_uid": "27b58ee9-5cad-5872-8eb7-a694728d8e79"
+            }
+          ],
+          "reason": "This specific field-evidence use is independently useful and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Cases where people work around existing tools can evidence the need for a design.",
+          "uid": "e1a4c5f8-d336-5025-9ba0-71217c61669b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4552d029-560e-46d8-9f02-5d7abce90a4b",
+              "memory_uid": "cf7e9410-2144-53c4-a236-a16a7b5be494"
+            }
+          ],
+          "reason": "This evidence-provenance distinction has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Stakeholder-reported problems and researcher-observed problems should be identified as separate evidence forms.",
+          "uid": "3be1064c-5840-54d9-97d6-ce12bccb4f91"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4552d029-560e-46d8-9f02-5d7abce90a4b",
+              "memory_uid": "ad643b33-fba1-5643-b57f-3bb8c3829122"
+            }
+          ],
+          "reason": "This observation about the informational value of breakdown logs is absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Field breakdown logs can expose system failures and adaptive user behavior together with their timing and conditions.",
+          "uid": "8965a081-2a68-518c-ac1e-839465dd2a7e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4552d029-560e-46d8-9f02-5d7abce90a4b",
+              "memory_uid": "546548e3-c47a-5a74-a04a-0a328602ead4"
+            }
+          ],
+          "reason": "This field-transition limitation is independently useful and has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Coexisting formal procedures and manual routines during system introduction can impede isolation of individual design effects.",
+          "uid": "9f340f91-1d18-586a-8ae5-be90200547ff"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Research-claim guidance covers evidence placement and provenance, fact–prediction separation, causal restraint, current citations, stakeholder needs, field workarounds and logs, and confounding during system transitions.",
+        "differences": "",
+        "reference_only": "Participant-facing guidance covers burden mitigation, accommodations, data separation, equipment loans, prototype disclosure, repeated-study limits, recruitment power, and benefit–burden framing."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "6d1ce03b-71a8-4c89-a58e-779926b619ff"
+    },
+    "analysis_digest": "d4a45c115cbc56e1d8adbb8a63e1a42c0de77fa33ad7daa801d8b313217380e1",
+    "key": "e747885a0ce02fa31942a2df2d5353f67123ac976f437bf1bdb5054faabf542f",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 42.99322641699837,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "e747885a0ce02fa31942a2df2d5353f67123ac976f437bf1bdb5054faabf542f",
+  "created_at": "2026-08-13T18:19:22.722279Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/ethics",
+  "pair_key": "56b627c6586bbb9a4980444a657e6918a78b27bbe4dd1253ed3e676addc1cb4e",
+  "provider_seconds": 42.99322641699837,
+  "right": "task-2/advisor2/claim-evidence",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

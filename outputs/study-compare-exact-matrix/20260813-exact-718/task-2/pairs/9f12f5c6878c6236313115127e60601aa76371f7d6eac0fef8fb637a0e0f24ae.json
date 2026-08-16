@@ -1,0 +1,368 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:20:23.092050+00:00",
+      "frames": [
+        {
+          "context_digest": "c4484b7a8284d7e31066ad3f4c4edf8844a2e0ce8695a323093f753243b6b18f",
+          "context_name": "task-2/advisor1/expression",
+          "context_uid": "39a6f298-c511-5c21-a106-998c1df9d951",
+          "memories": [
+            {
+              "content": "Use a flow diagram rather than a sequence table when alternate procedural branches lead to different outcomes.",
+              "content_digest": "48075a546ef4f1c2735e202cf43df2c164e4382f323007f542915195d025bf58",
+              "position": 0,
+              "uid": "51fa3fcc-9d5f-52f0-809d-62d7cdd8a865"
+            },
+            {
+              "content": "Draw alternate branches and their resulting outcomes in the same flow diagram so readers can compare them at once.",
+              "content_digest": "85d1fdc887f442e05b4089e28a6dc671e757eb781eae9c39646673054306ec34",
+              "position": 1,
+              "uid": "e686bd4d-3ebd-5e55-ba39-f26971247965"
+            },
+            {
+              "content": "The visual fidelity of a prototype may differ from its functional fidelity.",
+              "content_digest": "bfc110d2df084fd4f8393284db693ead012f2bfd9a4e804fd89f9a4e45e16e8c",
+              "position": 2,
+              "uid": "019662a9-6f03-527f-9b6d-be5a2966d9e9"
+            },
+            {
+              "content": "A flow diagram can make alternate branches and their different outcomes visible in one view.",
+              "content_digest": "8f69a73784cb0c304671161a6c42c63480c0ce0cc4864e613d8dde466365d496",
+              "position": 3,
+              "uid": "a6dfe9a7-1df8-561f-8d3e-fc19518beca9"
+            },
+            {
+              "content": "HCI reviewers often skim prototype screens and interaction flow diagrams before reading the main text.",
+              "content_digest": "ee7009a111b29298f748336d571f4d0233e08ef0255f6cfe69cb4c26def96394",
+              "position": 4,
+              "uid": "7047a23d-45b3-5d5c-a00b-c12552e9680d"
+            },
+            {
+              "content": "Readers can understand the overall branching shape of a procedure more quickly from a flow diagram than from rows read one at a time.",
+              "content_digest": "beb9438eb216e54223266b4f592245450812228d69f7a38908e4c260a0aaca01",
+              "position": 5,
+              "uid": "50a71968-7e3f-5b99-b3fa-769af386d0c0"
+            },
+            {
+              "content": "Redrawing a branching flow diagram after a procedural change usually takes longer than updating one row in a table.",
+              "content_digest": "cb0e535e1e58a4dbf42c5f22a3eded19fa0c228c6531b70530b226eeb2dbf24c",
+              "position": 6,
+              "uid": "ae1610f6-a855-56c1-a0fb-fd3207dab615"
+            },
+            {
+              "content": "Reviewers often inspect the proposal’s main visual before reading the procedural explanation in full.",
+              "content_digest": "a609677d56e7297c736ee92c7a45eb4d83824985a780d8ca4df664f1494c5cb2",
+              "position": 7,
+              "uid": "d2825b84-b4a6-58c9-8f8e-9e19c6192a03"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "f79bab66-863b-4b77-a743-83d4c7df203b"
+        },
+        {
+          "context_digest": "74ec0b91876efe6caed2938aaf4a0b06272de678fbf74dc9da1c217aa0bd042f",
+          "context_name": "task-2/advisor2/compensation",
+          "context_uid": "4ffbd453-7d61-56f7-90ad-34d77b485ef8",
+          "memories": [
+            {
+              "content": "Calculate user research compensation budgets based on the estimated participation burden, combining session time with required technical and travel preparation.",
+              "content_digest": "ba439fe3920339f56e377d8f82a64ab3ad27fb25e0eec3c65b610c81af53d175",
+              "position": 0,
+              "uid": "be9e402b-8d3b-58da-9766-2cf2ec25b9ae"
+            },
+            {
+              "content": "Compensate participants who withdraw from the study midway for their actual participation time.",
+              "content_digest": "599f542ec6f4a5a1a61f5c1a31547088e015439978a64b268879b5a2b65c9be4",
+              "position": 1,
+              "uid": "85157c57-410f-5c7d-8183-b37d61eebf8a"
+            },
+            {
+              "content": "Compensate for the time actually spent in sessions, regardless of the research modality.",
+              "content_digest": "b19b9dbece5d564de69e703491018fbd78ab834149eed0590a552773526b6e29",
+              "position": 2,
+              "uid": "8abeab95-3e41-5378-8409-08200aee9d58"
+            },
+            {
+              "content": "Allow the issuance of gift cards of equivalent value to participants in remote studies who cannot use electronic transfers.",
+              "content_digest": "8ac881488d0064f4b4c6143e2d8c69ab9806b419044adef266c50738c7afb291",
+              "position": 3,
+              "uid": "9b59c6ed-5dbe-5ccc-87b5-6be31f414e68"
+            },
+            {
+              "content": "Do not treat an unresolved payment method as a deficiency at the proposal stage.",
+              "content_digest": "80109274870eb1023e4cbcc6861a906a4d94db5dab2b2659bcebccde125c9ac3",
+              "position": 4,
+              "uid": "5c6c461d-05e5-5b0c-b801-245de2f9c8d7"
+            },
+            {
+              "content": "Allow differential compensation amounts for on-site and remote studies when participation burden varies due to travel or technical preparation.",
+              "content_digest": "556c5e49f7996a651a64825df2389f070629b9bc664c758d934f308c7fd6eea2",
+              "position": 5,
+              "uid": "44abc098-8c9f-5abb-bc49-9deb25066d93"
+            },
+            {
+              "content": "Participants judge the fairness of compensation based on the combined burden of session time and required technical and travel preparation.",
+              "content_digest": "80dd84e8b183e02f1fd772890b48712bb04a04852055eece98957a0c9028288c",
+              "position": 6,
+              "uid": "2a252668-f3f2-5582-b248-43ad81c54a48"
+            },
+            {
+              "content": "In longitudinal studies requiring diary entries and repeated reporting, include out-of-session recording time in compensation calculations.",
+              "content_digest": "7d103d93741e40d54c8df8347f2ce648a1cd96e19589663fa515bfb24b5bd844",
+              "position": 7,
+              "uid": "7e647a83-81b0-52d6-9362-e513dc2a5032"
+            },
+            {
+              "content": "Distinguish between participant research compensation and labor costs for field staff performing installation and operational support as part of their duties.",
+              "content_digest": "b1566527e9c1d7d3f93631d1503b08ddb4a6818daa570c118f265b47603592f0",
+              "position": 8,
+              "uid": "d77affab-60c8-5403-b189-17022b484640"
+            },
+            {
+              "content": "The user tends to count session time but omit participants’ advance setup and follow-up reporting time.",
+              "content_digest": "98911b7db2d8c3962d7ef48919265f40cdb61a711062e5459a4f6d43f71d6fd9",
+              "position": 9,
+              "uid": "0c470c6b-26a6-5501-93ac-c51fecd708ae"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "0846b191-9ea8-46c3-9546-26fdf505daa1"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate operational domains: the reference frame concerns presenting branching procedures and prototype-review behavior, while the compared frame governs research-participant compensation. Neither side supplies a claim that meaningfully overlaps, qualifies, or contradicts the other.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f79bab66-863b-4b77-a743-83d4c7df203b",
+              "memory_uid": "51fa3fcc-9d5f-52f0-809d-62d7cdd8a865"
+            }
+          ],
+          "reason": "This is an independently useful presentation rule, and the compared frame contains no claim about procedural visualization formats.",
+          "status": "RESOLVED",
+          "summary": "Branching procedures with outcome-divergent paths should use a flow diagram rather than a sequence table.",
+          "uid": "059f983e-ca75-51f5-b957-0c4393068f88"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f79bab66-863b-4b77-a743-83d4c7df203b",
+              "memory_uid": "e686bd4d-3ebd-5e55-ba39-f26971247965"
+            },
+            {
+              "frame_uid": "f79bab66-863b-4b77-a743-83d4c7df203b",
+              "memory_uid": "a6dfe9a7-1df8-561f-8d3e-fc19518beca9"
+            }
+          ],
+          "reason": "These memories restate one visualization capability, which has no counterpart in the compensation-focused compared frame.",
+          "status": "RESOLVED",
+          "summary": "A single flow diagram can display alternate branches and their outcomes together for direct comparison.",
+          "uid": "0ac71481-5313-5a5d-bc50-08dc643c7bf4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f79bab66-863b-4b77-a743-83d4c7df203b",
+              "memory_uid": "019662a9-6f03-527f-9b6d-be5a2966d9e9"
+            }
+          ],
+          "reason": "This is an independent prototype-evaluation distinction absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A prototype’s visual fidelity and functional fidelity may differ.",
+          "uid": "e4e75f95-471d-520e-947d-357f6dd3f5e0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f79bab66-863b-4b77-a743-83d4c7df203b",
+              "memory_uid": "7047a23d-45b3-5d5c-a00b-c12552e9680d"
+            },
+            {
+              "frame_uid": "f79bab66-863b-4b77-a743-83d4c7df203b",
+              "memory_uid": "d2825b84-b4a6-58c9-8f8e-9e19c6192a03"
+            }
+          ],
+          "reason": "These memories express the same visual-first review tendency, which the compared frame does not address.",
+          "status": "RESOLVED",
+          "summary": "Reviewers often inspect prominent prototype or proposal visuals before reading the full explanation.",
+          "uid": "ace822d6-6e12-5703-9218-fa0668ad2da8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f79bab66-863b-4b77-a743-83d4c7df203b",
+              "memory_uid": "50a71968-7e3f-5b99-b3fa-769af386d0c0"
+            }
+          ],
+          "reason": "This comparative comprehension benefit is independently useful and absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Flow diagrams can communicate a procedure’s overall branching shape faster than row-by-row tables.",
+          "uid": "f11bf2d2-e1e0-57d8-95c5-b787efdd9634"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f79bab66-863b-4b77-a743-83d4c7df203b",
+              "memory_uid": "ae1610f6-a855-56c1-a0fb-fd3207dab615"
+            }
+          ],
+          "reason": "This maintenance tradeoff is independently useful and has no compensation-related counterpart.",
+          "status": "RESOLVED",
+          "summary": "Updating a branching flow diagram after procedural change usually takes longer than revising one table row.",
+          "uid": "a2713465-cc05-5db9-88e5-9c909866d620"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0846b191-9ea8-46c3-9546-26fdf505daa1",
+              "memory_uid": "be9e402b-8d3b-58da-9766-2cf2ec25b9ae"
+            },
+            {
+              "frame_uid": "0846b191-9ea8-46c3-9546-26fdf505daa1",
+              "memory_uid": "44abc098-8c9f-5abb-bc49-9deb25066d93"
+            },
+            {
+              "frame_uid": "0846b191-9ea8-46c3-9546-26fdf505daa1",
+              "memory_uid": "2a252668-f3f2-5582-b248-43ad81c54a48"
+            }
+          ],
+          "reason": "These memories split one burden-based compensation principle and its fairness rationale; the reference frame contains no compensation policy.",
+          "status": "RESOLVED",
+          "summary": "Compensation should reflect combined participation burden, including session, technical-preparation, and travel demands, and may vary by modality when those burdens differ.",
+          "uid": "0deef07f-77ca-542c-ae1f-0ee91447b31d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0846b191-9ea8-46c3-9546-26fdf505daa1",
+              "memory_uid": "85157c57-410f-5c7d-8183-b37d61eebf8a"
+            },
+            {
+              "frame_uid": "0846b191-9ea8-46c3-9546-26fdf505daa1",
+              "memory_uid": "8abeab95-3e41-5378-8409-08200aee9d58"
+            }
+          ],
+          "reason": "These memories state a general actual-time rule and its withdrawal application, with no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Actual session participation time should be compensated across modalities, including time accrued before a participant withdraws midway.",
+          "uid": "f106e5fa-e6a8-5ac5-ae27-69b73717d9db"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0846b191-9ea8-46c3-9546-26fdf505daa1",
+              "memory_uid": "9b59c6ed-5dbe-5ccc-87b5-6be31f414e68"
+            }
+          ],
+          "reason": "This payment-method accommodation is independently useful and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Remote participants unable to use electronic transfers may receive equivalent-value gift cards.",
+          "uid": "0a638510-4dbd-5525-87bd-9dfaf294e326"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0846b191-9ea8-46c3-9546-26fdf505daa1",
+              "memory_uid": "5c6c461d-05e5-5b0c-b801-245de2f9c8d7"
+            }
+          ],
+          "reason": "This proposal-review policy is distinct from the other compensation rules and has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "An unresolved payment method should not be treated as a proposal-stage deficiency.",
+          "uid": "3a65ca91-f65d-58bf-a416-2d98b6ba59f4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0846b191-9ea8-46c3-9546-26fdf505daa1",
+              "memory_uid": "7e647a83-81b0-52d6-9362-e513dc2a5032"
+            }
+          ],
+          "reason": "This study-design-specific compensation requirement is independently useful and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Compensation for longitudinal studies should include out-of-session diary and repeated-reporting time.",
+          "uid": "242a2446-37fe-5bf0-9da9-0c494d2b92e0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0846b191-9ea8-46c3-9546-26fdf505daa1",
+              "memory_uid": "d77affab-60c8-5403-b189-17022b484640"
+            }
+          ],
+          "reason": "This accounting boundary is independently useful and has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Participant research compensation should be distinguished from labor costs for field staff performing assigned support duties.",
+          "uid": "328bff7a-9ccc-5c40-87ae-d90ce436c796"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0846b191-9ea8-46c3-9546-26fdf505daa1",
+              "memory_uid": "0c470c6b-26a6-5501-93ac-c51fecd708ae"
+            }
+          ],
+          "reason": "This behavioral budgeting observation is distinct from the normative compensation policies and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user tends to budget session time while omitting participants’ advance setup and follow-up reporting time.",
+          "uid": "3dcc992a-0f75-5840-82f3-2a3d799af9fe"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame bases compensation on participation burden, covers withdrawal and longitudinal work, permits burden-based and payment-method variations, separates participant payments from staff labor, and identifies proposal-stage and budgeting considerations.",
+        "differences": "",
+        "reference_only": "The reference frame favors flow diagrams for branching procedures, describes their comprehension and maintenance tradeoffs, distinguishes prototype fidelity dimensions, and notes reviewers’ visual-first reading behavior."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "04b64ca9-fc36-4a5a-8aa8-f4d8c613fbd6"
+    },
+    "analysis_digest": "2649904652cbd420ddd6b6aa9af3f8ffbe441831a87d24c47d731af5aee88c68",
+    "key": "0b5953c9e18d253406156bfa3ac341c98c9ad4c52b01cbe9188476f12895ed32",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 45.150406666998606,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "0b5953c9e18d253406156bfa3ac341c98c9ad4c52b01cbe9188476f12895ed32",
+  "created_at": "2026-08-13T18:21:08.242037Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/expression",
+  "pair_key": "9f12f5c6878c6236313115127e60601aa76371f7d6eac0fef8fb637a0e0f24ae",
+  "provider_seconds": 45.150406666998606,
+  "right": "task-2/advisor2/compensation",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

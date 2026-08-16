@@ -1,0 +1,397 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:43:24.759083+00:00",
+      "frames": [
+        {
+          "context_digest": "4f6b609414f921ca470614699bdac42e9f2932482375026def79956485b0569e",
+          "context_name": "task-3/local/personal-memory/2024/08",
+          "context_uid": "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+          "memories": [
+            {
+              "content": "The user has set a monthly limit in their budget record for spending other than living expenses.",
+              "content_digest": "5c0df9500947f7e044a8755d66d58adccca01db3aed42b43ab9748b8c4f431e9",
+              "position": 0,
+              "uid": "5f80c7ec-e294-5905-abab-91027c9d827b"
+            },
+            {
+              "content": "In a week when the user went grocery shopping and visited the bank separately, they made the same round trip twice.",
+              "content_digest": "4e814adad1a4c201f6348f1c14b14950b5c549bba64bf70cfccd08ca9efc5bd3",
+              "position": 1,
+              "uid": "2428ab2c-37ce-5de1-84dc-abcdfc8ce062"
+            },
+            {
+              "content": "The following week, the user completed both errands in one outing and reduced travel time.",
+              "content_digest": "ad5555ca7daa9d977cfcf5eb4f476eb5730cead6d307c986497716d69f1145b0",
+              "position": 2,
+              "uid": "bf30d1ef-d7cd-5aa3-b65b-ff04aae647e7"
+            },
+            {
+              "content": "When a bill alert arrived on the due date, the user postponed payment until after a meeting.",
+              "content_digest": "c62dda61c680da9ac1fd5ab9124fa05635d20ad9e4bbb7aef36723d289c05102",
+              "position": 3,
+              "uid": "442672e1-2188-5aa3-ad38-5e9c16f25bd5"
+            },
+            {
+              "content": "In a month when the user received an alert three days before the deadline, they finished payment before dinner.",
+              "content_digest": "939ac83da176d5bb1b7e2196402b9faacb962d947b85b9a61c31854867c1e62e",
+              "position": 4,
+              "uid": "c7385cce-ec43-5902-973c-5b8af54c3557"
+            },
+            {
+              "content": "The user collected cash receipts in their wallet and entered all the amounts at once at the end of the month.",
+              "content_digest": "3171a8128ed3855ac9a4c2b542516333fc3728ed1d7260974888b94d0b32c3e6",
+              "position": 5,
+              "uid": "d926c45c-ea49-589c-a7e4-491c9a1514f8"
+            },
+            {
+              "content": "After recording one large expense, the user ate out two fewer times that week.",
+              "content_digest": "af55fd94b01e0ece728347e9349f96b5733c57dae752f9559dc4e08bef7a3320",
+              "position": 6,
+              "uid": "9433523f-8c4e-5424-b370-d325ba5154d1"
+            },
+            {
+              "content": "The user's older sister prefers to settle the jointly paid cost of a meal by electronic transfer rather than cash.",
+              "content_digest": "d84d2ea68add4202e8c421e9c1702c29ca88bd6ae838588bd415fdbd1980cb2b",
+              "position": 7,
+              "uid": "d9531336-ac5f-5ba0-bf26-9c69c854578f"
+            },
+            {
+              "content": "Confirm the amount and account with the user before creating an automatic payment schedule.",
+              "content_digest": "b1d0c16fd880f4ae2657415ddc8fe0f223ccdd931248bb4412a6c95754d4cce1",
+              "position": 8,
+              "uid": "9941d390-8b40-5fee-8bcf-df6f36befcb0"
+            },
+            {
+              "content": "The timing of payment processing and late-payment recording may differ by billing institution.",
+              "content_digest": "203e65e4eb8451ec7551fb166357f107d17b8c89a2341b32fc25a3fb67ec7f98",
+              "position": 9,
+              "uid": "79aea8fd-5d48-50f7-adf6-b7ebe33bfb08"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "51a98f03-22ee-4691-90cd-1eb6ee3a464a"
+        },
+        {
+          "context_digest": "4b8dc68a205171fe661b04620d0fba2bbb386ff21d494699c34a74dc2ab86080",
+          "context_name": "task-3/local/personal-memory/2026/03",
+          "context_uid": "97d36150-4792-5a5c-9332-5eb1de8bcf04",
+          "memories": [
+            {
+              "content": "The user stores tax-related receipts in digital folders by year.",
+              "content_digest": "778f983547572b31798b7041899812a7b0b574d74b585baf6883e94919dee6ec",
+              "position": 0,
+              "uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393"
+            },
+            {
+              "content": "The user found three paper receipts late and recalculated the expense total already prepared.",
+              "content_digest": "542368a141ec82a1bd7da4b534d88ea62c487d16a37f454569bf6400cbc749e9",
+              "position": 1,
+              "uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878"
+            },
+            {
+              "content": "Starting the next month, the user photographed receipts on the day they were received and reduced omissions.",
+              "content_digest": "b95e0a1afa1196a9bff117bf12b1630edcc4eb65bfdfeb3128ae5937563a492e",
+              "position": 2,
+              "uid": "ff436ea5-1b3e-55df-8302-bd8a96740671"
+            },
+            {
+              "content": "The user named every file with only the photo date and spent a long time looking for a needed receipt.",
+              "content_digest": "c3aa33e0b7e007bdfc5c12dcda659e2a52938548fbf53d5a1ab034487a528857",
+              "position": 3,
+              "uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e"
+            },
+            {
+              "content": "The user later included the expense category in the filename and found the receipt immediately through search.",
+              "content_digest": "cdae97761f614b932d3b330723627bee8b0e3d033e2bf1061b721367237acee1",
+              "position": 4,
+              "uid": "89d6fa9a-b795-59df-be34-1c05a9861d35"
+            },
+            {
+              "content": "While reviewing documents just before submission, the user discovered one blank signature field.",
+              "content_digest": "a525c117b97eec82c678f276b319158703bf9cc558fb83cb81c0820d5c9e3174",
+              "position": 5,
+              "uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2"
+            },
+            {
+              "content": "Before submitting an administrative document, the user checks the signature field as the final item on the checklist.",
+              "content_digest": "542bec3cbc3fc8b22c95da274e479e96bfbf061a3b644d0d7f213de5a030dbd5",
+              "position": 6,
+              "uid": "5551622f-66cf-5542-8c47-1cddadab5c02"
+            },
+            {
+              "content": "Staff at a tax-support counter expect to receive an electronic copy in which every item is legible rather than a blurred or cropped photo.",
+              "content_digest": "d328ca248fdeecf0756e23b1202e7007bc8c3c25ae769439b0fd2efdbbe47580",
+              "position": 7,
+              "uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f"
+            },
+            {
+              "content": "The local agent can organize receipts by date and category but cannot determine whether an expense is deductible.",
+              "content_digest": "bcc769721a99b099ca20e5e527fa8904d54ecbaf9ae7d7616b95e1adaf1f89a9",
+              "position": 8,
+              "uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094"
+            },
+            {
+              "content": "The accepted scope and submission deadlines for administrative documents may vary under that year's guidance.",
+              "content_digest": "1ab61126b8efb0c2a9c6114c367018158f2e136bafa87e33f60aadb0686d0537",
+              "position": 9,
+              "uid": "de398064-3179-590b-8c62-effb17060115"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "66bee048-a012-4bcd-835e-c3481aaa0abe"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames overlap only on receipt-capture workflow, where explicit circumstances distinguish monthly batching from prompt photography after omissions. Otherwise, the reference focuses on personal budgeting, errands, bills, and shared payments, while the compared frame focuses on tax-receipt organization and administrative submission practices.",
+      "relations": [
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "51a98f03-22ee-4691-90cd-1eb6ee3a464a",
+              "memory_uid": "d926c45c-ea49-589c-a7e4-491c9a1514f8"
+            },
+            {
+              "frame_uid": "66bee048-a012-4bcd-835e-c3481aaa0abe",
+              "memory_uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878"
+            },
+            {
+              "frame_uid": "66bee048-a012-4bcd-835e-c3481aaa0abe",
+              "memory_uid": "ff436ea5-1b3e-55df-8302-bd8a96740671"
+            }
+          ],
+          "reason": "Both sides address when receipts are captured, but the reference describes a wallet-based cash-receipt workflow while the compared memories explicitly describe a later practice adopted after omissions.",
+          "status": "RESOLVED",
+          "summary": "Receipt capture cadence differs by stated workflow context: wallet-held cash receipts were batch-entered monthly, whereas paper receipts were photographed upon receipt after late discoveries caused omissions.",
+          "uid": "14cb9c77-ecac-5253-ba33-8a006e9ca134"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "51a98f03-22ee-4691-90cd-1eb6ee3a464a",
+              "memory_uid": "5f80c7ec-e294-5905-abab-91027c9d827b"
+            }
+          ],
+          "reason": "This is independently useful budgeting policy information not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user maintains a monthly limit for spending outside living expenses.",
+          "uid": "de17e200-b23d-544f-a216-338ddcac8d0d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "51a98f03-22ee-4691-90cd-1eb6ee3a464a",
+              "memory_uid": "2428ab2c-37ce-5de1-84dc-abcdfc8ce062"
+            },
+            {
+              "frame_uid": "51a98f03-22ee-4691-90cd-1eb6ee3a464a",
+              "memory_uid": "bf30d1ef-d7cd-5aa3-b65b-ff04aae647e7"
+            }
+          ],
+          "reason": "These memories form one before-and-after claim about trip consolidation, which the compared frame does not address.",
+          "status": "RESOLVED",
+          "summary": "Combining grocery and bank errands into one outing reduced travel compared with making the same trip twice.",
+          "uid": "cebbc2a8-c2de-5254-86e3-2aa0d055e55c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "51a98f03-22ee-4691-90cd-1eb6ee3a464a",
+              "memory_uid": "442672e1-2188-5aa3-ad38-5e9c16f25bd5"
+            },
+            {
+              "frame_uid": "51a98f03-22ee-4691-90cd-1eb6ee3a464a",
+              "memory_uid": "c7385cce-ec43-5902-973c-5b8af54c3557"
+            }
+          ],
+          "reason": "The memories jointly describe how alert lead time affected payment timing, a subject absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Earlier bill alerts supported payment before the deadline, while a due-date alert was followed by postponement until after a meeting.",
+          "uid": "77f09986-1d61-5f4e-9297-9fce552edfe9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "51a98f03-22ee-4691-90cd-1eb6ee3a464a",
+              "memory_uid": "9433523f-8c4e-5424-b370-d325ba5154d1"
+            }
+          ],
+          "reason": "This behavioral response to expense recording is independently useful and unmatched in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Recording a large expense was followed by eating out less frequently that week.",
+          "uid": "e6560400-c7fc-5d66-8e1c-37aa630f4586"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "51a98f03-22ee-4691-90cd-1eb6ee3a464a",
+              "memory_uid": "d9531336-ac5f-5ba0-bf26-9c69c854578f"
+            }
+          ],
+          "reason": "This payment-method preference is not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user's older sister prefers electronic transfer over cash when settling a jointly paid meal.",
+          "uid": "4cecfe75-cc89-54b4-950f-14057c343343"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "51a98f03-22ee-4691-90cd-1eb6ee3a464a",
+              "memory_uid": "9941d390-8b40-5fee-8bcf-df6f36befcb0"
+            }
+          ],
+          "reason": "This confirmation safeguard is independently useful and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The amount and account should be confirmed with the user before an automatic payment schedule is created.",
+          "uid": "b45de69d-a754-534c-85d4-4634987c9944"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "51a98f03-22ee-4691-90cd-1eb6ee3a464a",
+              "memory_uid": "79aea8fd-5d48-50f7-adf6-b7ebe33bfb08"
+            }
+          ],
+          "reason": "This billing-institution qualification is not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Payment-processing timing and late-payment recording may vary by billing institution.",
+          "uid": "0994b72f-cfb8-5c60-a88f-24d6c3629328"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "66bee048-a012-4bcd-835e-c3481aaa0abe",
+              "memory_uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393"
+            }
+          ],
+          "reason": "This tax-record organization practice is independently useful and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user stores tax-related receipts in digital folders organized by year.",
+          "uid": "f9699783-dd05-586b-99fa-952a0c3bf726"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "66bee048-a012-4bcd-835e-c3481aaa0abe",
+              "memory_uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e"
+            },
+            {
+              "frame_uid": "66bee048-a012-4bcd-835e-c3481aaa0abe",
+              "memory_uid": "89d6fa9a-b795-59df-be34-1c05a9861d35"
+            }
+          ],
+          "reason": "These memories form one before-and-after claim about filename design, which the reference frame does not address.",
+          "status": "RESOLVED",
+          "summary": "Adding expense categories to receipt filenames improved retrieval after date-only names proved difficult to search.",
+          "uid": "c7f673ec-a759-52dd-afe1-7f2da0ce33d1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "66bee048-a012-4bcd-835e-c3481aaa0abe",
+              "memory_uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2"
+            },
+            {
+              "frame_uid": "66bee048-a012-4bcd-835e-c3481aaa0abe",
+              "memory_uid": "5551622f-66cf-5542-8c47-1cddadab5c02"
+            }
+          ],
+          "reason": "These memories jointly describe a signature-checking safeguard absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Discovering an unsigned field during final review led to checking the signature field last before administrative submission.",
+          "uid": "3a3bc4bb-e2c1-5596-b163-295c6684b594"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "66bee048-a012-4bcd-835e-c3481aaa0abe",
+              "memory_uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f"
+            }
+          ],
+          "reason": "This submission-quality requirement is independently useful and unmatched in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Tax-support staff expect an electronic copy with every item legible, rather than blurred or cropped imagery.",
+          "uid": "cd1370bf-40e1-5c76-bc2e-03eb0b9e7322"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "66bee048-a012-4bcd-835e-c3481aaa0abe",
+              "memory_uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094"
+            }
+          ],
+          "reason": "This capability boundary is not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The local agent can organize receipts by date and category but cannot decide whether an expense is deductible.",
+          "uid": "3f757c36-e0d4-53a5-9363-cfcda7e8b536"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "66bee048-a012-4bcd-835e-c3481aaa0abe",
+              "memory_uid": "de398064-3179-590b-8c62-effb17060115"
+            }
+          ],
+          "reason": "This year-dependent qualification is independently useful and distinct from the reference frame's billing-institution variability.",
+          "status": "RESOLVED",
+          "summary": "Administrative-document scope and submission deadlines may vary with the applicable year's guidance.",
+          "uid": "5e52af46-3832-54ea-bc9c-1ac8a6a05312"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame uniquely covers tax filing organization, searchable filenames, signature checks, copy quality, agent capability limits, and guidance-dependent document requirements.",
+        "differences": "Receipt capture timing differs by workflow context: wallet-held cash receipts were entered monthly, while day-of-receipt photography was adopted after late paper receipts caused omissions.",
+        "reference_only": "The reference uniquely covers budgeting limits, errand consolidation, bill-alert timing, spending feedback, shared-meal settlement, automatic-payment confirmation, and institution-dependent payment processing."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "b10ecdc2-695f-4ede-b4ad-72a0f221ae42"
+    },
+    "analysis_digest": "65fc5801b68eb8e72a1e944f175eb42874ef07e579bc73fdbc8e8d208e977e90",
+    "key": "c5d76b49794c637ca11e72db15cd40057b78c799be5612110dab311970b20c5d",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 56.346513499996945,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "c5d76b49794c637ca11e72db15cd40057b78c799be5612110dab311970b20c5d",
+  "created_at": "2026-08-13T18:44:21.105158Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/08",
+  "pair_key": "3c30efacbe5b1416bfc5d7d7bede2125b50df04ab6a059a9c9790270eaa40b30",
+  "provider_seconds": 56.346513499996945,
+  "right": "task-3/local/personal-memory/2026/03",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

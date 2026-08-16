@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:34:59.240395+00:00",
+      "frames": [
+        {
+          "context_digest": "2f00e067f4f35600b73e87b5555d405e2801a33ba18a54c91e63e23a79f27a4c",
+          "context_name": "task-3/local/personal-memory/2024/01",
+          "context_uid": "cbd2e4d6-2601-5d3f-8bf2-2f66b755b007",
+          "memories": [
+            {
+              "content": "The user's mother's birthday falls in the third week of January.",
+              "content_digest": "d635ded9b470acdd462156515700e66c23dcb513a7034bb365be0ac139ec0422",
+              "position": 0,
+              "uid": "2cd0229d-b7f1-581b-8019-25bdb485afd9"
+            },
+            {
+              "content": "At the user's last family meal out, noise from the next table made conversation nearly impossible.",
+              "content_digest": "dc337d32e4b09167289e19a6b1c8fe970e7eaa6fdd6868ed1c7c300e018fcd15",
+              "position": 1,
+              "uid": "c62f1669-11c9-5a81-b5f5-304acce69c23"
+            },
+            {
+              "content": "At a barbecue at home in the same month, the user was comfortable because no one had to raise their voice.",
+              "content_digest": "63763b293a491200bf1f7a251467c1fa8c2cb8d4d8450732c01666dcdea183e3",
+              "position": 2,
+              "uid": "674f4bdf-27c3-5870-a68e-91e4a093dd93"
+            },
+            {
+              "content": "During their mother's birthday meal, the user left a restaurant with loud music after 30 minutes.",
+              "content_digest": "560755c6f051ec6f85e32dc4ee9447dfc97418fca6f9f414f6910c518a52c2c0",
+              "position": 3,
+              "uid": "21509788-2e3d-548b-8303-f34cfea68c9b"
+            },
+            {
+              "content": "When discussing postponed matters with family, the user prefers a quiet, one-on-one dining environment.",
+              "content_digest": "f22bedcf60a64b3666a7e4363d6a55c48547535492010fcb205a182c1ee920a8",
+              "position": 4,
+              "uid": "74eaea9d-7640-51ba-aa77-9c050581dc46"
+            },
+            {
+              "content": "At a large banquet hall reserved by their older sister, the user remembered the surrounding noise more than the food.",
+              "content_digest": "566e443c69410f1672ab209ba2257604e373cd305ab27243a39574481407af71",
+              "position": 5,
+              "uid": "1384df1d-2173-5673-96f5-a4d86835d404"
+            },
+            {
+              "content": "On a day the user ate grilled food at home with their younger brother, conversation was easy to continue, so the user stayed another hour after the meal.",
+              "content_digest": "c93ccbe3524946f1def05a1b385fbe3387945f51164b00c56f1ff80b477d011f",
+              "position": 6,
+              "uid": "3cf68c8e-5da9-51d3-a402-c10f4137b1f4"
+            },
+            {
+              "content": "The user's mother considers having the whole family eat at the same time more important than receiving a birthday gift.",
+              "content_digest": "d302cf7db2b83b103ea11323ab1b9d36168d224b405d4d0dd51b46b494014291",
+              "position": 7,
+              "uid": "a1984768-d20d-59cd-84c9-cb08c6b7affb"
+            },
+            {
+              "content": "When proposing a birthday meal for the user's mother, check the schedule and attendees; if conversation is the purpose, first consider a low-noise location, then confirm the final choice with the user.",
+              "content_digest": "481169c62cf6fae6b4f29184ffacef9c3c9d825a34d1545ca592bc35537bc65c",
+              "position": 8,
+              "uid": "f52d11e2-2449-5c9d-887b-96c8b5cd0184"
+            },
+            {
+              "content": "The local agent can compare past dining environments and the user's responses, but those records alone cannot determine the location of the next gathering.",
+              "content_digest": "b05fef8420abe3c47c2cd9f2de9149c9c6bda7dca301f09ac7f94eac1a29d2fa",
+              "position": 9,
+              "uid": "c8fccfbe-7756-5d62-9cd7-403dd6741915"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "d510d3e5-89fe-4023-b4be-48028ec0afe4"
+        },
+        {
+          "context_digest": "1d47d83944d91bc0316a61894412e9b4361758603b9532687cf68473f1d30198",
+          "context_name": "task-3/local/personal-memory/2026/01",
+          "context_uid": "e48e6eac-20f7-599d-9f76-4238bd9dd96d",
+          "memories": [
+            {
+              "content": "The user keeps gloves and scarves in a basket inside the entrance.",
+              "content_digest": "df54c52cb6bc89e2e66c747df9807c6892db272c2a23ac5ac91e3f64aaa2a5da",
+              "position": 0,
+              "uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409"
+            },
+            {
+              "content": "On a day the user could not find their gloves, they walked with their hands in their pockets and missed the bus.",
+              "content_digest": "d4205aee5fe3f2c18adc3622930cc7f74de231de9812ca594dbd95a0af7199ff",
+              "position": 1,
+              "uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5"
+            },
+            {
+              "content": "Before the next outing, the user put the gloves in the entrance basket the night before and left on time.",
+              "content_digest": "23a7026d7d1a7edd3278e7b8aa147ef0d315059663f78da5498ad6c1b4a5407c",
+              "position": 2,
+              "uid": "a11f0943-8ee1-5305-87fb-64982fb36f82"
+            },
+            {
+              "content": "On a snowy day, the user chose a shorter route but turned back at stairs that had not been cleared of snow.",
+              "content_digest": "e9e241d2bc4d7c2fa9a44471aa6d1c16d42d50fe2ed99ccfb50713107714be9b",
+              "position": 3,
+              "uid": "f623f245-cdd5-5080-8869-b52cf2914076"
+            },
+            {
+              "content": "The next day, the user took a cleared sidewalk along the main road and avoided slippery sections.",
+              "content_digest": "62c8ec8b38778e9922cf433af4ceb4d59f60bee52dc758e3b88bb1163637f108",
+              "position": 4,
+              "uid": "17ac56f1-1302-5350-99d5-b95ef7feb768"
+            },
+            {
+              "content": "The user fell asleep with the heat turned up, became too warm before dawn, and woke twice.",
+              "content_digest": "912dbbc88a0f4a174b714a794793781f4d2f6c889f73cd7f825338addcab5d6c",
+              "position": 5,
+              "uid": "96988fa9-44b1-511e-8c99-4372f902cfe3"
+            },
+            {
+              "content": "The next night, the user turned down the heat and used one additional thin blanket.",
+              "content_digest": "3d12a4609d4731ebe71bacc841c979ac3497553238c3b5c2191842bbf075ba89",
+              "position": 6,
+              "uid": "b628acaa-50da-552c-8665-244dc4ab8263"
+            },
+            {
+              "content": "On a morning with heavy snow, the user's father expects the user will worry about road conditions and sends a text before departure.",
+              "content_digest": "dcd6bcb23bee46e49813bb14dd8dcb91983d5830f0536d7f23fcdb3a8af0667c",
+              "position": 7,
+              "uid": "08dfb937-7b28-55b5-801c-c0da00cbd414"
+            },
+            {
+              "content": "Before proposing a winter travel route, check recent snow-clearing conditions and accessible entrances.",
+              "content_digest": "dcab87102a9979c51dd369d5ba5ed00b7445c8ccd14450edcb8bec7859689606",
+              "position": 8,
+              "uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d"
+            },
+            {
+              "content": "The local agent cannot know the actual condition of the sidewalk the user will take from a weather forecast alone.",
+              "content_digest": "6b4bcc2f2f508f130c047ff677cadae0eae5b4cc5e5dd6bb3a1fb3784d7793b1",
+              "position": 9,
+              "uid": "802c4031-57de-592a-9bc8-6ee3d54921c8"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "9b12281b-a5d8-4d13-924a-0dd1d5cf4234"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate domains: the reference frame concerns planning a quiet family birthday meal, while the compared frame concerns winter preparation, travel safety, and sleep comfort. No claims govern the same operational decision, and neither frame contradicts or qualifies the other.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d510d3e5-89fe-4023-b4be-48028ec0afe4",
+              "memory_uid": "2cd0229d-b7f1-581b-8019-25bdb485afd9"
+            }
+          ],
+          "reason": "Only the reference frame supplies the birthday timing, which is independently useful context.",
+          "status": "RESOLVED",
+          "summary": "The user's mother's birthday occurs in the third week of January.",
+          "uid": "bd822535-85cf-5d74-8a5f-6a0121e371a8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d510d3e5-89fe-4023-b4be-48028ec0afe4",
+              "memory_uid": "c62f1669-11c9-5a81-b5f5-304acce69c23"
+            }
+          ],
+          "reason": "Only the reference frame records this adverse dining-noise experience.",
+          "status": "RESOLVED",
+          "summary": "Noise from a neighboring table made conversation nearly impossible at the user's last family restaurant meal.",
+          "uid": "7efd0bf9-2c28-570c-900d-926facb53f51"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d510d3e5-89fe-4023-b4be-48028ec0afe4",
+              "memory_uid": "674f4bdf-27c3-5870-a68e-91e4a093dd93"
+            }
+          ],
+          "reason": "Only the reference frame records this favorable low-noise dining experience.",
+          "status": "RESOLVED",
+          "summary": "The user was comfortable at a home barbecue because conversation did not require raised voices.",
+          "uid": "2e96c4e0-789e-51c7-b31a-f202fff36fe9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d510d3e5-89fe-4023-b4be-48028ec0afe4",
+              "memory_uid": "21509788-2e3d-548b-8303-f34cfea68c9b"
+            }
+          ],
+          "reason": "Only the reference frame records this specific response to loud restaurant music.",
+          "status": "RESOLVED",
+          "summary": "The user left their mother's birthday restaurant meal after 30 minutes because of loud music.",
+          "uid": "58d35e5e-55f2-594c-b155-94f4eb260270"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d510d3e5-89fe-4023-b4be-48028ec0afe4",
+              "memory_uid": "74eaea9d-7640-51ba-aa77-9c050581dc46"
+            }
+          ],
+          "reason": "Only the reference frame states this conditional dining preference.",
+          "status": "RESOLVED",
+          "summary": "For discussing postponed family matters, the user prefers quiet, one-on-one dining.",
+          "uid": "47ad3adf-2684-57a9-ae3a-9dd46d163e0c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d510d3e5-89fe-4023-b4be-48028ec0afe4",
+              "memory_uid": "1384df1d-2173-5673-96f5-a4d86835d404"
+            }
+          ],
+          "reason": "Only the reference frame records this banquet-hall experience.",
+          "status": "RESOLVED",
+          "summary": "At a large banquet hall reserved by the user's older sister, surrounding noise overshadowed the food in the user's memory.",
+          "uid": "a02adbd9-bf05-534f-ba3b-34002283ee9c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d510d3e5-89fe-4023-b4be-48028ec0afe4",
+              "memory_uid": "3cf68c8e-5da9-51d3-a402-c10f4137b1f4"
+            }
+          ],
+          "reason": "Only the reference frame records this specific connection between conversational ease and staying longer.",
+          "status": "RESOLVED",
+          "summary": "Easy conversation during a home grilled meal with the user's younger brother led the user to stay an additional hour.",
+          "uid": "b3c19781-925d-53e0-91bd-f66f110cd314"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d510d3e5-89fe-4023-b4be-48028ec0afe4",
+              "memory_uid": "a1984768-d20d-59cd-84c9-cb08c6b7affb"
+            }
+          ],
+          "reason": "Only the reference frame states this birthday priority.",
+          "status": "RESOLVED",
+          "summary": "The user's mother values the whole family eating together more than receiving a birthday gift.",
+          "uid": "681a8e3b-5c12-5677-9568-0b4aa516eb35"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d510d3e5-89fe-4023-b4be-48028ec0afe4",
+              "memory_uid": "f52d11e2-2449-5c9d-887b-96c8b5cd0184"
+            }
+          ],
+          "reason": "Only the reference frame provides this birthday-meal planning procedure.",
+          "status": "RESOLVED",
+          "summary": "A proposed birthday meal should account for schedules and attendees, prioritize low noise when conversation matters, and leave the final choice to the user.",
+          "uid": "42cfad80-4316-5688-8bef-3b9435ac4ebf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d510d3e5-89fe-4023-b4be-48028ec0afe4",
+              "memory_uid": "c8fccfbe-7756-5d62-9cd7-403dd6741915"
+            }
+          ],
+          "reason": "Only the reference frame states this limitation on dining-location inference.",
+          "status": "RESOLVED",
+          "summary": "Past dining environments and reactions can be compared, but they cannot alone determine the next gathering location.",
+          "uid": "6112144b-b3f9-5beb-96f3-fe59e23b5a8f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9b12281b-a5d8-4d13-924a-0dd1d5cf4234",
+              "memory_uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409"
+            }
+          ],
+          "reason": "Only the compared frame supplies this winter-item storage practice.",
+          "status": "RESOLVED",
+          "summary": "The user stores gloves and scarves in a basket inside the entrance.",
+          "uid": "042d21f9-310d-5f3e-8c81-170122c056ba"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9b12281b-a5d8-4d13-924a-0dd1d5cf4234",
+              "memory_uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5"
+            }
+          ],
+          "reason": "Only the compared frame records this consequence of unavailable gloves.",
+          "status": "RESOLVED",
+          "summary": "After failing to find their gloves, the user walked with hands in pockets and missed the bus.",
+          "uid": "1cf085e9-2049-541f-96c2-16992071f089"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9b12281b-a5d8-4d13-924a-0dd1d5cf4234",
+              "memory_uid": "a11f0943-8ee1-5305-87fb-64982fb36f82"
+            }
+          ],
+          "reason": "Only the compared frame records this successful advance-preparation episode.",
+          "status": "RESOLVED",
+          "summary": "Placing gloves in the entrance basket the night before helped the user leave on time.",
+          "uid": "c1ce459a-6843-5fbe-81a5-73f69c6df300"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9b12281b-a5d8-4d13-924a-0dd1d5cf4234",
+              "memory_uid": "f623f245-cdd5-5080-8869-b52cf2914076"
+            }
+          ],
+          "reason": "Only the compared frame records this route obstruction.",
+          "status": "RESOLVED",
+          "summary": "On a snowy day, uncleared stairs forced the user to abandon a shorter route.",
+          "uid": "639cbf79-2f32-5bb0-8285-8b2b1b4a1eb2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9b12281b-a5d8-4d13-924a-0dd1d5cf4234",
+              "memory_uid": "17ac56f1-1302-5350-99d5-b95ef7feb768"
+            }
+          ],
+          "reason": "Only the compared frame records this successful snow-route choice.",
+          "status": "RESOLVED",
+          "summary": "The user avoided slippery sections by taking a cleared main-road sidewalk the next day.",
+          "uid": "38e77954-56e0-55cd-b0a0-2204fedec327"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9b12281b-a5d8-4d13-924a-0dd1d5cf4234",
+              "memory_uid": "96988fa9-44b1-511e-8c99-4372f902cfe3"
+            }
+          ],
+          "reason": "Only the compared frame records this adverse sleep-temperature experience.",
+          "status": "RESOLVED",
+          "summary": "Sleeping with the heat turned up made the user too warm and caused two awakenings.",
+          "uid": "9c560d9d-7269-5b81-aaf4-901b99847779"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9b12281b-a5d8-4d13-924a-0dd1d5cf4234",
+              "memory_uid": "b628acaa-50da-552c-8665-244dc4ab8263"
+            }
+          ],
+          "reason": "Only the compared frame records this sleep-comfort adjustment.",
+          "status": "RESOLVED",
+          "summary": "The following night, the user lowered the heat and added one thin blanket.",
+          "uid": "b67f87ed-7818-5928-9a7e-75de9126986c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9b12281b-a5d8-4d13-924a-0dd1d5cf4234",
+              "memory_uid": "08dfb937-7b28-55b5-801c-c0da00cbd414"
+            }
+          ],
+          "reason": "Only the compared frame states this family expectation and response.",
+          "status": "RESOLVED",
+          "summary": "During heavy snow, the user's father anticipates concern about road conditions and texts before departure.",
+          "uid": "e6a44465-0d9f-546c-b759-6b59acad4dce"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9b12281b-a5d8-4d13-924a-0dd1d5cf4234",
+              "memory_uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d"
+            }
+          ],
+          "reason": "Only the compared frame provides this winter-route planning guidance.",
+          "status": "RESOLVED",
+          "summary": "Winter-route proposals should be preceded by checks of recent snow clearing and accessible entrances.",
+          "uid": "fe669239-561d-536a-9083-bf10bd341e99"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9b12281b-a5d8-4d13-924a-0dd1d5cf4234",
+              "memory_uid": "802c4031-57de-592a-9bc8-6ee3d54921c8"
+            }
+          ],
+          "reason": "Only the compared frame states this limitation on sidewalk-condition inference.",
+          "status": "RESOLVED",
+          "summary": "A weather forecast alone cannot establish the actual condition of the sidewalk the user will take.",
+          "uid": "482f1625-4161-5619-a6ce-190ee466d583"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame records winter-item organization, route and snow-safety experiences, temperature-adjustment behavior, a family expectation, route-planning guidance, and limits on forecasting sidewalk conditions.",
+        "differences": "",
+        "reference_only": "The reference frame records birthday timing and family priorities, dining-noise experiences and preferences, a meal-planning procedure, and limits on inferring the next gathering location."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "a13edc1f-d046-46a3-b3da-4d1d7711c724"
+    },
+    "analysis_digest": "a63a510a75821cfc4579ccaaca2a531a68f3640a180f6f0bc9d2da1ef5e8bdef",
+    "key": "0c60d68199072d14385265612895f5b9cb3c942fb2b0d1ec3ec9516ba657a8c0",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 43.09074770799998,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "0c60d68199072d14385265612895f5b9cb3c942fb2b0d1ec3ec9516ba657a8c0",
+  "created_at": "2026-08-13T18:35:42.330696Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/01",
+  "pair_key": "0b2a670a3044a52e6894d85f0a07bf9196ef757ff7e57b5d2b062d0136bc8f4b",
+  "provider_seconds": 43.09074770799998,
+  "right": "task-3/local/personal-memory/2026/01",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

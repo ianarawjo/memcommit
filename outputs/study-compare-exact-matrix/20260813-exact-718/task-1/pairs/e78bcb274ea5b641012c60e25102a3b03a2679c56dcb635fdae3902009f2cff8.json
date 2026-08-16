@@ -1,0 +1,1056 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:05:45.057698+00:00",
+      "frames": [
+        {
+          "context_digest": "90d28c4953f52771985ddd420089b3ef613ccc7ab7d58fb66f18d21f69f3da39",
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memories": [
+            {
+              "content": "First-time visitors expect to be able to receive immediate directions to their destination at the visitor services desk on the first floor.",
+              "content_digest": "09d449de6a42fc3dfff1abb632bdb10126e9c8a299829d4197827254f855503e",
+              "position": 0,
+              "uid": "d79aa629-3e49-5c45-993e-c80efc278889"
+            },
+            {
+              "content": "The student support administration office is on the second floor of the Main Building.",
+              "content_digest": "5e989314c1e5ff8b9de7ba2dee2a625131f70a896bfafc99fd5778715b66c80c",
+              "position": 1,
+              "uid": "50135594-9d2a-554a-9552-c74d35b60b4f"
+            },
+            {
+              "content": "A shared consultation room is on the second floor of the Main Building.",
+              "content_digest": "41b92ef7376da86cb434d832bab5a90512b07e5d202983958abdb042e17e84b8",
+              "position": 2,
+              "uid": "0a35d46b-a369-560e-8363-0844ad4f9ea2"
+            },
+            {
+              "content": "A general restroom is on the second floor of the Main Building.",
+              "content_digest": "261e3d60da96e54897ea6008080c6f050cdb83dc8deb32eba8df50a8aaeb0d74",
+              "position": 3,
+              "uid": "b117c1ba-c88e-52ca-8dde-ccb21661e910"
+            },
+            {
+              "content": "An accessible restroom is on the second floor of the Main Building.",
+              "content_digest": "4889411f67b570714ce3ed05d167c577670e060d3d8985763bedb579612c551f",
+              "position": 4,
+              "uid": "2a06fd43-23f0-5d12-8d7e-d8e1df97176c"
+            },
+            {
+              "content": "The rear entrance is on the third floor of the Main Building.",
+              "content_digest": "38504552b5b76ac826c0bf605460f1f376b2efcd86c9879d00eeebe0d763502a",
+              "position": 5,
+              "uid": "6620e427-90a1-5f6c-9e99-12bd39277c3a"
+            },
+            {
+              "content": "A connecting corridor toward the Central Library is on the third floor of the Main Building.",
+              "content_digest": "587e5cc314073b92060ef8524fb438800d46cc9a53668870c887f2beb657008f",
+              "position": 6,
+              "uid": "a1f3fd8f-3c17-5020-a6b0-e50bde147841"
+            },
+            {
+              "content": "A seminar room is on the third floor of the Main Building.",
+              "content_digest": "74c46185308729632e8e2472704f136c6756d237907b27346c8af7e849083149",
+              "position": 7,
+              "uid": "d307ffc0-44d6-52d8-9ad6-f76651f2603a"
+            },
+            {
+              "content": "A general restroom is on the third floor of the Main Building.",
+              "content_digest": "dcdd792f575376c3f66ff07839b99ce6fdf9c09cdce34e8db857036e5a1e924e",
+              "position": 8,
+              "uid": "df86c8e5-275e-51d8-8e51-b4827e71d226"
+            },
+            {
+              "content": "An accessible restroom is on the third floor of the Main Building.",
+              "content_digest": "8f8ecb0a8e88d05d1f3231371d242f9500c069d5fcb05aaeec78fccdc287c195",
+              "position": 9,
+              "uid": "7f6b1eaa-72a9-509e-85e2-a3abdccbe8ac"
+            },
+            {
+              "content": "Department offices are on the fourth floor of the Main Building.",
+              "content_digest": "0f904cd6a8a5f5dc07755a806148a9e9afe2c2b719065ab31dcc437bdc6c92e4",
+              "position": 10,
+              "uid": "69e3647a-9987-5052-8d81-a231f73aeec7"
+            },
+            {
+              "content": "A shared meeting room is on the fourth floor of the Main Building.",
+              "content_digest": "0eb4f0edce29d16d468057d53e2a9ca0b8e8a907051d13b93fec56db7a6baa12",
+              "position": 11,
+              "uid": "250dc7c8-024c-5d51-9bd7-e2eefbded504"
+            },
+            {
+              "content": "Research labs are on the fifth floor of the Main Building.",
+              "content_digest": "6e51bc897a5832ea629d740ac8a394ab116b9a52d3ee6db9a3222af33bb58840",
+              "position": 12,
+              "uid": "d05a9731-1c25-5d54-b8a1-65195ca18327"
+            },
+            {
+              "content": "A seminar room is on the fifth floor of the Main Building.",
+              "content_digest": "36dbe3fcab6f612ba7ebf314a03c55577d7b8e46ab0bc85b3264c174c9c6171b",
+              "position": 13,
+              "uid": "fa07f2f5-bb84-56c0-9b9e-85e32b47453d"
+            },
+            {
+              "content": "Some seminar rooms on the fifth floor of the Main Building are also used for classes.",
+              "content_digest": "e55bbec2c365160fd3d409a660efabec23ed6ba4c3b64a85c1b5a02bb3780337",
+              "position": 14,
+              "uid": "7aced411-0d52-54ba-96cf-6b7fefcf1ea9"
+            },
+            {
+              "content": "A collaborative research lab is on the sixth floor of the Main Building.",
+              "content_digest": "4939bf80e5f0eac4387c234a94bc076344ed1041887f2cb9e0196648002dee53",
+              "position": 15,
+              "uid": "2df2602b-fa8c-5715-a7c7-1606037e3b6d"
+            },
+            {
+              "content": "A seminar room is on the sixth floor of the Main Building.",
+              "content_digest": "64209c374b400c7def917ed20b8c7b0c7b3d84c25ee687671c2ef6959576cdce",
+              "position": 16,
+              "uid": "24ad69ce-b1f5-5bde-ad59-d637f261cb99"
+            },
+            {
+              "content": "Some seminar rooms on the sixth floor of the Main Building are also used for classes.",
+              "content_digest": "732dcd0e36ab7d8b78ec9be93f5aa7277d5c3b59d36931a4345126429e55aeda",
+              "position": 17,
+              "uid": "11f4d4a4-85d0-5780-90f6-8d6e7edc10c6"
+            },
+            {
+              "content": "The research support office is on the seventh floor of the Main Building.",
+              "content_digest": "edd7897ab8543c72a4b1d6d02bc7ee5a4ff37eb69d17635318173f33ca0792fd",
+              "position": 18,
+              "uid": "411a27b6-e540-530b-a5b5-764e26855173"
+            },
+            {
+              "content": "A shared workspace for researchers is on the seventh floor of the Main Building.",
+              "content_digest": "81137cc81cd018ca344812e5753b3d8efbcf01211c2d0132b15ddbe2d1dcaa02",
+              "position": 19,
+              "uid": "bd016a0a-0be5-52e9-a549-102ea5fe0148"
+            },
+            {
+              "content": "Staff offices are on the eighth floor of the Main Building.",
+              "content_digest": "bb34fb782dc3416f872d41a1ba2c9b382af08e7c251cc2ddad808ff0c9ca8985",
+              "position": 20,
+              "uid": "1582377c-501e-57cc-9cd0-f3281289a2fa"
+            },
+            {
+              "content": "A small meeting room is on the eighth floor of the Main Building.",
+              "content_digest": "f0098f85d554cb4908f491e51aa41d872c07b8c75ba56d78e6c7bb5dc6493a26",
+              "position": 21,
+              "uid": "16f54319-1da3-5a17-830b-6524fa183511"
+            },
+            {
+              "content": "Administrative offices are on the ninth floor of the Main Building.",
+              "content_digest": "3c7ddb7f53bf3107feed8e7d7a62dfc9e37694ced6a25860c373133ca41a414e",
+              "position": 22,
+              "uid": "e06a605d-d4d2-5308-9cc5-b1cae7469f36"
+            },
+            {
+              "content": "A support room for tenth-floor events is on the ninth floor of the Main Building.",
+              "content_digest": "cf4d93dc60eb5c1c2921967ce0b633b92255e5043a888622b6f49a2c6bfe116a",
+              "position": 23,
+              "uid": "9da215bb-7f87-583d-9bc2-23e08305d4f1"
+            },
+            {
+              "content": "An exhibition and event hall is on the tenth floor of the Main Building.",
+              "content_digest": "b3fe73e93ef176ab52402232b56228a8cd36d3dd2a8c3bb493caba7065ce4f45",
+              "position": 24,
+              "uid": "710369be-287c-5c29-9da2-9631d099500e"
+            },
+            {
+              "content": "An event preparation room is on the tenth floor of the Main Building.",
+              "content_digest": "8d9e4538354d9a133655668026b32656f69868b08289c61388cf18dc0e05c1b2",
+              "position": 25,
+              "uid": "e9107328-9e4b-5dcf-a74d-22c90a23b5e0"
+            },
+            {
+              "content": "Provide guidance after checking both the published floor-by-floor facilities and temporary operation notices.",
+              "content_digest": "7ed03059dd96144cf1273c624e703ddb30111739302099cd95dd6aa28607536c",
+              "position": 26,
+              "uid": "076ffc9d-2681-59f2-8f8f-1435c49c3f17"
+            },
+            {
+              "content": "Do not infer the scope of nonpublic construction.",
+              "content_digest": "0aef36b8e9c9e08ded72fef02339d5c4b5c0985bf662c7705877b30f576485d5",
+              "position": 27,
+              "uid": "ba35ad87-8285-5130-add8-fc694deeb8f7"
+            },
+            {
+              "content": "Do not infer the results of on-site inspections.",
+              "content_digest": "2eeac1c499bf873e748317a191275053f858dd276800a95ed67b341c22ac2b42",
+              "position": 28,
+              "uid": "e59de198-f9a2-5f3f-be66-43eb9deab632"
+            },
+            {
+              "content": "Cleaning and security contractor staff prefer service routes separated from general users during shift changes.",
+              "content_digest": "eaa7ec50910e9d106e42d202c425e88d20b02ca511514f17689cd01d955a0a2e",
+              "position": 29,
+              "uid": "a3f16328-2a27-5b18-b802-11036a6d2be6"
+            },
+            {
+              "content": "The main entrance lobby is on the first floor of the Main Building.",
+              "content_digest": "818923ef7e2f4fa6029dae638ea52b1bff8704c0bf3259bde5c18175b7167c31",
+              "position": 30,
+              "uid": "c6894aba-7d8e-5448-b775-e0303efb15d1"
+            },
+            {
+              "content": "The visitor services desk is on the first floor of the Main Building.",
+              "content_digest": "1dbe49b32a29d511c102ac591e1d2b6300b2b03c50eaeeb1bca817f55c5623ba",
+              "position": 31,
+              "uid": "666e872c-e71a-5c64-a5cc-b12d2aac9916"
+            },
+            {
+              "content": "The Innovation Hub is on the first floor of the Main Building.",
+              "content_digest": "5ecec6c1863097a054119771a9678a0b711a3bae4660242321de213b66741ff3",
+              "position": 32,
+              "uid": "b3bd402a-5af7-58df-bbcc-2857c956fa74"
+            },
+            {
+              "content": "A general restroom is on the first floor of the Main Building.",
+              "content_digest": "7652772bca411d4c48f07f6863d14d3cbc8177e01f5cc9b8728caa81c4703272",
+              "position": 33,
+              "uid": "b33a6790-d94b-51d7-a737-92b9793a466c"
+            },
+            {
+              "content": "An accessible restroom is on the first floor of the Main Building.",
+              "content_digest": "918cb33df03c0505ffe2c796234ee41fa16176182c4cd0e61713459541b0e9f2",
+              "position": 34,
+              "uid": "70b6e9b8-4a12-5e39-a564-9de4e3882337"
+            },
+            {
+              "content": "The elevator lobby on the second floor of the Main Building is near the student support administration office.",
+              "content_digest": "a60222e9cd517d2f777bcf8c5747b400947869d3c24298e39f5a1a8cedd03a6d",
+              "position": 35,
+              "uid": "6132cf14-ab1b-54a6-aa32-c1039c8ab0e7"
+            },
+            {
+              "content": "The elevator lobby on the third floor of the Main Building is near the corridor toward the Central Library.",
+              "content_digest": "42d0e86733f2f27409105a22d61abb9824ee26dd8d1fe18329372aa2c1616f3d",
+              "position": 36,
+              "uid": "10e2336f-921e-54c3-872e-218a6e745277"
+            },
+            {
+              "content": "The names of the department offices on the fourth floor of the Main Building are displayed on the floor directory.",
+              "content_digest": "56b17674642e411c3bb9d4fc3895c20ae6fc8190e389a9efb8121bb4318e53da",
+              "position": 37,
+              "uid": "0ce575cf-f16d-5434-9ac5-00d454d90a09"
+            },
+            {
+              "content": "A shared printing station available to students is on the fourth floor of the Main Building.",
+              "content_digest": "af022ec5fd21182df662d20c5b5257416ffea42b32e5daa37ce6bdc753c44224",
+              "position": 38,
+              "uid": "0fa245a2-0f0c-5ef4-9c6e-04faa98c9f5f"
+            },
+            {
+              "content": "The research labs on the fifth floor of the Main Building are not spaces open to the general public.",
+              "content_digest": "88a340604372065b93c0f48fe37d467e4fdfee097616f62b969d933959667baf",
+              "position": 39,
+              "uid": "7b821e8c-2e26-52d0-b34e-314a614eeb26"
+            },
+            {
+              "content": "The collaborative research lab on the sixth floor of the Main Building is used by authorized research members.",
+              "content_digest": "c00693cf5b56b427be97a57708c69313243015d993f9eb847c7f452f1c1cc62a",
+              "position": 40,
+              "uid": "9ab67289-f3b1-5918-9965-ecb4ab743400"
+            },
+            {
+              "content": "Consultations with the research support office on the seventh floor of the Main Building follow the posted appointment process.",
+              "content_digest": "10a210b9adaf0095e4d9aa4945fd5edb9641de991897bd81a4387a62dc8fcfc5",
+              "position": 41,
+              "uid": "e7272a72-48a5-544b-8771-9c9872ae34f2"
+            },
+            {
+              "content": "Visitors to staff offices on the eighth floor of the Main Building expect the staff member with whom they have an appointment to be in the office at the scheduled time.",
+              "content_digest": "0b5d39bf7a3479dce17e55a2f3cdcd3dafc17701fc1a2b001c1876208bc9696f",
+              "position": 42,
+              "uid": "f7817017-85a2-582d-bb63-2b77cd2e9311"
+            },
+            {
+              "content": "Public administrative services on the ninth floor of the Main Building are provided during each department's operating hours.",
+              "content_digest": "240716412949aa058bdc6e1fd1b12000c46401096908f0936d23d439960d0968",
+              "position": 43,
+              "uid": "a2c599c9-1218-5d37-a866-66222eb5e226"
+            },
+            {
+              "content": "The elevators in the Main Building connect the underground parking level through the tenth floor.",
+              "content_digest": "299a6c838e01c665f695375941d90ea4e435552a1463284d81ec259199679cb0",
+              "position": 44,
+              "uid": "fdf4ee37-1183-5923-bccb-2c2b2d55cbb3"
+            },
+            {
+              "content": "The floor directory agent can describe the floors and space names of published facilities.",
+              "content_digest": "82b7b3e6ef75a7a7d2c3fc014af1be5e9d69e0fa3d6d347748ce88676efc01cc",
+              "position": 45,
+              "uid": "cc098a87-de11-594f-b59c-126a2cec29bd"
+            },
+            {
+              "content": "The floor directory agent cannot check the current occupancy status of meeting rooms.",
+              "content_digest": "dc40c0ba265e24acf1b6b56fe65a0a9a7e599452e46dc1d08abffec0aa5c383a",
+              "position": 46,
+              "uid": "b1e19dc4-db1f-5328-8448-aac4d37451d7"
+            },
+            {
+              "content": "First-time visitors are more familiar with department names than floor numbers and can more easily understand directions centered on department names.",
+              "content_digest": "f8a84cbb7e41563acdbcc60a7157cbe2d0105fddd7c497066bad727fe204ad51",
+              "position": 47,
+              "uid": "d842f429-c182-5fd0-baf8-8f023b85632f"
+            },
+            {
+              "content": "On public holidays, some administrative offices may not operate even when the Main Building is open.",
+              "content_digest": "d84a20691877b0f1e673f5bd8617cbbb2504d8b66672e939a7fa94d54a5a21ad",
+              "position": 48,
+              "uid": "90c6d663-e63e-591c-99c3-a300a7e7e253"
+            },
+            {
+              "content": "The floor directory agent cannot verify in real time, at the time of an inquiry, whether published floor-by-floor information matches the actual layout.",
+              "content_digest": "a29c3869fdc6be8ad8025f62587efe95a5c65687f8dff52d43ec43ad6166af4b",
+              "position": 49,
+              "uid": "38daa1a2-70e9-5815-957a-41c95ed6119e"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "24e3934d-1bab-4617-9330-91eb5ceae37f"
+        },
+        {
+          "context_digest": "988d27b41d8b17e6af266a8b07502a3efb08b189af6a36277c3f2c0792613398",
+          "context_name": "task-1/participant/construction-updates/facility-updates",
+          "context_uid": "fe3ca57d-565a-5839-a78f-15f9a224e75d",
+          "memories": [
+            {
+              "content": "Add campus-wiki/facility-updates: The Main Building undergoes major facility improvement construction during summer break.",
+              "content_digest": "f6cabc8be233fe08fc34c55cc33921be8a8ba462deea6b28452b440b7b3d7bd5",
+              "position": 0,
+              "uid": "99c29cea-9270-5a77-952c-b3f48da55612"
+            },
+            {
+              "content": "Add campus-wiki/facility-updates: During the construction period, the elevators operate alternately, one at a time.",
+              "content_digest": "82533ca579af17bad318da369bae3e1d9d2f215c02f673b38561a9ce6fce6c2a",
+              "position": 1,
+              "uid": "26131bc5-ee41-5d66-9507-4f11f9d0afde"
+            },
+            {
+              "content": "Add campus-wiki/facility-updates: The visitor services desk suspends in-person operations during the construction period.",
+              "content_digest": "5ec3f65e5ed0f8e690d655f0d8fdf33c47ac73e29d489e5aee594f8d0fb9f270",
+              "position": 2,
+              "uid": "5e34a7f5-41ab-5322-849b-f8304a1a3148"
+            },
+            {
+              "content": "Add campus-wiki/facility-updates: During the construction period, visitor services are replaced by the visitor menu in the integrated campus portal.",
+              "content_digest": "fa2c5abc68e02fb604c141e018e03455590ce250b4df0987d10cddce9d20920e",
+              "position": 3,
+              "uid": "f460b6d0-66c8-581c-860f-a925cc03770e"
+            },
+            {
+              "content": "Add campus-wiki/facility-updates: The general restroom on the first floor of the Main Building cannot be used during the construction period.",
+              "content_digest": "21a33f61243532b3bf0df3350dd617a5d8cfffdf390ac6ea77975c72182a3ab8",
+              "position": 4,
+              "uid": "cd0830c7-5289-529f-bedd-b0fd27d29b3f"
+            },
+            {
+              "content": "Add campus-wiki/facility-updates: The general restroom on the second floor of the Main Building cannot be used during the construction period.",
+              "content_digest": "27c79f22f859611b3e02d453e5aed9b1692f425ab369b035eeda032015b9a8d8",
+              "position": 5,
+              "uid": "d73ccf7b-55d0-5f1c-8197-d3c9551da84d"
+            },
+            {
+              "content": "Add campus-wiki/facility-updates: The general restroom on the third floor of the Main Building cannot be used during the construction period.",
+              "content_digest": "acf8fc6762c12b0a26ace2b23d502ade85e37a95a716d927786de2ee8d77bebc",
+              "position": 6,
+              "uid": "b9dda61f-7f10-5fad-ab6e-82ba3e7f8cf6"
+            },
+            {
+              "content": "Add campus-wiki/facility-updates: Because the general restrooms on the first through third floors of the Main Building are closed during the construction period, the nearest general restroom changes to the exhibition hall on the third floor of the West Complex.",
+              "content_digest": "7c08bb0b02f1f83f9f40a6d4c3e19b30fc82063fd5816cfbd73cf54844daaa85",
+              "position": 7,
+              "uid": "7a58eb23-f1a1-552b-b4b1-c3732cbeeb86"
+            },
+            {
+              "content": "Add campus-wiki/facility-updates: During the construction period, direct students, staff, and members who cannot use the Main Building restrooms to the Central Library restrooms.",
+              "content_digest": "0aecc940017d00acd913126ea5d0e7df71de222362828a1a36c5b4a4ebdb6c26",
+              "position": 8,
+              "uid": "cb4f2f04-25c6-58ed-acd6-71b0a9c29b69"
+            },
+            {
+              "content": "Add campus-wiki/facility-updates: As a rule, direct general visitors who cannot use the Main Building restrooms during the construction period to restrooms outside the Main Building.",
+              "content_digest": "127863c62c301de152bbaa72ebc31b47b21a163c0f51a9abfd10733d25cf4730",
+              "position": 9,
+              "uid": "0df15633-8f63-54c3-b679-1ab878e8c4f3"
+            },
+            {
+              "content": "Add campus-wiki/facility-updates: During the construction period, direct users who cannot use the accessible restroom in the Main Building to the Student Centre.",
+              "content_digest": "5b29f4a50178d1978a09eff82528c9d0900ca4a5223bb61ee4ad4c1cf6a570a0",
+              "position": 10,
+              "uid": "aa595f26-74ce-5f66-8a54-87bcc962cb06"
+            },
+            {
+              "content": "Add campus-wiki/facility-updates: The first-floor Innovation Hub does not operate its consultation desk during the construction period.",
+              "content_digest": "8e86c4bae9133b0da498eb55b5d021a05ba093a802f5a95a30cbafd4b47089e6",
+              "position": 11,
+              "uid": "8e868c0f-3a92-54e6-a76d-21d3ded46c65"
+            },
+            {
+              "content": "Add campus-wiki/facility-updates: An Innovation Hub visitor accustomed to in-person consultation may expect to receive an immediate consultation at the first-floor desk during the construction period, see that the desk is closed, and then search again for the online consultation channel.",
+              "content_digest": "c98a1ef56e07f70f37a47c435a7c541c376138a0b529bdfeb405cd5e84410eeb",
+              "position": 12,
+              "uid": "1dbffba3-b393-5a96-89c4-785df0782e3a"
+            },
+            {
+              "content": "Add campus-wiki/facility-updates: Air conditioning is occasionally interrupted for five to ten minutes for facility inspections.",
+              "content_digest": "f7005149c18f78c0cdbc4a36962b16408624e14a6c56506215505093cd8c9cad",
+              "position": 13,
+              "uid": "e79f6d6c-7637-5ef6-b373-651c21a6bb29"
+            },
+            {
+              "content": "Add campus-wiki/facility-updates: The construction period runs from June 24 through August 23.",
+              "content_digest": "eca1360a046a45d01f80d742252a67085d87f528c40871569f00f44210c76f8d",
+              "position": 14,
+              "uid": "faea18ec-3091-571f-be3f-345bdbf086b3"
+            },
+            {
+              "content": "Add campus-wiki/facility-updates: During the construction period, the facility guidance agent's response scope is limited to publicly disclosed operational impacts and it cannot verify or infer nonpublic types of work.",
+              "content_digest": "78644c8befa4044add7271ba256c549b42ce327c3f02ea72a6160f0917938bdc",
+              "position": 15,
+              "uid": "ecf1c8bb-4099-5e7f-82e0-a95928defd5f"
+            },
+            {
+              "content": "Modify campus-wiki/facility-updates: Cleaning and security contract staff may find the designated service entrance during the construction period more burdensome than the familiar lobby shift change and may go to the wrong entrance at the start of a shift.",
+              "content_digest": "ff75e84cf29f120764f958a8305d6f71b4840de585b14b653239f27df76a66fe",
+              "position": 16,
+              "uid": "0c87297c-f5fb-5380-9cc3-efa21c0fb60b"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "42b7f9f6-a6b4-4dbd-9dc0-d4507476fccb"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames combine a stable Main Building directory with temporary summer-construction operations. Construction conditions alter visitor services, restroom guidance, elevator availability, and Innovation Hub access, while most permanent locations and agent limitations remain one-sided. Contractor-routing concerns and nonpublic-construction boundaries align without either frame taking precedence.",
+      "relations": [
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "d79aa629-3e49-5c45-993e-c80efc278889"
+            },
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "666e872c-e71a-5c64-a5cc-b12d2aac9916"
+            },
+            {
+              "frame_uid": "42b7f9f6-a6b4-4dbd-9dc0-d4507476fccb",
+              "memory_uid": "5e34a7f5-41ab-5322-849b-f8304a1a3148"
+            },
+            {
+              "frame_uid": "42b7f9f6-a6b4-4dbd-9dc0-d4507476fccb",
+              "memory_uid": "f460b6d0-66c8-581c-860f-a925cc03770e"
+            }
+          ],
+          "reason": "The explicit construction period preserves the permanent desk location while changing how visitor guidance is delivered.",
+          "status": "RESOLVED",
+          "summary": "The first-floor visitor services desk is the baseline point for immediate directions, but in-person service is suspended and replaced by the campus portal during construction.",
+          "uid": "0c6fa51b-bc2f-5bb1-81f2-a38b15a31cdb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "50135594-9d2a-554a-9552-c74d35b60b4f"
+            },
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "6132cf14-ab1b-54a6-aa32-c1039c8ab0e7"
+            }
+          ],
+          "reason": "This is independently useful reference-only location and navigation information.",
+          "status": "RESOLVED",
+          "summary": "Student support administration is on the second floor near the elevator lobby.",
+          "uid": "295e51c5-b6c4-59c9-9d1a-460dae7699ac"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "0a35d46b-a369-560e-8363-0844ad4f9ea2"
+            }
+          ],
+          "reason": "No compared-side memory addresses this room.",
+          "status": "RESOLVED",
+          "summary": "A shared consultation room is on the Main Building’s second floor.",
+          "uid": "115509a8-2096-5661-8f56-62fdd214818c"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "b117c1ba-c88e-52ca-8dde-ccb21661e910"
+            },
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "df86c8e5-275e-51d8-8e51-b4827e71d226"
+            },
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "b33a6790-d94b-51d7-a737-92b9793a466c"
+            },
+            {
+              "frame_uid": "42b7f9f6-a6b4-4dbd-9dc0-d4507476fccb",
+              "memory_uid": "cd0830c7-5289-529f-bedd-b0fd27d29b3f"
+            },
+            {
+              "frame_uid": "42b7f9f6-a6b4-4dbd-9dc0-d4507476fccb",
+              "memory_uid": "d73ccf7b-55d0-5f1c-8197-d3c9551da84d"
+            },
+            {
+              "frame_uid": "42b7f9f6-a6b4-4dbd-9dc0-d4507476fccb",
+              "memory_uid": "b9dda61f-7f10-5fad-ab6e-82ba3e7f8cf6"
+            },
+            {
+              "frame_uid": "42b7f9f6-a6b4-4dbd-9dc0-d4507476fccb",
+              "memory_uid": "7a58eb23-f1a1-552b-b4b1-c3732cbeeb86"
+            },
+            {
+              "frame_uid": "42b7f9f6-a6b4-4dbd-9dc0-d4507476fccb",
+              "memory_uid": "cb4f2f04-25c6-58ed-acd6-71b0a9c29b69"
+            },
+            {
+              "frame_uid": "42b7f9f6-a6b4-4dbd-9dc0-d4507476fccb",
+              "memory_uid": "0df15633-8f63-54c3-b679-1ab878e8c4f3"
+            }
+          ],
+          "reason": "The construction condition explains the temporary unavailability and preserves the baseline locations; the alternative destinations vary explicitly by user group.",
+          "status": "RESOLVED",
+          "summary": "General restrooms normally exist on the first through third floors, but construction closes them and requires audience-appropriate directions to facilities outside the Main Building.",
+          "uid": "2f88e12f-ed78-5d56-abd1-9bf7b1b3a7ac"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "2a06fd43-23f0-5d12-8d7e-d8e1df97176c"
+            },
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "7f6b1eaa-72a9-509e-85e2-a3abdccbe8ac"
+            },
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "70b6e9b8-4a12-5e39-a564-9de4e3882337"
+            },
+            {
+              "frame_uid": "42b7f9f6-a6b4-4dbd-9dc0-d4507476fccb",
+              "memory_uid": "aa595f26-74ce-5f66-8a54-87bcc962cb06"
+            }
+          ],
+          "reason": "The compared guidance is expressly conditional on construction-period inability to use the baseline facilities.",
+          "status": "RESOLVED",
+          "summary": "Accessible restrooms are listed on the first through third floors, while users unable to use a Main Building accessible restroom during construction are directed to the Student Centre.",
+          "uid": "fded8ae7-a0d1-5607-b627-ba918b93d390"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "6620e427-90a1-5f6c-9e99-12bd39277c3a"
+            }
+          ],
+          "reason": "No compared-side memory addresses the rear entrance location.",
+          "status": "RESOLVED",
+          "summary": "The Main Building’s rear entrance is on the third floor.",
+          "uid": "73342271-920a-556e-8f49-e4d696f03544"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "a1f3fd8f-3c17-5020-a6b0-e50bde147841"
+            },
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "10e2336f-921e-54c3-872e-218a6e745277"
+            }
+          ],
+          "reason": "These reference memories form one navigation claim about reaching the library connection.",
+          "status": "RESOLVED",
+          "summary": "The third-floor corridor toward the Central Library is near the elevator lobby.",
+          "uid": "65ca7c7c-1459-562a-a36e-04dcd55208dc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "d307ffc0-44d6-52d8-9ad6-f76651f2603a"
+            }
+          ],
+          "reason": "No compared-side memory addresses this room.",
+          "status": "RESOLVED",
+          "summary": "A seminar room is on the Main Building’s third floor.",
+          "uid": "126e81de-589f-5d4b-b408-77707e79a30b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "69e3647a-9987-5052-8d81-a231f73aeec7"
+            },
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "0ce575cf-f16d-5434-9ac5-00d454d90a09"
+            }
+          ],
+          "reason": "These memories jointly describe the location and directory identification of the same offices.",
+          "status": "RESOLVED",
+          "summary": "Department offices are on the fourth floor, with their names shown on the floor directory.",
+          "uid": "01cf653f-ce67-58a5-ae83-092d1666b536"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "250dc7c8-024c-5d51-9bd7-e2eefbded504"
+            }
+          ],
+          "reason": "No compared-side memory addresses this room.",
+          "status": "RESOLVED",
+          "summary": "A shared meeting room is on the Main Building’s fourth floor.",
+          "uid": "abbfd9a3-70d0-502c-aabf-7fd10d9d2f06"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "d05a9731-1c25-5d54-b8a1-65195ca18327"
+            },
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "7b821e8c-2e26-52d0-b34e-314a614eeb26"
+            }
+          ],
+          "reason": "These memories jointly state the location and public-access status of the same labs.",
+          "status": "RESOLVED",
+          "summary": "Research labs are on the fifth floor and are not open to the general public.",
+          "uid": "d0d8502e-08a5-538f-9eb1-e55bf951ef63"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "fa07f2f5-bb84-56c0-9b9e-85e32b47453d"
+            },
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "7aced411-0d52-54ba-96cf-6b7fefcf1ea9"
+            }
+          ],
+          "reason": "These memories split one claim about the presence and additional use of fifth-floor seminar rooms.",
+          "status": "RESOLVED",
+          "summary": "The fifth floor has seminar rooms, some of which are also used for classes.",
+          "uid": "bd9c8bd1-9bb4-55fe-a18c-018cb3d75a93"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "2df2602b-fa8c-5715-a7c7-1606037e3b6d"
+            },
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "9ab67289-f3b1-5918-9965-ecb4ab743400"
+            }
+          ],
+          "reason": "These memories jointly state the location and authorized use of the same lab.",
+          "status": "RESOLVED",
+          "summary": "A collaborative research lab on the sixth floor is used by authorized research members.",
+          "uid": "1ae894f9-1ba2-5da4-be8c-e78755b8c66c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "24ad69ce-b1f5-5bde-ad59-d637f261cb99"
+            },
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "11f4d4a4-85d0-5780-90f6-8d6e7edc10c6"
+            }
+          ],
+          "reason": "These memories split one claim about the presence and additional use of sixth-floor seminar rooms.",
+          "status": "RESOLVED",
+          "summary": "The sixth floor has seminar rooms, some of which are also used for classes.",
+          "uid": "7d9485e6-7ca4-51e3-97c5-31964789f5c2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "411a27b6-e540-530b-a5b5-764e26855173"
+            },
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "e7272a72-48a5-544b-8771-9c9872ae34f2"
+            }
+          ],
+          "reason": "These memories jointly describe the office’s location and consultation-access procedure.",
+          "status": "RESOLVED",
+          "summary": "The seventh-floor research support office provides consultations through its posted appointment process.",
+          "uid": "e9be66e8-b436-596a-a009-ccdd605dea2b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "bd016a0a-0be5-52e9-a549-102ea5fe0148"
+            }
+          ],
+          "reason": "No compared-side memory addresses this workspace.",
+          "status": "RESOLVED",
+          "summary": "A shared researcher workspace is on the Main Building’s seventh floor.",
+          "uid": "a367fe86-b1d8-5ca9-a4f7-3e8ff8f61c0a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "1582377c-501e-57cc-9cd0-f3281289a2fa"
+            },
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "f7817017-85a2-582d-bb63-2b77cd2e9311"
+            }
+          ],
+          "reason": "These memories jointly describe the offices and the appointment expectation governing visits.",
+          "status": "RESOLVED",
+          "summary": "Staff offices are on the eighth floor, and appointed visitors expect the relevant staff member to be present at the scheduled time.",
+          "uid": "ac8e1e4b-1afc-545d-b945-08ebf5b334e9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "16f54319-1da3-5a17-830b-6524fa183511"
+            }
+          ],
+          "reason": "No compared-side memory addresses this room.",
+          "status": "RESOLVED",
+          "summary": "A small meeting room is on the Main Building’s eighth floor.",
+          "uid": "8a34c891-1892-530b-bf07-f45e727a27d0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "e06a605d-d4d2-5308-9cc5-b1cae7469f36"
+            },
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "a2c599c9-1218-5d37-a866-66222eb5e226"
+            },
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "90c6d663-e63e-591c-99c3-a300a7e7e253"
+            }
+          ],
+          "reason": "These memories jointly describe the offices’ location and operating availability.",
+          "status": "RESOLVED",
+          "summary": "Ninth-floor administrative offices provide public services during departmental operating hours, subject to possible public-holiday closure even when the building is open.",
+          "uid": "c030ab7f-f669-5551-975a-afdfcf74880e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "9da215bb-7f87-583d-9bc2-23e08305d4f1"
+            }
+          ],
+          "reason": "No compared-side memory addresses this support room.",
+          "status": "RESOLVED",
+          "summary": "A support room for tenth-floor events is on the ninth floor.",
+          "uid": "02b2d497-8392-5b40-bf17-3f3cd152173c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "710369be-287c-5c29-9da2-9631d099500e"
+            }
+          ],
+          "reason": "No compared-side memory addresses this hall.",
+          "status": "RESOLVED",
+          "summary": "An exhibition and event hall is on the Main Building’s tenth floor.",
+          "uid": "c2793675-4364-58f3-aff6-ec2fb95d4231"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "e9107328-9e4b-5dcf-a74d-22c90a23b5e0"
+            }
+          ],
+          "reason": "No compared-side memory addresses this room.",
+          "status": "RESOLVED",
+          "summary": "An event preparation room is on the Main Building’s tenth floor.",
+          "uid": "2eee9bc0-a15c-5d73-bc5d-f93abb80b155"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "076ffc9d-2681-59f2-8f8f-1435c49c3f17"
+            }
+          ],
+          "reason": "This is a reference-only procedure for selecting guidance sources.",
+          "status": "RESOLVED",
+          "summary": "Guidance should be based on both published floor facilities and temporary operation notices.",
+          "uid": "21e2a836-0a8c-5928-ba68-3c508f25609f"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "ba35ad87-8285-5130-add8-fc694deeb8f7"
+            },
+            {
+              "frame_uid": "42b7f9f6-a6b4-4dbd-9dc0-d4507476fccb",
+              "memory_uid": "ecf1c8bb-4099-5e7f-82e0-a95928defd5f"
+            }
+          ],
+          "reason": "Both frames materially support the same disclosure boundary, with the compared claim adding an explicit public-information scope.",
+          "status": "RESOLVED",
+          "summary": "Guidance must remain within publicly disclosed construction impacts and must not infer nonpublic construction details.",
+          "uid": "c7bccfb4-286b-5989-bb0e-f5de13e543cd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "e59de198-f9a2-5f3f-be66-43eb9deab632"
+            }
+          ],
+          "reason": "This reference-only epistemic restriction is independent of the compared frame’s disclosed air-conditioning interruption.",
+          "status": "RESOLVED",
+          "summary": "On-site inspection results must not be inferred.",
+          "uid": "72989cf5-543d-5bfe-af26-3a5986b91f51"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "a3f16328-2a27-5b18-b802-11036a6d2be6"
+            },
+            {
+              "frame_uid": "42b7f9f6-a6b4-4dbd-9dc0-d4507476fccb",
+              "memory_uid": "0c87297c-f5fb-5380-9cc3-efa21c0fb60b"
+            }
+          ],
+          "reason": "The claims jointly inform contractor routing: one states the route preference and the other identifies a usability risk without contradicting it.",
+          "status": "RESOLVED",
+          "summary": "Contract staff need separated service routing at shift changes, while unfamiliar designated construction-period access may burden them and cause entrance mistakes.",
+          "uid": "b1b0e2d7-4d46-5334-b49b-04c388ed4af8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "c6894aba-7d8e-5448-b775-e0303efb15d1"
+            }
+          ],
+          "reason": "No compared-side memory supplies or modifies this location.",
+          "status": "RESOLVED",
+          "summary": "The Main Building’s main entrance lobby is on the first floor.",
+          "uid": "9896e565-ad35-5d86-aefd-ae18abb1acd7"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "b3bd402a-5af7-58df-bbcc-2857c956fa74"
+            },
+            {
+              "frame_uid": "42b7f9f6-a6b4-4dbd-9dc0-d4507476fccb",
+              "memory_uid": "8e868c0f-3a92-54e6-a76d-21d3ded46c65"
+            },
+            {
+              "frame_uid": "42b7f9f6-a6b4-4dbd-9dc0-d4507476fccb",
+              "memory_uid": "1dbffba3-b393-5a96-89c4-785df0782e3a"
+            }
+          ],
+          "reason": "The construction condition explains the temporary service change and resulting visitor experience without displacing the baseline location.",
+          "status": "RESOLVED",
+          "summary": "The Innovation Hub remains a first-floor facility, but its consultation desk is closed during construction, potentially sending in-person visitors searching for the online channel.",
+          "uid": "47d0b8b9-3ea8-5bee-94b6-dc84a6708d49"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "0fa245a2-0f0c-5ef4-9c6e-04faa98c9f5f"
+            }
+          ],
+          "reason": "No compared-side memory addresses this facility.",
+          "status": "RESOLVED",
+          "summary": "A student-accessible shared printing station is on the fourth floor.",
+          "uid": "16d03c3f-23a4-5924-a90b-f7421f95e774"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "fdf4ee37-1183-5923-bccb-2c2b2d55cbb3"
+            },
+            {
+              "frame_uid": "42b7f9f6-a6b4-4dbd-9dc0-d4507476fccb",
+              "memory_uid": "26131bc5-ee41-5d66-9507-4f11f9d0afde"
+            }
+          ],
+          "reason": "The construction condition modifies elevator availability without contradicting their normal served-floor range.",
+          "status": "RESOLVED",
+          "summary": "Main Building elevators connect the underground parking level through the tenth floor, but during construction they operate alternately one at a time.",
+          "uid": "f0ef0c20-a146-5d42-ad0f-64fee52b3a9e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "cc098a87-de11-594f-b59c-126a2cec29bd"
+            },
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "38daa1a2-70e9-5815-957a-41c95ed6119e"
+            }
+          ],
+          "reason": "These memories jointly define the agent’s static directory capability and its real-time verification boundary.",
+          "status": "RESOLVED",
+          "summary": "The directory agent can describe published floors and space names but cannot verify in real time that the published layout matches current conditions.",
+          "uid": "d2e75d70-7b96-530d-8273-7fd1bf2b270c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "b1e19dc4-db1f-5328-8448-aac4d37451d7"
+            }
+          ],
+          "reason": "This is an independent reference-only capability limit.",
+          "status": "RESOLVED",
+          "summary": "The directory agent cannot check current meeting-room occupancy.",
+          "uid": "3a320984-aebd-5887-9140-1d495064a6e3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "24e3934d-1bab-4617-9330-91eb5ceae37f",
+              "memory_uid": "d842f429-c182-5fd0-baf8-8f023b85632f"
+            }
+          ],
+          "reason": "This is an independent reference-only navigation preference.",
+          "status": "RESOLVED",
+          "summary": "First-time visitors understand department-centered directions more easily than floor-number-centered directions.",
+          "uid": "1b047331-320b-5433-a8c7-6f9d705b26ef"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "42b7f9f6-a6b4-4dbd-9dc0-d4507476fccb",
+              "memory_uid": "99c29cea-9270-5a77-952c-b3f48da55612"
+            },
+            {
+              "frame_uid": "42b7f9f6-a6b4-4dbd-9dc0-d4507476fccb",
+              "memory_uid": "faea18ec-3091-571f-be3f-345bdbf086b3"
+            }
+          ],
+          "reason": "These compared memories jointly state one construction event and its schedule.",
+          "status": "RESOLVED",
+          "summary": "Major Main Building improvements occur during summer break, with the construction period running from June 24 through August 23.",
+          "uid": "88f6eb2e-6e70-53b2-b0ef-9688f394ffa6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "42b7f9f6-a6b4-4dbd-9dc0-d4507476fccb",
+              "memory_uid": "e79f6d6c-7637-5ef6-b373-651c21a6bb29"
+            }
+          ],
+          "reason": "This disclosed operational impact appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Facility inspections occasionally interrupt air conditioning for five to ten minutes.",
+          "uid": "76b4d5a9-3afc-518a-a964-e931cfd783be"
+        }
+      ],
+      "reports": {
+        "both": "Both support limits on discussing nonpublic construction and recognize contractor service-route needs alongside possible entrance confusion.",
+        "compared_only": "The compared frame provides the construction schedule and brief inspection-related air-conditioning interruptions.",
+        "differences": "Construction conditions suspend or redirect visitor services, alter restroom guidance, constrain elevator operation, and close Innovation Hub consultation despite baseline locations and expectations.",
+        "reference_only": "The reference supplies the broader floor directory, access details, operating caveats, visitor-navigation preferences, and directory-agent capability limits."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "e2247d4b-4666-4256-a3b0-8bfbbd213c90"
+    },
+    "analysis_digest": "d186a500859267d4b472e5af7dd60b85c115d5bd8a23cb83e8175e86cc13fe19",
+    "key": "d9e675913f01639672e77d55b198c58bf98553d414bee4e3893db38eedd5c653",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 99.09162641600051,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-1",
+    "task_description": {
+      "context_digest": "17a794e48857a8178811052488c3bd4cc66e9029847f2ce038825e49ed5afcc8",
+      "context_uid": "e2c67cf1-c2a8-5aef-a2cb-583a9fd8d6c6",
+      "name": "task-1/description"
+    }
+  },
+  "artifact_key": "d9e675913f01639672e77d55b198c58bf98553d414bee4e3893db38eedd5c653",
+  "created_at": "2026-08-13T18:07:24.148480Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-1/campus-wiki/facility-updates",
+  "pair_key": "e78bcb274ea5b641012c60e25102a3b03a2679c56dcb635fdae3902009f2cff8",
+  "provider_seconds": 99.09162641600051,
+  "right": "task-1/participant/construction-updates/facility-updates",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-1"
+}

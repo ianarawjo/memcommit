@@ -1,0 +1,408 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:15:58.131588+00:00",
+      "frames": [
+        {
+          "context_digest": "dd57f5a09e0271c33b7dccbe4935bf1a8d5be14dc7c618906e8af51709bbea89",
+          "context_name": "task-2/advisor1/claim-evidence",
+          "context_uid": "b0c4b50c-f70b-5b0c-a1eb-0fd63e0531bf",
+          "memories": [
+            {
+              "content": "Attach adjacent evidence or citations to verifiable claims about user behavior or technology effects.",
+              "content_digest": "3a856fbbda53df425705aaaff741896f5f5460a8feeb8fb8a73c03e592a80c62",
+              "position": 0,
+              "uid": "06f6c673-ea0c-5657-89d2-3f8711097cd7"
+            },
+            {
+              "content": "Distinguish between results observed in the pilot and expectations to be confirmed in the main user study using different expressions.",
+              "content_digest": "9117c0fd3d9cb713f035f9ae95118ae785af5fcf8909485b097f128ef8e12586",
+              "position": 1,
+              "uid": "58991ce7-d394-5087-b14f-0b014b0ec6ad"
+            },
+            {
+              "content": "Do not use verbs that imply proving causation if the design does not support causal inference.",
+              "content_digest": "5ee12e489ec1fd1af46a49cb05cc9447ed3fbf33ad7b4d8ce52ea700926ea29c",
+              "position": 2,
+              "uid": "f5adf029-a750-5a3a-8eb8-d68e43bb5c13"
+            },
+            {
+              "content": "For topics with sufficient HCI research evidence, prioritize citing recent comprehensive studies over listing individual cases.",
+              "content_digest": "2519cd2fca364ac6eef8577892b03d0a83509f6032874e30c30f36fb1e3dde5a",
+              "position": 3,
+              "uid": "b2a7ff8a-dfca-5857-8733-fe03cbd943ec"
+            },
+            {
+              "content": "Explain how each design choice was derived to address specific user needs.",
+              "content_digest": "fee6e06dfe0489b55ae0d75fe4e7b62facf78052a3136b7120d065e100f3b567",
+              "position": 4,
+              "uid": "1f0c95f4-69bb-5764-a358-d428ff7019d2"
+            },
+            {
+              "content": "Support each core claim with evidence that directly examined it rather than with indirect summaries.",
+              "content_digest": "372e0abff6997b041103fd71719c55549c2e3e0a3a5cdf2d4a1a24ec6538cbff",
+              "position": 5,
+              "uid": "cd475113-5354-5f80-b063-7628e4359afc"
+            },
+            {
+              "content": "Reviewers first check the direct evidence placed closest to the core claim.",
+              "content_digest": "61baa516115e1a5bf4f377358ead7c45bab5e666208b9cd6cd87426007493a49",
+              "position": 6,
+              "uid": "86fe1306-7650-58cc-a3df-79870c61784d"
+            },
+            {
+              "content": "Connect the proposed conceptual design principle to at least one observable user behavior.",
+              "content_digest": "d6c6f9dddd0cd99694df2f232e8a71957d53f77e8d10faf324927af679312acc",
+              "position": 7,
+              "uid": "5d022e45-09c0-515e-98f1-68b2aec686bc"
+            },
+            {
+              "content": "Identify which design judgment—retain, modify, or discard—each piece of evidence from formative evaluation supports.",
+              "content_digest": "a507db0052a4d9196c774a5df74c60fe9225bef49c5d9aece328bfb8dca48035",
+              "position": 8,
+              "uid": "9939e9e8-d97d-57db-974a-750566ca9e2b"
+            },
+            {
+              "content": "Results from controlled formative studies do not directly prove effects in actual long-term use.",
+              "content_digest": "aeeca3701d4ba297e928efc2034c474a2ae78101e440d515a57901e6814321a0",
+              "position": 9,
+              "uid": "41060e8e-95ff-58c1-8b71-36a501a9bd23"
+            },
+            {
+              "content": "The user can have an explanation approved as a conceptual contribution only if it is falsifiable with observable data.",
+              "content_digest": "171f4eeae9df2a0a739f90ed451a34a092093b9f6b0db7c6af04012bea734c5f",
+              "position": 10,
+              "uid": "ec54ce10-07db-5ae3-94a5-8f3621fed4a9"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "74a2975f-0f7c-41d2-909e-9d96dc09e5db"
+        },
+        {
+          "context_digest": "bf5136a518ce85246184349a0194e446748710ed6da95e5c97d4a31d74ddc1b9",
+          "context_name": "task-2/advisor2/review",
+          "context_uid": "3398ba87-f01e-56bd-9da2-0ed0894524fa",
+          "memories": [
+            {
+              "content": "Conduct one review prior to submission focusing solely on the validity of user problems, system interventions, and field evaluation logic.",
+              "content_digest": "9b0b5596ec5924a6141926bfc337ec6e23d77dfb7b65facb26b42109f05f1fe4",
+              "position": 0,
+              "uid": "6d203c86-b6e0-586a-b896-b654fa319ed1"
+            },
+            {
+              "content": "Cross-check whether research questions align with the core functions of the system.",
+              "content_digest": "f7f9f49efe539881dae49a96adce0ec349435e4cc7f55229c88097e54fe03f93",
+              "position": 1,
+              "uid": "6b75bfb1-67f5-50bb-9e0c-04026062de96"
+            },
+            {
+              "content": "Cross-check whether field tasks align with representative measures.",
+              "content_digest": "3e993f6c978e14b5b0f6e8ada40d8a0067981e943c67636e9599fb652dca44a4",
+              "position": 2,
+              "uid": "3abfda89-82ab-5cc5-bdcd-5e2f274fd727"
+            },
+            {
+              "content": "Cross-check whether the evidence to be collected aligns with the design and operational decisions to be changed.",
+              "content_digest": "a4761a8dac6c60a2132619c8c8e963aca0d61216d689786b18574f5e30f1f3aa",
+              "position": 3,
+              "uid": "f14f1974-9035-5a2c-931a-89a5004a2567"
+            },
+            {
+              "content": "Finally verify that the user problem, system intervention, field evaluation, and expected contribution form one coherent logical flow.",
+              "content_digest": "47198a770770dc805e0f40a5f9b9c34ae1999f39ec2f9fa1c34b3280f21f5477",
+              "position": 4,
+              "uid": "6ba1d344-5d98-5c25-ba1e-b28c08d39747"
+            },
+            {
+              "content": "HCI reviewers view the validity of design interventions as low if research questions do not connect to system functions.",
+              "content_digest": "ffa754352dfecc597f84cff7cbf8607a12bbfd99ac22250cc84392bd85e37e73",
+              "position": 5,
+              "uid": "4a85ebbd-a4ee-5c88-9e93-5fc545f41c64"
+            },
+            {
+              "content": "HCI reviewers view the validity of evaluation plans as low if field tasks fail to generate representative measures.",
+              "content_digest": "f29eb5429d767b0fa171b7e9862b3d8d06dfd388739e95acd67b2321aaf1a91e",
+              "position": 6,
+              "uid": "75c4c71d-28e3-559c-99d1-f0dccc31a9e2"
+            },
+            {
+              "content": "HCI reviewers view the practical utility of contributions as low if collected evidence cannot change design or operational decisions.",
+              "content_digest": "6b9ae0bc59cda995d674479dfe95f43359ff04e68cb07633957885ee5cf1336c",
+              "position": 7,
+              "uid": "577e5506-78e8-5768-b288-7a5986347cce"
+            },
+            {
+              "content": "Before submission, conduct a sequential walkthrough with field liaisons of installation failures, operational interruptions, and recovery scenarios.",
+              "content_digest": "115fa1f22eb7f55918620418f89def51ba84bd36e102875a5f5e560de5305dda",
+              "position": 8,
+              "uid": "9ce34a9a-4ba2-5b32-a1de-b0469ddc3f95"
+            },
+            {
+              "content": "Verify in one sentence how each proposed contribution could actually alter specific design or operational decisions.",
+              "content_digest": "1c6ef38e42f40e9cd6ab5323deaa825efb1136b926b66af9337ea6debaf8600e",
+              "position": 9,
+              "uid": "f8253f92-c60c-57e1-a630-6b31abe080ae"
+            },
+            {
+              "content": "The user must distinguish unconfirmed field partners and equipment from finalized ones so remaining execution risks can be assessed.",
+              "content_digest": "c2eb0936c09d8796092950aba699664f79f2222f27523e37a1af5feabe2b8058",
+              "position": 10,
+              "uid": "f5ad6933-3e22-5c47-bdaf-bacc9c9a5b3c"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "a464afa3-8a50-4f20-af2d-f2d38009503c"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames jointly emphasize traceable design logic and consequential contributions. Their evidence-to-decision policies differ in scope, while the reference adds reporting and evidentiary discipline and the compared frame adds submission checks, field-operational planning, and alignment tests across research, system, evaluation, and execution.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "74a2975f-0f7c-41d2-909e-9d96dc09e5db",
+              "memory_uid": "1f0c95f4-69bb-5764-a358-d428ff7019d2"
+            },
+            {
+              "frame_uid": "a464afa3-8a50-4f20-af2d-f2d38009503c",
+              "memory_uid": "6ba1d344-5d98-5c25-ba1e-b28c08d39747"
+            }
+          ],
+          "reason": "One claim requires explaining how each design choice addresses a user need, while the other requires a coherent flow from user problem through intervention, evaluation, and contribution; both jointly strengthen intervention justification.",
+          "status": "RESOLVED",
+          "summary": "Design interventions should be explicitly traceable to user needs or problems within the larger research logic.",
+          "uid": "a5ff7e2e-4727-586e-9c52-d30aaa51371f"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "74a2975f-0f7c-41d2-909e-9d96dc09e5db",
+              "memory_uid": "ec54ce10-07db-5ae3-94a5-8f3621fed4a9"
+            },
+            {
+              "frame_uid": "a464afa3-8a50-4f20-af2d-f2d38009503c",
+              "memory_uid": "f8253f92-c60c-57e1-a630-6b31abe080ae"
+            }
+          ],
+          "reason": "Observable falsifiability establishes whether a conceptual explanation can be tested, while identifying specific design or operational consequences establishes practical relevance; these are complementary criteria for contribution justification.",
+          "status": "RESOLVED",
+          "summary": "Proposed contributions require concrete grounding that makes their implications assessable.",
+          "uid": "87cb1898-9f05-5238-b1db-2f3168bfee58"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "74a2975f-0f7c-41d2-909e-9d96dc09e5db",
+              "memory_uid": "9939e9e8-d97d-57db-974a-750566ca9e2b"
+            },
+            {
+              "frame_uid": "a464afa3-8a50-4f20-af2d-f2d38009503c",
+              "memory_uid": "f14f1974-9035-5a2c-931a-89a5004a2567"
+            },
+            {
+              "frame_uid": "a464afa3-8a50-4f20-af2d-f2d38009503c",
+              "memory_uid": "577e5506-78e8-5768-b288-7a5986347cce"
+            }
+          ],
+          "reason": "The reference applies this rule to completed formative-evaluation evidence and retain-modify-discard judgments, whereas the compared frame applies it to evidence planned for collection and broader design or operational changes; that lifecycle distinction must be preserved.",
+          "status": "RESOLVED",
+          "summary": "Evidence should be connected to the design or operational decisions it can support or change.",
+          "uid": "71ba1d2f-c7dd-5570-9b1d-6c7c0aa36e6e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "74a2975f-0f7c-41d2-909e-9d96dc09e5db",
+              "memory_uid": "06f6c673-ea0c-5657-89d2-3f8711097cd7"
+            },
+            {
+              "frame_uid": "74a2975f-0f7c-41d2-909e-9d96dc09e5db",
+              "memory_uid": "cd475113-5354-5f80-b063-7628e4359afc"
+            },
+            {
+              "frame_uid": "74a2975f-0f7c-41d2-909e-9d96dc09e5db",
+              "memory_uid": "86fe1306-7650-58cc-a3df-79870c61784d"
+            }
+          ],
+          "reason": "These memories jointly state a one-sided evidence-support and placement rule, including the reviewer practice that motivates prioritizing the closest direct evidence.",
+          "status": "RESOLVED",
+          "summary": "Verifiable core claims should have directly examining evidence or citations placed adjacent to them.",
+          "uid": "dbee27a2-a470-5e1c-aadb-95c756bba8bb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "74a2975f-0f7c-41d2-909e-9d96dc09e5db",
+              "memory_uid": "58991ce7-d394-5087-b14f-0b014b0ec6ad"
+            },
+            {
+              "frame_uid": "74a2975f-0f7c-41d2-909e-9d96dc09e5db",
+              "memory_uid": "41060e8e-95ff-58c1-8b71-36a501a9bd23"
+            }
+          ],
+          "reason": "These memories split one one-sided boundary on how limited-stage results may be described and generalized.",
+          "status": "RESOLVED",
+          "summary": "Preliminary or controlled formative findings must be distinguished from unconfirmed main-study expectations and real-world long-term effects.",
+          "uid": "02f46b0b-b7b0-5e89-a4a2-7d1cc8149d1b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "74a2975f-0f7c-41d2-909e-9d96dc09e5db",
+              "memory_uid": "f5adf029-a750-5a3a-8eb8-d68e43bb5c13"
+            }
+          ],
+          "reason": "This is an independent one-sided constraint on inferential wording.",
+          "status": "RESOLVED",
+          "summary": "Causal verbs should not be used when the study design cannot support causal inference.",
+          "uid": "1fb4a74f-e87a-545c-bec3-460ae322c58e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "74a2975f-0f7c-41d2-909e-9d96dc09e5db",
+              "memory_uid": "b2a7ff8a-dfca-5857-8733-fe03cbd943ec"
+            }
+          ],
+          "reason": "This is an independent one-sided policy for selecting literature support.",
+          "status": "RESOLVED",
+          "summary": "Where HCI evidence is sufficient, recent comprehensive studies should be preferred over lists of individual cases.",
+          "uid": "fb4d5518-4fe2-5b58-baeb-e3e841f30391"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "74a2975f-0f7c-41d2-909e-9d96dc09e5db",
+              "memory_uid": "5d022e45-09c0-515e-98f1-68b2aec686bc"
+            }
+          ],
+          "reason": "This is an independent one-sided requirement for behaviorally grounding design principles.",
+          "status": "RESOLVED",
+          "summary": "A conceptual design principle should be connected to at least one observable user behavior.",
+          "uid": "6e5ab55b-a031-5e57-8717-fa5e6d38bf41"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a464afa3-8a50-4f20-af2d-f2d38009503c",
+              "memory_uid": "6d203c86-b6e0-586a-b896-b654fa319ed1"
+            }
+          ],
+          "reason": "This is an independent one-sided review procedure.",
+          "status": "RESOLVED",
+          "summary": "A dedicated pre-submission review should focus solely on the validity of user problems, system interventions, and field-evaluation logic.",
+          "uid": "6c698ebb-8dbb-5e24-8fa4-9d5b0bb2e2d7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a464afa3-8a50-4f20-af2d-f2d38009503c",
+              "memory_uid": "6b75bfb1-67f5-50bb-9e0c-04026062de96"
+            },
+            {
+              "frame_uid": "a464afa3-8a50-4f20-af2d-f2d38009503c",
+              "memory_uid": "4a85ebbd-a4ee-5c88-9e93-5fc545f41c64"
+            }
+          ],
+          "reason": "The paired memories state the same one-sided alignment check and its reviewer-facing rationale.",
+          "status": "RESOLVED",
+          "summary": "Research questions should align with core system functions because disconnects weaken the perceived validity of design interventions.",
+          "uid": "0e689c83-1682-5f29-b58a-f2a2465b61ff"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a464afa3-8a50-4f20-af2d-f2d38009503c",
+              "memory_uid": "3abfda89-82ab-5cc5-bdcd-5e2f274fd727"
+            },
+            {
+              "frame_uid": "a464afa3-8a50-4f20-af2d-f2d38009503c",
+              "memory_uid": "75c4c71d-28e3-559c-99d1-f0dccc31a9e2"
+            }
+          ],
+          "reason": "The paired memories state the same one-sided evaluation alignment check and its reviewer-facing rationale.",
+          "status": "RESOLVED",
+          "summary": "Field tasks should generate representative measures because misalignment weakens the perceived validity of evaluation plans.",
+          "uid": "713ea69a-7b68-517e-bfe5-8db7430ecace"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a464afa3-8a50-4f20-af2d-f2d38009503c",
+              "memory_uid": "9ce34a9a-4ba2-5b32-a1de-b0469ddc3f95"
+            }
+          ],
+          "reason": "This is an independent one-sided operational-readiness review procedure.",
+          "status": "RESOLVED",
+          "summary": "Field liaisons should sequentially review installation failures, operational interruptions, and recovery scenarios before submission.",
+          "uid": "0ed8538e-7bdd-5ca1-8132-e0ba2e2969a2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a464afa3-8a50-4f20-af2d-f2d38009503c",
+              "memory_uid": "f5ad6933-3e22-5c47-bdaf-bacc9c9a5b3c"
+            }
+          ],
+          "reason": "This is an independent one-sided disclosure requirement for field-execution dependencies.",
+          "status": "RESOLVED",
+          "summary": "Unconfirmed field partners and equipment should be distinguished from finalized resources so execution risks remain assessable.",
+          "uid": "5e53240d-dd6d-5d40-9d32-90cb8c2d4cb7"
+        }
+      ],
+      "reports": {
+        "both": "Both connect user needs to intervention logic and require contributions to be grounded in observable or decision-relevant consequences.",
+        "compared_only": "The compared frame adds dedicated coherence reviews, research-function and task-measure alignment checks, operational-failure walkthroughs, and disclosure of unresolved field resources.",
+        "differences": "Both link evidence to decisions, but one addresses completed formative evidence and explicit retain-modify-discard judgments, while the other covers planned collection and broader design or operational changes.",
+        "reference_only": "The reference adds direct citation practices, literature selection, cautious causal and generalization language, and observable grounding for design principles."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "a5cf7052-9898-40d8-929f-488b26a8ca92"
+    },
+    "analysis_digest": "ab276df8355aa6156275894f535b5cc6b246bf6a8d5a4329a742a7555cfdb980",
+    "key": "bc4be60eb009a29e0ec5163f58e264813a956a35538686509ca740f2d34e8603",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 52.341736957998364,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "bc4be60eb009a29e0ec5163f58e264813a956a35538686509ca740f2d34e8603",
+  "created_at": "2026-08-13T18:16:50.472347Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/claim-evidence",
+  "pair_key": "7de48b80b11bbf78538be8487e32188d9f584945db22c07a34c451c52f2e9b20",
+  "provider_seconds": 52.341736957998364,
+  "right": "task-2/advisor2/review",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

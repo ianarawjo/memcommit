@@ -1,0 +1,379 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:38:35.448218+00:00",
+      "frames": [
+        {
+          "context_digest": "db438345c3ec4b3f69562a274c9f81a93bd6e6df97bc89b60abcd193dc89b562",
+          "context_name": "task-3/local/personal-memory/2024/04",
+          "context_uid": "206e1cd3-93da-5341-bda3-95cde4814c20",
+          "memories": [
+            {
+              "content": "The user completed a routine dental checkup in April 2024.",
+              "content_digest": "bbaa093f8dee5b5ee42c4a180e683fce00bc9364f5a009b9fa1e7f2ac233bc01",
+              "position": 0,
+              "uid": "9cea83cd-e39f-53bd-9e79-d30aa465ad02"
+            },
+            {
+              "content": "When the user heard three checkup questions in succession, they asked for the first question again.",
+              "content_digest": "e1b76973991f009295489249af1a7cd0fa7957f24f330e39337e01e5b1acdcbb",
+              "position": 1,
+              "uid": "51f8326f-60d4-5ba3-ba32-a04331dcb930"
+            },
+            {
+              "content": "At the next visit, when questions were asked one at a time, the user answered each without omission.",
+              "content_digest": "30c943f2e043f485a7a7e1ac19343c753ed8f834d00716725322505e28e0b15a",
+              "position": 2,
+              "uid": "cd0bce79-71d5-5d46-9c68-8a1d096dd53a"
+            },
+            {
+              "content": "The user called to reschedule an appointment at lunchtime but did not reach anyone.",
+              "content_digest": "1d4bd2122c160d35080b232ebb8ae5080c2ce34124645b3ec8040d7d29af9752",
+              "position": 3,
+              "uid": "71e27b0c-5c10-5102-aeac-98b0841723f2"
+            },
+            {
+              "content": "After returning home, the user kept a photo of the paper instructions received at the clinic.",
+              "content_digest": "68cddec62167a3910122a129dcfdb3c5604a4fea996d01f870734739dd3b0221",
+              "position": 4,
+              "uid": "86ad5410-0cc7-5876-8e3a-a3f0dd1680c7"
+            },
+            {
+              "content": "On a day the user put only the visit address in the calendar, they had to search again for the floor.",
+              "content_digest": "0d6926aba2c90930bfa984d7af1b12c60f35e53ba9916dfbee2c2391961db1a9",
+              "position": 5,
+              "uid": "aab36950-7e2b-588f-bb7c-d3bd6e36c501"
+            },
+            {
+              "content": "On a day the user shared the checkup time with their older sister, the sister called to check in after the user returned home.",
+              "content_digest": "b7d0fea8e8f2fc13126453039dcedebcda3c67ce2ea96c4a2d5b60365448e0e3",
+              "position": 6,
+              "uid": "50ac9268-9259-56fd-8678-1dfc8f919efb"
+            },
+            {
+              "content": "The scheduling staff at that clinic expect requests to change appointments to arrive by telephone.",
+              "content_digest": "28eec4f0ef0b96764a3f7ea54ee3db9fd4d5f1b62a5a2fa29d0a6193f1d8a18c",
+              "position": 7,
+              "uid": "5141ca66-9860-5ec5-b028-ac8670f586ca"
+            },
+            {
+              "content": "Before adding a follow-up visit to the calendar, confirm the date, time, address, and floor with the user.",
+              "content_digest": "0555c837f721fccd5918b2275086bb39c75e016e27574027185cfbada1c766af",
+              "position": 8,
+              "uid": "e265e637-fa41-53d0-aa9b-0102e9962f9a"
+            },
+            {
+              "content": "The local agent can track completed checkups and scheduled appointments but cannot determine whether a follow-up visit is needed.",
+              "content_digest": "be24b47ccb071438fd01bb99b11af3c63f22e260312a26d901824e6bb0d4cd89",
+              "position": 9,
+              "uid": "7aece7ae-b327-537e-9cef-fe24ee8fc618"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "19a8fa2a-3128-47f6-8229-55153bacba87"
+        },
+        {
+          "context_digest": "1d47d83944d91bc0316a61894412e9b4361758603b9532687cf68473f1d30198",
+          "context_name": "task-3/local/personal-memory/2026/01",
+          "context_uid": "e48e6eac-20f7-599d-9f76-4238bd9dd96d",
+          "memories": [
+            {
+              "content": "The user keeps gloves and scarves in a basket inside the entrance.",
+              "content_digest": "df54c52cb6bc89e2e66c747df9807c6892db272c2a23ac5ac91e3f64aaa2a5da",
+              "position": 0,
+              "uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409"
+            },
+            {
+              "content": "On a day the user could not find their gloves, they walked with their hands in their pockets and missed the bus.",
+              "content_digest": "d4205aee5fe3f2c18adc3622930cc7f74de231de9812ca594dbd95a0af7199ff",
+              "position": 1,
+              "uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5"
+            },
+            {
+              "content": "Before the next outing, the user put the gloves in the entrance basket the night before and left on time.",
+              "content_digest": "23a7026d7d1a7edd3278e7b8aa147ef0d315059663f78da5498ad6c1b4a5407c",
+              "position": 2,
+              "uid": "a11f0943-8ee1-5305-87fb-64982fb36f82"
+            },
+            {
+              "content": "On a snowy day, the user chose a shorter route but turned back at stairs that had not been cleared of snow.",
+              "content_digest": "e9e241d2bc4d7c2fa9a44471aa6d1c16d42d50fe2ed99ccfb50713107714be9b",
+              "position": 3,
+              "uid": "f623f245-cdd5-5080-8869-b52cf2914076"
+            },
+            {
+              "content": "The next day, the user took a cleared sidewalk along the main road and avoided slippery sections.",
+              "content_digest": "62c8ec8b38778e9922cf433af4ceb4d59f60bee52dc758e3b88bb1163637f108",
+              "position": 4,
+              "uid": "17ac56f1-1302-5350-99d5-b95ef7feb768"
+            },
+            {
+              "content": "The user fell asleep with the heat turned up, became too warm before dawn, and woke twice.",
+              "content_digest": "912dbbc88a0f4a174b714a794793781f4d2f6c889f73cd7f825338addcab5d6c",
+              "position": 5,
+              "uid": "96988fa9-44b1-511e-8c99-4372f902cfe3"
+            },
+            {
+              "content": "The next night, the user turned down the heat and used one additional thin blanket.",
+              "content_digest": "3d12a4609d4731ebe71bacc841c979ac3497553238c3b5c2191842bbf075ba89",
+              "position": 6,
+              "uid": "b628acaa-50da-552c-8665-244dc4ab8263"
+            },
+            {
+              "content": "On a morning with heavy snow, the user's father expects the user will worry about road conditions and sends a text before departure.",
+              "content_digest": "dcd6bcb23bee46e49813bb14dd8dcb91983d5830f0536d7f23fcdb3a8af0667c",
+              "position": 7,
+              "uid": "08dfb937-7b28-55b5-801c-c0da00cbd414"
+            },
+            {
+              "content": "Before proposing a winter travel route, check recent snow-clearing conditions and accessible entrances.",
+              "content_digest": "dcab87102a9979c51dd369d5ba5ed00b7445c8ccd14450edcb8bec7859689606",
+              "position": 8,
+              "uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d"
+            },
+            {
+              "content": "The local agent cannot know the actual condition of the sidewalk the user will take from a weather forecast alone.",
+              "content_digest": "6b4bcc2f2f508f130c047ff677cadae0eae5b4cc5e5dd6bb3a1fb3784d7793b1",
+              "position": 9,
+              "uid": "802c4031-57de-592a-9bc8-6ee3d54921c8"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "f1d38d92-74ae-47c2-8cb4-81b8b71a63e8"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames contain independently useful information in separate domains. The reference frame concerns dental visits, communication, scheduling, records, family check-ins, and agent limits; the compared frame concerns winter clothing, routes, home temperature, family support, and travel-condition limits. No scope-aligned claims overlap materially.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "19a8fa2a-3128-47f6-8229-55153bacba87",
+              "memory_uid": "9cea83cd-e39f-53bd-9e79-d30aa465ad02"
+            }
+          ],
+          "reason": "This dental-care history is independently useful and has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user completed a routine dental checkup in April 2024.",
+          "uid": "738519ad-2088-5db1-85cb-7596f1fee9b1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "19a8fa2a-3128-47f6-8229-55153bacba87",
+              "memory_uid": "51f8326f-60d4-5ba3-ba32-a04331dcb930"
+            },
+            {
+              "frame_uid": "19a8fa2a-3128-47f6-8229-55153bacba87",
+              "memory_uid": "cd0bce79-71d5-5d46-9c68-8a1d096dd53a"
+            }
+          ],
+          "reason": "These observations jointly describe the effect of question pacing during visits, which the compared frame does not address.",
+          "status": "RESOLVED",
+          "summary": "The user needed repetition after several consecutive checkup questions but answered fully when questions were presented individually.",
+          "uid": "853aa919-51ea-5449-9fb4-8739948f4d45"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "19a8fa2a-3128-47f6-8229-55153bacba87",
+              "memory_uid": "71e27b0c-5c10-5102-aeac-98b0841723f2"
+            },
+            {
+              "frame_uid": "19a8fa2a-3128-47f6-8229-55153bacba87",
+              "memory_uid": "5141ca66-9860-5ec5-b028-ac8670f586ca"
+            }
+          ],
+          "reason": "These memories jointly describe the clinic’s telephone rescheduling channel and an observed access failure, with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Appointment-change requests at the clinic are expected by telephone, and a lunchtime rescheduling call went unanswered.",
+          "uid": "973288ad-125a-5e84-b991-8727bf4c9936"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "19a8fa2a-3128-47f6-8229-55153bacba87",
+              "memory_uid": "86ad5410-0cc7-5876-8e3a-a3f0dd1680c7"
+            }
+          ],
+          "reason": "This record-retention fact is independently useful and absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user retained a photograph of the clinic’s paper instructions after returning home.",
+          "uid": "2bfb3007-4232-5460-850b-49c8f1184ccf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "19a8fa2a-3128-47f6-8229-55153bacba87",
+              "memory_uid": "aab36950-7e2b-588f-bb7c-d3bd6e36c501"
+            },
+            {
+              "frame_uid": "19a8fa2a-3128-47f6-8229-55153bacba87",
+              "memory_uid": "e265e637-fa41-53d0-aa9b-0102e9962f9a"
+            }
+          ],
+          "reason": "The memories jointly support complete dental-visit calendar details, an operational concern not covered by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Follow-up calendar entries should be confirmed with the user for date, time, address, and floor because an address-only entry previously required another floor search.",
+          "uid": "fa05799d-27d4-5217-9905-f0cca935ec20"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "19a8fa2a-3128-47f6-8229-55153bacba87",
+              "memory_uid": "50ac9268-9259-56fd-8678-1dfc8f919efb"
+            }
+          ],
+          "reason": "This dental-visit family-support observation is independently useful and has no same-context counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "After receiving the checkup time, the user’s older sister called to check in following the visit.",
+          "uid": "8cb46e96-5841-520a-920f-dcc4cb4efcee"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "19a8fa2a-3128-47f6-8229-55153bacba87",
+              "memory_uid": "7aece7ae-b327-537e-9cef-fe24ee8fc618"
+            }
+          ],
+          "reason": "This capability boundary is specific to dental follow-up decisions and is not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The local agent can track completed and scheduled dental visits but cannot determine whether follow-up care is needed.",
+          "uid": "ff4ed323-90b8-5ffa-bd3a-6917a9e745e8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f1d38d92-74ae-47c2-8cb4-81b8b71a63e8",
+              "memory_uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409"
+            }
+          ],
+          "reason": "This household storage convention is independently useful and has no materially corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user stores gloves and scarves in a basket inside the entrance.",
+          "uid": "7e828e92-74d2-5699-af83-b4a5f03ebb00"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f1d38d92-74ae-47c2-8cb4-81b8b71a63e8",
+              "memory_uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5"
+            },
+            {
+              "frame_uid": "f1d38d92-74ae-47c2-8cb4-81b8b71a63e8",
+              "memory_uid": "a11f0943-8ee1-5305-87fb-64982fb36f82"
+            }
+          ],
+          "reason": "These observations jointly describe the departure effect of advance glove preparation, which the reference frame does not address.",
+          "status": "RESOLVED",
+          "summary": "Difficulty finding gloves contributed to a missed bus, while placing them in the entrance basket the night before supported an on-time departure.",
+          "uid": "aec6450a-6746-5679-890d-17cf0f0ef1b4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f1d38d92-74ae-47c2-8cb4-81b8b71a63e8",
+              "memory_uid": "f623f245-cdd5-5080-8869-b52cf2914076"
+            },
+            {
+              "frame_uid": "f1d38d92-74ae-47c2-8cb4-81b8b71a63e8",
+              "memory_uid": "17ac56f1-1302-5350-99d5-b95ef7feb768"
+            },
+            {
+              "frame_uid": "f1d38d92-74ae-47c2-8cb4-81b8b71a63e8",
+              "memory_uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d"
+            },
+            {
+              "frame_uid": "f1d38d92-74ae-47c2-8cb4-81b8b71a63e8",
+              "memory_uid": "802c4031-57de-592a-9bc8-6ee3d54921c8"
+            }
+          ],
+          "reason": "These memories jointly describe evidence, policy, and an information limit for snow-route selection, with no corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Winter route selection depends on recent clearing and accessible entrances; observed cleared paths were usable, uncleared stairs were not, and forecasts alone cannot establish actual sidewalk conditions.",
+          "uid": "8e93d659-6720-558b-b9e0-d31ad7473043"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f1d38d92-74ae-47c2-8cb4-81b8b71a63e8",
+              "memory_uid": "96988fa9-44b1-511e-8c99-4372f902cfe3"
+            },
+            {
+              "frame_uid": "f1d38d92-74ae-47c2-8cb4-81b8b71a63e8",
+              "memory_uid": "b628acaa-50da-552c-8665-244dc4ab8263"
+            }
+          ],
+          "reason": "These memories jointly describe an overnight temperature problem and subsequent adjustment, which the reference frame does not address.",
+          "status": "RESOLVED",
+          "summary": "High overnight heat caused warmth and repeated waking, followed the next night by lower heat and one additional thin blanket.",
+          "uid": "e46ed3ce-0076-558a-827b-d8ac695b61aa"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f1d38d92-74ae-47c2-8cb4-81b8b71a63e8",
+              "memory_uid": "08dfb937-7b28-55b5-801c-c0da00cbd414"
+            }
+          ],
+          "reason": "This weather-linked family-support pattern is independently useful and has no same-context counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "During heavy snow, the user’s father anticipates concern about road conditions and texts before departure.",
+          "uid": "6e147ffe-aeb2-5ec1-b2d9-7a27940dce95"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame uniquely covers glove organization, winter-route accessibility, nighttime temperature adjustment, parental pre-departure support, and limits on inferring sidewalk conditions.",
+        "differences": "",
+        "reference_only": "The reference uniquely records dental-care history, question pacing, telephone rescheduling, retained instructions, complete calendar details, sibling check-ins, and limits on determining follow-up needs."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "641b4728-da82-4d56-bde4-55cfdd821cb8"
+    },
+    "analysis_digest": "5b77e11294cfe9fe1c989cb872dfecd2a992d588778719d1a22c90d1c5f57929",
+    "key": "c38ff74b6cfc052733e1b52427861cd05a5172995713e6ada9558dabab30c022",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 58.51400558300156,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "c38ff74b6cfc052733e1b52427861cd05a5172995713e6ada9558dabab30c022",
+  "created_at": "2026-08-13T18:39:33.961547Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/04",
+  "pair_key": "351eaee8274259aa44a12df7bf1bc7fb7204af7cc2603c1a76478f2f0d93300e",
+  "provider_seconds": 58.51400558300156,
+  "right": "task-3/local/personal-memory/2026/01",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

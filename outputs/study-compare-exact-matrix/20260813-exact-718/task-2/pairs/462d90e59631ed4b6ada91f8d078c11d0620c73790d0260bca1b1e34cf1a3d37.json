@@ -1,0 +1,321 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:18:27.378485+00:00",
+      "frames": [
+        {
+          "context_digest": "52dc61895a6d116135c474d4828efde944579b3a5949b6d64c07dd9853f60801",
+          "context_name": "task-2/advisor1/emphasis",
+          "context_uid": "6f253a9e-f504-53bf-a1d1-de2c4532171e",
+          "memories": [
+            {
+              "content": "Do not exceed two primary HCI contributions.",
+              "content_digest": "c605e418506d380237fb8ce4723bcc2fedebcd5da0d8dd78ef813e21aaf71a7a",
+              "position": 0,
+              "uid": "4a1de8df-6f03-5a3d-bbfa-7c1144d2ec5c"
+            },
+            {
+              "content": "Name each design or empirical contribution and present it in a single sentence.",
+              "content_digest": "286e33467b65e080f192172ae85d481a89c8e1b2d73e1089772eab30e0ae48fa",
+              "position": 1,
+              "uid": "b5b6a901-9047-5482-a0e1-d29e5f7171e8"
+            },
+            {
+              "content": "In studies recruiting community participants, emphasize the time burden associated with participation.",
+              "content_digest": "67a881933729e29cc0ce33f61f50af810f6f12ab5aa9598d453cf3a959a5977f",
+              "position": 2,
+              "uid": "e89de514-48a5-5e9b-96ca-f194c0ed79ab"
+            },
+            {
+              "content": "In studies recruiting community participants, emphasize the travel burden associated with participation.",
+              "content_digest": "3c4e20244bb88626ef1d2ebc89774e29ac85a9ce774a3faaa726131059b8ae33",
+              "position": 3,
+              "uid": "f7025cbb-4005-53c6-9031-e33f04a86b92"
+            },
+            {
+              "content": "HCI reviewers find it difficult to identify primary contributions when named design or empirical contributions exceed two.",
+              "content_digest": "70a2dccd85ce8ca18db239926980dfe13a20b90a9dffa6acae73e5034fce1fbc",
+              "position": 4,
+              "uid": "a42891a1-b674-5747-a77c-43699b0b9723"
+            },
+            {
+              "content": "Emphasize the core design decisions that formative evaluation will change rather than a polished product demonstration.",
+              "content_digest": "be5cad46c349a7c4b538f1a947d979ec25b0f6a34494e4d3a7bb9550508766d4",
+              "position": 5,
+              "uid": "9d7169d5-058f-5f7c-b1ac-30cabd8ba02e"
+            },
+            {
+              "content": "Emphasize design principles transferable to other similar interactions as the primary contribution, rather than the performance of a specific prototype.",
+              "content_digest": "a39c447e1b61b2204233800bafd380163fb5492ddd25cb730bbc6c6a95114e56",
+              "position": 6,
+              "uid": "f8931b4e-9656-548d-84a1-f2f2c3eb47b1"
+            },
+            {
+              "content": "Formative evaluation creates grounds for modification in subsequent iterations rather than definitively determining the superiority of design alternatives.",
+              "content_digest": "0cdd894b41de667b621d6c385d3373c799f4fea53898f65d324c26e86a1c8807",
+              "position": 7,
+              "uid": "9bf9e735-7598-5977-abe2-87b2c9c38a24"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "44f9c197-1bc1-4f5b-b676-4b8d7f5f7633"
+        },
+        {
+          "context_digest": "1396f236b90acd99b836eb5367828f8319d0465ea25b66f696a7f583f4f5ecf6",
+          "context_name": "task-2/advisor2/terminology",
+          "context_uid": "a2976fe7-0e07-5045-9e91-6a214128a482",
+          "memories": [
+            {
+              "content": "Do not change names referring to the same user roles, system functions, or operational stages midway.",
+              "content_digest": "a0f821f4497e7518806857e9005d12e27f6043fda6dbd91ba33ef188e0a3be16",
+              "position": 0,
+              "uid": "e2ae95ed-9033-5625-9179-33f4cf4a95c1"
+            },
+            {
+              "content": "Use abbreviations only for long recurring terms in a two-page proposal.",
+              "content_digest": "e6cad365bd42a8327e3cac92b8cf49cc456fa3e2f5c6624797fa509c0aac6846",
+              "position": 1,
+              "uid": "4be60357-09fa-523d-8c8d-8e03ace8fde9"
+            },
+            {
+              "content": "Present the full term and abbreviation together when using an abbreviation for the first time.",
+              "content_digest": "7b7c1f90727c822edbc13af17d64d45552d1c7ddb5fa18e665369423fd93ffbe",
+              "position": 2,
+              "uid": "0dd5d707-7d13-5be0-8377-421507650cba"
+            },
+            {
+              "content": "Refer to participants based on the roles they perform in the study rather than their status.",
+              "content_digest": "d89feff6e3dad0eea0ba4b1b291b140048af9f0f89d84c8ac196ae547a7b03bd",
+              "position": 3,
+              "uid": "9b3f0cde-7c3e-5b6a-9500-855f31d65ef2"
+            },
+            {
+              "content": "Reviewers from different subfields find it difficult to infer an abbreviation from context alone when it is not defined at first use.",
+              "content_digest": "4ffe91fb52db337a4ad30dc56d0439e12851f17f411c414b6d673e79bd91e68b",
+              "position": 4,
+              "uid": "8c896114-85e6-5c3c-ae3f-6e8e6b59f2fe"
+            },
+            {
+              "content": "When introducing an operational role for the first time, define both the decisions it can make and the actions it performs.",
+              "content_digest": "916b66a818f988f69e2e3c90f0ed0dbb7d29fc9e030b3fc7f822b3817106cbc3",
+              "position": 5,
+              "uid": "dc9e3f25-7aac-500b-b431-f6d810dd09bb"
+            },
+            {
+              "content": "Individuals holding identical job titles may possess different system modification privileges and data access rights depending on their deployment site.",
+              "content_digest": "e0315abc2f42a8f2657aa52e04899096ce799ba790fcd77d22b4196f917790ac",
+              "position": 6,
+              "uid": "04956cab-eb3a-5b71-be45-b1edd6c4a216"
+            },
+            {
+              "content": "The user tends to group distinct field roles under the single label “user.”",
+              "content_digest": "ba75af998618324dbdfa225a2cd503c42888f77daf4d44eb4f79b3a7db8e4bbe",
+              "position": 7,
+              "uid": "fc8613e8-86ca-5322-bb5d-03dfbca71c46"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "b7d7d87f-47a8-4c25-bd96-50f44c327904"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate but complementary proposal-writing concerns. The reference frame governs contribution framing, community-participant burdens, and formative evaluation claims, while the compared frame governs terminology, abbreviations, and precise role descriptions. Neither frame supplies a scope-aligned counterpart to the other’s guidance.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "44f9c197-1bc1-4f5b-b676-4b8d7f5f7633",
+              "memory_uid": "4a1de8df-6f03-5a3d-bbfa-7c1144d2ec5c"
+            },
+            {
+              "frame_uid": "44f9c197-1bc1-4f5b-b676-4b8d7f5f7633",
+              "memory_uid": "a42891a1-b674-5747-a77c-43699b0b9723"
+            }
+          ],
+          "reason": "The reference memories state a contribution cap and its reviewer-centered rationale; the compared frame contains no corresponding contribution-count policy.",
+          "status": "RESOLVED",
+          "summary": "Primary HCI contributions should be limited to two because larger sets are difficult for reviewers to identify.",
+          "uid": "fbfdb4da-1846-5ac5-bd8d-09b32171749c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "44f9c197-1bc1-4f5b-b676-4b8d7f5f7633",
+              "memory_uid": "b5b6a901-9047-5482-a0e1-d29e5f7171e8"
+            }
+          ],
+          "reason": "This is a standalone presentation rule found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Each design or empirical contribution should be explicitly named and expressed in one sentence.",
+          "uid": "71649599-0be1-5c72-acba-490e5ddb27f8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "44f9c197-1bc1-4f5b-b676-4b8d7f5f7633",
+              "memory_uid": "e89de514-48a5-5e9b-96ca-f194c0ed79ab"
+            },
+            {
+              "frame_uid": "44f9c197-1bc1-4f5b-b676-4b8d7f5f7633",
+              "memory_uid": "f7025cbb-4005-53c6-9031-e33f04a86b92"
+            }
+          ],
+          "reason": "The reference memories split one participation-burden disclosure claim into two concrete dimensions; the compared frame does not address recruitment burdens.",
+          "status": "RESOLVED",
+          "summary": "Studies recruiting community participants should emphasize both the time and travel burdens of participation.",
+          "uid": "26629db5-89b2-5d1d-918a-9555b1d76b9f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "44f9c197-1bc1-4f5b-b676-4b8d7f5f7633",
+              "memory_uid": "9d7169d5-058f-5f7c-b1ac-30cabd8ba02e"
+            },
+            {
+              "frame_uid": "44f9c197-1bc1-4f5b-b676-4b8d7f5f7633",
+              "memory_uid": "9bf9e735-7598-5977-abe2-87b2c9c38a24"
+            }
+          ],
+          "reason": "These reference memories jointly characterize formative evaluation as evidence for iterative design change rather than final-product or superiority claims, with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Formative evaluation should foreground design decisions open to revision and support subsequent modification rather than claim a polished demonstration or definitive superiority.",
+          "uid": "ae34617d-fe86-5a6a-a942-6676a40f0792"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "44f9c197-1bc1-4f5b-b676-4b8d7f5f7633",
+              "memory_uid": "f8931b4e-9656-548d-84a1-f2f2c3eb47b1"
+            }
+          ],
+          "reason": "This contribution-framing preference appears only in the reference frame and is independent of its formative-evaluation guidance.",
+          "status": "RESOLVED",
+          "summary": "Transferable design principles should be presented as the primary contribution instead of a specific prototype’s performance.",
+          "uid": "5f90eaa9-2f7b-5644-957f-32a16aabf335"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7d7d87f-47a8-4c25-bd96-50f44c327904",
+              "memory_uid": "e2ae95ed-9033-5625-9179-33f4cf4a95c1"
+            }
+          ],
+          "reason": "This terminology-consistency rule appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Names for the same user roles, system functions, and operational stages should remain consistent throughout the proposal.",
+          "uid": "355ca58e-d3e8-561a-bc4a-50ee150a625d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7d7d87f-47a8-4c25-bd96-50f44c327904",
+              "memory_uid": "4be60357-09fa-523d-8c8d-8e03ace8fde9"
+            }
+          ],
+          "reason": "This explicitly scoped abbreviation-selection rule has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "In a two-page proposal, abbreviations should be reserved for long terms that recur.",
+          "uid": "8af5fec9-180a-5313-86cc-7529efe6db18"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7d7d87f-47a8-4c25-bd96-50f44c327904",
+              "memory_uid": "0dd5d707-7d13-5be0-8377-421507650cba"
+            },
+            {
+              "frame_uid": "b7d7d87f-47a8-4c25-bd96-50f44c327904",
+              "memory_uid": "8c896114-85e6-5c3c-ae3f-6e8e6b59f2fe"
+            }
+          ],
+          "reason": "The compared memories provide a first-use definition rule and its reviewer-centered rationale; the reference frame does not address abbreviations.",
+          "status": "RESOLVED",
+          "summary": "An abbreviation should be paired with its full term at first use because reviewers across subfields may not infer it from context.",
+          "uid": "90e23d7e-1936-5f49-8fe1-155b5718e779"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7d7d87f-47a8-4c25-bd96-50f44c327904",
+              "memory_uid": "9b3f0cde-7c3e-5b6a-9500-855f31d65ef2"
+            },
+            {
+              "frame_uid": "b7d7d87f-47a8-4c25-bd96-50f44c327904",
+              "memory_uid": "fc8613e8-86ca-5322-bb5d-03dfbca71c46"
+            }
+          ],
+          "reason": "The compared memories state the role-based naming principle and identify the tendency it corrects; the reference frame has no corresponding participant-label policy.",
+          "status": "RESOLVED",
+          "summary": "Participants should be identified by their distinct study roles rather than by status or the undifferentiated label “user.”",
+          "uid": "aa3be372-a41e-5eb1-a749-194918881a3e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7d7d87f-47a8-4c25-bd96-50f44c327904",
+              "memory_uid": "dc9e3f25-7aac-500b-b431-f6d810dd09bb"
+            },
+            {
+              "frame_uid": "b7d7d87f-47a8-4c25-bd96-50f44c327904",
+              "memory_uid": "04956cab-eb3a-5b71-be45-b1edd6c4a216"
+            }
+          ],
+          "reason": "These compared memories jointly explain why operational authority and behavior, rather than job title alone, must define a role; the reference frame does not address role permissions.",
+          "status": "RESOLVED",
+          "summary": "Operational roles should be defined by their decisions and actions, recognizing that identical job titles can carry different modification privileges and data-access rights across deployment sites.",
+          "uid": "678a640c-4e56-578d-9ae6-a4474fcf46eb"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame uniquely covers stable terminology, selective and defined abbreviations, and role descriptions grounded in study function, decision authority, actions, site-specific privileges, and access rights.",
+        "differences": "",
+        "reference_only": "The reference uniquely covers limiting and naming contributions, reporting community participation burdens, and framing formative evaluation around transferable principles, design revision, and appropriately modest evidence claims."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "df8e17f6-04c5-4fce-8a7e-bd0157b81d0d"
+    },
+    "analysis_digest": "3db10df3ba41ea00fc17870f54d74a39dee0009e2bcedc780d7a2299c7c66e32",
+    "key": "df62122027d9dcc7670412fa898c662cb8b97ab041119c8572feb0a60917aaad",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 30.82283016600195,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "df62122027d9dcc7670412fa898c662cb8b97ab041119c8572feb0a60917aaad",
+  "created_at": "2026-08-13T18:18:58.200937Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/emphasis",
+  "pair_key": "462d90e59631ed4b6ada91f8d078c11d0620c73790d0260bca1b1e34cf1a3d37",
+  "provider_seconds": 30.82283016600195,
+  "right": "task-2/advisor2/terminology",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

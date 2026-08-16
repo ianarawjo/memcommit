@@ -1,0 +1,379 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:41:18.061418+00:00",
+      "frames": [
+        {
+          "context_digest": "6cb54691fcd12037c24daa71882bad82cd67c16ea72979f2a41e1e1b8eae22a8",
+          "context_name": "task-3/local/personal-memory/2024/06",
+          "context_uid": "8c641e5b-01d9-560c-a8c0-b52cee7402c8",
+          "memories": [
+            {
+              "content": "The user stores copies of identity documents in an encrypted folder.",
+              "content_digest": "83efe427335c1415d4a8d601d6e1c5d7a129c6962b74468d313b123e045b052f",
+              "position": 0,
+              "uid": "79576c1e-fa88-5d6e-b5e2-3d4ec11c3e06"
+            },
+            {
+              "content": "On a day the user transferred between buses twice, they rested for an hour after the trip.",
+              "content_digest": "907b9cc4c16b4b3fe53c2323d31afc83347ddc63775bd865bc42b62ca539f5bb",
+              "position": 1,
+              "uid": "28a1ff0b-e2d4-5cb6-9c26-949d86f76bac"
+            },
+            {
+              "content": "On a day the user took a direct route with a similar travel time, they remained seated to the destination.",
+              "content_digest": "0c0d1b12aa0ad393ac43982fe7d36d08f75d9e634c933593ef6a0a96614bb9ea",
+              "position": 2,
+              "uid": "0ad4a1f9-e3e9-517e-8cfc-f8e6307f1d3e"
+            },
+            {
+              "content": "After arriving at an entrance with stairs only, the user went around to an entrance on the other side of the building.",
+              "content_digest": "775d4c0a211f4509a0488cb3b2a790ae22c1b2ba2e96ed6b9100ae3cfb454315",
+              "position": 3,
+              "uid": "f772b0c7-502f-55b7-b431-ee6b20518d38"
+            },
+            {
+              "content": "On a day the user checked the accessible entrance location in advance, they arrived before the agreed time.",
+              "content_digest": "4e087a4e0ca48a3414580ce0d974da4b2221b304302de01cf305945866320a6a",
+              "position": 4,
+              "uid": "0b2d800b-a4ab-5422-bf06-56d17b98f604"
+            },
+            {
+              "content": "On a rainy day, the user's clothes became wet while crossing an uncovered section at a transfer stop.",
+              "content_digest": "dad5c9f35f0469edc528091e47f22365c1cb5de1b32e70335826d67a576fb47d",
+              "position": 5,
+              "uid": "b233f332-4927-549b-8dab-b554977fe363"
+            },
+            {
+              "content": "On a day the user traveled with their maternal uncle, they agreed to meet at an entrance near the elevator.",
+              "content_digest": "c81b012ae6686f47d54809c50ab559077b0e170d54792d34038f0f8fc32c6a96",
+              "position": 6,
+              "uid": "b38d0d63-c4b0-5955-857d-03cbcfd27f5b"
+            },
+            {
+              "content": "The user's maternal uncle prefers an aisle seat from which it is easy to stand during long-distance travel.",
+              "content_digest": "3ea31753296866c1bf438b51eba4110b0c6ed2e907e86dc21796166ed19d82df",
+              "position": 7,
+              "uid": "4668d326-b11c-5467-bca4-e8d5e242e375"
+            },
+            {
+              "content": "The local agent cannot know whether an accessible entrance is operating that day from past route records alone.",
+              "content_digest": "00fc09badcb1d569e3cb1e392ad18406a032d17749f71b44ed7bc121d5d72b4c",
+              "position": 8,
+              "uid": "a77c985c-3986-5141-9805-e3321b3cfa2c"
+            },
+            {
+              "content": "The transfer route the user takes has more boarding and alighting events and walking segments than the direct route.",
+              "content_digest": "f9320e36494ea5beb854d6bbe38a817ae73cd9fe68b75977438d35e44fb38fe6",
+              "position": 9,
+              "uid": "988926a1-3e28-5b3e-a41c-d9338971643e"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "10037262-6a90-46c9-96f7-51d25668f877"
+        },
+        {
+          "context_digest": "5a45aaafce189f861f7195d3a753aa86812f64c689213961136327ca721c9d3e",
+          "context_name": "task-3/local/personal-memory/2026/06",
+          "context_uid": "f2e6c2e0-886a-52d8-98d4-03009ea37991",
+          "memories": [
+            {
+              "content": "The user keeps four folding chairs for family barbecues in storage.",
+              "content_digest": "7e2bb593a723adbac468184af4063e0ef74420baa03d6249ef77a84f2e6bc9df",
+              "position": 0,
+              "uid": "cce43b8e-c1c1-5208-8d9a-ee665b805d4c"
+            },
+            {
+              "content": "When six family members gathered in a noisy indoor restaurant, the user asked several times for the person across from them to repeat what was said.",
+              "content_digest": "d858d40478a37bed08580523df1915b85b4e2217b2fc506acedacaca55d2158d",
+              "position": 1,
+              "uid": "e682f0fd-e92f-566e-b1ec-1d5ebf091b60"
+            },
+            {
+              "content": "The user held the next gathering in their father's yard and moved between seats while speaking with everyone.",
+              "content_digest": "44843518c924955fa15e245dc41763a6fe21a95f6f590bd395f7b8a2d6357256",
+              "position": 2,
+              "uid": "c1f2b53e-6184-552b-a321-9796bb121055"
+            },
+            {
+              "content": "On a day the user started the barbecue at midday, sunlight led them to finish the meal quickly.",
+              "content_digest": "f275c2211b4bd69f40351800db57965b8ba44afbadb6e90a0291acae4e7a541b",
+              "position": 3,
+              "uid": "56d5befe-d5f4-59df-82e4-a66ba868dfc2"
+            },
+            {
+              "content": "The next time, the user started at 6 p.m. and remained outside until sunset.",
+              "content_digest": "13c413fbf16ea0704c10d09c5ee065a49ab789b0a3dadb1fc5068631dd95b292",
+              "position": 4,
+              "uid": "83d73ede-6f5a-550e-ba1c-c146b73a9917"
+            },
+            {
+              "content": "Because the side dishes brought by the user's mother and older sister had no labels, the user opened the same container twice.",
+              "content_digest": "5cc4205a743f5d8adca15876d7b0dd864089595ce729f4e3c1cc9a2272c6849b",
+              "position": 5,
+              "uid": "cf0947e8-c133-5259-bac2-e8ee6d74929e"
+            },
+            {
+              "content": "At the next gathering, the user wrote each food's name and who brought it on a small piece of paper.",
+              "content_digest": "6a93e0b5f7e3da8eff2e5c69a3f86c28dfc1a39c1ba7602a61cc1f6a96b837f9",
+              "position": 6,
+              "uid": "d42e48ca-39de-529f-bba2-332b779bd6c2"
+            },
+            {
+              "content": "After a barbecue, the user's younger brother prefers to divide leftover food into small containers to take home rather than discard it.",
+              "content_digest": "9febf1dab1f5000cddc636cd753d3c418b84810cbc6e394df7e8917d3fa29b72",
+              "position": 7,
+              "uid": "3958627e-a0fa-5e32-9e87-7ee874fc6fe7"
+            },
+            {
+              "content": "The local agent can summarize preparation and responses from prior family barbecues but cannot know the next attendees or weather.",
+              "content_digest": "6be2ed6916fc8a6200a4646b5db3b5ea0df7650e664bd098f973fb5229257cec",
+              "position": 8,
+              "uid": "1f24b5c2-554c-5356-b335-c6879e53ba7f"
+            },
+            {
+              "content": "The user's father's yard receives strong direct sunlight at midday; after 6 p.m., shade and wind lower the felt temperature.",
+              "content_digest": "a0bf855f5bb0422568bbed468e5299d111143362d7b9fe2dcf35dbaf8bcbf4c6",
+              "position": 9,
+              "uid": "d88b1b21-c58f-51d5-a60b-54bb11473d96"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "19f76943-8937-4218-b4c1-1ed8a013a6de"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover largely separate practical domains: the reference focuses on document security, transit effort, and accessible routing, while the compared frame focuses on family-barbecue arrangements. Their only aligned theme is a scoped limit on what a local agent can infer from historical records.",
+      "relations": [
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "10037262-6a90-46c9-96f7-51d25668f877",
+              "memory_uid": "a77c985c-3986-5141-9805-e3321b3cfa2c"
+            },
+            {
+              "frame_uid": "19f76943-8937-4218-b4c1-1ed8a013a6de",
+              "memory_uid": "1f24b5c2-554c-5356-b335-c6879e53ba7f"
+            }
+          ],
+          "reason": "Both memories bound the local agent’s knowledge from prior records, while explicitly preserving different domains and unknowns: current accessible-entrance operation versus future barbecue attendance and weather.",
+          "status": "RESOLVED",
+          "summary": "Historical records do not establish event-specific conditions that have not been observed for the relevant current or future occasion.",
+          "uid": "396a1724-4728-58d9-8426-198ae8195b8a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "10037262-6a90-46c9-96f7-51d25668f877",
+              "memory_uid": "79576c1e-fa88-5d6e-b5e2-3d4ec11c3e06"
+            }
+          ],
+          "reason": "This is independently useful reference-side information about document security, with no operational counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user stores identity-document copies in an encrypted folder.",
+          "uid": "75f7b2f6-28c5-530e-a742-28c949584af2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "10037262-6a90-46c9-96f7-51d25668f877",
+              "memory_uid": "28a1ff0b-e2d4-5cb6-9c26-949d86f76bac"
+            },
+            {
+              "frame_uid": "10037262-6a90-46c9-96f7-51d25668f877",
+              "memory_uid": "0ad4a1f9-e3e9-517e-8cfc-f8e6307f1d3e"
+            },
+            {
+              "frame_uid": "10037262-6a90-46c9-96f7-51d25668f877",
+              "memory_uid": "988926a1-3e28-5b3e-a41c-d9338971643e"
+            }
+          ],
+          "reason": "These reference-side observations jointly express one route-effort comparison and have no operational counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The transfer route entails more movement and subsequent recovery than a similarly timed direct route, on which the user could remain seated.",
+          "uid": "05971891-55d4-58e1-a27c-eb708c952da9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "10037262-6a90-46c9-96f7-51d25668f877",
+              "memory_uid": "f772b0c7-502f-55b7-b431-ee6b20518d38"
+            },
+            {
+              "frame_uid": "10037262-6a90-46c9-96f7-51d25668f877",
+              "memory_uid": "0b2d800b-a4ab-5422-bf06-56d17b98f604"
+            }
+          ],
+          "reason": "These reference-side experiences jointly describe the practical value of accessible-entrance planning and have no operational counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Locating an accessible entrance affects the user’s path and arrival timing, with advance checking avoiding an unplanned detour.",
+          "uid": "db0d3b74-0500-5155-ad47-5981be0cd23c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "10037262-6a90-46c9-96f7-51d25668f877",
+              "memory_uid": "b233f332-4927-549b-8dab-b554977fe363"
+            }
+          ],
+          "reason": "This is independently useful reference-side information about weather exposure during transit, with no operational counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "An uncovered transfer-stop section exposed the user to rain and wet clothing.",
+          "uid": "56aaa1ad-b4f8-5ec1-b52a-7f300f268c60"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "10037262-6a90-46c9-96f7-51d25668f877",
+              "memory_uid": "b38d0d63-c4b0-5955-857d-03cbcfd27f5b"
+            }
+          ],
+          "reason": "This is independently useful reference-side information about a specific meeting arrangement, with no operational counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "When traveling together, the user and their maternal uncle arranged to meet near an elevator entrance.",
+          "uid": "ea95fb63-6d74-528c-a310-3a79839f0d2e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "10037262-6a90-46c9-96f7-51d25668f877",
+              "memory_uid": "4668d326-b11c-5467-bca4-e8d5e242e375"
+            }
+          ],
+          "reason": "This is independently useful reference-side information about the uncle’s seating preference, with no operational counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s maternal uncle prefers an aisle seat that makes standing easier during long-distance travel.",
+          "uid": "b5ba374b-dc8d-53d3-809a-d68e80652a69"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "19f76943-8937-4218-b4c1-1ed8a013a6de",
+              "memory_uid": "cce43b8e-c1c1-5208-8d9a-ee665b805d4c"
+            }
+          ],
+          "reason": "This is independently useful compared-side information about gathering equipment, with no operational counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user keeps folding chairs in storage for family barbecues.",
+          "uid": "536a4a37-fedd-5188-89d1-d06b09a12648"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "19f76943-8937-4218-b4c1-1ed8a013a6de",
+              "memory_uid": "e682f0fd-e92f-566e-b1ec-1d5ebf091b60"
+            },
+            {
+              "frame_uid": "19f76943-8937-4218-b4c1-1ed8a013a6de",
+              "memory_uid": "c1f2b53e-6184-552b-a321-9796bb121055"
+            }
+          ],
+          "reason": "These compared-side experiences jointly describe how gathering setting and seating mobility shaped conversation, with no operational counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The gathering environment affected conversation: a noisy restaurant required repeated clarification, while a later yard gathering allowed the user to move among speakers.",
+          "uid": "0303d757-3cf4-5b93-918c-0a6434fef7ab"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "19f76943-8937-4218-b4c1-1ed8a013a6de",
+              "memory_uid": "56d5befe-d5f4-59df-82e4-a66ba868dfc2"
+            },
+            {
+              "frame_uid": "19f76943-8937-4218-b4c1-1ed8a013a6de",
+              "memory_uid": "83d73ede-6f5a-550e-ba1c-c146b73a9917"
+            },
+            {
+              "frame_uid": "19f76943-8937-4218-b4c1-1ed8a013a6de",
+              "memory_uid": "d88b1b21-c58f-51d5-a60b-54bb11473d96"
+            }
+          ],
+          "reason": "These compared-side observations jointly express one timing-and-conditions pattern for the father’s yard, with no operational counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Barbecue timing changed outdoor comfort and duration because midday brought strong sunlight, whereas evening brought shade, wind, and a longer stay.",
+          "uid": "680c5803-a3cf-57bd-abcb-bdd5c0b3780b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "19f76943-8937-4218-b4c1-1ed8a013a6de",
+              "memory_uid": "cf0947e8-c133-5259-bac2-e8ee6d74929e"
+            },
+            {
+              "frame_uid": "19f76943-8937-4218-b4c1-1ed8a013a6de",
+              "memory_uid": "d42e48ca-39de-529f-bba2-332b779bd6c2"
+            }
+          ],
+          "reason": "These compared-side memories form one problem-and-response account about food identification, with no operational counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "After unlabeled side dishes caused duplicate container opening, the user labeled foods and their contributors at the next gathering.",
+          "uid": "8e24a536-65b6-5835-ad6d-d6f38f0c1289"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "19f76943-8937-4218-b4c1-1ed8a013a6de",
+              "memory_uid": "3958627e-a0fa-5e32-9e87-7ee874fc6fe7"
+            }
+          ],
+          "reason": "This is independently useful compared-side information about leftover handling, with no operational counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s younger brother prefers taking leftovers home in small containers instead of discarding them.",
+          "uid": "b0f3ce0e-722b-5d64-adae-9dc40dd5660f"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame records barbecue seating, conversation conditions, timing and weather effects, food labeling, and leftover handling.",
+        "differences": "Both frames limit historical inference, but the reference concerns same-day entrance operation while the compared frame concerns future attendance and weather.",
+        "reference_only": "The reference records encrypted document storage, travel effort and weather exposure, accessible-entrance planning, and an uncle’s travel preferences."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "a67246d4-c49c-4a5e-83bc-3c0b52b8fafe"
+    },
+    "analysis_digest": "3780d7813c1c24babd7305ebddfbbc88812206d9331d4d7bcf68d6f09ec5e118",
+    "key": "23a934376ffb3f57c1cc7cb087a46e5235ef07e973eaa30b5fabb11b4c08a936",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 50.80553329199756,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "23a934376ffb3f57c1cc7cb087a46e5235ef07e973eaa30b5fabb11b4c08a936",
+  "created_at": "2026-08-13T18:42:08.866308Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/06",
+  "pair_key": "912d7bf22f7f27a6b7d2b84c1b2a62a28249f9302f6f4bb1d666f58742b2d8b8",
+  "provider_seconds": 50.80553329199756,
+  "right": "task-3/local/personal-memory/2026/06",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

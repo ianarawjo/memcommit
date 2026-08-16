@@ -48,6 +48,13 @@ from memcommit.interfaces.agent.distill import (
     DistillAgentAdapter,
     distill_agent_tool_schema,
 )
+from memcommit.interfaces.agent.dedup import (
+    DEDUP_AGENT_CONTRACT_VERSION,
+    DEDUP_AGENT_TOOL_NAME,
+    DedupAgentAdapter,
+    DedupAgentKind,
+    dedup_agent_tool_schema,
+)
 from memcommit.interfaces.agent.elaborate import (
     ELABORATE_AGENT_CONTRACT_VERSION,
     ELABORATE_AGENT_TOOL_NAME,
@@ -117,6 +124,10 @@ __all__ = [
     "DISTILL_AGENT_CONTRACT_VERSION",
     "DISTILL_AGENT_TOOL_NAME",
     "DistillAgentAdapter",
+    "DEDUP_AGENT_CONTRACT_VERSION",
+    "DEDUP_AGENT_TOOL_NAME",
+    "DedupAgentAdapter",
+    "DedupAgentKind",
     "ELABORATE_AGENT_CONTRACT_VERSION",
     "ELABORATE_AGENT_TOOL_NAME",
     "ElaborateAgentAdapter",
@@ -145,6 +156,7 @@ __all__ = [
     "compare_agent_tool_schema",
     "meld_agent_tool_schema",
     "distill_agent_tool_schema",
+    "dedup_agent_tool_schema",
     "elaborate_agent_tool_schema",
     "fit_agent_tool_schema",
     "help_agent_tool_schema",

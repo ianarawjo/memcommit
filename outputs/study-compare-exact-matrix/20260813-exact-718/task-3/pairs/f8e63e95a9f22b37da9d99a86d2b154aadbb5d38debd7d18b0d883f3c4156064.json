@@ -1,0 +1,415 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:37:54.624204+00:00",
+      "frames": [
+        {
+          "context_digest": "db438345c3ec4b3f69562a274c9f81a93bd6e6df97bc89b60abcd193dc89b562",
+          "context_name": "task-3/local/personal-memory/2024/04",
+          "context_uid": "206e1cd3-93da-5341-bda3-95cde4814c20",
+          "memories": [
+            {
+              "content": "The user completed a routine dental checkup in April 2024.",
+              "content_digest": "bbaa093f8dee5b5ee42c4a180e683fce00bc9364f5a009b9fa1e7f2ac233bc01",
+              "position": 0,
+              "uid": "9cea83cd-e39f-53bd-9e79-d30aa465ad02"
+            },
+            {
+              "content": "When the user heard three checkup questions in succession, they asked for the first question again.",
+              "content_digest": "e1b76973991f009295489249af1a7cd0fa7957f24f330e39337e01e5b1acdcbb",
+              "position": 1,
+              "uid": "51f8326f-60d4-5ba3-ba32-a04331dcb930"
+            },
+            {
+              "content": "At the next visit, when questions were asked one at a time, the user answered each without omission.",
+              "content_digest": "30c943f2e043f485a7a7e1ac19343c753ed8f834d00716725322505e28e0b15a",
+              "position": 2,
+              "uid": "cd0bce79-71d5-5d46-9c68-8a1d096dd53a"
+            },
+            {
+              "content": "The user called to reschedule an appointment at lunchtime but did not reach anyone.",
+              "content_digest": "1d4bd2122c160d35080b232ebb8ae5080c2ce34124645b3ec8040d7d29af9752",
+              "position": 3,
+              "uid": "71e27b0c-5c10-5102-aeac-98b0841723f2"
+            },
+            {
+              "content": "After returning home, the user kept a photo of the paper instructions received at the clinic.",
+              "content_digest": "68cddec62167a3910122a129dcfdb3c5604a4fea996d01f870734739dd3b0221",
+              "position": 4,
+              "uid": "86ad5410-0cc7-5876-8e3a-a3f0dd1680c7"
+            },
+            {
+              "content": "On a day the user put only the visit address in the calendar, they had to search again for the floor.",
+              "content_digest": "0d6926aba2c90930bfa984d7af1b12c60f35e53ba9916dfbee2c2391961db1a9",
+              "position": 5,
+              "uid": "aab36950-7e2b-588f-bb7c-d3bd6e36c501"
+            },
+            {
+              "content": "On a day the user shared the checkup time with their older sister, the sister called to check in after the user returned home.",
+              "content_digest": "b7d0fea8e8f2fc13126453039dcedebcda3c67ce2ea96c4a2d5b60365448e0e3",
+              "position": 6,
+              "uid": "50ac9268-9259-56fd-8678-1dfc8f919efb"
+            },
+            {
+              "content": "The scheduling staff at that clinic expect requests to change appointments to arrive by telephone.",
+              "content_digest": "28eec4f0ef0b96764a3f7ea54ee3db9fd4d5f1b62a5a2fa29d0a6193f1d8a18c",
+              "position": 7,
+              "uid": "5141ca66-9860-5ec5-b028-ac8670f586ca"
+            },
+            {
+              "content": "Before adding a follow-up visit to the calendar, confirm the date, time, address, and floor with the user.",
+              "content_digest": "0555c837f721fccd5918b2275086bb39c75e016e27574027185cfbada1c766af",
+              "position": 8,
+              "uid": "e265e637-fa41-53d0-aa9b-0102e9962f9a"
+            },
+            {
+              "content": "The local agent can track completed checkups and scheduled appointments but cannot determine whether a follow-up visit is needed.",
+              "content_digest": "be24b47ccb071438fd01bb99b11af3c63f22e260312a26d901824e6bb0d4cd89",
+              "position": 9,
+              "uid": "7aece7ae-b327-537e-9cef-fe24ee8fc618"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "5103ce70-9b01-40be-a06c-1460e31ac4a4"
+        },
+        {
+          "context_digest": "14adbc31fc3a2dc50b7b980d1e24569b16fff058104a812c7f3b4e1542b7abf0",
+          "context_name": "task-3/local/personal-memory/2025/03",
+          "context_uid": "913e0bfd-f6d9-579e-9a37-ba5daa9d17f1",
+          "memories": [
+            {
+              "content": "The user stores prepared meals on the second shelf of the freezer.",
+              "content_digest": "cd837b62b643f752da54b21de2f4f7a3d963a7c658d5b83dff39d1d92e0fdbad",
+              "position": 0,
+              "uid": "5d989bab-c471-5de9-bb73-29cabc4753dd"
+            },
+            {
+              "content": "The user went to the market without a shopping list and bought onions that were already at home.",
+              "content_digest": "f667c860e046bb27662b26d7cc4ed083ee48d9d7915237dc4b92ec378481a093",
+              "position": 1,
+              "uid": "d1725ae4-3fd3-5250-92b3-73d84d9152a7"
+            },
+            {
+              "content": "On a day the user shopped after checking a refrigerator photo, they did not make a duplicate purchase.",
+              "content_digest": "7283d4afe58c0ab05d9cb426bb80bed0e26e0b1783ff7cdd00a5f6e89d21861b",
+              "position": 2,
+              "uid": "904ff225-26df-5424-8a82-23d733649106"
+            },
+            {
+              "content": "On a day the user made a spicy stew, they left part of one bowl uneaten.",
+              "content_digest": "2765ec701f8e058d35ddee4a485c40221523ee2d9b56301ec1658ec4e419cbc2",
+              "position": 3,
+              "uid": "67a003c7-648a-59dc-8e82-03f9e452ffce"
+            },
+            {
+              "content": "The next time the user cooked it, they used half as much chili powder and finished the meal.",
+              "content_digest": "bdd7df7c762bbce31a40a45c2124e49ae3a6439dfc2133c574443d7eb3a7b1bb",
+              "position": 4,
+              "uid": "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9"
+            },
+            {
+              "content": "When cooking with their younger brother, the user assigned the cooking sequence only verbally and they did the same task twice.",
+              "content_digest": "bd92611cfc05fd42bb5d25e8dd7838ca1b2f6d99869bf1f61921b46950a4b532",
+              "position": 5,
+              "uid": "64bf4401-e972-5d15-a526-21ca901a6a9f"
+            },
+            {
+              "content": "The next time, the user and their younger brother split ingredient preparation and heat control and finished the meal 20 minutes earlier.",
+              "content_digest": "c3a28e7256d781ecb2d8710145880ffe79495e32d47ae1949c4be54e52a44555",
+              "position": 6,
+              "uid": "57e09ea5-54ff-5fce-aada-68daffbacc8b"
+            },
+            {
+              "content": "When cooking together, the user's younger brother prefers to divide the cooking and dishwashing roles in advance.",
+              "content_digest": "3bbc428c4f3b4e28a8e2341206ac78b39240eea53a9862192528029b0a57d12b",
+              "position": 7,
+              "uid": "0a5d054f-94bd-5955-bdb7-9b5427e2260b"
+            },
+            {
+              "content": "The local agent can compare responses across several meals, but it cannot conclude from one unfinished food item that the user dislikes that ingredient.",
+              "content_digest": "5787c1636d9dd4a5cb5bd70533b7dd44b2d6cff1047f5c408f5bcaa1b6577fe1",
+              "position": 8,
+              "uid": "1f94b78b-1635-551c-b90c-bea2a67ca595"
+            },
+            {
+              "content": "The condition of frozen prepared food may vary with its packaging and storage duration.",
+              "content_digest": "84bdac276dce5b50b19bc0c7c471468a22cc9945b1da7357700a58c157cf4ca1",
+              "position": 9,
+              "uid": "f64ef6c4-7665-5574-9d58-fc124b0bfe3f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "98fc32cb-3ec1-434d-8516-3550bd9a70da"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate operational domains: dental-visit support in the reference and food shopping, cooking, and storage in the compared frame. Each contributes independently useful observations, preferences, instructions, and agent limits, with no sufficiently specific shared decision or policy to relate across sides.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5103ce70-9b01-40be-a06c-1460e31ac4a4",
+              "memory_uid": "9cea83cd-e39f-53bd-9e79-d30aa465ad02"
+            }
+          ],
+          "reason": "This is a one-sided dental attendance record with no compared-side claim about the same event or decision.",
+          "status": "RESOLVED",
+          "summary": "The user completed a routine dental checkup in April 2024.",
+          "uid": "f09b338d-306a-5b1a-97fa-cf17934d9104"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5103ce70-9b01-40be-a06c-1460e31ac4a4",
+              "memory_uid": "51f8326f-60d4-5ba3-ba32-a04331dcb930"
+            },
+            {
+              "frame_uid": "5103ce70-9b01-40be-a06c-1460e31ac4a4",
+              "memory_uid": "cd0bce79-71d5-5d46-9c68-8a1d096dd53a"
+            }
+          ],
+          "reason": "The successive-question and one-at-a-time observations jointly describe one dental communication pattern absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Question pacing affected the user's ability to respond completely during checkups.",
+          "uid": "3cd71bce-0a0b-5248-8b54-2a8fb262ea43"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5103ce70-9b01-40be-a06c-1460e31ac4a4",
+              "memory_uid": "71e27b0c-5c10-5102-aeac-98b0841723f2"
+            }
+          ],
+          "reason": "This is a one-sided contact outcome with no compared-side claim concerning appointment access.",
+          "status": "RESOLVED",
+          "summary": "A lunchtime telephone attempt to reschedule an appointment did not reach clinic staff.",
+          "uid": "1a6bf356-77bc-5cc7-a440-4829894a4ac2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5103ce70-9b01-40be-a06c-1460e31ac4a4",
+              "memory_uid": "86ad5410-0cc7-5876-8e3a-a3f0dd1680c7"
+            }
+          ],
+          "reason": "This dental-information retention behavior has no counterpart addressing the same operational matter.",
+          "status": "RESOLVED",
+          "summary": "The user retained a photograph of the clinic's paper instructions after returning home.",
+          "uid": "e6fb494f-576f-58c8-bc9b-e7dcf0920fcd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5103ce70-9b01-40be-a06c-1460e31ac4a4",
+              "memory_uid": "aab36950-7e2b-588f-bb7c-d3bd6e36c501"
+            }
+          ],
+          "reason": "This is an independently useful calendar-detail observation unique to the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Recording only the visit address left the user needing to search again for the floor.",
+          "uid": "c10fc180-022f-59c1-b681-71414cf1ec13"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5103ce70-9b01-40be-a06c-1460e31ac4a4",
+              "memory_uid": "50ac9268-9259-56fd-8678-1dfc8f919efb"
+            }
+          ],
+          "reason": "This family-support observation concerns dental visits and is not matched by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Sharing the checkup time with the user's older sister enabled a post-visit check-in.",
+          "uid": "75262a21-5e05-5288-9c92-eab66ec0ea89"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5103ce70-9b01-40be-a06c-1460e31ac4a4",
+              "memory_uid": "5141ca66-9860-5ec5-b028-ac8670f586ca"
+            }
+          ],
+          "reason": "This clinic scheduling-channel policy is one-sided and governs no food-related decision.",
+          "status": "RESOLVED",
+          "summary": "The clinic expects appointment-change requests to be made by telephone.",
+          "uid": "ecf71f97-6e27-56c2-9da9-af7f706264e8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5103ce70-9b01-40be-a06c-1460e31ac4a4",
+              "memory_uid": "e265e637-fa41-53d0-aa9b-0102e9962f9a"
+            }
+          ],
+          "reason": "This dental scheduling instruction is independently useful and absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Before calendar entry, a follow-up visit's date, time, address, and floor should be confirmed with the user.",
+          "uid": "638849de-7a0f-521d-b33d-ebed6559b6f1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5103ce70-9b01-40be-a06c-1460e31ac4a4",
+              "memory_uid": "7aece7ae-b327-537e-9cef-fe24ee8fc618"
+            }
+          ],
+          "reason": "This capability boundary is specific to dental follow-up and has no same-scope counterpart.",
+          "status": "RESOLVED",
+          "summary": "The local agent can track checkups and appointments but cannot determine whether follow-up is needed.",
+          "uid": "4ba7556d-8323-5a5b-9e5c-15d700bb6bd9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "98fc32cb-3ec1-434d-8516-3550bd9a70da",
+              "memory_uid": "5d989bab-c471-5de9-bb73-29cabc4753dd"
+            }
+          ],
+          "reason": "This food-storage location is independently useful and appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user stores prepared meals on the freezer's second shelf.",
+          "uid": "fc34069f-0523-5a86-b95b-ffede0a9c3a4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "98fc32cb-3ec1-434d-8516-3550bd9a70da",
+              "memory_uid": "d1725ae4-3fd3-5250-92b3-73d84d9152a7"
+            },
+            {
+              "frame_uid": "98fc32cb-3ec1-434d-8516-3550bd9a70da",
+              "memory_uid": "904ff225-26df-5424-8a82-23d733649106"
+            }
+          ],
+          "reason": "The two shopping observations jointly express one inventory-checking pattern with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Checking a refrigerator photograph before shopping was associated with avoiding duplicate purchases, unlike shopping without a list.",
+          "uid": "621a771f-a1ab-54fd-85be-27385dfc7792"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "98fc32cb-3ec1-434d-8516-3550bd9a70da",
+              "memory_uid": "67a003c7-648a-59dc-8e82-03f9e452ffce"
+            },
+            {
+              "frame_uid": "98fc32cb-3ec1-434d-8516-3550bd9a70da",
+              "memory_uid": "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9"
+            }
+          ],
+          "reason": "The paired meal observations form one spice-adjustment pattern absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Reducing chili powder after leaving spicy stew unfinished was associated with finishing the next meal.",
+          "uid": "2bd9af2e-35bf-525b-959c-ba727564c49a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "98fc32cb-3ec1-434d-8516-3550bd9a70da",
+              "memory_uid": "64bf4401-e972-5d15-a526-21ca901a6a9f"
+            },
+            {
+              "frame_uid": "98fc32cb-3ec1-434d-8516-3550bd9a70da",
+              "memory_uid": "57e09ea5-54ff-5fce-aada-68daffbacc8b"
+            }
+          ],
+          "reason": "The two collaboration observations jointly describe one task-allocation pattern with no dental-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Explicitly dividing cooking responsibilities after duplicated work was associated with faster meal completion.",
+          "uid": "59bb1a2f-2525-5d80-9bb8-0d3344c27ae9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "98fc32cb-3ec1-434d-8516-3550bd9a70da",
+              "memory_uid": "0a5d054f-94bd-5955-bdb7-9b5427e2260b"
+            }
+          ],
+          "reason": "This collaborator preference is independently useful and unique to the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user's younger brother prefers cooking and dishwashing roles to be divided in advance.",
+          "uid": "ca9737aa-815c-5891-b613-a1f82d8cf6d1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "98fc32cb-3ec1-434d-8516-3550bd9a70da",
+              "memory_uid": "1f94b78b-1635-551c-b90c-bea2a67ca595"
+            }
+          ],
+          "reason": "This meal-preference inference limit has no same-scope claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The local agent may compare several meals but cannot infer ingredient dislike from one unfinished item.",
+          "uid": "6bc7f1b9-b08a-5942-8990-9af9da60628b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "98fc32cb-3ec1-434d-8516-3550bd9a70da",
+              "memory_uid": "f64ef6c4-7665-5574-9d58-fc124b0bfe3f"
+            }
+          ],
+          "reason": "This food-storage uncertainty is independently useful and appears only on the compared side.",
+          "status": "RESOLVED",
+          "summary": "Frozen prepared food condition may depend on packaging and storage duration.",
+          "uid": "523c477d-01ec-5d97-af43-e7f6d3e230c5"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers freezer storage, inventory checking, spice adjustment, collaborative cooking roles, meal-based preference inference, and food-condition uncertainty.",
+        "differences": "",
+        "reference_only": "The reference covers dental attendance, question pacing, appointment contact and calendar details, retained instructions, family check-ins, and limits on determining follow-up need."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "2f9af1bb-29c7-4f91-ba43-8f9c98ec9c96"
+    },
+    "analysis_digest": "9ec679c59b324307e52b16986c718f2c95e090f8da9cb4433a7d3cab7a59caf9",
+    "key": "34b0f6e8789153ffa4fb75e90e7a365dfe53a18c7e0d8e77a35a21a5d75f3175",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 39.055739833998814,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "34b0f6e8789153ffa4fb75e90e7a365dfe53a18c7e0d8e77a35a21a5d75f3175",
+  "created_at": "2026-08-13T18:38:33.679204Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/04",
+  "pair_key": "f8e63e95a9f22b37da9d99a86d2b154aadbb5d38debd7d18b0d883f3c4156064",
+  "provider_seconds": 39.055739833998814,
+  "right": "task-3/local/personal-memory/2025/03",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

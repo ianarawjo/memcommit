@@ -1,0 +1,352 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:45:44.811183+00:00",
+      "frames": [
+        {
+          "context_digest": "17b940da39446a9f934dff43ea7db561d14060561065852a34658fe4aaa1702f",
+          "context_name": "task-3/local/personal-memory/2024/10",
+          "context_uid": "7c55b789-a7d0-5070-9cf8-6f5e205415dc",
+          "memories": [
+            {
+              "content": "The user renewed their local library membership in October 2024.",
+              "content_digest": "eb9209032856bdbc69fbfa67e053bf8cd2bc23f8e8e25c0be9a5aa3f7e05f4e9",
+              "position": 0,
+              "uid": "04711182-acef-52a9-bd58-7fe98a54854a"
+            },
+            {
+              "content": "On an evening walk, the user saw an unlit street and took a detour along a main road.",
+              "content_digest": "62d001de1c6c4599e51c4e0713f577a2838e95e03f26064778e64542f390a599",
+              "position": 1,
+              "uid": "0229d0b1-750c-521b-a126-22c9d9d001c4"
+            },
+            {
+              "content": "On a day the user chose a well-lit pedestrian route, the walk took 12 minutes longer than usual.",
+              "content_digest": "ad3770626bef71bc9a29ec7772aeebeb70231e89b417b05b4da9c62a65b89afe",
+              "position": 2,
+              "uid": "e310fe87-8cde-5399-be00-9f8d7ec44e94"
+            },
+            {
+              "content": "On a day the user sat by the library window, they heard vehicle noise with every page they read.",
+              "content_digest": "090a190c68a5166d84cde1eed20f9a03c2b99722ed383eb3b5703489c01d85e0",
+              "position": 3,
+              "uid": "4f37306b-08cd-512a-b92e-ca6761da1a5b"
+            },
+            {
+              "content": "On the next visit, the user sat farther inside and did not move for an hour.",
+              "content_digest": "a071b4c7699fe17f63f0ab6263da1259aea00ad635169a313d4821f57071a86a",
+              "position": 4,
+              "uid": "5897ffa4-cfc6-5012-8931-15420ec5cf7c"
+            },
+            {
+              "content": "The user wrote the due date of a borrowed book on paper and then lost the paper.",
+              "content_digest": "43ef22512c79634cb9e3dc59006c7d06c3513a9d5d1f89eedbb392964cc34f02",
+              "position": 5,
+              "uid": "ce38bd13-3d51-5bff-9eba-ed70a8217356"
+            },
+            {
+              "content": "After entering the due date on their phone, the user saw a reminder the day before and put the book in their bag.",
+              "content_digest": "38782cba2f3bf260d62cf8e80c4a7e4a3a196d4d29ced3c4fe19d050e12c1e0a",
+              "position": 6,
+              "uid": "a304315b-bc0a-591b-b8c2-7eea5145819d"
+            },
+            {
+              "content": "Library staff expect a person requesting a replacement membership card to bring identity-verification material.",
+              "content_digest": "1ac59309aedbfa946661bf5bbc4d5141c420df059937893caba88725dfe77d24",
+              "position": 7,
+              "uid": "ef060b89-6c54-5c20-86be-c07766a35daa"
+            },
+            {
+              "content": "Check recent lighting and pedestrian conditions before proposing an evening walking route.",
+              "content_digest": "1b247adfb3723d14979b2cc7ecf6786c457d60e521b8708a6d08d38d3d1af437",
+              "position": 8,
+              "uid": "7669e5eb-c0fd-5182-ae9a-5f9ae95ddf2f"
+            },
+            {
+              "content": "The local agent can compare past reasons for detours but cannot directly observe current lighting and pedestrian conditions.",
+              "content_digest": "8a5f0e4cbb2fa6c19f2cb5d4e500ed460189b515604c87c6c2a4c8348c4efc44",
+              "position": 9,
+              "uid": "e96f7007-5814-5986-b121-4ce3b22506e1"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "4832f72b-e939-4730-b3b3-026baa3b6b6d"
+        },
+        {
+          "context_digest": "1d47d83944d91bc0316a61894412e9b4361758603b9532687cf68473f1d30198",
+          "context_name": "task-3/local/personal-memory/2026/01",
+          "context_uid": "e48e6eac-20f7-599d-9f76-4238bd9dd96d",
+          "memories": [
+            {
+              "content": "The user keeps gloves and scarves in a basket inside the entrance.",
+              "content_digest": "df54c52cb6bc89e2e66c747df9807c6892db272c2a23ac5ac91e3f64aaa2a5da",
+              "position": 0,
+              "uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409"
+            },
+            {
+              "content": "On a day the user could not find their gloves, they walked with their hands in their pockets and missed the bus.",
+              "content_digest": "d4205aee5fe3f2c18adc3622930cc7f74de231de9812ca594dbd95a0af7199ff",
+              "position": 1,
+              "uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5"
+            },
+            {
+              "content": "Before the next outing, the user put the gloves in the entrance basket the night before and left on time.",
+              "content_digest": "23a7026d7d1a7edd3278e7b8aa147ef0d315059663f78da5498ad6c1b4a5407c",
+              "position": 2,
+              "uid": "a11f0943-8ee1-5305-87fb-64982fb36f82"
+            },
+            {
+              "content": "On a snowy day, the user chose a shorter route but turned back at stairs that had not been cleared of snow.",
+              "content_digest": "e9e241d2bc4d7c2fa9a44471aa6d1c16d42d50fe2ed99ccfb50713107714be9b",
+              "position": 3,
+              "uid": "f623f245-cdd5-5080-8869-b52cf2914076"
+            },
+            {
+              "content": "The next day, the user took a cleared sidewalk along the main road and avoided slippery sections.",
+              "content_digest": "62c8ec8b38778e9922cf433af4ceb4d59f60bee52dc758e3b88bb1163637f108",
+              "position": 4,
+              "uid": "17ac56f1-1302-5350-99d5-b95ef7feb768"
+            },
+            {
+              "content": "The user fell asleep with the heat turned up, became too warm before dawn, and woke twice.",
+              "content_digest": "912dbbc88a0f4a174b714a794793781f4d2f6c889f73cd7f825338addcab5d6c",
+              "position": 5,
+              "uid": "96988fa9-44b1-511e-8c99-4372f902cfe3"
+            },
+            {
+              "content": "The next night, the user turned down the heat and used one additional thin blanket.",
+              "content_digest": "3d12a4609d4731ebe71bacc841c979ac3497553238c3b5c2191842bbf075ba89",
+              "position": 6,
+              "uid": "b628acaa-50da-552c-8665-244dc4ab8263"
+            },
+            {
+              "content": "On a morning with heavy snow, the user's father expects the user will worry about road conditions and sends a text before departure.",
+              "content_digest": "dcd6bcb23bee46e49813bb14dd8dcb91983d5830f0536d7f23fcdb3a8af0667c",
+              "position": 7,
+              "uid": "08dfb937-7b28-55b5-801c-c0da00cbd414"
+            },
+            {
+              "content": "Before proposing a winter travel route, check recent snow-clearing conditions and accessible entrances.",
+              "content_digest": "dcab87102a9979c51dd369d5ba5ed00b7445c8ccd14450edcb8bec7859689606",
+              "position": 8,
+              "uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d"
+            },
+            {
+              "content": "The local agent cannot know the actual condition of the sidewalk the user will take from a weather forecast alone.",
+              "content_digest": "6b4bcc2f2f508f130c047ff677cadae0eae5b4cc5e5dd6bb3a1fb3784d7793b1",
+              "position": 9,
+              "uid": "802c4031-57de-592a-9bc8-6ee3d54921c8"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "57d510d2-fb73-488b-8626-7ba9585748c6"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "Both frames emphasize adapting travel choices to recently verified hazards while preserving distinct evening-lighting and winter-snow scopes. Beyond travel, the reference contains library experiences and procedures, while the compared frame contains entryway preparation, sleep-temperature adjustment, and family communication about snow.",
+      "relations": [
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "4832f72b-e939-4730-b3b3-026baa3b6b6d",
+              "memory_uid": "0229d0b1-750c-521b-a126-22c9d9d001c4"
+            },
+            {
+              "frame_uid": "4832f72b-e939-4730-b3b3-026baa3b6b6d",
+              "memory_uid": "e310fe87-8cde-5399-be00-9f8d7ec44e94"
+            },
+            {
+              "frame_uid": "57d510d2-fb73-488b-8626-7ba9585748c6",
+              "memory_uid": "f623f245-cdd5-5080-8869-b52cf2914076"
+            },
+            {
+              "frame_uid": "57d510d2-fb73-488b-8626-7ba9585748c6",
+              "memory_uid": "17ac56f1-1302-5350-99d5-b95ef7feb768"
+            }
+          ],
+          "reason": "All members describe route selection shaped by immediate pedestrian safety, while the explicit hazard scope differs between poor lighting and uncleared snow or ice.",
+          "status": "RESOLVED",
+          "summary": "The user adapted walking routes in response to observed hazards, with safer alternatives involving detours, extra time, or avoidance of blocked and slippery sections.",
+          "uid": "8607aca3-6457-5d8f-b993-31032fc060b2"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "4832f72b-e939-4730-b3b3-026baa3b6b6d",
+              "memory_uid": "7669e5eb-c0fd-5182-ae9a-5f9ae95ddf2f"
+            },
+            {
+              "frame_uid": "4832f72b-e939-4730-b3b3-026baa3b6b6d",
+              "memory_uid": "e96f7007-5814-5986-b121-4ce3b22506e1"
+            },
+            {
+              "frame_uid": "57d510d2-fb73-488b-8626-7ba9585748c6",
+              "memory_uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d"
+            },
+            {
+              "frame_uid": "57d510d2-fb73-488b-8626-7ba9585748c6",
+              "memory_uid": "802c4031-57de-592a-9bc8-6ee3d54921c8"
+            }
+          ],
+          "reason": "Both frames pair a current-condition checking requirement with a limitation on local inference, but preserve distinct evening-lighting and winter snow-clearance scopes.",
+          "status": "RESOLVED",
+          "summary": "Route proposals require recent, route-specific condition information because indirect or historical knowledge cannot establish current pedestrian conditions.",
+          "uid": "e9c11e49-9502-567c-8b2e-b7a0b87b0ac2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4832f72b-e939-4730-b3b3-026baa3b6b6d",
+              "memory_uid": "04711182-acef-52a9-bd58-7fe98a54854a"
+            }
+          ],
+          "reason": "This is an independently useful library membership event found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user renewed their local library membership in October 2024.",
+          "uid": "8617c41b-8eaf-5aef-8204-c5435e13bf57"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4832f72b-e939-4730-b3b3-026baa3b6b6d",
+              "memory_uid": "4f37306b-08cd-512a-b92e-ca6761da1a5b"
+            },
+            {
+              "frame_uid": "4832f72b-e939-4730-b3b3-026baa3b6b6d",
+              "memory_uid": "5897ffa4-cfc6-5012-8931-15420ec5cf7c"
+            }
+          ],
+          "reason": "The members form one reference-only experience showing a seating adjustment following noise disturbance.",
+          "status": "RESOLVED",
+          "summary": "After vehicle noise disrupted reading by a library window, the user sat farther inside on the next visit and remained there for an hour.",
+          "uid": "02d5f079-e5cd-55ae-a538-9b9c51f9711f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4832f72b-e939-4730-b3b3-026baa3b6b6d",
+              "memory_uid": "ce38bd13-3d51-5bff-9eba-ed70a8217356"
+            },
+            {
+              "frame_uid": "4832f72b-e939-4730-b3b3-026baa3b6b6d",
+              "memory_uid": "a304315b-bc0a-591b-b8c2-7eea5145819d"
+            }
+          ],
+          "reason": "The members form one reference-only claim about replacing an unreliable paper reminder with an effective phone-based routine.",
+          "status": "RESOLVED",
+          "summary": "After losing a paper note of a book’s due date, the user used a phone reminder and prepared the book for return when alerted.",
+          "uid": "b029608c-ee83-5ea3-a615-707de68c9e17"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4832f72b-e939-4730-b3b3-026baa3b6b6d",
+              "memory_uid": "ef060b89-6c54-5c20-86be-c07766a35daa"
+            }
+          ],
+          "reason": "This is an independently useful library procedure found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Library staff expect identity-verification material when someone requests a replacement membership card.",
+          "uid": "d03113b7-0d66-59cb-a0f4-495971069921"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "57d510d2-fb73-488b-8626-7ba9585748c6",
+              "memory_uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409"
+            },
+            {
+              "frame_uid": "57d510d2-fb73-488b-8626-7ba9585748c6",
+              "memory_uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5"
+            },
+            {
+              "frame_uid": "57d510d2-fb73-488b-8626-7ba9585748c6",
+              "memory_uid": "a11f0943-8ee1-5305-87fb-64982fb36f82"
+            }
+          ],
+          "reason": "The members form one compared-only claim about an entrance-basket routine improving departure readiness.",
+          "status": "RESOLVED",
+          "summary": "The user keeps winter accessories near the entrance and, after missing a bus while searching for gloves, staged them there before the next outing and left on time.",
+          "uid": "1b8f1988-bb94-54f5-925a-70785852e3cc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "57d510d2-fb73-488b-8626-7ba9585748c6",
+              "memory_uid": "96988fa9-44b1-511e-8c99-4372f902cfe3"
+            },
+            {
+              "frame_uid": "57d510d2-fb73-488b-8626-7ba9585748c6",
+              "memory_uid": "b628acaa-50da-552c-8665-244dc4ab8263"
+            }
+          ],
+          "reason": "The members form one compared-only claim about adjusting room heat and bedding after overheating.",
+          "status": "RESOLVED",
+          "summary": "After excessive heat disrupted sleep, the user lowered the heat and used an additional thin blanket the next night.",
+          "uid": "469d88e0-d5e3-595f-b5ad-91da9fc2a29b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "57d510d2-fb73-488b-8626-7ba9585748c6",
+              "memory_uid": "08dfb937-7b28-55b5-801c-c0da00cbd414"
+            }
+          ],
+          "reason": "This is an independently useful family communication pattern found only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s father expects concern about road conditions during heavy snow and texts before departure.",
+          "uid": "1478e3fe-741f-559e-94de-9d761a0191e3"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers staging winter clothing, adjusting heat and bedding after disrupted sleep, and a father texting before snowy travel.",
+        "differences": "Travel experiences, verification requirements, and limits on inference align conditionally: one frame concerns evening lighting and pedestrian conditions, while the other concerns snow clearance, sidewalk safety, and accessible entrances.",
+        "reference_only": "The reference covers library membership, seating away from noise, phone-based due-date reminders, and identity verification for replacement cards."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "77cedd67-9a6c-4c55-b2c3-c1020ac60bd6"
+    },
+    "analysis_digest": "55d9a7bdb279ac9c452a1185e2b0d53ff06fe1ef74b63e2cfd098199edcfda24",
+    "key": "85c2ad68adb9f3062b06f490e65bc64163834bddd7b5dde4c59f5a93a871c2be",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 43.0355073330029,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "85c2ad68adb9f3062b06f490e65bc64163834bddd7b5dde4c59f5a93a871c2be",
+  "created_at": "2026-08-13T18:46:27.846288Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/10",
+  "pair_key": "9b9e2d8dbff22448600aa7892f697e9c0f7bac472b004a348b86d9cfa2ceee69",
+  "provider_seconds": 43.0355073330029,
+  "right": "task-3/local/personal-memory/2026/01",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

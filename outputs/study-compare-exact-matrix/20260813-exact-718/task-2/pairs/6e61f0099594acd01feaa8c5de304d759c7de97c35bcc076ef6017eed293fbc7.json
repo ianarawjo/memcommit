@@ -1,0 +1,343 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:15:06.156762+00:00",
+      "frames": [
+        {
+          "context_digest": "30f0425cad991a5bb1b473f7e73c2c039db2d91dc0c95116413d0a8e7b6fed29",
+          "context_name": "task-2/advisor1/budget",
+          "context_uid": "d6d3ee9e-eb0f-5c28-9463-7a680d53b470",
+          "memories": [
+            {
+              "content": "Keep the total, major cost categories, and one-line estimate basis in the main text so the resource argument can be understood without leaving the proposal.",
+              "content_digest": "5dc9db0be6499fc408063be04c9e1cc344986512f4d24d5697f5c53a08529c9a",
+              "position": 0,
+              "uid": "05e0261e-5c52-5030-8176-0f02d4522931"
+            },
+            {
+              "content": "Place each major cost beside the activity or deliverable it enables in the main text.",
+              "content_digest": "b97219830051faf46cff7c9541c331012571866926740ed4d6a7925c12fb21a8",
+              "position": 1,
+              "uid": "1083e9b3-698a-57b1-91ab-ce04cec1e5e5"
+            },
+            {
+              "content": "State the quantity and unit-rate basis for each major cost in the same paragraph that requests it.",
+              "content_digest": "5ce37d95d9d037bbab71276fa8f0e8e383b472d0122817ab7b711c971b8cbf5d",
+              "position": 2,
+              "uid": "3652f268-d86f-55d6-935d-d3bdc487aae6"
+            },
+            {
+              "content": "Readers may question a proposed priority when its cost cannot be checked on the same page as the claimed benefit.",
+              "content_digest": "26fa14ff80ece7682cb51c7356a47a8e60e94edd4551f59ecd2fa3017bd9bffd",
+              "position": 3,
+              "uid": "4e1e1201-94b8-5a7a-8737-edc4c62881ff"
+            },
+            {
+              "content": "Update the cost sentence whenever the related activity changes so the narrative and requested amount cannot drift apart.",
+              "content_digest": "343c11198b38874476e0cda3707dd07436699852db0934e2e8f8c95a7ea3c3ea",
+              "position": 4,
+              "uid": "2f5f9039-e038-51c1-8af0-21a78772c512"
+            },
+            {
+              "content": "Accept a denser main-text paragraph when the estimate basis is essential to deciding whether the request is proportionate.",
+              "content_digest": "59ca1aafc11b37b097251b4b7c6b15e249262304f79b261bd4351d3ca89cb5fe",
+              "position": 5,
+              "uid": "f7a16d08-fbe2-5508-890d-cdbf70c1146e"
+            },
+            {
+              "content": "The user tends to revise the work plan but forget a detached budget table unless the key amount is repeated beside the activity.",
+              "content_digest": "393651043824d9e9c528e5de7618854b71970967d172ee1e9bc3c77aec3baab0",
+              "position": 6,
+              "uid": "2ca1d5a1-d78a-55b2-ab21-fd6ad73366b4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "e04767b8-8a16-4535-a955-c863f6505c73"
+        },
+        {
+          "context_digest": "7842b257aa1d32e6e598b019791827a580a1864e19e05d9101413b11d5b0227d",
+          "context_name": "task-2/advisor2/style",
+          "context_uid": "f0ea0447-bfe6-503c-89da-e90f24af6e2d",
+          "memories": [
+            {
+              "content": "Use an em dash only for a deliberate interruption or sharp contrast; otherwise split the sentence or choose ordinary punctuation.",
+              "content_digest": "3c37a896774ebccbec1e4bb3ad4a4e61ece1bb4ae246226c93b1d78c651bee7b",
+              "position": 0,
+              "uid": "9bd2a9da-9720-5001-b958-f7a2a2658f87"
+            },
+            {
+              "content": "In procedural passages, begin each sentence with the action, condition, or output instead of repeating “we” so the steps remain easy to follow and reuse.",
+              "content_digest": "c61f6b8ae3612497403f306de2cbe4e6a25db285109e89f74d61439abf5fae30",
+              "position": 1,
+              "uid": "e3e20261-e03c-52fb-be9e-04f5f9b1294d"
+            },
+            {
+              "content": "Write system behaviors confirmed in the actual usage environment as observed states.",
+              "content_digest": "972e1f5ba9188f1a423c2b47782e1a3938749419e8c170fabc97e6dd4f86cab2",
+              "position": 2,
+              "uid": "8d8d0e8d-dad1-50b5-9438-049052748a6a"
+            },
+            {
+              "content": "Write system behaviors not yet confirmed in the field as conditional plans.",
+              "content_digest": "9b7f3fffb87af8004e9645b6494bd2b990a1f1bfb054ca0efecea2bfb74d850d",
+              "position": 3,
+              "uid": "8c74ba87-822b-5ce2-9a3a-3adc02ab9744"
+            },
+            {
+              "content": "Readers can reconstruct a sequence more accurately when each sentence begins with the action or condition rather than the author.",
+              "content_digest": "e6748d23d892cb074ac5259f3c733727746640973a5b62c0ed1b7c6a684e9db8",
+              "position": 4,
+              "uid": "1f29de31-5429-5dfc-ab27-01779fa16704"
+            },
+            {
+              "content": "Do not mechanically split connected thoughts into separate short sentences when doing so destroys the intended reading rhythm.",
+              "content_digest": "754be36b29f7b647390c9308fb7a1cfd9e3228ab0f875c8d53e01febbbb3fd8c",
+              "position": 5,
+              "uid": "1d181223-f750-57d2-97a5-b79f276a589f"
+            },
+            {
+              "content": "Preserve a longer sentence when its clauses form one continuous movement that is easier to follow together than apart.",
+              "content_digest": "074e374f77a4fa6f559e3d69746ab3c706d2b1f3d2e4b98a21e8d1e4d59ef087",
+              "position": 6,
+              "uid": "a5ce5f9f-8852-5080-ae35-21abcf4a0973"
+            },
+            {
+              "content": "The user understands that short sentences are easier to scan but feels that uniformly segmented prose loses its reading rhythm.",
+              "content_digest": "acf7ca20f09995c87c51434dc2ff489efc886ada5b2282dc4bc4014befd8fdc0",
+              "position": 7,
+              "uid": "888ce8af-a36e-5e74-9a0c-604aac48d3b7"
+            },
+            {
+              "content": "Write procedural sentences so their opening phrase can be reused as a checklist item without changing the step's meaning.",
+              "content_digest": "7fd5b55fc09e74df05628f1c61bd543b39b906847b86e7f09337a67b47553156",
+              "position": 8,
+              "uid": "ddf40413-3274-5662-ba5e-d6cae2a1e546"
+            },
+            {
+              "content": "The user should choose “I” as an individual author or “we” for a named team and should not mix them when describing the same responsible party.",
+              "content_digest": "951763104930e99be0182b59dbaa6d7d7a20fd23fe968e39a15bd0798a1bd1b7",
+              "position": 9,
+              "uid": "6b7aaddf-5bbd-5015-811d-9f4d7a4b4ad1"
+            },
+            {
+              "content": "Action-first procedural sentences can be reordered or copied into a checklist more easily because their subject is the step rather than the proposal author.",
+              "content_digest": "397e3c0b9262e13d94969669930081ac76d4967adec4c5fd1f681869b613bc36",
+              "position": 10,
+              "uid": "89c2ce30-d6aa-5762-bf17-c697caac68e4"
+            },
+            {
+              "content": "The user can explain whether an em dash marks an intentional interruption or contrast rather than using it decoratively.",
+              "content_digest": "ec27bb0d2ba0656602348660944cb483789dfaec189d6e32ad6145c8e17f81b2",
+              "position": 11,
+              "uid": "9f1b647a-bd2b-50df-8141-5b8c142c0fa5"
+            },
+            {
+              "content": "An em dash creates a stronger interruption than a comma and can make a deliberate contrast easier to hear in the sentence.",
+              "content_digest": "aa3c3cdb31d26aeeb33b047a22860bf1dbe0819e9cc93f03da112b04367b844e",
+              "position": 12,
+              "uid": "49a42872-adcc-5bf8-9029-1d134cac6267"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "844948ec-c72c-49af-a0e0-8f33731b4f31"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate but complementary writing concerns: the reference frame keeps proposal costs visible, checkable, and synchronized with activities, while the compared frame governs procedural phrasing, evidentiary status, sentence rhythm, pronoun consistency, and em-dash use. Neither frame supplies a scope-aligned counterpart to the other.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e04767b8-8a16-4535-a955-c863f6505c73",
+              "memory_uid": "05e0261e-5c52-5030-8176-0f02d4522931"
+            },
+            {
+              "frame_uid": "e04767b8-8a16-4535-a955-c863f6505c73",
+              "memory_uid": "3652f268-d86f-55d6-935d-d3bdc487aae6"
+            },
+            {
+              "frame_uid": "e04767b8-8a16-4535-a955-c863f6505c73",
+              "memory_uid": "f7a16d08-fbe2-5508-890d-cdbf70c1146e"
+            }
+          ],
+          "reason": "These memories jointly specify the cost information required in the proposal narrative and the readability tradeoff permitted when that information is essential to judging proportionality.",
+          "status": "RESOLVED",
+          "summary": "Keep decision-essential cost totals, categories, quantities, unit rates, and estimate bases in the main text, accepting added density when necessary.",
+          "uid": "40b615a6-d2c5-5292-a7c4-2cc81a022828"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e04767b8-8a16-4535-a955-c863f6505c73",
+              "memory_uid": "1083e9b3-698a-57b1-91ab-ce04cec1e5e5"
+            },
+            {
+              "frame_uid": "e04767b8-8a16-4535-a955-c863f6505c73",
+              "memory_uid": "4e1e1201-94b8-5a7a-8737-edc4c62881ff"
+            },
+            {
+              "frame_uid": "e04767b8-8a16-4535-a955-c863f6505c73",
+              "memory_uid": "2ca1d5a1-d78a-55b2-ab21-fd6ad73366b4"
+            }
+          ],
+          "reason": "These memories express one colocation principle and explain its reader-facing and user-specific value.",
+          "status": "RESOLVED",
+          "summary": "Place key costs beside the activities or benefits they support so readers can verify priorities and revisions are less likely to leave amounts detached from the work plan.",
+          "uid": "b7e27b93-ce50-512a-ac6f-d2bea29b7e69"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e04767b8-8a16-4535-a955-c863f6505c73",
+              "memory_uid": "2f5f9039-e038-51c1-8af0-21a78772c512"
+            }
+          ],
+          "reason": "This independently useful maintenance rule prevents the narrative description and requested amount from drifting apart over time.",
+          "status": "RESOLVED",
+          "summary": "Revise the cost sentence whenever its related activity changes.",
+          "uid": "9f08c844-8465-53c7-a110-13f7e19854a8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "844948ec-c72c-49af-a0e0-8f33731b4f31",
+              "memory_uid": "9bd2a9da-9720-5001-b958-f7a2a2658f87"
+            },
+            {
+              "frame_uid": "844948ec-c72c-49af-a0e0-8f33731b4f31",
+              "memory_uid": "9f1b647a-bd2b-50df-8141-5b8c142c0fa5"
+            },
+            {
+              "frame_uid": "844948ec-c72c-49af-a0e0-8f33731b4f31",
+              "memory_uid": "49a42872-adcc-5bf8-9029-1d134cac6267"
+            }
+          ],
+          "reason": "These memories state the same punctuation policy, its audible effect, and the user’s ability to distinguish intentional use from decoration.",
+          "status": "RESOLVED",
+          "summary": "Use an em dash only when its strong interruption or contrast is deliberate and explainable.",
+          "uid": "628e3a49-c45d-5e5c-97ea-7efcc3eebbba"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "844948ec-c72c-49af-a0e0-8f33731b4f31",
+              "memory_uid": "e3e20261-e03c-52fb-be9e-04f5f9b1294d"
+            },
+            {
+              "frame_uid": "844948ec-c72c-49af-a0e0-8f33731b4f31",
+              "memory_uid": "1f29de31-5429-5dfc-ab27-01779fa16704"
+            },
+            {
+              "frame_uid": "844948ec-c72c-49af-a0e0-8f33731b4f31",
+              "memory_uid": "ddf40413-3274-5662-ba5e-d6cae2a1e546"
+            },
+            {
+              "frame_uid": "844948ec-c72c-49af-a0e0-8f33731b4f31",
+              "memory_uid": "89c2ce30-d6aa-5762-bf17-c697caac68e4"
+            }
+          ],
+          "reason": "These memories restate one action-first procedural style and its benefits for reconstruction, reordering, and checklist reuse.",
+          "status": "RESOLVED",
+          "summary": "Begin procedural sentences with the action, condition, or output so sequences remain clear and openings can function as reusable checklist items.",
+          "uid": "7fbd85e9-9801-5d08-86ea-c93ba1762dab"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "844948ec-c72c-49af-a0e0-8f33731b4f31",
+              "memory_uid": "8d8d0e8d-dad1-50b5-9438-049052748a6a"
+            },
+            {
+              "frame_uid": "844948ec-c72c-49af-a0e0-8f33731b4f31",
+              "memory_uid": "8c74ba87-822b-5ce2-9a3a-3adc02ab9744"
+            }
+          ],
+          "reason": "The paired instructions form one evidentiary-status policy whose wording changes according to whether behavior has been confirmed in actual use.",
+          "status": "RESOLVED",
+          "summary": "Present field-confirmed system behavior as an observed state and unconfirmed behavior as a conditional plan.",
+          "uid": "8f149dcc-6228-5fc2-ac8d-cef690f8a5a1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "844948ec-c72c-49af-a0e0-8f33731b4f31",
+              "memory_uid": "1d181223-f750-57d2-97a5-b79f276a589f"
+            },
+            {
+              "frame_uid": "844948ec-c72c-49af-a0e0-8f33731b4f31",
+              "memory_uid": "a5ce5f9f-8852-5080-ae35-21abcf4a0973"
+            },
+            {
+              "frame_uid": "844948ec-c72c-49af-a0e0-8f33731b4f31",
+              "memory_uid": "888ce8af-a36e-5e74-9a0c-604aac48d3b7"
+            }
+          ],
+          "reason": "These memories express the same preference against uniformly segmented prose and identify continuity and rhythm as the governing considerations.",
+          "status": "RESOLVED",
+          "summary": "Preserve longer connected sentences when splitting them would damage a continuous, easier-to-follow reading movement.",
+          "uid": "4d051100-8747-572c-af48-5c97162f5896"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "844948ec-c72c-49af-a0e0-8f33731b4f31",
+              "memory_uid": "6b7aaddf-5bbd-5015-811d-9f4d7a4b4ad1"
+            }
+          ],
+          "reason": "This is an independent authorship and responsibility rule not otherwise addressed by either frame.",
+          "status": "RESOLVED",
+          "summary": "Choose “I” for an individual author or “we” for a named team and keep that choice consistent for the same responsible party.",
+          "uid": "7e24f0ac-ab24-5edf-ab25-80284e4c1b03"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame addresses action-first reusable procedures, observed versus conditional system claims, deliberate em-dash use, preservation of connected sentence rhythm, and consistent authorship pronouns.",
+        "differences": "",
+        "reference_only": "The reference frame emphasizes keeping cost totals, calculation bases, enabled activities, and updates together in the proposal’s main text so readers can assess proportionality and revisions do not create drift."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "86f4ba11-3f1a-4ef8-afce-996326c5ed48"
+    },
+    "analysis_digest": "2ccbf6a1960cbcdf4209fd85bc71f735e09c669696f08fd04ac1cd502640e3dd",
+    "key": "aabcfe15510730ed08524365ee84c651b49acd69ff9855bca1a4e4b45118a2e1",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 35.37154087499948,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "aabcfe15510730ed08524365ee84c651b49acd69ff9855bca1a4e4b45118a2e1",
+  "created_at": "2026-08-13T18:15:41.527585Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/budget",
+  "pair_key": "6e61f0099594acd01feaa8c5de304d759c7de97c35bcc076ef6017eed293fbc7",
+  "provider_seconds": 35.37154087499948,
+  "right": "task-2/advisor2/style",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

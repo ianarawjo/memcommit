@@ -1,0 +1,388 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:42:18.067848+00:00",
+      "frames": [
+        {
+          "context_digest": "58f58090449931225a941a4219f3fce7ebcf23bbabc0e0aa93a8733d4ba32701",
+          "context_name": "task-3/local/personal-memory/2024/07",
+          "context_uid": "8747b4f6-d17c-5b02-83f4-fc3af73e2da0",
+          "memories": [
+            {
+              "content": "The user updated the utility account for their residence in July 2024.",
+              "content_digest": "89c6a8e8dd7ad799b9ef4cb2b10963ce0b9ad55e713716d9729f903e76c0f71a",
+              "position": 0,
+              "uid": "65a332a2-2707-55f8-b7a6-a7378e6fbb7a"
+            },
+            {
+              "content": "After putting a paper bill in a drawer, the user checked it one day after the payment date.",
+              "content_digest": "474d42322de3190caee3e4feeb831bcb6a7b57e58427667d74be084ee9c64257",
+              "position": 1,
+              "uid": "fb94e1fd-9b3d-567a-81d8-d7a0ee90e04e"
+            },
+            {
+              "content": "In the month after receiving an electronic billing alert, the user paid two days before the deadline.",
+              "content_digest": "c16cf32e0018eb1cdf94e3070036d7fb93b0ccc8adb633a057642ff41284eaa0",
+              "position": 2,
+              "uid": "7d8db31a-c330-5852-9d7c-c9da7f98d899"
+            },
+            {
+              "content": "The user saw a water-inspection notice late and started washing dishes during the scheduled shutoff.",
+              "content_digest": "d5bea20cc35a46502ba919c52bee7519453346789d4bb881c82a9c08e6840cb0",
+              "position": 3,
+              "uid": "008dd110-feb2-5b4b-b602-bb3e23475a95"
+            },
+            {
+              "content": "After transferring a management-office notice to their phone calendar, the user did not miss the inspection time.",
+              "content_digest": "ce2c06404fcb8988b61da98f2ddd58d3db6506ff74aa1c7dfd43f841fa6fb25d",
+              "position": 4,
+              "uid": "a03ed01a-3d15-5eaf-9415-529705fd1245"
+            },
+            {
+              "content": "During a boiler technician's visit, the user had not cleared boxes from the entrance in advance and had to rearrange the passage.",
+              "content_digest": "39f4ca86667c0622dce2b6fee2b04df73131bf9d98e81478f1fa818b5dfe70c2",
+              "position": 5,
+              "uid": "2fb4b0bd-1257-5e50-881a-7f312940e1c5"
+            },
+            {
+              "content": "The user cleared the entrance the day before the next visit so the inspection could begin immediately.",
+              "content_digest": "e99fb029e3ca864e4f293358a85f33d73f4d7d2b9fda7dcd437ffdf183350666",
+              "position": 6,
+              "uid": "d05286e8-f183-5f4a-99d8-3dcca1aeaa09"
+            },
+            {
+              "content": "The building manager expects that a one-day advance visit notice gives a resident enough time to prepare the work area.",
+              "content_digest": "f992e380bfa87fa04c9f7dde8eceee69eb6b0aa3ad79c180d9023dafd7dd2abd",
+              "position": 7,
+              "uid": "44d28aa3-1aa4-5276-b545-86ee2cb17078"
+            },
+            {
+              "content": "Confirm the user's available time before finalizing a service visit to the residence.",
+              "content_digest": "dee4efa145a0f8b25c47a1c6855c02feee2de292e78b2e3790763796981db1e5",
+              "position": 8,
+              "uid": "77f77450-ab10-5469-8e2f-5445060926bc"
+            },
+            {
+              "content": "The local agent can compare payment records with notice times but cannot verify whether a residential service problem was resolved.",
+              "content_digest": "09e052010507ce17344888df5171f58996245cceb9012e160d540f030e7ba98a",
+              "position": 9,
+              "uid": "fd7f98b4-d5b9-5196-ad5e-c4356681ecf4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "329e4391-bace-441d-ae64-5e9e43e2230d"
+        },
+        {
+          "context_digest": "df0924e320cd14a29eaed60f78e82fd509c4062949b35706b2a7cb94571fb599",
+          "context_name": "task-3/local/personal-memory/2026/04",
+          "context_uid": "16e860a8-7a90-5b7a-adc3-1c487ef97e03",
+          "memories": [
+            {
+              "content": "The user collects clothes for donation in a large bag beside the entrance.",
+              "content_digest": "39f2f01c59b7fa4ca7529d510e1b0a6ffab6706861042f771cfe97f6f806efac",
+              "position": 0,
+              "uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            },
+            {
+              "content": "After emptying an entire drawer at once, the user could not find a charger they needed.",
+              "content_digest": "674c33ba6475f42b29b03e6f8711e0216f983f3d37fee3dacf9336e3bb4596bf",
+              "position": 1,
+              "uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            },
+            {
+              "content": "During the next organizing session, the user sorted items by type and put only items to be discarded in the bag.",
+              "content_digest": "63104b5a7fd380f818c8758c51f9550c7a7fa41ff91f1dd314225d1824b69643",
+              "position": 2,
+              "uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            },
+            {
+              "content": "Even after photographing unworn clothes, the user did not take them out again for one month.",
+              "content_digest": "519f131096440719dcd3412f4439c5cfe44b7f402684170209708040692dc5fd",
+              "position": 3,
+              "uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            },
+            {
+              "content": "After moving those clothes to the donation bag, the user cleared one closet compartment.",
+              "content_digest": "45db58ae108a299344d982d8606fff26f733252da691cf01417e760909ff6057",
+              "position": 4,
+              "uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            },
+            {
+              "content": "The user nearly discarded an important paper with advertising and checked the recycling box again.",
+              "content_digest": "6bf928f67944656e5f3c68d8869c0cefd039a588f0ba735f94520231ef58017c",
+              "position": 5,
+              "uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            },
+            {
+              "content": "During the next organizing session, the user kept a separate document box and did not mix the papers.",
+              "content_digest": "adac8d4266c6b11e15d29c484665bc5dcc915f9aa319198b6a69d0e7b0131bb3",
+              "position": 6,
+              "uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            },
+            {
+              "content": "The user's mother asks the user to check whether she needs kitchen items in good condition before discarding them.",
+              "content_digest": "0752bc2ac00c0b1301c45ab4c2e73f63c57e6ebc4255dcc1c13330ffda906612",
+              "position": 7,
+              "uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            },
+            {
+              "content": "Confirm with the user before marking a personal document or another person's property as a disposal candidate.",
+              "content_digest": "17062e2cd4738619e81e211cb2f53d14e78c5f4eab9ae49053ce7e06935a7db5",
+              "position": 8,
+              "uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            },
+            {
+              "content": "The local agent cannot determine an object's emotional meaning from frequency of use alone.",
+              "content_digest": "9c86bcfe2b209bf7957dced0eab000b42f97b6a435d705ccaccb15e49be3691d",
+              "position": 9,
+              "uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "0ecc70bd-226a-4b45-b44f-7be97f586cf2"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate household domains: the reference frame concerns utility billing and residential service preparation, while the compared frame concerns organizing and safeguarding possessions. Neither contains a scope-aligned counterpart to the other’s operational claims, and no contradiction is established.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "329e4391-bace-441d-ae64-5e9e43e2230d",
+              "memory_uid": "65a332a2-2707-55f8-b7a6-a7378e6fbb7a"
+            }
+          ],
+          "reason": "This is independently useful reference-side account history with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The residence’s utility account was updated in July 2024.",
+          "uid": "0015a303-f2b5-5eac-8b2e-aede2c42b2f6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "329e4391-bace-441d-ae64-5e9e43e2230d",
+              "memory_uid": "fb94e1fd-9b3d-567a-81d8-d7a0ee90e04e"
+            },
+            {
+              "frame_uid": "329e4391-bace-441d-ae64-5e9e43e2230d",
+              "memory_uid": "7d8db31a-c330-5852-9d7c-c9da7f98d899"
+            }
+          ],
+          "reason": "These episodes jointly describe a reference-only change in payment timing associated with how billing notices were handled.",
+          "status": "RESOLVED",
+          "summary": "The user checked a stored paper bill after its payment date but, following an electronic alert the next month, paid before the deadline.",
+          "uid": "7da0d3c7-2143-5fc2-87f8-00c1333ee569"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "329e4391-bace-441d-ae64-5e9e43e2230d",
+              "memory_uid": "008dd110-feb2-5b4b-b602-bb3e23475a95"
+            },
+            {
+              "frame_uid": "329e4391-bace-441d-ae64-5e9e43e2230d",
+              "memory_uid": "a03ed01a-3d15-5eaf-9415-529705fd1245"
+            }
+          ],
+          "reason": "These memories split one reference-only claim about outcomes from different ways of handling inspection notices.",
+          "status": "RESOLVED",
+          "summary": "Late awareness of one inspection notice caused a shutoff-time disruption, whereas calendaring a later notice prevented a missed inspection time.",
+          "uid": "1ac3774f-5e11-500b-9c62-29f2e27c6ac3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "329e4391-bace-441d-ae64-5e9e43e2230d",
+              "memory_uid": "2fb4b0bd-1257-5e50-881a-7f312940e1c5"
+            },
+            {
+              "frame_uid": "329e4391-bace-441d-ae64-5e9e43e2230d",
+              "memory_uid": "d05286e8-f183-5f4a-99d8-3dcca1aeaa09"
+            },
+            {
+              "frame_uid": "329e4391-bace-441d-ae64-5e9e43e2230d",
+              "memory_uid": "44d28aa3-1aa4-5276-b545-86ee2cb17078"
+            }
+          ],
+          "reason": "These memories collectively describe the reference frame’s preparation history and stated advance-notice expectation for residential visits.",
+          "status": "RESOLVED",
+          "summary": "Advance clearing of the entrance enabled a later inspection to start immediately, consistent with the manager’s expectation that one day’s notice permits work-area preparation, unlike an earlier unprepared visit.",
+          "uid": "775194d1-17f1-5886-99c8-cee10bf22abb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "329e4391-bace-441d-ae64-5e9e43e2230d",
+              "memory_uid": "77f77450-ab10-5469-8e2f-5445060926bc"
+            }
+          ],
+          "reason": "This scheduling policy is independently useful and has no compared-side claim about arranging service visits.",
+          "status": "RESOLVED",
+          "summary": "The user’s availability should be confirmed before a residential service visit is finalized.",
+          "uid": "cffbaa5e-1069-5306-bc2e-2c55ad7e1744"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "329e4391-bace-441d-ae64-5e9e43e2230d",
+              "memory_uid": "fd7f98b4-d5b9-5196-ad5e-c4356681ecf4"
+            }
+          ],
+          "reason": "This reference-only capability boundary concerns service and billing evidence, not object organization or valuation.",
+          "status": "RESOLVED",
+          "summary": "The local agent can compare payment and notice timing but cannot verify resolution of a residential service problem.",
+          "uid": "ef7b1f00-48d8-529b-9a30-7a949efd1160"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0ecc70bd-226a-4b45-b44f-7be97f586cf2",
+              "memory_uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            }
+          ],
+          "reason": "This is independently useful compared-side information about donation storage with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user keeps a large bag of clothes for donation beside the entrance.",
+          "uid": "35db0612-b3cf-5602-8b2e-a0ed0806ee36"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0ecc70bd-226a-4b45-b44f-7be97f586cf2",
+              "memory_uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            },
+            {
+              "frame_uid": "0ecc70bd-226a-4b45-b44f-7be97f586cf2",
+              "memory_uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            }
+          ],
+          "reason": "These memories jointly describe a compared-only shift from indiscriminate emptying to controlled sorting.",
+          "status": "RESOLVED",
+          "summary": "After losing track of a needed charger when emptying a drawer wholesale, the user later sorted by type and bagged only discard items.",
+          "uid": "7ec29c55-6368-5245-88f5-7275f2ed1b5a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0ecc70bd-226a-4b45-b44f-7be97f586cf2",
+              "memory_uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            },
+            {
+              "frame_uid": "0ecc70bd-226a-4b45-b44f-7be97f586cf2",
+              "memory_uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            }
+          ],
+          "reason": "These memories split one compared-only claim about differing follow-through and space outcomes for unworn clothes.",
+          "status": "RESOLVED",
+          "summary": "Photographing unworn clothes did not prompt removal for a month, while moving them into the donation bag subsequently cleared closet space.",
+          "uid": "b177a2ec-0ce5-5872-9ac3-0896e29afe30"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0ecc70bd-226a-4b45-b44f-7be97f586cf2",
+              "memory_uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            },
+            {
+              "frame_uid": "0ecc70bd-226a-4b45-b44f-7be97f586cf2",
+              "memory_uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            }
+          ],
+          "reason": "These memories jointly describe a compared-only risk and the later organizing practice that avoided mixing papers.",
+          "status": "RESOLVED",
+          "summary": "After nearly discarding an important paper mixed with advertising, the user kept documents separate during the next organizing session.",
+          "uid": "dcd83a02-32e3-589e-8eb6-141c04961322"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0ecc70bd-226a-4b45-b44f-7be97f586cf2",
+              "memory_uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            }
+          ],
+          "reason": "This is independently useful compared-side information about another person’s interest in potential disposal items.",
+          "status": "RESOLVED",
+          "summary": "The user’s mother asks to be consulted about useful kitchen items before they are discarded.",
+          "uid": "a0b858ab-6253-53bc-bb6a-748dbd44b94b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0ecc70bd-226a-4b45-b44f-7be97f586cf2",
+              "memory_uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            }
+          ],
+          "reason": "This compared-only disposal safeguard addresses a different operational decision from confirming availability for a service visit.",
+          "status": "RESOLVED",
+          "summary": "The user should be consulted before a personal document or another person’s property is marked for disposal.",
+          "uid": "460a6e0f-6dd9-531d-85c1-6c49bbd2b78b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0ecc70bd-226a-4b45-b44f-7be97f586cf2",
+              "memory_uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "reason": "This compared-only capability limit concerns object valuation and has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The local agent cannot infer an object’s emotional meaning solely from how often it is used.",
+          "uid": "129389a5-03dd-57a1-b2d7-77f0baf6073d"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame describes safer organizing methods, donation follow-through, protection of documents and others’ property, disposal confirmation, and limits on inferring emotional value.",
+        "differences": "",
+        "reference_only": "The reference describes billing-alert outcomes, inspection and access preparation, visit scheduling, and limits on verifying service resolution."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "f1c42fdd-aef3-4c26-9dec-851bc4628013"
+    },
+    "analysis_digest": "afc695fee6d07601dd075b4401f6ff5dd674b4b61ccce1b50962c9ac19dbc35d",
+    "key": "0eb6c8680da49350e5bed2d74d364c3667cbf1bbe6b74e5429d19ebd69d98078",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 39.956040667002526,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "0eb6c8680da49350e5bed2d74d364c3667cbf1bbe6b74e5429d19ebd69d98078",
+  "created_at": "2026-08-13T18:42:58.023534Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/07",
+  "pair_key": "7f143ba65633bcc0ca93424aa48b4802d26bd58b4fdeb2caa3ffa7c88940c9cf",
+  "provider_seconds": 39.956040667002526,
+  "right": "task-3/local/personal-memory/2026/04",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

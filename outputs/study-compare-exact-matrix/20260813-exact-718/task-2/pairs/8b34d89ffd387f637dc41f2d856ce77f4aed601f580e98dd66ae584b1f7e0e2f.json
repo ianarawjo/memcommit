@@ -1,0 +1,480 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:22:27.935666+00:00",
+      "frames": [
+        {
+          "context_digest": "d216a114524e2b755fff42b8577d5027d3e528aed50c5f588cebf57767bb7fc8",
+          "context_name": "task-2/advisor1/methods",
+          "context_uid": "d2f78b99-5dcf-5876-89a9-1058bceca333",
+          "memories": [
+            {
+              "content": "Link each HCI research question directly to corresponding user data and analysis procedures.",
+              "content_digest": "21e2d5e7eb4ec06057a8405359656cd03a98f4ae67956016d98582af44bfb402",
+              "position": 0,
+              "uid": "c8bcefee-c64a-5a1f-911c-502cc4522701"
+            },
+            {
+              "content": "In preregistered studies, specify the conditions under which deviations from the plan are permissible.",
+              "content_digest": "0ecac6de4eb5e3eec39477c5a6324acb8a1bd6cefb17eacc2c73cdd53160b85f",
+              "position": 1,
+              "uid": "8747b27e-6c2b-5498-9eac-c403e26101a6"
+            },
+            {
+              "content": "In preregistered studies, specify how to record content that deviates from the plan.",
+              "content_digest": "821b3ad70335f24d96aeffd2260e3bc27bb6efd1108a68b00ecc5cb7e7adb242",
+              "position": 2,
+              "uid": "c3ad4ad8-4c5c-54c5-8d65-2dae15fa69a0"
+            },
+            {
+              "content": "Commit to one exact target number of participants so the schedule, workload, and budget can be checked against the same quantity.",
+              "content_digest": "7ff7f3d29fc21399565b4047d3f78e6415e1b51a9247139fc156ea7d4f6d2f13",
+              "position": 3,
+              "uid": "df53a41c-2fbf-532a-a5b0-560a196bf5cb"
+            },
+            {
+              "content": "Specify the interview protocols, recording devices, or log tools used to collect each type of user data.",
+              "content_digest": "0396cbcbfd6e96ef9fd2af507855c4b71eb3003a15fc79d240cd0b751b6b5788",
+              "position": 4,
+              "uid": "24d49198-fd7b-5810-bc56-1910a796f76e"
+            },
+            {
+              "content": "Specify whether each type of user data is collected before, during, or after the interaction.",
+              "content_digest": "80a3ff6e82631a044e8859709930b675163439d11564d1b59601bca0ee030fba",
+              "position": 5,
+              "uid": "2f367cf3-50c5-59bc-972e-6173e56343ac"
+            },
+            {
+              "content": "Readers cannot tell whether the schedule and budget agree when different sections imply different target counts.",
+              "content_digest": "9b5de55faa7e64cf1149ef1bb60cf990815e789e7d1c4a3c0e6297fbbd300aae",
+              "position": 6,
+              "uid": "91db3bd1-4417-5db6-b7a6-3e79c87ebe88"
+            },
+            {
+              "content": "In formative evaluation prototypes, implementation instability exists as an independent cause of task failure alongside design choices.",
+              "content_digest": "dab5f616c4354c0e9f381b0e860e5ec5ff1afc249a4ad427f194c559781b83a8",
+              "position": 7,
+              "uid": "49746579-92d7-51ea-b158-7d770443d101"
+            },
+            {
+              "content": "If a prototype safety signal occurs during formative evaluation, existing institutional safety procedures take precedence over planned data collection.",
+              "content_digest": "2f2768eb4fbce9367786ab13ca8a608e82104cee45200f4aa59854efcf2edc3e",
+              "position": 8,
+              "uid": "20d116ab-f9cc-5f61-808b-8555da09d707"
+            },
+            {
+              "content": "Reviewers judge answerability by tracing the path from each research question to the data and analysis.",
+              "content_digest": "0fac56a79481bdcd7b169c7e3d9ab8fbd0b4f76d33dfe9f4a2f703f80e84aea9",
+              "position": 9,
+              "uid": "881bc037-c099-50e4-b7e0-d38fba5146c9"
+            },
+            {
+              "content": "The author of this proposal tends to present implemented feature lists directly as design contributions.",
+              "content_digest": "6cf2a1292756154c2a0a045f1e4bd4889994faaa838f93e8a2b9c949957ed920",
+              "position": 10,
+              "uid": "9a969676-6093-5fac-bda8-92ebdac70c37"
+            },
+            {
+              "content": "Calculate the required sessions, facilitator hours, and participant payments from the same exact target rather than from separate rough estimates.",
+              "content_digest": "ea6c96c9e5e7d5db7bd2210fd484e715e35727bd1e6f7c2ea2a2c4c12e488f2a",
+              "position": 11,
+              "uid": "0ecc319a-ae60-5510-883d-52e613138164"
+            },
+            {
+              "content": "If recruitment falls below the exact target, state the shortfall explicitly and revise the affected schedule or deliverable.",
+              "content_digest": "bdf962f17a92886e7a5ec0003460dce9ed9c02d02473f66c6f6b4e97c0c304b9",
+              "position": 12,
+              "uid": "c4dfdb65-e673-52c0-a40c-e909d6014e00"
+            },
+            {
+              "content": "Do not use a wide range merely to postpone choosing the quantity that the rest of the proposal must support.",
+              "content_digest": "332385b05f91f97c398bc954b6fc9e62da182f7e42de6dd5691435df6922fd43",
+              "position": 13,
+              "uid": "a7c3a123-3f05-52e0-b33e-c450d1a070ac"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "6418b6ea-45b7-41fd-9177-7d81e35eb879"
+        },
+        {
+          "context_digest": "5f537c105ac26d5b710957c611c114c6834953adc14933beda6f44d0a404e410",
+          "context_name": "task-2/advisor2/methods",
+          "context_uid": "531f5f15-65f7-5315-8ccf-0cea6e53b76a",
+          "memories": [
+            {
+              "content": "Specify field and user data sources and analysis procedures corresponding to all HCI research questions.",
+              "content_digest": "0fecdff0f7b1204928239ca5665756cbf5dda44709758e5a093df8187927029e",
+              "position": 0,
+              "uid": "90be328f-1c05-5574-9657-1b0cc04a10b8"
+            },
+            {
+              "content": "In preregistered studies, clarify the criteria for judging plan changes.",
+              "content_digest": "5df2c60004dfd796d0af2a2e16e25f0804164517d00b4c393a65609a3dfb7534",
+              "position": 1,
+              "uid": "452ab231-3131-5697-a728-475289deafd0"
+            },
+            {
+              "content": "In preregistered studies, clarify the location for recording plan changes.",
+              "content_digest": "b05214535147a4c880d7500036b4640a0c479b0b05e2c1061ebfde88cb3c9866",
+              "position": 2,
+              "uid": "9c979f39-9660-5392-a1cd-0d1317af0e0f"
+            },
+            {
+              "content": "Use a justified minimum-to-maximum target range when confirmations can change, and tie the minimum and maximum to different workload and budget cases.",
+              "content_digest": "6c5e9bcd656dc10013c47e9c953409dbb20b06ee9ab758e1915d5f4d37d2604c",
+              "position": 3,
+              "uid": "8a49f598-804e-5a81-8e88-add7b665633a"
+            },
+            {
+              "content": "Specify the observation records, system logs, or interview tools used to collect each type of field and user data.",
+              "content_digest": "04c875971ca30ee5e3909e2c4e0632512d285401d5c9c4c1f42f4aaa592b34c1",
+              "position": 4,
+              "uid": "629cb159-6f6c-5476-870d-716ab573aef8"
+            },
+            {
+              "content": "Specify whether each type of field and user data will be collected before, during, or after deployment.",
+              "content_digest": "b105c5c373365987dff3fc4b709ffd88ba64c8358c179f81d780dc12d6b11bce",
+              "position": 5,
+              "uid": "b565c5c9-a0f7-5aff-a3b1-19696c4d3b39"
+            },
+            {
+              "content": "Readers cannot assess a target range unless both bounds have a stated consequence for schedule, workload, or cost.",
+              "content_digest": "308b499d832f2780b8a0c7d4acf0c9168ddc0e960b837a7f77e6e9574b235066",
+              "position": 6,
+              "uid": "251a4b3c-58fd-5d66-b5bc-74dcbeaa7a0d"
+            },
+            {
+              "content": "In field deployments, network and service instability exist as independent causes of task failure alongside design choices.",
+              "content_digest": "90f270d2544ce92c7ab245e0eb1eca5836f0a885ea652d40b6aad08c1572b039",
+              "position": 7,
+              "uid": "f150891e-7635-5c35-b986-d369bc630ef4"
+            },
+            {
+              "content": "If a safety signal occurs in the field system, existing institutional safety procedures take precedence over the research schedule and data collection plan.",
+              "content_digest": "96e1d7012cce82f901994e7b454d3f7e0a0b1dd18c5af6b9b14694e939356f25",
+              "position": 8,
+              "uid": "7860d9d6-5c2e-5969-b956-f71398218d02"
+            },
+            {
+              "content": "Reviewers judge answerability by tracing the path from each research question to its data sources and analysis procedures.",
+              "content_digest": "90ba5b91064c53361b4e6cf80cb4ec6a23aea3a02becfae03342046ffa2adf0d",
+              "position": 9,
+              "uid": "4fc24f87-e7b5-5d34-b850-f90cdc9b1ea2"
+            },
+            {
+              "content": "The user authoring this proposal tends to present implemented feature lists directly as design contributions.",
+              "content_digest": "d75cc3bb9bd2475fc87a88dc4a72de982101a5c9f03efaf823bcab6ca95dfe5d",
+              "position": 10,
+              "uid": "2db331a6-28d7-5c32-8372-7d3f8bc5b04a"
+            },
+            {
+              "content": "Define what can still be completed at the minimum target instead of treating every number inside the range as operationally identical.",
+              "content_digest": "b6cead2c6a19be091d8594da052baadd184eb3ef18580860e54b2aa337986354",
+              "position": 11,
+              "uid": "40f23f85-561e-55b3-825b-5000f9638f8a"
+            },
+            {
+              "content": "Use a bounded range to absorb expected confirmation changes without pretending that one early estimate is guaranteed.",
+              "content_digest": "1bc0df6bfbc6936b8a390368b5647a93ea8aab7316e9c7d233690b1206e6f17c",
+              "position": 12,
+              "uid": "9527ccb8-6662-58e3-8edd-daf7c0a713af"
+            },
+            {
+              "content": "Show how session count and facilitator time change at the minimum and maximum bounds.",
+              "content_digest": "2167c3e6d6bafad2818bb211b2c735f47ea040318a944c3402abea86b3faa316",
+              "position": 13,
+              "uid": "3ff9ec36-b70d-5dbd-9692-27fdf734fd20"
+            },
+            {
+              "content": "Define the additional workload or deliverable enabled at the maximum target so the upper bound is not an arbitrary cushion.",
+              "content_digest": "30d71498d24e6f7640b3f128824bf4c917f18c9317f164cd864f862f4c81e7fb",
+              "position": 14,
+              "uid": "9e1c3629-641f-5c09-915d-8a2ad1c8013a"
+            },
+            {
+              "content": "A bounded range preserves uncertainty honestly but makes the final workload and budget less certain than one fixed target.",
+              "content_digest": "c9015c18fd3140429386ae5ff3a0e45ffc86d009590772374f8354d4efb85234",
+              "position": 15,
+              "uid": "7ba672db-131e-5795-89c9-46f56344e7ed"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "634a8819-24d0-44f0-bc22-56bb2e5ceedc"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [
+        {
+          "options": [
+            {
+              "label": "Exact target",
+              "text": "Require one operational participant target and revise plans explicitly if recruitment falls short.",
+              "uid": "31c383ea-7d40-595a-ae9b-cf1f6d5716c6"
+            },
+            {
+              "label": "Bounded range",
+              "text": "Permit a justified minimum and maximum with distinct operational consequences at each bound.",
+              "uid": "f1c4a012-995d-5246-9d4a-0876acd66236"
+            },
+            {
+              "label": "Conditional rule",
+              "text": "Use an exact target normally but permit a bounded range when defined confirmation uncertainty is present.",
+              "uid": "267a58a9-ccc3-5370-a90a-7a6e8254fe02"
+            }
+          ],
+          "priority": "REQUIRED",
+          "question": "When confirmations may change, must planning still use one exact participant target, or may it use a bounded range with separately defined workload, budget, and deliverable consequences?",
+          "relation_uids": [
+            "36ecb965-677f-5948-8f61-8e1d74bd6a69"
+          ],
+          "title": "Ground the participant target model",
+          "uid": "84604d3a-b7b5-575a-b16d-7821258bdc3c",
+          "why_it_matters": "The answer determines how sessions, staffing, payments, deliverables, and recruitment shortfalls are calculated and communicated."
+        }
+      ],
+      "overview": "The frames strongly align on research traceability, preregistration, data collection, failure attribution, safety, and authoring tendencies. Their principal unresolved disagreement is whether participant planning must use one exact target or may use a justified bounded range under uncertain confirmations.",
+      "relations": [
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            {
+              "frame_uid": "6418b6ea-45b7-41fd-9177-7d81e35eb879",
+              "memory_uid": "c8bcefee-c64a-5a1f-911c-502cc4522701"
+            },
+            {
+              "frame_uid": "6418b6ea-45b7-41fd-9177-7d81e35eb879",
+              "memory_uid": "881bc037-c099-50e4-b7e0-d38fba5146c9"
+            },
+            {
+              "frame_uid": "634a8819-24d0-44f0-bc22-56bb2e5ceedc",
+              "memory_uid": "90be328f-1c05-5574-9657-1b0cc04a10b8"
+            },
+            {
+              "frame_uid": "634a8819-24d0-44f0-bc22-56bb2e5ceedc",
+              "memory_uid": "4fc24f87-e7b5-5d34-b850-f90cdc9b1ea2"
+            }
+          ],
+          "reason": "Both frames state the same traceability requirement and the same reviewer-facing rationale.",
+          "status": "RESOLVED",
+          "summary": "Each research question must map directly to its data sources and analysis procedures so reviewers can assess answerability.",
+          "uid": "e7c03288-7e38-5a77-ac8e-fc1c87c315c2"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            {
+              "frame_uid": "6418b6ea-45b7-41fd-9177-7d81e35eb879",
+              "memory_uid": "8747b27e-6c2b-5498-9eac-c403e26101a6"
+            },
+            {
+              "frame_uid": "634a8819-24d0-44f0-bc22-56bb2e5ceedc",
+              "memory_uid": "452ab231-3131-5697-a728-475289deafd0"
+            }
+          ],
+          "reason": "Conditions permitting deviations and criteria for judging plan changes express the same operational control.",
+          "status": "RESOLVED",
+          "summary": "Preregistered studies must define criteria governing permissible departures from the plan.",
+          "uid": "872dd295-5660-59a5-a9d2-c6103676f7ae"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "6418b6ea-45b7-41fd-9177-7d81e35eb879",
+              "memory_uid": "c3ad4ad8-4c5c-54c5-8d65-2dae15fa69a0"
+            },
+            {
+              "frame_uid": "634a8819-24d0-44f0-bc22-56bb2e5ceedc",
+              "memory_uid": "9c979f39-9660-5392-a1cd-0d1317af0e0f"
+            }
+          ],
+          "reason": "Recording method or content and recording location are complementary requirements for the same deviation-documentation decision.",
+          "status": "RESOLVED",
+          "summary": "Preregistered studies must specify how and where plan deviations are documented.",
+          "uid": "7539a1ce-1760-5ad3-99f3-1a56a5ddbf7a"
+        },
+        {
+          "kind": "CONFLICT",
+          "members": [
+            {
+              "frame_uid": "6418b6ea-45b7-41fd-9177-7d81e35eb879",
+              "memory_uid": "df53a41c-2fbf-532a-a5b0-560a196bf5cb"
+            },
+            {
+              "frame_uid": "6418b6ea-45b7-41fd-9177-7d81e35eb879",
+              "memory_uid": "91db3bd1-4417-5db6-b7a6-3e79c87ebe88"
+            },
+            {
+              "frame_uid": "6418b6ea-45b7-41fd-9177-7d81e35eb879",
+              "memory_uid": "0ecc319a-ae60-5510-883d-52e613138164"
+            },
+            {
+              "frame_uid": "6418b6ea-45b7-41fd-9177-7d81e35eb879",
+              "memory_uid": "c4dfdb65-e673-52c0-a40c-e909d6014e00"
+            },
+            {
+              "frame_uid": "6418b6ea-45b7-41fd-9177-7d81e35eb879",
+              "memory_uid": "a7c3a123-3f05-52e0-b33e-c450d1a070ac"
+            },
+            {
+              "frame_uid": "634a8819-24d0-44f0-bc22-56bb2e5ceedc",
+              "memory_uid": "8a49f598-804e-5a81-8e88-add7b665633a"
+            },
+            {
+              "frame_uid": "634a8819-24d0-44f0-bc22-56bb2e5ceedc",
+              "memory_uid": "251a4b3c-58fd-5d66-b5bc-74dcbeaa7a0d"
+            },
+            {
+              "frame_uid": "634a8819-24d0-44f0-bc22-56bb2e5ceedc",
+              "memory_uid": "40f23f85-561e-55b3-825b-5000f9638f8a"
+            },
+            {
+              "frame_uid": "634a8819-24d0-44f0-bc22-56bb2e5ceedc",
+              "memory_uid": "9527ccb8-6662-58e3-8edd-daf7c0a713af"
+            },
+            {
+              "frame_uid": "634a8819-24d0-44f0-bc22-56bb2e5ceedc",
+              "memory_uid": "3ff9ec36-b70d-5dbd-9692-27fdf734fd20"
+            },
+            {
+              "frame_uid": "634a8819-24d0-44f0-bc22-56bb2e5ceedc",
+              "memory_uid": "9e1c3629-641f-5c09-915d-8a2ad1c8013a"
+            },
+            {
+              "frame_uid": "634a8819-24d0-44f0-bc22-56bb2e5ceedc",
+              "memory_uid": "7ba672db-131e-5795-89c9-46f56344e7ed"
+            }
+          ],
+          "reason": "The exact-target requirements reject postponing commitment through a range, while the bounded-range requirements deliberately preserve confirmation uncertainty; both cannot govern the same recruitment case.",
+          "status": "UNRESOLVED",
+          "summary": "Participant planning is organized around either one exact target with shortfall handling or a justified bounded range with distinct consequences at each bound.",
+          "uid": "36ecb965-677f-5948-8f61-8e1d74bd6a69"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "6418b6ea-45b7-41fd-9177-7d81e35eb879",
+              "memory_uid": "24d49198-fd7b-5810-bc56-1910a796f76e"
+            },
+            {
+              "frame_uid": "634a8819-24d0-44f0-bc22-56bb2e5ceedc",
+              "memory_uid": "629cb159-6f6c-5476-870d-716ab573aef8"
+            }
+          ],
+          "reason": "The operational requirement agrees, while the stated data and study settings differ and must be preserved.",
+          "status": "RESOLVED",
+          "summary": "Collection tools must be specified for each data type, with one frame centered on user interaction and the other explicitly including field deployment data.",
+          "uid": "2169d97c-0770-5982-a8d8-8ac8681e922e"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "6418b6ea-45b7-41fd-9177-7d81e35eb879",
+              "memory_uid": "2f367cf3-50c5-59bc-972e-6173e56343ac"
+            },
+            {
+              "frame_uid": "634a8819-24d0-44f0-bc22-56bb2e5ceedc",
+              "memory_uid": "b565c5c9-a0f7-5aff-a3b1-19696c4d3b39"
+            }
+          ],
+          "reason": "Both require temporal placement, scoped respectively to interaction-centered user data and field or user data around deployment.",
+          "status": "RESOLVED",
+          "summary": "Each data type must be located before, during, or after the relevant interaction or deployment.",
+          "uid": "8f94da50-566a-558a-9c51-af790c7036ce"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "6418b6ea-45b7-41fd-9177-7d81e35eb879",
+              "memory_uid": "49746579-92d7-51ea-b158-7d770443d101"
+            },
+            {
+              "frame_uid": "634a8819-24d0-44f0-bc22-56bb2e5ceedc",
+              "memory_uid": "f150891e-7635-5c35-b986-d369bc630ef4"
+            }
+          ],
+          "reason": "The shared attribution policy applies to explicitly different environments and technical failure modes.",
+          "status": "RESOLVED",
+          "summary": "Technical instability must be treated as an independent task-failure cause alongside design choices, with implementation instability in prototypes and network or service instability in field deployments.",
+          "uid": "3f4058db-0ac1-58ad-9f00-fd5980b78a86"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "6418b6ea-45b7-41fd-9177-7d81e35eb879",
+              "memory_uid": "20d116ab-f9cc-5f61-808b-8555da09d707"
+            },
+            {
+              "frame_uid": "634a8819-24d0-44f0-bc22-56bb2e5ceedc",
+              "memory_uid": "7860d9d6-5c2e-5969-b956-f71398218d02"
+            }
+          ],
+          "reason": "The precedence principle agrees, while the triggering environment and the field frame's explicit inclusion of schedule disruption remain scope-specific.",
+          "status": "RESOLVED",
+          "summary": "Institutional safety procedures supersede planned research activity when a safety signal occurs, whether in formative prototypes or field systems.",
+          "uid": "cf31a32b-5e77-55ef-a6c0-0f2bf7d5aefd"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            {
+              "frame_uid": "6418b6ea-45b7-41fd-9177-7d81e35eb879",
+              "memory_uid": "9a969676-6093-5fac-bda8-92ebdac70c37"
+            },
+            {
+              "frame_uid": "634a8819-24d0-44f0-bc22-56bb2e5ceedc",
+              "memory_uid": "2db331a6-28d7-5c32-8372-7d3f8bc5b04a"
+            }
+          ],
+          "reason": "The wording identifies the same authoring tendency without a material scope difference.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to present implemented feature lists directly as design contributions.",
+          "uid": "0bfef4b5-02a8-5d2c-a309-df8af537cca7"
+        }
+      ],
+      "reports": {
+        "both": "Both require traceable research questions, governed and recorded preregistration changes, and recognize the same feature-list authoring tendency.",
+        "compared_only": "",
+        "differences": "Collection timing and tools, instability causes, and safety precedence are framed for formative interaction versus field deployment. Participant planning conflicts between a single exact target and a consequence-based bounded range.",
+        "reference_only": ""
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "5554819e-404d-447f-afbb-18d5decc9cd1"
+    },
+    "analysis_digest": "8d6bd92a58f19a4e545ce270422a12e84b7ab69d76b04b197c0e0adac9f9541d",
+    "key": "4367ad03c32f5a88bf32bbced96fd14b6e792d1492a95628805315d0221d0b95",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 75.67667945799985,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "4367ad03c32f5a88bf32bbced96fd14b6e792d1492a95628805315d0221d0b95",
+  "created_at": "2026-08-13T18:23:43.611380Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/methods",
+  "pair_key": "8b34d89ffd387f637dc41f2d856ce77f4aed601f580e98dd66ae584b1f7e0e2f",
+  "provider_seconds": 75.67667945799985,
+  "right": "task-2/advisor2/methods",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

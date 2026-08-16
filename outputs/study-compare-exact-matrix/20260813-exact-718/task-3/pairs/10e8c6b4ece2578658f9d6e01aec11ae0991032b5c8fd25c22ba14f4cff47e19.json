@@ -1,0 +1,388 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:51:38.823232+00:00",
+      "frames": [
+        {
+          "context_digest": "ca8765e237d85d9bf3ecb78fe1d9a2487066ae14dae9509e40b324ac1277d75a",
+          "context_name": "task-3/local/personal-memory/2025/06",
+          "context_uid": "870f7336-726a-5d9c-bae4-12585311463e",
+          "memories": [
+            {
+              "content": "The user keeps a portable fan charger on a living-room shelf.",
+              "content_digest": "5ab7fad8ae1b3f56bdbc1c3ebf593a3d452590341b6de115f830fdf0d994c12e",
+              "position": 0,
+              "uid": "853a158c-edf9-578a-8e75-3d5daff6e4db"
+            },
+            {
+              "content": "On a hot day, the user worked with only the window open and lost focus in the afternoon.",
+              "content_digest": "3c4225f055db293c53a5a137d0c6353005bcb55b71dbc61bc69831aa5c3c08de",
+              "position": 1,
+              "uid": "f7d5ebdc-0cae-5e07-a060-e129b5a05570"
+            },
+            {
+              "content": "In the room where the user closed the curtains the next morning, the temperature rose less.",
+              "content_digest": "4cb4d1892db8769f4c066859dbb021c67d5015114f8522dfd904057061600ab5",
+              "position": 2,
+              "uid": "99e5c522-535b-5015-8617-06f645147f8b"
+            },
+            {
+              "content": "The user took the portable fan out without charging it, and it turned off after an hour.",
+              "content_digest": "0e1e0e9e985bea5be6976010a390f484b60a931ea7dfaf50a73c66616a73d5da",
+              "position": 3,
+              "uid": "7b3bf50c-63aa-5a1e-9a53-7befea25a468"
+            },
+            {
+              "content": "Before the next outing, the user charged it the night before and used the fan throughout the trip.",
+              "content_digest": "fd4282d169da18d902fc5f766d4e38131240bf3a51e6fa0c5bad69f80f1492af",
+              "position": 4,
+              "uid": "ca8de091-afb2-537f-a83a-09769056879d"
+            },
+            {
+              "content": "On a hot weekend, the user was eating lunch in their father's yard and moved indoors.",
+              "content_digest": "44e7d3bc5eaecec68ad6e7c0979572102f3c717b37712fcfada769959443ae8e",
+              "position": 5,
+              "uid": "4a0604fb-10b4-5132-a6de-ab6a229ff2be"
+            },
+            {
+              "content": "When the user returned to the yard in the evening, shade and wind led them to stay another hour.",
+              "content_digest": "7495f1d4ba2d1d732ab5c962f45b5b0c9c765ee21767373552247a823cf90984",
+              "position": 6,
+              "uid": "1f90941e-776f-5cba-9783-c392983dd72c"
+            },
+            {
+              "content": "The user's father prefers to move an outdoor meal to the evening rather than proceed at midday when the temperature is high.",
+              "content_digest": "5f9628a28b5c6f3b20a371d1c039f37f26c50832970936c8a243f161fd8288f4",
+              "position": 7,
+              "uid": "63391d26-7417-5ea6-ac0a-460af7489963"
+            },
+            {
+              "content": "The local agent can compare past responses to heat but cannot know the current felt temperature without an indoor temperature record.",
+              "content_digest": "815f4fb2c833d75e30cb0e323f5708e356bf38e0bbb573865092be48fbf2746a",
+              "position": 8,
+              "uid": "31502797-1379-5ec4-bd1b-a2e1515fa56e"
+            },
+            {
+              "content": "A room with a west-facing window can warm rapidly in the late afternoon.",
+              "content_digest": "448908f6242021de6d41ddee8121714a1388db6e4e3d067de27e6950ee712c23",
+              "position": 9,
+              "uid": "68f85c30-62c4-579d-97cd-9f401c686e63"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "a21e6009-f8c7-4f96-85f3-acca27e89df6"
+        },
+        {
+          "context_digest": "df0924e320cd14a29eaed60f78e82fd509c4062949b35706b2a7cb94571fb599",
+          "context_name": "task-3/local/personal-memory/2026/04",
+          "context_uid": "16e860a8-7a90-5b7a-adc3-1c487ef97e03",
+          "memories": [
+            {
+              "content": "The user collects clothes for donation in a large bag beside the entrance.",
+              "content_digest": "39f2f01c59b7fa4ca7529d510e1b0a6ffab6706861042f771cfe97f6f806efac",
+              "position": 0,
+              "uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            },
+            {
+              "content": "After emptying an entire drawer at once, the user could not find a charger they needed.",
+              "content_digest": "674c33ba6475f42b29b03e6f8711e0216f983f3d37fee3dacf9336e3bb4596bf",
+              "position": 1,
+              "uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            },
+            {
+              "content": "During the next organizing session, the user sorted items by type and put only items to be discarded in the bag.",
+              "content_digest": "63104b5a7fd380f818c8758c51f9550c7a7fa41ff91f1dd314225d1824b69643",
+              "position": 2,
+              "uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            },
+            {
+              "content": "Even after photographing unworn clothes, the user did not take them out again for one month.",
+              "content_digest": "519f131096440719dcd3412f4439c5cfe44b7f402684170209708040692dc5fd",
+              "position": 3,
+              "uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            },
+            {
+              "content": "After moving those clothes to the donation bag, the user cleared one closet compartment.",
+              "content_digest": "45db58ae108a299344d982d8606fff26f733252da691cf01417e760909ff6057",
+              "position": 4,
+              "uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            },
+            {
+              "content": "The user nearly discarded an important paper with advertising and checked the recycling box again.",
+              "content_digest": "6bf928f67944656e5f3c68d8869c0cefd039a588f0ba735f94520231ef58017c",
+              "position": 5,
+              "uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            },
+            {
+              "content": "During the next organizing session, the user kept a separate document box and did not mix the papers.",
+              "content_digest": "adac8d4266c6b11e15d29c484665bc5dcc915f9aa319198b6a69d0e7b0131bb3",
+              "position": 6,
+              "uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            },
+            {
+              "content": "The user's mother asks the user to check whether she needs kitchen items in good condition before discarding them.",
+              "content_digest": "0752bc2ac00c0b1301c45ab4c2e73f63c57e6ebc4255dcc1c13330ffda906612",
+              "position": 7,
+              "uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            },
+            {
+              "content": "Confirm with the user before marking a personal document or another person's property as a disposal candidate.",
+              "content_digest": "17062e2cd4738619e81e211cb2f53d14e78c5f4eab9ae49053ce7e06935a7db5",
+              "position": 8,
+              "uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            },
+            {
+              "content": "The local agent cannot determine an object's emotional meaning from frequency of use alone.",
+              "content_digest": "9c86bcfe2b209bf7957dced0eab000b42f97b6a435d705ccaccb15e49be3691d",
+              "position": 9,
+              "uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "2585d829-8404-4a6b-a97b-363f671d2177"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The reference frame concerns heat exposure, room cooling, fan readiness, and outdoor timing, while the compared frame concerns careful decluttering, donation, and disposal safeguards. Their operational claims address separate decisions, with no justified cross-frame equivalence, compatibility, scoped difference, or conflict.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a21e6009-f8c7-4f96-85f3-acca27e89df6",
+              "memory_uid": "853a158c-edf9-578a-8e75-3d5daff6e4db"
+            }
+          ],
+          "reason": "This is independently useful location information found only in the reference frame; the compared frame does not address the same charger or storage arrangement.",
+          "status": "RESOLVED",
+          "summary": "A portable fan charger is kept on a living-room shelf.",
+          "uid": "97493104-e46c-525c-aeae-3ef2dfb052d4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a21e6009-f8c7-4f96-85f3-acca27e89df6",
+              "memory_uid": "f7d5ebdc-0cae-5e07-a060-e129b5a05570"
+            },
+            {
+              "frame_uid": "a21e6009-f8c7-4f96-85f3-acca27e89df6",
+              "memory_uid": "99e5c522-535b-5015-8617-06f645147f8b"
+            }
+          ],
+          "reason": "These reference-only observations jointly describe one room-cooling pattern: ventilation alone was insufficient during heat, while closing curtains reduced the subsequent temperature rise.",
+          "status": "RESOLVED",
+          "summary": "Curtain use improved indoor heat management after an open window alone coincided with afternoon focus loss.",
+          "uid": "0ad330ef-f6b2-57f3-871a-72d89f9f2d98"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a21e6009-f8c7-4f96-85f3-acca27e89df6",
+              "memory_uid": "7b3bf50c-63aa-5a1e-9a53-7befea25a468"
+            },
+            {
+              "frame_uid": "a21e6009-f8c7-4f96-85f3-acca27e89df6",
+              "memory_uid": "ca8de091-afb2-537f-a83a-09769056879d"
+            }
+          ],
+          "reason": "The two reference memories form one before-and-after claim about prior charging and fan availability; the compared frame contains no corresponding portable-fan policy or outcome.",
+          "status": "RESOLVED",
+          "summary": "Charging the portable fan before an outing changed it from failing after an hour to lasting throughout the trip.",
+          "uid": "a024fd67-b694-532d-b4e8-b5d8518bcc23"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a21e6009-f8c7-4f96-85f3-acca27e89df6",
+              "memory_uid": "4a0604fb-10b4-5132-a6de-ab6a229ff2be"
+            },
+            {
+              "frame_uid": "a21e6009-f8c7-4f96-85f3-acca27e89df6",
+              "memory_uid": "1f90941e-776f-5cba-9783-c392983dd72c"
+            },
+            {
+              "frame_uid": "a21e6009-f8c7-4f96-85f3-acca27e89df6",
+              "memory_uid": "63391d26-7417-5ea6-ac0a-460af7489963"
+            }
+          ],
+          "reason": "These reference memories jointly express one timing-sensitive pattern for outdoor meals under heat; the compared frame contains no claim about heat or meal timing.",
+          "status": "RESOLVED",
+          "summary": "High midday heat curtailed an outdoor meal, whereas cooler evening shade and wind supported a longer stay and aligned with the father's preference for evening meals.",
+          "uid": "8ea361fe-d6d6-5a52-8220-07870bb7087e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a21e6009-f8c7-4f96-85f3-acca27e89df6",
+              "memory_uid": "31502797-1379-5ec4-bd1b-a2e1515fa56e"
+            }
+          ],
+          "reason": "This reference-only epistemic limitation concerns present thermal assessment, a different operational decision from the compared frame's limitation about emotional meaning.",
+          "status": "RESOLVED",
+          "summary": "The local agent needs an indoor temperature record to assess current felt temperature, despite being able to compare past heat responses.",
+          "uid": "fe376711-3d6d-5462-a677-405e0b67cf8f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a21e6009-f8c7-4f96-85f3-acca27e89df6",
+              "memory_uid": "68f85c30-62c4-579d-97cd-9f401c686e63"
+            }
+          ],
+          "reason": "This independently useful environmental fact appears only in the reference frame and is not addressed by any compared memory.",
+          "status": "RESOLVED",
+          "summary": "A west-facing window can cause rapid late-afternoon room warming.",
+          "uid": "f38e26d6-5820-51db-9095-3d05a1680c8f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2585d829-8404-4a6b-a97b-363f671d2177",
+              "memory_uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            }
+          ],
+          "reason": "This is independently useful storage-location information found only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Clothes intended for donation are collected in a large bag beside the entrance.",
+          "uid": "c2e3f2c3-657d-570c-a915-bb458ffe969d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2585d829-8404-4a6b-a97b-363f671d2177",
+              "memory_uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            },
+            {
+              "frame_uid": "2585d829-8404-4a6b-a97b-363f671d2177",
+              "memory_uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            }
+          ],
+          "reason": "These compared memories form one before-and-after organizing claim contrasting an unsuccessful bulk emptying with a more controlled sorting method; the reference frame does not address that workflow.",
+          "status": "RESOLVED",
+          "summary": "Sorting an organizing session by item type and limiting the discard bag avoided the indiscriminate mixing associated with losing a needed charger.",
+          "uid": "9b7af945-0f7e-5e00-b06e-2ebdeab764a9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2585d829-8404-4a6b-a97b-363f671d2177",
+              "memory_uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            },
+            {
+              "frame_uid": "2585d829-8404-4a6b-a97b-363f671d2177",
+              "memory_uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            }
+          ],
+          "reason": "These compared memories form one decluttering sequence linking continued non-use, donation placement, and recovered storage space; the reference frame has no corresponding claim.",
+          "status": "RESOLVED",
+          "summary": "Moving clothes that remained unworn after documentation into the donation bag cleared closet space.",
+          "uid": "cf8c70e4-bf55-5ae9-942d-5a625fe1b507"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2585d829-8404-4a6b-a97b-363f671d2177",
+              "memory_uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            },
+            {
+              "frame_uid": "2585d829-8404-4a6b-a97b-363f671d2177",
+              "memory_uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            }
+          ],
+          "reason": "These compared memories jointly describe one paper-handling safeguard derived from a near-disposal error; the reference frame does not address document sorting.",
+          "status": "RESOLVED",
+          "summary": "Separating documents during organizing reduced the risk revealed when an important paper was nearly discarded with advertising.",
+          "uid": "151e585b-363f-5279-94bd-146a3a622857"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2585d829-8404-4a6b-a97b-363f671d2177",
+              "memory_uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            }
+          ],
+          "reason": "This is a specific, independently useful family consultation preference appearing only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user's mother wants to be asked whether she needs usable kitchen items before they are discarded.",
+          "uid": "84e5a4f4-a099-5b0a-86e9-fba51c9f7278"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2585d829-8404-4a6b-a97b-363f671d2177",
+              "memory_uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            }
+          ],
+          "reason": "This compared-only confirmation policy protects sensitive or ownership-dependent items and is distinct from the mother's narrower preference about usable kitchen items.",
+          "status": "RESOLVED",
+          "summary": "The user should confirm before a personal document or another person's property is marked as a disposal candidate.",
+          "uid": "aae585db-7a39-53f8-8cc9-0aa2de27345d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2585d829-8404-4a6b-a97b-363f671d2177",
+              "memory_uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "reason": "This compared-only epistemic limitation governs sentimental-value judgments and does not address the reference frame's separate problem of assessing current thermal conditions.",
+          "status": "RESOLVED",
+          "summary": "The local agent cannot infer an object's emotional meaning solely from how often it is used.",
+          "uid": "cd4f824a-e32b-5ef5-baf0-912d3891f328"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame describes safer decluttering through typed sorting, donation of persistently unworn clothes, separated document handling, consultation before disposal, and caution about inferring emotional value from use frequency.",
+        "differences": "",
+        "reference_only": "The reference describes heat-management experiences and constraints: shading rooms, charging a portable fan, avoiding hot midday outdoor meals, recognizing west-window warming, and requiring indoor records to assess current conditions."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "2a190aac-014c-4460-8bc1-bcb04df8c9ec"
+    },
+    "analysis_digest": "21c941fd9759a22f66fe87d98650d0c4ff10b8c2348c065138bc3f656aaa10f9",
+    "key": "1ff8d8cde12114467cdcf1afa9dd3a6193d2e029a7d10833fc5d2fb0d6349c2c",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 53.69944454199867,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "1ff8d8cde12114467cdcf1afa9dd3a6193d2e029a7d10833fc5d2fb0d6349c2c",
+  "created_at": "2026-08-13T18:52:32.522368Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/06",
+  "pair_key": "10e8c6b4ece2578658f9d6e01aec11ae0991032b5c8fd25c22ba14f4cff47e19",
+  "provider_seconds": 53.69944454199867,
+  "right": "task-3/local/personal-memory/2026/04",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

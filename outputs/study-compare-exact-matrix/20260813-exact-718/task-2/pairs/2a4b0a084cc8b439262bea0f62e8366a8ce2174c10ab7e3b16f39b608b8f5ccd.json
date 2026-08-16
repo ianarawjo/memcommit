@@ -1,0 +1,309 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:19:35.558949+00:00",
+      "frames": [
+        {
+          "context_digest": "42df7e2f7640040d1d6f6f6e566e80d178668a05ab6918b64eed91b91a41b7fb",
+          "context_name": "task-2/advisor1/evaluation",
+          "context_uid": "30568e2f-ce17-50ce-a25b-1cc4bdb94689",
+          "memories": [
+            {
+              "content": "Specify a single representative measure that serves as the criterion for retaining, modifying, or discarding compared design alternatives.",
+              "content_digest": "53aa7c1f81a4fac9e76985be094717aa122e7077a6fcfde46946babd5929d390",
+              "position": 0,
+              "uid": "a50f6ecb-de38-5769-8a6e-23b84a7eb35c"
+            },
+            {
+              "content": "HCI review panels verify whether clear criteria for judging design alternatives are established using the declared primary measure.",
+              "content_digest": "fabd83103e5c3474f56de113c477f7ced5e863a508ec39bd4ae23653d63ad354",
+              "position": 1,
+              "uid": "44c61beb-24a2-584a-ad96-e622690d8171"
+            },
+            {
+              "content": "Collect process measures to diagnose interaction steps where problems occurred, alongside the primary outcome measure.",
+              "content_digest": "6cc2fedef1b0af1c594e48610e08a169f3bca2405bf8773945eca33396aecb36",
+              "position": 2,
+              "uid": "23202824-b576-5d77-b591-8b4cc0757632"
+            },
+            {
+              "content": "Interpret evaluation results as differences between compared design alternatives rather than as success or failure of a single prototype.",
+              "content_digest": "5c578d52a7dbbf4e4b646e707bbee4ac37bcd23bceb0b4d5e09ef3c08df9c2f4",
+              "position": 3,
+              "uid": "65ae88bf-8002-5ada-8590-eaf345b38863"
+            },
+            {
+              "content": "Check boundary cases to verify whether the derived design principles retain explanatory power for adjacent situations not included in the comparison.",
+              "content_digest": "3edc3e181a8086233d889f35cb98c9448875fe3fee915467f712ca3eb2886de1",
+              "position": 4,
+              "uid": "79af5e5f-4868-5e76-bcd5-3f8e1d6a0bd1"
+            },
+            {
+              "content": "Controlled evaluation environments do not reproduce time pressure, peer intervention, or voluntary termination conditions found in daily use.",
+              "content_digest": "e58a1bc6a423874525aca9f864b9b0dbd1e3ef9961410608c5837c88f1153d9b",
+              "position": 5,
+              "uid": "3a65fc8b-a5b4-50fc-a60e-fc6f3fc44547"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "e34730c9-298f-4043-8a19-7f6059e6e6a0"
+        },
+        {
+          "context_digest": "4efbf2f6c096022137cee2c075c75219bb4fd0f441579901b8445bb2d92101f5",
+          "context_name": "task-2/advisor2/budget",
+          "context_uid": "ae02c2b2-49d3-5c30-b686-81ea17a8a87e",
+          "memories": [
+            {
+              "content": "Keep the main text to the total and major categories, and place quantities, unit rates, and assumptions in one compact budget table or appendix.",
+              "content_digest": "2e0d76a9c09d14facdf93e8b82cb1c4f583b8a6063b74552f2c23b7d37224e9c",
+              "position": 0,
+              "uid": "d614b55d-d9f6-5347-8d02-2d219d621a09"
+            },
+            {
+              "content": "Give each cost category, quantity, unit rate, and subtotal a stable row in the separate budget table.",
+              "content_digest": "ecd8aa50fc469bb763f36784d140b871b82a283b39f30f46e9e166776321c602",
+              "position": 1,
+              "uid": "24500129-4b07-564f-ba67-39e40d7d7860"
+            },
+            {
+              "content": "Put the estimate basis in a dedicated table column so one assumption can be checked or revised without rewriting the narrative.",
+              "content_digest": "6ed604ab2ca300f215d13f18cb5344e9322635ad047ce36c08242765e7fb09f4",
+              "position": 2,
+              "uid": "07bad409-af9c-512a-b829-7ceb28273f91"
+            },
+            {
+              "content": "Readers can verify arithmetic and compare categories faster in a consistent table than in amounts distributed across prose.",
+              "content_digest": "1dc966a0ade3af3bc636cb99d456edbdb918c2a23efd4a5792db9f8ede061195",
+              "position": 3,
+              "uid": "abf6d361-c2eb-512f-87e0-f3af9c5eb677"
+            },
+            {
+              "content": "Revise one table row and its subtotal when an estimate changes instead of repeating the new amount across several prose paragraphs.",
+              "content_digest": "dcd7d010f7d2c1898fffe71ccc7a0067233dcbcf66fe4b429043b1900d097f84",
+              "position": 4,
+              "uid": "473cf3ca-9832-5d9c-97df-974f1d9b0d1b"
+            },
+            {
+              "content": "Keep detailed arithmetic out of the main argument when readers can reach the complete table from a clear reference.",
+              "content_digest": "940a8cdee63c326d9c9be89cc07e7f223f239e3537113d32c098f711bd816cf7",
+              "position": 5,
+              "uid": "675956de-2c61-53e1-bb89-9b49d92558ba"
+            },
+            {
+              "content": "The user tends to interrupt the argument with long cost enumerations when no separate budget table is available.",
+              "content_digest": "2c0715ec3cfa247a35c3acc854b0716dca764619050aa635c0c242a5b56aa2f1",
+              "position": 6,
+              "uid": "f4371f72-f222-5066-b2f4-0a6be5d6865e"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "cfaea344-b158-4dfd-bf8a-74a6be2ebc00"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate operational domains: the reference frame governs comparative HCI evaluation, while the compared frame governs presentation and maintenance of budget estimates. Neither contains a scope-aligned counterpart to the other, and no contradiction or interpretive uncertainty is evident.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e34730c9-298f-4043-8a19-7f6059e6e6a0",
+              "memory_uid": "a50f6ecb-de38-5769-8a6e-23b84a7eb35c"
+            }
+          ],
+          "reason": "Only the reference frame establishes a primary measure as the decision criterion for design alternatives.",
+          "status": "RESOLVED",
+          "summary": "A single representative measure should determine whether compared design alternatives are retained, modified, or discarded.",
+          "uid": "807cf70a-ea58-5741-ab41-35a707877a46"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e34730c9-298f-4043-8a19-7f6059e6e6a0",
+              "memory_uid": "44c61beb-24a2-584a-ad96-e622690d8171"
+            }
+          ],
+          "reason": "Only the reference frame assigns panels a verification role concerning evaluation criteria.",
+          "status": "RESOLVED",
+          "summary": "HCI review panels should verify that declared primary measures provide clear criteria for judging alternatives.",
+          "uid": "46f22c9b-eec9-556a-ab31-7f701acf2451"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e34730c9-298f-4043-8a19-7f6059e6e6a0",
+              "memory_uid": "23202824-b576-5d77-b591-8b4cc0757632"
+            }
+          ],
+          "reason": "Only the reference frame prescribes diagnostic process measurement alongside the primary outcome.",
+          "status": "RESOLVED",
+          "summary": "Process measures should accompany the primary outcome measure to locate problematic interaction steps.",
+          "uid": "feb638ae-8be6-5140-9234-6215c273c06c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e34730c9-298f-4043-8a19-7f6059e6e6a0",
+              "memory_uid": "65ae88bf-8002-5ada-8590-eaf345b38863"
+            }
+          ],
+          "reason": "Only the reference frame specifies the comparative interpretation of evaluation results.",
+          "status": "RESOLVED",
+          "summary": "Evaluation results should be interpreted comparatively across alternatives rather than as a verdict on one prototype.",
+          "uid": "13731b3e-3d19-5e07-a631-7eebe58fc2d7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e34730c9-298f-4043-8a19-7f6059e6e6a0",
+              "memory_uid": "79af5e5f-4868-5e76-bcd5-3f8e1d6a0bd1"
+            }
+          ],
+          "reason": "Only the reference frame requires checking the external explanatory reach of derived principles.",
+          "status": "RESOLVED",
+          "summary": "Boundary cases should test whether derived design principles explain adjacent situations outside the comparison.",
+          "uid": "f8f9cdec-4d35-5b2b-8d9b-75c8e8b602a0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e34730c9-298f-4043-8a19-7f6059e6e6a0",
+              "memory_uid": "3a65fc8b-a5b4-50fc-a60e-fc6f3fc44547"
+            }
+          ],
+          "reason": "Only the reference frame identifies these limits on ecological realism.",
+          "status": "RESOLVED",
+          "summary": "Controlled evaluations omit daily-use conditions such as time pressure, peer intervention, and voluntary termination.",
+          "uid": "7c479f5d-c662-5ab1-9011-bb0118a9c5f0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cfaea344-b158-4dfd-bf8a-74a6be2ebc00",
+              "memory_uid": "d614b55d-d9f6-5347-8d02-2d219d621a09"
+            },
+            {
+              "frame_uid": "cfaea344-b158-4dfd-bf8a-74a6be2ebc00",
+              "memory_uid": "675956de-2c61-53e1-bb89-9b49d92558ba"
+            }
+          ],
+          "reason": "The assigned compared-frame memories split one underlying presentation rule: keep narrative focused on totals and major categories while providing accessible full detail separately.",
+          "status": "RESOLVED",
+          "summary": "Detailed budget arithmetic should remain outside the main argument while staying reachable through a clearly referenced table or appendix.",
+          "uid": "59130eba-9b14-5b0f-ac3b-aa571b666f30"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cfaea344-b158-4dfd-bf8a-74a6be2ebc00",
+              "memory_uid": "24500129-4b07-564f-ba67-39e40d7d7860"
+            }
+          ],
+          "reason": "Only the compared frame specifies stable row-level organization for budget components.",
+          "status": "RESOLVED",
+          "summary": "Each cost category, quantity, unit rate, and subtotal should occupy a stable budget-table row.",
+          "uid": "0d5bbee5-7a2a-591b-a65d-969e1259de27"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cfaea344-b158-4dfd-bf8a-74a6be2ebc00",
+              "memory_uid": "07bad409-af9c-512a-b829-7ceb28273f91"
+            }
+          ],
+          "reason": "Only the compared frame prescribes a separate estimate-basis column and its revision benefit.",
+          "status": "RESOLVED",
+          "summary": "Estimate assumptions should occupy a dedicated table column so they can be checked or revised independently.",
+          "uid": "3cadc8e2-799d-5b14-bcef-5eeb092d684e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cfaea344-b158-4dfd-bf8a-74a6be2ebc00",
+              "memory_uid": "abf6d361-c2eb-512f-87e0-f3af9c5eb677"
+            }
+          ],
+          "reason": "Only the compared frame states this auditability and comparison rationale for tabular presentation.",
+          "status": "RESOLVED",
+          "summary": "A consistent budget table enables faster arithmetic verification and category comparison than dispersed prose.",
+          "uid": "9199c085-f866-5d9b-9e60-58a4371bed7d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cfaea344-b158-4dfd-bf8a-74a6be2ebc00",
+              "memory_uid": "473cf3ca-9832-5d9c-97df-974f1d9b0d1b"
+            }
+          ],
+          "reason": "Only the compared frame prescribes localized maintenance when an estimate changes.",
+          "status": "RESOLVED",
+          "summary": "Changed estimates should be updated in one table row and its subtotal rather than repeated across prose.",
+          "uid": "eb379cd5-aa2e-5814-8725-74a76b7a0d95"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cfaea344-b158-4dfd-bf8a-74a6be2ebc00",
+              "memory_uid": "f4371f72-f222-5066-b2f4-0a6be5d6865e"
+            }
+          ],
+          "reason": "Only the compared frame records this observed writing tendency and its triggering condition.",
+          "status": "RESOLVED",
+          "summary": "Without a separate budget table, the user tends to interrupt the argument with lengthy cost enumerations.",
+          "uid": "52414996-c10f-5de3-bcb6-9a0c02550ea6"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame separates cost detail from narrative, structures auditable estimate tables, supports localized revisions, and notes the readability problem caused by prose-based cost enumerations.",
+        "differences": "",
+        "reference_only": "The reference frame defines primary and diagnostic measures, comparative interpretation, review checks, boundary-case testing, and limits of controlled HCI evaluations."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "d31597e5-8365-469f-8282-47117fb828dd"
+    },
+    "analysis_digest": "991d3fc61e13bf2cc75e4bd4621e94be975a2b77033365072d6c684ec2dcf857",
+    "key": "c21b8f3d7ca7defaee26a81cbeb7fbce3ba5bc3e074d438dd478db071c46981f",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 31.81466208299753,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "c21b8f3d7ca7defaee26a81cbeb7fbce3ba5bc3e074d438dd478db071c46981f",
+  "created_at": "2026-08-13T18:20:07.373429Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/evaluation",
+  "pair_key": "2a4b0a084cc8b439262bea0f62e8366a8ce2174c10ab7e3b16f39b608b8f5ccd",
+  "provider_seconds": 31.81466208299753,
+  "right": "task-2/advisor2/budget",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

@@ -1,0 +1,468 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:24:17.577906+00:00",
+      "frames": [
+        {
+          "context_digest": "adcb1ff51b2facc8282e8a56d8fec5150dd8e7376b7889d21013f71fee66b9b8",
+          "context_name": "task-2/advisor1/review",
+          "context_uid": "57ec8c37-1a0a-5f3b-82e9-51adad82677c",
+          "memories": [
+            {
+              "content": "Conduct one review prior to submission focusing solely on the validity of user problems, design interventions, and evaluation logic.",
+              "content_digest": "3dd669e72e74416ccd0b8eaf32f6b24dc7400ceb50c133a18f3ff33f89075334",
+              "position": 0,
+              "uid": "0dda8eb3-3287-5bb6-9b26-b1c00cc038d9"
+            },
+            {
+              "content": "Cross-check whether research questions align with the core functions of the prototype.",
+              "content_digest": "b3fbab30f9c640c7b3f6424f2cbc7d66bfa1f455f937f7fb28a6cc8b3763597d",
+              "position": 1,
+              "uid": "c8e0c9dd-dc4a-5a7d-9a82-e7ee449a4b25"
+            },
+            {
+              "content": "Cross-check whether evaluation tasks align with representative measures.",
+              "content_digest": "1e49d1844cb2a0a66a3dec114e44713885299f7a80763ae4e9a416eba505d61f",
+              "position": 2,
+              "uid": "f93c5baa-3c2b-5e37-b07b-0b00e8b22ab9"
+            },
+            {
+              "content": "Cross-check whether collected evidence aligns with design and operational decisions to be changed.",
+              "content_digest": "bc977c73db48b06ad23b68fa58f2fa5f64b19d09856b0e80c8ddac0b039568f8",
+              "position": 3,
+              "uid": "8dae0ad6-2a6d-5d99-98db-b0d48a1140e5"
+            },
+            {
+              "content": "Verify at the end that user problems, design interventions, user studies, and expected contributions form a coherent logical flow.",
+              "content_digest": "8b8d84adb9296241a03a4e6b91acee829ff1eaea443f9dd0b132d7b64a53dcff",
+              "position": 4,
+              "uid": "0f89ab25-d9ee-5669-aa99-a0fe07803915"
+            },
+            {
+              "content": "HCI reviewers view the validity of design interventions as low if research questions are not linked to prototype functions.",
+              "content_digest": "e7e5bb6d9618adc9d4903a4d4cbbf53007381999a95e4ed2137e3705a988fa13",
+              "position": 5,
+              "uid": "3e4a9a3b-abc2-54ed-9b87-f81abf61b541"
+            },
+            {
+              "content": "HCI reviewers view the validity of evaluation plans as low if evaluation tasks do not produce representative measures.",
+              "content_digest": "b23af1197034e73ce7b5bf0c6870ee410e44a07810ebaae12259087f2c12f8f1",
+              "position": 6,
+              "uid": "fb785649-1947-5e7d-aafb-308f14fb21b4"
+            },
+            {
+              "content": "HCI reviewers view the practicality of contributions as low if collected evidence cannot change design or operational decisions.",
+              "content_digest": "3720d356aa625bea8226fb668004f599e61140f1ad1543b643eb72b7a39ec43d",
+              "position": 7,
+              "uid": "02f8ddd8-32b0-5e3b-b358-5e0472a6e0d2"
+            },
+            {
+              "content": "Cross-check at the end whether each research question, formative evaluation data, and design modification judgment are seamlessly connected.",
+              "content_digest": "f3b3d431c05e942ff3cea0ac2d239eeee33e224047a452debe0246c57472f74d",
+              "position": 8,
+              "uid": "d17ba26c-187e-57bc-8468-c9c053fc303d"
+            },
+            {
+              "content": "Review whether the application conditions of proposed design principles and boundary cases of failure are presented together.",
+              "content_digest": "28ab914aa4a03e8f1908176b235017a80838ed660d996773a44b3963b927bcb3",
+              "position": 9,
+              "uid": "48a91d19-cc68-5400-8971-8125236f3fbf"
+            },
+            {
+              "content": "The user can have contributions reviewed only if prototype outcomes and the transferable design knowledge derived from them are separated.",
+              "content_digest": "2deadd2cfeed19a3e544c81a345a40f2f3b4561a8d28b073b70400a5e82ae0cb",
+              "position": 10,
+              "uid": "774341c9-b92d-53a5-a24c-59c75e39756b"
+            },
+            {
+              "content": "The scope of observation in controlled formative evaluations does not include long-term adaptation and operational changes in real-world usage contexts.",
+              "content_digest": "76a1a3c03c7d93acc8a6aca832fd24ab9624ea9e53c8207876160ed1055682e2",
+              "position": 11,
+              "uid": "877015ae-ab0b-561c-9fe3-3abb2d0aaa4e"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "25dc510c-39bf-4529-a2ee-4acc2b9fe46f"
+        },
+        {
+          "context_digest": "5f537c105ac26d5b710957c611c114c6834953adc14933beda6f44d0a404e410",
+          "context_name": "task-2/advisor2/methods",
+          "context_uid": "531f5f15-65f7-5315-8ccf-0cea6e53b76a",
+          "memories": [
+            {
+              "content": "Specify field and user data sources and analysis procedures corresponding to all HCI research questions.",
+              "content_digest": "0fecdff0f7b1204928239ca5665756cbf5dda44709758e5a093df8187927029e",
+              "position": 0,
+              "uid": "90be328f-1c05-5574-9657-1b0cc04a10b8"
+            },
+            {
+              "content": "In preregistered studies, clarify the criteria for judging plan changes.",
+              "content_digest": "5df2c60004dfd796d0af2a2e16e25f0804164517d00b4c393a65609a3dfb7534",
+              "position": 1,
+              "uid": "452ab231-3131-5697-a728-475289deafd0"
+            },
+            {
+              "content": "In preregistered studies, clarify the location for recording plan changes.",
+              "content_digest": "b05214535147a4c880d7500036b4640a0c479b0b05e2c1061ebfde88cb3c9866",
+              "position": 2,
+              "uid": "9c979f39-9660-5392-a1cd-0d1317af0e0f"
+            },
+            {
+              "content": "Use a justified minimum-to-maximum target range when confirmations can change, and tie the minimum and maximum to different workload and budget cases.",
+              "content_digest": "6c5e9bcd656dc10013c47e9c953409dbb20b06ee9ab758e1915d5f4d37d2604c",
+              "position": 3,
+              "uid": "8a49f598-804e-5a81-8e88-add7b665633a"
+            },
+            {
+              "content": "Specify the observation records, system logs, or interview tools used to collect each type of field and user data.",
+              "content_digest": "04c875971ca30ee5e3909e2c4e0632512d285401d5c9c4c1f42f4aaa592b34c1",
+              "position": 4,
+              "uid": "629cb159-6f6c-5476-870d-716ab573aef8"
+            },
+            {
+              "content": "Specify whether each type of field and user data will be collected before, during, or after deployment.",
+              "content_digest": "b105c5c373365987dff3fc4b709ffd88ba64c8358c179f81d780dc12d6b11bce",
+              "position": 5,
+              "uid": "b565c5c9-a0f7-5aff-a3b1-19696c4d3b39"
+            },
+            {
+              "content": "Readers cannot assess a target range unless both bounds have a stated consequence for schedule, workload, or cost.",
+              "content_digest": "308b499d832f2780b8a0c7d4acf0c9168ddc0e960b837a7f77e6e9574b235066",
+              "position": 6,
+              "uid": "251a4b3c-58fd-5d66-b5bc-74dcbeaa7a0d"
+            },
+            {
+              "content": "In field deployments, network and service instability exist as independent causes of task failure alongside design choices.",
+              "content_digest": "90f270d2544ce92c7ab245e0eb1eca5836f0a885ea652d40b6aad08c1572b039",
+              "position": 7,
+              "uid": "f150891e-7635-5c35-b986-d369bc630ef4"
+            },
+            {
+              "content": "If a safety signal occurs in the field system, existing institutional safety procedures take precedence over the research schedule and data collection plan.",
+              "content_digest": "96e1d7012cce82f901994e7b454d3f7e0a0b1dd18c5af6b9b14694e939356f25",
+              "position": 8,
+              "uid": "7860d9d6-5c2e-5969-b956-f71398218d02"
+            },
+            {
+              "content": "Reviewers judge answerability by tracing the path from each research question to its data sources and analysis procedures.",
+              "content_digest": "90ba5b91064c53361b4e6cf80cb4ec6a23aea3a02becfae03342046ffa2adf0d",
+              "position": 9,
+              "uid": "4fc24f87-e7b5-5d34-b850-f90cdc9b1ea2"
+            },
+            {
+              "content": "The user authoring this proposal tends to present implemented feature lists directly as design contributions.",
+              "content_digest": "d75cc3bb9bd2475fc87a88dc4a72de982101a5c9f03efaf823bcab6ca95dfe5d",
+              "position": 10,
+              "uid": "2db331a6-28d7-5c32-8372-7d3f8bc5b04a"
+            },
+            {
+              "content": "Define what can still be completed at the minimum target instead of treating every number inside the range as operationally identical.",
+              "content_digest": "b6cead2c6a19be091d8594da052baadd184eb3ef18580860e54b2aa337986354",
+              "position": 11,
+              "uid": "40f23f85-561e-55b3-825b-5000f9638f8a"
+            },
+            {
+              "content": "Use a bounded range to absorb expected confirmation changes without pretending that one early estimate is guaranteed.",
+              "content_digest": "1bc0df6bfbc6936b8a390368b5647a93ea8aab7316e9c7d233690b1206e6f17c",
+              "position": 12,
+              "uid": "9527ccb8-6662-58e3-8edd-daf7c0a713af"
+            },
+            {
+              "content": "Show how session count and facilitator time change at the minimum and maximum bounds.",
+              "content_digest": "2167c3e6d6bafad2818bb211b2c735f47ea040318a944c3402abea86b3faa316",
+              "position": 13,
+              "uid": "3ff9ec36-b70d-5dbd-9692-27fdf734fd20"
+            },
+            {
+              "content": "Define the additional workload or deliverable enabled at the maximum target so the upper bound is not an arbitrary cushion.",
+              "content_digest": "30d71498d24e6f7640b3f128824bf4c917f18c9317f164cd864f862f4c81e7fb",
+              "position": 14,
+              "uid": "9e1c3629-641f-5c09-915d-8a2ad1c8013a"
+            },
+            {
+              "content": "A bounded range preserves uncertainty honestly but makes the final workload and budget less certain than one fixed target.",
+              "content_digest": "c9015c18fd3140429386ae5ff3a0e45ffc86d009590772374f8354d4efb85234",
+              "position": 15,
+              "uid": "7ba672db-131e-5795-89c9-46f56344e7ed"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "78cd1075-8ebd-4037-931e-04b0ba7bb615"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "Both frames support stronger research-question traceability and a clearer separation between prototype features and transferable contributions. The reference emphasizes submission-stage logical validity and evaluation limits, while the compared frame adds field-data planning, preregistration, bounded-target budgeting, deployment risks, and safety precedence.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "25dc510c-39bf-4529-a2ee-4acc2b9fe46f",
+              "memory_uid": "c8e0c9dd-dc4a-5a7d-9a82-e7ee449a4b25"
+            },
+            {
+              "frame_uid": "25dc510c-39bf-4529-a2ee-4acc2b9fe46f",
+              "memory_uid": "3e4a9a3b-abc2-54ed-9b87-f81abf61b541"
+            },
+            {
+              "frame_uid": "78cd1075-8ebd-4037-931e-04b0ba7bb615",
+              "memory_uid": "90be328f-1c05-5574-9657-1b0cc04a10b8"
+            },
+            {
+              "frame_uid": "78cd1075-8ebd-4037-931e-04b0ba7bb615",
+              "memory_uid": "4fc24f87-e7b5-5d34-b850-f90cdc9b1ea2"
+            }
+          ],
+          "reason": "The claims govern complementary links needed to establish the validity and answerability of research questions without requiring a scope distinction.",
+          "status": "RESOLVED",
+          "summary": "Research questions should be traceable both to prototype functions and to specified data sources and analysis procedures.",
+          "uid": "38cbed5e-02ab-51ff-90d3-662d0616c07a"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "25dc510c-39bf-4529-a2ee-4acc2b9fe46f",
+              "memory_uid": "774341c9-b92d-53a5-a24c-59c75e39756b"
+            },
+            {
+              "frame_uid": "78cd1075-8ebd-4037-931e-04b0ba7bb615",
+              "memory_uid": "2db331a6-28d7-5c32-8372-7d3f8bc5b04a"
+            }
+          ],
+          "reason": "One frame requires separating prototype outcomes from transferable knowledge, while the other identifies the authoring tendency that this separation addresses.",
+          "status": "RESOLVED",
+          "summary": "Implemented prototype features or outcomes should not be presented directly as transferable design contributions.",
+          "uid": "9a954b3d-aa29-5865-b239-a76fe5bc8a22"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "25dc510c-39bf-4529-a2ee-4acc2b9fe46f",
+              "memory_uid": "0dda8eb3-3287-5bb6-9b26-b1c00cc038d9"
+            }
+          ],
+          "reason": "Only the reference specifies this review timing, frequency, and restricted focus.",
+          "status": "RESOLVED",
+          "summary": "A single pre-submission review should focus exclusively on the validity of user problems, design interventions, and evaluation logic.",
+          "uid": "5dbfe894-8bb6-56cc-ba45-93131ee3c40c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "25dc510c-39bf-4529-a2ee-4acc2b9fe46f",
+              "memory_uid": "f93c5baa-3c2b-5e37-b07b-0b00e8b22ab9"
+            },
+            {
+              "frame_uid": "25dc510c-39bf-4529-a2ee-4acc2b9fe46f",
+              "memory_uid": "fb785649-1947-5e7d-aafb-308f14fb21b4"
+            }
+          ],
+          "reason": "Only the reference states this task-to-measure validity requirement and its reviewer consequence.",
+          "status": "RESOLVED",
+          "summary": "Evaluation tasks should produce representative measures so that the evaluation plan is judged valid.",
+          "uid": "2c22366e-9329-5b27-b703-fcddcc041a6b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "25dc510c-39bf-4529-a2ee-4acc2b9fe46f",
+              "memory_uid": "8dae0ad6-2a6d-5d99-98db-b0d48a1140e5"
+            },
+            {
+              "frame_uid": "25dc510c-39bf-4529-a2ee-4acc2b9fe46f",
+              "memory_uid": "02f8ddd8-32b0-5e3b-b358-5e0472a6e0d2"
+            }
+          ],
+          "reason": "Only the reference connects evidence to actionable design or operational changes and contribution practicality.",
+          "status": "RESOLVED",
+          "summary": "Collected evidence should be capable of changing design or operational decisions to support practical contributions.",
+          "uid": "33f6f724-3e8c-524d-8492-bc74a422cd41"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "25dc510c-39bf-4529-a2ee-4acc2b9fe46f",
+              "memory_uid": "0f89ab25-d9ee-5669-aa99-a0fe07803915"
+            },
+            {
+              "frame_uid": "25dc510c-39bf-4529-a2ee-4acc2b9fe46f",
+              "memory_uid": "d17ba26c-187e-57bc-8468-c9c053fc303d"
+            }
+          ],
+          "reason": "These reference memories express complementary parts of one end-stage coherence check.",
+          "status": "RESOLVED",
+          "summary": "A final coherence check should connect research questions, user evidence or studies, design modifications, and expected contributions into a logical flow.",
+          "uid": "bc5a198e-11ed-5399-b190-21460e29f1a1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "25dc510c-39bf-4529-a2ee-4acc2b9fe46f",
+              "memory_uid": "48a91d19-cc68-5400-8971-8125236f3fbf"
+            }
+          ],
+          "reason": "Only the reference requires explicit conditions and failure boundaries for design principles.",
+          "status": "RESOLVED",
+          "summary": "Proposed design principles should present their application conditions together with boundary cases of failure.",
+          "uid": "6f4ac08d-19c9-5969-8ba5-2de8fb837b5e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "25dc510c-39bf-4529-a2ee-4acc2b9fe46f",
+              "memory_uid": "877015ae-ab0b-561c-9fe3-3abb2d0aaa4e"
+            }
+          ],
+          "reason": "Only the reference defines this limitation on the observation scope of controlled formative evaluation.",
+          "status": "RESOLVED",
+          "summary": "Controlled formative evaluations do not observe long-term adaptation or operational change in real-world use.",
+          "uid": "19b40f94-31de-508b-b1cf-3d6581d8f0e9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78cd1075-8ebd-4037-931e-04b0ba7bb615",
+              "memory_uid": "629cb159-6f6c-5476-870d-716ab573aef8"
+            },
+            {
+              "frame_uid": "78cd1075-8ebd-4037-931e-04b0ba7bb615",
+              "memory_uid": "b565c5c9-a0f7-5aff-a3b1-19696c4d3b39"
+            }
+          ],
+          "reason": "These compared memories split the instrumentation and timing components of one data-collection specification.",
+          "status": "RESOLVED",
+          "summary": "Field and user data plans should identify collection instruments and when collection occurs relative to deployment.",
+          "uid": "dce32247-71a0-5596-99d0-ba582b3b255b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78cd1075-8ebd-4037-931e-04b0ba7bb615",
+              "memory_uid": "452ab231-3131-5697-a728-475289deafd0"
+            },
+            {
+              "frame_uid": "78cd1075-8ebd-4037-931e-04b0ba7bb615",
+              "memory_uid": "9c979f39-9660-5392-a1cd-0d1317af0e0f"
+            }
+          ],
+          "reason": "These compared memories state complementary components of one plan-change documentation policy.",
+          "status": "RESOLVED",
+          "summary": "Preregistered studies should specify both the criteria for judging plan changes and where those changes are recorded.",
+          "uid": "312e3316-3cd7-59f5-8151-14bdf43ee465"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78cd1075-8ebd-4037-931e-04b0ba7bb615",
+              "memory_uid": "8a49f598-804e-5a81-8e88-add7b665633a"
+            },
+            {
+              "frame_uid": "78cd1075-8ebd-4037-931e-04b0ba7bb615",
+              "memory_uid": "251a4b3c-58fd-5d66-b5bc-74dcbeaa7a0d"
+            },
+            {
+              "frame_uid": "78cd1075-8ebd-4037-931e-04b0ba7bb615",
+              "memory_uid": "40f23f85-561e-55b3-825b-5000f9638f8a"
+            },
+            {
+              "frame_uid": "78cd1075-8ebd-4037-931e-04b0ba7bb615",
+              "memory_uid": "9527ccb8-6662-58e3-8edd-daf7c0a713af"
+            },
+            {
+              "frame_uid": "78cd1075-8ebd-4037-931e-04b0ba7bb615",
+              "memory_uid": "3ff9ec36-b70d-5dbd-9692-27fdf734fd20"
+            },
+            {
+              "frame_uid": "78cd1075-8ebd-4037-931e-04b0ba7bb615",
+              "memory_uid": "9e1c3629-641f-5c09-915d-8a2ad1c8013a"
+            },
+            {
+              "frame_uid": "78cd1075-8ebd-4037-931e-04b0ba7bb615",
+              "memory_uid": "7ba672db-131e-5795-89c9-46f56344e7ed"
+            }
+          ],
+          "reason": "The compared memories collectively define and justify one operational policy for non-arbitrary target ranges and their tradeoffs.",
+          "status": "RESOLVED",
+          "summary": "When confirmations may change, use a justified bounded target whose minimum and maximum have explicit deliverables, workload, schedule, and budget consequences while acknowledging residual uncertainty.",
+          "uid": "4d4daa9c-7187-5195-a1b3-e38adef2d477"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78cd1075-8ebd-4037-931e-04b0ba7bb615",
+              "memory_uid": "f150891e-7635-5c35-b986-d369bc630ef4"
+            }
+          ],
+          "reason": "Only the compared frame identifies infrastructure instability as an independent failure cause.",
+          "status": "RESOLVED",
+          "summary": "Field-deployment task failures may arise independently from network or service instability rather than design choices.",
+          "uid": "620976d3-9158-53e8-beee-42aec0ee9bac"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78cd1075-8ebd-4037-931e-04b0ba7bb615",
+              "memory_uid": "7860d9d6-5c2e-5969-b956-f71398218d02"
+            }
+          ],
+          "reason": "Only the compared frame establishes this safety override.",
+          "status": "RESOLVED",
+          "summary": "A field-system safety signal makes institutional safety procedures take precedence over research schedules and data collection plans.",
+          "uid": "8f5ad2ce-e36d-5d5a-80e5-9b0b1dde414a"
+        }
+      ],
+      "reports": {
+        "both": "Both require traceable research questions and distinguish implemented prototype features from transferable design contributions.",
+        "compared_only": "The compared frame adds field-data collection details, preregistered change documentation, operationally justified target ranges, infrastructure-related failure causes, and institutional safety precedence.",
+        "differences": "",
+        "reference_only": "The reference adds final coherence checks, representative evaluation measures, decision-relevant evidence, design-principle boundaries, and limits of controlled formative evaluation."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "9550da4e-a230-4c29-b634-741b19b04ae5"
+    },
+    "analysis_digest": "1b574a24ddfe1e5cec16f6660c6c38eba870589f574014a9682ae1039cb9bf70",
+    "key": "f3bc87ba5231f6b89264c0c0aa69c372aebff7400832f3816b4f231b02bbf9c2",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 52.34651845899862,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "f3bc87ba5231f6b89264c0c0aa69c372aebff7400832f3816b4f231b02bbf9c2",
+  "created_at": "2026-08-13T18:25:09.923837Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/review",
+  "pair_key": "7ef237d99ef54a9482d09d1f8add5eeca68ce7892543252b9fb4051cce097ec1",
+  "provider_seconds": 52.34651845899862,
+  "right": "task-2/advisor2/methods",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

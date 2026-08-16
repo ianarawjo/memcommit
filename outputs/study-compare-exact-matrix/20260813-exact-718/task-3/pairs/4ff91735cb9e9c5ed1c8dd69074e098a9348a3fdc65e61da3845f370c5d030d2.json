@@ -1,0 +1,352 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:47:01.192327+00:00",
+      "frames": [
+        {
+          "context_digest": "492e513a553a9191e2c646cca49364b336ae6d163de5688eeca8cc661bbbdb32",
+          "context_name": "task-3/local/personal-memory/2024/11",
+          "context_uid": "0d5e1eef-1669-5589-94ba-b46c9c2080dc",
+          "memories": [
+            {
+              "content": "The user changed their schedule once in November 2024 because of their mother's hospital visit.",
+              "content_digest": "f08f07dda1b468ab191a59d87e7ceb8068189964edee2010abdae6e525d6103f",
+              "position": 0,
+              "uid": "bb17c696-0c1c-516f-8ad9-68a4b159ce22"
+            },
+            {
+              "content": "After seeing the reason for the schedule change written in a calendar invitation, the user asked for it to be removed.",
+              "content_digest": "7bfc906526c255f90a85b6dcc4b28ea1b0a9389e9f17ba989a4ce098280578c8",
+              "position": 1,
+              "uid": "195ba5ab-3ee0-5594-a859-9f2b5eadf9ea"
+            },
+            {
+              "content": "The user was able to reschedule the appointment after providing only a new time, without a reason.",
+              "content_digest": "14f1bd0410c76aa3a0eb28a2212fd06558ab23b6dc012aa5529980a67efe3e2b",
+              "position": 2,
+              "uid": "4c8759cc-66aa-527c-a9d5-197d39b5d2b7"
+            },
+            {
+              "content": "On a day the user traveled in their father's car, they photographed the parking location.",
+              "content_digest": "111e71af27be5d109557440569352964544e9b702810741445172a6cf51f94f5",
+              "position": 3,
+              "uid": "d4b27ea7-d329-5dc7-b7ca-91d0cd50a958"
+            },
+            {
+              "content": "On the next visit, when the user did not take a photo, they walked one circuit of the parking garage while looking for the exit.",
+              "content_digest": "6d61d67e35552cb739d0220e480189706ec5bbac74f93b87149a6948d9ac2805",
+              "position": 4,
+              "uid": "32a19a57-9b04-5f86-92ba-202a9ac803e4"
+            },
+            {
+              "content": "After hearing preparation items from their mother by phone, the user omitted two items.",
+              "content_digest": "449dc73aad797f5acd3d898292cf9942f7d3b65b9faf52769ae5b3332285b4f3",
+              "position": 5,
+              "uid": "0eeffd8c-acd6-57bf-950d-20cfa1fe62b3"
+            },
+            {
+              "content": "After receiving the preparation items again by text, the user put all of them in their bag.",
+              "content_digest": "9539ab90f598a96d97a73b7954db8834d3106861ba6ecc814e579a348e0145d6",
+              "position": 6,
+              "uid": "07ea3801-8666-581d-b846-2f45bf99ca19"
+            },
+            {
+              "content": "The user's mother does not want the reason for her visit disclosed in the user's external schedule.",
+              "content_digest": "b1aff7bb5b5df1ec773fd8875205cd9fdfa2fd5b520cf91b7c84c9e3054b4feb",
+              "position": 7,
+              "uid": "9e70b92e-1d8d-51ef-962d-bd9b348a56d5"
+            },
+            {
+              "content": "Do not include the mother's reason for a visit when conveying the user's availability externally.",
+              "content_digest": "b9473919c63f233fc66c49bbf00b20a8ab9532bcb1b8ce3896c442afed4229d9",
+              "position": 8,
+              "uid": "d76686fd-9f1d-5d94-931b-4b49c86a8f4e"
+            },
+            {
+              "content": "Some daily-life services may operate for shorter hours during the year-end holiday period.",
+              "content_digest": "48d4487aba4c395527f9dfeac9488f45556d1bd89475f8620b0a64d84e4479fc",
+              "position": 9,
+              "uid": "820a5de9-9e08-52c7-8747-5155fe341bb4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "7d694b8d-c21c-4798-9b81-7b8ff306eb8e"
+        },
+        {
+          "context_digest": "df0924e320cd14a29eaed60f78e82fd509c4062949b35706b2a7cb94571fb599",
+          "context_name": "task-3/local/personal-memory/2026/04",
+          "context_uid": "16e860a8-7a90-5b7a-adc3-1c487ef97e03",
+          "memories": [
+            {
+              "content": "The user collects clothes for donation in a large bag beside the entrance.",
+              "content_digest": "39f2f01c59b7fa4ca7529d510e1b0a6ffab6706861042f771cfe97f6f806efac",
+              "position": 0,
+              "uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            },
+            {
+              "content": "After emptying an entire drawer at once, the user could not find a charger they needed.",
+              "content_digest": "674c33ba6475f42b29b03e6f8711e0216f983f3d37fee3dacf9336e3bb4596bf",
+              "position": 1,
+              "uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            },
+            {
+              "content": "During the next organizing session, the user sorted items by type and put only items to be discarded in the bag.",
+              "content_digest": "63104b5a7fd380f818c8758c51f9550c7a7fa41ff91f1dd314225d1824b69643",
+              "position": 2,
+              "uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            },
+            {
+              "content": "Even after photographing unworn clothes, the user did not take them out again for one month.",
+              "content_digest": "519f131096440719dcd3412f4439c5cfe44b7f402684170209708040692dc5fd",
+              "position": 3,
+              "uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            },
+            {
+              "content": "After moving those clothes to the donation bag, the user cleared one closet compartment.",
+              "content_digest": "45db58ae108a299344d982d8606fff26f733252da691cf01417e760909ff6057",
+              "position": 4,
+              "uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            },
+            {
+              "content": "The user nearly discarded an important paper with advertising and checked the recycling box again.",
+              "content_digest": "6bf928f67944656e5f3c68d8869c0cefd039a588f0ba735f94520231ef58017c",
+              "position": 5,
+              "uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            },
+            {
+              "content": "During the next organizing session, the user kept a separate document box and did not mix the papers.",
+              "content_digest": "adac8d4266c6b11e15d29c484665bc5dcc915f9aa319198b6a69d0e7b0131bb3",
+              "position": 6,
+              "uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            },
+            {
+              "content": "The user's mother asks the user to check whether she needs kitchen items in good condition before discarding them.",
+              "content_digest": "0752bc2ac00c0b1301c45ab4c2e73f63c57e6ebc4255dcc1c13330ffda906612",
+              "position": 7,
+              "uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            },
+            {
+              "content": "Confirm with the user before marking a personal document or another person's property as a disposal candidate.",
+              "content_digest": "17062e2cd4738619e81e211cb2f53d14e78c5f4eab9ae49053ce7e06935a7db5",
+              "position": 8,
+              "uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            },
+            {
+              "content": "The local agent cannot determine an object's emotional meaning from frequency of use alone.",
+              "content_digest": "9c86bcfe2b209bf7957dced0eab000b42f97b6a435d705ccaccb15e49be3691d",
+              "position": 9,
+              "uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "39fd3732-e303-4167-b0cd-97f89ec98f51"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate domains. The reference frame concerns schedule privacy, practical memory aids, and holiday service hours, while the compared frame concerns safer household organizing, donation workflows, disposal confirmation, and limits on inferring sentimental value.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d694b8d-c21c-4798-9b81-7b8ff306eb8e",
+              "memory_uid": "bb17c696-0c1c-516f-8ad9-68a4b159ce22"
+            },
+            {
+              "frame_uid": "7d694b8d-c21c-4798-9b81-7b8ff306eb8e",
+              "memory_uid": "195ba5ab-3ee0-5594-a859-9f2b5eadf9ea"
+            },
+            {
+              "frame_uid": "7d694b8d-c21c-4798-9b81-7b8ff306eb8e",
+              "memory_uid": "4c8759cc-66aa-527c-a9d5-197d39b5d2b7"
+            },
+            {
+              "frame_uid": "7d694b8d-c21c-4798-9b81-7b8ff306eb8e",
+              "memory_uid": "9e70b92e-1d8d-51ef-962d-bd9b348a56d5"
+            },
+            {
+              "frame_uid": "7d694b8d-c21c-4798-9b81-7b8ff306eb8e",
+              "memory_uid": "d76686fd-9f1d-5d94-931b-4b49c86a8f4e"
+            }
+          ],
+          "reason": "These memories form one reference-only narrative and policy about changing availability without exposing the mother's private visit reason.",
+          "status": "RESOLVED",
+          "summary": "A November 2024 schedule change concerned the user's mother's hospital visit, but the visit reason should be omitted from external scheduling and was removed when disclosed; rescheduling can proceed with only a new time.",
+          "uid": "411bdc38-4cdf-5b28-8e0a-f15ccf0055f2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d694b8d-c21c-4798-9b81-7b8ff306eb8e",
+              "memory_uid": "d4b27ea7-d329-5dc7-b7ca-91d0cd50a958"
+            },
+            {
+              "frame_uid": "7d694b8d-c21c-4798-9b81-7b8ff306eb8e",
+              "memory_uid": "32a19a57-9b04-5f86-92ba-202a9ac803e4"
+            }
+          ],
+          "reason": "These memories jointly describe a reference-only practical use of a parking-location photo and the difficulty observed when it was absent.",
+          "status": "RESOLVED",
+          "summary": "Photographing a parking location aided the user's visit context, while omitting the photo on the next visit was followed by a circuit of the garage while seeking the exit.",
+          "uid": "f2844cce-3803-5726-aa11-cbed1e566a57"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d694b8d-c21c-4798-9b81-7b8ff306eb8e",
+              "memory_uid": "0eeffd8c-acd6-57bf-950d-20cfa1fe62b3"
+            },
+            {
+              "frame_uid": "7d694b8d-c21c-4798-9b81-7b8ff306eb8e",
+              "memory_uid": "07ea3801-8666-581d-b846-2f45bf99ca19"
+            }
+          ],
+          "reason": "These memories jointly provide reference-only evidence that a written preparation list supported more complete packing than an oral list.",
+          "status": "RESOLVED",
+          "summary": "The user omitted preparation items communicated by phone but packed all items after receiving them by text.",
+          "uid": "4157c112-9ae1-5c60-8e97-e382f2100533"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d694b8d-c21c-4798-9b81-7b8ff306eb8e",
+              "memory_uid": "820a5de9-9e08-52c7-8747-5155fe341bb4"
+            }
+          ],
+          "reason": "This is independent reference-only planning information with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Daily-life services may have shorter operating hours during the year-end holiday period.",
+          "uid": "0a055fe9-68ad-5947-a90f-c78f9ee367d1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "39fd3732-e303-4167-b0cd-97f89ec98f51",
+              "memory_uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            },
+            {
+              "frame_uid": "39fd3732-e303-4167-b0cd-97f89ec98f51",
+              "memory_uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            },
+            {
+              "frame_uid": "39fd3732-e303-4167-b0cd-97f89ec98f51",
+              "memory_uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            }
+          ],
+          "reason": "These memories jointly describe a compared-only clothing-donation workflow in which physical relocation, rather than photography alone, produced progress.",
+          "status": "RESOLVED",
+          "summary": "The user keeps a donation bag by the entrance, and moving photographed but untouched clothes into it cleared closet space.",
+          "uid": "a053d97a-ba9b-5039-a2af-7e155277e95d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "39fd3732-e303-4167-b0cd-97f89ec98f51",
+              "memory_uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            },
+            {
+              "frame_uid": "39fd3732-e303-4167-b0cd-97f89ec98f51",
+              "memory_uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            }
+          ],
+          "reason": "These memories jointly describe a compared-only shift from indiscriminate emptying to staged, category-based organizing.",
+          "status": "RESOLVED",
+          "summary": "After losing track of a needed charger when emptying a drawer at once, the user later sorted by type and bagged only discard items.",
+          "uid": "2d0727c3-358f-5c72-a650-bd9ca00da7d0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "39fd3732-e303-4167-b0cd-97f89ec98f51",
+              "memory_uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            },
+            {
+              "frame_uid": "39fd3732-e303-4167-b0cd-97f89ec98f51",
+              "memory_uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            }
+          ],
+          "reason": "These memories jointly describe a compared-only safeguard against accidental disposal of personal documents.",
+          "status": "RESOLVED",
+          "summary": "After nearly recycling an important paper, the user separated documents during later organizing, and personal documents require confirmation before being marked for disposal.",
+          "uid": "a31e671c-71ef-5e6c-ba0e-1baa58619df2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "39fd3732-e303-4167-b0cd-97f89ec98f51",
+              "memory_uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            },
+            {
+              "frame_uid": "39fd3732-e303-4167-b0cd-97f89ec98f51",
+              "memory_uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            }
+          ],
+          "reason": "These memories jointly express a compared-only confirmation requirement for disposal decisions affecting another person's property.",
+          "status": "RESOLVED",
+          "summary": "The user's mother wants consultation before usable kitchen items she may need are discarded, reflecting a need to confirm before treating another person's property as disposable.",
+          "uid": "2ae1ebc4-299d-5893-b6f5-03149be81e15"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "39fd3732-e303-4167-b0cd-97f89ec98f51",
+              "memory_uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "reason": "This is an independent compared-only limitation on interpreting possessions, with no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "An object's frequency of use alone does not let the local agent determine its emotional meaning.",
+          "uid": "84aa2c7f-48cd-5b47-b603-24845fb8db7d"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame describes staged sorting, physically moving donations, separating documents, confirming sensitive disposal decisions, and avoiding assumptions about emotional significance.",
+        "differences": "",
+        "reference_only": "The reference describes protecting a family visit’s purpose in external scheduling, using photos and written lists as memory aids, and anticipating reduced holiday service hours."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "1c815541-110c-47ce-a38c-b27e68a882d8"
+    },
+    "analysis_digest": "55e4021ef60fc3753ca1fe3668a436df9ea34a3cc1dc640476b80f740c1f2748",
+    "key": "68eee57922becf54698d97adebaeb51b4a2ac47e755c6628c6a11b4d5b6ad74b",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 42.557738667001104,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "68eee57922becf54698d97adebaeb51b4a2ac47e755c6628c6a11b4d5b6ad74b",
+  "created_at": "2026-08-13T18:47:43.749621Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/11",
+  "pair_key": "4ff91735cb9e9c5ed1c8dd69074e098a9348a3fdc65e61da3845f370c5d030d2",
+  "provider_seconds": 42.557738667001104,
+  "right": "task-3/local/personal-memory/2026/04",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

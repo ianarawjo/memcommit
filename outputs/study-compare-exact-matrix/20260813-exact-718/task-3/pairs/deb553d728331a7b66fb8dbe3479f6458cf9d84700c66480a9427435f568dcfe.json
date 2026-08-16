@@ -1,0 +1,388 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:46:54.430250+00:00",
+      "frames": [
+        {
+          "context_digest": "492e513a553a9191e2c646cca49364b336ae6d163de5688eeca8cc661bbbdb32",
+          "context_name": "task-3/local/personal-memory/2024/11",
+          "context_uid": "0d5e1eef-1669-5589-94ba-b46c9c2080dc",
+          "memories": [
+            {
+              "content": "The user changed their schedule once in November 2024 because of their mother's hospital visit.",
+              "content_digest": "f08f07dda1b468ab191a59d87e7ceb8068189964edee2010abdae6e525d6103f",
+              "position": 0,
+              "uid": "bb17c696-0c1c-516f-8ad9-68a4b159ce22"
+            },
+            {
+              "content": "After seeing the reason for the schedule change written in a calendar invitation, the user asked for it to be removed.",
+              "content_digest": "7bfc906526c255f90a85b6dcc4b28ea1b0a9389e9f17ba989a4ce098280578c8",
+              "position": 1,
+              "uid": "195ba5ab-3ee0-5594-a859-9f2b5eadf9ea"
+            },
+            {
+              "content": "The user was able to reschedule the appointment after providing only a new time, without a reason.",
+              "content_digest": "14f1bd0410c76aa3a0eb28a2212fd06558ab23b6dc012aa5529980a67efe3e2b",
+              "position": 2,
+              "uid": "4c8759cc-66aa-527c-a9d5-197d39b5d2b7"
+            },
+            {
+              "content": "On a day the user traveled in their father's car, they photographed the parking location.",
+              "content_digest": "111e71af27be5d109557440569352964544e9b702810741445172a6cf51f94f5",
+              "position": 3,
+              "uid": "d4b27ea7-d329-5dc7-b7ca-91d0cd50a958"
+            },
+            {
+              "content": "On the next visit, when the user did not take a photo, they walked one circuit of the parking garage while looking for the exit.",
+              "content_digest": "6d61d67e35552cb739d0220e480189706ec5bbac74f93b87149a6948d9ac2805",
+              "position": 4,
+              "uid": "32a19a57-9b04-5f86-92ba-202a9ac803e4"
+            },
+            {
+              "content": "After hearing preparation items from their mother by phone, the user omitted two items.",
+              "content_digest": "449dc73aad797f5acd3d898292cf9942f7d3b65b9faf52769ae5b3332285b4f3",
+              "position": 5,
+              "uid": "0eeffd8c-acd6-57bf-950d-20cfa1fe62b3"
+            },
+            {
+              "content": "After receiving the preparation items again by text, the user put all of them in their bag.",
+              "content_digest": "9539ab90f598a96d97a73b7954db8834d3106861ba6ecc814e579a348e0145d6",
+              "position": 6,
+              "uid": "07ea3801-8666-581d-b846-2f45bf99ca19"
+            },
+            {
+              "content": "The user's mother does not want the reason for her visit disclosed in the user's external schedule.",
+              "content_digest": "b1aff7bb5b5df1ec773fd8875205cd9fdfa2fd5b520cf91b7c84c9e3054b4feb",
+              "position": 7,
+              "uid": "9e70b92e-1d8d-51ef-962d-bd9b348a56d5"
+            },
+            {
+              "content": "Do not include the mother's reason for a visit when conveying the user's availability externally.",
+              "content_digest": "b9473919c63f233fc66c49bbf00b20a8ab9532bcb1b8ce3896c442afed4229d9",
+              "position": 8,
+              "uid": "d76686fd-9f1d-5d94-931b-4b49c86a8f4e"
+            },
+            {
+              "content": "Some daily-life services may operate for shorter hours during the year-end holiday period.",
+              "content_digest": "48d4487aba4c395527f9dfeac9488f45556d1bd89475f8620b0a64d84e4479fc",
+              "position": 9,
+              "uid": "820a5de9-9e08-52c7-8747-5155fe341bb4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "501849c4-9797-4557-8b81-772347c163a2"
+        },
+        {
+          "context_digest": "0af669f138c2617a4b35c0974627a23c7e5cb2405da5e306648b130efac7fbdf",
+          "context_name": "task-3/local/personal-memory/2025/12",
+          "context_uid": "c54e9dde-005a-5d20-b41b-1313b4713061",
+          "memories": [
+            {
+              "content": "The user stores wrapping paper and empty gift boxes on the upper shelf of the bedroom closet.",
+              "content_digest": "8f3b67dea69e1fa656f1e42e39700a71ebc250c4f6ec18dc4d4f88d467e86ad2",
+              "position": 0,
+              "uid": "bd69b616-6e7c-5440-8b29-586de68bcff6"
+            },
+            {
+              "content": "From photographs, the user discovered that they had given their mother the same type of kitchen item two years in a row.",
+              "content_digest": "6962b8dc03fd90e1c8badfda0d827008cc675b940e5975a5833ebe504af7d635",
+              "position": 1,
+              "uid": "90c60e57-d7db-5783-9ca8-2fd27b94d847"
+            },
+            {
+              "content": "This year, the user went to the market with their mother and let her choose a needed item directly.",
+              "content_digest": "9a27aa187ad2964f985ffcf376490f4b69d3c83f2034591187273bd89f61637a",
+              "position": 2,
+              "uid": "53bc23b2-8242-58b5-b496-a45c70bb8e41"
+            },
+            {
+              "content": "The user once ordered a gift late and had it delivered the day after the gathering.",
+              "content_digest": "245bb316eb5d0b0203c63eb9a2832c6cf73cb9e7e368bdb48a08bb6b702642d7",
+              "position": 3,
+              "uid": "3b097446-2c73-5414-8c06-6bacdf00a4c1"
+            },
+            {
+              "content": "The next year, the user checked the expected delivery date and ordered one week before the gathering.",
+              "content_digest": "97aed11c6b4f7d03bd6a55e27ef34ef539da85204787bb0468f1e2df51d958fc",
+              "position": 4,
+              "uid": "ce18c7a5-d1e9-5e5c-8739-b14fa7298feb"
+            },
+            {
+              "content": "The user did not put names on wrapped boxes and handed their older sister and younger brother each other's gifts.",
+              "content_digest": "48464eb29ee2d2e01cda00f0e3a13d116d4aa121d424aecc59644431e89f8957",
+              "position": 5,
+              "uid": "7657f424-cd24-54dd-8409-e04974dd1531"
+            },
+            {
+              "content": "The next time the user wrapped gifts, they wrote the recipient on the bottom of each box.",
+              "content_digest": "551e74aebf85d4ffee86b960c520b17f3f7e4d50428493934831a774d9e31db6",
+              "position": 6,
+              "uid": "d8e82ad3-902e-5f0c-aa8e-b23ce874982a"
+            },
+            {
+              "content": "The user's younger brother welcomes a snack the family can share immediately more than an item for his use alone.",
+              "content_digest": "ec32111520e2f12afc684c6441c075dcc0715fc450d0ce8f20408dfb955634a9",
+              "position": 7,
+              "uid": "8a941bf1-73bd-51d3-a069-62ecc9d56439"
+            },
+            {
+              "content": "The local agent can find past gift records and flag duplicates but cannot know what is needed this year.",
+              "content_digest": "f7574c7f91999992680a7e88e79270747fd744a46355800012c63319c286d731",
+              "position": 8,
+              "uid": "036edf8f-4680-5822-924e-0fdc691c8135"
+            },
+            {
+              "content": "Year-end deliveries may take longer than usual or have their expected dates changed.",
+              "content_digest": "cc0955e132cf6f4bec7f416e54ed2ffdbac22169adeeae7372a6ddc496da4b9e",
+              "position": 9,
+              "uid": "b9e9e222-a559-56e3-93b5-1f49a0e0d3ab"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "6520d10e-d9f4-44b7-8adf-6adb33cec084"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames mostly cover independent domains: the reference centers on schedule privacy, parking, and preparation habits, while the compared frame centers on gift selection, delivery, labeling, storage, and preferences. Both independently indicate that year-end timing can disrupt ordinary services.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "501849c4-9797-4557-8b81-772347c163a2",
+              "memory_uid": "820a5de9-9e08-52c7-8747-5155fe341bb4"
+            },
+            {
+              "frame_uid": "6520d10e-d9f4-44b7-8adf-6adb33cec084",
+              "memory_uid": "b9e9e222-a559-56e3-93b5-1f49a0e0d3ab"
+            }
+          ],
+          "reason": "The claims concern different but explicit service constraints that jointly inform year-end timing decisions without contradiction.",
+          "status": "RESOLVED",
+          "summary": "Year-end conditions may disrupt normal service timing through shorter operating hours or slower and revised deliveries.",
+          "uid": "bce1cc11-4c35-59ba-a2f4-2747021a1b82"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "501849c4-9797-4557-8b81-772347c163a2",
+              "memory_uid": "bb17c696-0c1c-516f-8ad9-68a4b159ce22"
+            }
+          ],
+          "reason": "This is independently useful reference-side history with no substantive counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A November 2024 schedule change occurred because of the user's mother's hospital visit.",
+          "uid": "e2afc135-2ea0-5bae-adab-4eaa95dd69ed"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "501849c4-9797-4557-8b81-772347c163a2",
+              "memory_uid": "195ba5ab-3ee0-5594-a859-9f2b5eadf9ea"
+            },
+            {
+              "frame_uid": "501849c4-9797-4557-8b81-772347c163a2",
+              "memory_uid": "9e70b92e-1d8d-51ef-962d-bd9b348a56d5"
+            },
+            {
+              "frame_uid": "501849c4-9797-4557-8b81-772347c163a2",
+              "memory_uid": "d76686fd-9f1d-5d94-931b-4b49c86a8f4e"
+            }
+          ],
+          "reason": "These memories provide the incident, privacy preference, and operational instruction for one reference-side disclosure rule.",
+          "status": "RESOLVED",
+          "summary": "The mother's visit reason should be omitted from externally visible schedule information, consistent with a prior request to remove it.",
+          "uid": "cbe42d36-6eef-51f7-ba36-4bb10be3ee7f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "501849c4-9797-4557-8b81-772347c163a2",
+              "memory_uid": "4c8759cc-66aa-527c-a9d5-197d39b5d2b7"
+            }
+          ],
+          "reason": "This is an independent reference-side observation about rescheduling requirements.",
+          "status": "RESOLVED",
+          "summary": "The user successfully rescheduled an appointment by supplying a new time without a reason.",
+          "uid": "27d7ce9e-5444-5b7a-9ed2-91b428f35f93"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "501849c4-9797-4557-8b81-772347c163a2",
+              "memory_uid": "d4b27ea7-d329-5dc7-b7ca-91d0cd50a958"
+            },
+            {
+              "frame_uid": "501849c4-9797-4557-8b81-772347c163a2",
+              "memory_uid": "32a19a57-9b04-5f86-92ba-202a9ac803e4"
+            }
+          ],
+          "reason": "The paired observations form one reference-side pattern concerning parking-location documentation and later navigation.",
+          "status": "RESOLVED",
+          "summary": "The user photographed a parking location on one visit and, without a photo on the next visit, walked a circuit while seeking the exit.",
+          "uid": "318d08ef-9f02-53d1-b04f-fcbba0aae235"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "501849c4-9797-4557-8b81-772347c163a2",
+              "memory_uid": "0eeffd8c-acd6-57bf-950d-20cfa1fe62b3"
+            },
+            {
+              "frame_uid": "501849c4-9797-4557-8b81-772347c163a2",
+              "memory_uid": "07ea3801-8666-581d-b846-2f45bf99ca19"
+            }
+          ],
+          "reason": "The observations jointly describe one reference-side difference between spoken and written preparation information.",
+          "status": "RESOLVED",
+          "summary": "The user omitted two preparation items after hearing them by phone but packed every item after receiving them by text.",
+          "uid": "1a00d4b1-ffee-5ea9-8f44-8881815184d1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6520d10e-d9f4-44b7-8adf-6adb33cec084",
+              "memory_uid": "bd69b616-6e7c-5440-8b29-586de68bcff6"
+            }
+          ],
+          "reason": "This is independently useful compared-side storage information.",
+          "status": "RESOLVED",
+          "summary": "Wrapping paper and empty gift boxes are stored on the upper shelf of the bedroom closet.",
+          "uid": "953ac552-7b5b-53e6-93dd-c54ea823dbd6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6520d10e-d9f4-44b7-8adf-6adb33cec084",
+              "memory_uid": "90c60e57-d7db-5783-9ca8-2fd27b94d847"
+            }
+          ],
+          "reason": "This is an independent compared-side observation about detecting duplicate gifts.",
+          "status": "RESOLVED",
+          "summary": "Photographs revealed that the user had given their mother the same type of kitchen item in consecutive years.",
+          "uid": "8a93765b-712e-590c-a086-f9890d25e757"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6520d10e-d9f4-44b7-8adf-6adb33cec084",
+              "memory_uid": "53bc23b2-8242-58b5-b496-a45c70bb8e41"
+            }
+          ],
+          "reason": "This is independent compared-side information about the gift-selection approach.",
+          "status": "RESOLVED",
+          "summary": "The user let their mother directly choose a needed market item this year.",
+          "uid": "376d4d82-bb5d-5fed-b9ae-1a14432aeed4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6520d10e-d9f4-44b7-8adf-6adb33cec084",
+              "memory_uid": "3b097446-2c73-5414-8c06-6bacdf00a4c1"
+            },
+            {
+              "frame_uid": "6520d10e-d9f4-44b7-8adf-6adb33cec084",
+              "memory_uid": "ce18c7a5-d1e9-5e5c-8739-b14fa7298feb"
+            }
+          ],
+          "reason": "The memories form one compared-side learning sequence about planning gift deliveries.",
+          "status": "RESOLVED",
+          "summary": "After a gift arrived one day after a gathering, the user later checked the expected delivery date and ordered one week in advance.",
+          "uid": "b7754c3b-232c-563a-9198-7dd0d0c2224b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6520d10e-d9f4-44b7-8adf-6adb33cec084",
+              "memory_uid": "7657f424-cd24-54dd-8409-e04974dd1531"
+            },
+            {
+              "frame_uid": "6520d10e-d9f4-44b7-8adf-6adb33cec084",
+              "memory_uid": "d8e82ad3-902e-5f0c-aa8e-b23ce874982a"
+            }
+          ],
+          "reason": "The memories form one compared-side learning sequence about identifying wrapped gifts.",
+          "status": "RESOLVED",
+          "summary": "After unlabeled boxes caused sibling gifts to be exchanged, the user later wrote each recipient's name on the bottom of the box.",
+          "uid": "66fb8d09-e4a6-53d7-93dd-22d030d93140"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6520d10e-d9f4-44b7-8adf-6adb33cec084",
+              "memory_uid": "8a941bf1-73bd-51d3-a069-62ecc9d56439"
+            }
+          ],
+          "reason": "This is independently useful compared-side recipient-preference information.",
+          "status": "RESOLVED",
+          "summary": "The user's younger brother prefers a snack the family can share immediately over an item intended only for him.",
+          "uid": "cca76a99-83ee-5477-a81b-cbe5ef898e4a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6520d10e-d9f4-44b7-8adf-6adb33cec084",
+              "memory_uid": "036edf8f-4680-5822-924e-0fdc691c8135"
+            }
+          ],
+          "reason": "This is an independent compared-side capability and limitation statement.",
+          "status": "RESOLVED",
+          "summary": "The local agent can locate prior gift records and flag duplicates but cannot determine what is needed this year.",
+          "uid": "7b19c178-40c7-5051-8456-cd26cc39d5f9"
+        }
+      ],
+      "reports": {
+        "both": "Both note year-end timing risks: services may shorten hours, while deliveries may slow or change dates.",
+        "compared_only": "The compared frame uniquely covers gift storage, selection and duplicate avoidance, advance ordering, recipient labeling, a sibling’s preference, and the local agent’s gift-record limits.",
+        "differences": "",
+        "reference_only": "The reference uniquely covers schedule-change privacy, reason-free rescheduling, parking-location photography, and better preparation-item recall from text."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "529f2310-f61b-4005-be67-177f839d8814"
+    },
+    "analysis_digest": "fe324f7b541a8220f6e9b37a30de961508bf815f5abc97c14892b40b456c333a",
+    "key": "ba5280f553c8eed4c12c2ea4e12f8bf49901ab83dfd6560a94d34fce638d1f9f",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 57.21914891599954,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "ba5280f553c8eed4c12c2ea4e12f8bf49901ab83dfd6560a94d34fce638d1f9f",
+  "created_at": "2026-08-13T18:47:51.649010Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/11",
+  "pair_key": "deb553d728331a7b66fb8dbe3479f6458cf9d84700c66480a9427435f568dcfe",
+  "provider_seconds": 57.21914891599954,
+  "right": "task-3/local/personal-memory/2025/12",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

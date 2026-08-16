@@ -1,0 +1,138 @@
+{
+  "coverage": {
+    "expected": 7,
+    "observed": 7
+  },
+  "created_at": "2026-08-11T00:30:42.913812Z",
+  "description_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+  "issues": [],
+  "kind": "STUDY_COMPARE_GRAPH_PAIR",
+  "left": {
+    "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+    "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+    "memory_count": 1,
+    "name": "task-3/description"
+  },
+  "method": "COMPACT_DECISION_VECTOR_V1",
+  "operation": "COMPARE",
+  "pair_key": "ea74058fbbe80ac1506a59513c7ab9b8762e4505fe25830953b36fd97b333030",
+  "provider": {
+    "condition": "COMPACT_DECISION_VECTOR",
+    "contract_valid": true,
+    "elapsed_seconds": 15.062321582998266,
+    "error_type": null,
+    "failure_category": null,
+    "operation": "compare_contexts_compact_ab_v1",
+    "prompt_chars": 5188,
+    "provider_calls": 1,
+    "provider_run": {
+      "completion_tokens": null,
+      "identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "operation": "compare_contexts_compact_ab_v1",
+      "prompt_tokens": null,
+      "upstream_model": "gpt-5.6-sol",
+      "upstream_provider": "openai-codex"
+    },
+    "provider_seconds": 15.061458500000299,
+    "response_bytes": 267,
+    "response_chars": 267,
+    "schema_chars": 1375,
+    "validation_error": null,
+    "validation_seconds": 0.0008434589981334284
+  },
+  "relations": [
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "77ea44c9-0a6f-5ab2-b20d-07341e978b87",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "4004ad20-547d-5588-a4d5-2bceff66005f",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000001",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "13b65314-02d9-5f22-bfc0-fd08b861f8f0",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000002",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "9bf4b3d7-ab89-5a22-8caa-de9debc744e9",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000003",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "38256d79-12a4-5f38-aca9-357056cab7ce",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000004",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "9db14c6f-298a-5b48-b7a6-d323cafbfd7f",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000005",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "044511b2-40d0-55cb-912c-49c4ec0874fc",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000006",
+      "status": "RESOLVED"
+    }
+  ],
+  "right": {
+    "context_digest": "ded698b747c6b36dd5078c0dd27f692338e2ad6c558633196088fa788b9b528b",
+    "context_uid": "9fd65004-661c-5349-8c35-1b96e8d5c9de",
+    "memory_count": 6,
+    "name": "task-3/local/guardrails/retention-and-revocation"
+  },
+  "schema_version": 1,
+  "semantic_content_in_participant_report": false,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

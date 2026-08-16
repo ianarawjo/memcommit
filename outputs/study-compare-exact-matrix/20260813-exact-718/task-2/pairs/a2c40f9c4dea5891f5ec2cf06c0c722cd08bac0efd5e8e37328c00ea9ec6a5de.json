@@ -1,0 +1,429 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:28:54.306792+00:00",
+      "frames": [
+        {
+          "context_digest": "587a9d2fb6abf2b486ccfc50ff85ae7280d7d7bd4003d85ce5877a4edfc9293f",
+          "context_name": "task-2/advisor1/terminology",
+          "context_uid": "7699c7c5-e48b-5548-b0aa-256d793c6c06",
+          "memories": [
+            {
+              "content": "Use the same term throughout the proposal for the same interaction concept or interface element.",
+              "content_digest": "2f11d02134609c6397d8f60105cc452e34129bc1c427a512455247e54951f18a",
+              "position": 0,
+              "uid": "949a884d-b348-5fa0-b1dd-adbebafe10a9"
+            },
+            {
+              "content": "Use abbreviations only for recurring terms of three or more words.",
+              "content_digest": "dcceb4407d24df4034dceca613413471bb46898a487aed0cc0905e48ede482e7",
+              "position": 1,
+              "uid": "2f484151-b5fc-51a9-8a88-b30a403617b3"
+            },
+            {
+              "content": "Present the full name and abbreviation together when using an abbreviation for the first time.",
+              "content_digest": "02e1b2b4cbc8f9a61e299bf1500663ae8cd4036155b2a7dec8c2ce40087ac29b",
+              "position": 2,
+              "uid": "21131a6f-d35c-51e3-895f-46cd21a3b566"
+            },
+            {
+              "content": "Prioritize the research role over diagnostic labels or deficits when referring to participants.",
+              "content_digest": "7b99c6ec90abdbb68d4af8e95a03df3149b9d2d4d637fbd33a70a2acf7073a12",
+              "position": 3,
+              "uid": "e02c3110-05c4-58a4-8d76-c8fd2426a0d5"
+            },
+            {
+              "content": "Reviewers from different subfields struggle to infer undefined abbreviations from context alone.",
+              "content_digest": "13af5eb9fe88f3f2d73192adfb48f7a20de09e22e777a952daa83ca1c030f9ee",
+              "position": 4,
+              "uid": "af028910-e48b-5605-b92b-9378bdfa525c"
+            },
+            {
+              "content": "Use the term formative evaluation for studies seeking design modification evidence, and distinguish it from final efficacy judgments.",
+              "content_digest": "4ba9bca850286ff6286cf4b3bf44395d608ec700c46acd8cd26c54e26d43b378",
+              "position": 5,
+              "uid": "39792d18-2be0-5135-a063-c5213247d330"
+            },
+            {
+              "content": "The user can have contribution labels such as principles, models, or guidelines approved only if they align with the abstraction level of the actual deliverables.",
+              "content_digest": "efed93b748ce74e3e9ed96949bf539c809ea4c36ae77bbb54670285f691f74e9",
+              "position": 6,
+              "uid": "bcaa8c30-ca6e-5b9f-af93-88513a2f16b1"
+            },
+            {
+              "content": "Design principles describe the relationship between conditions and outcomes rather than serving as instructions that merely replicate a single screen layout.",
+              "content_digest": "22385c2bb345db07d19c442e5d99a5c527c2795848b9e29fe198d0ede6255d6f",
+              "position": 7,
+              "uid": "82ad9fe2-4063-5e89-9097-c975aa2920cb"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "d821d7ab-7c1b-492c-9d6f-8d0a895709c7"
+        },
+        {
+          "context_digest": "19032e7fed99072de4fcaeff084874da452865e9958a1301ec01260d60e01867",
+          "context_name": "task-2/advisor2/structure",
+          "context_uid": "09c95ce6-baa2-5823-a035-e4b0d323200b",
+          "memories": [
+            {
+              "content": "Allow the problem framing to extend through a third sentence when a concrete person, setting, or use situation is needed to make the issue understandable.",
+              "content_digest": "c027c1b4290ff04fe84e475af5aae8fa9e90dd839903b9fe772892e8b6b80323",
+              "position": 0,
+              "uid": "e32f543b-1637-572a-ab96-319d74ee7e21"
+            },
+            {
+              "content": "Use the third sentence for the specific setting and consequence rather than compressing them into an abstract two-sentence summary.",
+              "content_digest": "f02d2bd7ea21e7ebbaff85d3e77c77689dadead77276a3d472d2ad59f94ec5ff",
+              "position": 1,
+              "uid": "6bbb0f69-ca99-539a-a810-a0fb34fe9cc3"
+            },
+            {
+              "content": "Explicitly specify the users, operational stakeholders, and actual usage environment in the primary HCI research question.",
+              "content_digest": "3ab83046fede9de55435f98324226f435bcc4932d2a7440ef61fc21c2e0d71f3",
+              "position": 2,
+              "uid": "48e887dc-7fc8-5a23-9999-890acb870251"
+            },
+            {
+              "content": "Provide one compact visual summary when proposing an unfamiliar interaction procedure.",
+              "content_digest": "1e4299abe1691fbbfc826fc59d4276831d9a49abd3588820ba2f50311fd56d2c",
+              "position": 3,
+              "uid": "e34bce0c-7d07-5fe6-b03f-39faa801640b"
+            },
+            {
+              "content": "Mark the conditions that move an unfamiliar interaction procedure from one step to the next in its visual summary.",
+              "content_digest": "9e7d7547cac76b4b6665ea585fedd7678682c7f9a4eadf129202ac2ea2c6b2b8",
+              "position": 4,
+              "uid": "68ad56f9-6ca2-587a-9182-fd98a79d3d5c"
+            },
+            {
+              "content": "Present the master’s research schedule as phase-specific milestones for field understanding, system implementation, user study, and analysis.",
+              "content_digest": "035713de4f5d6577859b2602ae32a7561594bcbeca023049d4b0e2d4c930d94a",
+              "position": 5,
+              "uid": "eca301ff-9feb-502d-b955-055c48342542"
+            },
+            {
+              "content": "Link deliverables that determine entry into the next phase to each milestone of the master’s research.",
+              "content_digest": "dff2c02b66c97696644d04ee7e685c706443257101e7ee34182dcc5021aa8525",
+              "position": 6,
+              "uid": "cbd977cd-1b78-5ca6-823a-7a5b4b92d77a"
+            },
+            {
+              "content": "Directly connect the gap in the actual usage context with the proposed design and operational contributions in a single flow.",
+              "content_digest": "8da57ff6f210ec4a38d82a2550f96a6b30ba59b7f63f3f3c08e9dcec10dce381",
+              "position": 7,
+              "uid": "9283aedb-6818-5c99-8fe0-502b488acb66"
+            },
+            {
+              "content": "Avoid extra subheadings in a two-page proposal; use paragraph transitions to preserve one continuous argument from problem to proposed response and next steps.",
+              "content_digest": "f6dabe3ee8aba7aa81d707519ffc7d3839f3a74ddcd97fa61d14396e1581f69c",
+              "position": 8,
+              "uid": "c5c04ab1-10e8-52a3-98a1-aa9cbede57c1"
+            },
+            {
+              "content": "Begin each paragraph by connecting it to the previous claim so the short proposal reads as an argument rather than a stack of labeled fragments.",
+              "content_digest": "37d855da87b3b3437e6cc7d865a02d1852b7f7a01c3d7855b0584e399d086619",
+              "position": 9,
+              "uid": "87203bcf-6724-543a-ad19-60a2becc4598"
+            },
+            {
+              "content": "Place preliminary results from field observations or technical validations near sentences supporting feasibility claims.",
+              "content_digest": "8cb8b48f7f57c3248d28f4b82181c9ddbac16acb7b67435abdfb761233b3aecb",
+              "position": 10,
+              "uid": "c9591180-6f3a-5909-8695-31704b9b6f01"
+            },
+            {
+              "content": "Readers may misinterpret a compressed opening when the person, setting, or consequence is only implied.",
+              "content_digest": "2eb34b31c7da38508d152ae4d47ddb8b08479a2e28fbdb4a50c72e7f1999bbf2",
+              "position": 11,
+              "uid": "0ac685f9-e338-5549-bf91-32078cf36f15"
+            },
+            {
+              "content": "A two-sentence opening can become so general that readers understand the topic but cannot picture the situation the proposal intends to change.",
+              "content_digest": "21625e7040d1007bf6931fc1e3551dbbd46739ad339773d51cd00d9f21abf96e",
+              "position": 12,
+              "uid": "5567fb3c-de90-5363-af1b-62fb5b8e0bb1"
+            },
+            {
+              "content": "Use paragraph transitions instead of extra headings when the repeated labels would consume space needed for the argument itself.",
+              "content_digest": "50620b1c5db672532aea9ce8c9bfc11688a5b83bf5436bfc9a308a08fc719286",
+              "position": 13,
+              "uid": "32cef408-4c66-5ef2-9a59-eea6fc67b16e"
+            },
+            {
+              "content": "End each paragraph with the question or consequence that the next paragraph answers.",
+              "content_digest": "3d3639057c446bbd3d2bef5393bce0219451ba3c718d655c62dc51b1ea2df86f",
+              "position": 14,
+              "uid": "3579fcc0-c74e-5006-901b-6406a3106fa1"
+            },
+            {
+              "content": "A continuous sequence of problem, consequence, response, and next step makes the relationship among claims audible without repeating section labels.",
+              "content_digest": "8e1d12ba37953236e2f51510ac3e0382b75b43ff911190216550f82c5679eadf",
+              "position": 15,
+              "uid": "2c2aa1af-c450-5c8d-a907-042c5757d3ee"
+            },
+            {
+              "content": "Readers may experience very short headed sections as an outline because each new label interrupts the connection to the previous paragraph.",
+              "content_digest": "c355e847db92d4c27343283e9415debff2fbdb4b2b2c505d4e442dc78251578d",
+              "position": 16,
+              "uid": "1fb62d5b-532b-5664-842c-57622e3c8b9d"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "4d56bab9-79bf-4ab1-ba12-a1343ee4983d"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames offer complementary, non-overlapping guidance for proposal writing. The reference frame governs terminology, participant language, study classification, and contribution naming, while the compared frame governs contextual framing, research questions, visuals, schedules, argumentative flow, and placement of feasibility evidence.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d821d7ab-7c1b-492c-9d6f-8d0a895709c7",
+              "memory_uid": "949a884d-b348-5fa0-b1dd-adbebafe10a9"
+            }
+          ],
+          "reason": "Only the reference frame supplies a general terminology-consistency rule.",
+          "status": "RESOLVED",
+          "summary": "Use one consistent term for each interaction concept or interface element throughout the proposal.",
+          "uid": "4ff84dd1-3ca6-503f-a0e7-d7689256bf2c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d821d7ab-7c1b-492c-9d6f-8d0a895709c7",
+              "memory_uid": "2f484151-b5fc-51a9-8a88-b30a403617b3"
+            },
+            {
+              "frame_uid": "d821d7ab-7c1b-492c-9d6f-8d0a895709c7",
+              "memory_uid": "21131a6f-d35c-51e3-895f-46cd21a3b566"
+            },
+            {
+              "frame_uid": "d821d7ab-7c1b-492c-9d6f-8d0a895709c7",
+              "memory_uid": "af028910-e48b-5605-b92b-9378bdfa525c"
+            }
+          ],
+          "reason": "These reference-side statements form one abbreviation policy comprising eligibility, introduction, and reader-facing rationale.",
+          "status": "RESOLVED",
+          "summary": "Reserve abbreviations for recurring multiword terms and define them on first use so cross-subfield reviewers need not infer their meaning.",
+          "uid": "79f6af3d-6e2a-584f-a520-518b864c37d8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d821d7ab-7c1b-492c-9d6f-8d0a895709c7",
+              "memory_uid": "e02c3110-05c4-58a4-8d76-c8fd2426a0d5"
+            }
+          ],
+          "reason": "Only the reference frame provides participant-labeling guidance.",
+          "status": "RESOLVED",
+          "summary": "Refer to participants by their research role rather than foregrounding diagnoses or deficits.",
+          "uid": "a460f423-e7bb-5b43-a10e-6bed37b22947"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d821d7ab-7c1b-492c-9d6f-8d0a895709c7",
+              "memory_uid": "39792d18-2be0-5135-a063-c5213247d330"
+            }
+          ],
+          "reason": "Only the reference frame defines this study-classification terminology.",
+          "status": "RESOLVED",
+          "summary": "Call studies formative evaluations when they seek evidence for design modification, distinguishing them from final efficacy judgments.",
+          "uid": "405cd014-9b4f-5162-a02c-ae0942c69273"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d821d7ab-7c1b-492c-9d6f-8d0a895709c7",
+              "memory_uid": "bcaa8c30-ca6e-5b9f-af93-88513a2f16b1"
+            },
+            {
+              "frame_uid": "d821d7ab-7c1b-492c-9d6f-8d0a895709c7",
+              "memory_uid": "82ad9fe2-4063-5e89-9097-c975aa2920cb"
+            }
+          ],
+          "reason": "These reference-side statements jointly specify how contribution types, especially design principles, should be named and characterized.",
+          "status": "RESOLVED",
+          "summary": "Use contribution labels that match the deliverables’ abstraction level, treating design principles as condition–outcome relationships rather than instructions reproducing one layout.",
+          "uid": "c5154995-d4d9-59b6-aaa1-84a058be2855"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4d56bab9-79bf-4ab1-ba12-a1343ee4983d",
+              "memory_uid": "e32f543b-1637-572a-ab96-319d74ee7e21"
+            },
+            {
+              "frame_uid": "4d56bab9-79bf-4ab1-ba12-a1343ee4983d",
+              "memory_uid": "6bbb0f69-ca99-539a-a810-a0fb34fe9cc3"
+            },
+            {
+              "frame_uid": "4d56bab9-79bf-4ab1-ba12-a1343ee4983d",
+              "memory_uid": "0ac685f9-e338-5549-bf91-32078cf36f15"
+            },
+            {
+              "frame_uid": "4d56bab9-79bf-4ab1-ba12-a1343ee4983d",
+              "memory_uid": "5567fb3c-de90-5363-af1b-62fb5b8e0bb1"
+            }
+          ],
+          "reason": "These compared-side statements express one conditional opening-length policy and its reader-comprehension rationale.",
+          "status": "RESOLVED",
+          "summary": "Allow a third opening sentence to state the concrete person, setting, and consequence when two sentences would leave the problem too abstract or easily misunderstood.",
+          "uid": "8021be02-029c-57c3-9e45-83c20ce0158d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4d56bab9-79bf-4ab1-ba12-a1343ee4983d",
+              "memory_uid": "48e887dc-7fc8-5a23-9999-890acb870251"
+            }
+          ],
+          "reason": "Only the compared frame specifies the contextual contents of the research question.",
+          "status": "RESOLVED",
+          "summary": "State users, operational stakeholders, and the actual usage environment explicitly in the primary HCI research question.",
+          "uid": "ee62e12f-facb-5424-8fb8-faca6c974bec"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4d56bab9-79bf-4ab1-ba12-a1343ee4983d",
+              "memory_uid": "e34bce0c-7d07-5fe6-b03f-39faa801640b"
+            },
+            {
+              "frame_uid": "4d56bab9-79bf-4ab1-ba12-a1343ee4983d",
+              "memory_uid": "68ad56f9-6ca2-587a-9182-fd98a79d3d5c"
+            }
+          ],
+          "reason": "These compared-side statements split one visual-explanation requirement into the summary and its transition annotations.",
+          "status": "RESOLVED",
+          "summary": "Provide a compact visual for an unfamiliar interaction procedure and mark the conditions governing transitions between its steps.",
+          "uid": "1a9e0293-0c87-5875-b2eb-1716472f71ce"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4d56bab9-79bf-4ab1-ba12-a1343ee4983d",
+              "memory_uid": "eca301ff-9feb-502d-b955-055c48342542"
+            },
+            {
+              "frame_uid": "4d56bab9-79bf-4ab1-ba12-a1343ee4983d",
+              "memory_uid": "cbd977cd-1b78-5ca6-823a-7a5b4b92d77a"
+            }
+          ],
+          "reason": "These compared-side statements jointly define milestone structure and phase-gating deliverables.",
+          "status": "RESOLVED",
+          "summary": "Organize the master’s research schedule into phase-specific milestones and attach the deliverables that determine entry into each next phase.",
+          "uid": "27904a6a-6391-598d-b522-7ae418ea033c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4d56bab9-79bf-4ab1-ba12-a1343ee4983d",
+              "memory_uid": "9283aedb-6818-5c99-8fe0-502b488acb66"
+            }
+          ],
+          "reason": "Only the compared frame states this gap-to-contribution linkage rule.",
+          "status": "RESOLVED",
+          "summary": "Connect the gap in actual use directly to the proposed design and operational contributions in one argumentative flow.",
+          "uid": "84ae9278-54d8-5e4e-a3a0-34e8a0450441"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4d56bab9-79bf-4ab1-ba12-a1343ee4983d",
+              "memory_uid": "c5c04ab1-10e8-52a3-98a1-aa9cbede57c1"
+            },
+            {
+              "frame_uid": "4d56bab9-79bf-4ab1-ba12-a1343ee4983d",
+              "memory_uid": "87203bcf-6724-543a-ad19-60a2becc4598"
+            },
+            {
+              "frame_uid": "4d56bab9-79bf-4ab1-ba12-a1343ee4983d",
+              "memory_uid": "32cef408-4c66-5ef2-9a59-eea6fc67b16e"
+            },
+            {
+              "frame_uid": "4d56bab9-79bf-4ab1-ba12-a1343ee4983d",
+              "memory_uid": "3579fcc0-c74e-5006-901b-6406a3106fa1"
+            },
+            {
+              "frame_uid": "4d56bab9-79bf-4ab1-ba12-a1343ee4983d",
+              "memory_uid": "2c2aa1af-c450-5c8d-a907-042c5757d3ee"
+            },
+            {
+              "frame_uid": "4d56bab9-79bf-4ab1-ba12-a1343ee4983d",
+              "memory_uid": "1fb62d5b-532b-5664-842c-57622e3c8b9d"
+            }
+          ],
+          "reason": "These compared-side statements form one structural policy, with transition techniques and explanations of how repeated headings consume space and fragment the argument.",
+          "status": "RESOLVED",
+          "summary": "In a short proposal, minimize interruptive subheadings and use linked paragraph openings and endings to sustain a continuous problem-to-next-step argument.",
+          "uid": "525521f1-be09-5f76-95da-a51d40ff88c4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4d56bab9-79bf-4ab1-ba12-a1343ee4983d",
+              "memory_uid": "c9591180-6f3a-5909-8695-31704b9b6f01"
+            }
+          ],
+          "reason": "Only the compared frame governs the local placement of preliminary feasibility evidence.",
+          "status": "RESOLVED",
+          "summary": "Place preliminary field or technical results near the feasibility claims they support.",
+          "uid": "c08d16a7-6d05-5406-b4ed-16638c79b163"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only guidance covers concrete problem framing, contextualized research questions, procedural visuals, milestone schedules, gap-to-contribution logic, continuous paragraph structure, and locally placed feasibility evidence.",
+        "differences": "",
+        "reference_only": "Reference-only guidance covers consistent terminology, disciplined abbreviation use, participant-centered language, formative-evaluation naming, and contribution labels matched to deliverable abstraction."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "6ad609a7-5caf-4c81-a99a-c8c96d9e829c"
+    },
+    "analysis_digest": "7d5fddc3771af4ea1906eec7d2341ccfcda02a62af427febc77c7d202dc14cd4",
+    "key": "4ad35d4e874e488e1abc11e5c8f96da5f9b68b8e1fedbad6dde3672c5d53d949",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 37.40569637500084,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "4ad35d4e874e488e1abc11e5c8f96da5f9b68b8e1fedbad6dde3672c5d53d949",
+  "created_at": "2026-08-13T18:29:31.711748Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/terminology",
+  "pair_key": "a2c40f9c4dea5891f5ec2cf06c0c722cd08bac0efd5e8e37328c00ea9ec6a5de",
+  "provider_seconds": 37.40569637500084,
+  "right": "task-2/advisor2/structure",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

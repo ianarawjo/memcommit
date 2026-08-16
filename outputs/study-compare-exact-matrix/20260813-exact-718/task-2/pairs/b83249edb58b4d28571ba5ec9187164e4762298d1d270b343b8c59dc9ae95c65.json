@@ -1,0 +1,215 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:19:59.197388+00:00",
+      "frames": [
+        {
+          "context_digest": "42df7e2f7640040d1d6f6f6e566e80d178668a05ab6918b64eed91b91a41b7fb",
+          "context_name": "task-2/advisor1/evaluation",
+          "context_uid": "30568e2f-ce17-50ce-a25b-1cc4bdb94689",
+          "memories": [
+            {
+              "content": "Specify a single representative measure that serves as the criterion for retaining, modifying, or discarding compared design alternatives.",
+              "content_digest": "53aa7c1f81a4fac9e76985be094717aa122e7077a6fcfde46946babd5929d390",
+              "position": 0,
+              "uid": "a50f6ecb-de38-5769-8a6e-23b84a7eb35c"
+            },
+            {
+              "content": "HCI review panels verify whether clear criteria for judging design alternatives are established using the declared primary measure.",
+              "content_digest": "fabd83103e5c3474f56de113c477f7ced5e863a508ec39bd4ae23653d63ad354",
+              "position": 1,
+              "uid": "44c61beb-24a2-584a-ad96-e622690d8171"
+            },
+            {
+              "content": "Collect process measures to diagnose interaction steps where problems occurred, alongside the primary outcome measure.",
+              "content_digest": "6cc2fedef1b0af1c594e48610e08a169f3bca2405bf8773945eca33396aecb36",
+              "position": 2,
+              "uid": "23202824-b576-5d77-b591-8b4cc0757632"
+            },
+            {
+              "content": "Interpret evaluation results as differences between compared design alternatives rather than as success or failure of a single prototype.",
+              "content_digest": "5c578d52a7dbbf4e4b646e707bbee4ac37bcd23bceb0b4d5e09ef3c08df9c2f4",
+              "position": 3,
+              "uid": "65ae88bf-8002-5ada-8590-eaf345b38863"
+            },
+            {
+              "content": "Check boundary cases to verify whether the derived design principles retain explanatory power for adjacent situations not included in the comparison.",
+              "content_digest": "3edc3e181a8086233d889f35cb98c9448875fe3fee915467f712ca3eb2886de1",
+              "position": 4,
+              "uid": "79af5e5f-4868-5e76-bcd5-3f8e1d6a0bd1"
+            },
+            {
+              "content": "Controlled evaluation environments do not reproduce time pressure, peer intervention, or voluntary termination conditions found in daily use.",
+              "content_digest": "e58a1bc6a423874525aca9f864b9b0dbd1e3ef9961410608c5837c88f1153d9b",
+              "position": 5,
+              "uid": "3a65fc8b-a5b4-50fc-a60e-fc6f3fc44547"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "d597a164-3ef2-4c04-b12f-3f220fce81b1"
+        },
+        {
+          "context_digest": "bb54539faeedf2db9ada09643c11270aabf235d8e3e6df98500f90f9b82aed49",
+          "context_name": "task-2/advisor2/reproducibility",
+          "context_uid": "5f2f3c0f-4cb1-5151-b381-847df75b6457",
+          "memories": [
+            {
+              "content": "HCI reviewers find it difficult to assess result reproducibility if the system version used in the field deployment is not disclosed.",
+              "content_digest": "83ac18cb56f74dbeb7834909b999669bb9a46d320b288bf38fb7b6c9bd0812f2",
+              "position": 0,
+              "uid": "40f11374-d91b-546a-9e93-fcf98a0fde98"
+            },
+            {
+              "content": "Record changes in system configurations, field procedures, and data collection tools during deployment, along with their timestamps and rationales.",
+              "content_digest": "ac399146f49e6ae5d21272de0cd13db6346d4cd67b096ecfa9bd314b026f403e",
+              "position": 1,
+              "uid": "cc72ad54-4cf3-56cd-9119-46776f5b2184"
+            },
+            {
+              "content": "The history of deployment versions and configuration changes provides necessary evidence for interpreting results from different field sites.",
+              "content_digest": "39ae70de900b646362a96cfa7d734a6404604b468398b09da9fb05783b389d25",
+              "position": 2,
+              "uid": "75f22b45-fb1b-568c-bb05-080fdacdcab2"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "7e1cea5a-3fd0-4acc-8c8a-ab1129b7adc5"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The reference frame focuses on comparative design evaluation: decision criteria, diagnostic measures, interpretation, generalization, and controlled-setting limits. The compared frame independently focuses on deployment provenance needed to interpret and reproduce field results. Neither frame supplies a scope-aligned counterpart to the other’s claims.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d597a164-3ef2-4c04-b12f-3f220fce81b1",
+              "memory_uid": "a50f6ecb-de38-5769-8a6e-23b84a7eb35c"
+            },
+            {
+              "frame_uid": "d597a164-3ef2-4c04-b12f-3f220fce81b1",
+              "memory_uid": "44c61beb-24a2-584a-ad96-e622690d8171"
+            }
+          ],
+          "reason": "Both reference-side statements split one underlying claim: alternatives need a primary-measure-based judgment criterion, and reviewers verify that criterion. The compared frame contains no corresponding evaluation-criterion claim.",
+          "status": "RESOLVED",
+          "summary": "A declared primary measure establishes and supports review of criteria for judging design alternatives.",
+          "uid": "78dfc614-6c77-5d56-8c71-1ee7576a921f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d597a164-3ef2-4c04-b12f-3f220fce81b1",
+              "memory_uid": "23202824-b576-5d77-b591-8b4cc0757632"
+            }
+          ],
+          "reason": "This is independently useful reference-side guidance about diagnostic measurement, while the compared frame addresses deployment provenance rather than interaction-step diagnosis.",
+          "status": "RESOLVED",
+          "summary": "Process measures should accompany the primary outcome measure to locate problematic interaction steps.",
+          "uid": "98b3fdec-bbb6-5224-8a68-fc55db0b0047"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d597a164-3ef2-4c04-b12f-3f220fce81b1",
+              "memory_uid": "65ae88bf-8002-5ada-8590-eaf345b38863"
+            }
+          ],
+          "reason": "This reference-side interpretive rule has no counterpart in the compared frame’s claims about documenting field-deployment versions and changes.",
+          "status": "RESOLVED",
+          "summary": "Evaluation results should be interpreted as differences among alternatives rather than as a single prototype’s success or failure.",
+          "uid": "efb85aa2-30db-50d9-87fc-1c5edfdd47ad"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d597a164-3ef2-4c04-b12f-3f220fce81b1",
+              "memory_uid": "79af5e5f-4868-5e76-bcd5-3f8e1d6a0bd1"
+            }
+          ],
+          "reason": "This is a one-sided claim about testing generalization; the compared frame provides deployment-history requirements but no boundary-case validation policy.",
+          "status": "RESOLVED",
+          "summary": "Adjacent boundary cases should test whether derived design principles retain explanatory power beyond the original comparison.",
+          "uid": "75d8408c-c227-5c4b-a03f-9f3b1055e2f9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d597a164-3ef2-4c04-b12f-3f220fce81b1",
+              "memory_uid": "3a65fc8b-a5b4-50fc-a60e-fc6f3fc44547"
+            }
+          ],
+          "reason": "This reference-side limitation concerns ecological fidelity and is independent of the compared frame’s deployment-provenance claims.",
+          "status": "RESOLVED",
+          "summary": "Controlled environments omit daily-use conditions such as time pressure, peer intervention, and voluntary termination.",
+          "uid": "44833bb7-5470-53bf-9ed1-899ad57d20be"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7e1cea5a-3fd0-4acc-8c8a-ab1129b7adc5",
+              "memory_uid": "40f11374-d91b-546a-9e93-fcf98a0fde98"
+            },
+            {
+              "frame_uid": "7e1cea5a-3fd0-4acc-8c8a-ab1129b7adc5",
+              "memory_uid": "cc72ad54-4cf3-56cd-9119-46776f5b2184"
+            },
+            {
+              "frame_uid": "7e1cea5a-3fd0-4acc-8c8a-ab1129b7adc5",
+              "memory_uid": "75f22b45-fb1b-568c-bb05-080fdacdcab2"
+            }
+          ],
+          "reason": "The compared-side statements split one underlying provenance claim across initial version disclosure, change logging, and the evidentiary value of deployment history. The reference frame contains no corresponding field-deployment documentation requirement.",
+          "status": "RESOLVED",
+          "summary": "Deployment versions and operational changes should be documented with relevant timing and rationale to support reproducibility and interpretation across field sites.",
+          "uid": "4ca83239-dd23-53e7-8faa-0920752a0280"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame requires deployment-version and change histories, with timing and rationale, to support reproducibility and cross-site interpretation.",
+        "differences": "",
+        "reference_only": "The reference covers primary decision criteria, diagnostic process measures, comparative interpretation, boundary-case testing, and limits of controlled evaluations."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "346347a2-553f-46b2-a692-07cb241daa75"
+    },
+    "analysis_digest": "bca73f1b8056cfeed5df16bfcb65d0a56206caf8f3e0975b8aa173c52f02974f",
+    "key": "5094ac4b399e7e62f01381f4793898dc4e1674b88f2e220ebc9c17557f9c9f4a",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 23.865821208000852,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "5094ac4b399e7e62f01381f4793898dc4e1674b88f2e220ebc9c17557f9c9f4a",
+  "created_at": "2026-08-13T18:20:23.062788Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/evaluation",
+  "pair_key": "b83249edb58b4d28571ba5ec9187164e4762298d1d270b343b8c59dc9ae95c65",
+  "provider_seconds": 23.865821208000852,
+  "right": "task-2/advisor2/reproducibility",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

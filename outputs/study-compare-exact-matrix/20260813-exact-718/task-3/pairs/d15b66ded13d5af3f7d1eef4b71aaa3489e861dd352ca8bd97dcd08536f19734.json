@@ -1,0 +1,424 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:37:24.683901+00:00",
+      "frames": [
+        {
+          "context_digest": "9fdb8cdfae14edf54f7410c0e8dd59527179de290b3d7c5f1b0f58494275b076",
+          "context_name": "task-3/local/personal-memory/2024/03",
+          "context_uid": "97c5905c-359b-5497-956f-b92db9ddbd2f",
+          "memories": [
+            {
+              "content": "The instructions for one medication the user takes say to take it after the evening meal.",
+              "content_digest": "32bba9f2936e560ddd5f4c5515895f2954b9c8722fcd501644569d1ff4f7b97c",
+              "position": 0,
+              "uid": "12ba4249-9450-5f2e-b648-5369a7997b26"
+            },
+            {
+              "content": "On a day with a morning appointment, the user miscalculated the fasting period and checked again at the reception desk.",
+              "content_digest": "532396ed2265321fbd4ca28ed1de2962211a357195bc9839503330c6cb0ab281",
+              "position": 1,
+              "uid": "051e79ff-5363-5160-9a13-46568fd13306"
+            },
+            {
+              "content": "For an afternoon visit, the user felt less rushed while preparing to travel than for a morning visit.",
+              "content_digest": "276fa255e4a4945f1475fa66129069ea33514bc24c98a246e9ab0d0000c156fa",
+              "position": 2,
+              "uid": "e7f1fcf7-ee2f-57d8-98cb-781e31e481e8"
+            },
+            {
+              "content": "On a day there was no waiting chair, the user stood for 20 minutes and their back became uncomfortable.",
+              "content_digest": "1c412785950057f01b1e7c10b716977cdb8bfb2b0605ef5bfdbdc6e349f6aaf8",
+              "position": 3,
+              "uid": "18d58666-2cfa-5959-8da9-2745bed56e11"
+            },
+            {
+              "content": "On a day medication instructions were explained all at once and at length, the user failed to write down an important time.",
+              "content_digest": "f3629bba06d053fa20712982f70b8dfd574b41a1b5ecd29d7c29f1b60742f647",
+              "position": 4,
+              "uid": "8fdede6e-64ed-5e4c-81f4-7a1075165568"
+            },
+            {
+              "content": "On a day medication times were confirmed one line at a time, the user copied them directly into their schedule after returning home.",
+              "content_digest": "acade505d6c0cdfddae0d169dea81c06a757aa7d7d2c760f6cdc253b06af5ded",
+              "position": 5,
+              "uid": "21f679f7-7d75-5c01-b6c3-b0d4bea5f2f0"
+            },
+            {
+              "content": "On a visit when their younger brother drove them, the user did not have to find a separate route home.",
+              "content_digest": "5e17c1227c7cbee7e995728edd17b4301903dfdc7a7bdc5f5ff3e06edfd357b3",
+              "position": 6,
+              "uid": "3ec03d39-3240-56d1-80da-313f79f2bf3a"
+            },
+            {
+              "content": "The user's younger brother prefers to receive a request for weekday-afternoon transportation two days beforehand rather than on the day itself.",
+              "content_digest": "7d1bf920ff730ddff86f328aaa3c3edf9d424170044bcd789a3ac55bffb5a839",
+              "position": 7,
+              "uid": "3069baac-fa68-5e94-8ba3-e888cf622f8c"
+            },
+            {
+              "content": "The local agent cannot determine the current prescription or whether use continues from medication notes alone.",
+              "content_digest": "89990815daa01f70a77b970b6a38cb9063f32fed898bd36e39a85551a1ad6200",
+              "position": 8,
+              "uid": "d7f215c6-57ea-561a-9627-3ce94203d507"
+            },
+            {
+              "content": "The waiting area at that clinic has too few chairs, so there may be periods when people must wait standing.",
+              "content_digest": "66c27ba4d6f3fb0d16b322a6de6d8afeb5c650fbe04162006a3288dd886ce1f0",
+              "position": 9,
+              "uid": "e6023aed-938d-5954-b8a7-8cb01340ee37"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "9e7f0f4c-2e09-4a31-9c04-9e07b71b61b9"
+        },
+        {
+          "context_digest": "d28031209c5edc768a592166e26351dd5bce0c7568d379fcaceab173450041c8",
+          "context_name": "task-3/local/personal-memory/2026/02",
+          "context_uid": "7ffcbc10-1703-54b0-9545-99742b51d333",
+          "memories": [
+            {
+              "content": "The user keeps basic repair tools in a box beneath the sink.",
+              "content_digest": "c2a23bace63735c502081b19682a8ceb3e37156b9aadd6f7739e2005c20469d6",
+              "position": 0,
+              "uid": "7d3daf76-a21e-5117-a534-6175ab2d2861"
+            },
+            {
+              "content": "On a day the faucet leaked, the user placed only a towel beneath it, and the floor became wet as well.",
+              "content_digest": "ad6baa7e1848e4e61bdaf22bc5c8665122330b5c70c8ae192216abbba17c6134",
+              "position": 1,
+              "uid": "70a6d9f5-180f-5174-b247-690e10baa23e"
+            },
+            {
+              "content": "After sending a photo to building management, the user finalized the time for a repair visit.",
+              "content_digest": "82b36c7a95e51a0dfa32768c2a437d509b75c0f93bc51a99a636f2c9739a20da",
+              "position": 2,
+              "uid": "9fcd922c-147c-517b-82b3-180fdfb13f33"
+            },
+            {
+              "content": "Before the technician's visit, the user emptied the area beneath the sink so work could begin immediately.",
+              "content_digest": "dbc3b48e5bc4b406dc17067dd93d92e845e3706f47c8706f9a5d5ef17bf64617",
+              "position": 3,
+              "uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5"
+            },
+            {
+              "content": "On a day the user wrote the visit time only in the calendar and turned off the reminder, they heard the doorbell late.",
+              "content_digest": "95fab6bcab815dd8bdd5fecb867f84c6d2f1a901771603b1dbf197cde3c1d19d",
+              "position": 4,
+              "uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65"
+            },
+            {
+              "content": "For the next visit, the user enabled a reminder 30 minutes beforehand and answered immediately at the entrance.",
+              "content_digest": "818783ff21b2d369935b9994c17b28f93f84ea7558dab9f2de20d0aad21f86a3",
+              "position": 5,
+              "uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a"
+            },
+            {
+              "content": "After the repair, the user called their maternal aunt to confirm that the spare key entrusted to her was still there.",
+              "content_digest": "ac01b9816dda2d6bf16f22b41157120b7ffdd75d19638f6313a88e1ce6e7a1f1",
+              "position": 6,
+              "uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441"
+            },
+            {
+              "content": "The user's maternal aunt considers it unsafe to hand the spare key to a repair technician without the user's explicit request.",
+              "content_digest": "f7c7c0306c81cc6de9f02aa1aed7d411db3f29757d024e7d5a1679b1ff308948",
+              "position": 7,
+              "uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd"
+            },
+            {
+              "content": "Obtain the user's reconfirmation before scheduling an external worker to enter the residential unit.",
+              "content_digest": "34382e40f4907bea82728787fdeb150e299d46a0079ae2847d4eda6d6d892d22",
+              "position": 8,
+              "uid": "4716a67b-8602-564c-9e89-85cd4ee158f9"
+            },
+            {
+              "content": "A multi-unit residential building's repair schedule may change because of emergency work or parts availability.",
+              "content_digest": "d701fdd1ffbf17ff0890c583b5bf39849e3c6e3cc296fde7e00d3d1ecc0ef196",
+              "position": 9,
+              "uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "c9810723-a9b0-4fcf-a47c-51d0266ceb7b"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate practical domains: clinic and medication experiences in the reference frame, and home-repair preparation, reminders, access authorization, and scheduling in the compared frame. No claims address the same operational policy closely enough for a cross-frame semantic relation.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9e7f0f4c-2e09-4a31-9c04-9e07b71b61b9",
+              "memory_uid": "12ba4249-9450-5f2e-b648-5369a7997b26"
+            }
+          ],
+          "reason": "This is independently useful medication-timing information found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A medication is instructed to be taken after the evening meal.",
+          "uid": "0f231f43-0115-56db-b35c-5c2643df8a7e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9e7f0f4c-2e09-4a31-9c04-9e07b71b61b9",
+              "memory_uid": "051e79ff-5363-5160-9a13-46568fd13306"
+            }
+          ],
+          "reason": "This is a distinct appointment-preparation experience found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user miscalculated fasting for a morning appointment and sought confirmation at reception.",
+          "uid": "c4734386-b4f9-5c57-97f9-a35b414b3669"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9e7f0f4c-2e09-4a31-9c04-9e07b71b61b9",
+              "memory_uid": "e7f1fcf7-ee2f-57d8-98cb-781e31e481e8"
+            }
+          ],
+          "reason": "This is independently useful visit-timing information found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Preparing to travel for an afternoon visit felt less rushed than for a morning visit.",
+          "uid": "a96f0538-f8b9-5d95-a715-48649d77f3cf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9e7f0f4c-2e09-4a31-9c04-9e07b71b61b9",
+              "memory_uid": "18d58666-2cfa-5959-8da9-2745bed56e11"
+            },
+            {
+              "frame_uid": "9e7f0f4c-2e09-4a31-9c04-9e07b71b61b9",
+              "memory_uid": "e6023aed-938d-5954-b8a7-8cb01340ee37"
+            }
+          ],
+          "reason": "Both memories describe the same one-sided clinic seating limitation and its experienced consequence.",
+          "status": "RESOLVED",
+          "summary": "Insufficient clinic seating can require standing long enough to cause the user back discomfort.",
+          "uid": "8013290a-4e6b-5bd1-bf7b-a7ddc45db23c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9e7f0f4c-2e09-4a31-9c04-9e07b71b61b9",
+              "memory_uid": "8fdede6e-64ed-5e4c-81f4-7a1075165568"
+            },
+            {
+              "frame_uid": "9e7f0f4c-2e09-4a31-9c04-9e07b71b61b9",
+              "memory_uid": "21f679f7-7d75-5c01-b6c3-b0d4bea5f2f0"
+            }
+          ],
+          "reason": "Both memories form one contrast about how medication instructions are communicated and captured, found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Stepwise confirmation helped the user record medication times, whereas a long all-at-once explanation led to missing an important time.",
+          "uid": "dabef5ec-af82-5e96-ba6e-cb6b2893fd43"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9e7f0f4c-2e09-4a31-9c04-9e07b71b61b9",
+              "memory_uid": "3ec03d39-3240-56d1-80da-313f79f2bf3a"
+            }
+          ],
+          "reason": "This is a distinct transportation benefit found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A ride from the user's younger brother removed the need to arrange a separate route home.",
+          "uid": "6c8d9c4d-f25a-5751-a85b-588bb99becd5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9e7f0f4c-2e09-4a31-9c04-9e07b71b61b9",
+              "memory_uid": "3069baac-fa68-5e94-8ba3-e888cf622f8c"
+            }
+          ],
+          "reason": "This is an independently useful transportation-request preference found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user's younger brother prefers two days' notice for weekday-afternoon transportation requests.",
+          "uid": "d1979196-62a5-5003-887f-e260158f0ee0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9e7f0f4c-2e09-4a31-9c04-9e07b71b61b9",
+              "memory_uid": "d7f215c6-57ea-561a-9627-3ce94203d507"
+            }
+          ],
+          "reason": "This is a distinct limitation on interpreting medication records found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Medication notes alone do not establish the current prescription or whether use continues.",
+          "uid": "e19e60c5-5610-5003-954f-3d200baefd24"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c9810723-a9b0-4fcf-a47c-51d0266ceb7b",
+              "memory_uid": "7d3daf76-a21e-5117-a534-6175ab2d2861"
+            }
+          ],
+          "reason": "This is independently useful repair-resource information found only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user stores basic repair tools beneath the sink.",
+          "uid": "cbe31ca1-89d4-59b4-a2bc-31db94d73e82"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c9810723-a9b0-4fcf-a47c-51d0266ceb7b",
+              "memory_uid": "70a6d9f5-180f-5174-b247-690e10baa23e"
+            }
+          ],
+          "reason": "This is a distinct leak-response experience found only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Using only a towel beneath a leaking faucet did not prevent the floor from becoming wet.",
+          "uid": "a6f5b9ed-6967-5a80-9062-2ae6e4339244"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c9810723-a9b0-4fcf-a47c-51d0266ceb7b",
+              "memory_uid": "9fcd922c-147c-517b-82b3-180fdfb13f33"
+            }
+          ],
+          "reason": "This is independently useful repair-coordination information found only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user finalized a repair-visit time after sending building management a photo.",
+          "uid": "d06cc0c1-27a7-5eb3-9531-f10dae1f26d9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c9810723-a9b0-4fcf-a47c-51d0266ceb7b",
+              "memory_uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5"
+            }
+          ],
+          "reason": "This is a distinct repair-preparation action found only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user cleared the area beneath the sink before the technician arrived so work could start immediately.",
+          "uid": "6ec5c94a-d05c-5545-a96d-ecc8b5da3d2e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c9810723-a9b0-4fcf-a47c-51d0266ceb7b",
+              "memory_uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65"
+            },
+            {
+              "frame_uid": "c9810723-a9b0-4fcf-a47c-51d0266ceb7b",
+              "memory_uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a"
+            }
+          ],
+          "reason": "Both memories form one contrast about reminder settings and readiness for repair visits, found only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A disabled reminder contributed to answering late, while a reminder set thirty minutes ahead supported an immediate response.",
+          "uid": "ec56f7b4-d552-5a30-a867-6de494f3f0a0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c9810723-a9b0-4fcf-a47c-51d0266ceb7b",
+              "memory_uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441"
+            }
+          ],
+          "reason": "This is a distinct post-repair key-verification action found only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "After the repair, the user confirmed with their maternal aunt that the entrusted spare key remained with her.",
+          "uid": "aeb7dfd5-91af-5a2e-8032-339de096fc16"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c9810723-a9b0-4fcf-a47c-51d0266ceb7b",
+              "memory_uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd"
+            }
+          ],
+          "reason": "This is an independently useful key-handoff safety preference found only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user's maternal aunt considers technician access to the spare key unsafe without the user's explicit request.",
+          "uid": "8dd48676-ad91-5a99-b7fd-69379111184e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c9810723-a9b0-4fcf-a47c-51d0266ceb7b",
+              "memory_uid": "4716a67b-8602-564c-9e89-85cd4ee158f9"
+            }
+          ],
+          "reason": "This is a distinct worker-entry authorization policy found only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user's reconfirmation should be obtained before scheduling an external worker to enter the residence.",
+          "uid": "77a37bbe-e730-5754-8ff3-852c3f001e78"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c9810723-a9b0-4fcf-a47c-51d0266ceb7b",
+              "memory_uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+            }
+          ],
+          "reason": "This is independently useful scheduling-contingency information found only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Emergency work or parts availability can change a multi-unit building's repair schedule.",
+          "uid": "58039b0a-b917-5cc3-abdf-8e6b823e87c4"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame describes leak response, repair coordination and preparation, visit reminders, spare-key handling, worker-entry authorization, and possible schedule changes.",
+        "differences": "",
+        "reference_only": "The reference describes medication timing and communication, appointment preparation and transportation, clinic seating limitations, and uncertainty about current prescription status."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "d57b0a60-bd34-4cea-9313-77578ad46fca"
+    },
+    "analysis_digest": "823c3c0089ec2dcebe552224350a232f1ab15546134531b2e85c18796c752df5",
+    "key": "a8f117706f53824ecfad6f29781cccf0c65ab45e9d0a6b7187ba0b1f1f0e1c0b",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 41.593534582996654,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "a8f117706f53824ecfad6f29781cccf0c65ab45e9d0a6b7187ba0b1f1f0e1c0b",
+  "created_at": "2026-08-13T18:38:06.277058Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/03",
+  "pair_key": "d15b66ded13d5af3f7d1eef4b71aaa3489e861dd352ca8bd97dcd08536f19734",
+  "provider_seconds": 41.593534582996654,
+  "right": "task-3/local/personal-memory/2026/02",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

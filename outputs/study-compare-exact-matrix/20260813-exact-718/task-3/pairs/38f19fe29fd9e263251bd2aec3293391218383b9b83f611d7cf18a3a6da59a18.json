@@ -1,0 +1,397 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:45:02.767844+00:00",
+      "frames": [
+        {
+          "context_digest": "17b940da39446a9f934dff43ea7db561d14060561065852a34658fe4aaa1702f",
+          "context_name": "task-3/local/personal-memory/2024/10",
+          "context_uid": "7c55b789-a7d0-5070-9cf8-6f5e205415dc",
+          "memories": [
+            {
+              "content": "The user renewed their local library membership in October 2024.",
+              "content_digest": "eb9209032856bdbc69fbfa67e053bf8cd2bc23f8e8e25c0be9a5aa3f7e05f4e9",
+              "position": 0,
+              "uid": "04711182-acef-52a9-bd58-7fe98a54854a"
+            },
+            {
+              "content": "On an evening walk, the user saw an unlit street and took a detour along a main road.",
+              "content_digest": "62d001de1c6c4599e51c4e0713f577a2838e95e03f26064778e64542f390a599",
+              "position": 1,
+              "uid": "0229d0b1-750c-521b-a126-22c9d9d001c4"
+            },
+            {
+              "content": "On a day the user chose a well-lit pedestrian route, the walk took 12 minutes longer than usual.",
+              "content_digest": "ad3770626bef71bc9a29ec7772aeebeb70231e89b417b05b4da9c62a65b89afe",
+              "position": 2,
+              "uid": "e310fe87-8cde-5399-be00-9f8d7ec44e94"
+            },
+            {
+              "content": "On a day the user sat by the library window, they heard vehicle noise with every page they read.",
+              "content_digest": "090a190c68a5166d84cde1eed20f9a03c2b99722ed383eb3b5703489c01d85e0",
+              "position": 3,
+              "uid": "4f37306b-08cd-512a-b92e-ca6761da1a5b"
+            },
+            {
+              "content": "On the next visit, the user sat farther inside and did not move for an hour.",
+              "content_digest": "a071b4c7699fe17f63f0ab6263da1259aea00ad635169a313d4821f57071a86a",
+              "position": 4,
+              "uid": "5897ffa4-cfc6-5012-8931-15420ec5cf7c"
+            },
+            {
+              "content": "The user wrote the due date of a borrowed book on paper and then lost the paper.",
+              "content_digest": "43ef22512c79634cb9e3dc59006c7d06c3513a9d5d1f89eedbb392964cc34f02",
+              "position": 5,
+              "uid": "ce38bd13-3d51-5bff-9eba-ed70a8217356"
+            },
+            {
+              "content": "After entering the due date on their phone, the user saw a reminder the day before and put the book in their bag.",
+              "content_digest": "38782cba2f3bf260d62cf8e80c4a7e4a3a196d4d29ced3c4fe19d050e12c1e0a",
+              "position": 6,
+              "uid": "a304315b-bc0a-591b-b8c2-7eea5145819d"
+            },
+            {
+              "content": "Library staff expect a person requesting a replacement membership card to bring identity-verification material.",
+              "content_digest": "1ac59309aedbfa946661bf5bbc4d5141c420df059937893caba88725dfe77d24",
+              "position": 7,
+              "uid": "ef060b89-6c54-5c20-86be-c07766a35daa"
+            },
+            {
+              "content": "Check recent lighting and pedestrian conditions before proposing an evening walking route.",
+              "content_digest": "1b247adfb3723d14979b2cc7ecf6786c457d60e521b8708a6d08d38d3d1af437",
+              "position": 8,
+              "uid": "7669e5eb-c0fd-5182-ae9a-5f9ae95ddf2f"
+            },
+            {
+              "content": "The local agent can compare past reasons for detours but cannot directly observe current lighting and pedestrian conditions.",
+              "content_digest": "8a5f0e4cbb2fa6c19f2cb5d4e500ed460189b515604c87c6c2a4c8348c4efc44",
+              "position": 9,
+              "uid": "e96f7007-5814-5986-b121-4ce3b22506e1"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "39de58f6-89ed-4d7e-ac47-5511b7c62d5b"
+        },
+        {
+          "context_digest": "14adbc31fc3a2dc50b7b980d1e24569b16fff058104a812c7f3b4e1542b7abf0",
+          "context_name": "task-3/local/personal-memory/2025/03",
+          "context_uid": "913e0bfd-f6d9-579e-9a37-ba5daa9d17f1",
+          "memories": [
+            {
+              "content": "The user stores prepared meals on the second shelf of the freezer.",
+              "content_digest": "cd837b62b643f752da54b21de2f4f7a3d963a7c658d5b83dff39d1d92e0fdbad",
+              "position": 0,
+              "uid": "5d989bab-c471-5de9-bb73-29cabc4753dd"
+            },
+            {
+              "content": "The user went to the market without a shopping list and bought onions that were already at home.",
+              "content_digest": "f667c860e046bb27662b26d7cc4ed083ee48d9d7915237dc4b92ec378481a093",
+              "position": 1,
+              "uid": "d1725ae4-3fd3-5250-92b3-73d84d9152a7"
+            },
+            {
+              "content": "On a day the user shopped after checking a refrigerator photo, they did not make a duplicate purchase.",
+              "content_digest": "7283d4afe58c0ab05d9cb426bb80bed0e26e0b1783ff7cdd00a5f6e89d21861b",
+              "position": 2,
+              "uid": "904ff225-26df-5424-8a82-23d733649106"
+            },
+            {
+              "content": "On a day the user made a spicy stew, they left part of one bowl uneaten.",
+              "content_digest": "2765ec701f8e058d35ddee4a485c40221523ee2d9b56301ec1658ec4e419cbc2",
+              "position": 3,
+              "uid": "67a003c7-648a-59dc-8e82-03f9e452ffce"
+            },
+            {
+              "content": "The next time the user cooked it, they used half as much chili powder and finished the meal.",
+              "content_digest": "bdd7df7c762bbce31a40a45c2124e49ae3a6439dfc2133c574443d7eb3a7b1bb",
+              "position": 4,
+              "uid": "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9"
+            },
+            {
+              "content": "When cooking with their younger brother, the user assigned the cooking sequence only verbally and they did the same task twice.",
+              "content_digest": "bd92611cfc05fd42bb5d25e8dd7838ca1b2f6d99869bf1f61921b46950a4b532",
+              "position": 5,
+              "uid": "64bf4401-e972-5d15-a526-21ca901a6a9f"
+            },
+            {
+              "content": "The next time, the user and their younger brother split ingredient preparation and heat control and finished the meal 20 minutes earlier.",
+              "content_digest": "c3a28e7256d781ecb2d8710145880ffe79495e32d47ae1949c4be54e52a44555",
+              "position": 6,
+              "uid": "57e09ea5-54ff-5fce-aada-68daffbacc8b"
+            },
+            {
+              "content": "When cooking together, the user's younger brother prefers to divide the cooking and dishwashing roles in advance.",
+              "content_digest": "3bbc428c4f3b4e28a8e2341206ac78b39240eea53a9862192528029b0a57d12b",
+              "position": 7,
+              "uid": "0a5d054f-94bd-5955-bdb7-9b5427e2260b"
+            },
+            {
+              "content": "The local agent can compare responses across several meals, but it cannot conclude from one unfinished food item that the user dislikes that ingredient.",
+              "content_digest": "5787c1636d9dd4a5cb5bd70533b7dd44b2d6cff1047f5c408f5bcaa1b6577fe1",
+              "position": 8,
+              "uid": "1f94b78b-1635-551c-b90c-bea2a67ca595"
+            },
+            {
+              "content": "The condition of frozen prepared food may vary with its packaging and storage duration.",
+              "content_digest": "84bdac276dce5b50b19bc0c7c471468a22cc9945b1da7357700a58c157cf4ca1",
+              "position": 9,
+              "uid": "f64ef6c4-7665-5574-9d58-fc124b0bfe3f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "314f9e9b-7894-4303-89c4-a21f1b7b8626"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate areas of the user’s life: library use and evening-route safety in the reference frame, and food storage, shopping, cooking, and meal coordination in the compared frame. No claims govern the same operational decision, so no cross-frame alignment or disagreement is established.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "39de58f6-89ed-4d7e-ac47-5511b7c62d5b",
+              "memory_uid": "04711182-acef-52a9-bd58-7fe98a54854a"
+            }
+          ],
+          "reason": "This is independently useful reference-side history with no compared-side claim about membership renewal.",
+          "status": "RESOLVED",
+          "summary": "The user renewed their local library membership in October 2024.",
+          "uid": "02de25c2-085c-59eb-a91e-541ed785b42d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "39de58f6-89ed-4d7e-ac47-5511b7c62d5b",
+              "memory_uid": "0229d0b1-750c-521b-a126-22c9d9d001c4"
+            }
+          ],
+          "reason": "This is a specific reference-side safety response without a compared-side counterpart addressing route choice.",
+          "status": "RESOLVED",
+          "summary": "The user detoured to a main road after encountering an unlit street during an evening walk.",
+          "uid": "2b798560-38d6-53c8-8136-3a3685cc9a9f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "39de58f6-89ed-4d7e-ac47-5511b7c62d5b",
+              "memory_uid": "e310fe87-8cde-5399-be00-9f8d7ec44e94"
+            }
+          ],
+          "reason": "This independently records a reference-side tradeoff between lighting and travel time.",
+          "status": "RESOLVED",
+          "summary": "Choosing a well-lit pedestrian route once added 12 minutes to the user’s usual walk.",
+          "uid": "ed230f21-5166-5170-8cf5-f84f25b44c03"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "39de58f6-89ed-4d7e-ac47-5511b7c62d5b",
+              "memory_uid": "4f37306b-08cd-512a-b92e-ca6761da1a5b"
+            },
+            {
+              "frame_uid": "39de58f6-89ed-4d7e-ac47-5511b7c62d5b",
+              "memory_uid": "5897ffa4-cfc6-5012-8931-15420ec5cf7c"
+            }
+          ],
+          "reason": "These reference memories form one sequential account of adapting library seating after a noisy experience.",
+          "status": "RESOLVED",
+          "summary": "After vehicle noise accompanied reading by the library window, the user sat farther inside on the next visit and remained there for an hour.",
+          "uid": "25ac28fa-9451-5e7b-8c39-395ad9403378"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "39de58f6-89ed-4d7e-ac47-5511b7c62d5b",
+              "memory_uid": "ce38bd13-3d51-5bff-9eba-ed70a8217356"
+            },
+            {
+              "frame_uid": "39de58f6-89ed-4d7e-ac47-5511b7c62d5b",
+              "memory_uid": "a304315b-bc0a-591b-b8c2-7eea5145819d"
+            }
+          ],
+          "reason": "These reference memories jointly describe one change from unreliable paper tracking to effective phone-based tracking.",
+          "status": "RESOLVED",
+          "summary": "After losing a paper due-date note, the user entered the date on their phone, received a prior-day reminder, and packed the book.",
+          "uid": "3a348faa-9910-5a8f-aaab-fd24f2f98b95"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "39de58f6-89ed-4d7e-ac47-5511b7c62d5b",
+              "memory_uid": "ef060b89-6c54-5c20-86be-c07766a35daa"
+            }
+          ],
+          "reason": "This reference-side procedural expectation has no compared-side claim about library-card replacement.",
+          "status": "RESOLVED",
+          "summary": "Library staff expect identity-verification material from someone requesting a replacement membership card.",
+          "uid": "d06667eb-1ec8-5518-b910-fe4e242a315e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "39de58f6-89ed-4d7e-ac47-5511b7c62d5b",
+              "memory_uid": "7669e5eb-c0fd-5182-ae9a-5f9ae95ddf2f"
+            }
+          ],
+          "reason": "This is an independently useful reference-side routing policy absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Recent lighting and pedestrian conditions should be checked before proposing an evening walking route.",
+          "uid": "c7c612ba-a79b-56d6-b840-9a0793600bf2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "39de58f6-89ed-4d7e-ac47-5511b7c62d5b",
+              "memory_uid": "e96f7007-5814-5986-b121-4ce3b22506e1"
+            }
+          ],
+          "reason": "This is a reference-side capability boundary specific to current route conditions.",
+          "status": "RESOLVED",
+          "summary": "The local agent can compare prior detour reasons but cannot directly observe current lighting or pedestrian conditions.",
+          "uid": "a654f67e-5c54-5d34-b16b-5b97669fe9f2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "314f9e9b-7894-4303-89c4-a21f1b7b8626",
+              "memory_uid": "5d989bab-c471-5de9-bb73-29cabc4753dd"
+            }
+          ],
+          "reason": "This compared-side storage practice has no reference-side counterpart addressing food placement.",
+          "status": "RESOLVED",
+          "summary": "The user stores prepared meals on the freezer’s second shelf.",
+          "uid": "efb4d659-0369-5282-b207-621bc3403704"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "314f9e9b-7894-4303-89c4-a21f1b7b8626",
+              "memory_uid": "d1725ae4-3fd3-5250-92b3-73d84d9152a7"
+            },
+            {
+              "frame_uid": "314f9e9b-7894-4303-89c4-a21f1b7b8626",
+              "memory_uid": "904ff225-26df-5424-8a82-23d733649106"
+            }
+          ],
+          "reason": "These compared memories form one account of an inventory-checking aid preventing repeat purchasing.",
+          "status": "RESOLVED",
+          "summary": "After buying duplicate onions without a list, the user later avoided a duplicate purchase by checking a refrigerator photo before shopping.",
+          "uid": "e14f5ec5-1c92-50f7-a346-fada6c9f0d51"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "314f9e9b-7894-4303-89c4-a21f1b7b8626",
+              "memory_uid": "67a003c7-648a-59dc-8e82-03f9e452ffce"
+            },
+            {
+              "frame_uid": "314f9e9b-7894-4303-89c4-a21f1b7b8626",
+              "memory_uid": "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9"
+            }
+          ],
+          "reason": "These compared memories jointly describe one cooking adjustment followed by a different meal outcome.",
+          "status": "RESOLVED",
+          "summary": "After leaving some spicy stew uneaten, the user used half as much chili powder the next time and finished the meal.",
+          "uid": "ad9a4669-8253-5df2-b776-a67fe00c7b77"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "314f9e9b-7894-4303-89c4-a21f1b7b8626",
+              "memory_uid": "64bf4401-e972-5d15-a526-21ca901a6a9f"
+            },
+            {
+              "frame_uid": "314f9e9b-7894-4303-89c4-a21f1b7b8626",
+              "memory_uid": "57e09ea5-54ff-5fce-aada-68daffbacc8b"
+            },
+            {
+              "frame_uid": "314f9e9b-7894-4303-89c4-a21f1b7b8626",
+              "memory_uid": "0a5d054f-94bd-5955-bdb7-9b5427e2260b"
+            }
+          ],
+          "reason": "The compared memories collectively describe duplicated work under verbal sequencing, faster completion after splitting responsibilities, and the brother’s preference for advance role division.",
+          "status": "RESOLVED",
+          "summary": "Shared cooking with the user’s younger brother is better organized through advance division of responsibilities than through verbal sequencing alone.",
+          "uid": "25caa1a9-8188-55a8-a578-fbb69442a381"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "314f9e9b-7894-4303-89c4-a21f1b7b8626",
+              "memory_uid": "1f94b78b-1635-551c-b90c-bea2a67ca595"
+            }
+          ],
+          "reason": "This is a compared-side evidentiary limit specific to interpreting food preferences.",
+          "status": "RESOLVED",
+          "summary": "The local agent may compare several meal responses but cannot infer ingredient dislike from one unfinished food item.",
+          "uid": "51d85e32-fd2b-5ebe-86e2-33ecc70cd53d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "314f9e9b-7894-4303-89c4-a21f1b7b8626",
+              "memory_uid": "f64ef6c4-7665-5574-9d58-fc124b0bfe3f"
+            }
+          ],
+          "reason": "This compared-side qualification about frozen-food condition has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The condition of frozen prepared food may depend on packaging and storage duration.",
+          "uid": "013a2f6e-7ab7-5d92-b056-d1628a5120fc"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only content covers freezer storage, inventory-aware shopping, spice adjustment, shared-cooking coordination, limits on inferring food preferences, and packaging or duration effects on frozen food.",
+        "differences": "",
+        "reference_only": "Reference-only content covers library membership and procedures, seating and due-date adaptations, evening-walk experiences, route-condition checks, and limits on observing current conditions."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "693c237d-d888-43a0-b045-797c18f810c8"
+    },
+    "analysis_digest": "0cc287c05b55f2642157b1965353b7fdcee69f3720ff539a961214cd540396af",
+    "key": "7b65ca617c6374790097022e36fe897eb38c72f1c1c250f4c59597b25cab2ff5",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 56.61686458300028,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "7b65ca617c6374790097022e36fe897eb38c72f1c1c250f4c59597b25cab2ff5",
+  "created_at": "2026-08-13T18:45:59.384221Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/10",
+  "pair_key": "38f19fe29fd9e263251bd2aec3293391218383b9b83f611d7cf18a3a6da59a18",
+  "provider_seconds": 56.61686458300028,
+  "right": "task-3/local/personal-memory/2025/03",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

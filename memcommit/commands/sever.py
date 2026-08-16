@@ -29,7 +29,7 @@ from memcommit.commands.sever_sessions import (
     reload_selected_sever_session,
 )
 from memcommit.context_targeting.catalog import freeze_granted_context_navigation
-from memcommit.commands.context_picker import context_memory_rows
+from memcommit.context_targeting.tui.picker import context_memory_rows
 from memcommit.commands.sever_setup_shell import choose_sever_setup
 from memcommit.interfaces.console.text import (
     display_escape_text,

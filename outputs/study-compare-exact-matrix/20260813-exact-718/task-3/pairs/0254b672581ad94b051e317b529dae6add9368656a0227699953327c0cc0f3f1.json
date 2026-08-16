@@ -1,0 +1,397 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:52:35.733695+00:00",
+      "frames": [
+        {
+          "context_digest": "ac4f93d71b525f6156f0b669075a833a2a41161be6abe677ec382bff6e6060e8",
+          "context_name": "task-3/local/personal-memory/2025/08",
+          "context_uid": "ed84de75-8e18-5bec-908c-a1ff9827b3e3",
+          "memories": [
+            {
+              "content": "The user keeps packing tape for returns in an upper kitchen drawer.",
+              "content_digest": "ed359d883caffd7ce4daddc297ddcc9d26da233dc2a36dc4dbc96e300b2248e9",
+              "position": 0,
+              "uid": "15c3941e-ed44-508f-ae30-b51456b5ba86"
+            },
+            {
+              "content": "The user arrived ten minutes before the post office closed and found that numbered-ticket intake had ended.",
+              "content_digest": "3c4609eea9455bbd46a6f238aa750f61f348ce7b2cf421a4d123f1b707b52550",
+              "position": 1,
+              "uid": "84d1fd1c-9508-5f05-9a7c-1d5f20ecf4a4"
+            },
+            {
+              "content": "Before the next visit, the user checked the operating hours and arrived one hour before closing.",
+              "content_digest": "b2997262abf4ba476c63de3550e54269ef7d61bb56d3adb5b6d9f54ba13fc078",
+              "position": 2,
+              "uid": "8946f9da-e325-59c3-9260-2d2f590d3701"
+            },
+            {
+              "content": "The user went to the counter without closing a return box and had to go back to the packing station.",
+              "content_digest": "759122c3f88ca71b992a725e357beab72f9820de872a7bd895b808c2df21f2b2",
+              "position": 3,
+              "uid": "67e8b160-a57d-56e5-a766-741b7ce0e939"
+            },
+            {
+              "content": "For the next return, the user sealed the box at home and completed intake in one attempt.",
+              "content_digest": "007fcec32ea3788854161e68c95c2aaba90e94a721d03b350e1619afc54840e3",
+              "position": 4,
+              "uid": "efd0706b-600a-5ac1-926e-cc0602ca0086"
+            },
+            {
+              "content": "The user scheduled bank and post-office errands for the same day, but they took a long time because the destinations were in different directions.",
+              "content_digest": "000e1975fde79f4d6caf36adad0c2e481a032537cfa410e46649866d985567c2",
+              "position": 5,
+              "uid": "1e8a6f7e-0911-5a34-ad82-172479d1a7a4"
+            },
+            {
+              "content": "The following week, after checking the locations on a map, the user visited nearby branches in sequence.",
+              "content_digest": "c3de08c5b6074dff2b3f6303f5efc3740cc430b634cb365a5d570061a30a53fa",
+              "position": 6,
+              "uid": "a8670161-257e-51ab-8e30-0e282952278f"
+            },
+            {
+              "content": "Postal staff expect a return-label barcode to arrive affixed flat, without a fold.",
+              "content_digest": "6293ace2d67781644694976af71d5696cad28979d9641718ccd59f16b3397a47",
+              "position": 7,
+              "uid": "2db70f53-99ee-556c-a8c1-b809881cbebd"
+            },
+            {
+              "content": "Before grouping errands into one outing, check each institution's location and operating hours that day.",
+              "content_digest": "7fef923f9ed507db5aad6cf65eaee2c965075e51fef0ff73fa669f1e7f69314a",
+              "position": 8,
+              "uid": "38d60cc4-2f91-5cc2-b511-55cdbbe12c32"
+            },
+            {
+              "content": "Postal and financial counters may operate on different hours than usual around public holidays.",
+              "content_digest": "2d5dc709c468405ea894f343e922dc2546b826ed7488e613f4d4dd730bccccfd",
+              "position": 9,
+              "uid": "1272087c-a535-5612-8c7a-1bc257183788"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "b233dd5e-b842-46bb-9c71-66b245ddb42d"
+        },
+        {
+          "context_digest": "df0924e320cd14a29eaed60f78e82fd509c4062949b35706b2a7cb94571fb599",
+          "context_name": "task-3/local/personal-memory/2026/04",
+          "context_uid": "16e860a8-7a90-5b7a-adc3-1c487ef97e03",
+          "memories": [
+            {
+              "content": "The user collects clothes for donation in a large bag beside the entrance.",
+              "content_digest": "39f2f01c59b7fa4ca7529d510e1b0a6ffab6706861042f771cfe97f6f806efac",
+              "position": 0,
+              "uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            },
+            {
+              "content": "After emptying an entire drawer at once, the user could not find a charger they needed.",
+              "content_digest": "674c33ba6475f42b29b03e6f8711e0216f983f3d37fee3dacf9336e3bb4596bf",
+              "position": 1,
+              "uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            },
+            {
+              "content": "During the next organizing session, the user sorted items by type and put only items to be discarded in the bag.",
+              "content_digest": "63104b5a7fd380f818c8758c51f9550c7a7fa41ff91f1dd314225d1824b69643",
+              "position": 2,
+              "uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            },
+            {
+              "content": "Even after photographing unworn clothes, the user did not take them out again for one month.",
+              "content_digest": "519f131096440719dcd3412f4439c5cfe44b7f402684170209708040692dc5fd",
+              "position": 3,
+              "uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            },
+            {
+              "content": "After moving those clothes to the donation bag, the user cleared one closet compartment.",
+              "content_digest": "45db58ae108a299344d982d8606fff26f733252da691cf01417e760909ff6057",
+              "position": 4,
+              "uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            },
+            {
+              "content": "The user nearly discarded an important paper with advertising and checked the recycling box again.",
+              "content_digest": "6bf928f67944656e5f3c68d8869c0cefd039a588f0ba735f94520231ef58017c",
+              "position": 5,
+              "uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            },
+            {
+              "content": "During the next organizing session, the user kept a separate document box and did not mix the papers.",
+              "content_digest": "adac8d4266c6b11e15d29c484665bc5dcc915f9aa319198b6a69d0e7b0131bb3",
+              "position": 6,
+              "uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            },
+            {
+              "content": "The user's mother asks the user to check whether she needs kitchen items in good condition before discarding them.",
+              "content_digest": "0752bc2ac00c0b1301c45ab4c2e73f63c57e6ebc4255dcc1c13330ffda906612",
+              "position": 7,
+              "uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            },
+            {
+              "content": "Confirm with the user before marking a personal document or another person's property as a disposal candidate.",
+              "content_digest": "17062e2cd4738619e81e211cb2f53d14e78c5f4eab9ae49053ce7e06935a7db5",
+              "position": 8,
+              "uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            },
+            {
+              "content": "The local agent cannot determine an object's emotional meaning from frequency of use alone.",
+              "content_digest": "9c86bcfe2b209bf7957dced0eab000b42f97b6a435d705ccaccb15e49be3691d",
+              "position": 9,
+              "uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "3482c6d4-78fe-4dbc-9730-d6e7cfd3cff8"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate practical domains: the reference frame concerns return shipping and errand planning, while the compared frame concerns household sorting and cautious disposal. No shared operational claim, scope-dependent difference, or direct conflict is established.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b233dd5e-b842-46bb-9c71-66b245ddb42d",
+              "memory_uid": "15c3941e-ed44-508f-ae30-b51456b5ba86"
+            }
+          ],
+          "reason": "This is independently useful storage information found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Packing tape used for returns is stored in an upper kitchen drawer.",
+          "uid": "3c55c081-28bf-5c30-b6e0-01556abd4ae2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b233dd5e-b842-46bb-9c71-66b245ddb42d",
+              "memory_uid": "84d1fd1c-9508-5f05-9a7c-1d5f20ecf4a4"
+            },
+            {
+              "frame_uid": "b233dd5e-b842-46bb-9c71-66b245ddb42d",
+              "memory_uid": "8946f9da-e325-59c3-9260-2d2f590d3701"
+            }
+          ],
+          "reason": "The paired experience and adjustment form one reference-only claim about allowing sufficient intake time.",
+          "status": "RESOLVED",
+          "summary": "A failed near-closing postal visit led the user to check hours and arrive substantially earlier next time.",
+          "uid": "9f80e243-2410-5f06-915a-22d6cc79a157"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b233dd5e-b842-46bb-9c71-66b245ddb42d",
+              "memory_uid": "67e8b160-a57d-56e5-a766-741b7ce0e939"
+            },
+            {
+              "frame_uid": "b233dd5e-b842-46bb-9c71-66b245ddb42d",
+              "memory_uid": "efd0706b-600a-5ac1-926e-cc0602ca0086"
+            }
+          ],
+          "reason": "The failure and later correction form one reference-only claim about preparing the box before reaching the counter.",
+          "status": "RESOLVED",
+          "summary": "After an unsealed box caused an extra packing step, the user sealed the next return at home and completed intake directly.",
+          "uid": "7183b6e5-007a-5e5d-91f6-a4c71c1ccb97"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b233dd5e-b842-46bb-9c71-66b245ddb42d",
+              "memory_uid": "1e8a6f7e-0911-5a34-ad82-172479d1a7a4"
+            },
+            {
+              "frame_uid": "b233dd5e-b842-46bb-9c71-66b245ddb42d",
+              "memory_uid": "a8670161-257e-51ab-8e30-0e282952278f"
+            }
+          ],
+          "reason": "The experience and adjustment form one reference-only claim about geographic planning for grouped errands.",
+          "status": "RESOLVED",
+          "summary": "After inefficiently visiting destinations in different directions, the user mapped nearby branches and visited them in sequence.",
+          "uid": "5f20132e-803b-56ad-ba5a-ae5f37dee49b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b233dd5e-b842-46bb-9c71-66b245ddb42d",
+              "memory_uid": "2db70f53-99ee-556c-a8c1-b809881cbebd"
+            }
+          ],
+          "reason": "This is an independent reference-only postal preparation requirement.",
+          "status": "RESOLVED",
+          "summary": "Postal staff expect a return-label barcode to be attached flat and unfolded.",
+          "uid": "cb65ee88-81a1-5285-bd89-8c384db49c6a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b233dd5e-b842-46bb-9c71-66b245ddb42d",
+              "memory_uid": "38d60cc4-2f91-5cc2-b511-55cdbbe12c32"
+            }
+          ],
+          "reason": "This is an independent reference-only planning policy that combines geographic and scheduling checks.",
+          "status": "RESOLVED",
+          "summary": "Locations and same-day operating hours should be checked before combining institutional errands into one outing.",
+          "uid": "f941b1ab-5e81-506f-9c1a-4e453c837fee"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b233dd5e-b842-46bb-9c71-66b245ddb42d",
+              "memory_uid": "1272087c-a535-5612-8c7a-1bc257183788"
+            }
+          ],
+          "reason": "This is an independent reference-only scheduling caveat.",
+          "status": "RESOLVED",
+          "summary": "Postal and financial counter hours may differ from their usual schedules around public holidays.",
+          "uid": "df2c3051-df67-5e7b-91c0-4abde0859003"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3482c6d4-78fe-4dbc-9730-d6e7cfd3cff8",
+              "memory_uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            }
+          ],
+          "reason": "This is independently useful staging information found only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Clothes intended for donation are collected in a large bag beside the entrance.",
+          "uid": "58058e75-4e1c-5231-8214-ed99c7bd4fe9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3482c6d4-78fe-4dbc-9730-d6e7cfd3cff8",
+              "memory_uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            },
+            {
+              "frame_uid": "3482c6d4-78fe-4dbc-9730-d6e7cfd3cff8",
+              "memory_uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            }
+          ],
+          "reason": "The problem and revised method form one compared-only claim about controlled sorting and disposal separation.",
+          "status": "RESOLVED",
+          "summary": "After bulk drawer emptying made a needed charger hard to find, the user sorted by item type and placed only discard items in the bag.",
+          "uid": "32456580-552e-5505-90f8-b1ede353249b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3482c6d4-78fe-4dbc-9730-d6e7cfd3cff8",
+              "memory_uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            },
+            {
+              "frame_uid": "3482c6d4-78fe-4dbc-9730-d6e7cfd3cff8",
+              "memory_uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            }
+          ],
+          "reason": "The delay and subsequent action form one compared-only claim about physical donation staging enabling decluttering.",
+          "status": "RESOLVED",
+          "summary": "Photographing unworn clothes did not prompt action, but moving them into the donation bag cleared closet space.",
+          "uid": "c80290e9-aa72-56e7-9daa-178c9448ea94"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3482c6d4-78fe-4dbc-9730-d6e7cfd3cff8",
+              "memory_uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            },
+            {
+              "frame_uid": "3482c6d4-78fe-4dbc-9730-d6e7cfd3cff8",
+              "memory_uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            }
+          ],
+          "reason": "The near mistake and preventive adjustment form one compared-only claim about separating documents from recycling.",
+          "status": "RESOLVED",
+          "summary": "After nearly recycling an important paper with advertising, the user kept documents in a separate box during the next session.",
+          "uid": "a31c997a-a785-5538-a90b-6b18d2760fa4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3482c6d4-78fe-4dbc-9730-d6e7cfd3cff8",
+              "memory_uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            }
+          ],
+          "reason": "This is an independent compared-only consultation preference concerning kitchen items.",
+          "status": "RESOLVED",
+          "summary": "The user's mother asks to be consulted about useful kitchen items in good condition before they are discarded.",
+          "uid": "b8962d1e-e521-59b1-a236-6d1c8cf8d912"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3482c6d4-78fe-4dbc-9730-d6e7cfd3cff8",
+              "memory_uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            }
+          ],
+          "reason": "This is an independent compared-only authorization safeguard for sensitive or externally owned items.",
+          "status": "RESOLVED",
+          "summary": "The user should confirm before a personal document or another person's property is marked for disposal.",
+          "uid": "e86d0ef6-486d-5c75-96c0-7424b464a8c8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3482c6d4-78fe-4dbc-9730-d6e7cfd3cff8",
+              "memory_uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "reason": "This is an independent compared-only limitation on disposal-related judgment.",
+          "status": "RESOLVED",
+          "summary": "An object's emotional significance cannot be inferred from frequency of use alone.",
+          "uid": "de92778e-286b-5ed3-82f1-872ef6bcd05f"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers donation staging, controlled sorting, follow-through on unused clothes, document separation, consultation before disposal, and limits on inferring emotional significance.",
+        "differences": "",
+        "reference_only": "The reference covers return-supply storage, postal preparation requirements, timing, route planning, and checks for location, daily hours, and holiday schedules."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "e643763b-9234-44c8-8ea3-8cdd0bc0e7c0"
+    },
+    "analysis_digest": "ef91df44898940ea52909354cdee388ab0a0c6d98a2e5b1a52cf39787eb17d70",
+    "key": "d5d796161181a0907ecb093aaebaeb1b4221b0e685d51e237b3b3912a3ba7f32",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 59.83330354100326,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "d5d796161181a0907ecb093aaebaeb1b4221b0e685d51e237b3b3912a3ba7f32",
+  "created_at": "2026-08-13T18:53:35.566586Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/08",
+  "pair_key": "0254b672581ad94b051e317b529dae6add9368656a0227699953327c0cc0f3f1",
+  "provider_seconds": 59.83330354100326,
+  "right": "task-3/local/personal-memory/2026/04",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

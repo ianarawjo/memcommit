@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:47:47.791474+00:00",
+      "frames": [
+        {
+          "context_digest": "0b8af0ea4e580cc332939d026149e543e9251c54de246e3eabb83c941e6c12f2",
+          "context_name": "task-3/local/personal-memory/2024/12",
+          "context_uid": "66c3e5de-61bb-5795-8e5a-4e28f64be857",
+          "memories": [
+            {
+              "content": "The user used an accessible entrance at a clinic in December 2024.",
+              "content_digest": "a940bc9fb7423a1bdb9dde547cd39eb8ad66d4fa3051649c62b042fc63935263",
+              "position": 0,
+              "uid": "a6923620-267d-5129-b8c4-cd9b1e1a1e7b"
+            },
+            {
+              "content": "On a day snow had accumulated and blocked the main-entrance ramp, the user went to a side entrance.",
+              "content_digest": "460c05d8e8b4b7443ff42cbeead66e07201846394bcbe5948f63e585a197006f",
+              "position": 1,
+              "uid": "fb0e1d1f-0ef5-5214-b6d7-f6ca5c68f582"
+            },
+            {
+              "content": "The user learned on site that the elevator was under inspection and delayed the appointment.",
+              "content_digest": "b5efa024c597b57651178431d22173d4ca1242c3a4c9607f8bd5a7ff681af6f4",
+              "position": 2,
+              "uid": "4cb45120-4376-5c7b-ae92-faa9e4b9330c"
+            },
+            {
+              "content": "The day before the next visit, the user called to check whether the elevator would be operating.",
+              "content_digest": "93c66066de480a4d2f30b7b7c4d955acfceb227ac898766b6375829804b580eb",
+              "position": 3,
+              "uid": "479f4434-879c-5335-b0c9-c0bfa19ecdcd"
+            },
+            {
+              "content": "The user waited for their turn in front of a ticket machine near the waiting chairs.",
+              "content_digest": "fada8c09d46af2e1bcbd2b1e97d9cb786ceca83fc13d1240627639dd6cb96e65",
+              "position": 4,
+              "uid": "0f2c78a7-8f92-573d-af8a-a360ceb77b24"
+            },
+            {
+              "content": "On a day the user waited in a corridor without chairs, they leaned against the wall and changed position several times.",
+              "content_digest": "0037afaeb85d94f985b1628b7b8f8194fb00d7d7e72e1746c6bae2c2ba66fe6f",
+              "position": 5,
+              "uid": "7b9197ac-4263-5169-8d3b-d34f5d893d36"
+            },
+            {
+              "content": "On a day their older sister accompanied them, the user found a place to sit immediately after reception.",
+              "content_digest": "1ae59de552a922fd3b4d39e7e5dc1ec65ff08ee68e3448f2152f27dfec710a5a",
+              "position": 6,
+              "uid": "7b0b7571-f29c-56e5-a27a-82d69a4a6982"
+            },
+            {
+              "content": "Reception staff expect that a first-time visitor may ask where the accessible entrance is.",
+              "content_digest": "7dc3300dc630b737c0f7b437eba30179aa6aaa03efd61c968604ee505a43aa73",
+              "position": 7,
+              "uid": "e9515d6b-10d9-579f-abf7-5030db64218a"
+            },
+            {
+              "content": "The local agent cannot infer the user's condition from a record of using an accessible route alone.",
+              "content_digest": "2d8a50f62f32c43ca62e1e23b75c34361ece43fd8367964174fdc73d66795df4",
+              "position": 8,
+              "uid": "8e57141d-c603-56cd-ab9e-c14b4e944b45"
+            },
+            {
+              "content": "Snow accumulation and snow-removal work can temporarily block an entrance route used under ordinary conditions.",
+              "content_digest": "4fb152c120860688789bdd4b825de45799e9fa00c0c18c334492dd4b274adde9",
+              "position": 9,
+              "uid": "a6076438-307c-56fe-9d2c-848181846ce5"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "d3fa2d9f-bae9-4b89-9c4d-62728e662eb6"
+        },
+        {
+          "context_digest": "ac4f93d71b525f6156f0b669075a833a2a41161be6abe677ec382bff6e6060e8",
+          "context_name": "task-3/local/personal-memory/2025/08",
+          "context_uid": "ed84de75-8e18-5bec-908c-a1ff9827b3e3",
+          "memories": [
+            {
+              "content": "The user keeps packing tape for returns in an upper kitchen drawer.",
+              "content_digest": "ed359d883caffd7ce4daddc297ddcc9d26da233dc2a36dc4dbc96e300b2248e9",
+              "position": 0,
+              "uid": "15c3941e-ed44-508f-ae30-b51456b5ba86"
+            },
+            {
+              "content": "The user arrived ten minutes before the post office closed and found that numbered-ticket intake had ended.",
+              "content_digest": "3c4609eea9455bbd46a6f238aa750f61f348ce7b2cf421a4d123f1b707b52550",
+              "position": 1,
+              "uid": "84d1fd1c-9508-5f05-9a7c-1d5f20ecf4a4"
+            },
+            {
+              "content": "Before the next visit, the user checked the operating hours and arrived one hour before closing.",
+              "content_digest": "b2997262abf4ba476c63de3550e54269ef7d61bb56d3adb5b6d9f54ba13fc078",
+              "position": 2,
+              "uid": "8946f9da-e325-59c3-9260-2d2f590d3701"
+            },
+            {
+              "content": "The user went to the counter without closing a return box and had to go back to the packing station.",
+              "content_digest": "759122c3f88ca71b992a725e357beab72f9820de872a7bd895b808c2df21f2b2",
+              "position": 3,
+              "uid": "67e8b160-a57d-56e5-a766-741b7ce0e939"
+            },
+            {
+              "content": "For the next return, the user sealed the box at home and completed intake in one attempt.",
+              "content_digest": "007fcec32ea3788854161e68c95c2aaba90e94a721d03b350e1619afc54840e3",
+              "position": 4,
+              "uid": "efd0706b-600a-5ac1-926e-cc0602ca0086"
+            },
+            {
+              "content": "The user scheduled bank and post-office errands for the same day, but they took a long time because the destinations were in different directions.",
+              "content_digest": "000e1975fde79f4d6caf36adad0c2e481a032537cfa410e46649866d985567c2",
+              "position": 5,
+              "uid": "1e8a6f7e-0911-5a34-ad82-172479d1a7a4"
+            },
+            {
+              "content": "The following week, after checking the locations on a map, the user visited nearby branches in sequence.",
+              "content_digest": "c3de08c5b6074dff2b3f6303f5efc3740cc430b634cb365a5d570061a30a53fa",
+              "position": 6,
+              "uid": "a8670161-257e-51ab-8e30-0e282952278f"
+            },
+            {
+              "content": "Postal staff expect a return-label barcode to arrive affixed flat, without a fold.",
+              "content_digest": "6293ace2d67781644694976af71d5696cad28979d9641718ccd59f16b3397a47",
+              "position": 7,
+              "uid": "2db70f53-99ee-556c-a8c1-b809881cbebd"
+            },
+            {
+              "content": "Before grouping errands into one outing, check each institution's location and operating hours that day.",
+              "content_digest": "7fef923f9ed507db5aad6cf65eaee2c965075e51fef0ff73fa669f1e7f69314a",
+              "position": 8,
+              "uid": "38d60cc4-2f91-5cc2-b511-55cdbbe12c32"
+            },
+            {
+              "content": "Postal and financial counters may operate on different hours than usual around public holidays.",
+              "content_digest": "2d5dc709c468405ea894f343e922dc2546b826ed7488e613f4d4dd730bccccfd",
+              "position": 9,
+              "uid": "1272087c-a535-5612-8c7a-1bc257183788"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "38d4bcdd-4ddb-4632-ae01-01945fc406c2"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames contain separate clinic-access and post-office errand histories. Although both include advance checks and responses to service obstacles, those parallels govern different operational decisions, so no cross-frame equivalence, compatibility, scoped difference, or conflict is established.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d3fa2d9f-bae9-4b89-9c4d-62728e662eb6",
+              "memory_uid": "a6923620-267d-5129-b8c4-cd9b1e1a1e7b"
+            }
+          ],
+          "reason": "This clinic-access event is independently useful reference-only information and has no substantively corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "The user used a clinic’s accessible entrance in December 2024.",
+          "uid": "c1dbb5aa-8747-5d8e-b5d0-2c64abdd9aac"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d3fa2d9f-bae9-4b89-9c4d-62728e662eb6",
+              "memory_uid": "fb0e1d1f-0ef5-5214-b6d7-f6ca5c68f582"
+            }
+          ],
+          "reason": "This weather-conditioned clinic route change is independently useful reference-only information and has no compared-side counterpart governing that access decision.",
+          "status": "RESOLVED",
+          "summary": "Snow blocking the clinic’s main ramp led the user to use a side entrance.",
+          "uid": "be4b2d5d-1177-5b59-bf3c-0471244c2250"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d3fa2d9f-bae9-4b89-9c4d-62728e662eb6",
+              "memory_uid": "4cb45120-4376-5c7b-ae92-faa9e4b9330c"
+            }
+          ],
+          "reason": "This clinic elevator disruption is independently useful reference-only information and is not substantively matched by a compared-side service obstacle.",
+          "status": "RESOLVED",
+          "summary": "An elevator inspection discovered on site delayed the user’s clinic appointment.",
+          "uid": "049efa1a-23f1-5e00-9c95-61e3719caf71"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d3fa2d9f-bae9-4b89-9c4d-62728e662eb6",
+              "memory_uid": "479f4434-879c-5335-b0c9-c0bfa19ecdcd"
+            }
+          ],
+          "reason": "This advance accessibility check concerns a distinct clinic decision; checking postal hours is only a broad procedural parallel.",
+          "status": "RESOLVED",
+          "summary": "Before a later clinic visit, the user called to verify elevator operation.",
+          "uid": "d11bc22e-4334-55ef-9f48-99e835f2f896"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d3fa2d9f-bae9-4b89-9c4d-62728e662eb6",
+              "memory_uid": "0f2c78a7-8f92-573d-af8a-a360ceb77b24"
+            }
+          ],
+          "reason": "This clinic waiting-location experience is independently useful reference-only information and does not address the post office’s ticket-intake cutoff.",
+          "status": "RESOLVED",
+          "summary": "The user waited near clinic chairs in front of a ticket machine.",
+          "uid": "28a45866-7290-5bc9-9fd7-b4d02afe3a98"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d3fa2d9f-bae9-4b89-9c4d-62728e662eb6",
+              "memory_uid": "7b9197ac-4263-5169-8d3b-d34f5d893d36"
+            }
+          ],
+          "reason": "This specific clinic waiting experience is independently useful reference-only information without a compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "While waiting in a chairless corridor, the user leaned against a wall and repeatedly changed position.",
+          "uid": "d2aeb9a0-b287-584d-b7cc-964d8162e081"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d3fa2d9f-bae9-4b89-9c4d-62728e662eb6",
+              "memory_uid": "7b0b7571-f29c-56e5-a27a-82d69a4a6982"
+            }
+          ],
+          "reason": "This accompanied clinic seating experience is independently useful reference-only information without a compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "When accompanied by an older sister, the user found seating immediately after clinic reception.",
+          "uid": "d1be5a62-e50a-5aea-8d30-6261a99a83f2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d3fa2d9f-bae9-4b89-9c4d-62728e662eb6",
+              "memory_uid": "e9515d6b-10d9-579f-abf7-5030db64218a"
+            }
+          ],
+          "reason": "This clinic-specific staff expectation is independently useful reference-only information and differs operationally from postal packaging expectations.",
+          "status": "RESOLVED",
+          "summary": "Clinic reception staff anticipate that first-time visitors may ask for the accessible entrance.",
+          "uid": "9219b23c-dc45-548e-85a1-f551125e869f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d3fa2d9f-bae9-4b89-9c4d-62728e662eb6",
+              "memory_uid": "8e57141d-c603-56cd-ab9e-c14b4e944b45"
+            }
+          ],
+          "reason": "This interpretive constraint is independently useful reference-only information and has no substantively corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "Accessible-route use alone does not justify inferring the user’s condition.",
+          "uid": "e97f4b3c-a773-597b-bd58-fdff7e0a227d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d3fa2d9f-bae9-4b89-9c4d-62728e662eb6",
+              "memory_uid": "a6076438-307c-56fe-9d2c-848181846ce5"
+            }
+          ],
+          "reason": "This general clinic-route contingency is independently useful reference-only information and has no compared-side counterpart about physical access routes.",
+          "status": "RESOLVED",
+          "summary": "Snow accumulation or removal work can temporarily block an ordinarily used entrance route.",
+          "uid": "f86a3713-a1e1-550e-a8e3-e54f055ae993"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "38d4bcdd-4ddb-4632-ae01-01945fc406c2",
+              "memory_uid": "15c3941e-ed44-508f-ae30-b51456b5ba86"
+            }
+          ],
+          "reason": "This household storage fact is independently useful compared-only information and has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user stores return-packing tape in an upper kitchen drawer.",
+          "uid": "fc43004d-3a30-57b8-911b-f30d9386831d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "38d4bcdd-4ddb-4632-ae01-01945fc406c2",
+              "memory_uid": "84d1fd1c-9508-5f05-9a7c-1d5f20ecf4a4"
+            }
+          ],
+          "reason": "This postal intake-timing event is independently useful compared-only information and is not substantively matched by clinic waiting near a ticket machine.",
+          "status": "RESOLVED",
+          "summary": "Arriving shortly before post-office closing was too late for numbered-ticket intake.",
+          "uid": "6fa26c52-0cd1-59e5-a3d0-59d65834c1bd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "38d4bcdd-4ddb-4632-ae01-01945fc406c2",
+              "memory_uid": "8946f9da-e325-59c3-9260-2d2f590d3701"
+            }
+          ],
+          "reason": "This advance timing decision is independently useful compared-only information; the clinic elevator check governs a different operational question.",
+          "status": "RESOLVED",
+          "summary": "Before returning to the post office, the user checked hours and arrived well before closing.",
+          "uid": "531c1dd7-3fe5-5894-bb24-4a28ec635a78"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "38d4bcdd-4ddb-4632-ae01-01945fc406c2",
+              "memory_uid": "67e8b160-a57d-56e5-a766-741b7ce0e939"
+            }
+          ],
+          "reason": "This return-preparation failure is independently useful compared-only information without a reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "An unsealed return box required the user to leave the counter and revisit the packing station.",
+          "uid": "fade714d-a261-54a6-9b72-6bb33512b00a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "38d4bcdd-4ddb-4632-ae01-01945fc406c2",
+              "memory_uid": "efd0706b-600a-5ac1-926e-cc0602ca0086"
+            }
+          ],
+          "reason": "This successful return-preparation practice is independently useful compared-only information without a reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "For a later return, sealing the box at home enabled intake in one attempt.",
+          "uid": "e826e2a9-ac7b-5542-ba82-57bf47e05971"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "38d4bcdd-4ddb-4632-ae01-01945fc406c2",
+              "memory_uid": "1e8a6f7e-0911-5a34-ad82-172479d1a7a4"
+            }
+          ],
+          "reason": "This errand-routing outcome is independently useful compared-only information without a reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Combining bank and post-office errands took a long time because the destinations lay in different directions.",
+          "uid": "9520a0a7-2e9e-5847-b3bc-a40298eabd4b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "38d4bcdd-4ddb-4632-ae01-01945fc406c2",
+              "memory_uid": "a8670161-257e-51ab-8e30-0e282952278f"
+            }
+          ],
+          "reason": "This improved errand-routing practice is independently useful compared-only information without a reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "After consulting a map, the user visited nearby bank and postal branches sequentially.",
+          "uid": "f494a3a4-73eb-5aac-8a12-189a1bb4f69a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "38d4bcdd-4ddb-4632-ae01-01945fc406c2",
+              "memory_uid": "2db70f53-99ee-556c-a8c1-b809881cbebd"
+            }
+          ],
+          "reason": "This postal packaging expectation is independently useful compared-only information and does not correspond operationally to clinic entrance guidance.",
+          "status": "RESOLVED",
+          "summary": "Postal staff expect return-label barcodes to be affixed flat and unfolded.",
+          "uid": "303e94d1-49dd-52fd-b65b-9a1962f22b24"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "38d4bcdd-4ddb-4632-ae01-01945fc406c2",
+              "memory_uid": "38d60cc4-2f91-5cc2-b511-55cdbbe12c32"
+            }
+          ],
+          "reason": "This multi-errand planning guidance is independently useful compared-only information and exceeds the scope of the reference’s clinic-specific checks.",
+          "status": "RESOLVED",
+          "summary": "Locations and same-day operating hours should be checked before institutions are grouped into one outing.",
+          "uid": "528a97c0-af78-5212-8d02-f0068e6ba7ad"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "38d4bcdd-4ddb-4632-ae01-01945fc406c2",
+              "memory_uid": "1272087c-a535-5612-8c7a-1bc257183788"
+            }
+          ],
+          "reason": "This holiday-hours contingency is independently useful compared-only information and has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Postal and financial counters may use unusual hours around public holidays.",
+          "uid": "bae4a1fd-52d8-5d87-ae88-b46b17672fbc"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers return preparation, ticket-intake timing, coordinated errand planning, barcode presentation, and possible holiday-hour changes.",
+        "differences": "",
+        "reference_only": "The reference describes clinic access, temporary route and elevator barriers, waiting and seating experiences, staff expectations, and limits on inferring a condition from accessible-route use."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "e6de95da-355e-4e89-8d59-0a6a9daa0a0b"
+    },
+    "analysis_digest": "0f65becbcae068cb6039f083f721b898a5796283687205a81e9e465c4a965fd6",
+    "key": "dfe030d8744abb6059c49ae89974565a1b66484df364db664769ae25280e5daf",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 41.5325163339985,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "dfe030d8744abb6059c49ae89974565a1b66484df364db664769ae25280e5daf",
+  "created_at": "2026-08-13T18:48:29.323543Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/12",
+  "pair_key": "1470e6cf81edfab2665f7de0e6b9e3849dc32a7478d7b989af30253cca278845",
+  "provider_seconds": 41.5325163339985,
+  "right": "task-3/local/personal-memory/2025/08",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

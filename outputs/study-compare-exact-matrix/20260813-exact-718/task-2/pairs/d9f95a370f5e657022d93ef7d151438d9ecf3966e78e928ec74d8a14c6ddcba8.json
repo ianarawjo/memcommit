@@ -1,0 +1,387 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:28:13.912636+00:00",
+      "frames": [
+        {
+          "context_digest": "587a9d2fb6abf2b486ccfc50ff85ae7280d7d7bd4003d85ce5877a4edfc9293f",
+          "context_name": "task-2/advisor1/terminology",
+          "context_uid": "7699c7c5-e48b-5548-b0aa-256d793c6c06",
+          "memories": [
+            {
+              "content": "Use the same term throughout the proposal for the same interaction concept or interface element.",
+              "content_digest": "2f11d02134609c6397d8f60105cc452e34129bc1c427a512455247e54951f18a",
+              "position": 0,
+              "uid": "949a884d-b348-5fa0-b1dd-adbebafe10a9"
+            },
+            {
+              "content": "Use abbreviations only for recurring terms of three or more words.",
+              "content_digest": "dcceb4407d24df4034dceca613413471bb46898a487aed0cc0905e48ede482e7",
+              "position": 1,
+              "uid": "2f484151-b5fc-51a9-8a88-b30a403617b3"
+            },
+            {
+              "content": "Present the full name and abbreviation together when using an abbreviation for the first time.",
+              "content_digest": "02e1b2b4cbc8f9a61e299bf1500663ae8cd4036155b2a7dec8c2ce40087ac29b",
+              "position": 2,
+              "uid": "21131a6f-d35c-51e3-895f-46cd21a3b566"
+            },
+            {
+              "content": "Prioritize the research role over diagnostic labels or deficits when referring to participants.",
+              "content_digest": "7b99c6ec90abdbb68d4af8e95a03df3149b9d2d4d637fbd33a70a2acf7073a12",
+              "position": 3,
+              "uid": "e02c3110-05c4-58a4-8d76-c8fd2426a0d5"
+            },
+            {
+              "content": "Reviewers from different subfields struggle to infer undefined abbreviations from context alone.",
+              "content_digest": "13af5eb9fe88f3f2d73192adfb48f7a20de09e22e777a952daa83ca1c030f9ee",
+              "position": 4,
+              "uid": "af028910-e48b-5605-b92b-9378bdfa525c"
+            },
+            {
+              "content": "Use the term formative evaluation for studies seeking design modification evidence, and distinguish it from final efficacy judgments.",
+              "content_digest": "4ba9bca850286ff6286cf4b3bf44395d608ec700c46acd8cd26c54e26d43b378",
+              "position": 5,
+              "uid": "39792d18-2be0-5135-a063-c5213247d330"
+            },
+            {
+              "content": "The user can have contribution labels such as principles, models, or guidelines approved only if they align with the abstraction level of the actual deliverables.",
+              "content_digest": "efed93b748ce74e3e9ed96949bf539c809ea4c36ae77bbb54670285f691f74e9",
+              "position": 6,
+              "uid": "bcaa8c30-ca6e-5b9f-af93-88513a2f16b1"
+            },
+            {
+              "content": "Design principles describe the relationship between conditions and outcomes rather than serving as instructions that merely replicate a single screen layout.",
+              "content_digest": "22385c2bb345db07d19c442e5d99a5c527c2795848b9e29fe198d0ede6255d6f",
+              "position": 7,
+              "uid": "82ad9fe2-4063-5e89-9097-c975aa2920cb"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "cf967b35-a345-4530-8d31-c33e7044d4d6"
+        },
+        {
+          "context_digest": "6cd44802c5b4878ee84adef31f52231d09d37ccc0ef9a7256d0421114835a6bd",
+          "context_name": "task-2/advisor2/claim-evidence",
+          "context_uid": "1ca4b72a-fcbb-5997-a1b5-f764662460a5",
+          "memories": [
+            {
+              "content": "Place observational evidence or sources adjacent to claims regarding user needs or field effects.",
+              "content_digest": "513b102a6ed66a1dd3fb3380065f34552036a6dffed20d7101487342096021e3",
+              "position": 0,
+              "uid": "b39cf79f-d174-5ecb-98c9-b3f62ce0696a"
+            },
+            {
+              "content": "Distinguish at the sentence level between facts already confirmed in the field and predictions to be examined in the user study.",
+              "content_digest": "63a7fdcf7da5c4fa36a2c7a6f8542837956fa0dcdedee781593f399516501067",
+              "position": 1,
+              "uid": "b95e0185-f933-508d-8da7-41c65e2cc340"
+            },
+            {
+              "content": "Do not use verbs implying proof of causality if the design does not support causal inference.",
+              "content_digest": "0db514f790eb85ba0800c1f8c659cd4236136b9e36c034899c36f6116c040f04",
+              "position": 2,
+              "uid": "f82f1e1f-3f27-5668-a5a4-e64b0f88b44a"
+            },
+            {
+              "content": "Prioritize citations of recent systems and field research in rapidly changing HCI topics.",
+              "content_digest": "e8cd0847480ba8d07f971f21978873d13b6bd34d4e4625dd3dde8039afd5b88c",
+              "position": 3,
+              "uid": "b5461283-9001-510c-9a30-bb367f247b25"
+            },
+            {
+              "content": "Explain the user or operational stakeholder needs that each design choice aims to address.",
+              "content_digest": "59df6b478a0e200ceaa520bb7c4535b2078a8354efae0eec77a06cb6843bfab6",
+              "position": 4,
+              "uid": "87340c01-2e0f-5b82-9410-2133648022da"
+            },
+            {
+              "content": "Support each important conclusion with the closest evidence that directly examined it.",
+              "content_digest": "6731286cd67ee18644df531752f10913f4df9e7c7acf936da99caafacd597c0a",
+              "position": 5,
+              "uid": "8b15a9ad-aa53-5a54-beb2-f1cc8d6da846"
+            },
+            {
+              "content": "Reviewers first check direct evidence placed closest to important conclusions.",
+              "content_digest": "940880f0ee481e00ff7f935c9b76af8137d0f8a8664a2c53fb3d044681980c8f",
+              "position": 6,
+              "uid": "565a2263-e3bc-5379-9a80-64665b491c88"
+            },
+            {
+              "content": "Use field cases in which people completed tasks by working around existing tools as evidence for the need for the design.",
+              "content_digest": "4c731184cb33bda8ab315870713872842339013be68cf5f79c43a8b9f4e297d4",
+              "position": 7,
+              "uid": "27b58ee9-5cad-5872-8eb7-a694728d8e79"
+            },
+            {
+              "content": "Distinguish between problems reported by operational stakeholders and those directly observed by the researcher as separate forms of evidence.",
+              "content_digest": "39586ea932c540d6c7a1b0faff870d7ef6433052792defdc110beb513276ffe6",
+              "position": 8,
+              "uid": "cf7e9410-2144-53c4-a236-a16a7b5be494"
+            },
+            {
+              "content": "Field breakdown logs can reveal both system failures and user adaptive behaviors, including their timing and conditions.",
+              "content_digest": "331910b18eef90e53453e700a55b43143b3e8d07d3bb2c88bade31fddb0e5965",
+              "position": 9,
+              "uid": "ad643b33-fba1-5643-b57f-3bb8c3829122"
+            },
+            {
+              "content": "In field sites introducing new systems, formal procedures often coexist with existing manual routines for a period, making it difficult to isolate the effects of single design changes.",
+              "content_digest": "7def8e340a5ae1ad7cce9228e3e4279f499f47f0d2576bbe23e59f3703f04084",
+              "position": 10,
+              "uid": "546548e3-c47a-5a74-a04a-0a328602ead4"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "d1e512d5-3c11-4b21-a1d3-61c1772033c5"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address complementary but non-overlapping proposal concerns. The reference frame governs terminology, participant language, evaluation naming, and contribution abstraction; the compared frame governs evidentiary placement, claim calibration, stakeholder justification, field observations, and limits on causal interpretation.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cf967b35-a345-4530-8d31-c33e7044d4d6",
+              "memory_uid": "949a884d-b348-5fa0-b1dd-adbebafe10a9"
+            }
+          ],
+          "reason": "This is an independently useful terminology-consistency rule found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The proposal should use one consistent term for each interaction concept or interface element.",
+          "uid": "790a7820-45ce-54dc-aaa1-717082471eb1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cf967b35-a345-4530-8d31-c33e7044d4d6",
+              "memory_uid": "2f484151-b5fc-51a9-8a88-b30a403617b3"
+            },
+            {
+              "frame_uid": "cf967b35-a345-4530-8d31-c33e7044d4d6",
+              "memory_uid": "21131a6f-d35c-51e3-895f-46cd21a3b566"
+            },
+            {
+              "frame_uid": "cf967b35-a345-4530-8d31-c33e7044d4d6",
+              "memory_uid": "af028910-e48b-5605-b92b-9378bdfa525c"
+            }
+          ],
+          "reason": "These statements jointly form one reference-only abbreviation policy, combining its eligibility rule, first-use convention, and reviewer-facing rationale.",
+          "status": "RESOLVED",
+          "summary": "Abbreviations should be reserved for recurring multiword terms and introduced alongside their full names because reviewers cannot reliably infer undefined abbreviations.",
+          "uid": "d12d6d82-f68c-5d31-8fa1-5e083ba2665f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cf967b35-a345-4530-8d31-c33e7044d4d6",
+              "memory_uid": "e02c3110-05c4-58a4-8d76-c8fd2426a0d5"
+            }
+          ],
+          "reason": "This is an independently useful reference-only naming principle concerning respectful participant language.",
+          "status": "RESOLVED",
+          "summary": "Participant references should foreground the person’s research role rather than diagnostic labels or deficits.",
+          "uid": "484691e8-8bcc-5acf-911c-b3fb258fd522"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cf967b35-a345-4530-8d31-c33e7044d4d6",
+              "memory_uid": "39792d18-2be0-5135-a063-c5213247d330"
+            }
+          ],
+          "reason": "This is an independently useful reference-only rule for naming and differentiating evaluation purposes.",
+          "status": "RESOLVED",
+          "summary": "Studies seeking evidence for design modification should be called formative evaluations and distinguished from final efficacy judgments.",
+          "uid": "c26c0a4f-570f-5c0f-bfa5-0d1199af2c7e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cf967b35-a345-4530-8d31-c33e7044d4d6",
+              "memory_uid": "bcaa8c30-ca6e-5b9f-af93-88513a2f16b1"
+            },
+            {
+              "frame_uid": "cf967b35-a345-4530-8d31-c33e7044d4d6",
+              "memory_uid": "82ad9fe2-4063-5e89-9097-c975aa2920cb"
+            }
+          ],
+          "reason": "These statements jointly define one reference-only policy for choosing defensible contribution labels and clarify the abstraction expected of design principles.",
+          "status": "RESOLVED",
+          "summary": "Contribution labels should match the abstraction of the deliverables, with design principles expressing condition–outcome relationships rather than instructions for reproducing one screen.",
+          "uid": "d0b3fd0e-d8f6-5c92-b050-0dad00e6027e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d1e512d5-3c11-4b21-a1d3-61c1772033c5",
+              "memory_uid": "b39cf79f-d174-5ecb-98c9-b3f62ce0696a"
+            },
+            {
+              "frame_uid": "d1e512d5-3c11-4b21-a1d3-61c1772033c5",
+              "memory_uid": "8b15a9ad-aa53-5a54-beb2-f1cc8d6da846"
+            },
+            {
+              "frame_uid": "d1e512d5-3c11-4b21-a1d3-61c1772033c5",
+              "memory_uid": "565a2263-e3bc-5379-9a80-64665b491c88"
+            }
+          ],
+          "reason": "These statements jointly express one compared-only evidence-placement policy and its reviewer-behavior rationale.",
+          "status": "RESOLVED",
+          "summary": "Evidence or sources should be placed adjacent to the user-need, field-effect, or important-conclusion claims they directly support.",
+          "uid": "65aa9dc9-c7d6-5e43-9f62-e130f89ef719"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d1e512d5-3c11-4b21-a1d3-61c1772033c5",
+              "memory_uid": "b95e0185-f933-508d-8da7-41c65e2cc340"
+            }
+          ],
+          "reason": "This is an independently useful compared-only rule for separating established evidence from study hypotheses.",
+          "status": "RESOLVED",
+          "summary": "Confirmed field facts and predictions awaiting examination should be distinguished at the sentence level.",
+          "uid": "a6c48462-d8e1-54d7-b287-890f1892f0e3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d1e512d5-3c11-4b21-a1d3-61c1772033c5",
+              "memory_uid": "f82f1e1f-3f27-5668-a5a4-e64b0f88b44a"
+            }
+          ],
+          "reason": "This is an independently useful compared-only constraint on matching claim strength to research design.",
+          "status": "RESOLVED",
+          "summary": "Causal verbs should not be used when the study design cannot support causal inference.",
+          "uid": "d1998985-d0e5-5ed0-afef-4e31f2eb2abf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d1e512d5-3c11-4b21-a1d3-61c1772033c5",
+              "memory_uid": "b5461283-9001-510c-9a30-bb367f247b25"
+            }
+          ],
+          "reason": "This is an independently useful compared-only source-selection principle concerning evidentiary recency and relevance.",
+          "status": "RESOLVED",
+          "summary": "Rapidly changing HCI topics should prioritize citations to recent systems and field research.",
+          "uid": "fd74ed6a-1b6d-57ba-aea4-01cdab11c066"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d1e512d5-3c11-4b21-a1d3-61c1772033c5",
+              "memory_uid": "87340c01-2e0f-5b82-9410-2133648022da"
+            }
+          ],
+          "reason": "This is an independently useful compared-only requirement for explaining the need served by design decisions.",
+          "status": "RESOLVED",
+          "summary": "Each design choice should be connected to the user or operational stakeholder need it aims to address.",
+          "uid": "e4514902-8e88-5361-960c-956e7c1ce7ae"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d1e512d5-3c11-4b21-a1d3-61c1772033c5",
+              "memory_uid": "27b58ee9-5cad-5872-8eb7-a694728d8e79"
+            }
+          ],
+          "reason": "This is an independently useful compared-only claim about using workaround cases as design-need evidence.",
+          "status": "RESOLVED",
+          "summary": "Cases where people work around existing tools to complete tasks can evidence the need for a design.",
+          "uid": "b43f43cf-3bc1-5be1-a3e3-5a19a0f75c1c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d1e512d5-3c11-4b21-a1d3-61c1772033c5",
+              "memory_uid": "cf7e9410-2144-53c4-a236-a16a7b5be494"
+            }
+          ],
+          "reason": "This is an independently useful compared-only distinction about the provenance of field evidence.",
+          "status": "RESOLVED",
+          "summary": "Problems reported by operational stakeholders and problems directly observed by researchers should be treated as separate evidence forms.",
+          "uid": "215a52dc-e6ea-515a-abab-1f2384058cbb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d1e512d5-3c11-4b21-a1d3-61c1772033c5",
+              "memory_uid": "ad643b33-fba1-5643-b57f-3bb8c3829122"
+            }
+          ],
+          "reason": "This is an independently useful compared-only claim about the evidentiary value of breakdown logs.",
+          "status": "RESOLVED",
+          "summary": "Field breakdown logs can reveal system failures and adaptive user behavior together with their timing and conditions.",
+          "uid": "1c258216-d7f7-5304-bd7b-733c36453947"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d1e512d5-3c11-4b21-a1d3-61c1772033c5",
+              "memory_uid": "546548e3-c47a-5a74-a04a-0a328602ead4"
+            }
+          ],
+          "reason": "This is an independently useful compared-only field-context limitation on attributing observed effects.",
+          "status": "RESOLVED",
+          "summary": "Temporary coexistence of formal new-system procedures and established manual routines can impede isolation of individual design-change effects.",
+          "uid": "4f0b4936-1890-5667-a4b3-3672f5eb3364"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame uniquely emphasizes direct and recent evidence, careful claim language, stakeholder needs, distinct field evidence types, adaptive behavior, and contextual obstacles to isolating design effects.",
+        "differences": "",
+        "reference_only": "The reference uniquely sets conventions for consistent terminology, abbreviations, participant-centered language, formative evaluation, and contribution labels matched to deliverable abstraction."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "7f4e2241-ddb3-4e22-a1e0-19da2407fab3"
+    },
+    "analysis_digest": "eba693c530ce3c3d2af02883b456268b4202d17cfa309746ddf517de74ab78af",
+    "key": "058eeb46f2fb36619ee0b5573bdb6695315bcb2b90b04b0d85ab4ebe09ec7d57",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 34.96888245900118,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "058eeb46f2fb36619ee0b5573bdb6695315bcb2b90b04b0d85ab4ebe09ec7d57",
+  "created_at": "2026-08-13T18:28:48.881014Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/terminology",
+  "pair_key": "d9f95a370f5e657022d93ef7d151438d9ecf3966e78e928ec74d8a14c6ddcba8",
+  "provider_seconds": 34.96888245900118,
+  "right": "task-2/advisor2/claim-evidence",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

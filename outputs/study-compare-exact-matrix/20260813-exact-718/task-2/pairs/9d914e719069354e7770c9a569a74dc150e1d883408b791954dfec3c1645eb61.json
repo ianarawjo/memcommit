@@ -1,0 +1,339 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:24:58.344226+00:00",
+      "frames": [
+        {
+          "context_digest": "3dd1208c3f947a57bc5f1d490a28c999913d43cad775b2b01e50c6059d6b660e",
+          "context_name": "task-2/advisor1/safety",
+          "context_uid": "cd6c1fab-786a-52ea-9437-9a4d209ba419",
+          "memories": [
+            {
+              "content": "Specify the order and recipients for reporting serious discomfort during the study.",
+              "content_digest": "1de38a3ec5fc3267ebeb35482a458d4aaf50d2aea44c6dba334f184e50ddddd2",
+              "position": 0,
+              "uid": "9d6f5228-d182-571a-83d2-6a67becb7736"
+            },
+            {
+              "content": "Field staff rely on a pre-defined contact sequence when serious discomfort is reported.",
+              "content_digest": "ed3a3b19d92a50c7dd324981b702bac31e0130fda38fe37150e500481ed11d84",
+              "position": 1,
+              "uid": "00ed485d-66c2-59ad-9c5b-9ae445412690"
+            },
+            {
+              "content": "Establish criteria for halting the use of a design alternative if recurring severe errors appear during formative evaluation.",
+              "content_digest": "dcca56df756b89f89a0a9dbf2bf45aee6480392b368c9cf3402223d3084b801b",
+              "position": 2,
+              "uid": "9c6e1561-f671-52cb-aa67-245cc4987ad4"
+            },
+            {
+              "content": "Do not include a design alternative halted for safety reasons in subsequent evaluation iterations without modification.",
+              "content_digest": "01668098161666622f4d7ed8298e3e63a06fa9b10a4cfd53b200d820f96f5c50",
+              "position": 3,
+              "uid": "2381ecf7-2b11-583d-91d9-0a5cfc279ba1"
+            },
+            {
+              "content": "Even in controlled environments, delayed prototype recovery procedures increase session interruption time and alter data collection conditions for the same task.",
+              "content_digest": "fd0f364ef66cfa7be937779ed4ce3ffb1a406bc227d09c26b288a751c5e0d427",
+              "position": 4,
+              "uid": "c5ce1b00-36d9-5cdd-a318-93b88ca0e322"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "726dddb4-d6f1-41d8-97c3-17963753cc9f"
+        },
+        {
+          "context_digest": "0c296942d89f44af52c83dcba02568af2b56ed1016260f3d3b9c95e919a51339",
+          "context_name": "task-2/advisor2/ethics",
+          "context_uid": "fa36b485-422d-54c3-a145-0f60a077757c",
+          "memories": [
+            {
+              "content": "Link anticipated participant burden with its mitigation strategies for each field user study task.",
+              "content_digest": "120fdee3ad17815fe2e9aa806aab19843cf6597753cf0d35aa0618a3116a1bd2",
+              "position": 0,
+              "uid": "bc8c1327-993c-51ce-8f53-919dc253e0f8"
+            },
+            {
+              "content": "Specify the accommodations necessary for participants to access the field system and research tasks.",
+              "content_digest": "e09cce7cc60d904d618dffa5619cac9c44e4dbcc4f2a0d8547b9ede06586a82b",
+              "position": 1,
+              "uid": "578f6fdf-6bbc-5d1b-8f03-c7460a5cdc7b"
+            },
+            {
+              "content": "Specify how accessibility accommodations will be provided in the field user study.",
+              "content_digest": "98a13f5b544276eaafd5d0b1aea63b2e313ce327f5881f0e4bbcff19724e8c6e",
+              "position": 2,
+              "uid": "6804d5db-c872-5ded-bf68-14fd30e1b645"
+            },
+            {
+              "content": "Describe how personal identifiers will be separated from research data immediately upon collection.",
+              "content_digest": "0bf884cd31610ba663854e8c273ec6769666b38ee72714ba63f0b390d69b8ba3",
+              "position": 3,
+              "uid": "448f23d0-9607-5977-9d13-a99af48a6fc1"
+            },
+            {
+              "content": "List equipment to be loaned when participants lack necessary gear.",
+              "content_digest": "665d4e26cc8390ca2334d4740650e77977b60fd0e3eed2464ade0ca55a806eb2",
+              "position": 4,
+              "uid": "b97f3e2f-e132-5f6f-a748-f406a89a1bc5"
+            },
+            {
+              "content": "Describe the procedure for returning equipment loaned to participants.",
+              "content_digest": "100ffbad1288c3263bc4a1044b2d42da35c36a3f73786e58e4391fbac98c84f2",
+              "position": 5,
+              "uid": "d05964ea-0423-5642-86e1-9e9c19edffbe"
+            },
+            {
+              "content": "The HCI ethics reviewer verifies that anticipated burden and mitigation strategies correspond for each field user study task.",
+              "content_digest": "067bbafce95c77b4a9acc5ba9652db92dba6dc96e14588841db158919bf044b2",
+              "position": 6,
+              "uid": "26407eb8-5c02-551f-a960-1652eb080f90"
+            },
+            {
+              "content": "Ensure that participants can safely return to existing work procedures if they discontinue research participation.",
+              "content_digest": "213cff51d754811573c78ba0ca92f37e614e9fa4ae1080aa7fcfb550c85437fb",
+              "position": 7,
+              "uid": "7e0ba411-3fd9-53ec-8a3f-4499316c06bb"
+            },
+            {
+              "content": "Specify that organizational members who decline research participation will not face disadvantages in task assignment or performance evaluation.",
+              "content_digest": "46b2b0857255b48ed6001191b089c1d6ecba859690818cbff8fe7676fa1f860a",
+              "position": 8,
+              "uid": "a6fbea37-335c-544b-8bac-01f759bc3855"
+            },
+            {
+              "content": "The user's withdrawal risk can be adequately assessed only when a safe alternative procedure exists for field tasks.",
+              "content_digest": "604a38c44856b4407cf2b1d83df216510e77f84ce76ef4dbc7f9be21cd32393b",
+              "position": 9,
+              "uid": "885d1cf3-8bcd-513c-9591-a548fcbd3992"
+            },
+            {
+              "content": "The user tends to assume that a short session also entails little burden from work interruption and exposure to a manager.",
+              "content_digest": "0c48fd9dd3b393f73a8005db56bf2c11320d82b84040af105ca65c3ff9ce6f17",
+              "position": 10,
+              "uid": "520b4c9f-306e-5749-83b5-2218c97f89e6"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "b8cdcf60-28c2-4ee8-83de-2d0c03de965d"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames provide complementary but non-overlapping safeguards. The reference emphasizes incident escalation, unsafe-design controls, and prototype recovery effects; the compared frame addresses burden, accessibility, privacy, equipment, withdrawal protections, and coercion risks. No direct semantic counterpart or scope-aligned disagreement is present.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "726dddb4-d6f1-41d8-97c3-17963753cc9f",
+              "memory_uid": "9d6f5228-d182-571a-83d2-6a67becb7736"
+            },
+            {
+              "frame_uid": "726dddb4-d6f1-41d8-97c3-17963753cc9f",
+              "memory_uid": "00ed485d-66c2-59ad-9c5b-9ae445412690"
+            }
+          ],
+          "reason": "This incident-reporting protocol appears only in the reference frame, where its specification and staff reliance express one underlying operational claim.",
+          "status": "RESOLVED",
+          "summary": "Serious discomfort is handled through a predefined reporting sequence identifying the order and recipients for escalation.",
+          "uid": "63a76210-83f9-547f-a476-6b666513f077"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "726dddb4-d6f1-41d8-97c3-17963753cc9f",
+              "memory_uid": "9c6e1561-f671-52cb-aa67-245cc4987ad4"
+            }
+          ],
+          "reason": "The reference alone specifies the trigger criteria governing when evaluation of an unsafe alternative stops.",
+          "status": "RESOLVED",
+          "summary": "Recurring severe errors during formative evaluation require defined criteria for halting a design alternative.",
+          "uid": "ae501b9b-fc4c-5110-a669-c48ce2089d7a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "726dddb4-d6f1-41d8-97c3-17963753cc9f",
+              "memory_uid": "2381ecf7-2b11-583d-91d9-0a5cfc279ba1"
+            }
+          ],
+          "reason": "The reference alone governs reuse after a safety halt, a separate lifecycle decision from establishing the initial halt criteria.",
+          "status": "RESOLVED",
+          "summary": "A design alternative halted for safety reasons must be modified before inclusion in later evaluation iterations.",
+          "uid": "0b454cc5-1a68-567a-9f4f-6e9ee891f583"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "726dddb4-d6f1-41d8-97c3-17963753cc9f",
+              "memory_uid": "c5ce1b00-36d9-5cdd-a318-93b88ca0e322"
+            }
+          ],
+          "reason": "This operational consequence of recovery delays appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Delayed prototype recovery increases interruption time and changes data-collection conditions even in controlled environments.",
+          "uid": "eb363348-5307-5904-bb6b-2f66a4071ef2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b8cdcf60-28c2-4ee8-83de-2d0c03de965d",
+              "memory_uid": "bc8c1327-993c-51ce-8f53-919dc253e0f8"
+            },
+            {
+              "frame_uid": "b8cdcf60-28c2-4ee8-83de-2d0c03de965d",
+              "memory_uid": "26407eb8-5c02-551f-a960-1652eb080f90"
+            }
+          ],
+          "reason": "The compared frame alone expresses the task-level burden-to-mitigation mapping and its review control as parts of one policy.",
+          "status": "RESOLVED",
+          "summary": "Anticipated participant burden and mitigation strategies must correspond for every field-study task and be verified by the ethics reviewer.",
+          "uid": "5d41099d-ea77-5db9-90be-c494092b7770"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b8cdcf60-28c2-4ee8-83de-2d0c03de965d",
+              "memory_uid": "578f6fdf-6bbc-5d1b-8f03-c7460a5cdc7b"
+            },
+            {
+              "frame_uid": "b8cdcf60-28c2-4ee8-83de-2d0c03de965d",
+              "memory_uid": "6804d5db-c872-5ded-bf68-14fd30e1b645"
+            }
+          ],
+          "reason": "The compared frame alone splits one accommodation-planning requirement into identifying needed access support and describing its delivery.",
+          "status": "RESOLVED",
+          "summary": "Necessary accessibility accommodations and how they will be provided must be specified for the field system and research tasks.",
+          "uid": "afa24649-cbfe-5bb6-b163-b3060cd604b6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b8cdcf60-28c2-4ee8-83de-2d0c03de965d",
+              "memory_uid": "448f23d0-9607-5977-9d13-a99af48a6fc1"
+            }
+          ],
+          "reason": "This data-handling safeguard appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Personal identifiers must be separated from research data immediately upon collection using a described procedure.",
+          "uid": "5a5874c5-b6ff-5c6f-9864-a5ecc7fba2f8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b8cdcf60-28c2-4ee8-83de-2d0c03de965d",
+              "memory_uid": "b97f3e2f-e132-5f6f-a748-f406a89a1bc5"
+            }
+          ],
+          "reason": "The compared frame alone specifies the inventory decision for participant equipment support.",
+          "status": "RESOLVED",
+          "summary": "Equipment available for loan when participants lack necessary gear must be listed.",
+          "uid": "603f7b69-70cb-5a9c-8791-f457824d1a95"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b8cdcf60-28c2-4ee8-83de-2d0c03de965d",
+              "memory_uid": "d05964ea-0423-5642-86e1-9e9c19edffbe"
+            }
+          ],
+          "reason": "The compared frame alone addresses the return process, independently from identifying which equipment may be loaned.",
+          "status": "RESOLVED",
+          "summary": "The procedure for participants to return loaned equipment must be described.",
+          "uid": "a8bf9028-5d4d-5390-b217-e526f3b13805"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b8cdcf60-28c2-4ee8-83de-2d0c03de965d",
+              "memory_uid": "7e0ba411-3fd9-53ec-8a3f-4499316c06bb"
+            },
+            {
+              "frame_uid": "b8cdcf60-28c2-4ee8-83de-2d0c03de965d",
+              "memory_uid": "885d1cf3-8bcd-513c-9591-a548fcbd3992"
+            }
+          ],
+          "reason": "The compared frame alone states the safe fallback requirement and its role in assessing withdrawal risk as one underlying withdrawal-protection claim.",
+          "status": "RESOLVED",
+          "summary": "Field participation requires a safe return to existing work procedures upon withdrawal, because withdrawal risk assessment depends on such an alternative.",
+          "uid": "3404fd91-3563-5ee2-9566-e6035b314b5b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b8cdcf60-28c2-4ee8-83de-2d0c03de965d",
+              "memory_uid": "a6fbea37-335c-544b-8bac-01f759bc3855"
+            }
+          ],
+          "reason": "This protection against workplace consequences for nonparticipation appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Organizational members who decline participation must not be disadvantaged in task assignment or performance evaluation.",
+          "uid": "3a898cec-ee5f-5b4a-bcb9-258972f5781f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b8cdcf60-28c2-4ee8-83de-2d0c03de965d",
+              "memory_uid": "520b4c9f-306e-5749-83b5-2218c97f89e6"
+            }
+          ],
+          "reason": "This caution about underestimating workplace study burden appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Users may incorrectly infer that a short session entails little burden from work interruption or manager exposure.",
+          "uid": "1b742ed8-a693-52df-be47-58ae96a267a6"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers task-specific burden mitigation, accessibility, identifier separation, equipment loans, safe withdrawal procedures, protection from participation penalties, and underestimated workplace interruption and manager-exposure burdens.",
+        "differences": "",
+        "reference_only": "The reference covers serious-discomfort escalation, safety-based design halting and reuse restrictions, and the effects of delayed prototype recovery on sessions and data conditions."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "f47b20d1-0ea2-4610-8606-e99a9ac3d6b2"
+    },
+    "analysis_digest": "c518c4b521432f60ae34471e8794be441fe19b66eea43eac53852f4497c2bccf",
+    "key": "7872f4ae9c6c6dd652fcf58153dbe9cb2bdd5b70c52ddc765443bfcd8d49a805",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 37.149489915998856,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "7872f4ae9c6c6dd652fcf58153dbe9cb2bdd5b70c52ddc765443bfcd8d49a805",
+  "created_at": "2026-08-13T18:25:35.493326Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/safety",
+  "pair_key": "9d914e719069354e7770c9a569a74dc150e1d883408b791954dfec3c1645eb61",
+  "provider_seconds": 37.149489915998856,
+  "right": "task-2/advisor2/ethics",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

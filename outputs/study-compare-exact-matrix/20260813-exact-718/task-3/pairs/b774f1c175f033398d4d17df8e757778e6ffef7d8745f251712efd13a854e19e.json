@@ -1,0 +1,379 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:44:08.800541+00:00",
+      "frames": [
+        {
+          "context_digest": "e13d5ca14260d4cdee2047de1529bdadfb8f6c3ea1abf7b2fbc1cc2a4a3fa401",
+          "context_name": "task-3/local/personal-memory/2024/09",
+          "context_uid": "497036ef-19ef-5611-bf5a-a9eeaf1569a0",
+          "memories": [
+            {
+              "content": "The user's available days and times vary by week, making it difficult to apply last month's free time directly to the next appointment.",
+              "content_digest": "9883c185fcf05c7f7f2b427012701a926576130739a6a43f6cd4e94f26f7e87d",
+              "position": 0,
+              "uid": "84b4519d-ef17-5403-a866-4eb705951a09"
+            },
+            {
+              "content": "The user once canceled an appointment booked for the same weekday as in the previous month.",
+              "content_digest": "9d38149632b950760dbbfdf98630e74e48c0a2130b1293142adef0f9948485bb",
+              "position": 1,
+              "uid": "25994612-bebc-5643-8642-19b825f00f00"
+            },
+            {
+              "content": "When asked again about availability just before booking, the user provided three free times for that week.",
+              "content_digest": "6d7bf61d037b8f702b87eb75ca99670e46f8ed37eb3cd0588f232a63cbe7d97c",
+              "position": 2,
+              "uid": "9b667d0d-d97b-5dfa-af66-295b9c40403d"
+            },
+            {
+              "content": "On a day with two consecutive morning appointments, the user ate lunch at 3 p.m.",
+              "content_digest": "6cf4e59cc0449ecab23ac3e5b69e3993146fb9e31de4ddf7ddab1c81a47c2b8a",
+              "position": 3,
+              "uid": "54d29daf-7bd7-5221-ae65-8b46f7f4869b"
+            },
+            {
+              "content": "On a day the user left an hour between appointments, they ate while traveling.",
+              "content_digest": "f669cb3d5198e5eed84c2578c8810a8105d03b2d68064bd323dd6573339e2a3b",
+              "position": 4,
+              "uid": "375957b9-e051-5a94-bde1-d157f44cc343"
+            },
+            {
+              "content": "After seeing a private reason written directly in a calendar title, the user removed the wording.",
+              "content_digest": "6f32d03fd9854adaf5773fab91d96d94b8d50557dd7d3bf090caaf37488ad121",
+              "position": 5,
+              "uid": "d189ddb4-7014-5d19-b779-5f36c6bb4160"
+            },
+            {
+              "content": "The user checked that a calendar-sharing screen showed only the time and hid the details.",
+              "content_digest": "e182d94b728aa0057bf201f1caf924e715d12de484495d6bd653cd658c6fc091",
+              "position": 6,
+              "uid": "61ee4989-7372-5845-b14f-d8a6eb1e5300"
+            },
+            {
+              "content": "When evening plans on the same day must change, the user's mother wants advance notice on the weekend morning.",
+              "content_digest": "24ef090a587ad5f54aec84d231bed02577bfebc8ed2a487f0aea9eb3a6644f24",
+              "position": 7,
+              "uid": "f2b9f9b0-3d15-5411-9c40-ddce42288ed3"
+            },
+            {
+              "content": "The local agent cannot know the private reason for unavailability from the unavailable time alone.",
+              "content_digest": "a5ae072d060bfbae6e2d06ecaec6dad87039a14c3bee62dc0e3abd2a9096f5e2",
+              "position": 8,
+              "uid": "947e37c1-1235-54e1-8ddd-dcad7d725ede"
+            },
+            {
+              "content": "The user's shared calendar does not automatically reserve travel time between events.",
+              "content_digest": "44b0830b7ef31860d3bd70e859c449a2f8e5cecd94b4b571bf08e09da3f648eb",
+              "position": 9,
+              "uid": "1b2e9508-d9ce-5b27-bf66-ec7691061e13"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "774929d3-25d6-4e9f-b7f1-75fbc566dfbd"
+        },
+        {
+          "context_digest": "a2ea3c6aa8c1680fcf9a7dd71d0dbff822c6af5493b34b79022f5e740bb35259",
+          "context_name": "task-3/local/personal-memory/2025/07",
+          "context_uid": "5c264a7f-0300-587c-ad1c-0439cedc7737",
+          "memories": [
+            {
+              "content": "The user keeps a travel power bank in the first drawer beneath the desk.",
+              "content_digest": "deb13f4eae5e32bc035da0558fa1b290f4bac0dfa5ca350d5abd0456af07ab7f",
+              "position": 0,
+              "uid": "447bfd8d-1490-5404-a2b4-13b4587e6aba"
+            },
+            {
+              "content": "The user packed three pairs of shoes for a two-night trip but wore only one pair.",
+              "content_digest": "097601b179049e1c4dd6b20a2fe2703ffb0d4a89d5ae15a763d339b989da50d8",
+              "position": 1,
+              "uid": "3ab0326a-a006-51ea-9348-7ada19a23bce"
+            },
+            {
+              "content": "For the next two-night trip, the user packed only one pair of walking shoes and reduced the bag's weight.",
+              "content_digest": "afd02b05250a60ad461e01132a94f0105d419521803082d1057205a2bc9a92ad",
+              "position": 2,
+              "uid": "ef467ab6-8ba6-5f81-8f12-578ec1824e09"
+            },
+            {
+              "content": "On a trip when the user forgot a charging cable, they bought a new one after arrival.",
+              "content_digest": "bbe1ac80a2311e0e631446b811d799494dc5ca4db408fc63d1cb09a01e2cd105",
+              "position": 3,
+              "uid": "aa4defc3-2b65-5688-accb-aaa49f2430b6"
+            },
+            {
+              "content": "Before the next trip, the user checked charging items against a photo and packed all of them.",
+              "content_digest": "cc2663db793bec80657023ccd545add403ec7dcc6dc39da4d03a95b5a9f65ff9",
+              "position": 4,
+              "uid": "2d937b4b-d73d-5382-abbe-3cd4e596b3a5"
+            },
+            {
+              "content": "The user packed toiletries on the departure day and arrived 15 minutes late at the meeting place.",
+              "content_digest": "1f5f7eb4cf651ee44244315e52de31cbd7bffe70489315bda287d1ca3cb9a8d4",
+              "position": 5,
+              "uid": "0be8b327-0a06-5241-b98d-daa6b0a4aa50"
+            },
+            {
+              "content": "The next time, the user closed the bag the night before and departed on time.",
+              "content_digest": "61f6c02e4637501f5ad9b1a9f668e298e566558a3d9e611a8b521c17256513b7",
+              "position": 6,
+              "uid": "90059fcc-436d-5453-98f0-a9b23a08faf1"
+            },
+            {
+              "content": "The user's older sister considers it safer to pack an extra cable even for a short trip to avoid charging problems.",
+              "content_digest": "f06b38b34e0f27bc01d8a79733173673d37a209e8619ad3df816a73718ffd89f",
+              "position": 7,
+              "uid": "12ef03f9-8cda-5ed7-be83-891b4702f872"
+            },
+            {
+              "content": "When creating a travel preparation list, confirm the trip length and actual activities with the user.",
+              "content_digest": "f34a0a341cd8ce9c641c16b780c4e53ccae4b6dca2c8f176be7579f5b0115654",
+              "position": 8,
+              "uid": "54136935-a460-573d-ac40-f5edb0ca7e6c"
+            },
+            {
+              "content": "The local agent cannot establish what the next trip requires from the luggage used on the previous trip alone.",
+              "content_digest": "4accbe60aa4e53ff75a18cc0291a870f106ac69a10a2cff96147c2dbd74892e3",
+              "position": 9,
+              "uid": "029c0777-bdbb-5d48-9309-1b1e6c7d88f4"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "035d1bff-8bc6-403c-8ac6-5eeba3a9d16a"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames contain independent operational knowledge in different domains. The reference frame concerns appointment availability, scheduling buffers, calendar privacy, family notice, and inference limits; the compared frame concerns travel packing, charging readiness, departure timing, item location, and trip-specific planning.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "774929d3-25d6-4e9f-b7f1-75fbc566dfbd",
+              "memory_uid": "84b4519d-ef17-5403-a866-4eb705951a09"
+            },
+            {
+              "frame_uid": "774929d3-25d6-4e9f-b7f1-75fbc566dfbd",
+              "memory_uid": "25994612-bebc-5643-8642-19b825f00f00"
+            },
+            {
+              "frame_uid": "774929d3-25d6-4e9f-b7f1-75fbc566dfbd",
+              "memory_uid": "9b667d0d-d97b-5dfa-af66-295b9c40403d"
+            }
+          ],
+          "reason": "Weekly availability varies, a repeated-weekday booking was canceled, and a fresh inquiry produced current options; together these support one appointment-specific planning claim.",
+          "status": "RESOLVED",
+          "summary": "Appointment availability should be confirmed for the current week rather than inferred from an earlier month.",
+          "uid": "829888fb-57ff-5743-ac9d-71f1e31c4f8b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "774929d3-25d6-4e9f-b7f1-75fbc566dfbd",
+              "memory_uid": "54d29daf-7bd7-5221-ae65-8b46f7f4869b"
+            }
+          ],
+          "reason": "This is a specific one-sided observation about meal timing under a tightly packed appointment schedule.",
+          "status": "RESOLVED",
+          "summary": "Consecutive morning appointments can substantially delay the user’s lunch.",
+          "uid": "69deb70c-7ae1-561d-9d17-41bcb96c00ac"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "774929d3-25d6-4e9f-b7f1-75fbc566dfbd",
+              "memory_uid": "375957b9-e051-5a94-bde1-d157f44cc343"
+            },
+            {
+              "frame_uid": "774929d3-25d6-4e9f-b7f1-75fbc566dfbd",
+              "memory_uid": "1b2e9508-d9ce-5b27-bf66-ec7691061e13"
+            }
+          ],
+          "reason": "The observed meal during travel and the calendar’s lack of automatic travel holds jointly describe the need to account explicitly for transit.",
+          "status": "RESOLVED",
+          "summary": "Travel between appointments can consume nominal gaps and is not automatically reserved by the shared calendar.",
+          "uid": "d60129ba-2a20-5852-817e-322fe9ecddb3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "774929d3-25d6-4e9f-b7f1-75fbc566dfbd",
+              "memory_uid": "d189ddb4-7014-5d19-b779-5f36c6bb4160"
+            },
+            {
+              "frame_uid": "774929d3-25d6-4e9f-b7f1-75fbc566dfbd",
+              "memory_uid": "61ee4989-7372-5845-b14f-d8a6eb1e5300"
+            }
+          ],
+          "reason": "Removing sensitive title wording and verifying that sharing exposes only time are two expressions of the same calendar-privacy practice.",
+          "status": "RESOLVED",
+          "summary": "The user actively keeps private reasons out of visible calendar details.",
+          "uid": "a435bc99-1d4d-56ce-b552-23218c441d6d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "774929d3-25d6-4e9f-b7f1-75fbc566dfbd",
+              "memory_uid": "f2b9f9b0-3d15-5411-9c40-ddce42288ed3"
+            }
+          ],
+          "reason": "This is an independently useful, one-sided communication preference with a specific timing condition.",
+          "status": "RESOLVED",
+          "summary": "The user’s mother wants weekend-morning advance notice when same-day evening plans must change.",
+          "uid": "8282db17-1586-5c64-9601-c418a88c4ed8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "774929d3-25d6-4e9f-b7f1-75fbc566dfbd",
+              "memory_uid": "947e37c1-1235-54e1-8ddd-dcad7d725ede"
+            }
+          ],
+          "reason": "This is an independently useful limitation on what may be inferred from calendar availability.",
+          "status": "RESOLVED",
+          "summary": "An unavailable time alone does not reveal its private reason to the local agent.",
+          "uid": "96a7fd0b-1ff5-5246-9c7f-26eede5a7b80"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "035d1bff-8bc6-403c-8ac6-5eeba3a9d16a",
+              "memory_uid": "447bfd8d-1490-5404-a2b4-13b4587e6aba"
+            }
+          ],
+          "reason": "This is a standalone one-sided location fact.",
+          "status": "RESOLVED",
+          "summary": "The travel power bank is kept in the first drawer beneath the desk.",
+          "uid": "b548defe-be33-5c63-bbd6-a7fdc6aa65d5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "035d1bff-8bc6-403c-8ac6-5eeba3a9d16a",
+              "memory_uid": "3ab0326a-a006-51ea-9348-7ada19a23bce"
+            },
+            {
+              "frame_uid": "035d1bff-8bc6-403c-8ac6-5eeba3a9d16a",
+              "memory_uid": "ef467ab6-8ba6-5f81-8f12-578ec1824e09"
+            }
+          ],
+          "reason": "The initial overpacking and subsequent lighter packing form one travel-packing lesson.",
+          "status": "RESOLVED",
+          "summary": "For a two-night trip, reducing footwear from three pairs to one walking pair lowered bag weight without sacrificing used footwear.",
+          "uid": "5653388d-8db9-510d-9592-e00d68d29e6d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "035d1bff-8bc6-403c-8ac6-5eeba3a9d16a",
+              "memory_uid": "aa4defc3-2b65-5688-accb-aaa49f2430b6"
+            },
+            {
+              "frame_uid": "035d1bff-8bc6-403c-8ac6-5eeba3a9d16a",
+              "memory_uid": "2d937b4b-d73d-5382-abbe-3cd4e596b3a5"
+            }
+          ],
+          "reason": "The forgotten cable and the later successful photo-based check describe one charging-preparation improvement.",
+          "status": "RESOLVED",
+          "summary": "Checking charging items against a photo before departure can prevent omissions that otherwise require replacement purchases.",
+          "uid": "7380e129-a032-5ff8-8afa-f8c82c828760"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "035d1bff-8bc6-403c-8ac6-5eeba3a9d16a",
+              "memory_uid": "0be8b327-0a06-5241-b98d-daa6b0a4aa50"
+            },
+            {
+              "frame_uid": "035d1bff-8bc6-403c-8ac6-5eeba3a9d16a",
+              "memory_uid": "90059fcc-436d-5453-98f0-a9b23a08faf1"
+            }
+          ],
+          "reason": "The late and on-time departures provide contrasting observations for one preparation-timing claim.",
+          "status": "RESOLVED",
+          "summary": "Closing the bag the night before, rather than packing toiletries on departure day, supports an on-time departure.",
+          "uid": "81b0055b-678c-591c-9b4f-93d4ae5547fb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "035d1bff-8bc6-403c-8ac6-5eeba3a9d16a",
+              "memory_uid": "12ef03f9-8cda-5ed7-be83-891b4702f872"
+            }
+          ],
+          "reason": "This is a distinct one-sided recommendation attributed to the sister, separate from checking required charging items.",
+          "status": "RESOLVED",
+          "summary": "The user’s older sister prefers packing an extra cable even for short trips as a charging safeguard.",
+          "uid": "f9270c0d-c7c6-5f4f-b869-ed555d4cb026"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "035d1bff-8bc6-403c-8ac6-5eeba3a9d16a",
+              "memory_uid": "54136935-a460-573d-ac40-f5edb0ca7e6c"
+            },
+            {
+              "frame_uid": "035d1bff-8bc6-403c-8ac6-5eeba3a9d16a",
+              "memory_uid": "029c0777-bdbb-5d48-9309-1b1e6c7d88f4"
+            }
+          ],
+          "reason": "The planning instruction and stated inference limit express the same trip-specific requirements principle.",
+          "status": "RESOLVED",
+          "summary": "Travel preparation should be based on the upcoming trip’s length and activities rather than prior luggage alone.",
+          "uid": "71c4fa7d-1a97-5fff-90e3-469b225577d3"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only content covers lighter and earlier packing, charging-item safeguards, an extra-cable preference, a power-bank location, and confirming each trip’s actual requirements.",
+        "differences": "",
+        "reference_only": "Reference-only content covers reconfirming current availability, protecting calendar privacy, allowing for meals and travel, giving family advance notice, and limits on inferring private reasons."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "a8f3b6dc-a1a8-40d5-9da6-bf67e30a3a4b"
+    },
+    "analysis_digest": "7f1afd216ef7e497d2301d11321dfd90c5d8fd514298311511caf45cd15093da",
+    "key": "cc539618f3a853e6907d9d7af127f4a2f60d204b1e21bac1b765cf14c30235fd",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 38.51699770800042,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "cc539618f3a853e6907d9d7af127f4a2f60d204b1e21bac1b765cf14c30235fd",
+  "created_at": "2026-08-13T18:44:47.317163Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/09",
+  "pair_key": "b774f1c175f033398d4d17df8e757778e6ffef7d8745f251712efd13a854e19e",
+  "provider_seconds": 38.51699770800042,
+  "right": "task-3/local/personal-memory/2025/07",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

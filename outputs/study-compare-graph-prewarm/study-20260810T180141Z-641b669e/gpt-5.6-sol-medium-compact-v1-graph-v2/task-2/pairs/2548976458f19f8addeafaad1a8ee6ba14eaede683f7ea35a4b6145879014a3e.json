@@ -1,0 +1,263 @@
+{
+  "coverage": {
+    "expected": 30,
+    "observed": 30
+  },
+  "created_at": "2026-08-11T00:26:49.201040Z",
+  "description_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+  "issues": [],
+  "kind": "STUDY_COMPARE_GRAPH_PAIR",
+  "left": {
+    "context_digest": "130876ecc1e3921197d330f5ad8493b927360f3505da3eff8df01d4f595a4934",
+    "context_uid": "0ff7abfd-58d3-58c2-b42a-31dca38cb7bd",
+    "memory_count": 17,
+    "name": "task-2/advisor1/structure"
+  },
+  "method": "COMPACT_FALLBACK_EXHAUSTIVE_V1",
+  "operation": "COMPARE",
+  "pair_key": "2548976458f19f8addeafaad1a8ee6ba14eaede683f7ea35a4b6145879014a3e",
+  "provider": {
+    "compact_provider_seconds": 54.15930504098651,
+    "compact_validation_error": "Every compact group must be used by at least one source Memory.",
+    "condition": "COMPACT_WITH_EXHAUSTIVE_FALLBACK",
+    "fallback_provider_seconds": 67.70128258300247,
+    "provider_calls": 2,
+    "provider_seconds": 121.86058762398898
+  },
+  "relations": [
+    {
+      "comment": "These memories form one proposal-opening rule with supporting reader-behavior rationale; the compared frame has no corresponding rule about opening content or sequencing.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "44249c8a-e84f-5c20-a9cd-a55457e98511",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "21371c6c-c74f-5791-8f9b-6d099306bfb5",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "8ecaec22-7c25-5a39-a85b-56db9c3b607e",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "a4536b84-40f2-57db-84e4-024c97c9fecb",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000001",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "This is an independently useful requirement for research-question formulation with no matching claim in the compared frame.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "f69ea80c-0d56-5fe8-9d24-8793eefa6643",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000002",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "These memories split one visualization requirement; the compared frame does not address procedural visuals or transition conditions.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "18ebdcbc-cf5a-5e6c-b2cd-b4cd07d7e59e",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "5ab99a77-8836-50cf-8377-fdd23a208bc4",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000003",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "These memories jointly define one phase-and-deliverable planning structure absent from the compared frame.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "b9b7932b-85c1-5a14-80f7-0983dbf22380",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "fc0a3a72-2da2-5843-be3a-a4ff2adf8fac",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000004",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "This is an independently useful content-placement rule with no counterpart in the compared frame.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "2f7092a7-2625-5d27-bd76-a13ee5809cc2",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000005",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "These memories elaborate one proposal-section labeling system and its navigation and diagnostic purposes; the compared frame contains no heading policy.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "a1857f07-36cd-5a6c-946d-a308e712e9eb",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "895b5ac9-1aa4-51d2-b89a-94e9fe5b869d",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "3005f4c5-e17b-531b-b9bf-c9d69411c71f",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "2312cb6e-4f50-56f5-b725-ba5e45697a73",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "1d90043b-f010-5a14-9493-77f636c13975",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "b77fe6ec-676b-5bb9-9119-45aefea2aa27",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000006",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "This is an independently useful evidence-placement rule, distinct from the compared frame’s guidance about how prototype status is worded.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "4913f63e-ceb9-587a-ade9-494fc8f28849",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000007",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "These memories combine one punctuation rule with the observed tendency and reviewer-facing rationale; the reference frame has no punctuation policy.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "33503d41-7b99-5526-a028-0a1a20652c0d",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "13dc50e1-ecaa-504e-a602-7a10a09d5484",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "358230d3-9ff0-51b9-9bf6-0752a2d9845a",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000008",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "These memories state one sentence-granularity rule and the tendency motivating it; the reference frame governs opening content rather than general claim density within sentences.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "79437c17-1f08-5188-8177-c622429dc4f9",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "cc860653-ad91-52f8-91db-5b26371dca0a",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "af0d191d-d23e-562b-997b-b1024dacefda",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000009",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "These memories express one accountability-through-voice rule with its observed failure mode and interpretive consequence; no reference memory governs grammatical voice.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "807a906c-d519-59b1-8406-43c8015ef068",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "ff8f0b12-9df4-5968-90b2-cd8d971dcc1b",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "bec16e02-b267-50b8-9c0e-964184f2a6b4",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000010",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "This independently useful ownership boundary has no matching claim in the reference frame.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "6c282ef7-4326-5d69-a7c4-d3f4f3a3a508",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000011",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "This independently useful pronoun-consistency rule has no counterpart in the reference frame.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "58565355-bec5-5b2b-89ed-f0b8cab0351a",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000012",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "These memories split one maturity-sensitive wording rule; the reference frame addresses placement of feasibility evidence rather than status-dependent descriptions.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "e463a3b5-263f-58da-9895-242965892e60",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "fef78af8-1774-5da0-8345-571eb8c9cc3c",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000013",
+      "status": "RESOLVED"
+    }
+  ],
+  "right": {
+    "context_digest": "ea897f5484a40cff96a5be5b246258a16ce1af6660b5f96c17e3b0528c06d090",
+    "context_uid": "a759f597-4f26-5782-828b-55f1c90076bf",
+    "memory_count": 13,
+    "name": "task-2/advisor1/style"
+  },
+  "schema_version": 1,
+  "semantic_content_in_participant_report": false,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

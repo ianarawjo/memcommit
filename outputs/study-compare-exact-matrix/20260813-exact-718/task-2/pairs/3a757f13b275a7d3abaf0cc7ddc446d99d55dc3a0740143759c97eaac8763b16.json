@@ -1,0 +1,323 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:21:10.039399+00:00",
+      "frames": [
+        {
+          "context_digest": "4ae7659c0c6976de9bf2292f9e35962963b7931b470c2294d4f0e70b3500bff0",
+          "context_name": "task-2/advisor1/feasibility",
+          "context_uid": "52db6b06-e86a-556a-913e-30e45f7e9529",
+          "memories": [
+            {
+              "content": "Mark unverified schedule assumptions as such.",
+              "content_digest": "d4cdcdbcdb51d96f9a7435e72c2e4ef25a3e3822a765a88afafeca5194bda96e",
+              "position": 0,
+              "uid": "b150c774-27f6-5ec8-8cb9-9a00be19ce9b"
+            },
+            {
+              "content": "Mark unverified recruitment assumptions as such.",
+              "content_digest": "4cc28528fee1c7b09f709638e2b57d3bc9efe635d20500ee98567f8f59b8cf21",
+              "position": 1,
+              "uid": "6c7d14ed-67e5-56ff-befb-7648b95aa7a3"
+            },
+            {
+              "content": "Mark unverified technical assumptions as such.",
+              "content_digest": "8942e49cd46e3e9746330349df11e49d4a6c9250c7aa4c52c2d9ade1c97c735c",
+              "position": 2,
+              "uid": "00bf39b5-fe97-5fd0-b579-a5c13b5e6af7"
+            },
+            {
+              "content": "Clarify which stage of prototype fabrication or user study each requested resource is used for.",
+              "content_digest": "81ba64e23304f8fbbb3af4f2c30dfa3c517899c486e88ba211189a7911fcbd64",
+              "position": 3,
+              "uid": "3ae97c88-7537-5733-b48d-e02c9283f486"
+            },
+            {
+              "content": "Operations reviewers judge feasibility based on the personnel assigned to each procedure.",
+              "content_digest": "fe29bb7e592d116001a25ce11c603ae29f21d446925c28db692f14970d5b8134",
+              "position": 4,
+              "uid": "e2b5c1f0-97c2-5d46-af80-993d8d5606c9"
+            },
+            {
+              "content": "Operations reviewers judge feasibility based on the equipment assigned to each procedure.",
+              "content_digest": "859ab328c21506d11dd1f6d98e98d5a552446e774931a8bc13396750acf0793b",
+              "position": 5,
+              "uid": "f636b400-d3a2-5873-bf5b-c990b0f7ea42"
+            },
+            {
+              "content": "Operations reviewers judge feasibility based on the time allocated to each procedure.",
+              "content_digest": "08656886328ece4d813e36b1145805ffd3f3d4c6c855c20b1464143fb12868ab",
+              "position": 6,
+              "uid": "49385488-2315-51bc-bea0-749a1aea52f1"
+            },
+            {
+              "content": "Verify that the planned number of formative evaluation iterations is feasible within the time for prototype modification and recruitment resources.",
+              "content_digest": "9e181a14a97abd740a85679554395d7b315c07f0e4171ef276a2c31553b285c7",
+              "position": 7,
+              "uid": "f1c22a48-9d8d-5e82-9837-690d66e719db"
+            },
+            {
+              "content": "Include only the minimum functionality required to compare primary design assumptions in the scope of the formative evaluation prototype.",
+              "content_digest": "7769c2a4c03dc1c279bbf34bf0cefdcd076e3c1d8a1e56015bf20357ecfcf433",
+              "position": 8,
+              "uid": "4d69f030-0dc0-5df7-a153-0b595a3f68de"
+            },
+            {
+              "content": "The user's iterative design plan can be judged feasible only if time and personnel are allocated for modifying the prototype between iterations.",
+              "content_digest": "0339285cf9fd632814c5b5eb2b48fd46e3baf09ea95fb406f71b5d2cc804fa7e",
+              "position": 9,
+              "uid": "152f8621-f5fb-5c5e-a961-1fde77ed0bb3"
+            },
+            {
+              "content": "Delays in participant recruitment can compress the time available for prototype modification between formative evaluations.",
+              "content_digest": "9945f30dba63d2d070bad59cb2fb15b6a26d635f337949c3891b58d17c43973a",
+              "position": 10,
+              "uid": "1877a138-31f6-59a5-b666-ae57985f540d"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "9838b4d4-44d5-49eb-b34a-9d95be33a542"
+        },
+        {
+          "context_digest": "4efbf2f6c096022137cee2c075c75219bb4fd0f441579901b8445bb2d92101f5",
+          "context_name": "task-2/advisor2/budget",
+          "context_uid": "ae02c2b2-49d3-5c30-b686-81ea17a8a87e",
+          "memories": [
+            {
+              "content": "Keep the main text to the total and major categories, and place quantities, unit rates, and assumptions in one compact budget table or appendix.",
+              "content_digest": "2e0d76a9c09d14facdf93e8b82cb1c4f583b8a6063b74552f2c23b7d37224e9c",
+              "position": 0,
+              "uid": "d614b55d-d9f6-5347-8d02-2d219d621a09"
+            },
+            {
+              "content": "Give each cost category, quantity, unit rate, and subtotal a stable row in the separate budget table.",
+              "content_digest": "ecd8aa50fc469bb763f36784d140b871b82a283b39f30f46e9e166776321c602",
+              "position": 1,
+              "uid": "24500129-4b07-564f-ba67-39e40d7d7860"
+            },
+            {
+              "content": "Put the estimate basis in a dedicated table column so one assumption can be checked or revised without rewriting the narrative.",
+              "content_digest": "6ed604ab2ca300f215d13f18cb5344e9322635ad047ce36c08242765e7fb09f4",
+              "position": 2,
+              "uid": "07bad409-af9c-512a-b829-7ceb28273f91"
+            },
+            {
+              "content": "Readers can verify arithmetic and compare categories faster in a consistent table than in amounts distributed across prose.",
+              "content_digest": "1dc966a0ade3af3bc636cb99d456edbdb918c2a23efd4a5792db9f8ede061195",
+              "position": 3,
+              "uid": "abf6d361-c2eb-512f-87e0-f3af9c5eb677"
+            },
+            {
+              "content": "Revise one table row and its subtotal when an estimate changes instead of repeating the new amount across several prose paragraphs.",
+              "content_digest": "dcd7d010f7d2c1898fffe71ccc7a0067233dcbcf66fe4b429043b1900d097f84",
+              "position": 4,
+              "uid": "473cf3ca-9832-5d9c-97df-974f1d9b0d1b"
+            },
+            {
+              "content": "Keep detailed arithmetic out of the main argument when readers can reach the complete table from a clear reference.",
+              "content_digest": "940a8cdee63c326d9c9be89cc07e7f223f239e3537113d32c098f711bd816cf7",
+              "position": 5,
+              "uid": "675956de-2c61-53e1-bb89-9b49d92558ba"
+            },
+            {
+              "content": "The user tends to interrupt the argument with long cost enumerations when no separate budget table is available.",
+              "content_digest": "2c0715ec3cfa247a35c3acc854b0716dca764619050aa635c0c242a5b56aa2f1",
+              "position": 6,
+              "uid": "f4371f72-f222-5066-b2f4-0a6be5d6865e"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "680fa84e-6a17-4b26-b2ab-48e00ee195e7"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate concerns: the reference focuses on transparent assumptions and operational feasibility for iterative prototype evaluation, while the compared frame focuses on keeping budget detail structured, verifiable, maintainable, and outside the main argument. Neither side supplies a directly corresponding operational claim.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9838b4d4-44d5-49eb-b34a-9d95be33a542",
+              "memory_uid": "b150c774-27f6-5ec8-8cb9-9a00be19ce9b"
+            },
+            {
+              "frame_uid": "9838b4d4-44d5-49eb-b34a-9d95be33a542",
+              "memory_uid": "6c7d14ed-67e5-56ff-befb-7648b95aa7a3"
+            },
+            {
+              "frame_uid": "9838b4d4-44d5-49eb-b34a-9d95be33a542",
+              "memory_uid": "00bf39b5-fe97-5fd0-b579-a5c13b5e6af7"
+            }
+          ],
+          "reason": "These reference-side memories split one general disclosure policy across three assumption domains, with no corresponding budget-presentation claim on the compared side.",
+          "status": "RESOLVED",
+          "summary": "Unverified schedule, recruitment, and technical assumptions should be explicitly identified as unverified.",
+          "uid": "a6d1f280-7e73-58ec-a45a-dce1340024e7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9838b4d4-44d5-49eb-b34a-9d95be33a542",
+              "memory_uid": "3ae97c88-7537-5733-b48d-e02c9283f486"
+            }
+          ],
+          "reason": "This is independently useful reference-side guidance about resource-stage traceability and has no substantive counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Requested resources should be tied to the prototype-fabrication or user-study stage where they will be used.",
+          "uid": "09a8eff6-2f47-5d1b-ac31-5307ece4d11d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9838b4d4-44d5-49eb-b34a-9d95be33a542",
+              "memory_uid": "e2b5c1f0-97c2-5d46-af80-993d8d5606c9"
+            },
+            {
+              "frame_uid": "9838b4d4-44d5-49eb-b34a-9d95be33a542",
+              "memory_uid": "f636b400-d3a2-5873-bf5b-c990b0f7ea42"
+            },
+            {
+              "frame_uid": "9838b4d4-44d5-49eb-b34a-9d95be33a542",
+              "memory_uid": "49385488-2315-51bc-bea0-749a1aea52f1"
+            }
+          ],
+          "reason": "These reference-side memories split one feasibility criterion across its principal operational inputs, which the compared frame does not address.",
+          "status": "RESOLVED",
+          "summary": "Procedure feasibility is judged from the personnel, equipment, and time assigned to each procedure.",
+          "uid": "2aebf086-8921-582f-a5fd-68e5c0b873be"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9838b4d4-44d5-49eb-b34a-9d95be33a542",
+              "memory_uid": "f1c22a48-9d8d-5e82-9837-690d66e719db"
+            },
+            {
+              "frame_uid": "9838b4d4-44d5-49eb-b34a-9d95be33a542",
+              "memory_uid": "152f8621-f5fb-5c5e-a961-1fde77ed0bb3"
+            },
+            {
+              "frame_uid": "9838b4d4-44d5-49eb-b34a-9d95be33a542",
+              "memory_uid": "1877a138-31f6-59a5-b666-ae57985f540d"
+            }
+          ],
+          "reason": "These reference-side memories develop one underlying iterative-feasibility claim through required resources, between-iteration allocations, and a specific scheduling risk; no compared-side claim governs this decision.",
+          "status": "RESOLVED",
+          "summary": "Formative evaluation iterations require feasible allocations for recruitment and prototype modification, and recruitment delays can reduce the modification time available between iterations.",
+          "uid": "47a7779d-51d3-5b9e-9c5c-3d823f486361"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9838b4d4-44d5-49eb-b34a-9d95be33a542",
+              "memory_uid": "4d69f030-0dc0-5df7-a153-0b595a3f68de"
+            }
+          ],
+          "reason": "This is independent reference-side scope guidance without a substantive counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A formative evaluation prototype should include only the minimum functionality needed to compare primary design assumptions.",
+          "uid": "99d5cf11-79a8-5a08-bb13-258b721a0936"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "680fa84e-6a17-4b26-b2ab-48e00ee195e7",
+              "memory_uid": "d614b55d-d9f6-5347-8d02-2d219d621a09"
+            },
+            {
+              "frame_uid": "680fa84e-6a17-4b26-b2ab-48e00ee195e7",
+              "memory_uid": "675956de-2c61-53e1-bb89-9b49d92558ba"
+            }
+          ],
+          "reason": "These compared-side memories restate one presentation policy for separating detailed budget material from the narrative; the reference frame does not address budget placement.",
+          "status": "RESOLVED",
+          "summary": "The main argument should present only budget totals and major categories, with detailed quantities, rates, assumptions, and arithmetic placed in a clearly referenced separate table or appendix.",
+          "uid": "5fa1d06c-a6d7-5da0-86c2-700bc057633a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "680fa84e-6a17-4b26-b2ab-48e00ee195e7",
+              "memory_uid": "24500129-4b07-564f-ba67-39e40d7d7860"
+            },
+            {
+              "frame_uid": "680fa84e-6a17-4b26-b2ab-48e00ee195e7",
+              "memory_uid": "07bad409-af9c-512a-b829-7ceb28273f91"
+            },
+            {
+              "frame_uid": "680fa84e-6a17-4b26-b2ab-48e00ee195e7",
+              "memory_uid": "abf6d361-c2eb-512f-87e0-f3af9c5eb677"
+            },
+            {
+              "frame_uid": "680fa84e-6a17-4b26-b2ab-48e00ee195e7",
+              "memory_uid": "473cf3ca-9832-5d9c-97df-974f1d9b0d1b"
+            }
+          ],
+          "reason": "These compared-side memories describe complementary parts and benefits of one structured-table practice, with no corresponding operational claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A consistent budget table should give estimates stable, checkable fields so arithmetic, category comparisons, and individual estimate revisions can be handled efficiently.",
+          "uid": "1f82044f-fcb8-51d3-8894-e4aa2db937a3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "680fa84e-6a17-4b26-b2ab-48e00ee195e7",
+              "memory_uid": "f4371f72-f222-5066-b2f4-0a6be5d6865e"
+            }
+          ],
+          "reason": "This is an independently useful compared-side observation about user behavior rather than the table-format policy itself, and the reference frame contains no counterpart.",
+          "status": "RESOLVED",
+          "summary": "Without a separate budget table, the user tends to interrupt the argument with lengthy cost enumerations.",
+          "uid": "8227defb-41fa-5433-83b1-9bf72057105d"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame recommends a separate, consistently structured budget table that preserves narrative flow while making estimates, arithmetic, and revisions easier to verify and maintain; it also notes the user's tendency toward disruptive cost enumerations.",
+        "differences": "",
+        "reference_only": "The reference calls for labeling unverified assumptions, mapping resources to stages, testing procedure and iteration feasibility, limiting prototype scope, and accounting for recruitment effects on modification time."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "2051c2cc-cfa0-455f-91a8-1daa943e6682"
+    },
+    "analysis_digest": "197f5c7bce0787320d891f1f820b8b2e2cbdfc4dc6a7c865c435bc69b021156d",
+    "key": "36c484699c178ceed291a1b03bf997a7b1e49f132649dba8101137b6ff057303",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 30.595907125003578,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "36c484699c178ceed291a1b03bf997a7b1e49f132649dba8101137b6ff057303",
+  "created_at": "2026-08-13T18:21:40.634939Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/feasibility",
+  "pair_key": "3a757f13b275a7d3abaf0cc7ddc446d99d55dc3a0740143759c97eaac8763b16",
+  "provider_seconds": 30.595907125003578,
+  "right": "task-2/advisor2/budget",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

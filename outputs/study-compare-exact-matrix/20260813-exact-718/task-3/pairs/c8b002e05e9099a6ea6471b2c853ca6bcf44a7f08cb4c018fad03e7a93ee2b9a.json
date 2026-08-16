@@ -1,0 +1,370 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:52:18.438357+00:00",
+      "frames": [
+        {
+          "context_digest": "a2ea3c6aa8c1680fcf9a7dd71d0dbff822c6af5493b34b79022f5e740bb35259",
+          "context_name": "task-3/local/personal-memory/2025/07",
+          "context_uid": "5c264a7f-0300-587c-ad1c-0439cedc7737",
+          "memories": [
+            {
+              "content": "The user keeps a travel power bank in the first drawer beneath the desk.",
+              "content_digest": "deb13f4eae5e32bc035da0558fa1b290f4bac0dfa5ca350d5abd0456af07ab7f",
+              "position": 0,
+              "uid": "447bfd8d-1490-5404-a2b4-13b4587e6aba"
+            },
+            {
+              "content": "The user packed three pairs of shoes for a two-night trip but wore only one pair.",
+              "content_digest": "097601b179049e1c4dd6b20a2fe2703ffb0d4a89d5ae15a763d339b989da50d8",
+              "position": 1,
+              "uid": "3ab0326a-a006-51ea-9348-7ada19a23bce"
+            },
+            {
+              "content": "For the next two-night trip, the user packed only one pair of walking shoes and reduced the bag's weight.",
+              "content_digest": "afd02b05250a60ad461e01132a94f0105d419521803082d1057205a2bc9a92ad",
+              "position": 2,
+              "uid": "ef467ab6-8ba6-5f81-8f12-578ec1824e09"
+            },
+            {
+              "content": "On a trip when the user forgot a charging cable, they bought a new one after arrival.",
+              "content_digest": "bbe1ac80a2311e0e631446b811d799494dc5ca4db408fc63d1cb09a01e2cd105",
+              "position": 3,
+              "uid": "aa4defc3-2b65-5688-accb-aaa49f2430b6"
+            },
+            {
+              "content": "Before the next trip, the user checked charging items against a photo and packed all of them.",
+              "content_digest": "cc2663db793bec80657023ccd545add403ec7dcc6dc39da4d03a95b5a9f65ff9",
+              "position": 4,
+              "uid": "2d937b4b-d73d-5382-abbe-3cd4e596b3a5"
+            },
+            {
+              "content": "The user packed toiletries on the departure day and arrived 15 minutes late at the meeting place.",
+              "content_digest": "1f5f7eb4cf651ee44244315e52de31cbd7bffe70489315bda287d1ca3cb9a8d4",
+              "position": 5,
+              "uid": "0be8b327-0a06-5241-b98d-daa6b0a4aa50"
+            },
+            {
+              "content": "The next time, the user closed the bag the night before and departed on time.",
+              "content_digest": "61f6c02e4637501f5ad9b1a9f668e298e566558a3d9e611a8b521c17256513b7",
+              "position": 6,
+              "uid": "90059fcc-436d-5453-98f0-a9b23a08faf1"
+            },
+            {
+              "content": "The user's older sister considers it safer to pack an extra cable even for a short trip to avoid charging problems.",
+              "content_digest": "f06b38b34e0f27bc01d8a79733173673d37a209e8619ad3df816a73718ffd89f",
+              "position": 7,
+              "uid": "12ef03f9-8cda-5ed7-be83-891b4702f872"
+            },
+            {
+              "content": "When creating a travel preparation list, confirm the trip length and actual activities with the user.",
+              "content_digest": "f34a0a341cd8ce9c641c16b780c4e53ccae4b6dca2c8f176be7579f5b0115654",
+              "position": 8,
+              "uid": "54136935-a460-573d-ac40-f5edb0ca7e6c"
+            },
+            {
+              "content": "The local agent cannot establish what the next trip requires from the luggage used on the previous trip alone.",
+              "content_digest": "4accbe60aa4e53ff75a18cc0291a870f106ac69a10a2cff96147c2dbd74892e3",
+              "position": 9,
+              "uid": "029c0777-bdbb-5d48-9309-1b1e6c7d88f4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "5ddd32b7-1f37-4f30-a095-5fb6a534214a"
+        },
+        {
+          "context_digest": "5a45aaafce189f861f7195d3a753aa86812f64c689213961136327ca721c9d3e",
+          "context_name": "task-3/local/personal-memory/2026/06",
+          "context_uid": "f2e6c2e0-886a-52d8-98d4-03009ea37991",
+          "memories": [
+            {
+              "content": "The user keeps four folding chairs for family barbecues in storage.",
+              "content_digest": "7e2bb593a723adbac468184af4063e0ef74420baa03d6249ef77a84f2e6bc9df",
+              "position": 0,
+              "uid": "cce43b8e-c1c1-5208-8d9a-ee665b805d4c"
+            },
+            {
+              "content": "When six family members gathered in a noisy indoor restaurant, the user asked several times for the person across from them to repeat what was said.",
+              "content_digest": "d858d40478a37bed08580523df1915b85b4e2217b2fc506acedacaca55d2158d",
+              "position": 1,
+              "uid": "e682f0fd-e92f-566e-b1ec-1d5ebf091b60"
+            },
+            {
+              "content": "The user held the next gathering in their father's yard and moved between seats while speaking with everyone.",
+              "content_digest": "44843518c924955fa15e245dc41763a6fe21a95f6f590bd395f7b8a2d6357256",
+              "position": 2,
+              "uid": "c1f2b53e-6184-552b-a321-9796bb121055"
+            },
+            {
+              "content": "On a day the user started the barbecue at midday, sunlight led them to finish the meal quickly.",
+              "content_digest": "f275c2211b4bd69f40351800db57965b8ba44afbadb6e90a0291acae4e7a541b",
+              "position": 3,
+              "uid": "56d5befe-d5f4-59df-82e4-a66ba868dfc2"
+            },
+            {
+              "content": "The next time, the user started at 6 p.m. and remained outside until sunset.",
+              "content_digest": "13c413fbf16ea0704c10d09c5ee065a49ab789b0a3dadb1fc5068631dd95b292",
+              "position": 4,
+              "uid": "83d73ede-6f5a-550e-ba1c-c146b73a9917"
+            },
+            {
+              "content": "Because the side dishes brought by the user's mother and older sister had no labels, the user opened the same container twice.",
+              "content_digest": "5cc4205a743f5d8adca15876d7b0dd864089595ce729f4e3c1cc9a2272c6849b",
+              "position": 5,
+              "uid": "cf0947e8-c133-5259-bac2-e8ee6d74929e"
+            },
+            {
+              "content": "At the next gathering, the user wrote each food's name and who brought it on a small piece of paper.",
+              "content_digest": "6a93e0b5f7e3da8eff2e5c69a3f86c28dfc1a39c1ba7602a61cc1f6a96b837f9",
+              "position": 6,
+              "uid": "d42e48ca-39de-529f-bba2-332b779bd6c2"
+            },
+            {
+              "content": "After a barbecue, the user's younger brother prefers to divide leftover food into small containers to take home rather than discard it.",
+              "content_digest": "9febf1dab1f5000cddc636cd753d3c418b84810cbc6e394df7e8917d3fa29b72",
+              "position": 7,
+              "uid": "3958627e-a0fa-5e32-9e87-7ee874fc6fe7"
+            },
+            {
+              "content": "The local agent can summarize preparation and responses from prior family barbecues but cannot know the next attendees or weather.",
+              "content_digest": "6be2ed6916fc8a6200a4646b5db3b5ea0df7650e664bd098f973fb5229257cec",
+              "position": 8,
+              "uid": "1f24b5c2-554c-5356-b335-c6879e53ba7f"
+            },
+            {
+              "content": "The user's father's yard receives strong direct sunlight at midday; after 6 p.m., shade and wind lower the felt temperature.",
+              "content_digest": "a0bf855f5bb0422568bbed468e5299d111143362d7b9fe2dcf35dbaf8bcbf4c6",
+              "position": 9,
+              "uid": "d88b1b21-c58f-51d5-a60b-54bb11473d96"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "e63d1b9f-f13f-4e96-bc56-ba3c18db325e"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "Both frames capture lessons from prior events and adjustments to later preparation, but in different domains: short-trip packing and family barbecues. Their shared planning principle is context-dependent; all other information is independently useful within its own domain, with no conflict or uncertainty.",
+      "relations": [
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "5ddd32b7-1f37-4f30-a095-5fb6a534214a",
+              "memory_uid": "54136935-a460-573d-ac40-f5edb0ca7e6c"
+            },
+            {
+              "frame_uid": "5ddd32b7-1f37-4f30-a095-5fb6a534214a",
+              "memory_uid": "029c0777-bdbb-5d48-9309-1b1e6c7d88f4"
+            },
+            {
+              "frame_uid": "e63d1b9f-f13f-4e96-bc56-ba3c18db325e",
+              "memory_uid": "1f24b5c2-554c-5356-b335-c6879e53ba7f"
+            }
+          ],
+          "reason": "The travel scope calls for confirming trip length and activities because prior luggage is insufficient, while the barbecue scope identifies attendees and weather as unknowable from previous gatherings.",
+          "status": "RESOLVED",
+          "summary": "Planning the next event requires current event-specific facts rather than relying on prior-event evidence alone.",
+          "uid": "fc4dcf23-ba03-58f4-9c2d-6c545a1793de"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5ddd32b7-1f37-4f30-a095-5fb6a534214a",
+              "memory_uid": "447bfd8d-1490-5404-a2b4-13b4587e6aba"
+            }
+          ],
+          "reason": "This is independently useful reference-side location information with no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "The travel power bank is stored in the first drawer beneath the desk.",
+          "uid": "b18144e3-2e2e-56df-a9b3-252f95bd57a6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5ddd32b7-1f37-4f30-a095-5fb6a534214a",
+              "memory_uid": "3ab0326a-a006-51ea-9348-7ada19a23bce"
+            },
+            {
+              "frame_uid": "5ddd32b7-1f37-4f30-a095-5fb6a534214a",
+              "memory_uid": "ef467ab6-8ba6-5f81-8f12-578ec1824e09"
+            }
+          ],
+          "reason": "These reference-side memories form one before-and-after travel-packing lesson with no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "After overpacking shoes for a short trip, the user brought one walking pair on the next such trip and reduced bag weight.",
+          "uid": "34a0c452-380a-56d3-8740-4236524d0f51"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5ddd32b7-1f37-4f30-a095-5fb6a534214a",
+              "memory_uid": "aa4defc3-2b65-5688-accb-aaa49f2430b6"
+            },
+            {
+              "frame_uid": "5ddd32b7-1f37-4f30-a095-5fb6a534214a",
+              "memory_uid": "2d937b4b-d73d-5382-abbe-3cd4e596b3a5"
+            }
+          ],
+          "reason": "These reference-side memories form one charging-preparation lesson and response with no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "After forgetting a charging cable, the user used a photo-based check on the next trip and packed all charging items.",
+          "uid": "77f143a9-bfbc-50ec-881f-302de7348d3a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5ddd32b7-1f37-4f30-a095-5fb6a534214a",
+              "memory_uid": "0be8b327-0a06-5241-b98d-daa6b0a4aa50"
+            },
+            {
+              "frame_uid": "5ddd32b7-1f37-4f30-a095-5fb6a534214a",
+              "memory_uid": "90059fcc-436d-5453-98f0-a9b23a08faf1"
+            }
+          ],
+          "reason": "These reference-side memories form one packing-timing lesson and response with no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "After departure-day packing caused lateness, the user closed the bag the night before and departed on time.",
+          "uid": "3efefbab-3e66-51bd-a9eb-336af2b8fd7d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5ddd32b7-1f37-4f30-a095-5fb6a534214a",
+              "memory_uid": "12ef03f9-8cda-5ed7-be83-891b4702f872"
+            }
+          ],
+          "reason": "This family member's travel preference is independently useful and has no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user's older sister prefers packing an extra cable even for short trips to reduce charging risk.",
+          "uid": "3094a210-2503-50e2-99ce-562b7b08dfa0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e63d1b9f-f13f-4e96-bc56-ba3c18db325e",
+              "memory_uid": "cce43b8e-c1c1-5208-8d9a-ee665b805d4c"
+            }
+          ],
+          "reason": "This is independently useful compared-side equipment information with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user keeps four folding chairs in storage for family barbecues.",
+          "uid": "44b1b84b-a152-5edd-bd58-d238896e28b5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e63d1b9f-f13f-4e96-bc56-ba3c18db325e",
+              "memory_uid": "e682f0fd-e92f-566e-b1ec-1d5ebf091b60"
+            },
+            {
+              "frame_uid": "e63d1b9f-f13f-4e96-bc56-ba3c18db325e",
+              "memory_uid": "c1f2b53e-6184-552b-a321-9796bb121055"
+            }
+          ],
+          "reason": "These compared-side memories form one venue and conversation adjustment with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "After difficulty hearing across a noisy restaurant table, the user held the next gathering in the father's yard and moved between seats to converse.",
+          "uid": "04c90b0d-2033-515e-8129-4c0ba5ac1abd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e63d1b9f-f13f-4e96-bc56-ba3c18db325e",
+              "memory_uid": "56d5befe-d5f4-59df-82e4-a66ba868dfc2"
+            },
+            {
+              "frame_uid": "e63d1b9f-f13f-4e96-bc56-ba3c18db325e",
+              "memory_uid": "83d73ede-6f5a-550e-ba1c-c146b73a9917"
+            },
+            {
+              "frame_uid": "e63d1b9f-f13f-4e96-bc56-ba3c18db325e",
+              "memory_uid": "d88b1b21-c58f-51d5-a60b-54bb11473d96"
+            }
+          ],
+          "reason": "These compared-side memories jointly describe the yard's time-dependent conditions and the resulting scheduling adjustment, with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Midday sunlight shortened one barbecue, whereas a later start provided shade, wind, and comfortable outdoor time through sunset.",
+          "uid": "314e92ea-1db2-56cc-b791-5dc7ba835fdf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e63d1b9f-f13f-4e96-bc56-ba3c18db325e",
+              "memory_uid": "cf0947e8-c133-5259-bac2-e8ee6d74929e"
+            },
+            {
+              "frame_uid": "e63d1b9f-f13f-4e96-bc56-ba3c18db325e",
+              "memory_uid": "d42e48ca-39de-529f-bba2-332b779bd6c2"
+            }
+          ],
+          "reason": "These compared-side memories form one food-identification lesson and response with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "After unlabeled side dishes caused duplicate opening, the user labeled foods and their contributors at the next gathering.",
+          "uid": "b0a0c671-2e6b-5e3c-aa73-53743a70c9eb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e63d1b9f-f13f-4e96-bc56-ba3c18db325e",
+              "memory_uid": "3958627e-a0fa-5e32-9e87-7ee874fc6fe7"
+            }
+          ],
+          "reason": "This family member's leftover-handling preference is independently useful and has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user's younger brother prefers dividing barbecue leftovers into small take-home containers instead of discarding them.",
+          "uid": "6125210a-744d-5292-9d47-f4405c4f0645"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Barbecue memories cover stored seating, conversation-friendly venues, weather-aware timing, food labels, and a family preference for sharing leftovers.",
+        "differences": "Future-event planning cannot rely on prior experience alone: travel preparation requires current trip details, while barbecue planning depends on current attendees and weather.",
+        "reference_only": "Travel memories cover stored equipment, lighter footwear, charging safeguards, earlier packing, and a family preference for a spare cable."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "2766aee6-b8e8-4533-a2f4-e1dbdbd93acb"
+    },
+    "analysis_digest": "59788a74b103c1b735b8e61bb9d6ca5d2a89c9ef06cabba9c9c8ea055d7b9996",
+    "key": "f8fa29db4ea1e6118fdf4947f4f52a69bda0037ad0a3ef50af694f6c3203fa08",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 42.12251395799831,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "f8fa29db4ea1e6118fdf4947f4f52a69bda0037ad0a3ef50af694f6c3203fa08",
+  "created_at": "2026-08-13T18:53:00.560424Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/07",
+  "pair_key": "c8b002e05e9099a6ea6471b2c853ca6bcf44a7f08cb4c018fad03e7a93ee2b9a",
+  "provider_seconds": 42.12251395799831,
+  "right": "task-3/local/personal-memory/2026/06",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

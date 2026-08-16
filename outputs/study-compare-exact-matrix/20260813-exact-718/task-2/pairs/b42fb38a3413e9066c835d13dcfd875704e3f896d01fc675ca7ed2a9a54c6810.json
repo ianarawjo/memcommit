@@ -1,0 +1,467 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:19:01.304216+00:00",
+      "frames": [
+        {
+          "context_digest": "89608fbad1167ce0da41a7a6312a1b4e92ee55ff6a7d97bb480a0c75d588a7f2",
+          "context_name": "task-2/advisor1/ethics",
+          "context_uid": "5cdea05f-b6ec-586d-a87f-5347d1d51f96",
+          "memories": [
+            {
+              "content": "Link expected participant burden in each user study task to its corresponding mitigation strategy.",
+              "content_digest": "3595c8f1662100b6c6345bb709c7b2eba285f1979f8d3a5b925c4f32ed9aa4dc",
+              "position": 0,
+              "uid": "e93ea2ee-a8b0-5f3d-b6fd-c76f385eef50"
+            },
+            {
+              "content": "Specify the accommodations necessary for participants to access the prototype and research tasks.",
+              "content_digest": "9879ddf2306813f412b89c1f67f4b1a4779ff9acf55b0b34942bc6f1f555f695",
+              "position": 1,
+              "uid": "6ecf6a7b-f4e9-5d96-a52c-520197d4a2a6"
+            },
+            {
+              "content": "Specify how accessibility accommodations will be provided during user study sessions.",
+              "content_digest": "cce1831f8b2bb3015bc4e69e64a2b1cd4ea6f7249daf28da6686eec262038dc5",
+              "position": 2,
+              "uid": "bc41fce0-dbfc-5d23-9d97-9f81531c098c"
+            },
+            {
+              "content": "Describe how personal identifiers will be separated from research data immediately after collection.",
+              "content_digest": "bd80d3a47e10f1c8a9aec0362cb51995bfe9ecd22f86be916cb0a9009b5f23bf",
+              "position": 3,
+              "uid": "9768e0d9-ef46-52a4-af04-8f6ca3c176c5"
+            },
+            {
+              "content": "Specify the equipment to be loaned to participants who lack necessary devices.",
+              "content_digest": "69991f284e369e31da55a2a23afef032bd50f43dfe66d417a816b242d10c9926",
+              "position": 4,
+              "uid": "e874407e-4d36-55a6-949e-44e5944f1bb4"
+            },
+            {
+              "content": "Describe the procedure for returning equipment loaned to participants.",
+              "content_digest": "100ffbad1288c3263bc4a1044b2d42da35c36a3f73786e58e4391fbac98c84f2",
+              "position": 5,
+              "uid": "df16dca6-0b48-5753-aa18-7e5524187a1e"
+            },
+            {
+              "content": "HCI ethics reviewers verify that expected burdens and mitigation strategies correspond to each user study task.",
+              "content_digest": "1ce06fdbd6b8c4542063ab2413ba80a40c86336dcc43ebb4e1590a246e76d968",
+              "position": 6,
+              "uid": "7d0b3072-7bac-5bc6-9c79-acc808c38f1f"
+            },
+            {
+              "content": "Inform participants that the formative evaluation prototype is not a finished service.",
+              "content_digest": "b02788b149a575392cc58dcba87c21026eec4d733f4e1ef0b3149fcc0e318e74",
+              "position": 7,
+              "uid": "407a4c1c-c333-5764-8d89-252bed150f99"
+            },
+            {
+              "content": "Set an upper limit on cumulative task burden when requesting repeated evaluations from the same participant.",
+              "content_digest": "9d8e4304568abc398445be0aeddc4d1c9945bf48e0295240d48c071dd979646e",
+              "position": 8,
+              "uid": "28646fd3-54af-51f9-97da-ad9489ecda79"
+            },
+            {
+              "content": "The author of this proposal tends to emphasize expected benefits of the prototype over participant burden.",
+              "content_digest": "ffb40ab90087893e20227797ee997e40803e3b812f8a1634e282ab9920cf28d4",
+              "position": 9,
+              "uid": "218aafb6-9332-5693-a2e7-c7777dc64de7"
+            },
+            {
+              "content": "In organizations where leaders or institutional staff handle recruitment, recruitment authority and academic or professional evaluation authority may be combined in the same role.",
+              "content_digest": "d7baf962a2cae0da6c9057f909918788101229b54d57340fb1d5aad459597c05",
+              "position": 10,
+              "uid": "1ecb7268-f77a-5643-a456-357df6cd8f6e"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "254cd3fa-b5da-4ed4-b118-4ae26fc3b948"
+        },
+        {
+          "context_digest": "5f537c105ac26d5b710957c611c114c6834953adc14933beda6f44d0a404e410",
+          "context_name": "task-2/advisor2/methods",
+          "context_uid": "531f5f15-65f7-5315-8ccf-0cea6e53b76a",
+          "memories": [
+            {
+              "content": "Specify field and user data sources and analysis procedures corresponding to all HCI research questions.",
+              "content_digest": "0fecdff0f7b1204928239ca5665756cbf5dda44709758e5a093df8187927029e",
+              "position": 0,
+              "uid": "90be328f-1c05-5574-9657-1b0cc04a10b8"
+            },
+            {
+              "content": "In preregistered studies, clarify the criteria for judging plan changes.",
+              "content_digest": "5df2c60004dfd796d0af2a2e16e25f0804164517d00b4c393a65609a3dfb7534",
+              "position": 1,
+              "uid": "452ab231-3131-5697-a728-475289deafd0"
+            },
+            {
+              "content": "In preregistered studies, clarify the location for recording plan changes.",
+              "content_digest": "b05214535147a4c880d7500036b4640a0c479b0b05e2c1061ebfde88cb3c9866",
+              "position": 2,
+              "uid": "9c979f39-9660-5392-a1cd-0d1317af0e0f"
+            },
+            {
+              "content": "Use a justified minimum-to-maximum target range when confirmations can change, and tie the minimum and maximum to different workload and budget cases.",
+              "content_digest": "6c5e9bcd656dc10013c47e9c953409dbb20b06ee9ab758e1915d5f4d37d2604c",
+              "position": 3,
+              "uid": "8a49f598-804e-5a81-8e88-add7b665633a"
+            },
+            {
+              "content": "Specify the observation records, system logs, or interview tools used to collect each type of field and user data.",
+              "content_digest": "04c875971ca30ee5e3909e2c4e0632512d285401d5c9c4c1f42f4aaa592b34c1",
+              "position": 4,
+              "uid": "629cb159-6f6c-5476-870d-716ab573aef8"
+            },
+            {
+              "content": "Specify whether each type of field and user data will be collected before, during, or after deployment.",
+              "content_digest": "b105c5c373365987dff3fc4b709ffd88ba64c8358c179f81d780dc12d6b11bce",
+              "position": 5,
+              "uid": "b565c5c9-a0f7-5aff-a3b1-19696c4d3b39"
+            },
+            {
+              "content": "Readers cannot assess a target range unless both bounds have a stated consequence for schedule, workload, or cost.",
+              "content_digest": "308b499d832f2780b8a0c7d4acf0c9168ddc0e960b837a7f77e6e9574b235066",
+              "position": 6,
+              "uid": "251a4b3c-58fd-5d66-b5bc-74dcbeaa7a0d"
+            },
+            {
+              "content": "In field deployments, network and service instability exist as independent causes of task failure alongside design choices.",
+              "content_digest": "90f270d2544ce92c7ab245e0eb1eca5836f0a885ea652d40b6aad08c1572b039",
+              "position": 7,
+              "uid": "f150891e-7635-5c35-b986-d369bc630ef4"
+            },
+            {
+              "content": "If a safety signal occurs in the field system, existing institutional safety procedures take precedence over the research schedule and data collection plan.",
+              "content_digest": "96e1d7012cce82f901994e7b454d3f7e0a0b1dd18c5af6b9b14694e939356f25",
+              "position": 8,
+              "uid": "7860d9d6-5c2e-5969-b956-f71398218d02"
+            },
+            {
+              "content": "Reviewers judge answerability by tracing the path from each research question to its data sources and analysis procedures.",
+              "content_digest": "90ba5b91064c53361b4e6cf80cb4ec6a23aea3a02becfae03342046ffa2adf0d",
+              "position": 9,
+              "uid": "4fc24f87-e7b5-5d34-b850-f90cdc9b1ea2"
+            },
+            {
+              "content": "The user authoring this proposal tends to present implemented feature lists directly as design contributions.",
+              "content_digest": "d75cc3bb9bd2475fc87a88dc4a72de982101a5c9f03efaf823bcab6ca95dfe5d",
+              "position": 10,
+              "uid": "2db331a6-28d7-5c32-8372-7d3f8bc5b04a"
+            },
+            {
+              "content": "Define what can still be completed at the minimum target instead of treating every number inside the range as operationally identical.",
+              "content_digest": "b6cead2c6a19be091d8594da052baadd184eb3ef18580860e54b2aa337986354",
+              "position": 11,
+              "uid": "40f23f85-561e-55b3-825b-5000f9638f8a"
+            },
+            {
+              "content": "Use a bounded range to absorb expected confirmation changes without pretending that one early estimate is guaranteed.",
+              "content_digest": "1bc0df6bfbc6936b8a390368b5647a93ea8aab7316e9c7d233690b1206e6f17c",
+              "position": 12,
+              "uid": "9527ccb8-6662-58e3-8edd-daf7c0a713af"
+            },
+            {
+              "content": "Show how session count and facilitator time change at the minimum and maximum bounds.",
+              "content_digest": "2167c3e6d6bafad2818bb211b2c735f47ea040318a944c3402abea86b3faa316",
+              "position": 13,
+              "uid": "3ff9ec36-b70d-5dbd-9692-27fdf734fd20"
+            },
+            {
+              "content": "Define the additional workload or deliverable enabled at the maximum target so the upper bound is not an arbitrary cushion.",
+              "content_digest": "30d71498d24e6f7640b3f128824bf4c917f18c9317f164cd864f862f4c81e7fb",
+              "position": 14,
+              "uid": "9e1c3629-641f-5c09-915d-8a2ad1c8013a"
+            },
+            {
+              "content": "A bounded range preserves uncertainty honestly but makes the final workload and budget less certain than one fixed target.",
+              "content_digest": "c9015c18fd3140429386ae5ff3a0e45ffc86d009590772374f8354d4efb85234",
+              "position": 15,
+              "uid": "7ba672db-131e-5795-89c9-46f56344e7ed"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "7728a3b9-29ad-4d7b-8d32-095a67df3b0e"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address largely separate dimensions of HCI proposal quality. The reference frame concentrates on participant protection, accessibility, equipment, burden, and recruitment power, while the compared frame concentrates on research traceability, preregistration, bounded planning targets, field contingencies, and safety precedence.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "254cd3fa-b5da-4ed4-b118-4ae26fc3b948",
+              "memory_uid": "e93ea2ee-a8b0-5f3d-b6fd-c76f385eef50"
+            },
+            {
+              "frame_uid": "254cd3fa-b5da-4ed4-b118-4ae26fc3b948",
+              "memory_uid": "7d0b3072-7bac-5bc6-9c79-acc808c38f1f"
+            }
+          ],
+          "reason": "These reference-side memories state the underlying task-level burden-mitigation requirement and the corresponding ethics-review check; the compared frame contains no claim about participant-burden review.",
+          "status": "RESOLVED",
+          "summary": "Expected participant burdens and mitigations should be mapped to each study task and reviewable on that basis.",
+          "uid": "c7cde7e2-e469-540a-bbd2-30a4a91e2a8d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "254cd3fa-b5da-4ed4-b118-4ae26fc3b948",
+              "memory_uid": "6ecf6a7b-f4e9-5d96-a52c-520197d4a2a6"
+            },
+            {
+              "frame_uid": "254cd3fa-b5da-4ed4-b118-4ae26fc3b948",
+              "memory_uid": "bc41fce0-dbfc-5d23-9d97-9f81531c098c"
+            }
+          ],
+          "reason": "These reference-side memories split one accommodation-planning claim into identifying required access support and explaining its delivery; the compared frame does not address accommodations.",
+          "status": "RESOLVED",
+          "summary": "Necessary accessibility accommodations and their provision during study sessions must be specified.",
+          "uid": "b0f28d70-911e-5526-81c9-958eefa16a45"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "254cd3fa-b5da-4ed4-b118-4ae26fc3b948",
+              "memory_uid": "9768e0d9-ef46-52a4-af04-8f6ca3c176c5"
+            }
+          ],
+          "reason": "This is independently useful reference-only information about post-collection data handling, absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Personal identifiers should be separated from research data immediately after collection.",
+          "uid": "6a928503-8d20-5cf9-8503-f37c6db9c0cb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "254cd3fa-b5da-4ed4-b118-4ae26fc3b948",
+              "memory_uid": "e874407e-4d36-55a6-949e-44e5944f1bb4"
+            },
+            {
+              "frame_uid": "254cd3fa-b5da-4ed4-b118-4ae26fc3b948",
+              "memory_uid": "df16dca6-0b48-5753-aa18-7e5524187a1e"
+            }
+          ],
+          "reason": "These reference-side memories describe complementary parts of one equipment-loan process; the compared frame does not address participant device access or returns.",
+          "status": "RESOLVED",
+          "summary": "Participant equipment support should specify both the devices loaned and their return procedure.",
+          "uid": "f3740394-c6b6-59c2-8171-b8970bf63336"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "254cd3fa-b5da-4ed4-b118-4ae26fc3b948",
+              "memory_uid": "407a4c1c-c333-5764-8d89-252bed150f99"
+            }
+          ],
+          "reason": "This reference-only disclosure requirement is independently useful and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Participants should be told that the formative prototype is not a finished service.",
+          "uid": "ee259880-6d06-5a1c-851e-1db96339a20f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "254cd3fa-b5da-4ed4-b118-4ae26fc3b948",
+              "memory_uid": "28646fd3-54af-51f9-97da-ad9489ecda79"
+            }
+          ],
+          "reason": "This reference-only safeguard governs repeated participation, which the compared frame does not discuss.",
+          "status": "RESOLVED",
+          "summary": "Repeated evaluations involving the same participant should have an upper limit on cumulative task burden.",
+          "uid": "6846656f-f776-568a-94d2-b7a9e29a5936"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "254cd3fa-b5da-4ed4-b118-4ae26fc3b948",
+              "memory_uid": "218aafb6-9332-5693-a2e7-c7777dc64de7"
+            }
+          ],
+          "reason": "This reference-only observation identifies a specific benefit-versus-burden framing tendency; the compared-side author tendency concerns a different substantive problem.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to emphasize prototype benefits over participant burden.",
+          "uid": "fc490b70-1279-53a0-b4a7-a3b05a1fcd7e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "254cd3fa-b5da-4ed4-b118-4ae26fc3b948",
+              "memory_uid": "1ecb7268-f77a-5643-a456-357df6cd8f6e"
+            }
+          ],
+          "reason": "This reference-only observation concerns role-based power in recruitment and evaluation, with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Recruitment and evaluative authority may be combined when organizational leaders or institutional staff recruit participants.",
+          "uid": "0a2099f7-3846-5eaf-92b6-34300e9a4a8c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7728a3b9-29ad-4d7b-8d32-095a67df3b0e",
+              "memory_uid": "90be328f-1c05-5574-9657-1b0cc04a10b8"
+            },
+            {
+              "frame_uid": "7728a3b9-29ad-4d7b-8d32-095a67df3b0e",
+              "memory_uid": "629cb159-6f6c-5476-870d-716ab573aef8"
+            },
+            {
+              "frame_uid": "7728a3b9-29ad-4d7b-8d32-095a67df3b0e",
+              "memory_uid": "b565c5c9-a0f7-5aff-a3b1-19696c4d3b39"
+            },
+            {
+              "frame_uid": "7728a3b9-29ad-4d7b-8d32-095a67df3b0e",
+              "memory_uid": "4fc24f87-e7b5-5d34-b850-f90cdc9b1ea2"
+            }
+          ],
+          "reason": "These compared-side memories split one research-traceability claim across the required path, collection details, timing, analysis, and reviewer use; the reference frame does not address answerability tracing.",
+          "status": "RESOLVED",
+          "summary": "Each research question should be traceable to specified data sources, collection tools and timing, and analysis procedures so reviewers can assess answerability.",
+          "uid": "b2ead543-1d6f-501a-9703-57ecfe7ffa1b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7728a3b9-29ad-4d7b-8d32-095a67df3b0e",
+              "memory_uid": "452ab231-3131-5697-a728-475289deafd0"
+            },
+            {
+              "frame_uid": "7728a3b9-29ad-4d7b-8d32-095a67df3b0e",
+              "memory_uid": "9c979f39-9660-5392-a1cd-0d1317af0e0f"
+            }
+          ],
+          "reason": "These compared-side memories describe complementary governance details for changes to preregistered plans; the reference frame contains no preregistration claim.",
+          "status": "RESOLVED",
+          "summary": "Preregistered studies should specify both how plan changes are judged and where they are recorded.",
+          "uid": "46418a10-fe2f-5465-a9a0-9a5416bd8d62"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7728a3b9-29ad-4d7b-8d32-095a67df3b0e",
+              "memory_uid": "8a49f598-804e-5a81-8e88-add7b665633a"
+            },
+            {
+              "frame_uid": "7728a3b9-29ad-4d7b-8d32-095a67df3b0e",
+              "memory_uid": "251a4b3c-58fd-5d66-b5bc-74dcbeaa7a0d"
+            },
+            {
+              "frame_uid": "7728a3b9-29ad-4d7b-8d32-095a67df3b0e",
+              "memory_uid": "40f23f85-561e-55b3-825b-5000f9638f8a"
+            },
+            {
+              "frame_uid": "7728a3b9-29ad-4d7b-8d32-095a67df3b0e",
+              "memory_uid": "9527ccb8-6662-58e3-8edd-daf7c0a713af"
+            },
+            {
+              "frame_uid": "7728a3b9-29ad-4d7b-8d32-095a67df3b0e",
+              "memory_uid": "3ff9ec36-b70d-5dbd-9692-27fdf734fd20"
+            },
+            {
+              "frame_uid": "7728a3b9-29ad-4d7b-8d32-095a67df3b0e",
+              "memory_uid": "9e1c3629-641f-5c09-915d-8a2ad1c8013a"
+            },
+            {
+              "frame_uid": "7728a3b9-29ad-4d7b-8d32-095a67df3b0e",
+              "memory_uid": "7ba672db-131e-5795-89c9-46f56344e7ed"
+            }
+          ],
+          "reason": "These compared-side memories jointly elaborate one planning policy: justify a range, make both bounds operationally meaningful, and acknowledge the resulting uncertainty; the reference frame does not address planning targets.",
+          "status": "RESOLVED",
+          "summary": "A bounded target range should represent confirmation uncertainty while assigning distinct workload, budget, schedule, session, and deliverable consequences to its minimum and maximum.",
+          "uid": "9a264ad8-11cb-5b86-9365-10cb28fd7c82"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7728a3b9-29ad-4d7b-8d32-095a67df3b0e",
+              "memory_uid": "f150891e-7635-5c35-b986-d369bc630ef4"
+            }
+          ],
+          "reason": "This compared-only causal distinction for field deployments is independently useful and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Field task failures may arise independently from network or service instability as well as design choices.",
+          "uid": "c92c5b73-1027-51b6-8fa1-2663d310bf63"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7728a3b9-29ad-4d7b-8d32-095a67df3b0e",
+              "memory_uid": "7860d9d6-5c2e-5969-b956-f71398218d02"
+            }
+          ],
+          "reason": "This compared-only conditional priority rule has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Institutional safety procedures take precedence over research scheduling and data collection when a field-system safety signal occurs.",
+          "uid": "49a1ff1c-fda0-56c7-a467-58dba8e4da1b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7728a3b9-29ad-4d7b-8d32-095a67df3b0e",
+              "memory_uid": "2db331a6-28d7-5c32-8372-7d3f8bc5b04a"
+            }
+          ],
+          "reason": "This compared-only observation identifies a feature-to-contribution framing tendency distinct from the reference-side benefit-versus-burden tendency.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to present implemented feature lists directly as design contributions.",
+          "uid": "7b700bb5-63d0-5132-b0da-ba093b14e5fe"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only material covers question-to-data traceability, preregistration changes, operationally meaningful target ranges, deployment instability, institutional safety precedence, and feature-list framing.",
+        "differences": "",
+        "reference_only": "Reference-only material covers task-level burden mitigation, accommodations, data de-identification, equipment loans, prototype disclosure, repeated-study burden limits, benefit framing, and recruitment power conflicts."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "9fa17212-730c-4934-a153-b1b90d36338b"
+    },
+    "analysis_digest": "a808a5eda4216407d8e81c16122e70db3c268afebc3003c56c6a020e4cc9d244",
+    "key": "32dbe4bd7fd1fecc6c5ff7448f7a8a5ed14afb6743f0660c74730cf0c20103ee",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 43.91708416699839,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "32dbe4bd7fd1fecc6c5ff7448f7a8a5ed14afb6743f0660c74730cf0c20103ee",
+  "created_at": "2026-08-13T18:19:45.220903Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/ethics",
+  "pair_key": "b42fb38a3413e9066c835d13dcfd875704e3f896d01fc675ca7ed2a9a54c6810",
+  "provider_seconds": 43.91708416699839,
+  "right": "task-2/advisor2/methods",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

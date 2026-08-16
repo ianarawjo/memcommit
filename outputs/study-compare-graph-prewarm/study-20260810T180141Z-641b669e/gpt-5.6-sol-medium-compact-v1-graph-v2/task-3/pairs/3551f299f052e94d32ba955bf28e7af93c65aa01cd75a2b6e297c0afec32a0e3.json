@@ -1,0 +1,206 @@
+{
+  "coverage": {
+    "expected": 14,
+    "observed": 14
+  },
+  "created_at": "2026-08-11T00:43:49.214369Z",
+  "description_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+  "issues": [],
+  "kind": "STUDY_COMPARE_GRAPH_PAIR",
+  "left": {
+    "context_digest": "4c0c17be18904a704970710fe1bcecad8f3943221bf9594e64cce447cec06b28",
+    "context_uid": "d0f950bf-3dff-5662-9098-fc19c3edc2e4",
+    "memory_count": 8,
+    "name": "task-3/local/guardrails/minimization-and-redaction"
+  },
+  "method": "COMPACT_DECISION_VECTOR_V1",
+  "operation": "COMPARE",
+  "pair_key": "3551f299f052e94d32ba955bf28e7af93c65aa01cd75a2b6e297c0afec32a0e3",
+  "provider": {
+    "condition": "COMPACT_DECISION_VECTOR",
+    "contract_valid": true,
+    "elapsed_seconds": 28.118926458002534,
+    "error_type": null,
+    "failure_category": null,
+    "operation": "compare_contexts_compact_ab_v1",
+    "prompt_chars": 6221,
+    "provider_calls": 1,
+    "provider_run": {
+      "completion_tokens": null,
+      "identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "operation": "compare_contexts_compact_ab_v1",
+      "prompt_tokens": null,
+      "upstream_model": "gpt-5.6-sol",
+      "upstream_provider": "openai-codex"
+    },
+    "provider_seconds": 28.118340041008196,
+    "response_bytes": 553,
+    "response_chars": 553,
+    "schema_chars": 1378,
+    "validation_error": null,
+    "validation_seconds": 0.0005785419925814494
+  },
+  "relations": [
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "98c510fb-1fe7-5af1-a85e-dbaffc7f9d24",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "4004ad20-547d-5588-a4d5-2bceff66005f",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000001",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "9d626b1a-d3f8-57ee-919e-4a103f974c01",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000002",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "c679d589-afa1-59bd-9973-a20076c1fc8d",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000003",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "ee35327b-43ee-5dc2-9e6f-4632ce25636c",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000004",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "8a1824a2-c4a3-5648-9f9a-c449f82a71a5",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000005",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Summary omissions and undelivered revocations create different inference risks that must retain their respective contexts.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "2dfad7bd-3d8a-5dc0-babd-8fa4eeb1555a",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "0b514128-2b69-534e-bac9-e685aefc5683",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "044511b2-40d0-55cb-912c-49c4ec0874fc",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000006",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "9e254845-ed87-5fe5-97e8-b4454bb4382b",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000007",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "13b65314-02d9-5f22-bfc0-fd08b861f8f0",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000008",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "9bf4b3d7-ab89-5a22-8caa-de9debc744e9",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000009",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "38256d79-12a4-5f38-aca9-357056cab7ce",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000010",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "9db14c6f-298a-5b48-b7a6-d323cafbfd7f",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000011",
+      "status": "RESOLVED"
+    }
+  ],
+  "right": {
+    "context_digest": "ded698b747c6b36dd5078c0dd27f692338e2ad6c558633196088fa788b9b528b",
+    "context_uid": "9fd65004-661c-5349-8c35-1b96e8d5c9de",
+    "memory_count": 6,
+    "name": "task-3/local/guardrails/retention-and-revocation"
+  },
+  "schema_version": 1,
+  "semantic_content_in_participant_report": false,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

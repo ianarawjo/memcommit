@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:47:35.764163+00:00",
+      "frames": [
+        {
+          "context_digest": "0b8af0ea4e580cc332939d026149e543e9251c54de246e3eabb83c941e6c12f2",
+          "context_name": "task-3/local/personal-memory/2024/12",
+          "context_uid": "66c3e5de-61bb-5795-8e5a-4e28f64be857",
+          "memories": [
+            {
+              "content": "The user used an accessible entrance at a clinic in December 2024.",
+              "content_digest": "a940bc9fb7423a1bdb9dde547cd39eb8ad66d4fa3051649c62b042fc63935263",
+              "position": 0,
+              "uid": "a6923620-267d-5129-b8c4-cd9b1e1a1e7b"
+            },
+            {
+              "content": "On a day snow had accumulated and blocked the main-entrance ramp, the user went to a side entrance.",
+              "content_digest": "460c05d8e8b4b7443ff42cbeead66e07201846394bcbe5948f63e585a197006f",
+              "position": 1,
+              "uid": "fb0e1d1f-0ef5-5214-b6d7-f6ca5c68f582"
+            },
+            {
+              "content": "The user learned on site that the elevator was under inspection and delayed the appointment.",
+              "content_digest": "b5efa024c597b57651178431d22173d4ca1242c3a4c9607f8bd5a7ff681af6f4",
+              "position": 2,
+              "uid": "4cb45120-4376-5c7b-ae92-faa9e4b9330c"
+            },
+            {
+              "content": "The day before the next visit, the user called to check whether the elevator would be operating.",
+              "content_digest": "93c66066de480a4d2f30b7b7c4d955acfceb227ac898766b6375829804b580eb",
+              "position": 3,
+              "uid": "479f4434-879c-5335-b0c9-c0bfa19ecdcd"
+            },
+            {
+              "content": "The user waited for their turn in front of a ticket machine near the waiting chairs.",
+              "content_digest": "fada8c09d46af2e1bcbd2b1e97d9cb786ceca83fc13d1240627639dd6cb96e65",
+              "position": 4,
+              "uid": "0f2c78a7-8f92-573d-af8a-a360ceb77b24"
+            },
+            {
+              "content": "On a day the user waited in a corridor without chairs, they leaned against the wall and changed position several times.",
+              "content_digest": "0037afaeb85d94f985b1628b7b8f8194fb00d7d7e72e1746c6bae2c2ba66fe6f",
+              "position": 5,
+              "uid": "7b9197ac-4263-5169-8d3b-d34f5d893d36"
+            },
+            {
+              "content": "On a day their older sister accompanied them, the user found a place to sit immediately after reception.",
+              "content_digest": "1ae59de552a922fd3b4d39e7e5dc1ec65ff08ee68e3448f2152f27dfec710a5a",
+              "position": 6,
+              "uid": "7b0b7571-f29c-56e5-a27a-82d69a4a6982"
+            },
+            {
+              "content": "Reception staff expect that a first-time visitor may ask where the accessible entrance is.",
+              "content_digest": "7dc3300dc630b737c0f7b437eba30179aa6aaa03efd61c968604ee505a43aa73",
+              "position": 7,
+              "uid": "e9515d6b-10d9-579f-abf7-5030db64218a"
+            },
+            {
+              "content": "The local agent cannot infer the user's condition from a record of using an accessible route alone.",
+              "content_digest": "2d8a50f62f32c43ca62e1e23b75c34361ece43fd8367964174fdc73d66795df4",
+              "position": 8,
+              "uid": "8e57141d-c603-56cd-ab9e-c14b4e944b45"
+            },
+            {
+              "content": "Snow accumulation and snow-removal work can temporarily block an entrance route used under ordinary conditions.",
+              "content_digest": "4fb152c120860688789bdd4b825de45799e9fa00c0c18c334492dd4b274adde9",
+              "position": 9,
+              "uid": "a6076438-307c-56fe-9d2c-848181846ce5"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "4cbad97b-6671-4ad8-ae48-199091eb487a"
+        },
+        {
+          "context_digest": "b727ef7cf1cb7ca0f00ea3598d36577397e092dcb632f55c3eafb942850922d7",
+          "context_name": "task-3/local/personal-memory/2025/04",
+          "context_uid": "720d2021-1ec5-52ab-ace4-a93e02b05ad9",
+          "memories": [
+            {
+              "content": "The user keeps the shared laundry-room access card in an entrance drawer.",
+              "content_digest": "3c98e367c99e0867f1217c891dc5d982c115fd9d1b4bc3957cca6dbb6338203b",
+              "position": 0,
+              "uid": "a1c67646-6a75-504a-9508-d69e1d04b3e5"
+            },
+            {
+              "content": "The user went downstairs 25 minutes after the laundry finished and received a note from another household.",
+              "content_digest": "44968f6f10c0ae2d1dd775eb066564dada6346c6f59bdacf90d687c57e6c1e0f",
+              "position": 1,
+              "uid": "9479e799-95d7-50d2-af62-d1e0914a389b"
+            },
+            {
+              "content": "For the next load, the user set a reminder five minutes before the end and removed the laundry immediately.",
+              "content_digest": "bc77b81f6126e44bbffeb4ae2dfbb641d31a9742b7a196a106ac385321b48958",
+              "position": 2,
+              "uid": "528cb5ea-8c36-5206-beaa-19432250ec4d"
+            },
+            {
+              "content": "The user washed light-colored clothes with new jeans, and color transferred onto white socks.",
+              "content_digest": "ed0f36cf5ebe8f9542ad39ba45fc109634d72f1cb2b266c15dfe6655e3df3add",
+              "position": 3,
+              "uid": "85fb1639-2176-5329-b490-3325ff030db4"
+            },
+            {
+              "content": "The user later washed the new jeans separately, and the color of the other clothes did not change.",
+              "content_digest": "6e47fe1a02ac39064ea9db2d06d8a1f01f80302825bbe412df745401612e4a84",
+              "position": 4,
+              "uid": "431d170a-863f-596d-97c0-0c9634524ee5"
+            },
+            {
+              "content": "On a day the user did not check the dryer filter, the clothes needed another drying cycle.",
+              "content_digest": "8127e9f3ea34724673517f1e260a73acfb70e287a7e7de84e196ad1cb815f5a7",
+              "position": 5,
+              "uid": "4df33adc-cfba-50f2-b141-e2ebed38b81c"
+            },
+            {
+              "content": "On the next use, after emptying the filter, the user finished drying in one cycle.",
+              "content_digest": "932cfb8fc93277783d8990dad62cfd3e1c9a86e39ad1bd019ce00dac632c53d5",
+              "position": 6,
+              "uid": "ba7daae9-938d-55a1-af20-21cd10d395d8"
+            },
+            {
+              "content": "The building manager judges that not leaving finished laundry for a long time is fair to other households.",
+              "content_digest": "5eabe2d3dff252bb250abcde8fe2d528362afb0e73e7628e839715c3e8a3cd56",
+              "position": 7,
+              "uid": "abbf8742-38e3-5810-b222-fe91e3340962"
+            },
+            {
+              "content": "When creating a shared laundry-room reminder, base it on the end time of the machine the user started.",
+              "content_digest": "e00bc6fe09fea6fde6a27817bd6824a141c1ac4a656b9659067b7e1af9881b1f",
+              "position": 8,
+              "uid": "06273d22-0b42-5c55-9d70-eda14084219a"
+            },
+            {
+              "content": "Even if the local agent knows where the card is kept, it cannot know which machines in the shared laundry room are currently available.",
+              "content_digest": "d03f5583c9e4c686307af90ff00ff54e5ac0990e34296b3d241e4f299d15f4b7",
+              "position": 9,
+              "uid": "03ac930e-d745-5c29-8c24-5ced669817f9"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "ff0cea6d-d4db-4750-9b28-0b634854d8fb"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate domains: clinic accessibility and waiting experiences on the reference side, and shared-laundry access, timing, sorting, drying, and etiquette on the compared side. No claims address the same operational decision, and no conflict or scope-dependent difference is present.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4cbad97b-6671-4ad8-ae48-199091eb487a",
+              "memory_uid": "a6923620-267d-5129-b8c4-cd9b1e1a1e7b"
+            }
+          ],
+          "reason": "This is a one-sided historical clinic-access fact with no corresponding laundry-room claim.",
+          "status": "RESOLVED",
+          "summary": "The user used a clinic’s accessible entrance in December 2024.",
+          "uid": "1b56b5da-38ca-5c89-b486-d7b9114b3541"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4cbad97b-6671-4ad8-ae48-199091eb487a",
+              "memory_uid": "fb0e1d1f-0ef5-5214-b6d7-f6ca5c68f582"
+            }
+          ],
+          "reason": "This is a one-sided account of adapting to a temporary clinic-route obstruction.",
+          "status": "RESOLVED",
+          "summary": "Snow blocking the clinic’s main ramp led the user to use a side entrance.",
+          "uid": "d21180ca-bd0b-5334-97b4-16468f50a484"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4cbad97b-6671-4ad8-ae48-199091eb487a",
+              "memory_uid": "4cb45120-4376-5c7b-ae92-faa9e4b9330c"
+            }
+          ],
+          "reason": "This is a one-sided clinic disruption and delay event.",
+          "status": "RESOLVED",
+          "summary": "An elevator inspection discovered on site delayed the user’s clinic appointment.",
+          "uid": "2ad46cb9-2f5e-5879-84ca-3fdf375a14e2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4cbad97b-6671-4ad8-ae48-199091eb487a",
+              "memory_uid": "479f4434-879c-5335-b0c9-c0bfa19ecdcd"
+            }
+          ],
+          "reason": "This is a one-sided precaution concerning clinic accessibility.",
+          "status": "RESOLVED",
+          "summary": "Before a later clinic visit, the user called to verify elevator operation.",
+          "uid": "f54c397b-f7b0-58b2-b90d-6905ada64ee7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4cbad97b-6671-4ad8-ae48-199091eb487a",
+              "memory_uid": "0f2c78a7-8f92-573d-af8a-a360ceb77b24"
+            }
+          ],
+          "reason": "This is a one-sided description of a clinic waiting arrangement.",
+          "status": "RESOLVED",
+          "summary": "The user waited near clinic chairs and a ticket machine.",
+          "uid": "04af3876-7b1a-534b-a709-833156eea7f3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4cbad97b-6671-4ad8-ae48-199091eb487a",
+              "memory_uid": "7b9197ac-4263-5169-8d3b-d34f5d893d36"
+            }
+          ],
+          "reason": "This is a one-sided account of coping with a clinic waiting area lacking seating.",
+          "status": "RESOLVED",
+          "summary": "Without corridor chairs, the user leaned against a wall and repeatedly changed position.",
+          "uid": "8aa7b9e2-de12-555c-b8cb-c7373e3e7da1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4cbad97b-6671-4ad8-ae48-199091eb487a",
+              "memory_uid": "7b0b7571-f29c-56e5-a27a-82d69a4a6982"
+            }
+          ],
+          "reason": "This is a one-sided clinic visit and seating experience.",
+          "status": "RESOLVED",
+          "summary": "When accompanied by an older sister, the user found seating immediately after reception.",
+          "uid": "27959348-80d6-5868-905b-ba98d6f4df8a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4cbad97b-6671-4ad8-ae48-199091eb487a",
+              "memory_uid": "e9515d6b-10d9-579f-abf7-5030db64218a"
+            }
+          ],
+          "reason": "This is a one-sided expectation about clinic wayfinding support.",
+          "status": "RESOLVED",
+          "summary": "Clinic reception staff anticipate first-time visitors asking for the accessible entrance.",
+          "uid": "5a4915ab-54cd-58ef-a2e1-827288862e9b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4cbad97b-6671-4ad8-ae48-199091eb487a",
+              "memory_uid": "8e57141d-c603-56cd-ab9e-c14b4e944b45"
+            }
+          ],
+          "reason": "This is a one-sided limitation on interpreting clinic-access records.",
+          "status": "RESOLVED",
+          "summary": "Using an accessible route alone does not justify inferring the user’s condition.",
+          "uid": "b695c6a3-91d4-5a87-8ac3-31a0cff926c4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4cbad97b-6671-4ad8-ae48-199091eb487a",
+              "memory_uid": "a6076438-307c-56fe-9d2c-848181846ce5"
+            }
+          ],
+          "reason": "This is a one-sided general claim about temporary entrance-route accessibility.",
+          "status": "RESOLVED",
+          "summary": "Snow and snow removal can temporarily obstruct an ordinarily used entrance route.",
+          "uid": "00539f26-79ad-5ee9-ab99-dd77db986c82"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ff0cea6d-d4db-4750-9b28-0b634854d8fb",
+              "memory_uid": "a1c67646-6a75-504a-9508-d69e1d04b3e5"
+            }
+          ],
+          "reason": "This is a one-sided household fact about laundry-room access.",
+          "status": "RESOLVED",
+          "summary": "The shared laundry-room access card is kept in an entrance drawer.",
+          "uid": "960df507-0af9-5eef-b84f-c2f67fd8f1ca"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ff0cea6d-d4db-4750-9b28-0b634854d8fb",
+              "memory_uid": "9479e799-95d7-50d2-af62-d1e0914a389b"
+            }
+          ],
+          "reason": "This is a one-sided shared-laundry timing incident.",
+          "status": "RESOLVED",
+          "summary": "The user collected finished laundry after 25 minutes and received another household’s note.",
+          "uid": "dbce56bc-659b-5f3d-ab49-83713952cd9c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ff0cea6d-d4db-4750-9b28-0b634854d8fb",
+              "memory_uid": "528cb5ea-8c36-5206-beaa-19432250ec4d"
+            }
+          ],
+          "reason": "This is a one-sided change in laundry-collection practice.",
+          "status": "RESOLVED",
+          "summary": "For a later load, the user set an advance reminder and removed the laundry immediately.",
+          "uid": "a923f7f0-6134-544d-a104-d47c404d493a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ff0cea6d-d4db-4750-9b28-0b634854d8fb",
+              "memory_uid": "85fb1639-2176-5329-b490-3325ff030db4"
+            }
+          ],
+          "reason": "This is a one-sided laundry-sorting outcome.",
+          "status": "RESOLVED",
+          "summary": "Washing new jeans with light clothes transferred color onto white socks.",
+          "uid": "23a657cc-7124-5140-9a6b-76ed88870cfe"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ff0cea6d-d4db-4750-9b28-0b634854d8fb",
+              "memory_uid": "431d170a-863f-596d-97c0-0c9634524ee5"
+            }
+          ],
+          "reason": "This is a one-sided later laundry-sorting outcome.",
+          "status": "RESOLVED",
+          "summary": "Washing the new jeans separately prevented color changes in other clothes.",
+          "uid": "0102b739-a80d-5cdd-8066-a3d7154e4667"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ff0cea6d-d4db-4750-9b28-0b634854d8fb",
+              "memory_uid": "4df33adc-cfba-50f2-b141-e2ebed38b81c"
+            }
+          ],
+          "reason": "This is a one-sided dryer-use outcome.",
+          "status": "RESOLVED",
+          "summary": "Failing to check the dryer filter resulted in an additional drying cycle.",
+          "uid": "187ff628-40f8-56bd-ab6a-f87bd73747a3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ff0cea6d-d4db-4750-9b28-0b634854d8fb",
+              "memory_uid": "ba7daae9-938d-55a1-af20-21cd10d395d8"
+            }
+          ],
+          "reason": "This is a one-sided later dryer-use outcome.",
+          "status": "RESOLVED",
+          "summary": "After emptying the dryer filter, the user completed drying in one cycle.",
+          "uid": "6f268445-6995-5b52-af45-e237ccb8491f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ff0cea6d-d4db-4750-9b28-0b634854d8fb",
+              "memory_uid": "abbf8742-38e3-5810-b222-fe91e3340962"
+            }
+          ],
+          "reason": "This is a one-sided shared-laundry etiquette judgment.",
+          "status": "RESOLVED",
+          "summary": "The building manager considers prompt removal of finished laundry fair to other households.",
+          "uid": "a1d85395-48bc-5cb2-820d-b8c0fe6492bf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ff0cea6d-d4db-4750-9b28-0b634854d8fb",
+              "memory_uid": "06273d22-0b42-5c55-9d70-eda14084219a"
+            }
+          ],
+          "reason": "This is a one-sided operational rule for creating laundry reminders.",
+          "status": "RESOLVED",
+          "summary": "A shared laundry-room reminder should use the end time of the machine the user started.",
+          "uid": "bdc33eb7-dec1-5837-a319-4cecfd2a8bb5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ff0cea6d-d4db-4750-9b28-0b634854d8fb",
+              "memory_uid": "03ac930e-d745-5c29-8c24-5ced669817f9"
+            }
+          ],
+          "reason": "This is a one-sided limitation on inferring live laundry-room status.",
+          "status": "RESOLVED",
+          "summary": "Knowing the access card’s location does not reveal current laundry-machine availability.",
+          "uid": "35cd2ccf-6708-519b-8f7e-2b7f35b49d18"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame describes laundry-room card storage, timely collection and reminders, color-transfer prevention, dryer-filter effects, fairness to neighbors, and limits on knowing machine availability.",
+        "differences": "",
+        "reference_only": "The reference describes clinic entrance accessibility, temporary route and elevator disruptions, advance checking, varied waiting conditions, staff expectations, and limits on inferring a user’s condition."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "edb1b961-e5c6-4b32-8f62-4e3baf04c3ca"
+    },
+    "analysis_digest": "a23592f0edcb424fd4602f630fb046944e1840c35c3d5b4e2d9b6ccb7d482ebd",
+    "key": "6c2cf7c4726ca87f7d4f267fc2b48c00c4813672a8f593ccf8181826a32734c1",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 39.84661291700104,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "6c2cf7c4726ca87f7d4f267fc2b48c00c4813672a8f593ccf8181826a32734c1",
+  "created_at": "2026-08-13T18:48:15.610527Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/12",
+  "pair_key": "9053d5a27b86354456cf79651f4ebd00457da8881a4bd5a2f107b18b4f837a97",
+  "provider_seconds": 39.84661291700104,
+  "right": "task-3/local/personal-memory/2025/04",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

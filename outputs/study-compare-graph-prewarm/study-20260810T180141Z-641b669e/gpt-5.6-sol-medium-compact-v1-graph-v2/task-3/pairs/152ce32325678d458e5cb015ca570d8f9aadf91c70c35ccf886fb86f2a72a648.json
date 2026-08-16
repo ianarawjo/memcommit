@@ -1,0 +1,1803 @@
+{
+  "coverage": {
+    "expected": 195,
+    "observed": 195
+  },
+  "created_at": "2026-08-11T00:36:42.711045Z",
+  "description_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+  "issues": [],
+  "kind": "STUDY_COMPARE_GRAPH_PAIR",
+  "left": {
+    "context_digest": "41fc415e370c7073670e7ebe29df45366c9bd9b3a3505b3ed4e872e6fbfff7e5",
+    "context_uid": "10c1e5b1-4d4b-566c-bf14-c385523c344e",
+    "memory_count": 75,
+    "name": "task-3/local/guardrails"
+  },
+  "method": "COMPACT_FALLBACK_EXHAUSTIVE_V1",
+  "operation": "COMPARE",
+  "pair_key": "152ce32325678d458e5cb015ca570d8f9aadf91c70c35ccf886fb86f2a72a648",
+  "provider": {
+    "compact_provider_seconds": 56.433323332996224,
+    "compact_validation_error": "Invalid compact compared_group_ids item.",
+    "condition": "COMPACT_WITH_EXHAUSTIVE_FALLBACK",
+    "fallback_provider_seconds": 221.10949362500105,
+    "provider_calls": 2,
+    "provider_seconds": 277.5428169579973
+  },
+  "relations": [
+    {
+      "comment": "Only the reference frame supplies this external-sharing minimization policy.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "c971c24d-2543-5874-91e3-b97aec8bc77a",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "75944d44-d6e7-52fc-a68a-676b0df123ed",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "98c510fb-1fe7-5af1-a85e-dbaffc7f9d24",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000001",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame defines this approval-scope policy.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "3d3749df-7036-548b-b939-7b6b32c79af6",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "e0133c8a-5382-50d2-9d9a-74e3ff700f69",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "58850532-c154-5e64-87cb-91c81d3e5ca5",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "05953013-6bb7-5f2c-8024-23ef357161fa",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "9b905e4c-8522-5138-bc4e-b4deb308d28d",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "ce35336a-9b15-5448-b664-d6e8a5306d32",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "14d28101-761a-5d2a-8f80-d89f526b8598",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000002",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame supplies this prerequisite.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "78bba4e2-c5d0-5df3-8f81-6641515e4875",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000003",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame describes this recipient interpretation risk.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "b5618dee-42df-583f-a839-e8e611ccdabd",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000004",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame supplies these linked third-party safeguards.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "67035ffd-3709-592a-9d42-601fffb9ff79",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "47174c75-1951-5f0f-be2f-e79315d88b91",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "5cd7bde0-0d4f-5946-a551-65836f41cb3e",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "eafc4a2b-8e2a-5e58-9813-f1346bbdc2ad",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000005",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame establishes this inference restriction.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "73411861-8d89-5bf4-9987-f7757e403089",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000006",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame addresses combinational re-identification.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "4af0efc1-3442-580c-b2da-7725249adbbd",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "9e254845-ed87-5fe5-97e8-b4454bb4382b",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000007",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame defines this freshness control.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "aff10a17-19e9-5e2e-b082-4971c8ac5b2f",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "77a7fd0e-d11c-596f-ac36-ffe2a183b6ea",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000008",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame supplies this uncertainty-labeling rule.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "3f8f3387-8c2a-5059-8b4f-4b1478f5076a",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "587c2393-0105-5905-813e-c188b5a976f4",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000009",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame governs unresolved source conflicts.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "aa806a1b-9eaa-5964-98a6-ed787d57887b",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000010",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame requires source-level sharing provenance.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "b59b39e5-f099-5111-9ce9-8eaef8472cc8",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "c0ce508e-2777-54e3-806d-632adbdb9073",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000011",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame defines recipient-identification controls.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "96442184-816a-58f1-a72d-40eb907688fe",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "f3fb4551-f2b4-5a94-96ee-866bb001c620",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "2c0ded0a-75d2-53d3-8eb7-4b8ac5823ba3",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "fe9c1c24-9eb4-5e5d-a233-14ce425164ab",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000012",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame requires this disclosure.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "33169da3-3a2a-5e33-8fe2-66dbe9c0b641",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000013",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame requires item-level preview.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "f449bbaa-c795-51b3-8f19-f6f26d819445",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000014",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame defines this authority boundary.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "d7d7f1a5-f831-5d03-9137-ae485cebb67a",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000015",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame describes this retention interpretation.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "b0db9a0f-f96d-5766-b1fb-483e89d0b4a3",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000016",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame describes this processor-approval gap.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "319e6774-f20f-571e-b92f-e6c71f345320",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "c2f154f8-6340-57d6-bd12-efa5411592b1",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "9b320cc6-d3d3-5135-82dc-93b48c4bfb71",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000017",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame governs draft retention.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "13b65314-02d9-5f22-bfc0-fd08b861f8f0",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "9bf4b3d7-ab89-5a22-8caa-de9debc744e9",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000018",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame supplies this exclusion rule.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "4004ad20-547d-5588-a4d5-2bceff66005f",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000019",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame governs reuse after revocation.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "38256d79-12a4-5f38-aca9-357056cab7ce",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000020",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame distinguishes draft deletion from source deletion.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "9db14c6f-298a-5b48-b7a6-d323cafbfd7f",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000021",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame describes this revocation-communication risk.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "044511b2-40d0-55cb-912c-49c4ec0874fc",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000022",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame defines this authority-verification boundary.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "7bd3b376-95ae-58bb-b8c5-adb3431e31ed",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "51df9ae8-3eeb-5466-99e2-fa43d6dd34f7",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "c2036232-1c1a-5a48-b465-8f1b503dffd8",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "8530cb36-8f66-5cb3-bcf6-fc4763daa2ef",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000023",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame describes this intermediary interpretation.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "bd834d39-cdba-5742-b76c-5ede06d26852",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000024",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame supplies this redaction rule.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "9d626b1a-d3f8-57ee-919e-4a103f974c01",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000025",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame defines this fidelity check.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "c679d589-afa1-59bd-9973-a20076c1fc8d",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000026",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame establishes this anti-fabrication rule.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "ee35327b-43ee-5dc2-9e6f-4632ce25636c",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000027",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame requires this redaction disclosure.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "8a1824a2-c4a3-5648-9f9a-c449f82a71a5",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000028",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame addresses the semantics and interpretation of omission.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "2dfad7bd-3d8a-5dc0-babd-8fa4eeb1555a",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "0b514128-2b69-534e-bac9-e685aefc5683",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000029",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame defines this channel restriction.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "6e6f2c1f-18e8-56ab-b7e9-af5f1ef15b6e",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000030",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame supplies this compatibility check.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "c11769a3-cb4c-589d-91fc-48a7fc5f4b28",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000031",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame governs identifying metadata.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "d75604e1-1e25-5c2b-8316-3db4224965bf",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000032",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame supplies this protection requirement.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "c6dd9cd4-bbc5-55a6-922f-2b78f2f37c20",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000033",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame governs cross-channel retry behavior.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "b40d9699-8a5f-552e-97db-1a9ae59a9c34",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000034",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame states this channel-control limitation.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "e0c0f0bb-e602-5597-8b7b-27e8b06ce7ff",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000035",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame defines this observability limit.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "69e95464-217e-5620-8ffc-c5d0f20afc46",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000036",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame addresses this content-role ambiguity.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "f9492eaf-c1e8-5adc-9987-e58fcf527ed6",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000037",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame supplies this downstream-forwarding control.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "e8c87c6c-1c32-534b-87be-32b5bb93584f",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000038",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame requires this downstream restriction.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "8cd6d58b-9325-584d-8c5c-396e1af03423",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000039",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame defines this assurance limit.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "00564a98-72a6-57ce-9fc6-20a918e9e593",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000040",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame addresses training authorization.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "aeb15a51-9870-5e89-bcef-d5ad49792a02",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000041",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame distinguishes these permissions.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "62a622be-5e30-50f6-b1c0-f3b6454d0a64",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000042",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame describes this copy-persistence risk.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "975278ec-2ea5-5dec-b9bc-8054d880d0e3",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000043",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame defines these approval-audit fields.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "a0b32950-42b4-58a6-b1af-dd4638086d3d",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "620a1dee-b131-586f-a838-64d853c44a92",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "26256211-0509-5c26-a54c-e83b4bde5a4e",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000044",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame requires this failure notification.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "0d377136-da0b-570b-8deb-c662bee5bcbb",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000045",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame defines this audit boundary.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "d26befa6-62a2-5923-a31b-71e73a31e164",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000046",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame describes this correction-propagation limit.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "d5d34316-4878-53d9-9ba8-d4d4d3d13752",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000047",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame describes this audit-dispute risk.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "fe68d351-4ae7-5c4c-a4e2-d6c4c7aa0220",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000048",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame supplies this personal deadline.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "50911f7e-75a1-5099-99f1-e471bb8e6cb6",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000049",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this preparation pattern.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "d5bd9f79-7295-5014-9668-83b7cffc78e2",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "5f92f6a3-1739-580c-bd63-1a936098ccd0",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000050",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this form-entry pattern.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "929107ac-c62d-5920-9f71-12d4c9a102e9",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "df8b90c2-4310-5e89-b979-508309bf6b04",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000051",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame supplies this scheduling lesson.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "306b9df1-d713-5413-b448-e2b42376d827",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "870b57b5-4cdb-54fc-b17f-8ffb86dad802",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "111972b9-e05f-5e1b-b121-ef9e51572d1d",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000052",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame supplies this counter expectation.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "a0fe456c-0794-5bce-8ef9-9558e9833471",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000053",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame states this document-specific knowledge limit.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "c9872898-ec4f-576e-b154-ff6fda581a1a",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000054",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this review event.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "3ff046b1-5810-51ca-8d43-c99ef6a90b41",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000055",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this preparation-format pattern.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "e2a304e5-6100-5a5f-b508-0a7f28f6bda7",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "51d03bff-3e33-5f68-9df6-ed7efa8e3de9",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000056",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this contact-timing experience.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "0987293e-3e21-5cbc-bb46-59245a5fa041",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "dc3de6ad-56ea-528a-a9b7-349e79af2326",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000057",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame supplies this contact-verification history and rule.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "6546d41b-3d5b-5802-a9e7-ac028405e3f2",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "ea6eb9d2-9b01-5330-a4d5-886d4bc6cd85",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "e6f89ded-5687-5c25-8df8-88f288d450c6",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000058",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this preference.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "12fe7e64-192e-5359-8f96-d2875f7e5399",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000059",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this reminder preference.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "f9197c33-ff93-5215-a3a5-e4087bea2a0d",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000060",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this item location.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "5d989bab-c471-5de9-bb73-29cabc4753dd",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000061",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this shopping pattern.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "d1725ae4-3fd3-5250-92b3-73d84d9152a7",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "904ff225-26df-5424-8a82-23d733649106",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000062",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this cooking adjustment.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "67a003c7-648a-59dc-8e82-03f9e452ffce",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000063",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this collaborative-cooking pattern and preference.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "64bf4401-e972-5d15-a526-21ca901a6a9f",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "57e09ea5-54ff-5fce-aada-68daffbacc8b",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "0a5d054f-94bd-5955-bdb7-9b5427e2260b",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000064",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame states this food-preference inference limit.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "1f94b78b-1635-551c-b90c-bea2a67ca595",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000065",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame supplies this storage condition.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "f64ef6c4-7665-5574-9d58-fc124b0bfe3f",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000066",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this item location.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "a1c67646-6a75-504a-9508-d69e1d04b3e5",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000067",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame supplies this shared-laundry timing pattern.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "9479e799-95d7-50d2-af62-d1e0914a389b",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "528cb5ea-8c36-5206-beaa-19432250ec4d",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "abbf8742-38e3-5810-b222-fe91e3340962",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "06273d22-0b42-5c55-9d70-eda14084219a",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000068",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this laundry-sorting pattern.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "85fb1639-2176-5329-b490-3325ff030db4",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "431d170a-863f-596d-97c0-0c9634524ee5",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000069",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this dryer-maintenance pattern.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "4df33adc-cfba-50f2-b141-e2ebed38b81c",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "ba7daae9-938d-55a1-af20-21cd10d395d8",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000070",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame states this availability limit.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "03ac930e-d745-5c29-8c24-5ced669817f9",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000071",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this plant location.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "cb09b8ab-c7c4-51bb-a227-039c7cdfae5d",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000072",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this watering pattern.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "95978183-0070-5b12-b117-be39bb343a5e",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "8c610ce5-1eb7-52e5-ad81-e8062d23cd19",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000073",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this plant-placement adjustment.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "3f886c0c-071b-5f2d-adad-da01345d702f",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "afe855b8-f5ad-559c-a63f-6f655ba371a2",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000074",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this identification need.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "384c4f5f-b15c-5742-ac79-20106d0dd30b",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "48dc89af-ed9d-51a5-a4b1-b809fd818143",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000075",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this care perspective.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "a2426820-65d6-5c78-ac50-0f32b366ae47",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000076",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame supplies this reminder rule.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "efd51196-ed48-5699-a0f4-c5b8e149d11c",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000077",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame supplies this changing plant condition.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "4c93eeff-566e-5a1a-afb9-035c97fb9c73",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000078",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this item location.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "853a158c-edf9-578a-8e75-3d5daff6e4db",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000079",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this indoor-heat pattern.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "f7d5ebdc-0cae-5e07-a060-e129b5a05570",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "99e5c522-535b-5015-8617-06f645147f8b",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000080",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this charging pattern.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "7b3bf50c-63aa-5a1e-9a53-7befea25a468",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "ca8de091-afb2-537f-a83a-09769056879d",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000081",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this heat-timing pattern and family preference.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "4a0604fb-10b4-5132-a6de-ab6a229ff2be",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "1f90941e-776f-5cba-9783-c392983dd72c",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "63391d26-7417-5ea6-ac0a-460af7489963",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000082",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame states this temperature-specific knowledge limit.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "31502797-1379-5ec4-bd1b-a2e1515fa56e",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000083",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame supplies this environmental condition.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "68f85c30-62c4-579d-97cd-9f401c686e63",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000084",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this item location.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "447bfd8d-1490-5404-a2b4-13b4587e6aba",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000085",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this packing adjustment.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "3ab0326a-a006-51ea-9348-7ada19a23bce",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "ef467ab6-8ba6-5f81-8f12-578ec1824e09",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000086",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this packing-check pattern.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "aa4defc3-2b65-5688-accb-aaa49f2430b6",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "2d937b4b-d73d-5382-abbe-3cd4e596b3a5",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000087",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this timing adjustment.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "0be8b327-0a06-5241-b98d-daa6b0a4aa50",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "90059fcc-436d-5453-98f0-a9b23a08faf1",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000088",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this preference.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "12ef03f9-8cda-5ed7-be83-891b4702f872",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000089",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame supplies this planning rule.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "54136935-a460-573d-ac40-f5edb0ca7e6c",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000090",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame states this travel-planning limit.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "029c0777-bdbb-5d48-9309-1b1e6c7d88f4",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000091",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this item location.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "15c3941e-ed44-508f-ae30-b51456b5ba86",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000092",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this counter-timing pattern.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "84d1fd1c-9508-5f05-9a7c-1d5f20ecf4a4",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "8946f9da-e325-59c3-9260-2d2f590d3701",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000093",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this return-preparation pattern.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "67e8b160-a57d-56e5-a766-741b7ce0e939",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "efd0706b-600a-5ac1-926e-cc0602ca0086",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000094",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this routing pattern.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "1e8a6f7e-0911-5a34-ad82-172479d1a7a4",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "a8670161-257e-51ab-8e30-0e282952278f",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000095",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame supplies this postal expectation.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "2db70f53-99ee-556c-a8c1-b809881cbebd",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000096",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame supplies this outing-planning rule.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "38d60cc4-2f91-5cc2-b511-55cdbbe12c32",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000097",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame supplies this changing-hours condition.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "1272087c-a535-5612-8c7a-1bc257183788",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000098",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this item location.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "3d3f7960-daf5-5a51-98b3-14261c5aa66c",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000099",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this concentration pattern.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "28714a4e-bc14-5703-b594-126471ae0585",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000100",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this attention pattern and stated feeling.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "1b1c9f90-2561-53d5-88fe-d54618450143",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "076a7caa-5dcf-5f9d-8bee-efc952652efa",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "310f4cfc-b117-5511-8e13-2bd2ebec9fe5",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000101",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this place-marking pattern.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "1dad71ec-6a5d-550e-89d2-a86dc3dacb11",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "58494743-fc7f-59e9-8e17-80b8a644470a",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000102",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this perspective.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "cce66589-892c-5d73-bdbc-2c6e94e0992e",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000103",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame states this prediction limit.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "20b2a27f-908f-5ed7-a288-f7c1030674fc",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000104",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this item location.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "82c1e806-de3a-5633-8a08-175487e69fd6",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000105",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this footwear pattern.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "25df6384-836f-5f8e-bd97-73a1fb171c48",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "55abae4f-206a-586e-8b35-406d7525c0a1",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000106",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this break-in adjustment.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "c6d21ec4-6bdf-55df-b4d4-05cb531bf4bd",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "a6424854-e51e-5afc-8b9f-9e2f0273f70e",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000107",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records these umbrella-handling outcomes.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "1b436b46-3d1f-5aa2-99e3-94b7c2412bfd",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "ccd1f422-6130-5f19-869e-681102a3a1fa",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000108",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this family practice.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "c69a8e87-2b6f-5514-ab0d-0037531592f8",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000109",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame supplies this planning rule.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "4567ea9f-1800-51ed-bfac-f4cdf674d4cf",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000110",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame states this footwear-specific knowledge limit.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "a4ff1b76-755d-530a-b24c-8655115e4fbe",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000111",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this event.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "3f6eaf6c-00e7-5bd7-9809-367f54a0f707",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000112",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this gathering-environment pattern.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "9fd0b9b6-986d-54b0-965e-45feaf9cd482",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "cbc477c4-83c4-506b-9da8-9252d14d7f6b",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "bbfc537e-3fcc-5065-ab93-4777bcdfc10c",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "b61367fa-dd17-5ff2-9d6b-f81f6123735a",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000113",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this family-meal coordination pattern.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "681cdbd5-595d-5211-914d-edfd9a6b130d",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "81c0c4e9-5ae4-5e8a-b11c-7d33032fd8ec",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "56078821-34d0-540f-ae66-03bdd7bd1df3",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000114",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame supplies this scheduling rule.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "19c8ae40-1f5b-5fec-9538-e7bc7cfb036a",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000115",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame supplies this seasonal condition.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "3ea9fa3b-4411-55d0-ac90-2ed5515e6ef7",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000116",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this item location.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "bd69b616-6e7c-5440-8b29-586de68bcff6",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000117",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this gift-selection adjustment.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "90c60e57-d7db-5783-9ca8-2fd27b94d847",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "53bc23b2-8242-58b5-b496-a45c70bb8e41",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000118",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this ordering adjustment.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "3b097446-2c73-5414-8c06-6bacdf00a4c1",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "ce18c7a5-d1e9-5e5c-8739-b14fa7298feb",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000119",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this labeling lesson.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "7657f424-cd24-54dd-8409-e04974dd1531",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "d8e82ad3-902e-5f0c-aa8e-b23ce874982a",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000120",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame records this preference.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "8a941bf1-73bd-51d3-a069-62ecc9d56439",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000121",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame states this gift-selection limit.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "036edf8f-4680-5822-924e-0fdc691c8135",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000122",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame supplies this seasonal delivery condition.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "b9e9e222-a559-56e3-93b5-1f49a0e0d3ab",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000123",
+      "status": "RESOLVED"
+    }
+  ],
+  "right": {
+    "context_digest": "256ab07bee67ed20b15be40e4959b1acb3c53ec00673cfb8a2d9d94b0f362633",
+    "context_uid": "dbe52d14-8d33-5e1e-b380-71066eab0218",
+    "memory_count": 120,
+    "name": "task-3/local/personal-memory/2025"
+  },
+  "schema_version": 1,
+  "semantic_content_in_participant_report": false,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

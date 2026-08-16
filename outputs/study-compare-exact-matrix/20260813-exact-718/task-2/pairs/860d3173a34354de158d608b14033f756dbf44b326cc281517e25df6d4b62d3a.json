@@ -1,0 +1,321 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:26:02.309937+00:00",
+      "frames": [
+        {
+          "context_digest": "d2c716d52357c4200adc8772d5823715ffd736eb766028c1c62bbb32852bc344",
+          "context_name": "task-2/advisor1/scope",
+          "context_uid": "6db29abe-5784-5eec-acaa-060bac0e11f1",
+          "memories": [
+            {
+              "content": "Define in one sentence the user groups and usage contexts to which the design knowledge does not apply.",
+              "content_digest": "3193ffe501a06d6148b39c333853b42bc0278b2ab3c3df88162b049548ff16bb",
+              "position": 0,
+              "uid": "e594a6ab-81e9-5e5f-8ef5-e6bb8f3760d7"
+            },
+            {
+              "content": "Reviewers judge the generalization boundary of results through explicitly excluded targets and situations.",
+              "content_digest": "a929649a7bd07f29f31a8cd1969a3c160ba5f61c0def76e204443c30234f84b0",
+              "position": 1,
+              "uid": "31cdacff-7c49-547d-9f97-598a07b67fb6"
+            },
+            {
+              "content": "Specify user goals, interaction conditions, and technological constraints under which the proposed design knowledge can be transferred.",
+              "content_digest": "6ae1bfaeadb1863db1997685527706d210a379a376a24d3de1168e952f847627",
+              "position": 2,
+              "uid": "1459d986-4dc9-51f3-bf13-dbb0b07045c8"
+            },
+            {
+              "content": "Small-scale formative studies can support analytic generalization distinct from statistical representativeness when results are expressed in terms of design conditions and mechanisms.",
+              "content_digest": "1963572a303acbf383890b7d97b52349f572df761e89ea3fd5116058cd2e1cea",
+              "position": 3,
+              "uid": "1db5fcd6-f93c-5630-9810-053c10b5ceba"
+            },
+            {
+              "content": "The author of this proposal tends to apply design knowledge derived from an accessible sample to a broader user population.",
+              "content_digest": "df2a7f1284c1994c6dec49eb7995acd1ed341a9e6b8f4b06c854d85fa9d77d6c",
+              "position": 4,
+              "uid": "fd29c315-521f-53c0-add5-c668ec318a43"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "026415ab-56f5-4a2e-b1b4-bd7b431c2ddc"
+        },
+        {
+          "context_digest": "bf5136a518ce85246184349a0194e446748710ed6da95e5c97d4a31d74ddc1b9",
+          "context_name": "task-2/advisor2/review",
+          "context_uid": "3398ba87-f01e-56bd-9da2-0ed0894524fa",
+          "memories": [
+            {
+              "content": "Conduct one review prior to submission focusing solely on the validity of user problems, system interventions, and field evaluation logic.",
+              "content_digest": "9b0b5596ec5924a6141926bfc337ec6e23d77dfb7b65facb26b42109f05f1fe4",
+              "position": 0,
+              "uid": "6d203c86-b6e0-586a-b896-b654fa319ed1"
+            },
+            {
+              "content": "Cross-check whether research questions align with the core functions of the system.",
+              "content_digest": "f7f9f49efe539881dae49a96adce0ec349435e4cc7f55229c88097e54fe03f93",
+              "position": 1,
+              "uid": "6b75bfb1-67f5-50bb-9e0c-04026062de96"
+            },
+            {
+              "content": "Cross-check whether field tasks align with representative measures.",
+              "content_digest": "3e993f6c978e14b5b0f6e8ada40d8a0067981e943c67636e9599fb652dca44a4",
+              "position": 2,
+              "uid": "3abfda89-82ab-5cc5-bdcd-5e2f274fd727"
+            },
+            {
+              "content": "Cross-check whether the evidence to be collected aligns with the design and operational decisions to be changed.",
+              "content_digest": "a4761a8dac6c60a2132619c8c8e963aca0d61216d689786b18574f5e30f1f3aa",
+              "position": 3,
+              "uid": "f14f1974-9035-5a2c-931a-89a5004a2567"
+            },
+            {
+              "content": "Finally verify that the user problem, system intervention, field evaluation, and expected contribution form one coherent logical flow.",
+              "content_digest": "47198a770770dc805e0f40a5f9b9c34ae1999f39ec2f9fa1c34b3280f21f5477",
+              "position": 4,
+              "uid": "6ba1d344-5d98-5c25-ba1e-b28c08d39747"
+            },
+            {
+              "content": "HCI reviewers view the validity of design interventions as low if research questions do not connect to system functions.",
+              "content_digest": "ffa754352dfecc597f84cff7cbf8607a12bbfd99ac22250cc84392bd85e37e73",
+              "position": 5,
+              "uid": "4a85ebbd-a4ee-5c88-9e93-5fc545f41c64"
+            },
+            {
+              "content": "HCI reviewers view the validity of evaluation plans as low if field tasks fail to generate representative measures.",
+              "content_digest": "f29eb5429d767b0fa171b7e9862b3d8d06dfd388739e95acd67b2321aaf1a91e",
+              "position": 6,
+              "uid": "75c4c71d-28e3-559c-99d1-f0dccc31a9e2"
+            },
+            {
+              "content": "HCI reviewers view the practical utility of contributions as low if collected evidence cannot change design or operational decisions.",
+              "content_digest": "6b9ae0bc59cda995d674479dfe95f43359ff04e68cb07633957885ee5cf1336c",
+              "position": 7,
+              "uid": "577e5506-78e8-5768-b288-7a5986347cce"
+            },
+            {
+              "content": "Before submission, conduct a sequential walkthrough with field liaisons of installation failures, operational interruptions, and recovery scenarios.",
+              "content_digest": "115fa1f22eb7f55918620418f89def51ba84bd36e102875a5f5e560de5305dda",
+              "position": 8,
+              "uid": "9ce34a9a-4ba2-5b32-a1de-b0469ddc3f95"
+            },
+            {
+              "content": "Verify in one sentence how each proposed contribution could actually alter specific design or operational decisions.",
+              "content_digest": "1c6ef38e42f40e9cd6ab5323deaa825efb1136b926b66af9337ea6debaf8600e",
+              "position": 9,
+              "uid": "f8253f92-c60c-57e1-a630-6b31abe080ae"
+            },
+            {
+              "content": "The user must distinguish unconfirmed field partners and equipment from finalized ones so remaining execution risks can be assessed.",
+              "content_digest": "c2eb0936c09d8796092950aba699664f79f2222f27523e37a1af5feabe2b8058",
+              "position": 10,
+              "uid": "f5ad6933-3e22-5c47-bdaf-bacc9c9a5b3c"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "a9ae8c9e-1c21-46ff-b657-b9f10d404a78"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate proposal-quality concerns. The reference frame defines responsible generalization boundaries and transfer conditions, while the compared frame emphasizes pre-submission checks for intervention logic, evaluative usefulness, operational resilience, and execution risk. Neither side supplies a scope-aligned counterpart to the other’s claims.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "026415ab-56f5-4a2e-b1b4-bd7b431c2ddc",
+              "memory_uid": "e594a6ab-81e9-5e5f-8ef5-e6bb8f3760d7"
+            },
+            {
+              "frame_uid": "026415ab-56f5-4a2e-b1b4-bd7b431c2ddc",
+              "memory_uid": "31cdacff-7c49-547d-9f97-598a07b67fb6"
+            }
+          ],
+          "reason": "Both statements treat excluded user groups, targets, contexts, or situations as the basis for reviewers to judge generalization limits, with no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Explicit exclusions define the boundary within which design results may reasonably generalize.",
+          "uid": "c986ab0b-c137-5868-9572-4acb878686eb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "026415ab-56f5-4a2e-b1b4-bd7b431c2ddc",
+              "memory_uid": "1459d986-4dc9-51f3-bf13-dbb0b07045c8"
+            }
+          ],
+          "reason": "This is an independently useful specification of positive transfer conditions that the compared frame does not address.",
+          "status": "RESOLVED",
+          "summary": "Transferability should be stated through applicable user goals, interaction conditions, and technological constraints.",
+          "uid": "f9f4dfd4-1644-5f0e-9235-665d6d5bb6ab"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "026415ab-56f5-4a2e-b1b4-bd7b431c2ddc",
+              "memory_uid": "1db5fcd6-f93c-5630-9810-053c10b5ceba"
+            }
+          ],
+          "reason": "This establishes a distinct evidentiary basis for generalization that has no scope-aligned claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Small formative studies may support analytic generalization through stated design conditions and mechanisms without claiming statistical representativeness.",
+          "uid": "e9a1e699-548a-550c-9d22-bad6d0c46212"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "026415ab-56f5-4a2e-b1b4-bd7b431c2ddc",
+              "memory_uid": "fd29c315-521f-53c0-add5-c668ec318a43"
+            }
+          ],
+          "reason": "This identifies a specific overgeneralization tendency rather than prescribing a boundary or evaluation check, and the compared frame offers no counterpart.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to extend design knowledge from an accessible sample to a broader population.",
+          "uid": "8f1e573c-b36e-5f7a-8782-234dddeeb403"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a9ae8c9e-1c21-46ff-b657-b9f10d404a78",
+              "memory_uid": "6d203c86-b6e0-586a-b896-b654fa319ed1"
+            },
+            {
+              "frame_uid": "a9ae8c9e-1c21-46ff-b657-b9f10d404a78",
+              "memory_uid": "6ba1d344-5d98-5c25-ba1e-b28c08d39747"
+            }
+          ],
+          "reason": "Both statements describe the same overarching validity review and its required end-to-end coherence, which the reference frame does not cover.",
+          "status": "RESOLVED",
+          "summary": "A focused pre-submission review should test whether the user problem, intervention, field evaluation, and expected contribution form a coherent logical flow.",
+          "uid": "728fe643-1bcc-5112-ae54-088868dfa672"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a9ae8c9e-1c21-46ff-b657-b9f10d404a78",
+              "memory_uid": "6b75bfb1-67f5-50bb-9e0c-04026062de96"
+            },
+            {
+              "frame_uid": "a9ae8c9e-1c21-46ff-b657-b9f10d404a78",
+              "memory_uid": "4a85ebbd-a4ee-5c88-9e93-5fc545f41c64"
+            }
+          ],
+          "reason": "The check and reviewer rationale express one underlying alignment requirement with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Research questions should connect to the system’s core functions to sustain the validity of the design intervention.",
+          "uid": "8c76aeb7-3830-5e1d-8f94-7a5d74b1ffa6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a9ae8c9e-1c21-46ff-b657-b9f10d404a78",
+              "memory_uid": "3abfda89-82ab-5cc5-bdcd-5e2f274fd727"
+            },
+            {
+              "frame_uid": "a9ae8c9e-1c21-46ff-b657-b9f10d404a78",
+              "memory_uid": "75c4c71d-28e3-559c-99d1-f0dccc31a9e2"
+            }
+          ],
+          "reason": "The check and reviewer rationale express one underlying evaluation-alignment requirement absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Field tasks should generate representative measures to sustain the validity of the evaluation plan.",
+          "uid": "c72b3e8c-81d3-5ade-9e2b-3a187f8f1548"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a9ae8c9e-1c21-46ff-b657-b9f10d404a78",
+              "memory_uid": "f14f1974-9035-5a2c-931a-89a5004a2567"
+            },
+            {
+              "frame_uid": "a9ae8c9e-1c21-46ff-b657-b9f10d404a78",
+              "memory_uid": "577e5506-78e8-5768-b288-7a5986347cce"
+            },
+            {
+              "frame_uid": "a9ae8c9e-1c21-46ff-b657-b9f10d404a78",
+              "memory_uid": "f8253f92-c60c-57e1-a630-6b31abe080ae"
+            }
+          ],
+          "reason": "Each statement addresses the same practical-utility requirement: evidence and contributions must have an explicit path to changing decisions; the reference frame does not address it.",
+          "status": "RESOLVED",
+          "summary": "Collected evidence and proposed contributions should be tied to specific design or operational decisions they could change.",
+          "uid": "92e1df6b-d0e4-5acf-b3db-f73eccc32b62"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a9ae8c9e-1c21-46ff-b657-b9f10d404a78",
+              "memory_uid": "9ce34a9a-4ba2-5b32-a1de-b0469ddc3f95"
+            }
+          ],
+          "reason": "This is a distinct operational-resilience review practice with no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Field liaisons should conduct a pre-submission walkthrough of installation failures, operational interruptions, and recovery scenarios.",
+          "uid": "72c8e47a-d4f8-52ea-8719-b8aa4c84cc1b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a9ae8c9e-1c21-46ff-b657-b9f10d404a78",
+              "memory_uid": "f5ad6933-3e22-5c47-bdaf-bacc9c9a5b3c"
+            }
+          ],
+          "reason": "This is a distinct disclosure requirement for execution uncertainty that the reference frame does not address.",
+          "status": "RESOLVED",
+          "summary": "Unconfirmed field partners and equipment should be distinguished from finalized resources so execution risks remain assessable.",
+          "uid": "4bc4e088-6e89-59ad-a8bb-c66183ef3013"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers coherent intervention and evaluation logic, decision-relevant evidence, operational-failure walkthroughs, and disclosure of unresolved field-partner and equipment risks.",
+        "differences": "",
+        "reference_only": "The reference frame covers exclusions, transfer conditions, analytic generalization from formative studies, and the risk of extending accessible-sample findings too broadly."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "0c09aad1-2def-4f89-836d-b037b217d1b7"
+    },
+    "analysis_digest": "57b5c90a29f2dc6ed1892fc92f1106a4176c551900235ca6295d52c90feac84a",
+    "key": "a9543b42a45aee6ac19688d049071b90ec371f513dfd7c4f2c297a373af06c75",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 31.687852458002453,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "a9543b42a45aee6ac19688d049071b90ec371f513dfd7c4f2c297a373af06c75",
+  "created_at": "2026-08-13T18:26:33.997230Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/scope",
+  "pair_key": "860d3173a34354de158d608b14033f756dbf44b326cc281517e25df6d4b62d3a",
+  "provider_seconds": 31.687852458002453,
+  "right": "task-2/advisor2/review",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

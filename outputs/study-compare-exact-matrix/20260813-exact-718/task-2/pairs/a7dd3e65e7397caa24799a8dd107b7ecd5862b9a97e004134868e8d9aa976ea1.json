@@ -1,0 +1,344 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:25:11.485005+00:00",
+      "frames": [
+        {
+          "context_digest": "3dd1208c3f947a57bc5f1d490a28c999913d43cad775b2b01e50c6059d6b660e",
+          "context_name": "task-2/advisor1/safety",
+          "context_uid": "cd6c1fab-786a-52ea-9437-9a4d209ba419",
+          "memories": [
+            {
+              "content": "Specify the order and recipients for reporting serious discomfort during the study.",
+              "content_digest": "1de38a3ec5fc3267ebeb35482a458d4aaf50d2aea44c6dba334f184e50ddddd2",
+              "position": 0,
+              "uid": "9d6f5228-d182-571a-83d2-6a67becb7736"
+            },
+            {
+              "content": "Field staff rely on a pre-defined contact sequence when serious discomfort is reported.",
+              "content_digest": "ed3a3b19d92a50c7dd324981b702bac31e0130fda38fe37150e500481ed11d84",
+              "position": 1,
+              "uid": "00ed485d-66c2-59ad-9c5b-9ae445412690"
+            },
+            {
+              "content": "Establish criteria for halting the use of a design alternative if recurring severe errors appear during formative evaluation.",
+              "content_digest": "dcca56df756b89f89a0a9dbf2bf45aee6480392b368c9cf3402223d3084b801b",
+              "position": 2,
+              "uid": "9c6e1561-f671-52cb-aa67-245cc4987ad4"
+            },
+            {
+              "content": "Do not include a design alternative halted for safety reasons in subsequent evaluation iterations without modification.",
+              "content_digest": "01668098161666622f4d7ed8298e3e63a06fa9b10a4cfd53b200d820f96f5c50",
+              "position": 3,
+              "uid": "2381ecf7-2b11-583d-91d9-0a5cfc279ba1"
+            },
+            {
+              "content": "Even in controlled environments, delayed prototype recovery procedures increase session interruption time and alter data collection conditions for the same task.",
+              "content_digest": "fd0f364ef66cfa7be937779ed4ce3ffb1a406bc227d09c26b288a751c5e0d427",
+              "position": 4,
+              "uid": "c5ce1b00-36d9-5cdd-a318-93b88ca0e322"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "32504eee-b4a0-4029-9860-93fe6c935471"
+        },
+        {
+          "context_digest": "5f537c105ac26d5b710957c611c114c6834953adc14933beda6f44d0a404e410",
+          "context_name": "task-2/advisor2/methods",
+          "context_uid": "531f5f15-65f7-5315-8ccf-0cea6e53b76a",
+          "memories": [
+            {
+              "content": "Specify field and user data sources and analysis procedures corresponding to all HCI research questions.",
+              "content_digest": "0fecdff0f7b1204928239ca5665756cbf5dda44709758e5a093df8187927029e",
+              "position": 0,
+              "uid": "90be328f-1c05-5574-9657-1b0cc04a10b8"
+            },
+            {
+              "content": "In preregistered studies, clarify the criteria for judging plan changes.",
+              "content_digest": "5df2c60004dfd796d0af2a2e16e25f0804164517d00b4c393a65609a3dfb7534",
+              "position": 1,
+              "uid": "452ab231-3131-5697-a728-475289deafd0"
+            },
+            {
+              "content": "In preregistered studies, clarify the location for recording plan changes.",
+              "content_digest": "b05214535147a4c880d7500036b4640a0c479b0b05e2c1061ebfde88cb3c9866",
+              "position": 2,
+              "uid": "9c979f39-9660-5392-a1cd-0d1317af0e0f"
+            },
+            {
+              "content": "Use a justified minimum-to-maximum target range when confirmations can change, and tie the minimum and maximum to different workload and budget cases.",
+              "content_digest": "6c5e9bcd656dc10013c47e9c953409dbb20b06ee9ab758e1915d5f4d37d2604c",
+              "position": 3,
+              "uid": "8a49f598-804e-5a81-8e88-add7b665633a"
+            },
+            {
+              "content": "Specify the observation records, system logs, or interview tools used to collect each type of field and user data.",
+              "content_digest": "04c875971ca30ee5e3909e2c4e0632512d285401d5c9c4c1f42f4aaa592b34c1",
+              "position": 4,
+              "uid": "629cb159-6f6c-5476-870d-716ab573aef8"
+            },
+            {
+              "content": "Specify whether each type of field and user data will be collected before, during, or after deployment.",
+              "content_digest": "b105c5c373365987dff3fc4b709ffd88ba64c8358c179f81d780dc12d6b11bce",
+              "position": 5,
+              "uid": "b565c5c9-a0f7-5aff-a3b1-19696c4d3b39"
+            },
+            {
+              "content": "Readers cannot assess a target range unless both bounds have a stated consequence for schedule, workload, or cost.",
+              "content_digest": "308b499d832f2780b8a0c7d4acf0c9168ddc0e960b837a7f77e6e9574b235066",
+              "position": 6,
+              "uid": "251a4b3c-58fd-5d66-b5bc-74dcbeaa7a0d"
+            },
+            {
+              "content": "In field deployments, network and service instability exist as independent causes of task failure alongside design choices.",
+              "content_digest": "90f270d2544ce92c7ab245e0eb1eca5836f0a885ea652d40b6aad08c1572b039",
+              "position": 7,
+              "uid": "f150891e-7635-5c35-b986-d369bc630ef4"
+            },
+            {
+              "content": "If a safety signal occurs in the field system, existing institutional safety procedures take precedence over the research schedule and data collection plan.",
+              "content_digest": "96e1d7012cce82f901994e7b454d3f7e0a0b1dd18c5af6b9b14694e939356f25",
+              "position": 8,
+              "uid": "7860d9d6-5c2e-5969-b956-f71398218d02"
+            },
+            {
+              "content": "Reviewers judge answerability by tracing the path from each research question to its data sources and analysis procedures.",
+              "content_digest": "90ba5b91064c53361b4e6cf80cb4ec6a23aea3a02becfae03342046ffa2adf0d",
+              "position": 9,
+              "uid": "4fc24f87-e7b5-5d34-b850-f90cdc9b1ea2"
+            },
+            {
+              "content": "The user authoring this proposal tends to present implemented feature lists directly as design contributions.",
+              "content_digest": "d75cc3bb9bd2475fc87a88dc4a72de982101a5c9f03efaf823bcab6ca95dfe5d",
+              "position": 10,
+              "uid": "2db331a6-28d7-5c32-8372-7d3f8bc5b04a"
+            },
+            {
+              "content": "Define what can still be completed at the minimum target instead of treating every number inside the range as operationally identical.",
+              "content_digest": "b6cead2c6a19be091d8594da052baadd184eb3ef18580860e54b2aa337986354",
+              "position": 11,
+              "uid": "40f23f85-561e-55b3-825b-5000f9638f8a"
+            },
+            {
+              "content": "Use a bounded range to absorb expected confirmation changes without pretending that one early estimate is guaranteed.",
+              "content_digest": "1bc0df6bfbc6936b8a390368b5647a93ea8aab7316e9c7d233690b1206e6f17c",
+              "position": 12,
+              "uid": "9527ccb8-6662-58e3-8edd-daf7c0a713af"
+            },
+            {
+              "content": "Show how session count and facilitator time change at the minimum and maximum bounds.",
+              "content_digest": "2167c3e6d6bafad2818bb211b2c735f47ea040318a944c3402abea86b3faa316",
+              "position": 13,
+              "uid": "3ff9ec36-b70d-5dbd-9692-27fdf734fd20"
+            },
+            {
+              "content": "Define the additional workload or deliverable enabled at the maximum target so the upper bound is not an arbitrary cushion.",
+              "content_digest": "30d71498d24e6f7640b3f128824bf4c917f18c9317f164cd864f862f4c81e7fb",
+              "position": 14,
+              "uid": "9e1c3629-641f-5c09-915d-8a2ad1c8013a"
+            },
+            {
+              "content": "A bounded range preserves uncertainty honestly but makes the final workload and budget less certain than one fixed target.",
+              "content_digest": "c9015c18fd3140429386ae5ff3a0e45ffc86d009590772374f8354d4efb85234",
+              "position": 15,
+              "uid": "7ba672db-131e-5795-89c9-46f56344e7ed"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "1dfb12e7-5a1a-4d28-b06e-5cee0f3d6d5f"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "Both frames emphasize protecting research integrity when safety or operational disruptions arise, but they govern different contexts and actions. The reference additionally defines discomfort escalation, while the compared frame adds methodology traceability, preregistration-change documentation, operational target ranges, and an authoring-pattern observation.",
+      "relations": [
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "32504eee-b4a0-4029-9860-93fe6c935471",
+              "memory_uid": "9c6e1561-f671-52cb-aa67-245cc4987ad4"
+            },
+            {
+              "frame_uid": "32504eee-b4a0-4029-9860-93fe6c935471",
+              "memory_uid": "2381ecf7-2b11-583d-91d9-0a5cfc279ba1"
+            },
+            {
+              "frame_uid": "1dfb12e7-5a1a-4d28-b06e-5cee0f3d6d5f",
+              "memory_uid": "7860d9d6-5c2e-5969-b956-f71398218d02"
+            }
+          ],
+          "reason": "The explicit formative-evaluation and field-system conditions explain why the required actions differ and must remain distinct.",
+          "status": "RESOLVED",
+          "summary": "Safety concerns interrupt ordinary research progression, with formative evaluation halting and restricting unsafe design alternatives while field deployment invokes institutional procedures over research plans.",
+          "uid": "5a5342f1-1a3f-56d2-a80b-c56b8ea52bdd"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "32504eee-b4a0-4029-9860-93fe6c935471",
+              "memory_uid": "c5ce1b00-36d9-5cdd-a318-93b88ca0e322"
+            },
+            {
+              "frame_uid": "1dfb12e7-5a1a-4d28-b06e-5cee0f3d6d5f",
+              "memory_uid": "f150891e-7635-5c35-b986-d369bc630ef4"
+            }
+          ],
+          "reason": "The claims address non-design disruption under explicitly different environments and identify context-specific mechanisms and consequences.",
+          "status": "RESOLVED",
+          "summary": "Operational factors outside the evaluated design can disrupt tasks or data collection, through delayed prototype recovery in controlled sessions or network and service instability in field deployments.",
+          "uid": "cbcc44ca-babc-5ed9-b61c-0835f5035c5d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "32504eee-b4a0-4029-9860-93fe6c935471",
+              "memory_uid": "9d6f5228-d182-571a-83d2-6a67becb7736"
+            },
+            {
+              "frame_uid": "32504eee-b4a0-4029-9860-93fe6c935471",
+              "memory_uid": "00ed485d-66c2-59ad-9c5b-9ae445412690"
+            }
+          ],
+          "reason": "The reference alone supplies the reporting-chain requirement and its operational use.",
+          "status": "RESOLVED",
+          "summary": "Serious discomfort is handled through a predefined reporting sequence with specified recipients for field staff.",
+          "uid": "79a16560-39cc-5ab9-9090-dfe3b97b19d8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1dfb12e7-5a1a-4d28-b06e-5cee0f3d6d5f",
+              "memory_uid": "90be328f-1c05-5574-9657-1b0cc04a10b8"
+            },
+            {
+              "frame_uid": "1dfb12e7-5a1a-4d28-b06e-5cee0f3d6d5f",
+              "memory_uid": "629cb159-6f6c-5476-870d-716ab573aef8"
+            },
+            {
+              "frame_uid": "1dfb12e7-5a1a-4d28-b06e-5cee0f3d6d5f",
+              "memory_uid": "b565c5c9-a0f7-5aff-a3b1-19696c4d3b39"
+            },
+            {
+              "frame_uid": "1dfb12e7-5a1a-4d28-b06e-5cee0f3d6d5f",
+              "memory_uid": "4fc24f87-e7b5-5d34-b850-f90cdc9b1ea2"
+            }
+          ],
+          "reason": "These compared-side statements split and justify one methodology-traceability requirement not supplied by the reference.",
+          "status": "RESOLVED",
+          "summary": "Each HCI research question should be traceable to field or user data sources, collection instruments and timing, and analysis procedures so reviewers can judge answerability.",
+          "uid": "7e13af59-35eb-5ecb-a0ff-ccdaf868321c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1dfb12e7-5a1a-4d28-b06e-5cee0f3d6d5f",
+              "memory_uid": "452ab231-3131-5697-a728-475289deafd0"
+            },
+            {
+              "frame_uid": "1dfb12e7-5a1a-4d28-b06e-5cee0f3d6d5f",
+              "memory_uid": "9c979f39-9660-5392-a1cd-0d1317af0e0f"
+            }
+          ],
+          "reason": "The compared frame alone provides complementary parts of one plan-change documentation policy.",
+          "status": "RESOLVED",
+          "summary": "Preregistered studies should define both the criteria for judging plan changes and where those changes will be recorded.",
+          "uid": "b1e3f2cb-6561-53f5-a44e-8775826adab2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1dfb12e7-5a1a-4d28-b06e-5cee0f3d6d5f",
+              "memory_uid": "8a49f598-804e-5a81-8e88-add7b665633a"
+            },
+            {
+              "frame_uid": "1dfb12e7-5a1a-4d28-b06e-5cee0f3d6d5f",
+              "memory_uid": "251a4b3c-58fd-5d66-b5bc-74dcbeaa7a0d"
+            },
+            {
+              "frame_uid": "1dfb12e7-5a1a-4d28-b06e-5cee0f3d6d5f",
+              "memory_uid": "40f23f85-561e-55b3-825b-5000f9638f8a"
+            },
+            {
+              "frame_uid": "1dfb12e7-5a1a-4d28-b06e-5cee0f3d6d5f",
+              "memory_uid": "9527ccb8-6662-58e3-8edd-daf7c0a713af"
+            },
+            {
+              "frame_uid": "1dfb12e7-5a1a-4d28-b06e-5cee0f3d6d5f",
+              "memory_uid": "3ff9ec36-b70d-5dbd-9692-27fdf734fd20"
+            },
+            {
+              "frame_uid": "1dfb12e7-5a1a-4d28-b06e-5cee0f3d6d5f",
+              "memory_uid": "9e1c3629-641f-5c09-915d-8a2ad1c8013a"
+            },
+            {
+              "frame_uid": "1dfb12e7-5a1a-4d28-b06e-5cee0f3d6d5f",
+              "memory_uid": "7ba672db-131e-5795-89c9-46f56344e7ed"
+            }
+          ],
+          "reason": "The compared-side statements elaborate one operational policy for using and interpreting minimum-to-maximum targets.",
+          "status": "RESOLVED",
+          "summary": "When confirmations may change, a justified bounded target range should connect each bound to concrete workload, schedule, budget, session, facilitator, and deliverable consequences while acknowledging remaining uncertainty.",
+          "uid": "80d3f4c0-4d8b-5372-b7b6-adcd51f9a24a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1dfb12e7-5a1a-4d28-b06e-5cee0f3d6d5f",
+              "memory_uid": "2db331a6-28d7-5c32-8372-7d3f8bc5b04a"
+            }
+          ],
+          "reason": "This authoring-pattern observation appears only in the compared frame and is independent of its methodological policies.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to present implemented feature lists directly as design contributions.",
+          "uid": "e0efd7aa-3480-5cf4-a3d2-c8a52fa687bc"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers traceable data and analysis plans, preregistration changes, operationally justified target ranges, and a tendency to frame feature lists as contributions.",
+        "differences": "Safety responses differ between formative design evaluation and field deployment, while non-design disruptions are framed through controlled-session recovery delays versus field infrastructure instability.",
+        "reference_only": "The reference specifies a predefined reporting sequence and recipients for serious participant discomfort."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "a91728e5-2e0c-47e9-bef7-c95127ae1e7f"
+    },
+    "analysis_digest": "8b0c3878551ef336f2a7a69a33daa4b84851d472e6cc21c457045a0155e442f3",
+    "key": "a353f0176cff1e1b7724e4e31e7d4a65428f0197b01d3a2bd5244e348d14658c",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 39.56791366700054,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "a353f0176cff1e1b7724e4e31e7d4a65428f0197b01d3a2bd5244e348d14658c",
+  "created_at": "2026-08-13T18:25:51.052436Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/safety",
+  "pair_key": "a7dd3e65e7397caa24799a8dd107b7ecd5862b9a97e004134868e8d9aa976ea1",
+  "provider_seconds": 39.56791366700054,
+  "right": "task-2/advisor2/methods",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

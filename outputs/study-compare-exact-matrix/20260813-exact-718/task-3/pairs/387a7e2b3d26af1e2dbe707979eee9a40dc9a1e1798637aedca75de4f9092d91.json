@@ -1,0 +1,379 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:45:13.210695+00:00",
+      "frames": [
+        {
+          "context_digest": "17b940da39446a9f934dff43ea7db561d14060561065852a34658fe4aaa1702f",
+          "context_name": "task-3/local/personal-memory/2024/10",
+          "context_uid": "7c55b789-a7d0-5070-9cf8-6f5e205415dc",
+          "memories": [
+            {
+              "content": "The user renewed their local library membership in October 2024.",
+              "content_digest": "eb9209032856bdbc69fbfa67e053bf8cd2bc23f8e8e25c0be9a5aa3f7e05f4e9",
+              "position": 0,
+              "uid": "04711182-acef-52a9-bd58-7fe98a54854a"
+            },
+            {
+              "content": "On an evening walk, the user saw an unlit street and took a detour along a main road.",
+              "content_digest": "62d001de1c6c4599e51c4e0713f577a2838e95e03f26064778e64542f390a599",
+              "position": 1,
+              "uid": "0229d0b1-750c-521b-a126-22c9d9d001c4"
+            },
+            {
+              "content": "On a day the user chose a well-lit pedestrian route, the walk took 12 minutes longer than usual.",
+              "content_digest": "ad3770626bef71bc9a29ec7772aeebeb70231e89b417b05b4da9c62a65b89afe",
+              "position": 2,
+              "uid": "e310fe87-8cde-5399-be00-9f8d7ec44e94"
+            },
+            {
+              "content": "On a day the user sat by the library window, they heard vehicle noise with every page they read.",
+              "content_digest": "090a190c68a5166d84cde1eed20f9a03c2b99722ed383eb3b5703489c01d85e0",
+              "position": 3,
+              "uid": "4f37306b-08cd-512a-b92e-ca6761da1a5b"
+            },
+            {
+              "content": "On the next visit, the user sat farther inside and did not move for an hour.",
+              "content_digest": "a071b4c7699fe17f63f0ab6263da1259aea00ad635169a313d4821f57071a86a",
+              "position": 4,
+              "uid": "5897ffa4-cfc6-5012-8931-15420ec5cf7c"
+            },
+            {
+              "content": "The user wrote the due date of a borrowed book on paper and then lost the paper.",
+              "content_digest": "43ef22512c79634cb9e3dc59006c7d06c3513a9d5d1f89eedbb392964cc34f02",
+              "position": 5,
+              "uid": "ce38bd13-3d51-5bff-9eba-ed70a8217356"
+            },
+            {
+              "content": "After entering the due date on their phone, the user saw a reminder the day before and put the book in their bag.",
+              "content_digest": "38782cba2f3bf260d62cf8e80c4a7e4a3a196d4d29ced3c4fe19d050e12c1e0a",
+              "position": 6,
+              "uid": "a304315b-bc0a-591b-b8c2-7eea5145819d"
+            },
+            {
+              "content": "Library staff expect a person requesting a replacement membership card to bring identity-verification material.",
+              "content_digest": "1ac59309aedbfa946661bf5bbc4d5141c420df059937893caba88725dfe77d24",
+              "position": 7,
+              "uid": "ef060b89-6c54-5c20-86be-c07766a35daa"
+            },
+            {
+              "content": "Check recent lighting and pedestrian conditions before proposing an evening walking route.",
+              "content_digest": "1b247adfb3723d14979b2cc7ecf6786c457d60e521b8708a6d08d38d3d1af437",
+              "position": 8,
+              "uid": "7669e5eb-c0fd-5182-ae9a-5f9ae95ddf2f"
+            },
+            {
+              "content": "The local agent can compare past reasons for detours but cannot directly observe current lighting and pedestrian conditions.",
+              "content_digest": "8a5f0e4cbb2fa6c19f2cb5d4e500ed460189b515604c87c6c2a4c8348c4efc44",
+              "position": 9,
+              "uid": "e96f7007-5814-5986-b121-4ce3b22506e1"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "3325a413-7971-4b90-aa5a-315dfe06e214"
+        },
+        {
+          "context_digest": "a2ea3c6aa8c1680fcf9a7dd71d0dbff822c6af5493b34b79022f5e740bb35259",
+          "context_name": "task-3/local/personal-memory/2025/07",
+          "context_uid": "5c264a7f-0300-587c-ad1c-0439cedc7737",
+          "memories": [
+            {
+              "content": "The user keeps a travel power bank in the first drawer beneath the desk.",
+              "content_digest": "deb13f4eae5e32bc035da0558fa1b290f4bac0dfa5ca350d5abd0456af07ab7f",
+              "position": 0,
+              "uid": "447bfd8d-1490-5404-a2b4-13b4587e6aba"
+            },
+            {
+              "content": "The user packed three pairs of shoes for a two-night trip but wore only one pair.",
+              "content_digest": "097601b179049e1c4dd6b20a2fe2703ffb0d4a89d5ae15a763d339b989da50d8",
+              "position": 1,
+              "uid": "3ab0326a-a006-51ea-9348-7ada19a23bce"
+            },
+            {
+              "content": "For the next two-night trip, the user packed only one pair of walking shoes and reduced the bag's weight.",
+              "content_digest": "afd02b05250a60ad461e01132a94f0105d419521803082d1057205a2bc9a92ad",
+              "position": 2,
+              "uid": "ef467ab6-8ba6-5f81-8f12-578ec1824e09"
+            },
+            {
+              "content": "On a trip when the user forgot a charging cable, they bought a new one after arrival.",
+              "content_digest": "bbe1ac80a2311e0e631446b811d799494dc5ca4db408fc63d1cb09a01e2cd105",
+              "position": 3,
+              "uid": "aa4defc3-2b65-5688-accb-aaa49f2430b6"
+            },
+            {
+              "content": "Before the next trip, the user checked charging items against a photo and packed all of them.",
+              "content_digest": "cc2663db793bec80657023ccd545add403ec7dcc6dc39da4d03a95b5a9f65ff9",
+              "position": 4,
+              "uid": "2d937b4b-d73d-5382-abbe-3cd4e596b3a5"
+            },
+            {
+              "content": "The user packed toiletries on the departure day and arrived 15 minutes late at the meeting place.",
+              "content_digest": "1f5f7eb4cf651ee44244315e52de31cbd7bffe70489315bda287d1ca3cb9a8d4",
+              "position": 5,
+              "uid": "0be8b327-0a06-5241-b98d-daa6b0a4aa50"
+            },
+            {
+              "content": "The next time, the user closed the bag the night before and departed on time.",
+              "content_digest": "61f6c02e4637501f5ad9b1a9f668e298e566558a3d9e611a8b521c17256513b7",
+              "position": 6,
+              "uid": "90059fcc-436d-5453-98f0-a9b23a08faf1"
+            },
+            {
+              "content": "The user's older sister considers it safer to pack an extra cable even for a short trip to avoid charging problems.",
+              "content_digest": "f06b38b34e0f27bc01d8a79733173673d37a209e8619ad3df816a73718ffd89f",
+              "position": 7,
+              "uid": "12ef03f9-8cda-5ed7-be83-891b4702f872"
+            },
+            {
+              "content": "When creating a travel preparation list, confirm the trip length and actual activities with the user.",
+              "content_digest": "f34a0a341cd8ce9c641c16b780c4e53ccae4b6dca2c8f176be7579f5b0115654",
+              "position": 8,
+              "uid": "54136935-a460-573d-ac40-f5edb0ca7e6c"
+            },
+            {
+              "content": "The local agent cannot establish what the next trip requires from the luggage used on the previous trip alone.",
+              "content_digest": "4accbe60aa4e53ff75a18cc0291a870f106ac69a10a2cff96147c2dbd74892e3",
+              "position": 9,
+              "uid": "029c0777-bdbb-5d48-9309-1b1e6c7d88f4"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "d6a316f5-5070-4642-8bcd-686c18f375d5"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate practical domains: the reference records library use and evening-route safety, while the compared frame records travel packing and preparation. Each contains observations, adaptations, guidance, and limits, but none governs the same operational decision.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3325a413-7971-4b90-aa5a-315dfe06e214",
+              "memory_uid": "04711182-acef-52a9-bd58-7fe98a54854a"
+            }
+          ],
+          "reason": "This is independently useful library-membership history with no corresponding travel claim.",
+          "status": "RESOLVED",
+          "summary": "The user renewed their local library membership in October 2024.",
+          "uid": "39aa270b-4542-5930-b29b-c43091d210c5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3325a413-7971-4b90-aa5a-315dfe06e214",
+              "memory_uid": "0229d0b1-750c-521b-a126-22c9d9d001c4"
+            },
+            {
+              "frame_uid": "3325a413-7971-4b90-aa5a-315dfe06e214",
+              "memory_uid": "e310fe87-8cde-5399-be00-9f8d7ec44e94"
+            }
+          ],
+          "reason": "These memories jointly describe the practical travel-time cost of avoiding poorly lit evening streets, a claim absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Choosing safer, better-lit walking routes led the user to detour or accept a longer journey.",
+          "uid": "2c181384-44d1-5fdb-b727-bac086cde8bc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3325a413-7971-4b90-aa5a-315dfe06e214",
+              "memory_uid": "4f37306b-08cd-512a-b92e-ca6761da1a5b"
+            },
+            {
+              "frame_uid": "3325a413-7971-4b90-aa5a-315dfe06e214",
+              "memory_uid": "5897ffa4-cfc6-5012-8931-15420ec5cf7c"
+            }
+          ],
+          "reason": "The memories form one observation-and-adaptation sequence about library seating, without a matching claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "After traffic noise disrupted reading by a library window, the user sat farther inside and remained there for an hour.",
+          "uid": "64165a0d-0140-5d9e-b94b-1a201529227a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3325a413-7971-4b90-aa5a-315dfe06e214",
+              "memory_uid": "ce38bd13-3d51-5bff-9eba-ed70a8217356"
+            },
+            {
+              "frame_uid": "3325a413-7971-4b90-aa5a-315dfe06e214",
+              "memory_uid": "a304315b-bc0a-591b-b8c2-7eea5145819d"
+            }
+          ],
+          "reason": "The memories jointly contrast an unsuccessful paper reminder with a successful phone reminder for a library loan; the compared frame has no same-decision claim.",
+          "status": "RESOLVED",
+          "summary": "A paper due-date note was lost, while a phone reminder prompted the user to place the borrowed book in their bag.",
+          "uid": "54ce233e-388c-53c4-8e78-43a5ac2ea64f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3325a413-7971-4b90-aa5a-315dfe06e214",
+              "memory_uid": "ef060b89-6c54-5c20-86be-c07766a35daa"
+            }
+          ],
+          "reason": "This is a standalone library procedure absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Library staff expect identity-verification material from someone requesting a replacement membership card.",
+          "uid": "1367bcbc-e31b-52b8-8d93-521dbfae1736"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3325a413-7971-4b90-aa5a-315dfe06e214",
+              "memory_uid": "7669e5eb-c0fd-5182-ae9a-5f9ae95ddf2f"
+            },
+            {
+              "frame_uid": "3325a413-7971-4b90-aa5a-315dfe06e214",
+              "memory_uid": "e96f7007-5814-5986-b121-4ce3b22506e1"
+            }
+          ],
+          "reason": "These memories split one route-planning constraint into required current checking and the agent limitation that makes it necessary; no travel-packing claim addresses that decision.",
+          "status": "RESOLVED",
+          "summary": "Evening-route proposals require recent lighting and pedestrian information because the local agent can compare past detours but cannot directly observe current conditions.",
+          "uid": "362647a9-2d63-511b-92a5-429a707b99fd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6a316f5-5070-4642-8bcd-686c18f375d5",
+              "memory_uid": "447bfd8d-1490-5404-a2b4-13b4587e6aba"
+            }
+          ],
+          "reason": "This is independently useful equipment-location information absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user keeps a travel power bank in the first drawer beneath the desk.",
+          "uid": "60097e00-b621-578f-bc52-bae63347628d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6a316f5-5070-4642-8bcd-686c18f375d5",
+              "memory_uid": "3ab0326a-a006-51ea-9348-7ada19a23bce"
+            },
+            {
+              "frame_uid": "d6a316f5-5070-4642-8bcd-686c18f375d5",
+              "memory_uid": "ef467ab6-8ba6-5f81-8f12-578ec1824e09"
+            }
+          ],
+          "reason": "The memories form one packing observation-and-adaptation sequence with no corresponding library or route-planning claim.",
+          "status": "RESOLVED",
+          "summary": "After overpacking shoes for a two-night trip, the user took only one pair of walking shoes on the next such trip and reduced bag weight.",
+          "uid": "f87f0124-ec18-5fdc-907b-507c43d7f8e1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6a316f5-5070-4642-8bcd-686c18f375d5",
+              "memory_uid": "aa4defc3-2b65-5688-accb-aaa49f2430b6"
+            },
+            {
+              "frame_uid": "d6a316f5-5070-4642-8bcd-686c18f375d5",
+              "memory_uid": "2d937b4b-d73d-5382-abbe-3cd4e596b3a5"
+            }
+          ],
+          "reason": "The memories jointly describe a charging-item packing failure and the later checking method; the reference frame contains no same-decision claim.",
+          "status": "RESOLVED",
+          "summary": "After forgetting a charging cable and buying another, the user checked charging items against a photo before the next trip and packed them all.",
+          "uid": "0441df39-197f-5395-8eb4-a1b004ed2a21"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6a316f5-5070-4642-8bcd-686c18f375d5",
+              "memory_uid": "0be8b327-0a06-5241-b98d-daa6b0a4aa50"
+            },
+            {
+              "frame_uid": "d6a316f5-5070-4642-8bcd-686c18f375d5",
+              "memory_uid": "90059fcc-436d-5453-98f0-a9b23a08faf1"
+            }
+          ],
+          "reason": "The memories form one timing-related packing observation-and-adaptation sequence absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "After departure-day toiletry packing contributed to lateness, the user closed the bag the night before and departed on time.",
+          "uid": "10c3bf57-bdd0-5b39-90e4-b0dcfbebee94"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6a316f5-5070-4642-8bcd-686c18f375d5",
+              "memory_uid": "12ef03f9-8cda-5ed7-be83-891b4702f872"
+            }
+          ],
+          "reason": "This is a standalone third-party travel-packing preference with no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s older sister considers an extra cable safer even for a short trip because it may prevent charging problems.",
+          "uid": "0af7fca8-145a-59b8-8c84-b64b0efd27c4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6a316f5-5070-4642-8bcd-686c18f375d5",
+              "memory_uid": "54136935-a460-573d-ac40-f5edb0ca7e6c"
+            },
+            {
+              "frame_uid": "d6a316f5-5070-4642-8bcd-686c18f375d5",
+              "memory_uid": "029c0777-bdbb-5d48-9309-1b1e6c7d88f4"
+            }
+          ],
+          "reason": "These memories split one planning constraint into the information to confirm and the agent limitation that makes confirmation necessary; no reference claim addresses travel-list requirements.",
+          "status": "RESOLVED",
+          "summary": "Travel preparation lists should be based on the upcoming trip’s length and activities because previous luggage alone cannot establish current requirements.",
+          "uid": "96366ec1-e97d-50cf-81eb-96d6b5010dfa"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Travel material covers stored equipment, lighter packing, charging checks, earlier preparation, a relative’s extra-cable preference, and tailoring lists to the upcoming trip.",
+        "differences": "",
+        "reference_only": "Library material covers membership, seating choices, due-date reminders, replacement-card requirements, and checking current conditions for safer evening routes."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "9b1366d7-83a4-4904-a2d1-f719dc5416a8"
+    },
+    "analysis_digest": "3c078ae20900422e62509d5e631e0a78e38f702689dee82649880db36cde1247",
+    "key": "9fb300bb2d68a4ce49347e5b767e20d7b2e107276fffffe998b1e5a145c78402",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 34.937984916999994,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "9fb300bb2d68a4ce49347e5b767e20d7b2e107276fffffe998b1e5a145c78402",
+  "created_at": "2026-08-13T18:45:48.148129Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/10",
+  "pair_key": "387a7e2b3d26af1e2dbe707979eee9a40dc9a1e1798637aedca75de4f9092d91",
+  "provider_seconds": 34.937984916999994,
+  "right": "task-3/local/personal-memory/2025/07",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

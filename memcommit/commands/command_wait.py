@@ -33,7 +33,7 @@ from memcommit.commands.command_progress import (
     busy_suffix,
     render_progress_line,
 )
-from memcommit.commands.context_picker import (
+from memcommit.context_targeting.tui.picker import (
     CONTEXT_PICKER_STYLE,
     ContextMemoryRow,
     ContextPickerNavigationUnit,

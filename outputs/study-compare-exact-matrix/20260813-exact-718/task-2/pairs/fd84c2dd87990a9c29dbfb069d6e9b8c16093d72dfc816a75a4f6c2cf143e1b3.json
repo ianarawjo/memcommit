@@ -1,0 +1,368 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:24:22.112595+00:00",
+      "frames": [
+        {
+          "context_digest": "adcb1ff51b2facc8282e8a56d8fec5150dd8e7376b7889d21013f71fee66b9b8",
+          "context_name": "task-2/advisor1/review",
+          "context_uid": "57ec8c37-1a0a-5f3b-82e9-51adad82677c",
+          "memories": [
+            {
+              "content": "Conduct one review prior to submission focusing solely on the validity of user problems, design interventions, and evaluation logic.",
+              "content_digest": "3dd669e72e74416ccd0b8eaf32f6b24dc7400ceb50c133a18f3ff33f89075334",
+              "position": 0,
+              "uid": "0dda8eb3-3287-5bb6-9b26-b1c00cc038d9"
+            },
+            {
+              "content": "Cross-check whether research questions align with the core functions of the prototype.",
+              "content_digest": "b3fbab30f9c640c7b3f6424f2cbc7d66bfa1f455f937f7fb28a6cc8b3763597d",
+              "position": 1,
+              "uid": "c8e0c9dd-dc4a-5a7d-9a82-e7ee449a4b25"
+            },
+            {
+              "content": "Cross-check whether evaluation tasks align with representative measures.",
+              "content_digest": "1e49d1844cb2a0a66a3dec114e44713885299f7a80763ae4e9a416eba505d61f",
+              "position": 2,
+              "uid": "f93c5baa-3c2b-5e37-b07b-0b00e8b22ab9"
+            },
+            {
+              "content": "Cross-check whether collected evidence aligns with design and operational decisions to be changed.",
+              "content_digest": "bc977c73db48b06ad23b68fa58f2fa5f64b19d09856b0e80c8ddac0b039568f8",
+              "position": 3,
+              "uid": "8dae0ad6-2a6d-5d99-98db-b0d48a1140e5"
+            },
+            {
+              "content": "Verify at the end that user problems, design interventions, user studies, and expected contributions form a coherent logical flow.",
+              "content_digest": "8b8d84adb9296241a03a4e6b91acee829ff1eaea443f9dd0b132d7b64a53dcff",
+              "position": 4,
+              "uid": "0f89ab25-d9ee-5669-aa99-a0fe07803915"
+            },
+            {
+              "content": "HCI reviewers view the validity of design interventions as low if research questions are not linked to prototype functions.",
+              "content_digest": "e7e5bb6d9618adc9d4903a4d4cbbf53007381999a95e4ed2137e3705a988fa13",
+              "position": 5,
+              "uid": "3e4a9a3b-abc2-54ed-9b87-f81abf61b541"
+            },
+            {
+              "content": "HCI reviewers view the validity of evaluation plans as low if evaluation tasks do not produce representative measures.",
+              "content_digest": "b23af1197034e73ce7b5bf0c6870ee410e44a07810ebaae12259087f2c12f8f1",
+              "position": 6,
+              "uid": "fb785649-1947-5e7d-aafb-308f14fb21b4"
+            },
+            {
+              "content": "HCI reviewers view the practicality of contributions as low if collected evidence cannot change design or operational decisions.",
+              "content_digest": "3720d356aa625bea8226fb668004f599e61140f1ad1543b643eb72b7a39ec43d",
+              "position": 7,
+              "uid": "02f8ddd8-32b0-5e3b-b358-5e0472a6e0d2"
+            },
+            {
+              "content": "Cross-check at the end whether each research question, formative evaluation data, and design modification judgment are seamlessly connected.",
+              "content_digest": "f3b3d431c05e942ff3cea0ac2d239eeee33e224047a452debe0246c57472f74d",
+              "position": 8,
+              "uid": "d17ba26c-187e-57bc-8468-c9c053fc303d"
+            },
+            {
+              "content": "Review whether the application conditions of proposed design principles and boundary cases of failure are presented together.",
+              "content_digest": "28ab914aa4a03e8f1908176b235017a80838ed660d996773a44b3963b927bcb3",
+              "position": 9,
+              "uid": "48a91d19-cc68-5400-8971-8125236f3fbf"
+            },
+            {
+              "content": "The user can have contributions reviewed only if prototype outcomes and the transferable design knowledge derived from them are separated.",
+              "content_digest": "2deadd2cfeed19a3e544c81a345a40f2f3b4561a8d28b073b70400a5e82ae0cb",
+              "position": 10,
+              "uid": "774341c9-b92d-53a5-a24c-59c75e39756b"
+            },
+            {
+              "content": "The scope of observation in controlled formative evaluations does not include long-term adaptation and operational changes in real-world usage contexts.",
+              "content_digest": "76a1a3c03c7d93acc8a6aca832fd24ab9624ea9e53c8207876160ed1055682e2",
+              "position": 11,
+              "uid": "877015ae-ab0b-561c-9fe3-3abb2d0aaa4e"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "c3295782-6962-41a9-bfc1-ea725e10c61f"
+        },
+        {
+          "context_digest": "b598a4ff3268ef8c6c0d7bc5ff34af370074bcdd30d61bd3623fcdfb167f37d6",
+          "context_name": "task-2/advisor2/safety",
+          "context_uid": "4283d797-6a33-5f39-b7f6-f4dbd3264389",
+          "memories": [
+            {
+              "content": "List whom to notify and in what order if serious discomfort is reported during the study.",
+              "content_digest": "3453feb8597fb15c827f22297d58dc804fdc1d8080b9e93ba35b85a4425092b6",
+              "position": 0,
+              "uid": "ceb095a9-3068-55ea-a06f-d954c121e007"
+            },
+            {
+              "content": "Field staff rely on the pre-defined contact sequence when serious discomfort is reported.",
+              "content_digest": "ba38f8a5c993c810e19b9120f4492c3accf962c8b8fd7642539ac24f363099e0",
+              "position": 1,
+              "uid": "962d7645-02b3-5611-8415-4370794c10d4"
+            },
+            {
+              "content": "Define the thresholds for participant harm, operational disruption, and data anomalies at which deployment and data collection must cease.",
+              "content_digest": "7f7f124d266efd8255c4615ebc7eb375447047ed5a2b96327f28f8f17d048813",
+              "position": 2,
+              "uid": "a3270872-1901-5d24-8ef1-374833599bf9"
+            },
+            {
+              "content": "Establish procedures to restore existing systems and workflow states after suspending field deployment.",
+              "content_digest": "1a5f7636ec45e60df11db8b0d3763345c0bfaf9a92c1e5d581e6b36452c31208",
+              "position": 3,
+              "uid": "f6dd1368-0d90-5f1a-97d0-56594ce8f4b3"
+            },
+            {
+              "content": "The user's stop plan can be judged feasible only when it identifies who has authority to order recovery and who is responsible for carrying it out.",
+              "content_digest": "3fa05bd19fdeeb320a37cfb89ad853a868b64055f7b21eb182798b0119f6620c",
+              "position": 4,
+              "uid": "342e4697-873f-56a8-b4a4-896efe910144"
+            },
+            {
+              "content": "In organizations where error reporting is linked to individual performance evaluations, safety signal records may be separated from research decision logs, potentially breaking the traceability path for the same incident.",
+              "content_digest": "2bf13ff8ab1a778e8a793ede627b28d40798ae40d25c7a6d25eb5e2e79dd8e97",
+              "position": 5,
+              "uid": "6c4e9175-4590-5689-ae2b-678f0eb930b9"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "7d70b150-c100-4314-b52d-7b3445034e12"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate operational domains. The reference frame concerns pre-submission HCI validity, coherence, contribution framing, and evaluation limits, while the compared frame concerns field-study escalation, stopping, recovery, and incident traceability. Neither side supplies a scope bridge that makes these claims govern the same decisions.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c3295782-6962-41a9-bfc1-ea725e10c61f",
+              "memory_uid": "0dda8eb3-3287-5bb6-9b26-b1c00cc038d9"
+            }
+          ],
+          "reason": "Only the reference frame specifies this overarching review scope; the compared frame addresses field-study safety and recovery operations instead.",
+          "status": "RESOLVED",
+          "summary": "A focused pre-submission review should assess the validity of user problems, design interventions, and evaluation logic.",
+          "uid": "7bc98ec8-2fa9-5a20-8dd9-5e8859b756fa"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c3295782-6962-41a9-bfc1-ea725e10c61f",
+              "memory_uid": "c8e0c9dd-dc4a-5a7d-9a82-e7ee449a4b25"
+            },
+            {
+              "frame_uid": "c3295782-6962-41a9-bfc1-ea725e10c61f",
+              "memory_uid": "3e4a9a3b-abc2-54ed-9b87-f81abf61b541"
+            }
+          ],
+          "reason": "The reference memories state the check and its reviewer-facing rationale as one underlying claim, with no counterpart governing this decision in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Research questions should be linked to prototype functions to preserve the validity of design interventions.",
+          "uid": "88864af1-931c-5408-ad5a-d4666b8a3002"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c3295782-6962-41a9-bfc1-ea725e10c61f",
+              "memory_uid": "f93c5baa-3c2b-5e37-b07b-0b00e8b22ab9"
+            },
+            {
+              "frame_uid": "c3295782-6962-41a9-bfc1-ea725e10c61f",
+              "memory_uid": "fb785649-1947-5e7d-aafb-308f14fb21b4"
+            }
+          ],
+          "reason": "The reference memories express the operational check and its consequence as one claim; the compared frame contains no corresponding evaluation-measure policy.",
+          "status": "RESOLVED",
+          "summary": "Evaluation tasks should produce representative measures to preserve the validity of the evaluation plan.",
+          "uid": "a1e06a76-bb6b-5c44-a36d-9c00aa10665c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c3295782-6962-41a9-bfc1-ea725e10c61f",
+              "memory_uid": "8dae0ad6-2a6d-5d99-98db-b0d48a1140e5"
+            },
+            {
+              "frame_uid": "c3295782-6962-41a9-bfc1-ea725e10c61f",
+              "memory_uid": "02f8ddd8-32b0-5e3b-b358-5e0472a6e0d2"
+            }
+          ],
+          "reason": "The reference memories split one evidence-to-decision claim into a check and reviewer rationale, while the compared frame does not address evidentiary usefulness.",
+          "status": "RESOLVED",
+          "summary": "Collected evidence should be capable of informing changes to design or operational decisions so contributions remain practical.",
+          "uid": "08c0b346-96a2-50e0-abeb-1010156dd858"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c3295782-6962-41a9-bfc1-ea725e10c61f",
+              "memory_uid": "0f89ab25-d9ee-5669-aa99-a0fe07803915"
+            }
+          ],
+          "reason": "This broad end-stage coherence check is independently useful and appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The final submission should present a coherent logical flow from user problems and interventions through studies to expected contributions.",
+          "uid": "cda921a2-63c8-5fb6-9a1a-fca393b7a34f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c3295782-6962-41a9-bfc1-ea725e10c61f",
+              "memory_uid": "d17ba26c-187e-57bc-8468-c9c053fc303d"
+            }
+          ],
+          "reason": "This specific formative-evidence trace is narrower than general submission coherence and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Each research question, item of formative evaluation data, and design-modification judgment should be connected at the end.",
+          "uid": "65012207-d4b6-57c6-8d36-9feac21fca7f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c3295782-6962-41a9-bfc1-ea725e10c61f",
+              "memory_uid": "48a91d19-cc68-5400-8971-8125236f3fbf"
+            }
+          ],
+          "reason": "Only the reference frame addresses the qualified applicability of design principles.",
+          "status": "RESOLVED",
+          "summary": "Proposed design principles should be presented with both their application conditions and failure boundary cases.",
+          "uid": "09c30f7e-77e7-5efc-bbc9-96f4a9073dc3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c3295782-6962-41a9-bfc1-ea725e10c61f",
+              "memory_uid": "774341c9-b92d-53a5-a24c-59c75e39756b"
+            }
+          ],
+          "reason": "Only the reference frame states this contribution-framing requirement.",
+          "status": "RESOLVED",
+          "summary": "Contribution review requires separating prototype outcomes from the transferable design knowledge derived from them.",
+          "uid": "63a0c2e3-9608-5704-a911-f3ec712fe47d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c3295782-6962-41a9-bfc1-ea725e10c61f",
+              "memory_uid": "877015ae-ab0b-561c-9fe3-3abb2d0aaa4e"
+            }
+          ],
+          "reason": "This is a one-sided limitation on evaluation scope, unrelated to the compared frame's field safety and recovery requirements.",
+          "status": "RESOLVED",
+          "summary": "Controlled formative evaluations do not observe long-term adaptation or operational change in real-world use.",
+          "uid": "0102a10a-91d5-5255-963f-387e56bfd3b7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d70b150-c100-4314-b52d-7b3445034e12",
+              "memory_uid": "ceb095a9-3068-55ea-a06f-d954c121e007"
+            },
+            {
+              "frame_uid": "7d70b150-c100-4314-b52d-7b3445034e12",
+              "memory_uid": "962d7645-02b3-5611-8415-4370794c10d4"
+            }
+          ],
+          "reason": "The compared memories state the escalation procedure and staff reliance on it as one underlying claim; the reference frame provides no discomfort-response policy.",
+          "status": "RESOLVED",
+          "summary": "Serious participant discomfort should trigger a predefined notification sequence identifying whom field staff contact and in what order.",
+          "uid": "a51e23bb-b4e4-513a-bd9b-f34760255d2e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d70b150-c100-4314-b52d-7b3445034e12",
+              "memory_uid": "a3270872-1901-5d24-8ef1-374833599bf9"
+            }
+          ],
+          "reason": "Only the compared frame defines mandatory stopping criteria for field activity.",
+          "status": "RESOLVED",
+          "summary": "Deployment and data collection should cease at defined thresholds for participant harm, operational disruption, or data anomalies.",
+          "uid": "eeffc14c-1006-5ed4-8891-731e0ce12516"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d70b150-c100-4314-b52d-7b3445034e12",
+              "memory_uid": "f6dd1368-0d90-5f1a-97d0-56594ce8f4b3"
+            },
+            {
+              "frame_uid": "7d70b150-c100-4314-b52d-7b3445034e12",
+              "memory_uid": "342e4697-873f-56a8-b4a4-896efe910144"
+            }
+          ],
+          "reason": "The compared memories split one recovery-planning claim across workflow restoration and governance roles; the reference frame has no corresponding recovery policy.",
+          "status": "RESOLVED",
+          "summary": "A feasible post-suspension recovery plan should define restoration procedures together with authority to order recovery and responsibility for execution.",
+          "uid": "1ea80665-b680-51ca-be10-99b2e7f77866"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d70b150-c100-4314-b52d-7b3445034e12",
+              "memory_uid": "6c4e9175-4590-5689-ae2b-678f0eb930b9"
+            }
+          ],
+          "reason": "Only the compared frame identifies this conditional organizational risk to incident traceability.",
+          "status": "RESOLVED",
+          "summary": "Performance-linked error reporting may separate safety records from research decision logs and break traceability for the same incident.",
+          "uid": "b639a07f-ef9e-5c9d-85fe-d04d396301aa"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers discomfort escalation, mandatory stop thresholds, restoration procedures and recovery authority, plus an organizational risk to incident traceability when safety and research logs are separated.",
+        "differences": "",
+        "reference_only": "The reference frame covers validity checks linking questions, prototype functions, measures, evidence, and design decisions; overall argument coherence; design-principle boundaries; contribution framing; and limits of controlled formative evaluation."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "85952523-f21c-4fb5-b44d-c926d7be8d95"
+    },
+    "analysis_digest": "5beaf8ff8ce99eee6a019f3fe383c7e2b6d8e21e754e04976666de896be14238",
+    "key": "abe67e9d789c08650524ed8ef1b4d3b0f9c51f338426dd199d36d45719342225",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 46.37703091599906,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "abe67e9d789c08650524ed8ef1b4d3b0f9c51f338426dd199d36d45719342225",
+  "created_at": "2026-08-13T18:25:08.489092Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/review",
+  "pair_key": "fd84c2dd87990a9c29dbfb069d6e9b8c16093d72dfc816a75a4f6c2cf143e1b3",
+  "provider_seconds": 46.37703091599906,
+  "right": "task-2/advisor2/safety",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

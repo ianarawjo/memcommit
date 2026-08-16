@@ -1,0 +1,379 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:41:13.005586+00:00",
+      "frames": [
+        {
+          "context_digest": "6cb54691fcd12037c24daa71882bad82cd67c16ea72979f2a41e1e1b8eae22a8",
+          "context_name": "task-3/local/personal-memory/2024/06",
+          "context_uid": "8c641e5b-01d9-560c-a8c0-b52cee7402c8",
+          "memories": [
+            {
+              "content": "The user stores copies of identity documents in an encrypted folder.",
+              "content_digest": "83efe427335c1415d4a8d601d6e1c5d7a129c6962b74468d313b123e045b052f",
+              "position": 0,
+              "uid": "79576c1e-fa88-5d6e-b5e2-3d4ec11c3e06"
+            },
+            {
+              "content": "On a day the user transferred between buses twice, they rested for an hour after the trip.",
+              "content_digest": "907b9cc4c16b4b3fe53c2323d31afc83347ddc63775bd865bc42b62ca539f5bb",
+              "position": 1,
+              "uid": "28a1ff0b-e2d4-5cb6-9c26-949d86f76bac"
+            },
+            {
+              "content": "On a day the user took a direct route with a similar travel time, they remained seated to the destination.",
+              "content_digest": "0c0d1b12aa0ad393ac43982fe7d36d08f75d9e634c933593ef6a0a96614bb9ea",
+              "position": 2,
+              "uid": "0ad4a1f9-e3e9-517e-8cfc-f8e6307f1d3e"
+            },
+            {
+              "content": "After arriving at an entrance with stairs only, the user went around to an entrance on the other side of the building.",
+              "content_digest": "775d4c0a211f4509a0488cb3b2a790ae22c1b2ba2e96ed6b9100ae3cfb454315",
+              "position": 3,
+              "uid": "f772b0c7-502f-55b7-b431-ee6b20518d38"
+            },
+            {
+              "content": "On a day the user checked the accessible entrance location in advance, they arrived before the agreed time.",
+              "content_digest": "4e087a4e0ca48a3414580ce0d974da4b2221b304302de01cf305945866320a6a",
+              "position": 4,
+              "uid": "0b2d800b-a4ab-5422-bf06-56d17b98f604"
+            },
+            {
+              "content": "On a rainy day, the user's clothes became wet while crossing an uncovered section at a transfer stop.",
+              "content_digest": "dad5c9f35f0469edc528091e47f22365c1cb5de1b32e70335826d67a576fb47d",
+              "position": 5,
+              "uid": "b233f332-4927-549b-8dab-b554977fe363"
+            },
+            {
+              "content": "On a day the user traveled with their maternal uncle, they agreed to meet at an entrance near the elevator.",
+              "content_digest": "c81b012ae6686f47d54809c50ab559077b0e170d54792d34038f0f8fc32c6a96",
+              "position": 6,
+              "uid": "b38d0d63-c4b0-5955-857d-03cbcfd27f5b"
+            },
+            {
+              "content": "The user's maternal uncle prefers an aisle seat from which it is easy to stand during long-distance travel.",
+              "content_digest": "3ea31753296866c1bf438b51eba4110b0c6ed2e907e86dc21796166ed19d82df",
+              "position": 7,
+              "uid": "4668d326-b11c-5467-bca4-e8d5e242e375"
+            },
+            {
+              "content": "The local agent cannot know whether an accessible entrance is operating that day from past route records alone.",
+              "content_digest": "00fc09badcb1d569e3cb1e392ad18406a032d17749f71b44ed7bc121d5d72b4c",
+              "position": 8,
+              "uid": "a77c985c-3986-5141-9805-e3321b3cfa2c"
+            },
+            {
+              "content": "The transfer route the user takes has more boarding and alighting events and walking segments than the direct route.",
+              "content_digest": "f9320e36494ea5beb854d6bbe38a817ae73cd9fe68b75977438d35e44fb38fe6",
+              "position": 9,
+              "uid": "988926a1-3e28-5b3e-a41c-d9338971643e"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "0b834d5f-3749-4479-a772-817a4931f8d8"
+        },
+        {
+          "context_digest": "4eadf16a0c655a266bec3ebe56b056075c55e7f716f6879a0b6a905fe34136df",
+          "context_name": "task-3/local/personal-memory/2026/05",
+          "context_uid": "fd476504-4d4e-54d9-80b8-3dc2b18555d8",
+          "memories": [
+            {
+              "content": "The user keeps a picnic mat on the bottom shelf of the entrance storage cabinet.",
+              "content_digest": "c17479bd6a0f978f71b106b562507e702c3b84af5119be6bce48e4ee1664e728",
+              "position": 0,
+              "uid": "a9da4cfc-a6aa-51ae-9ec4-0de5c7a09227"
+            },
+            {
+              "content": "On a day the user went to the riverside, they sat in a place without shade and moved after an hour.",
+              "content_digest": "f9ab1da828ca5af06cb8bf54fe85136e316f503dab465fad514ab5a3f8243633",
+              "position": 1,
+              "uid": "fa2735e1-f4af-57d3-a18c-795715b6715b"
+            },
+            {
+              "content": "At the next outdoor meal, the user chose a place near a large tree and stayed for two hours.",
+              "content_digest": "189b7d85561df45986a6b7c9fe681b5ef53b22ca1f5e83fa8d64a7d93b35a577",
+              "position": 2,
+              "uid": "3bd8b8f2-c5b4-5004-8b9e-e388cc26ea7a"
+            },
+            {
+              "content": "On a hot day when the user brought only one bottle of water, they bought another drink partway through the outing.",
+              "content_digest": "92aa494a12664105a4bffc50a9026fadbec78332f750636093ea82ecc68e9597",
+              "position": 3,
+              "uid": "c7c4b494-39a6-5f5c-b37f-51c5061ac926"
+            },
+            {
+              "content": "On the next outing, the user brought two small bottles of water after freezing them.",
+              "content_digest": "69b3035b57b58b1aa778bd0da75dc806c1c449e7e35dc448aff92f7499c3148d",
+              "position": 4,
+              "uid": "dd9f5b3c-9c2e-5dbc-bf6e-eb7761eeb075"
+            },
+            {
+              "content": "When meeting their maternal uncle at a park, the user and the uncle waited at different entrances for 15 minutes.",
+              "content_digest": "9785e87b9fe79813762eb2e19e6d4f256a55f4799c92d095aaf695a8a1de5851",
+              "position": 5,
+              "uid": "2ed2a41c-f6ae-54d6-875c-a195d8fdacee"
+            },
+            {
+              "content": "For the next meeting, the user sent a photo of the entrance sign, and they met at the same place.",
+              "content_digest": "de40b6b7df84784639b97cf7ce153ad8af6e77320d75f3869979e5e3d39169e2",
+              "position": 6,
+              "uid": "23f3a4fc-d51e-5d0b-87f0-d5be407a57f3"
+            },
+            {
+              "content": "For a park meeting, the user's maternal uncle prefers an entrance that requires less walking from the parking area.",
+              "content_digest": "552a43b869c6f06cbf571f794106727406d87841d43addc92f31a3532f73d6f3",
+              "position": 7,
+              "uid": "e9f459f3-8ff0-5a0e-b78b-eda8d18b914e"
+            },
+            {
+              "content": "When making an outdoor plan, confirm the exact entrance and an alternative location in case of rain.",
+              "content_digest": "a265a6364c182de35363b58135b1da60d11595d1e3e0029f6851ac272261a959",
+              "position": 8,
+              "uid": "70277b86-d5db-5b58-8a94-e77372d15a4c"
+            },
+            {
+              "content": "Some park restrooms and drinking fountains may be closed seasonally.",
+              "content_digest": "8e5c4f5f85d4d27dc2211f46e3ab3bbed7f3d9687070b9028992b670986b09ca",
+              "position": 9,
+              "uid": "5a54437b-9b0e-5103-860d-d878be70b3ef"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "89e782a2-1c14-4e3f-ab48-be4d3f20ca02"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames overlap only on coordinating a clearly identified entrance when meeting the user’s maternal uncle. Otherwise, the reference focuses on transit burden, accessibility, document security, and travel comfort, while the compared frame adds outdoor seating, hydration, supplies, meeting contingencies, and seasonal facility availability.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "0b834d5f-3749-4479-a772-817a4931f8d8",
+              "memory_uid": "b38d0d63-c4b0-5955-857d-03cbcfd27f5b"
+            },
+            {
+              "frame_uid": "89e782a2-1c14-4e3f-ab48-be4d3f20ca02",
+              "memory_uid": "2ed2a41c-f6ae-54d6-875c-a195d8fdacee"
+            },
+            {
+              "frame_uid": "89e782a2-1c14-4e3f-ab48-be4d3f20ca02",
+              "memory_uid": "23f3a4fc-d51e-5d0b-87f0-d5be407a57f3"
+            }
+          ],
+          "reason": "The episodes address the same entrance-coordination decision: agreement near an elevator and a sign photo are consistent identification methods, while the park mix-up demonstrates the ambiguity they address.",
+          "status": "RESOLVED",
+          "summary": "Meetings with the maternal uncle are supported by clearly identifying the intended entrance through an agreed landmark or visual reference.",
+          "uid": "fec30e0d-1726-5f61-a5e0-e08da48b2527"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0b834d5f-3749-4479-a772-817a4931f8d8",
+              "memory_uid": "79576c1e-fa88-5d6e-b5e2-3d4ec11c3e06"
+            }
+          ],
+          "reason": "This is an independently useful security practice found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user keeps copies of identity documents in encrypted storage.",
+          "uid": "b7d7a72f-d1f9-52ba-9bfe-2e0241c57298"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0b834d5f-3749-4479-a772-817a4931f8d8",
+              "memory_uid": "28a1ff0b-e2d4-5cb6-9c26-949d86f76bac"
+            },
+            {
+              "frame_uid": "0b834d5f-3749-4479-a772-817a4931f8d8",
+              "memory_uid": "0ad4a1f9-e3e9-517e-8cfc-f8e6307f1d3e"
+            },
+            {
+              "frame_uid": "0b834d5f-3749-4479-a772-817a4931f8d8",
+              "memory_uid": "988926a1-3e28-5b3e-a41c-d9338971643e"
+            }
+          ],
+          "reason": "The reference memories split one comparative transit-burden account across route structure, seated travel, and subsequent rest; the compared frame provides no corresponding claim.",
+          "status": "RESOLVED",
+          "summary": "Compared with a similarly timed direct route, the transfer route involves more movement and was associated with greater post-trip recovery.",
+          "uid": "61254d34-ea3c-5b86-815b-430c905321c0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0b834d5f-3749-4479-a772-817a4931f8d8",
+              "memory_uid": "f772b0c7-502f-55b7-b431-ee6b20518d38"
+            },
+            {
+              "frame_uid": "0b834d5f-3749-4479-a772-817a4931f8d8",
+              "memory_uid": "0b2d800b-a4ab-5422-bf06-56d17b98f604"
+            },
+            {
+              "frame_uid": "0b834d5f-3749-4479-a772-817a4931f8d8",
+              "memory_uid": "a77c985c-3986-5141-9805-e3321b3cfa2c"
+            }
+          ],
+          "reason": "The reference memories jointly describe a stairs-only arrival, a beneficial advance location check, and the limits of historical route records; the compared frame lacks this accessibility-specific claim.",
+          "status": "RESOLVED",
+          "summary": "Accessible-building entry requires advance and current verification because entrance location or operation can affect detours and arrival timing.",
+          "uid": "2e325fdc-539c-5c56-828b-10f6b5edd0a1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0b834d5f-3749-4479-a772-817a4931f8d8",
+              "memory_uid": "b233f332-4927-549b-8dab-b554977fe363"
+            }
+          ],
+          "reason": "This transit-weather exposure is independently useful information present only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "An uncovered section at a transfer stop exposed the user to rain and left their clothes wet.",
+          "uid": "a56a1561-a674-57b0-a92f-cf30a07cb59e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0b834d5f-3749-4479-a772-817a4931f8d8",
+              "memory_uid": "4668d326-b11c-5467-bca4-e8d5e242e375"
+            }
+          ],
+          "reason": "This travel-seating preference appears only in the reference frame and concerns a separate decision from meeting-place selection.",
+          "status": "RESOLVED",
+          "summary": "The maternal uncle prefers an aisle seat that makes standing easier during long-distance travel.",
+          "uid": "58da9b96-693a-5c36-89e8-b5bd7998ffd4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "89e782a2-1c14-4e3f-ab48-be4d3f20ca02",
+              "memory_uid": "a9da4cfc-a6aa-51ae-9ec4-0de5c7a09227"
+            }
+          ],
+          "reason": "This household storage detail appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user stores a picnic mat on the bottom shelf of the entrance storage cabinet.",
+          "uid": "911d31cc-5860-58bd-b65d-c402f1b4a1ff"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "89e782a2-1c14-4e3f-ab48-be4d3f20ca02",
+              "memory_uid": "fa2735e1-f4af-57d3-a18c-795715b6715b"
+            },
+            {
+              "frame_uid": "89e782a2-1c14-4e3f-ab48-be4d3f20ca02",
+              "memory_uid": "3bd8b8f2-c5b4-5004-8b9e-e388cc26ea7a"
+            }
+          ],
+          "reason": "The compared memories form one before-and-after account about outdoor seating conditions; the reference frame has no corresponding claim.",
+          "status": "RESOLVED",
+          "summary": "Choosing shade for an outdoor meal was associated with remaining longer than when seated without shade.",
+          "uid": "d273cb92-a5f5-5dc0-8ec1-d0fb989b6f2b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "89e782a2-1c14-4e3f-ab48-be4d3f20ca02",
+              "memory_uid": "c7c4b494-39a6-5f5c-b37f-51c5061ac926"
+            },
+            {
+              "frame_uid": "89e782a2-1c14-4e3f-ab48-be4d3f20ca02",
+              "memory_uid": "dd9f5b3c-9c2e-5dbc-bf6e-eb7761eeb075"
+            }
+          ],
+          "reason": "The compared memories split one hydration-preparation account between the initial shortage and the later adjustment; the reference frame has no counterpart.",
+          "status": "RESOLVED",
+          "summary": "After needing an additional drink on a hot outing, the user prepared two frozen water bottles for the next outing.",
+          "uid": "f1081097-4556-54ac-90ff-b6de39bda072"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "89e782a2-1c14-4e3f-ab48-be4d3f20ca02",
+              "memory_uid": "e9f459f3-8ff0-5a0e-b78b-eda8d18b914e"
+            }
+          ],
+          "reason": "This park-access preference is found only in the compared frame and is distinct from merely identifying a shared meeting entrance.",
+          "status": "RESOLVED",
+          "summary": "For park meetings, the maternal uncle prefers an entrance requiring less walking from the parking area.",
+          "uid": "4ea43d7a-5c2b-502f-93c4-9ac79579b53c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "89e782a2-1c14-4e3f-ab48-be4d3f20ca02",
+              "memory_uid": "70277b86-d5db-5b58-8a94-e77372d15a4c"
+            }
+          ],
+          "reason": "This combined entrance-and-weather contingency policy appears only in the compared frame; its rain alternative is not supplied by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Outdoor plans should specify the exact entrance and an alternative meeting location for rain.",
+          "uid": "7aaf2f7b-6985-52bb-b8ef-c152c1522d23"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "89e782a2-1c14-4e3f-ab48-be4d3f20ca02",
+              "memory_uid": "5a54437b-9b0e-5103-860d-d878be70b3ef"
+            }
+          ],
+          "reason": "This seasonal facility-availability limitation is independently useful information present only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Park restrooms and drinking fountains may be unavailable because of seasonal closures.",
+          "uid": "a1ea21ca-70db-5201-a017-1c69392e721a"
+        }
+      ],
+      "reports": {
+        "both": "Both describe entrance coordination with the maternal uncle, with an agreed landmark or sign photo helping identify the intended meeting place.",
+        "compared_only": "The compared frame uniquely covers picnic supplies, shade and hydration preparation, parking-side entrance preference, rain contingencies, and seasonal park-facility closures.",
+        "differences": "",
+        "reference_only": "The reference uniquely covers secure identity-document storage, transit exertion and rain exposure, accessible-building entry planning, and aisle-seat preference."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "8e4d0caf-af5b-4990-b574-dfe8a1feb47c"
+    },
+    "analysis_digest": "bf59677af51c12b31faa8e00eba4579afdca0289cb1e7c573626664b431da348",
+    "key": "ff305350aeb0afe4058c30631b0d30fe9b846e9c5e30328096491092cfabe4e9",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 84.4642336249999,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "ff305350aeb0afe4058c30631b0d30fe9b846e9c5e30328096491092cfabe4e9",
+  "created_at": "2026-08-13T18:42:37.469193Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/06",
+  "pair_key": "fb02ec650c944173b096b46ed8943066f1b4fdf6ba3362c1489f08165a10b609",
+  "provider_seconds": 84.4642336249999,
+  "right": "task-3/local/personal-memory/2026/05",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

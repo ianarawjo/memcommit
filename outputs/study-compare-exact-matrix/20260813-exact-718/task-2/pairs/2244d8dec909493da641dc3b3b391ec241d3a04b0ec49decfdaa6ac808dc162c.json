@@ -1,0 +1,291 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:28:52.526773+00:00",
+      "frames": [
+        {
+          "context_digest": "587a9d2fb6abf2b486ccfc50ff85ae7280d7d7bd4003d85ce5877a4edfc9293f",
+          "context_name": "task-2/advisor1/terminology",
+          "context_uid": "7699c7c5-e48b-5548-b0aa-256d793c6c06",
+          "memories": [
+            {
+              "content": "Use the same term throughout the proposal for the same interaction concept or interface element.",
+              "content_digest": "2f11d02134609c6397d8f60105cc452e34129bc1c427a512455247e54951f18a",
+              "position": 0,
+              "uid": "949a884d-b348-5fa0-b1dd-adbebafe10a9"
+            },
+            {
+              "content": "Use abbreviations only for recurring terms of three or more words.",
+              "content_digest": "dcceb4407d24df4034dceca613413471bb46898a487aed0cc0905e48ede482e7",
+              "position": 1,
+              "uid": "2f484151-b5fc-51a9-8a88-b30a403617b3"
+            },
+            {
+              "content": "Present the full name and abbreviation together when using an abbreviation for the first time.",
+              "content_digest": "02e1b2b4cbc8f9a61e299bf1500663ae8cd4036155b2a7dec8c2ce40087ac29b",
+              "position": 2,
+              "uid": "21131a6f-d35c-51e3-895f-46cd21a3b566"
+            },
+            {
+              "content": "Prioritize the research role over diagnostic labels or deficits when referring to participants.",
+              "content_digest": "7b99c6ec90abdbb68d4af8e95a03df3149b9d2d4d637fbd33a70a2acf7073a12",
+              "position": 3,
+              "uid": "e02c3110-05c4-58a4-8d76-c8fd2426a0d5"
+            },
+            {
+              "content": "Reviewers from different subfields struggle to infer undefined abbreviations from context alone.",
+              "content_digest": "13af5eb9fe88f3f2d73192adfb48f7a20de09e22e777a952daa83ca1c030f9ee",
+              "position": 4,
+              "uid": "af028910-e48b-5605-b92b-9378bdfa525c"
+            },
+            {
+              "content": "Use the term formative evaluation for studies seeking design modification evidence, and distinguish it from final efficacy judgments.",
+              "content_digest": "4ba9bca850286ff6286cf4b3bf44395d608ec700c46acd8cd26c54e26d43b378",
+              "position": 5,
+              "uid": "39792d18-2be0-5135-a063-c5213247d330"
+            },
+            {
+              "content": "The user can have contribution labels such as principles, models, or guidelines approved only if they align with the abstraction level of the actual deliverables.",
+              "content_digest": "efed93b748ce74e3e9ed96949bf539c809ea4c36ae77bbb54670285f691f74e9",
+              "position": 6,
+              "uid": "bcaa8c30-ca6e-5b9f-af93-88513a2f16b1"
+            },
+            {
+              "content": "Design principles describe the relationship between conditions and outcomes rather than serving as instructions that merely replicate a single screen layout.",
+              "content_digest": "22385c2bb345db07d19c442e5d99a5c527c2795848b9e29fe198d0ede6255d6f",
+              "position": 7,
+              "uid": "82ad9fe2-4063-5e89-9097-c975aa2920cb"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "4a95be46-f6e9-403a-8c3d-e92d2abd0ff5"
+        },
+        {
+          "context_digest": "3cadca09eeabe1389261c2e43133d8b304ed2cad66332f3444e686a824f10a21",
+          "context_name": "task-2/advisor2/scope",
+          "context_uid": "86efd53c-c08d-537c-983f-91a7b915640d",
+          "memories": [
+            {
+              "content": "Specify in one sentence the user population and actual usage environment to which the design knowledge applies.",
+              "content_digest": "3bb25f3252678a84fe361c9562692c27556d31b6fac53da87b763648e80ed6ac",
+              "position": 0,
+              "uid": "6cfd5026-0c04-5ed8-baac-a56e68723aa3"
+            },
+            {
+              "content": "Reviewers judge the generalization boundary of results through the specified target population and environment.",
+              "content_digest": "9119780de23a4734bc8e0ba3c39dce251611932fd86bec479b522adaf1882758",
+              "position": 1,
+              "uid": "5bc7cf05-8c47-57d4-a749-ec7d2ec45e3e"
+            },
+            {
+              "content": "Specify the workflow, technical infrastructure, and operational-authority conditions that must match before applying the design guidelines at another field site.",
+              "content_digest": "2970e43d1b52b63b6f76c3c55a5534d24508bcd32402e66098d75dbb52d8083b",
+              "position": 2,
+              "uid": "25731e2b-8535-5b37-a377-0a3a99dbe189"
+            },
+            {
+              "content": "The transferability of field design knowledge depends not only on user characteristics but also on workflow and technological–organizational infrastructure.",
+              "content_digest": "71b7cbcf151114f17886e57f026c2b2ebdd666c7aa88f95c85880a1bc96fdcd2",
+              "position": 3,
+              "uid": "d79ba448-76b6-592e-b4ba-8cfd98683755"
+            },
+            {
+              "content": "The user tends to apply results confirmed at one deployment site to all similar organizations.",
+              "content_digest": "810ee3a6b79606e7f199a30aa146f47e405ff71d1728a3bbfef16b601f5c0d5e",
+              "position": 4,
+              "uid": "cde0ee2b-af3c-5c0d-b23c-632778c93e20"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "ae7eb612-2f6d-430c-8408-a9ec484d22a8"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address complementary proposal-quality concerns without making overlapping operational claims. The reference frame governs terminology, abbreviations, participant language, evaluation framing, and contribution labeling; the compared frame governs generalization boundaries, transfer conditions, and overextension from single-site evidence.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4a95be46-f6e9-403a-8c3d-e92d2abd0ff5",
+              "memory_uid": "949a884d-b348-5fa0-b1dd-adbebafe10a9"
+            }
+          ],
+          "reason": "This is an independently useful reference-only rule about terminological consistency, with no counterpart governing the same decision in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Use consistent terminology for each interaction concept or interface element throughout a proposal.",
+          "uid": "70afb2be-a6cb-5175-8296-a4f3b859e766"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4a95be46-f6e9-403a-8c3d-e92d2abd0ff5",
+              "memory_uid": "2f484151-b5fc-51a9-8a88-b30a403617b3"
+            }
+          ],
+          "reason": "This reference-only rule determines when abbreviation is appropriate; the compared frame contains no corresponding abbreviation policy.",
+          "status": "RESOLVED",
+          "summary": "Reserve abbreviations for recurring terms containing at least three words.",
+          "uid": "14bea2bb-8748-5cf6-890b-219eddc6598c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4a95be46-f6e9-403a-8c3d-e92d2abd0ff5",
+              "memory_uid": "21131a6f-d35c-51e3-895f-46cd21a3b566"
+            },
+            {
+              "frame_uid": "4a95be46-f6e9-403a-8c3d-e92d2abd0ff5",
+              "memory_uid": "af028910-e48b-5605-b92b-9378bdfa525c"
+            }
+          ],
+          "reason": "The reference memories express the instruction and its reviewer-comprehension rationale as one underlying first-use abbreviation claim, absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Introduce an abbreviation alongside its full name because reviewers cannot reliably infer undefined abbreviations.",
+          "uid": "89fae7ac-a878-5ee9-aa1a-2fa13e15748b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4a95be46-f6e9-403a-8c3d-e92d2abd0ff5",
+              "memory_uid": "e02c3110-05c4-58a4-8d76-c8fd2426a0d5"
+            }
+          ],
+          "reason": "This is a standalone reference-only policy for participant language and is not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Refer to participants by prioritizing their research role over diagnoses or perceived deficits.",
+          "uid": "f7a1582c-7268-59b0-b865-529d67325abb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4a95be46-f6e9-403a-8c3d-e92d2abd0ff5",
+              "memory_uid": "39792d18-2be0-5135-a063-c5213247d330"
+            }
+          ],
+          "reason": "This reference-only terminology rule governs evaluation framing, whereas the compared frame addresses applicability boundaries.",
+          "status": "RESOLVED",
+          "summary": "Call design-modification studies formative evaluations and distinguish them from final efficacy judgments.",
+          "uid": "e826f92c-9a30-5362-957e-545b061e465e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4a95be46-f6e9-403a-8c3d-e92d2abd0ff5",
+              "memory_uid": "bcaa8c30-ca6e-5b9f-af93-88513a2f16b1"
+            }
+          ],
+          "reason": "This is an independently useful reference-only rule for selecting contribution labels, without a same-decision counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Use contribution labels such as principles, models, or guidelines only when their abstraction matches the actual deliverables.",
+          "uid": "385139da-e65b-55b5-956f-70f87163c8ad"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4a95be46-f6e9-403a-8c3d-e92d2abd0ff5",
+              "memory_uid": "82ad9fe2-4063-5e89-9097-c975aa2920cb"
+            }
+          ],
+          "reason": "This reference-only claim defines the proper abstraction and function of design principles; transfer conditions in the compared frame do not govern that definition.",
+          "status": "RESOLVED",
+          "summary": "Treat design principles as condition–outcome relationships rather than instructions reproducing one screen layout.",
+          "uid": "6d1864ee-9254-5c34-97bc-aa9a47286fd1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ae7eb612-2f6d-430c-8408-a9ec484d22a8",
+              "memory_uid": "6cfd5026-0c04-5ed8-baac-a56e68723aa3"
+            },
+            {
+              "frame_uid": "ae7eb612-2f6d-430c-8408-a9ec484d22a8",
+              "memory_uid": "5bc7cf05-8c47-57d4-a749-ec7d2ec45e3e"
+            }
+          ],
+          "reason": "The compared memories provide an instruction and its review rationale for one underlying applicability-boundary claim, which the reference frame does not address.",
+          "status": "RESOLVED",
+          "summary": "State the applicable user population and usage environment so reviewers can identify the results’ generalization boundary.",
+          "uid": "15f0051b-3fce-5e03-bb2f-e3d756262b3f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ae7eb612-2f6d-430c-8408-a9ec484d22a8",
+              "memory_uid": "25731e2b-8535-5b37-a377-0a3a99dbe189"
+            },
+            {
+              "frame_uid": "ae7eb612-2f6d-430c-8408-a9ec484d22a8",
+              "memory_uid": "d79ba448-76b6-592e-b4ba-8cfd98683755"
+            }
+          ],
+          "reason": "The compared memories jointly state that transferability depends on operational and technological–organizational conditions beyond user characteristics; no reference memory governs this transfer decision.",
+          "status": "RESOLVED",
+          "summary": "Specify matching workflow, technical infrastructure, and organizational authority conditions before transferring design guidelines to another site.",
+          "uid": "52e57c81-b2ce-5a98-9000-022efce328a5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ae7eb612-2f6d-430c-8408-a9ec484d22a8",
+              "memory_uid": "cde0ee2b-af3c-5c0d-b23c-632778c93e20"
+            }
+          ],
+          "reason": "This is a compared-only observation about a specific generalization risk and is independently useful from the prescriptions defining applicability and transfer conditions.",
+          "status": "RESOLVED",
+          "summary": "Results confirmed at one deployment site tend to be overgeneralized to all similar organizations.",
+          "uid": "01a5a936-95b2-566a-b0c4-bd5d2ce2df14"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame requires explicit population, environment, workflow, infrastructure, and authority boundaries for transfer, while noting the risk of overgeneralizing single-site results.",
+        "differences": "",
+        "reference_only": "The reference covers consistent terminology, disciplined abbreviation use, participant-respectful language, formative evaluation, and contribution labels matched to deliverable abstraction."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "67c6c41d-fe0e-4d15-8f74-e968a1cac75d"
+    },
+    "analysis_digest": "c30cc4ad57fdbb0b2ef384eb7fc6418346660f87f2e7f4026ee787dde4aa3639",
+    "key": "98c9716496cacb7c496f889ed11a29e640a61d7f02bf6af95f9dc4876ffd1787",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 28.446119042000646,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "98c9716496cacb7c496f889ed11a29e640a61d7f02bf6af95f9dc4876ffd1787",
+  "created_at": "2026-08-13T18:29:20.972600Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/terminology",
+  "pair_key": "2244d8dec909493da641dc3b3b391ec241d3a04b0ec49decfdaa6ac808dc162c",
+  "provider_seconds": 28.446119042000646,
+  "right": "task-2/advisor2/scope",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

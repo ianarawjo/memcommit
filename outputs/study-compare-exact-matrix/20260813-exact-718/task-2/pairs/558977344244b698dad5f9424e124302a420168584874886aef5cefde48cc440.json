@@ -1,0 +1,388 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:24:48.886959+00:00",
+      "frames": [
+        {
+          "context_digest": "adcb1ff51b2facc8282e8a56d8fec5150dd8e7376b7889d21013f71fee66b9b8",
+          "context_name": "task-2/advisor1/review",
+          "context_uid": "57ec8c37-1a0a-5f3b-82e9-51adad82677c",
+          "memories": [
+            {
+              "content": "Conduct one review prior to submission focusing solely on the validity of user problems, design interventions, and evaluation logic.",
+              "content_digest": "3dd669e72e74416ccd0b8eaf32f6b24dc7400ceb50c133a18f3ff33f89075334",
+              "position": 0,
+              "uid": "0dda8eb3-3287-5bb6-9b26-b1c00cc038d9"
+            },
+            {
+              "content": "Cross-check whether research questions align with the core functions of the prototype.",
+              "content_digest": "b3fbab30f9c640c7b3f6424f2cbc7d66bfa1f455f937f7fb28a6cc8b3763597d",
+              "position": 1,
+              "uid": "c8e0c9dd-dc4a-5a7d-9a82-e7ee449a4b25"
+            },
+            {
+              "content": "Cross-check whether evaluation tasks align with representative measures.",
+              "content_digest": "1e49d1844cb2a0a66a3dec114e44713885299f7a80763ae4e9a416eba505d61f",
+              "position": 2,
+              "uid": "f93c5baa-3c2b-5e37-b07b-0b00e8b22ab9"
+            },
+            {
+              "content": "Cross-check whether collected evidence aligns with design and operational decisions to be changed.",
+              "content_digest": "bc977c73db48b06ad23b68fa58f2fa5f64b19d09856b0e80c8ddac0b039568f8",
+              "position": 3,
+              "uid": "8dae0ad6-2a6d-5d99-98db-b0d48a1140e5"
+            },
+            {
+              "content": "Verify at the end that user problems, design interventions, user studies, and expected contributions form a coherent logical flow.",
+              "content_digest": "8b8d84adb9296241a03a4e6b91acee829ff1eaea443f9dd0b132d7b64a53dcff",
+              "position": 4,
+              "uid": "0f89ab25-d9ee-5669-aa99-a0fe07803915"
+            },
+            {
+              "content": "HCI reviewers view the validity of design interventions as low if research questions are not linked to prototype functions.",
+              "content_digest": "e7e5bb6d9618adc9d4903a4d4cbbf53007381999a95e4ed2137e3705a988fa13",
+              "position": 5,
+              "uid": "3e4a9a3b-abc2-54ed-9b87-f81abf61b541"
+            },
+            {
+              "content": "HCI reviewers view the validity of evaluation plans as low if evaluation tasks do not produce representative measures.",
+              "content_digest": "b23af1197034e73ce7b5bf0c6870ee410e44a07810ebaae12259087f2c12f8f1",
+              "position": 6,
+              "uid": "fb785649-1947-5e7d-aafb-308f14fb21b4"
+            },
+            {
+              "content": "HCI reviewers view the practicality of contributions as low if collected evidence cannot change design or operational decisions.",
+              "content_digest": "3720d356aa625bea8226fb668004f599e61140f1ad1543b643eb72b7a39ec43d",
+              "position": 7,
+              "uid": "02f8ddd8-32b0-5e3b-b358-5e0472a6e0d2"
+            },
+            {
+              "content": "Cross-check at the end whether each research question, formative evaluation data, and design modification judgment are seamlessly connected.",
+              "content_digest": "f3b3d431c05e942ff3cea0ac2d239eeee33e224047a452debe0246c57472f74d",
+              "position": 8,
+              "uid": "d17ba26c-187e-57bc-8468-c9c053fc303d"
+            },
+            {
+              "content": "Review whether the application conditions of proposed design principles and boundary cases of failure are presented together.",
+              "content_digest": "28ab914aa4a03e8f1908176b235017a80838ed660d996773a44b3963b927bcb3",
+              "position": 9,
+              "uid": "48a91d19-cc68-5400-8971-8125236f3fbf"
+            },
+            {
+              "content": "The user can have contributions reviewed only if prototype outcomes and the transferable design knowledge derived from them are separated.",
+              "content_digest": "2deadd2cfeed19a3e544c81a345a40f2f3b4561a8d28b073b70400a5e82ae0cb",
+              "position": 10,
+              "uid": "774341c9-b92d-53a5-a24c-59c75e39756b"
+            },
+            {
+              "content": "The scope of observation in controlled formative evaluations does not include long-term adaptation and operational changes in real-world usage contexts.",
+              "content_digest": "76a1a3c03c7d93acc8a6aca832fd24ab9624ea9e53c8207876160ed1055682e2",
+              "position": 11,
+              "uid": "877015ae-ab0b-561c-9fe3-3abb2d0aaa4e"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "2062c3db-5b0c-4dd7-acc5-adf82896c23a"
+        },
+        {
+          "context_digest": "1396f236b90acd99b836eb5367828f8319d0465ea25b66f696a7f583f4f5ecf6",
+          "context_name": "task-2/advisor2/terminology",
+          "context_uid": "a2976fe7-0e07-5045-9e91-6a214128a482",
+          "memories": [
+            {
+              "content": "Do not change names referring to the same user roles, system functions, or operational stages midway.",
+              "content_digest": "a0f821f4497e7518806857e9005d12e27f6043fda6dbd91ba33ef188e0a3be16",
+              "position": 0,
+              "uid": "e2ae95ed-9033-5625-9179-33f4cf4a95c1"
+            },
+            {
+              "content": "Use abbreviations only for long recurring terms in a two-page proposal.",
+              "content_digest": "e6cad365bd42a8327e3cac92b8cf49cc456fa3e2f5c6624797fa509c0aac6846",
+              "position": 1,
+              "uid": "4be60357-09fa-523d-8c8d-8e03ace8fde9"
+            },
+            {
+              "content": "Present the full term and abbreviation together when using an abbreviation for the first time.",
+              "content_digest": "7b7c1f90727c822edbc13af17d64d45552d1c7ddb5fa18e665369423fd93ffbe",
+              "position": 2,
+              "uid": "0dd5d707-7d13-5be0-8377-421507650cba"
+            },
+            {
+              "content": "Refer to participants based on the roles they perform in the study rather than their status.",
+              "content_digest": "d89feff6e3dad0eea0ba4b1b291b140048af9f0f89d84c8ac196ae547a7b03bd",
+              "position": 3,
+              "uid": "9b3f0cde-7c3e-5b6a-9500-855f31d65ef2"
+            },
+            {
+              "content": "Reviewers from different subfields find it difficult to infer an abbreviation from context alone when it is not defined at first use.",
+              "content_digest": "4ffe91fb52db337a4ad30dc56d0439e12851f17f411c414b6d673e79bd91e68b",
+              "position": 4,
+              "uid": "8c896114-85e6-5c3c-ae3f-6e8e6b59f2fe"
+            },
+            {
+              "content": "When introducing an operational role for the first time, define both the decisions it can make and the actions it performs.",
+              "content_digest": "916b66a818f988f69e2e3c90f0ed0dbb7d29fc9e030b3fc7f822b3817106cbc3",
+              "position": 5,
+              "uid": "dc9e3f25-7aac-500b-b431-f6d810dd09bb"
+            },
+            {
+              "content": "Individuals holding identical job titles may possess different system modification privileges and data access rights depending on their deployment site.",
+              "content_digest": "e0315abc2f42a8f2657aa52e04899096ce799ba790fcd77d22b4196f917790ac",
+              "position": 6,
+              "uid": "04956cab-eb3a-5b71-be45-b1edd6c4a216"
+            },
+            {
+              "content": "The user tends to group distinct field roles under the single label “user.”",
+              "content_digest": "ba75af998618324dbdfa225a2cd503c42888f77daf4d44eb4f79b3a7db8e4bbe",
+              "position": 7,
+              "uid": "fc8613e8-86ca-5322-bb5d-03dfbca71c46"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "209b94c6-498c-4edd-93ab-99aa07778f93"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate but complementary review concerns: the reference frame governs substantive HCI argument validity, evidence, contribution scope, and evaluation limits, while the compared frame governs terminology, abbreviations, and precise role descriptions. Neither frame supplies a scope-aligned counterpart to the other.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2062c3db-5b0c-4dd7-acc5-adf82896c23a",
+              "memory_uid": "0dda8eb3-3287-5bb6-9b26-b1c00cc038d9"
+            }
+          ],
+          "reason": "Only the reference frame establishes this overall substantive review mandate.",
+          "status": "RESOLVED",
+          "summary": "A pre-submission review should focus specifically on the validity of user problems, design interventions, and evaluation logic.",
+          "uid": "74dcb82e-170e-5a99-af17-e82adeb54248"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2062c3db-5b0c-4dd7-acc5-adf82896c23a",
+              "memory_uid": "c8e0c9dd-dc4a-5a7d-9a82-e7ee449a4b25"
+            },
+            {
+              "frame_uid": "2062c3db-5b0c-4dd7-acc5-adf82896c23a",
+              "memory_uid": "3e4a9a3b-abc2-54ed-9b87-f81abf61b541"
+            }
+          ],
+          "reason": "The paired memories state the alignment check and its reviewer-facing rationale; the compared frame has no counterpart concerning research-question alignment.",
+          "status": "RESOLVED",
+          "summary": "Research questions should be linked to prototype functions so that design interventions appear valid to HCI reviewers.",
+          "uid": "eb89a3f7-49c7-55ef-85f5-e26e92179710"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2062c3db-5b0c-4dd7-acc5-adf82896c23a",
+              "memory_uid": "f93c5baa-3c2b-5e37-b07b-0b00e8b22ab9"
+            },
+            {
+              "frame_uid": "2062c3db-5b0c-4dd7-acc5-adf82896c23a",
+              "memory_uid": "fb785649-1947-5e7d-aafb-308f14fb21b4"
+            }
+          ],
+          "reason": "The paired memories state the evaluation-measure check and its reviewer-facing rationale; the compared frame does not address measurement validity.",
+          "status": "RESOLVED",
+          "summary": "Evaluation tasks should yield representative measures so that the evaluation plan appears valid to HCI reviewers.",
+          "uid": "489b0c1e-b424-5695-aa08-721177042b64"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2062c3db-5b0c-4dd7-acc5-adf82896c23a",
+              "memory_uid": "8dae0ad6-2a6d-5d99-98db-b0d48a1140e5"
+            },
+            {
+              "frame_uid": "2062c3db-5b0c-4dd7-acc5-adf82896c23a",
+              "memory_uid": "02f8ddd8-32b0-5e3b-b358-5e0472a6e0d2"
+            }
+          ],
+          "reason": "The paired memories express the same actionability requirement and its reviewer-facing consequence; no compared-side claim addresses evidentiary actionability.",
+          "status": "RESOLVED",
+          "summary": "Collected evidence should support changes to design or operational decisions so that claimed contributions remain practical.",
+          "uid": "f921dee5-0372-53c1-9df2-089ec7889390"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2062c3db-5b0c-4dd7-acc5-adf82896c23a",
+              "memory_uid": "0f89ab25-d9ee-5669-aa99-a0fe07803915"
+            },
+            {
+              "frame_uid": "2062c3db-5b0c-4dd7-acc5-adf82896c23a",
+              "memory_uid": "d17ba26c-187e-57bc-8468-c9c053fc303d"
+            }
+          ],
+          "reason": "Both memories specify final checks on connected proposal logic at complementary levels of detail, with no compared-side equivalent.",
+          "status": "RESOLVED",
+          "summary": "End-stage review should verify a coherent chain connecting problems, research questions, interventions, study evidence, modification judgments, and expected contributions.",
+          "uid": "7900161a-4564-5b56-b41e-f62af27d8564"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2062c3db-5b0c-4dd7-acc5-adf82896c23a",
+              "memory_uid": "48a91d19-cc68-5400-8971-8125236f3fbf"
+            }
+          ],
+          "reason": "This contribution-scope requirement appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Proposed design principles should present both their application conditions and their failure boundaries.",
+          "uid": "70bb8b35-9e06-5484-949b-11a4fe537b12"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2062c3db-5b0c-4dd7-acc5-adf82896c23a",
+              "memory_uid": "774341c9-b92d-53a5-a24c-59c75e39756b"
+            }
+          ],
+          "reason": "This distinction between artifact outcomes and transferable knowledge appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Prototype outcomes should be separated from the transferable design knowledge derived from them when presenting contributions for review.",
+          "uid": "8fe56950-6355-56ce-917a-3a203219324b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2062c3db-5b0c-4dd7-acc5-adf82896c23a",
+              "memory_uid": "877015ae-ab0b-561c-9fe3-3abb2d0aaa4e"
+            }
+          ],
+          "reason": "This explicit limitation on evaluation scope appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Controlled formative evaluations do not observe long-term adaptation or operational change in real-world use contexts.",
+          "uid": "6ff368ee-71e8-515b-bed9-1d7eef06628b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "209b94c6-498c-4edd-93ab-99aa07778f93",
+              "memory_uid": "e2ae95ed-9033-5625-9179-33f4cf4a95c1"
+            }
+          ],
+          "reason": "The compared frame alone establishes this cross-document naming-consistency policy.",
+          "status": "RESOLVED",
+          "summary": "Names for the same user roles, system functions, and operational stages should remain consistent throughout the proposal.",
+          "uid": "9a2cf5fd-a324-5099-8516-f91122da054e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "209b94c6-498c-4edd-93ab-99aa07778f93",
+              "memory_uid": "4be60357-09fa-523d-8c8d-8e03ace8fde9"
+            }
+          ],
+          "reason": "This format-specific restriction on abbreviation use appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "In a two-page proposal, abbreviations should be reserved for long terms that recur.",
+          "uid": "1d27608b-cbab-5858-b022-77d085eb9eb5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "209b94c6-498c-4edd-93ab-99aa07778f93",
+              "memory_uid": "0dd5d707-7d13-5be0-8377-421507650cba"
+            },
+            {
+              "frame_uid": "209b94c6-498c-4edd-93ab-99aa07778f93",
+              "memory_uid": "8c896114-85e6-5c3c-ae3f-6e8e6b59f2fe"
+            }
+          ],
+          "reason": "The paired memories provide the first-use rule and its cross-subfield readability rationale; the reference frame has no abbreviation policy.",
+          "status": "RESOLVED",
+          "summary": "An abbreviation should be introduced alongside its full term because reviewers cannot reliably infer undefined abbreviations from context.",
+          "uid": "d9a0e4e2-fa45-57bd-beb4-1cf8ab582eab"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "209b94c6-498c-4edd-93ab-99aa07778f93",
+              "memory_uid": "9b3f0cde-7c3e-5b6a-9500-855f31d65ef2"
+            },
+            {
+              "frame_uid": "209b94c6-498c-4edd-93ab-99aa07778f93",
+              "memory_uid": "fc8613e8-86ca-5322-bb5d-03dfbca71c46"
+            }
+          ],
+          "reason": "The paired memories express a role-specific naming policy and the labeling problem it addresses; the reference frame has no counterpart.",
+          "status": "RESOLVED",
+          "summary": "Study participants should be named by their functional roles rather than status or the undifferentiated label “user.”",
+          "uid": "c466b226-0d52-57a1-979f-6d92cf204f37"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "209b94c6-498c-4edd-93ab-99aa07778f93",
+              "memory_uid": "dc9e3f25-7aac-500b-b431-f6d810dd09bb"
+            },
+            {
+              "frame_uid": "209b94c6-498c-4edd-93ab-99aa07778f93",
+              "memory_uid": "04956cab-eb3a-5b71-be45-b1edd6c4a216"
+            }
+          ],
+          "reason": "The paired memories state the role-definition requirement and the deployment variation motivating it; the reference frame does not define operational roles.",
+          "status": "RESOLVED",
+          "summary": "Operational roles should be defined by their decisions and actions because identical job titles can carry site-specific modification privileges and data-access rights.",
+          "uid": "a0282368-98c8-5613-be93-a9f8f22dcad6"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers stable terminology, disciplined abbreviation use, first-use definitions, role-based participant naming, and operational-role descriptions that account for site-specific authority and access.",
+        "differences": "",
+        "reference_only": "The reference frame covers pre-submission validation of problem–intervention–evaluation logic, actionable evidence, coherent research chains, transferable contribution claims, design-principle boundaries, and limits of controlled formative evaluation."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "d4f82b40-3ed7-45b9-a7d4-f0125bd5dbc4"
+    },
+    "analysis_digest": "1bc0a6eda3cf287b18c306692fdbf598f64217a722741a4ee78e50e16e0f6ce8",
+    "key": "76e30534f29a13c3ef62d1532468ee22edd0abae5079f4095d98733334f500d8",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 42.69281841599877,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "76e30534f29a13c3ef62d1532468ee22edd0abae5079f4095d98733334f500d8",
+  "created_at": "2026-08-13T18:25:31.579321Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/review",
+  "pair_key": "558977344244b698dad5f9424e124302a420168584874886aef5cefde48cc440",
+  "provider_seconds": 42.69281841599877,
+  "right": "task-2/advisor2/terminology",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

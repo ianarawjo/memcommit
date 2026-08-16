@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from prompt_toolkit.application.current import get_app
 from prompt_toolkit.utils import get_cwidth
 
-from memcommit.commands.context_picker import (
+from memcommit.context_targeting.tui.picker import (
     ContextMemoryRow,
     context_memory_rows,
     render_context_options,

@@ -1,0 +1,406 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:52:58.135291+00:00",
+      "frames": [
+        {
+          "context_digest": "07c43eb0b8ecd9107f1d879a409b45289e236f48f620ff85f1d30ce594809149",
+          "context_name": "task-3/local/personal-memory/2025/09",
+          "context_uid": "5cd8ed5f-2f1f-5deb-8347-fc3bfa484d99",
+          "memories": [
+            {
+              "content": "The user keeps the book they are reading and a note-taking notebook on a small living-room desk.",
+              "content_digest": "d2c70cf4c27fe62f5915f2f5c669484c4a875e4ee21f8d7d89a5ff6746f14cf1",
+              "position": 0,
+              "uid": "3d3f7960-daf5-5a51-98b3-14261c5aa66c"
+            },
+            {
+              "content": "While reading in the living room with the television on, the user read the same paragraph three times.",
+              "content_digest": "00e41e6d5fe1dcfe961fa0f739860823ecf338dc55d5b9beea265ca823974582",
+              "position": 1,
+              "uid": "28714a4e-bc14-5703-b594-126471ae0585"
+            },
+            {
+              "content": "The next day, after turning off the television, the user read 40 pages without interruption.",
+              "content_digest": "c28ba9c872757b6683ab03d73e6ad61f71484d55986aae4c0976862a85e3a8b1",
+              "position": 2,
+              "uid": "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df"
+            },
+            {
+              "content": "On a day the phone was on the desk, the user stopped taking notes each time they checked a notification.",
+              "content_digest": "f95cb8b1b8abe89d7bf597ca5fb78f0862fe97a7cf0d8bc5a46c04026ebd6889",
+              "position": 3,
+              "uid": "1b1c9f90-2561-53d5-88fe-d54618450143"
+            },
+            {
+              "content": "During the next reading period, the user left the phone in another room and did not check it for an hour.",
+              "content_digest": "89dc50732e19b88a77657b285ce71c399d229b510265cc9adfbdf6ad706680cd",
+              "position": 4,
+              "uid": "076a7caa-5dcf-5f9d-8bee-efc952652efa"
+            },
+            {
+              "content": "A note attached to a paper book fell out, and the user had to find their place again.",
+              "content_digest": "723e48ceeba6c94e627c79af0518c811cfc8337f9eeae3a80ae388ec98786994",
+              "position": 5,
+              "uid": "1dad71ec-6a5d-550e-89d2-a86dc3dacb11"
+            },
+            {
+              "content": "With the next book, the user recorded the page number in the notebook and resumed reading immediately.",
+              "content_digest": "c74c2f80bf403da64f0a6de97ff04bc1f41cf68d0d33829fa926cc2549e8ea75",
+              "position": 6,
+              "uid": "58494743-fc7f-59e9-8e17-80b8a644470a"
+            },
+            {
+              "content": "The user's father expects that lowering the television volume while the user reads will make it easier for the user to concentrate.",
+              "content_digest": "281b1f8f55f8d22fbebdb2220405dc3e2300e29e0a568c1fac36d4bb1c39c186",
+              "position": 7,
+              "uid": "cce66589-892c-5d73-bdbc-2c6e94e0992e"
+            },
+            {
+              "content": "The local agent can summarize past reading environments and interruption records but cannot predict the next reading time.",
+              "content_digest": "50e5376e22f503048a7f1bf4055bfb31cb4aa3c75b1c816f2febce913716eb58",
+              "position": 8,
+              "uid": "20b2a27f-908f-5ed7-a288-f7c1030674fc"
+            },
+            {
+              "content": "The user feels that repeated notifications interrupt their flow of concentration.",
+              "content_digest": "d777b2a01cfac23e6ef7701c04c33592f8382fa78f8e307bae9ddbffc9a8e2ef",
+              "position": 9,
+              "uid": "310f4cfc-b117-5511-8e13-2bd2ebec9fe5"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "79d0425a-527d-4c3e-9828-7a37d226ab15"
+        },
+        {
+          "context_digest": "d28031209c5edc768a592166e26351dd5bce0c7568d379fcaceab173450041c8",
+          "context_name": "task-3/local/personal-memory/2026/02",
+          "context_uid": "7ffcbc10-1703-54b0-9545-99742b51d333",
+          "memories": [
+            {
+              "content": "The user keeps basic repair tools in a box beneath the sink.",
+              "content_digest": "c2a23bace63735c502081b19682a8ceb3e37156b9aadd6f7739e2005c20469d6",
+              "position": 0,
+              "uid": "7d3daf76-a21e-5117-a534-6175ab2d2861"
+            },
+            {
+              "content": "On a day the faucet leaked, the user placed only a towel beneath it, and the floor became wet as well.",
+              "content_digest": "ad6baa7e1848e4e61bdaf22bc5c8665122330b5c70c8ae192216abbba17c6134",
+              "position": 1,
+              "uid": "70a6d9f5-180f-5174-b247-690e10baa23e"
+            },
+            {
+              "content": "After sending a photo to building management, the user finalized the time for a repair visit.",
+              "content_digest": "82b36c7a95e51a0dfa32768c2a437d509b75c0f93bc51a99a636f2c9739a20da",
+              "position": 2,
+              "uid": "9fcd922c-147c-517b-82b3-180fdfb13f33"
+            },
+            {
+              "content": "Before the technician's visit, the user emptied the area beneath the sink so work could begin immediately.",
+              "content_digest": "dbc3b48e5bc4b406dc17067dd93d92e845e3706f47c8706f9a5d5ef17bf64617",
+              "position": 3,
+              "uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5"
+            },
+            {
+              "content": "On a day the user wrote the visit time only in the calendar and turned off the reminder, they heard the doorbell late.",
+              "content_digest": "95fab6bcab815dd8bdd5fecb867f84c6d2f1a901771603b1dbf197cde3c1d19d",
+              "position": 4,
+              "uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65"
+            },
+            {
+              "content": "For the next visit, the user enabled a reminder 30 minutes beforehand and answered immediately at the entrance.",
+              "content_digest": "818783ff21b2d369935b9994c17b28f93f84ea7558dab9f2de20d0aad21f86a3",
+              "position": 5,
+              "uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a"
+            },
+            {
+              "content": "After the repair, the user called their maternal aunt to confirm that the spare key entrusted to her was still there.",
+              "content_digest": "ac01b9816dda2d6bf16f22b41157120b7ffdd75d19638f6313a88e1ce6e7a1f1",
+              "position": 6,
+              "uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441"
+            },
+            {
+              "content": "The user's maternal aunt considers it unsafe to hand the spare key to a repair technician without the user's explicit request.",
+              "content_digest": "f7c7c0306c81cc6de9f02aa1aed7d411db3f29757d024e7d5a1679b1ff308948",
+              "position": 7,
+              "uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd"
+            },
+            {
+              "content": "Obtain the user's reconfirmation before scheduling an external worker to enter the residential unit.",
+              "content_digest": "34382e40f4907bea82728787fdeb150e299d46a0079ae2847d4eda6d6d892d22",
+              "position": 8,
+              "uid": "4716a67b-8602-564c-9e89-85cd4ee158f9"
+            },
+            {
+              "content": "A multi-unit residential building's repair schedule may change because of emergency work or parts availability.",
+              "content_digest": "d701fdd1ffbf17ff0890c583b5bf39849e3c6e3cc296fde7e00d3d1ecc0ef196",
+              "position": 9,
+              "uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "54cd51f9-f920-42a5-9c15-a75347618a1d"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate domains: the reference describes reading setup, distraction, place-keeping, and limited agent capability, while the compared frame covers leak response, repair coordination, reminders, access safeguards, and scheduling uncertainty. No claims materially govern the same operational decision.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "79d0425a-527d-4c3e-9828-7a37d226ab15",
+              "memory_uid": "3d3f7960-daf5-5a51-98b3-14261c5aa66c"
+            }
+          ],
+          "reason": "This is independently useful information about the user's reading setup, with no counterpart concerning that operational context in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user keeps current reading and note-taking materials on a small living-room desk.",
+          "uid": "57491ba1-6a0d-583c-bc4c-06f6640c294c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "79d0425a-527d-4c3e-9828-7a37d226ab15",
+              "memory_uid": "28714a4e-bc14-5703-b594-126471ae0585"
+            },
+            {
+              "frame_uid": "79d0425a-527d-4c3e-9828-7a37d226ab15",
+              "memory_uid": "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df"
+            }
+          ],
+          "reason": "These observations split one one-sided contrast about television conditions and reading continuity; repair coordination does not address that decision.",
+          "status": "RESOLVED",
+          "summary": "The paired reading episodes associate an active television with repeated rereading and an inactive television with sustained uninterrupted reading.",
+          "uid": "3b4237c2-2cd3-57d9-94d6-4728f78cb96a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "79d0425a-527d-4c3e-9828-7a37d226ab15",
+              "memory_uid": "1b1c9f90-2561-53d5-88fe-d54618450143"
+            },
+            {
+              "frame_uid": "79d0425a-527d-4c3e-9828-7a37d226ab15",
+              "memory_uid": "076a7caa-5dcf-5f9d-8bee-efc952652efa"
+            },
+            {
+              "frame_uid": "79d0425a-527d-4c3e-9828-7a37d226ab15",
+              "memory_uid": "310f4cfc-b117-5511-8e13-2bd2ebec9fe5"
+            }
+          ],
+          "reason": "The observations and stated feeling jointly express one one-sided claim about notification-driven reading interruption, absent from the repair-focused frame.",
+          "status": "RESOLVED",
+          "summary": "Phone notifications disrupt the user's note-taking and concentration, while leaving the phone elsewhere permits an hour without checking it.",
+          "uid": "02a86988-eb5c-566d-9238-23e13ff86d54"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "79d0425a-527d-4c3e-9828-7a37d226ab15",
+              "memory_uid": "1dad71ec-6a5d-550e-89d2-a86dc3dacb11"
+            },
+            {
+              "frame_uid": "79d0425a-527d-4c3e-9828-7a37d226ab15",
+              "memory_uid": "58494743-fc7f-59e9-8e17-80b8a644470a"
+            }
+          ],
+          "reason": "These memories form one contrast about preserving a reading position; the compared frame contains no claim about that practice.",
+          "status": "RESOLVED",
+          "summary": "After a loose note caused the user to lose their place, recording the page number in a notebook enabled immediate resumption with the next book.",
+          "uid": "57df4879-6d0f-5e9d-a003-f4b3fa77e7d3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "79d0425a-527d-4c3e-9828-7a37d226ab15",
+              "memory_uid": "cce66589-892c-5d73-bdbc-2c6e94e0992e"
+            }
+          ],
+          "reason": "This is a distinct family member's expectation about the reading environment, not an operational claim addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user's father expects lower television volume to improve the user's concentration while reading.",
+          "uid": "dd997772-ea6c-50cf-951c-d5d3a30eca3b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "79d0425a-527d-4c3e-9828-7a37d226ab15",
+              "memory_uid": "20b2a27f-908f-5ed7-a288-f7c1030674fc"
+            }
+          ],
+          "reason": "This capability boundary is independently useful and has no corresponding agent-capability claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The local agent can summarize past reading environments and interruptions but cannot predict the next reading time.",
+          "uid": "5272b3e5-2f22-5b14-bcd5-cec33a50ef1c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "54cd51f9-f920-42a5-9c15-a75347618a1d",
+              "memory_uid": "7d3daf76-a21e-5117-a534-6175ab2d2861"
+            }
+          ],
+          "reason": "This is one-sided information about repair-tool storage and does not materially address any reading-related operational decision.",
+          "status": "RESOLVED",
+          "summary": "The user stores basic repair tools in a box beneath the sink.",
+          "uid": "a1e935b5-812a-5994-84a9-4d94cf4e244f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "54cd51f9-f920-42a5-9c15-a75347618a1d",
+              "memory_uid": "70a6d9f5-180f-5174-b247-690e10baa23e"
+            }
+          ],
+          "reason": "This is a distinct observation about inadequate leak containment, with no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Using only a towel beneath a leaking faucet failed to prevent the floor from becoming wet.",
+          "uid": "cfe231d1-ba1f-535f-8d7c-a14dae354eac"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "54cd51f9-f920-42a5-9c15-a75347618a1d",
+              "memory_uid": "9fcd922c-147c-517b-82b3-180fdfb13f33"
+            }
+          ],
+          "reason": "This independently describes repair coordination and does not overlap with the reference frame's reading-time observations.",
+          "status": "RESOLVED",
+          "summary": "The user finalized a repair-visit time after sending building management a photograph.",
+          "uid": "5ca299ac-8219-50ac-ab1f-201fee9fcc5d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "54cd51f9-f920-42a5-9c15-a75347618a1d",
+              "memory_uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5"
+            }
+          ],
+          "reason": "This is a distinct preparation practice for repair access, absent from the reading-focused reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user cleared the area beneath the sink before the technician arrived so work could begin immediately.",
+          "uid": "c0297c10-0c3a-578c-9a1b-5b429693c396"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "54cd51f9-f920-42a5-9c15-a75347618a1d",
+              "memory_uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65"
+            },
+            {
+              "frame_uid": "54cd51f9-f920-42a5-9c15-a75347618a1d",
+              "memory_uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a"
+            }
+          ],
+          "reason": "The episodes split one one-sided contrast about reminders for repair visits; notification interruption during reading governs a different decision and is not materially related.",
+          "status": "RESOLVED",
+          "summary": "A disabled visit reminder was associated with answering the door late, whereas a 30-minute reminder was associated with answering immediately.",
+          "uid": "2a9612e8-20a6-5b07-9960-abb9ac538a51"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "54cd51f9-f920-42a5-9c15-a75347618a1d",
+              "memory_uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441"
+            }
+          ],
+          "reason": "This is an independently useful verification event concerning key custody, with no matching claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "After the repair, the user confirmed with their maternal aunt that the entrusted spare key remained with her.",
+          "uid": "5ad17f1f-9b0c-53fc-af40-c2281c192f24"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "54cd51f9-f920-42a5-9c15-a75347618a1d",
+              "memory_uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd"
+            }
+          ],
+          "reason": "This is a distinct safety judgment about delegated key access and has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user's maternal aunt considers giving a repair technician the spare key unsafe without the user's explicit request.",
+          "uid": "bc30df17-fb6e-51ef-90f0-9261e4980bf7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "54cd51f9-f920-42a5-9c15-a75347618a1d",
+              "memory_uid": "4716a67b-8602-564c-9e89-85cd4ee158f9"
+            }
+          ],
+          "reason": "This is a one-sided entry-authorization requirement; no reference-side claim governs residential access.",
+          "status": "RESOLVED",
+          "summary": "The user's reconfirmation should be obtained before scheduling an external worker to enter the residence.",
+          "uid": "f6b01034-71d1-58b2-9777-d7fff6054fd1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "54cd51f9-f920-42a5-9c15-a75347618a1d",
+              "memory_uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+            }
+          ],
+          "reason": "This is independently useful information about repair-scheduling uncertainty, unrelated to the reference-side limit on predicting reading time.",
+          "status": "RESOLVED",
+          "summary": "Emergency work or parts availability may change a multi-unit building's repair schedule.",
+          "uid": "39e612e3-4a7c-5ca8-8d3b-ad798f10e0aa"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers repair supplies, leak containment, visit preparation and reminders, spare-key handling, entry reconfirmation, and causes of repair-schedule changes.",
+        "differences": "",
+        "reference_only": "The reference covers reading materials, television and notification distractions, place-keeping practices, a family expectation about concentration, and limits on summarizing or predicting reading activity."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "a9ec7026-ea6d-497a-acd6-b9d6a4009aaf"
+    },
+    "analysis_digest": "ee7c99e2680bea55e08cb74b30c5c2bc6835d867c737b5175d84f424bb0f4a61",
+    "key": "ef9c8a40ff32453d0cc416ea5b2218996ed6852c589170d53eb7381629f8bb19",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 43.47576100000151,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "ef9c8a40ff32453d0cc416ea5b2218996ed6852c589170d53eb7381629f8bb19",
+  "created_at": "2026-08-13T18:53:41.610663Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/09",
+  "pair_key": "725f1e6539042a66d134d9101172240b8d1f4067a333a8b9367711d152476c1e",
+  "provider_seconds": 43.47576100000151,
+  "right": "task-3/local/personal-memory/2026/02",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

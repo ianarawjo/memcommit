@@ -1,0 +1,415 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:35:26.868673+00:00",
+      "frames": [
+        {
+          "context_digest": "4c7d7890b4c8dbd807acc103affd0572c325fd2e0f58346a97c3ed49e48ba34e",
+          "context_name": "task-3/local/personal-memory/2024/02",
+          "context_uid": "7bedad96-d78b-5977-a4c9-71049dcfcec8",
+          "memories": [
+            {
+              "content": "The user's maternal aunt keeps one spare key to the user's home.",
+              "content_digest": "2e45c292a3cbc26a1c9928c4546c6029c7dcd2aa6aa0a45a7cfb4be7888dd5c6",
+              "position": 0,
+              "uid": "1c627e4c-c393-5bd3-a5ae-b3318821be73"
+            },
+            {
+              "content": "If the door is locked, the user is accustomed to contacting their maternal aunt, who has the spare key, before contacting building management.",
+              "content_digest": "709cc4a1ae26126bd3238ea8c0e343415d95d084ddaf022590ff4197003c7b81",
+              "position": 1,
+              "uid": "e80936de-87af-5dbb-ab94-d456bbfaab0a"
+            },
+            {
+              "content": "When going to collect the spare key from their maternal aunt, the user wants to give an arrival time first so neither person has to wait.",
+              "content_digest": "5dab57d537091a28848dfa3592d16e038d6e78eeb8159489c17475befeb62a53",
+              "position": 2,
+              "uid": "7c26cf33-0630-5138-910a-6d37d6ed2b63"
+            },
+            {
+              "content": "The user feels at ease only after returning a borrowed spare key in person on the same day.",
+              "content_digest": "d3b9e78e166fb3af3dc248bcddbf1c1df15d3eed57655991a52c23b4ebb6ba14",
+              "position": 3,
+              "uid": "c3f0f26c-8d89-55e3-8bf3-398271e417e7"
+            },
+            {
+              "content": "The user feels uneasy about writing down a new entrance passcode on paper.",
+              "content_digest": "fe40a50fb7f0b0e1514a2f7e6ea3748e73cbd76fa45b862b4880c9eba68a2312",
+              "position": 4,
+              "uid": "7d7d00a3-c5af-5441-bb50-9631fbfd7979"
+            },
+            {
+              "content": "The user found it difficult when a family member arrived without notice during a meeting and the user could not respond immediately.",
+              "content_digest": "30d2126eb016f1fab8b8bd670bc00ee6ac5182f28b0afe696b2c30f4d7bc128f",
+              "position": 5,
+              "uid": "2e0df581-bd54-54f5-94ef-b719427fc88c"
+            },
+            {
+              "content": "On a day their younger brother received a package for them, the user felt reassured after checking the delivery photo.",
+              "content_digest": "54eacbc39b057a6a18f8ddd8e1db587dbef231ecb10ed8cd84a46b3575ac470c",
+              "position": 6,
+              "uid": "9278b64e-7550-5eb6-bbfd-544a2ae4ec3d"
+            },
+            {
+              "content": "The user's maternal aunt wants confirmation that the user is coming in person before handing over the spare key.",
+              "content_digest": "5d780f2fb96eac2d3c65e7417ee00e64e29c2f8873c432b291e62773723182c9",
+              "position": 7,
+              "uid": "76fb9115-a3f2-5ce3-a445-c3d1e38e4253"
+            },
+            {
+              "content": "Confirm with the user before sharing the spare key's storage location or the maternal aunt's contact information.",
+              "content_digest": "ac00da1acd77d05fd277a0a92d2ab62cbefb3c334e6e7c2cb3b046fbea217a6c",
+              "position": 8,
+              "uid": "6fa50e1d-8bd1-557a-9b03-1e4a4dc664bd"
+            },
+            {
+              "content": "The management office of a multi-unit residential building does not hold a unit key without verifying identity.",
+              "content_digest": "841f44fddced7681d5c9b47aaa2536f14536f1309b1f73104df7cb44738efbd1",
+              "position": 9,
+              "uid": "b18ff5b4-4f0d-5b93-8c41-439e5b15c710"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "efc37073-0d26-4d5a-bfa0-79230989e68a"
+        },
+        {
+          "context_digest": "14adbc31fc3a2dc50b7b980d1e24569b16fff058104a812c7f3b4e1542b7abf0",
+          "context_name": "task-3/local/personal-memory/2025/03",
+          "context_uid": "913e0bfd-f6d9-579e-9a37-ba5daa9d17f1",
+          "memories": [
+            {
+              "content": "The user stores prepared meals on the second shelf of the freezer.",
+              "content_digest": "cd837b62b643f752da54b21de2f4f7a3d963a7c658d5b83dff39d1d92e0fdbad",
+              "position": 0,
+              "uid": "5d989bab-c471-5de9-bb73-29cabc4753dd"
+            },
+            {
+              "content": "The user went to the market without a shopping list and bought onions that were already at home.",
+              "content_digest": "f667c860e046bb27662b26d7cc4ed083ee48d9d7915237dc4b92ec378481a093",
+              "position": 1,
+              "uid": "d1725ae4-3fd3-5250-92b3-73d84d9152a7"
+            },
+            {
+              "content": "On a day the user shopped after checking a refrigerator photo, they did not make a duplicate purchase.",
+              "content_digest": "7283d4afe58c0ab05d9cb426bb80bed0e26e0b1783ff7cdd00a5f6e89d21861b",
+              "position": 2,
+              "uid": "904ff225-26df-5424-8a82-23d733649106"
+            },
+            {
+              "content": "On a day the user made a spicy stew, they left part of one bowl uneaten.",
+              "content_digest": "2765ec701f8e058d35ddee4a485c40221523ee2d9b56301ec1658ec4e419cbc2",
+              "position": 3,
+              "uid": "67a003c7-648a-59dc-8e82-03f9e452ffce"
+            },
+            {
+              "content": "The next time the user cooked it, they used half as much chili powder and finished the meal.",
+              "content_digest": "bdd7df7c762bbce31a40a45c2124e49ae3a6439dfc2133c574443d7eb3a7b1bb",
+              "position": 4,
+              "uid": "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9"
+            },
+            {
+              "content": "When cooking with their younger brother, the user assigned the cooking sequence only verbally and they did the same task twice.",
+              "content_digest": "bd92611cfc05fd42bb5d25e8dd7838ca1b2f6d99869bf1f61921b46950a4b532",
+              "position": 5,
+              "uid": "64bf4401-e972-5d15-a526-21ca901a6a9f"
+            },
+            {
+              "content": "The next time, the user and their younger brother split ingredient preparation and heat control and finished the meal 20 minutes earlier.",
+              "content_digest": "c3a28e7256d781ecb2d8710145880ffe79495e32d47ae1949c4be54e52a44555",
+              "position": 6,
+              "uid": "57e09ea5-54ff-5fce-aada-68daffbacc8b"
+            },
+            {
+              "content": "When cooking together, the user's younger brother prefers to divide the cooking and dishwashing roles in advance.",
+              "content_digest": "3bbc428c4f3b4e28a8e2341206ac78b39240eea53a9862192528029b0a57d12b",
+              "position": 7,
+              "uid": "0a5d054f-94bd-5955-bdb7-9b5427e2260b"
+            },
+            {
+              "content": "The local agent can compare responses across several meals, but it cannot conclude from one unfinished food item that the user dislikes that ingredient.",
+              "content_digest": "5787c1636d9dd4a5cb5bd70533b7dd44b2d6cff1047f5c408f5bcaa1b6577fe1",
+              "position": 8,
+              "uid": "1f94b78b-1635-551c-b90c-bea2a67ca595"
+            },
+            {
+              "content": "The condition of frozen prepared food may vary with its packaging and storage duration.",
+              "content_digest": "84bdac276dce5b50b19bc0c7c471468a22cc9945b1da7357700a58c157cf4ca1",
+              "position": 9,
+              "uid": "f64ef6c4-7665-5574-9d58-fc124b0bfe3f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "44a37c90-9779-48d4-a141-5bd4a1335d1e"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate practical domains: the reference centers on home access, privacy, and family coordination, while the compared frame centers on food storage, shopping, cooking, and cautious inference. No claims govern the same operational decision, and no conflict or scope-dependent difference appears.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "efc37073-0d26-4d5a-bfa0-79230989e68a",
+              "memory_uid": "1c627e4c-c393-5bd3-a5ae-b3318821be73"
+            }
+          ],
+          "reason": "This is independently useful home-access information found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The maternal aunt keeps a spare key to the user’s home.",
+          "uid": "00d153b9-0a9b-5bfa-9b63-6f3e32a3626e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "efc37073-0d26-4d5a-bfa0-79230989e68a",
+              "memory_uid": "e80936de-87af-5dbb-ab94-d456bbfaab0a"
+            }
+          ],
+          "reason": "This contact-order practice has no counterpart addressing the same access decision in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "When locked out, the user normally contacts the maternal aunt before building management.",
+          "uid": "93ccede2-bd0d-5c2d-99f9-64bca921a0d3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "efc37073-0d26-4d5a-bfa0-79230989e68a",
+              "memory_uid": "7c26cf33-0630-5138-910a-6d37d6ed2b63"
+            },
+            {
+              "frame_uid": "efc37073-0d26-4d5a-bfa0-79230989e68a",
+              "memory_uid": "76fb9115-a3f2-5ce3-a445-c3d1e38e4253"
+            }
+          ],
+          "reason": "These memories express complementary parts of one reference-only pickup-confirmation practice.",
+          "status": "RESOLVED",
+          "summary": "Spare-key pickup is coordinated in advance: the user provides an arrival time, and the aunt wants confirmation of an in-person visit before handover.",
+          "uid": "91b05021-2ae9-5146-8a7f-bbecfc742ad5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "efc37073-0d26-4d5a-bfa0-79230989e68a",
+              "memory_uid": "c3f0f26c-8d89-55e3-8bf3-398271e417e7"
+            }
+          ],
+          "reason": "This return preference is independently useful and absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user feels comfortable after returning a borrowed spare key in person on the same day.",
+          "uid": "6dce1a0a-1959-551e-a2f8-f651bbd1d53f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "efc37073-0d26-4d5a-bfa0-79230989e68a",
+              "memory_uid": "7d7d00a3-c5af-5441-bb50-9631fbfd7979"
+            }
+          ],
+          "reason": "This security preference has no claim about the same decision in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user is uneasy about recording a new entrance passcode on paper.",
+          "uid": "94293ff2-de62-5701-9fd5-d38de864cb2c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "efc37073-0d26-4d5a-bfa0-79230989e68a",
+              "memory_uid": "2e0df581-bd54-54f5-94ef-b719427fc88c"
+            }
+          ],
+          "reason": "This reference-only experience concerns advance notice and availability, not the cooking coordination described elsewhere.",
+          "status": "RESOLVED",
+          "summary": "An unannounced family arrival during a meeting was difficult because the user could not respond immediately.",
+          "uid": "a93b9808-6728-50a7-89c4-7d25d7cbf254"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "efc37073-0d26-4d5a-bfa0-79230989e68a",
+              "memory_uid": "9278b64e-7550-5eb6-bbfd-544a2ae4ec3d"
+            }
+          ],
+          "reason": "Although another memory involves a refrigerator photo, the photos support different operational decisions, so this remains an independent reference-only claim.",
+          "status": "RESOLVED",
+          "summary": "The user felt reassured after checking a delivery photo when their younger brother received a package for them.",
+          "uid": "1267ec52-7649-5158-be4c-6ec98ea5e855"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "efc37073-0d26-4d5a-bfa0-79230989e68a",
+              "memory_uid": "6fa50e1d-8bd1-557a-9b03-1e4a4dc664bd"
+            }
+          ],
+          "reason": "This privacy rule is independently useful and has no compared-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user should be consulted before the spare key’s location or the aunt’s contact information is shared.",
+          "uid": "89320c88-7035-5a42-ad12-31c6df4a2749"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "efc37073-0d26-4d5a-bfa0-79230989e68a",
+              "memory_uid": "b18ff5b4-4f0d-5b93-8c41-439e5b15c710"
+            }
+          ],
+          "reason": "This building-access constraint appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A multi-unit building’s management office does not hold a unit key without identity verification.",
+          "uid": "04edcece-33ea-5ea9-85d4-7c478ddfe27c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "44a37c90-9779-48d4-a141-5bd4a1335d1e",
+              "memory_uid": "5d989bab-c471-5de9-bb73-29cabc4753dd"
+            }
+          ],
+          "reason": "This food-location fact appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user stores prepared meals on the freezer’s second shelf.",
+          "uid": "e254a144-62b0-57d1-8541-800741730ea0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "44a37c90-9779-48d4-a141-5bd4a1335d1e",
+              "memory_uid": "d1725ae4-3fd3-5250-92b3-73d84d9152a7"
+            }
+          ],
+          "reason": "This compared-only shopping outcome is independently useful.",
+          "status": "RESOLVED",
+          "summary": "Shopping without a list led the user to buy onions already available at home.",
+          "uid": "f870ee6f-49ef-5513-8ec4-dbe36a2baee1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "44a37c90-9779-48d4-a141-5bd4a1335d1e",
+              "memory_uid": "904ff225-26df-5424-8a82-23d733649106"
+            }
+          ],
+          "reason": "This concerns inventory-based purchasing rather than delivery verification, so it has no same-decision counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Checking a refrigerator photo before shopping helped the user avoid a duplicate purchase.",
+          "uid": "1b3a0c21-b3b3-5672-b339-b110b77b81dd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "44a37c90-9779-48d4-a141-5bd4a1335d1e",
+              "memory_uid": "67a003c7-648a-59dc-8e82-03f9e452ffce"
+            },
+            {
+              "frame_uid": "44a37c90-9779-48d4-a141-5bd4a1335d1e",
+              "memory_uid": "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9"
+            }
+          ],
+          "reason": "The two memories form one compared-only account of a recipe adjustment and its observed outcome.",
+          "status": "RESOLVED",
+          "summary": "After leaving spicy stew unfinished, the user halved the chili powder on the next attempt and finished the meal.",
+          "uid": "99d04911-22db-5c53-ae06-0bcf2ab30b61"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "44a37c90-9779-48d4-a141-5bd4a1335d1e",
+              "memory_uid": "64bf4401-e972-5d15-a526-21ca901a6a9f"
+            },
+            {
+              "frame_uid": "44a37c90-9779-48d4-a141-5bd4a1335d1e",
+              "memory_uid": "57e09ea5-54ff-5fce-aada-68daffbacc8b"
+            },
+            {
+              "frame_uid": "44a37c90-9779-48d4-a141-5bd4a1335d1e",
+              "memory_uid": "0a5d054f-94bd-5955-bdb7-9b5427e2260b"
+            }
+          ],
+          "reason": "These memories jointly describe one compared-only coordination pattern and its observed effects.",
+          "status": "RESOLVED",
+          "summary": "Cooking with the younger brother improved when responsibilities were divided in advance, avoiding duplicated work, saving time, and matching his preference for predefined cooking and dishwashing roles.",
+          "uid": "6517e2f7-1534-5f94-8f19-1f86bf879e3e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "44a37c90-9779-48d4-a141-5bd4a1335d1e",
+              "memory_uid": "1f94b78b-1635-551c-b90c-bea2a67ca595"
+            }
+          ],
+          "reason": "This evidentiary limit appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The local agent may compare behavior across meals but cannot infer ingredient dislike from one unfinished item.",
+          "uid": "ef3478cd-eb9a-55e3-9e94-34943d29f8b5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "44a37c90-9779-48d4-a141-5bd4a1335d1e",
+              "memory_uid": "f64ef6c4-7665-5574-9d58-fc124b0bfe3f"
+            }
+          ],
+          "reason": "This storage-condition qualification is independently useful and appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Frozen prepared food condition can vary with packaging and storage duration.",
+          "uid": "99f7ebc4-b999-5a89-9e3b-ea366a894f34"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame describes food organization, photo-assisted shopping, recipe adjustment, advance division of cooking roles, cautious interpretation of meal behavior, and storage-dependent food condition.",
+        "differences": "",
+        "reference_only": "The reference describes spare-key custody and retrieval, sensitive access information, building identity checks, and experiences involving unannounced visits and delivery verification."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "d5e43c8e-4f02-421b-a4eb-12470720f43e"
+    },
+    "analysis_digest": "e59189eb1e29fd6dbaddf536e315d9795a691ea7c14159e7734be3beafef9f2e",
+    "key": "a25b5e9674e952012da39bacf1dc5b1e003d233af3ffbbd9d4f9b5c73b05ceb3",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 55.59901941699718,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "a25b5e9674e952012da39bacf1dc5b1e003d233af3ffbbd9d4f9b5c73b05ceb3",
+  "created_at": "2026-08-13T18:36:22.467086Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/02",
+  "pair_key": "38118cece329f56498f04087702905f0097f23d2a1803a91aedd672d2950592c",
+  "provider_seconds": 55.59901941699718,
+  "right": "task-3/local/personal-memory/2025/03",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

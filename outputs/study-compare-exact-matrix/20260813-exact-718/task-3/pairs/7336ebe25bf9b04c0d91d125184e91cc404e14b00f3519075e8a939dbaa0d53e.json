@@ -1,0 +1,415 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:35:46.254861+00:00",
+      "frames": [
+        {
+          "context_digest": "4c7d7890b4c8dbd807acc103affd0572c325fd2e0f58346a97c3ed49e48ba34e",
+          "context_name": "task-3/local/personal-memory/2024/02",
+          "context_uid": "7bedad96-d78b-5977-a4c9-71049dcfcec8",
+          "memories": [
+            {
+              "content": "The user's maternal aunt keeps one spare key to the user's home.",
+              "content_digest": "2e45c292a3cbc26a1c9928c4546c6029c7dcd2aa6aa0a45a7cfb4be7888dd5c6",
+              "position": 0,
+              "uid": "1c627e4c-c393-5bd3-a5ae-b3318821be73"
+            },
+            {
+              "content": "If the door is locked, the user is accustomed to contacting their maternal aunt, who has the spare key, before contacting building management.",
+              "content_digest": "709cc4a1ae26126bd3238ea8c0e343415d95d084ddaf022590ff4197003c7b81",
+              "position": 1,
+              "uid": "e80936de-87af-5dbb-ab94-d456bbfaab0a"
+            },
+            {
+              "content": "When going to collect the spare key from their maternal aunt, the user wants to give an arrival time first so neither person has to wait.",
+              "content_digest": "5dab57d537091a28848dfa3592d16e038d6e78eeb8159489c17475befeb62a53",
+              "position": 2,
+              "uid": "7c26cf33-0630-5138-910a-6d37d6ed2b63"
+            },
+            {
+              "content": "The user feels at ease only after returning a borrowed spare key in person on the same day.",
+              "content_digest": "d3b9e78e166fb3af3dc248bcddbf1c1df15d3eed57655991a52c23b4ebb6ba14",
+              "position": 3,
+              "uid": "c3f0f26c-8d89-55e3-8bf3-398271e417e7"
+            },
+            {
+              "content": "The user feels uneasy about writing down a new entrance passcode on paper.",
+              "content_digest": "fe40a50fb7f0b0e1514a2f7e6ea3748e73cbd76fa45b862b4880c9eba68a2312",
+              "position": 4,
+              "uid": "7d7d00a3-c5af-5441-bb50-9631fbfd7979"
+            },
+            {
+              "content": "The user found it difficult when a family member arrived without notice during a meeting and the user could not respond immediately.",
+              "content_digest": "30d2126eb016f1fab8b8bd670bc00ee6ac5182f28b0afe696b2c30f4d7bc128f",
+              "position": 5,
+              "uid": "2e0df581-bd54-54f5-94ef-b719427fc88c"
+            },
+            {
+              "content": "On a day their younger brother received a package for them, the user felt reassured after checking the delivery photo.",
+              "content_digest": "54eacbc39b057a6a18f8ddd8e1db587dbef231ecb10ed8cd84a46b3575ac470c",
+              "position": 6,
+              "uid": "9278b64e-7550-5eb6-bbfd-544a2ae4ec3d"
+            },
+            {
+              "content": "The user's maternal aunt wants confirmation that the user is coming in person before handing over the spare key.",
+              "content_digest": "5d780f2fb96eac2d3c65e7417ee00e64e29c2f8873c432b291e62773723182c9",
+              "position": 7,
+              "uid": "76fb9115-a3f2-5ce3-a445-c3d1e38e4253"
+            },
+            {
+              "content": "Confirm with the user before sharing the spare key's storage location or the maternal aunt's contact information.",
+              "content_digest": "ac00da1acd77d05fd277a0a92d2ab62cbefb3c334e6e7c2cb3b046fbea217a6c",
+              "position": 8,
+              "uid": "6fa50e1d-8bd1-557a-9b03-1e4a4dc664bd"
+            },
+            {
+              "content": "The management office of a multi-unit residential building does not hold a unit key without verifying identity.",
+              "content_digest": "841f44fddced7681d5c9b47aaa2536f14536f1309b1f73104df7cb44738efbd1",
+              "position": 9,
+              "uid": "b18ff5b4-4f0d-5b93-8c41-439e5b15c710"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "22999a5f-723c-46ec-8057-29dbc653b926"
+        },
+        {
+          "context_digest": "ac4f93d71b525f6156f0b669075a833a2a41161be6abe677ec382bff6e6060e8",
+          "context_name": "task-3/local/personal-memory/2025/08",
+          "context_uid": "ed84de75-8e18-5bec-908c-a1ff9827b3e3",
+          "memories": [
+            {
+              "content": "The user keeps packing tape for returns in an upper kitchen drawer.",
+              "content_digest": "ed359d883caffd7ce4daddc297ddcc9d26da233dc2a36dc4dbc96e300b2248e9",
+              "position": 0,
+              "uid": "15c3941e-ed44-508f-ae30-b51456b5ba86"
+            },
+            {
+              "content": "The user arrived ten minutes before the post office closed and found that numbered-ticket intake had ended.",
+              "content_digest": "3c4609eea9455bbd46a6f238aa750f61f348ce7b2cf421a4d123f1b707b52550",
+              "position": 1,
+              "uid": "84d1fd1c-9508-5f05-9a7c-1d5f20ecf4a4"
+            },
+            {
+              "content": "Before the next visit, the user checked the operating hours and arrived one hour before closing.",
+              "content_digest": "b2997262abf4ba476c63de3550e54269ef7d61bb56d3adb5b6d9f54ba13fc078",
+              "position": 2,
+              "uid": "8946f9da-e325-59c3-9260-2d2f590d3701"
+            },
+            {
+              "content": "The user went to the counter without closing a return box and had to go back to the packing station.",
+              "content_digest": "759122c3f88ca71b992a725e357beab72f9820de872a7bd895b808c2df21f2b2",
+              "position": 3,
+              "uid": "67e8b160-a57d-56e5-a766-741b7ce0e939"
+            },
+            {
+              "content": "For the next return, the user sealed the box at home and completed intake in one attempt.",
+              "content_digest": "007fcec32ea3788854161e68c95c2aaba90e94a721d03b350e1619afc54840e3",
+              "position": 4,
+              "uid": "efd0706b-600a-5ac1-926e-cc0602ca0086"
+            },
+            {
+              "content": "The user scheduled bank and post-office errands for the same day, but they took a long time because the destinations were in different directions.",
+              "content_digest": "000e1975fde79f4d6caf36adad0c2e481a032537cfa410e46649866d985567c2",
+              "position": 5,
+              "uid": "1e8a6f7e-0911-5a34-ad82-172479d1a7a4"
+            },
+            {
+              "content": "The following week, after checking the locations on a map, the user visited nearby branches in sequence.",
+              "content_digest": "c3de08c5b6074dff2b3f6303f5efc3740cc430b634cb365a5d570061a30a53fa",
+              "position": 6,
+              "uid": "a8670161-257e-51ab-8e30-0e282952278f"
+            },
+            {
+              "content": "Postal staff expect a return-label barcode to arrive affixed flat, without a fold.",
+              "content_digest": "6293ace2d67781644694976af71d5696cad28979d9641718ccd59f16b3397a47",
+              "position": 7,
+              "uid": "2db70f53-99ee-556c-a8c1-b809881cbebd"
+            },
+            {
+              "content": "Before grouping errands into one outing, check each institution's location and operating hours that day.",
+              "content_digest": "7fef923f9ed507db5aad6cf65eaee2c965075e51fef0ff73fa669f1e7f69314a",
+              "position": 8,
+              "uid": "38d60cc4-2f91-5cc2-b511-55cdbbe12c32"
+            },
+            {
+              "content": "Postal and financial counters may operate on different hours than usual around public holidays.",
+              "content_digest": "2d5dc709c468405ea894f343e922dc2546b826ed7488e613f4d4dd730bccccfd",
+              "position": 9,
+              "uid": "1272087c-a535-5612-8c7a-1bc257183788"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "ed2eb2dd-e92d-4a32-bf4a-a1a03abbb7e7"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate operational domains. The reference frame concerns home access, family coordination, privacy, and delivery reassurance, while the compared frame concerns postal returns and errand planning. No shared claim, scope-dependent difference, ambiguity, or conflict is present.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "22999a5f-723c-46ec-8057-29dbc653b926",
+              "memory_uid": "1c627e4c-c393-5bd3-a5ae-b3318821be73"
+            }
+          ],
+          "reason": "This is independently useful home-access information found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The maternal aunt keeps a spare key to the user’s home.",
+          "uid": "f31a39bd-a6af-5386-b6ca-fba9747d941d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "22999a5f-723c-46ec-8057-29dbc653b926",
+              "memory_uid": "e80936de-87af-5dbb-ab94-d456bbfaab0a"
+            }
+          ],
+          "reason": "This establishes a one-sided fallback order distinct from merely identifying who holds the key.",
+          "status": "RESOLVED",
+          "summary": "For a locked door, the user normally contacts the key-holding aunt before building management.",
+          "uid": "8f12ba9f-901d-5277-a7ca-422939d3892a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "22999a5f-723c-46ec-8057-29dbc653b926",
+              "memory_uid": "7c26cf33-0630-5138-910a-6d37d6ed2b63"
+            },
+            {
+              "frame_uid": "22999a5f-723c-46ec-8057-29dbc653b926",
+              "memory_uid": "76fb9115-a3f2-5ce3-a445-c3d1e38e4253"
+            }
+          ],
+          "reason": "The reference memories split one pickup-coordination practice between the user’s arrival-time notice and the aunt’s requirement for confirmation.",
+          "status": "RESOLVED",
+          "summary": "An in-person spare-key pickup is coordinated in advance so the visit is confirmed and neither person waits unnecessarily.",
+          "uid": "0984df0e-28f9-59d7-8799-3046cfc50a33"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "22999a5f-723c-46ec-8057-29dbc653b926",
+              "memory_uid": "c3f0f26c-8d89-55e3-8bf3-398271e417e7"
+            }
+          ],
+          "reason": "This is an independent one-sided preference governing completion of a key-borrowing episode.",
+          "status": "RESOLVED",
+          "summary": "The user feels at ease only after returning a borrowed spare key in person that same day.",
+          "uid": "254ac40f-5b3a-5e51-8f3a-0b558ebcb840"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "22999a5f-723c-46ec-8057-29dbc653b926",
+              "memory_uid": "7d7d00a3-c5af-5441-bb50-9631fbfd7979"
+            }
+          ],
+          "reason": "This is independent one-sided information about handling access credentials.",
+          "status": "RESOLVED",
+          "summary": "The user is uneasy about recording a new entrance passcode on paper.",
+          "uid": "728bda1b-bcf0-5c9e-93b8-4e66a80cfc87"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "22999a5f-723c-46ec-8057-29dbc653b926",
+              "memory_uid": "2e0df581-bd54-54f5-94ef-b719427fc88c"
+            }
+          ],
+          "reason": "This is a separate one-sided experience concerning visit notice and availability.",
+          "status": "RESOLVED",
+          "summary": "An unannounced family arrival during a meeting was difficult because the user could not respond immediately.",
+          "uid": "f097ebb2-cf3d-5d75-a7a9-de39ce056154"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "22999a5f-723c-46ec-8057-29dbc653b926",
+              "memory_uid": "9278b64e-7550-5eb6-bbfd-544a2ae4ec3d"
+            }
+          ],
+          "reason": "This is independent one-sided information about package verification and reassurance.",
+          "status": "RESOLVED",
+          "summary": "The user felt reassured by checking the delivery photo after a younger brother received a package for them.",
+          "uid": "a26135b0-58df-570d-93ca-a4119fcecacf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "22999a5f-723c-46ec-8057-29dbc653b926",
+              "memory_uid": "6fa50e1d-8bd1-557a-9b03-1e4a4dc664bd"
+            }
+          ],
+          "reason": "This is a distinct one-sided privacy rule for sensitive access information.",
+          "status": "RESOLVED",
+          "summary": "The user must be consulted before disclosing the spare key’s location or the aunt’s contact information.",
+          "uid": "bb9860c8-a84d-514e-bc36-31c480df2198"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "22999a5f-723c-46ec-8057-29dbc653b926",
+              "memory_uid": "b18ff5b4-4f0d-5b93-8c41-439e5b15c710"
+            }
+          ],
+          "reason": "This is independent one-sided information about management’s access-control procedure.",
+          "status": "RESOLVED",
+          "summary": "Building management does not provide a unit key without verifying identity.",
+          "uid": "c17f445c-02a5-5e7b-8851-55ba5612a513"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ed2eb2dd-e92d-4a32-bf4a-a1a03abbb7e7",
+              "memory_uid": "15c3941e-ed44-508f-ae30-b51456b5ba86"
+            }
+          ],
+          "reason": "This is independently useful return-supply information found only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Packing tape for returns is stored in an upper kitchen drawer.",
+          "uid": "c232cf7c-38af-592f-a0f2-2c9192a4b890"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ed2eb2dd-e92d-4a32-bf4a-a1a03abbb7e7",
+              "memory_uid": "84d1fd1c-9508-5f05-9a7c-1d5f20ecf4a4"
+            },
+            {
+              "frame_uid": "ed2eb2dd-e92d-4a32-bf4a-a1a03abbb7e7",
+              "memory_uid": "8946f9da-e325-59c3-9260-2d2f590d3701"
+            }
+          ],
+          "reason": "The compared memories form one timing lesson through an unsuccessful late arrival and the user’s subsequent adjustment.",
+          "status": "RESOLVED",
+          "summary": "After missing numbered-ticket intake shortly before closing, the user checked hours and arrived substantially earlier on the next visit.",
+          "uid": "b334fd8f-c361-53d8-a638-8a72d09b3787"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ed2eb2dd-e92d-4a32-bf4a-a1a03abbb7e7",
+              "memory_uid": "67e8b160-a57d-56e5-a766-741b7ce0e939"
+            },
+            {
+              "frame_uid": "ed2eb2dd-e92d-4a32-bf4a-a1a03abbb7e7",
+              "memory_uid": "efd0706b-600a-5ac1-926e-cc0602ca0086"
+            }
+          ],
+          "reason": "The compared memories express one box-preparation lesson through a failed attempt and the improved later practice.",
+          "status": "RESOLVED",
+          "summary": "After an unsealed return box caused an extra trip to the packing station, the user sealed the next box at home and completed intake in one attempt.",
+          "uid": "ce8cd636-0b40-5a83-b19b-a549b974d515"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ed2eb2dd-e92d-4a32-bf4a-a1a03abbb7e7",
+              "memory_uid": "1e8a6f7e-0911-5a34-ad82-172479d1a7a4"
+            },
+            {
+              "frame_uid": "ed2eb2dd-e92d-4a32-bf4a-a1a03abbb7e7",
+              "memory_uid": "a8670161-257e-51ab-8e30-0e282952278f"
+            }
+          ],
+          "reason": "The compared memories form one routing lesson through an inefficient outing and a later location-based improvement.",
+          "status": "RESOLVED",
+          "summary": "After errands in opposite directions took too long, the user checked a map and visited nearby branches in sequence the following week.",
+          "uid": "9d0695aa-99b0-58fc-8717-32149be79a8d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ed2eb2dd-e92d-4a32-bf4a-a1a03abbb7e7",
+              "memory_uid": "2db70f53-99ee-556c-a8c1-b809881cbebd"
+            }
+          ],
+          "reason": "This is an independent one-sided packaging requirement.",
+          "status": "RESOLVED",
+          "summary": "Postal staff expect the return-label barcode to be attached flat and without a fold.",
+          "uid": "221af0c7-9d72-5282-9294-dd96e9d33761"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ed2eb2dd-e92d-4a32-bf4a-a1a03abbb7e7",
+              "memory_uid": "38d60cc4-2f91-5cc2-b511-55cdbbe12c32"
+            }
+          ],
+          "reason": "This is a distinct one-sided planning policy covering both routing and same-day availability.",
+          "status": "RESOLVED",
+          "summary": "Before combining errands, check every institution’s location and operating hours for that day.",
+          "uid": "2ab51a47-1e30-5600-a69c-ec95a0b4dcb8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ed2eb2dd-e92d-4a32-bf4a-a1a03abbb7e7",
+              "memory_uid": "1272087c-a535-5612-8c7a-1bc257183788"
+            }
+          ],
+          "reason": "This is independent one-sided schedule context that qualifies planning near holidays.",
+          "status": "RESOLVED",
+          "summary": "Postal and financial counters may have unusual operating hours around public holidays.",
+          "uid": "394433f6-275b-5e98-927f-67871bc20949"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Postal-return memories cover supplies, timing, packaging, barcode presentation, and lessons from failed or improved visits. Errand-planning memories emphasize checking locations, sequencing nearby branches, verifying hours, and accounting for holiday schedules.",
+        "differences": "",
+        "reference_only": "Home access relies on an aunt-held spare key, coordinated in-person pickup and return, privacy safeguards, and management identity checks; separate memories address passcode discomfort, unexpected family visits, and delivery-photo reassurance."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "ceecb44c-6625-43dc-bfb6-6da794485a78"
+    },
+    "analysis_digest": "6909ba6fae3edd9d1d645f23b051720fd1f94542b99dfc735a45eca69e700816",
+    "key": "6a7f37b2963c50e10256483b74e2d36f48bb25d4b89a7df34f8a3985bab7b957",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 43.211312250001356,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "6a7f37b2963c50e10256483b74e2d36f48bb25d4b89a7df34f8a3985bab7b957",
+  "created_at": "2026-08-13T18:36:29.465751Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/02",
+  "pair_key": "7336ebe25bf9b04c0d91d125184e91cc404e14b00f3519075e8a939dbaa0d53e",
+  "provider_seconds": 43.211312250001356,
+  "right": "task-3/local/personal-memory/2025/08",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

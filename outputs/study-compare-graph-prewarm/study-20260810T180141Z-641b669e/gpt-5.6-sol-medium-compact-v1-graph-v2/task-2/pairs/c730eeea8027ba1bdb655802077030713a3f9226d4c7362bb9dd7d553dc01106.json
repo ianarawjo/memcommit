@@ -1,0 +1,119 @@
+{
+  "coverage": {
+    "expected": 7,
+    "observed": 7
+  },
+  "created_at": "2026-08-11T00:27:05.113470Z",
+  "description_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+  "issues": [],
+  "kind": "STUDY_COMPARE_GRAPH_PAIR",
+  "left": {
+    "context_digest": "4efbf2f6c096022137cee2c075c75219bb4fd0f441579901b8445bb2d92101f5",
+    "context_uid": "ae02c2b2-49d3-5c30-b686-81ea17a8a87e",
+    "memory_count": 7,
+    "name": "task-2/advisor2/budget"
+  },
+  "method": "DETERMINISTIC_EMPTY_VIEW",
+  "operation": "COMPARE",
+  "pair_key": "c730eeea8027ba1bdb655802077030713a3f9226d4c7362bb9dd7d553dc01106",
+  "provider": {
+    "provider_calls": 0,
+    "provider_seconds": 0.0
+  },
+  "relations": [
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "d614b55d-d9f6-5347-8d02-2d219d621a09",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000001",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "24500129-4b07-564f-ba67-39e40d7d7860",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000002",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "07bad409-af9c-512a-b829-7ceb28273f91",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000003",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "abf6d361-c2eb-512f-87e0-f3af9c5eb677",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000004",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "473cf3ca-9832-5d9c-97df-974f1d9b0d1b",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000005",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "675956de-2c61-53e1-bb89-9b49d92558ba",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000006",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "f4371f72-f222-5066-b2f4-0a6be5d6865e",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000007",
+      "status": "RESOLVED"
+    }
+  ],
+  "right": {
+    "context_digest": "975b1478f5252472057ed204fc9f517de15a84679c501e8e97009878dfea572c",
+    "context_uid": "0e19f3b1-4107-48ab-9186-8773e48b812d",
+    "memory_count": 0,
+    "name": "task-2/participant"
+  },
+  "schema_version": 1,
+  "semantic_content_in_participant_report": false,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

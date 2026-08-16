@@ -1,0 +1,234 @@
+{
+  "coverage": {
+    "expected": 19,
+    "observed": 19
+  },
+  "created_at": "2026-08-11T00:21:59.363633Z",
+  "description_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+  "issues": [],
+  "kind": "STUDY_COMPARE_GRAPH_PAIR",
+  "left": {
+    "context_digest": "d216a114524e2b755fff42b8577d5027d3e528aed50c5f588cebf57767bb7fc8",
+    "context_uid": "d2f78b99-5dcf-5876-89a9-1058bceca333",
+    "memory_count": 14,
+    "name": "task-2/advisor1/methods"
+  },
+  "method": "COMPACT_DECISION_VECTOR_V1",
+  "operation": "COMPARE",
+  "pair_key": "9ecceac17b8e327fd6cb90064c2e9bdb41421bf1f38111f3a8698dfa522aef3c",
+  "provider": {
+    "condition": "COMPACT_DECISION_VECTOR",
+    "contract_valid": true,
+    "elapsed_seconds": 33.81398883300426,
+    "error_type": null,
+    "failure_category": null,
+    "operation": "compare_contexts_compact_ab_v1",
+    "prompt_chars": 8063,
+    "provider_calls": 1,
+    "provider_run": {
+      "completion_tokens": null,
+      "identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "operation": "compare_contexts_compact_ab_v1",
+      "prompt_tokens": null,
+      "upstream_model": "gpt-5.6-sol",
+      "upstream_provider": "openai-codex"
+    },
+    "provider_seconds": 33.81247233299655,
+    "response_bytes": 911,
+    "response_chars": 911,
+    "schema_chars": 1380,
+    "validation_error": null,
+    "validation_seconds": 0.001494875003118068
+  },
+  "relations": [
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "c8bcefee-c64a-5a1f-911c-502cc4522701",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "881bc037-c099-50e4-b7e0-d38fba5146c9",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000001",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "8747b27e-6c2b-5498-9eac-c403e26101a6",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000002",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "c3ad4ad8-4c5c-54c5-8d65-2dae15fa69a0",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000003",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "df53a41c-2fbf-532a-a5b0-560a196bf5cb",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "91db3bd1-4417-5db6-b7a6-3e79c87ebe88",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "0ecc319a-ae60-5510-883d-52e613138164",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "a7c3a123-3f05-52e0-b33e-c450d1a070ac",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000004",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "24d49198-fd7b-5810-bc56-1910a796f76e",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000005",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "2f367cf3-50c5-59bc-972e-6173e56343ac",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000006",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "The reference covers implementation instability as a general failure cause in formative evaluation, while the compared claim specifically covers delayed recovery altering interruptions and data-collection conditions even in controlled environments.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "49746579-92d7-51ea-b158-7d770443d101",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "c5ce1b00-36d9-5cdd-a318-93b88ca0e322",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000007",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "The reference gives precedence to institutional procedures for prototype safety signals, while the compared claims specify the reporting sequence for the narrower condition of serious discomfort.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "20d116ab-f9cc-5f61-808b-8555da09d707",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "9d6f5228-d182-571a-83d2-6a67becb7736",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "00ed485d-66c2-59ad-9c5b-9ae445412690",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000008",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "9a969676-6093-5fac-bda8-92ebdac70c37",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000009",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "c4dfdb65-e673-52c0-a40c-e909d6014e00",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000010",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "9c6e1561-f671-52cb-aa67-245cc4987ad4",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000011",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "2381ecf7-2b11-583d-91d9-0a5cfc279ba1",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000012",
+      "status": "RESOLVED"
+    }
+  ],
+  "right": {
+    "context_digest": "3dd1208c3f947a57bc5f1d490a28c999913d43cad775b2b01e50c6059d6b660e",
+    "context_uid": "cd6c1fab-786a-52ea-9437-9a4d209ba419",
+    "memory_count": 5,
+    "name": "task-2/advisor1/safety"
+  },
+  "schema_version": 1,
+  "semantic_content_in_participant_report": false,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

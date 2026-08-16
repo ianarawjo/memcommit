@@ -35,7 +35,7 @@ from memcommit.commands.readable_context_catalog import (
     freeze_profile_context_navigation,
     freeze_readable_context_catalog,
 )
-from memcommit.commands.context_picker import (
+from memcommit.context_targeting.tui.picker import (
     ContextMemoryRow,
     ContextTree,
     choose_context,

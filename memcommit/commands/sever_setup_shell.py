@@ -32,7 +32,7 @@ from memcommit.context_targeting.tui.rendering import (
 from memcommit.context_targeting.tui.selection import ContextSelectionState
 from memcommit.context_targeting.tui.tree import ContextTreeState, build_context_tree
 from memcommit.selection.tui import tree_choice_marker, tree_choice_styles
-from memcommit.commands.context_picker import (
+from memcommit.context_targeting.tui.picker import (
     CONTEXT_PICKER_STYLE,
     ContextMemoryPreviewController,
     ContextMemoryRow,

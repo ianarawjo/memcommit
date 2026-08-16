@@ -1,0 +1,418 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:17:15.309703+00:00",
+      "frames": [
+        {
+          "context_digest": "e76b6eea5af0e4d970d4db385b4100a788a8b1ed5ef6e68709bd92c943ab3b6b",
+          "context_name": "task-2/advisor1/compensation",
+          "context_uid": "7ba75d6b-cef6-5c8b-9b17-d3901e168d24",
+          "memories": [
+            {
+              "content": "Calculate user study compensation budgets based on estimated participation burden, combining session time and preparation effort.",
+              "content_digest": "2dc18d8ddeb900741b2a8f936a59d5fc72423e2d3144e8b2232a6435dc9a68f1",
+              "position": 0,
+              "uid": "0ae46268-cca7-57d5-a0ee-6eb3b85cda84"
+            },
+            {
+              "content": "Compensate for required travel time in face-to-face user studies as well.",
+              "content_digest": "688ba9df95e18254a5a33ab6c0e59066cf0674137b6802178e3fb8eae4ba38e5",
+              "position": 1,
+              "uid": "bdda6e22-ea06-5a13-8854-67f7521724db"
+            },
+            {
+              "content": "Compensate for the actual time participants spent in sessions, regardless of research modality.",
+              "content_digest": "8673c2b5b5913f0e8bcf0035eea4bc87430bb1fcf8ffb27b354bde0ca3a7ae4e",
+              "position": 2,
+              "uid": "f49b1d0a-7a1a-53b5-b7fc-815cc2cc134a"
+            },
+            {
+              "content": "Leave cash payment as an available compensation method for face-to-face studies.",
+              "content_digest": "72f9e1b33de0c05bb711c2d8162ab62f382a75871a710db37b858125eae6fcde",
+              "position": 3,
+              "uid": "1f4d05e4-2a79-572c-8050-beb1464fb781"
+            },
+            {
+              "content": "If compensation equity is explained, do not require finalizing the payment method at the proposal stage.",
+              "content_digest": "6945260e986651e7992034801b6151a3f93184013fea77d17b630f55fcdc943b",
+              "position": 4,
+              "uid": "abcba764-6f35-5dae-bb3d-7860fb72ccf2"
+            },
+            {
+              "content": "Apply the same base hourly rate to face-to-face and remote studies if task burden is equal.",
+              "content_digest": "144477b358e6e8931042d1793a5ffd10f56d69aa90523d69d20a622528a9dad0",
+              "position": 5,
+              "uid": "c6a28f37-1a7c-5dbd-b75c-c829f0461504"
+            },
+            {
+              "content": "Participants judge compensation fairness based on the total burden, combining session time with required travel and preparation time.",
+              "content_digest": "54e8900c7049e048484db8b523a41e98cbb911b45be2adbd103fd2f1635bf026",
+              "position": 6,
+              "uid": "874de649-9c04-5960-b3a9-e68356ef666c"
+            },
+            {
+              "content": "Account in compensation for the burden of rescheduling iterations and returning for multiple formative evaluation sessions.",
+              "content_digest": "f09be004defb4019ba7476919b6780cc2b6bbac088f79dbd0ec66bf2753af27d",
+              "position": 7,
+              "uid": "529559f5-850d-5920-8e27-0b1e7138dc36"
+            },
+            {
+              "content": "Compensate participants for time already invested even if a session is terminated early due to prototype errors.",
+              "content_digest": "64b65cc0b307b48d64641d126594a5b8a9258518c3aa27d7846be2306c25a9f4",
+              "position": 8,
+              "uid": "c8be56ee-860a-5f6c-abbf-02c8dbc59eb5"
+            },
+            {
+              "content": "The author of this proposal tends to exclude preparation burden between sessions when calculating compensation for iterative studies.",
+              "content_digest": "177f041fcb9fe768dcc1c476b592e99c8609d06ebf727aeca1379d21256b43d8",
+              "position": 9,
+              "uid": "bdac8cf8-dd11-5794-b4b2-9774ff344436"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "4cf5f186-8ea9-48b5-b3eb-21e535e1fb57"
+        },
+        {
+          "context_digest": "7842b257aa1d32e6e598b019791827a580a1864e19e05d9101413b11d5b0227d",
+          "context_name": "task-2/advisor2/style",
+          "context_uid": "f0ea0447-bfe6-503c-89da-e90f24af6e2d",
+          "memories": [
+            {
+              "content": "Use an em dash only for a deliberate interruption or sharp contrast; otherwise split the sentence or choose ordinary punctuation.",
+              "content_digest": "3c37a896774ebccbec1e4bb3ad4a4e61ece1bb4ae246226c93b1d78c651bee7b",
+              "position": 0,
+              "uid": "9bd2a9da-9720-5001-b958-f7a2a2658f87"
+            },
+            {
+              "content": "In procedural passages, begin each sentence with the action, condition, or output instead of repeating “we” so the steps remain easy to follow and reuse.",
+              "content_digest": "c61f6b8ae3612497403f306de2cbe4e6a25db285109e89f74d61439abf5fae30",
+              "position": 1,
+              "uid": "e3e20261-e03c-52fb-be9e-04f5f9b1294d"
+            },
+            {
+              "content": "Write system behaviors confirmed in the actual usage environment as observed states.",
+              "content_digest": "972e1f5ba9188f1a423c2b47782e1a3938749419e8c170fabc97e6dd4f86cab2",
+              "position": 2,
+              "uid": "8d8d0e8d-dad1-50b5-9438-049052748a6a"
+            },
+            {
+              "content": "Write system behaviors not yet confirmed in the field as conditional plans.",
+              "content_digest": "9b7f3fffb87af8004e9645b6494bd2b990a1f1bfb054ca0efecea2bfb74d850d",
+              "position": 3,
+              "uid": "8c74ba87-822b-5ce2-9a3a-3adc02ab9744"
+            },
+            {
+              "content": "Readers can reconstruct a sequence more accurately when each sentence begins with the action or condition rather than the author.",
+              "content_digest": "e6748d23d892cb074ac5259f3c733727746640973a5b62c0ed1b7c6a684e9db8",
+              "position": 4,
+              "uid": "1f29de31-5429-5dfc-ab27-01779fa16704"
+            },
+            {
+              "content": "Do not mechanically split connected thoughts into separate short sentences when doing so destroys the intended reading rhythm.",
+              "content_digest": "754be36b29f7b647390c9308fb7a1cfd9e3228ab0f875c8d53e01febbbb3fd8c",
+              "position": 5,
+              "uid": "1d181223-f750-57d2-97a5-b79f276a589f"
+            },
+            {
+              "content": "Preserve a longer sentence when its clauses form one continuous movement that is easier to follow together than apart.",
+              "content_digest": "074e374f77a4fa6f559e3d69746ab3c706d2b1f3d2e4b98a21e8d1e4d59ef087",
+              "position": 6,
+              "uid": "a5ce5f9f-8852-5080-ae35-21abcf4a0973"
+            },
+            {
+              "content": "The user understands that short sentences are easier to scan but feels that uniformly segmented prose loses its reading rhythm.",
+              "content_digest": "acf7ca20f09995c87c51434dc2ff489efc886ada5b2282dc4bc4014befd8fdc0",
+              "position": 7,
+              "uid": "888ce8af-a36e-5e74-9a0c-604aac48d3b7"
+            },
+            {
+              "content": "Write procedural sentences so their opening phrase can be reused as a checklist item without changing the step's meaning.",
+              "content_digest": "7fd5b55fc09e74df05628f1c61bd543b39b906847b86e7f09337a67b47553156",
+              "position": 8,
+              "uid": "ddf40413-3274-5662-ba5e-d6cae2a1e546"
+            },
+            {
+              "content": "The user should choose “I” as an individual author or “we” for a named team and should not mix them when describing the same responsible party.",
+              "content_digest": "951763104930e99be0182b59dbaa6d7d7a20fd23fe968e39a15bd0798a1bd1b7",
+              "position": 9,
+              "uid": "6b7aaddf-5bbd-5015-811d-9f4d7a4b4ad1"
+            },
+            {
+              "content": "Action-first procedural sentences can be reordered or copied into a checklist more easily because their subject is the step rather than the proposal author.",
+              "content_digest": "397e3c0b9262e13d94969669930081ac76d4967adec4c5fd1f681869b613bc36",
+              "position": 10,
+              "uid": "89c2ce30-d6aa-5762-bf17-c697caac68e4"
+            },
+            {
+              "content": "The user can explain whether an em dash marks an intentional interruption or contrast rather than using it decoratively.",
+              "content_digest": "ec27bb0d2ba0656602348660944cb483789dfaec189d6e32ad6145c8e17f81b2",
+              "position": 11,
+              "uid": "9f1b647a-bd2b-50df-8141-5b8c142c0fa5"
+            },
+            {
+              "content": "An em dash creates a stronger interruption than a comma and can make a deliberate contrast easier to hear in the sentence.",
+              "content_digest": "aa3c3cdb31d26aeeb33b047a22860bf1dbe0819e9cc93f03da112b04367b844e",
+              "position": 12,
+              "uid": "49a42872-adcc-5bf8-9029-1d134cac6267"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "a7fe7863-f033-4369-82b6-b83fa5ea7df9"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate domains: participant-compensation policy and procedural writing style. Neither supplies a counterpart to the other’s claims, so the ledger preserves each independently, including compensation practices that may diverge from stated burden principles.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4cf5f186-8ea9-48b5-b3eb-21e535e1fb57",
+              "memory_uid": "0ae46268-cca7-57d5-a0ee-6eb3b85cda84"
+            },
+            {
+              "frame_uid": "4cf5f186-8ea9-48b5-b3eb-21e535e1fb57",
+              "memory_uid": "bdda6e22-ea06-5a13-8854-67f7521724db"
+            },
+            {
+              "frame_uid": "4cf5f186-8ea9-48b5-b3eb-21e535e1fb57",
+              "memory_uid": "874de649-9c04-5960-b3a9-e68356ef666c"
+            }
+          ],
+          "reason": "These memories state or split the same reference-only burden principle and its fairness rationale; the compared frame has no compensation counterpart.",
+          "status": "RESOLVED",
+          "summary": "Compensation should reflect total participation burden, including session time, preparation, and required travel.",
+          "uid": "e837bbb5-13bd-5ecc-8dac-9b7d15852b9a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4cf5f186-8ea9-48b5-b3eb-21e535e1fb57",
+              "memory_uid": "f49b1d0a-7a1a-53b5-b7fc-815cc2cc134a"
+            }
+          ],
+          "reason": "This is an independent reference-only rule about compensable time across modalities.",
+          "status": "RESOLVED",
+          "summary": "Actual session time should be compensated regardless of study modality.",
+          "uid": "dd8c17b9-9e8c-5af0-9355-8f28b7c669ef"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4cf5f186-8ea9-48b5-b3eb-21e535e1fb57",
+              "memory_uid": "1f4d05e4-2a79-572c-8050-beb1464fb781"
+            }
+          ],
+          "reason": "This reference-only claim governs compensation method availability, not compensation amount or writing style.",
+          "status": "RESOLVED",
+          "summary": "Cash should remain an available payment method for face-to-face studies.",
+          "uid": "1b7a5cc3-5d8b-5dc6-857b-fd12894921a6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4cf5f186-8ea9-48b5-b3eb-21e535e1fb57",
+              "memory_uid": "abcba764-6f35-5dae-bb3d-7860fb72ccf2"
+            }
+          ],
+          "reason": "This is an independent reference-only rule about when payment-method selection must be finalized.",
+          "status": "RESOLVED",
+          "summary": "A proposal may leave the payment method unsettled when compensation equity is explained.",
+          "uid": "399447bb-bf34-5b00-a09e-a9e32d4f1600"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4cf5f186-8ea9-48b5-b3eb-21e535e1fb57",
+              "memory_uid": "c6a28f37-1a7c-5dbd-b75c-c829f0461504"
+            }
+          ],
+          "reason": "This reference-only claim establishes modality-neutral base-rate equity.",
+          "status": "RESOLVED",
+          "summary": "Equal task burden should receive the same base hourly rate in face-to-face and remote studies.",
+          "uid": "6ee57def-6882-5730-81f5-c10b6034621a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4cf5f186-8ea9-48b5-b3eb-21e535e1fb57",
+              "memory_uid": "529559f5-850d-5920-8e27-0b1e7138dc36"
+            }
+          ],
+          "reason": "This is a reference-only policy for burdens created by iterative participation.",
+          "status": "RESOLVED",
+          "summary": "Compensation should account for rescheduling iterations and repeated formative-evaluation attendance.",
+          "uid": "ffaf83d7-beb6-5d5b-b806-d7c0c4b3b355"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4cf5f186-8ea9-48b5-b3eb-21e535e1fb57",
+              "memory_uid": "c8be56ee-860a-5f6c-abbf-02c8dbc59eb5"
+            }
+          ],
+          "reason": "This independent reference-only claim addresses compensation after an unsuccessful session.",
+          "status": "RESOLVED",
+          "summary": "Participants should be paid for time already invested when prototype errors terminate a session early.",
+          "uid": "8bf06b74-7550-55a7-b1fa-875a4ef53c57"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4cf5f186-8ea9-48b5-b3eb-21e535e1fb57",
+              "memory_uid": "bdac8cf8-dd11-5794-b4b2-9774ff344436"
+            }
+          ],
+          "reason": "This is a one-sided descriptive observation about current calculation practice, distinct from the reference frame’s prescriptive compensation principles.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to omit between-session preparation burden from iterative-study compensation calculations.",
+          "uid": "c73d20eb-4725-5c13-bbad-d6ccecf80297"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a7fe7863-f033-4369-82b6-b83fa5ea7df9",
+              "memory_uid": "9bd2a9da-9720-5001-b958-f7a2a2658f87"
+            },
+            {
+              "frame_uid": "a7fe7863-f033-4369-82b6-b83fa5ea7df9",
+              "memory_uid": "9f1b647a-bd2b-50df-8141-5b8c142c0fa5"
+            },
+            {
+              "frame_uid": "a7fe7863-f033-4369-82b6-b83fa5ea7df9",
+              "memory_uid": "49a42872-adcc-5bf8-9029-1d134cac6267"
+            }
+          ],
+          "reason": "These compared-only memories state and justify one punctuation rule concerning the em dash’s deliberate rhetorical function.",
+          "status": "RESOLVED",
+          "summary": "Use an em dash only for an intentional strong interruption or contrast that can be explained as such.",
+          "uid": "68e44366-9654-5e7f-a673-4dab43d13578"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a7fe7863-f033-4369-82b6-b83fa5ea7df9",
+              "memory_uid": "e3e20261-e03c-52fb-be9e-04f5f9b1294d"
+            },
+            {
+              "frame_uid": "a7fe7863-f033-4369-82b6-b83fa5ea7df9",
+              "memory_uid": "1f29de31-5429-5dfc-ab27-01779fa16704"
+            },
+            {
+              "frame_uid": "a7fe7863-f033-4369-82b6-b83fa5ea7df9",
+              "memory_uid": "ddf40413-3274-5662-ba5e-d6cae2a1e546"
+            },
+            {
+              "frame_uid": "a7fe7863-f033-4369-82b6-b83fa5ea7df9",
+              "memory_uid": "89c2ce30-d6aa-5762-bf17-c697caac68e4"
+            }
+          ],
+          "reason": "These compared-only memories restate one action-first writing principle and its operational benefits.",
+          "status": "RESOLVED",
+          "summary": "Begin procedural sentences with the action, condition, or output so sequences remain clear, reusable, reorderable, and checklist-ready.",
+          "uid": "9d242214-0a03-5ae9-b7f2-a587c982644d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a7fe7863-f033-4369-82b6-b83fa5ea7df9",
+              "memory_uid": "8d8d0e8d-dad1-50b5-9438-049052748a6a"
+            },
+            {
+              "frame_uid": "a7fe7863-f033-4369-82b6-b83fa5ea7df9",
+              "memory_uid": "8c74ba87-822b-5ce2-9a3a-3adc02ab9744"
+            }
+          ],
+          "reason": "These compared-only memories split one documentation rule according to explicit confirmation status.",
+          "status": "RESOLVED",
+          "summary": "Describe field-confirmed system behavior as observed state and unconfirmed behavior as a conditional plan.",
+          "uid": "355b0467-33c5-56aa-876c-c34a435a3c40"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a7fe7863-f033-4369-82b6-b83fa5ea7df9",
+              "memory_uid": "1d181223-f750-57d2-97a5-b79f276a589f"
+            },
+            {
+              "frame_uid": "a7fe7863-f033-4369-82b6-b83fa5ea7df9",
+              "memory_uid": "a5ce5f9f-8852-5080-ae35-21abcf4a0973"
+            },
+            {
+              "frame_uid": "a7fe7863-f033-4369-82b6-b83fa5ea7df9",
+              "memory_uid": "888ce8af-a36e-5e74-9a0c-604aac48d3b7"
+            }
+          ],
+          "reason": "These compared-only memories express one preference and rationale for retaining continuous sentence movement.",
+          "status": "RESOLVED",
+          "summary": "Preserve connected thoughts in longer sentences when mechanical segmentation would damage clarity or reading rhythm.",
+          "uid": "d210fe8d-e1a0-507e-b1d0-1981d1336004"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a7fe7863-f033-4369-82b6-b83fa5ea7df9",
+              "memory_uid": "6b7aaddf-5bbd-5015-811d-9f4d7a4b4ad1"
+            }
+          ],
+          "reason": "This is an independent compared-only rule about consistent attribution of responsibility.",
+          "status": "RESOLVED",
+          "summary": "Use “I” for an individual author or “we” for a named team without mixing them for the same responsible party.",
+          "uid": "4c3e6609-2e3e-56ff-8236-31ece46a6d4d"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Writing guidance covers action-first procedures, evidentiary framing, sentence rhythm, em-dash discipline, checklist reuse, and consistent authorial pronouns.",
+        "differences": "",
+        "reference_only": "Compensation guidance covers total burden, modality-neutral time and rates, travel, repeated participation, early termination, payment methods, proposal timing, and a reported tendency to omit between-session preparation."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "de92473f-b14a-4309-9aed-38d842b9d131"
+    },
+    "analysis_digest": "a194d8a55aab0851e6da87369d3a40e80cd73899db687f0ff6214d3769e3913c",
+    "key": "e453b10fced93fc8c293b191100630754eb9da8b14cdf0b71864a79b7b375e39",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 44.4857592499975,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "e453b10fced93fc8c293b191100630754eb9da8b14cdf0b71864a79b7b375e39",
+  "created_at": "2026-08-13T18:17:59.794818Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/compensation",
+  "pair_key": "24553468e624468dc3840cee296ce9ee6ea02e08869d0625dadda2b730b86a17",
+  "provider_seconds": 44.4857592499975,
+  "right": "task-2/advisor2/style",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

@@ -1,0 +1,313 @@
+{
+  "coverage": {
+    "expected": 34,
+    "observed": 34
+  },
+  "created_at": "2026-08-11T00:26:09.448150Z",
+  "description_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+  "issues": [
+    {
+      "options": [
+        {
+          "label": "Descriptive subheadings",
+          "text": "Use and reuse short labels for the problem, proposed response, and next steps.",
+          "uid": "3bcc7776-89a2-5208-8197-1affa1667038"
+        },
+        {
+          "label": "Continuous argument",
+          "text": "Avoid extra headings and connect the proposal through paragraph transitions.",
+          "uid": "d2229d6a-04e8-5c0a-8997-dee2a1cc8a6e"
+        },
+        {
+          "label": "Conditional hybrid",
+          "text": "Use headings only when their navigation value outweighs their space cost and interruption of flow.",
+          "uid": "5311e106-6720-50b7-b27e-5b1925f02fa9"
+        }
+      ],
+      "priority": "REQUIRED",
+      "question": "Should the proposal use descriptive subheadings for the problem, response, and next steps, or preserve a continuous argument through paragraph transitions without extra headings?",
+      "relation_keys": [
+        "r000008"
+      ],
+      "title": "Two-page proposal structure",
+      "why_it_matters": "The choice directly governs section labeling, navigation, continuity, and use of limited page space."
+    }
+  ],
+  "kind": "STUDY_COMPARE_GRAPH_PAIR",
+  "left": {
+    "context_digest": "130876ecc1e3921197d330f5ad8493b927360f3505da3eff8df01d4f595a4934",
+    "context_uid": "0ff7abfd-58d3-58c2-b42a-31dca38cb7bd",
+    "memory_count": 17,
+    "name": "task-2/advisor1/structure"
+  },
+  "method": "COMPACT_DECISION_VECTOR_V1",
+  "operation": "COMPARE",
+  "pair_key": "9495c244500b68fe3c5707e45f16c997996d02de6fc5182098c6c053ef789850",
+  "provider": {
+    "condition": "COMPACT_DECISION_VECTOR",
+    "contract_valid": true,
+    "elapsed_seconds": 56.82918641700235,
+    "error_type": null,
+    "failure_category": null,
+    "operation": "compare_contexts_compact_ab_v1",
+    "prompt_chars": 12052,
+    "provider_calls": 1,
+    "provider_run": {
+      "completion_tokens": null,
+      "identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "operation": "compare_contexts_compact_ab_v1",
+      "prompt_tokens": null,
+      "upstream_model": "gpt-5.6-sol",
+      "upstream_provider": "openai-codex"
+    },
+    "provider_seconds": 56.82830033299979,
+    "response_bytes": 1575,
+    "response_chars": 1575,
+    "schema_chars": 1382,
+    "validation_error": null,
+    "validation_seconds": 0.0008777080074651167
+  },
+  "relations": [
+    {
+      "comment": "The two-sentence framing rule admits a third sentence when a concrete person, setting, or use situation is necessary for comprehension.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "44249c8a-e84f-5c20-a9cd-a55457e98511",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "21371c6c-c74f-5791-8f9b-6d099306bfb5",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "8ecaec22-7c25-5a39-a85b-56db9c3b607e",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "a4536b84-40f2-57db-84e4-024c97c9fecb",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "e32f543b-1637-572a-ab96-319d74ee7e21",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "6bbb0f69-ca99-539a-a810-a0fb34fe9cc3",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "0ac685f9-e338-5549-bf91-32078cf36f15",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "5567fb3c-de90-5363-af1b-62fb5b8e0bb1",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000001",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "f69ea80c-0d56-5fe8-9d24-8793eefa6643",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "48e887dc-7fc8-5a23-9999-890acb870251",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000002",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "EQUIVALENT",
+      "members": [
+        {
+          "memory_uid": "18ebdcbc-cf5a-5e6c-b2cd-b4cd07d7e59e",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "e34bce0c-7d07-5fe6-b03f-39faa801640b",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000003",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "EQUIVALENT",
+      "members": [
+        {
+          "memory_uid": "5ab99a77-8836-50cf-8377-fdd23a208bc4",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "68ad56f9-6ca2-587a-9182-fd98a79d3d5c",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000004",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "b9b7932b-85c1-5a14-80f7-0983dbf22380",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "eca301ff-9feb-502d-b955-055c48342542",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000005",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "fc0a3a72-2da2-5843-be3a-a4ff2adf8fac",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "cbd977cd-1b78-5ca6-823a-7a5b4b92d77a",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000006",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "2f7092a7-2625-5d27-bd76-a13ee5809cc2",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "9283aedb-6818-5c99-8fe0-502b488acb66",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000007",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "The frames prescribe opposing navigation structures for the same two-page proposal: descriptive subheadings versus a continuous transition-led argument without extra headings.",
+      "kind": "CONFLICT",
+      "members": [
+        {
+          "memory_uid": "a1857f07-36cd-5a6c-946d-a308e712e9eb",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "895b5ac9-1aa4-51d2-b89a-94e9fe5b869d",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "3005f4c5-e17b-531b-b9bf-c9d69411c71f",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "2312cb6e-4f50-56f5-b725-ba5e45697a73",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "1d90043b-f010-5a14-9493-77f636c13975",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "b77fe6ec-676b-5bb9-9119-45aefea2aa27",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "c5c04ab1-10e8-52a3-98a1-aa9cbede57c1",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "32cef408-4c66-5ef2-9a59-eea6fc67b16e",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "2c2aa1af-c450-5c8d-a907-042c5757d3ee",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "1fb62d5b-532b-5664-842c-57622e3c8b9d",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000008",
+      "status": "UNRESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "EQUIVALENT",
+      "members": [
+        {
+          "memory_uid": "4913f63e-ceb9-587a-ade9-494fc8f28849",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "c9591180-6f3a-5909-8695-31704b9b6f01",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000009",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "87203bcf-6724-543a-ad19-60a2becc4598",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000010",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "3579fcc0-c74e-5006-901b-6406a3106fa1",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000011",
+      "status": "RESOLVED"
+    }
+  ],
+  "right": {
+    "context_digest": "19032e7fed99072de4fcaeff084874da452865e9958a1301ec01260d60e01867",
+    "context_uid": "09c95ce6-baa2-5823-a035-e4b0d323200b",
+    "memory_count": 17,
+    "name": "task-2/advisor2/structure"
+  },
+  "schema_version": 1,
+  "semantic_content_in_participant_report": false,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

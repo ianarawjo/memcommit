@@ -1,0 +1,361 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:48:48.246563+00:00",
+      "frames": [
+        {
+          "context_digest": "e56d4062f59b72f23e5414f759cd9f2b09c659d820a29a979fe2edb8bfc3e7a4",
+          "context_name": "task-3/local/personal-memory/2025/01",
+          "context_uid": "2ce7ce06-145c-50c7-bfb4-cb175b9a5255",
+          "memories": [
+            {
+              "content": "One of the user's identity documents needs renewal in the second half of 2025.",
+              "content_digest": "0ade63adc8aedc4dbc0003f2cbc2759010c8bf2645a95fedd3db28b7cfbe0daa",
+              "position": 0,
+              "uid": "50911f7e-75a1-5099-99f1-e471bb8e6cb6"
+            },
+            {
+              "content": "The user postponed an application until the next day after spending time looking for document photos in scattered folders.",
+              "content_digest": "fa1703848374c3364cf49be01e115e08897e16a4ccda3c9edef1212189159ce6",
+              "position": 1,
+              "uid": "d5bd9f79-7295-5014-9668-83b7cffc78e2"
+            },
+            {
+              "content": "After gathering the necessary copies in one folder, the user completed the renewal form in one sitting.",
+              "content_digest": "133721b244e02fce2fe24312b703e59225c023d65bea31bf65decb36a18b4ba5",
+              "position": 2,
+              "uid": "5f92f6a3-1739-580c-bd63-1a936098ccd0"
+            },
+            {
+              "content": "The user entered an abbreviated name on an official form and then discovered that it differed from the supporting document.",
+              "content_digest": "d32485dcfd1311d0739bf9887a330f25bf9b3f47f077c56ec7cdb667bde20a55",
+              "position": 3,
+              "uid": "929107ac-c62d-5920-9f71-12d4c9a102e9"
+            },
+            {
+              "content": "On the next application, after comparing the name with the source document, the user did not receive a correction request.",
+              "content_digest": "e6aa9e63c72f762c00824787c3b971f2cdf76a343c336f329e5b28b0f164d02d",
+              "position": 4,
+              "uid": "df8b90c2-4310-5e89-b979-508309bf6b04"
+            },
+            {
+              "content": "The user put only the submission deadline in the calendar and missed the application deadline by one day because they did not check the issuance period.",
+              "content_digest": "995703686975cdd718d999557d4b5ca13a95c3c1eabfbb73808bb5150eda824b",
+              "position": 5,
+              "uid": "306b9df1-d713-5413-b448-e2b42376d827"
+            },
+            {
+              "content": "On the next application, the user recorded the expected issuance date separately in the calendar.",
+              "content_digest": "b83c9061bf30d64e48b74959513fd37e7ab043446dae7e4fd284102a249a1240",
+              "position": 6,
+              "uid": "870b57b5-4cdb-54fc-b17f-8ffb86dad802"
+            },
+            {
+              "content": "Staff at a public-service counter expect a person requesting identity verification to bring an original as well as a copy.",
+              "content_digest": "eae3721b7f1d905172c169c5a483d2af74aa40bced23d1bbcb8d571ab27df706",
+              "position": 7,
+              "uid": "a0fe456c-0794-5bce-8ef9-9558e9833471"
+            },
+            {
+              "content": "When planning an official application, put both the submission deadline and expected issuance date in the calendar and verify them.",
+              "content_digest": "c5b37d86ef85d5023b60578e7f5f6af1bc49711e32ecc0255bc826a743dce0e1",
+              "position": 8,
+              "uid": "111972b9-e05f-5e1b-b121-ef9e51572d1d"
+            },
+            {
+              "content": "The local agent cannot determine the current validity of an identity document without its expiration date.",
+              "content_digest": "ebc9f4fe21d4ad7e53681d32ded2c049c7d4bf57e24ef71213a5ebdbaaaee521",
+              "position": 9,
+              "uid": "c9872898-ec4f-576e-b154-ff6fda581a1a"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "366c61c1-13d6-4285-a91c-18dbbaa755bf"
+        },
+        {
+          "context_digest": "1d47d83944d91bc0316a61894412e9b4361758603b9532687cf68473f1d30198",
+          "context_name": "task-3/local/personal-memory/2026/01",
+          "context_uid": "e48e6eac-20f7-599d-9f76-4238bd9dd96d",
+          "memories": [
+            {
+              "content": "The user keeps gloves and scarves in a basket inside the entrance.",
+              "content_digest": "df54c52cb6bc89e2e66c747df9807c6892db272c2a23ac5ac91e3f64aaa2a5da",
+              "position": 0,
+              "uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409"
+            },
+            {
+              "content": "On a day the user could not find their gloves, they walked with their hands in their pockets and missed the bus.",
+              "content_digest": "d4205aee5fe3f2c18adc3622930cc7f74de231de9812ca594dbd95a0af7199ff",
+              "position": 1,
+              "uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5"
+            },
+            {
+              "content": "Before the next outing, the user put the gloves in the entrance basket the night before and left on time.",
+              "content_digest": "23a7026d7d1a7edd3278e7b8aa147ef0d315059663f78da5498ad6c1b4a5407c",
+              "position": 2,
+              "uid": "a11f0943-8ee1-5305-87fb-64982fb36f82"
+            },
+            {
+              "content": "On a snowy day, the user chose a shorter route but turned back at stairs that had not been cleared of snow.",
+              "content_digest": "e9e241d2bc4d7c2fa9a44471aa6d1c16d42d50fe2ed99ccfb50713107714be9b",
+              "position": 3,
+              "uid": "f623f245-cdd5-5080-8869-b52cf2914076"
+            },
+            {
+              "content": "The next day, the user took a cleared sidewalk along the main road and avoided slippery sections.",
+              "content_digest": "62c8ec8b38778e9922cf433af4ceb4d59f60bee52dc758e3b88bb1163637f108",
+              "position": 4,
+              "uid": "17ac56f1-1302-5350-99d5-b95ef7feb768"
+            },
+            {
+              "content": "The user fell asleep with the heat turned up, became too warm before dawn, and woke twice.",
+              "content_digest": "912dbbc88a0f4a174b714a794793781f4d2f6c889f73cd7f825338addcab5d6c",
+              "position": 5,
+              "uid": "96988fa9-44b1-511e-8c99-4372f902cfe3"
+            },
+            {
+              "content": "The next night, the user turned down the heat and used one additional thin blanket.",
+              "content_digest": "3d12a4609d4731ebe71bacc841c979ac3497553238c3b5c2191842bbf075ba89",
+              "position": 6,
+              "uid": "b628acaa-50da-552c-8665-244dc4ab8263"
+            },
+            {
+              "content": "On a morning with heavy snow, the user's father expects the user will worry about road conditions and sends a text before departure.",
+              "content_digest": "dcd6bcb23bee46e49813bb14dd8dcb91983d5830f0536d7f23fcdb3a8af0667c",
+              "position": 7,
+              "uid": "08dfb937-7b28-55b5-801c-c0da00cbd414"
+            },
+            {
+              "content": "Before proposing a winter travel route, check recent snow-clearing conditions and accessible entrances.",
+              "content_digest": "dcab87102a9979c51dd369d5ba5ed00b7445c8ccd14450edcb8bec7859689606",
+              "position": 8,
+              "uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d"
+            },
+            {
+              "content": "The local agent cannot know the actual condition of the sidewalk the user will take from a weather forecast alone.",
+              "content_digest": "6b4bcc2f2f508f130c047ff677cadae0eae5b4cc5e5dd6bb3a1fb3784d7793b1",
+              "position": 9,
+              "uid": "802c4031-57de-592a-9bc8-6ee3d54921c8"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "f4b7ef25-f22a-4887-bac7-0d0ad771b612"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate practical domains rather than competing policies: the reference frame concerns identity-document applications, while the compared frame concerns winter organization, travel, comfort, and family communication. Each side contributes independently useful information, with no supported cross-frame equivalence, compatibility, scope difference, or conflict.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "366c61c1-13d6-4285-a91c-18dbbaa755bf",
+              "memory_uid": "50911f7e-75a1-5099-99f1-e471bb8e6cb6"
+            }
+          ],
+          "reason": "Only the reference frame supplies the document-renewal timeframe; it is independently useful and has no operational counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "An identity document requires renewal during the latter half of 2025.",
+          "uid": "8b2b2520-9e11-5f59-acfe-4f36cb0138be"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "366c61c1-13d6-4285-a91c-18dbbaa755bf",
+              "memory_uid": "d5bd9f79-7295-5014-9668-83b7cffc78e2"
+            },
+            {
+              "frame_uid": "366c61c1-13d6-4285-a91c-18dbbaa755bf",
+              "memory_uid": "5f92f6a3-1739-580c-bd63-1a936098ccd0"
+            }
+          ],
+          "reason": "The reference memories describe the delay caused by scattered document photos and the later completion enabled by gathering the needed copies; the compared frame does not address application materials.",
+          "status": "RESOLVED",
+          "summary": "Consolidating required document images and copies supports completing a renewal application without another preparation delay.",
+          "uid": "1c88f86f-bc6b-5034-8eac-ffca10ed0bf9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "366c61c1-13d6-4285-a91c-18dbbaa755bf",
+              "memory_uid": "929107ac-c62d-5920-9f71-12d4c9a102e9"
+            },
+            {
+              "frame_uid": "366c61c1-13d6-4285-a91c-18dbbaa755bf",
+              "memory_uid": "df8b90c2-4310-5e89-b979-508309bf6b04"
+            }
+          ],
+          "reason": "The reference memories present the initial abbreviated-name mismatch and the improved outcome after source-document comparison; no compared memory governs official-form names.",
+          "status": "RESOLVED",
+          "summary": "Comparing the entered name with the supporting document avoids discrepancies and associated correction requests on official applications.",
+          "uid": "95b85532-639f-5221-816f-8cccb6f670ea"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "366c61c1-13d6-4285-a91c-18dbbaa755bf",
+              "memory_uid": "306b9df1-d713-5413-b448-e2b42376d827"
+            },
+            {
+              "frame_uid": "366c61c1-13d6-4285-a91c-18dbbaa755bf",
+              "memory_uid": "870b57b5-4cdb-54fc-b17f-8ffb86dad802"
+            },
+            {
+              "frame_uid": "366c61c1-13d6-4285-a91c-18dbbaa755bf",
+              "memory_uid": "111972b9-e05f-5e1b-b121-ef9e51572d1d"
+            }
+          ],
+          "reason": "The reference memories jointly state the scheduling failure, the subsequent calendar practice, and the resulting planning rule; the compared frame contains no application-timing policy.",
+          "status": "RESOLVED",
+          "summary": "Official-application planning should separately record and verify both the submission deadline and expected issuance date.",
+          "uid": "ef09220c-abf8-5a5c-af5b-2f0c2a1b7963"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "366c61c1-13d6-4285-a91c-18dbbaa755bf",
+              "memory_uid": "a0fe456c-0794-5bce-8ef9-9558e9833471"
+            }
+          ],
+          "reason": "This counter-document expectation appears only in the reference frame and is independent of the compared frame’s winter matters.",
+          "status": "RESOLVED",
+          "summary": "Identity-verification requests at a public-service counter are expected to include both an original document and a copy.",
+          "uid": "ad2415b8-e389-5eb6-80df-700435bbbeba"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "366c61c1-13d6-4285-a91c-18dbbaa755bf",
+              "memory_uid": "c9872898-ec4f-576e-b154-ff6fda581a1a"
+            }
+          ],
+          "reason": "This information-limit claim is specific to document validity and has no matching operational decision or policy in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A local agent cannot determine an identity document’s current validity without its expiration date.",
+          "uid": "9cdad225-6a9a-571d-9a31-e419c196e684"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f4b7ef25-f22a-4887-bac7-0d0ad771b612",
+              "memory_uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409"
+            },
+            {
+              "frame_uid": "f4b7ef25-f22a-4887-bac7-0d0ad771b612",
+              "memory_uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5"
+            },
+            {
+              "frame_uid": "f4b7ef25-f22a-4887-bac7-0d0ad771b612",
+              "memory_uid": "a11f0943-8ee1-5305-87fb-64982fb36f82"
+            }
+          ],
+          "reason": "The compared memories describe the storage practice, the consequence of missing gloves, and the improved outcome after advance placement; the reference frame does not address winter-accessory storage.",
+          "status": "RESOLVED",
+          "summary": "Keeping gloves in the entrance basket and placing them there before an outing supports finding them promptly and leaving on time.",
+          "uid": "8ff14af5-a0d3-5f39-a8fc-59ebfa0118ed"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f4b7ef25-f22a-4887-bac7-0d0ad771b612",
+              "memory_uid": "f623f245-cdd5-5080-8869-b52cf2914076"
+            },
+            {
+              "frame_uid": "f4b7ef25-f22a-4887-bac7-0d0ad771b612",
+              "memory_uid": "17ac56f1-1302-5350-99d5-b95ef7feb768"
+            },
+            {
+              "frame_uid": "f4b7ef25-f22a-4887-bac7-0d0ad771b612",
+              "memory_uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d"
+            },
+            {
+              "frame_uid": "f4b7ef25-f22a-4887-bac7-0d0ad771b612",
+              "memory_uid": "802c4031-57de-592a-9bc8-6ee3d54921c8"
+            }
+          ],
+          "reason": "The compared memories collectively contrast an uncleared shortcut with a cleared route, state the checking policy, and identify the forecast limitation; the reference frame contains no winter-route guidance.",
+          "status": "RESOLVED",
+          "summary": "Winter-route planning should use recent snow-clearance and entrance-access information because route length and weather forecasts alone do not establish actual sidewalk usability.",
+          "uid": "cc89c563-6281-51d6-8c13-b192ae286fe7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f4b7ef25-f22a-4887-bac7-0d0ad771b612",
+              "memory_uid": "96988fa9-44b1-511e-8c99-4372f902cfe3"
+            },
+            {
+              "frame_uid": "f4b7ef25-f22a-4887-bac7-0d0ad771b612",
+              "memory_uid": "b628acaa-50da-552c-8665-244dc4ab8263"
+            }
+          ],
+          "reason": "The compared memories describe the overheating episode and the next-night adjustment as one sleep-comfort sequence; no reference memory concerns temperature or bedding.",
+          "status": "RESOLVED",
+          "summary": "Reducing the heat and adding a thin blanket is the user’s subsequent response to sleep disruption caused by excessive overnight warmth.",
+          "uid": "73306693-0f0b-55dd-8d62-74ed0810e5ee"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f4b7ef25-f22a-4887-bac7-0d0ad771b612",
+              "memory_uid": "08dfb937-7b28-55b5-801c-c0da00cbd414"
+            }
+          ],
+          "reason": "This family communication pattern appears only in the compared frame and is separate from its route-planning policy and all reference-frame application information.",
+          "status": "RESOLVED",
+          "summary": "During heavy snow, the user’s father anticipates concern about road conditions and texts before departure.",
+          "uid": "f3814511-e8ee-5adb-a92c-296817f50ef6"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers storing winter accessories, checking route clearance and access, adjusting nighttime warmth, and a father’s pre-departure message during heavy snow.",
+        "differences": "",
+        "reference_only": "The reference frame covers renewal timing, document preparation, name verification, calendar planning, counter requirements, and limits on determining document validity."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "86888123-8b30-4cff-90ea-4a97ade505a7"
+    },
+    "analysis_digest": "db7c5b9030e731b490c406955367e1cc5c23b7f65a544e246ad5739e33447dcd",
+    "key": "ce7847a0b3516b84f3618e94b0899fcde0bdc36633491eeebe44764a9209f107",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 45.60001495799952,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "ce7847a0b3516b84f3618e94b0899fcde0bdc36633491eeebe44764a9209f107",
+  "created_at": "2026-08-13T18:49:33.846248Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/01",
+  "pair_key": "a2f3df94e52aaa5b8718ee8eb9aeaa110f3df1770711c0fd5e3a64d09e1d6ad3",
+  "provider_seconds": 45.60001495799952,
+  "right": "task-3/local/personal-memory/2026/01",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

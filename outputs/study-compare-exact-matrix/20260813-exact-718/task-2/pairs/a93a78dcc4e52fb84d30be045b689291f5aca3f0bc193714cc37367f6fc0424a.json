@@ -1,0 +1,426 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:18:58.229358+00:00",
+      "frames": [
+        {
+          "context_digest": "89608fbad1167ce0da41a7a6312a1b4e92ee55ff6a7d97bb480a0c75d588a7f2",
+          "context_name": "task-2/advisor1/ethics",
+          "context_uid": "5cdea05f-b6ec-586d-a87f-5347d1d51f96",
+          "memories": [
+            {
+              "content": "Link expected participant burden in each user study task to its corresponding mitigation strategy.",
+              "content_digest": "3595c8f1662100b6c6345bb709c7b2eba285f1979f8d3a5b925c4f32ed9aa4dc",
+              "position": 0,
+              "uid": "e93ea2ee-a8b0-5f3d-b6fd-c76f385eef50"
+            },
+            {
+              "content": "Specify the accommodations necessary for participants to access the prototype and research tasks.",
+              "content_digest": "9879ddf2306813f412b89c1f67f4b1a4779ff9acf55b0b34942bc6f1f555f695",
+              "position": 1,
+              "uid": "6ecf6a7b-f4e9-5d96-a52c-520197d4a2a6"
+            },
+            {
+              "content": "Specify how accessibility accommodations will be provided during user study sessions.",
+              "content_digest": "cce1831f8b2bb3015bc4e69e64a2b1cd4ea6f7249daf28da6686eec262038dc5",
+              "position": 2,
+              "uid": "bc41fce0-dbfc-5d23-9d97-9f81531c098c"
+            },
+            {
+              "content": "Describe how personal identifiers will be separated from research data immediately after collection.",
+              "content_digest": "bd80d3a47e10f1c8a9aec0362cb51995bfe9ecd22f86be916cb0a9009b5f23bf",
+              "position": 3,
+              "uid": "9768e0d9-ef46-52a4-af04-8f6ca3c176c5"
+            },
+            {
+              "content": "Specify the equipment to be loaned to participants who lack necessary devices.",
+              "content_digest": "69991f284e369e31da55a2a23afef032bd50f43dfe66d417a816b242d10c9926",
+              "position": 4,
+              "uid": "e874407e-4d36-55a6-949e-44e5944f1bb4"
+            },
+            {
+              "content": "Describe the procedure for returning equipment loaned to participants.",
+              "content_digest": "100ffbad1288c3263bc4a1044b2d42da35c36a3f73786e58e4391fbac98c84f2",
+              "position": 5,
+              "uid": "df16dca6-0b48-5753-aa18-7e5524187a1e"
+            },
+            {
+              "content": "HCI ethics reviewers verify that expected burdens and mitigation strategies correspond to each user study task.",
+              "content_digest": "1ce06fdbd6b8c4542063ab2413ba80a40c86336dcc43ebb4e1590a246e76d968",
+              "position": 6,
+              "uid": "7d0b3072-7bac-5bc6-9c79-acc808c38f1f"
+            },
+            {
+              "content": "Inform participants that the formative evaluation prototype is not a finished service.",
+              "content_digest": "b02788b149a575392cc58dcba87c21026eec4d733f4e1ef0b3149fcc0e318e74",
+              "position": 7,
+              "uid": "407a4c1c-c333-5764-8d89-252bed150f99"
+            },
+            {
+              "content": "Set an upper limit on cumulative task burden when requesting repeated evaluations from the same participant.",
+              "content_digest": "9d8e4304568abc398445be0aeddc4d1c9945bf48e0295240d48c071dd979646e",
+              "position": 8,
+              "uid": "28646fd3-54af-51f9-97da-ad9489ecda79"
+            },
+            {
+              "content": "The author of this proposal tends to emphasize expected benefits of the prototype over participant burden.",
+              "content_digest": "ffb40ab90087893e20227797ee997e40803e3b812f8a1634e282ab9920cf28d4",
+              "position": 9,
+              "uid": "218aafb6-9332-5693-a2e7-c7777dc64de7"
+            },
+            {
+              "content": "In organizations where leaders or institutional staff handle recruitment, recruitment authority and academic or professional evaluation authority may be combined in the same role.",
+              "content_digest": "d7baf962a2cae0da6c9057f909918788101229b54d57340fb1d5aad459597c05",
+              "position": 10,
+              "uid": "1ecb7268-f77a-5643-a456-357df6cd8f6e"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "d933423e-283d-408e-8ddb-4333acea21b5"
+        },
+        {
+          "context_digest": "b379636c1034c71339b717628e5e233c5f245d0452c487967c8e881d38e4b4a7",
+          "context_name": "task-2/advisor2/feasibility",
+          "context_uid": "2a4a102a-14f5-53bb-88ef-681448ebecff",
+          "memories": [
+            {
+              "content": "Mark unverified schedule assumptions as such.",
+              "content_digest": "d4cdcdbcdb51d96f9a7435e72c2e4ef25a3e3822a765a88afafeca5194bda96e",
+              "position": 0,
+              "uid": "5c9755f8-78bd-5654-a3c7-8be0864e4f12"
+            },
+            {
+              "content": "Mark unverified recruitment assumptions as such.",
+              "content_digest": "4cc28528fee1c7b09f709638e2b57d3bc9efe635d20500ee98567f8f59b8cf21",
+              "position": 1,
+              "uid": "75af48aa-b39e-5b55-95d9-f7f7d2becbad"
+            },
+            {
+              "content": "Mark unverified technical assumptions as such.",
+              "content_digest": "8942e49cd46e3e9746330349df11e49d4a6c9250c7aa4c52c2d9ade1c97c735c",
+              "position": 2,
+              "uid": "292e33b0-4bfd-5e3a-9379-0fbf3619c42d"
+            },
+            {
+              "content": "Trace back the resources required for each core prototype feature and field research procedure.",
+              "content_digest": "b1ac088b664c62c3c1cfb96f6bb31a3ab5fc0fd77d0d1fba58e1da621b5dd56a",
+              "position": 3,
+              "uid": "c0c1fd8d-1aae-51a3-a1d4-66c1481d7b48"
+            },
+            {
+              "content": "Operations reviewers judge feasibility by examining the personnel required for each procedure.",
+              "content_digest": "3199aba38f58f677147b94eca54221e4d0add145a2a58194c3851efcc22e8fab",
+              "position": 4,
+              "uid": "7be25c27-6d67-50fe-90b5-76fca32a93d8"
+            },
+            {
+              "content": "Operations reviewers judge feasibility by examining the equipment required for each procedure.",
+              "content_digest": "13f9b86391d66cf558fc6eead29969c80acdf78d2164c96aa99641bf6c2891fd",
+              "position": 5,
+              "uid": "1aae182f-4eb3-58b7-b8cd-5ce517ead36a"
+            },
+            {
+              "content": "Operations reviewers judge feasibility by examining the time required for each procedure.",
+              "content_digest": "29efef51e7b8e35c459099af93b8ea90d019d83de3cf894e04b184078619fff4",
+              "position": 6,
+              "uid": "84f6e5e3-96b4-538b-a633-1b656204a296"
+            },
+            {
+              "content": "Document separately the commitments and confirmation status of field partners required for recruitment, installation, and operational support.",
+              "content_digest": "ba0ceb0fa886251bfe2b5a83154500862f8c2d4a82ed74fc9ddb3600010cc0b3",
+              "position": 7,
+              "uid": "16a461c4-d90d-5d0f-bfd0-4c1a116ec2be"
+            },
+            {
+              "content": "Designate a responsible party for software updates, equipment inspections, and user support during the deployment period.",
+              "content_digest": "54caa62836c502faf35561d45fba1d02a059c8ed6436ce714114bd392cb3bc9d",
+              "position": 8,
+              "uid": "0ce26892-666f-5ebe-95b2-c6f48915f18b"
+            },
+            {
+              "content": "The user's deployment readiness can be assessed only when dependencies on external services and field personnel are visible.",
+              "content_digest": "931fa67dd8ea84954ce3f0b9631301c320fdcf1bf46fb7fda0214e77636c8c1c",
+              "position": 9,
+              "uid": "4f35fd0c-005a-56a7-b33a-d74bde2d65eb"
+            },
+            {
+              "content": "Field schedules and assigned personnel may change due to operational factors beyond the researcher’s control.",
+              "content_digest": "71739481ce3043f342d9c7c52297c7644931a0a096215fc15150915b74968d84",
+              "position": 10,
+              "uid": "3b96bf66-59e4-5dbf-98d3-937402abc67b"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "5f79f0c7-b278-420f-9cb3-0cda0d33696a"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The reference frame concentrates on participant protection, accessibility, privacy, equipment lending, and research power dynamics. The compared frame independently addresses operational uncertainty, resource feasibility, partner commitments, deployment ownership, and dependency visibility; no scope-aligned shared or conflicting policy is established.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d933423e-283d-408e-8ddb-4333acea21b5",
+              "memory_uid": "e93ea2ee-a8b0-5f3d-b6fd-c76f385eef50"
+            },
+            {
+              "frame_uid": "d933423e-283d-408e-8ddb-4333acea21b5",
+              "memory_uid": "7d0b3072-7bac-5bc6-9c79-acc808c38f1f"
+            }
+          ],
+          "reason": "This participant-protection requirement and its review mechanism appear only in the reference frame; operational resource review does not address the same policy.",
+          "status": "RESOLVED",
+          "summary": "Expected burdens and mitigations are tied to individual study tasks and their correspondence is subject to ethics review.",
+          "uid": "021e6b40-6a7f-5e52-8be1-a0e242a1e8d8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d933423e-283d-408e-8ddb-4333acea21b5",
+              "memory_uid": "6ecf6a7b-f4e9-5d96-a52c-520197d4a2a6"
+            },
+            {
+              "frame_uid": "d933423e-283d-408e-8ddb-4333acea21b5",
+              "memory_uid": "bc41fce0-dbfc-5d23-9d97-9f81531c098c"
+            }
+          ],
+          "reason": "These memories split the substantive and delivery aspects of one accessibility-planning claim found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Required accessibility accommodations and the way they will be delivered during sessions must be specified.",
+          "uid": "64f97c8c-a667-59dc-a779-07b700802cfc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d933423e-283d-408e-8ddb-4333acea21b5",
+              "memory_uid": "9768e0d9-ef46-52a4-af04-8f6ca3c176c5"
+            }
+          ],
+          "reason": "The compared frame contains no claim about research-data privacy or identifier handling.",
+          "status": "RESOLVED",
+          "summary": "Personal identifiers are separated from research data immediately after collection.",
+          "uid": "261ee039-521c-56f0-9acc-05a11e5e2e75"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d933423e-283d-408e-8ddb-4333acea21b5",
+              "memory_uid": "e874407e-4d36-55a6-949e-44e5944f1bb4"
+            },
+            {
+              "frame_uid": "d933423e-283d-408e-8ddb-4333acea21b5",
+              "memory_uid": "df16dca6-0b48-5753-aa18-7e5524187a1e"
+            }
+          ],
+          "reason": "These memories describe two parts of the participant-loan lifecycle, unlike the compared frame's general feasibility examination of required equipment.",
+          "status": "RESOLVED",
+          "summary": "Participant equipment lending must identify the devices provided and the procedure for their return.",
+          "uid": "0db1e32f-2ae7-5dac-83fb-a4f323c0e7be"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d933423e-283d-408e-8ddb-4333acea21b5",
+              "memory_uid": "407a4c1c-c333-5764-8d89-252bed150f99"
+            }
+          ],
+          "reason": "This participant-facing disclosure obligation appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Participants are told that the formative prototype is not a finished service.",
+          "uid": "253c8643-be5c-5fbd-9b80-d6e20e706120"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d933423e-283d-408e-8ddb-4333acea21b5",
+              "memory_uid": "28646fd3-54af-51f9-97da-ad9489ecda79"
+            }
+          ],
+          "reason": "The compared frame does not address cumulative participant exposure or repeated-study limits.",
+          "status": "RESOLVED",
+          "summary": "Repeated evaluations with the same participant are governed by an upper limit on cumulative task burden.",
+          "uid": "a1b5f9bf-06ec-5171-be7c-640774ac15fc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d933423e-283d-408e-8ddb-4333acea21b5",
+              "memory_uid": "218aafb6-9332-5693-a2e7-c7777dc64de7"
+            }
+          ],
+          "reason": "This evaluative observation about authorial framing appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The proposal author is characterized as emphasizing prototype benefits over participant burden.",
+          "uid": "80f726b2-a638-516e-859b-1123bb412793"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d933423e-283d-408e-8ddb-4333acea21b5",
+              "memory_uid": "1ecb7268-f77a-5643-a456-357df6cd8f6e"
+            }
+          ],
+          "reason": "This research power-dynamics risk is independent of the compared frame's operational recruitment assumptions and partner commitments.",
+          "status": "RESOLVED",
+          "summary": "Institutional recruitment arrangements may combine recruitment power with academic or professional evaluation power in one role.",
+          "uid": "1e7cf861-2c00-568f-8318-c58ddd3d57e1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5f79f0c7-b278-420f-9cb3-0cda0d33696a",
+              "memory_uid": "5c9755f8-78bd-5654-a3c7-8be0864e4f12"
+            },
+            {
+              "frame_uid": "5f79f0c7-b278-420f-9cb3-0cda0d33696a",
+              "memory_uid": "75af48aa-b39e-5b55-95d9-f7f7d2becbad"
+            },
+            {
+              "frame_uid": "5f79f0c7-b278-420f-9cb3-0cda0d33696a",
+              "memory_uid": "292e33b0-4bfd-5e3a-9379-0fbf3619c42d"
+            }
+          ],
+          "reason": "These memories apply one uncertainty-labeling rule across three operational assumption categories found only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Unverified schedule, recruitment, and technical assumptions are explicitly labeled as unverified.",
+          "uid": "c2b78a37-2206-592c-9be4-252ea4def845"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5f79f0c7-b278-420f-9cb3-0cda0d33696a",
+              "memory_uid": "c0c1fd8d-1aae-51a3-a1d4-66c1481d7b48"
+            }
+          ],
+          "reason": "This operational traceability requirement appears only in the compared frame and is broader than participant equipment lending.",
+          "status": "RESOLVED",
+          "summary": "Required resources are traced to each core prototype feature and field-research procedure.",
+          "uid": "b0cce644-c07c-5ab0-9777-51d684285259"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5f79f0c7-b278-420f-9cb3-0cda0d33696a",
+              "memory_uid": "7be25c27-6d67-50fe-90b5-76fca32a93d8"
+            },
+            {
+              "frame_uid": "5f79f0c7-b278-420f-9cb3-0cda0d33696a",
+              "memory_uid": "1aae182f-4eb3-58b7-b8cd-5ce517ead36a"
+            },
+            {
+              "frame_uid": "5f79f0c7-b278-420f-9cb3-0cda0d33696a",
+              "memory_uid": "84f6e5e3-96b4-538b-a633-1b656204a296"
+            }
+          ],
+          "reason": "These memories split one feasibility-review method into its three resource dimensions, with no matching review policy in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Operations reviewers assess procedure feasibility through required personnel, equipment, and time.",
+          "uid": "c075d432-e111-59d2-9e24-4ff70aee4aaa"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5f79f0c7-b278-420f-9cb3-0cda0d33696a",
+              "memory_uid": "16a461c4-d90d-5d0f-bfd0-4c1a116ec2be"
+            }
+          ],
+          "reason": "This partner-governance documentation requirement appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Field-partner commitments and confirmation status are separately documented for recruitment, installation, and operational support.",
+          "uid": "fec166cf-602b-5b39-bb70-b3a146f18142"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5f79f0c7-b278-420f-9cb3-0cda0d33696a",
+              "memory_uid": "0ce26892-666f-5ebe-95b2-c6f48915f18b"
+            }
+          ],
+          "reason": "The reference frame does not assign ongoing deployment maintenance and support ownership.",
+          "status": "RESOLVED",
+          "summary": "A responsible party is designated for software updates, equipment inspections, and user support during deployment.",
+          "uid": "465eecd1-c625-59d7-a208-2fe03d3df320"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5f79f0c7-b278-420f-9cb3-0cda0d33696a",
+              "memory_uid": "4f35fd0c-005a-56a7-b33a-d74bde2d65eb"
+            }
+          ],
+          "reason": "This readiness precondition appears only in the compared frame and does not duplicate participant-facing safeguards.",
+          "status": "RESOLVED",
+          "summary": "Deployment readiness assessment depends on making external-service and field-personnel dependencies visible.",
+          "uid": "59717afc-5a14-5846-a9fd-552ac9ba0dff"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5f79f0c7-b278-420f-9cb3-0cda0d33696a",
+              "memory_uid": "3b96bf66-59e4-5dbf-98d3-937402abc67b"
+            }
+          ],
+          "reason": "This operational contingency observation appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Field schedules and personnel assignments may change because of operational factors beyond researcher control.",
+          "uid": "e5e0990d-e066-5273-bc3b-2c61469f10de"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only material covers labeling uncertain assumptions, tracing resources, feasibility review, partner commitments, deployment responsibility, external dependencies, and operational schedule variability.",
+        "differences": "",
+        "reference_only": "Reference-only material covers task-level burden controls, accommodations, data separation, participant equipment lending, prototype disclosure, repeated-study burden, benefit bias, and recruitment-related power concentration."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "2c04816f-c22d-41c6-9506-4403b7b28478"
+    },
+    "analysis_digest": "f287a8e0861c9faed39cb9aaae685765954941283f3198394c49daa8ebe6482c",
+    "key": "756c48ac24930e98c59ecbac647b5932bae8f844ff82f61180805d80e0e33193",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 44.219859084001655,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "756c48ac24930e98c59ecbac647b5932bae8f844ff82f61180805d80e0e33193",
+  "created_at": "2026-08-13T18:19:42.448767Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/ethics",
+  "pair_key": "a93a78dcc4e52fb84d30be045b689291f5aca3f0bc193714cc37367f6fc0424a",
+  "provider_seconds": 44.219859084001655,
+  "right": "task-2/advisor2/feasibility",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

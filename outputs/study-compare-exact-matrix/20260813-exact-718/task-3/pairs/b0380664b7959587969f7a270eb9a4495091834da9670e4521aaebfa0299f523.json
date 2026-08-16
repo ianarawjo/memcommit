@@ -1,0 +1,406 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:39:02.365571+00:00",
+      "frames": [
+        {
+          "context_digest": "3f1b018c2a3a8594d00bffba053626a876fef4893e678dd9600986d9d41c0f31",
+          "context_name": "task-3/local/personal-memory/2024/05",
+          "context_uid": "683986e6-d517-5a53-9dc1-16b69cf0d12e",
+          "memories": [
+            {
+              "content": "The user keeps a small table fan beside the bedroom window.",
+              "content_digest": "b8a464f5e2a33edcef1259af4a412b047ba190bae9cfe42aaf1dbd722efc7f0c",
+              "position": 0,
+              "uid": "3088c235-435c-52ee-9ffc-26cf85ec196e"
+            },
+            {
+              "content": "On a day the user drank coffee late in the afternoon, they could not fall asleep until dawn.",
+              "content_digest": "ef4cf019ebc163fc24f03b8bd505599cd13fc83f33565d51ffb4379dc21d72b8",
+              "position": 1,
+              "uid": "7811ed66-2f22-54d8-a215-62a843264ba5"
+            },
+            {
+              "content": "On a day the user drank coffee before 2 p.m., they fell asleep at their usual time.",
+              "content_digest": "046ac3f8454da623f73d1293fb954b72a3ea056642fd9ee7948c35f110e77669",
+              "position": 2,
+              "uid": "d0f94a56-5cf8-5215-9cfa-5993b3b781be"
+            },
+            {
+              "content": "On a tired day, the user ate dinner out and postponed even washing the dishes after returning home.",
+              "content_digest": "ac36f6c1039dc74f764b4671f718f1e124823dc75fd45abda010285523280b71",
+              "position": 3,
+              "uid": "fc19394a-6634-5aae-bfa5-bba91e707954"
+            },
+            {
+              "content": "In the same week, on a day the user made simple noodles at home, they rested immediately after the meal.",
+              "content_digest": "45bb543f6c6ca213b856683b3c53448ac0d044bcf24f694eda292d6c4923ac5c",
+              "position": 4,
+              "uid": "be7aa7f3-1b67-5677-950d-9942ca337a99"
+            },
+            {
+              "content": "On a night the window was left open, street noise woke the user twice.",
+              "content_digest": "13f3dd86b869b25ee75e1b80d9cdb890b79434fa976fbd7246e89ba808f1a6c6",
+              "position": 5,
+              "uid": "47faaefd-2d60-5693-9847-2c1d5d2f9092"
+            },
+            {
+              "content": "On a night the table fan was running, the user was not too warm even with the window closed.",
+              "content_digest": "96ce23df1cf4f913e3b4c339cc3a857a6a8776e3f3f48e865eae65f02297bba8",
+              "position": 6,
+              "uid": "d6eea310-1313-5a51-b032-f3f518620610"
+            },
+            {
+              "content": "The user's father prefers to have coffee available after dinner and believes it will not cause a sleep problem.",
+              "content_digest": "197616278309e370f0d0e633700b1bde2c6e4395dbc8ed2b942e14fb6c1c9cc5",
+              "position": 7,
+              "uid": "056defa1-8256-561d-a2b4-a70df4058c33"
+            },
+            {
+              "content": "When making a sleep-related suggestion, do not treat one or two records as a general lifestyle habit.",
+              "content_digest": "963795e89a1e2365dd81abf463fb9a80c1c22b9c0e59b121681f89c09860e583",
+              "position": 8,
+              "uid": "7cecee60-fabd-55a3-998b-78810bd9eaf4"
+            },
+            {
+              "content": "The user tends to go to bed much later after drinking coffee late in the afternoon.",
+              "content_digest": "e54652939c104807d5c501753f85aee97883cc55e1d056787b86857cd5b8292d",
+              "position": 9,
+              "uid": "9ace13d3-d881-5720-bfd5-f7884db67756"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "fb09c76a-ebb0-492b-983d-8265cafd160e"
+        },
+        {
+          "context_digest": "b727ef7cf1cb7ca0f00ea3598d36577397e092dcb632f55c3eafb942850922d7",
+          "context_name": "task-3/local/personal-memory/2025/04",
+          "context_uid": "720d2021-1ec5-52ab-ace4-a93e02b05ad9",
+          "memories": [
+            {
+              "content": "The user keeps the shared laundry-room access card in an entrance drawer.",
+              "content_digest": "3c98e367c99e0867f1217c891dc5d982c115fd9d1b4bc3957cca6dbb6338203b",
+              "position": 0,
+              "uid": "a1c67646-6a75-504a-9508-d69e1d04b3e5"
+            },
+            {
+              "content": "The user went downstairs 25 minutes after the laundry finished and received a note from another household.",
+              "content_digest": "44968f6f10c0ae2d1dd775eb066564dada6346c6f59bdacf90d687c57e6c1e0f",
+              "position": 1,
+              "uid": "9479e799-95d7-50d2-af62-d1e0914a389b"
+            },
+            {
+              "content": "For the next load, the user set a reminder five minutes before the end and removed the laundry immediately.",
+              "content_digest": "bc77b81f6126e44bbffeb4ae2dfbb641d31a9742b7a196a106ac385321b48958",
+              "position": 2,
+              "uid": "528cb5ea-8c36-5206-beaa-19432250ec4d"
+            },
+            {
+              "content": "The user washed light-colored clothes with new jeans, and color transferred onto white socks.",
+              "content_digest": "ed0f36cf5ebe8f9542ad39ba45fc109634d72f1cb2b266c15dfe6655e3df3add",
+              "position": 3,
+              "uid": "85fb1639-2176-5329-b490-3325ff030db4"
+            },
+            {
+              "content": "The user later washed the new jeans separately, and the color of the other clothes did not change.",
+              "content_digest": "6e47fe1a02ac39064ea9db2d06d8a1f01f80302825bbe412df745401612e4a84",
+              "position": 4,
+              "uid": "431d170a-863f-596d-97c0-0c9634524ee5"
+            },
+            {
+              "content": "On a day the user did not check the dryer filter, the clothes needed another drying cycle.",
+              "content_digest": "8127e9f3ea34724673517f1e260a73acfb70e287a7e7de84e196ad1cb815f5a7",
+              "position": 5,
+              "uid": "4df33adc-cfba-50f2-b141-e2ebed38b81c"
+            },
+            {
+              "content": "On the next use, after emptying the filter, the user finished drying in one cycle.",
+              "content_digest": "932cfb8fc93277783d8990dad62cfd3e1c9a86e39ad1bd019ce00dac632c53d5",
+              "position": 6,
+              "uid": "ba7daae9-938d-55a1-af20-21cd10d395d8"
+            },
+            {
+              "content": "The building manager judges that not leaving finished laundry for a long time is fair to other households.",
+              "content_digest": "5eabe2d3dff252bb250abcde8fe2d528362afb0e73e7628e839715c3e8a3cd56",
+              "position": 7,
+              "uid": "abbf8742-38e3-5810-b222-fe91e3340962"
+            },
+            {
+              "content": "When creating a shared laundry-room reminder, base it on the end time of the machine the user started.",
+              "content_digest": "e00bc6fe09fea6fde6a27817bd6824a141c1ac4a656b9659067b7e1af9881b1f",
+              "position": 8,
+              "uid": "06273d22-0b42-5c55-9d70-eda14084219a"
+            },
+            {
+              "content": "Even if the local agent knows where the card is kept, it cannot know which machines in the shared laundry room are currently available.",
+              "content_digest": "d03f5583c9e4c686307af90ff00ff54e5ac0990e34296b3d241e4f299d15f4b7",
+              "position": 9,
+              "uid": "03ac930e-d745-5c29-8c24-5ced669817f9"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "8f9341c8-4ed5-4f49-8e16-520411f17590"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate domains: bedroom sleep conditions, caffeine, meals, and inference caution on one side; shared-laundry timing, sorting, drying, access, fairness, reminders, and capability limits on the other. Neither frame supplies a scope-aligned counterpart to the other.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fb09c76a-ebb0-492b-983d-8265cafd160e",
+              "memory_uid": "3088c235-435c-52ee-9ffc-26cf85ec196e"
+            }
+          ],
+          "reason": "This is independently useful bedroom-equipment location information with no laundry-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "A small table fan is kept beside the bedroom window.",
+          "uid": "11c7e6b5-54d8-5715-9d5b-4c8c502f216f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fb09c76a-ebb0-492b-983d-8265cafd160e",
+              "memory_uid": "7811ed66-2f22-54d8-a215-62a843264ba5"
+            },
+            {
+              "frame_uid": "fb09c76a-ebb0-492b-983d-8265cafd160e",
+              "memory_uid": "9ace13d3-d881-5720-bfd5-f7884db67756"
+            }
+          ],
+          "reason": "The specific sleepless night and the stated recurring tendency express one underlying caffeine-timing claim, absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Late-afternoon coffee is associated with substantially delayed sleep for the user.",
+          "uid": "db9dd927-2528-514d-889a-ac65ad273490"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fb09c76a-ebb0-492b-983d-8265cafd160e",
+              "memory_uid": "d0f94a56-5cf8-5215-9cfa-5993b3b781be"
+            }
+          ],
+          "reason": "This bounded early-coffee observation is independently useful and has no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Coffee consumed before 2 p.m. coincided with the user's usual sleep time on one recorded day.",
+          "uid": "e6dc2a0c-bbc1-52c0-befd-b7a3f433e68e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fb09c76a-ebb0-492b-983d-8265cafd160e",
+              "memory_uid": "fc19394a-6634-5aae-bfa5-bba91e707954"
+            }
+          ],
+          "reason": "This isolated meal-and-chore observation has no semantically corresponding laundry claim.",
+          "status": "RESOLVED",
+          "summary": "On one tired day, eating dinner out was followed by postponing dishwashing at home.",
+          "uid": "94d23b21-24a4-55fb-98a6-750b09e32b4c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fb09c76a-ebb0-492b-983d-8265cafd160e",
+              "memory_uid": "be7aa7f3-1b67-5677-950d-9942ca337a99"
+            }
+          ],
+          "reason": "This bounded home-meal observation is independent of the compared frame's laundry content.",
+          "status": "RESOLVED",
+          "summary": "On one day that week, the user made simple noodles and rested immediately after eating.",
+          "uid": "d3f0169b-0019-5872-9a73-964b1119141f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fb09c76a-ebb0-492b-983d-8265cafd160e",
+              "memory_uid": "47faaefd-2d60-5693-9847-2c1d5d2f9092"
+            },
+            {
+              "frame_uid": "fb09c76a-ebb0-492b-983d-8265cafd160e",
+              "memory_uid": "d6eea310-1313-5a51-b032-f3f518620610"
+            }
+          ],
+          "reason": "Both observations split one underlying bedroom cooling-and-noise claim, for which the compared frame provides no counterpart.",
+          "status": "RESOLVED",
+          "summary": "The sleep-environment records contrast open-window street-noise awakenings with comfortable temperature using a fan while the window was closed.",
+          "uid": "7aca81bb-a7dc-5512-9ada-3e089eeb1d10"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fb09c76a-ebb0-492b-983d-8265cafd160e",
+              "memory_uid": "056defa1-8256-561d-a2b4-a70df4058c33"
+            }
+          ],
+          "reason": "This records another person's preference and belief, with no corresponding compared-side information.",
+          "status": "RESOLVED",
+          "summary": "The user's father wants coffee available after dinner and believes it will not impair sleep.",
+          "uid": "8eaad605-dfe5-5359-a311-019e0fdef64d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fb09c76a-ebb0-492b-983d-8265cafd160e",
+              "memory_uid": "7cecee60-fabd-55a3-998b-78810bd9eaf4"
+            }
+          ],
+          "reason": "This is a distinct evidentiary constraint for sleep-related guidance and has no laundry-side equivalent.",
+          "status": "RESOLVED",
+          "summary": "Sleep suggestions should not generalize one or two records into a lifestyle habit.",
+          "uid": "73c9bc79-bad6-5543-8a38-c5c249b4450e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8f9341c8-4ed5-4f49-8e16-520411f17590",
+              "memory_uid": "a1c67646-6a75-504a-9508-d69e1d04b3e5"
+            }
+          ],
+          "reason": "This is independently useful access-item location information absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The shared laundry-room access card is kept in an entrance drawer.",
+          "uid": "202b2ae0-b50a-5035-8628-83280323e6fd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8f9341c8-4ed5-4f49-8e16-520411f17590",
+              "memory_uid": "9479e799-95d7-50d2-af62-d1e0914a389b"
+            },
+            {
+              "frame_uid": "8f9341c8-4ed5-4f49-8e16-520411f17590",
+              "memory_uid": "528cb5ea-8c36-5206-beaa-19432250ec4d"
+            }
+          ],
+          "reason": "The two events split one underlying claim about reminder-supported prompt collection, with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "A delayed laundry pickup drew a household note, while an advance reminder enabled immediate pickup on the next load.",
+          "uid": "c504444f-f47b-56dc-820b-891d577cf8ee"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8f9341c8-4ed5-4f49-8e16-520411f17590",
+              "memory_uid": "85fb1639-2176-5329-b490-3325ff030db4"
+            },
+            {
+              "frame_uid": "8f9341c8-4ed5-4f49-8e16-520411f17590",
+              "memory_uid": "431d170a-863f-596d-97c0-0c9634524ee5"
+            }
+          ],
+          "reason": "The paired wash outcomes express one underlying sorting-and-dye-transfer claim absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "New jeans transferred color when washed with light clothes, whereas separating them avoided color changes to other clothes.",
+          "uid": "e3814a48-cbee-53bf-b22d-7c5289e4a4ba"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8f9341c8-4ed5-4f49-8e16-520411f17590",
+              "memory_uid": "4df33adc-cfba-50f2-b141-e2ebed38b81c"
+            },
+            {
+              "frame_uid": "8f9341c8-4ed5-4f49-8e16-520411f17590",
+              "memory_uid": "ba7daae9-938d-55a1-af20-21cd10d395d8"
+            }
+          ],
+          "reason": "The paired drying outcomes split one underlying filter-related efficiency claim with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Skipping the dryer-filter check coincided with needing another cycle, while emptying it preceded completion in one cycle.",
+          "uid": "0a77776f-cccf-53c0-9a3b-5dd6cb1cb177"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8f9341c8-4ed5-4f49-8e16-520411f17590",
+              "memory_uid": "abbf8742-38e3-5810-b222-fe91e3340962"
+            }
+          ],
+          "reason": "This shared-facility fairness judgment is independently useful and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The building manager considers avoiding long delays in removing finished laundry fair to other households.",
+          "uid": "81cfd014-e625-5ddc-8495-0ad2ba776171"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8f9341c8-4ed5-4f49-8e16-520411f17590",
+              "memory_uid": "06273d22-0b42-5c55-9d70-eda14084219a"
+            }
+          ],
+          "reason": "This operational reminder rule has no scope-aligned claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Shared laundry-room reminders should be based on the end time of the machine the user started.",
+          "uid": "3d690b9e-5c45-58b2-a6b3-13f74a27c252"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8f9341c8-4ed5-4f49-8e16-520411f17590",
+              "memory_uid": "03ac930e-d745-5c29-8c24-5ced669817f9"
+            }
+          ],
+          "reason": "This capability boundary is independently useful and has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Knowing the access-card location does not provide knowledge of current shared laundry-machine availability.",
+          "uid": "b292460f-b581-537d-b05c-3885ff34f9af"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers laundry access, prompt collection, dye-transfer prevention, dryer-filter effects, shared-room fairness, reminder timing, and lack of live machine-availability knowledge.",
+        "differences": "",
+        "reference_only": "The reference records bedroom cooling and noise, caffeine timing and sleep, isolated meal-and-rest observations, a family preference, and caution against generalizing sparse records."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "9ce0156c-9153-4ddc-82c2-fe4b2fc0358a"
+    },
+    "analysis_digest": "91d37c0d26ebd3dfa2deea720c4adf066739c261e3f08c5905117a07f8bf743e",
+    "key": "f27781456cc30b4e2e8135d4e294fb57ca18febc6041b34da40cee6f0d5dc117",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 63.37492595799995,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "f27781456cc30b4e2e8135d4e294fb57ca18febc6041b34da40cee6f0d5dc117",
+  "created_at": "2026-08-13T18:40:05.740117Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/05",
+  "pair_key": "b0380664b7959587969f7a270eb9a4495091834da9670e4521aaebfa0299f523",
+  "provider_seconds": 63.37492595799995,
+  "right": "task-3/local/personal-memory/2025/04",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

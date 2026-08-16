@@ -1,0 +1,388 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:39:12.551383+00:00",
+      "frames": [
+        {
+          "context_digest": "3f1b018c2a3a8594d00bffba053626a876fef4893e678dd9600986d9d41c0f31",
+          "context_name": "task-3/local/personal-memory/2024/05",
+          "context_uid": "683986e6-d517-5a53-9dc1-16b69cf0d12e",
+          "memories": [
+            {
+              "content": "The user keeps a small table fan beside the bedroom window.",
+              "content_digest": "b8a464f5e2a33edcef1259af4a412b047ba190bae9cfe42aaf1dbd722efc7f0c",
+              "position": 0,
+              "uid": "3088c235-435c-52ee-9ffc-26cf85ec196e"
+            },
+            {
+              "content": "On a day the user drank coffee late in the afternoon, they could not fall asleep until dawn.",
+              "content_digest": "ef4cf019ebc163fc24f03b8bd505599cd13fc83f33565d51ffb4379dc21d72b8",
+              "position": 1,
+              "uid": "7811ed66-2f22-54d8-a215-62a843264ba5"
+            },
+            {
+              "content": "On a day the user drank coffee before 2 p.m., they fell asleep at their usual time.",
+              "content_digest": "046ac3f8454da623f73d1293fb954b72a3ea056642fd9ee7948c35f110e77669",
+              "position": 2,
+              "uid": "d0f94a56-5cf8-5215-9cfa-5993b3b781be"
+            },
+            {
+              "content": "On a tired day, the user ate dinner out and postponed even washing the dishes after returning home.",
+              "content_digest": "ac36f6c1039dc74f764b4671f718f1e124823dc75fd45abda010285523280b71",
+              "position": 3,
+              "uid": "fc19394a-6634-5aae-bfa5-bba91e707954"
+            },
+            {
+              "content": "In the same week, on a day the user made simple noodles at home, they rested immediately after the meal.",
+              "content_digest": "45bb543f6c6ca213b856683b3c53448ac0d044bcf24f694eda292d6c4923ac5c",
+              "position": 4,
+              "uid": "be7aa7f3-1b67-5677-950d-9942ca337a99"
+            },
+            {
+              "content": "On a night the window was left open, street noise woke the user twice.",
+              "content_digest": "13f3dd86b869b25ee75e1b80d9cdb890b79434fa976fbd7246e89ba808f1a6c6",
+              "position": 5,
+              "uid": "47faaefd-2d60-5693-9847-2c1d5d2f9092"
+            },
+            {
+              "content": "On a night the table fan was running, the user was not too warm even with the window closed.",
+              "content_digest": "96ce23df1cf4f913e3b4c339cc3a857a6a8776e3f3f48e865eae65f02297bba8",
+              "position": 6,
+              "uid": "d6eea310-1313-5a51-b032-f3f518620610"
+            },
+            {
+              "content": "The user's father prefers to have coffee available after dinner and believes it will not cause a sleep problem.",
+              "content_digest": "197616278309e370f0d0e633700b1bde2c6e4395dbc8ed2b942e14fb6c1c9cc5",
+              "position": 7,
+              "uid": "056defa1-8256-561d-a2b4-a70df4058c33"
+            },
+            {
+              "content": "When making a sleep-related suggestion, do not treat one or two records as a general lifestyle habit.",
+              "content_digest": "963795e89a1e2365dd81abf463fb9a80c1c22b9c0e59b121681f89c09860e583",
+              "position": 8,
+              "uid": "7cecee60-fabd-55a3-998b-78810bd9eaf4"
+            },
+            {
+              "content": "The user tends to go to bed much later after drinking coffee late in the afternoon.",
+              "content_digest": "e54652939c104807d5c501753f85aee97883cc55e1d056787b86857cd5b8292d",
+              "position": 9,
+              "uid": "9ace13d3-d881-5720-bfd5-f7884db67756"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "62e61298-bcdd-4253-b66f-93e5a92b7877"
+        },
+        {
+          "context_digest": "ca8765e237d85d9bf3ecb78fe1d9a2487066ae14dae9509e40b324ac1277d75a",
+          "context_name": "task-3/local/personal-memory/2025/06",
+          "context_uid": "870f7336-726a-5d9c-bae4-12585311463e",
+          "memories": [
+            {
+              "content": "The user keeps a portable fan charger on a living-room shelf.",
+              "content_digest": "5ab7fad8ae1b3f56bdbc1c3ebf593a3d452590341b6de115f830fdf0d994c12e",
+              "position": 0,
+              "uid": "853a158c-edf9-578a-8e75-3d5daff6e4db"
+            },
+            {
+              "content": "On a hot day, the user worked with only the window open and lost focus in the afternoon.",
+              "content_digest": "3c4225f055db293c53a5a137d0c6353005bcb55b71dbc61bc69831aa5c3c08de",
+              "position": 1,
+              "uid": "f7d5ebdc-0cae-5e07-a060-e129b5a05570"
+            },
+            {
+              "content": "In the room where the user closed the curtains the next morning, the temperature rose less.",
+              "content_digest": "4cb4d1892db8769f4c066859dbb021c67d5015114f8522dfd904057061600ab5",
+              "position": 2,
+              "uid": "99e5c522-535b-5015-8617-06f645147f8b"
+            },
+            {
+              "content": "The user took the portable fan out without charging it, and it turned off after an hour.",
+              "content_digest": "0e1e0e9e985bea5be6976010a390f484b60a931ea7dfaf50a73c66616a73d5da",
+              "position": 3,
+              "uid": "7b3bf50c-63aa-5a1e-9a53-7befea25a468"
+            },
+            {
+              "content": "Before the next outing, the user charged it the night before and used the fan throughout the trip.",
+              "content_digest": "fd4282d169da18d902fc5f766d4e38131240bf3a51e6fa0c5bad69f80f1492af",
+              "position": 4,
+              "uid": "ca8de091-afb2-537f-a83a-09769056879d"
+            },
+            {
+              "content": "On a hot weekend, the user was eating lunch in their father's yard and moved indoors.",
+              "content_digest": "44e7d3bc5eaecec68ad6e7c0979572102f3c717b37712fcfada769959443ae8e",
+              "position": 5,
+              "uid": "4a0604fb-10b4-5132-a6de-ab6a229ff2be"
+            },
+            {
+              "content": "When the user returned to the yard in the evening, shade and wind led them to stay another hour.",
+              "content_digest": "7495f1d4ba2d1d732ab5c962f45b5b0c9c765ee21767373552247a823cf90984",
+              "position": 6,
+              "uid": "1f90941e-776f-5cba-9783-c392983dd72c"
+            },
+            {
+              "content": "The user's father prefers to move an outdoor meal to the evening rather than proceed at midday when the temperature is high.",
+              "content_digest": "5f9628a28b5c6f3b20a371d1c039f37f26c50832970936c8a243f161fd8288f4",
+              "position": 7,
+              "uid": "63391d26-7417-5ea6-ac0a-460af7489963"
+            },
+            {
+              "content": "The local agent can compare past responses to heat but cannot know the current felt temperature without an indoor temperature record.",
+              "content_digest": "815f4fb2c833d75e30cb0e323f5708e356bf38e0bbb573865092be48fbf2746a",
+              "position": 8,
+              "uid": "31502797-1379-5ec4-bd1b-a2e1515fa56e"
+            },
+            {
+              "content": "A room with a west-facing window can warm rapidly in the late afternoon.",
+              "content_digest": "448908f6242021de6d41ddee8121714a1388db6e4e3d067de27e6950ee712c23",
+              "position": 9,
+              "uid": "68f85c30-62c4-579d-97cd-9f401c686e63"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "5f95be84-b5f6-4ca1-9c5c-cb6dc4ca1672"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames jointly inform indoor heat management through airflow, fan use, and curtains, while otherwise preserving separate observations about sleep and coffee, low-effort evenings, portable-fan preparation, outdoor heat responses, family preferences, environmental limits, and room characteristics.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "62e61298-bcdd-4253-b66f-93e5a92b7877",
+              "memory_uid": "47faaefd-2d60-5693-9847-2c1d5d2f9092"
+            },
+            {
+              "frame_uid": "62e61298-bcdd-4253-b66f-93e5a92b7877",
+              "memory_uid": "d6eea310-1313-5a51-b032-f3f518620610"
+            },
+            {
+              "frame_uid": "5f95be84-b5f6-4ca1-9c5c-cb6dc4ca1672",
+              "memory_uid": "f7d5ebdc-0cae-5e07-a060-e129b5a05570"
+            },
+            {
+              "frame_uid": "5f95be84-b5f6-4ca1-9c5c-cb6dc4ca1672",
+              "memory_uid": "99e5c522-535b-5015-8617-06f645147f8b"
+            }
+          ],
+          "reason": "Each observation informs the same practical choice among ventilation, fan use, and solar-heat control without asserting incompatible outcomes under the same conditions.",
+          "status": "RESOLVED",
+          "summary": "The frames provide complementary observations about managing indoor heat with windows, a fan, and curtains, including comfort, noise, and concentration outcomes.",
+          "uid": "79b7e6cc-0115-5529-8471-d10a6b1a6064"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "62e61298-bcdd-4253-b66f-93e5a92b7877",
+              "memory_uid": "3088c235-435c-52ee-9ffc-26cf85ec196e"
+            }
+          ],
+          "reason": "This is independently useful reference-only information about the location of a specific fan.",
+          "status": "RESOLVED",
+          "summary": "The user keeps a small table fan beside the bedroom window.",
+          "uid": "5f66895f-1f55-5a9f-a098-328f623e02a0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "62e61298-bcdd-4253-b66f-93e5a92b7877",
+              "memory_uid": "7811ed66-2f22-54d8-a215-62a843264ba5"
+            },
+            {
+              "frame_uid": "62e61298-bcdd-4253-b66f-93e5a92b7877",
+              "memory_uid": "d0f94a56-5cf8-5215-9cfa-5993b3b781be"
+            },
+            {
+              "frame_uid": "62e61298-bcdd-4253-b66f-93e5a92b7877",
+              "memory_uid": "9ace13d3-d881-5720-bfd5-f7884db67756"
+            }
+          ],
+          "reason": "These memories split one reference-only claim about how coffee timing relates to the user’s sleep.",
+          "status": "RESOLVED",
+          "summary": "The reference records associate late-afternoon coffee with substantially delayed sleep, while coffee before 2 p.m. coincided with usual sleep timing.",
+          "uid": "88469423-47d2-59ef-bc4e-f5f62b69cc92"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "62e61298-bcdd-4253-b66f-93e5a92b7877",
+              "memory_uid": "fc19394a-6634-5aae-bfa5-bba91e707954"
+            }
+          ],
+          "reason": "This is a one-sided observation about fatigue, dining out, and deferred chores.",
+          "status": "RESOLVED",
+          "summary": "On a tired day, eating dinner out was followed by postponing even dishwashing after returning home.",
+          "uid": "52aea3ed-0fac-52b7-856f-be74ffe3e1b8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "62e61298-bcdd-4253-b66f-93e5a92b7877",
+              "memory_uid": "be7aa7f3-1b67-5677-950d-9942ca337a99"
+            }
+          ],
+          "reason": "This separate one-sided observation concerns a home meal and immediate rest, without establishing the same circumstance or consequence as the dining-out record.",
+          "status": "RESOLVED",
+          "summary": "After making simple noodles at home, the user rested immediately after the meal.",
+          "uid": "28bc0aa3-0a0f-5e28-9cf5-d8ff3b6c22d2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "62e61298-bcdd-4253-b66f-93e5a92b7877",
+              "memory_uid": "056defa1-8256-561d-a2b4-a70df4058c33"
+            }
+          ],
+          "reason": "This is independently useful reference-only information about the father’s preference and belief.",
+          "status": "RESOLVED",
+          "summary": "The user’s father prefers coffee to be available after dinner and believes it will not impair sleep.",
+          "uid": "0d2ef191-b79b-5701-b13b-99ad579facab"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "62e61298-bcdd-4253-b66f-93e5a92b7877",
+              "memory_uid": "7cecee60-fabd-55a3-998b-78810bd9eaf4"
+            }
+          ],
+          "reason": "This reference-only methodological constraint governs how sparse sleep observations should be interpreted.",
+          "status": "RESOLVED",
+          "summary": "Sleep-related suggestions should not turn one or two records into a general lifestyle habit.",
+          "uid": "1acac009-e0af-501e-b83f-48cc26656525"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5f95be84-b5f6-4ca1-9c5c-cb6dc4ca1672",
+              "memory_uid": "853a158c-edf9-578a-8e75-3d5daff6e4db"
+            }
+          ],
+          "reason": "This is independently useful compared-only information about charger storage.",
+          "status": "RESOLVED",
+          "summary": "The portable fan charger is kept on a living-room shelf.",
+          "uid": "b3218688-405d-52b5-bba4-dff683819405"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5f95be84-b5f6-4ca1-9c5c-cb6dc4ca1672",
+              "memory_uid": "7b3bf50c-63aa-5a1e-9a53-7befea25a468"
+            },
+            {
+              "frame_uid": "5f95be84-b5f6-4ca1-9c5c-cb6dc4ca1672",
+              "memory_uid": "ca8de091-afb2-537f-a83a-09769056879d"
+            }
+          ],
+          "reason": "These compared-side memories describe contrasting parts of one underlying claim about advance charging and portable-fan availability.",
+          "status": "RESOLVED",
+          "summary": "The portable fan failed partway through an uncharged outing but lasted throughout a later trip after being charged the night before.",
+          "uid": "f33ee386-f1c4-506e-83db-59e2294bb0ff"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5f95be84-b5f6-4ca1-9c5c-cb6dc4ca1672",
+              "memory_uid": "4a0604fb-10b4-5132-a6de-ab6a229ff2be"
+            },
+            {
+              "frame_uid": "5f95be84-b5f6-4ca1-9c5c-cb6dc4ca1672",
+              "memory_uid": "1f90941e-776f-5cba-9783-c392983dd72c"
+            }
+          ],
+          "reason": "These memories form one compared-only episode showing that the user’s willingness to remain outdoors varied with heat, shade, wind, and time of day.",
+          "status": "RESOLVED",
+          "summary": "The user moved indoors during a hot outdoor lunch but later remained in the yard when evening shade and wind improved conditions.",
+          "uid": "30d78eee-b72d-5d0f-aeb7-b1ffc7367b9b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5f95be84-b5f6-4ca1-9c5c-cb6dc4ca1672",
+              "memory_uid": "63391d26-7417-5ea6-ac0a-460af7489963"
+            }
+          ],
+          "reason": "This is a distinct compared-only preference belonging to the father rather than a restatement of the user’s observed yard behavior.",
+          "status": "RESOLVED",
+          "summary": "The user’s father prefers moving an outdoor meal to the evening when midday temperatures are high.",
+          "uid": "85fd5971-683c-5ee3-bd01-544de2840d57"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5f95be84-b5f6-4ca1-9c5c-cb6dc4ca1672",
+              "memory_uid": "31502797-1379-5ec4-bd1b-a2e1515fa56e"
+            }
+          ],
+          "reason": "This compared-only statement defines an evidentiary limit on assessing present indoor comfort.",
+          "status": "RESOLVED",
+          "summary": "Past heat responses can be compared, but current felt temperature cannot be known without an indoor temperature record.",
+          "uid": "8aeea475-643f-5217-93bb-2f659065b29c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5f95be84-b5f6-4ca1-9c5c-cb6dc4ca1672",
+              "memory_uid": "68f85c30-62c4-579d-97cd-9f401c686e63"
+            }
+          ],
+          "reason": "This is independently useful compared-only information about a room characteristic and its thermal effect.",
+          "status": "RESOLVED",
+          "summary": "A room with a west-facing window can warm rapidly in the late afternoon.",
+          "uid": "a6fa4eb6-dc18-5ce1-89e1-45958f754a66"
+        }
+      ],
+      "reports": {
+        "both": "Indoor heat observations complement one another: fan use supported nighttime comfort, open windows introduced noise or inadequate daytime relief, and curtains reduced warming.",
+        "compared_only": "Compared-only material covers charger placement and preparation, heat-conditioned yard use and meal timing, limits on inferring current indoor comfort, and west-facing-window warming.",
+        "differences": "",
+        "reference_only": "Reference-only material covers fan placement, coffee timing and sleep, low-effort meal evenings, the father’s coffee preference, and caution against generalizing from sparse records."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "f5e9b9ff-bb69-49d2-968c-7e31e0d4373e"
+    },
+    "analysis_digest": "38799607d29b2fedd7cbb8f80301e5f6b4d7622715332512cfccf55044374e93",
+    "key": "f141be8a819bf221bb2494c3c85e27feb0dd75a1167f4134cbf8e48ed452af61",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 67.51846274999843,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "f141be8a819bf221bb2494c3c85e27feb0dd75a1167f4134cbf8e48ed452af61",
+  "created_at": "2026-08-13T18:40:20.069717Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/05",
+  "pair_key": "b6c71506306b044a6775a2a519485dc81e1157015b876311f8f7989703944c86",
+  "provider_seconds": 67.51846274999843,
+  "right": "task-3/local/personal-memory/2025/06",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

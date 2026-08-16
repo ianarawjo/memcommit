@@ -1,0 +1,300 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:19:49.916682+00:00",
+      "frames": [
+        {
+          "context_digest": "42df7e2f7640040d1d6f6f6e566e80d178668a05ab6918b64eed91b91a41b7fb",
+          "context_name": "task-2/advisor1/evaluation",
+          "context_uid": "30568e2f-ce17-50ce-a25b-1cc4bdb94689",
+          "memories": [
+            {
+              "content": "Specify a single representative measure that serves as the criterion for retaining, modifying, or discarding compared design alternatives.",
+              "content_digest": "53aa7c1f81a4fac9e76985be094717aa122e7077a6fcfde46946babd5929d390",
+              "position": 0,
+              "uid": "a50f6ecb-de38-5769-8a6e-23b84a7eb35c"
+            },
+            {
+              "content": "HCI review panels verify whether clear criteria for judging design alternatives are established using the declared primary measure.",
+              "content_digest": "fabd83103e5c3474f56de113c477f7ced5e863a508ec39bd4ae23653d63ad354",
+              "position": 1,
+              "uid": "44c61beb-24a2-584a-ad96-e622690d8171"
+            },
+            {
+              "content": "Collect process measures to diagnose interaction steps where problems occurred, alongside the primary outcome measure.",
+              "content_digest": "6cc2fedef1b0af1c594e48610e08a169f3bca2405bf8773945eca33396aecb36",
+              "position": 2,
+              "uid": "23202824-b576-5d77-b591-8b4cc0757632"
+            },
+            {
+              "content": "Interpret evaluation results as differences between compared design alternatives rather than as success or failure of a single prototype.",
+              "content_digest": "5c578d52a7dbbf4e4b646e707bbee4ac37bcd23bceb0b4d5e09ef3c08df9c2f4",
+              "position": 3,
+              "uid": "65ae88bf-8002-5ada-8590-eaf345b38863"
+            },
+            {
+              "content": "Check boundary cases to verify whether the derived design principles retain explanatory power for adjacent situations not included in the comparison.",
+              "content_digest": "3edc3e181a8086233d889f35cb98c9448875fe3fee915467f712ca3eb2886de1",
+              "position": 4,
+              "uid": "79af5e5f-4868-5e76-bcd5-3f8e1d6a0bd1"
+            },
+            {
+              "content": "Controlled evaluation environments do not reproduce time pressure, peer intervention, or voluntary termination conditions found in daily use.",
+              "content_digest": "e58a1bc6a423874525aca9f864b9b0dbd1e3ef9961410608c5837c88f1153d9b",
+              "position": 5,
+              "uid": "3a65fc8b-a5b4-50fc-a60e-fc6f3fc44547"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "7156c384-bacd-4da1-bf15-b3bfccdae87d"
+        },
+        {
+          "context_digest": "4371a72e6fb939731cb550ca5363a3b5210680482f84c18b36ba933f4454ecc1",
+          "context_name": "task-2/advisor2/expression",
+          "context_uid": "cf8e8baf-292e-57c3-8e2c-3f9b3d52f3d3",
+          "memories": [
+            {
+              "content": "Use a sequence table rather than a flow diagram when the procedure is likely to change repeatedly during drafting.",
+              "content_digest": "575bb4530af1e93b215ea57f0fd63e1e09136554da98aecf87288cc39ea9697c",
+              "position": 0,
+              "uid": "4264c20d-3e44-578d-866e-7787cc7b59e2"
+            },
+            {
+              "content": "The visual fidelity of a prototype and its level of connection to actual data and services may differ.",
+              "content_digest": "9478cb005a07ca7edfa924579b3d5221b1fa1143b5d8327369e7ee799b76aa9f",
+              "position": 1,
+              "uid": "70a8c3f0-0f6a-5881-abd6-29f52833b7bd"
+            },
+            {
+              "content": "Service flow diagrams indicate human-system transitions that are not revealed by individual screens alone.",
+              "content_digest": "5e3e18a38b1e62724d2ae0445549e214a219d205a80735bc6b4c0e643a96b8b3",
+              "position": 2,
+              "uid": "b410aa8d-db87-586b-a1cd-4af5767a9f7a"
+            },
+            {
+              "content": "HCI reviewers often scan system structure and service flow diagrams before the main text.",
+              "content_digest": "22a46440a6aeda0cb7d39cc6fedf6bbff6cac91232ec0cb163bf1fc17ff257d4",
+              "position": 3,
+              "uid": "a385fbb1-85b4-5132-bbc7-8fd8daedb715"
+            },
+            {
+              "content": "Give each step, actor, condition, and outcome a stable row in the sequence table.",
+              "content_digest": "2a073bf2ec4c5592ddc405d83cb438a5ed880699d3c157f310fb3dbff7851622",
+              "position": 4,
+              "uid": "22254f16-4628-5fd9-b1af-6e66dc2572b3"
+            },
+            {
+              "content": "Updating one row in a sequence table is usually faster than redrawing a branching diagram after a procedural change.",
+              "content_digest": "cf97dbf66018a6be1ee42dfc79ff8de44e8742db2b42c9d1ef70b3f252805a39",
+              "position": 5,
+              "uid": "32028269-5d43-5a65-b22b-9e570ceabfde"
+            },
+            {
+              "content": "Readers can check sequence tables step by step but may find the overall branching shape less immediate.",
+              "content_digest": "18b5de0cdd22ef1774151332afdbc408f9f591cf889e51271f81a372f74ef86d",
+              "position": 6,
+              "uid": "939ee3d0-b611-574a-a25b-82708394bd5e"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "88ffd28c-e21f-4013-83c2-1d21e1b7a1fd"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate parts of HCI practice without substantive overlap. The reference frame focuses on comparative evaluation criteria, interpretation, diagnostic measures, generalization, and environmental limits, while the compared frame focuses on prototype dimensions and ways to document and review procedures and service flows.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7156c384-bacd-4da1-bf15-b3bfccdae87d",
+              "memory_uid": "a50f6ecb-de38-5769-8a6e-23b84a7eb35c"
+            },
+            {
+              "frame_uid": "7156c384-bacd-4da1-bf15-b3bfccdae87d",
+              "memory_uid": "44c61beb-24a2-584a-ad96-e622690d8171"
+            }
+          ],
+          "reason": "These reference-side statements split one evaluation-governance claim into criterion specification and verification, with no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "A declared primary measure anchors criteria for judging design alternatives and their review-panel verification.",
+          "uid": "d995b58a-a518-5a4a-b23a-e6491f68b208"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7156c384-bacd-4da1-bf15-b3bfccdae87d",
+              "memory_uid": "23202824-b576-5d77-b591-8b4cc0757632"
+            }
+          ],
+          "reason": "This is independently useful reference-side guidance on diagnostic measurement and has no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Process measures supplement the primary outcome measure by locating problematic interaction steps.",
+          "uid": "555fad3d-39e6-502d-a725-25c3e2317e8c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7156c384-bacd-4da1-bf15-b3bfccdae87d",
+              "memory_uid": "65ae88bf-8002-5ada-8590-eaf345b38863"
+            }
+          ],
+          "reason": "This reference-side interpretation rule is independent of the compared frame’s representation and prototyping claims.",
+          "status": "RESOLVED",
+          "summary": "Evaluation results should be interpreted as differences among alternatives rather than as a single prototype’s success or failure.",
+          "uid": "7fac7151-5acb-50a6-a2ad-ad0beab13e20"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7156c384-bacd-4da1-bf15-b3bfccdae87d",
+              "memory_uid": "79af5e5f-4868-5e76-bcd5-3f8e1d6a0bd1"
+            }
+          ],
+          "reason": "This reference-side generalization check has no substantively related compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "Boundary cases should test whether derived design principles explain adjacent situations outside the comparison.",
+          "uid": "3eed6e9c-a7cb-5907-b550-c51586f32a8c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7156c384-bacd-4da1-bf15-b3bfccdae87d",
+              "memory_uid": "3a65fc8b-a5b4-50fc-a60e-fc6f3fc44547"
+            }
+          ],
+          "reason": "This reference-side ecological-validity limitation is independently useful and unmatched in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Controlled evaluations omit daily-use conditions such as time pressure, peer intervention, and voluntary termination.",
+          "uid": "51516849-72b1-5ca7-9086-00f7aa856f7c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "88ffd28c-e21f-4013-83c2-1d21e1b7a1fd",
+              "memory_uid": "4264c20d-3e44-578d-866e-7787cc7b59e2"
+            },
+            {
+              "frame_uid": "88ffd28c-e21f-4013-83c2-1d21e1b7a1fd",
+              "memory_uid": "32028269-5d43-5a65-b22b-9e570ceabfde"
+            }
+          ],
+          "reason": "The compared-side statements express one adaptability rationale for sequence tables, absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Sequence tables are preferable for repeatedly changing procedures because individual rows can be updated faster than branching diagrams can be redrawn.",
+          "uid": "be2f0ee3-82c5-5b9c-b47b-5db921571b1a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "88ffd28c-e21f-4013-83c2-1d21e1b7a1fd",
+              "memory_uid": "22254f16-4628-5fd9-b1af-6e66dc2572b3"
+            }
+          ],
+          "reason": "This compared-side table-structure prescription is independently useful and has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Each procedural step, actor, condition, and outcome should occupy a stable sequence-table row.",
+          "uid": "e9deecd6-72ff-5e7d-b3af-404b5a822d2f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "88ffd28c-e21f-4013-83c2-1d21e1b7a1fd",
+              "memory_uid": "939ee3d0-b611-574a-a25b-82708394bd5e"
+            }
+          ],
+          "reason": "This compared-side readability tradeoff is distinct from its other table guidance and unmatched in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Sequence tables support stepwise checking but make the overall branching shape less immediate.",
+          "uid": "fde1e994-2f04-5ce6-9d9d-9c3ef66a8015"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "88ffd28c-e21f-4013-83c2-1d21e1b7a1fd",
+              "memory_uid": "70a8c3f0-0f6a-5881-abd6-29f52833b7bd"
+            }
+          ],
+          "reason": "This compared-side distinction between prototype dimensions has no substantive reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Prototype visual fidelity can vary independently from connection to real data and services.",
+          "uid": "64efbe90-4b4b-5a5d-9d25-e4c3b64383c2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "88ffd28c-e21f-4013-83c2-1d21e1b7a1fd",
+              "memory_uid": "b410aa8d-db87-586b-a1cd-4af5767a9f7a"
+            }
+          ],
+          "reason": "This compared-side claim concerns the informational value of service-flow representation and is absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Service flow diagrams reveal human-system transitions that individual screens do not show.",
+          "uid": "3bb032f9-7acc-5098-b781-117e04144065"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "88ffd28c-e21f-4013-83c2-1d21e1b7a1fd",
+              "memory_uid": "a385fbb1-85b4-5132-bbc7-8fd8daedb715"
+            }
+          ],
+          "reason": "This compared-side observation about reviewer navigation is independently useful and has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "HCI reviewers often inspect system-structure and service-flow diagrams before reading the main text.",
+          "uid": "e630338f-562e-5917-bd67-492483da466d"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Prototype fidelity and service connectivity are distinguished. Sequence tables support frequently changing procedures through stable, editable rows but obscure branching shape, while service diagrams reveal transitions and attract early reviewer attention.",
+        "differences": "",
+        "reference_only": "Comparative evaluation is anchored by a primary measure, supplemented by diagnostic process measures, interpreted between alternatives, tested at boundaries, and qualified by controlled-environment limitations."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "1f5e8e27-69d1-40dc-8241-e6b4916cec14"
+    },
+    "analysis_digest": "295efc9478ec3337d57f7897997170d8dd08cfea9c89a75b75bccdc90e75679d",
+    "key": "e48cea5169b29ba09e7fa2d25e953bde112c2be53bdc57a5816a73a5a5cb8ae2",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 38.70561383299719,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "e48cea5169b29ba09e7fa2d25e953bde112c2be53bdc57a5816a73a5a5cb8ae2",
+  "created_at": "2026-08-13T18:20:28.621933Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/evaluation",
+  "pair_key": "080b8af8332ec182342d9b31d0259c97dade894b11a21d9c22507e31270c35c8",
+  "provider_seconds": 38.70561383299719,
+  "right": "task-2/advisor2/expression",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

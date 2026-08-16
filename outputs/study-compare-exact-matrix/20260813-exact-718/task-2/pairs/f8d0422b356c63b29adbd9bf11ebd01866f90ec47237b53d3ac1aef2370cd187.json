@@ -1,0 +1,513 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:26:31.192925+00:00",
+      "frames": [
+        {
+          "context_digest": "130876ecc1e3921197d330f5ad8493b927360f3505da3eff8df01d4f595a4934",
+          "context_name": "task-2/advisor1/structure",
+          "context_uid": "0ff7abfd-58d3-58c2-b42a-31dca38cb7bd",
+          "memories": [
+            {
+              "content": "Complete the problem framing within the first two sentences so the reader reaches the proposal's central issue before any supporting background.",
+              "content_digest": "4096d07c1d883f8ba3973fd247207f8e86964ff2172e8580c81cb53e64772a6c",
+              "position": 0,
+              "uid": "44249c8a-e84f-5c20-a9cd-a55457e98511"
+            },
+            {
+              "content": "Use the first sentence for the concrete problem and the second for its consequence; reserve later sentences for the proposed response.",
+              "content_digest": "8d72b732a389d0c1bbb22112fa3ba6d8113c8b9d29d252d751c5a55cf7abc648",
+              "position": 1,
+              "uid": "21371c6c-c74f-5791-8f9b-6d099306bfb5"
+            },
+            {
+              "content": "Specify the user, context, and interaction to be explored in the primary HCI research question.",
+              "content_digest": "cc6e0085a02b6df0b572f7393a15292e7fd6c8204f78c66f50fd15190ef49dd0",
+              "position": 2,
+              "uid": "f69ea80c-0d56-5fe8-9d24-8793eefa6643"
+            },
+            {
+              "content": "Provide one compact visual summary when proposing an unfamiliar interaction procedure.",
+              "content_digest": "1e4299abe1691fbbfc826fc59d4276831d9a49abd3588820ba2f50311fd56d2c",
+              "position": 3,
+              "uid": "18ebdcbc-cf5a-5e6c-b2cd-b4cd07d7e59e"
+            },
+            {
+              "content": "Mark the conditions that move an unfamiliar interaction procedure from one step to the next in its visual summary.",
+              "content_digest": "9e7d7547cac76b4b6665ea585fedd7678682c7f9a4eadf129202ac2ea2c6b2b8",
+              "position": 4,
+              "uid": "5ab99a77-8836-50cf-8377-fdd23a208bc4"
+            },
+            {
+              "content": "Present the master’s research schedule as phased periods for exploration, design, prototyping, and user evaluation.",
+              "content_digest": "de00ac53757731455605eb2a3568fcbb4ea3660401a8e6aaf2cb9698795decec",
+              "position": 5,
+              "uid": "b9b7932b-85c1-5a14-80f7-0983dbf22380"
+            },
+            {
+              "content": "Link one reviewable deliverable to each phase of the master’s research.",
+              "content_digest": "cac76eb15b96d8fa32e3041fd5a067a3b5e2085fa832755b5740fe7cf2b57c17",
+              "position": 6,
+              "uid": "fc0a3a72-2da2-5843-be3a-a4ff2adf8fac"
+            },
+            {
+              "content": "Place the gap left by HCI-related research and the proposed design and empirical contributions in close proximity.",
+              "content_digest": "94c1e46dec54f1af7649582c49adbd9f998d3b82300cd234c58604e68619c6d9",
+              "position": 7,
+              "uid": "2f7092a7-2625-5d27-bd76-a13ee5809cc2"
+            },
+            {
+              "content": "Divide a two-page proposal with short descriptive subheadings so a reader can jump directly to the problem, proposed response, and next steps.",
+              "content_digest": "9a65c457d63f97379a188faea00bbc6dfc4ea30ad54aee1386f724a765e88e90",
+              "position": 8,
+              "uid": "a1857f07-36cd-5a6c-946d-a308e712e9eb"
+            },
+            {
+              "content": "Give the problem and proposed response their own descriptive subheadings instead of relying only on paragraph transitions.",
+              "content_digest": "3f5d0cf36befd2b1cb66ae8038719d3f8cd4472303e5173c48c1f96f67d9e969",
+              "position": 9,
+              "uid": "895b5ac9-1aa4-51d2-b89a-94e9fe5b869d"
+            },
+            {
+              "content": "Give the next steps and requested support their own descriptive subheading so they remain easy to find on a return visit.",
+              "content_digest": "008352fbd9cb0d40bd64afe1db74efb2a833adc4146924743b836dbd1941bd90",
+              "position": 10,
+              "uid": "3005f4c5-e17b-531b-b9bf-c9d69411c71f"
+            },
+            {
+              "content": "Place pilot observation or initial prototype results near sentences supporting feasibility claims.",
+              "content_digest": "60e9dcff7041a8df6d3471976e828c8a4713a24ec1b8fa6b6af77afd75b78cf8",
+              "position": 11,
+              "uid": "4913f63e-ceb9-587a-ade9-494fc8f28849"
+            },
+            {
+              "content": "Readers often decide what a proposal is about from its first two sentences before scanning the rest of the page.",
+              "content_digest": "0d8addaa334e762de0ef2ec08c78102bc005a6b81f0baf418c83be2a2981934b",
+              "position": 12,
+              "uid": "8ecaec22-7c25-5a39-a85b-56db9c3b607e"
+            },
+            {
+              "content": "When setup continues past the second sentence, readers who are skimming often retain the background topic but miss the exact problem being proposed.",
+              "content_digest": "5976e248ce36164afb87182216974b972f783352ae5b500398052387ee628710",
+              "position": 13,
+              "uid": "a4536b84-40f2-57db-84e4-024c97c9fecb"
+            },
+            {
+              "content": "Reuse the same short subheadings in discussion so a reader can return to a section without searching through the whole page.",
+              "content_digest": "276c3060f1479291f0d0dd7eba9899e91191555c65cfa60a48d28d1f5b877538",
+              "position": 14,
+              "uid": "2312cb6e-4f50-56f5-b725-ba5e45697a73"
+            },
+            {
+              "content": "Use visible subheadings as a completeness check: an empty or missing section makes an omitted part of the proposal immediately apparent.",
+              "content_digest": "2a68f989965d7f20482be421bc6145ea22d769c78e9c833a842694480dc097f5",
+              "position": 15,
+              "uid": "1d90043b-f010-5a14-9493-77f636c13975"
+            },
+            {
+              "content": "Readers often scan section labels before deciding which paragraph to read closely.",
+              "content_digest": "95e51e9236f82b7ace59c6a24359f398583142c762cc1dd607717a9f297e804a",
+              "position": 16,
+              "uid": "b77fe6ec-676b-5bb9-9119-45aefea2aa27"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "6d0f977e-aa88-4003-85f3-3420c9a66d7f"
+        },
+        {
+          "context_digest": "0c296942d89f44af52c83dcba02568af2b56ed1016260f3d3b9c95e919a51339",
+          "context_name": "task-2/advisor2/ethics",
+          "context_uid": "fa36b485-422d-54c3-a145-0f60a077757c",
+          "memories": [
+            {
+              "content": "Link anticipated participant burden with its mitigation strategies for each field user study task.",
+              "content_digest": "120fdee3ad17815fe2e9aa806aab19843cf6597753cf0d35aa0618a3116a1bd2",
+              "position": 0,
+              "uid": "bc8c1327-993c-51ce-8f53-919dc253e0f8"
+            },
+            {
+              "content": "Specify the accommodations necessary for participants to access the field system and research tasks.",
+              "content_digest": "e09cce7cc60d904d618dffa5619cac9c44e4dbcc4f2a0d8547b9ede06586a82b",
+              "position": 1,
+              "uid": "578f6fdf-6bbc-5d1b-8f03-c7460a5cdc7b"
+            },
+            {
+              "content": "Specify how accessibility accommodations will be provided in the field user study.",
+              "content_digest": "98a13f5b544276eaafd5d0b1aea63b2e313ce327f5881f0e4bbcff19724e8c6e",
+              "position": 2,
+              "uid": "6804d5db-c872-5ded-bf68-14fd30e1b645"
+            },
+            {
+              "content": "Describe how personal identifiers will be separated from research data immediately upon collection.",
+              "content_digest": "0bf884cd31610ba663854e8c273ec6769666b38ee72714ba63f0b390d69b8ba3",
+              "position": 3,
+              "uid": "448f23d0-9607-5977-9d13-a99af48a6fc1"
+            },
+            {
+              "content": "List equipment to be loaned when participants lack necessary gear.",
+              "content_digest": "665d4e26cc8390ca2334d4740650e77977b60fd0e3eed2464ade0ca55a806eb2",
+              "position": 4,
+              "uid": "b97f3e2f-e132-5f6f-a748-f406a89a1bc5"
+            },
+            {
+              "content": "Describe the procedure for returning equipment loaned to participants.",
+              "content_digest": "100ffbad1288c3263bc4a1044b2d42da35c36a3f73786e58e4391fbac98c84f2",
+              "position": 5,
+              "uid": "d05964ea-0423-5642-86e1-9e9c19edffbe"
+            },
+            {
+              "content": "The HCI ethics reviewer verifies that anticipated burden and mitigation strategies correspond for each field user study task.",
+              "content_digest": "067bbafce95c77b4a9acc5ba9652db92dba6dc96e14588841db158919bf044b2",
+              "position": 6,
+              "uid": "26407eb8-5c02-551f-a960-1652eb080f90"
+            },
+            {
+              "content": "Ensure that participants can safely return to existing work procedures if they discontinue research participation.",
+              "content_digest": "213cff51d754811573c78ba0ca92f37e614e9fa4ae1080aa7fcfb550c85437fb",
+              "position": 7,
+              "uid": "7e0ba411-3fd9-53ec-8a3f-4499316c06bb"
+            },
+            {
+              "content": "Specify that organizational members who decline research participation will not face disadvantages in task assignment or performance evaluation.",
+              "content_digest": "46b2b0857255b48ed6001191b089c1d6ecba859690818cbff8fe7676fa1f860a",
+              "position": 8,
+              "uid": "a6fbea37-335c-544b-8bac-01f759bc3855"
+            },
+            {
+              "content": "The user's withdrawal risk can be adequately assessed only when a safe alternative procedure exists for field tasks.",
+              "content_digest": "604a38c44856b4407cf2b1d83df216510e77f84ce76ef4dbc7f9be21cd32393b",
+              "position": 9,
+              "uid": "885d1cf3-8bcd-513c-9591-a548fcbd3992"
+            },
+            {
+              "content": "The user tends to assume that a short session also entails little burden from work interruption and exposure to a manager.",
+              "content_digest": "0c48fd9dd3b393f73a8005db56bf2c11320d82b84040af105ca65c3ff9ce6f17",
+              "position": 10,
+              "uid": "520b4c9f-306e-5749-83b5-2218c97f89e6"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "28a6a930-3735-4c8a-a9ff-1766b9344a63"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames contain complementary but operationally independent guidance: the reference frame focuses on proposal structure, research framing, evidence, visuals, and planning, while the compared frame focuses on ethical safeguards and practical arrangements for field studies. Neither frame supplies a scope-aligned counterpart to the other.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6d0f977e-aa88-4003-85f3-3420c9a66d7f",
+              "memory_uid": "44249c8a-e84f-5c20-a9cd-a55457e98511"
+            },
+            {
+              "frame_uid": "6d0f977e-aa88-4003-85f3-3420c9a66d7f",
+              "memory_uid": "21371c6c-c74f-5791-8f9b-6d099306bfb5"
+            }
+          ],
+          "reason": "These instructions split one opening-framing policy into its timing requirement and sentence-level structure, with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The proposal opening should state the concrete problem and its consequence within the first two sentences before presenting the response.",
+          "uid": "6a0e0072-8bc8-5f22-9e3f-062ed38b33ff"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6d0f977e-aa88-4003-85f3-3420c9a66d7f",
+              "memory_uid": "8ecaec22-7c25-5a39-a85b-56db9c3b607e"
+            },
+            {
+              "frame_uid": "6d0f977e-aa88-4003-85f3-3420c9a66d7f",
+              "memory_uid": "a4536b84-40f2-57db-84e4-024c97c9fecb"
+            }
+          ],
+          "reason": "These observations jointly describe the reader behavior motivating concise opening framing, and the compared frame contains no counterpart.",
+          "status": "RESOLVED",
+          "summary": "Skimming readers infer a proposal’s subject from its opening and may miss the exact problem when background extends beyond the second sentence.",
+          "uid": "a1d5b081-6c55-5756-a911-5cb19899e26d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6d0f977e-aa88-4003-85f3-3420c9a66d7f",
+              "memory_uid": "f69ea80c-0d56-5fe8-9d24-8793eefa6643"
+            }
+          ],
+          "reason": "This is an independently useful requirement for research-question specificity that appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The primary HCI research question should identify the user, context, and interaction under investigation.",
+          "uid": "91b7c16d-f194-52fb-b9cb-036a83418ac1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6d0f977e-aa88-4003-85f3-3420c9a66d7f",
+              "memory_uid": "18ebdcbc-cf5a-5e6c-b2cd-b4cd07d7e59e"
+            },
+            {
+              "frame_uid": "6d0f977e-aa88-4003-85f3-3420c9a66d7f",
+              "memory_uid": "5ab99a77-8836-50cf-8377-fdd23a208bc4"
+            }
+          ],
+          "reason": "The memories split one visual-documentation requirement into the need for a summary and the transition information it must show; the compared frame has no equivalent policy.",
+          "status": "RESOLVED",
+          "summary": "An unfamiliar interaction procedure should have a compact visual summary that marks the conditions governing movement between steps.",
+          "uid": "2f4c4f3f-7aae-5148-9e0e-1c580480898f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6d0f977e-aa88-4003-85f3-3420c9a66d7f",
+              "memory_uid": "b9b7932b-85c1-5a14-80f7-0983dbf22380"
+            },
+            {
+              "frame_uid": "6d0f977e-aa88-4003-85f3-3420c9a66d7f",
+              "memory_uid": "fc0a3a72-2da2-5843-be3a-a4ff2adf8fac"
+            }
+          ],
+          "reason": "These memories jointly define one phased planning structure and its phase-level accountability mechanism, which is absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The master’s research schedule should organize exploration, design, prototyping, and evaluation into phases, each with a reviewable deliverable.",
+          "uid": "09024762-b5af-5374-b84c-d93065423d64"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6d0f977e-aa88-4003-85f3-3420c9a66d7f",
+              "memory_uid": "2f7092a7-2625-5d27-bd76-a13ee5809cc2"
+            }
+          ],
+          "reason": "This is a distinct proposal-argument placement rule found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The HCI research gap should appear close to the proposed design and empirical contributions.",
+          "uid": "3a9a4ca5-0ad8-5007-bcc0-b2c8ba2c2353"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6d0f977e-aa88-4003-85f3-3420c9a66d7f",
+              "memory_uid": "a1857f07-36cd-5a6c-946d-a308e712e9eb"
+            },
+            {
+              "frame_uid": "6d0f977e-aa88-4003-85f3-3420c9a66d7f",
+              "memory_uid": "895b5ac9-1aa4-51d2-b89a-94e9fe5b869d"
+            },
+            {
+              "frame_uid": "6d0f977e-aa88-4003-85f3-3420c9a66d7f",
+              "memory_uid": "3005f4c5-e17b-531b-b9bf-c9d69411c71f"
+            }
+          ],
+          "reason": "The memories state and divide one section-labeling policy for direct navigation, without a corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A two-page proposal should use descriptive subheadings that separately expose the problem, proposed response, next steps, and requested support.",
+          "uid": "0bfaa610-bd67-58db-b6dc-e789304974c5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6d0f977e-aa88-4003-85f3-3420c9a66d7f",
+              "memory_uid": "2312cb6e-4f50-56f5-b725-ba5e45697a73"
+            }
+          ],
+          "reason": "This is an independent continuity rule for later discussion and appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The same short subheadings should be reused in discussion to support quick return navigation.",
+          "uid": "70798ca8-c6d9-5c57-b120-169bcd28d922"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6d0f977e-aa88-4003-85f3-3420c9a66d7f",
+              "memory_uid": "1d90043b-f010-5a14-9493-77f636c13975"
+            }
+          ],
+          "reason": "This assigns subheadings a distinct validation function not addressed in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Visible subheadings should serve as a completeness check by exposing missing or empty proposal sections.",
+          "uid": "5b42df57-6452-52ea-9eb2-5e34780d026d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6d0f977e-aa88-4003-85f3-3420c9a66d7f",
+              "memory_uid": "b77fe6ec-676b-5bb9-9119-45aefea2aa27"
+            }
+          ],
+          "reason": "This is a one-sided observation about navigation behavior rather than a counterpart to the compared frame’s field-study policies.",
+          "status": "RESOLVED",
+          "summary": "Readers often inspect section labels before choosing which paragraph to read closely.",
+          "uid": "c7211740-be88-585f-ba59-d6b21a01b425"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6d0f977e-aa88-4003-85f3-3420c9a66d7f",
+              "memory_uid": "4913f63e-ceb9-587a-ade9-494fc8f28849"
+            }
+          ],
+          "reason": "This is a distinct evidence-placement rule that appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Pilot observations or initial prototype results should be placed near the feasibility claims they support.",
+          "uid": "a5856abf-e1d2-5943-871a-bb71085a4410"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "28a6a930-3735-4c8a-a9ff-1766b9344a63",
+              "memory_uid": "bc8c1327-993c-51ce-8f53-919dc253e0f8"
+            },
+            {
+              "frame_uid": "28a6a930-3735-4c8a-a9ff-1766b9344a63",
+              "memory_uid": "26407eb8-5c02-551f-a960-1652eb080f90"
+            }
+          ],
+          "reason": "The memories express the same task-level burden-to-mitigation requirement from drafting and review perspectives, with no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Anticipated participant burden and mitigation strategies should correspond for every field-study task and be reviewable by the HCI ethics reviewer.",
+          "uid": "b6b51049-63f2-5772-9012-5300e7d1079a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "28a6a930-3735-4c8a-a9ff-1766b9344a63",
+              "memory_uid": "578f6fdf-6bbc-5d1b-8f03-c7460a5cdc7b"
+            },
+            {
+              "frame_uid": "28a6a930-3735-4c8a-a9ff-1766b9344a63",
+              "memory_uid": "6804d5db-c872-5ded-bf68-14fd30e1b645"
+            }
+          ],
+          "reason": "These memories split one accessibility-planning requirement into identification and delivery, neither of which is addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The field-study plan should specify both the accommodations participants need and how those accommodations will be provided.",
+          "uid": "5f2e3b28-445f-536a-92bd-2cb9019271f0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "28a6a930-3735-4c8a-a9ff-1766b9344a63",
+              "memory_uid": "448f23d0-9607-5977-9d13-a99af48a6fc1"
+            }
+          ],
+          "reason": "This is an independent data-handling safeguard present only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Personal identifiers should be separated from research data immediately upon collection.",
+          "uid": "e4faea9e-0f2b-5f4d-abc0-9b6472d1b1fb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "28a6a930-3735-4c8a-a9ff-1766b9344a63",
+              "memory_uid": "b97f3e2f-e132-5f6f-a748-f406a89a1bc5"
+            },
+            {
+              "frame_uid": "28a6a930-3735-4c8a-a9ff-1766b9344a63",
+              "memory_uid": "d05964ea-0423-5642-86e1-9e9c19edffbe"
+            }
+          ],
+          "reason": "The memories describe the provision and return stages of one equipment-loan arrangement, which has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The study plan should identify equipment loaned to participants who lack necessary gear and explain its return procedure.",
+          "uid": "a5b447c7-c7a6-5c46-8371-42161892e254"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "28a6a930-3735-4c8a-a9ff-1766b9344a63",
+              "memory_uid": "7e0ba411-3fd9-53ec-8a3f-4499316c06bb"
+            },
+            {
+              "frame_uid": "28a6a930-3735-4c8a-a9ff-1766b9344a63",
+              "memory_uid": "885d1cf3-8bcd-513c-9591-a548fcbd3992"
+            }
+          ],
+          "reason": "The memories state one withdrawal-safety requirement and its assessment rationale, absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Field tasks should have a safe existing procedure to which participants can return after withdrawal, because withdrawal risk depends on that fallback.",
+          "uid": "82c95826-24e2-5361-9e45-bbc3dab23544"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "28a6a930-3735-4c8a-a9ff-1766b9344a63",
+              "memory_uid": "a6fbea37-335c-544b-8bac-01f759bc3855"
+            }
+          ],
+          "reason": "This is an independent protection against workplace coercion or retaliation found only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Organizational members who decline participation should not be disadvantaged in task assignments or performance evaluations.",
+          "uid": "1925365b-3b61-5e23-8d2a-a1a610c96cf4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "28a6a930-3735-4c8a-a9ff-1766b9344a63",
+              "memory_uid": "520b4c9f-306e-5749-83b5-2218c97f89e6"
+            }
+          ],
+          "reason": "This is a distinct observation about underestimating workplace-study burden and has no scope-aligned counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A short session may still impose meaningful burden through work interruption and exposure to a manager, despite users’ tendency to assume otherwise.",
+          "uid": "b2d20557-cdfb-5a89-8875-6c95d7bce0b9"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only guidance covers task-level burden mitigation, accessibility, identifier separation, equipment loans, withdrawal safeguards, protection for nonparticipants, and the risk of underestimating burdens created by workplace interruption and managerial exposure.",
+        "differences": "",
+        "reference_only": "Reference-only guidance covers rapid problem framing, precise HCI questions, procedure visuals, phased schedules, gap-and-contribution placement, navigable subheadings, and nearby feasibility evidence, supported by observations about reader scanning."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "1d02219c-9813-410e-a1bc-cd04459067a3"
+    },
+    "analysis_digest": "e421e5e11324a801332736f50e52a8ffb48580a537185b9e448e30e4092214f9",
+    "key": "f0c62d393ecffe879e3ebf324c887e782b1473de4b3adf332fdc15bc59aba74d",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 60.63897116699809,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "f0c62d393ecffe879e3ebf324c887e782b1473de4b3adf332fdc15bc59aba74d",
+  "created_at": "2026-08-13T18:27:31.830762Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/structure",
+  "pair_key": "f8d0422b356c63b29adbd9bf11ebd01866f90ec47237b53d3ac1aef2370cd187",
+  "provider_seconds": 60.63897116699809,
+  "right": "task-2/advisor2/ethics",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

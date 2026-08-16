@@ -1,0 +1,388 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:35:09.317502+00:00",
+      "frames": [
+        {
+          "context_digest": "2f00e067f4f35600b73e87b5555d405e2801a33ba18a54c91e63e23a79f27a4c",
+          "context_name": "task-3/local/personal-memory/2024/01",
+          "context_uid": "cbd2e4d6-2601-5d3f-8bf2-2f66b755b007",
+          "memories": [
+            {
+              "content": "The user's mother's birthday falls in the third week of January.",
+              "content_digest": "d635ded9b470acdd462156515700e66c23dcb513a7034bb365be0ac139ec0422",
+              "position": 0,
+              "uid": "2cd0229d-b7f1-581b-8019-25bdb485afd9"
+            },
+            {
+              "content": "At the user's last family meal out, noise from the next table made conversation nearly impossible.",
+              "content_digest": "dc337d32e4b09167289e19a6b1c8fe970e7eaa6fdd6868ed1c7c300e018fcd15",
+              "position": 1,
+              "uid": "c62f1669-11c9-5a81-b5f5-304acce69c23"
+            },
+            {
+              "content": "At a barbecue at home in the same month, the user was comfortable because no one had to raise their voice.",
+              "content_digest": "63763b293a491200bf1f7a251467c1fa8c2cb8d4d8450732c01666dcdea183e3",
+              "position": 2,
+              "uid": "674f4bdf-27c3-5870-a68e-91e4a093dd93"
+            },
+            {
+              "content": "During their mother's birthday meal, the user left a restaurant with loud music after 30 minutes.",
+              "content_digest": "560755c6f051ec6f85e32dc4ee9447dfc97418fca6f9f414f6910c518a52c2c0",
+              "position": 3,
+              "uid": "21509788-2e3d-548b-8303-f34cfea68c9b"
+            },
+            {
+              "content": "When discussing postponed matters with family, the user prefers a quiet, one-on-one dining environment.",
+              "content_digest": "f22bedcf60a64b3666a7e4363d6a55c48547535492010fcb205a182c1ee920a8",
+              "position": 4,
+              "uid": "74eaea9d-7640-51ba-aa77-9c050581dc46"
+            },
+            {
+              "content": "At a large banquet hall reserved by their older sister, the user remembered the surrounding noise more than the food.",
+              "content_digest": "566e443c69410f1672ab209ba2257604e373cd305ab27243a39574481407af71",
+              "position": 5,
+              "uid": "1384df1d-2173-5673-96f5-a4d86835d404"
+            },
+            {
+              "content": "On a day the user ate grilled food at home with their younger brother, conversation was easy to continue, so the user stayed another hour after the meal.",
+              "content_digest": "c93ccbe3524946f1def05a1b385fbe3387945f51164b00c56f1ff80b477d011f",
+              "position": 6,
+              "uid": "3cf68c8e-5da9-51d3-a402-c10f4137b1f4"
+            },
+            {
+              "content": "The user's mother considers having the whole family eat at the same time more important than receiving a birthday gift.",
+              "content_digest": "d302cf7db2b83b103ea11323ab1b9d36168d224b405d4d0dd51b46b494014291",
+              "position": 7,
+              "uid": "a1984768-d20d-59cd-84c9-cb08c6b7affb"
+            },
+            {
+              "content": "When proposing a birthday meal for the user's mother, check the schedule and attendees; if conversation is the purpose, first consider a low-noise location, then confirm the final choice with the user.",
+              "content_digest": "481169c62cf6fae6b4f29184ffacef9c3c9d825a34d1545ca592bc35537bc65c",
+              "position": 8,
+              "uid": "f52d11e2-2449-5c9d-887b-96c8b5cd0184"
+            },
+            {
+              "content": "The local agent can compare past dining environments and the user's responses, but those records alone cannot determine the location of the next gathering.",
+              "content_digest": "b05fef8420abe3c47c2cd9f2de9149c9c6bda7dca301f09ac7f94eac1a29d2fa",
+              "position": 9,
+              "uid": "c8fccfbe-7756-5d62-9cd7-403dd6741915"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "e1659922-4c3f-4907-82bf-eb6db8981597"
+        },
+        {
+          "context_digest": "4eadf16a0c655a266bec3ebe56b056075c55e7f716f6879a0b6a905fe34136df",
+          "context_name": "task-3/local/personal-memory/2026/05",
+          "context_uid": "fd476504-4d4e-54d9-80b8-3dc2b18555d8",
+          "memories": [
+            {
+              "content": "The user keeps a picnic mat on the bottom shelf of the entrance storage cabinet.",
+              "content_digest": "c17479bd6a0f978f71b106b562507e702c3b84af5119be6bce48e4ee1664e728",
+              "position": 0,
+              "uid": "a9da4cfc-a6aa-51ae-9ec4-0de5c7a09227"
+            },
+            {
+              "content": "On a day the user went to the riverside, they sat in a place without shade and moved after an hour.",
+              "content_digest": "f9ab1da828ca5af06cb8bf54fe85136e316f503dab465fad514ab5a3f8243633",
+              "position": 1,
+              "uid": "fa2735e1-f4af-57d3-a18c-795715b6715b"
+            },
+            {
+              "content": "At the next outdoor meal, the user chose a place near a large tree and stayed for two hours.",
+              "content_digest": "189b7d85561df45986a6b7c9fe681b5ef53b22ca1f5e83fa8d64a7d93b35a577",
+              "position": 2,
+              "uid": "3bd8b8f2-c5b4-5004-8b9e-e388cc26ea7a"
+            },
+            {
+              "content": "On a hot day when the user brought only one bottle of water, they bought another drink partway through the outing.",
+              "content_digest": "92aa494a12664105a4bffc50a9026fadbec78332f750636093ea82ecc68e9597",
+              "position": 3,
+              "uid": "c7c4b494-39a6-5f5c-b37f-51c5061ac926"
+            },
+            {
+              "content": "On the next outing, the user brought two small bottles of water after freezing them.",
+              "content_digest": "69b3035b57b58b1aa778bd0da75dc806c1c449e7e35dc448aff92f7499c3148d",
+              "position": 4,
+              "uid": "dd9f5b3c-9c2e-5dbc-bf6e-eb7761eeb075"
+            },
+            {
+              "content": "When meeting their maternal uncle at a park, the user and the uncle waited at different entrances for 15 minutes.",
+              "content_digest": "9785e87b9fe79813762eb2e19e6d4f256a55f4799c92d095aaf695a8a1de5851",
+              "position": 5,
+              "uid": "2ed2a41c-f6ae-54d6-875c-a195d8fdacee"
+            },
+            {
+              "content": "For the next meeting, the user sent a photo of the entrance sign, and they met at the same place.",
+              "content_digest": "de40b6b7df84784639b97cf7ce153ad8af6e77320d75f3869979e5e3d39169e2",
+              "position": 6,
+              "uid": "23f3a4fc-d51e-5d0b-87f0-d5be407a57f3"
+            },
+            {
+              "content": "For a park meeting, the user's maternal uncle prefers an entrance that requires less walking from the parking area.",
+              "content_digest": "552a43b869c6f06cbf571f794106727406d87841d43addc92f31a3532f73d6f3",
+              "position": 7,
+              "uid": "e9f459f3-8ff0-5a0e-b78b-eda8d18b914e"
+            },
+            {
+              "content": "When making an outdoor plan, confirm the exact entrance and an alternative location in case of rain.",
+              "content_digest": "a265a6364c182de35363b58135b1da60d11595d1e3e0029f6851ac272261a959",
+              "position": 8,
+              "uid": "70277b86-d5db-5b58-8a94-e77372d15a4c"
+            },
+            {
+              "content": "Some park restrooms and drinking fountains may be closed seasonally.",
+              "content_digest": "8e5c4f5f85d4d27dc2211f46e3ab3bbed7f3d9687070b9028992b670986b09ca",
+              "position": 9,
+              "uid": "5a54437b-9b0e-5103-860d-d878be70b3ef"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "ec168f6a-268d-4f3f-a210-6bf5f09ed9c8"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate planning domains: one centers on a family birthday meal and conversational comfort, while the other records practical lessons for park outings. Neither frame supplies a scope-aligned counterpart that supports a cross-frame semantic relation or raises a conflict.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e1659922-4c3f-4907-82bf-eb6db8981597",
+              "memory_uid": "2cd0229d-b7f1-581b-8019-25bdb485afd9"
+            }
+          ],
+          "reason": "This one-sided calendar fact has no counterpart in the outdoor-planning frame.",
+          "status": "RESOLVED",
+          "summary": "The user's mother's birthday occurs in the third week of January.",
+          "uid": "6cb3a3b0-fe50-56f1-82f5-ce21e62a8d6a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e1659922-4c3f-4907-82bf-eb6db8981597",
+              "memory_uid": "c62f1669-11c9-5a81-b5f5-304acce69c23"
+            },
+            {
+              "frame_uid": "e1659922-4c3f-4907-82bf-eb6db8981597",
+              "memory_uid": "674f4bdf-27c3-5870-a68e-91e4a093dd93"
+            },
+            {
+              "frame_uid": "e1659922-4c3f-4907-82bf-eb6db8981597",
+              "memory_uid": "21509788-2e3d-548b-8303-f34cfea68c9b"
+            },
+            {
+              "frame_uid": "e1659922-4c3f-4907-82bf-eb6db8981597",
+              "memory_uid": "1384df1d-2173-5673-96f5-a4d86835d404"
+            },
+            {
+              "frame_uid": "e1659922-4c3f-4907-82bf-eb6db8981597",
+              "memory_uid": "3cf68c8e-5da9-51d3-a402-c10f4137b1f4"
+            }
+          ],
+          "reason": "These episodes jointly support one one-sided experiential claim about noise and conversational comfort; the other frame does not address dining acoustics.",
+          "status": "RESOLVED",
+          "summary": "The user's dining experiences consistently associate loud surroundings with impaired or shortened conversation and quiet home meals with easier, longer interaction.",
+          "uid": "bbfe053e-39e4-59fa-8f67-3cb6de30481c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e1659922-4c3f-4907-82bf-eb6db8981597",
+              "memory_uid": "74eaea9d-7640-51ba-aa77-9c050581dc46"
+            }
+          ],
+          "reason": "This explicit setting preference is independently useful and has no scope-aligned counterpart in the park-outing frame.",
+          "status": "RESOLVED",
+          "summary": "For postponed family discussions, the user prefers quiet, one-on-one dining.",
+          "uid": "817ddbc8-eecb-5861-b5be-d6063bb31fcb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e1659922-4c3f-4907-82bf-eb6db8981597",
+              "memory_uid": "a1984768-d20d-59cd-84c9-cb08c6b7affb"
+            }
+          ],
+          "reason": "This one-sided family priority is absent from the outdoor-planning frame.",
+          "status": "RESOLVED",
+          "summary": "The user's mother values having the whole family eat together more than receiving a birthday gift.",
+          "uid": "7418e03a-3000-5001-ab25-d0af1b57ffca"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e1659922-4c3f-4907-82bf-eb6db8981597",
+              "memory_uid": "f52d11e2-2449-5c9d-887b-96c8b5cd0184"
+            }
+          ],
+          "reason": "This birthday-meal procedure governs a different operational setting from the park-planning procedure and therefore has no semantic counterpart.",
+          "status": "RESOLVED",
+          "summary": "Planning the mother's birthday meal should account for schedules and attendees, prioritize low noise when conversation matters, and leave the final choice for user confirmation.",
+          "uid": "ff2aba15-2aad-5869-a596-9dde5e4e4160"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e1659922-4c3f-4907-82bf-eb6db8981597",
+              "memory_uid": "c8fccfbe-7756-5d62-9cd7-403dd6741915"
+            }
+          ],
+          "reason": "This one-sided limitation on venue inference has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Past dining environments and user responses can be compared but cannot alone determine the next gathering location.",
+          "uid": "02539fee-e905-56fb-bcbb-f2d420f4b3d3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ec168f6a-268d-4f3f-a210-6bf5f09ed9c8",
+              "memory_uid": "a9da4cfc-a6aa-51ae-9ec4-0de5c7a09227"
+            }
+          ],
+          "reason": "This one-sided storage fact has no counterpart in the family-dining frame.",
+          "status": "RESOLVED",
+          "summary": "The user stores a picnic mat on the bottom shelf of the entrance storage cabinet.",
+          "uid": "c3deaad4-4b39-541f-b19e-c3d2d7eec46b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ec168f6a-268d-4f3f-a210-6bf5f09ed9c8",
+              "memory_uid": "fa2735e1-f4af-57d3-a18c-795715b6715b"
+            },
+            {
+              "frame_uid": "ec168f6a-268d-4f3f-a210-6bf5f09ed9c8",
+              "memory_uid": "3bd8b8f2-c5b4-5004-8b9e-e388cc26ea7a"
+            }
+          ],
+          "reason": "These episodes jointly express one one-sided lesson about shade during outdoor meals; the reference frame does not address it.",
+          "status": "RESOLVED",
+          "summary": "Outdoor-meal experiences indicate that lack of shade prompted relocation, while choosing a large tree's shade supported a longer stay.",
+          "uid": "4d41ac66-1ace-502c-bfe3-0042af22da3e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ec168f6a-268d-4f3f-a210-6bf5f09ed9c8",
+              "memory_uid": "c7c4b494-39a6-5f5c-b37f-51c5061ac926"
+            },
+            {
+              "frame_uid": "ec168f6a-268d-4f3f-a210-6bf5f09ed9c8",
+              "memory_uid": "dd9f5b3c-9c2e-5dbc-bf6e-eb7761eeb075"
+            }
+          ],
+          "reason": "These memories form one one-sided hydration-preparation lesson with no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "After one bottle proved insufficient on a hot outing, the user prepared two small frozen water bottles for the next outing.",
+          "uid": "586e2a24-475b-5a94-a912-6a0cda54453e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ec168f6a-268d-4f3f-a210-6bf5f09ed9c8",
+              "memory_uid": "2ed2a41c-f6ae-54d6-875c-a195d8fdacee"
+            },
+            {
+              "frame_uid": "ec168f6a-268d-4f3f-a210-6bf5f09ed9c8",
+              "memory_uid": "23f3a4fc-d51e-5d0b-87f0-d5be407a57f3"
+            }
+          ],
+          "reason": "These episodes jointly capture one one-sided entrance-identification lesson; the family-dining frame has no counterpart.",
+          "status": "RESOLVED",
+          "summary": "After the user and their maternal uncle waited at different park entrances, sending a photo of the entrance sign enabled them to meet at the same place next time.",
+          "uid": "2308d4e2-bafe-57b3-9a0f-bd5311678cf0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ec168f6a-268d-4f3f-a210-6bf5f09ed9c8",
+              "memory_uid": "e9f459f3-8ff0-5a0e-b78b-eda8d18b914e"
+            }
+          ],
+          "reason": "This one-sided accessibility preference has no scope-aligned counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "For park meetings, the user's maternal uncle prefers an entrance requiring less walking from the parking area.",
+          "uid": "22ef0336-89bc-5f47-8538-641c60a5d467"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ec168f6a-268d-4f3f-a210-6bf5f09ed9c8",
+              "memory_uid": "70277b86-d5db-5b58-8a94-e77372d15a4c"
+            }
+          ],
+          "reason": "This park-planning procedure governs a different operational setting from birthday-meal planning and is independently useful.",
+          "status": "RESOLVED",
+          "summary": "An outdoor plan should confirm the exact entrance and identify an alternative location for rain.",
+          "uid": "0a03c31d-88ca-5d6d-bf5c-d455a28b0a58"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ec168f6a-268d-4f3f-a210-6bf5f09ed9c8",
+              "memory_uid": "5a54437b-9b0e-5103-860d-d878be70b3ef"
+            }
+          ],
+          "reason": "This one-sided outdoor-facility constraint has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Park restrooms and drinking fountains may close seasonally.",
+          "uid": "293a4386-8f38-51e4-908c-6443a871b271"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers picnic supplies, shade and hydration lessons, entrance coordination and accessibility, rain contingencies, and seasonal park-facility closures.",
+        "differences": "",
+        "reference_only": "The reference frame records birthday timing, family priorities, noise-sensitive dining experiences and preferences, a meal-planning procedure, and a limit on inferring the next venue from past records."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "389029cd-2870-457d-aa5e-17c8a3302e26"
+    },
+    "analysis_digest": "628a5c12dfd30a6ab04e0369479f2b238ff7473f5f22688e19825ba7ed877540",
+    "key": "68f4c2514cddfe1910f071c15f32a2945d512f857d9f9bd155b51aa391c6639a",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 36.90613412499806,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "68f4c2514cddfe1910f071c15f32a2945d512f857d9f9bd155b51aa391c6639a",
+  "created_at": "2026-08-13T18:35:46.223101Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/01",
+  "pair_key": "f443890522076249748fa8cf5bb3404e43f1b15516574441e15909c36ce500e5",
+  "provider_seconds": 36.90613412499806,
+  "right": "task-3/local/personal-memory/2026/05",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

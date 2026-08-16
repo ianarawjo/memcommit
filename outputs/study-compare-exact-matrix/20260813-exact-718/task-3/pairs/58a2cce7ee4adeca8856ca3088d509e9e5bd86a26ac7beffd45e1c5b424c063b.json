@@ -1,0 +1,361 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:38:53.420988+00:00",
+      "frames": [
+        {
+          "context_digest": "3f1b018c2a3a8594d00bffba053626a876fef4893e678dd9600986d9d41c0f31",
+          "context_name": "task-3/local/personal-memory/2024/05",
+          "context_uid": "683986e6-d517-5a53-9dc1-16b69cf0d12e",
+          "memories": [
+            {
+              "content": "The user keeps a small table fan beside the bedroom window.",
+              "content_digest": "b8a464f5e2a33edcef1259af4a412b047ba190bae9cfe42aaf1dbd722efc7f0c",
+              "position": 0,
+              "uid": "3088c235-435c-52ee-9ffc-26cf85ec196e"
+            },
+            {
+              "content": "On a day the user drank coffee late in the afternoon, they could not fall asleep until dawn.",
+              "content_digest": "ef4cf019ebc163fc24f03b8bd505599cd13fc83f33565d51ffb4379dc21d72b8",
+              "position": 1,
+              "uid": "7811ed66-2f22-54d8-a215-62a843264ba5"
+            },
+            {
+              "content": "On a day the user drank coffee before 2 p.m., they fell asleep at their usual time.",
+              "content_digest": "046ac3f8454da623f73d1293fb954b72a3ea056642fd9ee7948c35f110e77669",
+              "position": 2,
+              "uid": "d0f94a56-5cf8-5215-9cfa-5993b3b781be"
+            },
+            {
+              "content": "On a tired day, the user ate dinner out and postponed even washing the dishes after returning home.",
+              "content_digest": "ac36f6c1039dc74f764b4671f718f1e124823dc75fd45abda010285523280b71",
+              "position": 3,
+              "uid": "fc19394a-6634-5aae-bfa5-bba91e707954"
+            },
+            {
+              "content": "In the same week, on a day the user made simple noodles at home, they rested immediately after the meal.",
+              "content_digest": "45bb543f6c6ca213b856683b3c53448ac0d044bcf24f694eda292d6c4923ac5c",
+              "position": 4,
+              "uid": "be7aa7f3-1b67-5677-950d-9942ca337a99"
+            },
+            {
+              "content": "On a night the window was left open, street noise woke the user twice.",
+              "content_digest": "13f3dd86b869b25ee75e1b80d9cdb890b79434fa976fbd7246e89ba808f1a6c6",
+              "position": 5,
+              "uid": "47faaefd-2d60-5693-9847-2c1d5d2f9092"
+            },
+            {
+              "content": "On a night the table fan was running, the user was not too warm even with the window closed.",
+              "content_digest": "96ce23df1cf4f913e3b4c339cc3a857a6a8776e3f3f48e865eae65f02297bba8",
+              "position": 6,
+              "uid": "d6eea310-1313-5a51-b032-f3f518620610"
+            },
+            {
+              "content": "The user's father prefers to have coffee available after dinner and believes it will not cause a sleep problem.",
+              "content_digest": "197616278309e370f0d0e633700b1bde2c6e4395dbc8ed2b942e14fb6c1c9cc5",
+              "position": 7,
+              "uid": "056defa1-8256-561d-a2b4-a70df4058c33"
+            },
+            {
+              "content": "When making a sleep-related suggestion, do not treat one or two records as a general lifestyle habit.",
+              "content_digest": "963795e89a1e2365dd81abf463fb9a80c1c22b9c0e59b121681f89c09860e583",
+              "position": 8,
+              "uid": "7cecee60-fabd-55a3-998b-78810bd9eaf4"
+            },
+            {
+              "content": "The user tends to go to bed much later after drinking coffee late in the afternoon.",
+              "content_digest": "e54652939c104807d5c501753f85aee97883cc55e1d056787b86857cd5b8292d",
+              "position": 9,
+              "uid": "9ace13d3-d881-5720-bfd5-f7884db67756"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "a5522b10-e954-4ccf-be1a-d7a07239ddca"
+        },
+        {
+          "context_digest": "14adbc31fc3a2dc50b7b980d1e24569b16fff058104a812c7f3b4e1542b7abf0",
+          "context_name": "task-3/local/personal-memory/2025/03",
+          "context_uid": "913e0bfd-f6d9-579e-9a37-ba5daa9d17f1",
+          "memories": [
+            {
+              "content": "The user stores prepared meals on the second shelf of the freezer.",
+              "content_digest": "cd837b62b643f752da54b21de2f4f7a3d963a7c658d5b83dff39d1d92e0fdbad",
+              "position": 0,
+              "uid": "5d989bab-c471-5de9-bb73-29cabc4753dd"
+            },
+            {
+              "content": "The user went to the market without a shopping list and bought onions that were already at home.",
+              "content_digest": "f667c860e046bb27662b26d7cc4ed083ee48d9d7915237dc4b92ec378481a093",
+              "position": 1,
+              "uid": "d1725ae4-3fd3-5250-92b3-73d84d9152a7"
+            },
+            {
+              "content": "On a day the user shopped after checking a refrigerator photo, they did not make a duplicate purchase.",
+              "content_digest": "7283d4afe58c0ab05d9cb426bb80bed0e26e0b1783ff7cdd00a5f6e89d21861b",
+              "position": 2,
+              "uid": "904ff225-26df-5424-8a82-23d733649106"
+            },
+            {
+              "content": "On a day the user made a spicy stew, they left part of one bowl uneaten.",
+              "content_digest": "2765ec701f8e058d35ddee4a485c40221523ee2d9b56301ec1658ec4e419cbc2",
+              "position": 3,
+              "uid": "67a003c7-648a-59dc-8e82-03f9e452ffce"
+            },
+            {
+              "content": "The next time the user cooked it, they used half as much chili powder and finished the meal.",
+              "content_digest": "bdd7df7c762bbce31a40a45c2124e49ae3a6439dfc2133c574443d7eb3a7b1bb",
+              "position": 4,
+              "uid": "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9"
+            },
+            {
+              "content": "When cooking with their younger brother, the user assigned the cooking sequence only verbally and they did the same task twice.",
+              "content_digest": "bd92611cfc05fd42bb5d25e8dd7838ca1b2f6d99869bf1f61921b46950a4b532",
+              "position": 5,
+              "uid": "64bf4401-e972-5d15-a526-21ca901a6a9f"
+            },
+            {
+              "content": "The next time, the user and their younger brother split ingredient preparation and heat control and finished the meal 20 minutes earlier.",
+              "content_digest": "c3a28e7256d781ecb2d8710145880ffe79495e32d47ae1949c4be54e52a44555",
+              "position": 6,
+              "uid": "57e09ea5-54ff-5fce-aada-68daffbacc8b"
+            },
+            {
+              "content": "When cooking together, the user's younger brother prefers to divide the cooking and dishwashing roles in advance.",
+              "content_digest": "3bbc428c4f3b4e28a8e2341206ac78b39240eea53a9862192528029b0a57d12b",
+              "position": 7,
+              "uid": "0a5d054f-94bd-5955-bdb7-9b5427e2260b"
+            },
+            {
+              "content": "The local agent can compare responses across several meals, but it cannot conclude from one unfinished food item that the user dislikes that ingredient.",
+              "content_digest": "5787c1636d9dd4a5cb5bd70533b7dd44b2d6cff1047f5c408f5bcaa1b6577fe1",
+              "position": 8,
+              "uid": "1f94b78b-1635-551c-b90c-bea2a67ca595"
+            },
+            {
+              "content": "The condition of frozen prepared food may vary with its packaging and storage duration.",
+              "content_digest": "84bdac276dce5b50b19bc0c7c471468a22cc9945b1da7357700a58c157cf4ca1",
+              "position": 9,
+              "uid": "f64ef6c4-7665-5574-9d58-fc124b0bfe3f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "fdf32bcd-54f5-4811-9551-8651f8ddfc19"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover different practical domains: sleep and bedroom conditions versus food storage, shopping, cooking, and collaboration. Their only substantive overlap is a shared caution against drawing broad conclusions from sparse observations, preserved under different domain scopes; no contradictions appear.",
+      "relations": [
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "a5522b10-e954-4ccf-be1a-d7a07239ddca",
+              "memory_uid": "7cecee60-fabd-55a3-998b-78810bd9eaf4"
+            },
+            {
+              "frame_uid": "fdf32bcd-54f5-4811-9551-8651f8ddfc19",
+              "memory_uid": "1f94b78b-1635-551c-b90c-bea2a67ca595"
+            }
+          ],
+          "reason": "The reference limits sleep-habit conclusions from one or two records, while the compared frame limits ingredient-dislike conclusions from one unfinished item; the explicit sleep and food scopes explain and preserve the difference.",
+          "status": "RESOLVED",
+          "summary": "Both frames caution against generalizing from very limited behavioral evidence, with the protected inference differing by domain.",
+          "uid": "5dfe6ca9-51c3-531f-88bc-0bb8c27c61ab"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a5522b10-e954-4ccf-be1a-d7a07239ddca",
+              "memory_uid": "7811ed66-2f22-54d8-a215-62a843264ba5"
+            },
+            {
+              "frame_uid": "a5522b10-e954-4ccf-be1a-d7a07239ddca",
+              "memory_uid": "d0f94a56-5cf8-5215-9cfa-5993b3b781be"
+            },
+            {
+              "frame_uid": "a5522b10-e954-4ccf-be1a-d7a07239ddca",
+              "memory_uid": "9ace13d3-d881-5720-bfd5-f7884db67756"
+            }
+          ],
+          "reason": "These records jointly describe a timing-dependent coffee and sleep pattern absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The reference alone associates late-afternoon coffee with substantially delayed sleep and coffee before 2 p.m. with usual sleep timing.",
+          "uid": "8bf09076-54c6-5008-8886-c6e59a952120"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a5522b10-e954-4ccf-be1a-d7a07239ddca",
+              "memory_uid": "3088c235-435c-52ee-9ffc-26cf85ec196e"
+            },
+            {
+              "frame_uid": "a5522b10-e954-4ccf-be1a-d7a07239ddca",
+              "memory_uid": "47faaefd-2d60-5693-9847-2c1d5d2f9092"
+            },
+            {
+              "frame_uid": "a5522b10-e954-4ccf-be1a-d7a07239ddca",
+              "memory_uid": "d6eea310-1313-5a51-b032-f3f518620610"
+            }
+          ],
+          "reason": "These details form one bedroom ventilation, cooling, and sleep-environment claim absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The reference alone describes a bedside fan and observations that an open window admitted disruptive street noise while the fan kept a closed room comfortable.",
+          "uid": "68cc0378-2504-53ac-8083-a785238ab15e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a5522b10-e954-4ccf-be1a-d7a07239ddca",
+              "memory_uid": "fc19394a-6634-5aae-bfa5-bba91e707954"
+            },
+            {
+              "frame_uid": "a5522b10-e954-4ccf-be1a-d7a07239ddca",
+              "memory_uid": "be7aa7f3-1b67-5677-950d-9942ca337a99"
+            }
+          ],
+          "reason": "Both observations describe reduced post-dinner activity and have no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The reference alone records immediate rest or postponed cleanup after low-effort dinner situations.",
+          "uid": "e19a8111-9078-5729-9dc5-e1989ada0db5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a5522b10-e954-4ccf-be1a-d7a07239ddca",
+              "memory_uid": "056defa1-8256-561d-a2b4-a70df4058c33"
+            }
+          ],
+          "reason": "This family-member preference and belief is independently useful information absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The reference alone states that the user’s father wants coffee available after dinner and expects no sleep problem.",
+          "uid": "dfd91ed6-7ce8-5298-805f-0dbd939f890d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fdf32bcd-54f5-4811-9551-8651f8ddfc19",
+              "memory_uid": "5d989bab-c471-5de9-bb73-29cabc4753dd"
+            }
+          ],
+          "reason": "This storage-location fact is absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The compared frame alone locates prepared meals on the freezer’s second shelf.",
+          "uid": "dbd237c8-774c-5234-8bf7-d1e79ad164b1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fdf32bcd-54f5-4811-9551-8651f8ddfc19",
+              "memory_uid": "d1725ae4-3fd3-5250-92b3-73d84d9152a7"
+            },
+            {
+              "frame_uid": "fdf32bcd-54f5-4811-9551-8651f8ddfc19",
+              "memory_uid": "904ff225-26df-5424-8a82-23d733649106"
+            }
+          ],
+          "reason": "The observations jointly support a shopping inventory-check claim absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The compared frame alone contrasts a duplicate onion purchase made without a list with successful duplicate avoidance after checking a refrigerator photo.",
+          "uid": "83302fab-647a-51e3-915c-15adefb6260d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fdf32bcd-54f5-4811-9551-8651f8ddfc19",
+              "memory_uid": "67a003c7-648a-59dc-8e82-03f9e452ffce"
+            },
+            {
+              "frame_uid": "fdf32bcd-54f5-4811-9551-8651f8ddfc19",
+              "memory_uid": "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9"
+            }
+          ],
+          "reason": "These linked cooking attempts describe a spice-level adjustment and outcome absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The compared frame alone records unfinished spicy stew followed by full meal completion when half as much chili powder was used.",
+          "uid": "aef03de4-9fe8-5dbb-9ad7-baab2afac3b2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fdf32bcd-54f5-4811-9551-8651f8ddfc19",
+              "memory_uid": "64bf4401-e972-5d15-a526-21ca901a6a9f"
+            },
+            {
+              "frame_uid": "fdf32bcd-54f5-4811-9551-8651f8ddfc19",
+              "memory_uid": "57e09ea5-54ff-5fce-aada-68daffbacc8b"
+            },
+            {
+              "frame_uid": "fdf32bcd-54f5-4811-9551-8651f8ddfc19",
+              "memory_uid": "0a5d054f-94bd-5955-bdb7-9b5427e2260b"
+            }
+          ],
+          "reason": "All records contribute to one household cooking-coordination claim absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The compared frame alone connects unclear verbal task sequencing with duplicated work and advance role division with faster shared cooking, alongside the brother’s preference for prior division of cooking and dishwashing.",
+          "uid": "0168093d-8f0c-5823-a93c-306e381c2c3a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fdf32bcd-54f5-4811-9551-8651f8ddfc19",
+              "memory_uid": "f64ef6c4-7665-5574-9d58-fc124b0bfe3f"
+            }
+          ],
+          "reason": "This food-quality qualification is independently useful and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The compared frame alone notes that frozen prepared food condition can depend on packaging and storage duration.",
+          "uid": "ed1c87b4-916b-5f29-aa3b-c46bd1a3340b"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame uniquely covers freezer storage, duplicate-purchase prevention, spice adjustment, shared-cooking coordination, and food-condition variability.",
+        "differences": "Both frames limit inference from sparse observations, but one applies the caution to sleep habits and the other to food preferences.",
+        "reference_only": "The reference uniquely covers coffee timing and sleep, bedroom cooling and noise, low-energy post-dinner rest, and the father’s after-dinner coffee preference."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "415e74ad-4a42-4447-af82-869c53d1f3c3"
+    },
+    "analysis_digest": "e908b2b39210d126bd910a137328f18bebfca112effc3b723a9db1c1c9f46de8",
+    "key": "5c39b7d552a7e49582709cd414860547e41a26b0c2c6fbe389d456b3075a7842",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 38.55741166699954,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "5c39b7d552a7e49582709cd414860547e41a26b0c2c6fbe389d456b3075a7842",
+  "created_at": "2026-08-13T18:39:31.977776Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/05",
+  "pair_key": "58a2cce7ee4adeca8856ca3088d509e9e5bd86a26ac7beffd45e1c5b424c063b",
+  "provider_seconds": 38.55741166699954,
+  "right": "task-3/local/personal-memory/2025/03",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

@@ -1,5 +1,7 @@
 # Interactive Context picker and read-only browser
 
+Last reviewed: 2026-08-16.
+
 ## Motivation
 
 The semantic ambiguity review already demonstrates that a participant can
@@ -184,7 +186,8 @@ expand-all restore behavior. Optional `ContextMemoryRow` projections—the
 retained compatibility type name—add read-only direct-item leaves without
 changing the Context cursor. The component performs
 no terminal I/O and assigns no operational role to the selected name.
-`choose_context()` is the existing full-screen, single-selection wrapper over
+`choose_context()` in `memcommit.context_targeting.tui.picker` is the
+full-screen, single-selection wrapper over
 that state and can also run in read-only browse mode. Larger TUIs may embed one or more
 independent states and retain their own role, scope, validation, and receipt
 contracts. Sever setup uses one state for Source and one for Criteria while
@@ -216,27 +219,30 @@ memcommit.cli
 │   ├── MemoryStore.list_context_names()
 │   ├── MemoryStore.current_context_name()
 │   ├── in a TTY
-│   │   └── context_picker.choose_context(browse_only=True) # no target receipt
+│   │   └── context_targeting.tui.picker.choose_context(
+│   │           browse_only=True)                    # no target receipt
 │   └── outside a TTY
 │       └── render the read-only list and current `*` marker
 └── mem switch -> commands.switch.cmd
     ├── MemoryStore.current_context_name()       # one command-start snapshot
     ├── when NAME is omitted
     │   ├── MemoryStore.list_context_names()
-    │   └── context_picker.choose_context()      # full-screen wrapper; returns a name
+    │   └── context_targeting.tui.picker.choose_context()
+    │                                           # returns a name only
     ├── when NAME is supplied
     │   └── bypass the catalog UI and use the operand directly
-    ├── context_locator.resolve_context_locator() # explicit relative operands
-    ├── MemoryStore.context_exists()
-    ├── MemoryStore.load()                       # full target validation
-    └── MemoryStore.set_current_context_if()     # the only switch-state write
+    ├── interfaces.tui.operations.switch         # name -> typed request
+    ├── switch_application.switch_context()      # locator/application policy
+    └── switch_runtime.MemoryStoreSwitchContextPort
+        ├── READ access + full target validation
+        └── MemoryStore.set_current_*_if()       # the only switch-state write
 ```
 
-This shared lower-level dependency is intentional. `context_picker` owns tree
+This shared lower-level dependency is intentional. The neutral Context picker owns tree
 navigation and exposes separate accepting and browse-only behavior;
 `commands.contexts` owns the guarantee that no target receipt has a
-state-writing continuation; and `commands.switch` owns relative resolution,
-target validation, and mutation. Keeping the commands from invoking one
+state-writing continuation; and the Switch application/runtime owns relative
+resolution, target validation, and mutation. Keeping the commands from invoking one
 another avoids making human-oriented output into an internal data contract
 while still giving both surfaces the same sorted names and tree mechanics.
 
@@ -245,6 +251,11 @@ Compare, Update, Ground, or Switch flow does not mislabel selection as another
 operation. The lower `ContextTreeState` boundary is preferred when selection
 must remain inside an existing full-screen application; launching nested Typer
 commands is not an integration mechanism.
+
+`commands/context_picker.py` is now a behavior-free compatibility export.
+Production callers import the neutral picker directly, so Ground and other
+operations no longer depend on the Switch command layer merely to render the
+same frozen names.
 
 The local catalog method scans only ordinary Context records under
 `contexts/**/context.json` and validates their minimum identity header, so
@@ -265,8 +276,9 @@ reloads the target and the final compare-and-set rejects both a changed target
 record and a changed current pointer.
 
 The lexical resolver itself is operation-neutral and lives in
-`memcommit.context_locator`; Switch owns only picker behavior, existence and
-load validation, and the final state compare-and-set. Compare uses the same
+`memcommit.context_locator`; Switch owns existence and load validation plus
+the final state compare-and-set through `switch_application.py` and
+`switch_runtime.py`. Compare uses the same
 resolver without inheriting Switch's mutation semantics. The reuse boundary is
 documented in
 [`context-locator-design-rationale.md`](context-locator-design-rationale.md).

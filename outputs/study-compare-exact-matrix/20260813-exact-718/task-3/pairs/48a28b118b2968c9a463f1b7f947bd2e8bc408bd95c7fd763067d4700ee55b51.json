@@ -1,0 +1,406 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:47:51.679361+00:00",
+      "frames": [
+        {
+          "context_digest": "0b8af0ea4e580cc332939d026149e543e9251c54de246e3eabb83c941e6c12f2",
+          "context_name": "task-3/local/personal-memory/2024/12",
+          "context_uid": "66c3e5de-61bb-5795-8e5a-4e28f64be857",
+          "memories": [
+            {
+              "content": "The user used an accessible entrance at a clinic in December 2024.",
+              "content_digest": "a940bc9fb7423a1bdb9dde547cd39eb8ad66d4fa3051649c62b042fc63935263",
+              "position": 0,
+              "uid": "a6923620-267d-5129-b8c4-cd9b1e1a1e7b"
+            },
+            {
+              "content": "On a day snow had accumulated and blocked the main-entrance ramp, the user went to a side entrance.",
+              "content_digest": "460c05d8e8b4b7443ff42cbeead66e07201846394bcbe5948f63e585a197006f",
+              "position": 1,
+              "uid": "fb0e1d1f-0ef5-5214-b6d7-f6ca5c68f582"
+            },
+            {
+              "content": "The user learned on site that the elevator was under inspection and delayed the appointment.",
+              "content_digest": "b5efa024c597b57651178431d22173d4ca1242c3a4c9607f8bd5a7ff681af6f4",
+              "position": 2,
+              "uid": "4cb45120-4376-5c7b-ae92-faa9e4b9330c"
+            },
+            {
+              "content": "The day before the next visit, the user called to check whether the elevator would be operating.",
+              "content_digest": "93c66066de480a4d2f30b7b7c4d955acfceb227ac898766b6375829804b580eb",
+              "position": 3,
+              "uid": "479f4434-879c-5335-b0c9-c0bfa19ecdcd"
+            },
+            {
+              "content": "The user waited for their turn in front of a ticket machine near the waiting chairs.",
+              "content_digest": "fada8c09d46af2e1bcbd2b1e97d9cb786ceca83fc13d1240627639dd6cb96e65",
+              "position": 4,
+              "uid": "0f2c78a7-8f92-573d-af8a-a360ceb77b24"
+            },
+            {
+              "content": "On a day the user waited in a corridor without chairs, they leaned against the wall and changed position several times.",
+              "content_digest": "0037afaeb85d94f985b1628b7b8f8194fb00d7d7e72e1746c6bae2c2ba66fe6f",
+              "position": 5,
+              "uid": "7b9197ac-4263-5169-8d3b-d34f5d893d36"
+            },
+            {
+              "content": "On a day their older sister accompanied them, the user found a place to sit immediately after reception.",
+              "content_digest": "1ae59de552a922fd3b4d39e7e5dc1ec65ff08ee68e3448f2152f27dfec710a5a",
+              "position": 6,
+              "uid": "7b0b7571-f29c-56e5-a27a-82d69a4a6982"
+            },
+            {
+              "content": "Reception staff expect that a first-time visitor may ask where the accessible entrance is.",
+              "content_digest": "7dc3300dc630b737c0f7b437eba30179aa6aaa03efd61c968604ee505a43aa73",
+              "position": 7,
+              "uid": "e9515d6b-10d9-579f-abf7-5030db64218a"
+            },
+            {
+              "content": "The local agent cannot infer the user's condition from a record of using an accessible route alone.",
+              "content_digest": "2d8a50f62f32c43ca62e1e23b75c34361ece43fd8367964174fdc73d66795df4",
+              "position": 8,
+              "uid": "8e57141d-c603-56cd-ab9e-c14b4e944b45"
+            },
+            {
+              "content": "Snow accumulation and snow-removal work can temporarily block an entrance route used under ordinary conditions.",
+              "content_digest": "4fb152c120860688789bdd4b825de45799e9fa00c0c18c334492dd4b274adde9",
+              "position": 9,
+              "uid": "a6076438-307c-56fe-9d2c-848181846ce5"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "f3d8fb15-a039-4fa3-bf80-8b11ac37a2b7"
+        },
+        {
+          "context_digest": "40dca3509f1e21c564970ebb7664df755d25c1c19c4e79b458c803662fb827ce",
+          "context_name": "task-3/local/personal-memory/2025/11",
+          "context_uid": "af363401-7cdc-5426-ad00-4f98635e2dab",
+          "memories": [
+            {
+              "content": "The user recorded a family dinner in the calendar for the final week of November.",
+              "content_digest": "59755036ea9e7d172a5e673253fc7f089e61efe043b2e660f429fe2fa9003d34",
+              "position": 0,
+              "uid": "3f6eaf6c-00e7-5bd7-9809-367f54a0f707"
+            },
+            {
+              "content": "In a crowded restaurant, the user had to ask several times for orders to be repeated, interrupting the flow of conversation.",
+              "content_digest": "2d79e2f4f88a70bc8fbf9efca1b1751fbf51d88667f304c8e8c965a0a536cee7",
+              "position": 1,
+              "uid": "9fd0b9b6-986d-54b0-965e-45feaf9cd482"
+            },
+            {
+              "content": "When the user held the next gathering at their father's home, they continued the conversation on the sofa after the meal.",
+              "content_digest": "4b22fa055bb342db0589b0c54e415f4fa2af02445d3c55b3f38510bd6ca62f38",
+              "position": 2,
+              "uid": "cbc477c4-83c4-506b-9da8-9252d14d7f6b"
+            },
+            {
+              "content": "At a gathering with loud music prepared by their older sister, the user developed a headache and went outside briefly.",
+              "content_digest": "c9b34c3e3211ca7f15eb9a6f8ba97941222bc35ec0253d3da3f383c7247c3e83",
+              "position": 3,
+              "uid": "bbfc537e-3fcc-5065-ab93-4777bcdfc10c"
+            },
+            {
+              "content": "On a day the user held a yard barbecue with their younger brother, the open space dispersed the sound and made conversation easier.",
+              "content_digest": "dd35056c7731d3249a3c2689ee9fb6bfe6974544e302630de6ea230378fea9eb",
+              "position": 4,
+              "uid": "b61367fa-dd17-5ff2-9d6b-f81f6123735a"
+            },
+            {
+              "content": "After seeing a message that their maternal aunt would arrive at 5 p.m., the user delayed meal preparation by an hour.",
+              "content_digest": "31992a8945bfacfc9422f3180b203865f951f200561cd23dad901ec795c5de10",
+              "position": 5,
+              "uid": "681cdbd5-595d-5211-914d-edfd9a6b130d"
+            },
+            {
+              "content": "On a day the user waited without knowing their maternal uncle's arrival time, they reheated the food twice.",
+              "content_digest": "fae7c462a85e844648cb99419e6fdb3a2cd8c7721209ea49a40b4df597635176",
+              "position": 6,
+              "uid": "81c0c4e9-5ae4-5e8a-b11c-7d33032fd8ec"
+            },
+            {
+              "content": "The user's maternal uncle considers it easier to time his departure when he knows the family meal's start time in advance.",
+              "content_digest": "793f47adaa4c5274d15377b0f4adbc2415c0bd5243baf7a1c77c0d92e987a7e8",
+              "position": 7,
+              "uid": "56078821-34d0-540f-ae66-03bdd7bd1df3"
+            },
+            {
+              "content": "Before scheduling a family meal, confirm the attendees' arrival times and the location with the user.",
+              "content_digest": "d057fab5cbe97472da2a796114018a7491d20db6a826cd56943268f73ffeb792",
+              "position": 8,
+              "uid": "19c8ae40-1f5b-5fec-9538-e7bc7cfb036a"
+            },
+            {
+              "content": "Available restaurant reservation times may diminish quickly during the year-end gathering season.",
+              "content_digest": "7bfc817a42ab2d2c67ad04eae58fb3c86bbede15b7cc4ef431a75528bb425e7e",
+              "position": 9,
+              "uid": "3ea9fa3b-4411-55d0-ac90-2ed5515e6ef7"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "4b79679f-5af9-48cc-89d5-651575af1fc9"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate operational contexts: clinic accessibility and waiting experiences on one side, and family gatherings, sound environments, timing coordination, and reservations on the other. No claims address the same decision closely enough to support a cross-frame relation.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f3d8fb15-a039-4fa3-bf80-8b11ac37a2b7",
+              "memory_uid": "a6923620-267d-5129-b8c4-cd9b1e1a1e7b"
+            }
+          ],
+          "reason": "This is a one-sided historical clinic-access fact with no compared-side claim addressing the same event or operational decision.",
+          "status": "RESOLVED",
+          "summary": "The user used a clinic’s accessible entrance in December 2024.",
+          "uid": "d5f1e1bc-ba2d-58cb-a389-32a65d642bac"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f3d8fb15-a039-4fa3-bf80-8b11ac37a2b7",
+              "memory_uid": "fb0e1d1f-0ef5-5214-b6d7-f6ca5c68f582"
+            },
+            {
+              "frame_uid": "f3d8fb15-a039-4fa3-bf80-8b11ac37a2b7",
+              "memory_uid": "a6076438-307c-56fe-9d2c-848181846ce5"
+            }
+          ],
+          "reason": "These memories split a single one-sided claim about snow-related entrance-route disruption; the compared frame contains no corresponding access claim.",
+          "status": "RESOLVED",
+          "summary": "Snow can temporarily obstruct an ordinarily used clinic entrance route, and one such obstruction led the user to use a side entrance.",
+          "uid": "c74c6f70-6363-5be2-b6ec-8ee4b01f127a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f3d8fb15-a039-4fa3-bf80-8b11ac37a2b7",
+              "memory_uid": "4cb45120-4376-5c7b-ae92-faa9e4b9330c"
+            }
+          ],
+          "reason": "This clinic elevator incident is independently useful and has no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "An elevator inspection discovered on site delayed the user’s clinic appointment.",
+          "uid": "3c97f77c-fef9-5115-9ad0-1e48ee3fc854"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f3d8fb15-a039-4fa3-bf80-8b11ac37a2b7",
+              "memory_uid": "479f4434-879c-5335-b0c9-c0bfa19ecdcd"
+            }
+          ],
+          "reason": "This proactive accessibility check concerns a different operational decision from the compared frame’s family-event coordination.",
+          "status": "RESOLVED",
+          "summary": "Before a later clinic visit, the user called to verify elevator operation.",
+          "uid": "5dda77ed-ee00-5534-aa1a-0769b9eb9921"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f3d8fb15-a039-4fa3-bf80-8b11ac37a2b7",
+              "memory_uid": "0f2c78a7-8f92-573d-af8a-a360ceb77b24"
+            }
+          ],
+          "reason": "This specific clinic waiting arrangement has no claim on the compared side addressing the same setting or decision.",
+          "status": "RESOLVED",
+          "summary": "The user waited near clinic chairs for their turn at a ticket machine.",
+          "uid": "fb28952c-3b85-54c4-bfb4-6820ff83306f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f3d8fb15-a039-4fa3-bf80-8b11ac37a2b7",
+              "memory_uid": "7b9197ac-4263-5169-8d3b-d34f5d893d36"
+            }
+          ],
+          "reason": "This one-sided account of waiting without seating is independently useful and unmatched by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "While waiting in a chairless corridor, the user leaned against a wall and repeatedly changed position.",
+          "uid": "9980bccf-1f2b-5630-a4cf-8bb92ff321c4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f3d8fb15-a039-4fa3-bf80-8b11ac37a2b7",
+              "memory_uid": "7b0b7571-f29c-56e5-a27a-82d69a4a6982"
+            }
+          ],
+          "reason": "This accompanied clinic seating experience has no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "During a clinic visit with an older sister, the user found seating immediately after reception.",
+          "uid": "ef4e976f-73c3-5f05-a554-9bcc46c3b9b7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f3d8fb15-a039-4fa3-bf80-8b11ac37a2b7",
+              "memory_uid": "e9515d6b-10d9-579f-abf7-5030db64218a"
+            }
+          ],
+          "reason": "This clinic navigation expectation is a one-sided operational consideration absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Reception staff anticipate that first-time visitors may request directions to the accessible entrance.",
+          "uid": "066c9144-7983-53cc-856f-8a171ec7b072"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f3d8fb15-a039-4fa3-bf80-8b11ac37a2b7",
+              "memory_uid": "8e57141d-c603-56cd-ab9e-c14b4e944b45"
+            }
+          ],
+          "reason": "This inference constraint is independently useful and is not addressed by any compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "Use of an accessible route alone does not justify inferring the user’s condition.",
+          "uid": "cf809864-66c0-5520-b669-a7d66826c921"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4b79679f-5af9-48cc-89d5-651575af1fc9",
+              "memory_uid": "3f6eaf6c-00e7-5bd7-9809-367f54a0f707"
+            }
+          ],
+          "reason": "This family-event calendar fact has no reference-side claim about the same event or scheduling decision.",
+          "status": "RESOLVED",
+          "summary": "The user recorded a family dinner for the final week of November.",
+          "uid": "9c9c000b-a409-563f-b9e5-0b51465ce9ce"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4b79679f-5af9-48cc-89d5-651575af1fc9",
+              "memory_uid": "9fd0b9b6-986d-54b0-965e-45feaf9cd482"
+            },
+            {
+              "frame_uid": "4b79679f-5af9-48cc-89d5-651575af1fc9",
+              "memory_uid": "bbfc537e-3fcc-5065-ab93-4777bcdfc10c"
+            },
+            {
+              "frame_uid": "4b79679f-5af9-48cc-89d5-651575af1fc9",
+              "memory_uid": "b61367fa-dd17-5ff2-9d6b-f81f6123735a"
+            }
+          ],
+          "reason": "These memories split one one-sided claim across crowded restaurant noise, loud music, and sound-dispersing outdoor space; clinic access and waiting claims do not address that decision area.",
+          "status": "RESOLVED",
+          "summary": "Sound conditions at gatherings affected the user’s conversational ease and physical comfort.",
+          "uid": "685fbd38-124e-5bb3-bed6-9672d211efba"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4b79679f-5af9-48cc-89d5-651575af1fc9",
+              "memory_uid": "cbc477c4-83c4-506b-9da8-9252d14d7f6b"
+            }
+          ],
+          "reason": "This gathering-location experience is independently useful and has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "At a gathering held at the user’s father’s home, conversation continued on the sofa after the meal.",
+          "uid": "349ac187-c22e-53a0-84da-f4f50681a52e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4b79679f-5af9-48cc-89d5-651575af1fc9",
+              "memory_uid": "681cdbd5-595d-5211-914d-edfd9a6b130d"
+            },
+            {
+              "frame_uid": "4b79679f-5af9-48cc-89d5-651575af1fc9",
+              "memory_uid": "81c0c4e9-5ae4-5e8a-b11c-7d33032fd8ec"
+            },
+            {
+              "frame_uid": "4b79679f-5af9-48cc-89d5-651575af1fc9",
+              "memory_uid": "56078821-34d0-540f-ae66-03bdd7bd1df3"
+            }
+          ],
+          "reason": "These memories split one one-sided timing-coordination claim through delayed preparation, repeated reheating, and an attendee’s departure planning; no reference claim governs family-meal timing.",
+          "status": "RESOLVED",
+          "summary": "Advance or missing timing information affected family-meal preparation and travel coordination.",
+          "uid": "f9008b30-2bdd-5e42-97e2-4b95feaaf3a1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4b79679f-5af9-48cc-89d5-651575af1fc9",
+              "memory_uid": "19c8ae40-1f5b-5fec-9538-e7bc7cfb036a"
+            }
+          ],
+          "reason": "This explicit family-meal scheduling policy addresses a distinct operational decision absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Before scheduling a family meal, the user should be consulted about attendee arrival times and location.",
+          "uid": "fe31fb50-9088-529d-90a1-a575f136ed60"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4b79679f-5af9-48cc-89d5-651575af1fc9",
+              "memory_uid": "3ea9fa3b-4411-55d0-ac90-2ed5515e6ef7"
+            }
+          ],
+          "reason": "This seasonal reservation constraint is independently useful and has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Restaurant reservation availability may shrink quickly during the year-end gathering season.",
+          "uid": "a2b0a885-0435-5acd-bd42-6e112ecdaaf0"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame describes family-event scheduling, environmental sound effects, gathering locations, advance timing coordination, meal preparation, and seasonal restaurant availability.",
+        "differences": "",
+        "reference_only": "The reference describes clinic access routes, snow obstruction, elevator disruption and checking, waiting and seating experiences, visitor navigation expectations, and limits on inferring the user’s condition."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "4d937a9d-ec2d-4b36-bcfe-ff7f56470e9a"
+    },
+    "analysis_digest": "d059fba6879209a6760c392ea2e4fa47dd533788df213ec5a6918d6439f92269",
+    "key": "839679f638d3a4ce483d3c73c2e0238de983df99e9f17435a01d11ce776a5ddd",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 45.431450833999406,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "839679f638d3a4ce483d3c73c2e0238de983df99e9f17435a01d11ce776a5ddd",
+  "created_at": "2026-08-13T18:48:37.110365Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/12",
+  "pair_key": "48a28b118b2968c9a463f1b7f947bd2e8bc408bd95c7fd763067d4700ee55b51",
+  "provider_seconds": 45.431450833999406,
+  "right": "task-3/local/personal-memory/2025/11",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

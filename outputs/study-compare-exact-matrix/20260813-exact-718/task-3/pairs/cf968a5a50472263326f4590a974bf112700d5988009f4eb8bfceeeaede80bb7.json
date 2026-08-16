@@ -1,0 +1,379 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:38:50.202481+00:00",
+      "frames": [
+        {
+          "context_digest": "3f1b018c2a3a8594d00bffba053626a876fef4893e678dd9600986d9d41c0f31",
+          "context_name": "task-3/local/personal-memory/2024/05",
+          "context_uid": "683986e6-d517-5a53-9dc1-16b69cf0d12e",
+          "memories": [
+            {
+              "content": "The user keeps a small table fan beside the bedroom window.",
+              "content_digest": "b8a464f5e2a33edcef1259af4a412b047ba190bae9cfe42aaf1dbd722efc7f0c",
+              "position": 0,
+              "uid": "3088c235-435c-52ee-9ffc-26cf85ec196e"
+            },
+            {
+              "content": "On a day the user drank coffee late in the afternoon, they could not fall asleep until dawn.",
+              "content_digest": "ef4cf019ebc163fc24f03b8bd505599cd13fc83f33565d51ffb4379dc21d72b8",
+              "position": 1,
+              "uid": "7811ed66-2f22-54d8-a215-62a843264ba5"
+            },
+            {
+              "content": "On a day the user drank coffee before 2 p.m., they fell asleep at their usual time.",
+              "content_digest": "046ac3f8454da623f73d1293fb954b72a3ea056642fd9ee7948c35f110e77669",
+              "position": 2,
+              "uid": "d0f94a56-5cf8-5215-9cfa-5993b3b781be"
+            },
+            {
+              "content": "On a tired day, the user ate dinner out and postponed even washing the dishes after returning home.",
+              "content_digest": "ac36f6c1039dc74f764b4671f718f1e124823dc75fd45abda010285523280b71",
+              "position": 3,
+              "uid": "fc19394a-6634-5aae-bfa5-bba91e707954"
+            },
+            {
+              "content": "In the same week, on a day the user made simple noodles at home, they rested immediately after the meal.",
+              "content_digest": "45bb543f6c6ca213b856683b3c53448ac0d044bcf24f694eda292d6c4923ac5c",
+              "position": 4,
+              "uid": "be7aa7f3-1b67-5677-950d-9942ca337a99"
+            },
+            {
+              "content": "On a night the window was left open, street noise woke the user twice.",
+              "content_digest": "13f3dd86b869b25ee75e1b80d9cdb890b79434fa976fbd7246e89ba808f1a6c6",
+              "position": 5,
+              "uid": "47faaefd-2d60-5693-9847-2c1d5d2f9092"
+            },
+            {
+              "content": "On a night the table fan was running, the user was not too warm even with the window closed.",
+              "content_digest": "96ce23df1cf4f913e3b4c339cc3a857a6a8776e3f3f48e865eae65f02297bba8",
+              "position": 6,
+              "uid": "d6eea310-1313-5a51-b032-f3f518620610"
+            },
+            {
+              "content": "The user's father prefers to have coffee available after dinner and believes it will not cause a sleep problem.",
+              "content_digest": "197616278309e370f0d0e633700b1bde2c6e4395dbc8ed2b942e14fb6c1c9cc5",
+              "position": 7,
+              "uid": "056defa1-8256-561d-a2b4-a70df4058c33"
+            },
+            {
+              "content": "When making a sleep-related suggestion, do not treat one or two records as a general lifestyle habit.",
+              "content_digest": "963795e89a1e2365dd81abf463fb9a80c1c22b9c0e59b121681f89c09860e583",
+              "position": 8,
+              "uid": "7cecee60-fabd-55a3-998b-78810bd9eaf4"
+            },
+            {
+              "content": "The user tends to go to bed much later after drinking coffee late in the afternoon.",
+              "content_digest": "e54652939c104807d5c501753f85aee97883cc55e1d056787b86857cd5b8292d",
+              "position": 9,
+              "uid": "9ace13d3-d881-5720-bfd5-f7884db67756"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "68994e00-ec5c-41c7-b7ea-8d98a8d82b3d"
+        },
+        {
+          "context_digest": "e56d4062f59b72f23e5414f759cd9f2b09c659d820a29a979fe2edb8bfc3e7a4",
+          "context_name": "task-3/local/personal-memory/2025/01",
+          "context_uid": "2ce7ce06-145c-50c7-bfb4-cb175b9a5255",
+          "memories": [
+            {
+              "content": "One of the user's identity documents needs renewal in the second half of 2025.",
+              "content_digest": "0ade63adc8aedc4dbc0003f2cbc2759010c8bf2645a95fedd3db28b7cfbe0daa",
+              "position": 0,
+              "uid": "50911f7e-75a1-5099-99f1-e471bb8e6cb6"
+            },
+            {
+              "content": "The user postponed an application until the next day after spending time looking for document photos in scattered folders.",
+              "content_digest": "fa1703848374c3364cf49be01e115e08897e16a4ccda3c9edef1212189159ce6",
+              "position": 1,
+              "uid": "d5bd9f79-7295-5014-9668-83b7cffc78e2"
+            },
+            {
+              "content": "After gathering the necessary copies in one folder, the user completed the renewal form in one sitting.",
+              "content_digest": "133721b244e02fce2fe24312b703e59225c023d65bea31bf65decb36a18b4ba5",
+              "position": 2,
+              "uid": "5f92f6a3-1739-580c-bd63-1a936098ccd0"
+            },
+            {
+              "content": "The user entered an abbreviated name on an official form and then discovered that it differed from the supporting document.",
+              "content_digest": "d32485dcfd1311d0739bf9887a330f25bf9b3f47f077c56ec7cdb667bde20a55",
+              "position": 3,
+              "uid": "929107ac-c62d-5920-9f71-12d4c9a102e9"
+            },
+            {
+              "content": "On the next application, after comparing the name with the source document, the user did not receive a correction request.",
+              "content_digest": "e6aa9e63c72f762c00824787c3b971f2cdf76a343c336f329e5b28b0f164d02d",
+              "position": 4,
+              "uid": "df8b90c2-4310-5e89-b979-508309bf6b04"
+            },
+            {
+              "content": "The user put only the submission deadline in the calendar and missed the application deadline by one day because they did not check the issuance period.",
+              "content_digest": "995703686975cdd718d999557d4b5ca13a95c3c1eabfbb73808bb5150eda824b",
+              "position": 5,
+              "uid": "306b9df1-d713-5413-b448-e2b42376d827"
+            },
+            {
+              "content": "On the next application, the user recorded the expected issuance date separately in the calendar.",
+              "content_digest": "b83c9061bf30d64e48b74959513fd37e7ab043446dae7e4fd284102a249a1240",
+              "position": 6,
+              "uid": "870b57b5-4cdb-54fc-b17f-8ffb86dad802"
+            },
+            {
+              "content": "Staff at a public-service counter expect a person requesting identity verification to bring an original as well as a copy.",
+              "content_digest": "eae3721b7f1d905172c169c5a483d2af74aa40bced23d1bbcb8d571ab27df706",
+              "position": 7,
+              "uid": "a0fe456c-0794-5bce-8ef9-9558e9833471"
+            },
+            {
+              "content": "When planning an official application, put both the submission deadline and expected issuance date in the calendar and verify them.",
+              "content_digest": "c5b37d86ef85d5023b60578e7f5f6af1bc49711e32ecc0255bc826a743dce0e1",
+              "position": 8,
+              "uid": "111972b9-e05f-5e1b-b121-ef9e51572d1d"
+            },
+            {
+              "content": "The local agent cannot determine the current validity of an identity document without its expiration date.",
+              "content_digest": "ebc9f4fe21d4ad7e53681d32ded2c049c7d4bf57e24ef71213a5ebdbaaaee521",
+              "position": 9,
+              "uid": "c9872898-ec4f-576e-b154-ff6fda581a1a"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "2e68e895-f0f5-432b-b9e3-0ea887b80c9a"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate practical domains rather than shared decisions: the reference describes sleep, coffee timing, evening energy, and bedroom conditions, while the compared frame covers identity-document renewal and application handling. Each side contributes independently useful information without a scope-based difference or contradiction.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "68994e00-ec5c-41c7-b7ea-8d98a8d82b3d",
+              "memory_uid": "3088c235-435c-52ee-9ffc-26cf85ec196e"
+            }
+          ],
+          "reason": "This is a one-sided bedroom-setup fact with no compared-frame claim addressing the same operational subject.",
+          "status": "RESOLVED",
+          "summary": "A small table fan is kept beside the user’s bedroom window.",
+          "uid": "268a9e30-fc13-546b-bf74-a33b982cc4eb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "68994e00-ec5c-41c7-b7ea-8d98a8d82b3d",
+              "memory_uid": "7811ed66-2f22-54d8-a215-62a843264ba5"
+            },
+            {
+              "frame_uid": "68994e00-ec5c-41c7-b7ea-8d98a8d82b3d",
+              "memory_uid": "d0f94a56-5cf8-5215-9cfa-5993b3b781be"
+            },
+            {
+              "frame_uid": "68994e00-ec5c-41c7-b7ea-8d98a8d82b3d",
+              "memory_uid": "9ace13d3-d881-5720-bfd5-f7884db67756"
+            }
+          ],
+          "reason": "These memories split one reference-only claim about coffee timing and the user’s sleep outcome; the compared frame contains no corresponding sleep or caffeine information.",
+          "status": "RESOLVED",
+          "summary": "The user’s records associate late-afternoon coffee with substantially delayed sleep, while coffee before 2 p.m. coincided with usual sleep timing.",
+          "uid": "a5e1600e-5fe0-5cd2-9aa2-38167bfef182"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "68994e00-ec5c-41c7-b7ea-8d98a8d82b3d",
+              "memory_uid": "fc19394a-6634-5aae-bfa5-bba91e707954"
+            },
+            {
+              "frame_uid": "68994e00-ec5c-41c7-b7ea-8d98a8d82b3d",
+              "memory_uid": "be7aa7f3-1b67-5677-950d-9942ca337a99"
+            }
+          ],
+          "reason": "These episodes split one reference-only observation about reduced post-dinner activity and have no application-related counterpart.",
+          "status": "RESOLVED",
+          "summary": "On low-energy evenings, the user rested after dinner or postponed a household chore.",
+          "uid": "ed660400-2bd5-54ec-8930-057f2801f01e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "68994e00-ec5c-41c7-b7ea-8d98a8d82b3d",
+              "memory_uid": "47faaefd-2d60-5693-9847-2c1d5d2f9092"
+            },
+            {
+              "frame_uid": "68994e00-ec5c-41c7-b7ea-8d98a8d82b3d",
+              "memory_uid": "d6eea310-1313-5a51-b032-f3f518620610"
+            }
+          ],
+          "reason": "The memories jointly describe one reference-only bedroom window-and-fan tradeoff affecting sleep conditions.",
+          "status": "RESOLVED",
+          "summary": "An open window admitted sleep-disrupting street noise, whereas a running fan kept the user comfortable with the window closed.",
+          "uid": "80f46ce8-c251-5ca6-b007-ca65a51ec7d9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "68994e00-ec5c-41c7-b7ea-8d98a8d82b3d",
+              "memory_uid": "056defa1-8256-561d-a2b4-a70df4058c33"
+            }
+          ],
+          "reason": "This is an independently useful one-sided preference and belief about another person, absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s father prefers coffee to remain available after dinner and believes it will not impair sleep.",
+          "uid": "5e3fdef5-e037-5620-bda0-b60841d6dfd3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "68994e00-ec5c-41c7-b7ea-8d98a8d82b3d",
+              "memory_uid": "7cecee60-fabd-55a3-998b-78810bd9eaf4"
+            }
+          ],
+          "reason": "This reference-only methodological constraint governs interpretation of sparse sleep records and has no matching application-planning claim.",
+          "status": "RESOLVED",
+          "summary": "Sleep suggestions should not treat one or two records as evidence of a general lifestyle habit.",
+          "uid": "efe0664a-e987-5e59-a290-0009040a53ab"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2e68e895-f0f5-432b-b9e3-0ea887b80c9a",
+              "memory_uid": "50911f7e-75a1-5099-99f1-e471bb8e6cb6"
+            }
+          ],
+          "reason": "This is a one-sided renewal-timing fact with no reference-frame claim about identity documents.",
+          "status": "RESOLVED",
+          "summary": "One identity document required renewal in the second half of 2025.",
+          "uid": "f8d12ef3-4678-51f2-a0f8-710eda021e09"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2e68e895-f0f5-432b-b9e3-0ea887b80c9a",
+              "memory_uid": "d5bd9f79-7295-5014-9668-83b7cffc78e2"
+            },
+            {
+              "frame_uid": "2e68e895-f0f5-432b-b9e3-0ea887b80c9a",
+              "memory_uid": "5f92f6a3-1739-580c-bd63-1a936098ccd0"
+            }
+          ],
+          "reason": "These memories split one compared-only claim about organized document preparation affecting application progress.",
+          "status": "RESOLVED",
+          "summary": "Scattered document materials delayed an application, while gathering the necessary copies in one folder enabled completion in one sitting.",
+          "uid": "25ddde8e-f0d6-571a-954e-14a5bc241325"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2e68e895-f0f5-432b-b9e3-0ea887b80c9a",
+              "memory_uid": "929107ac-c62d-5920-9f71-12d4c9a102e9"
+            },
+            {
+              "frame_uid": "2e68e895-f0f5-432b-b9e3-0ea887b80c9a",
+              "memory_uid": "df8b90c2-4310-5e89-b979-508309bf6b04"
+            }
+          ],
+          "reason": "These memories split one compared-only claim about exact-name verification on official forms.",
+          "status": "RESOLVED",
+          "summary": "Using an abbreviated name caused a mismatch, while checking the name against the source document preceded an application without a correction request.",
+          "uid": "7485ae93-a193-53aa-bbf7-8369ceba8f69"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2e68e895-f0f5-432b-b9e3-0ea887b80c9a",
+              "memory_uid": "306b9df1-d713-5413-b448-e2b42376d827"
+            },
+            {
+              "frame_uid": "2e68e895-f0f5-432b-b9e3-0ea887b80c9a",
+              "memory_uid": "870b57b5-4cdb-54fc-b17f-8ffb86dad802"
+            },
+            {
+              "frame_uid": "2e68e895-f0f5-432b-b9e3-0ea887b80c9a",
+              "memory_uid": "111972b9-e05f-5e1b-b121-ef9e51572d1d"
+            }
+          ],
+          "reason": "These memories provide evidence, a later practice, and guidance for one compared-only application-scheduling policy.",
+          "status": "RESOLVED",
+          "summary": "Application planning should track and verify both the submission deadline and expected issuance date, reflecting experience from a missed deadline and a later improved calendar entry.",
+          "uid": "890b1b84-4d12-52a7-9f36-3974e24c6d19"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2e68e895-f0f5-432b-b9e3-0ea887b80c9a",
+              "memory_uid": "a0fe456c-0794-5bce-8ef9-9558e9833471"
+            }
+          ],
+          "reason": "This is an independently useful compared-only procedural expectation with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Public-service counter staff expect identity-verification applicants to bring both an original and a copy.",
+          "uid": "cdce6fe3-a871-552e-aabf-dc1cea51f1b8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2e68e895-f0f5-432b-b9e3-0ea887b80c9a",
+              "memory_uid": "c9872898-ec4f-576e-b154-ff6fda581a1a"
+            }
+          ],
+          "reason": "This is an independently useful compared-only information limit, unrelated to the reference frame’s sleep content.",
+          "status": "RESOLVED",
+          "summary": "A local agent cannot determine an identity document’s current validity without its expiration date.",
+          "uid": "2dde8a96-75f5-5430-964a-e45cfa52eff5"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers document renewal timing, organized preparation, exact-name checks, calendar planning, counter requirements, and limits on assessing validity without an expiration date.",
+        "differences": "",
+        "reference_only": "The reference records sleep-related observations and guidance involving coffee timing, bedroom airflow and noise, low-energy evenings, and a family member’s coffee preference."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "09360a7e-a1c3-465a-b8ad-7011ec48af14"
+    },
+    "analysis_digest": "54751d58b4dcc971ba030fb02217f34869c21307cb7182ad508f62bf102a0249",
+    "key": "2485c4d26870a979040027573714faeee412350883081a5a9ba44c98fbb8e3bc",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 61.53316350000023,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "2485c4d26870a979040027573714faeee412350883081a5a9ba44c98fbb8e3bc",
+  "created_at": "2026-08-13T18:39:51.735307Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/05",
+  "pair_key": "cf968a5a50472263326f4590a974bf112700d5988009f4eb8bfceeeaede80bb7",
+  "provider_seconds": 61.53316350000023,
+  "right": "task-3/local/personal-memory/2025/01",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

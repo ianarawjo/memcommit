@@ -1,0 +1,388 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:36:05.852120+00:00",
+      "frames": [
+        {
+          "context_digest": "4c7d7890b4c8dbd807acc103affd0572c325fd2e0f58346a97c3ed49e48ba34e",
+          "context_name": "task-3/local/personal-memory/2024/02",
+          "context_uid": "7bedad96-d78b-5977-a4c9-71049dcfcec8",
+          "memories": [
+            {
+              "content": "The user's maternal aunt keeps one spare key to the user's home.",
+              "content_digest": "2e45c292a3cbc26a1c9928c4546c6029c7dcd2aa6aa0a45a7cfb4be7888dd5c6",
+              "position": 0,
+              "uid": "1c627e4c-c393-5bd3-a5ae-b3318821be73"
+            },
+            {
+              "content": "If the door is locked, the user is accustomed to contacting their maternal aunt, who has the spare key, before contacting building management.",
+              "content_digest": "709cc4a1ae26126bd3238ea8c0e343415d95d084ddaf022590ff4197003c7b81",
+              "position": 1,
+              "uid": "e80936de-87af-5dbb-ab94-d456bbfaab0a"
+            },
+            {
+              "content": "When going to collect the spare key from their maternal aunt, the user wants to give an arrival time first so neither person has to wait.",
+              "content_digest": "5dab57d537091a28848dfa3592d16e038d6e78eeb8159489c17475befeb62a53",
+              "position": 2,
+              "uid": "7c26cf33-0630-5138-910a-6d37d6ed2b63"
+            },
+            {
+              "content": "The user feels at ease only after returning a borrowed spare key in person on the same day.",
+              "content_digest": "d3b9e78e166fb3af3dc248bcddbf1c1df15d3eed57655991a52c23b4ebb6ba14",
+              "position": 3,
+              "uid": "c3f0f26c-8d89-55e3-8bf3-398271e417e7"
+            },
+            {
+              "content": "The user feels uneasy about writing down a new entrance passcode on paper.",
+              "content_digest": "fe40a50fb7f0b0e1514a2f7e6ea3748e73cbd76fa45b862b4880c9eba68a2312",
+              "position": 4,
+              "uid": "7d7d00a3-c5af-5441-bb50-9631fbfd7979"
+            },
+            {
+              "content": "The user found it difficult when a family member arrived without notice during a meeting and the user could not respond immediately.",
+              "content_digest": "30d2126eb016f1fab8b8bd670bc00ee6ac5182f28b0afe696b2c30f4d7bc128f",
+              "position": 5,
+              "uid": "2e0df581-bd54-54f5-94ef-b719427fc88c"
+            },
+            {
+              "content": "On a day their younger brother received a package for them, the user felt reassured after checking the delivery photo.",
+              "content_digest": "54eacbc39b057a6a18f8ddd8e1db587dbef231ecb10ed8cd84a46b3575ac470c",
+              "position": 6,
+              "uid": "9278b64e-7550-5eb6-bbfd-544a2ae4ec3d"
+            },
+            {
+              "content": "The user's maternal aunt wants confirmation that the user is coming in person before handing over the spare key.",
+              "content_digest": "5d780f2fb96eac2d3c65e7417ee00e64e29c2f8873c432b291e62773723182c9",
+              "position": 7,
+              "uid": "76fb9115-a3f2-5ce3-a445-c3d1e38e4253"
+            },
+            {
+              "content": "Confirm with the user before sharing the spare key's storage location or the maternal aunt's contact information.",
+              "content_digest": "ac00da1acd77d05fd277a0a92d2ab62cbefb3c334e6e7c2cb3b046fbea217a6c",
+              "position": 8,
+              "uid": "6fa50e1d-8bd1-557a-9b03-1e4a4dc664bd"
+            },
+            {
+              "content": "The management office of a multi-unit residential building does not hold a unit key without verifying identity.",
+              "content_digest": "841f44fddced7681d5c9b47aaa2536f14536f1309b1f73104df7cb44738efbd1",
+              "position": 9,
+              "uid": "b18ff5b4-4f0d-5b93-8c41-439e5b15c710"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "fd44d8aa-d0c8-4123-ba9c-412e1bd69b5b"
+        },
+        {
+          "context_digest": "0af669f138c2617a4b35c0974627a23c7e5cb2405da5e306648b130efac7fbdf",
+          "context_name": "task-3/local/personal-memory/2025/12",
+          "context_uid": "c54e9dde-005a-5d20-b41b-1313b4713061",
+          "memories": [
+            {
+              "content": "The user stores wrapping paper and empty gift boxes on the upper shelf of the bedroom closet.",
+              "content_digest": "8f3b67dea69e1fa656f1e42e39700a71ebc250c4f6ec18dc4d4f88d467e86ad2",
+              "position": 0,
+              "uid": "bd69b616-6e7c-5440-8b29-586de68bcff6"
+            },
+            {
+              "content": "From photographs, the user discovered that they had given their mother the same type of kitchen item two years in a row.",
+              "content_digest": "6962b8dc03fd90e1c8badfda0d827008cc675b940e5975a5833ebe504af7d635",
+              "position": 1,
+              "uid": "90c60e57-d7db-5783-9ca8-2fd27b94d847"
+            },
+            {
+              "content": "This year, the user went to the market with their mother and let her choose a needed item directly.",
+              "content_digest": "9a27aa187ad2964f985ffcf376490f4b69d3c83f2034591187273bd89f61637a",
+              "position": 2,
+              "uid": "53bc23b2-8242-58b5-b496-a45c70bb8e41"
+            },
+            {
+              "content": "The user once ordered a gift late and had it delivered the day after the gathering.",
+              "content_digest": "245bb316eb5d0b0203c63eb9a2832c6cf73cb9e7e368bdb48a08bb6b702642d7",
+              "position": 3,
+              "uid": "3b097446-2c73-5414-8c06-6bacdf00a4c1"
+            },
+            {
+              "content": "The next year, the user checked the expected delivery date and ordered one week before the gathering.",
+              "content_digest": "97aed11c6b4f7d03bd6a55e27ef34ef539da85204787bb0468f1e2df51d958fc",
+              "position": 4,
+              "uid": "ce18c7a5-d1e9-5e5c-8739-b14fa7298feb"
+            },
+            {
+              "content": "The user did not put names on wrapped boxes and handed their older sister and younger brother each other's gifts.",
+              "content_digest": "48464eb29ee2d2e01cda00f0e3a13d116d4aa121d424aecc59644431e89f8957",
+              "position": 5,
+              "uid": "7657f424-cd24-54dd-8409-e04974dd1531"
+            },
+            {
+              "content": "The next time the user wrapped gifts, they wrote the recipient on the bottom of each box.",
+              "content_digest": "551e74aebf85d4ffee86b960c520b17f3f7e4d50428493934831a774d9e31db6",
+              "position": 6,
+              "uid": "d8e82ad3-902e-5f0c-aa8e-b23ce874982a"
+            },
+            {
+              "content": "The user's younger brother welcomes a snack the family can share immediately more than an item for his use alone.",
+              "content_digest": "ec32111520e2f12afc684c6441c075dcc0715fc450d0ce8f20408dfb955634a9",
+              "position": 7,
+              "uid": "8a941bf1-73bd-51d3-a069-62ecc9d56439"
+            },
+            {
+              "content": "The local agent can find past gift records and flag duplicates but cannot know what is needed this year.",
+              "content_digest": "f7574c7f91999992680a7e88e79270747fd744a46355800012c63319c286d731",
+              "position": 8,
+              "uid": "036edf8f-4680-5822-924e-0fdc691c8135"
+            },
+            {
+              "content": "Year-end deliveries may take longer than usual or have their expected dates changed.",
+              "content_digest": "cc0955e132cf6f4bec7f416e54ed2ffdbac22169adeeae7372a6ddc496da4b9e",
+              "position": 9,
+              "uid": "b9e9e222-a559-56e3-93b5-1f49a0e0d3ab"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "8bbc866d-cc0c-40a9-9458-7bdacbda9daa"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The reference frame concerns home access, key handling, privacy, visits, and delivery verification, while the compared frame concerns gift selection, storage, labeling, preferences, and delivery planning. No claims address the same operational decision closely enough for a cross-frame relation.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fd44d8aa-d0c8-4123-ba9c-412e1bd69b5b",
+              "memory_uid": "1c627e4c-c393-5bd3-a5ae-b3318821be73"
+            },
+            {
+              "frame_uid": "fd44d8aa-d0c8-4123-ba9c-412e1bd69b5b",
+              "memory_uid": "e80936de-87af-5dbb-ab94-d456bbfaab0a"
+            }
+          ],
+          "reason": "These memories jointly define the user’s one-sided spare-key access arrangement and escalation practice, with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The maternal aunt holds the home’s spare key and is the user’s first contact when locked out.",
+          "uid": "8dd1a101-e6f3-5803-8eed-983ea9510299"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fd44d8aa-d0c8-4123-ba9c-412e1bd69b5b",
+              "memory_uid": "7c26cf33-0630-5138-910a-6d37d6ed2b63"
+            },
+            {
+              "frame_uid": "fd44d8aa-d0c8-4123-ba9c-412e1bd69b5b",
+              "memory_uid": "76fb9115-a3f2-5ce3-a445-c3d1e38e4253"
+            }
+          ],
+          "reason": "Both memories express advance coordination for the same key handoff, and the compared frame contains no matching pickup policy.",
+          "status": "RESOLVED",
+          "summary": "An in-person spare-key pickup should be confirmed in advance, including an arrival time.",
+          "uid": "8af2fb2e-433c-5a62-a4a3-91df31317484"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fd44d8aa-d0c8-4123-ba9c-412e1bd69b5b",
+              "memory_uid": "c3f0f26c-8d89-55e3-8bf3-398271e417e7"
+            }
+          ],
+          "reason": "This is an independently useful key-return preference absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user prefers to return a borrowed spare key in person on the same day.",
+          "uid": "bb8a3b41-8f62-5ae9-843d-64757a154edf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fd44d8aa-d0c8-4123-ba9c-412e1bd69b5b",
+              "memory_uid": "7d7d00a3-c5af-5441-bb50-9631fbfd7979"
+            }
+          ],
+          "reason": "This is a distinct access-security preference with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user is uneasy about recording a new entrance passcode on paper.",
+          "uid": "d3d4eb97-4975-534f-9ee8-e15e818c3101"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fd44d8aa-d0c8-4123-ba9c-412e1bd69b5b",
+              "memory_uid": "2e0df581-bd54-54f5-94ef-b719427fc88c"
+            }
+          ],
+          "reason": "This provides independently useful context about advance notice for visits, which the compared frame does not address.",
+          "status": "RESOLVED",
+          "summary": "An unannounced family visit during a meeting caused difficulty because the user could not respond immediately.",
+          "uid": "8749d006-0a01-535a-9455-b7b2b6728ba9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fd44d8aa-d0c8-4123-ba9c-412e1bd69b5b",
+              "memory_uid": "9278b64e-7550-5eb6-bbfd-544a2ae4ec3d"
+            }
+          ],
+          "reason": "This is a distinct package-verification experience; the compared delivery memories concern gift timing rather than receipt verification.",
+          "status": "RESOLVED",
+          "summary": "A delivery photo reassured the user after their younger brother received a package for them.",
+          "uid": "76796437-c9c9-5919-a19a-acc8efd758c3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fd44d8aa-d0c8-4123-ba9c-412e1bd69b5b",
+              "memory_uid": "6fa50e1d-8bd1-557a-9b03-1e4a4dc664bd"
+            }
+          ],
+          "reason": "This is a distinct consent requirement for sensitive access information, absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user should be consulted before disclosing the spare key’s location or the aunt’s contact information.",
+          "uid": "9fd71729-e397-55bb-9fdb-b94ce9ee01c0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fd44d8aa-d0c8-4123-ba9c-412e1bd69b5b",
+              "memory_uid": "b18ff5b4-4f0d-5b93-8c41-439e5b15c710"
+            }
+          ],
+          "reason": "This is an independently useful building-access constraint with no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "Building management requires identity verification before providing access to a unit key.",
+          "uid": "39b45a7c-081b-5adc-9e78-f7be56b91c03"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8bbc866d-cc0c-40a9-9458-7bdacbda9daa",
+              "memory_uid": "bd69b616-6e7c-5440-8b29-586de68bcff6"
+            }
+          ],
+          "reason": "This is a distinct storage-location fact absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Wrapping paper and empty gift boxes are stored on the upper bedroom-closet shelf.",
+          "uid": "7bab300f-4742-5a1a-8f4e-7ed99db891e3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8bbc866d-cc0c-40a9-9458-7bdacbda9daa",
+              "memory_uid": "90c60e57-d7db-5783-9ca8-2fd27b94d847"
+            },
+            {
+              "frame_uid": "8bbc866d-cc0c-40a9-9458-7bdacbda9daa",
+              "memory_uid": "53bc23b2-8242-58b5-b496-a45c70bb8e41"
+            },
+            {
+              "frame_uid": "8bbc866d-cc0c-40a9-9458-7bdacbda9daa",
+              "memory_uid": "036edf8f-4680-5822-924e-0fdc691c8135"
+            }
+          ],
+          "reason": "These memories split one gift-selection lesson between duplicate detection, its limitation, and obtaining the mother’s current choice; the reference frame has no corresponding decision.",
+          "status": "RESOLVED",
+          "summary": "Past records can reveal duplicate gifts, but current needs require direct recipient input.",
+          "uid": "8df7a508-5847-56bb-8ed4-a04c8f9f8a6b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8bbc866d-cc0c-40a9-9458-7bdacbda9daa",
+              "memory_uid": "3b097446-2c73-5414-8c06-6bacdf00a4c1"
+            },
+            {
+              "frame_uid": "8bbc866d-cc0c-40a9-9458-7bdacbda9daa",
+              "memory_uid": "ce18c7a5-d1e9-5e5c-8739-b14fa7298feb"
+            },
+            {
+              "frame_uid": "8bbc866d-cc0c-40a9-9458-7bdacbda9daa",
+              "memory_uid": "b9e9e222-a559-56e3-93b5-1f49a0e0d3ab"
+            }
+          ],
+          "reason": "These memories jointly describe a late-delivery experience, the later planning adjustment, and the seasonal timing risk underlying it, with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Gift ordering should account for uncertain year-end delivery dates by checking estimates and ordering earlier.",
+          "uid": "9a1ea09a-2bc1-58a2-aaaa-19444f1a1506"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8bbc866d-cc0c-40a9-9458-7bdacbda9daa",
+              "memory_uid": "7657f424-cd24-54dd-8409-e04974dd1531"
+            },
+            {
+              "frame_uid": "8bbc866d-cc0c-40a9-9458-7bdacbda9daa",
+              "memory_uid": "d8e82ad3-902e-5f0c-aa8e-b23ce874982a"
+            }
+          ],
+          "reason": "These memories form one labeling lesson through the mix-up and the subsequent corrective practice; the reference frame does not address gift identification.",
+          "status": "RESOLVED",
+          "summary": "Writing recipients’ names on wrapped boxes prevents gifts from being handed to the wrong siblings.",
+          "uid": "b18e9319-6dfd-5517-b983-b8839f5d21a7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8bbc866d-cc0c-40a9-9458-7bdacbda9daa",
+              "memory_uid": "8a941bf1-73bd-51d3-a069-62ecc9d56439"
+            }
+          ],
+          "reason": "This is an independently useful recipient preference absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The younger brother prefers a snack the family can share immediately over an item solely for him.",
+          "uid": "c6894612-e852-5503-9f77-ce5fd3c17715"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only information covers gift storage, recipient-informed selection and duplicate detection, delivery timing, package labeling, and the younger brother’s preference for shareable snacks.",
+        "differences": "",
+        "reference_only": "Reference-only information covers spare-key access and handling, passcode privacy, advance notice for visits, delivery-photo reassurance, consent before disclosing access details, and management identity checks."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "72d1418d-93f4-4ecf-a768-f2cb589eabc2"
+    },
+    "analysis_digest": "a3a0197d4146c0a0c92d8dc1416d57ede74a2cb72c7f0cca5cab747abf614046",
+    "key": "45dfda39ce2b3172be81b258fa8ef1b7a2a1bc61005f1063b5abdbe17a93fda0",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 54.5680088750014,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "45dfda39ce2b3172be81b258fa8ef1b7a2a1bc61005f1063b5abdbe17a93fda0",
+  "created_at": "2026-08-13T18:37:00.419311Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/02",
+  "pair_key": "cdc20bb9b6cb2137f652e147707a0ba93cf675d7edcc53b11cf64b01097435cd",
+  "provider_seconds": 54.5680088750014,
+  "right": "task-3/local/personal-memory/2025/12",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

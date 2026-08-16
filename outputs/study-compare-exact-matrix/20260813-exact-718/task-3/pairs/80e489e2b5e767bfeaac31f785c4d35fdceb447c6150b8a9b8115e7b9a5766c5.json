@@ -1,0 +1,370 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:53:09.515207+00:00",
+      "frames": [
+        {
+          "context_digest": "07c43eb0b8ecd9107f1d879a409b45289e236f48f620ff85f1d30ce594809149",
+          "context_name": "task-3/local/personal-memory/2025/09",
+          "context_uid": "5cd8ed5f-2f1f-5deb-8347-fc3bfa484d99",
+          "memories": [
+            {
+              "content": "The user keeps the book they are reading and a note-taking notebook on a small living-room desk.",
+              "content_digest": "d2c70cf4c27fe62f5915f2f5c669484c4a875e4ee21f8d7d89a5ff6746f14cf1",
+              "position": 0,
+              "uid": "3d3f7960-daf5-5a51-98b3-14261c5aa66c"
+            },
+            {
+              "content": "While reading in the living room with the television on, the user read the same paragraph three times.",
+              "content_digest": "00e41e6d5fe1dcfe961fa0f739860823ecf338dc55d5b9beea265ca823974582",
+              "position": 1,
+              "uid": "28714a4e-bc14-5703-b594-126471ae0585"
+            },
+            {
+              "content": "The next day, after turning off the television, the user read 40 pages without interruption.",
+              "content_digest": "c28ba9c872757b6683ab03d73e6ad61f71484d55986aae4c0976862a85e3a8b1",
+              "position": 2,
+              "uid": "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df"
+            },
+            {
+              "content": "On a day the phone was on the desk, the user stopped taking notes each time they checked a notification.",
+              "content_digest": "f95cb8b1b8abe89d7bf597ca5fb78f0862fe97a7cf0d8bc5a46c04026ebd6889",
+              "position": 3,
+              "uid": "1b1c9f90-2561-53d5-88fe-d54618450143"
+            },
+            {
+              "content": "During the next reading period, the user left the phone in another room and did not check it for an hour.",
+              "content_digest": "89dc50732e19b88a77657b285ce71c399d229b510265cc9adfbdf6ad706680cd",
+              "position": 4,
+              "uid": "076a7caa-5dcf-5f9d-8bee-efc952652efa"
+            },
+            {
+              "content": "A note attached to a paper book fell out, and the user had to find their place again.",
+              "content_digest": "723e48ceeba6c94e627c79af0518c811cfc8337f9eeae3a80ae388ec98786994",
+              "position": 5,
+              "uid": "1dad71ec-6a5d-550e-89d2-a86dc3dacb11"
+            },
+            {
+              "content": "With the next book, the user recorded the page number in the notebook and resumed reading immediately.",
+              "content_digest": "c74c2f80bf403da64f0a6de97ff04bc1f41cf68d0d33829fa926cc2549e8ea75",
+              "position": 6,
+              "uid": "58494743-fc7f-59e9-8e17-80b8a644470a"
+            },
+            {
+              "content": "The user's father expects that lowering the television volume while the user reads will make it easier for the user to concentrate.",
+              "content_digest": "281b1f8f55f8d22fbebdb2220405dc3e2300e29e0a568c1fac36d4bb1c39c186",
+              "position": 7,
+              "uid": "cce66589-892c-5d73-bdbc-2c6e94e0992e"
+            },
+            {
+              "content": "The local agent can summarize past reading environments and interruption records but cannot predict the next reading time.",
+              "content_digest": "50e5376e22f503048a7f1bf4055bfb31cb4aa3c75b1c816f2febce913716eb58",
+              "position": 8,
+              "uid": "20b2a27f-908f-5ed7-a288-f7c1030674fc"
+            },
+            {
+              "content": "The user feels that repeated notifications interrupt their flow of concentration.",
+              "content_digest": "d777b2a01cfac23e6ef7701c04c33592f8382fa78f8e307bae9ddbffc9a8e2ef",
+              "position": 9,
+              "uid": "310f4cfc-b117-5511-8e13-2bd2ebec9fe5"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "90db5340-8372-4cb2-b405-f3cefd36f376"
+        },
+        {
+          "context_digest": "5a45aaafce189f861f7195d3a753aa86812f64c689213961136327ca721c9d3e",
+          "context_name": "task-3/local/personal-memory/2026/06",
+          "context_uid": "f2e6c2e0-886a-52d8-98d4-03009ea37991",
+          "memories": [
+            {
+              "content": "The user keeps four folding chairs for family barbecues in storage.",
+              "content_digest": "7e2bb593a723adbac468184af4063e0ef74420baa03d6249ef77a84f2e6bc9df",
+              "position": 0,
+              "uid": "cce43b8e-c1c1-5208-8d9a-ee665b805d4c"
+            },
+            {
+              "content": "When six family members gathered in a noisy indoor restaurant, the user asked several times for the person across from them to repeat what was said.",
+              "content_digest": "d858d40478a37bed08580523df1915b85b4e2217b2fc506acedacaca55d2158d",
+              "position": 1,
+              "uid": "e682f0fd-e92f-566e-b1ec-1d5ebf091b60"
+            },
+            {
+              "content": "The user held the next gathering in their father's yard and moved between seats while speaking with everyone.",
+              "content_digest": "44843518c924955fa15e245dc41763a6fe21a95f6f590bd395f7b8a2d6357256",
+              "position": 2,
+              "uid": "c1f2b53e-6184-552b-a321-9796bb121055"
+            },
+            {
+              "content": "On a day the user started the barbecue at midday, sunlight led them to finish the meal quickly.",
+              "content_digest": "f275c2211b4bd69f40351800db57965b8ba44afbadb6e90a0291acae4e7a541b",
+              "position": 3,
+              "uid": "56d5befe-d5f4-59df-82e4-a66ba868dfc2"
+            },
+            {
+              "content": "The next time, the user started at 6 p.m. and remained outside until sunset.",
+              "content_digest": "13c413fbf16ea0704c10d09c5ee065a49ab789b0a3dadb1fc5068631dd95b292",
+              "position": 4,
+              "uid": "83d73ede-6f5a-550e-ba1c-c146b73a9917"
+            },
+            {
+              "content": "Because the side dishes brought by the user's mother and older sister had no labels, the user opened the same container twice.",
+              "content_digest": "5cc4205a743f5d8adca15876d7b0dd864089595ce729f4e3c1cc9a2272c6849b",
+              "position": 5,
+              "uid": "cf0947e8-c133-5259-bac2-e8ee6d74929e"
+            },
+            {
+              "content": "At the next gathering, the user wrote each food's name and who brought it on a small piece of paper.",
+              "content_digest": "6a93e0b5f7e3da8eff2e5c69a3f86c28dfc1a39c1ba7602a61cc1f6a96b837f9",
+              "position": 6,
+              "uid": "d42e48ca-39de-529f-bba2-332b779bd6c2"
+            },
+            {
+              "content": "After a barbecue, the user's younger brother prefers to divide leftover food into small containers to take home rather than discard it.",
+              "content_digest": "9febf1dab1f5000cddc636cd753d3c418b84810cbc6e394df7e8917d3fa29b72",
+              "position": 7,
+              "uid": "3958627e-a0fa-5e32-9e87-7ee874fc6fe7"
+            },
+            {
+              "content": "The local agent can summarize preparation and responses from prior family barbecues but cannot know the next attendees or weather.",
+              "content_digest": "6be2ed6916fc8a6200a4646b5db3b5ea0df7650e664bd098f973fb5229257cec",
+              "position": 8,
+              "uid": "1f24b5c2-554c-5356-b335-c6879e53ba7f"
+            },
+            {
+              "content": "The user's father's yard receives strong direct sunlight at midday; after 6 p.m., shade and wind lower the felt temperature.",
+              "content_digest": "a0bf855f5bb0422568bbed468e5299d111143362d7b9fe2dcf35dbaf8bcbf4c6",
+              "position": 9,
+              "uid": "d88b1b21-c58f-51d5-a60b-54bb11473d96"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "f49455b6-f74d-4f96-9394-446f56b3b91e"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "Both frames describe observed environmental effects, practical adjustments, and limits on retrospective local-agent summaries, but in separate domains: reading concentration and family barbecues. Their shared agent limitation is domain-scoped; all other information is independently useful and one-sided.",
+      "relations": [
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "90db5340-8372-4cb2-b405-f3cefd36f376",
+              "memory_uid": "20b2a27f-908f-5ed7-a288-f7c1030674fc"
+            },
+            {
+              "frame_uid": "f49455b6-f74d-4f96-9394-446f56b3b91e",
+              "memory_uid": "1f24b5c2-554c-5356-b335-c6879e53ba7f"
+            }
+          ],
+          "reason": "Both claims impose the same retrospective-versus-future boundary, while explicitly applying it to different records and future unknowns: reading environments and timing versus barbecue preparation, attendees, and weather.",
+          "status": "RESOLVED",
+          "summary": "The local agent can summarize prior domain-specific circumstances and responses but cannot determine important details of the next event.",
+          "uid": "809c7e23-e86f-5c7a-b979-4c365a029880"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "90db5340-8372-4cb2-b405-f3cefd36f376",
+              "memory_uid": "3d3f7960-daf5-5a51-98b3-14261c5aa66c"
+            }
+          ],
+          "reason": "This is independently useful information about the location of reading materials, with no counterpart governing barbecue arrangements.",
+          "status": "RESOLVED",
+          "summary": "The user keeps the current book and a note-taking notebook on a small living-room desk.",
+          "uid": "fcd81e1b-aca2-55f1-a1de-17fb961c0517"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "90db5340-8372-4cb2-b405-f3cefd36f376",
+              "memory_uid": "28714a4e-bc14-5703-b594-126471ae0585"
+            },
+            {
+              "frame_uid": "90db5340-8372-4cb2-b405-f3cefd36f376",
+              "memory_uid": "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df"
+            }
+          ],
+          "reason": "These observations jointly express a one-sided contrast in reading performance under television-on and television-off conditions.",
+          "status": "RESOLVED",
+          "summary": "The user reread a paragraph with the television on, then read forty uninterrupted pages after turning it off the next day.",
+          "uid": "71ef99de-8d98-594a-8c6d-f6e12248f76b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "90db5340-8372-4cb2-b405-f3cefd36f376",
+              "memory_uid": "1b1c9f90-2561-53d5-88fe-d54618450143"
+            },
+            {
+              "frame_uid": "90db5340-8372-4cb2-b405-f3cefd36f376",
+              "memory_uid": "076a7caa-5dcf-5f9d-8bee-efc952652efa"
+            },
+            {
+              "frame_uid": "90db5340-8372-4cb2-b405-f3cefd36f376",
+              "memory_uid": "310f4cfc-b117-5511-8e13-2bd2ebec9fe5"
+            }
+          ],
+          "reason": "These memories jointly describe one reading-specific interruption pattern and the user’s subsequent phone-placement response, without a counterpart in the barbecue frame.",
+          "status": "RESOLVED",
+          "summary": "Phone notifications disrupted the user’s note-taking and perceived concentration flow, while leaving the phone elsewhere prevented checking it for an hour during the next reading period.",
+          "uid": "1e06d010-cce4-536b-a6af-10912bbe232d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "90db5340-8372-4cb2-b405-f3cefd36f376",
+              "memory_uid": "1dad71ec-6a5d-550e-89d2-a86dc3dacb11"
+            },
+            {
+              "frame_uid": "90db5340-8372-4cb2-b405-f3cefd36f376",
+              "memory_uid": "58494743-fc7f-59e9-8e17-80b8a644470a"
+            }
+          ],
+          "reason": "The memories form one reading-specific problem-and-adjustment claim about preserving place across sessions.",
+          "status": "RESOLVED",
+          "summary": "After a loose note fell from a paper book and forced the user to recover their place, the user recorded the page number for the next book and resumed immediately.",
+          "uid": "d295a70f-2bb4-5c5a-9d3e-2e15a923f112"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "90db5340-8372-4cb2-b405-f3cefd36f376",
+              "memory_uid": "cce66589-892c-5d73-bdbc-2c6e94e0992e"
+            }
+          ],
+          "reason": "This is a one-sided expectation about managing television noise during reading, distinct from observations about barbecue settings.",
+          "status": "RESOLVED",
+          "summary": "The user’s father expects lower television volume during reading to improve the user’s concentration.",
+          "uid": "7469336d-0865-5df2-b62a-7b5129a745ba"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f49455b6-f74d-4f96-9394-446f56b3b91e",
+              "memory_uid": "cce43b8e-c1c1-5208-8d9a-ee665b805d4c"
+            }
+          ],
+          "reason": "This is independently useful information about barbecue seating resources, with no reading-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user stores four folding chairs for family barbecues.",
+          "uid": "448702a1-973a-5ab4-b6d2-3d1cd0c17b57"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f49455b6-f74d-4f96-9394-446f56b3b91e",
+              "memory_uid": "e682f0fd-e92f-566e-b1ec-1d5ebf091b60"
+            },
+            {
+              "frame_uid": "f49455b6-f74d-4f96-9394-446f56b3b91e",
+              "memory_uid": "c1f2b53e-6184-552b-a321-9796bb121055"
+            }
+          ],
+          "reason": "These memories jointly describe a gathering-specific conversational difficulty and subsequent venue and movement change.",
+          "status": "RESOLVED",
+          "summary": "After difficulty hearing across a noisy indoor restaurant table, the user held the next family gathering in the father’s yard and moved between seats to speak with everyone.",
+          "uid": "32386a31-cfb9-50bc-af72-10879c08716b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f49455b6-f74d-4f96-9394-446f56b3b91e",
+              "memory_uid": "56d5befe-d5f4-59df-82e4-a66ba868dfc2"
+            },
+            {
+              "frame_uid": "f49455b6-f74d-4f96-9394-446f56b3b91e",
+              "memory_uid": "83d73ede-6f5a-550e-ba1c-c146b73a9917"
+            },
+            {
+              "frame_uid": "f49455b6-f74d-4f96-9394-446f56b3b91e",
+              "memory_uid": "d88b1b21-c58f-51d5-a60b-54bb11473d96"
+            }
+          ],
+          "reason": "These memories jointly establish a barbecue-specific relationship among start time, sunlight, later weather conditions, and duration.",
+          "status": "RESOLVED",
+          "summary": "Strong midday sunlight shortened one barbecue, whereas a 6 p.m. start allowed the user to remain outside until sunset as later shade and wind reduced the felt temperature.",
+          "uid": "00277e08-1f09-5478-ad59-9a5faca17019"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f49455b6-f74d-4f96-9394-446f56b3b91e",
+              "memory_uid": "cf0947e8-c133-5259-bac2-e8ee6d74929e"
+            },
+            {
+              "frame_uid": "f49455b6-f74d-4f96-9394-446f56b3b91e",
+              "memory_uid": "d42e48ca-39de-529f-bba2-332b779bd6c2"
+            }
+          ],
+          "reason": "The memories form one barbecue-specific identification problem and labeling adjustment.",
+          "status": "RESOLVED",
+          "summary": "After unlabeled side dishes caused the user to reopen a container, the user labeled foods and their contributors at the next gathering.",
+          "uid": "a012497c-0b05-5857-b434-ce5733aa78ab"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f49455b6-f74d-4f96-9394-446f56b3b91e",
+              "memory_uid": "3958627e-a0fa-5e32-9e87-7ee874fc6fe7"
+            }
+          ],
+          "reason": "This is an independently useful family preference about handling barbecue leftovers, with no reading-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user’s younger brother prefers dividing barbecue leftovers into small take-home containers instead of discarding them.",
+          "uid": "6a2812c9-eff6-5d88-b9a5-495a33e1def7"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Barbecue memories cover stored seating, conversational venue changes, sunlight-sensitive timing, food labels, and a brother’s leftover preference.",
+        "differences": "The local agent is retrospective rather than predictive in both frames, with its records and unknown future details scoped respectively to reading and barbecues.",
+        "reference_only": "Reading memories cover desk materials, television and notification distractions, phone removal, place-keeping, and a father’s concentration expectation."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "703d744b-fd57-48c4-a19f-af31b3776dfc"
+    },
+    "analysis_digest": "37e93d9ba3f91bbaa88187e8faaabf37bf1cfaef593cf7110b31db7fb34267de",
+    "key": "5c9ea9940f01387656f3289ef437eefd3e5abf7138fcb2e81888d681ee4c0b7c",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 38.019764792003116,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "5c9ea9940f01387656f3289ef437eefd3e5abf7138fcb2e81888d681ee4c0b7c",
+  "created_at": "2026-08-13T18:53:47.534578Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/09",
+  "pair_key": "80e489e2b5e767bfeaac31f785c4d35fdceb447c6150b8a9b8115e7b9a5766c5",
+  "provider_seconds": 38.019764792003116,
+  "right": "task-3/local/personal-memory/2026/06",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

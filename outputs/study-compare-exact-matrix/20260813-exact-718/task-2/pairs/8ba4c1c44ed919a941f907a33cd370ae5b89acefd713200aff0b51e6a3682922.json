@@ -1,0 +1,390 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:25:24.754218+00:00",
+      "frames": [
+        {
+          "context_digest": "3dd1208c3f947a57bc5f1d490a28c999913d43cad775b2b01e50c6059d6b660e",
+          "context_name": "task-2/advisor1/safety",
+          "context_uid": "cd6c1fab-786a-52ea-9437-9a4d209ba419",
+          "memories": [
+            {
+              "content": "Specify the order and recipients for reporting serious discomfort during the study.",
+              "content_digest": "1de38a3ec5fc3267ebeb35482a458d4aaf50d2aea44c6dba334f184e50ddddd2",
+              "position": 0,
+              "uid": "9d6f5228-d182-571a-83d2-6a67becb7736"
+            },
+            {
+              "content": "Field staff rely on a pre-defined contact sequence when serious discomfort is reported.",
+              "content_digest": "ed3a3b19d92a50c7dd324981b702bac31e0130fda38fe37150e500481ed11d84",
+              "position": 1,
+              "uid": "00ed485d-66c2-59ad-9c5b-9ae445412690"
+            },
+            {
+              "content": "Establish criteria for halting the use of a design alternative if recurring severe errors appear during formative evaluation.",
+              "content_digest": "dcca56df756b89f89a0a9dbf2bf45aee6480392b368c9cf3402223d3084b801b",
+              "position": 2,
+              "uid": "9c6e1561-f671-52cb-aa67-245cc4987ad4"
+            },
+            {
+              "content": "Do not include a design alternative halted for safety reasons in subsequent evaluation iterations without modification.",
+              "content_digest": "01668098161666622f4d7ed8298e3e63a06fa9b10a4cfd53b200d820f96f5c50",
+              "position": 3,
+              "uid": "2381ecf7-2b11-583d-91d9-0a5cfc279ba1"
+            },
+            {
+              "content": "Even in controlled environments, delayed prototype recovery procedures increase session interruption time and alter data collection conditions for the same task.",
+              "content_digest": "fd0f364ef66cfa7be937779ed4ce3ffb1a406bc227d09c26b288a751c5e0d427",
+              "position": 4,
+              "uid": "c5ce1b00-36d9-5cdd-a318-93b88ca0e322"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "dbcb21ea-3dc9-403f-b8e6-f872eb9532d6"
+        },
+        {
+          "context_digest": "19032e7fed99072de4fcaeff084874da452865e9958a1301ec01260d60e01867",
+          "context_name": "task-2/advisor2/structure",
+          "context_uid": "09c95ce6-baa2-5823-a035-e4b0d323200b",
+          "memories": [
+            {
+              "content": "Allow the problem framing to extend through a third sentence when a concrete person, setting, or use situation is needed to make the issue understandable.",
+              "content_digest": "c027c1b4290ff04fe84e475af5aae8fa9e90dd839903b9fe772892e8b6b80323",
+              "position": 0,
+              "uid": "e32f543b-1637-572a-ab96-319d74ee7e21"
+            },
+            {
+              "content": "Use the third sentence for the specific setting and consequence rather than compressing them into an abstract two-sentence summary.",
+              "content_digest": "f02d2bd7ea21e7ebbaff85d3e77c77689dadead77276a3d472d2ad59f94ec5ff",
+              "position": 1,
+              "uid": "6bbb0f69-ca99-539a-a810-a0fb34fe9cc3"
+            },
+            {
+              "content": "Explicitly specify the users, operational stakeholders, and actual usage environment in the primary HCI research question.",
+              "content_digest": "3ab83046fede9de55435f98324226f435bcc4932d2a7440ef61fc21c2e0d71f3",
+              "position": 2,
+              "uid": "48e887dc-7fc8-5a23-9999-890acb870251"
+            },
+            {
+              "content": "Provide one compact visual summary when proposing an unfamiliar interaction procedure.",
+              "content_digest": "1e4299abe1691fbbfc826fc59d4276831d9a49abd3588820ba2f50311fd56d2c",
+              "position": 3,
+              "uid": "e34bce0c-7d07-5fe6-b03f-39faa801640b"
+            },
+            {
+              "content": "Mark the conditions that move an unfamiliar interaction procedure from one step to the next in its visual summary.",
+              "content_digest": "9e7d7547cac76b4b6665ea585fedd7678682c7f9a4eadf129202ac2ea2c6b2b8",
+              "position": 4,
+              "uid": "68ad56f9-6ca2-587a-9182-fd98a79d3d5c"
+            },
+            {
+              "content": "Present the master’s research schedule as phase-specific milestones for field understanding, system implementation, user study, and analysis.",
+              "content_digest": "035713de4f5d6577859b2602ae32a7561594bcbeca023049d4b0e2d4c930d94a",
+              "position": 5,
+              "uid": "eca301ff-9feb-502d-b955-055c48342542"
+            },
+            {
+              "content": "Link deliverables that determine entry into the next phase to each milestone of the master’s research.",
+              "content_digest": "dff2c02b66c97696644d04ee7e685c706443257101e7ee34182dcc5021aa8525",
+              "position": 6,
+              "uid": "cbd977cd-1b78-5ca6-823a-7a5b4b92d77a"
+            },
+            {
+              "content": "Directly connect the gap in the actual usage context with the proposed design and operational contributions in a single flow.",
+              "content_digest": "8da57ff6f210ec4a38d82a2550f96a6b30ba59b7f63f3f3c08e9dcec10dce381",
+              "position": 7,
+              "uid": "9283aedb-6818-5c99-8fe0-502b488acb66"
+            },
+            {
+              "content": "Avoid extra subheadings in a two-page proposal; use paragraph transitions to preserve one continuous argument from problem to proposed response and next steps.",
+              "content_digest": "f6dabe3ee8aba7aa81d707519ffc7d3839f3a74ddcd97fa61d14396e1581f69c",
+              "position": 8,
+              "uid": "c5c04ab1-10e8-52a3-98a1-aa9cbede57c1"
+            },
+            {
+              "content": "Begin each paragraph by connecting it to the previous claim so the short proposal reads as an argument rather than a stack of labeled fragments.",
+              "content_digest": "37d855da87b3b3437e6cc7d865a02d1852b7f7a01c3d7855b0584e399d086619",
+              "position": 9,
+              "uid": "87203bcf-6724-543a-ad19-60a2becc4598"
+            },
+            {
+              "content": "Place preliminary results from field observations or technical validations near sentences supporting feasibility claims.",
+              "content_digest": "8cb8b48f7f57c3248d28f4b82181c9ddbac16acb7b67435abdfb761233b3aecb",
+              "position": 10,
+              "uid": "c9591180-6f3a-5909-8695-31704b9b6f01"
+            },
+            {
+              "content": "Readers may misinterpret a compressed opening when the person, setting, or consequence is only implied.",
+              "content_digest": "2eb34b31c7da38508d152ae4d47ddb8b08479a2e28fbdb4a50c72e7f1999bbf2",
+              "position": 11,
+              "uid": "0ac685f9-e338-5549-bf91-32078cf36f15"
+            },
+            {
+              "content": "A two-sentence opening can become so general that readers understand the topic but cannot picture the situation the proposal intends to change.",
+              "content_digest": "21625e7040d1007bf6931fc1e3551dbbd46739ad339773d51cd00d9f21abf96e",
+              "position": 12,
+              "uid": "5567fb3c-de90-5363-af1b-62fb5b8e0bb1"
+            },
+            {
+              "content": "Use paragraph transitions instead of extra headings when the repeated labels would consume space needed for the argument itself.",
+              "content_digest": "50620b1c5db672532aea9ce8c9bfc11688a5b83bf5436bfc9a308a08fc719286",
+              "position": 13,
+              "uid": "32cef408-4c66-5ef2-9a59-eea6fc67b16e"
+            },
+            {
+              "content": "End each paragraph with the question or consequence that the next paragraph answers.",
+              "content_digest": "3d3639057c446bbd3d2bef5393bce0219451ba3c718d655c62dc51b1ea2df86f",
+              "position": 14,
+              "uid": "3579fcc0-c74e-5006-901b-6406a3106fa1"
+            },
+            {
+              "content": "A continuous sequence of problem, consequence, response, and next step makes the relationship among claims audible without repeating section labels.",
+              "content_digest": "8e1d12ba37953236e2f51510ac3e0382b75b43ff911190216550f82c5679eadf",
+              "position": 15,
+              "uid": "2c2aa1af-c450-5c8d-a907-042c5757d3ee"
+            },
+            {
+              "content": "Readers may experience very short headed sections as an outline because each new label interrupts the connection to the previous paragraph.",
+              "content_digest": "c355e847db92d4c27343283e9415debff2fbdb4b2b2c505d4e442dc78251578d",
+              "position": 16,
+              "uid": "1fb62d5b-532b-5664-842c-57622e3c8b9d"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "83c89502-87c1-46c5-8246-01e1484314a0"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate aspects of HCI research practice. The reference covers participant-safety escalation, unsafe design alternatives, and prototype recovery effects, while the compared frame focuses on proposal framing, contextual specificity, procedural visuals, scheduling, argument flow, and feasibility evidence. No cross-frame operational claim materially overlaps.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "dbcb21ea-3dc9-403f-b8e6-f872eb9532d6",
+              "memory_uid": "9d6f5228-d182-571a-83d2-6a67becb7736"
+            },
+            {
+              "frame_uid": "dbcb21ea-3dc9-403f-b8e6-f872eb9532d6",
+              "memory_uid": "00ed485d-66c2-59ad-9c5b-9ae445412690"
+            }
+          ],
+          "reason": "Both memories express the same one-sided operational claim: field staff need an established escalation path when serious discomfort is reported.",
+          "status": "RESOLVED",
+          "summary": "The reference alone requires a predefined reporting sequence and recipients for serious discomfort during a study.",
+          "uid": "ecbe2377-4c9a-53bb-9f8b-6da6e917017a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "dbcb21ea-3dc9-403f-b8e6-f872eb9532d6",
+              "memory_uid": "9c6e1561-f671-52cb-aa67-245cc4987ad4"
+            }
+          ],
+          "reason": "This is an independently useful safety threshold not addressed in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The reference alone calls for criteria to halt a design alternative when severe errors recur during formative evaluation.",
+          "uid": "5913f802-1134-5d18-af64-28acc341586b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "dbcb21ea-3dc9-403f-b8e6-f872eb9532d6",
+              "memory_uid": "2381ecf7-2b11-583d-91d9-0a5cfc279ba1"
+            }
+          ],
+          "reason": "This governs subsequent evaluation eligibility, a distinct safety policy absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The reference alone prohibits reusing an unmodified design alternative after it was halted for safety reasons.",
+          "uid": "181f15db-d330-5ff0-accb-a3c851f4eeed"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "dbcb21ea-3dc9-403f-b8e6-f872eb9532d6",
+              "memory_uid": "c5ce1b00-36d9-5cdd-a318-93b88ca0e322"
+            }
+          ],
+          "reason": "This study-execution observation has no materially related claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The reference alone identifies longer interruptions and altered data-collection conditions as consequences of delayed prototype recovery.",
+          "uid": "aedf5afa-73f6-540a-b8b2-fcb6f15add53"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "83c89502-87c1-46c5-8246-01e1484314a0",
+              "memory_uid": "e32f543b-1637-572a-ab96-319d74ee7e21"
+            },
+            {
+              "frame_uid": "83c89502-87c1-46c5-8246-01e1484314a0",
+              "memory_uid": "6bbb0f69-ca99-539a-a810-a0fb34fe9cc3"
+            },
+            {
+              "frame_uid": "83c89502-87c1-46c5-8246-01e1484314a0",
+              "memory_uid": "0ac685f9-e338-5549-bf91-32078cf36f15"
+            },
+            {
+              "frame_uid": "83c89502-87c1-46c5-8246-01e1484314a0",
+              "memory_uid": "5567fb3c-de90-5363-af1b-62fb5b8e0bb1"
+            }
+          ],
+          "reason": "All members support the same one-sided claim that compressing a contextual problem opening into two sentences can make the intended situation too abstract or ambiguous.",
+          "status": "RESOLVED",
+          "summary": "The compared frame alone favors a third opening sentence when needed to make the person, setting, and consequence concrete and understandable.",
+          "uid": "57567dc3-c4b3-5729-872a-1fe96b312663"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "83c89502-87c1-46c5-8246-01e1484314a0",
+              "memory_uid": "48e887dc-7fc8-5a23-9999-890acb870251"
+            }
+          ],
+          "reason": "This independently governs research-question content and is not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The compared frame alone requires the primary HCI research question to name users, operational stakeholders, and the actual usage environment.",
+          "uid": "553c946a-7c83-543b-8893-462d7b967014"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "83c89502-87c1-46c5-8246-01e1484314a0",
+              "memory_uid": "e34bce0c-7d07-5fe6-b03f-39faa801640b"
+            },
+            {
+              "frame_uid": "83c89502-87c1-46c5-8246-01e1484314a0",
+              "memory_uid": "68ad56f9-6ca2-587a-9182-fd98a79d3d5c"
+            }
+          ],
+          "reason": "Both members split one one-sided visualization policy for communicating an unfamiliar procedure.",
+          "status": "RESOLVED",
+          "summary": "The compared frame alone requires a compact visual summary of an unfamiliar interaction procedure, including conditions governing step transitions.",
+          "uid": "bbcde758-c40e-5839-820f-99e36b5d264f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "83c89502-87c1-46c5-8246-01e1484314a0",
+              "memory_uid": "eca301ff-9feb-502d-b955-055c48342542"
+            },
+            {
+              "frame_uid": "83c89502-87c1-46c5-8246-01e1484314a0",
+              "memory_uid": "cbd977cd-1b78-5ca6-823a-7a5b4b92d77a"
+            }
+          ],
+          "reason": "Both members form one scheduling claim covering phase-specific progress and transition criteria.",
+          "status": "RESOLVED",
+          "summary": "The compared frame alone structures a master’s research schedule around phase milestones and deliverables that gate entry into later phases.",
+          "uid": "d6791746-2917-5553-a9ad-9328a108eeee"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "83c89502-87c1-46c5-8246-01e1484314a0",
+              "memory_uid": "9283aedb-6818-5c99-8fe0-502b488acb66"
+            }
+          ],
+          "reason": "This proposal-logic requirement is independently useful and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The compared frame alone calls for a direct argumentative flow from the actual-use-context gap to proposed design and operational contributions.",
+          "uid": "ca8571ce-1766-5cff-b0b9-5b0d695f2095"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "83c89502-87c1-46c5-8246-01e1484314a0",
+              "memory_uid": "c5c04ab1-10e8-52a3-98a1-aa9cbede57c1"
+            },
+            {
+              "frame_uid": "83c89502-87c1-46c5-8246-01e1484314a0",
+              "memory_uid": "87203bcf-6724-543a-ad19-60a2becc4598"
+            },
+            {
+              "frame_uid": "83c89502-87c1-46c5-8246-01e1484314a0",
+              "memory_uid": "32cef408-4c66-5ef2-9a59-eea6fc67b16e"
+            },
+            {
+              "frame_uid": "83c89502-87c1-46c5-8246-01e1484314a0",
+              "memory_uid": "3579fcc0-c74e-5006-901b-6406a3106fa1"
+            },
+            {
+              "frame_uid": "83c89502-87c1-46c5-8246-01e1484314a0",
+              "memory_uid": "2c2aa1af-c450-5c8d-a907-042c5757d3ee"
+            },
+            {
+              "frame_uid": "83c89502-87c1-46c5-8246-01e1484314a0",
+              "memory_uid": "1fb62d5b-532b-5664-842c-57622e3c8b9d"
+            }
+          ],
+          "reason": "All members elaborate the same one-sided structural policy, including paragraph openings, endings, claim sequence, space use, and the interruption caused by repeated labels.",
+          "status": "RESOLVED",
+          "summary": "The compared frame alone favors paragraph transitions and linked claims over extra headings so a short proposal reads as one continuous argument.",
+          "uid": "2674e39e-d1a7-5f97-b12f-49130809f955"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "83c89502-87c1-46c5-8246-01e1484314a0",
+              "memory_uid": "c9591180-6f3a-5909-8695-31704b9b6f01"
+            }
+          ],
+          "reason": "This independently governs evidence placement and has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The compared frame alone places preliminary field or technical results near the feasibility claims they support.",
+          "uid": "3d0b52d8-e3fc-5f7c-b713-2acf3e21e1f6"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame uniquely guides contextual proposal framing, research-question specificity, procedural visuals, milestone planning, contribution logic, continuous paragraph structure, and placement of feasibility evidence.",
+        "differences": "",
+        "reference_only": "The reference uniquely addresses serious-discomfort escalation, safety-based stopping and reuse of design alternatives, and the effects of delayed prototype recovery on study sessions."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "019f8cd4-d5cf-440f-9f2c-3ab33a084230"
+    },
+    "analysis_digest": "3f72cdd4324cd97560159bfd2446d51507808bc4d8413a349b453105fd6d926b",
+    "key": "cb087fc9bacc2664c839b4937fda3012215c708b682840a550be78852e329dfe",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 36.87124862500059,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "cb087fc9bacc2664c839b4937fda3012215c708b682840a550be78852e329dfe",
+  "created_at": "2026-08-13T18:26:01.625282Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/safety",
+  "pair_key": "8ba4c1c44ed919a941f907a33cd370ae5b89acefd713200aff0b51e6a3682922",
+  "provider_seconds": 36.87124862500059,
+  "right": "task-2/advisor2/structure",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

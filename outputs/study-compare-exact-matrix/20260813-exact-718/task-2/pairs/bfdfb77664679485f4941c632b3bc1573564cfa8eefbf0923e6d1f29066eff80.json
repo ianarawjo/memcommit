@@ -1,0 +1,253 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:26:06.487746+00:00",
+      "frames": [
+        {
+          "context_digest": "d2c716d52357c4200adc8772d5823715ffd736eb766028c1c62bbb32852bc344",
+          "context_name": "task-2/advisor1/scope",
+          "context_uid": "6db29abe-5784-5eec-acaa-060bac0e11f1",
+          "memories": [
+            {
+              "content": "Define in one sentence the user groups and usage contexts to which the design knowledge does not apply.",
+              "content_digest": "3193ffe501a06d6148b39c333853b42bc0278b2ab3c3df88162b049548ff16bb",
+              "position": 0,
+              "uid": "e594a6ab-81e9-5e5f-8ef5-e6bb8f3760d7"
+            },
+            {
+              "content": "Reviewers judge the generalization boundary of results through explicitly excluded targets and situations.",
+              "content_digest": "a929649a7bd07f29f31a8cd1969a3c160ba5f61c0def76e204443c30234f84b0",
+              "position": 1,
+              "uid": "31cdacff-7c49-547d-9f97-598a07b67fb6"
+            },
+            {
+              "content": "Specify user goals, interaction conditions, and technological constraints under which the proposed design knowledge can be transferred.",
+              "content_digest": "6ae1bfaeadb1863db1997685527706d210a379a376a24d3de1168e952f847627",
+              "position": 2,
+              "uid": "1459d986-4dc9-51f3-bf13-dbb0b07045c8"
+            },
+            {
+              "content": "Small-scale formative studies can support analytic generalization distinct from statistical representativeness when results are expressed in terms of design conditions and mechanisms.",
+              "content_digest": "1963572a303acbf383890b7d97b52349f572df761e89ea3fd5116058cd2e1cea",
+              "position": 3,
+              "uid": "1db5fcd6-f93c-5630-9810-053c10b5ceba"
+            },
+            {
+              "content": "The author of this proposal tends to apply design knowledge derived from an accessible sample to a broader user population.",
+              "content_digest": "df2a7f1284c1994c6dec49eb7995acd1ed341a9e6b8f4b06c854d85fa9d77d6c",
+              "position": 4,
+              "uid": "fd29c315-521f-53c0-add5-c668ec318a43"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "9f16ce34-44fc-4502-9523-214e32a1ce03"
+        },
+        {
+          "context_digest": "b598a4ff3268ef8c6c0d7bc5ff34af370074bcdd30d61bd3623fcdfb167f37d6",
+          "context_name": "task-2/advisor2/safety",
+          "context_uid": "4283d797-6a33-5f39-b7f6-f4dbd3264389",
+          "memories": [
+            {
+              "content": "List whom to notify and in what order if serious discomfort is reported during the study.",
+              "content_digest": "3453feb8597fb15c827f22297d58dc804fdc1d8080b9e93ba35b85a4425092b6",
+              "position": 0,
+              "uid": "ceb095a9-3068-55ea-a06f-d954c121e007"
+            },
+            {
+              "content": "Field staff rely on the pre-defined contact sequence when serious discomfort is reported.",
+              "content_digest": "ba38f8a5c993c810e19b9120f4492c3accf962c8b8fd7642539ac24f363099e0",
+              "position": 1,
+              "uid": "962d7645-02b3-5611-8415-4370794c10d4"
+            },
+            {
+              "content": "Define the thresholds for participant harm, operational disruption, and data anomalies at which deployment and data collection must cease.",
+              "content_digest": "7f7f124d266efd8255c4615ebc7eb375447047ed5a2b96327f28f8f17d048813",
+              "position": 2,
+              "uid": "a3270872-1901-5d24-8ef1-374833599bf9"
+            },
+            {
+              "content": "Establish procedures to restore existing systems and workflow states after suspending field deployment.",
+              "content_digest": "1a5f7636ec45e60df11db8b0d3763345c0bfaf9a92c1e5d581e6b36452c31208",
+              "position": 3,
+              "uid": "f6dd1368-0d90-5f1a-97d0-56594ce8f4b3"
+            },
+            {
+              "content": "The user's stop plan can be judged feasible only when it identifies who has authority to order recovery and who is responsible for carrying it out.",
+              "content_digest": "3fa05bd19fdeeb320a37cfb89ad853a868b64055f7b21eb182798b0119f6620c",
+              "position": 4,
+              "uid": "342e4697-873f-56a8-b4a4-896efe910144"
+            },
+            {
+              "content": "In organizations where error reporting is linked to individual performance evaluations, safety signal records may be separated from research decision logs, potentially breaking the traceability path for the same incident.",
+              "content_digest": "2bf13ff8ab1a778e8a793ede627b28d40798ae40d25c7a6d25eb5e2e79dd8e97",
+              "position": 5,
+              "uid": "6c4e9175-4590-5689-ae2b-678f0eb930b9"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "5354cf5c-2e12-4526-a077-84d382354bcd"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The reference frame addresses generalization boundaries, transfer conditions, and risks of overextending design knowledge. The compared frame independently addresses incident escalation, stopping thresholds, recovery governance, and conditional traceability risks. No claims materially govern the same operational decision.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9f16ce34-44fc-4502-9523-214e32a1ce03",
+              "memory_uid": "e594a6ab-81e9-5e5f-8ef5-e6bb8f3760d7"
+            },
+            {
+              "frame_uid": "9f16ce34-44fc-4502-9523-214e32a1ce03",
+              "memory_uid": "31cdacff-7c49-547d-9f97-598a07b67fb6"
+            }
+          ],
+          "reason": "These reference-side statements express one underlying claim about explicitly documenting exclusions so the applicability boundary can be judged; the compared frame contains no claim about generalization boundaries.",
+          "status": "RESOLVED",
+          "summary": "Excluded user groups and usage situations define the boundary through which reviewers assess the generalizability of design results.",
+          "uid": "c9d36ced-85b2-52de-8911-8bf2ec8fff69"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9f16ce34-44fc-4502-9523-214e32a1ce03",
+              "memory_uid": "1459d986-4dc9-51f3-bf13-dbb0b07045c8"
+            }
+          ],
+          "reason": "This is independently useful reference-side guidance about positive transfer conditions, while the compared frame addresses study stopping and recovery operations.",
+          "status": "RESOLVED",
+          "summary": "Transferability of design knowledge should be specified through user goals, interaction conditions, and technological constraints.",
+          "uid": "85027742-99d7-59d6-a099-81c72e8e552e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9f16ce34-44fc-4502-9523-214e32a1ce03",
+              "memory_uid": "1db5fcd6-f93c-5630-9810-053c10b5ceba"
+            }
+          ],
+          "reason": "This reference-side methodological principle has no counterpart governing the compared frame’s incident-response and deployment-suspension policies.",
+          "status": "RESOLVED",
+          "summary": "Small formative studies may support analytic generalization when findings are expressed through design conditions and mechanisms rather than statistical representativeness.",
+          "uid": "0287ae13-0cdf-5c8a-afcc-073aef9ede05"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9f16ce34-44fc-4502-9523-214e32a1ce03",
+              "memory_uid": "fd29c315-521f-53c0-add5-c668ec318a43"
+            }
+          ],
+          "reason": "This reference-side observation identifies a specific overgeneralization tendency absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to extend design knowledge from an accessible sample to a broader population.",
+          "uid": "241d7a6e-88b8-537d-9c9e-86b25094e164"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5354cf5c-2e12-4526-a077-84d382354bcd",
+              "memory_uid": "ceb095a9-3068-55ea-a06f-d954c121e007"
+            },
+            {
+              "frame_uid": "5354cf5c-2e12-4526-a077-84d382354bcd",
+              "memory_uid": "962d7645-02b3-5611-8415-4370794c10d4"
+            }
+          ],
+          "reason": "These compared-side statements express one operational escalation claim, combining the required plan with how staff use it; the reference frame contains no incident-notification policy.",
+          "status": "RESOLVED",
+          "summary": "A predefined ordered contact sequence should identify whom field staff notify when serious discomfort is reported.",
+          "uid": "ff050ee8-6d8c-54a3-8711-f51db3f96b51"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5354cf5c-2e12-4526-a077-84d382354bcd",
+              "memory_uid": "a3270872-1901-5d24-8ef1-374833599bf9"
+            }
+          ],
+          "reason": "This compared-side stopping rule is independently useful and has no counterpart in the reference frame’s generalization guidance.",
+          "status": "RESOLVED",
+          "summary": "Explicit thresholds for participant harm, operational disruption, and data anomalies should determine when deployment and data collection cease.",
+          "uid": "f2239cb3-db22-52d5-84d6-1f06e5880e01"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5354cf5c-2e12-4526-a077-84d382354bcd",
+              "memory_uid": "f6dd1368-0d90-5f1a-97d0-56594ce8f4b3"
+            },
+            {
+              "frame_uid": "5354cf5c-2e12-4526-a077-84d382354bcd",
+              "memory_uid": "342e4697-873f-56a8-b4a4-896efe910144"
+            }
+          ],
+          "reason": "These compared-side statements jointly define the substance and governance of one recovery plan; the reference frame contains no recovery procedure or responsibility allocation.",
+          "status": "RESOLVED",
+          "summary": "A feasible post-suspension recovery plan should restore systems and workflows while identifying both recovery-ordering authority and execution responsibility.",
+          "uid": "85d5e12c-554f-5d2e-bd7b-9c7cd3f11487"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5354cf5c-2e12-4526-a077-84d382354bcd",
+              "memory_uid": "6c4e9175-4590-5689-ae2b-678f0eb930b9"
+            }
+          ],
+          "reason": "This compared-side conditional organizational risk is independently useful and unrelated to the reference frame’s applicability and generalization claims.",
+          "status": "RESOLVED",
+          "summary": "Where error reporting affects individual evaluations, separating safety records from research decision logs may break incident traceability.",
+          "uid": "f187b86a-7316-5345-88ca-d4e85f81d01d"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers discomfort escalation, cessation thresholds, system recovery and its governance, plus a context-specific risk to incident traceability.",
+        "differences": "",
+        "reference_only": "The reference defines exclusions and transfer conditions, distinguishes analytic from statistical generalization, and notes a tendency to generalize beyond accessible samples."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "b1b54b5d-eec7-44b1-ade5-11810f2ba507"
+    },
+    "analysis_digest": "7d012ac9af39401277c7b81ad95157ca91eff75bcfae44af857c7cc80c343337",
+    "key": "137e5db819a19ee794be532b5fa9aaf4d4b4b3f52654aa252e5c5c9b1e8725e7",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 28.48048566599755,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "137e5db819a19ee794be532b5fa9aaf4d4b4b3f52654aa252e5c5c9b1e8725e7",
+  "created_at": "2026-08-13T18:26:34.967873Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/scope",
+  "pair_key": "bfdfb77664679485f4941c632b3bc1573564cfa8eefbf0923e6d1f29066eff80",
+  "provider_seconds": 28.48048566599755,
+  "right": "task-2/advisor2/safety",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

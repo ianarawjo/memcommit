@@ -1,0 +1,429 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:27:16.743265+00:00",
+      "frames": [
+        {
+          "context_digest": "130876ecc1e3921197d330f5ad8493b927360f3505da3eff8df01d4f595a4934",
+          "context_name": "task-2/advisor1/structure",
+          "context_uid": "0ff7abfd-58d3-58c2-b42a-31dca38cb7bd",
+          "memories": [
+            {
+              "content": "Complete the problem framing within the first two sentences so the reader reaches the proposal's central issue before any supporting background.",
+              "content_digest": "4096d07c1d883f8ba3973fd247207f8e86964ff2172e8580c81cb53e64772a6c",
+              "position": 0,
+              "uid": "44249c8a-e84f-5c20-a9cd-a55457e98511"
+            },
+            {
+              "content": "Use the first sentence for the concrete problem and the second for its consequence; reserve later sentences for the proposed response.",
+              "content_digest": "8d72b732a389d0c1bbb22112fa3ba6d8113c8b9d29d252d751c5a55cf7abc648",
+              "position": 1,
+              "uid": "21371c6c-c74f-5791-8f9b-6d099306bfb5"
+            },
+            {
+              "content": "Specify the user, context, and interaction to be explored in the primary HCI research question.",
+              "content_digest": "cc6e0085a02b6df0b572f7393a15292e7fd6c8204f78c66f50fd15190ef49dd0",
+              "position": 2,
+              "uid": "f69ea80c-0d56-5fe8-9d24-8793eefa6643"
+            },
+            {
+              "content": "Provide one compact visual summary when proposing an unfamiliar interaction procedure.",
+              "content_digest": "1e4299abe1691fbbfc826fc59d4276831d9a49abd3588820ba2f50311fd56d2c",
+              "position": 3,
+              "uid": "18ebdcbc-cf5a-5e6c-b2cd-b4cd07d7e59e"
+            },
+            {
+              "content": "Mark the conditions that move an unfamiliar interaction procedure from one step to the next in its visual summary.",
+              "content_digest": "9e7d7547cac76b4b6665ea585fedd7678682c7f9a4eadf129202ac2ea2c6b2b8",
+              "position": 4,
+              "uid": "5ab99a77-8836-50cf-8377-fdd23a208bc4"
+            },
+            {
+              "content": "Present the master’s research schedule as phased periods for exploration, design, prototyping, and user evaluation.",
+              "content_digest": "de00ac53757731455605eb2a3568fcbb4ea3660401a8e6aaf2cb9698795decec",
+              "position": 5,
+              "uid": "b9b7932b-85c1-5a14-80f7-0983dbf22380"
+            },
+            {
+              "content": "Link one reviewable deliverable to each phase of the master’s research.",
+              "content_digest": "cac76eb15b96d8fa32e3041fd5a067a3b5e2085fa832755b5740fe7cf2b57c17",
+              "position": 6,
+              "uid": "fc0a3a72-2da2-5843-be3a-a4ff2adf8fac"
+            },
+            {
+              "content": "Place the gap left by HCI-related research and the proposed design and empirical contributions in close proximity.",
+              "content_digest": "94c1e46dec54f1af7649582c49adbd9f998d3b82300cd234c58604e68619c6d9",
+              "position": 7,
+              "uid": "2f7092a7-2625-5d27-bd76-a13ee5809cc2"
+            },
+            {
+              "content": "Divide a two-page proposal with short descriptive subheadings so a reader can jump directly to the problem, proposed response, and next steps.",
+              "content_digest": "9a65c457d63f97379a188faea00bbc6dfc4ea30ad54aee1386f724a765e88e90",
+              "position": 8,
+              "uid": "a1857f07-36cd-5a6c-946d-a308e712e9eb"
+            },
+            {
+              "content": "Give the problem and proposed response their own descriptive subheadings instead of relying only on paragraph transitions.",
+              "content_digest": "3f5d0cf36befd2b1cb66ae8038719d3f8cd4472303e5173c48c1f96f67d9e969",
+              "position": 9,
+              "uid": "895b5ac9-1aa4-51d2-b89a-94e9fe5b869d"
+            },
+            {
+              "content": "Give the next steps and requested support their own descriptive subheading so they remain easy to find on a return visit.",
+              "content_digest": "008352fbd9cb0d40bd64afe1db74efb2a833adc4146924743b836dbd1941bd90",
+              "position": 10,
+              "uid": "3005f4c5-e17b-531b-b9bf-c9d69411c71f"
+            },
+            {
+              "content": "Place pilot observation or initial prototype results near sentences supporting feasibility claims.",
+              "content_digest": "60e9dcff7041a8df6d3471976e828c8a4713a24ec1b8fa6b6af77afd75b78cf8",
+              "position": 11,
+              "uid": "4913f63e-ceb9-587a-ade9-494fc8f28849"
+            },
+            {
+              "content": "Readers often decide what a proposal is about from its first two sentences before scanning the rest of the page.",
+              "content_digest": "0d8addaa334e762de0ef2ec08c78102bc005a6b81f0baf418c83be2a2981934b",
+              "position": 12,
+              "uid": "8ecaec22-7c25-5a39-a85b-56db9c3b607e"
+            },
+            {
+              "content": "When setup continues past the second sentence, readers who are skimming often retain the background topic but miss the exact problem being proposed.",
+              "content_digest": "5976e248ce36164afb87182216974b972f783352ae5b500398052387ee628710",
+              "position": 13,
+              "uid": "a4536b84-40f2-57db-84e4-024c97c9fecb"
+            },
+            {
+              "content": "Reuse the same short subheadings in discussion so a reader can return to a section without searching through the whole page.",
+              "content_digest": "276c3060f1479291f0d0dd7eba9899e91191555c65cfa60a48d28d1f5b877538",
+              "position": 14,
+              "uid": "2312cb6e-4f50-56f5-b725-ba5e45697a73"
+            },
+            {
+              "content": "Use visible subheadings as a completeness check: an empty or missing section makes an omitted part of the proposal immediately apparent.",
+              "content_digest": "2a68f989965d7f20482be421bc6145ea22d769c78e9c833a842694480dc097f5",
+              "position": 15,
+              "uid": "1d90043b-f010-5a14-9493-77f636c13975"
+            },
+            {
+              "content": "Readers often scan section labels before deciding which paragraph to read closely.",
+              "content_digest": "95e51e9236f82b7ace59c6a24359f398583142c762cc1dd607717a9f297e804a",
+              "position": 16,
+              "uid": "b77fe6ec-676b-5bb9-9119-45aefea2aa27"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "431c90a2-995b-4903-ae10-31cee219a048"
+        },
+        {
+          "context_digest": "1396f236b90acd99b836eb5367828f8319d0465ea25b66f696a7f583f4f5ecf6",
+          "context_name": "task-2/advisor2/terminology",
+          "context_uid": "a2976fe7-0e07-5045-9e91-6a214128a482",
+          "memories": [
+            {
+              "content": "Do not change names referring to the same user roles, system functions, or operational stages midway.",
+              "content_digest": "a0f821f4497e7518806857e9005d12e27f6043fda6dbd91ba33ef188e0a3be16",
+              "position": 0,
+              "uid": "e2ae95ed-9033-5625-9179-33f4cf4a95c1"
+            },
+            {
+              "content": "Use abbreviations only for long recurring terms in a two-page proposal.",
+              "content_digest": "e6cad365bd42a8327e3cac92b8cf49cc456fa3e2f5c6624797fa509c0aac6846",
+              "position": 1,
+              "uid": "4be60357-09fa-523d-8c8d-8e03ace8fde9"
+            },
+            {
+              "content": "Present the full term and abbreviation together when using an abbreviation for the first time.",
+              "content_digest": "7b7c1f90727c822edbc13af17d64d45552d1c7ddb5fa18e665369423fd93ffbe",
+              "position": 2,
+              "uid": "0dd5d707-7d13-5be0-8377-421507650cba"
+            },
+            {
+              "content": "Refer to participants based on the roles they perform in the study rather than their status.",
+              "content_digest": "d89feff6e3dad0eea0ba4b1b291b140048af9f0f89d84c8ac196ae547a7b03bd",
+              "position": 3,
+              "uid": "9b3f0cde-7c3e-5b6a-9500-855f31d65ef2"
+            },
+            {
+              "content": "Reviewers from different subfields find it difficult to infer an abbreviation from context alone when it is not defined at first use.",
+              "content_digest": "4ffe91fb52db337a4ad30dc56d0439e12851f17f411c414b6d673e79bd91e68b",
+              "position": 4,
+              "uid": "8c896114-85e6-5c3c-ae3f-6e8e6b59f2fe"
+            },
+            {
+              "content": "When introducing an operational role for the first time, define both the decisions it can make and the actions it performs.",
+              "content_digest": "916b66a818f988f69e2e3c90f0ed0dbb7d29fc9e030b3fc7f822b3817106cbc3",
+              "position": 5,
+              "uid": "dc9e3f25-7aac-500b-b431-f6d810dd09bb"
+            },
+            {
+              "content": "Individuals holding identical job titles may possess different system modification privileges and data access rights depending on their deployment site.",
+              "content_digest": "e0315abc2f42a8f2657aa52e04899096ce799ba790fcd77d22b4196f917790ac",
+              "position": 6,
+              "uid": "04956cab-eb3a-5b71-be45-b1edd6c4a216"
+            },
+            {
+              "content": "The user tends to group distinct field roles under the single label “user.”",
+              "content_digest": "ba75af998618324dbdfa225a2cd503c42888f77daf4d44eb4f79b3a7db8e4bbe",
+              "position": 7,
+              "uid": "fc8613e8-86ca-5322-bb5d-03dfbca71c46"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "75d284eb-32c6-4f11-aed4-74cc3f17403d"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address complementary but nonoverlapping aspects of proposal quality. The reference frame emphasizes structure, early problem framing, research design, visual explanation, scheduling, evidence placement, and navigation; the compared frame focuses on stable terminology, abbreviations, and precise role definitions.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "431c90a2-995b-4903-ae10-31cee219a048",
+              "memory_uid": "44249c8a-e84f-5c20-a9cd-a55457e98511"
+            },
+            {
+              "frame_uid": "431c90a2-995b-4903-ae10-31cee219a048",
+              "memory_uid": "21371c6c-c74f-5791-8f9b-6d099306bfb5"
+            },
+            {
+              "frame_uid": "431c90a2-995b-4903-ae10-31cee219a048",
+              "memory_uid": "8ecaec22-7c25-5a39-a85b-56db9c3b607e"
+            },
+            {
+              "frame_uid": "431c90a2-995b-4903-ae10-31cee219a048",
+              "memory_uid": "a4536b84-40f2-57db-84e4-024c97c9fecb"
+            }
+          ],
+          "reason": "The memories jointly give an opening structure and explain that readers use those sentences to identify the proposal, while extended setup can obscure the exact problem.",
+          "status": "RESOLVED",
+          "summary": "State the concrete problem and its consequence within the first two sentences, leaving the proposed response for later.",
+          "uid": "1f498859-98b0-5c09-835e-e5c59b2b09e2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "431c90a2-995b-4903-ae10-31cee219a048",
+              "memory_uid": "f69ea80c-0d56-5fe8-9d24-8793eefa6643"
+            }
+          ],
+          "reason": "This is an independently useful requirement for research-question formulation that has no substantively matching claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Include the user, context, and interaction in the primary HCI research question.",
+          "uid": "570a0fd8-269d-544b-bf85-d27ecdae84e7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "431c90a2-995b-4903-ae10-31cee219a048",
+              "memory_uid": "18ebdcbc-cf5a-5e6c-b2cd-b4cd07d7e59e"
+            },
+            {
+              "frame_uid": "431c90a2-995b-4903-ae10-31cee219a048",
+              "memory_uid": "5ab99a77-8836-50cf-8377-fdd23a208bc4"
+            }
+          ],
+          "reason": "The memories split one visual-explanation requirement into the summary itself and the transition information it must show.",
+          "status": "RESOLVED",
+          "summary": "Summarize an unfamiliar interaction procedure with a compact visual that marks step-transition conditions.",
+          "uid": "1fa5843f-c356-5be5-bdcc-c6acda55496f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "431c90a2-995b-4903-ae10-31cee219a048",
+              "memory_uid": "b9b7932b-85c1-5a14-80f7-0983dbf22380"
+            },
+            {
+              "frame_uid": "431c90a2-995b-4903-ae10-31cee219a048",
+              "memory_uid": "fc0a3a72-2da2-5843-be3a-a4ff2adf8fac"
+            }
+          ],
+          "reason": "The memories jointly define one schedule presentation: named research periods paired with outputs that can be reviewed.",
+          "status": "RESOLVED",
+          "summary": "Show the master’s research as exploration, design, prototyping, and evaluation phases, each with a reviewable deliverable.",
+          "uid": "f23ae6c8-862f-59d3-846f-5478d03156a8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "431c90a2-995b-4903-ae10-31cee219a048",
+              "memory_uid": "2f7092a7-2625-5d27-bd76-a13ee5809cc2"
+            }
+          ],
+          "reason": "This is an independently useful spatial organization rule not materially addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Place the HCI research gap close to the proposed design and empirical contributions.",
+          "uid": "25c70745-0102-5f01-946f-aee532373701"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "431c90a2-995b-4903-ae10-31cee219a048",
+              "memory_uid": "a1857f07-36cd-5a6c-946d-a308e712e9eb"
+            },
+            {
+              "frame_uid": "431c90a2-995b-4903-ae10-31cee219a048",
+              "memory_uid": "895b5ac9-1aa4-51d2-b89a-94e9fe5b869d"
+            },
+            {
+              "frame_uid": "431c90a2-995b-4903-ae10-31cee219a048",
+              "memory_uid": "3005f4c5-e17b-531b-b9bf-c9d69411c71f"
+            },
+            {
+              "frame_uid": "431c90a2-995b-4903-ae10-31cee219a048",
+              "memory_uid": "2312cb6e-4f50-56f5-b725-ba5e45697a73"
+            },
+            {
+              "frame_uid": "431c90a2-995b-4903-ae10-31cee219a048",
+              "memory_uid": "b77fe6ec-676b-5bb9-9119-45aefea2aa27"
+            }
+          ],
+          "reason": "The memories state and elaborate one navigation scheme, including its principal sections, reuse during discussion, and the reader behavior motivating visible labels.",
+          "status": "RESOLVED",
+          "summary": "Use stable descriptive subheadings for the problem, response, and next steps so readers can scan and revisit the two-page proposal efficiently.",
+          "uid": "56e71df4-fb0a-5c8b-94c8-fa0f175d6d11"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "431c90a2-995b-4903-ae10-31cee219a048",
+              "memory_uid": "1d90043b-f010-5a14-9493-77f636c13975"
+            }
+          ],
+          "reason": "This assigns subheadings an independently useful completeness-checking function beyond their navigation role.",
+          "status": "RESOLVED",
+          "summary": "Use visible subheadings to reveal missing or empty proposal sections.",
+          "uid": "2174155c-04c6-51fe-8fad-3ef14326da26"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "431c90a2-995b-4903-ae10-31cee219a048",
+              "memory_uid": "4913f63e-ceb9-587a-ade9-494fc8f28849"
+            }
+          ],
+          "reason": "This is a distinct evidence-placement rule without a substantive counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Place pilot observations or initial prototype results near the feasibility claims they support.",
+          "uid": "dd9bd105-08fc-522c-be5b-e360949b50f7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "75d284eb-32c6-4f11-aed4-74cc3f17403d",
+              "memory_uid": "e2ae95ed-9033-5625-9179-33f4cf4a95c1"
+            }
+          ],
+          "reason": "This is an independently useful terminology-consistency rule not materially addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Keep names for the same user roles, system functions, and operational stages consistent throughout the proposal.",
+          "uid": "e51ec81b-cb6c-5be9-8d78-f587242a5a22"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "75d284eb-32c6-4f11-aed4-74cc3f17403d",
+              "memory_uid": "4be60357-09fa-523d-8c8d-8e03ace8fde9"
+            },
+            {
+              "frame_uid": "75d284eb-32c6-4f11-aed4-74cc3f17403d",
+              "memory_uid": "0dd5d707-7d13-5be0-8377-421507650cba"
+            },
+            {
+              "frame_uid": "75d284eb-32c6-4f11-aed4-74cc3f17403d",
+              "memory_uid": "8c896114-85e6-5c3c-ae3f-6e8e6b59f2fe"
+            }
+          ],
+          "reason": "The memories form one abbreviation policy and explain that first-use definitions are needed because cross-subfield reviewers may not infer meanings from context.",
+          "status": "RESOLVED",
+          "summary": "Reserve abbreviations for long recurring terms and define each alongside its full term at first use.",
+          "uid": "77c785ed-8399-5a46-9b17-9534ed4c75dc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "75d284eb-32c6-4f11-aed4-74cc3f17403d",
+              "memory_uid": "9b3f0cde-7c3e-5b6a-9500-855f31d65ef2"
+            },
+            {
+              "frame_uid": "75d284eb-32c6-4f11-aed4-74cc3f17403d",
+              "memory_uid": "fc8613e8-86ca-5322-bb5d-03dfbca71c46"
+            }
+          ],
+          "reason": "The memories jointly identify role-based naming as the corrective to collapsing distinct field roles under the label “user.”",
+          "status": "RESOLVED",
+          "summary": "Label participants by their study roles rather than status or a generic user category.",
+          "uid": "145a94ab-274a-5734-868f-35554900e4d4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "75d284eb-32c6-4f11-aed4-74cc3f17403d",
+              "memory_uid": "dc9e3f25-7aac-500b-b431-f6d810dd09bb"
+            },
+            {
+              "frame_uid": "75d284eb-32c6-4f11-aed4-74cc3f17403d",
+              "memory_uid": "04956cab-eb3a-5b71-be45-b1edd6c4a216"
+            }
+          ],
+          "reason": "The memories jointly require capability-based role definitions and explain why job titles alone may not determine operational authority across deployments.",
+          "status": "RESOLVED",
+          "summary": "Define an operational role by its decisions and actions, accounting for site-dependent modification privileges and data access.",
+          "uid": "e758b469-40b1-5755-a060-22082ce5836a"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only guidance covers consistent naming, restrained and defined abbreviations, role-based participant labels, and operational-role definitions grounded in permissions, actions, and site variation.",
+        "differences": "",
+        "reference_only": "Reference-only guidance covers opening clarity, research-question specificity, procedure visuals, phased schedules, gap-to-contribution linkage, descriptive navigation, completeness checks, and evidence near feasibility claims."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "2baa1f11-2a53-476c-9375-379175b727e1"
+    },
+    "analysis_digest": "eac8a0f180d51d3e83b8b579a71d3192891dccb87a81069f5c273ff367b0ee8a",
+    "key": "1d4f00b5feda231350aef0bbb5cbdde80224cacc83e65107a5011dec1fc7f91f",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 50.4065046249998,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "1d4f00b5feda231350aef0bbb5cbdde80224cacc83e65107a5011dec1fc7f91f",
+  "created_at": "2026-08-13T18:28:07.149028Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/structure",
+  "pair_key": "c78ade78dc524e0a49217c354f6c41c845b27c81f1f9bf97ce7a88c6f729cd99",
+  "provider_seconds": 50.4065046249998,
+  "right": "task-2/advisor2/terminology",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

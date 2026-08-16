@@ -36,6 +36,10 @@ from memcommit.context_catalog import (
     ContextCatalogScan,
 )
 from memcommit.profile_config import resolve_active_store_dir
+from memcommit.storage_permissions import (
+    ensure_private_directory,
+    open_private_exclusive,
+)
 from memcommit.write_protection import (
     WriteProtectionError,
     WriteProtectionRegistry,
@@ -111,10 +115,12 @@ def _reject_duplicate_json_keys(
 
 
 def _write_json_atomic(path: Path, data: object) -> None:
-    """Write JSON through a same-directory temporary file, then replace."""
+    """Write owner-only JSON through a same-directory atomic replacement."""
     temporary = path.parent / f".{path.name}.write-{uuid.uuid4().hex}"
     try:
-        with open(temporary, "x", encoding="utf-8") as f:
+        ensure_private_directory(path.parent, parents=True)
+        descriptor = open_private_exclusive(temporary)
+        with os.fdopen(descriptor, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2)
             f.flush()
             os.fsync(f.fileno())
@@ -350,10 +356,12 @@ def _mapped_context_name(name: str, old_root: str, new_root: str) -> str | None:
 
 
 def _write_bytes_atomic(path: Path, data: bytes) -> None:
-    """Restore exact bytes through the same replace boundary as JSON writes."""
+    """Restore owner-only bytes through the JSON replace boundary."""
     temporary = path.parent / f".{path.name}.write-{uuid.uuid4().hex}"
     try:
-        with open(temporary, "xb") as file:
+        ensure_private_directory(path.parent, parents=True)
+        descriptor = open_private_exclusive(temporary)
+        with os.fdopen(descriptor, "wb") as file:
             file.write(data)
             file.flush()
             os.fsync(file.fileno())
@@ -918,8 +926,8 @@ class MemoryStore:
             Path(root).absolute() if root is not None else Path(STORE_DIR)
         )
         if create:
-            self.store_dir.mkdir(parents=True, exist_ok=True)
-            self.contexts_dir.mkdir(parents=True, exist_ok=True)
+            ensure_private_directory(self.store_dir, parents=True)
+            ensure_private_directory(self.contexts_dir, parents=True)
             if not self.state_file.exists():
                 self._write_state({"current": None})
 

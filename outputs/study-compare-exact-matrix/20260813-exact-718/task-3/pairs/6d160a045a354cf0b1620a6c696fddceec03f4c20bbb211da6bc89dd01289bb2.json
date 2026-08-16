@@ -1,0 +1,388 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:40:24.204778+00:00",
+      "frames": [
+        {
+          "context_digest": "6cb54691fcd12037c24daa71882bad82cd67c16ea72979f2a41e1e1b8eae22a8",
+          "context_name": "task-3/local/personal-memory/2024/06",
+          "context_uid": "8c641e5b-01d9-560c-a8c0-b52cee7402c8",
+          "memories": [
+            {
+              "content": "The user stores copies of identity documents in an encrypted folder.",
+              "content_digest": "83efe427335c1415d4a8d601d6e1c5d7a129c6962b74468d313b123e045b052f",
+              "position": 0,
+              "uid": "79576c1e-fa88-5d6e-b5e2-3d4ec11c3e06"
+            },
+            {
+              "content": "On a day the user transferred between buses twice, they rested for an hour after the trip.",
+              "content_digest": "907b9cc4c16b4b3fe53c2323d31afc83347ddc63775bd865bc42b62ca539f5bb",
+              "position": 1,
+              "uid": "28a1ff0b-e2d4-5cb6-9c26-949d86f76bac"
+            },
+            {
+              "content": "On a day the user took a direct route with a similar travel time, they remained seated to the destination.",
+              "content_digest": "0c0d1b12aa0ad393ac43982fe7d36d08f75d9e634c933593ef6a0a96614bb9ea",
+              "position": 2,
+              "uid": "0ad4a1f9-e3e9-517e-8cfc-f8e6307f1d3e"
+            },
+            {
+              "content": "After arriving at an entrance with stairs only, the user went around to an entrance on the other side of the building.",
+              "content_digest": "775d4c0a211f4509a0488cb3b2a790ae22c1b2ba2e96ed6b9100ae3cfb454315",
+              "position": 3,
+              "uid": "f772b0c7-502f-55b7-b431-ee6b20518d38"
+            },
+            {
+              "content": "On a day the user checked the accessible entrance location in advance, they arrived before the agreed time.",
+              "content_digest": "4e087a4e0ca48a3414580ce0d974da4b2221b304302de01cf305945866320a6a",
+              "position": 4,
+              "uid": "0b2d800b-a4ab-5422-bf06-56d17b98f604"
+            },
+            {
+              "content": "On a rainy day, the user's clothes became wet while crossing an uncovered section at a transfer stop.",
+              "content_digest": "dad5c9f35f0469edc528091e47f22365c1cb5de1b32e70335826d67a576fb47d",
+              "position": 5,
+              "uid": "b233f332-4927-549b-8dab-b554977fe363"
+            },
+            {
+              "content": "On a day the user traveled with their maternal uncle, they agreed to meet at an entrance near the elevator.",
+              "content_digest": "c81b012ae6686f47d54809c50ab559077b0e170d54792d34038f0f8fc32c6a96",
+              "position": 6,
+              "uid": "b38d0d63-c4b0-5955-857d-03cbcfd27f5b"
+            },
+            {
+              "content": "The user's maternal uncle prefers an aisle seat from which it is easy to stand during long-distance travel.",
+              "content_digest": "3ea31753296866c1bf438b51eba4110b0c6ed2e907e86dc21796166ed19d82df",
+              "position": 7,
+              "uid": "4668d326-b11c-5467-bca4-e8d5e242e375"
+            },
+            {
+              "content": "The local agent cannot know whether an accessible entrance is operating that day from past route records alone.",
+              "content_digest": "00fc09badcb1d569e3cb1e392ad18406a032d17749f71b44ed7bc121d5d72b4c",
+              "position": 8,
+              "uid": "a77c985c-3986-5141-9805-e3321b3cfa2c"
+            },
+            {
+              "content": "The transfer route the user takes has more boarding and alighting events and walking segments than the direct route.",
+              "content_digest": "f9320e36494ea5beb854d6bbe38a817ae73cd9fe68b75977438d35e44fb38fe6",
+              "position": 9,
+              "uid": "988926a1-3e28-5b3e-a41c-d9338971643e"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "42bcbae6-8f7c-4fa7-860c-976ae28c31bb"
+        },
+        {
+          "context_digest": "a2ea3c6aa8c1680fcf9a7dd71d0dbff822c6af5493b34b79022f5e740bb35259",
+          "context_name": "task-3/local/personal-memory/2025/07",
+          "context_uid": "5c264a7f-0300-587c-ad1c-0439cedc7737",
+          "memories": [
+            {
+              "content": "The user keeps a travel power bank in the first drawer beneath the desk.",
+              "content_digest": "deb13f4eae5e32bc035da0558fa1b290f4bac0dfa5ca350d5abd0456af07ab7f",
+              "position": 0,
+              "uid": "447bfd8d-1490-5404-a2b4-13b4587e6aba"
+            },
+            {
+              "content": "The user packed three pairs of shoes for a two-night trip but wore only one pair.",
+              "content_digest": "097601b179049e1c4dd6b20a2fe2703ffb0d4a89d5ae15a763d339b989da50d8",
+              "position": 1,
+              "uid": "3ab0326a-a006-51ea-9348-7ada19a23bce"
+            },
+            {
+              "content": "For the next two-night trip, the user packed only one pair of walking shoes and reduced the bag's weight.",
+              "content_digest": "afd02b05250a60ad461e01132a94f0105d419521803082d1057205a2bc9a92ad",
+              "position": 2,
+              "uid": "ef467ab6-8ba6-5f81-8f12-578ec1824e09"
+            },
+            {
+              "content": "On a trip when the user forgot a charging cable, they bought a new one after arrival.",
+              "content_digest": "bbe1ac80a2311e0e631446b811d799494dc5ca4db408fc63d1cb09a01e2cd105",
+              "position": 3,
+              "uid": "aa4defc3-2b65-5688-accb-aaa49f2430b6"
+            },
+            {
+              "content": "Before the next trip, the user checked charging items against a photo and packed all of them.",
+              "content_digest": "cc2663db793bec80657023ccd545add403ec7dcc6dc39da4d03a95b5a9f65ff9",
+              "position": 4,
+              "uid": "2d937b4b-d73d-5382-abbe-3cd4e596b3a5"
+            },
+            {
+              "content": "The user packed toiletries on the departure day and arrived 15 minutes late at the meeting place.",
+              "content_digest": "1f5f7eb4cf651ee44244315e52de31cbd7bffe70489315bda287d1ca3cb9a8d4",
+              "position": 5,
+              "uid": "0be8b327-0a06-5241-b98d-daa6b0a4aa50"
+            },
+            {
+              "content": "The next time, the user closed the bag the night before and departed on time.",
+              "content_digest": "61f6c02e4637501f5ad9b1a9f668e298e566558a3d9e611a8b521c17256513b7",
+              "position": 6,
+              "uid": "90059fcc-436d-5453-98f0-a9b23a08faf1"
+            },
+            {
+              "content": "The user's older sister considers it safer to pack an extra cable even for a short trip to avoid charging problems.",
+              "content_digest": "f06b38b34e0f27bc01d8a79733173673d37a209e8619ad3df816a73718ffd89f",
+              "position": 7,
+              "uid": "12ef03f9-8cda-5ed7-be83-891b4702f872"
+            },
+            {
+              "content": "When creating a travel preparation list, confirm the trip length and actual activities with the user.",
+              "content_digest": "f34a0a341cd8ce9c641c16b780c4e53ccae4b6dca2c8f176be7579f5b0115654",
+              "position": 8,
+              "uid": "54136935-a460-573d-ac40-f5edb0ca7e6c"
+            },
+            {
+              "content": "The local agent cannot establish what the next trip requires from the luggage used on the previous trip alone.",
+              "content_digest": "4accbe60aa4e53ff75a18cc0291a870f106ac69a10a2cff96147c2dbd74892e3",
+              "position": 9,
+              "uid": "029c0777-bdbb-5d48-9309-1b1e6c7d88f4"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "f2cdeac8-0b3f-45a0-9e1c-7eea916426ba"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "Both frames show travel experiences informing future preparation. They align on advance preparation supporting punctuality and distinguish two contexts where historical evidence alone is insufficient. The reference emphasizes route accessibility and transit burden; the compared frame emphasizes luggage, charging, and packing practices.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "42bcbae6-8f7c-4fa7-860c-976ae28c31bb",
+              "memory_uid": "0b2d800b-a4ab-5422-bf06-56d17b98f604"
+            },
+            {
+              "frame_uid": "f2cdeac8-0b3f-45a0-9e1c-7eea916426ba",
+              "memory_uid": "0be8b327-0a06-5241-b98d-daa6b0a4aa50"
+            },
+            {
+              "frame_uid": "f2cdeac8-0b3f-45a0-9e1c-7eea916426ba",
+              "memory_uid": "90059fcc-436d-5453-98f0-a9b23a08faf1"
+            }
+          ],
+          "reason": "The memories address the same operational choice—when to complete travel preparation—and their observed punctuality outcomes reinforce rather than contradict one another.",
+          "status": "RESOLVED",
+          "summary": "Preparing relevant travel details in advance is associated with arriving on time or early, while departure-day preparation is associated with lateness.",
+          "uid": "71c8fae0-3c0a-574d-bf63-51a0eaf4f1b3"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "42bcbae6-8f7c-4fa7-860c-976ae28c31bb",
+              "memory_uid": "a77c985c-3986-5141-9805-e3321b3cfa2c"
+            },
+            {
+              "frame_uid": "f2cdeac8-0b3f-45a0-9e1c-7eea916426ba",
+              "memory_uid": "029c0777-bdbb-5d48-9309-1b1e6c7d88f4"
+            }
+          ],
+          "reason": "Both state the same evidentiary limitation, but their explicit operational scopes differ and must be preserved.",
+          "status": "RESOLVED",
+          "summary": "Past travel evidence alone cannot establish a present or future requirement, with the limitation applying separately to entrance operation and trip-luggage needs.",
+          "uid": "7ec22123-4df9-5a9f-ba15-cf83a1c007de"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "42bcbae6-8f7c-4fa7-860c-976ae28c31bb",
+              "memory_uid": "79576c1e-fa88-5d6e-b5e2-3d4ec11c3e06"
+            }
+          ],
+          "reason": "This is independently useful reference-only information about secure document storage.",
+          "status": "RESOLVED",
+          "summary": "The user stores copies of identity documents in an encrypted folder.",
+          "uid": "1cb7ff23-4f29-54d0-9406-42fca5380fc4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "42bcbae6-8f7c-4fa7-860c-976ae28c31bb",
+              "memory_uid": "28a1ff0b-e2d4-5cb6-9c26-949d86f76bac"
+            },
+            {
+              "frame_uid": "42bcbae6-8f7c-4fa7-860c-976ae28c31bb",
+              "memory_uid": "0ad4a1f9-e3e9-517e-8cfc-f8e6307f1d3e"
+            },
+            {
+              "frame_uid": "42bcbae6-8f7c-4fa7-860c-976ae28c31bb",
+              "memory_uid": "988926a1-3e28-5b3e-a41c-d9338971643e"
+            }
+          ],
+          "reason": "These reference memories jointly express one comparative claim about the physical demands of transfer and direct routes.",
+          "status": "RESOLVED",
+          "summary": "Transfer travel involves more movement and was followed by rest, while a similarly timed direct journey allowed the user to remain seated.",
+          "uid": "9249fb36-db3d-5282-bc8f-39bea7bfb577"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "42bcbae6-8f7c-4fa7-860c-976ae28c31bb",
+              "memory_uid": "f772b0c7-502f-55b7-b431-ee6b20518d38"
+            }
+          ],
+          "reason": "This is independently useful reference-only information about an accessibility-related navigation event.",
+          "status": "RESOLVED",
+          "summary": "A stairs-only entrance required the user to detour to another side of the building.",
+          "uid": "774bc1f3-269b-52f9-a1a8-6f96b5622aef"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "42bcbae6-8f7c-4fa7-860c-976ae28c31bb",
+              "memory_uid": "b233f332-4927-549b-8dab-b554977fe363"
+            }
+          ],
+          "reason": "This is independently useful reference-only information about weather exposure on a route.",
+          "status": "RESOLVED",
+          "summary": "An uncovered section at a transfer stop left the user’s clothes wet on a rainy day.",
+          "uid": "45080d12-00a7-5aba-bbdc-09e90a78f211"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "42bcbae6-8f7c-4fa7-860c-976ae28c31bb",
+              "memory_uid": "b38d0d63-c4b0-5955-857d-03cbcfd27f5b"
+            }
+          ],
+          "reason": "This is independently useful reference-only information about a specific meeting arrangement.",
+          "status": "RESOLVED",
+          "summary": "The user and their maternal uncle arranged to meet at an entrance near an elevator.",
+          "uid": "727dd30b-3183-59bb-b9a0-bbc24b4baf03"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "42bcbae6-8f7c-4fa7-860c-976ae28c31bb",
+              "memory_uid": "4668d326-b11c-5467-bca4-e8d5e242e375"
+            }
+          ],
+          "reason": "This is independently useful reference-only information about the uncle’s seating preference.",
+          "status": "RESOLVED",
+          "summary": "The user’s maternal uncle prefers an aisle seat that makes standing easier during long-distance travel.",
+          "uid": "33c860a5-c51e-50fa-864f-4d37b7ca41d1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f2cdeac8-0b3f-45a0-9e1c-7eea916426ba",
+              "memory_uid": "447bfd8d-1490-5404-a2b4-13b4587e6aba"
+            }
+          ],
+          "reason": "This is independently useful compared-only information about an item’s storage location.",
+          "status": "RESOLVED",
+          "summary": "The user keeps a travel power bank in the first drawer beneath the desk.",
+          "uid": "342c5a46-8710-531d-894b-a7ec0be4d1d2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f2cdeac8-0b3f-45a0-9e1c-7eea916426ba",
+              "memory_uid": "3ab0326a-a006-51ea-9348-7ada19a23bce"
+            },
+            {
+              "frame_uid": "f2cdeac8-0b3f-45a0-9e1c-7eea916426ba",
+              "memory_uid": "ef467ab6-8ba6-5f81-8f12-578ec1824e09"
+            }
+          ],
+          "reason": "These compared memories form one adaptation claim linking prior unused footwear to lighter subsequent packing.",
+          "status": "RESOLVED",
+          "summary": "After overpacking shoes for a two-night trip, the user took only one walking pair next time and reduced bag weight.",
+          "uid": "4d6ec76d-467c-513c-b197-e317770e3f41"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f2cdeac8-0b3f-45a0-9e1c-7eea916426ba",
+              "memory_uid": "aa4defc3-2b65-5688-accb-aaa49f2430b6"
+            },
+            {
+              "frame_uid": "f2cdeac8-0b3f-45a0-9e1c-7eea916426ba",
+              "memory_uid": "2d937b4b-d73d-5382-abbe-3cd4e596b3a5"
+            }
+          ],
+          "reason": "These compared memories form one adaptation claim linking a charging-item omission to a successful later check.",
+          "status": "RESOLVED",
+          "summary": "After forgetting a charging cable and buying a replacement, the user used a photo check before the next trip and packed all charging items.",
+          "uid": "3f67a339-10f2-552e-81c6-2b7af89f414a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f2cdeac8-0b3f-45a0-9e1c-7eea916426ba",
+              "memory_uid": "12ef03f9-8cda-5ed7-be83-891b4702f872"
+            }
+          ],
+          "reason": "This is independently useful compared-only information about the sister’s packing preference.",
+          "status": "RESOLVED",
+          "summary": "The user’s older sister considers an extra cable safer even for short trips because it may prevent charging problems.",
+          "uid": "2dc9afed-c6ff-57e3-9743-19431a36c4a9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f2cdeac8-0b3f-45a0-9e1c-7eea916426ba",
+              "memory_uid": "54136935-a460-573d-ac40-f5edb0ca7e6c"
+            }
+          ],
+          "reason": "This is independently useful compared-only guidance for determining preparation needs.",
+          "status": "RESOLVED",
+          "summary": "Travel preparation lists should be grounded in the upcoming trip’s length and actual activities.",
+          "uid": "bf9c4d6c-347f-5627-a40d-06e2775b99d5"
+        }
+      ],
+      "reports": {
+        "both": "Advance preparation is associated with timely arrival across entrance planning and bag-packing contexts.",
+        "compared_only": "The compared frame covers power-bank storage, lighter shoe packing, charging checks, an extra-cable preference, and activity-based preparation lists.",
+        "differences": "Historical information alone is insufficient in distinct scopes: current entrance operation and requirements for a future trip.",
+        "reference_only": "The reference covers encrypted identity documents, transfer fatigue, accessibility detours, weather exposure, meeting arrangements, and an uncle’s seating preference."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "d3dfa157-cbc6-4936-b33e-b0fe54721e5d"
+    },
+    "analysis_digest": "5cc2d038eed7239e6c1d8182172e33723dbdf51a7e951022b27d879c69f61933",
+    "key": "c7b12110d098e63661eaf03aecd7ed3c99148eec07bc907ba68bd3c7aa23bd81",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 56.52740845799781,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "c7b12110d098e63661eaf03aecd7ed3c99148eec07bc907ba68bd3c7aa23bd81",
+  "created_at": "2026-08-13T18:41:20.731701Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/06",
+  "pair_key": "6d160a045a354cf0b1620a6c696fddceec03f4c20bbb211da6bc89dd01289bb2",
+  "provider_seconds": 56.52740845799781,
+  "right": "task-3/local/personal-memory/2025/07",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

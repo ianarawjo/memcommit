@@ -1,0 +1,330 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:21:46.712314+00:00",
+      "frames": [
+        {
+          "context_digest": "4ae7659c0c6976de9bf2292f9e35962963b7931b470c2294d4f0e70b3500bff0",
+          "context_name": "task-2/advisor1/feasibility",
+          "context_uid": "52db6b06-e86a-556a-913e-30e45f7e9529",
+          "memories": [
+            {
+              "content": "Mark unverified schedule assumptions as such.",
+              "content_digest": "d4cdcdbcdb51d96f9a7435e72c2e4ef25a3e3822a765a88afafeca5194bda96e",
+              "position": 0,
+              "uid": "b150c774-27f6-5ec8-8cb9-9a00be19ce9b"
+            },
+            {
+              "content": "Mark unverified recruitment assumptions as such.",
+              "content_digest": "4cc28528fee1c7b09f709638e2b57d3bc9efe635d20500ee98567f8f59b8cf21",
+              "position": 1,
+              "uid": "6c7d14ed-67e5-56ff-befb-7648b95aa7a3"
+            },
+            {
+              "content": "Mark unverified technical assumptions as such.",
+              "content_digest": "8942e49cd46e3e9746330349df11e49d4a6c9250c7aa4c52c2d9ade1c97c735c",
+              "position": 2,
+              "uid": "00bf39b5-fe97-5fd0-b579-a5c13b5e6af7"
+            },
+            {
+              "content": "Clarify which stage of prototype fabrication or user study each requested resource is used for.",
+              "content_digest": "81ba64e23304f8fbbb3af4f2c30dfa3c517899c486e88ba211189a7911fcbd64",
+              "position": 3,
+              "uid": "3ae97c88-7537-5733-b48d-e02c9283f486"
+            },
+            {
+              "content": "Operations reviewers judge feasibility based on the personnel assigned to each procedure.",
+              "content_digest": "fe29bb7e592d116001a25ce11c603ae29f21d446925c28db692f14970d5b8134",
+              "position": 4,
+              "uid": "e2b5c1f0-97c2-5d46-af80-993d8d5606c9"
+            },
+            {
+              "content": "Operations reviewers judge feasibility based on the equipment assigned to each procedure.",
+              "content_digest": "859ab328c21506d11dd1f6d98e98d5a552446e774931a8bc13396750acf0793b",
+              "position": 5,
+              "uid": "f636b400-d3a2-5873-bf5b-c990b0f7ea42"
+            },
+            {
+              "content": "Operations reviewers judge feasibility based on the time allocated to each procedure.",
+              "content_digest": "08656886328ece4d813e36b1145805ffd3f3d4c6c855c20b1464143fb12868ab",
+              "position": 6,
+              "uid": "49385488-2315-51bc-bea0-749a1aea52f1"
+            },
+            {
+              "content": "Verify that the planned number of formative evaluation iterations is feasible within the time for prototype modification and recruitment resources.",
+              "content_digest": "9e181a14a97abd740a85679554395d7b315c07f0e4171ef276a2c31553b285c7",
+              "position": 7,
+              "uid": "f1c22a48-9d8d-5e82-9837-690d66e719db"
+            },
+            {
+              "content": "Include only the minimum functionality required to compare primary design assumptions in the scope of the formative evaluation prototype.",
+              "content_digest": "7769c2a4c03dc1c279bbf34bf0cefdcd076e3c1d8a1e56015bf20357ecfcf433",
+              "position": 8,
+              "uid": "4d69f030-0dc0-5df7-a153-0b595a3f68de"
+            },
+            {
+              "content": "The user's iterative design plan can be judged feasible only if time and personnel are allocated for modifying the prototype between iterations.",
+              "content_digest": "0339285cf9fd632814c5b5eb2b48fd46e3baf09ea95fb406f71b5d2cc804fa7e",
+              "position": 9,
+              "uid": "152f8621-f5fb-5c5e-a961-1fde77ed0bb3"
+            },
+            {
+              "content": "Delays in participant recruitment can compress the time available for prototype modification between formative evaluations.",
+              "content_digest": "9945f30dba63d2d070bad59cb2fb15b6a26d635f337949c3891b58d17c43973a",
+              "position": 10,
+              "uid": "1877a138-31f6-59a5-b666-ae57985f540d"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "156814d2-e64b-46e4-85a7-5c861be28b7c"
+        },
+        {
+          "context_digest": "3cadca09eeabe1389261c2e43133d8b304ed2cad66332f3444e686a824f10a21",
+          "context_name": "task-2/advisor2/scope",
+          "context_uid": "86efd53c-c08d-537c-983f-91a7b915640d",
+          "memories": [
+            {
+              "content": "Specify in one sentence the user population and actual usage environment to which the design knowledge applies.",
+              "content_digest": "3bb25f3252678a84fe361c9562692c27556d31b6fac53da87b763648e80ed6ac",
+              "position": 0,
+              "uid": "6cfd5026-0c04-5ed8-baac-a56e68723aa3"
+            },
+            {
+              "content": "Reviewers judge the generalization boundary of results through the specified target population and environment.",
+              "content_digest": "9119780de23a4734bc8e0ba3c39dce251611932fd86bec479b522adaf1882758",
+              "position": 1,
+              "uid": "5bc7cf05-8c47-57d4-a749-ec7d2ec45e3e"
+            },
+            {
+              "content": "Specify the workflow, technical infrastructure, and operational-authority conditions that must match before applying the design guidelines at another field site.",
+              "content_digest": "2970e43d1b52b63b6f76c3c55a5534d24508bcd32402e66098d75dbb52d8083b",
+              "position": 2,
+              "uid": "25731e2b-8535-5b37-a377-0a3a99dbe189"
+            },
+            {
+              "content": "The transferability of field design knowledge depends not only on user characteristics but also on workflow and technological–organizational infrastructure.",
+              "content_digest": "71b7cbcf151114f17886e57f026c2b2ebdd666c7aa88f95c85880a1bc96fdcd2",
+              "position": 3,
+              "uid": "d79ba448-76b6-592e-b4ba-8cfd98683755"
+            },
+            {
+              "content": "The user tends to apply results confirmed at one deployment site to all similar organizations.",
+              "content_digest": "810ee3a6b79606e7f199a30aa146f47e405ff71d1728a3bbfef16b601f5c0d5e",
+              "position": 4,
+              "uid": "cde0ee2b-af3c-5c0d-b23c-632778c93e20"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "7724f625-0b2a-4717-861d-f03b8aaf6dbb"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate review concerns: the reference focuses on formative-evaluation feasibility, resource allocation, prototype scope, and assumption labeling, while the compared frame focuses on defining and respecting the contextual boundaries of field-design knowledge. Neither frame supplies a scope-aligned counterpart to the other’s claims.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "156814d2-e64b-46e4-85a7-5c861be28b7c",
+              "memory_uid": "b150c774-27f6-5ec8-8cb9-9a00be19ce9b"
+            },
+            {
+              "frame_uid": "156814d2-e64b-46e4-85a7-5c861be28b7c",
+              "memory_uid": "6c7d14ed-67e5-56ff-befb-7648b95aa7a3"
+            },
+            {
+              "frame_uid": "156814d2-e64b-46e4-85a7-5c861be28b7c",
+              "memory_uid": "00bf39b5-fe97-5fd0-b579-a5c13b5e6af7"
+            }
+          ],
+          "reason": "These memories split one reference-only disclosure policy across three assumption domains; the compared frame contains no claim about labeling assumptions.",
+          "status": "RESOLVED",
+          "summary": "Unverified assumptions about scheduling, recruitment, and technical matters should be explicitly identified as unverified.",
+          "uid": "a79ca6ef-7752-5809-bbf8-b74151cf873f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "156814d2-e64b-46e4-85a7-5c861be28b7c",
+              "memory_uid": "3ae97c88-7537-5733-b48d-e02c9283f486"
+            }
+          ],
+          "reason": "This is independently useful reference-only guidance on explaining resource use, without a counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Requested resources should be mapped to the prototype-fabrication or user-study stage where they are needed.",
+          "uid": "d7d6dd77-d737-5527-9303-fd5e6775d7ae"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "156814d2-e64b-46e4-85a7-5c861be28b7c",
+              "memory_uid": "e2b5c1f0-97c2-5d46-af80-993d8d5606c9"
+            },
+            {
+              "frame_uid": "156814d2-e64b-46e4-85a7-5c861be28b7c",
+              "memory_uid": "f636b400-d3a2-5873-bf5b-c990b0f7ea42"
+            },
+            {
+              "frame_uid": "156814d2-e64b-46e4-85a7-5c861be28b7c",
+              "memory_uid": "49385488-2315-51bc-bea0-749a1aea52f1"
+            }
+          ],
+          "reason": "These memories split one reference-only feasibility criterion across three resource dimensions; the compared frame does not address procedure resourcing.",
+          "status": "RESOLVED",
+          "summary": "Procedure feasibility is judged from its assigned personnel, equipment, and time.",
+          "uid": "1a12e2f1-c97b-54c4-9142-f1eb9c264be1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "156814d2-e64b-46e4-85a7-5c861be28b7c",
+              "memory_uid": "f1c22a48-9d8d-5e82-9837-690d66e719db"
+            }
+          ],
+          "reason": "This reference-only claim governs iteration-count feasibility and has no scope-aligned counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The planned number of formative-evaluation iterations should be checked against modification time and recruitment resources.",
+          "uid": "88c8f4f9-ed8c-5316-ae5e-b1f8e2acfc0f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "156814d2-e64b-46e4-85a7-5c861be28b7c",
+              "memory_uid": "4d69f030-0dc0-5df7-a153-0b595a3f68de"
+            }
+          ],
+          "reason": "This is an independent reference-only prototype-scoping policy absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A formative-evaluation prototype should include only the minimum functionality needed to compare primary design assumptions.",
+          "uid": "1dc88b14-73f0-5e60-8133-3684efe9881b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "156814d2-e64b-46e4-85a7-5c861be28b7c",
+              "memory_uid": "152f8621-f5fb-5c5e-a961-1fde77ed0bb3"
+            }
+          ],
+          "reason": "This reference-only feasibility condition concerns between-iteration modification resources, which the compared frame does not address.",
+          "status": "RESOLVED",
+          "summary": "An iterative design plan is feasible only when time and personnel are allocated for prototype modification between iterations.",
+          "uid": "9ed9cecf-0156-50c4-bfc7-2154041b45ec"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "156814d2-e64b-46e4-85a7-5c861be28b7c",
+              "memory_uid": "1877a138-31f6-59a5-b666-ae57985f540d"
+            }
+          ],
+          "reason": "This reference-only schedule-risk observation is independently useful and lacks a counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Participant-recruitment delays can reduce the time available for prototype modification between formative evaluations.",
+          "uid": "f05a4ee4-2600-5f1a-8249-b3aeb02fcd84"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7724f625-0b2a-4717-861d-f03b8aaf6dbb",
+              "memory_uid": "6cfd5026-0c04-5ed8-baac-a56e68723aa3"
+            },
+            {
+              "frame_uid": "7724f625-0b2a-4717-861d-f03b8aaf6dbb",
+              "memory_uid": "5bc7cf05-8c47-57d4-a749-ec7d2ec45e3e"
+            }
+          ],
+          "reason": "These compared-only memories express complementary parts of one boundary-setting claim: specifying population and environment and explaining their review significance.",
+          "status": "RESOLVED",
+          "summary": "The applicable population and usage environment should be stated because reviewers use them to judge the generalization boundary of results.",
+          "uid": "adb3a4bf-518c-5115-aa47-6caef10cec7e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7724f625-0b2a-4717-861d-f03b8aaf6dbb",
+              "memory_uid": "25731e2b-8535-5b37-a377-0a3a99dbe189"
+            }
+          ],
+          "reason": "This is independent compared-only guidance for cross-site application and has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Applying design guidelines at another field site requires specifying which workflow, technical-infrastructure, and operational-authority conditions must match.",
+          "uid": "229fc1dc-7031-5634-b45e-600f059a6eac"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7724f625-0b2a-4717-861d-f03b8aaf6dbb",
+              "memory_uid": "d79ba448-76b6-592e-b4ba-8cfd98683755"
+            }
+          ],
+          "reason": "This compared-only claim identifies contextual determinants of transferability; the reference frame instead addresses study feasibility and resources.",
+          "status": "RESOLVED",
+          "summary": "Transferability of field-design knowledge depends on workflow and technological-organizational infrastructure as well as user characteristics.",
+          "uid": "bdb1246a-ab25-5146-9c25-e6aa5f411513"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7724f625-0b2a-4717-861d-f03b8aaf6dbb",
+              "memory_uid": "cde0ee2b-af3c-5c0d-b23c-632778c93e20"
+            }
+          ],
+          "reason": "This compared-only observation identifies a specific overgeneralization tendency not asserted or contradicted by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user tends to generalize results from one deployment site to all similar organizations.",
+          "uid": "fda722b7-7960-5db1-9ec8-02897f6a6f14"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame defines population, environment, workflow, infrastructure, and authority boundaries for generalizing field-design knowledge, and notes a tendency toward overgeneralization.",
+        "differences": "",
+        "reference_only": "The reference covers transparent assumption labeling, procedure-level resource planning, iteration feasibility, minimum prototype functionality, and recruitment-related schedule risk."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "f384782b-cd38-49cc-961f-cf237ab2a725"
+    },
+    "analysis_digest": "8f0055914a44e39ff2f8d9b63bf44f5c036f8d0e04f66994ca2c8f78b5527764",
+    "key": "f00ba65d2c96990216af3d5c7244efd8707ebf4a9753308095f34d506d5ee65a",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 31.115532625000924,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "f00ba65d2c96990216af3d5c7244efd8707ebf4a9753308095f34d506d5ee65a",
+  "created_at": "2026-08-13T18:22:17.827362Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/feasibility",
+  "pair_key": "d1bb5ec53133bcf03be049cabba5bfb63eb90149d8a77d344f174d715b275790",
+  "provider_seconds": 31.115532625000924,
+  "right": "task-2/advisor2/scope",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:53:29.019901+00:00",
+      "frames": [
+        {
+          "context_digest": "5e42fc3dcfbf5576148277f6841977ca8a5cabd4a3fc67a5581f6f6cc816c900",
+          "context_name": "task-3/local/personal-memory/2025/10",
+          "context_uid": "8130b676-dc51-5c31-b7dc-185afdf9cf07",
+          "memories": [
+            {
+              "content": "The user keeps waterproof shoes for rainy days to the left of the entrance.",
+              "content_digest": "5b9e5a20153c7865010318800d740a410faef0c13fe2278c20ce984a89b7dea5",
+              "position": 0,
+              "uid": "82c1e806-de3a-5633-8a08-175487e69fd6"
+            },
+            {
+              "content": "On a day the user walked in the rain wearing thin shoes, their socks became wet and they changed them after arrival.",
+              "content_digest": "fdbdab8c08a4b1d933ff8ac3ddedee8541ddf070e8c6e6020b6c1d14b992c621",
+              "position": 1,
+              "uid": "25df6384-836f-5f8e-bd97-73a1fb171c48"
+            },
+            {
+              "content": "On the next rainy day, the user wore waterproof shoes and their feet remained dry.",
+              "content_digest": "0e87d74fb93fe062cd12efe2f5a04fbae5ce13a60491fd9ad04c4e006acbd87f",
+              "position": 2,
+              "uid": "55abae4f-206a-586e-8b35-406d7525c0a1"
+            },
+            {
+              "content": "On a day the user walked for a long time in new shoes, their heel chafed and they shortened the route home.",
+              "content_digest": "aeb369b995cdf17ea73ae8546b454eab70f33bf6d3c67a09aee2805c1c598b6d",
+              "position": 3,
+              "uid": "c6d21ec4-6bdf-55df-b4d4-05cb531bf4bd"
+            },
+            {
+              "content": "The user wore the same shoes on two short outings before using them on a long walk.",
+              "content_digest": "0d7ed5656f35f4fe025c6ba80e4c829f5b9851c193f981de9a461f848317d60a",
+              "position": 4,
+              "uid": "a6424854-e51e-5afc-8b9f-9e2f0273f70e"
+            },
+            {
+              "content": "On a day the user dried an umbrella outside the entrance, they found it immediately before the next outing.",
+              "content_digest": "dbc2453ca5f895e2cfe7f58e5624cf4c5d6793468af3b25df7e9a4ddb7d50159",
+              "position": 5,
+              "uid": "1b436b46-3d1f-5aa2-99e3-94b7c2412bfd"
+            },
+            {
+              "content": "On a day the user put a folded wet umbrella in their bag, documents inside became wet.",
+              "content_digest": "1f63fbc8c6b491a734f0f7a4190e26aec22826c1ff839242e0ca71d933312c9c",
+              "position": 6,
+              "uid": "ccd1f422-6130-5f19-869e-681102a3a1fa"
+            },
+            {
+              "content": "When rain is forecast, the user's mother expects the user may forget an umbrella and sets out a spare at the entrance.",
+              "content_digest": "80bdfaefb6f781aa91ef7217331e75f09b4766650c2b078dfadf592b2eb27b08",
+              "position": 7,
+              "uid": "c69a8e87-2b6f-5514-ab0d-0037531592f8"
+            },
+            {
+              "content": "When proposing a long-distance walking plan, check both the weather that day and recent records of shoe discomfort.",
+              "content_digest": "f54a546d423099c3abbb65bb49e4ddf773a8191dcffbb8b3d5153dfd70553b73",
+              "position": 8,
+              "uid": "4567ea9f-1800-51ed-bfac-f4cdf674d4cf"
+            },
+            {
+              "content": "Even if the local agent knows a shoe's location, it cannot know its current condition or whether it is usable.",
+              "content_digest": "28202c222ca800a5e19dbaebea2b3c992748f530a695517cf123b10187a31bc8",
+              "position": 9,
+              "uid": "a4ff1b76-755d-530a-b24c-8655115e4fbe"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "0be05ab2-c7a5-43b2-be40-73e56002ed61"
+        },
+        {
+          "context_digest": "4b8dc68a205171fe661b04620d0fba2bbb386ff21d494699c34a74dc2ab86080",
+          "context_name": "task-3/local/personal-memory/2026/03",
+          "context_uid": "97d36150-4792-5a5c-9332-5eb1de8bcf04",
+          "memories": [
+            {
+              "content": "The user stores tax-related receipts in digital folders by year.",
+              "content_digest": "778f983547572b31798b7041899812a7b0b574d74b585baf6883e94919dee6ec",
+              "position": 0,
+              "uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393"
+            },
+            {
+              "content": "The user found three paper receipts late and recalculated the expense total already prepared.",
+              "content_digest": "542368a141ec82a1bd7da4b534d88ea62c487d16a37f454569bf6400cbc749e9",
+              "position": 1,
+              "uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878"
+            },
+            {
+              "content": "Starting the next month, the user photographed receipts on the day they were received and reduced omissions.",
+              "content_digest": "b95e0a1afa1196a9bff117bf12b1630edcc4eb65bfdfeb3128ae5937563a492e",
+              "position": 2,
+              "uid": "ff436ea5-1b3e-55df-8302-bd8a96740671"
+            },
+            {
+              "content": "The user named every file with only the photo date and spent a long time looking for a needed receipt.",
+              "content_digest": "c3aa33e0b7e007bdfc5c12dcda659e2a52938548fbf53d5a1ab034487a528857",
+              "position": 3,
+              "uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e"
+            },
+            {
+              "content": "The user later included the expense category in the filename and found the receipt immediately through search.",
+              "content_digest": "cdae97761f614b932d3b330723627bee8b0e3d033e2bf1061b721367237acee1",
+              "position": 4,
+              "uid": "89d6fa9a-b795-59df-be34-1c05a9861d35"
+            },
+            {
+              "content": "While reviewing documents just before submission, the user discovered one blank signature field.",
+              "content_digest": "a525c117b97eec82c678f276b319158703bf9cc558fb83cb81c0820d5c9e3174",
+              "position": 5,
+              "uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2"
+            },
+            {
+              "content": "Before submitting an administrative document, the user checks the signature field as the final item on the checklist.",
+              "content_digest": "542bec3cbc3fc8b22c95da274e479e96bfbf061a3b644d0d7f213de5a030dbd5",
+              "position": 6,
+              "uid": "5551622f-66cf-5542-8c47-1cddadab5c02"
+            },
+            {
+              "content": "Staff at a tax-support counter expect to receive an electronic copy in which every item is legible rather than a blurred or cropped photo.",
+              "content_digest": "d328ca248fdeecf0756e23b1202e7007bc8c3c25ae769439b0fd2efdbbe47580",
+              "position": 7,
+              "uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f"
+            },
+            {
+              "content": "The local agent can organize receipts by date and category but cannot determine whether an expense is deductible.",
+              "content_digest": "bcc769721a99b099ca20e5e527fa8904d54ecbaf9ae7d7616b95e1adaf1f89a9",
+              "position": 8,
+              "uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094"
+            },
+            {
+              "content": "The accepted scope and submission deadlines for administrative documents may vary under that year's guidance.",
+              "content_digest": "1ab61126b8efb0c2a9c6114c367018158f2e136bafa87e33f60aadb0686d0537",
+              "position": 9,
+              "uid": "de398064-3179-590b-8c62-effb17060115"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "5188812a-3580-46e8-863b-c1beb3b22a52"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover independent domains rather than shared operational claims: the reference concerns rain, footwear, umbrellas, and walking decisions, while the compared frame concerns receipt management and administrative submissions. No scope-aligned conflict or uncertain correspondence appears.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0be05ab2-c7a5-43b2-be40-73e56002ed61",
+              "memory_uid": "82c1e806-de3a-5633-8a08-175487e69fd6"
+            }
+          ],
+          "reason": "This location information is independently useful and has no substantively corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Waterproof shoes for rainy days are kept to the left of the entrance.",
+          "uid": "5743317e-b11b-5599-b7f9-b340d96f4e68"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0be05ab2-c7a5-43b2-be40-73e56002ed61",
+              "memory_uid": "25df6384-836f-5f8e-bd97-73a1fb171c48"
+            }
+          ],
+          "reason": "This rain-and-footwear experience is independently useful and has no substantively corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Walking in rain with thin shoes resulted in wet socks that needed changing.",
+          "uid": "d0eaef70-5e6e-5465-81e6-eb3885ae376d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0be05ab2-c7a5-43b2-be40-73e56002ed61",
+              "memory_uid": "55abae4f-206a-586e-8b35-406d7525c0a1"
+            }
+          ],
+          "reason": "This outcome concerning waterproof footwear is independently useful and has no substantively corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Wearing waterproof shoes on a rainy day kept the user's feet dry.",
+          "uid": "df6b4e28-4e0d-5be2-9e44-f8566922b787"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0be05ab2-c7a5-43b2-be40-73e56002ed61",
+              "memory_uid": "c6d21ec4-6bdf-55df-b4d4-05cb531bf4bd"
+            }
+          ],
+          "reason": "This shoe-discomfort episode is independently useful and has no substantively corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A long walk in new shoes caused heel chafing and led the user to shorten the return route.",
+          "uid": "a5fd57b7-7273-50a5-b601-9b3f983ca708"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0be05ab2-c7a5-43b2-be40-73e56002ed61",
+              "memory_uid": "a6424854-e51e-5afc-8b9f-9e2f0273f70e"
+            }
+          ],
+          "reason": "This prior shoe-use history is independently useful and has no substantively corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user wore the same shoes on two short outings before taking a long walk in them.",
+          "uid": "52afe4cd-8825-52b8-a220-66230dc9b742"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0be05ab2-c7a5-43b2-be40-73e56002ed61",
+              "memory_uid": "1b436b46-3d1f-5aa2-99e3-94b7c2412bfd"
+            }
+          ],
+          "reason": "This umbrella-placement experience is independently useful and has no substantively corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Drying an umbrella outside the entrance made it immediately available for the next outing.",
+          "uid": "cc65436c-29fa-52a8-a75f-52460d0b099b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0be05ab2-c7a5-43b2-be40-73e56002ed61",
+              "memory_uid": "ccd1f422-6130-5f19-869e-681102a3a1fa"
+            }
+          ],
+          "reason": "This consequence of storing a wet umbrella is independently useful and has no substantively corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Putting a folded wet umbrella in a bag caused documents inside to become wet.",
+          "uid": "1b237e25-1537-5b81-a904-57606e1f65a6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0be05ab2-c7a5-43b2-be40-73e56002ed61",
+              "memory_uid": "c69a8e87-2b6f-5514-ab0d-0037531592f8"
+            }
+          ],
+          "reason": "This household rain-preparation behavior is independently useful and has no substantively corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "When rain is forecast, the user's mother anticipates possible forgetfulness and places a spare umbrella at the entrance.",
+          "uid": "7f9f732a-b79d-575d-8088-304f7d0f31cc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0be05ab2-c7a5-43b2-be40-73e56002ed61",
+              "memory_uid": "4567ea9f-1800-51ed-bfac-f4cdf674d4cf"
+            }
+          ],
+          "reason": "This walking-planning rule is independently useful and has no substantively corresponding policy in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Long-distance walking proposals should account for both that day's weather and recent shoe-discomfort records.",
+          "uid": "e6e8a06d-7755-546c-a28a-1fcce0cca605"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0be05ab2-c7a5-43b2-be40-73e56002ed61",
+              "memory_uid": "a4ff1b76-755d-530a-b24c-8655115e4fbe"
+            }
+          ],
+          "reason": "This limitation on assessing footwear is independently useful and is not the same operational limitation as the compared frame's deductibility constraint.",
+          "status": "RESOLVED",
+          "summary": "Knowing where a shoe is does not let the local agent determine its current condition or usability.",
+          "uid": "84781953-9d67-5735-b4f9-0bde6cb70be5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5188812a-3580-46e8-863b-c1beb3b22a52",
+              "memory_uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393"
+            }
+          ],
+          "reason": "This receipt-filing practice is independently useful and has no substantively corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Tax-related receipts are stored in digital folders organized by year.",
+          "uid": "3f2d27c1-6fe4-51e1-8c99-c4fd218e6368"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5188812a-3580-46e8-863b-c1beb3b22a52",
+              "memory_uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878"
+            }
+          ],
+          "reason": "This consequence of omitted receipts is independently useful and has no substantively corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Finding three paper receipts late forced the user to recalculate an already prepared expense total.",
+          "uid": "c9e920c8-9086-57bc-b8dc-eb30a5d1c40a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5188812a-3580-46e8-863b-c1beb3b22a52",
+              "memory_uid": "ff436ea5-1b3e-55df-8302-bd8a96740671"
+            }
+          ],
+          "reason": "This receipt-capture improvement is independently useful and has no substantively corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Photographing receipts on the day they were received reduced omissions.",
+          "uid": "82150668-5b17-5a2d-96e6-54db2081b986"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5188812a-3580-46e8-863b-c1beb3b22a52",
+              "memory_uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e"
+            }
+          ],
+          "reason": "This file-naming and retrieval problem is independently useful and has no substantively corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Using only the photo date in receipt filenames made a needed receipt slow to find.",
+          "uid": "b32acb07-d33f-51b1-8a91-41a004b720ff"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5188812a-3580-46e8-863b-c1beb3b22a52",
+              "memory_uid": "89d6fa9a-b795-59df-be34-1c05a9861d35"
+            }
+          ],
+          "reason": "This file-naming improvement is independently useful and has no substantively corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Adding the expense category to filenames enabled immediate receipt retrieval through search.",
+          "uid": "c99e00e8-f2e4-51c2-b470-b6e39a6f7d35"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5188812a-3580-46e8-863b-c1beb3b22a52",
+              "memory_uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2"
+            }
+          ],
+          "reason": "This pre-submission discovery is independently useful and has no substantively corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A document review shortly before submission revealed a blank signature field.",
+          "uid": "e27f32ce-03dc-56f4-8766-cab7506ce0c7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5188812a-3580-46e8-863b-c1beb3b22a52",
+              "memory_uid": "5551622f-66cf-5542-8c47-1cddadab5c02"
+            }
+          ],
+          "reason": "This submission-check policy is independently useful and has no substantively corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The signature field is checked as the final checklist item before an administrative document is submitted.",
+          "uid": "5054190a-8509-5174-9f9a-49316752f2a1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5188812a-3580-46e8-863b-c1beb3b22a52",
+              "memory_uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f"
+            }
+          ],
+          "reason": "This document-quality expectation is independently useful and has no substantively corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Tax-support staff expect an electronic copy in which every item is legible rather than blurred or cropped.",
+          "uid": "1b82aadf-778d-5a59-8ec9-eddf6a7fe357"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5188812a-3580-46e8-863b-c1beb3b22a52",
+              "memory_uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094"
+            }
+          ],
+          "reason": "This limitation on tax judgment is independently useful and is not the same operational limitation as the reference frame's footwear-usability constraint.",
+          "status": "RESOLVED",
+          "summary": "The local agent can organize receipts by date and category but cannot determine whether an expense is deductible.",
+          "uid": "19fc377d-12b0-51f6-bf71-50fa5fadae4b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5188812a-3580-46e8-863b-c1beb3b22a52",
+              "memory_uid": "de398064-3179-590b-8c62-effb17060115"
+            }
+          ],
+          "reason": "This year-dependent compliance qualification is independently useful and has no substantively corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Accepted administrative-document scope and submission deadlines may vary with that year's guidance.",
+          "uid": "3e70d070-a402-587d-b508-e3035e005191"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame records receipt capture, filing and retrieval practices, submission checks and quality expectations, agent limits on deductibility, and year-dependent requirements.",
+        "differences": "",
+        "reference_only": "The reference records rain preparation, footwear and umbrella experiences, walking-plan checks, household support, and limits on knowing shoe usability."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "865ecf26-c3a5-495e-9043-19107c977c52"
+    },
+    "analysis_digest": "90f18d90e035ed05a91ce9c929efe40deb2ec1b2abe4b2784c417baacb13f9ab",
+    "key": "5a415d1d5e27010afbcbbbedeaedc3422c057056f35a00a43dea3dc10c859864",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 44.36572391699883,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "5a415d1d5e27010afbcbbbedeaedc3422c057056f35a00a43dea3dc10c859864",
+  "created_at": "2026-08-13T18:54:13.385223Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/10",
+  "pair_key": "27c3876be97f4e1e7f77a721e789f30ba16952e6d3b7fc01c7f53e3919bc31c5",
+  "provider_seconds": 44.36572391699883,
+  "right": "task-3/local/personal-memory/2026/03",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

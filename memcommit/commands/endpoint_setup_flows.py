@@ -23,7 +23,7 @@ from memcommit.commands.session_endpoint_setup import (
     EndpointSetupDraft,
     choose_session_endpoints,
 )
-from memcommit.commands.context_picker import context_memory_rows
+from memcommit.context_targeting.tui.picker import context_memory_rows
 from memcommit.context import Memory
 from memcommit.source_projection.model import SourceDisplayFacts
 from memcommit.store import MemoryStore

@@ -1,0 +1,388 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:48:54.482189+00:00",
+      "frames": [
+        {
+          "context_digest": "e56d4062f59b72f23e5414f759cd9f2b09c659d820a29a979fe2edb8bfc3e7a4",
+          "context_name": "task-3/local/personal-memory/2025/01",
+          "context_uid": "2ce7ce06-145c-50c7-bfb4-cb175b9a5255",
+          "memories": [
+            {
+              "content": "One of the user's identity documents needs renewal in the second half of 2025.",
+              "content_digest": "0ade63adc8aedc4dbc0003f2cbc2759010c8bf2645a95fedd3db28b7cfbe0daa",
+              "position": 0,
+              "uid": "50911f7e-75a1-5099-99f1-e471bb8e6cb6"
+            },
+            {
+              "content": "The user postponed an application until the next day after spending time looking for document photos in scattered folders.",
+              "content_digest": "fa1703848374c3364cf49be01e115e08897e16a4ccda3c9edef1212189159ce6",
+              "position": 1,
+              "uid": "d5bd9f79-7295-5014-9668-83b7cffc78e2"
+            },
+            {
+              "content": "After gathering the necessary copies in one folder, the user completed the renewal form in one sitting.",
+              "content_digest": "133721b244e02fce2fe24312b703e59225c023d65bea31bf65decb36a18b4ba5",
+              "position": 2,
+              "uid": "5f92f6a3-1739-580c-bd63-1a936098ccd0"
+            },
+            {
+              "content": "The user entered an abbreviated name on an official form and then discovered that it differed from the supporting document.",
+              "content_digest": "d32485dcfd1311d0739bf9887a330f25bf9b3f47f077c56ec7cdb667bde20a55",
+              "position": 3,
+              "uid": "929107ac-c62d-5920-9f71-12d4c9a102e9"
+            },
+            {
+              "content": "On the next application, after comparing the name with the source document, the user did not receive a correction request.",
+              "content_digest": "e6aa9e63c72f762c00824787c3b971f2cdf76a343c336f329e5b28b0f164d02d",
+              "position": 4,
+              "uid": "df8b90c2-4310-5e89-b979-508309bf6b04"
+            },
+            {
+              "content": "The user put only the submission deadline in the calendar and missed the application deadline by one day because they did not check the issuance period.",
+              "content_digest": "995703686975cdd718d999557d4b5ca13a95c3c1eabfbb73808bb5150eda824b",
+              "position": 5,
+              "uid": "306b9df1-d713-5413-b448-e2b42376d827"
+            },
+            {
+              "content": "On the next application, the user recorded the expected issuance date separately in the calendar.",
+              "content_digest": "b83c9061bf30d64e48b74959513fd37e7ab043446dae7e4fd284102a249a1240",
+              "position": 6,
+              "uid": "870b57b5-4cdb-54fc-b17f-8ffb86dad802"
+            },
+            {
+              "content": "Staff at a public-service counter expect a person requesting identity verification to bring an original as well as a copy.",
+              "content_digest": "eae3721b7f1d905172c169c5a483d2af74aa40bced23d1bbcb8d571ab27df706",
+              "position": 7,
+              "uid": "a0fe456c-0794-5bce-8ef9-9558e9833471"
+            },
+            {
+              "content": "When planning an official application, put both the submission deadline and expected issuance date in the calendar and verify them.",
+              "content_digest": "c5b37d86ef85d5023b60578e7f5f6af1bc49711e32ecc0255bc826a743dce0e1",
+              "position": 8,
+              "uid": "111972b9-e05f-5e1b-b121-ef9e51572d1d"
+            },
+            {
+              "content": "The local agent cannot determine the current validity of an identity document without its expiration date.",
+              "content_digest": "ebc9f4fe21d4ad7e53681d32ded2c049c7d4bf57e24ef71213a5ebdbaaaee521",
+              "position": 9,
+              "uid": "c9872898-ec4f-576e-b154-ff6fda581a1a"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "ec0946b3-0b83-4f21-a6d8-e584b941c031"
+        },
+        {
+          "context_digest": "d28031209c5edc768a592166e26351dd5bce0c7568d379fcaceab173450041c8",
+          "context_name": "task-3/local/personal-memory/2026/02",
+          "context_uid": "7ffcbc10-1703-54b0-9545-99742b51d333",
+          "memories": [
+            {
+              "content": "The user keeps basic repair tools in a box beneath the sink.",
+              "content_digest": "c2a23bace63735c502081b19682a8ceb3e37156b9aadd6f7739e2005c20469d6",
+              "position": 0,
+              "uid": "7d3daf76-a21e-5117-a534-6175ab2d2861"
+            },
+            {
+              "content": "On a day the faucet leaked, the user placed only a towel beneath it, and the floor became wet as well.",
+              "content_digest": "ad6baa7e1848e4e61bdaf22bc5c8665122330b5c70c8ae192216abbba17c6134",
+              "position": 1,
+              "uid": "70a6d9f5-180f-5174-b247-690e10baa23e"
+            },
+            {
+              "content": "After sending a photo to building management, the user finalized the time for a repair visit.",
+              "content_digest": "82b36c7a95e51a0dfa32768c2a437d509b75c0f93bc51a99a636f2c9739a20da",
+              "position": 2,
+              "uid": "9fcd922c-147c-517b-82b3-180fdfb13f33"
+            },
+            {
+              "content": "Before the technician's visit, the user emptied the area beneath the sink so work could begin immediately.",
+              "content_digest": "dbc3b48e5bc4b406dc17067dd93d92e845e3706f47c8706f9a5d5ef17bf64617",
+              "position": 3,
+              "uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5"
+            },
+            {
+              "content": "On a day the user wrote the visit time only in the calendar and turned off the reminder, they heard the doorbell late.",
+              "content_digest": "95fab6bcab815dd8bdd5fecb867f84c6d2f1a901771603b1dbf197cde3c1d19d",
+              "position": 4,
+              "uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65"
+            },
+            {
+              "content": "For the next visit, the user enabled a reminder 30 minutes beforehand and answered immediately at the entrance.",
+              "content_digest": "818783ff21b2d369935b9994c17b28f93f84ea7558dab9f2de20d0aad21f86a3",
+              "position": 5,
+              "uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a"
+            },
+            {
+              "content": "After the repair, the user called their maternal aunt to confirm that the spare key entrusted to her was still there.",
+              "content_digest": "ac01b9816dda2d6bf16f22b41157120b7ffdd75d19638f6313a88e1ce6e7a1f1",
+              "position": 6,
+              "uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441"
+            },
+            {
+              "content": "The user's maternal aunt considers it unsafe to hand the spare key to a repair technician without the user's explicit request.",
+              "content_digest": "f7c7c0306c81cc6de9f02aa1aed7d411db3f29757d024e7d5a1679b1ff308948",
+              "position": 7,
+              "uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd"
+            },
+            {
+              "content": "Obtain the user's reconfirmation before scheduling an external worker to enter the residential unit.",
+              "content_digest": "34382e40f4907bea82728787fdeb150e299d46a0079ae2847d4eda6d6d892d22",
+              "position": 8,
+              "uid": "4716a67b-8602-564c-9e89-85cd4ee158f9"
+            },
+            {
+              "content": "A multi-unit residential building's repair schedule may change because of emergency work or parts availability.",
+              "content_digest": "d701fdd1ffbf17ff0890c583b5bf39849e3c6e3cc296fde7e00d3d1ecc0ef196",
+              "position": 9,
+              "uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "5ada3233-419e-4415-a583-a7893e46f0fe"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames mostly preserve independent guidance about identity-document applications and residential repairs. Their only direct semantic overlap is calendar planning, where explicit contexts support different safeguards: tracking application milestones versus enabling an advance reminder for a repair visit. No claims conflict or remain unclear.",
+      "relations": [
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "ec0946b3-0b83-4f21-a6d8-e584b941c031",
+              "memory_uid": "306b9df1-d713-5413-b448-e2b42376d827"
+            },
+            {
+              "frame_uid": "ec0946b3-0b83-4f21-a6d8-e584b941c031",
+              "memory_uid": "870b57b5-4cdb-54fc-b17f-8ffb86dad802"
+            },
+            {
+              "frame_uid": "ec0946b3-0b83-4f21-a6d8-e584b941c031",
+              "memory_uid": "111972b9-e05f-5e1b-b121-ef9e51572d1d"
+            },
+            {
+              "frame_uid": "5ada3233-419e-4415-a583-a7893e46f0fe",
+              "memory_uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65"
+            },
+            {
+              "frame_uid": "5ada3233-419e-4415-a583-a7893e46f0fe",
+              "memory_uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a"
+            }
+          ],
+          "reason": "Official applications call for separately tracking and verifying submission and issuance dates, whereas technician visits call for an advance reminder so the user is ready to answer.",
+          "status": "RESOLVED",
+          "summary": "Calendar safeguards differ explicitly between official applications and residential repair visits.",
+          "uid": "7f05d838-11b7-5522-b2a8-b32cfc7645f9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ec0946b3-0b83-4f21-a6d8-e584b941c031",
+              "memory_uid": "50911f7e-75a1-5099-99f1-e471bb8e6cb6"
+            }
+          ],
+          "reason": "Only the reference supplies this document-specific renewal window.",
+          "status": "RESOLVED",
+          "summary": "An identity document requires renewal during the latter half of 2025.",
+          "uid": "7f5fa7e9-0622-5978-8c49-bf6662637b23"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ec0946b3-0b83-4f21-a6d8-e584b941c031",
+              "memory_uid": "d5bd9f79-7295-5014-9668-83b7cffc78e2"
+            },
+            {
+              "frame_uid": "ec0946b3-0b83-4f21-a6d8-e584b941c031",
+              "memory_uid": "5f92f6a3-1739-580c-bd63-1a936098ccd0"
+            }
+          ],
+          "reason": "The reference describes both the delay caused by scattered document photos and the smoother completion after gathering the copies together.",
+          "status": "RESOLVED",
+          "summary": "Consolidating required application materials prevents search-related delay and supports completing the form in one sitting.",
+          "uid": "c2c9db16-3af7-58af-86a2-d2d70cea2701"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ec0946b3-0b83-4f21-a6d8-e584b941c031",
+              "memory_uid": "929107ac-c62d-5920-9f71-12d4c9a102e9"
+            },
+            {
+              "frame_uid": "ec0946b3-0b83-4f21-a6d8-e584b941c031",
+              "memory_uid": "df8b90c2-4310-5e89-b979-508309bf6b04"
+            }
+          ],
+          "reason": "The reference supplies the initial mismatch and the successful outcome after checking the source document on a later application.",
+          "status": "RESOLVED",
+          "summary": "Comparing the entered name with the supporting document avoids correction requests caused by abbreviation mismatches.",
+          "uid": "f7ee26a2-2c97-5b44-87d9-b04ddf4296ac"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ec0946b3-0b83-4f21-a6d8-e584b941c031",
+              "memory_uid": "a0fe456c-0794-5bce-8ef9-9558e9833471"
+            }
+          ],
+          "reason": "Only the reference states this counter-service expectation.",
+          "status": "RESOLVED",
+          "summary": "A public-service identity-verification request is expected to include both an original document and a copy.",
+          "uid": "c3e9ab99-1948-5696-934b-95f4170e760f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ec0946b3-0b83-4f21-a6d8-e584b941c031",
+              "memory_uid": "c9872898-ec4f-576e-b154-ff6fda581a1a"
+            }
+          ],
+          "reason": "Only the reference identifies this information limitation.",
+          "status": "RESOLVED",
+          "summary": "Current document validity cannot be determined locally without the expiration date.",
+          "uid": "0ca89f63-8e2d-5ead-b2c3-f2e5f13bf047"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5ada3233-419e-4415-a583-a7893e46f0fe",
+              "memory_uid": "7d3daf76-a21e-5117-a534-6175ab2d2861"
+            }
+          ],
+          "reason": "Only the compared frame records this storage location.",
+          "status": "RESOLVED",
+          "summary": "Basic repair tools are stored in a box beneath the sink.",
+          "uid": "1019dfd9-534f-5908-a16c-cd8887d9c51c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5ada3233-419e-4415-a583-a7893e46f0fe",
+              "memory_uid": "70a6d9f5-180f-5174-b247-690e10baa23e"
+            }
+          ],
+          "reason": "Only the compared frame describes this inadequate containment attempt and its consequence.",
+          "status": "RESOLVED",
+          "summary": "Using only a towel beneath a leaking faucet failed to keep the floor dry.",
+          "uid": "483ae4ad-b3f1-5f84-9ddf-c0cd834d4a7e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5ada3233-419e-4415-a583-a7893e46f0fe",
+              "memory_uid": "9fcd922c-147c-517b-82b3-180fdfb13f33"
+            }
+          ],
+          "reason": "Only the compared frame describes this step in arranging the repair.",
+          "status": "RESOLVED",
+          "summary": "Sending a photo to building management enabled the repair-visit time to be finalized.",
+          "uid": "39d5d8fc-ca6f-522b-af7f-82ecfd32e4b8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5ada3233-419e-4415-a583-a7893e46f0fe",
+              "memory_uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5"
+            }
+          ],
+          "reason": "Only the compared frame records this preparation and its operational benefit.",
+          "status": "RESOLVED",
+          "summary": "Clearing the area beneath the sink before the technician arrived allowed work to begin immediately.",
+          "uid": "b20d9530-9cda-586b-896e-6a78434b6b9a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5ada3233-419e-4415-a583-a7893e46f0fe",
+              "memory_uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441"
+            }
+          ],
+          "reason": "Only the compared frame records this post-repair custody check.",
+          "status": "RESOLVED",
+          "summary": "The user confirmed after the repair that the maternal aunt still held the entrusted spare key.",
+          "uid": "25b02b69-da89-54ae-9423-68a5d60153bb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5ada3233-419e-4415-a583-a7893e46f0fe",
+              "memory_uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd"
+            },
+            {
+              "frame_uid": "5ada3233-419e-4415-a583-a7893e46f0fe",
+              "memory_uid": "4716a67b-8602-564c-9e89-85cd4ee158f9"
+            }
+          ],
+          "reason": "The compared frame expresses the same underlying access-control requirement through the aunt's spare-key handoff rule and the instruction to reconfirm before scheduling entry.",
+          "status": "RESOLVED",
+          "summary": "Residential repair access requires explicit user confirmation before a third party enables or schedules worker entry.",
+          "uid": "3778e6bd-0c9c-57d0-bbf3-955f89ea3173"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5ada3233-419e-4415-a583-a7893e46f0fe",
+              "memory_uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+            }
+          ],
+          "reason": "Only the compared frame identifies these causes of schedule uncertainty.",
+          "status": "RESOLVED",
+          "summary": "Repair schedules in multi-unit buildings may change because of emergency work or parts availability.",
+          "uid": "e9b82278-2179-5ec9-8cf4-790811fd5782"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers repair-tool storage, leak containment, arranging and preparing for repairs, confirming spare-key custody, requiring authorization for worker access, and possible repair-schedule changes.",
+        "differences": "Calendar safeguards vary by context: official applications require tracking submission and issuance dates, while repair visits call for an advance reminder.",
+        "reference_only": "The reference covers renewal timing, organizing application materials, matching names to supporting documents, bringing originals and copies, and the expiration-date information needed to assess validity."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "91766254-0a7a-4941-9601-ade614308b98"
+    },
+    "analysis_digest": "98e46df82538167959ec032f6dbfac57d9c5a4bd7214915a2a5b8c9bb4984d86",
+    "key": "d8ac2f294a14e4af786e7c701fc6209870581958985aa7cbbbe65acad263283a",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 63.5768247920023,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "d8ac2f294a14e4af786e7c701fc6209870581958985aa7cbbbe65acad263283a",
+  "created_at": "2026-08-13T18:49:58.058560Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/01",
+  "pair_key": "c7da44a9ab46810ec50c52b5c3f37a86fd9482960b25445ce95ab674f311f7cc",
+  "provider_seconds": 63.5768247920023,
+  "right": "task-3/local/personal-memory/2026/02",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

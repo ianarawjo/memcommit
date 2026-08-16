@@ -1,0 +1,381 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:26:10.694849+00:00",
+      "frames": [
+        {
+          "context_digest": "d2c716d52357c4200adc8772d5823715ffd736eb766028c1c62bbb32852bc344",
+          "context_name": "task-2/advisor1/scope",
+          "context_uid": "6db29abe-5784-5eec-acaa-060bac0e11f1",
+          "memories": [
+            {
+              "content": "Define in one sentence the user groups and usage contexts to which the design knowledge does not apply.",
+              "content_digest": "3193ffe501a06d6148b39c333853b42bc0278b2ab3c3df88162b049548ff16bb",
+              "position": 0,
+              "uid": "e594a6ab-81e9-5e5f-8ef5-e6bb8f3760d7"
+            },
+            {
+              "content": "Reviewers judge the generalization boundary of results through explicitly excluded targets and situations.",
+              "content_digest": "a929649a7bd07f29f31a8cd1969a3c160ba5f61c0def76e204443c30234f84b0",
+              "position": 1,
+              "uid": "31cdacff-7c49-547d-9f97-598a07b67fb6"
+            },
+            {
+              "content": "Specify user goals, interaction conditions, and technological constraints under which the proposed design knowledge can be transferred.",
+              "content_digest": "6ae1bfaeadb1863db1997685527706d210a379a376a24d3de1168e952f847627",
+              "position": 2,
+              "uid": "1459d986-4dc9-51f3-bf13-dbb0b07045c8"
+            },
+            {
+              "content": "Small-scale formative studies can support analytic generalization distinct from statistical representativeness when results are expressed in terms of design conditions and mechanisms.",
+              "content_digest": "1963572a303acbf383890b7d97b52349f572df761e89ea3fd5116058cd2e1cea",
+              "position": 3,
+              "uid": "1db5fcd6-f93c-5630-9810-053c10b5ceba"
+            },
+            {
+              "content": "The author of this proposal tends to apply design knowledge derived from an accessible sample to a broader user population.",
+              "content_digest": "df2a7f1284c1994c6dec49eb7995acd1ed341a9e6b8f4b06c854d85fa9d77d6c",
+              "position": 4,
+              "uid": "fd29c315-521f-53c0-add5-c668ec318a43"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "0b2b1a25-c284-47bd-b2a9-b628b1ab85fe"
+        },
+        {
+          "context_digest": "19032e7fed99072de4fcaeff084874da452865e9958a1301ec01260d60e01867",
+          "context_name": "task-2/advisor2/structure",
+          "context_uid": "09c95ce6-baa2-5823-a035-e4b0d323200b",
+          "memories": [
+            {
+              "content": "Allow the problem framing to extend through a third sentence when a concrete person, setting, or use situation is needed to make the issue understandable.",
+              "content_digest": "c027c1b4290ff04fe84e475af5aae8fa9e90dd839903b9fe772892e8b6b80323",
+              "position": 0,
+              "uid": "e32f543b-1637-572a-ab96-319d74ee7e21"
+            },
+            {
+              "content": "Use the third sentence for the specific setting and consequence rather than compressing them into an abstract two-sentence summary.",
+              "content_digest": "f02d2bd7ea21e7ebbaff85d3e77c77689dadead77276a3d472d2ad59f94ec5ff",
+              "position": 1,
+              "uid": "6bbb0f69-ca99-539a-a810-a0fb34fe9cc3"
+            },
+            {
+              "content": "Explicitly specify the users, operational stakeholders, and actual usage environment in the primary HCI research question.",
+              "content_digest": "3ab83046fede9de55435f98324226f435bcc4932d2a7440ef61fc21c2e0d71f3",
+              "position": 2,
+              "uid": "48e887dc-7fc8-5a23-9999-890acb870251"
+            },
+            {
+              "content": "Provide one compact visual summary when proposing an unfamiliar interaction procedure.",
+              "content_digest": "1e4299abe1691fbbfc826fc59d4276831d9a49abd3588820ba2f50311fd56d2c",
+              "position": 3,
+              "uid": "e34bce0c-7d07-5fe6-b03f-39faa801640b"
+            },
+            {
+              "content": "Mark the conditions that move an unfamiliar interaction procedure from one step to the next in its visual summary.",
+              "content_digest": "9e7d7547cac76b4b6665ea585fedd7678682c7f9a4eadf129202ac2ea2c6b2b8",
+              "position": 4,
+              "uid": "68ad56f9-6ca2-587a-9182-fd98a79d3d5c"
+            },
+            {
+              "content": "Present the master’s research schedule as phase-specific milestones for field understanding, system implementation, user study, and analysis.",
+              "content_digest": "035713de4f5d6577859b2602ae32a7561594bcbeca023049d4b0e2d4c930d94a",
+              "position": 5,
+              "uid": "eca301ff-9feb-502d-b955-055c48342542"
+            },
+            {
+              "content": "Link deliverables that determine entry into the next phase to each milestone of the master’s research.",
+              "content_digest": "dff2c02b66c97696644d04ee7e685c706443257101e7ee34182dcc5021aa8525",
+              "position": 6,
+              "uid": "cbd977cd-1b78-5ca6-823a-7a5b4b92d77a"
+            },
+            {
+              "content": "Directly connect the gap in the actual usage context with the proposed design and operational contributions in a single flow.",
+              "content_digest": "8da57ff6f210ec4a38d82a2550f96a6b30ba59b7f63f3f3c08e9dcec10dce381",
+              "position": 7,
+              "uid": "9283aedb-6818-5c99-8fe0-502b488acb66"
+            },
+            {
+              "content": "Avoid extra subheadings in a two-page proposal; use paragraph transitions to preserve one continuous argument from problem to proposed response and next steps.",
+              "content_digest": "f6dabe3ee8aba7aa81d707519ffc7d3839f3a74ddcd97fa61d14396e1581f69c",
+              "position": 8,
+              "uid": "c5c04ab1-10e8-52a3-98a1-aa9cbede57c1"
+            },
+            {
+              "content": "Begin each paragraph by connecting it to the previous claim so the short proposal reads as an argument rather than a stack of labeled fragments.",
+              "content_digest": "37d855da87b3b3437e6cc7d865a02d1852b7f7a01c3d7855b0584e399d086619",
+              "position": 9,
+              "uid": "87203bcf-6724-543a-ad19-60a2becc4598"
+            },
+            {
+              "content": "Place preliminary results from field observations or technical validations near sentences supporting feasibility claims.",
+              "content_digest": "8cb8b48f7f57c3248d28f4b82181c9ddbac16acb7b67435abdfb761233b3aecb",
+              "position": 10,
+              "uid": "c9591180-6f3a-5909-8695-31704b9b6f01"
+            },
+            {
+              "content": "Readers may misinterpret a compressed opening when the person, setting, or consequence is only implied.",
+              "content_digest": "2eb34b31c7da38508d152ae4d47ddb8b08479a2e28fbdb4a50c72e7f1999bbf2",
+              "position": 11,
+              "uid": "0ac685f9-e338-5549-bf91-32078cf36f15"
+            },
+            {
+              "content": "A two-sentence opening can become so general that readers understand the topic but cannot picture the situation the proposal intends to change.",
+              "content_digest": "21625e7040d1007bf6931fc1e3551dbbd46739ad339773d51cd00d9f21abf96e",
+              "position": 12,
+              "uid": "5567fb3c-de90-5363-af1b-62fb5b8e0bb1"
+            },
+            {
+              "content": "Use paragraph transitions instead of extra headings when the repeated labels would consume space needed for the argument itself.",
+              "content_digest": "50620b1c5db672532aea9ce8c9bfc11688a5b83bf5436bfc9a308a08fc719286",
+              "position": 13,
+              "uid": "32cef408-4c66-5ef2-9a59-eea6fc67b16e"
+            },
+            {
+              "content": "End each paragraph with the question or consequence that the next paragraph answers.",
+              "content_digest": "3d3639057c446bbd3d2bef5393bce0219451ba3c718d655c62dc51b1ea2df86f",
+              "position": 14,
+              "uid": "3579fcc0-c74e-5006-901b-6406a3106fa1"
+            },
+            {
+              "content": "A continuous sequence of problem, consequence, response, and next step makes the relationship among claims audible without repeating section labels.",
+              "content_digest": "8e1d12ba37953236e2f51510ac3e0382b75b43ff911190216550f82c5679eadf",
+              "position": 15,
+              "uid": "2c2aa1af-c450-5c8d-a907-042c5757d3ee"
+            },
+            {
+              "content": "Readers may experience very short headed sections as an outline because each new label interrupts the connection to the previous paragraph.",
+              "content_digest": "c355e847db92d4c27343283e9415debff2fbdb4b2b2c505d4e442dc78251578d",
+              "position": 16,
+              "uid": "1fb62d5b-532b-5664-842c-57622e3c8b9d"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "65c4f131-23fc-4059-a886-fcfed91b448c"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "Both frames favor explicit population and usage-context framing. The reference additionally defines generalization boundaries and cautions against overextension, while the compared frame concentrates on concise proposal storytelling, procedural visuals, milestone gates, contextualized openings, and locally placed feasibility evidence.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "0b2b1a25-c284-47bd-b2a9-b628b1ab85fe",
+              "memory_uid": "1459d986-4dc9-51f3-bf13-dbb0b07045c8"
+            },
+            {
+              "frame_uid": "65c4f131-23fc-4059-a886-fcfed91b448c",
+              "memory_uid": "48e887dc-7fc8-5a23-9999-890acb870251"
+            }
+          ],
+          "reason": "The claims reinforce explicit contextual scope, while one defines transfer conditions and the other specifies constituents of the primary research question.",
+          "status": "RESOLVED",
+          "summary": "Research framing should explicitly identify the users and usage conditions relevant to the knowledge or question.",
+          "uid": "7f8000a0-4cda-5eee-9037-bd7d9af34d3b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0b2b1a25-c284-47bd-b2a9-b628b1ab85fe",
+              "memory_uid": "e594a6ab-81e9-5e5f-8ef5-e6bb8f3760d7"
+            },
+            {
+              "frame_uid": "0b2b1a25-c284-47bd-b2a9-b628b1ab85fe",
+              "memory_uid": "31cdacff-7c49-547d-9f97-598a07b67fb6"
+            }
+          ],
+          "reason": "These reference-side claims express one underlying requirement and its reviewer-facing purpose, with no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "Explicitly excluded users and situations define the boundary for judging generalization.",
+          "uid": "95c6a0ba-6a5b-582a-9255-5389ffd4c1c6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0b2b1a25-c284-47bd-b2a9-b628b1ab85fe",
+              "memory_uid": "1db5fcd6-f93c-5630-9810-053c10b5ceba"
+            }
+          ],
+          "reason": "This reference-side principle distinguishes analytic transfer from statistical representativeness and is independently useful.",
+          "status": "RESOLVED",
+          "summary": "Small formative studies can support analytic generalization when findings state design conditions and mechanisms.",
+          "uid": "273a2853-1137-5b49-afc1-50bb04a5d308"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0b2b1a25-c284-47bd-b2a9-b628b1ab85fe",
+              "memory_uid": "fd29c315-521f-53c0-add5-c668ec318a43"
+            }
+          ],
+          "reason": "This reference-side observation identifies a specific overgeneralization tendency not stated in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to extend design knowledge from an accessible sample to a broader population.",
+          "uid": "d76803fe-4b08-5837-b6bd-768bd8997e7e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "65c4f131-23fc-4059-a886-fcfed91b448c",
+              "memory_uid": "e32f543b-1637-572a-ab96-319d74ee7e21"
+            },
+            {
+              "frame_uid": "65c4f131-23fc-4059-a886-fcfed91b448c",
+              "memory_uid": "6bbb0f69-ca99-539a-a810-a0fb34fe9cc3"
+            },
+            {
+              "frame_uid": "65c4f131-23fc-4059-a886-fcfed91b448c",
+              "memory_uid": "0ac685f9-e338-5549-bf91-32078cf36f15"
+            },
+            {
+              "frame_uid": "65c4f131-23fc-4059-a886-fcfed91b448c",
+              "memory_uid": "5567fb3c-de90-5363-af1b-62fb5b8e0bb1"
+            }
+          ],
+          "reason": "These compared-side claims state one opening-framing policy together with the reader-comprehension problem motivating it.",
+          "status": "RESOLVED",
+          "summary": "A third opening sentence should concretize the person, setting, or consequence when compression would leave the intended situation unclear.",
+          "uid": "60491711-324a-5f21-b6a9-470b833991cb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "65c4f131-23fc-4059-a886-fcfed91b448c",
+              "memory_uid": "e34bce0c-7d07-5fe6-b03f-39faa801640b"
+            },
+            {
+              "frame_uid": "65c4f131-23fc-4059-a886-fcfed91b448c",
+              "memory_uid": "68ad56f9-6ca2-587a-9182-fd98a79d3d5c"
+            }
+          ],
+          "reason": "These compared-side claims split one visualization requirement into the summary itself and its transition annotations.",
+          "status": "RESOLVED",
+          "summary": "An unfamiliar interaction procedure should have a compact visual summary that marks conditions for moving between steps.",
+          "uid": "0010b3da-f7e4-5a2b-ab30-581ed2c55ac4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "65c4f131-23fc-4059-a886-fcfed91b448c",
+              "memory_uid": "eca301ff-9feb-502d-b955-055c48342542"
+            },
+            {
+              "frame_uid": "65c4f131-23fc-4059-a886-fcfed91b448c",
+              "memory_uid": "cbd977cd-1b78-5ca6-823a-7a5b4b92d77a"
+            }
+          ],
+          "reason": "These compared-side claims jointly define a gated milestone structure spanning the master's research phases.",
+          "status": "RESOLVED",
+          "summary": "The research schedule should use phase-specific milestones with deliverables that govern entry into subsequent phases.",
+          "uid": "cc570ef6-7b95-5451-9e51-eec411ca576b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "65c4f131-23fc-4059-a886-fcfed91b448c",
+              "memory_uid": "9283aedb-6818-5c99-8fe0-502b488acb66"
+            }
+          ],
+          "reason": "This compared-side claim supplies an independently useful linkage between the problem context and contributions.",
+          "status": "RESOLVED",
+          "summary": "The actual-context gap should connect directly to the proposed design and operational contributions in one flow.",
+          "uid": "f6aeb9ef-509d-5f11-bfdf-56ffbac35951"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "65c4f131-23fc-4059-a886-fcfed91b448c",
+              "memory_uid": "c5c04ab1-10e8-52a3-98a1-aa9cbede57c1"
+            },
+            {
+              "frame_uid": "65c4f131-23fc-4059-a886-fcfed91b448c",
+              "memory_uid": "87203bcf-6724-543a-ad19-60a2becc4598"
+            },
+            {
+              "frame_uid": "65c4f131-23fc-4059-a886-fcfed91b448c",
+              "memory_uid": "32cef408-4c66-5ef2-9a59-eea6fc67b16e"
+            },
+            {
+              "frame_uid": "65c4f131-23fc-4059-a886-fcfed91b448c",
+              "memory_uid": "3579fcc0-c74e-5006-901b-6406a3106fa1"
+            },
+            {
+              "frame_uid": "65c4f131-23fc-4059-a886-fcfed91b448c",
+              "memory_uid": "2c2aa1af-c450-5c8d-a907-042c5757d3ee"
+            },
+            {
+              "frame_uid": "65c4f131-23fc-4059-a886-fcfed91b448c",
+              "memory_uid": "1fb62d5b-532b-5664-842c-57622e3c8b9d"
+            }
+          ],
+          "reason": "These compared-side claims collectively specify and justify one continuous argumentative structure across paragraphs.",
+          "status": "RESOLVED",
+          "summary": "A short proposal should use paragraph transitions and consequence-response sequencing instead of space-consuming headings that fragment the argument.",
+          "uid": "bd4600a8-9837-5e6b-9710-9b8be0614320"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "65c4f131-23fc-4059-a886-fcfed91b448c",
+              "memory_uid": "c9591180-6f3a-5909-8695-31704b9b6f01"
+            }
+          ],
+          "reason": "This compared-side placement rule is independently useful and has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Preliminary field or technical results should appear near the feasibility claims they support.",
+          "uid": "5747417a-cf64-527a-a03f-e2c70b92227f"
+        }
+      ],
+      "reports": {
+        "both": "Both require research framing to identify relevant users and real usage conditions explicitly.",
+        "compared_only": "The compared frame adds concrete openings, procedural visuals, gated milestones, contextual contribution flow, continuous paragraph structure, and proximity between preliminary evidence and feasibility claims.",
+        "differences": "",
+        "reference_only": "The reference defines exclusions and transfer conditions, distinguishes analytic from statistical generalization, and notes a tendency to overgeneralize from accessible samples."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "d64d16c6-06a8-4237-95f5-0d4d283f77c5"
+    },
+    "analysis_digest": "21c562193991a8a27deede2a361e29ee1959ee64d8c1a16f1cb52095de1321fe",
+    "key": "2b15fab38d998ee534816c527f18c5a3dbb07c9dccfd6f2571bef83e0d8fd336",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 40.33540108299712,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "2b15fab38d998ee534816c527f18c5a3dbb07c9dccfd6f2571bef83e0d8fd336",
+  "created_at": "2026-08-13T18:26:51.029893Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/scope",
+  "pair_key": "3c79259bbfd05decac0c5d747a733ecb43f3471f87dcfc8b4bc4162654cf0fe5",
+  "provider_seconds": 40.33540108299712,
+  "right": "task-2/advisor2/structure",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

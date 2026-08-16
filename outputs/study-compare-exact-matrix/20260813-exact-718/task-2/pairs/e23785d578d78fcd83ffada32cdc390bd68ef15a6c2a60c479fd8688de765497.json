@@ -1,0 +1,370 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:16:31.142092+00:00",
+      "frames": [
+        {
+          "context_digest": "e76b6eea5af0e4d970d4db385b4100a788a8b1ed5ef6e68709bd92c943ab3b6b",
+          "context_name": "task-2/advisor1/compensation",
+          "context_uid": "7ba75d6b-cef6-5c8b-9b17-d3901e168d24",
+          "memories": [
+            {
+              "content": "Calculate user study compensation budgets based on estimated participation burden, combining session time and preparation effort.",
+              "content_digest": "2dc18d8ddeb900741b2a8f936a59d5fc72423e2d3144e8b2232a6435dc9a68f1",
+              "position": 0,
+              "uid": "0ae46268-cca7-57d5-a0ee-6eb3b85cda84"
+            },
+            {
+              "content": "Compensate for required travel time in face-to-face user studies as well.",
+              "content_digest": "688ba9df95e18254a5a33ab6c0e59066cf0674137b6802178e3fb8eae4ba38e5",
+              "position": 1,
+              "uid": "bdda6e22-ea06-5a13-8854-67f7521724db"
+            },
+            {
+              "content": "Compensate for the actual time participants spent in sessions, regardless of research modality.",
+              "content_digest": "8673c2b5b5913f0e8bcf0035eea4bc87430bb1fcf8ffb27b354bde0ca3a7ae4e",
+              "position": 2,
+              "uid": "f49b1d0a-7a1a-53b5-b7fc-815cc2cc134a"
+            },
+            {
+              "content": "Leave cash payment as an available compensation method for face-to-face studies.",
+              "content_digest": "72f9e1b33de0c05bb711c2d8162ab62f382a75871a710db37b858125eae6fcde",
+              "position": 3,
+              "uid": "1f4d05e4-2a79-572c-8050-beb1464fb781"
+            },
+            {
+              "content": "If compensation equity is explained, do not require finalizing the payment method at the proposal stage.",
+              "content_digest": "6945260e986651e7992034801b6151a3f93184013fea77d17b630f55fcdc943b",
+              "position": 4,
+              "uid": "abcba764-6f35-5dae-bb3d-7860fb72ccf2"
+            },
+            {
+              "content": "Apply the same base hourly rate to face-to-face and remote studies if task burden is equal.",
+              "content_digest": "144477b358e6e8931042d1793a5ffd10f56d69aa90523d69d20a622528a9dad0",
+              "position": 5,
+              "uid": "c6a28f37-1a7c-5dbd-b75c-c829f0461504"
+            },
+            {
+              "content": "Participants judge compensation fairness based on the total burden, combining session time with required travel and preparation time.",
+              "content_digest": "54e8900c7049e048484db8b523a41e98cbb911b45be2adbd103fd2f1635bf026",
+              "position": 6,
+              "uid": "874de649-9c04-5960-b3a9-e68356ef666c"
+            },
+            {
+              "content": "Account in compensation for the burden of rescheduling iterations and returning for multiple formative evaluation sessions.",
+              "content_digest": "f09be004defb4019ba7476919b6780cc2b6bbac088f79dbd0ec66bf2753af27d",
+              "position": 7,
+              "uid": "529559f5-850d-5920-8e27-0b1e7138dc36"
+            },
+            {
+              "content": "Compensate participants for time already invested even if a session is terminated early due to prototype errors.",
+              "content_digest": "64b65cc0b307b48d64641d126594a5b8a9258518c3aa27d7846be2306c25a9f4",
+              "position": 8,
+              "uid": "c8be56ee-860a-5f6c-abbf-02c8dbc59eb5"
+            },
+            {
+              "content": "The author of this proposal tends to exclude preparation burden between sessions when calculating compensation for iterative studies.",
+              "content_digest": "177f041fcb9fe768dcc1c476b592e99c8609d06ebf727aeca1379d21256b43d8",
+              "position": 9,
+              "uid": "bdac8cf8-dd11-5794-b4b2-9774ff344436"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "594c1ef5-1a92-48a2-b1ec-cef50374b1f9"
+        },
+        {
+          "context_digest": "74ec0b91876efe6caed2938aaf4a0b06272de678fbf74dc9da1c217aa0bd042f",
+          "context_name": "task-2/advisor2/compensation",
+          "context_uid": "4ffbd453-7d61-56f7-90ad-34d77b485ef8",
+          "memories": [
+            {
+              "content": "Calculate user research compensation budgets based on the estimated participation burden, combining session time with required technical and travel preparation.",
+              "content_digest": "ba439fe3920339f56e377d8f82a64ab3ad27fb25e0eec3c65b610c81af53d175",
+              "position": 0,
+              "uid": "be9e402b-8d3b-58da-9766-2cf2ec25b9ae"
+            },
+            {
+              "content": "Compensate participants who withdraw from the study midway for their actual participation time.",
+              "content_digest": "599f542ec6f4a5a1a61f5c1a31547088e015439978a64b268879b5a2b65c9be4",
+              "position": 1,
+              "uid": "85157c57-410f-5c7d-8183-b37d61eebf8a"
+            },
+            {
+              "content": "Compensate for the time actually spent in sessions, regardless of the research modality.",
+              "content_digest": "b19b9dbece5d564de69e703491018fbd78ab834149eed0590a552773526b6e29",
+              "position": 2,
+              "uid": "8abeab95-3e41-5378-8409-08200aee9d58"
+            },
+            {
+              "content": "Allow the issuance of gift cards of equivalent value to participants in remote studies who cannot use electronic transfers.",
+              "content_digest": "8ac881488d0064f4b4c6143e2d8c69ab9806b419044adef266c50738c7afb291",
+              "position": 3,
+              "uid": "9b59c6ed-5dbe-5ccc-87b5-6be31f414e68"
+            },
+            {
+              "content": "Do not treat an unresolved payment method as a deficiency at the proposal stage.",
+              "content_digest": "80109274870eb1023e4cbcc6861a906a4d94db5dab2b2659bcebccde125c9ac3",
+              "position": 4,
+              "uid": "5c6c461d-05e5-5b0c-b801-245de2f9c8d7"
+            },
+            {
+              "content": "Allow differential compensation amounts for on-site and remote studies when participation burden varies due to travel or technical preparation.",
+              "content_digest": "556c5e49f7996a651a64825df2389f070629b9bc664c758d934f308c7fd6eea2",
+              "position": 5,
+              "uid": "44abc098-8c9f-5abb-bc49-9deb25066d93"
+            },
+            {
+              "content": "Participants judge the fairness of compensation based on the combined burden of session time and required technical and travel preparation.",
+              "content_digest": "80dd84e8b183e02f1fd772890b48712bb04a04852055eece98957a0c9028288c",
+              "position": 6,
+              "uid": "2a252668-f3f2-5582-b248-43ad81c54a48"
+            },
+            {
+              "content": "In longitudinal studies requiring diary entries and repeated reporting, include out-of-session recording time in compensation calculations.",
+              "content_digest": "7d103d93741e40d54c8df8347f2ce648a1cd96e19589663fa515bfb24b5bd844",
+              "position": 7,
+              "uid": "7e647a83-81b0-52d6-9362-e513dc2a5032"
+            },
+            {
+              "content": "Distinguish between participant research compensation and labor costs for field staff performing installation and operational support as part of their duties.",
+              "content_digest": "b1566527e9c1d7d3f93631d1503b08ddb4a6818daa570c118f265b47603592f0",
+              "position": 8,
+              "uid": "d77affab-60c8-5403-b189-17022b484640"
+            },
+            {
+              "content": "The user tends to count session time but omit participants’ advance setup and follow-up reporting time.",
+              "content_digest": "98911b7db2d8c3962d7ef48919265f40cdb61a711062e5459a4f6d43f71d6fd9",
+              "position": 9,
+              "uid": "0c470c6b-26a6-5501-93ac-c51fecd708ae"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "5fd7df62-da9d-4aa7-b35a-a415360f8fc7"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "Both frames ground compensation in total burden, actual time, and modality-neutral treatment, while covering incomplete and repeated studies and recognizing omitted out-of-session work. They differ on whether proposal-stage payment flexibility requires an equity explanation, and each adds distinct payment or cost-classification provisions.",
+      "relations": [
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            {
+              "frame_uid": "594c1ef5-1a92-48a2-b1ec-cef50374b1f9",
+              "memory_uid": "0ae46268-cca7-57d5-a0ee-6eb3b85cda84"
+            },
+            {
+              "frame_uid": "5fd7df62-da9d-4aa7-b35a-a415360f8fc7",
+              "memory_uid": "be9e402b-8d3b-58da-9766-2cf2ec25b9ae"
+            }
+          ],
+          "reason": "Both state the same budgeting rule; the compared frame merely specifies technical and travel preparation within the broader preparation burden.",
+          "status": "RESOLVED",
+          "summary": "Compensation budgets should reflect estimated participation burden, including session time and required preparation.",
+          "uid": "ae644295-426a-53d3-bd1c-0d91563b3945"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "594c1ef5-1a92-48a2-b1ec-cef50374b1f9",
+              "memory_uid": "bdda6e22-ea06-5a13-8854-67f7521724db"
+            },
+            {
+              "frame_uid": "594c1ef5-1a92-48a2-b1ec-cef50374b1f9",
+              "memory_uid": "c6a28f37-1a7c-5dbd-b75c-c829f0461504"
+            },
+            {
+              "frame_uid": "5fd7df62-da9d-4aa7-b35a-a415360f8fc7",
+              "memory_uid": "44abc098-8c9f-5abb-bc49-9deb25066d93"
+            }
+          ],
+          "reason": "The claims jointly make burden, rather than study modality itself, the basis for equal base rates and justified compensation differences.",
+          "status": "RESOLVED",
+          "summary": "Compensation should remain modality-neutral at equal burden while accounting for extra travel or technical burden when present.",
+          "uid": "bd08803e-599e-5517-8e6a-bca47d62d1e7"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            {
+              "frame_uid": "594c1ef5-1a92-48a2-b1ec-cef50374b1f9",
+              "memory_uid": "f49b1d0a-7a1a-53b5-b7fc-815cc2cc134a"
+            },
+            {
+              "frame_uid": "5fd7df62-da9d-4aa7-b35a-a415360f8fc7",
+              "memory_uid": "8abeab95-3e41-5378-8409-08200aee9d58"
+            }
+          ],
+          "reason": "The operational rule and scope are the same in both frames.",
+          "status": "RESOLVED",
+          "summary": "Actual time spent in sessions should be compensated regardless of research modality.",
+          "uid": "5c523add-6458-54c6-8778-4868888fc900"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "594c1ef5-1a92-48a2-b1ec-cef50374b1f9",
+              "memory_uid": "1f4d05e4-2a79-572c-8050-beb1464fb781"
+            }
+          ],
+          "reason": "This independently useful payment-method option appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Cash should remain an available payment method for face-to-face studies.",
+          "uid": "b16d9534-91d2-5cc9-ba62-16371df9e515"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "594c1ef5-1a92-48a2-b1ec-cef50374b1f9",
+              "memory_uid": "abcba764-6f35-5dae-bb3d-7860fb72ccf2"
+            },
+            {
+              "frame_uid": "5fd7df62-da9d-4aa7-b35a-a415360f8fc7",
+              "memory_uid": "5c6c461d-05e5-5b0c-b801-245de2f9c8d7"
+            }
+          ],
+          "reason": "The shared proposal-stage flexibility is preserved, while the reference claim states a condition absent from the compared claim.",
+          "status": "RESOLVED",
+          "summary": "An unresolved payment method need not be treated as a proposal-stage deficiency, with the reference frame explicitly requiring an equity explanation.",
+          "uid": "96c8f9ac-eaad-522f-9d0f-37b59c588ccc"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            {
+              "frame_uid": "594c1ef5-1a92-48a2-b1ec-cef50374b1f9",
+              "memory_uid": "874de649-9c04-5960-b3a9-e68356ef666c"
+            },
+            {
+              "frame_uid": "5fd7df62-da9d-4aa7-b35a-a415360f8fc7",
+              "memory_uid": "2a252668-f3f2-5582-b248-43ad81c54a48"
+            }
+          ],
+          "reason": "Both express the same fairness principle; technical preparation is a specific form of the preparation burden named in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Participants assess compensation fairness from combined session, travel, and preparation burdens.",
+          "uid": "5e96a3c1-ac14-56fc-929b-73be76313f30"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "594c1ef5-1a92-48a2-b1ec-cef50374b1f9",
+              "memory_uid": "529559f5-850d-5920-8e27-0b1e7138dc36"
+            },
+            {
+              "frame_uid": "5fd7df62-da9d-4aa7-b35a-a415360f8fc7",
+              "memory_uid": "7e647a83-81b0-52d6-9362-e513dc2a5032"
+            }
+          ],
+          "reason": "Rescheduling and return visits on one side and diary or reporting work on the other are complementary applications of the same repeated-study compensation policy.",
+          "status": "RESOLVED",
+          "summary": "Compensation for repeated or longitudinal studies should include consequential burdens beyond individual session attendance.",
+          "uid": "6f4de67a-4a6f-5c6e-be8b-c6cf366214e2"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "594c1ef5-1a92-48a2-b1ec-cef50374b1f9",
+              "memory_uid": "c8be56ee-860a-5f6c-abbf-02c8dbc59eb5"
+            },
+            {
+              "frame_uid": "5fd7df62-da9d-4aa7-b35a-a415360f8fc7",
+              "memory_uid": "85157c57-410f-5c7d-8183-b37d61eebf8a"
+            }
+          ],
+          "reason": "Prototype-caused termination and participant withdrawal are compatible termination circumstances governed by the same actual-time principle.",
+          "status": "RESOLVED",
+          "summary": "Participants should be paid for time already invested when participation ends before study completion.",
+          "uid": "c48e0998-7987-56b6-9098-b4db940b6ab5"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "594c1ef5-1a92-48a2-b1ec-cef50374b1f9",
+              "memory_uid": "bdac8cf8-dd11-5794-b4b2-9774ff344436"
+            },
+            {
+              "frame_uid": "5fd7df62-da9d-4aa7-b35a-a415360f8fc7",
+              "memory_uid": "0c470c6b-26a6-5501-93ac-c51fecd708ae"
+            }
+          ],
+          "reason": "Between-session preparation, advance setup, and follow-up reporting are complementary manifestations of the same omission tendency.",
+          "status": "RESOLVED",
+          "summary": "The described compensation practice tends to count session time while omitting participant work performed outside sessions.",
+          "uid": "53a9a917-d12a-5386-8ff5-7bfc2896b008"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5fd7df62-da9d-4aa7-b35a-a415360f8fc7",
+              "memory_uid": "9b59c6ed-5dbe-5ccc-87b5-6be31f414e68"
+            }
+          ],
+          "reason": "This independently useful remote payment alternative appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Equivalent-value gift cards may be issued to remote participants unable to use electronic transfers.",
+          "uid": "0578eae8-a3ae-591a-bca1-0b4871d0d3b4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5fd7df62-da9d-4aa7-b35a-a415360f8fc7",
+              "memory_uid": "d77affab-60c8-5403-b189-17022b484640"
+            }
+          ],
+          "reason": "This cost-classification rule appears only in the compared frame and is independent of its participant payment-method provision.",
+          "status": "RESOLVED",
+          "summary": "Participant research compensation should be distinguished from labor costs for field staff performing assigned support duties.",
+          "uid": "c7861722-19d5-54de-8b97-9c77b6467e94"
+        }
+      ],
+      "reports": {
+        "both": "Both use total burden and actual participation time to guide compensation, adjust for modality-related burdens, cover incomplete and repeated participation, and flag omitted out-of-session effort.",
+        "compared_only": "The compared frame permits equivalent gift cards for some remote participants and separates participant compensation from field-staff labor costs.",
+        "differences": "Proposal-stage payment-method flexibility is explicitly conditional on explaining equity in the reference frame but unconditional in the compared frame.",
+        "reference_only": "The reference frame preserves cash as an option for face-to-face studies."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "73e03429-1e0e-4d7a-960e-54a7829dffe4"
+    },
+    "analysis_digest": "d3d5a8f3a042cb1274c5adb8e393f03e5c8165947b0c6e337bac72cbcb50715c",
+    "key": "65445aac98a66c3d715a74ba903aa7d954eaf148a45245fc4aa5279207e09134",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 51.43663279199973,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "65445aac98a66c3d715a74ba903aa7d954eaf148a45245fc4aa5279207e09134",
+  "created_at": "2026-08-13T18:17:22.578248Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/compensation",
+  "pair_key": "e23785d578d78fcd83ffada32cdc390bd68ef15a6c2a60c479fd8688de765497",
+  "provider_seconds": 51.43663279199973,
+  "right": "task-2/advisor2/compensation",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

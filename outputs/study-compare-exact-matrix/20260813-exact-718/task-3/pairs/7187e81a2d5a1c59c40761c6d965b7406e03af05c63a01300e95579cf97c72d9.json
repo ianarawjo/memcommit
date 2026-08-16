@@ -1,0 +1,406 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:42:47.423261+00:00",
+      "frames": [
+        {
+          "context_digest": "4f6b609414f921ca470614699bdac42e9f2932482375026def79956485b0569e",
+          "context_name": "task-3/local/personal-memory/2024/08",
+          "context_uid": "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+          "memories": [
+            {
+              "content": "The user has set a monthly limit in their budget record for spending other than living expenses.",
+              "content_digest": "5c0df9500947f7e044a8755d66d58adccca01db3aed42b43ab9748b8c4f431e9",
+              "position": 0,
+              "uid": "5f80c7ec-e294-5905-abab-91027c9d827b"
+            },
+            {
+              "content": "In a week when the user went grocery shopping and visited the bank separately, they made the same round trip twice.",
+              "content_digest": "4e814adad1a4c201f6348f1c14b14950b5c549bba64bf70cfccd08ca9efc5bd3",
+              "position": 1,
+              "uid": "2428ab2c-37ce-5de1-84dc-abcdfc8ce062"
+            },
+            {
+              "content": "The following week, the user completed both errands in one outing and reduced travel time.",
+              "content_digest": "ad5555ca7daa9d977cfcf5eb4f476eb5730cead6d307c986497716d69f1145b0",
+              "position": 2,
+              "uid": "bf30d1ef-d7cd-5aa3-b65b-ff04aae647e7"
+            },
+            {
+              "content": "When a bill alert arrived on the due date, the user postponed payment until after a meeting.",
+              "content_digest": "c62dda61c680da9ac1fd5ab9124fa05635d20ad9e4bbb7aef36723d289c05102",
+              "position": 3,
+              "uid": "442672e1-2188-5aa3-ad38-5e9c16f25bd5"
+            },
+            {
+              "content": "In a month when the user received an alert three days before the deadline, they finished payment before dinner.",
+              "content_digest": "939ac83da176d5bb1b7e2196402b9faacb962d947b85b9a61c31854867c1e62e",
+              "position": 4,
+              "uid": "c7385cce-ec43-5902-973c-5b8af54c3557"
+            },
+            {
+              "content": "The user collected cash receipts in their wallet and entered all the amounts at once at the end of the month.",
+              "content_digest": "3171a8128ed3855ac9a4c2b542516333fc3728ed1d7260974888b94d0b32c3e6",
+              "position": 5,
+              "uid": "d926c45c-ea49-589c-a7e4-491c9a1514f8"
+            },
+            {
+              "content": "After recording one large expense, the user ate out two fewer times that week.",
+              "content_digest": "af55fd94b01e0ece728347e9349f96b5733c57dae752f9559dc4e08bef7a3320",
+              "position": 6,
+              "uid": "9433523f-8c4e-5424-b370-d325ba5154d1"
+            },
+            {
+              "content": "The user's older sister prefers to settle the jointly paid cost of a meal by electronic transfer rather than cash.",
+              "content_digest": "d84d2ea68add4202e8c421e9c1702c29ca88bd6ae838588bd415fdbd1980cb2b",
+              "position": 7,
+              "uid": "d9531336-ac5f-5ba0-bf26-9c69c854578f"
+            },
+            {
+              "content": "Confirm the amount and account with the user before creating an automatic payment schedule.",
+              "content_digest": "b1d0c16fd880f4ae2657415ddc8fe0f223ccdd931248bb4412a6c95754d4cce1",
+              "position": 8,
+              "uid": "9941d390-8b40-5fee-8bcf-df6f36befcb0"
+            },
+            {
+              "content": "The timing of payment processing and late-payment recording may differ by billing institution.",
+              "content_digest": "203e65e4eb8451ec7551fb166357f107d17b8c89a2341b32fc25a3fb67ec7f98",
+              "position": 9,
+              "uid": "79aea8fd-5d48-50f7-adf6-b7ebe33bfb08"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "1cc4adad-e5a7-46d8-8262-85f15b30b896"
+        },
+        {
+          "context_digest": "ca8765e237d85d9bf3ecb78fe1d9a2487066ae14dae9509e40b324ac1277d75a",
+          "context_name": "task-3/local/personal-memory/2025/06",
+          "context_uid": "870f7336-726a-5d9c-bae4-12585311463e",
+          "memories": [
+            {
+              "content": "The user keeps a portable fan charger on a living-room shelf.",
+              "content_digest": "5ab7fad8ae1b3f56bdbc1c3ebf593a3d452590341b6de115f830fdf0d994c12e",
+              "position": 0,
+              "uid": "853a158c-edf9-578a-8e75-3d5daff6e4db"
+            },
+            {
+              "content": "On a hot day, the user worked with only the window open and lost focus in the afternoon.",
+              "content_digest": "3c4225f055db293c53a5a137d0c6353005bcb55b71dbc61bc69831aa5c3c08de",
+              "position": 1,
+              "uid": "f7d5ebdc-0cae-5e07-a060-e129b5a05570"
+            },
+            {
+              "content": "In the room where the user closed the curtains the next morning, the temperature rose less.",
+              "content_digest": "4cb4d1892db8769f4c066859dbb021c67d5015114f8522dfd904057061600ab5",
+              "position": 2,
+              "uid": "99e5c522-535b-5015-8617-06f645147f8b"
+            },
+            {
+              "content": "The user took the portable fan out without charging it, and it turned off after an hour.",
+              "content_digest": "0e1e0e9e985bea5be6976010a390f484b60a931ea7dfaf50a73c66616a73d5da",
+              "position": 3,
+              "uid": "7b3bf50c-63aa-5a1e-9a53-7befea25a468"
+            },
+            {
+              "content": "Before the next outing, the user charged it the night before and used the fan throughout the trip.",
+              "content_digest": "fd4282d169da18d902fc5f766d4e38131240bf3a51e6fa0c5bad69f80f1492af",
+              "position": 4,
+              "uid": "ca8de091-afb2-537f-a83a-09769056879d"
+            },
+            {
+              "content": "On a hot weekend, the user was eating lunch in their father's yard and moved indoors.",
+              "content_digest": "44e7d3bc5eaecec68ad6e7c0979572102f3c717b37712fcfada769959443ae8e",
+              "position": 5,
+              "uid": "4a0604fb-10b4-5132-a6de-ab6a229ff2be"
+            },
+            {
+              "content": "When the user returned to the yard in the evening, shade and wind led them to stay another hour.",
+              "content_digest": "7495f1d4ba2d1d732ab5c962f45b5b0c9c765ee21767373552247a823cf90984",
+              "position": 6,
+              "uid": "1f90941e-776f-5cba-9783-c392983dd72c"
+            },
+            {
+              "content": "The user's father prefers to move an outdoor meal to the evening rather than proceed at midday when the temperature is high.",
+              "content_digest": "5f9628a28b5c6f3b20a371d1c039f37f26c50832970936c8a243f161fd8288f4",
+              "position": 7,
+              "uid": "63391d26-7417-5ea6-ac0a-460af7489963"
+            },
+            {
+              "content": "The local agent can compare past responses to heat but cannot know the current felt temperature without an indoor temperature record.",
+              "content_digest": "815f4fb2c833d75e30cb0e323f5708e356bf38e0bbb573865092be48fbf2746a",
+              "position": 8,
+              "uid": "31502797-1379-5ec4-bd1b-a2e1515fa56e"
+            },
+            {
+              "content": "A room with a west-facing window can warm rapidly in the late afternoon.",
+              "content_digest": "448908f6242021de6d41ddee8121714a1388db6e4e3d067de27e6950ee712c23",
+              "position": 9,
+              "uid": "68f85c30-62c4-579d-97cd-9f401c686e63"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "9eace3d4-366a-4217-a81a-7b91c2074fc3"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate practical domains: personal finance and payment habits on one side, and heat management and portable-fan use on the other. Each contains coherent observations and policies, but none materially addresses the same operational decision across frames.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1cc4adad-e5a7-46d8-8262-85f15b30b896",
+              "memory_uid": "5f80c7ec-e294-5905-abab-91027c9d827b"
+            }
+          ],
+          "reason": "This is independently useful budgeting information with no counterpart addressing that financial control.",
+          "status": "RESOLVED",
+          "summary": "The user maintains a monthly limit for non-living expenses.",
+          "uid": "fd20b3b9-9e23-5d42-89f5-a16245752fb8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1cc4adad-e5a7-46d8-8262-85f15b30b896",
+              "memory_uid": "2428ab2c-37ce-5de1-84dc-abcdfc8ce062"
+            },
+            {
+              "frame_uid": "1cc4adad-e5a7-46d8-8262-85f15b30b896",
+              "memory_uid": "bf30d1ef-d7cd-5aa3-b65b-ff04aae647e7"
+            }
+          ],
+          "reason": "The two observations form one before-and-after claim about errand consolidation, with no counterpart concerning travel planning.",
+          "status": "RESOLVED",
+          "summary": "Combining grocery and banking errands into one outing avoided duplicate travel and reduced travel time.",
+          "uid": "9dc18858-c556-5a6d-bf38-9609a048ae5a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1cc4adad-e5a7-46d8-8262-85f15b30b896",
+              "memory_uid": "442672e1-2188-5aa3-ad38-5e9c16f25bd5"
+            },
+            {
+              "frame_uid": "1cc4adad-e5a7-46d8-8262-85f15b30b896",
+              "memory_uid": "c7385cce-ec43-5902-973c-5b8af54c3557"
+            }
+          ],
+          "reason": "The episodes jointly describe how alert timing relates to payment timing, with no counterpart concerning bill reminders.",
+          "status": "RESOLVED",
+          "summary": "Earlier bill alerts were associated with earlier payment, while a due-date alert preceded postponement.",
+          "uid": "d9a44624-d5c0-5453-94c4-a44d0e7b686e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1cc4adad-e5a7-46d8-8262-85f15b30b896",
+              "memory_uid": "d926c45c-ea49-589c-a7e4-491c9a1514f8"
+            }
+          ],
+          "reason": "This is a standalone expense-recording practice absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user stores cash receipts and records their amounts together at month end.",
+          "uid": "77760b14-0e4f-50c1-8ae4-b59d69093896"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1cc4adad-e5a7-46d8-8262-85f15b30b896",
+              "memory_uid": "9433523f-8c4e-5424-b370-d325ba5154d1"
+            }
+          ],
+          "reason": "This independently useful spending-response observation has no counterpart concerning expense-driven behavior.",
+          "status": "RESOLVED",
+          "summary": "Recording a large expense was followed by reduced restaurant spending that week.",
+          "uid": "6cda0a41-bb06-5e13-9f0b-cf0d6d974fd2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1cc4adad-e5a7-46d8-8262-85f15b30b896",
+              "memory_uid": "d9531336-ac5f-5ba0-bf26-9c69c854578f"
+            }
+          ],
+          "reason": "This is a specific shared-cost settlement preference with no corresponding claim about financial reimbursement.",
+          "status": "RESOLVED",
+          "summary": "The user's older sister prefers electronic transfer over cash for settling a jointly paid meal.",
+          "uid": "9f6bcae5-113f-55c8-a35f-ca8caf56ff80"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1cc4adad-e5a7-46d8-8262-85f15b30b896",
+              "memory_uid": "9941d390-8b40-5fee-8bcf-df6f36befcb0"
+            }
+          ],
+          "reason": "This is a standalone authorization safeguard with no counterpart concerning automatic payments.",
+          "status": "RESOLVED",
+          "summary": "The amount and account should be confirmed with the user before an automatic payment schedule is created.",
+          "uid": "07aa7158-f8c0-5fa9-9d68-d93a52cb0ff4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1cc4adad-e5a7-46d8-8262-85f15b30b896",
+              "memory_uid": "79aea8fd-5d48-50f7-adf6-b7ebe33bfb08"
+            }
+          ],
+          "reason": "This independently useful qualification about billing systems has no counterpart concerning payment processing.",
+          "status": "RESOLVED",
+          "summary": "Payment-processing and late-recording timing can vary by billing institution.",
+          "uid": "2b214899-6ad4-5f75-8066-7c14f5ce8044"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9eace3d4-366a-4217-a81a-7b91c2074fc3",
+              "memory_uid": "853a158c-edf9-578a-8e75-3d5daff6e4db"
+            }
+          ],
+          "reason": "This is standalone location information with no counterpart concerning device storage.",
+          "status": "RESOLVED",
+          "summary": "The user keeps a portable-fan charger on a living-room shelf.",
+          "uid": "e89ac73b-2261-57ee-bf92-08e1921151ef"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9eace3d4-366a-4217-a81a-7b91c2074fc3",
+              "memory_uid": "f7d5ebdc-0cae-5e07-a060-e129b5a05570"
+            },
+            {
+              "frame_uid": "9eace3d4-366a-4217-a81a-7b91c2074fc3",
+              "memory_uid": "99e5c522-535b-5015-8617-06f645147f8b"
+            }
+          ],
+          "reason": "The observations jointly describe consequences of different indoor heat-management responses, with no counterpart addressing room temperature control.",
+          "status": "RESOLVED",
+          "summary": "Indoor heat outcomes varied with room-management conditions: relying on an open window coincided with lost focus, while closing curtains limited warming.",
+          "uid": "f2520269-2c03-5e6a-b783-5224698840b1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9eace3d4-366a-4217-a81a-7b91c2074fc3",
+              "memory_uid": "7b3bf50c-63aa-5a1e-9a53-7befea25a468"
+            },
+            {
+              "frame_uid": "9eace3d4-366a-4217-a81a-7b91c2074fc3",
+              "memory_uid": "ca8de091-afb2-537f-a83a-09769056879d"
+            }
+          ],
+          "reason": "The episodes form one before-and-after claim about preparation and fan runtime, with no counterpart concerning portable-device charging.",
+          "status": "RESOLVED",
+          "summary": "Charging the portable fan beforehand enabled extended use, whereas taking it out uncharged led to early shutdown.",
+          "uid": "e98c7cc1-7d12-5d9d-b10d-9197ac53ecbf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9eace3d4-366a-4217-a81a-7b91c2074fc3",
+              "memory_uid": "4a0604fb-10b4-5132-a6de-ab6a229ff2be"
+            },
+            {
+              "frame_uid": "9eace3d4-366a-4217-a81a-7b91c2074fc3",
+              "memory_uid": "1f90941e-776f-5cba-9783-c392983dd72c"
+            }
+          ],
+          "reason": "The observations jointly describe outdoor-use behavior under different heat conditions, with no counterpart concerning time-of-day heat response.",
+          "status": "RESOLVED",
+          "summary": "The user left a hot yard at lunchtime but stayed longer after returning under cooler evening conditions.",
+          "uid": "08f0fff4-5d04-50d8-a801-b17b4e973575"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9eace3d4-366a-4217-a81a-7b91c2074fc3",
+              "memory_uid": "63391d26-7417-5ea6-ac0a-460af7489963"
+            }
+          ],
+          "reason": "This specific meal-timing preference has no counterpart addressing outdoor heat decisions.",
+          "status": "RESOLVED",
+          "summary": "The user's father prefers postponing an outdoor meal until evening when midday temperatures are high.",
+          "uid": "07b47ea1-e043-5cf2-a3d2-bb3e71e44ae1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9eace3d4-366a-4217-a81a-7b91c2074fc3",
+              "memory_uid": "31502797-1379-5ec4-bd1b-a2e1515fa56e"
+            }
+          ],
+          "reason": "This is a standalone capability and data limitation with no counterpart concerning environmental observation.",
+          "status": "RESOLVED",
+          "summary": "The local agent can compare past heat responses but cannot determine current felt temperature without an indoor temperature record.",
+          "uid": "6332c213-a7e8-5542-8ed0-3cb6719fbd0a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9eace3d4-366a-4217-a81a-7b91c2074fc3",
+              "memory_uid": "68f85c30-62c4-579d-97cd-9f401c686e63"
+            }
+          ],
+          "reason": "This independently useful environmental condition has no counterpart concerning solar heat exposure.",
+          "status": "RESOLVED",
+          "summary": "A west-facing window can cause rapid room warming in late afternoon.",
+          "uid": "77c7e15a-e570-5345-8ecb-ed56d20f7a42"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers indoor and outdoor heat responses, fan storage and charging, meal timing, temperature-data limitations, and late-afternoon warming from west-facing windows.",
+        "differences": "",
+        "reference_only": "The reference covers discretionary budgeting, errand consolidation, bill-alert timing, expense recording and behavior, shared-cost preferences, automatic-payment safeguards, and institution-dependent processing."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "5cbe0d6f-0dcf-4460-8cf8-9865cfadfc73"
+    },
+    "analysis_digest": "de78edd37f0f21fca15508878afa9e9f20a850cbf6b3960fdff989e4783c0450",
+    "key": "0d474068273b87c9d69b9af2c1cd077dc218d816256759e162273f279ad00f7f",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 39.184233874999336,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "0d474068273b87c9d69b9af2c1cd077dc218d816256759e162273f279ad00f7f",
+  "created_at": "2026-08-13T18:43:26.607085Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/08",
+  "pair_key": "7187e81a2d5a1c59c40761c6d965b7406e03af05c63a01300e95579cf97c72d9",
+  "provider_seconds": 39.184233874999336,
+  "right": "task-3/local/personal-memory/2025/06",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

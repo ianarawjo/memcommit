@@ -1,0 +1,302 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:17:32.412575+00:00",
+      "frames": [
+        {
+          "context_digest": "52dc61895a6d116135c474d4828efde944579b3a5949b6d64c07dd9853f60801",
+          "context_name": "task-2/advisor1/emphasis",
+          "context_uid": "6f253a9e-f504-53bf-a1d1-de2c4532171e",
+          "memories": [
+            {
+              "content": "Do not exceed two primary HCI contributions.",
+              "content_digest": "c605e418506d380237fb8ce4723bcc2fedebcd5da0d8dd78ef813e21aaf71a7a",
+              "position": 0,
+              "uid": "4a1de8df-6f03-5a3d-bbfa-7c1144d2ec5c"
+            },
+            {
+              "content": "Name each design or empirical contribution and present it in a single sentence.",
+              "content_digest": "286e33467b65e080f192172ae85d481a89c8e1b2d73e1089772eab30e0ae48fa",
+              "position": 1,
+              "uid": "b5b6a901-9047-5482-a0e1-d29e5f7171e8"
+            },
+            {
+              "content": "In studies recruiting community participants, emphasize the time burden associated with participation.",
+              "content_digest": "67a881933729e29cc0ce33f61f50af810f6f12ab5aa9598d453cf3a959a5977f",
+              "position": 2,
+              "uid": "e89de514-48a5-5e9b-96ca-f194c0ed79ab"
+            },
+            {
+              "content": "In studies recruiting community participants, emphasize the travel burden associated with participation.",
+              "content_digest": "3c4e20244bb88626ef1d2ebc89774e29ac85a9ce774a3faaa726131059b8ae33",
+              "position": 3,
+              "uid": "f7025cbb-4005-53c6-9031-e33f04a86b92"
+            },
+            {
+              "content": "HCI reviewers find it difficult to identify primary contributions when named design or empirical contributions exceed two.",
+              "content_digest": "70a2dccd85ce8ca18db239926980dfe13a20b90a9dffa6acae73e5034fce1fbc",
+              "position": 4,
+              "uid": "a42891a1-b674-5747-a77c-43699b0b9723"
+            },
+            {
+              "content": "Emphasize the core design decisions that formative evaluation will change rather than a polished product demonstration.",
+              "content_digest": "be5cad46c349a7c4b538f1a947d979ec25b0f6a34494e4d3a7bb9550508766d4",
+              "position": 5,
+              "uid": "9d7169d5-058f-5f7c-b1ac-30cabd8ba02e"
+            },
+            {
+              "content": "Emphasize design principles transferable to other similar interactions as the primary contribution, rather than the performance of a specific prototype.",
+              "content_digest": "a39c447e1b61b2204233800bafd380163fb5492ddd25cb730bbc6c6a95114e56",
+              "position": 6,
+              "uid": "f8931b4e-9656-548d-84a1-f2f2c3eb47b1"
+            },
+            {
+              "content": "Formative evaluation creates grounds for modification in subsequent iterations rather than definitively determining the superiority of design alternatives.",
+              "content_digest": "0cdd894b41de667b621d6c385d3373c799f4fea53898f65d324c26e86a1c8807",
+              "position": 7,
+              "uid": "9bf9e735-7598-5977-abe2-87b2c9c38a24"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "23df81d6-1ca5-4149-9b05-91652d3b3d3f"
+        },
+        {
+          "context_digest": "4efbf2f6c096022137cee2c075c75219bb4fd0f441579901b8445bb2d92101f5",
+          "context_name": "task-2/advisor2/budget",
+          "context_uid": "ae02c2b2-49d3-5c30-b686-81ea17a8a87e",
+          "memories": [
+            {
+              "content": "Keep the main text to the total and major categories, and place quantities, unit rates, and assumptions in one compact budget table or appendix.",
+              "content_digest": "2e0d76a9c09d14facdf93e8b82cb1c4f583b8a6063b74552f2c23b7d37224e9c",
+              "position": 0,
+              "uid": "d614b55d-d9f6-5347-8d02-2d219d621a09"
+            },
+            {
+              "content": "Give each cost category, quantity, unit rate, and subtotal a stable row in the separate budget table.",
+              "content_digest": "ecd8aa50fc469bb763f36784d140b871b82a283b39f30f46e9e166776321c602",
+              "position": 1,
+              "uid": "24500129-4b07-564f-ba67-39e40d7d7860"
+            },
+            {
+              "content": "Put the estimate basis in a dedicated table column so one assumption can be checked or revised without rewriting the narrative.",
+              "content_digest": "6ed604ab2ca300f215d13f18cb5344e9322635ad047ce36c08242765e7fb09f4",
+              "position": 2,
+              "uid": "07bad409-af9c-512a-b829-7ceb28273f91"
+            },
+            {
+              "content": "Readers can verify arithmetic and compare categories faster in a consistent table than in amounts distributed across prose.",
+              "content_digest": "1dc966a0ade3af3bc636cb99d456edbdb918c2a23efd4a5792db9f8ede061195",
+              "position": 3,
+              "uid": "abf6d361-c2eb-512f-87e0-f3af9c5eb677"
+            },
+            {
+              "content": "Revise one table row and its subtotal when an estimate changes instead of repeating the new amount across several prose paragraphs.",
+              "content_digest": "dcd7d010f7d2c1898fffe71ccc7a0067233dcbcf66fe4b429043b1900d097f84",
+              "position": 4,
+              "uid": "473cf3ca-9832-5d9c-97df-974f1d9b0d1b"
+            },
+            {
+              "content": "Keep detailed arithmetic out of the main argument when readers can reach the complete table from a clear reference.",
+              "content_digest": "940a8cdee63c326d9c9be89cc07e7f223f239e3537113d32c098f711bd816cf7",
+              "position": 5,
+              "uid": "675956de-2c61-53e1-bb89-9b49d92558ba"
+            },
+            {
+              "content": "The user tends to interrupt the argument with long cost enumerations when no separate budget table is available.",
+              "content_digest": "2c0715ec3cfa247a35c3acc854b0716dca764619050aa635c0c242a5b56aa2f1",
+              "position": 6,
+              "uid": "f4371f72-f222-5066-b2f4-0a6be5d6865e"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "648534fa-ae9b-40a9-b550-030c135a39aa"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate operational domains without overlap or disagreement. The reference frame governs how HCI contributions, community-participant burdens, and formative evaluation are presented, while the compared frame governs budget organization, auditability, and revision.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "23df81d6-1ca5-4149-9b05-91652d3b3d3f",
+              "memory_uid": "4a1de8df-6f03-5a3d-bbfa-7c1144d2ec5c"
+            },
+            {
+              "frame_uid": "23df81d6-1ca5-4149-9b05-91652d3b3d3f",
+              "memory_uid": "a42891a1-b674-5747-a77c-43699b0b9723"
+            }
+          ],
+          "reason": "The directive and its reviewer-centered rationale express one reference-only policy with no operational counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Primary HCI contributions should be limited to two because larger sets become difficult for reviewers to identify.",
+          "uid": "9c587550-d22a-53ee-ac1e-c2a1a35513b7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "23df81d6-1ca5-4149-9b05-91652d3b3d3f",
+              "memory_uid": "b5b6a901-9047-5482-a0e1-d29e5f7171e8"
+            }
+          ],
+          "reason": "This is an independently useful reference-only presentation rule not addressed by the budget guidance.",
+          "status": "RESOLVED",
+          "summary": "Each design or empirical contribution should be named and stated in one sentence.",
+          "uid": "ba8bf216-b3a5-544e-bd66-e4fef6b361d4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "23df81d6-1ca5-4149-9b05-91652d3b3d3f",
+              "memory_uid": "e89de514-48a5-5e9b-96ca-f194c0ed79ab"
+            },
+            {
+              "frame_uid": "23df81d6-1ca5-4149-9b05-91652d3b3d3f",
+              "memory_uid": "f7025cbb-4005-53c6-9031-e33f04a86b92"
+            }
+          ],
+          "reason": "The two memories split one reference-only requirement concerning participation burdens, which the compared frame does not address.",
+          "status": "RESOLVED",
+          "summary": "Studies recruiting community participants should emphasize both time and travel burdens.",
+          "uid": "0307a6b5-a130-53a8-8c59-1e69308648ea"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "23df81d6-1ca5-4149-9b05-91652d3b3d3f",
+              "memory_uid": "9d7169d5-058f-5f7c-b1ac-30cabd8ba02e"
+            }
+          ],
+          "reason": "This is a reference-only framing principle for formative design work and has no budget-related counterpart.",
+          "status": "RESOLVED",
+          "summary": "Formative evaluation should foreground design decisions likely to change rather than present a polished product demonstration.",
+          "uid": "e313a789-99f5-5a88-acf8-828ed61e2e2c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "23df81d6-1ca5-4149-9b05-91652d3b3d3f",
+              "memory_uid": "f8931b4e-9656-548d-84a1-f2f2c3eb47b1"
+            }
+          ],
+          "reason": "This independently useful reference-only contribution principle is outside the compared frame's budget-documentation scope.",
+          "status": "RESOLVED",
+          "summary": "Transferable design principles should be emphasized as the primary contribution instead of a particular prototype's performance.",
+          "uid": "5055fab4-5a4b-55a3-b3cb-17bb910db8a8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "23df81d6-1ca5-4149-9b05-91652d3b3d3f",
+              "memory_uid": "9bf9e735-7598-5977-abe2-87b2c9c38a24"
+            }
+          ],
+          "reason": "This reference-only claim defines the evidentiary role of formative evaluation and is not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Formative evaluation supports later modification rather than definitively establishing the superiority of design alternatives.",
+          "uid": "8cde07a8-8c2b-55a5-b8f9-b97dcf3ea2bc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "648534fa-ae9b-40a9-b550-030c135a39aa",
+              "memory_uid": "d614b55d-d9f6-5347-8d02-2d219d621a09"
+            },
+            {
+              "frame_uid": "648534fa-ae9b-40a9-b550-030c135a39aa",
+              "memory_uid": "675956de-2c61-53e1-bb89-9b49d92558ba"
+            },
+            {
+              "frame_uid": "648534fa-ae9b-40a9-b550-030c135a39aa",
+              "memory_uid": "f4371f72-f222-5066-b2f4-0a6be5d6865e"
+            }
+          ],
+          "reason": "The memories state and motivate one compared-only policy separating detailed budgeting from narrative exposition.",
+          "status": "RESOLVED",
+          "summary": "Detailed budget arithmetic should reside in an accessible compact table or appendix so long cost enumerations do not interrupt the main argument.",
+          "uid": "2d79b46f-f84a-5d30-8474-52d6c627929d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "648534fa-ae9b-40a9-b550-030c135a39aa",
+              "memory_uid": "24500129-4b07-564f-ba67-39e40d7d7860"
+            },
+            {
+              "frame_uid": "648534fa-ae9b-40a9-b550-030c135a39aa",
+              "memory_uid": "abf6d361-c2eb-512f-87e0-f3af9c5eb677"
+            }
+          ],
+          "reason": "The table-structure rule and its reader-centered rationale form one compared-only budgeting claim without a reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "A consistent budget table should give each cost category, quantity, unit rate, and subtotal a stable row to support faster verification and comparison.",
+          "uid": "56ce999a-3640-5837-a350-9313529f4724"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "648534fa-ae9b-40a9-b550-030c135a39aa",
+              "memory_uid": "07bad409-af9c-512a-b829-7ceb28273f91"
+            },
+            {
+              "frame_uid": "648534fa-ae9b-40a9-b550-030c135a39aa",
+              "memory_uid": "473cf3ca-9832-5d9c-97df-974f1d9b0d1b"
+            }
+          ],
+          "reason": "Both memories describe one compared-only structure for independently checking and revising budget estimates.",
+          "status": "RESOLVED",
+          "summary": "Estimate assumptions should occupy a dedicated column so changes can be handled by revising the affected row and subtotal rather than rewriting narrative.",
+          "uid": "46aca63c-8141-5bea-87bf-5d70c32170dc"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame separates budget detail from the argument and structures estimates for verification, clear assumptions, and localized revision.",
+        "differences": "",
+        "reference_only": "The reference frame limits and formats HCI contributions, highlights participation burdens, and frames formative evaluation around transferable principles and iterative design change."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "b9dab772-3cd0-4967-975c-b57bc336a681"
+    },
+    "analysis_digest": "87ad2575f217cfde0970f9d7808ee8e01ef3a79e08ae9f0d1cd57432b28e9a7e",
+    "key": "75fe431e197554e8a0b7e5b70a20e334870e1de160a0448a97fdec0257d51173",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 33.11599837499671,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "75fe431e197554e8a0b7e5b70a20e334870e1de160a0448a97fdec0257d51173",
+  "created_at": "2026-08-13T18:18:05.528249Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/emphasis",
+  "pair_key": "dc1db9437326c53c99cf7e1f9d1d82ad04685c216637c175b62e1069ad0394dd",
+  "provider_seconds": 33.11599837499671,
+  "right": "task-2/advisor2/budget",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

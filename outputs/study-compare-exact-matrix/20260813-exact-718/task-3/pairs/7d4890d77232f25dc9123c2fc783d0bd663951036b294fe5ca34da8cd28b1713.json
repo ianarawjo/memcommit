@@ -1,0 +1,370 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:53:41.642588+00:00",
+      "frames": [
+        {
+          "context_digest": "40dca3509f1e21c564970ebb7664df755d25c1c19c4e79b458c803662fb827ce",
+          "context_name": "task-3/local/personal-memory/2025/11",
+          "context_uid": "af363401-7cdc-5426-ad00-4f98635e2dab",
+          "memories": [
+            {
+              "content": "The user recorded a family dinner in the calendar for the final week of November.",
+              "content_digest": "59755036ea9e7d172a5e673253fc7f089e61efe043b2e660f429fe2fa9003d34",
+              "position": 0,
+              "uid": "3f6eaf6c-00e7-5bd7-9809-367f54a0f707"
+            },
+            {
+              "content": "In a crowded restaurant, the user had to ask several times for orders to be repeated, interrupting the flow of conversation.",
+              "content_digest": "2d79e2f4f88a70bc8fbf9efca1b1751fbf51d88667f304c8e8c965a0a536cee7",
+              "position": 1,
+              "uid": "9fd0b9b6-986d-54b0-965e-45feaf9cd482"
+            },
+            {
+              "content": "When the user held the next gathering at their father's home, they continued the conversation on the sofa after the meal.",
+              "content_digest": "4b22fa055bb342db0589b0c54e415f4fa2af02445d3c55b3f38510bd6ca62f38",
+              "position": 2,
+              "uid": "cbc477c4-83c4-506b-9da8-9252d14d7f6b"
+            },
+            {
+              "content": "At a gathering with loud music prepared by their older sister, the user developed a headache and went outside briefly.",
+              "content_digest": "c9b34c3e3211ca7f15eb9a6f8ba97941222bc35ec0253d3da3f383c7247c3e83",
+              "position": 3,
+              "uid": "bbfc537e-3fcc-5065-ab93-4777bcdfc10c"
+            },
+            {
+              "content": "On a day the user held a yard barbecue with their younger brother, the open space dispersed the sound and made conversation easier.",
+              "content_digest": "dd35056c7731d3249a3c2689ee9fb6bfe6974544e302630de6ea230378fea9eb",
+              "position": 4,
+              "uid": "b61367fa-dd17-5ff2-9d6b-f81f6123735a"
+            },
+            {
+              "content": "After seeing a message that their maternal aunt would arrive at 5 p.m., the user delayed meal preparation by an hour.",
+              "content_digest": "31992a8945bfacfc9422f3180b203865f951f200561cd23dad901ec795c5de10",
+              "position": 5,
+              "uid": "681cdbd5-595d-5211-914d-edfd9a6b130d"
+            },
+            {
+              "content": "On a day the user waited without knowing their maternal uncle's arrival time, they reheated the food twice.",
+              "content_digest": "fae7c462a85e844648cb99419e6fdb3a2cd8c7721209ea49a40b4df597635176",
+              "position": 6,
+              "uid": "81c0c4e9-5ae4-5e8a-b11c-7d33032fd8ec"
+            },
+            {
+              "content": "The user's maternal uncle considers it easier to time his departure when he knows the family meal's start time in advance.",
+              "content_digest": "793f47adaa4c5274d15377b0f4adbc2415c0bd5243baf7a1c77c0d92e987a7e8",
+              "position": 7,
+              "uid": "56078821-34d0-540f-ae66-03bdd7bd1df3"
+            },
+            {
+              "content": "Before scheduling a family meal, confirm the attendees' arrival times and the location with the user.",
+              "content_digest": "d057fab5cbe97472da2a796114018a7491d20db6a826cd56943268f73ffeb792",
+              "position": 8,
+              "uid": "19c8ae40-1f5b-5fec-9538-e7bc7cfb036a"
+            },
+            {
+              "content": "Available restaurant reservation times may diminish quickly during the year-end gathering season.",
+              "content_digest": "7bfc817a42ab2d2c67ad04eae58fb3c86bbede15b7cc4ef431a75528bb425e7e",
+              "position": 9,
+              "uid": "3ea9fa3b-4411-55d0-ac90-2ed5515e6ef7"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "8fb38f00-bbe7-42ac-a0d5-c4823f32fec4"
+        },
+        {
+          "context_digest": "1d47d83944d91bc0316a61894412e9b4361758603b9532687cf68473f1d30198",
+          "context_name": "task-3/local/personal-memory/2026/01",
+          "context_uid": "e48e6eac-20f7-599d-9f76-4238bd9dd96d",
+          "memories": [
+            {
+              "content": "The user keeps gloves and scarves in a basket inside the entrance.",
+              "content_digest": "df54c52cb6bc89e2e66c747df9807c6892db272c2a23ac5ac91e3f64aaa2a5da",
+              "position": 0,
+              "uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409"
+            },
+            {
+              "content": "On a day the user could not find their gloves, they walked with their hands in their pockets and missed the bus.",
+              "content_digest": "d4205aee5fe3f2c18adc3622930cc7f74de231de9812ca594dbd95a0af7199ff",
+              "position": 1,
+              "uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5"
+            },
+            {
+              "content": "Before the next outing, the user put the gloves in the entrance basket the night before and left on time.",
+              "content_digest": "23a7026d7d1a7edd3278e7b8aa147ef0d315059663f78da5498ad6c1b4a5407c",
+              "position": 2,
+              "uid": "a11f0943-8ee1-5305-87fb-64982fb36f82"
+            },
+            {
+              "content": "On a snowy day, the user chose a shorter route but turned back at stairs that had not been cleared of snow.",
+              "content_digest": "e9e241d2bc4d7c2fa9a44471aa6d1c16d42d50fe2ed99ccfb50713107714be9b",
+              "position": 3,
+              "uid": "f623f245-cdd5-5080-8869-b52cf2914076"
+            },
+            {
+              "content": "The next day, the user took a cleared sidewalk along the main road and avoided slippery sections.",
+              "content_digest": "62c8ec8b38778e9922cf433af4ceb4d59f60bee52dc758e3b88bb1163637f108",
+              "position": 4,
+              "uid": "17ac56f1-1302-5350-99d5-b95ef7feb768"
+            },
+            {
+              "content": "The user fell asleep with the heat turned up, became too warm before dawn, and woke twice.",
+              "content_digest": "912dbbc88a0f4a174b714a794793781f4d2f6c889f73cd7f825338addcab5d6c",
+              "position": 5,
+              "uid": "96988fa9-44b1-511e-8c99-4372f902cfe3"
+            },
+            {
+              "content": "The next night, the user turned down the heat and used one additional thin blanket.",
+              "content_digest": "3d12a4609d4731ebe71bacc841c979ac3497553238c3b5c2191842bbf075ba89",
+              "position": 6,
+              "uid": "b628acaa-50da-552c-8665-244dc4ab8263"
+            },
+            {
+              "content": "On a morning with heavy snow, the user's father expects the user will worry about road conditions and sends a text before departure.",
+              "content_digest": "dcd6bcb23bee46e49813bb14dd8dcb91983d5830f0536d7f23fcdb3a8af0667c",
+              "position": 7,
+              "uid": "08dfb937-7b28-55b5-801c-c0da00cbd414"
+            },
+            {
+              "content": "Before proposing a winter travel route, check recent snow-clearing conditions and accessible entrances.",
+              "content_digest": "dcab87102a9979c51dd369d5ba5ed00b7445c8ccd14450edcb8bec7859689606",
+              "position": 8,
+              "uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d"
+            },
+            {
+              "content": "The local agent cannot know the actual condition of the sidewalk the user will take from a weather forecast alone.",
+              "content_digest": "6b4bcc2f2f508f130c047ff677cadae0eae5b4cc5e5dd6bb3a1fb3784d7793b1",
+              "position": 9,
+              "uid": "802c4031-57de-592a-9bc8-6ee3d54921c8"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "5c736c09-0fb1-4bef-a53c-f12c44aee485"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate practical domains rather than shared policies: the reference centers on family gatherings and meal coordination, while the compared frame concerns winter preparation, travel safety, and household comfort. All claims are independently useful and no conflict or ambiguity is present.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8fb38f00-bbe7-42ac-a0d5-c4823f32fec4",
+              "memory_uid": "3f6eaf6c-00e7-5bd7-9809-367f54a0f707"
+            }
+          ],
+          "reason": "This is a standalone family-calendar fact with no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A family dinner is recorded for the final week of November.",
+          "uid": "861a3db1-bf68-5386-ba37-b59e2b9e5654"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8fb38f00-bbe7-42ac-a0d5-c4823f32fec4",
+              "memory_uid": "9fd0b9b6-986d-54b0-965e-45feaf9cd482"
+            },
+            {
+              "frame_uid": "8fb38f00-bbe7-42ac-a0d5-c4823f32fec4",
+              "memory_uid": "bbfc537e-3fcc-5065-ab93-4777bcdfc10c"
+            },
+            {
+              "frame_uid": "8fb38f00-bbe7-42ac-a0d5-c4823f32fec4",
+              "memory_uid": "b61367fa-dd17-5ff2-9d6b-f81f6123735a"
+            }
+          ],
+          "reason": "The restaurant, loud-music, and outdoor-barbecue experiences jointly establish one venue-noise claim that is independent of the compared frame's winter concerns.",
+          "status": "RESOLVED",
+          "summary": "Gathering acoustics affect the user's conversational ease and physical comfort.",
+          "uid": "49e40de8-11d9-5d4e-9ad1-eed19960e3c0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8fb38f00-bbe7-42ac-a0d5-c4823f32fec4",
+              "memory_uid": "cbc477c4-83c4-506b-9da8-9252d14d7f6b"
+            }
+          ],
+          "reason": "This specific home-gathering pattern is independently useful and has no materially corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "A gathering at the user's father's home allowed conversation to continue on the sofa after the meal.",
+          "uid": "272377a6-1f83-5f03-b8b2-def3077a156e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8fb38f00-bbe7-42ac-a0d5-c4823f32fec4",
+              "memory_uid": "681cdbd5-595d-5211-914d-edfd9a6b130d"
+            },
+            {
+              "frame_uid": "8fb38f00-bbe7-42ac-a0d5-c4823f32fec4",
+              "memory_uid": "81c0c4e9-5ae4-5e8a-b11c-7d33032fd8ec"
+            }
+          ],
+          "reason": "The aunt and uncle episodes provide complementary evidence for one arrival-time preparation claim absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Knowing an attendee's arrival time supports meal preparation, while uncertainty can require repeated reheating.",
+          "uid": "14ff258f-a233-5ab9-9e59-eb4420678201"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8fb38f00-bbe7-42ac-a0d5-c4823f32fec4",
+              "memory_uid": "56078821-34d0-540f-ae66-03bdd7bd1df3"
+            }
+          ],
+          "reason": "This attendee-specific planning preference is separate from the compared frame's travel and household claims.",
+          "status": "RESOLVED",
+          "summary": "The user's maternal uncle finds advance notice of the family meal's start time helpful for timing his departure.",
+          "uid": "ee563238-e6e8-51f2-b1ea-4367b2e4ef6e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8fb38f00-bbe7-42ac-a0d5-c4823f32fec4",
+              "memory_uid": "19c8ae40-1f5b-5fec-9538-e7bc7cfb036a"
+            }
+          ],
+          "reason": "This family-meal scheduling policy has no materially corresponding operational policy in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Before scheduling a family meal, the attendees' arrival times and location should be confirmed with the user.",
+          "uid": "d1955438-36a3-59f1-bdde-2374954f83f4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8fb38f00-bbe7-42ac-a0d5-c4823f32fec4",
+              "memory_uid": "3ea9fa3b-4411-55d0-ac90-2ed5515e6ef7"
+            }
+          ],
+          "reason": "This seasonal booking constraint is independently useful and is not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Restaurant reservation availability may shrink quickly during the year-end gathering season.",
+          "uid": "81a053e8-7710-55de-acfe-6ae85349d847"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5c736c09-0fb1-4bef-a53c-f12c44aee485",
+              "memory_uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409"
+            },
+            {
+              "frame_uid": "5c736c09-0fb1-4bef-a53c-f12c44aee485",
+              "memory_uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5"
+            },
+            {
+              "frame_uid": "5c736c09-0fb1-4bef-a53c-f12c44aee485",
+              "memory_uid": "a11f0943-8ee1-5305-87fb-64982fb36f82"
+            }
+          ],
+          "reason": "The storage habit, missed-bus episode, and successful preparation episode jointly express one winter-item readiness claim absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Keeping gloves in the entrance basket and preparing them the night before helps the user leave on time.",
+          "uid": "ff521d87-b4d9-56c4-9724-f99249eddfe2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5c736c09-0fb1-4bef-a53c-f12c44aee485",
+              "memory_uid": "f623f245-cdd5-5080-8869-b52cf2914076"
+            },
+            {
+              "frame_uid": "5c736c09-0fb1-4bef-a53c-f12c44aee485",
+              "memory_uid": "17ac56f1-1302-5350-99d5-b95ef7feb768"
+            },
+            {
+              "frame_uid": "5c736c09-0fb1-4bef-a53c-f12c44aee485",
+              "memory_uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d"
+            },
+            {
+              "frame_uid": "5c736c09-0fb1-4bef-a53c-f12c44aee485",
+              "memory_uid": "802c4031-57de-592a-9bc8-6ee3d54921c8"
+            }
+          ],
+          "reason": "The blocked route, successful cleared route, verification policy, and forecast limitation jointly support one condition-based routing claim independent of the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Safe winter routing depends on recent snow clearing and accessible entrances, which a weather forecast alone cannot establish.",
+          "uid": "97702ddb-423b-5b15-9741-a158b4ab69dc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5c736c09-0fb1-4bef-a53c-f12c44aee485",
+              "memory_uid": "96988fa9-44b1-511e-8c99-4372f902cfe3"
+            },
+            {
+              "frame_uid": "5c736c09-0fb1-4bef-a53c-f12c44aee485",
+              "memory_uid": "b628acaa-50da-552c-8665-244dc4ab8263"
+            }
+          ],
+          "reason": "The two-night sequence expresses one household temperature-adjustment claim with no materially corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "Lowering the heat and adding a thin blanket followed sleep disruption caused by excessive overnight warmth.",
+          "uid": "dedf79a5-2d9b-5567-9d8b-784e74d00538"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5c736c09-0fb1-4bef-a53c-f12c44aee485",
+              "memory_uid": "08dfb937-7b28-55b5-801c-c0da00cbd414"
+            }
+          ],
+          "reason": "This proactive family travel communication pattern is independently useful and does not materially match the reference frame's meal-timing communication.",
+          "status": "RESOLVED",
+          "summary": "During heavy snow, the user's father anticipates concern about road conditions and texts before departure.",
+          "uid": "eb712c6c-1643-59c9-b624-d00a7e69e08a"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame describes winter-item preparation, snow-safe route verification, sleep-temperature adjustment, and proactive travel-condition communication.",
+        "differences": "",
+        "reference_only": "The reference describes family-event scheduling, venue acoustics, conversational settings, timing coordination, and seasonal reservation pressure."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "bb63ccef-9336-417e-9bef-78686487bb50"
+    },
+    "analysis_digest": "ca9d5989b0fd48f1f5913b173725a231b972805275105bf9e263233f38ea94cf",
+    "key": "f74ceb41ac7dce42f20cbab9d777dc74745e68e135031e6c145782daf2556b98",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 52.762825291996705,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "f74ceb41ac7dce42f20cbab9d777dc74745e68e135031e6c145782daf2556b98",
+  "created_at": "2026-08-13T18:54:34.404772Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/11",
+  "pair_key": "7d4890d77232f25dc9123c2fc783d0bd663951036b294fe5ca34da8cd28b1713",
+  "provider_seconds": 52.762825291996705,
+  "right": "task-3/local/personal-memory/2026/01",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

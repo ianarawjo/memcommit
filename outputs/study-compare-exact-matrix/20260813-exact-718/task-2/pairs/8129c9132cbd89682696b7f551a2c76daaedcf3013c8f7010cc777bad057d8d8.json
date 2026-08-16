@@ -1,0 +1,428 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:26:19.782487+00:00",
+      "frames": [
+        {
+          "context_digest": "130876ecc1e3921197d330f5ad8493b927360f3505da3eff8df01d4f595a4934",
+          "context_name": "task-2/advisor1/structure",
+          "context_uid": "0ff7abfd-58d3-58c2-b42a-31dca38cb7bd",
+          "memories": [
+            {
+              "content": "Complete the problem framing within the first two sentences so the reader reaches the proposal's central issue before any supporting background.",
+              "content_digest": "4096d07c1d883f8ba3973fd247207f8e86964ff2172e8580c81cb53e64772a6c",
+              "position": 0,
+              "uid": "44249c8a-e84f-5c20-a9cd-a55457e98511"
+            },
+            {
+              "content": "Use the first sentence for the concrete problem and the second for its consequence; reserve later sentences for the proposed response.",
+              "content_digest": "8d72b732a389d0c1bbb22112fa3ba6d8113c8b9d29d252d751c5a55cf7abc648",
+              "position": 1,
+              "uid": "21371c6c-c74f-5791-8f9b-6d099306bfb5"
+            },
+            {
+              "content": "Specify the user, context, and interaction to be explored in the primary HCI research question.",
+              "content_digest": "cc6e0085a02b6df0b572f7393a15292e7fd6c8204f78c66f50fd15190ef49dd0",
+              "position": 2,
+              "uid": "f69ea80c-0d56-5fe8-9d24-8793eefa6643"
+            },
+            {
+              "content": "Provide one compact visual summary when proposing an unfamiliar interaction procedure.",
+              "content_digest": "1e4299abe1691fbbfc826fc59d4276831d9a49abd3588820ba2f50311fd56d2c",
+              "position": 3,
+              "uid": "18ebdcbc-cf5a-5e6c-b2cd-b4cd07d7e59e"
+            },
+            {
+              "content": "Mark the conditions that move an unfamiliar interaction procedure from one step to the next in its visual summary.",
+              "content_digest": "9e7d7547cac76b4b6665ea585fedd7678682c7f9a4eadf129202ac2ea2c6b2b8",
+              "position": 4,
+              "uid": "5ab99a77-8836-50cf-8377-fdd23a208bc4"
+            },
+            {
+              "content": "Present the master’s research schedule as phased periods for exploration, design, prototyping, and user evaluation.",
+              "content_digest": "de00ac53757731455605eb2a3568fcbb4ea3660401a8e6aaf2cb9698795decec",
+              "position": 5,
+              "uid": "b9b7932b-85c1-5a14-80f7-0983dbf22380"
+            },
+            {
+              "content": "Link one reviewable deliverable to each phase of the master’s research.",
+              "content_digest": "cac76eb15b96d8fa32e3041fd5a067a3b5e2085fa832755b5740fe7cf2b57c17",
+              "position": 6,
+              "uid": "fc0a3a72-2da2-5843-be3a-a4ff2adf8fac"
+            },
+            {
+              "content": "Place the gap left by HCI-related research and the proposed design and empirical contributions in close proximity.",
+              "content_digest": "94c1e46dec54f1af7649582c49adbd9f998d3b82300cd234c58604e68619c6d9",
+              "position": 7,
+              "uid": "2f7092a7-2625-5d27-bd76-a13ee5809cc2"
+            },
+            {
+              "content": "Divide a two-page proposal with short descriptive subheadings so a reader can jump directly to the problem, proposed response, and next steps.",
+              "content_digest": "9a65c457d63f97379a188faea00bbc6dfc4ea30ad54aee1386f724a765e88e90",
+              "position": 8,
+              "uid": "a1857f07-36cd-5a6c-946d-a308e712e9eb"
+            },
+            {
+              "content": "Give the problem and proposed response their own descriptive subheadings instead of relying only on paragraph transitions.",
+              "content_digest": "3f5d0cf36befd2b1cb66ae8038719d3f8cd4472303e5173c48c1f96f67d9e969",
+              "position": 9,
+              "uid": "895b5ac9-1aa4-51d2-b89a-94e9fe5b869d"
+            },
+            {
+              "content": "Give the next steps and requested support their own descriptive subheading so they remain easy to find on a return visit.",
+              "content_digest": "008352fbd9cb0d40bd64afe1db74efb2a833adc4146924743b836dbd1941bd90",
+              "position": 10,
+              "uid": "3005f4c5-e17b-531b-b9bf-c9d69411c71f"
+            },
+            {
+              "content": "Place pilot observation or initial prototype results near sentences supporting feasibility claims.",
+              "content_digest": "60e9dcff7041a8df6d3471976e828c8a4713a24ec1b8fa6b6af77afd75b78cf8",
+              "position": 11,
+              "uid": "4913f63e-ceb9-587a-ade9-494fc8f28849"
+            },
+            {
+              "content": "Readers often decide what a proposal is about from its first two sentences before scanning the rest of the page.",
+              "content_digest": "0d8addaa334e762de0ef2ec08c78102bc005a6b81f0baf418c83be2a2981934b",
+              "position": 12,
+              "uid": "8ecaec22-7c25-5a39-a85b-56db9c3b607e"
+            },
+            {
+              "content": "When setup continues past the second sentence, readers who are skimming often retain the background topic but miss the exact problem being proposed.",
+              "content_digest": "5976e248ce36164afb87182216974b972f783352ae5b500398052387ee628710",
+              "position": 13,
+              "uid": "a4536b84-40f2-57db-84e4-024c97c9fecb"
+            },
+            {
+              "content": "Reuse the same short subheadings in discussion so a reader can return to a section without searching through the whole page.",
+              "content_digest": "276c3060f1479291f0d0dd7eba9899e91191555c65cfa60a48d28d1f5b877538",
+              "position": 14,
+              "uid": "2312cb6e-4f50-56f5-b725-ba5e45697a73"
+            },
+            {
+              "content": "Use visible subheadings as a completeness check: an empty or missing section makes an omitted part of the proposal immediately apparent.",
+              "content_digest": "2a68f989965d7f20482be421bc6145ea22d769c78e9c833a842694480dc097f5",
+              "position": 15,
+              "uid": "1d90043b-f010-5a14-9493-77f636c13975"
+            },
+            {
+              "content": "Readers often scan section labels before deciding which paragraph to read closely.",
+              "content_digest": "95e51e9236f82b7ace59c6a24359f398583142c762cc1dd607717a9f297e804a",
+              "position": 16,
+              "uid": "b77fe6ec-676b-5bb9-9119-45aefea2aa27"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "fe1178d3-5887-4fff-ba88-61e347ad92dd"
+        },
+        {
+          "context_digest": "4efbf2f6c096022137cee2c075c75219bb4fd0f441579901b8445bb2d92101f5",
+          "context_name": "task-2/advisor2/budget",
+          "context_uid": "ae02c2b2-49d3-5c30-b686-81ea17a8a87e",
+          "memories": [
+            {
+              "content": "Keep the main text to the total and major categories, and place quantities, unit rates, and assumptions in one compact budget table or appendix.",
+              "content_digest": "2e0d76a9c09d14facdf93e8b82cb1c4f583b8a6063b74552f2c23b7d37224e9c",
+              "position": 0,
+              "uid": "d614b55d-d9f6-5347-8d02-2d219d621a09"
+            },
+            {
+              "content": "Give each cost category, quantity, unit rate, and subtotal a stable row in the separate budget table.",
+              "content_digest": "ecd8aa50fc469bb763f36784d140b871b82a283b39f30f46e9e166776321c602",
+              "position": 1,
+              "uid": "24500129-4b07-564f-ba67-39e40d7d7860"
+            },
+            {
+              "content": "Put the estimate basis in a dedicated table column so one assumption can be checked or revised without rewriting the narrative.",
+              "content_digest": "6ed604ab2ca300f215d13f18cb5344e9322635ad047ce36c08242765e7fb09f4",
+              "position": 2,
+              "uid": "07bad409-af9c-512a-b829-7ceb28273f91"
+            },
+            {
+              "content": "Readers can verify arithmetic and compare categories faster in a consistent table than in amounts distributed across prose.",
+              "content_digest": "1dc966a0ade3af3bc636cb99d456edbdb918c2a23efd4a5792db9f8ede061195",
+              "position": 3,
+              "uid": "abf6d361-c2eb-512f-87e0-f3af9c5eb677"
+            },
+            {
+              "content": "Revise one table row and its subtotal when an estimate changes instead of repeating the new amount across several prose paragraphs.",
+              "content_digest": "dcd7d010f7d2c1898fffe71ccc7a0067233dcbcf66fe4b429043b1900d097f84",
+              "position": 4,
+              "uid": "473cf3ca-9832-5d9c-97df-974f1d9b0d1b"
+            },
+            {
+              "content": "Keep detailed arithmetic out of the main argument when readers can reach the complete table from a clear reference.",
+              "content_digest": "940a8cdee63c326d9c9be89cc07e7f223f239e3537113d32c098f711bd816cf7",
+              "position": 5,
+              "uid": "675956de-2c61-53e1-bb89-9b49d92558ba"
+            },
+            {
+              "content": "The user tends to interrupt the argument with long cost enumerations when no separate budget table is available.",
+              "content_digest": "2c0715ec3cfa247a35c3acc854b0716dca764619050aa635c0c242a5b56aa2f1",
+              "position": 6,
+              "uid": "f4371f72-f222-5066-b2f4-0a6be5d6865e"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "35766f22-2200-4639-92d7-cbbf41b18fa7"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate dimensions of proposal quality: the reference emphasizes framing, research design, evidence placement, and navigable structure, while the compared frame focuses on keeping budget detail structured, verifiable, maintainable, and outside the main argument. Neither frame supplies a counterpart to the other’s policies.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fe1178d3-5887-4fff-ba88-61e347ad92dd",
+              "memory_uid": "44249c8a-e84f-5c20-a9cd-a55457e98511"
+            },
+            {
+              "frame_uid": "fe1178d3-5887-4fff-ba88-61e347ad92dd",
+              "memory_uid": "21371c6c-c74f-5791-8f9b-6d099306bfb5"
+            },
+            {
+              "frame_uid": "fe1178d3-5887-4fff-ba88-61e347ad92dd",
+              "memory_uid": "8ecaec22-7c25-5a39-a85b-56db9c3b607e"
+            },
+            {
+              "frame_uid": "fe1178d3-5887-4fff-ba88-61e347ad92dd",
+              "memory_uid": "a4536b84-40f2-57db-84e4-024c97c9fecb"
+            }
+          ],
+          "reason": "These memories jointly state and motivate one reference-only policy about the timing and division of opening problem framing; the compared frame contains no budget-related counterpart to that editorial claim.",
+          "status": "RESOLVED",
+          "summary": "State the concrete problem and its consequence within the first two sentences so skimming readers grasp the proposal’s central issue before later background or response material.",
+          "uid": "308afd2e-2828-5150-875a-74130651cf21"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fe1178d3-5887-4fff-ba88-61e347ad92dd",
+              "memory_uid": "f69ea80c-0d56-5fe8-9d24-8793eefa6643"
+            }
+          ],
+          "reason": "This is an independently useful reference-only requirement for research-question formulation, with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Define the primary HCI research question by specifying the user, context, and interaction under study.",
+          "uid": "3b9b383c-90f7-57b6-81ab-5ed6acba6097"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fe1178d3-5887-4fff-ba88-61e347ad92dd",
+              "memory_uid": "18ebdcbc-cf5a-5e6c-b2cd-b4cd07d7e59e"
+            },
+            {
+              "frame_uid": "fe1178d3-5887-4fff-ba88-61e347ad92dd",
+              "memory_uid": "5ab99a77-8836-50cf-8377-fdd23a208bc4"
+            }
+          ],
+          "reason": "The two memories split one reference-only visualization requirement into the summary itself and its necessary transition annotations; no compared memory addresses interaction procedures.",
+          "status": "RESOLVED",
+          "summary": "For an unfamiliar interaction procedure, provide a compact visual summary that identifies the conditions governing transitions between steps.",
+          "uid": "04b69016-bf10-5237-8268-2156bb57450c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fe1178d3-5887-4fff-ba88-61e347ad92dd",
+              "memory_uid": "b9b7932b-85c1-5a14-80f7-0983dbf22380"
+            },
+            {
+              "frame_uid": "fe1178d3-5887-4fff-ba88-61e347ad92dd",
+              "memory_uid": "fc0a3a72-2da2-5843-be3a-a4ff2adf8fac"
+            }
+          ],
+          "reason": "These memories form one reference-only planning policy connecting named research phases with their outputs; the compared frame does not discuss schedules or deliverables.",
+          "status": "RESOLVED",
+          "summary": "Organize the master’s research schedule into exploration, design, prototyping, and evaluation phases, each linked to a reviewable deliverable.",
+          "uid": "7dc37866-ad4c-5c2a-b036-ddff9ea47b27"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fe1178d3-5887-4fff-ba88-61e347ad92dd",
+              "memory_uid": "2f7092a7-2625-5d27-bd76-a13ee5809cc2"
+            }
+          ],
+          "reason": "This is a distinct reference-only claim about spatially connecting the motivating gap with the proposal’s contributions.",
+          "status": "RESOLVED",
+          "summary": "Place the HCI research gap close to the proposed design and empirical contributions.",
+          "uid": "d0a44587-985b-5afb-81ba-f3d01542c9a5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fe1178d3-5887-4fff-ba88-61e347ad92dd",
+              "memory_uid": "a1857f07-36cd-5a6c-946d-a308e712e9eb"
+            },
+            {
+              "frame_uid": "fe1178d3-5887-4fff-ba88-61e347ad92dd",
+              "memory_uid": "895b5ac9-1aa4-51d2-b89a-94e9fe5b869d"
+            },
+            {
+              "frame_uid": "fe1178d3-5887-4fff-ba88-61e347ad92dd",
+              "memory_uid": "3005f4c5-e17b-531b-b9bf-c9d69411c71f"
+            },
+            {
+              "frame_uid": "fe1178d3-5887-4fff-ba88-61e347ad92dd",
+              "memory_uid": "2312cb6e-4f50-56f5-b725-ba5e45697a73"
+            },
+            {
+              "frame_uid": "fe1178d3-5887-4fff-ba88-61e347ad92dd",
+              "memory_uid": "b77fe6ec-676b-5bb9-9119-45aefea2aa27"
+            }
+          ],
+          "reason": "These memories restate and divide one reference-only navigation policy, including the required section labels, their reuse, and the reader-scanning behavior they support.",
+          "status": "RESOLVED",
+          "summary": "Use short, reusable descriptive subheadings for the problem, proposed response, and next steps or requested support so readers can scan and revisit a two-page proposal efficiently.",
+          "uid": "37863089-28a2-570e-902f-91f54a1d71ea"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fe1178d3-5887-4fff-ba88-61e347ad92dd",
+              "memory_uid": "1d90043b-f010-5a14-9493-77f636c13975"
+            }
+          ],
+          "reason": "Although it also uses subheadings, this reference-only claim gives them an independently useful validation function rather than the navigation function described elsewhere.",
+          "status": "RESOLVED",
+          "summary": "Use visible subheadings to expose missing or empty proposal sections as a completeness check.",
+          "uid": "3e3fb50f-7ff4-5122-a84f-1043b03d7d43"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fe1178d3-5887-4fff-ba88-61e347ad92dd",
+              "memory_uid": "4913f63e-ceb9-587a-ade9-494fc8f28849"
+            }
+          ],
+          "reason": "This is an independent reference-only evidence-placement policy with no corresponding compared claim.",
+          "status": "RESOLVED",
+          "summary": "Place pilot observations or initial prototype results near the sentences that assert feasibility.",
+          "uid": "a112db22-80d4-5eda-8de2-b773285a10c7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "35766f22-2200-4639-92d7-cbbf41b18fa7",
+              "memory_uid": "d614b55d-d9f6-5347-8d02-2d219d621a09"
+            },
+            {
+              "frame_uid": "35766f22-2200-4639-92d7-cbbf41b18fa7",
+              "memory_uid": "675956de-2c61-53e1-bb89-9b49d92558ba"
+            },
+            {
+              "frame_uid": "35766f22-2200-4639-92d7-cbbf41b18fa7",
+              "memory_uid": "f4371f72-f222-5066-b2f4-0a6be5d6865e"
+            }
+          ],
+          "reason": "These memories jointly state and motivate one compared-only separation policy intended to prevent long cost enumerations from interrupting the argument.",
+          "status": "RESOLVED",
+          "summary": "Keep the main argument to totals and major cost categories, while placing detailed arithmetic and assumptions in a compact, clearly referenced budget table or appendix.",
+          "uid": "e3bce0f5-ff70-5081-a4ee-6101f0cdf421"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "35766f22-2200-4639-92d7-cbbf41b18fa7",
+              "memory_uid": "24500129-4b07-564f-ba67-39e40d7d7860"
+            }
+          ],
+          "reason": "This is a distinct compared-only requirement for the table’s row structure.",
+          "status": "RESOLVED",
+          "summary": "Give every cost category, quantity, unit rate, and subtotal a stable row in the budget table.",
+          "uid": "8e3a3b05-d989-595d-8ebe-12391aafc2d4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "35766f22-2200-4639-92d7-cbbf41b18fa7",
+              "memory_uid": "07bad409-af9c-512a-b829-7ceb28273f91"
+            }
+          ],
+          "reason": "This is an independently useful compared-only schema and revision policy for estimate assumptions.",
+          "status": "RESOLVED",
+          "summary": "Place each estimate’s basis in a dedicated table column so its assumption can be checked or revised without rewriting narrative text.",
+          "uid": "3c62ccbf-4727-575f-a44c-c6f17fa19653"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "35766f22-2200-4639-92d7-cbbf41b18fa7",
+              "memory_uid": "abf6d361-c2eb-512f-87e0-f3af9c5eb677"
+            }
+          ],
+          "reason": "This compared-only claim states the verification and comparison benefit of tabular presentation, independently of the table’s specific schema.",
+          "status": "RESOLVED",
+          "summary": "Use a consistent budget table to make arithmetic verification and category comparison faster than amounts distributed through prose.",
+          "uid": "1efbd368-aae4-590c-b153-63d520303f35"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "35766f22-2200-4639-92d7-cbbf41b18fa7",
+              "memory_uid": "473cf3ca-9832-5d9c-97df-974f1d9b0d1b"
+            }
+          ],
+          "reason": "This is a distinct compared-only maintenance policy for localizing budget updates.",
+          "status": "RESOLVED",
+          "summary": "When an estimate changes, revise its table row and subtotal rather than repeating the new amount across multiple prose paragraphs.",
+          "uid": "c199ab0a-9b60-52cb-9425-cb29fdb6ccb0"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only guidance separates budget detail from the argument and structures estimates for clear assumptions, arithmetic verification, category comparison, and localized revision.",
+        "differences": "",
+        "reference_only": "Reference-only guidance covers early problem framing, research-question specificity, procedure visualization, phased planning, contribution positioning, navigable subheadings, completeness checks, and nearby feasibility evidence."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "13fb933b-f5b8-4446-81e7-91ff42599084"
+    },
+    "analysis_digest": "504839dd7050df43714372ee0b406f9845432ef52143e2f26246195494ddb4ca",
+    "key": "1d1825a3a78c1db14e5e05af3c47129ec135bf416325eea55bf6cba8cf7a44e9",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 40.692084375001286,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "1d1825a3a78c1db14e5e05af3c47129ec135bf416325eea55bf6cba8cf7a44e9",
+  "created_at": "2026-08-13T18:27:00.474235Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/structure",
+  "pair_key": "8129c9132cbd89682696b7f551a2c76daaedcf3013c8f7010cc777bad057d8d8",
+  "provider_seconds": 40.692084375001286,
+  "right": "task-2/advisor2/budget",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

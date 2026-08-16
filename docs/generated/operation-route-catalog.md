@@ -13,13 +13,14 @@ architectural-closure conclusion. `Curated state` comes from the reviewed
 | `audit` | `memcommit.commands.audit:cmd` | — | `memcommit.interfaces.tui.operations.audit`<br>`memcommit.interfaces.tui.operations.audit.setup` | — | — | — | `PARTIAL_SURFACE` | `UNREVIEWED` |
 | `branch` | `memcommit.commands.branch:cmd` | — | — | — | — | — | `COMMAND_ONLY` | `UNREVIEWED` |
 | `check-conformance` | `memcommit.commands.check_conformance:cmd` | — | — | — | — | — | `COMMAND_ONLY` | `UNREVIEWED` |
-| `checkout` | `memcommit.cli:_checkout` | — | — | — | — | — | `COMMAND_ONLY` | `UNREVIEWED` |
+| `checkout` | `memcommit.cli:_checkout` | `memcommit.switch_application`<br>`memcommit.switch_runtime` | `memcommit.interfaces.tui.operations.switch`<br>`memcommit.interfaces.tui.operations.switch.model`<br>`memcommit.interfaces.tui.operations.switch.screen` | — | — | `docs/switch-application-boundary-matrix.md` | `BOUNDED_INTERNAL` | `UNREVIEWED` |
 | `checkpoint` | `memcommit.commands.checkpoint:cmd` | — | — | — | — | — | `COMMAND_ONLY` | `UNREVIEWED` |
 | `chunk` | `memcommit.commands.chunk:cmd` | — | — | — | — | — | `COMMAND_ONLY` | `UNREVIEWED` |
 | `clear` | `memcommit.commands.clear:cmd` | — | — | — | — | — | `COMMAND_ONLY` | `UNREVIEWED` |
 | `compare` | `memcommit.commands.compare:cmd` | — | `memcommit.interfaces.tui.operations.compare`<br>`memcommit.interfaces.tui.operations.compare.model`<br>`memcommit.interfaces.tui.operations.compare.setup` | `compare_contexts`<br>`open_comparison`<br>`refresh_comparison` | `memcommit.interfaces.agent.compare` | `docs/compare-application-boundary-matrix.md` | `PARTIAL_SURFACE` | `CLOSED` |
 | `config` | `memcommit.commands.config:app` | — | — | — | — | — | `COMMAND_ONLY` | `UNREVIEWED` |
 | `contexts` | `memcommit.commands.contexts:cmd` | — | — | — | — | — | `COMMAND_ONLY` | `UNREVIEWED` |
+| `dedup` | `memcommit.commands.dedup:cmd` | `memcommit.dedup_application`<br>`memcommit.dedup_runtime` | `memcommit.interfaces.tui.operations.dedup`<br>`memcommit.interfaces.tui.operations.dedup.screen` | `apply_dedup`<br>`plan_dedup` | `memcommit.interfaces.agent.dedup` | — | `PARTIAL_SURFACE` | `CLOSED` |
 | `delete` | `memcommit.commands.delete:cmd` | — | — | — | — | — | `COMMAND_ONLY` | `UNREVIEWED` |
 | `diff` | `memcommit.commands.diff:cmd` | — | — | — | — | — | `COMMAND_ONLY` | `UNREVIEWED` |
 | `distill` | `memcommit.commands.distill:cmd` | `memcommit.distill_application`<br>`memcommit.distill_runtime` | `memcommit.interfaces.tui.operations.distill`<br>`memcommit.interfaces.tui.operations.distill.adapter`<br>`memcommit.interfaces.tui.operations.distill.model`<br>`memcommit.interfaces.tui.operations.distill.screen` | `apply_distill`<br>`distill_context` | `memcommit.interfaces.agent.distill` | `docs/distill-elaborate-application-boundary-matrix.md` | `MULTI_ADAPTER` | `CLOSED` |
@@ -61,7 +62,7 @@ architectural-closure conclusion. `Curated state` comes from the reviewed
 | `show` | `memcommit.commands.show:cmd` | — | — | — | — | — | `COMMAND_ONLY` | `UNREVIEWED` |
 | `status` | `memcommit.commands.status:cmd` | — | — | — | — | — | `COMMAND_ONLY` | `UNREVIEWED` |
 | `summarize` | `memcommit.commands.summarize:cmd` | `memcommit.summarize_application`<br>`memcommit.summarize_runtime` | `memcommit.interfaces.tui.operations.summarize`<br>`memcommit.interfaces.tui.operations.summarize.adapter`<br>`memcommit.interfaces.tui.operations.summarize.model`<br>`memcommit.interfaces.tui.operations.summarize.screen` | — | — | `docs/summarize-application-boundary-matrix.md` | `BOUNDED_INTERNAL` | `CLOSED` |
-| `switch` | `memcommit.commands.switch:cmd` | — | — | — | — | — | `COMMAND_ONLY` | `UNREVIEWED` |
+| `switch` | `memcommit.commands.switch:cmd` | `memcommit.switch_application`<br>`memcommit.switch_runtime` | `memcommit.interfaces.tui.operations.switch`<br>`memcommit.interfaces.tui.operations.switch.model`<br>`memcommit.interfaces.tui.operations.switch.screen` | — | — | `docs/switch-application-boundary-matrix.md` | `BOUNDED_INTERNAL` | `CLOSED` |
 | `trace` | `memcommit.commands.trace:cmd` | — | — | — | — | — | `COMMAND_ONLY` | `UNREVIEWED` |
 | `translate` | `memcommit.commands.translate:cmd` | — | — | — | — | — | `COMMAND_ONLY` | `UNREVIEWED` |
 | `undo` | `memcommit.commands.undo:cmd` | — | — | — | — | — | `COMMAND_ONLY` | `UNREVIEWED` |

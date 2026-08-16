@@ -1,0 +1,349 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:14:06.855950+00:00",
+      "frames": [
+        {
+          "context_digest": "30f0425cad991a5bb1b473f7e73c2c039db2d91dc0c95116413d0a8e7b6fed29",
+          "context_name": "task-2/advisor1/budget",
+          "context_uid": "d6d3ee9e-eb0f-5c28-9463-7a680d53b470",
+          "memories": [
+            {
+              "content": "Keep the total, major cost categories, and one-line estimate basis in the main text so the resource argument can be understood without leaving the proposal.",
+              "content_digest": "5dc9db0be6499fc408063be04c9e1cc344986512f4d24d5697f5c53a08529c9a",
+              "position": 0,
+              "uid": "05e0261e-5c52-5030-8176-0f02d4522931"
+            },
+            {
+              "content": "Place each major cost beside the activity or deliverable it enables in the main text.",
+              "content_digest": "b97219830051faf46cff7c9541c331012571866926740ed4d6a7925c12fb21a8",
+              "position": 1,
+              "uid": "1083e9b3-698a-57b1-91ab-ce04cec1e5e5"
+            },
+            {
+              "content": "State the quantity and unit-rate basis for each major cost in the same paragraph that requests it.",
+              "content_digest": "5ce37d95d9d037bbab71276fa8f0e8e383b472d0122817ab7b711c971b8cbf5d",
+              "position": 2,
+              "uid": "3652f268-d86f-55d6-935d-d3bdc487aae6"
+            },
+            {
+              "content": "Readers may question a proposed priority when its cost cannot be checked on the same page as the claimed benefit.",
+              "content_digest": "26fa14ff80ece7682cb51c7356a47a8e60e94edd4551f59ecd2fa3017bd9bffd",
+              "position": 3,
+              "uid": "4e1e1201-94b8-5a7a-8737-edc4c62881ff"
+            },
+            {
+              "content": "Update the cost sentence whenever the related activity changes so the narrative and requested amount cannot drift apart.",
+              "content_digest": "343c11198b38874476e0cda3707dd07436699852db0934e2e8f8c95a7ea3c3ea",
+              "position": 4,
+              "uid": "2f5f9039-e038-51c1-8af0-21a78772c512"
+            },
+            {
+              "content": "Accept a denser main-text paragraph when the estimate basis is essential to deciding whether the request is proportionate.",
+              "content_digest": "59ca1aafc11b37b097251b4b7c6b15e249262304f79b261bd4351d3ca89cb5fe",
+              "position": 5,
+              "uid": "f7a16d08-fbe2-5508-890d-cdbf70c1146e"
+            },
+            {
+              "content": "The user tends to revise the work plan but forget a detached budget table unless the key amount is repeated beside the activity.",
+              "content_digest": "393651043824d9e9c528e5de7618854b71970967d172ee1e9bc3c77aec3baab0",
+              "position": 6,
+              "uid": "2ca1d5a1-d78a-55b2-ab21-fd6ad73366b4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "14209eaa-6ed9-4bd0-b999-22f9e5abe78c"
+        },
+        {
+          "context_digest": "74ec0b91876efe6caed2938aaf4a0b06272de678fbf74dc9da1c217aa0bd042f",
+          "context_name": "task-2/advisor2/compensation",
+          "context_uid": "4ffbd453-7d61-56f7-90ad-34d77b485ef8",
+          "memories": [
+            {
+              "content": "Calculate user research compensation budgets based on the estimated participation burden, combining session time with required technical and travel preparation.",
+              "content_digest": "ba439fe3920339f56e377d8f82a64ab3ad27fb25e0eec3c65b610c81af53d175",
+              "position": 0,
+              "uid": "be9e402b-8d3b-58da-9766-2cf2ec25b9ae"
+            },
+            {
+              "content": "Compensate participants who withdraw from the study midway for their actual participation time.",
+              "content_digest": "599f542ec6f4a5a1a61f5c1a31547088e015439978a64b268879b5a2b65c9be4",
+              "position": 1,
+              "uid": "85157c57-410f-5c7d-8183-b37d61eebf8a"
+            },
+            {
+              "content": "Compensate for the time actually spent in sessions, regardless of the research modality.",
+              "content_digest": "b19b9dbece5d564de69e703491018fbd78ab834149eed0590a552773526b6e29",
+              "position": 2,
+              "uid": "8abeab95-3e41-5378-8409-08200aee9d58"
+            },
+            {
+              "content": "Allow the issuance of gift cards of equivalent value to participants in remote studies who cannot use electronic transfers.",
+              "content_digest": "8ac881488d0064f4b4c6143e2d8c69ab9806b419044adef266c50738c7afb291",
+              "position": 3,
+              "uid": "9b59c6ed-5dbe-5ccc-87b5-6be31f414e68"
+            },
+            {
+              "content": "Do not treat an unresolved payment method as a deficiency at the proposal stage.",
+              "content_digest": "80109274870eb1023e4cbcc6861a906a4d94db5dab2b2659bcebccde125c9ac3",
+              "position": 4,
+              "uid": "5c6c461d-05e5-5b0c-b801-245de2f9c8d7"
+            },
+            {
+              "content": "Allow differential compensation amounts for on-site and remote studies when participation burden varies due to travel or technical preparation.",
+              "content_digest": "556c5e49f7996a651a64825df2389f070629b9bc664c758d934f308c7fd6eea2",
+              "position": 5,
+              "uid": "44abc098-8c9f-5abb-bc49-9deb25066d93"
+            },
+            {
+              "content": "Participants judge the fairness of compensation based on the combined burden of session time and required technical and travel preparation.",
+              "content_digest": "80dd84e8b183e02f1fd772890b48712bb04a04852055eece98957a0c9028288c",
+              "position": 6,
+              "uid": "2a252668-f3f2-5582-b248-43ad81c54a48"
+            },
+            {
+              "content": "In longitudinal studies requiring diary entries and repeated reporting, include out-of-session recording time in compensation calculations.",
+              "content_digest": "7d103d93741e40d54c8df8347f2ce648a1cd96e19589663fa515bfb24b5bd844",
+              "position": 7,
+              "uid": "7e647a83-81b0-52d6-9362-e513dc2a5032"
+            },
+            {
+              "content": "Distinguish between participant research compensation and labor costs for field staff performing installation and operational support as part of their duties.",
+              "content_digest": "b1566527e9c1d7d3f93631d1503b08ddb4a6818daa570c118f265b47603592f0",
+              "position": 8,
+              "uid": "d77affab-60c8-5403-b189-17022b484640"
+            },
+            {
+              "content": "The user tends to count session time but omit participants’ advance setup and follow-up reporting time.",
+              "content_digest": "98911b7db2d8c3962d7ef48919265f40cdb61a711062e5459a4f6d43f71d6fd9",
+              "position": 9,
+              "uid": "0c470c6b-26a6-5501-93ac-c51fecd708ae"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "260ad9c4-f0e5-46d1-ab1d-f64294e7940c"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate dimensions of research budgeting. The reference frame governs how costs and estimate bases stay visible and synchronized in proposal prose, while the compared frame governs participant-compensation calculation, fairness, payment flexibility, and cost classification.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "14209eaa-6ed9-4bd0-b999-22f9e5abe78c",
+              "memory_uid": "05e0261e-5c52-5030-8176-0f02d4522931"
+            },
+            {
+              "frame_uid": "14209eaa-6ed9-4bd0-b999-22f9e5abe78c",
+              "memory_uid": "f7a16d08-fbe2-5508-890d-cdbf70c1146e"
+            }
+          ],
+          "reason": "This is a one-sided proposal-presentation policy; the compared frame addresses how participant compensation is determined rather than where budget justification appears.",
+          "status": "RESOLVED",
+          "summary": "Keep decision-essential cost totals, categories, and estimate bases in the main text even when this makes the prose denser.",
+          "uid": "7a7d3503-86a4-55aa-b897-9f3c6ce0ad36"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "14209eaa-6ed9-4bd0-b999-22f9e5abe78c",
+              "memory_uid": "1083e9b3-698a-57b1-91ab-ce04cec1e5e5"
+            },
+            {
+              "frame_uid": "14209eaa-6ed9-4bd0-b999-22f9e5abe78c",
+              "memory_uid": "4e1e1201-94b8-5a7a-8737-edc4c62881ff"
+            }
+          ],
+          "reason": "This is a one-sided navigability and checkability claim without a corresponding compensation-policy claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Place major costs beside the activities or benefits they support so readers can assess cost against value on the same page.",
+          "uid": "5567aae9-a8e7-5e3e-a555-b67e2dd2fadf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "14209eaa-6ed9-4bd0-b999-22f9e5abe78c",
+              "memory_uid": "3652f268-d86f-55d6-935d-d3bdc487aae6"
+            }
+          ],
+          "reason": "This specific proposal-detail placement requirement appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "State each major cost’s quantity and unit-rate basis in the paragraph requesting it.",
+          "uid": "64af73c1-289d-5120-af92-5edada2bbbdb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "14209eaa-6ed9-4bd0-b999-22f9e5abe78c",
+              "memory_uid": "2f5f9039-e038-51c1-8af0-21a78772c512"
+            },
+            {
+              "frame_uid": "14209eaa-6ed9-4bd0-b999-22f9e5abe78c",
+              "memory_uid": "2ca1d5a1-d78a-55b2-ab21-fd6ad73366b4"
+            }
+          ],
+          "reason": "These memories express the same one-sided maintenance concern about plan-budget drift; the compared frame does not address document synchronization.",
+          "status": "RESOLVED",
+          "summary": "Keep activity descriptions and their nearby key amounts synchronized to prevent revisions from leaving a detached budget inconsistent with the work plan.",
+          "uid": "820a66a7-735f-59c8-a02f-cf08eee57e91"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "260ad9c4-f0e5-46d1-ab1d-f64294e7940c",
+              "memory_uid": "be9e402b-8d3b-58da-9766-2cf2ec25b9ae"
+            },
+            {
+              "frame_uid": "260ad9c4-f0e5-46d1-ab1d-f64294e7940c",
+              "memory_uid": "2a252668-f3f2-5582-b248-43ad81c54a48"
+            },
+            {
+              "frame_uid": "260ad9c4-f0e5-46d1-ab1d-f64294e7940c",
+              "memory_uid": "0c470c6b-26a6-5501-93ac-c51fecd708ae"
+            }
+          ],
+          "reason": "These memories state and motivate the same one-sided burden-based calculation principle, which the reference frame does not supply.",
+          "status": "RESOLVED",
+          "summary": "Base participant compensation on burden beyond session time, including applicable preparation, travel, setup, and follow-up work.",
+          "uid": "611ec069-fd19-57e2-b51f-c8114df1ec2c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "260ad9c4-f0e5-46d1-ab1d-f64294e7940c",
+              "memory_uid": "85157c57-410f-5c7d-8183-b37d61eebf8a"
+            }
+          ],
+          "reason": "This withdrawal-specific compensation rule appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Compensate participants who withdraw midway for the time they actually participated.",
+          "uid": "98104aae-dffe-5d61-8f62-489dc42ffadf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "260ad9c4-f0e5-46d1-ab1d-f64294e7940c",
+              "memory_uid": "8abeab95-3e41-5378-8409-08200aee9d58"
+            }
+          ],
+          "reason": "This modality-neutral rule for session-time compensation appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Compensate actual session time regardless of whether participation is remote or on-site.",
+          "uid": "54751291-59fc-5e52-a6fc-85294631258d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "260ad9c4-f0e5-46d1-ab1d-f64294e7940c",
+              "memory_uid": "9b59c6ed-5dbe-5ccc-87b5-6be31f414e68"
+            }
+          ],
+          "reason": "This conditional payment-method alternative appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Permit equivalent-value gift cards for remote participants who cannot use electronic transfers.",
+          "uid": "6c9633b5-b18a-54b3-b289-c4980c7711f8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "260ad9c4-f0e5-46d1-ab1d-f64294e7940c",
+              "memory_uid": "5c6c461d-05e5-5b0c-b801-245de2f9c8d7"
+            }
+          ],
+          "reason": "This proposal-stage evaluation rule appears only in the compared frame and is independent of the reference frame’s cost-presentation requirements.",
+          "status": "RESOLVED",
+          "summary": "Do not treat an unresolved payment method as a proposal-stage deficiency.",
+          "uid": "4bca278e-59de-5deb-84b2-079f6b897c01"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "260ad9c4-f0e5-46d1-ab1d-f64294e7940c",
+              "memory_uid": "44abc098-8c9f-5abb-bc49-9deb25066d93"
+            }
+          ],
+          "reason": "This conditional rule for differential compensation appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Allow on-site and remote compensation amounts to differ when their travel or technical-preparation burdens differ.",
+          "uid": "522fc155-7aaf-5dbd-a442-e7227a241738"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "260ad9c4-f0e5-46d1-ab1d-f64294e7940c",
+              "memory_uid": "7e647a83-81b0-52d6-9362-e513dc2a5032"
+            }
+          ],
+          "reason": "This longitudinal-study calculation rule appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Include out-of-session diary and repeated-reporting time when calculating compensation for longitudinal studies.",
+          "uid": "d97e7cb8-3379-58c5-8ca7-04d1aeed35bb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "260ad9c4-f0e5-46d1-ab1d-f64294e7940c",
+              "memory_uid": "d77affab-60c8-5403-b189-17022b484640"
+            }
+          ],
+          "reason": "This cost-classification distinction appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Separate participant research compensation from labor costs for field staff performing installation or operational support.",
+          "uid": "c504c218-900f-506b-8402-120f325715fb"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Participant compensation should reflect actual and ancillary burden, including withdrawal, preparation, travel, and longitudinal reporting, while allowing suitable payment methods, burden-based modality differences, and separation from staff labor costs.",
+        "differences": "",
+        "reference_only": "Proposal prose should expose decision-relevant totals, categories, unit-rate bases, and activity-linked costs, with related amounts updated as plans change."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "abcd9fc3-dd2d-44ed-b243-c465249dcc8b"
+    },
+    "analysis_digest": "6eaef44e81504eb63a4e770a6856aabaea80db8d9d1ce6e22c596c56d90d7183",
+    "key": "4cb38818da6caa0ed636bfa74c33881cad9c616e80001ef97cea8757da84b973",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 52.80263866699897,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "4cb38818da6caa0ed636bfa74c33881cad9c616e80001ef97cea8757da84b973",
+  "created_at": "2026-08-13T18:14:59.658171Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/budget",
+  "pair_key": "af8c96d43902ae439f8c375542f9c9685762935720773fc38fdca8d4e7769946",
+  "provider_seconds": 52.80263866699897,
+  "right": "task-2/advisor2/compensation",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

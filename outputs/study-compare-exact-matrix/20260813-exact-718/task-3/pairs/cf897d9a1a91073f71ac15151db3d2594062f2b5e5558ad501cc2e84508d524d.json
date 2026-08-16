@@ -1,0 +1,406 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:42:39.076271+00:00",
+      "frames": [
+        {
+          "context_digest": "4f6b609414f921ca470614699bdac42e9f2932482375026def79956485b0569e",
+          "context_name": "task-3/local/personal-memory/2024/08",
+          "context_uid": "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+          "memories": [
+            {
+              "content": "The user has set a monthly limit in their budget record for spending other than living expenses.",
+              "content_digest": "5c0df9500947f7e044a8755d66d58adccca01db3aed42b43ab9748b8c4f431e9",
+              "position": 0,
+              "uid": "5f80c7ec-e294-5905-abab-91027c9d827b"
+            },
+            {
+              "content": "In a week when the user went grocery shopping and visited the bank separately, they made the same round trip twice.",
+              "content_digest": "4e814adad1a4c201f6348f1c14b14950b5c549bba64bf70cfccd08ca9efc5bd3",
+              "position": 1,
+              "uid": "2428ab2c-37ce-5de1-84dc-abcdfc8ce062"
+            },
+            {
+              "content": "The following week, the user completed both errands in one outing and reduced travel time.",
+              "content_digest": "ad5555ca7daa9d977cfcf5eb4f476eb5730cead6d307c986497716d69f1145b0",
+              "position": 2,
+              "uid": "bf30d1ef-d7cd-5aa3-b65b-ff04aae647e7"
+            },
+            {
+              "content": "When a bill alert arrived on the due date, the user postponed payment until after a meeting.",
+              "content_digest": "c62dda61c680da9ac1fd5ab9124fa05635d20ad9e4bbb7aef36723d289c05102",
+              "position": 3,
+              "uid": "442672e1-2188-5aa3-ad38-5e9c16f25bd5"
+            },
+            {
+              "content": "In a month when the user received an alert three days before the deadline, they finished payment before dinner.",
+              "content_digest": "939ac83da176d5bb1b7e2196402b9faacb962d947b85b9a61c31854867c1e62e",
+              "position": 4,
+              "uid": "c7385cce-ec43-5902-973c-5b8af54c3557"
+            },
+            {
+              "content": "The user collected cash receipts in their wallet and entered all the amounts at once at the end of the month.",
+              "content_digest": "3171a8128ed3855ac9a4c2b542516333fc3728ed1d7260974888b94d0b32c3e6",
+              "position": 5,
+              "uid": "d926c45c-ea49-589c-a7e4-491c9a1514f8"
+            },
+            {
+              "content": "After recording one large expense, the user ate out two fewer times that week.",
+              "content_digest": "af55fd94b01e0ece728347e9349f96b5733c57dae752f9559dc4e08bef7a3320",
+              "position": 6,
+              "uid": "9433523f-8c4e-5424-b370-d325ba5154d1"
+            },
+            {
+              "content": "The user's older sister prefers to settle the jointly paid cost of a meal by electronic transfer rather than cash.",
+              "content_digest": "d84d2ea68add4202e8c421e9c1702c29ca88bd6ae838588bd415fdbd1980cb2b",
+              "position": 7,
+              "uid": "d9531336-ac5f-5ba0-bf26-9c69c854578f"
+            },
+            {
+              "content": "Confirm the amount and account with the user before creating an automatic payment schedule.",
+              "content_digest": "b1d0c16fd880f4ae2657415ddc8fe0f223ccdd931248bb4412a6c95754d4cce1",
+              "position": 8,
+              "uid": "9941d390-8b40-5fee-8bcf-df6f36befcb0"
+            },
+            {
+              "content": "The timing of payment processing and late-payment recording may differ by billing institution.",
+              "content_digest": "203e65e4eb8451ec7551fb166357f107d17b8c89a2341b32fc25a3fb67ec7f98",
+              "position": 9,
+              "uid": "79aea8fd-5d48-50f7-adf6-b7ebe33bfb08"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "c3f0cdce-f854-4054-9d39-6cacfe8ba7ee"
+        },
+        {
+          "context_digest": "3e738289251b9bdf3deb1c7a7540e6ce811b09e26a020af3a76d47b4c85c7ab1",
+          "context_name": "task-3/local/personal-memory/2025/02",
+          "context_uid": "ce7367b8-8532-5f43-972a-1665ca8e3e80",
+          "memories": [
+            {
+              "content": "The user reviewed their emergency-contact list in February 2025.",
+              "content_digest": "b2f108376dbbf53e8885b9c61080d4c873209d8c6e399c37412fa507fec08b0b",
+              "position": 0,
+              "uid": "3ff046b1-5810-51ca-8d43-c99ef6a90b41"
+            },
+            {
+              "content": "When preparation instructions arrived as a long paragraph, the user missed two items.",
+              "content_digest": "43bde452a403f85bcffa6f7ba6b3142ed45604730083327c6f57092b98f397aa",
+              "position": 1,
+              "uid": "e2a304e5-6100-5a5f-b508-0a7f28f6bda7"
+            },
+            {
+              "content": "After changing the same content into a checklist, the user marked every item they had prepared.",
+              "content_digest": "0f8115061b489894115fd252f079ee673504ed09dea4d88d558e64ed6189f1be",
+              "position": 2,
+              "uid": "51d03bff-3e33-5f68-9df6-ed7efa8e3de9"
+            },
+            {
+              "content": "The user called their mother on a weekend evening, but they spoke only briefly because the mother was out.",
+              "content_digest": "a9a1e7d87532667781677f4760beeb086f1e423365a915a0ec0b494892cbb361",
+              "position": 3,
+              "uid": "0987293e-3e21-5cbc-bb46-59245a5fa041"
+            },
+            {
+              "content": "The user called again on Saturday morning the following week and spoke for 40 minutes.",
+              "content_digest": "f08c9f170345686b2091e3b0ecd49f049e245d584886da62d586185010f713bf",
+              "position": 4,
+              "uid": "dc3de6ad-56ea-528a-a9b7-349e79af2326"
+            },
+            {
+              "content": "The user sent a text to an old number for an emergency contact and saw that delivery failed.",
+              "content_digest": "692321e996b9ac8e3500a2da7765f77e0d14c6f040cf2c33944cbdcb39c706de",
+              "position": 5,
+              "uid": "6546d41b-3d5b-5802-a9e7-ac028405e3f2"
+            },
+            {
+              "content": "After confirming the new number with their older sister, the user updated the contact list.",
+              "content_digest": "8d2e954a978e35c1da92948ccc8e45f38fcc25ea3fafe7c389ef546f6eda1ae1",
+              "position": 6,
+              "uid": "ea6eb9d2-9b01-5330-a4d5-886d4bc6cd85"
+            },
+            {
+              "content": "For nonurgent contact, the user's older sister prefers to reply by text when available rather than take a call immediately.",
+              "content_digest": "86639aee50903bc3261e6f88ac7d649c8197927fe214d5d17e0e6f5b3d69a59d",
+              "position": 7,
+              "uid": "12fe7e64-192e-5359-8f96-d2875f7e5399"
+            },
+            {
+              "content": "Before using an emergency contact, reconfirm the number and relationship information with the user.",
+              "content_digest": "78e41f61ba99eaf8840d5d318d08327ca6bb087addd6e22269e8b63281bb67c7",
+              "position": 8,
+              "uid": "e6f89ded-5687-5c25-8df8-88f288d450c6"
+            },
+            {
+              "content": "The user feels that a reminder the day before an appointment gives them enough time to recheck preparation items.",
+              "content_digest": "1a9fcc01df362c76b6d9c8e4fa2d33229a2ae2762c0c6d25e0fc89312a6e0ed4",
+              "position": 9,
+              "uid": "f9197c33-ff93-5215-a3a5-e4087bea2a0d"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "4292785f-eedc-48a6-a0f4-93693e97ac76"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate domains: the reference records budgeting, errands, bills, expenses, and meal settlement, while the compared frame records emergency contacts, preparation, family communication, and reminders. No claims govern the same operational decision, and none conflict or require scope reconciliation.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c3f0cdce-f854-4054-9d39-6cacfe8ba7ee",
+              "memory_uid": "5f80c7ec-e294-5905-abab-91027c9d827b"
+            }
+          ],
+          "reason": "This is independently useful reference-only budgeting information with no compared-side claim about spending limits.",
+          "status": "RESOLVED",
+          "summary": "The user maintains a monthly spending limit for expenses outside living costs.",
+          "uid": "994fd939-ab30-5dbe-8d4a-95fce47b2179"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c3f0cdce-f854-4054-9d39-6cacfe8ba7ee",
+              "memory_uid": "2428ab2c-37ce-5de1-84dc-abcdfc8ce062"
+            },
+            {
+              "frame_uid": "c3f0cdce-f854-4054-9d39-6cacfe8ba7ee",
+              "memory_uid": "bf30d1ef-d7cd-5aa3-b65b-ff04aae647e7"
+            }
+          ],
+          "reason": "The two reference memories form one before-and-after observation about errand consolidation; the compared frame has no claim addressing travel or errand planning.",
+          "status": "RESOLVED",
+          "summary": "Combining grocery and banking errands into one outing reduced travel compared with making the same trip twice.",
+          "uid": "0034f544-c741-5917-941e-97a3928bc0ef"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c3f0cdce-f854-4054-9d39-6cacfe8ba7ee",
+              "memory_uid": "442672e1-2188-5aa3-ad38-5e9c16f25bd5"
+            },
+            {
+              "frame_uid": "c3f0cdce-f854-4054-9d39-6cacfe8ba7ee",
+              "memory_uid": "c7385cce-ec43-5902-973c-5b8af54c3557"
+            }
+          ],
+          "reason": "The reference memories jointly express one timing comparison about bill alerts; no compared-side memory addresses bill-payment reminders.",
+          "status": "RESOLVED",
+          "summary": "An alert three days before a bill deadline supported earlier completion than an alert arriving on the due date.",
+          "uid": "fe232001-7ba4-50a5-81b0-fc3d2b715bb9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c3f0cdce-f854-4054-9d39-6cacfe8ba7ee",
+              "memory_uid": "d926c45c-ea49-589c-a7e4-491c9a1514f8"
+            }
+          ],
+          "reason": "This is a distinct reference-only expense-recording practice.",
+          "status": "RESOLVED",
+          "summary": "The user accumulated cash receipts and entered their amounts together at month end.",
+          "uid": "08748d0f-afdb-586c-bcb6-1789ae33ce86"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c3f0cdce-f854-4054-9d39-6cacfe8ba7ee",
+              "memory_uid": "9433523f-8c4e-5424-b370-d325ba5154d1"
+            }
+          ],
+          "reason": "This is a distinct reference-only observation about spending awareness and subsequent dining behavior.",
+          "status": "RESOLVED",
+          "summary": "Recording a large expense was followed by the user eating out less that week.",
+          "uid": "fcfc6ae9-9410-5dbd-a181-6d201aee72eb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c3f0cdce-f854-4054-9d39-6cacfe8ba7ee",
+              "memory_uid": "d9531336-ac5f-5ba0-bf26-9c69c854578f"
+            }
+          ],
+          "reason": "This reference-only preference concerns meal-cost settlement, not the compared frame's separate preference about nonurgent communication.",
+          "status": "RESOLVED",
+          "summary": "The user's older sister prefers electronic transfer over cash when settling a jointly paid meal.",
+          "uid": "3f42e626-1cc9-5ed1-85cc-165c84ce489b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c3f0cdce-f854-4054-9d39-6cacfe8ba7ee",
+              "memory_uid": "9941d390-8b40-5fee-8bcf-df6f36befcb0"
+            }
+          ],
+          "reason": "This is a reference-only safeguard governing automatic payments; contact verification in the compared frame governs a materially different action.",
+          "status": "RESOLVED",
+          "summary": "The payment amount and account should be confirmed with the user before an automatic payment schedule is created.",
+          "uid": "28d8716c-e7cc-5065-aac2-b808aab48670"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c3f0cdce-f854-4054-9d39-6cacfe8ba7ee",
+              "memory_uid": "79aea8fd-5d48-50f7-adf6-b7ebe33bfb08"
+            }
+          ],
+          "reason": "This is distinct reference-only billing information with no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Payment-processing timing and late-payment recording can vary by billing institution.",
+          "uid": "e6ead73c-5664-5a1b-8968-4231e94a5a45"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4292785f-eedc-48a6-a0f4-93693e97ac76",
+              "memory_uid": "3ff046b1-5810-51ca-8d43-c99ef6a90b41"
+            }
+          ],
+          "reason": "This is a distinct compared-only record of a contact-list review.",
+          "status": "RESOLVED",
+          "summary": "The user reviewed their emergency-contact list in February 2025.",
+          "uid": "d062778c-801b-58ed-8a20-01ff4190fc38"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4292785f-eedc-48a6-a0f4-93693e97ac76",
+              "memory_uid": "e2a304e5-6100-5a5f-b508-0a7f28f6bda7"
+            },
+            {
+              "frame_uid": "4292785f-eedc-48a6-a0f4-93693e97ac76",
+              "memory_uid": "51d03bff-3e33-5f68-9df6-ed7efa8e3de9"
+            }
+          ],
+          "reason": "The two compared memories form one before-and-after observation about instruction format; the reference frame has no preparation-format claim.",
+          "status": "RESOLVED",
+          "summary": "Presenting preparation instructions as a checklist improved item tracking compared with a long paragraph.",
+          "uid": "6dfe90fa-f234-5a0a-8a52-34f08c5092ca"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4292785f-eedc-48a6-a0f4-93693e97ac76",
+              "memory_uid": "0987293e-3e21-5cbc-bb46-59245a5fa041"
+            },
+            {
+              "frame_uid": "4292785f-eedc-48a6-a0f4-93693e97ac76",
+              "memory_uid": "dc3de6ad-56ea-528a-a9b7-349e79af2326"
+            }
+          ],
+          "reason": "The compared memories jointly express one timing comparison for family calls, with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "A Saturday-morning call with the user's mother lasted longer than a weekend-evening call when the mother was out.",
+          "uid": "6957c4ec-daf9-5aae-9845-db7c60eb9185"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4292785f-eedc-48a6-a0f4-93693e97ac76",
+              "memory_uid": "6546d41b-3d5b-5802-a9e7-ac028405e3f2"
+            },
+            {
+              "frame_uid": "4292785f-eedc-48a6-a0f4-93693e97ac76",
+              "memory_uid": "ea6eb9d2-9b01-5330-a4d5-886d4bc6cd85"
+            }
+          ],
+          "reason": "The compared memories describe one contact-correction episode; the reference frame contains no emergency-contact maintenance claim.",
+          "status": "RESOLVED",
+          "summary": "After a message to an old emergency-contact number failed, the user confirmed the replacement number with their older sister and updated the list.",
+          "uid": "727c497c-2f4f-5f32-8804-9110f0e958b6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4292785f-eedc-48a6-a0f4-93693e97ac76",
+              "memory_uid": "12fe7e64-192e-5359-8f96-d2875f7e5399"
+            }
+          ],
+          "reason": "This compared-only communication preference is operationally independent of the reference-side meal-settlement preference.",
+          "status": "RESOLVED",
+          "summary": "For nonurgent communication, the user's older sister prefers replying by text when available over immediately taking a call.",
+          "uid": "2944be14-ebd0-5b62-866f-ad38c5f2d8c9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4292785f-eedc-48a6-a0f4-93693e97ac76",
+              "memory_uid": "e6f89ded-5687-5c25-8df8-88f288d450c6"
+            }
+          ],
+          "reason": "This is a compared-only safeguard specific to using emergency contacts, not the reference frame's automatic-payment safeguard.",
+          "status": "RESOLVED",
+          "summary": "The emergency contact's number and relationship information should be reconfirmed with the user before use.",
+          "uid": "c37027d1-8822-5c07-8a23-6c60fa855260"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4292785f-eedc-48a6-a0f4-93693e97ac76",
+              "memory_uid": "f9197c33-ff93-5215-a3a5-e4087bea2a0d"
+            }
+          ],
+          "reason": "This is distinct compared-only information about appointment-reminder timing.",
+          "status": "RESOLVED",
+          "summary": "The user considers a reminder one day before an appointment sufficient for rechecking preparation items.",
+          "uid": "325203d9-57e2-58b5-a9c3-44f4b9f8e6db"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame describes contact maintenance, checklist-based preparation, timing of family calls, communication preferences, verification before emergency-contact use, and appointment reminders.",
+        "differences": "",
+        "reference_only": "The reference describes budgeting limits, travel-efficient errand planning, bill reminders and processing, expense-recording effects, meal reimbursement preferences, and confirmation before automatic payments."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "92adf8a8-87fc-4be0-9934-fe7010860d1b"
+    },
+    "analysis_digest": "971b57cbce84c3e9959150a7765f02ae821f65c8e0a69d134c70b6ba99efa3bd",
+    "key": "3d98356222fbba2924aa871b2e9b0de19e8ceeec1dcec607a614df7c62df728c",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 38.32357024999874,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "3d98356222fbba2924aa871b2e9b0de19e8ceeec1dcec607a614df7c62df728c",
+  "created_at": "2026-08-13T18:43:17.399453Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/08",
+  "pair_key": "cf897d9a1a91073f71ac15151db3d2594062f2b5e5558ad501cc2e84508d524d",
+  "provider_seconds": 38.32357024999874,
+  "right": "task-3/local/personal-memory/2025/02",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

@@ -1,0 +1,329 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:24:51.629598+00:00",
+      "frames": [
+        {
+          "context_digest": "3dd1208c3f947a57bc5f1d490a28c999913d43cad775b2b01e50c6059d6b660e",
+          "context_name": "task-2/advisor1/safety",
+          "context_uid": "cd6c1fab-786a-52ea-9437-9a4d209ba419",
+          "memories": [
+            {
+              "content": "Specify the order and recipients for reporting serious discomfort during the study.",
+              "content_digest": "1de38a3ec5fc3267ebeb35482a458d4aaf50d2aea44c6dba334f184e50ddddd2",
+              "position": 0,
+              "uid": "9d6f5228-d182-571a-83d2-6a67becb7736"
+            },
+            {
+              "content": "Field staff rely on a pre-defined contact sequence when serious discomfort is reported.",
+              "content_digest": "ed3a3b19d92a50c7dd324981b702bac31e0130fda38fe37150e500481ed11d84",
+              "position": 1,
+              "uid": "00ed485d-66c2-59ad-9c5b-9ae445412690"
+            },
+            {
+              "content": "Establish criteria for halting the use of a design alternative if recurring severe errors appear during formative evaluation.",
+              "content_digest": "dcca56df756b89f89a0a9dbf2bf45aee6480392b368c9cf3402223d3084b801b",
+              "position": 2,
+              "uid": "9c6e1561-f671-52cb-aa67-245cc4987ad4"
+            },
+            {
+              "content": "Do not include a design alternative halted for safety reasons in subsequent evaluation iterations without modification.",
+              "content_digest": "01668098161666622f4d7ed8298e3e63a06fa9b10a4cfd53b200d820f96f5c50",
+              "position": 3,
+              "uid": "2381ecf7-2b11-583d-91d9-0a5cfc279ba1"
+            },
+            {
+              "content": "Even in controlled environments, delayed prototype recovery procedures increase session interruption time and alter data collection conditions for the same task.",
+              "content_digest": "fd0f364ef66cfa7be937779ed4ce3ffb1a406bc227d09c26b288a751c5e0d427",
+              "position": 4,
+              "uid": "c5ce1b00-36d9-5cdd-a318-93b88ca0e322"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "913ace9d-c4ff-42f3-b2a1-cd8c46c3e522"
+        },
+        {
+          "context_digest": "74ec0b91876efe6caed2938aaf4a0b06272de678fbf74dc9da1c217aa0bd042f",
+          "context_name": "task-2/advisor2/compensation",
+          "context_uid": "4ffbd453-7d61-56f7-90ad-34d77b485ef8",
+          "memories": [
+            {
+              "content": "Calculate user research compensation budgets based on the estimated participation burden, combining session time with required technical and travel preparation.",
+              "content_digest": "ba439fe3920339f56e377d8f82a64ab3ad27fb25e0eec3c65b610c81af53d175",
+              "position": 0,
+              "uid": "be9e402b-8d3b-58da-9766-2cf2ec25b9ae"
+            },
+            {
+              "content": "Compensate participants who withdraw from the study midway for their actual participation time.",
+              "content_digest": "599f542ec6f4a5a1a61f5c1a31547088e015439978a64b268879b5a2b65c9be4",
+              "position": 1,
+              "uid": "85157c57-410f-5c7d-8183-b37d61eebf8a"
+            },
+            {
+              "content": "Compensate for the time actually spent in sessions, regardless of the research modality.",
+              "content_digest": "b19b9dbece5d564de69e703491018fbd78ab834149eed0590a552773526b6e29",
+              "position": 2,
+              "uid": "8abeab95-3e41-5378-8409-08200aee9d58"
+            },
+            {
+              "content": "Allow the issuance of gift cards of equivalent value to participants in remote studies who cannot use electronic transfers.",
+              "content_digest": "8ac881488d0064f4b4c6143e2d8c69ab9806b419044adef266c50738c7afb291",
+              "position": 3,
+              "uid": "9b59c6ed-5dbe-5ccc-87b5-6be31f414e68"
+            },
+            {
+              "content": "Do not treat an unresolved payment method as a deficiency at the proposal stage.",
+              "content_digest": "80109274870eb1023e4cbcc6861a906a4d94db5dab2b2659bcebccde125c9ac3",
+              "position": 4,
+              "uid": "5c6c461d-05e5-5b0c-b801-245de2f9c8d7"
+            },
+            {
+              "content": "Allow differential compensation amounts for on-site and remote studies when participation burden varies due to travel or technical preparation.",
+              "content_digest": "556c5e49f7996a651a64825df2389f070629b9bc664c758d934f308c7fd6eea2",
+              "position": 5,
+              "uid": "44abc098-8c9f-5abb-bc49-9deb25066d93"
+            },
+            {
+              "content": "Participants judge the fairness of compensation based on the combined burden of session time and required technical and travel preparation.",
+              "content_digest": "80dd84e8b183e02f1fd772890b48712bb04a04852055eece98957a0c9028288c",
+              "position": 6,
+              "uid": "2a252668-f3f2-5582-b248-43ad81c54a48"
+            },
+            {
+              "content": "In longitudinal studies requiring diary entries and repeated reporting, include out-of-session recording time in compensation calculations.",
+              "content_digest": "7d103d93741e40d54c8df8347f2ce648a1cd96e19589663fa515bfb24b5bd844",
+              "position": 7,
+              "uid": "7e647a83-81b0-52d6-9362-e513dc2a5032"
+            },
+            {
+              "content": "Distinguish between participant research compensation and labor costs for field staff performing installation and operational support as part of their duties.",
+              "content_digest": "b1566527e9c1d7d3f93631d1503b08ddb4a6818daa570c118f265b47603592f0",
+              "position": 8,
+              "uid": "d77affab-60c8-5403-b189-17022b484640"
+            },
+            {
+              "content": "The user tends to count session time but omit participants’ advance setup and follow-up reporting time.",
+              "content_digest": "98911b7db2d8c3962d7ef48919265f40cdb61a711062e5459a4f6d43f71d6fd9",
+              "position": 9,
+              "uid": "0c470c6b-26a6-5501-93ac-c51fecd708ae"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "e9888cc6-23da-424d-ab59-3766c2c959ea"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate operational domains. The reference addresses discomfort escalation, safety-based design iteration controls, and prototype recovery effects; the compared frame addresses participant compensation principles, exceptions, payment methods, modality and longitudinal burdens, staff-cost boundaries, and common budgeting omissions.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "913ace9d-c4ff-42f3-b2a1-cd8c46c3e522",
+              "memory_uid": "9d6f5228-d182-571a-83d2-6a67becb7736"
+            },
+            {
+              "frame_uid": "913ace9d-c4ff-42f3-b2a1-cd8c46c3e522",
+              "memory_uid": "00ed485d-66c2-59ad-9c5b-9ae445412690"
+            }
+          ],
+          "reason": "The reference memories state complementary parts of one escalation procedure, while the compared frame contains no claim about discomfort reporting.",
+          "status": "RESOLVED",
+          "summary": "Serious discomfort during a study should be handled through a predefined reporting sequence identifying the order and recipients.",
+          "uid": "4abfa0bd-6523-5970-9589-c139a9d3640d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "913ace9d-c4ff-42f3-b2a1-cd8c46c3e522",
+              "memory_uid": "9c6e1561-f671-52cb-aa67-245cc4987ad4"
+            }
+          ],
+          "reason": "This is an independently useful reference-only safety threshold; the compared frame addresses compensation rather than design-halting criteria.",
+          "status": "RESOLVED",
+          "summary": "Formative evaluation should define criteria for halting a design alternative when severe errors recur.",
+          "uid": "a24266e0-2a53-5116-8007-c584b6aec2a8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "913ace9d-c4ff-42f3-b2a1-cd8c46c3e522",
+              "memory_uid": "2381ecf7-2b11-583d-91d9-0a5cfc279ba1"
+            }
+          ],
+          "reason": "This reference-only rule governs subsequent reuse after a safety halt and has no counterpart in the compensation material.",
+          "status": "RESOLVED",
+          "summary": "A design alternative halted for safety reasons should not return unchanged in later evaluation iterations.",
+          "uid": "3a307582-5fa8-5fe8-afec-6148c275d02c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "913ace9d-c4ff-42f3-b2a1-cd8c46c3e522",
+              "memory_uid": "c5ce1b00-36d9-5cdd-a318-93b88ca0e322"
+            }
+          ],
+          "reason": "This reference-only observation concerns recovery delays and session conditions, which the compared frame does not address.",
+          "status": "RESOLVED",
+          "summary": "Delayed prototype recovery increases interruption time and changes data-collection conditions even in controlled environments.",
+          "uid": "32684038-3153-5b8b-8953-dc156d7006a1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e9888cc6-23da-424d-ab59-3766c2c959ea",
+              "memory_uid": "be9e402b-8d3b-58da-9766-2cf2ec25b9ae"
+            },
+            {
+              "frame_uid": "e9888cc6-23da-424d-ab59-3766c2c959ea",
+              "memory_uid": "2a252668-f3f2-5582-b248-43ad81c54a48"
+            }
+          ],
+          "reason": "The compared memories provide the policy and its participant-centered rationale as parts of one burden-based compensation claim; the reference frame contains no compensation policy.",
+          "status": "RESOLVED",
+          "summary": "Compensation budgets should reflect the combined burden of session time and required technical and travel preparation, consistent with participants’ fairness judgments.",
+          "uid": "1f6f3d0c-2e6b-5aac-aa5f-6dcdccb46121"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e9888cc6-23da-424d-ab59-3766c2c959ea",
+              "memory_uid": "85157c57-410f-5c7d-8183-b37d61eebf8a"
+            },
+            {
+              "frame_uid": "e9888cc6-23da-424d-ab59-3766c2c959ea",
+              "memory_uid": "8abeab95-3e41-5378-8409-08200aee9d58"
+            }
+          ],
+          "reason": "The compared memories state a general actual-time rule and its withdrawal application; the reference frame contains no corresponding compensation claim.",
+          "status": "RESOLVED",
+          "summary": "Participants should be compensated for time actually spent in sessions across modalities, including when they withdraw midway.",
+          "uid": "997b1f4c-99cc-5e43-9ab7-3497e363eb34"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e9888cc6-23da-424d-ab59-3766c2c959ea",
+              "memory_uid": "9b59c6ed-5dbe-5ccc-87b5-6be31f414e68"
+            }
+          ],
+          "reason": "This is an independently useful compared-only payment-method alternative with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Remote-study participants unable to use electronic transfers may receive gift cards of equivalent value.",
+          "uid": "951888e3-526f-5ac7-a62a-64b9c5176803"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e9888cc6-23da-424d-ab59-3766c2c959ea",
+              "memory_uid": "5c6c461d-05e5-5b0c-b801-245de2f9c8d7"
+            }
+          ],
+          "reason": "This compared-only rule concerns proposal-stage assessment and is distinct from selecting an eventual payment alternative.",
+          "status": "RESOLVED",
+          "summary": "An unresolved payment method should not be treated as a deficiency at the proposal stage.",
+          "uid": "2d18a612-400f-5dcd-9b89-18e77cd4c1dc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e9888cc6-23da-424d-ab59-3766c2c959ea",
+              "memory_uid": "44abc098-8c9f-5abb-bc49-9deb25066d93"
+            }
+          ],
+          "reason": "This compared-only policy specifically permits burden-based modality differentials, a decision not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "On-site and remote studies may use different compensation amounts when travel or technical preparation creates different participation burdens.",
+          "uid": "3241192d-f0af-50f4-b241-32d4c19afcf3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e9888cc6-23da-424d-ab59-3766c2c959ea",
+              "memory_uid": "7e647a83-81b0-52d6-9362-e513dc2a5032"
+            }
+          ],
+          "reason": "This compared-only rule adds a longitudinal, out-of-session burden category not discussed in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Compensation calculations for longitudinal studies should include time spent on diary entries and repeated reporting outside sessions.",
+          "uid": "e1b8d437-a6c4-5e8c-bf6c-9a63755ac8e0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e9888cc6-23da-424d-ab59-3766c2c959ea",
+              "memory_uid": "d77affab-60c8-5403-b189-17022b484640"
+            }
+          ],
+          "reason": "This compared-only accounting boundary concerns different recipients and cost types and has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Participant research compensation should be distinguished from labor costs for field staff performing installation and operational support duties.",
+          "uid": "9520a598-6f75-5404-a5d4-64caa11102eb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e9888cc6-23da-424d-ab59-3766c2c959ea",
+              "memory_uid": "0c470c6b-26a6-5501-93ac-c51fecd708ae"
+            }
+          ],
+          "reason": "This compared-only observation identifies a specific budgeting omission; the reference frame provides no related assessment.",
+          "status": "RESOLVED",
+          "summary": "Compensation planning commonly risks counting session time while omitting participants’ advance setup and follow-up reporting time.",
+          "uid": "f8edd849-2f71-509f-b061-03a54e493907"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only material covers burden- and time-based compensation, withdrawal handling, payment flexibility, modality and longitudinal adjustments, separation of participant and staff costs, and budgeting omissions.",
+        "differences": "",
+        "reference_only": "Reference-only material covers serious-discomfort escalation, safety thresholds and restrictions for design alternatives, and the effects of delayed prototype recovery."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "f01c44dd-12ab-41af-adc0-13917a682ac8"
+    },
+    "analysis_digest": "9bf9fec9d23f0fc393f51597dd3ad9b4b12f8e23ea218a51795ef659724504d2",
+    "key": "b750a19271b56fc20524fafee90d63fc7a69cf33e8d44c135f612ca73df0866a",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 42.35759379100273,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "b750a19271b56fc20524fafee90d63fc7a69cf33e8d44c135f612ca73df0866a",
+  "created_at": "2026-08-13T18:25:33.986569Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/safety",
+  "pair_key": "3cfd79a5d38e9fc68e5a30f3e2c0e9d0111bfa7df13141469c142f5018ce4370",
+  "provider_seconds": 42.35759379100273,
+  "right": "task-2/advisor2/compensation",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

@@ -106,12 +106,12 @@ All three `find-*` commands are read-only and create no checkpoint.
 `find-duplicates` reports Memory-pair evidence without choosing a deletion
 target, but it does not pre-enumerate every pair as model input.
 `find-ambiguities` judges one Memory at a time, while `find-conflicts` judges
-Memory pairs. A future mutating `dedup` stage will turn confirmed duplicate
-results into a survivor plan. Future clarification grounds unresolved
-readings. Implemented Resolve V1 attempts only the remaining joint Fit `MAY`
-or `NO` frame; the typed finder-to-Resolve handoff remains future work, so it
-is invoked directly over an exact Context and optional direct-Memory selectors
-today.
+Memory pairs. Implemented `dedup` turns explicitly confirmed eligible duplicate
+links into connected components and a reviewed existing-survivor plan. Future
+clarification grounds unresolved readings. Implemented Resolve V1 attempts
+only the remaining joint Fit `MAY` or `NO` frame; an exact conflict finding can
+enter it through the typed handoff while direct Context invocation remains
+available.
 
 ## Intent
 
@@ -297,8 +297,8 @@ contract are specified separately in the
 
 Both mechanical and semantic duplicate detection are necessary, but they are
 two visibly different trust layers of the read-only public
-`mem find-duplicates` operation. A separate future `mem dedup` operation may
-consume confirmed findings and propose mutation; detection itself never
+`mem find-duplicates` operation. The separate `mem dedup` operation consumes
+explicitly confirmed eligible findings and proposes mutation; detection itself never
 chooses a survivor or removes a UID.
 
 ### Mechanical dedup
@@ -506,11 +506,11 @@ important than final CLI spelling.
 | Envelope | future `mem ingest` | source manifest, stage progress, linked provenance | preserves raw intake first; delegates every mutation to the confirmed stage contract |
 | 1 | `mem impact atomize`; `mem atomize --save`; `mem atomize --save-as NAME` | exhaustive classifications, ordered split proposals, and recorded source-to-child lineage | preview saves a Context-scoped analysis but no Context checkpoint; in-place apply creates one checkpoint; save-as retains its baseline as provenance and publishes one final Atomize creation checkpoint in a fresh Context |
 | 2 | `mem find-duplicates` | positive pair evidence discovered from the whole direct Context | read-only; no checkpoint |
-| 2a | future `mem dedup` | confirmed survivor and absorbed-UID plan | stale-safe confirmed groups apply as one checkpoint |
+| 2a | `mem dedup` | confirmed survivor and absorbed-UID plan | stale-safe confirmed components apply as one checkpoint; inbound references block V1 |
 | 3 | `mem find-ambiguities` | unary interpretation and clarification findings | read-only; no checkpoint |
 | 4 | `mem find-conflicts` | pairwise `YES`/`MAY` conflict findings and questions | read-only; no checkpoint |
 | 5a | future clarification | grounded reading or missing-evidence record for ambiguity findings | read-only response first; any edit requires a separate confirmed plan |
-| 5b | future `mem resolve` | minimum-change candidate that independently changes joint Fit `MAY`/`NO` to `YES`, or `NEEDS_INPUT` | proposal first; explicit Apply consumes one exact authorized plan |
+| 5b | `mem resolve` | minimum-change candidate that independently changes joint Fit `MAY`/`NO` to `YES`, or `NEEDS_INPUT` | proposal first; explicit Apply consumes one exact authorized plan |
 | 6 | `mem audience` | applicability, recipient, purpose, and disclosure assignments | preview first; storage representation must be explicit |
 | 7 | `mem normalize` | named rule violations and full replacement proposals | confirmed batch applies as one checkpoint |
 | 8 | `mem find-duplicates` verification | post-normalization mechanical and semantic reclassification | read-only; any removal requires a new `dedup` plan |
@@ -540,7 +540,7 @@ important than final CLI spelling.
 - Does not perform deduplication, reconciliation, audience inference, or
   deletion of non-propositional notes.
 
-### `find-duplicates` and future `dedup`
+### `find-duplicates` and `dedup`
 
 - `find-duplicates` runs deterministic `EXACT`/`SURFACE_EQUIVALENT` detection
   before semantic classification and shows the tiers separately.
@@ -552,7 +552,7 @@ important than final CLI spelling.
   groups. If either Memory contains a unique fact, constraint, or exception,
   `OVERLAP` is a rejected calibration result and is not emitted as a duplicate.
 - `UNKNOWN` is not a duplicate finding or a dedup outcome to apply.
-- A future `dedup` plan keeps one stable survivor UID and its existing wording,
+- A `dedup` plan keeps one stable survivor UID and its existing wording,
   and names every absorbed source UID. Canonical rewriting belongs to
   `normalize`; combining unique facts is a different integration operation.
 - Referenced Memories cannot be removed until inbound references have been
@@ -586,14 +586,14 @@ important than final CLI spelling.
   UID action, and navigation layer. Meld uses its dynamic interactive adapter;
   Update exposes exact planned changes read-only. This is not a shared
   provider, persistence, or mutation engine, and Update semantic issue turns
-  remain future work. Clarification, Fit Resolve, and `distill` remain future or
-  design-only contracts. Symmetric and public Context-directional `mem meld`
+  remain future work. Clarification remains future; Fit Resolve and `distill`
+  are implemented as separate contracts. Symmetric and public Context-directional `mem meld`
   are implemented through the bounded Context workbench.
 
 The focused rationale is
 [`memory-review-shell-design-rationale.md`](memory-review-shell-design-rationale.md).
 
-### Future clarification and Resolve
+### Clarification and Resolve
 
 - They consume separate ambiguity and conflict findings instead of replacing
   either detector.
@@ -729,8 +729,8 @@ golden regression harness now implement the preferred source boundary.
 `find-duplicates`, `find-ambiguities`, and `find-conflicts` remain separate
 read-only commands so that their whole-Context relation discovery, pair-target,
 and unary contracts stay observable. Stronger independent atomize validation,
-a future `dedup` apply path and clarification, plus the implemented direct
-Fit Resolve path, followed by
+implemented typed Dedup and conflict-to-Resolve handoffs, future clarification,
+followed by
 `audience`, `normalize`, duplicate verification, and `place`, can then be added
 one at a time. A later
 `mem ingest` may orchestrate those same tested operations without replacing

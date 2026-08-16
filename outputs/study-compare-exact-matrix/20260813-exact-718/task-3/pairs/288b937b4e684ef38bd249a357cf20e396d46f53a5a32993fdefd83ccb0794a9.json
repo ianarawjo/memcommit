@@ -1,0 +1,397 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:52:33.206652+00:00",
+      "frames": [
+        {
+          "context_digest": "ac4f93d71b525f6156f0b669075a833a2a41161be6abe677ec382bff6e6060e8",
+          "context_name": "task-3/local/personal-memory/2025/08",
+          "context_uid": "ed84de75-8e18-5bec-908c-a1ff9827b3e3",
+          "memories": [
+            {
+              "content": "The user keeps packing tape for returns in an upper kitchen drawer.",
+              "content_digest": "ed359d883caffd7ce4daddc297ddcc9d26da233dc2a36dc4dbc96e300b2248e9",
+              "position": 0,
+              "uid": "15c3941e-ed44-508f-ae30-b51456b5ba86"
+            },
+            {
+              "content": "The user arrived ten minutes before the post office closed and found that numbered-ticket intake had ended.",
+              "content_digest": "3c4609eea9455bbd46a6f238aa750f61f348ce7b2cf421a4d123f1b707b52550",
+              "position": 1,
+              "uid": "84d1fd1c-9508-5f05-9a7c-1d5f20ecf4a4"
+            },
+            {
+              "content": "Before the next visit, the user checked the operating hours and arrived one hour before closing.",
+              "content_digest": "b2997262abf4ba476c63de3550e54269ef7d61bb56d3adb5b6d9f54ba13fc078",
+              "position": 2,
+              "uid": "8946f9da-e325-59c3-9260-2d2f590d3701"
+            },
+            {
+              "content": "The user went to the counter without closing a return box and had to go back to the packing station.",
+              "content_digest": "759122c3f88ca71b992a725e357beab72f9820de872a7bd895b808c2df21f2b2",
+              "position": 3,
+              "uid": "67e8b160-a57d-56e5-a766-741b7ce0e939"
+            },
+            {
+              "content": "For the next return, the user sealed the box at home and completed intake in one attempt.",
+              "content_digest": "007fcec32ea3788854161e68c95c2aaba90e94a721d03b350e1619afc54840e3",
+              "position": 4,
+              "uid": "efd0706b-600a-5ac1-926e-cc0602ca0086"
+            },
+            {
+              "content": "The user scheduled bank and post-office errands for the same day, but they took a long time because the destinations were in different directions.",
+              "content_digest": "000e1975fde79f4d6caf36adad0c2e481a032537cfa410e46649866d985567c2",
+              "position": 5,
+              "uid": "1e8a6f7e-0911-5a34-ad82-172479d1a7a4"
+            },
+            {
+              "content": "The following week, after checking the locations on a map, the user visited nearby branches in sequence.",
+              "content_digest": "c3de08c5b6074dff2b3f6303f5efc3740cc430b634cb365a5d570061a30a53fa",
+              "position": 6,
+              "uid": "a8670161-257e-51ab-8e30-0e282952278f"
+            },
+            {
+              "content": "Postal staff expect a return-label barcode to arrive affixed flat, without a fold.",
+              "content_digest": "6293ace2d67781644694976af71d5696cad28979d9641718ccd59f16b3397a47",
+              "position": 7,
+              "uid": "2db70f53-99ee-556c-a8c1-b809881cbebd"
+            },
+            {
+              "content": "Before grouping errands into one outing, check each institution's location and operating hours that day.",
+              "content_digest": "7fef923f9ed507db5aad6cf65eaee2c965075e51fef0ff73fa669f1e7f69314a",
+              "position": 8,
+              "uid": "38d60cc4-2f91-5cc2-b511-55cdbbe12c32"
+            },
+            {
+              "content": "Postal and financial counters may operate on different hours than usual around public holidays.",
+              "content_digest": "2d5dc709c468405ea894f343e922dc2546b826ed7488e613f4d4dd730bccccfd",
+              "position": 9,
+              "uid": "1272087c-a535-5612-8c7a-1bc257183788"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "4d42e5a5-d1eb-42f1-9610-997a69a1c5a6"
+        },
+        {
+          "context_digest": "4b8dc68a205171fe661b04620d0fba2bbb386ff21d494699c34a74dc2ab86080",
+          "context_name": "task-3/local/personal-memory/2026/03",
+          "context_uid": "97d36150-4792-5a5c-9332-5eb1de8bcf04",
+          "memories": [
+            {
+              "content": "The user stores tax-related receipts in digital folders by year.",
+              "content_digest": "778f983547572b31798b7041899812a7b0b574d74b585baf6883e94919dee6ec",
+              "position": 0,
+              "uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393"
+            },
+            {
+              "content": "The user found three paper receipts late and recalculated the expense total already prepared.",
+              "content_digest": "542368a141ec82a1bd7da4b534d88ea62c487d16a37f454569bf6400cbc749e9",
+              "position": 1,
+              "uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878"
+            },
+            {
+              "content": "Starting the next month, the user photographed receipts on the day they were received and reduced omissions.",
+              "content_digest": "b95e0a1afa1196a9bff117bf12b1630edcc4eb65bfdfeb3128ae5937563a492e",
+              "position": 2,
+              "uid": "ff436ea5-1b3e-55df-8302-bd8a96740671"
+            },
+            {
+              "content": "The user named every file with only the photo date and spent a long time looking for a needed receipt.",
+              "content_digest": "c3aa33e0b7e007bdfc5c12dcda659e2a52938548fbf53d5a1ab034487a528857",
+              "position": 3,
+              "uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e"
+            },
+            {
+              "content": "The user later included the expense category in the filename and found the receipt immediately through search.",
+              "content_digest": "cdae97761f614b932d3b330723627bee8b0e3d033e2bf1061b721367237acee1",
+              "position": 4,
+              "uid": "89d6fa9a-b795-59df-be34-1c05a9861d35"
+            },
+            {
+              "content": "While reviewing documents just before submission, the user discovered one blank signature field.",
+              "content_digest": "a525c117b97eec82c678f276b319158703bf9cc558fb83cb81c0820d5c9e3174",
+              "position": 5,
+              "uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2"
+            },
+            {
+              "content": "Before submitting an administrative document, the user checks the signature field as the final item on the checklist.",
+              "content_digest": "542bec3cbc3fc8b22c95da274e479e96bfbf061a3b644d0d7f213de5a030dbd5",
+              "position": 6,
+              "uid": "5551622f-66cf-5542-8c47-1cddadab5c02"
+            },
+            {
+              "content": "Staff at a tax-support counter expect to receive an electronic copy in which every item is legible rather than a blurred or cropped photo.",
+              "content_digest": "d328ca248fdeecf0756e23b1202e7007bc8c3c25ae769439b0fd2efdbbe47580",
+              "position": 7,
+              "uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f"
+            },
+            {
+              "content": "The local agent can organize receipts by date and category but cannot determine whether an expense is deductible.",
+              "content_digest": "bcc769721a99b099ca20e5e527fa8904d54ecbaf9ae7d7616b95e1adaf1f89a9",
+              "position": 8,
+              "uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094"
+            },
+            {
+              "content": "The accepted scope and submission deadlines for administrative documents may vary under that year's guidance.",
+              "content_digest": "1ab61126b8efb0c2a9c6114c367018158f2e136bafa87e33f60aadb0686d0537",
+              "position": 9,
+              "uid": "de398064-3179-590b-8c62-effb17060115"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "574c9dec-1ccb-4818-b2e7-4445c245bdb5"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames contain complementary but operationally separate administrative routines: the reference centers on postal returns and outing logistics, while the compared frame centers on receipt records, document review, and tax-support boundaries. No supplied claims govern the same decision closely enough for a cross-frame relation.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4d42e5a5-d1eb-42f1-9610-997a69a1c5a6",
+              "memory_uid": "15c3941e-ed44-508f-ae30-b51456b5ba86"
+            }
+          ],
+          "reason": "This is one-sided information about the location of a physical return supply; the compared frame has no claim addressing that storage decision.",
+          "status": "RESOLVED",
+          "summary": "The user stores return packing tape in an upper kitchen drawer.",
+          "uid": "117332f1-ac0c-5115-9282-64dc0d524643"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4d42e5a5-d1eb-42f1-9610-997a69a1c5a6",
+              "memory_uid": "84d1fd1c-9508-5f05-9a7c-1d5f20ecf4a4"
+            },
+            {
+              "frame_uid": "4d42e5a5-d1eb-42f1-9610-997a69a1c5a6",
+              "memory_uid": "8946f9da-e325-59c3-9260-2d2f590d3701"
+            }
+          ],
+          "reason": "These memories form a problem-and-adjustment account about timing a postal visit; no compared memory addresses arrival timing for counter intake.",
+          "status": "RESOLVED",
+          "summary": "After missing post-office ticket intake near closing, the user checked hours and arrived substantially earlier on the next visit.",
+          "uid": "84b53c16-eb25-5484-8b1c-13181a7ac1b6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4d42e5a5-d1eb-42f1-9610-997a69a1c5a6",
+              "memory_uid": "67e8b160-a57d-56e5-a766-741b7ce0e939"
+            },
+            {
+              "frame_uid": "4d42e5a5-d1eb-42f1-9610-997a69a1c5a6",
+              "memory_uid": "efd0706b-600a-5ac1-926e-cc0602ca0086"
+            }
+          ],
+          "reason": "These memories describe one preparation failure and its corrective routine for postal returns, without a counterpart governing box sealing.",
+          "status": "RESOLVED",
+          "summary": "After an unsealed return caused an extra trip to the packing station, the user sealed the next box at home and completed intake directly.",
+          "uid": "0094f10d-a27f-5a9b-837c-457f5d81308d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4d42e5a5-d1eb-42f1-9610-997a69a1c5a6",
+              "memory_uid": "1e8a6f7e-0911-5a34-ad82-172479d1a7a4"
+            },
+            {
+              "frame_uid": "4d42e5a5-d1eb-42f1-9610-997a69a1c5a6",
+              "memory_uid": "a8670161-257e-51ab-8e30-0e282952278f"
+            }
+          ],
+          "reason": "These memories describe one routing problem and its improvement; the compared frame contains no claim about selecting or sequencing errand locations.",
+          "status": "RESOLVED",
+          "summary": "After distant bank and postal destinations made a combined outing inefficient, the user mapped and visited nearby branches in sequence.",
+          "uid": "d4f174ff-35b9-5a42-b636-219c6769fd4d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4d42e5a5-d1eb-42f1-9610-997a69a1c5a6",
+              "memory_uid": "2db70f53-99ee-556c-a8c1-b809881cbebd"
+            }
+          ],
+          "reason": "This postal-label requirement is independently useful and has no compared-side claim governing barcode placement.",
+          "status": "RESOLVED",
+          "summary": "Postal staff expect a return-label barcode to be affixed flat and unfolded.",
+          "uid": "d8726e69-5912-5aa4-a565-b8a12e383584"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4d42e5a5-d1eb-42f1-9610-997a69a1c5a6",
+              "memory_uid": "38d60cc4-2f91-5cc2-b511-55cdbbe12c32"
+            }
+          ],
+          "reason": "This is a one-sided outing-planning policy; the compared frame does not address whether or how institutions should be grouped into a trip.",
+          "status": "RESOLVED",
+          "summary": "Before combining errands, check each institution's location and operating hours for that day.",
+          "uid": "63e136c8-ce74-5df4-ba97-e3f3091d1a99"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4d42e5a5-d1eb-42f1-9610-997a69a1c5a6",
+              "memory_uid": "1272087c-a535-5612-8c7a-1bc257183788"
+            }
+          ],
+          "reason": "This is a specific caution about holiday counter schedules, with no compared-side claim about public-holiday operating hours.",
+          "status": "RESOLVED",
+          "summary": "Postal and financial counter hours may differ from their usual schedules around public holidays.",
+          "uid": "80948e00-020b-5254-9f8c-edc992fcdbe9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "574c9dec-1ccb-4818-b2e7-4445c245bdb5",
+              "memory_uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393"
+            }
+          ],
+          "reason": "This is one-sided information about the user's receipt-folder structure; the reference frame contains no claim about tax-record storage.",
+          "status": "RESOLVED",
+          "summary": "The user stores tax-related receipts in digital folders organized by year.",
+          "uid": "59465dc2-5aaf-5722-b999-5be2111b9063"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "574c9dec-1ccb-4818-b2e7-4445c245bdb5",
+              "memory_uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878"
+            },
+            {
+              "frame_uid": "574c9dec-1ccb-4818-b2e7-4445c245bdb5",
+              "memory_uid": "ff436ea5-1b3e-55df-8302-bd8a96740671"
+            }
+          ],
+          "reason": "These memories form a problem-and-adjustment account about prompt receipt capture; no reference memory governs receipt collection or expense-total completeness.",
+          "status": "RESOLVED",
+          "summary": "After late-discovered paper receipts forced recalculation, the user began photographing receipts on receipt day and reduced omissions.",
+          "uid": "a3d8accf-84eb-5816-a29d-8ef77762bf6a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "574c9dec-1ccb-4818-b2e7-4445c245bdb5",
+              "memory_uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e"
+            },
+            {
+              "frame_uid": "574c9dec-1ccb-4818-b2e7-4445c245bdb5",
+              "memory_uid": "89d6fa9a-b795-59df-be34-1c05a9861d35"
+            }
+          ],
+          "reason": "These memories describe one naming problem and its corrective convention; the reference frame has no claim about searchable receipt filenames.",
+          "status": "RESOLVED",
+          "summary": "After date-only filenames made a receipt difficult to find, the user added expense categories and retrieved receipts readily through search.",
+          "uid": "a8144627-061a-5db3-8ddd-032b8bd03abf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "574c9dec-1ccb-4818-b2e7-4445c245bdb5",
+              "memory_uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2"
+            },
+            {
+              "frame_uid": "574c9dec-1ccb-4818-b2e7-4445c245bdb5",
+              "memory_uid": "5551622f-66cf-5542-8c47-1cddadab5c02"
+            }
+          ],
+          "reason": "These memories describe one document-review omission and the resulting checklist practice; no reference memory addresses signatures.",
+          "status": "RESOLVED",
+          "summary": "After finding a blank signature field shortly before submission, the user made the signature field the final checklist item.",
+          "uid": "6af47ca3-c17b-5fb3-a7c9-751e0bc5db73"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "574c9dec-1ccb-4818-b2e7-4445c245bdb5",
+              "memory_uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f"
+            }
+          ],
+          "reason": "This requirement specifically governs electronic-document image quality; the reference frame's barcode-placement rule concerns a different artifact and operational check.",
+          "status": "RESOLVED",
+          "summary": "Tax-support staff expect electronic copies whose contents are fully legible rather than blurred or cropped.",
+          "uid": "7dba18a1-2aea-5060-872b-b61f189d412b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "574c9dec-1ccb-4818-b2e7-4445c245bdb5",
+              "memory_uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094"
+            }
+          ],
+          "reason": "This is a one-sided capability boundary for receipt assistance, with no reference-side claim about agent authority or tax judgments.",
+          "status": "RESOLVED",
+          "summary": "The local agent can organize receipts by date and category but cannot decide expense deductibility.",
+          "uid": "29cea8e9-eda8-5593-a2aa-f2a229b3de71"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "574c9dec-1ccb-4818-b2e7-4445c245bdb5",
+              "memory_uid": "de398064-3179-590b-8c62-effb17060115"
+            }
+          ],
+          "reason": "This is a one-sided caution about annually changing administrative requirements, not a rule about the reference frame's locations, counter schedules, or postal preparation.",
+          "status": "RESOLVED",
+          "summary": "Accepted document scope and submission deadlines may vary with the applicable year's guidance.",
+          "uid": "84a83154-6eff-5ab6-b7fb-26a5d42d4b3c"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers receipt capture and organization, searchable filenames, signature checks, electronic-copy legibility, limits on deductibility guidance, and annually variable filing requirements.",
+        "differences": "",
+        "reference_only": "The reference covers return-supply storage, timely and prepared postal visits, efficient errand routing, barcode placement, same-day planning checks, and holiday counter hours."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "4bba2f15-a7e4-4705-8d5f-6abc1ba4f8cb"
+    },
+    "analysis_digest": "c8ddc837c9ac765e1230d898ebf3e0231d4d93b7e70dee63b2105ef6094d109e",
+    "key": "d0e0785cc6125cc5a6bf6a4f16ff903b4a5262296bb27a1759a949b01ac58ec3",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 41.48090299999967,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "d0e0785cc6125cc5a6bf6a4f16ff903b4a5262296bb27a1759a949b01ac58ec3",
+  "created_at": "2026-08-13T18:53:14.686993Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/08",
+  "pair_key": "288b937b4e684ef38bd249a357cf20e396d46f53a5a32993fdefd83ccb0794a9",
+  "provider_seconds": 41.48090299999967,
+  "right": "task-3/local/personal-memory/2026/03",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

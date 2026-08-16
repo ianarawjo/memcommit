@@ -1,0 +1,168 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:23:40.198126+00:00",
+      "frames": [
+        {
+          "context_digest": "9d55b4a5604285e426b317f7f4732b35ca1e9df044f7015b3ae6a6be0df5492b",
+          "context_name": "task-2/advisor1/reproducibility",
+          "context_uid": "7d293f75-52b6-5f27-99c4-54f2be3d8e59",
+          "memories": [
+            {
+              "content": "HCI reviewers find it difficult to assess the reproducibility of results if the prototype version used in the evaluation is not disclosed.",
+              "content_digest": "9b89217d4ef2c7524af665ea80d7d60e61f1663fd8ea4bdde533c8d3a0da2044",
+              "position": 0,
+              "uid": "fb400759-63ed-568a-b94e-5f0c2fe94b67"
+            },
+            {
+              "content": "Record the manipulated and fixed elements of compared design alternatives so that other researchers can reconstruct them.",
+              "content_digest": "26b84b5f0644980de51d764218ce90fb614eb02a2df38fb3632f44d360a93cd3",
+              "position": 1,
+              "uid": "e52e8470-6419-5306-9ddd-00a86003dcf3"
+            },
+            {
+              "content": "Records of formative evaluation decisions enable the reconstruction of connections between raw data, interpretation, and design modifications.",
+              "content_digest": "f213479e4bd1947d418083139346ed7f666bc597133962617d94bdd3a9af0083",
+              "position": 2,
+              "uid": "8f4edf8c-491d-56fe-bde4-d9ce25d6de50"
+            },
+            {
+              "content": "The user must make it possible to trace which observations each prototype version reflects so the process of deriving design knowledge can be reviewed.",
+              "content_digest": "1c9b8a6f650f2eb652b1e9cbb62ad9dcbb3ec13f2e160b52db83492640eb0ae9",
+              "position": 3,
+              "uid": "87662a7e-ffc7-521a-a06c-7db8184377e8"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "8f40985a-dd7e-4d8e-bfc6-24ae1e5f08be"
+        },
+        {
+          "context_digest": "bb54539faeedf2db9ada09643c11270aabf235d8e3e6df98500f90f9b82aed49",
+          "context_name": "task-2/advisor2/reproducibility",
+          "context_uid": "5f2f3c0f-4cb1-5151-b381-847df75b6457",
+          "memories": [
+            {
+              "content": "HCI reviewers find it difficult to assess result reproducibility if the system version used in the field deployment is not disclosed.",
+              "content_digest": "83ac18cb56f74dbeb7834909b999669bb9a46d320b288bf38fb7b6c9bd0812f2",
+              "position": 0,
+              "uid": "40f11374-d91b-546a-9e93-fcf98a0fde98"
+            },
+            {
+              "content": "Record changes in system configurations, field procedures, and data collection tools during deployment, along with their timestamps and rationales.",
+              "content_digest": "ac399146f49e6ae5d21272de0cd13db6346d4cd67b096ecfa9bd314b026f403e",
+              "position": 1,
+              "uid": "cc72ad54-4cf3-56cd-9119-46776f5b2184"
+            },
+            {
+              "content": "The history of deployment versions and configuration changes provides necessary evidence for interpreting results from different field sites.",
+              "content_digest": "39ae70de900b646362a96cfa7d734a6404604b468398b09da9fb05783b389d25",
+              "position": 2,
+              "uid": "75f22b45-fb1b-568c-bb05-080fdacdcab2"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "87974d60-1f51-4958-9fc0-a68ba972866f"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "Both frames emphasize reproducibility through transparent versioning and provenance, while tailoring required records to different research settings. Prototype evaluation focuses on design alternatives and formative evidence chains; field deployment focuses on evolving configurations, procedures, tools, rationales, and site-level interpretation.",
+      "relations": [
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "8f40985a-dd7e-4d8e-bfc6-24ae1e5f08be",
+              "memory_uid": "fb400759-63ed-568a-b94e-5f0c2fe94b67"
+            },
+            {
+              "frame_uid": "87974d60-1f51-4958-9fc0-a68ba972866f",
+              "memory_uid": "40f11374-d91b-546a-9e93-fcf98a0fde98"
+            }
+          ],
+          "reason": "The operational requirement is shared, while the explicitly different study contexts determine which version must be disclosed.",
+          "status": "RESOLVED",
+          "summary": "Version disclosure supports reproducibility assessment in both frames, applying to the prototype used in an evaluation on one side and the system used in a field deployment on the other.",
+          "uid": "b7678887-efb5-5ae1-980a-b453258cb910"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "8f40985a-dd7e-4d8e-bfc6-24ae1e5f08be",
+              "memory_uid": "e52e8470-6419-5306-9ddd-00a86003dcf3"
+            },
+            {
+              "frame_uid": "87974d60-1f51-4958-9fc0-a68ba972866f",
+              "memory_uid": "cc72ad54-4cf3-56cd-9119-46776f5b2184"
+            }
+          ],
+          "reason": "The research phase explicitly explains the different record contents needed to reconstruct experimental alternatives or deployment evolution.",
+          "status": "RESOLVED",
+          "summary": "Both frames require recording consequential study conditions, with design comparisons documenting manipulated and fixed alternative elements and deployments documenting configuration, procedure, and tool changes with timing and rationales.",
+          "uid": "1760d474-0efd-55cf-9a2f-ea3b4ac10d80"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "8f40985a-dd7e-4d8e-bfc6-24ae1e5f08be",
+              "memory_uid": "8f4edf8c-491d-56fe-bde4-d9ce25d6de50"
+            },
+            {
+              "frame_uid": "8f40985a-dd7e-4d8e-bfc6-24ae1e5f08be",
+              "memory_uid": "87662a7e-ffc7-521a-a06c-7db8184377e8"
+            },
+            {
+              "frame_uid": "87974d60-1f51-4958-9fc0-a68ba972866f",
+              "memory_uid": "75f22b45-fb1b-568c-bb05-080fdacdcab2"
+            }
+          ],
+          "reason": "The shared provenance purpose is specialized by whether knowledge is derived through formative design iteration or interpreted across field deployments.",
+          "status": "RESOLVED",
+          "summary": "Both frames treat historical traceability as interpretive evidence, linking formative observations, interpretations, versions, and design modifications in one context and deployment versions and configuration changes to field-site results in the other.",
+          "uid": "28528e13-36be-5e0e-9bb4-99500c68ceb1"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "",
+        "differences": "Version disclosure is scoped to prototype evaluation versus field deployment. Provenance requirements likewise differ: formative work records controlled design elements and links observations, interpretations, and modifications, whereas deployment records operational changes, timing, rationales, and version history for interpreting field-site results.",
+        "reference_only": ""
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "bf6da5bc-3cf8-4ed0-bd4f-a4dd68074ae5"
+    },
+    "analysis_digest": "871e575264ea518a9cc985e4501008caa5274ae58f58516f91e89ce917997429",
+    "key": "6c56c2236bb7d2ce32343a2aecaee5c3b5dac818b68d0ac72c5ad3ff4a634f8e",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 33.10753079100323,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "6c56c2236bb7d2ce32343a2aecaee5c3b5dac818b68d0ac72c5ad3ff4a634f8e",
+  "created_at": "2026-08-13T18:24:13.305296Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/reproducibility",
+  "pair_key": "664b2ae118ad8ecb53a6046cc32f92e877c6aa46da5e81757983d926d52da59e",
+  "provider_seconds": 33.10753079100323,
+  "right": "task-2/advisor2/reproducibility",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

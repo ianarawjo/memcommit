@@ -1,0 +1,410 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:21:54.230649+00:00",
+      "frames": [
+        {
+          "context_digest": "4ae7659c0c6976de9bf2292f9e35962963b7931b470c2294d4f0e70b3500bff0",
+          "context_name": "task-2/advisor1/feasibility",
+          "context_uid": "52db6b06-e86a-556a-913e-30e45f7e9529",
+          "memories": [
+            {
+              "content": "Mark unverified schedule assumptions as such.",
+              "content_digest": "d4cdcdbcdb51d96f9a7435e72c2e4ef25a3e3822a765a88afafeca5194bda96e",
+              "position": 0,
+              "uid": "b150c774-27f6-5ec8-8cb9-9a00be19ce9b"
+            },
+            {
+              "content": "Mark unverified recruitment assumptions as such.",
+              "content_digest": "4cc28528fee1c7b09f709638e2b57d3bc9efe635d20500ee98567f8f59b8cf21",
+              "position": 1,
+              "uid": "6c7d14ed-67e5-56ff-befb-7648b95aa7a3"
+            },
+            {
+              "content": "Mark unverified technical assumptions as such.",
+              "content_digest": "8942e49cd46e3e9746330349df11e49d4a6c9250c7aa4c52c2d9ade1c97c735c",
+              "position": 2,
+              "uid": "00bf39b5-fe97-5fd0-b579-a5c13b5e6af7"
+            },
+            {
+              "content": "Clarify which stage of prototype fabrication or user study each requested resource is used for.",
+              "content_digest": "81ba64e23304f8fbbb3af4f2c30dfa3c517899c486e88ba211189a7911fcbd64",
+              "position": 3,
+              "uid": "3ae97c88-7537-5733-b48d-e02c9283f486"
+            },
+            {
+              "content": "Operations reviewers judge feasibility based on the personnel assigned to each procedure.",
+              "content_digest": "fe29bb7e592d116001a25ce11c603ae29f21d446925c28db692f14970d5b8134",
+              "position": 4,
+              "uid": "e2b5c1f0-97c2-5d46-af80-993d8d5606c9"
+            },
+            {
+              "content": "Operations reviewers judge feasibility based on the equipment assigned to each procedure.",
+              "content_digest": "859ab328c21506d11dd1f6d98e98d5a552446e774931a8bc13396750acf0793b",
+              "position": 5,
+              "uid": "f636b400-d3a2-5873-bf5b-c990b0f7ea42"
+            },
+            {
+              "content": "Operations reviewers judge feasibility based on the time allocated to each procedure.",
+              "content_digest": "08656886328ece4d813e36b1145805ffd3f3d4c6c855c20b1464143fb12868ab",
+              "position": 6,
+              "uid": "49385488-2315-51bc-bea0-749a1aea52f1"
+            },
+            {
+              "content": "Verify that the planned number of formative evaluation iterations is feasible within the time for prototype modification and recruitment resources.",
+              "content_digest": "9e181a14a97abd740a85679554395d7b315c07f0e4171ef276a2c31553b285c7",
+              "position": 7,
+              "uid": "f1c22a48-9d8d-5e82-9837-690d66e719db"
+            },
+            {
+              "content": "Include only the minimum functionality required to compare primary design assumptions in the scope of the formative evaluation prototype.",
+              "content_digest": "7769c2a4c03dc1c279bbf34bf0cefdcd076e3c1d8a1e56015bf20357ecfcf433",
+              "position": 8,
+              "uid": "4d69f030-0dc0-5df7-a153-0b595a3f68de"
+            },
+            {
+              "content": "The user's iterative design plan can be judged feasible only if time and personnel are allocated for modifying the prototype between iterations.",
+              "content_digest": "0339285cf9fd632814c5b5eb2b48fd46e3baf09ea95fb406f71b5d2cc804fa7e",
+              "position": 9,
+              "uid": "152f8621-f5fb-5c5e-a961-1fde77ed0bb3"
+            },
+            {
+              "content": "Delays in participant recruitment can compress the time available for prototype modification between formative evaluations.",
+              "content_digest": "9945f30dba63d2d070bad59cb2fb15b6a26d635f337949c3891b58d17c43973a",
+              "position": 10,
+              "uid": "1877a138-31f6-59a5-b666-ae57985f540d"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "54cdc2dc-3b3b-41dc-86de-fe3033950849"
+        },
+        {
+          "context_digest": "7842b257aa1d32e6e598b019791827a580a1864e19e05d9101413b11d5b0227d",
+          "context_name": "task-2/advisor2/style",
+          "context_uid": "f0ea0447-bfe6-503c-89da-e90f24af6e2d",
+          "memories": [
+            {
+              "content": "Use an em dash only for a deliberate interruption or sharp contrast; otherwise split the sentence or choose ordinary punctuation.",
+              "content_digest": "3c37a896774ebccbec1e4bb3ad4a4e61ece1bb4ae246226c93b1d78c651bee7b",
+              "position": 0,
+              "uid": "9bd2a9da-9720-5001-b958-f7a2a2658f87"
+            },
+            {
+              "content": "In procedural passages, begin each sentence with the action, condition, or output instead of repeating “we” so the steps remain easy to follow and reuse.",
+              "content_digest": "c61f6b8ae3612497403f306de2cbe4e6a25db285109e89f74d61439abf5fae30",
+              "position": 1,
+              "uid": "e3e20261-e03c-52fb-be9e-04f5f9b1294d"
+            },
+            {
+              "content": "Write system behaviors confirmed in the actual usage environment as observed states.",
+              "content_digest": "972e1f5ba9188f1a423c2b47782e1a3938749419e8c170fabc97e6dd4f86cab2",
+              "position": 2,
+              "uid": "8d8d0e8d-dad1-50b5-9438-049052748a6a"
+            },
+            {
+              "content": "Write system behaviors not yet confirmed in the field as conditional plans.",
+              "content_digest": "9b7f3fffb87af8004e9645b6494bd2b990a1f1bfb054ca0efecea2bfb74d850d",
+              "position": 3,
+              "uid": "8c74ba87-822b-5ce2-9a3a-3adc02ab9744"
+            },
+            {
+              "content": "Readers can reconstruct a sequence more accurately when each sentence begins with the action or condition rather than the author.",
+              "content_digest": "e6748d23d892cb074ac5259f3c733727746640973a5b62c0ed1b7c6a684e9db8",
+              "position": 4,
+              "uid": "1f29de31-5429-5dfc-ab27-01779fa16704"
+            },
+            {
+              "content": "Do not mechanically split connected thoughts into separate short sentences when doing so destroys the intended reading rhythm.",
+              "content_digest": "754be36b29f7b647390c9308fb7a1cfd9e3228ab0f875c8d53e01febbbb3fd8c",
+              "position": 5,
+              "uid": "1d181223-f750-57d2-97a5-b79f276a589f"
+            },
+            {
+              "content": "Preserve a longer sentence when its clauses form one continuous movement that is easier to follow together than apart.",
+              "content_digest": "074e374f77a4fa6f559e3d69746ab3c706d2b1f3d2e4b98a21e8d1e4d59ef087",
+              "position": 6,
+              "uid": "a5ce5f9f-8852-5080-ae35-21abcf4a0973"
+            },
+            {
+              "content": "The user understands that short sentences are easier to scan but feels that uniformly segmented prose loses its reading rhythm.",
+              "content_digest": "acf7ca20f09995c87c51434dc2ff489efc886ada5b2282dc4bc4014befd8fdc0",
+              "position": 7,
+              "uid": "888ce8af-a36e-5e74-9a0c-604aac48d3b7"
+            },
+            {
+              "content": "Write procedural sentences so their opening phrase can be reused as a checklist item without changing the step's meaning.",
+              "content_digest": "7fd5b55fc09e74df05628f1c61bd543b39b906847b86e7f09337a67b47553156",
+              "position": 8,
+              "uid": "ddf40413-3274-5662-ba5e-d6cae2a1e546"
+            },
+            {
+              "content": "The user should choose “I” as an individual author or “we” for a named team and should not mix them when describing the same responsible party.",
+              "content_digest": "951763104930e99be0182b59dbaa6d7d7a20fd23fe968e39a15bd0798a1bd1b7",
+              "position": 9,
+              "uid": "6b7aaddf-5bbd-5015-811d-9f4d7a4b4ad1"
+            },
+            {
+              "content": "Action-first procedural sentences can be reordered or copied into a checklist more easily because their subject is the step rather than the proposal author.",
+              "content_digest": "397e3c0b9262e13d94969669930081ac76d4967adec4c5fd1f681869b613bc36",
+              "position": 10,
+              "uid": "89c2ce30-d6aa-5762-bf17-c697caac68e4"
+            },
+            {
+              "content": "The user can explain whether an em dash marks an intentional interruption or contrast rather than using it decoratively.",
+              "content_digest": "ec27bb0d2ba0656602348660944cb483789dfaec189d6e32ad6145c8e17f81b2",
+              "position": 11,
+              "uid": "9f1b647a-bd2b-50df-8141-5b8c142c0fa5"
+            },
+            {
+              "content": "An em dash creates a stronger interruption than a comma and can make a deliberate contrast easier to hear in the sentence.",
+              "content_digest": "aa3c3cdb31d26aeeb33b047a22860bf1dbe0819e9cc93f03da112b04367b844e",
+              "position": 12,
+              "uid": "49a42872-adcc-5bf8-9029-1d134cac6267"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "0439dcfe-84e5-4a5b-8eb8-90287eaa6af8"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "Both frames promote explicit handling of evidentiary status, while otherwise covering independent concerns: the reference emphasizes study feasibility, resource staging, prototype scope, and recruitment risk; the compared frame emphasizes procedural clarity, sentence rhythm, authorial voice, and deliberate em-dash use.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "54cdc2dc-3b3b-41dc-86de-fe3033950849",
+              "memory_uid": "b150c774-27f6-5ec8-8cb9-9a00be19ce9b"
+            },
+            {
+              "frame_uid": "54cdc2dc-3b3b-41dc-86de-fe3033950849",
+              "memory_uid": "6c7d14ed-67e5-56ff-befb-7648b95aa7a3"
+            },
+            {
+              "frame_uid": "54cdc2dc-3b3b-41dc-86de-fe3033950849",
+              "memory_uid": "00bf39b5-fe97-5fd0-b579-a5c13b5e6af7"
+            },
+            {
+              "frame_uid": "0439dcfe-84e5-4a5b-8eb8-90287eaa6af8",
+              "memory_uid": "8d8d0e8d-dad1-50b5-9438-049052748a6a"
+            },
+            {
+              "frame_uid": "0439dcfe-84e5-4a5b-8eb8-90287eaa6af8",
+              "memory_uid": "8c74ba87-822b-5ce2-9a3a-3adc02ab9744"
+            }
+          ],
+          "reason": "The reference requires unverified schedule, recruitment, and technical assumptions to be marked, while the compared frame distinguishes observed system states from unconfirmed conditional plans; together they govern explicit representation of evidentiary status without contradiction.",
+          "status": "RESOLVED",
+          "summary": "Claims should be expressed according to whether their underlying assumptions or behaviors have been verified.",
+          "uid": "df189aa4-375c-54f3-b225-00de1f1a63b0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "54cdc2dc-3b3b-41dc-86de-fe3033950849",
+              "memory_uid": "3ae97c88-7537-5733-b48d-e02c9283f486"
+            }
+          ],
+          "reason": "This stage-specific resource-mapping requirement appears only in the reference frame and is independently useful.",
+          "status": "RESOLVED",
+          "summary": "Requested resources should be tied to the prototype-fabrication or user-study stage where they are used.",
+          "uid": "e8beed13-c95a-5180-bdbc-bac337f6703b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "54cdc2dc-3b3b-41dc-86de-fe3033950849",
+              "memory_uid": "e2b5c1f0-97c2-5d46-af80-993d8d5606c9"
+            },
+            {
+              "frame_uid": "54cdc2dc-3b3b-41dc-86de-fe3033950849",
+              "memory_uid": "f636b400-d3a2-5873-bf5b-c990b0f7ea42"
+            },
+            {
+              "frame_uid": "54cdc2dc-3b3b-41dc-86de-fe3033950849",
+              "memory_uid": "49385488-2315-51bc-bea0-749a1aea52f1"
+            }
+          ],
+          "reason": "These reference memories split one underlying feasibility criterion across its three resource inputs, with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Procedure feasibility is judged from assigned personnel, equipment, and time.",
+          "uid": "952f8a6c-ccfd-5d29-ba75-bd6e973b6f39"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "54cdc2dc-3b3b-41dc-86de-fe3033950849",
+              "memory_uid": "f1c22a48-9d8d-5e82-9837-690d66e719db"
+            }
+          ],
+          "reason": "This reference-only claim independently governs whether the intended evaluation cycle count is feasible.",
+          "status": "RESOLVED",
+          "summary": "The planned number of formative iterations should be checked against modification time and recruitment resources.",
+          "uid": "95447414-00a6-5d83-ada4-7d6d16b709bf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "54cdc2dc-3b3b-41dc-86de-fe3033950849",
+              "memory_uid": "4d69f030-0dc0-5df7-a153-0b595a3f68de"
+            }
+          ],
+          "reason": "This reference-only claim independently constrains prototype scope.",
+          "status": "RESOLVED",
+          "summary": "A formative-evaluation prototype should contain only the minimum functionality needed to compare primary design assumptions.",
+          "uid": "e674fcbc-1d0e-58ff-ab63-ca82116d0cb2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "54cdc2dc-3b3b-41dc-86de-fe3033950849",
+              "memory_uid": "152f8621-f5fb-5c5e-a961-1fde77ed0bb3"
+            }
+          ],
+          "reason": "This reference-only claim states a specific feasibility condition for between-iteration modification capacity.",
+          "status": "RESOLVED",
+          "summary": "Iterative-design feasibility depends on allocating time and personnel to modify the prototype between iterations.",
+          "uid": "99b98bdc-b933-5f99-91b6-8a8f82bd3c7b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "54cdc2dc-3b3b-41dc-86de-fe3033950849",
+              "memory_uid": "1877a138-31f6-59a5-b666-ae57985f540d"
+            }
+          ],
+          "reason": "This reference-only claim identifies a distinct schedule dependency and risk mechanism.",
+          "status": "RESOLVED",
+          "summary": "Participant-recruitment delays can reduce the time available for prototype modification between formative evaluations.",
+          "uid": "1bb4c752-38fb-5687-86fc-f03e52c703be"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0439dcfe-84e5-4a5b-8eb8-90287eaa6af8",
+              "memory_uid": "9bd2a9da-9720-5001-b958-f7a2a2658f87"
+            },
+            {
+              "frame_uid": "0439dcfe-84e5-4a5b-8eb8-90287eaa6af8",
+              "memory_uid": "9f1b647a-bd2b-50df-8141-5b8c142c0fa5"
+            },
+            {
+              "frame_uid": "0439dcfe-84e5-4a5b-8eb8-90287eaa6af8",
+              "memory_uid": "49a42872-adcc-5bf8-9029-1d134cac6267"
+            }
+          ],
+          "reason": "The compared memories state one underlying punctuation policy together with its interpretive test and rationale, absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Em dashes should mark intentional interruption or sharp contrast, reflecting their stronger audible break rather than serving as decoration.",
+          "uid": "3596066b-e38f-5f30-99a4-8dd802a6c9ac"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0439dcfe-84e5-4a5b-8eb8-90287eaa6af8",
+              "memory_uid": "e3e20261-e03c-52fb-be9e-04f5f9b1294d"
+            },
+            {
+              "frame_uid": "0439dcfe-84e5-4a5b-8eb8-90287eaa6af8",
+              "memory_uid": "1f29de31-5429-5dfc-ab27-01779fa16704"
+            },
+            {
+              "frame_uid": "0439dcfe-84e5-4a5b-8eb8-90287eaa6af8",
+              "memory_uid": "ddf40413-3274-5662-ba5e-d6cae2a1e546"
+            },
+            {
+              "frame_uid": "0439dcfe-84e5-4a5b-8eb8-90287eaa6af8",
+              "memory_uid": "89c2ce30-d6aa-5762-bf17-c697caac68e4"
+            }
+          ],
+          "reason": "The compared memories restate and explain one action-first procedural-writing policy, with no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Procedural sentences should begin with the action, condition, or output so sequences remain clear and steps can be reused or reordered as checklist items.",
+          "uid": "536cab2e-97c0-5ccb-9045-e57803ffe7f6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0439dcfe-84e5-4a5b-8eb8-90287eaa6af8",
+              "memory_uid": "1d181223-f750-57d2-97a5-b79f276a589f"
+            },
+            {
+              "frame_uid": "0439dcfe-84e5-4a5b-8eb8-90287eaa6af8",
+              "memory_uid": "a5ce5f9f-8852-5080-ae35-21abcf4a0973"
+            },
+            {
+              "frame_uid": "0439dcfe-84e5-4a5b-8eb8-90287eaa6af8",
+              "memory_uid": "888ce8af-a36e-5e74-9a0c-604aac48d3b7"
+            }
+          ],
+          "reason": "The compared memories express one underlying preference against uniformly short, rhythm-breaking prose, absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Connected clauses should remain together when mechanical segmentation would damage an otherwise clearer continuous reading rhythm.",
+          "uid": "e5cccfe8-9632-583a-bfff-a9c803b3eee3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0439dcfe-84e5-4a5b-8eb8-90287eaa6af8",
+              "memory_uid": "6b7aaddf-5bbd-5015-811d-9f4d7a4b4ad1"
+            }
+          ],
+          "reason": "This compared-only claim independently governs authorial voice and responsibility attribution.",
+          "status": "RESOLVED",
+          "summary": "Descriptions of one responsible party should consistently use either “I” for an individual or “we” for a named team.",
+          "uid": "c40d4c53-d5b1-5d82-89a3-30a2f732270c"
+        }
+      ],
+      "reports": {
+        "both": "Both frames distinguish supported claims from unverified or unconfirmed ones and call for wording that makes that status explicit.",
+        "compared_only": "The compared frame covers action-first reusable procedures, deliberate em-dash use, preservation of sentence rhythm, and consistent authorial pronouns.",
+        "differences": "",
+        "reference_only": "The reference covers resource-to-stage mapping, procedure-level feasibility, iteration and modification capacity, minimal prototype scope, and recruitment-delay risk."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "773bbc20-6021-4a25-80b7-96f4fe130ee2"
+    },
+    "analysis_digest": "fb6b3ce90f8985c7338560233c83d171a799cb130acfede78074e7fa926d932b",
+    "key": "8345fb4adcfab03706d0df2d780938e81594c1c3d5a3999fb55aba5538a470ac",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 33.655959791001806,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "8345fb4adcfab03706d0df2d780938e81594c1c3d5a3999fb55aba5538a470ac",
+  "created_at": "2026-08-13T18:22:27.885858Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/feasibility",
+  "pair_key": "921c700652eb16e902c345a8383f820315452d1f5c71670c8e6d1967a2a5d256",
+  "provider_seconds": 33.655959791001806,
+  "right": "task-2/advisor2/style",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

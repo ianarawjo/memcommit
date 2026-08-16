@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:53:47.049433+00:00",
+      "frames": [
+        {
+          "context_digest": "40dca3509f1e21c564970ebb7664df755d25c1c19c4e79b458c803662fb827ce",
+          "context_name": "task-3/local/personal-memory/2025/11",
+          "context_uid": "af363401-7cdc-5426-ad00-4f98635e2dab",
+          "memories": [
+            {
+              "content": "The user recorded a family dinner in the calendar for the final week of November.",
+              "content_digest": "59755036ea9e7d172a5e673253fc7f089e61efe043b2e660f429fe2fa9003d34",
+              "position": 0,
+              "uid": "3f6eaf6c-00e7-5bd7-9809-367f54a0f707"
+            },
+            {
+              "content": "In a crowded restaurant, the user had to ask several times for orders to be repeated, interrupting the flow of conversation.",
+              "content_digest": "2d79e2f4f88a70bc8fbf9efca1b1751fbf51d88667f304c8e8c965a0a536cee7",
+              "position": 1,
+              "uid": "9fd0b9b6-986d-54b0-965e-45feaf9cd482"
+            },
+            {
+              "content": "When the user held the next gathering at their father's home, they continued the conversation on the sofa after the meal.",
+              "content_digest": "4b22fa055bb342db0589b0c54e415f4fa2af02445d3c55b3f38510bd6ca62f38",
+              "position": 2,
+              "uid": "cbc477c4-83c4-506b-9da8-9252d14d7f6b"
+            },
+            {
+              "content": "At a gathering with loud music prepared by their older sister, the user developed a headache and went outside briefly.",
+              "content_digest": "c9b34c3e3211ca7f15eb9a6f8ba97941222bc35ec0253d3da3f383c7247c3e83",
+              "position": 3,
+              "uid": "bbfc537e-3fcc-5065-ab93-4777bcdfc10c"
+            },
+            {
+              "content": "On a day the user held a yard barbecue with their younger brother, the open space dispersed the sound and made conversation easier.",
+              "content_digest": "dd35056c7731d3249a3c2689ee9fb6bfe6974544e302630de6ea230378fea9eb",
+              "position": 4,
+              "uid": "b61367fa-dd17-5ff2-9d6b-f81f6123735a"
+            },
+            {
+              "content": "After seeing a message that their maternal aunt would arrive at 5 p.m., the user delayed meal preparation by an hour.",
+              "content_digest": "31992a8945bfacfc9422f3180b203865f951f200561cd23dad901ec795c5de10",
+              "position": 5,
+              "uid": "681cdbd5-595d-5211-914d-edfd9a6b130d"
+            },
+            {
+              "content": "On a day the user waited without knowing their maternal uncle's arrival time, they reheated the food twice.",
+              "content_digest": "fae7c462a85e844648cb99419e6fdb3a2cd8c7721209ea49a40b4df597635176",
+              "position": 6,
+              "uid": "81c0c4e9-5ae4-5e8a-b11c-7d33032fd8ec"
+            },
+            {
+              "content": "The user's maternal uncle considers it easier to time his departure when he knows the family meal's start time in advance.",
+              "content_digest": "793f47adaa4c5274d15377b0f4adbc2415c0bd5243baf7a1c77c0d92e987a7e8",
+              "position": 7,
+              "uid": "56078821-34d0-540f-ae66-03bdd7bd1df3"
+            },
+            {
+              "content": "Before scheduling a family meal, confirm the attendees' arrival times and the location with the user.",
+              "content_digest": "d057fab5cbe97472da2a796114018a7491d20db6a826cd56943268f73ffeb792",
+              "position": 8,
+              "uid": "19c8ae40-1f5b-5fec-9538-e7bc7cfb036a"
+            },
+            {
+              "content": "Available restaurant reservation times may diminish quickly during the year-end gathering season.",
+              "content_digest": "7bfc817a42ab2d2c67ad04eae58fb3c86bbede15b7cc4ef431a75528bb425e7e",
+              "position": 9,
+              "uid": "3ea9fa3b-4411-55d0-ac90-2ed5515e6ef7"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "602c24d3-5f4b-49a0-965e-b8d7ba7048e9"
+        },
+        {
+          "context_digest": "df0924e320cd14a29eaed60f78e82fd509c4062949b35706b2a7cb94571fb599",
+          "context_name": "task-3/local/personal-memory/2026/04",
+          "context_uid": "16e860a8-7a90-5b7a-adc3-1c487ef97e03",
+          "memories": [
+            {
+              "content": "The user collects clothes for donation in a large bag beside the entrance.",
+              "content_digest": "39f2f01c59b7fa4ca7529d510e1b0a6ffab6706861042f771cfe97f6f806efac",
+              "position": 0,
+              "uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            },
+            {
+              "content": "After emptying an entire drawer at once, the user could not find a charger they needed.",
+              "content_digest": "674c33ba6475f42b29b03e6f8711e0216f983f3d37fee3dacf9336e3bb4596bf",
+              "position": 1,
+              "uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            },
+            {
+              "content": "During the next organizing session, the user sorted items by type and put only items to be discarded in the bag.",
+              "content_digest": "63104b5a7fd380f818c8758c51f9550c7a7fa41ff91f1dd314225d1824b69643",
+              "position": 2,
+              "uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            },
+            {
+              "content": "Even after photographing unworn clothes, the user did not take them out again for one month.",
+              "content_digest": "519f131096440719dcd3412f4439c5cfe44b7f402684170209708040692dc5fd",
+              "position": 3,
+              "uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            },
+            {
+              "content": "After moving those clothes to the donation bag, the user cleared one closet compartment.",
+              "content_digest": "45db58ae108a299344d982d8606fff26f733252da691cf01417e760909ff6057",
+              "position": 4,
+              "uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            },
+            {
+              "content": "The user nearly discarded an important paper with advertising and checked the recycling box again.",
+              "content_digest": "6bf928f67944656e5f3c68d8869c0cefd039a588f0ba735f94520231ef58017c",
+              "position": 5,
+              "uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            },
+            {
+              "content": "During the next organizing session, the user kept a separate document box and did not mix the papers.",
+              "content_digest": "adac8d4266c6b11e15d29c484665bc5dcc915f9aa319198b6a69d0e7b0131bb3",
+              "position": 6,
+              "uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            },
+            {
+              "content": "The user's mother asks the user to check whether she needs kitchen items in good condition before discarding them.",
+              "content_digest": "0752bc2ac00c0b1301c45ab4c2e73f63c57e6ebc4255dcc1c13330ffda906612",
+              "position": 7,
+              "uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            },
+            {
+              "content": "Confirm with the user before marking a personal document or another person's property as a disposal candidate.",
+              "content_digest": "17062e2cd4738619e81e211cb2f53d14e78c5f4eab9ae49053ce7e06935a7db5",
+              "position": 8,
+              "uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            },
+            {
+              "content": "The local agent cannot determine an object's emotional meaning from frequency of use alone.",
+              "content_digest": "9c86bcfe2b209bf7957dced0eab000b42f97b6a435d705ccaccb15e49be3691d",
+              "position": 9,
+              "uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "83ee4a7b-8cb5-4e8d-9944-35f67ca57b3b"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate domains: family-meal planning and sensory experience versus household decluttering and disposal safeguards. No claims address the same operational decision closely enough to form a cross-frame relation, and neither side contradicts the other.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "602c24d3-5f4b-49a0-965e-b8d7ba7048e9",
+              "memory_uid": "3f6eaf6c-00e7-5bd7-9809-367f54a0f707"
+            }
+          ],
+          "reason": "This is independently useful reference-side scheduling history with no compared-side claim about family events or calendars.",
+          "status": "RESOLVED",
+          "summary": "A family dinner was entered in the calendar for the final week of November.",
+          "uid": "e774af9a-35e1-5b21-962f-c430e0ee21f9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "602c24d3-5f4b-49a0-965e-b8d7ba7048e9",
+              "memory_uid": "9fd0b9b6-986d-54b0-965e-45feaf9cd482"
+            }
+          ],
+          "reason": "This is a distinct reference-side observation about communication in a noisy venue; the compared frame contains no matching venue or sensory claim.",
+          "status": "RESOLVED",
+          "summary": "Restaurant crowd noise forced repeated order clarification and disrupted conversation.",
+          "uid": "2ab929b9-17ee-5683-a1d7-ce390f883df9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "602c24d3-5f4b-49a0-965e-b8d7ba7048e9",
+              "memory_uid": "cbc477c4-83c4-506b-9da8-9252d14d7f6b"
+            }
+          ],
+          "reason": "This reference-side gathering detail has no operational counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "At the father's home, conversation continued on the sofa after the meal.",
+          "uid": "28c69b87-1783-5f5b-9470-dbb30662582e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "602c24d3-5f4b-49a0-965e-b8d7ba7048e9",
+              "memory_uid": "bbfc537e-3fcc-5065-ab93-4777bcdfc10c"
+            }
+          ],
+          "reason": "This is independent reference-side evidence about sensitivity and coping during a gathering, absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Loud music at a gathering caused a headache, prompting the user to step outside briefly.",
+          "uid": "8d19126e-fe2e-5cb5-a5a9-cc089200a89f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "602c24d3-5f4b-49a0-965e-b8d7ba7048e9",
+              "memory_uid": "b61367fa-dd17-5ff2-9d6b-f81f6123735a"
+            }
+          ],
+          "reason": "This reference-side observation about an outdoor setting's acoustic benefit has no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "At a yard barbecue, open space dispersed sound and made conversation easier.",
+          "uid": "eca74d9c-964f-542e-b7ae-ae5345930054"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "602c24d3-5f4b-49a0-965e-b8d7ba7048e9",
+              "memory_uid": "681cdbd5-595d-5211-914d-edfd9a6b130d"
+            }
+          ],
+          "reason": "This is distinct reference-side evidence about adapting meal preparation to a communicated arrival time.",
+          "status": "RESOLVED",
+          "summary": "Knowing the maternal aunt would arrive at 5 p.m. led the user to delay meal preparation by an hour.",
+          "uid": "72433a9e-ae2c-58af-9281-950eedb9e7f3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "602c24d3-5f4b-49a0-965e-b8d7ba7048e9",
+              "memory_uid": "81c0c4e9-5ae4-5e8a-b11c-7d33032fd8ec"
+            }
+          ],
+          "reason": "This reference-side consequence of missing arrival information is not addressed by any compared-side memory.",
+          "status": "RESOLVED",
+          "summary": "Uncertainty about the maternal uncle's arrival time resulted in the food being reheated twice.",
+          "uid": "9eebff1e-c6b9-55a4-820d-655356fe944b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "602c24d3-5f4b-49a0-965e-b8d7ba7048e9",
+              "memory_uid": "56078821-34d0-540f-ae66-03bdd7bd1df3"
+            }
+          ],
+          "reason": "This is an independently useful reference-side preference about advance meal timing, with no compared-side analogue.",
+          "status": "RESOLVED",
+          "summary": "The maternal uncle can time his departure more easily when told the family meal's start time in advance.",
+          "uid": "bda70630-e577-5b34-8ee3-8151b8cfbfc2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "602c24d3-5f4b-49a0-965e-b8d7ba7048e9",
+              "memory_uid": "19c8ae40-1f5b-5fec-9538-e7bc7cfb036a"
+            }
+          ],
+          "reason": "This reference-side scheduling policy governs family meals, whereas the compared-side confirmation policy governs disposal decisions; they do not materially address the same operational decision.",
+          "status": "RESOLVED",
+          "summary": "Before scheduling a family meal, the attendees' arrival times and location should be confirmed with the user.",
+          "uid": "e74e4317-d9fe-54bd-8d9b-4b56ce2ea72c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "602c24d3-5f4b-49a0-965e-b8d7ba7048e9",
+              "memory_uid": "3ea9fa3b-4411-55d0-ac90-2ed5515e6ef7"
+            }
+          ],
+          "reason": "This reference-side planning constraint has no compared-side claim about reservations or seasonal availability.",
+          "status": "RESOLVED",
+          "summary": "Restaurant reservation availability may shrink quickly during the year-end gathering season.",
+          "uid": "b18e0a90-6388-5896-a0f3-42e2ddcc9546"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "83ee4a7b-8cb5-4e8d-9944-35f67ca57b3b",
+              "memory_uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            }
+          ],
+          "reason": "This is independently useful compared-side information about the user's donation setup, absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user collects clothes for donation in a large bag beside the entrance.",
+          "uid": "64ab5548-d22d-5425-9273-dac473a05fe2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "83ee4a7b-8cb5-4e8d-9944-35f67ca57b3b",
+              "memory_uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            }
+          ],
+          "reason": "This compared-side organizing failure has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Emptying a whole drawer at once made a needed charger difficult to find.",
+          "uid": "78c36665-ff46-52f0-b5c2-0f6ba5addd54"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "83ee4a7b-8cb5-4e8d-9944-35f67ca57b3b",
+              "memory_uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            }
+          ],
+          "reason": "This is a distinct compared-side organizing method not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "In a later organizing session, the user sorted by item type and placed only discard items in the bag.",
+          "uid": "e31c7404-ff47-5afd-a455-32bf2460f6d9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "83ee4a7b-8cb5-4e8d-9944-35f67ca57b3b",
+              "memory_uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            }
+          ],
+          "reason": "This compared-side evidence about continued non-use of clothing has no reference-side analogue.",
+          "status": "RESOLVED",
+          "summary": "Photographed unworn clothes remained untouched for another month.",
+          "uid": "8d3eaa9c-813c-5efd-a040-0d363a72af8c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "83ee4a7b-8cb5-4e8d-9944-35f67ca57b3b",
+              "memory_uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            }
+          ],
+          "reason": "This compared-side outcome of decluttering is independent of all reference-side family-meal information.",
+          "status": "RESOLVED",
+          "summary": "Moving the clothes into the donation bag cleared a closet compartment.",
+          "uid": "1792a3d0-9a16-5397-aafe-bba3a9ad7773"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "83ee4a7b-8cb5-4e8d-9944-35f67ca57b3b",
+              "memory_uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            }
+          ],
+          "reason": "This compared-side disposal risk has no matching reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "An important paper was nearly discarded with advertising, leading the user to recheck the recycling box.",
+          "uid": "74d1e916-ac83-521a-91f8-3d0c9a0ef471"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "83ee4a7b-8cb5-4e8d-9944-35f67ca57b3b",
+              "memory_uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            }
+          ],
+          "reason": "This is a distinct compared-side safeguard for organizing documents, absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "In a later organizing session, a separate document box prevented papers from being mixed.",
+          "uid": "12f117ad-a271-5f2d-b388-b0da7537a2d5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "83ee4a7b-8cb5-4e8d-9944-35f67ca57b3b",
+              "memory_uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            }
+          ],
+          "reason": "This compared-side preference concerns another person's possible use of household items and has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user's mother wants to be asked whether she needs usable kitchen items before they are discarded.",
+          "uid": "9b9c959e-1a8d-5e2d-b3b9-0931bbc0137f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "83ee4a7b-8cb5-4e8d-9944-35f67ca57b3b",
+              "memory_uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            }
+          ],
+          "reason": "This compared-side disposal policy is operationally separate from the reference-side policy about confirming family-meal logistics.",
+          "status": "RESOLVED",
+          "summary": "The user should be consulted before a personal document or another person's property is marked for disposal.",
+          "uid": "339e6193-010a-59f5-b3f3-07743936bdae"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "83ee4a7b-8cb5-4e8d-9944-35f67ca57b3b",
+              "memory_uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "reason": "This compared-side limitation on evaluating possessions is not addressed in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Frequency of use alone does not let the local agent determine an object's emotional meaning.",
+          "uid": "7c44076e-7559-5b5c-90f6-5e3f09b3f907"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame records donation and organizing practices, risks of losing valuables or documents, disposal confirmation, and limits on inferring sentimental value.",
+        "differences": "",
+        "reference_only": "The reference records family gatherings, noise-related comfort, timing coordination, scheduling confirmation, and seasonal restaurant availability."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "ccae56f1-b4a8-45bd-a626-6aa0909f6e12"
+    },
+    "analysis_digest": "3524b74836bddafdf4deb72ada411fd43f03f28c46b16d6d39764c5ab7292e49",
+    "key": "248a5288fab3122496eee36c0c41b7dc802d8cf33f0f974b5a707ef1e68caf35",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 47.77571041600095,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "248a5288fab3122496eee36c0c41b7dc802d8cf33f0f974b5a707ef1e68caf35",
+  "created_at": "2026-08-13T18:54:34.824501Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/11",
+  "pair_key": "e9a611719de5b5d66f3b2f223c83587f2f364fe67f0f865cc8b753bd8b2df3dd",
+  "provider_seconds": 47.77571041600095,
+  "right": "task-3/local/personal-memory/2026/04",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

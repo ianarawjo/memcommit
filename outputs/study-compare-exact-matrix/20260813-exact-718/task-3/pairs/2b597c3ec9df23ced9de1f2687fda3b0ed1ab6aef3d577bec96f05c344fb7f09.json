@@ -1,0 +1,361 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:34:28.638863+00:00",
+      "frames": [
+        {
+          "context_digest": "2f00e067f4f35600b73e87b5555d405e2801a33ba18a54c91e63e23a79f27a4c",
+          "context_name": "task-3/local/personal-memory/2024/01",
+          "context_uid": "cbd2e4d6-2601-5d3f-8bf2-2f66b755b007",
+          "memories": [
+            {
+              "content": "The user's mother's birthday falls in the third week of January.",
+              "content_digest": "d635ded9b470acdd462156515700e66c23dcb513a7034bb365be0ac139ec0422",
+              "position": 0,
+              "uid": "2cd0229d-b7f1-581b-8019-25bdb485afd9"
+            },
+            {
+              "content": "At the user's last family meal out, noise from the next table made conversation nearly impossible.",
+              "content_digest": "dc337d32e4b09167289e19a6b1c8fe970e7eaa6fdd6868ed1c7c300e018fcd15",
+              "position": 1,
+              "uid": "c62f1669-11c9-5a81-b5f5-304acce69c23"
+            },
+            {
+              "content": "At a barbecue at home in the same month, the user was comfortable because no one had to raise their voice.",
+              "content_digest": "63763b293a491200bf1f7a251467c1fa8c2cb8d4d8450732c01666dcdea183e3",
+              "position": 2,
+              "uid": "674f4bdf-27c3-5870-a68e-91e4a093dd93"
+            },
+            {
+              "content": "During their mother's birthday meal, the user left a restaurant with loud music after 30 minutes.",
+              "content_digest": "560755c6f051ec6f85e32dc4ee9447dfc97418fca6f9f414f6910c518a52c2c0",
+              "position": 3,
+              "uid": "21509788-2e3d-548b-8303-f34cfea68c9b"
+            },
+            {
+              "content": "When discussing postponed matters with family, the user prefers a quiet, one-on-one dining environment.",
+              "content_digest": "f22bedcf60a64b3666a7e4363d6a55c48547535492010fcb205a182c1ee920a8",
+              "position": 4,
+              "uid": "74eaea9d-7640-51ba-aa77-9c050581dc46"
+            },
+            {
+              "content": "At a large banquet hall reserved by their older sister, the user remembered the surrounding noise more than the food.",
+              "content_digest": "566e443c69410f1672ab209ba2257604e373cd305ab27243a39574481407af71",
+              "position": 5,
+              "uid": "1384df1d-2173-5673-96f5-a4d86835d404"
+            },
+            {
+              "content": "On a day the user ate grilled food at home with their younger brother, conversation was easy to continue, so the user stayed another hour after the meal.",
+              "content_digest": "c93ccbe3524946f1def05a1b385fbe3387945f51164b00c56f1ff80b477d011f",
+              "position": 6,
+              "uid": "3cf68c8e-5da9-51d3-a402-c10f4137b1f4"
+            },
+            {
+              "content": "The user's mother considers having the whole family eat at the same time more important than receiving a birthday gift.",
+              "content_digest": "d302cf7db2b83b103ea11323ab1b9d36168d224b405d4d0dd51b46b494014291",
+              "position": 7,
+              "uid": "a1984768-d20d-59cd-84c9-cb08c6b7affb"
+            },
+            {
+              "content": "When proposing a birthday meal for the user's mother, check the schedule and attendees; if conversation is the purpose, first consider a low-noise location, then confirm the final choice with the user.",
+              "content_digest": "481169c62cf6fae6b4f29184ffacef9c3c9d825a34d1545ca592bc35537bc65c",
+              "position": 8,
+              "uid": "f52d11e2-2449-5c9d-887b-96c8b5cd0184"
+            },
+            {
+              "content": "The local agent can compare past dining environments and the user's responses, but those records alone cannot determine the location of the next gathering.",
+              "content_digest": "b05fef8420abe3c47c2cd9f2de9149c9c6bda7dca301f09ac7f94eac1a29d2fa",
+              "position": 9,
+              "uid": "c8fccfbe-7756-5d62-9cd7-403dd6741915"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "32a84050-5499-4f84-beeb-a995cc2c9e7e"
+        },
+        {
+          "context_digest": "07c43eb0b8ecd9107f1d879a409b45289e236f48f620ff85f1d30ce594809149",
+          "context_name": "task-3/local/personal-memory/2025/09",
+          "context_uid": "5cd8ed5f-2f1f-5deb-8347-fc3bfa484d99",
+          "memories": [
+            {
+              "content": "The user keeps the book they are reading and a note-taking notebook on a small living-room desk.",
+              "content_digest": "d2c70cf4c27fe62f5915f2f5c669484c4a875e4ee21f8d7d89a5ff6746f14cf1",
+              "position": 0,
+              "uid": "3d3f7960-daf5-5a51-98b3-14261c5aa66c"
+            },
+            {
+              "content": "While reading in the living room with the television on, the user read the same paragraph three times.",
+              "content_digest": "00e41e6d5fe1dcfe961fa0f739860823ecf338dc55d5b9beea265ca823974582",
+              "position": 1,
+              "uid": "28714a4e-bc14-5703-b594-126471ae0585"
+            },
+            {
+              "content": "The next day, after turning off the television, the user read 40 pages without interruption.",
+              "content_digest": "c28ba9c872757b6683ab03d73e6ad61f71484d55986aae4c0976862a85e3a8b1",
+              "position": 2,
+              "uid": "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df"
+            },
+            {
+              "content": "On a day the phone was on the desk, the user stopped taking notes each time they checked a notification.",
+              "content_digest": "f95cb8b1b8abe89d7bf597ca5fb78f0862fe97a7cf0d8bc5a46c04026ebd6889",
+              "position": 3,
+              "uid": "1b1c9f90-2561-53d5-88fe-d54618450143"
+            },
+            {
+              "content": "During the next reading period, the user left the phone in another room and did not check it for an hour.",
+              "content_digest": "89dc50732e19b88a77657b285ce71c399d229b510265cc9adfbdf6ad706680cd",
+              "position": 4,
+              "uid": "076a7caa-5dcf-5f9d-8bee-efc952652efa"
+            },
+            {
+              "content": "A note attached to a paper book fell out, and the user had to find their place again.",
+              "content_digest": "723e48ceeba6c94e627c79af0518c811cfc8337f9eeae3a80ae388ec98786994",
+              "position": 5,
+              "uid": "1dad71ec-6a5d-550e-89d2-a86dc3dacb11"
+            },
+            {
+              "content": "With the next book, the user recorded the page number in the notebook and resumed reading immediately.",
+              "content_digest": "c74c2f80bf403da64f0a6de97ff04bc1f41cf68d0d33829fa926cc2549e8ea75",
+              "position": 6,
+              "uid": "58494743-fc7f-59e9-8e17-80b8a644470a"
+            },
+            {
+              "content": "The user's father expects that lowering the television volume while the user reads will make it easier for the user to concentrate.",
+              "content_digest": "281b1f8f55f8d22fbebdb2220405dc3e2300e29e0a568c1fac36d4bb1c39c186",
+              "position": 7,
+              "uid": "cce66589-892c-5d73-bdbc-2c6e94e0992e"
+            },
+            {
+              "content": "The local agent can summarize past reading environments and interruption records but cannot predict the next reading time.",
+              "content_digest": "50e5376e22f503048a7f1bf4055bfb31cb4aa3c75b1c816f2febce913716eb58",
+              "position": 8,
+              "uid": "20b2a27f-908f-5ed7-a288-f7c1030674fc"
+            },
+            {
+              "content": "The user feels that repeated notifications interrupt their flow of concentration.",
+              "content_digest": "d777b2a01cfac23e6ef7701c04c33592f8382fa78f8e307bae9ddbffc9a8e2ef",
+              "position": 9,
+              "uid": "310f4cfc-b117-5511-8e13-2bd2ebec9fe5"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "4477765f-01db-4eea-91a9-0a3cb185ff72"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate personal contexts: family dining and reading concentration. Their only substantive overlap is a shared, domain-scoped limit on using past observations to determine future circumstances. The remaining memories form coherent but independent one-sided claims, with no conflict or ambiguity.",
+      "relations": [
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "32a84050-5499-4f84-beeb-a995cc2c9e7e",
+              "memory_uid": "c8fccfbe-7756-5d62-9cd7-403dd6741915"
+            },
+            {
+              "frame_uid": "4477765f-01db-4eea-91a9-0a3cb185ff72",
+              "memory_uid": "20b2a27f-908f-5ed7-a288-f7c1030674fc"
+            }
+          ],
+          "reason": "The claims express the same evidentiary limitation while explicitly applying it to different activities and different future unknowns.",
+          "status": "RESOLVED",
+          "summary": "Historical environment records may be summarized or compared but cannot determine a future circumstance; the relevant circumstance is gathering location in the dining context and reading time in the reading context.",
+          "uid": "fd654706-5f08-5135-9f9a-2647a91a0fb0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "32a84050-5499-4f84-beeb-a995cc2c9e7e",
+              "memory_uid": "2cd0229d-b7f1-581b-8019-25bdb485afd9"
+            }
+          ],
+          "reason": "Only the reference supplies this independently useful calendar fact.",
+          "status": "RESOLVED",
+          "summary": "The user's mother's birthday occurs during the third week of January.",
+          "uid": "70260da8-8996-5229-bc7b-9461ee1bf19d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "32a84050-5499-4f84-beeb-a995cc2c9e7e",
+              "memory_uid": "c62f1669-11c9-5a81-b5f5-304acce69c23"
+            },
+            {
+              "frame_uid": "32a84050-5499-4f84-beeb-a995cc2c9e7e",
+              "memory_uid": "674f4bdf-27c3-5870-a68e-91e4a093dd93"
+            },
+            {
+              "frame_uid": "32a84050-5499-4f84-beeb-a995cc2c9e7e",
+              "memory_uid": "21509788-2e3d-548b-8303-f34cfea68c9b"
+            },
+            {
+              "frame_uid": "32a84050-5499-4f84-beeb-a995cc2c9e7e",
+              "memory_uid": "1384df1d-2173-5673-96f5-a4d86835d404"
+            },
+            {
+              "frame_uid": "32a84050-5499-4f84-beeb-a995cc2c9e7e",
+              "memory_uid": "3cf68c8e-5da9-51d3-a402-c10f4137b1f4"
+            }
+          ],
+          "reason": "These reference memories provide complementary observations supporting one underlying claim about ambient noise and the user's dining experience.",
+          "status": "RESOLVED",
+          "summary": "The user's dining experiences associate noisy restaurants or large gatherings with disrupted or diminished engagement, while quieter home meals support comfort, conversation, and longer visits.",
+          "uid": "17cbd8a7-9acd-5e5d-a7eb-1b257754fcd4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "32a84050-5499-4f84-beeb-a995cc2c9e7e",
+              "memory_uid": "74eaea9d-7640-51ba-aa77-9c050581dc46"
+            }
+          ],
+          "reason": "Only the reference provides this specific situational preference.",
+          "status": "RESOLVED",
+          "summary": "For postponed family discussions, the user prefers quiet, one-on-one dining.",
+          "uid": "560a46c3-944e-5794-9f96-13c7ccddc211"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "32a84050-5499-4f84-beeb-a995cc2c9e7e",
+              "memory_uid": "a1984768-d20d-59cd-84c9-cb08c6b7affb"
+            }
+          ],
+          "reason": "Only the reference supplies this independently useful family priority.",
+          "status": "RESOLVED",
+          "summary": "The user's mother values having the whole family eat together more than receiving a birthday gift.",
+          "uid": "78c9e34a-bde5-5015-9a37-ccfea7e8168f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "32a84050-5499-4f84-beeb-a995cc2c9e7e",
+              "memory_uid": "f52d11e2-2449-5c9d-887b-96c8b5cd0184"
+            }
+          ],
+          "reason": "Only the reference provides this multi-factor planning policy and confirmation requirement.",
+          "status": "RESOLVED",
+          "summary": "Planning the mother's birthday meal should account for schedules and attendees, prioritize low noise when conversation is intended, and leave the final choice to the user.",
+          "uid": "d7469287-0471-5319-bd98-f70c1a35f81c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4477765f-01db-4eea-91a9-0a3cb185ff72",
+              "memory_uid": "3d3f7960-daf5-5a51-98b3-14261c5aa66c"
+            }
+          ],
+          "reason": "Only the compared frame supplies this reading-space arrangement.",
+          "status": "RESOLVED",
+          "summary": "The user keeps their current book and note-taking notebook on a small living-room desk.",
+          "uid": "a458f8cf-7d84-598d-b343-aa4eeede7172"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4477765f-01db-4eea-91a9-0a3cb185ff72",
+              "memory_uid": "28714a4e-bc14-5703-b594-126471ae0585"
+            },
+            {
+              "frame_uid": "4477765f-01db-4eea-91a9-0a3cb185ff72",
+              "memory_uid": "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df"
+            },
+            {
+              "frame_uid": "4477765f-01db-4eea-91a9-0a3cb185ff72",
+              "memory_uid": "cce66589-892c-5d73-bdbc-2c6e94e0992e"
+            }
+          ],
+          "reason": "These compared memories jointly express one underlying claim about television noise affecting reading concentration.",
+          "status": "RESOLVED",
+          "summary": "Television sound is treated as a reading-concentration factor: an active television coincides with rereading, its absence with sustained reading, and reduced volume is expected to help.",
+          "uid": "3a507156-2da8-529e-8fd2-0bb3aed94db7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4477765f-01db-4eea-91a9-0a3cb185ff72",
+              "memory_uid": "1b1c9f90-2561-53d5-88fe-d54618450143"
+            },
+            {
+              "frame_uid": "4477765f-01db-4eea-91a9-0a3cb185ff72",
+              "memory_uid": "076a7caa-5dcf-5f9d-8bee-efc952652efa"
+            },
+            {
+              "frame_uid": "4477765f-01db-4eea-91a9-0a3cb185ff72",
+              "memory_uid": "310f4cfc-b117-5511-8e13-2bd2ebec9fe5"
+            }
+          ],
+          "reason": "These compared memories provide observation, response, and self-assessment for one underlying notification-distraction claim.",
+          "status": "RESOLVED",
+          "summary": "Phone notifications interrupt the user's concentration and note-taking flow, while placing the phone in another room supports an uninterrupted reading period.",
+          "uid": "2166ac21-f254-569a-a324-c17d69eca114"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4477765f-01db-4eea-91a9-0a3cb185ff72",
+              "memory_uid": "1dad71ec-6a5d-550e-89d2-a86dc3dacb11"
+            },
+            {
+              "frame_uid": "4477765f-01db-4eea-91a9-0a3cb185ff72",
+              "memory_uid": "58494743-fc7f-59e9-8e17-80b8a644470a"
+            }
+          ],
+          "reason": "These compared memories contrast two page-tracking methods and jointly support one underlying bookmarking claim.",
+          "status": "RESOLVED",
+          "summary": "Recording the page number in a notebook enables immediate resumption, whereas relying on a loose note can cause the user to lose their place.",
+          "uid": "504e3e42-4098-5125-9d48-0f15a98359ab"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame describes a reading setup, television and notification distractions, strategies that sustain concentration, and notebook-based page tracking.",
+        "differences": "Both frames limit what historical environment and interruption records can establish, but one applies this boundary to choosing a family gathering location and the other to predicting a reading time.",
+        "reference_only": "The reference describes birthday timing and family priorities, noise-sensitive dining experiences and preferences, and a user-confirmed process for planning a conversational birthday meal."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "343a3b96-86da-407d-859d-8c249d15ec28"
+    },
+    "analysis_digest": "bbad7b8e9206acbae23ed151068cdcb8bad001088156e9fb636614b0683dd7ea",
+    "key": "7990027f2abea416eea2a3ebfb7433f2a699e2b0a55366c029a1f112b6840ac4",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 45.98138375000053,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "7990027f2abea416eea2a3ebfb7433f2a699e2b0a55366c029a1f112b6840ac4",
+  "created_at": "2026-08-13T18:35:14.619780Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/01",
+  "pair_key": "2b597c3ec9df23ced9de1f2687fda3b0ed1ab6aef3d577bec96f05c344fb7f09",
+  "provider_seconds": 45.98138375000053,
+  "right": "task-3/local/personal-memory/2025/09",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

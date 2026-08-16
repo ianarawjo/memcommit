@@ -1,0 +1,1183 @@
+{
+  "coverage": {
+    "expected": 130,
+    "observed": 130
+  },
+  "created_at": "2026-08-11T01:07:52.931885Z",
+  "description_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+  "issues": [],
+  "kind": "STUDY_COMPARE_GRAPH_PAIR",
+  "left": {
+    "context_digest": "256ab07bee67ed20b15be40e4959b1acb3c53ec00673cfb8a2d9d94b0f362633",
+    "context_uid": "dbe52d14-8d33-5e1e-b380-71066eab0218",
+    "memory_count": 120,
+    "name": "task-3/local/personal-memory/2025"
+  },
+  "method": "COMPACT_FALLBACK_EXHAUSTIVE_V1",
+  "operation": "COMPARE",
+  "pair_key": "320e1f7b40cc89889389f6ce2bc780c8d5e960dd4bdf112fc69150ab25adfffa",
+  "provider": {
+    "compact_provider_seconds": 41.228002666000975,
+    "compact_validation_error": "Every compact group must be used by at least one source Memory.",
+    "condition": "COMPACT_WITH_EXHAUSTIVE_FALLBACK",
+    "fallback_provider_seconds": 141.4557047499984,
+    "provider_calls": 2,
+    "provider_seconds": 182.68370741599938
+  },
+  "relations": [
+    {
+      "comment": "Only the reference states this document-renewal timing.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "50911f7e-75a1-5099-99f1-e471bb8e6cb6",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000001",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "The reference alone describes the delay and subsequent benefit of consolidating the required copies.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "d5bd9f79-7295-5014-9668-83b7cffc78e2",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "5f92f6a3-1739-580c-bd63-1a936098ccd0",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000002",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference provides the mismatched-name episode and the successful later check.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "929107ac-c62d-5920-9f71-12d4c9a102e9",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "df8b90c2-4310-5e89-b979-508309bf6b04",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000003",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "The reference alone links a missed deadline to omitted issuance timing and records the revised calendar practice.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "306b9df1-d713-5413-b448-e2b42376d827",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "870b57b5-4cdb-54fc-b17f-8ffb86dad802",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "111972b9-e05f-5e1b-b121-ef9e51572d1d",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000004",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference contains this counter-staff expectation.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "a0fe456c-0794-5bce-8ef9-9558e9833471",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000005",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference states this information limitation.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "c9872898-ec4f-576e-b154-ff6fda581a1a",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000006",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference records this review.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "3ff046b1-5810-51ca-8d43-c99ef6a90b41",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000007",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference contrasts missed paragraph items with complete checklist marking.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "e2a304e5-6100-5a5f-b508-0a7f28f6bda7",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "51d03bff-3e33-5f68-9df6-ed7efa8e3de9",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000008",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference supplies these two calling outcomes.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "0987293e-3e21-5cbc-bb46-59245a5fa041",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "dc3de6ad-56ea-528a-a9b7-349e79af2326",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000009",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "The reference alone describes the failed message, family confirmation, list update, and resulting verification practice.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "6546d41b-3d5b-5802-a9e7-ac028405e3f2",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "ea6eb9d2-9b01-5330-a4d5-886d4bc6cd85",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "e6f89ded-5687-5c25-8df8-88f288d450c6",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000010",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference states this communication preference.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "12fe7e64-192e-5359-8f96-d2875f7e5399",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000011",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference states this reminder preference.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "f9197c33-ff93-5215-a3a5-e4087bea2a0d",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000012",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference identifies this storage location.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "5d989bab-c471-5de9-bb73-29cabc4753dd",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000013",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference contrasts an unplanned duplicate purchase with the photo-assisted outcome.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "d1725ae4-3fd3-5250-92b3-73d84d9152a7",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "904ff225-26df-5424-8a82-23d733649106",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000014",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference describes this recipe adjustment and outcome.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "67a003c7-648a-59dc-8e82-03f9e452ffce",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000015",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "The reference alone links unclear verbal sequencing, later role division, improved timing, and the brother's preference.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "64bf4401-e972-5d15-a526-21ca901a6a9f",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "57e09ea5-54ff-5fce-aada-68daffbacc8b",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "0a5d054f-94bd-5955-bdb7-9b5427e2260b",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000016",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference states this inference boundary.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "1f94b78b-1635-551c-b90c-bea2a67ca595",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000017",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference provides this storage caveat.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "f64ef6c4-7665-5574-9d58-fc124b0bfe3f",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000018",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference identifies this card location.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "a1c67646-6a75-504a-9508-d69e1d04b3e5",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000019",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "The reference alone connects delayed removal, an advance reminder, immediate pickup, the manager's fairness view, and the reminder rule.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "9479e799-95d7-50d2-af62-d1e0914a389b",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "528cb5ea-8c36-5206-beaa-19432250ec4d",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "abbf8742-38e3-5810-b222-fe91e3340962",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "06273d22-0b42-5c55-9d70-eda14084219a",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000020",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference contrasts the mixed-load damage with the later separate wash.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "85fb1639-2176-5329-b490-3325ff030db4",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "431d170a-863f-596d-97c0-0c9634524ee5",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000021",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference contrasts unchecked and emptied-filter outcomes.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "4df33adc-cfba-50f2-b141-e2ebed38b81c",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "ba7daae9-938d-55a1-af20-21cd10d395d8",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000022",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference states this real-time availability limitation.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "03ac930e-d745-5c29-8c24-5ced669817f9",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000023",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference provides this plant location.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "cb09b8ab-c7c4-51bb-a227-039c7cdfae5d",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000024",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference contrasts yellowing under daily watering with new growth after deeper moisture checks.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "95978183-0070-5b12-b117-be39bb343a5e",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "8c610ce5-1eb7-52e5-ad81-e8062d23cd19",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000025",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference describes the wind incident and repositioning response.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "3f886c0c-071b-5f2d-adad-da01345d702f",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "afe855b8-f5ad-559c-a63f-6f655ba371a2",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000026",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference records both labeling a pot and confusion involving an unlabeled pot.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "384c4f5f-b15c-5742-ac79-20106d0dd30b",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "48dc89af-ed9d-51a5-a4b1-b809fd818143",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000027",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference states this care priority.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "a2426820-65d6-5c78-ac50-0f32b366ae47",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000028",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference states this reminder rule.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "efd51196-ed48-5699-a0f4-c5b8e149d11c",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000029",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference provides this environmental qualification.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "4c93eeff-566e-5a1a-afb9-035c97fb9c73",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000030",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference identifies this charger location.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "853a158c-edf9-578a-8e75-3d5daff6e4db",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000031",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference contrasts the user's hot-day loss of focus with the lower temperature rise after closing curtains.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "f7d5ebdc-0cae-5e07-a060-e129b5a05570",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "99e5c522-535b-5015-8617-06f645147f8b",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000032",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference contrasts the uncharged shutdown with the charged result.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "7b3bf50c-63aa-5a1e-9a53-7befea25a468",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "ca8de091-afb2-537f-a83a-09769056879d",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000033",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "The reference alone combines the user's midday move indoors, longer evening stay, and the father's timing preference.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "4a0604fb-10b4-5132-a6de-ab6a229ff2be",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "1f90941e-776f-5cba-9783-c392983dd72c",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "63391d26-7417-5ea6-ac0a-460af7489963",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000034",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference states this limitation despite allowing comparison of past heat responses.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "31502797-1379-5ec4-bd1b-a2e1515fa56e",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000035",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference provides this room-heating observation.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "68f85c30-62c4-579d-97cd-9f401c686e63",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000036",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference identifies this storage location.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "447bfd8d-1490-5404-a2b4-13b4587e6aba",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000037",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference contrasts these short-trip packing outcomes.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "3ab0326a-a006-51ea-9348-7ada19a23bce",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "ef467ab6-8ba6-5f81-8f12-578ec1824e09",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000038",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference describes the forgotten cable and successful later photo check.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "aa4defc3-2b65-5688-accb-aaa49f2430b6",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "2d937b4b-d73d-5382-abbe-3cd4e596b3a5",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000039",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference contrasts departure-day packing and lateness with night-before completion.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "0be8b327-0a06-5241-b98d-daa6b0a4aa50",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "90059fcc-436d-5453-98f0-a9b23a08faf1",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000040",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference states this packing preference.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "12ef03f9-8cda-5ed7-be83-891b4702f872",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000041",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference states this list-scoping rule.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "54136935-a460-573d-ac40-f5edb0ca7e6c",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000042",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference states this inference limitation.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "029c0777-bdbb-5d48-9309-1b1e6c7d88f4",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000043",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference identifies this storage location.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "15c3941e-ed44-508f-ae30-b51456b5ba86",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000044",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference contrasts the failed late arrival with the successful earlier visit.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "84d1fd1c-9508-5f05-9a7c-1d5f20ecf4a4",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "8946f9da-e325-59c3-9260-2d2f590d3701",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000045",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference contrasts an unsealed-box detour with successful advance sealing.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "67e8b160-a57d-56e5-a766-741b7ce0e939",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "efd0706b-600a-5ac1-926e-cc0602ca0086",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000046",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference contrasts poorly aligned destinations with a mapped branch sequence.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "1e8a6f7e-0911-5a34-ad82-172479d1a7a4",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "a8670161-257e-51ab-8e30-0e282952278f",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000047",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference states this barcode requirement.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "2db70f53-99ee-556c-a8c1-b809881cbebd",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000048",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference states this planning rule.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "38d60cc4-2f91-5cc2-b511-55cdbbe12c32",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000049",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference provides this holiday-hours caveat.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "1272087c-a535-5612-8c7a-1bc257183788",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000050",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference identifies this reading setup.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "3d3f7960-daf5-5a51-98b3-14261c5aa66c",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000051",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "The reference alone connects repeated reading with the television on, uninterrupted reading when it was off, and the father's volume expectation.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "28714a4e-bc14-5703-b594-126471ae0585",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "cce66589-892c-5d73-bdbc-2c6e94e0992e",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000052",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "The reference alone combines the observed note-taking interruptions, the successful phone-free period, and the user's stated experience.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "1b1c9f90-2561-53d5-88fe-d54618450143",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "076a7caa-5dcf-5f9d-8bee-efc952652efa",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "310f4cfc-b117-5511-8e13-2bd2ebec9fe5",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000053",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference contrasts the lost marker with immediate resumption from the notebook record.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "1dad71ec-6a5d-550e-89d2-a86dc3dacb11",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "58494743-fc7f-59e9-8e17-80b8a644470a",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000054",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference states this prediction limitation.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "20b2a27f-908f-5ed7-a288-f7c1030674fc",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000055",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference identifies this footwear location.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "82c1e806-de3a-5633-8a08-175487e69fd6",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000056",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference contrasts the wet- and dry-foot outcomes.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "25df6384-836f-5f8e-bd97-73a1fb171c48",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "55abae4f-206a-586e-8b35-406d7525c0a1",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000057",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference describes heel chafing on a long walk and subsequent short-outing use.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "c6d21ec4-6bdf-55df-b4d4-05cb531bf4bd",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "a6424854-e51e-5afc-8b9f-9e2f0273f70e",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000058",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference records this result.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "1b436b46-3d1f-5aa2-99e3-94b7c2412bfd",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000059",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference records this damage.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "ccd1f422-6130-5f19-869e-681102a3a1fa",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000060",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference states this expectation and action.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "c69a8e87-2b6f-5514-ab0d-0037531592f8",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000061",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Both frames govern route proposals, but their explicit long-distance and winter conditions explain and preserve the different checks; the compared examples support the snow-specific rule.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "4567ea9f-1800-51ed-bfac-f4cdf674d4cf",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "f623f245-cdd5-5080-8869-b52cf2914076",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "17ac56f1-1302-5350-99d5-b95ef7feb768",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000062",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference states this footwear-state limitation.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "a4ff1b76-755d-530a-b24c-8655115e4fbe",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000063",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference records this calendar event.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "3f6eaf6c-00e7-5bd7-9809-367f54a0f707",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000064",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference contrasts repeated-order interruptions at the restaurant with continued conversation at the father's home.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "9fd0b9b6-986d-54b0-965e-45feaf9cd482",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "cbc477c4-83c4-506b-9da8-9252d14d7f6b",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000065",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference contrasts a headache from loud music with easier conversation at an open-space barbecue.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "bbfc537e-3fcc-5065-ab93-4777bcdfc10c",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "b61367fa-dd17-5ff2-9d6b-f81f6123735a",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000066",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "The reference alone connects known and unknown arrival timing with food preparation, the uncle's departure planning, and the scheduling rule.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "681cdbd5-595d-5211-914d-edfd9a6b130d",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "81c0c4e9-5ae4-5e8a-b11c-7d33032fd8ec",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "56078821-34d0-540f-ae66-03bdd7bd1df3",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "19c8ae40-1f5b-5fec-9538-e7bc7cfb036a",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000067",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference provides this seasonal reservation caveat.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "3ea9fa3b-4411-55d0-ac90-2ed5515e6ef7",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000068",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference identifies this storage location.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "bd69b616-6e7c-5440-8b29-586de68bcff6",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000069",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "The reference alone combines the duplicate discovery, the mother's direct selection, and the limit of historical records.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "90c60e57-d7db-5783-9ca8-2fd27b94d847",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "53bc23b2-8242-58b5-b496-a45c70bb8e41",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "036edf8f-4680-5822-924e-0fdc691c8135",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000070",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference describes the late delivery, improved early order, and seasonal uncertainty.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "3b097446-2c73-5414-8c06-6bacdf00a4c1",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "ce18c7a5-d1e9-5e5c-8739-b14fa7298feb",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "b9e9e222-a559-56e3-93b5-1f49a0e0d3ab",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000071",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference contrasts unlabeled mix-ups with later recipient labeling.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "7657f424-cd24-54dd-8409-e04974dd1531",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "d8e82ad3-902e-5f0c-aa8e-b23ce874982a",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000072",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference states this gift preference.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "8a941bf1-73bd-51d3-a069-62ecc9d56439",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000073",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame identifies this winter-accessory location.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000074",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame contrasts the missed-bus episode with successful advance preparation.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "a11f0943-8ee1-5305-87fb-64982fb36f82",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000075",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame describes the overheating episode and next-night adjustment.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "96988fa9-44b1-511e-8c99-4372f902cfe3",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "b628acaa-50da-552c-8665-244dc4ab8263",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000076",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame states this expectation and communication behavior.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "08dfb937-7b28-55b5-801c-c0da00cbd414",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000077",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame states this route-condition limitation.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "802c4031-57de-592a-9bc8-6ee3d54921c8",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000078",
+      "status": "RESOLVED"
+    }
+  ],
+  "right": {
+    "context_digest": "1d47d83944d91bc0316a61894412e9b4361758603b9532687cf68473f1d30198",
+    "context_uid": "e48e6eac-20f7-599d-9f76-4238bd9dd96d",
+    "memory_count": 10,
+    "name": "task-3/local/personal-memory/2026/01"
+  },
+  "schema_version": 1,
+  "semantic_content_in_participant_report": false,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

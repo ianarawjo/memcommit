@@ -1,0 +1,320 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:23:42.665731+00:00",
+      "frames": [
+        {
+          "context_digest": "9d55b4a5604285e426b317f7f4732b35ca1e9df044f7015b3ae6a6be0df5492b",
+          "context_name": "task-2/advisor1/reproducibility",
+          "context_uid": "7d293f75-52b6-5f27-99c4-54f2be3d8e59",
+          "memories": [
+            {
+              "content": "HCI reviewers find it difficult to assess the reproducibility of results if the prototype version used in the evaluation is not disclosed.",
+              "content_digest": "9b89217d4ef2c7524af665ea80d7d60e61f1663fd8ea4bdde533c8d3a0da2044",
+              "position": 0,
+              "uid": "fb400759-63ed-568a-b94e-5f0c2fe94b67"
+            },
+            {
+              "content": "Record the manipulated and fixed elements of compared design alternatives so that other researchers can reconstruct them.",
+              "content_digest": "26b84b5f0644980de51d764218ce90fb614eb02a2df38fb3632f44d360a93cd3",
+              "position": 1,
+              "uid": "e52e8470-6419-5306-9ddd-00a86003dcf3"
+            },
+            {
+              "content": "Records of formative evaluation decisions enable the reconstruction of connections between raw data, interpretation, and design modifications.",
+              "content_digest": "f213479e4bd1947d418083139346ed7f666bc597133962617d94bdd3a9af0083",
+              "position": 2,
+              "uid": "8f4edf8c-491d-56fe-bde4-d9ce25d6de50"
+            },
+            {
+              "content": "The user must make it possible to trace which observations each prototype version reflects so the process of deriving design knowledge can be reviewed.",
+              "content_digest": "1c9b8a6f650f2eb652b1e9cbb62ad9dcbb3ec13f2e160b52db83492640eb0ae9",
+              "position": 3,
+              "uid": "87662a7e-ffc7-521a-a06c-7db8184377e8"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "f1b2143f-ec95-40fa-9cba-757356467871"
+        },
+        {
+          "context_digest": "bf5136a518ce85246184349a0194e446748710ed6da95e5c97d4a31d74ddc1b9",
+          "context_name": "task-2/advisor2/review",
+          "context_uid": "3398ba87-f01e-56bd-9da2-0ed0894524fa",
+          "memories": [
+            {
+              "content": "Conduct one review prior to submission focusing solely on the validity of user problems, system interventions, and field evaluation logic.",
+              "content_digest": "9b0b5596ec5924a6141926bfc337ec6e23d77dfb7b65facb26b42109f05f1fe4",
+              "position": 0,
+              "uid": "6d203c86-b6e0-586a-b896-b654fa319ed1"
+            },
+            {
+              "content": "Cross-check whether research questions align with the core functions of the system.",
+              "content_digest": "f7f9f49efe539881dae49a96adce0ec349435e4cc7f55229c88097e54fe03f93",
+              "position": 1,
+              "uid": "6b75bfb1-67f5-50bb-9e0c-04026062de96"
+            },
+            {
+              "content": "Cross-check whether field tasks align with representative measures.",
+              "content_digest": "3e993f6c978e14b5b0f6e8ada40d8a0067981e943c67636e9599fb652dca44a4",
+              "position": 2,
+              "uid": "3abfda89-82ab-5cc5-bdcd-5e2f274fd727"
+            },
+            {
+              "content": "Cross-check whether the evidence to be collected aligns with the design and operational decisions to be changed.",
+              "content_digest": "a4761a8dac6c60a2132619c8c8e963aca0d61216d689786b18574f5e30f1f3aa",
+              "position": 3,
+              "uid": "f14f1974-9035-5a2c-931a-89a5004a2567"
+            },
+            {
+              "content": "Finally verify that the user problem, system intervention, field evaluation, and expected contribution form one coherent logical flow.",
+              "content_digest": "47198a770770dc805e0f40a5f9b9c34ae1999f39ec2f9fa1c34b3280f21f5477",
+              "position": 4,
+              "uid": "6ba1d344-5d98-5c25-ba1e-b28c08d39747"
+            },
+            {
+              "content": "HCI reviewers view the validity of design interventions as low if research questions do not connect to system functions.",
+              "content_digest": "ffa754352dfecc597f84cff7cbf8607a12bbfd99ac22250cc84392bd85e37e73",
+              "position": 5,
+              "uid": "4a85ebbd-a4ee-5c88-9e93-5fc545f41c64"
+            },
+            {
+              "content": "HCI reviewers view the validity of evaluation plans as low if field tasks fail to generate representative measures.",
+              "content_digest": "f29eb5429d767b0fa171b7e9862b3d8d06dfd388739e95acd67b2321aaf1a91e",
+              "position": 6,
+              "uid": "75c4c71d-28e3-559c-99d1-f0dccc31a9e2"
+            },
+            {
+              "content": "HCI reviewers view the practical utility of contributions as low if collected evidence cannot change design or operational decisions.",
+              "content_digest": "6b9ae0bc59cda995d674479dfe95f43359ff04e68cb07633957885ee5cf1336c",
+              "position": 7,
+              "uid": "577e5506-78e8-5768-b288-7a5986347cce"
+            },
+            {
+              "content": "Before submission, conduct a sequential walkthrough with field liaisons of installation failures, operational interruptions, and recovery scenarios.",
+              "content_digest": "115fa1f22eb7f55918620418f89def51ba84bd36e102875a5f5e560de5305dda",
+              "position": 8,
+              "uid": "9ce34a9a-4ba2-5b32-a1de-b0469ddc3f95"
+            },
+            {
+              "content": "Verify in one sentence how each proposed contribution could actually alter specific design or operational decisions.",
+              "content_digest": "1c6ef38e42f40e9cd6ab5323deaa825efb1136b926b66af9337ea6debaf8600e",
+              "position": 9,
+              "uid": "f8253f92-c60c-57e1-a630-6b31abe080ae"
+            },
+            {
+              "content": "The user must distinguish unconfirmed field partners and equipment from finalized ones so remaining execution risks can be assessed.",
+              "content_digest": "c2eb0936c09d8796092950aba699664f79f2222f27523e37a1af5feabe2b8058",
+              "position": 10,
+              "uid": "f5ad6933-3e22-5c47-bdaf-bacc9c9a5b3c"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "fef04627-ab56-4c3a-b3ae-e4464106020c"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The reference frame concentrates on reproducible documentation of prototypes, alternatives, observations, and formative decisions. The compared frame instead concentrates on pre-submission validity, coherence, decision relevance, field-failure preparation, and execution-risk disclosure. These are complementary topic areas, but they do not govern the same operational decisions.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f1b2143f-ec95-40fa-9cba-757356467871",
+              "memory_uid": "fb400759-63ed-568a-b94e-5f0c2fe94b67"
+            }
+          ],
+          "reason": "Only the reference frame addresses identifying the evaluated prototype version.",
+          "status": "RESOLVED",
+          "summary": "Evaluation reports should disclose the prototype version used so reviewers can assess reproducibility.",
+          "uid": "aeee1485-00a8-5674-8a9a-d1d4f8997757"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f1b2143f-ec95-40fa-9cba-757356467871",
+              "memory_uid": "e52e8470-6419-5306-9ddd-00a86003dcf3"
+            }
+          ],
+          "reason": "Only the reference frame specifies documenting controlled and changed elements across design alternatives.",
+          "status": "RESOLVED",
+          "summary": "Compared design alternatives should record both manipulated and fixed elements to permit reconstruction.",
+          "uid": "dcb248d0-9a88-5145-9be3-7ddc03e7dbe5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f1b2143f-ec95-40fa-9cba-757356467871",
+              "memory_uid": "8f4edf8c-491d-56fe-bde4-d9ce25d6de50"
+            }
+          ],
+          "reason": "Only the reference frame addresses preserving the evidentiary chain behind formative design changes.",
+          "status": "RESOLVED",
+          "summary": "Formative evaluation decisions should be recorded to reconstruct links among raw data, interpretation, and design modifications.",
+          "uid": "9ce477e7-a69f-58b0-90dc-bd834f3f6b42"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f1b2143f-ec95-40fa-9cba-757356467871",
+              "memory_uid": "87662a7e-ffc7-521a-a06c-7db8184377e8"
+            }
+          ],
+          "reason": "Only the reference frame requires observation-level traceability across prototype evolution.",
+          "status": "RESOLVED",
+          "summary": "Observations should be traceable to the prototype versions that reflect them so design-knowledge derivation can be reviewed.",
+          "uid": "fc44ba12-ffae-57de-adc8-18556a7b93ad"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fef04627-ab56-4c3a-b3ae-e4464106020c",
+              "memory_uid": "6d203c86-b6e0-586a-b896-b654fa319ed1"
+            }
+          ],
+          "reason": "Only the compared frame prescribes this focused review activity.",
+          "status": "RESOLVED",
+          "summary": "A dedicated pre-submission review should examine the validity of user problems, system interventions, and field-evaluation logic.",
+          "uid": "ea0ba2b9-70b3-51a3-9bbc-6ebce580bd5f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fef04627-ab56-4c3a-b3ae-e4464106020c",
+              "memory_uid": "6b75bfb1-67f5-50bb-9e0c-04026062de96"
+            },
+            {
+              "frame_uid": "fef04627-ab56-4c3a-b3ae-e4464106020c",
+              "memory_uid": "4a85ebbd-a4ee-5c88-9e93-5fc545f41c64"
+            }
+          ],
+          "reason": "The compared memories state the alignment check and its reviewer-facing validity consequence as one underlying claim; the reference frame does not address it.",
+          "status": "RESOLVED",
+          "summary": "Research questions should connect to core system functions to support the validity of design interventions.",
+          "uid": "584bfff1-7176-5e03-94ee-d027ade1a983"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fef04627-ab56-4c3a-b3ae-e4464106020c",
+              "memory_uid": "3abfda89-82ab-5cc5-bdcd-5e2f274fd727"
+            },
+            {
+              "frame_uid": "fef04627-ab56-4c3a-b3ae-e4464106020c",
+              "memory_uid": "75c4c71d-28e3-559c-99d1-f0dccc31a9e2"
+            }
+          ],
+          "reason": "The compared memories state the alignment check and its reviewer-facing validity consequence as one underlying claim; the reference frame does not address it.",
+          "status": "RESOLVED",
+          "summary": "Field tasks should generate representative measures to support the validity of evaluation plans.",
+          "uid": "568d2f71-941b-5292-ab99-d5de3dd3c7cd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fef04627-ab56-4c3a-b3ae-e4464106020c",
+              "memory_uid": "f14f1974-9035-5a2c-931a-89a5004a2567"
+            },
+            {
+              "frame_uid": "fef04627-ab56-4c3a-b3ae-e4464106020c",
+              "memory_uid": "577e5506-78e8-5768-b288-7a5986347cce"
+            },
+            {
+              "frame_uid": "fef04627-ab56-4c3a-b3ae-e4464106020c",
+              "memory_uid": "f8253f92-c60c-57e1-a630-6b31abe080ae"
+            }
+          ],
+          "reason": "The compared memories split one actionability requirement across an alignment check, its practical-utility rationale, and a concise verification step; the reference frame does not make this claim.",
+          "status": "RESOLVED",
+          "summary": "Collected evidence and proposed contributions should be explicitly connected to specific design or operational decisions they could change.",
+          "uid": "ae148982-79fc-546c-bf45-627d6ae1bdac"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fef04627-ab56-4c3a-b3ae-e4464106020c",
+              "memory_uid": "6ba1d344-5d98-5c25-ba1e-b28c08d39747"
+            }
+          ],
+          "reason": "Only the compared frame requires this end-to-end coherence check.",
+          "status": "RESOLVED",
+          "summary": "Before submission, the user problem, system intervention, field evaluation, and expected contribution should be verified as one coherent logical flow.",
+          "uid": "8f68e10a-ca7b-5d7b-ae04-6d14f5f28529"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fef04627-ab56-4c3a-b3ae-e4464106020c",
+              "memory_uid": "9ce34a9a-4ba2-5b32-a1de-b0469ddc3f95"
+            }
+          ],
+          "reason": "Only the compared frame prescribes an operational-failure walkthrough with field liaisons.",
+          "status": "RESOLVED",
+          "summary": "Before submission, field liaisons should sequentially review installation failures, operational interruptions, and recovery scenarios.",
+          "uid": "edb3b28a-8b75-5b7f-b6f3-4598bfbcac35"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fef04627-ab56-4c3a-b3ae-e4464106020c",
+              "memory_uid": "f5ad6933-3e22-5c47-bdaf-bacc9c9a5b3c"
+            }
+          ],
+          "reason": "Only the compared frame addresses disclosure of unresolved field dependencies.",
+          "status": "RESOLVED",
+          "summary": "Unconfirmed field partners and equipment should be distinguished from finalized resources so remaining execution risks can be assessed.",
+          "uid": "8eab9eb9-8bfd-593a-982d-f8cd213c7256"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only material addresses validity review, research-function and task-measure alignment, actionable contributions, overall logical coherence, operational-failure walkthroughs, and disclosure of unresolved field resources.",
+        "differences": "",
+        "reference_only": "Reference-only material addresses prototype-version disclosure, reconstructable design alternatives, formative evidence-to-change records, and observation-to-version traceability."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "76434a0d-2526-4008-9aae-b395c7f33d22"
+    },
+    "analysis_digest": "3b25f2b157fd8dc418939d002c45ccac1957002ed23a94d348237040d534043b",
+    "key": "f470eeda4bdc70dfced078ad39b25bddfc323fbd2faa9766e0fa70b8f719d394",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 36.32275466699866,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "f470eeda4bdc70dfced078ad39b25bddfc323fbd2faa9766e0fa70b8f719d394",
+  "created_at": "2026-08-13T18:24:18.987707Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/reproducibility",
+  "pair_key": "404e200aec555d8cb1f5e37ebcdc385f036471f59ccb7e12bea8279e854ae2d0",
+  "provider_seconds": 36.32275466699866,
+  "right": "task-2/advisor2/review",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

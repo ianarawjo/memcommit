@@ -1,0 +1,379 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:41:52.444766+00:00",
+      "frames": [
+        {
+          "context_digest": "58f58090449931225a941a4219f3fce7ebcf23bbabc0e0aa93a8733d4ba32701",
+          "context_name": "task-3/local/personal-memory/2024/07",
+          "context_uid": "8747b4f6-d17c-5b02-83f4-fc3af73e2da0",
+          "memories": [
+            {
+              "content": "The user updated the utility account for their residence in July 2024.",
+              "content_digest": "89c6a8e8dd7ad799b9ef4cb2b10963ce0b9ad55e713716d9729f903e76c0f71a",
+              "position": 0,
+              "uid": "65a332a2-2707-55f8-b7a6-a7378e6fbb7a"
+            },
+            {
+              "content": "After putting a paper bill in a drawer, the user checked it one day after the payment date.",
+              "content_digest": "474d42322de3190caee3e4feeb831bcb6a7b57e58427667d74be084ee9c64257",
+              "position": 1,
+              "uid": "fb94e1fd-9b3d-567a-81d8-d7a0ee90e04e"
+            },
+            {
+              "content": "In the month after receiving an electronic billing alert, the user paid two days before the deadline.",
+              "content_digest": "c16cf32e0018eb1cdf94e3070036d7fb93b0ccc8adb633a057642ff41284eaa0",
+              "position": 2,
+              "uid": "7d8db31a-c330-5852-9d7c-c9da7f98d899"
+            },
+            {
+              "content": "The user saw a water-inspection notice late and started washing dishes during the scheduled shutoff.",
+              "content_digest": "d5bea20cc35a46502ba919c52bee7519453346789d4bb881c82a9c08e6840cb0",
+              "position": 3,
+              "uid": "008dd110-feb2-5b4b-b602-bb3e23475a95"
+            },
+            {
+              "content": "After transferring a management-office notice to their phone calendar, the user did not miss the inspection time.",
+              "content_digest": "ce2c06404fcb8988b61da98f2ddd58d3db6506ff74aa1c7dfd43f841fa6fb25d",
+              "position": 4,
+              "uid": "a03ed01a-3d15-5eaf-9415-529705fd1245"
+            },
+            {
+              "content": "During a boiler technician's visit, the user had not cleared boxes from the entrance in advance and had to rearrange the passage.",
+              "content_digest": "39f4ca86667c0622dce2b6fee2b04df73131bf9d98e81478f1fa818b5dfe70c2",
+              "position": 5,
+              "uid": "2fb4b0bd-1257-5e50-881a-7f312940e1c5"
+            },
+            {
+              "content": "The user cleared the entrance the day before the next visit so the inspection could begin immediately.",
+              "content_digest": "e99fb029e3ca864e4f293358a85f33d73f4d7d2b9fda7dcd437ffdf183350666",
+              "position": 6,
+              "uid": "d05286e8-f183-5f4a-99d8-3dcca1aeaa09"
+            },
+            {
+              "content": "The building manager expects that a one-day advance visit notice gives a resident enough time to prepare the work area.",
+              "content_digest": "f992e380bfa87fa04c9f7dde8eceee69eb6b0aa3ad79c180d9023dafd7dd2abd",
+              "position": 7,
+              "uid": "44d28aa3-1aa4-5276-b545-86ee2cb17078"
+            },
+            {
+              "content": "Confirm the user's available time before finalizing a service visit to the residence.",
+              "content_digest": "dee4efa145a0f8b25c47a1c6855c02feee2de292e78b2e3790763796981db1e5",
+              "position": 8,
+              "uid": "77f77450-ab10-5469-8e2f-5445060926bc"
+            },
+            {
+              "content": "The local agent can compare payment records with notice times but cannot verify whether a residential service problem was resolved.",
+              "content_digest": "09e052010507ce17344888df5171f58996245cceb9012e160d540f030e7ba98a",
+              "position": 9,
+              "uid": "fd7f98b4-d5b9-5196-ad5e-c4356681ecf4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "efb19275-8fc8-4ade-a552-73ba1b9aa14f"
+        },
+        {
+          "context_digest": "07c43eb0b8ecd9107f1d879a409b45289e236f48f620ff85f1d30ce594809149",
+          "context_name": "task-3/local/personal-memory/2025/09",
+          "context_uid": "5cd8ed5f-2f1f-5deb-8347-fc3bfa484d99",
+          "memories": [
+            {
+              "content": "The user keeps the book they are reading and a note-taking notebook on a small living-room desk.",
+              "content_digest": "d2c70cf4c27fe62f5915f2f5c669484c4a875e4ee21f8d7d89a5ff6746f14cf1",
+              "position": 0,
+              "uid": "3d3f7960-daf5-5a51-98b3-14261c5aa66c"
+            },
+            {
+              "content": "While reading in the living room with the television on, the user read the same paragraph three times.",
+              "content_digest": "00e41e6d5fe1dcfe961fa0f739860823ecf338dc55d5b9beea265ca823974582",
+              "position": 1,
+              "uid": "28714a4e-bc14-5703-b594-126471ae0585"
+            },
+            {
+              "content": "The next day, after turning off the television, the user read 40 pages without interruption.",
+              "content_digest": "c28ba9c872757b6683ab03d73e6ad61f71484d55986aae4c0976862a85e3a8b1",
+              "position": 2,
+              "uid": "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df"
+            },
+            {
+              "content": "On a day the phone was on the desk, the user stopped taking notes each time they checked a notification.",
+              "content_digest": "f95cb8b1b8abe89d7bf597ca5fb78f0862fe97a7cf0d8bc5a46c04026ebd6889",
+              "position": 3,
+              "uid": "1b1c9f90-2561-53d5-88fe-d54618450143"
+            },
+            {
+              "content": "During the next reading period, the user left the phone in another room and did not check it for an hour.",
+              "content_digest": "89dc50732e19b88a77657b285ce71c399d229b510265cc9adfbdf6ad706680cd",
+              "position": 4,
+              "uid": "076a7caa-5dcf-5f9d-8bee-efc952652efa"
+            },
+            {
+              "content": "A note attached to a paper book fell out, and the user had to find their place again.",
+              "content_digest": "723e48ceeba6c94e627c79af0518c811cfc8337f9eeae3a80ae388ec98786994",
+              "position": 5,
+              "uid": "1dad71ec-6a5d-550e-89d2-a86dc3dacb11"
+            },
+            {
+              "content": "With the next book, the user recorded the page number in the notebook and resumed reading immediately.",
+              "content_digest": "c74c2f80bf403da64f0a6de97ff04bc1f41cf68d0d33829fa926cc2549e8ea75",
+              "position": 6,
+              "uid": "58494743-fc7f-59e9-8e17-80b8a644470a"
+            },
+            {
+              "content": "The user's father expects that lowering the television volume while the user reads will make it easier for the user to concentrate.",
+              "content_digest": "281b1f8f55f8d22fbebdb2220405dc3e2300e29e0a568c1fac36d4bb1c39c186",
+              "position": 7,
+              "uid": "cce66589-892c-5d73-bdbc-2c6e94e0992e"
+            },
+            {
+              "content": "The local agent can summarize past reading environments and interruption records but cannot predict the next reading time.",
+              "content_digest": "50e5376e22f503048a7f1bf4055bfb31cb4aa3c75b1c816f2febce913716eb58",
+              "position": 8,
+              "uid": "20b2a27f-908f-5ed7-a288-f7c1030674fc"
+            },
+            {
+              "content": "The user feels that repeated notifications interrupt their flow of concentration.",
+              "content_digest": "d777b2a01cfac23e6ef7701c04c33592f8382fa78f8e307bae9ddbffc9a8e2ef",
+              "position": 9,
+              "uid": "310f4cfc-b117-5511-8e13-2bd2ebec9fe5"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "0a3ca79a-6a87-42be-8c6e-fe52165a24c5"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames concern separate domains: residential billing and service coordination versus reading concentration and interruption management. Their only direct relationship is a scope-dependent description of the local agent’s capabilities; all other information contributes independent, side-specific history, expectations, practices, or guidance.",
+      "relations": [
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "efb19275-8fc8-4ade-a552-73ba1b9aa14f",
+              "memory_uid": "fd7f98b4-d5b9-5196-ad5e-c4356681ecf4"
+            },
+            {
+              "frame_uid": "0a3ca79a-6a87-42be-8c6e-fe52165a24c5",
+              "memory_uid": "20b2a27f-908f-5ed7-a288-f7c1030674fc"
+            }
+          ],
+          "reason": "Both memories define operational capability boundaries for the local agent, but their stated domains and unavailable functions are distinct conditions that must be preserved.",
+          "status": "RESOLVED",
+          "summary": "The local agent’s supported summaries and comparisons, and its unsupported determinations, differ explicitly between residential-service and reading contexts.",
+          "uid": "cdde9ed4-1c17-5bc1-b3eb-c79838b84e2f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "efb19275-8fc8-4ade-a552-73ba1b9aa14f",
+              "memory_uid": "65a332a2-2707-55f8-b7a6-a7378e6fbb7a"
+            }
+          ],
+          "reason": "This is an independently useful residential-account event with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user updated the residence’s utility account in July 2024.",
+          "uid": "636d5e21-608a-5bf9-b52f-58fcf69d75af"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "efb19275-8fc8-4ade-a552-73ba1b9aa14f",
+              "memory_uid": "fb94e1fd-9b3d-567a-81d8-d7a0ee90e04e"
+            },
+            {
+              "frame_uid": "efb19275-8fc8-4ade-a552-73ba1b9aa14f",
+              "memory_uid": "7d8db31a-c330-5852-9d7c-c9da7f98d899"
+            }
+          ],
+          "reason": "These memories form one contrast about how bill-notice handling accompanied late versus timely payment action, with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user checked a stored paper bill after its payment date but paid before the deadline after an electronic billing alert.",
+          "uid": "a48629de-a41e-5941-91c8-9544d43ad7ff"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "efb19275-8fc8-4ade-a552-73ba1b9aa14f",
+              "memory_uid": "008dd110-feb2-5b4b-b602-bb3e23475a95"
+            },
+            {
+              "frame_uid": "efb19275-8fc8-4ade-a552-73ba1b9aa14f",
+              "memory_uid": "a03ed01a-3d15-5eaf-9415-529705fd1245"
+            }
+          ],
+          "reason": "These memories split one residential-notice-handling pattern contrasting disruption after late review with successful calendar use; the compared frame has no matching claim.",
+          "status": "RESOLVED",
+          "summary": "Late notice review caused the user to begin a task during a shutoff, whereas transferring a later notice to a phone calendar supported timely inspection awareness.",
+          "uid": "05c1e236-1001-5baa-8201-56d5c47fb6b8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "efb19275-8fc8-4ade-a552-73ba1b9aa14f",
+              "memory_uid": "2fb4b0bd-1257-5e50-881a-7f312940e1c5"
+            },
+            {
+              "frame_uid": "efb19275-8fc8-4ade-a552-73ba1b9aa14f",
+              "memory_uid": "d05286e8-f183-5f4a-99d8-3dcca1aeaa09"
+            }
+          ],
+          "reason": "These memories form one before-and-after claim about preparing the residence’s work passage, absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Uncleared entrance boxes delayed access during one technician visit, while clearing the entrance before the next visit allowed immediate inspection.",
+          "uid": "7ef26fa9-9b6d-59af-a26f-f8fabd2f161f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "efb19275-8fc8-4ade-a552-73ba1b9aa14f",
+              "memory_uid": "44d28aa3-1aa4-5276-b545-86ee2cb17078"
+            }
+          ],
+          "reason": "This third-party expectation about residential visit preparation is independently useful and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The building manager expects one day’s advance notice to provide enough preparation time.",
+          "uid": "d8d4b932-7225-5fd0-a62e-563132d358ce"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "efb19275-8fc8-4ade-a552-73ba1b9aa14f",
+              "memory_uid": "77f77450-ab10-5469-8e2f-5445060926bc"
+            }
+          ],
+          "reason": "This is a standalone scheduling instruction not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s availability should be confirmed before a residential service visit is finalized.",
+          "uid": "fbd29bd7-abbf-5291-b9f0-d6ea735cdebf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0a3ca79a-6a87-42be-8c6e-fe52165a24c5",
+              "memory_uid": "3d3f7960-daf5-5a51-98b3-14261c5aa66c"
+            }
+          ],
+          "reason": "This reading-workspace arrangement is independently useful and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user keeps a current book and note-taking notebook on a small living-room desk.",
+          "uid": "62007c7a-7d8f-5c32-8560-2e23da058496"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0a3ca79a-6a87-42be-8c6e-fe52165a24c5",
+              "memory_uid": "28714a4e-bc14-5703-b594-126471ae0585"
+            },
+            {
+              "frame_uid": "0a3ca79a-6a87-42be-8c6e-fe52165a24c5",
+              "memory_uid": "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df"
+            }
+          ],
+          "reason": "These memories form one contrast about television presence and reading continuity, with no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Reading with the television on involved rereading, while turning it off accompanied sustained, uninterrupted reading the next day.",
+          "uid": "db0cb772-c92a-5c02-85ec-14969a9181a5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0a3ca79a-6a87-42be-8c6e-fe52165a24c5",
+              "memory_uid": "1b1c9f90-2561-53d5-88fe-d54618450143"
+            },
+            {
+              "frame_uid": "0a3ca79a-6a87-42be-8c6e-fe52165a24c5",
+              "memory_uid": "076a7caa-5dcf-5f9d-8bee-efc952652efa"
+            },
+            {
+              "frame_uid": "0a3ca79a-6a87-42be-8c6e-fe52165a24c5",
+              "memory_uid": "310f4cfc-b117-5511-8e13-2bd2ebec9fe5"
+            }
+          ],
+          "reason": "These memories provide observations and the user’s interpretation of one underlying phone-notification interruption pattern, absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Accessible notifications interrupted the user’s note-taking and perceived concentration flow, while leaving the phone elsewhere prevented checking for an hour.",
+          "uid": "baa5c7bf-deb1-54c8-bce6-b6d9c16a72d3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0a3ca79a-6a87-42be-8c6e-fe52165a24c5",
+              "memory_uid": "1dad71ec-6a5d-550e-89d2-a86dc3dacb11"
+            },
+            {
+              "frame_uid": "0a3ca79a-6a87-42be-8c6e-fe52165a24c5",
+              "memory_uid": "58494743-fc7f-59e9-8e17-80b8a644470a"
+            }
+          ],
+          "reason": "These memories form one contrast about reliable reading-place tracking, with no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A loose note failed as a place marker, whereas recording the page number in a notebook enabled immediate resumption with the next book.",
+          "uid": "f5f28476-3dae-55bb-9228-73501c6df170"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0a3ca79a-6a87-42be-8c6e-fe52165a24c5",
+              "memory_uid": "cce66589-892c-5d73-bdbc-2c6e94e0992e"
+            }
+          ],
+          "reason": "This third-party expectation about the reading environment is independently useful and has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s father expects lower television volume to make reading concentration easier.",
+          "uid": "5a3618cf-4f21-52cc-9b55-020627251d2c"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers the reading setup, television and phone distractions, place-marking practices, concentration experiences, and a family expectation about television volume.",
+        "differences": "The local agent has different explicitly bounded functions in residential-service and reading contexts, with separate limits on verifying resolution and predicting future reading time.",
+        "reference_only": "The reference covers utility-account history, billing and notice handling, visit preparation, management expectations, and service scheduling guidance."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "ce2e2645-c3ff-4014-8fb5-3df3718bad0b"
+    },
+    "analysis_digest": "44d61e388a699a9957e3064039802e87cbee297e130e7cc8f1070d4e65aeb5c0",
+    "key": "58d905a08962707daa4903b6684c8fb8207a07ba24715df0fd7435982eddccc4",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 47.58969420800349,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "58d905a08962707daa4903b6684c8fb8207a07ba24715df0fd7435982eddccc4",
+  "created_at": "2026-08-13T18:42:40.034102Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/07",
+  "pair_key": "c4cdf6b5150377afd82c751ccdf80c0413fc17943accd7bc7828f6ab7e191296",
+  "provider_seconds": 47.58969420800349,
+  "right": "task-3/local/personal-memory/2025/09",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

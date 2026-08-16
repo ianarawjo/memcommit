@@ -1,0 +1,230 @@
+{
+  "coverage": {
+    "expected": 18,
+    "observed": 18
+  },
+  "created_at": "2026-08-11T00:41:07.033175Z",
+  "description_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+  "issues": [],
+  "kind": "STUDY_COMPARE_GRAPH_PAIR",
+  "left": {
+    "context_digest": "4bf42c36daf8e8c65e73bc045af519ad29b4bcca4a73b34b352c4e30a565be85",
+    "context_uid": "62523a5e-66f1-5023-a78b-9151bd72055f",
+    "memory_count": 8,
+    "name": "task-3/local/guardrails/downstream-use"
+  },
+  "method": "COMPACT_DECISION_VECTOR_V1",
+  "operation": "COMPARE",
+  "pair_key": "c264be98bc44a4747412c8f0e95f9681c45eebb1f7ebde0e1f666b10af8cda13",
+  "provider": {
+    "condition": "COMPACT_DECISION_VECTOR",
+    "contract_valid": true,
+    "elapsed_seconds": 56.3798608329962,
+    "error_type": null,
+    "failure_category": null,
+    "operation": "compare_contexts_compact_ab_v1",
+    "prompt_chars": 7334,
+    "provider_calls": 1,
+    "provider_run": {
+      "completion_tokens": null,
+      "identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "operation": "compare_contexts_compact_ab_v1",
+      "prompt_tokens": null,
+      "upstream_model": "gpt-5.6-sol",
+      "upstream_provider": "openai-codex"
+    },
+    "provider_seconds": 56.37906866701087,
+    "response_bytes": 470,
+    "response_chars": 470,
+    "schema_chars": 1380,
+    "validation_error": null,
+    "validation_seconds": 0.0007779169973218814
+  },
+  "relations": [
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "e8c87c6c-1c32-534b-87be-32b5bb93584f",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000001",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "8cd6d58b-9325-584d-8c5c-396e1af03423",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000002",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "00564a98-72a6-57ce-9fc6-20a918e9e593",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "975278ec-2ea5-5dec-b9bc-8054d880d0e3",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000003",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "aeb15a51-9870-5e89-bcef-d5ad49792a02",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "62a622be-5e30-50f6-b1c0-f3b6454d0a64",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000004",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "c2f154f8-6340-57d6-bd12-efa5411592b1",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000005",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "9b320cc6-d3d3-5135-82dc-93b48c4bfb71",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000006",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "84b4519d-ef17-5403-a866-4eb705951a09",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "25994612-bebc-5643-8642-19b825f00f00",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "9b667d0d-d97b-5dfa-af66-295b9c40403d",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000007",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "54d29daf-7bd7-5221-ae65-8b46f7f4869b",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "375957b9-e051-5a94-bde1-d157f44cc343",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000008",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "d189ddb4-7014-5d19-b779-5f36c6bb4160",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "61ee4989-7372-5845-b14f-d8a6eb1e5300",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000009",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "f2b9f9b0-3d15-5411-9c40-ddce42288ed3",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000010",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "947e37c1-1235-54e1-8ddd-dcad7d725ede",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000011",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "1b2e9508-d9ce-5b27-bf66-ec7691061e13",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000012",
+      "status": "RESOLVED"
+    }
+  ],
+  "right": {
+    "context_digest": "e13d5ca14260d4cdee2047de1529bdadfb8f6c3ea1abf7b2fbc1cc2a4a3fa401",
+    "context_uid": "497036ef-19ef-5611-bf5a-a9eeaf1569a0",
+    "memory_count": 10,
+    "name": "task-3/local/personal-memory/2024/09"
+  },
+  "schema_version": 1,
+  "semantic_content_in_participant_report": false,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

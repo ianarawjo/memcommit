@@ -1,0 +1,216 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:26:07.624754+00:00",
+      "frames": [
+        {
+          "context_digest": "d2c716d52357c4200adc8772d5823715ffd736eb766028c1c62bbb32852bc344",
+          "context_name": "task-2/advisor1/scope",
+          "context_uid": "6db29abe-5784-5eec-acaa-060bac0e11f1",
+          "memories": [
+            {
+              "content": "Define in one sentence the user groups and usage contexts to which the design knowledge does not apply.",
+              "content_digest": "3193ffe501a06d6148b39c333853b42bc0278b2ab3c3df88162b049548ff16bb",
+              "position": 0,
+              "uid": "e594a6ab-81e9-5e5f-8ef5-e6bb8f3760d7"
+            },
+            {
+              "content": "Reviewers judge the generalization boundary of results through explicitly excluded targets and situations.",
+              "content_digest": "a929649a7bd07f29f31a8cd1969a3c160ba5f61c0def76e204443c30234f84b0",
+              "position": 1,
+              "uid": "31cdacff-7c49-547d-9f97-598a07b67fb6"
+            },
+            {
+              "content": "Specify user goals, interaction conditions, and technological constraints under which the proposed design knowledge can be transferred.",
+              "content_digest": "6ae1bfaeadb1863db1997685527706d210a379a376a24d3de1168e952f847627",
+              "position": 2,
+              "uid": "1459d986-4dc9-51f3-bf13-dbb0b07045c8"
+            },
+            {
+              "content": "Small-scale formative studies can support analytic generalization distinct from statistical representativeness when results are expressed in terms of design conditions and mechanisms.",
+              "content_digest": "1963572a303acbf383890b7d97b52349f572df761e89ea3fd5116058cd2e1cea",
+              "position": 3,
+              "uid": "1db5fcd6-f93c-5630-9810-053c10b5ceba"
+            },
+            {
+              "content": "The author of this proposal tends to apply design knowledge derived from an accessible sample to a broader user population.",
+              "content_digest": "df2a7f1284c1994c6dec49eb7995acd1ed341a9e6b8f4b06c854d85fa9d77d6c",
+              "position": 4,
+              "uid": "fd29c315-521f-53c0-add5-c668ec318a43"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "dec7cd91-77d9-4912-8471-6fb68f328e9c"
+        },
+        {
+          "context_digest": "3cadca09eeabe1389261c2e43133d8b304ed2cad66332f3444e686a824f10a21",
+          "context_name": "task-2/advisor2/scope",
+          "context_uid": "86efd53c-c08d-537c-983f-91a7b915640d",
+          "memories": [
+            {
+              "content": "Specify in one sentence the user population and actual usage environment to which the design knowledge applies.",
+              "content_digest": "3bb25f3252678a84fe361c9562692c27556d31b6fac53da87b763648e80ed6ac",
+              "position": 0,
+              "uid": "6cfd5026-0c04-5ed8-baac-a56e68723aa3"
+            },
+            {
+              "content": "Reviewers judge the generalization boundary of results through the specified target population and environment.",
+              "content_digest": "9119780de23a4734bc8e0ba3c39dce251611932fd86bec479b522adaf1882758",
+              "position": 1,
+              "uid": "5bc7cf05-8c47-57d4-a749-ec7d2ec45e3e"
+            },
+            {
+              "content": "Specify the workflow, technical infrastructure, and operational-authority conditions that must match before applying the design guidelines at another field site.",
+              "content_digest": "2970e43d1b52b63b6f76c3c55a5534d24508bcd32402e66098d75dbb52d8083b",
+              "position": 2,
+              "uid": "25731e2b-8535-5b37-a377-0a3a99dbe189"
+            },
+            {
+              "content": "The transferability of field design knowledge depends not only on user characteristics but also on workflow and technological–organizational infrastructure.",
+              "content_digest": "71b7cbcf151114f17886e57f026c2b2ebdd666c7aa88f95c85880a1bc96fdcd2",
+              "position": 3,
+              "uid": "d79ba448-76b6-592e-b4ba-8cfd98683755"
+            },
+            {
+              "content": "The user tends to apply results confirmed at one deployment site to all similar organizations.",
+              "content_digest": "810ee3a6b79606e7f199a30aa146f47e405ff71d1728a3bbfef16b601f5c0d5e",
+              "position": 4,
+              "uid": "cde0ee2b-af3c-5c0d-b23c-632778c93e20"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "91eaeae8-849d-4517-b448-65d963e0af19"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "Both frames emphasize explicit generalization boundaries and transfer conditions, while approaching applicability through complementary inclusion and exclusion language. They describe overgeneralization at different population and organizational scopes. Only the reference explains how small formative studies can support analytic rather than statistical generalization.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "dec7cd91-77d9-4912-8471-6fb68f328e9c",
+              "memory_uid": "e594a6ab-81e9-5e5f-8ef5-e6bb8f3760d7"
+            },
+            {
+              "frame_uid": "91eaeae8-849d-4517-b448-65d963e0af19",
+              "memory_uid": "6cfd5026-0c04-5ed8-baac-a56e68723aa3"
+            }
+          ],
+          "reason": "The claims address the same boundary-setting decision through complementary positive and negative formulations that can jointly govern a design-knowledge statement.",
+          "status": "RESOLVED",
+          "summary": "Applicability boundaries should identify the relevant user population and usage context, including both where design knowledge applies and where it does not.",
+          "uid": "272c4ff6-1219-59c1-8352-19bfd81cd6d7"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "dec7cd91-77d9-4912-8471-6fb68f328e9c",
+              "memory_uid": "31cdacff-7c49-547d-9f97-598a07b67fb6"
+            },
+            {
+              "frame_uid": "91eaeae8-849d-4517-b448-65d963e0af19",
+              "memory_uid": "5bc7cf05-8c47-57d4-a749-ec7d2ec45e3e"
+            }
+          ],
+          "reason": "Both claims describe substantive evidence reviewers use to judge the same boundary, with inclusion and exclusion criteria supplying complementary information.",
+          "status": "RESOLVED",
+          "summary": "Reviewers assess generalization boundaries using explicit descriptions of relevant populations, environments, excluded targets, and excluded situations.",
+          "uid": "eadfd2e3-aeea-5b7d-9df3-3bbb673ab1d4"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "dec7cd91-77d9-4912-8471-6fb68f328e9c",
+              "memory_uid": "1459d986-4dc9-51f3-bf13-dbb0b07045c8"
+            },
+            {
+              "frame_uid": "91eaeae8-849d-4517-b448-65d963e0af19",
+              "memory_uid": "25731e2b-8535-5b37-a377-0a3a99dbe189"
+            },
+            {
+              "frame_uid": "91eaeae8-849d-4517-b448-65d963e0af19",
+              "memory_uid": "d79ba448-76b6-592e-b4ba-8cfd98683755"
+            }
+          ],
+          "reason": "All claims govern transfer to another setting and consistently require contextual fit; the compared frame elaborates workflow, infrastructure, and authority without contradicting the reference conditions.",
+          "status": "RESOLVED",
+          "summary": "Transferring design knowledge requires matching consequential user, interaction, workflow, technological, and organizational conditions.",
+          "uid": "d531500b-f290-5161-9cb2-3a0aa966f8f3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "dec7cd91-77d9-4912-8471-6fb68f328e9c",
+              "memory_uid": "1db5fcd6-f93c-5630-9810-053c10b5ceba"
+            }
+          ],
+          "reason": "This independently useful methodological distinction appears only in the reference frame and is not restated by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Small formative studies may support analytic generalization without statistical representativeness when findings articulate design conditions and mechanisms.",
+          "uid": "121e8e43-3c99-523c-9ba9-06e21257a6b8"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "dec7cd91-77d9-4912-8471-6fb68f328e9c",
+              "memory_uid": "fd29c315-521f-53c0-add5-c668ec318a43"
+            },
+            {
+              "frame_uid": "91eaeae8-849d-4517-b448-65d963e0af19",
+              "memory_uid": "cde0ee2b-af3c-5c0d-b23c-632778c93e20"
+            }
+          ],
+          "reason": "The claims share an overgeneralization pattern, while their explicit source and target conditions distinguish population-level transfer from cross-organization transfer and must be preserved.",
+          "status": "RESOLVED",
+          "summary": "Both frames identify a tendency to overextend situated findings, but one concerns population generalization from an accessible sample and the other organizational generalization from a single deployment site.",
+          "uid": "df83abc0-17c8-52f4-b816-06048d4196d6"
+        }
+      ],
+      "reports": {
+        "both": "Both require explicit applicability boundaries and context-sensitive transfer criteria spanning users, use settings, workflow, technology, and organizational conditions.",
+        "compared_only": "",
+        "differences": "The overgeneralization tendency is framed at different scopes: extending from an accessible sample to a broader population versus extending one deployment’s results across similar organizations.",
+        "reference_only": "The reference distinguishes analytic generalization from statistical representativeness for small formative studies when findings identify design conditions and mechanisms."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "f846d6de-90d5-4b59-b8c1-8b7ac7787e9f"
+    },
+    "analysis_digest": "b115bc638d2b567ecc836811dd3df168b7fa450076460579ac92e3fcc38e771b",
+    "key": "0061406e1afedc59ea5853a92f59c4e028735dc1dd6f0780ea427b9091370eb3",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 23.322259291999217,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "0061406e1afedc59ea5853a92f59c4e028735dc1dd6f0780ea427b9091370eb3",
+  "created_at": "2026-08-13T18:26:30.946465Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/scope",
+  "pair_key": "da077dcef9d6f8317c45d8b319c4308e7963378c50da9bb5635ebf67d1e9d112",
+  "provider_seconds": 23.322259291999217,
+  "right": "task-2/advisor2/scope",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

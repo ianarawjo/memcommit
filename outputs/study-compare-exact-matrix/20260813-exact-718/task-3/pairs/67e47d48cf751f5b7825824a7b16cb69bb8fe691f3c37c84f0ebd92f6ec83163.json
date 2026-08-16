@@ -1,0 +1,406 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:43:31.931117+00:00",
+      "frames": [
+        {
+          "context_digest": "4f6b609414f921ca470614699bdac42e9f2932482375026def79956485b0569e",
+          "context_name": "task-3/local/personal-memory/2024/08",
+          "context_uid": "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+          "memories": [
+            {
+              "content": "The user has set a monthly limit in their budget record for spending other than living expenses.",
+              "content_digest": "5c0df9500947f7e044a8755d66d58adccca01db3aed42b43ab9748b8c4f431e9",
+              "position": 0,
+              "uid": "5f80c7ec-e294-5905-abab-91027c9d827b"
+            },
+            {
+              "content": "In a week when the user went grocery shopping and visited the bank separately, they made the same round trip twice.",
+              "content_digest": "4e814adad1a4c201f6348f1c14b14950b5c549bba64bf70cfccd08ca9efc5bd3",
+              "position": 1,
+              "uid": "2428ab2c-37ce-5de1-84dc-abcdfc8ce062"
+            },
+            {
+              "content": "The following week, the user completed both errands in one outing and reduced travel time.",
+              "content_digest": "ad5555ca7daa9d977cfcf5eb4f476eb5730cead6d307c986497716d69f1145b0",
+              "position": 2,
+              "uid": "bf30d1ef-d7cd-5aa3-b65b-ff04aae647e7"
+            },
+            {
+              "content": "When a bill alert arrived on the due date, the user postponed payment until after a meeting.",
+              "content_digest": "c62dda61c680da9ac1fd5ab9124fa05635d20ad9e4bbb7aef36723d289c05102",
+              "position": 3,
+              "uid": "442672e1-2188-5aa3-ad38-5e9c16f25bd5"
+            },
+            {
+              "content": "In a month when the user received an alert three days before the deadline, they finished payment before dinner.",
+              "content_digest": "939ac83da176d5bb1b7e2196402b9faacb962d947b85b9a61c31854867c1e62e",
+              "position": 4,
+              "uid": "c7385cce-ec43-5902-973c-5b8af54c3557"
+            },
+            {
+              "content": "The user collected cash receipts in their wallet and entered all the amounts at once at the end of the month.",
+              "content_digest": "3171a8128ed3855ac9a4c2b542516333fc3728ed1d7260974888b94d0b32c3e6",
+              "position": 5,
+              "uid": "d926c45c-ea49-589c-a7e4-491c9a1514f8"
+            },
+            {
+              "content": "After recording one large expense, the user ate out two fewer times that week.",
+              "content_digest": "af55fd94b01e0ece728347e9349f96b5733c57dae752f9559dc4e08bef7a3320",
+              "position": 6,
+              "uid": "9433523f-8c4e-5424-b370-d325ba5154d1"
+            },
+            {
+              "content": "The user's older sister prefers to settle the jointly paid cost of a meal by electronic transfer rather than cash.",
+              "content_digest": "d84d2ea68add4202e8c421e9c1702c29ca88bd6ae838588bd415fdbd1980cb2b",
+              "position": 7,
+              "uid": "d9531336-ac5f-5ba0-bf26-9c69c854578f"
+            },
+            {
+              "content": "Confirm the amount and account with the user before creating an automatic payment schedule.",
+              "content_digest": "b1d0c16fd880f4ae2657415ddc8fe0f223ccdd931248bb4412a6c95754d4cce1",
+              "position": 8,
+              "uid": "9941d390-8b40-5fee-8bcf-df6f36befcb0"
+            },
+            {
+              "content": "The timing of payment processing and late-payment recording may differ by billing institution.",
+              "content_digest": "203e65e4eb8451ec7551fb166357f107d17b8c89a2341b32fc25a3fb67ec7f98",
+              "position": 9,
+              "uid": "79aea8fd-5d48-50f7-adf6-b7ebe33bfb08"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "a33ce046-1ee8-4ca2-ae52-4bfb6e5e3f9a"
+        },
+        {
+          "context_digest": "4eadf16a0c655a266bec3ebe56b056075c55e7f716f6879a0b6a905fe34136df",
+          "context_name": "task-3/local/personal-memory/2026/05",
+          "context_uid": "fd476504-4d4e-54d9-80b8-3dc2b18555d8",
+          "memories": [
+            {
+              "content": "The user keeps a picnic mat on the bottom shelf of the entrance storage cabinet.",
+              "content_digest": "c17479bd6a0f978f71b106b562507e702c3b84af5119be6bce48e4ee1664e728",
+              "position": 0,
+              "uid": "a9da4cfc-a6aa-51ae-9ec4-0de5c7a09227"
+            },
+            {
+              "content": "On a day the user went to the riverside, they sat in a place without shade and moved after an hour.",
+              "content_digest": "f9ab1da828ca5af06cb8bf54fe85136e316f503dab465fad514ab5a3f8243633",
+              "position": 1,
+              "uid": "fa2735e1-f4af-57d3-a18c-795715b6715b"
+            },
+            {
+              "content": "At the next outdoor meal, the user chose a place near a large tree and stayed for two hours.",
+              "content_digest": "189b7d85561df45986a6b7c9fe681b5ef53b22ca1f5e83fa8d64a7d93b35a577",
+              "position": 2,
+              "uid": "3bd8b8f2-c5b4-5004-8b9e-e388cc26ea7a"
+            },
+            {
+              "content": "On a hot day when the user brought only one bottle of water, they bought another drink partway through the outing.",
+              "content_digest": "92aa494a12664105a4bffc50a9026fadbec78332f750636093ea82ecc68e9597",
+              "position": 3,
+              "uid": "c7c4b494-39a6-5f5c-b37f-51c5061ac926"
+            },
+            {
+              "content": "On the next outing, the user brought two small bottles of water after freezing them.",
+              "content_digest": "69b3035b57b58b1aa778bd0da75dc806c1c449e7e35dc448aff92f7499c3148d",
+              "position": 4,
+              "uid": "dd9f5b3c-9c2e-5dbc-bf6e-eb7761eeb075"
+            },
+            {
+              "content": "When meeting their maternal uncle at a park, the user and the uncle waited at different entrances for 15 minutes.",
+              "content_digest": "9785e87b9fe79813762eb2e19e6d4f256a55f4799c92d095aaf695a8a1de5851",
+              "position": 5,
+              "uid": "2ed2a41c-f6ae-54d6-875c-a195d8fdacee"
+            },
+            {
+              "content": "For the next meeting, the user sent a photo of the entrance sign, and they met at the same place.",
+              "content_digest": "de40b6b7df84784639b97cf7ce153ad8af6e77320d75f3869979e5e3d39169e2",
+              "position": 6,
+              "uid": "23f3a4fc-d51e-5d0b-87f0-d5be407a57f3"
+            },
+            {
+              "content": "For a park meeting, the user's maternal uncle prefers an entrance that requires less walking from the parking area.",
+              "content_digest": "552a43b869c6f06cbf571f794106727406d87841d43addc92f31a3532f73d6f3",
+              "position": 7,
+              "uid": "e9f459f3-8ff0-5a0e-b78b-eda8d18b914e"
+            },
+            {
+              "content": "When making an outdoor plan, confirm the exact entrance and an alternative location in case of rain.",
+              "content_digest": "a265a6364c182de35363b58135b1da60d11595d1e3e0029f6851ac272261a959",
+              "position": 8,
+              "uid": "70277b86-d5db-5b58-8a94-e77372d15a4c"
+            },
+            {
+              "content": "Some park restrooms and drinking fountains may be closed seasonally.",
+              "content_digest": "8e5c4f5f85d4d27dc2211f46e3ab3bbed7f3d9687070b9028992b670986b09ca",
+              "position": 9,
+              "uid": "5a54437b-9b0e-5103-860d-d878be70b3ef"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "e5a57230-9dc1-4e72-87d6-9ccdf847124b"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate domains: the reference records budgeting, errands, bills, expenses, and payment practices, while the compared frame records outdoor comfort, supplies, meeting coordination, and park contingencies. No claims govern the same operational decision, and neither side contradicts the other.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a33ce046-1ee8-4ca2-ae52-4bfb6e5e3f9a",
+              "memory_uid": "5f80c7ec-e294-5905-abab-91027c9d827b"
+            }
+          ],
+          "reason": "This is independently useful budgeting information with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user maintains a monthly limit for non-living spending.",
+          "uid": "5135c9b1-a26c-5452-8d01-1f0852f142a0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a33ce046-1ee8-4ca2-ae52-4bfb6e5e3f9a",
+              "memory_uid": "2428ab2c-37ce-5de1-84dc-abcdfc8ce062"
+            },
+            {
+              "frame_uid": "a33ce046-1ee8-4ca2-ae52-4bfb6e5e3f9a",
+              "memory_uid": "bf30d1ef-d7cd-5aa3-b65b-ff04aae647e7"
+            }
+          ],
+          "reason": "Both memories form one before-and-after account of errand consolidation, which the compared frame does not address.",
+          "status": "RESOLVED",
+          "summary": "The user reduced travel time by combining grocery and banking errands after previously making the same trip twice.",
+          "uid": "d6df0641-a832-5c78-b94d-89021627adf2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a33ce046-1ee8-4ca2-ae52-4bfb6e5e3f9a",
+              "memory_uid": "442672e1-2188-5aa3-ad38-5e9c16f25bd5"
+            },
+            {
+              "frame_uid": "a33ce046-1ee8-4ca2-ae52-4bfb6e5e3f9a",
+              "memory_uid": "c7385cce-ec43-5902-973c-5b8af54c3557"
+            }
+          ],
+          "reason": "Both memories jointly describe the operational effect of bill-alert timing, absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Earlier bill notification was associated with payment before dinner, whereas due-date notification was followed by postponement until after a meeting.",
+          "uid": "6fb52caf-cb8d-5308-a4a7-6765bd5a88b1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a33ce046-1ee8-4ca2-ae52-4bfb6e5e3f9a",
+              "memory_uid": "d926c45c-ea49-589c-a7e4-491c9a1514f8"
+            }
+          ],
+          "reason": "This expense-recording practice has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user stores cash receipts in a wallet and records their amounts together at month end.",
+          "uid": "15a79ce1-d58d-5746-bf63-8244aac37bda"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a33ce046-1ee8-4ca2-ae52-4bfb6e5e3f9a",
+              "memory_uid": "9433523f-8c4e-5424-b370-d325ba5154d1"
+            }
+          ],
+          "reason": "This spending adjustment is independently useful and unaddressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Recording a large expense was followed by the user eating out less that week.",
+          "uid": "4e68335a-c75d-5872-8429-c0d124721d1e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a33ce046-1ee8-4ca2-ae52-4bfb6e5e3f9a",
+              "memory_uid": "d9531336-ac5f-5ba0-bf26-9c69c854578f"
+            }
+          ],
+          "reason": "This reimbursement preference has no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s older sister prefers electronic transfer over cash when settling a jointly paid meal.",
+          "uid": "ac8edede-609a-5f3e-94ac-16b30b78d6f6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a33ce046-1ee8-4ca2-ae52-4bfb6e5e3f9a",
+              "memory_uid": "9941d390-8b40-5fee-8bcf-df6f36befcb0"
+            }
+          ],
+          "reason": "This safeguard governs automatic payments, a decision not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The amount and account should be confirmed with the user before an automatic payment schedule is created.",
+          "uid": "27ac5882-f1d8-584a-82d2-88cb0edcc5af"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a33ce046-1ee8-4ca2-ae52-4bfb6e5e3f9a",
+              "memory_uid": "79aea8fd-5d48-50f7-adf6-b7ebe33bfb08"
+            }
+          ],
+          "reason": "This billing qualification is absent from the compared frame and remains independently useful.",
+          "status": "RESOLVED",
+          "summary": "Payment-processing and late-recording timing can vary across billing institutions.",
+          "uid": "704d31e0-c067-5a3d-ac1c-e9737cd09635"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e5a57230-9dc1-4e72-87d6-9ccdf847124b",
+              "memory_uid": "a9da4cfc-a6aa-51ae-9ec4-0de5c7a09227"
+            }
+          ],
+          "reason": "This storage-location fact has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user stores a picnic mat on the bottom shelf of the entrance cabinet.",
+          "uid": "e28411b9-9886-54ac-91ce-dcebfe802bc3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e5a57230-9dc1-4e72-87d6-9ccdf847124b",
+              "memory_uid": "fa2735e1-f4af-57d3-a18c-795715b6715b"
+            },
+            {
+              "frame_uid": "e5a57230-9dc1-4e72-87d6-9ccdf847124b",
+              "memory_uid": "3bd8b8f2-c5b4-5004-8b9e-e388cc26ea7a"
+            }
+          ],
+          "reason": "Both memories form one before-and-after account of adapting outdoor seating for shade, which the reference frame does not address.",
+          "status": "RESOLVED",
+          "summary": "After leaving an unshaded riverside spot within an hour, the user chose tree shade at the next outdoor meal and stayed longer.",
+          "uid": "c680060f-9234-58f2-b90e-44e021a8d439"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e5a57230-9dc1-4e72-87d6-9ccdf847124b",
+              "memory_uid": "c7c4b494-39a6-5f5c-b37f-51c5061ac926"
+            },
+            {
+              "frame_uid": "e5a57230-9dc1-4e72-87d6-9ccdf847124b",
+              "memory_uid": "dd9f5b3c-9c2e-5dbc-bf6e-eb7761eeb075"
+            }
+          ],
+          "reason": "Both memories form one before-and-after account of adapting hydration preparation, absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "After needing to buy another drink on a hot outing, the user brought two frozen water bottles on the next outing.",
+          "uid": "eb36774d-c10d-5510-a805-edf157fa5bf7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e5a57230-9dc1-4e72-87d6-9ccdf847124b",
+              "memory_uid": "2ed2a41c-f6ae-54d6-875c-a195d8fdacee"
+            },
+            {
+              "frame_uid": "e5a57230-9dc1-4e72-87d6-9ccdf847124b",
+              "memory_uid": "23f3a4fc-d51e-5d0b-87f0-d5be407a57f3"
+            }
+          ],
+          "reason": "Both memories form one before-and-after account of improving meeting-point coordination, which the reference frame does not cover.",
+          "status": "RESOLVED",
+          "summary": "After waiting at different park entrances, the user sent an entrance-sign photo for the next meeting and successfully coordinated the location.",
+          "uid": "1be51490-c032-5c97-aed4-062e5f342720"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e5a57230-9dc1-4e72-87d6-9ccdf847124b",
+              "memory_uid": "e9f459f3-8ff0-5a0e-b78b-eda8d18b914e"
+            }
+          ],
+          "reason": "This accessibility-related entrance preference has no corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s maternal uncle prefers a park entrance requiring less walking from the parking area.",
+          "uid": "3a9211fc-ef7f-5362-be59-b2992539566d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e5a57230-9dc1-4e72-87d6-9ccdf847124b",
+              "memory_uid": "70277b86-d5db-5b58-8a94-e77372d15a4c"
+            }
+          ],
+          "reason": "This planning safeguard concerns outdoor meeting logistics, a decision not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Outdoor plans should confirm the exact entrance and an alternative location for rain.",
+          "uid": "855dae31-1318-5cbe-9b56-1039e197d7ed"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e5a57230-9dc1-4e72-87d6-9ccdf847124b",
+              "memory_uid": "5a54437b-9b0e-5103-860d-d878be70b3ef"
+            }
+          ],
+          "reason": "This park-facility qualification is absent from the reference frame and remains independently useful.",
+          "status": "RESOLVED",
+          "summary": "Park restrooms and drinking fountains may be seasonally closed.",
+          "uid": "151adf0b-8c8f-53af-b212-ca7e4b21ea03"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame describes picnic storage, shade and hydration adaptations, park-entrance coordination and accessibility preferences, outdoor-plan confirmation, and seasonal facility closures.",
+        "differences": "",
+        "reference_only": "The reference describes budget limits, efficient errand grouping, earlier bill alerts, expense recording and spending adjustment, a relative’s reimbursement preference, payment-schedule confirmation, and institution-dependent processing."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "d80d5ee6-0b84-4a8d-9992-1092923a58d2"
+    },
+    "analysis_digest": "7cbf3216a3ea5a9934d77a457f4e75733c1b135f8cddf967ad7c4849eac77fce",
+    "key": "5a610433526a367e2daabe341512cf09514d1c8eddc5691739f1542f52fa926e",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 36.834150542003044,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "5a610433526a367e2daabe341512cf09514d1c8eddc5691739f1542f52fa926e",
+  "created_at": "2026-08-13T18:44:08.764679Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/08",
+  "pair_key": "67e47d48cf751f5b7825824a7b16cb69bb8fe691f3c37c84f0ebd92f6ec83163",
+  "provider_seconds": 36.834150542003044,
+  "right": "task-3/local/personal-memory/2026/05",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

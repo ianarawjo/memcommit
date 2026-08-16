@@ -1,0 +1,448 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:16:59.488941+00:00",
+      "frames": [
+        {
+          "context_digest": "e76b6eea5af0e4d970d4db385b4100a788a8b1ed5ef6e68709bd92c943ab3b6b",
+          "context_name": "task-2/advisor1/compensation",
+          "context_uid": "7ba75d6b-cef6-5c8b-9b17-d3901e168d24",
+          "memories": [
+            {
+              "content": "Calculate user study compensation budgets based on estimated participation burden, combining session time and preparation effort.",
+              "content_digest": "2dc18d8ddeb900741b2a8f936a59d5fc72423e2d3144e8b2232a6435dc9a68f1",
+              "position": 0,
+              "uid": "0ae46268-cca7-57d5-a0ee-6eb3b85cda84"
+            },
+            {
+              "content": "Compensate for required travel time in face-to-face user studies as well.",
+              "content_digest": "688ba9df95e18254a5a33ab6c0e59066cf0674137b6802178e3fb8eae4ba38e5",
+              "position": 1,
+              "uid": "bdda6e22-ea06-5a13-8854-67f7521724db"
+            },
+            {
+              "content": "Compensate for the actual time participants spent in sessions, regardless of research modality.",
+              "content_digest": "8673c2b5b5913f0e8bcf0035eea4bc87430bb1fcf8ffb27b354bde0ca3a7ae4e",
+              "position": 2,
+              "uid": "f49b1d0a-7a1a-53b5-b7fc-815cc2cc134a"
+            },
+            {
+              "content": "Leave cash payment as an available compensation method for face-to-face studies.",
+              "content_digest": "72f9e1b33de0c05bb711c2d8162ab62f382a75871a710db37b858125eae6fcde",
+              "position": 3,
+              "uid": "1f4d05e4-2a79-572c-8050-beb1464fb781"
+            },
+            {
+              "content": "If compensation equity is explained, do not require finalizing the payment method at the proposal stage.",
+              "content_digest": "6945260e986651e7992034801b6151a3f93184013fea77d17b630f55fcdc943b",
+              "position": 4,
+              "uid": "abcba764-6f35-5dae-bb3d-7860fb72ccf2"
+            },
+            {
+              "content": "Apply the same base hourly rate to face-to-face and remote studies if task burden is equal.",
+              "content_digest": "144477b358e6e8931042d1793a5ffd10f56d69aa90523d69d20a622528a9dad0",
+              "position": 5,
+              "uid": "c6a28f37-1a7c-5dbd-b75c-c829f0461504"
+            },
+            {
+              "content": "Participants judge compensation fairness based on the total burden, combining session time with required travel and preparation time.",
+              "content_digest": "54e8900c7049e048484db8b523a41e98cbb911b45be2adbd103fd2f1635bf026",
+              "position": 6,
+              "uid": "874de649-9c04-5960-b3a9-e68356ef666c"
+            },
+            {
+              "content": "Account in compensation for the burden of rescheduling iterations and returning for multiple formative evaluation sessions.",
+              "content_digest": "f09be004defb4019ba7476919b6780cc2b6bbac088f79dbd0ec66bf2753af27d",
+              "position": 7,
+              "uid": "529559f5-850d-5920-8e27-0b1e7138dc36"
+            },
+            {
+              "content": "Compensate participants for time already invested even if a session is terminated early due to prototype errors.",
+              "content_digest": "64b65cc0b307b48d64641d126594a5b8a9258518c3aa27d7846be2306c25a9f4",
+              "position": 8,
+              "uid": "c8be56ee-860a-5f6c-abbf-02c8dbc59eb5"
+            },
+            {
+              "content": "The author of this proposal tends to exclude preparation burden between sessions when calculating compensation for iterative studies.",
+              "content_digest": "177f041fcb9fe768dcc1c476b592e99c8609d06ebf727aeca1379d21256b43d8",
+              "position": 9,
+              "uid": "bdac8cf8-dd11-5794-b4b2-9774ff344436"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "205614bc-b7ec-490e-87cc-8aea3ba33569"
+        },
+        {
+          "context_digest": "5f537c105ac26d5b710957c611c114c6834953adc14933beda6f44d0a404e410",
+          "context_name": "task-2/advisor2/methods",
+          "context_uid": "531f5f15-65f7-5315-8ccf-0cea6e53b76a",
+          "memories": [
+            {
+              "content": "Specify field and user data sources and analysis procedures corresponding to all HCI research questions.",
+              "content_digest": "0fecdff0f7b1204928239ca5665756cbf5dda44709758e5a093df8187927029e",
+              "position": 0,
+              "uid": "90be328f-1c05-5574-9657-1b0cc04a10b8"
+            },
+            {
+              "content": "In preregistered studies, clarify the criteria for judging plan changes.",
+              "content_digest": "5df2c60004dfd796d0af2a2e16e25f0804164517d00b4c393a65609a3dfb7534",
+              "position": 1,
+              "uid": "452ab231-3131-5697-a728-475289deafd0"
+            },
+            {
+              "content": "In preregistered studies, clarify the location for recording plan changes.",
+              "content_digest": "b05214535147a4c880d7500036b4640a0c479b0b05e2c1061ebfde88cb3c9866",
+              "position": 2,
+              "uid": "9c979f39-9660-5392-a1cd-0d1317af0e0f"
+            },
+            {
+              "content": "Use a justified minimum-to-maximum target range when confirmations can change, and tie the minimum and maximum to different workload and budget cases.",
+              "content_digest": "6c5e9bcd656dc10013c47e9c953409dbb20b06ee9ab758e1915d5f4d37d2604c",
+              "position": 3,
+              "uid": "8a49f598-804e-5a81-8e88-add7b665633a"
+            },
+            {
+              "content": "Specify the observation records, system logs, or interview tools used to collect each type of field and user data.",
+              "content_digest": "04c875971ca30ee5e3909e2c4e0632512d285401d5c9c4c1f42f4aaa592b34c1",
+              "position": 4,
+              "uid": "629cb159-6f6c-5476-870d-716ab573aef8"
+            },
+            {
+              "content": "Specify whether each type of field and user data will be collected before, during, or after deployment.",
+              "content_digest": "b105c5c373365987dff3fc4b709ffd88ba64c8358c179f81d780dc12d6b11bce",
+              "position": 5,
+              "uid": "b565c5c9-a0f7-5aff-a3b1-19696c4d3b39"
+            },
+            {
+              "content": "Readers cannot assess a target range unless both bounds have a stated consequence for schedule, workload, or cost.",
+              "content_digest": "308b499d832f2780b8a0c7d4acf0c9168ddc0e960b837a7f77e6e9574b235066",
+              "position": 6,
+              "uid": "251a4b3c-58fd-5d66-b5bc-74dcbeaa7a0d"
+            },
+            {
+              "content": "In field deployments, network and service instability exist as independent causes of task failure alongside design choices.",
+              "content_digest": "90f270d2544ce92c7ab245e0eb1eca5836f0a885ea652d40b6aad08c1572b039",
+              "position": 7,
+              "uid": "f150891e-7635-5c35-b986-d369bc630ef4"
+            },
+            {
+              "content": "If a safety signal occurs in the field system, existing institutional safety procedures take precedence over the research schedule and data collection plan.",
+              "content_digest": "96e1d7012cce82f901994e7b454d3f7e0a0b1dd18c5af6b9b14694e939356f25",
+              "position": 8,
+              "uid": "7860d9d6-5c2e-5969-b956-f71398218d02"
+            },
+            {
+              "content": "Reviewers judge answerability by tracing the path from each research question to its data sources and analysis procedures.",
+              "content_digest": "90ba5b91064c53361b4e6cf80cb4ec6a23aea3a02becfae03342046ffa2adf0d",
+              "position": 9,
+              "uid": "4fc24f87-e7b5-5d34-b850-f90cdc9b1ea2"
+            },
+            {
+              "content": "The user authoring this proposal tends to present implemented feature lists directly as design contributions.",
+              "content_digest": "d75cc3bb9bd2475fc87a88dc4a72de982101a5c9f03efaf823bcab6ca95dfe5d",
+              "position": 10,
+              "uid": "2db331a6-28d7-5c32-8372-7d3f8bc5b04a"
+            },
+            {
+              "content": "Define what can still be completed at the minimum target instead of treating every number inside the range as operationally identical.",
+              "content_digest": "b6cead2c6a19be091d8594da052baadd184eb3ef18580860e54b2aa337986354",
+              "position": 11,
+              "uid": "40f23f85-561e-55b3-825b-5000f9638f8a"
+            },
+            {
+              "content": "Use a bounded range to absorb expected confirmation changes without pretending that one early estimate is guaranteed.",
+              "content_digest": "1bc0df6bfbc6936b8a390368b5647a93ea8aab7316e9c7d233690b1206e6f17c",
+              "position": 12,
+              "uid": "9527ccb8-6662-58e3-8edd-daf7c0a713af"
+            },
+            {
+              "content": "Show how session count and facilitator time change at the minimum and maximum bounds.",
+              "content_digest": "2167c3e6d6bafad2818bb211b2c735f47ea040318a944c3402abea86b3faa316",
+              "position": 13,
+              "uid": "3ff9ec36-b70d-5dbd-9692-27fdf734fd20"
+            },
+            {
+              "content": "Define the additional workload or deliverable enabled at the maximum target so the upper bound is not an arbitrary cushion.",
+              "content_digest": "30d71498d24e6f7640b3f128824bf4c917f18c9317f164cd864f862f4c81e7fb",
+              "position": 14,
+              "uid": "9e1c3629-641f-5c09-915d-8a2ad1c8013a"
+            },
+            {
+              "content": "A bounded range preserves uncertainty honestly but makes the final workload and budget less certain than one fixed target.",
+              "content_digest": "c9015c18fd3140429386ae5ff3a0e45ffc86d009590772374f8354d4efb85234",
+              "position": 15,
+              "uid": "7ba672db-131e-5795-89c9-46f56344e7ed"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "7d82078b-660e-4c0f-b8f0-6ddd56537f82"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate operational areas. The reference frame focuses on equitable participant compensation across burden, modality, iteration, and disruptions, while the compared frame focuses on research-plan traceability, preregistration, bounded targets, field risks, safety precedence, and proposal-authoring habits.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "205614bc-b7ec-490e-87cc-8aea3ba33569",
+              "memory_uid": "0ae46268-cca7-57d5-a0ee-6eb3b85cda84"
+            },
+            {
+              "frame_uid": "205614bc-b7ec-490e-87cc-8aea3ba33569",
+              "memory_uid": "bdda6e22-ea06-5a13-8854-67f7521724db"
+            },
+            {
+              "frame_uid": "205614bc-b7ec-490e-87cc-8aea3ba33569",
+              "memory_uid": "f49b1d0a-7a1a-53b5-b7fc-815cc2cc134a"
+            },
+            {
+              "frame_uid": "205614bc-b7ec-490e-87cc-8aea3ba33569",
+              "memory_uid": "874de649-9c04-5960-b3a9-e68356ef666c"
+            }
+          ],
+          "reason": "These memories state or support one reference-only basis for calculating fair compensation; the compared frame contains no corresponding compensation rule.",
+          "status": "RESOLVED",
+          "summary": "Participant compensation should reflect total participation burden, including session time, required preparation, and face-to-face travel.",
+          "uid": "35cc768c-e85b-54de-8ab6-04ba821933f9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "205614bc-b7ec-490e-87cc-8aea3ba33569",
+              "memory_uid": "1f4d05e4-2a79-572c-8050-beb1464fb781"
+            }
+          ],
+          "reason": "This is an independent reference-only rule about compensation method availability.",
+          "status": "RESOLVED",
+          "summary": "Cash should remain an available payment method for face-to-face studies.",
+          "uid": "c8fb729f-3d6d-54de-93ca-5eb028897ba9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "205614bc-b7ec-490e-87cc-8aea3ba33569",
+              "memory_uid": "abcba764-6f35-5dae-bb3d-7860fb72ccf2"
+            }
+          ],
+          "reason": "This is an independent reference-only rule about when payment-method details must be settled.",
+          "status": "RESOLVED",
+          "summary": "A proposal need not finalize the payment method when compensation equity is adequately explained.",
+          "uid": "0ea39542-61aa-5cfc-b039-7cac53e750dd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "205614bc-b7ec-490e-87cc-8aea3ba33569",
+              "memory_uid": "c6a28f37-1a7c-5dbd-b75c-c829f0461504"
+            }
+          ],
+          "reason": "This is an independent reference-only policy governing rate equality across study modalities.",
+          "status": "RESOLVED",
+          "summary": "Face-to-face and remote studies should use the same base hourly rate when task burden is equal.",
+          "uid": "e55071cc-4cbe-528d-a910-1a05d3d31fe9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "205614bc-b7ec-490e-87cc-8aea3ba33569",
+              "memory_uid": "529559f5-850d-5920-8e27-0b1e7138dc36"
+            }
+          ],
+          "reason": "This is an independent reference-only rule addressing burdens created by multi-session iteration.",
+          "status": "RESOLVED",
+          "summary": "Compensation should account for rescheduling and repeated attendance in iterative formative evaluations.",
+          "uid": "c3848b15-4bf1-5918-b025-f1baf265e75a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "205614bc-b7ec-490e-87cc-8aea3ba33569",
+              "memory_uid": "c8be56ee-860a-5f6c-abbf-02c8dbc59eb5"
+            }
+          ],
+          "reason": "This is an independent reference-only rule for compensating disrupted sessions.",
+          "status": "RESOLVED",
+          "summary": "Participants should be compensated for time already invested when prototype errors terminate a session early.",
+          "uid": "7b0a6fb1-1f82-56a2-a7b3-17b71492a543"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "205614bc-b7ec-490e-87cc-8aea3ba33569",
+              "memory_uid": "bdac8cf8-dd11-5794-b4b2-9774ff344436"
+            }
+          ],
+          "reason": "This is a reference-only observation about authoring behavior, distinct from the normative compensation policies.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to omit between-session preparation burden from iterative-study compensation calculations.",
+          "uid": "25d1d111-0014-5d79-884a-5bd737449c0e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d82078b-660e-4c0f-b8f0-6ddd56537f82",
+              "memory_uid": "90be328f-1c05-5574-9657-1b0cc04a10b8"
+            },
+            {
+              "frame_uid": "7d82078b-660e-4c0f-b8f0-6ddd56537f82",
+              "memory_uid": "629cb159-6f6c-5476-870d-716ab573aef8"
+            },
+            {
+              "frame_uid": "7d82078b-660e-4c0f-b8f0-6ddd56537f82",
+              "memory_uid": "b565c5c9-a0f7-5aff-a3b1-19696c4d3b39"
+            },
+            {
+              "frame_uid": "7d82078b-660e-4c0f-b8f0-6ddd56537f82",
+              "memory_uid": "4fc24f87-e7b5-5d34-b850-f90cdc9b1ea2"
+            }
+          ],
+          "reason": "These compared-side memories split and justify one methodological requirement for an assessable, end-to-end data plan.",
+          "status": "RESOLVED",
+          "summary": "Each HCI research question should be traceable to specified data sources, collection tools and timing, and analysis procedures.",
+          "uid": "4b0f4994-b6e4-5182-89d5-fdfb9ef7d80d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d82078b-660e-4c0f-b8f0-6ddd56537f82",
+              "memory_uid": "452ab231-3131-5697-a728-475289deafd0"
+            },
+            {
+              "frame_uid": "7d82078b-660e-4c0f-b8f0-6ddd56537f82",
+              "memory_uid": "9c979f39-9660-5392-a1cd-0d1317af0e0f"
+            }
+          ],
+          "reason": "These compared-side memories specify complementary parts of one change-documentation policy.",
+          "status": "RESOLVED",
+          "summary": "Preregistered studies should state both the criteria for judging plan changes and where those changes will be recorded.",
+          "uid": "c241030b-8dc4-5e28-b7ec-ce37b9db8464"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d82078b-660e-4c0f-b8f0-6ddd56537f82",
+              "memory_uid": "8a49f598-804e-5a81-8e88-add7b665633a"
+            },
+            {
+              "frame_uid": "7d82078b-660e-4c0f-b8f0-6ddd56537f82",
+              "memory_uid": "251a4b3c-58fd-5d66-b5bc-74dcbeaa7a0d"
+            },
+            {
+              "frame_uid": "7d82078b-660e-4c0f-b8f0-6ddd56537f82",
+              "memory_uid": "40f23f85-561e-55b3-825b-5000f9638f8a"
+            },
+            {
+              "frame_uid": "7d82078b-660e-4c0f-b8f0-6ddd56537f82",
+              "memory_uid": "9527ccb8-6662-58e3-8edd-daf7c0a713af"
+            },
+            {
+              "frame_uid": "7d82078b-660e-4c0f-b8f0-6ddd56537f82",
+              "memory_uid": "3ff9ec36-b70d-5dbd-9692-27fdf734fd20"
+            },
+            {
+              "frame_uid": "7d82078b-660e-4c0f-b8f0-6ddd56537f82",
+              "memory_uid": "9e1c3629-641f-5c09-915d-8a2ad1c8013a"
+            },
+            {
+              "frame_uid": "7d82078b-660e-4c0f-b8f0-6ddd56537f82",
+              "memory_uid": "7ba672db-131e-5795-89c9-46f56344e7ed"
+            }
+          ],
+          "reason": "These compared-side memories jointly state, elaborate, and justify one operational policy for meaningful target ranges.",
+          "status": "RESOLVED",
+          "summary": "When confirmations may change, use a justified bounded target whose minimum and maximum specify distinct deliverables, session and facilitator workload, schedule or cost consequences, and remaining uncertainty.",
+          "uid": "988acc5c-e9e7-5d66-830f-b1fb3df1f49c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d82078b-660e-4c0f-b8f0-6ddd56537f82",
+              "memory_uid": "f150891e-7635-5c35-b986-d369bc630ef4"
+            }
+          ],
+          "reason": "This is an independent compared-only caution about attributing failures in field deployments.",
+          "status": "RESOLVED",
+          "summary": "Field task failures may arise independently from network or service instability as well as from design choices.",
+          "uid": "8e8c537c-8656-54bd-864b-6f80dc96dee3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d82078b-660e-4c0f-b8f0-6ddd56537f82",
+              "memory_uid": "7860d9d6-5c2e-5969-b956-f71398218d02"
+            }
+          ],
+          "reason": "This is an independent compared-only contingency policy for field safety events.",
+          "status": "RESOLVED",
+          "summary": "Institutional safety procedures take precedence over research schedules and data-collection plans when a field-system safety signal occurs.",
+          "uid": "731bcd50-53a9-5080-9cfb-f0212c24d13d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d82078b-660e-4c0f-b8f0-6ddd56537f82",
+              "memory_uid": "2db331a6-28d7-5c32-8372-7d3f8bc5b04a"
+            }
+          ],
+          "reason": "This is an independent compared-only observation about proposal-authoring behavior.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to present implemented feature lists directly as design contributions.",
+          "uid": "cbad314b-4c4b-51a8-ac41-34151759ee39"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only guidance covers traceable data plans, preregistration changes, operationally meaningful target ranges, field-system failure attribution, safety precedence, and a tendency to frame feature lists as contributions.",
+        "differences": "",
+        "reference_only": "Reference-only guidance covers burden-based compensation, modality-neutral rates, payment-method flexibility, iterative and interrupted sessions, and a tendency to omit preparation effort."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "a2ec89a1-437d-46e1-9171-2fa45118e63c"
+    },
+    "analysis_digest": "1ccb5ee8fd0d3abb54154c9a7a4cef82d438b92e6c2ce45907240d746e500ea9",
+    "key": "fcacdeac6c801585423da9f1d241c63ddef118bce78e3811f546fda456e251b2",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 47.25486066600206,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "fcacdeac6c801585423da9f1d241c63ddef118bce78e3811f546fda456e251b2",
+  "created_at": "2026-08-13T18:17:46.743235Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/compensation",
+  "pair_key": "b3074dc4eb26fc4fec377d6184f42601d443518102865bd21d1a917bce166b14",
+  "provider_seconds": 47.25486066600206,
+  "right": "task-2/advisor2/methods",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

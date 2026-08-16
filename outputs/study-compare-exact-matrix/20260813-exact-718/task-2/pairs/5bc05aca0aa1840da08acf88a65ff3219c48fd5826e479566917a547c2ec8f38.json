@@ -1,0 +1,428 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:19:26.927449+00:00",
+      "frames": [
+        {
+          "context_digest": "89608fbad1167ce0da41a7a6312a1b4e92ee55ff6a7d97bb480a0c75d588a7f2",
+          "context_name": "task-2/advisor1/ethics",
+          "context_uid": "5cdea05f-b6ec-586d-a87f-5347d1d51f96",
+          "memories": [
+            {
+              "content": "Link expected participant burden in each user study task to its corresponding mitigation strategy.",
+              "content_digest": "3595c8f1662100b6c6345bb709c7b2eba285f1979f8d3a5b925c4f32ed9aa4dc",
+              "position": 0,
+              "uid": "e93ea2ee-a8b0-5f3d-b6fd-c76f385eef50"
+            },
+            {
+              "content": "Specify the accommodations necessary for participants to access the prototype and research tasks.",
+              "content_digest": "9879ddf2306813f412b89c1f67f4b1a4779ff9acf55b0b34942bc6f1f555f695",
+              "position": 1,
+              "uid": "6ecf6a7b-f4e9-5d96-a52c-520197d4a2a6"
+            },
+            {
+              "content": "Specify how accessibility accommodations will be provided during user study sessions.",
+              "content_digest": "cce1831f8b2bb3015bc4e69e64a2b1cd4ea6f7249daf28da6686eec262038dc5",
+              "position": 2,
+              "uid": "bc41fce0-dbfc-5d23-9d97-9f81531c098c"
+            },
+            {
+              "content": "Describe how personal identifiers will be separated from research data immediately after collection.",
+              "content_digest": "bd80d3a47e10f1c8a9aec0362cb51995bfe9ecd22f86be916cb0a9009b5f23bf",
+              "position": 3,
+              "uid": "9768e0d9-ef46-52a4-af04-8f6ca3c176c5"
+            },
+            {
+              "content": "Specify the equipment to be loaned to participants who lack necessary devices.",
+              "content_digest": "69991f284e369e31da55a2a23afef032bd50f43dfe66d417a816b242d10c9926",
+              "position": 4,
+              "uid": "e874407e-4d36-55a6-949e-44e5944f1bb4"
+            },
+            {
+              "content": "Describe the procedure for returning equipment loaned to participants.",
+              "content_digest": "100ffbad1288c3263bc4a1044b2d42da35c36a3f73786e58e4391fbac98c84f2",
+              "position": 5,
+              "uid": "df16dca6-0b48-5753-aa18-7e5524187a1e"
+            },
+            {
+              "content": "HCI ethics reviewers verify that expected burdens and mitigation strategies correspond to each user study task.",
+              "content_digest": "1ce06fdbd6b8c4542063ab2413ba80a40c86336dcc43ebb4e1590a246e76d968",
+              "position": 6,
+              "uid": "7d0b3072-7bac-5bc6-9c79-acc808c38f1f"
+            },
+            {
+              "content": "Inform participants that the formative evaluation prototype is not a finished service.",
+              "content_digest": "b02788b149a575392cc58dcba87c21026eec4d733f4e1ef0b3149fcc0e318e74",
+              "position": 7,
+              "uid": "407a4c1c-c333-5764-8d89-252bed150f99"
+            },
+            {
+              "content": "Set an upper limit on cumulative task burden when requesting repeated evaluations from the same participant.",
+              "content_digest": "9d8e4304568abc398445be0aeddc4d1c9945bf48e0295240d48c071dd979646e",
+              "position": 8,
+              "uid": "28646fd3-54af-51f9-97da-ad9489ecda79"
+            },
+            {
+              "content": "The author of this proposal tends to emphasize expected benefits of the prototype over participant burden.",
+              "content_digest": "ffb40ab90087893e20227797ee997e40803e3b812f8a1634e282ab9920cf28d4",
+              "position": 9,
+              "uid": "218aafb6-9332-5693-a2e7-c7777dc64de7"
+            },
+            {
+              "content": "In organizations where leaders or institutional staff handle recruitment, recruitment authority and academic or professional evaluation authority may be combined in the same role.",
+              "content_digest": "d7baf962a2cae0da6c9057f909918788101229b54d57340fb1d5aad459597c05",
+              "position": 10,
+              "uid": "1ecb7268-f77a-5643-a456-357df6cd8f6e"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "43b69289-10a1-4ee5-9799-759c870f3589"
+        },
+        {
+          "context_digest": "7842b257aa1d32e6e598b019791827a580a1864e19e05d9101413b11d5b0227d",
+          "context_name": "task-2/advisor2/style",
+          "context_uid": "f0ea0447-bfe6-503c-89da-e90f24af6e2d",
+          "memories": [
+            {
+              "content": "Use an em dash only for a deliberate interruption or sharp contrast; otherwise split the sentence or choose ordinary punctuation.",
+              "content_digest": "3c37a896774ebccbec1e4bb3ad4a4e61ece1bb4ae246226c93b1d78c651bee7b",
+              "position": 0,
+              "uid": "9bd2a9da-9720-5001-b958-f7a2a2658f87"
+            },
+            {
+              "content": "In procedural passages, begin each sentence with the action, condition, or output instead of repeating “we” so the steps remain easy to follow and reuse.",
+              "content_digest": "c61f6b8ae3612497403f306de2cbe4e6a25db285109e89f74d61439abf5fae30",
+              "position": 1,
+              "uid": "e3e20261-e03c-52fb-be9e-04f5f9b1294d"
+            },
+            {
+              "content": "Write system behaviors confirmed in the actual usage environment as observed states.",
+              "content_digest": "972e1f5ba9188f1a423c2b47782e1a3938749419e8c170fabc97e6dd4f86cab2",
+              "position": 2,
+              "uid": "8d8d0e8d-dad1-50b5-9438-049052748a6a"
+            },
+            {
+              "content": "Write system behaviors not yet confirmed in the field as conditional plans.",
+              "content_digest": "9b7f3fffb87af8004e9645b6494bd2b990a1f1bfb054ca0efecea2bfb74d850d",
+              "position": 3,
+              "uid": "8c74ba87-822b-5ce2-9a3a-3adc02ab9744"
+            },
+            {
+              "content": "Readers can reconstruct a sequence more accurately when each sentence begins with the action or condition rather than the author.",
+              "content_digest": "e6748d23d892cb074ac5259f3c733727746640973a5b62c0ed1b7c6a684e9db8",
+              "position": 4,
+              "uid": "1f29de31-5429-5dfc-ab27-01779fa16704"
+            },
+            {
+              "content": "Do not mechanically split connected thoughts into separate short sentences when doing so destroys the intended reading rhythm.",
+              "content_digest": "754be36b29f7b647390c9308fb7a1cfd9e3228ab0f875c8d53e01febbbb3fd8c",
+              "position": 5,
+              "uid": "1d181223-f750-57d2-97a5-b79f276a589f"
+            },
+            {
+              "content": "Preserve a longer sentence when its clauses form one continuous movement that is easier to follow together than apart.",
+              "content_digest": "074e374f77a4fa6f559e3d69746ab3c706d2b1f3d2e4b98a21e8d1e4d59ef087",
+              "position": 6,
+              "uid": "a5ce5f9f-8852-5080-ae35-21abcf4a0973"
+            },
+            {
+              "content": "The user understands that short sentences are easier to scan but feels that uniformly segmented prose loses its reading rhythm.",
+              "content_digest": "acf7ca20f09995c87c51434dc2ff489efc886ada5b2282dc4bc4014befd8fdc0",
+              "position": 7,
+              "uid": "888ce8af-a36e-5e74-9a0c-604aac48d3b7"
+            },
+            {
+              "content": "Write procedural sentences so their opening phrase can be reused as a checklist item without changing the step's meaning.",
+              "content_digest": "7fd5b55fc09e74df05628f1c61bd543b39b906847b86e7f09337a67b47553156",
+              "position": 8,
+              "uid": "ddf40413-3274-5662-ba5e-d6cae2a1e546"
+            },
+            {
+              "content": "The user should choose “I” as an individual author or “we” for a named team and should not mix them when describing the same responsible party.",
+              "content_digest": "951763104930e99be0182b59dbaa6d7d7a20fd23fe968e39a15bd0798a1bd1b7",
+              "position": 9,
+              "uid": "6b7aaddf-5bbd-5015-811d-9f4d7a4b4ad1"
+            },
+            {
+              "content": "Action-first procedural sentences can be reordered or copied into a checklist more easily because their subject is the step rather than the proposal author.",
+              "content_digest": "397e3c0b9262e13d94969669930081ac76d4967adec4c5fd1f681869b613bc36",
+              "position": 10,
+              "uid": "89c2ce30-d6aa-5762-bf17-c697caac68e4"
+            },
+            {
+              "content": "The user can explain whether an em dash marks an intentional interruption or contrast rather than using it decoratively.",
+              "content_digest": "ec27bb0d2ba0656602348660944cb483789dfaec189d6e32ad6145c8e17f81b2",
+              "position": 11,
+              "uid": "9f1b647a-bd2b-50df-8141-5b8c142c0fa5"
+            },
+            {
+              "content": "An em dash creates a stronger interruption than a comma and can make a deliberate contrast easier to hear in the sentence.",
+              "content_digest": "aa3c3cdb31d26aeeb33b047a22860bf1dbe0819e9cc93f03da112b04367b844e",
+              "position": 12,
+              "uid": "49a42872-adcc-5bf8-9029-1d134cac6267"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "43a32561-a61f-49f7-a6a0-40c91889e689"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate domains rather than shared or competing policies. The reference frame defines participant-protection and study-access requirements, while the compared frame defines prose style, procedural clarity, evidentiary phrasing, sentence rhythm, and authorial voice conventions.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "43b69289-10a1-4ee5-9799-759c870f3589",
+              "memory_uid": "e93ea2ee-a8b0-5f3d-b6fd-c76f385eef50"
+            },
+            {
+              "frame_uid": "43b69289-10a1-4ee5-9799-759c870f3589",
+              "memory_uid": "7d0b3072-7bac-5bc6-9c79-acc808c38f1f"
+            }
+          ],
+          "reason": "These memories express directive and review aspects of one reference-only task-level burden-control requirement; the compared frame contains no corresponding writing-policy claim.",
+          "status": "RESOLVED",
+          "summary": "Expected burdens and their mitigations are mapped to individual user-study tasks and checked by ethics reviewers.",
+          "uid": "002cc45c-ba1e-50f8-a77a-b1c4f23901f2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "43b69289-10a1-4ee5-9799-759c870f3589",
+              "memory_uid": "6ecf6a7b-f4e9-5d96-a52c-520197d4a2a6"
+            },
+            {
+              "frame_uid": "43b69289-10a1-4ee5-9799-759c870f3589",
+              "memory_uid": "bc41fce0-dbfc-5d23-9d97-9f81531c098c"
+            }
+          ],
+          "reason": "These memories split the identification and provision stages of one reference-only accommodation plan; the compared frame provides no corresponding accessibility requirement.",
+          "status": "RESOLVED",
+          "summary": "Accessibility planning identifies necessary accommodations and specifies how they will be delivered during study sessions.",
+          "uid": "5a516f32-18d8-558b-a186-3c74ef31114e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "43b69289-10a1-4ee5-9799-759c870f3589",
+              "memory_uid": "9768e0d9-ef46-52a4-af04-8f6ca3c176c5"
+            }
+          ],
+          "reason": "This is an independently useful reference-only data-protection procedure with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Personal identifiers are separated from research data immediately after collection.",
+          "uid": "a269b048-c11c-579d-95f0-41df8ebe0da0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "43b69289-10a1-4ee5-9799-759c870f3589",
+              "memory_uid": "e874407e-4d36-55a6-949e-44e5944f1bb4"
+            },
+            {
+              "frame_uid": "43b69289-10a1-4ee5-9799-759c870f3589",
+              "memory_uid": "df16dca6-0b48-5753-aa18-7e5524187a1e"
+            }
+          ],
+          "reason": "These memories describe complementary stages of one reference-only equipment-loan lifecycle; the compared frame contains no corresponding operational requirement.",
+          "status": "RESOLVED",
+          "summary": "Participant equipment loans specify both the devices provided and the return procedure.",
+          "uid": "9df0c1fc-fc50-56ce-bb1c-3d7ec127cca7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "43b69289-10a1-4ee5-9799-759c870f3589",
+              "memory_uid": "407a4c1c-c333-5764-8d89-252bed150f99"
+            }
+          ],
+          "reason": "This is an independently useful reference-only participant disclosure with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Participants are told that the formative-evaluation prototype is not a finished service.",
+          "uid": "7d8d2cd9-0328-5d2b-977e-2598039ed25f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "43b69289-10a1-4ee5-9799-759c870f3589",
+              "memory_uid": "28646fd3-54af-51f9-97da-ad9489ecda79"
+            }
+          ],
+          "reason": "This is an independently useful reference-only safeguard for repeated participation with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Repeated evaluations involving the same participant are subject to an upper limit on cumulative task burden.",
+          "uid": "57ea8fb9-e47a-5f78-9c5b-4715e4a4bea7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "43b69289-10a1-4ee5-9799-759c870f3589",
+              "memory_uid": "218aafb6-9332-5693-a2e7-c7777dc64de7"
+            }
+          ],
+          "reason": "This is an independently useful reference-only observation about authorial bias, distinct from the compared frame’s general prose conventions.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to emphasize prototype benefits over participant burden.",
+          "uid": "7b1a33c2-9949-5f99-83cb-5d915a3961ff"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "43b69289-10a1-4ee5-9799-759c870f3589",
+              "memory_uid": "1ecb7268-f77a-5643-a456-357df6cd8f6e"
+            }
+          ],
+          "reason": "This is an independently useful reference-only observation about institutional role concentration with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Recruitment authority and academic or professional evaluation authority may be combined when organizational leaders or staff recruit participants.",
+          "uid": "006f6701-ad4c-595c-9ba0-1653220e2c7f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "43a32561-a61f-49f7-a6a0-40c91889e689",
+              "memory_uid": "9bd2a9da-9720-5001-b958-f7a2a2658f87"
+            },
+            {
+              "frame_uid": "43a32561-a61f-49f7-a6a0-40c91889e689",
+              "memory_uid": "9f1b647a-bd2b-50df-8141-5b8c142c0fa5"
+            },
+            {
+              "frame_uid": "43a32561-a61f-49f7-a6a0-40c91889e689",
+              "memory_uid": "49a42872-adcc-5bf8-9029-1d134cac6267"
+            }
+          ],
+          "reason": "These memories provide the rule, rationale, and user-understanding aspect of one compared-only punctuation policy; the reference frame contains no corresponding style claim.",
+          "status": "RESOLVED",
+          "summary": "Em dashes are reserved for intentional interruption or sharp contrast, whose stronger audible break should be explainable rather than decorative.",
+          "uid": "c93480f6-587f-5d29-800d-4e0d25207726"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "43a32561-a61f-49f7-a6a0-40c91889e689",
+              "memory_uid": "e3e20261-e03c-52fb-be9e-04f5f9b1294d"
+            },
+            {
+              "frame_uid": "43a32561-a61f-49f7-a6a0-40c91889e689",
+              "memory_uid": "1f29de31-5429-5dfc-ab27-01779fa16704"
+            },
+            {
+              "frame_uid": "43a32561-a61f-49f7-a6a0-40c91889e689",
+              "memory_uid": "ddf40413-3274-5662-ba5e-d6cae2a1e546"
+            },
+            {
+              "frame_uid": "43a32561-a61f-49f7-a6a0-40c91889e689",
+              "memory_uid": "89c2ce30-d6aa-5762-bf17-c697caac68e4"
+            }
+          ],
+          "reason": "These memories restate the rule and practical benefits of one compared-only action-first procedure style; the reference frame contains no corresponding writing convention.",
+          "status": "RESOLVED",
+          "summary": "Procedural sentences begin with the action, condition, or output so sequences remain clear and steps can be reordered or reused as checklist items.",
+          "uid": "78defa13-9d91-5e66-b93b-e0c9408bd46e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "43a32561-a61f-49f7-a6a0-40c91889e689",
+              "memory_uid": "8d8d0e8d-dad1-50b5-9438-049052748a6a"
+            },
+            {
+              "frame_uid": "43a32561-a61f-49f7-a6a0-40c91889e689",
+              "memory_uid": "8c74ba87-822b-5ce2-9a3a-3adc02ab9744"
+            }
+          ],
+          "reason": "These memories split one compared-only phrasing policy according to explicit confirmation status; the reference frame contains no corresponding evidentiary-language rule.",
+          "status": "RESOLVED",
+          "summary": "System behavior is written as an observed state when confirmed in actual use and as a conditional plan when field confirmation is absent.",
+          "uid": "2d2e0381-9718-5459-a0ab-795d1c857882"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "43a32561-a61f-49f7-a6a0-40c91889e689",
+              "memory_uid": "1d181223-f750-57d2-97a5-b79f276a589f"
+            },
+            {
+              "frame_uid": "43a32561-a61f-49f7-a6a0-40c91889e689",
+              "memory_uid": "a5ce5f9f-8852-5080-ae35-21abcf4a0973"
+            },
+            {
+              "frame_uid": "43a32561-a61f-49f7-a6a0-40c91889e689",
+              "memory_uid": "888ce8af-a36e-5e74-9a0c-604aac48d3b7"
+            }
+          ],
+          "reason": "These memories state the preference, rule, and preservation condition for one compared-only sentence-rhythm policy; the reference frame contains no corresponding prose claim.",
+          "status": "RESOLVED",
+          "summary": "Connected thoughts remain in a longer sentence when splitting them would impair continuity or the intended reading rhythm.",
+          "uid": "e29995f1-069e-5175-9056-9fd611cb5fba"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "43a32561-a61f-49f7-a6a0-40c91889e689",
+              "memory_uid": "6b7aaddf-5bbd-5015-811d-9f4d7a4b4ad1"
+            }
+          ],
+          "reason": "This is an independently useful compared-only authorial-voice convention with no corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "An author chooses “I” for an individual or “we” for a named team and uses that voice consistently for the same responsible party.",
+          "uid": "514fb9f5-c439-5626-b6b6-eb3c06483074"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers deliberate em-dash use, action-first reusable procedures, field-confirmed versus conditional claims, sentence rhythm, and consistent authorial voice.",
+        "differences": "",
+        "reference_only": "The reference frame covers burden mitigation and limits, accommodations, data de-identification, equipment loans, prototype disclosure, author bias, and recruitment power risks."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "a1621e82-e3c0-45bb-b3ae-0fb5b4c1d194"
+    },
+    "analysis_digest": "b86630ebbf76a2795858e63efeb6b0c17cfbac1f30231492e5ffe3b98029eeee",
+    "key": "e009ffbefce58b71281ee80642187b67779c279947c3c2d63cd9b12bdc9ebfec",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 42.26907658399796,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "e009ffbefce58b71281ee80642187b67779c279947c3c2d63cd9b12bdc9ebfec",
+  "created_at": "2026-08-13T18:20:09.196562Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/ethics",
+  "pair_key": "5bc05aca0aa1840da08acf88a65ff3219c48fd5826e479566917a547c2ec8f38",
+  "provider_seconds": 42.26907658399796,
+  "right": "task-2/advisor2/style",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

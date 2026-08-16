@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:47:50.131827+00:00",
+      "frames": [
+        {
+          "context_digest": "0b8af0ea4e580cc332939d026149e543e9251c54de246e3eabb83c941e6c12f2",
+          "context_name": "task-3/local/personal-memory/2024/12",
+          "context_uid": "66c3e5de-61bb-5795-8e5a-4e28f64be857",
+          "memories": [
+            {
+              "content": "The user used an accessible entrance at a clinic in December 2024.",
+              "content_digest": "a940bc9fb7423a1bdb9dde547cd39eb8ad66d4fa3051649c62b042fc63935263",
+              "position": 0,
+              "uid": "a6923620-267d-5129-b8c4-cd9b1e1a1e7b"
+            },
+            {
+              "content": "On a day snow had accumulated and blocked the main-entrance ramp, the user went to a side entrance.",
+              "content_digest": "460c05d8e8b4b7443ff42cbeead66e07201846394bcbe5948f63e585a197006f",
+              "position": 1,
+              "uid": "fb0e1d1f-0ef5-5214-b6d7-f6ca5c68f582"
+            },
+            {
+              "content": "The user learned on site that the elevator was under inspection and delayed the appointment.",
+              "content_digest": "b5efa024c597b57651178431d22173d4ca1242c3a4c9607f8bd5a7ff681af6f4",
+              "position": 2,
+              "uid": "4cb45120-4376-5c7b-ae92-faa9e4b9330c"
+            },
+            {
+              "content": "The day before the next visit, the user called to check whether the elevator would be operating.",
+              "content_digest": "93c66066de480a4d2f30b7b7c4d955acfceb227ac898766b6375829804b580eb",
+              "position": 3,
+              "uid": "479f4434-879c-5335-b0c9-c0bfa19ecdcd"
+            },
+            {
+              "content": "The user waited for their turn in front of a ticket machine near the waiting chairs.",
+              "content_digest": "fada8c09d46af2e1bcbd2b1e97d9cb786ceca83fc13d1240627639dd6cb96e65",
+              "position": 4,
+              "uid": "0f2c78a7-8f92-573d-af8a-a360ceb77b24"
+            },
+            {
+              "content": "On a day the user waited in a corridor without chairs, they leaned against the wall and changed position several times.",
+              "content_digest": "0037afaeb85d94f985b1628b7b8f8194fb00d7d7e72e1746c6bae2c2ba66fe6f",
+              "position": 5,
+              "uid": "7b9197ac-4263-5169-8d3b-d34f5d893d36"
+            },
+            {
+              "content": "On a day their older sister accompanied them, the user found a place to sit immediately after reception.",
+              "content_digest": "1ae59de552a922fd3b4d39e7e5dc1ec65ff08ee68e3448f2152f27dfec710a5a",
+              "position": 6,
+              "uid": "7b0b7571-f29c-56e5-a27a-82d69a4a6982"
+            },
+            {
+              "content": "Reception staff expect that a first-time visitor may ask where the accessible entrance is.",
+              "content_digest": "7dc3300dc630b737c0f7b437eba30179aa6aaa03efd61c968604ee505a43aa73",
+              "position": 7,
+              "uid": "e9515d6b-10d9-579f-abf7-5030db64218a"
+            },
+            {
+              "content": "The local agent cannot infer the user's condition from a record of using an accessible route alone.",
+              "content_digest": "2d8a50f62f32c43ca62e1e23b75c34361ece43fd8367964174fdc73d66795df4",
+              "position": 8,
+              "uid": "8e57141d-c603-56cd-ab9e-c14b4e944b45"
+            },
+            {
+              "content": "Snow accumulation and snow-removal work can temporarily block an entrance route used under ordinary conditions.",
+              "content_digest": "4fb152c120860688789bdd4b825de45799e9fa00c0c18c334492dd4b274adde9",
+              "position": 9,
+              "uid": "a6076438-307c-56fe-9d2c-848181846ce5"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "4c49ff7b-2b5c-40ae-8d6a-f440cf187052"
+        },
+        {
+          "context_digest": "5e42fc3dcfbf5576148277f6841977ca8a5cabd4a3fc67a5581f6f6cc816c900",
+          "context_name": "task-3/local/personal-memory/2025/10",
+          "context_uid": "8130b676-dc51-5c31-b7dc-185afdf9cf07",
+          "memories": [
+            {
+              "content": "The user keeps waterproof shoes for rainy days to the left of the entrance.",
+              "content_digest": "5b9e5a20153c7865010318800d740a410faef0c13fe2278c20ce984a89b7dea5",
+              "position": 0,
+              "uid": "82c1e806-de3a-5633-8a08-175487e69fd6"
+            },
+            {
+              "content": "On a day the user walked in the rain wearing thin shoes, their socks became wet and they changed them after arrival.",
+              "content_digest": "fdbdab8c08a4b1d933ff8ac3ddedee8541ddf070e8c6e6020b6c1d14b992c621",
+              "position": 1,
+              "uid": "25df6384-836f-5f8e-bd97-73a1fb171c48"
+            },
+            {
+              "content": "On the next rainy day, the user wore waterproof shoes and their feet remained dry.",
+              "content_digest": "0e87d74fb93fe062cd12efe2f5a04fbae5ce13a60491fd9ad04c4e006acbd87f",
+              "position": 2,
+              "uid": "55abae4f-206a-586e-8b35-406d7525c0a1"
+            },
+            {
+              "content": "On a day the user walked for a long time in new shoes, their heel chafed and they shortened the route home.",
+              "content_digest": "aeb369b995cdf17ea73ae8546b454eab70f33bf6d3c67a09aee2805c1c598b6d",
+              "position": 3,
+              "uid": "c6d21ec4-6bdf-55df-b4d4-05cb531bf4bd"
+            },
+            {
+              "content": "The user wore the same shoes on two short outings before using them on a long walk.",
+              "content_digest": "0d7ed5656f35f4fe025c6ba80e4c829f5b9851c193f981de9a461f848317d60a",
+              "position": 4,
+              "uid": "a6424854-e51e-5afc-8b9f-9e2f0273f70e"
+            },
+            {
+              "content": "On a day the user dried an umbrella outside the entrance, they found it immediately before the next outing.",
+              "content_digest": "dbc2453ca5f895e2cfe7f58e5624cf4c5d6793468af3b25df7e9a4ddb7d50159",
+              "position": 5,
+              "uid": "1b436b46-3d1f-5aa2-99e3-94b7c2412bfd"
+            },
+            {
+              "content": "On a day the user put a folded wet umbrella in their bag, documents inside became wet.",
+              "content_digest": "1f63fbc8c6b491a734f0f7a4190e26aec22826c1ff839242e0ca71d933312c9c",
+              "position": 6,
+              "uid": "ccd1f422-6130-5f19-869e-681102a3a1fa"
+            },
+            {
+              "content": "When rain is forecast, the user's mother expects the user may forget an umbrella and sets out a spare at the entrance.",
+              "content_digest": "80bdfaefb6f781aa91ef7217331e75f09b4766650c2b078dfadf592b2eb27b08",
+              "position": 7,
+              "uid": "c69a8e87-2b6f-5514-ab0d-0037531592f8"
+            },
+            {
+              "content": "When proposing a long-distance walking plan, check both the weather that day and recent records of shoe discomfort.",
+              "content_digest": "f54a546d423099c3abbb65bb49e4ddf773a8191dcffbb8b3d5153dfd70553b73",
+              "position": 8,
+              "uid": "4567ea9f-1800-51ed-bfac-f4cdf674d4cf"
+            },
+            {
+              "content": "Even if the local agent knows a shoe's location, it cannot know its current condition or whether it is usable.",
+              "content_digest": "28202c222ca800a5e19dbaebea2b3c992748f530a695517cf123b10187a31bc8",
+              "position": 9,
+              "uid": "a4ff1b76-755d-530a-b24c-8655115e4fbe"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "8b5ea2b2-2cb5-4960-90ba-d8b7ceeda69f"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate domains: clinic accessibility, waiting conditions, and inference limits on one side; rain preparation, footwear outcomes, umbrella handling, walking plans, and shoe-status uncertainty on the other. No supplied claims govern the same operational decision or present a scope-aligned disagreement.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4c49ff7b-2b5c-40ae-8d6a-f440cf187052",
+              "memory_uid": "a6923620-267d-5129-b8c4-cd9b1e1a1e7b"
+            }
+          ],
+          "reason": "This is a one-sided clinic-access event with no compared-side claim addressing that event or decision.",
+          "status": "RESOLVED",
+          "summary": "The user used a clinic’s accessible entrance in December 2024.",
+          "uid": "343fe69c-22ee-55a8-946c-7c6737a400f9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4c49ff7b-2b5c-40ae-8d6a-f440cf187052",
+              "memory_uid": "fb0e1d1f-0ef5-5214-b6d7-f6ca5c68f582"
+            }
+          ],
+          "reason": "This specific access detour has no counterpart concerning the same route disruption in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Snow blocking the main ramp led the user to enter the clinic from the side.",
+          "uid": "9cf6671c-5109-5d81-a078-b4f3c9ac24ae"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4c49ff7b-2b5c-40ae-8d6a-f440cf187052",
+              "memory_uid": "4cb45120-4376-5c7b-ae92-faa9e4b9330c"
+            }
+          ],
+          "reason": "This clinic elevator disruption is independently useful and absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "An elevator inspection discovered on site delayed the user’s appointment.",
+          "uid": "760dfc39-d627-5ac5-8c91-ad0d92655621"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4c49ff7b-2b5c-40ae-8d6a-f440cf187052",
+              "memory_uid": "479f4434-879c-5335-b0c9-c0bfa19ecdcd"
+            }
+          ],
+          "reason": "This anticipatory clinic-access check addresses a decision not covered by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Before a later visit, the user called to verify elevator operation.",
+          "uid": "3012c980-8a8d-5912-b979-d3501b601059"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4c49ff7b-2b5c-40ae-8d6a-f440cf187052",
+              "memory_uid": "0f2c78a7-8f92-573d-af8a-a360ceb77b24"
+            }
+          ],
+          "reason": "This waiting-location experience has no compared-side claim about the same setting or decision.",
+          "status": "RESOLVED",
+          "summary": "The user waited near chairs for a turn at a ticket machine.",
+          "uid": "dbec26d0-dcbd-5197-b5d3-8b1615392100"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4c49ff7b-2b5c-40ae-8d6a-f440cf187052",
+              "memory_uid": "7b9197ac-4263-5169-8d3b-d34f5d893d36"
+            }
+          ],
+          "reason": "This specific response to unavailable seating is one-sided and independently useful.",
+          "status": "RESOLVED",
+          "summary": "While waiting in a chairless corridor, the user leaned against a wall and repeatedly changed position.",
+          "uid": "61740e7f-db2d-5c9d-81e2-5cfec759eb24"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4c49ff7b-2b5c-40ae-8d6a-f440cf187052",
+              "memory_uid": "7b0b7571-f29c-56e5-a27a-82d69a4a6982"
+            }
+          ],
+          "reason": "This accompanied clinic-seating experience has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "When accompanied by an older sister, the user found seating immediately after reception.",
+          "uid": "7c2376b8-9f8b-535c-b0c6-7ebfbed31263"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4c49ff7b-2b5c-40ae-8d6a-f440cf187052",
+              "memory_uid": "e9515d6b-10d9-579f-abf7-5030db64218a"
+            }
+          ],
+          "reason": "This clinic guidance expectation governs a decision not addressed by compared-side content.",
+          "status": "RESOLVED",
+          "summary": "Reception staff anticipate that first-time visitors may request directions to the accessible entrance.",
+          "uid": "ed206051-9e4e-57e7-b2c3-903b0a648858"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4c49ff7b-2b5c-40ae-8d6a-f440cf187052",
+              "memory_uid": "8e57141d-c603-56cd-ab9e-c14b4e944b45"
+            }
+          ],
+          "reason": "Although the compared frame also contains an inference limit, it concerns shoe usability rather than the same subject or operational judgment.",
+          "status": "RESOLVED",
+          "summary": "Accessible-route use alone does not justify inferring the user’s condition.",
+          "uid": "a62ced5b-bdb3-5169-a687-dd7f890bda2f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4c49ff7b-2b5c-40ae-8d6a-f440cf187052",
+              "memory_uid": "a6076438-307c-56fe-9d2c-848181846ce5"
+            }
+          ],
+          "reason": "This general clinic-route contingency is independently useful and has no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Snow accumulation or removal work can temporarily block an ordinarily used entrance route.",
+          "uid": "d0af864f-8994-502a-8d3f-944423363e7f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8b5ea2b2-2cb5-4960-90ba-d8b7ceeda69f",
+              "memory_uid": "82c1e806-de3a-5633-8a08-175487e69fd6"
+            }
+          ],
+          "reason": "This footwear-location fact is one-sided and does not address any clinic-access decision.",
+          "status": "RESOLVED",
+          "summary": "The user keeps rainy-day waterproof shoes to the left of the entrance.",
+          "uid": "95cc34ee-e02e-5118-a4e0-26b12b6dc937"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8b5ea2b2-2cb5-4960-90ba-d8b7ceeda69f",
+              "memory_uid": "25df6384-836f-5f8e-bd97-73a1fb171c48"
+            }
+          ],
+          "reason": "This footwear-and-weather outcome has no reference-side counterpart concerning the same choice.",
+          "status": "RESOLVED",
+          "summary": "Walking in rain with thin shoes caused wet socks that the user changed after arrival.",
+          "uid": "4bf27f3e-fa20-50e2-a428-14879b6e8899"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8b5ea2b2-2cb5-4960-90ba-d8b7ceeda69f",
+              "memory_uid": "55abae4f-206a-586e-8b35-406d7525c0a1"
+            }
+          ],
+          "reason": "This successful rainy-day footwear outcome is independently useful and one-sided.",
+          "status": "RESOLVED",
+          "summary": "On a later rainy day, waterproof shoes kept the user’s feet dry.",
+          "uid": "94024b72-e334-50d7-a103-9139682cedc4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8b5ea2b2-2cb5-4960-90ba-d8b7ceeda69f",
+              "memory_uid": "c6d21ec4-6bdf-55df-b4d4-05cb531bf4bd"
+            }
+          ],
+          "reason": "This shoe-discomfort event governs walking choices not covered in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A long walk in new shoes caused heel chafing and prompted a shorter route home.",
+          "uid": "527e871d-2095-593a-8cf4-e12f2c3737b4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8b5ea2b2-2cb5-4960-90ba-d8b7ceeda69f",
+              "memory_uid": "a6424854-e51e-5afc-8b9f-9e2f0273f70e"
+            }
+          ],
+          "reason": "This footwear trial history is one-sided and distinct from the later long-walk outcome.",
+          "status": "RESOLVED",
+          "summary": "The user tested the same shoes on two short outings before a long walk.",
+          "uid": "58faefa6-e4ee-5580-80b9-a0858e9b49d9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8b5ea2b2-2cb5-4960-90ba-d8b7ceeda69f",
+              "memory_uid": "1b436b46-3d1f-5aa2-99e3-94b7c2412bfd"
+            }
+          ],
+          "reason": "This umbrella-placement outcome has no reference-side claim about the same practice.",
+          "status": "RESOLVED",
+          "summary": "Drying an umbrella outside the entrance made it immediately findable before the next outing.",
+          "uid": "aff976c5-dd4e-57eb-95b9-5061e54db137"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8b5ea2b2-2cb5-4960-90ba-d8b7ceeda69f",
+              "memory_uid": "ccd1f422-6130-5f19-869e-681102a3a1fa"
+            }
+          ],
+          "reason": "This water-damage event is independently useful and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Putting a folded wet umbrella in a bag caused documents inside to become wet.",
+          "uid": "307dc2e5-9999-5a1b-9850-11840d27e968"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8b5ea2b2-2cb5-4960-90ba-d8b7ceeda69f",
+              "memory_uid": "c69a8e87-2b6f-5514-ab0d-0037531592f8"
+            }
+          ],
+          "reason": "This family prompting practice addresses rain preparation not covered by reference-side content.",
+          "status": "RESOLVED",
+          "summary": "When rain is forecast, the user’s mother sets out a spare umbrella because the user may forget one.",
+          "uid": "96334e90-a626-57fe-aae4-c09d1584169d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8b5ea2b2-2cb5-4960-90ba-d8b7ceeda69f",
+              "memory_uid": "4567ea9f-1800-51ed-bfac-f4cdf674d4cf"
+            }
+          ],
+          "reason": "This planning policy governs a distinct operational decision with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Long-distance walking proposals should consider both current weather and recent shoe-discomfort records.",
+          "uid": "f8c79191-8f57-52eb-aac9-1f7e0b8a8b3a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8b5ea2b2-2cb5-4960-90ba-d8b7ceeda69f",
+              "memory_uid": "a4ff1b76-755d-530a-b24c-8655115e4fbe"
+            }
+          ],
+          "reason": "Although the reference frame also limits inference from a recorded fact, it concerns the user’s condition rather than shoe-use decisions.",
+          "status": "RESOLVED",
+          "summary": "Knowing a shoe’s location does not establish its current condition or usability.",
+          "uid": "dc353a96-f544-5fc7-9e1e-09568487b22f"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame records rain-ready footwear, shoe discomfort, umbrella placement and water damage, family prompting, walking-plan checks, and uncertainty about shoe usability.",
+        "differences": "",
+        "reference_only": "The reference records clinic access disruptions, elevator checks, waiting and seating experiences, visitor guidance, and limits on inferring a user’s condition from route use."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "b6d124fc-4948-429d-89c7-891ddb1f9d26"
+    },
+    "analysis_digest": "f9089575e293a2da62cad30a17f6febdf4d994fd295d1112bed2ede7ab7e190d",
+    "key": "5573679475c2028f1505945a438b190f15587da0cefa96b987103cedd25b6629",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 42.171902292000595,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "5573679475c2028f1505945a438b190f15587da0cefa96b987103cedd25b6629",
+  "created_at": "2026-08-13T18:48:32.303393Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/12",
+  "pair_key": "d5babf49526ad4f8ddecdf1d4868b5b5542d4ccd55ac847ba707b8216bfb5e23",
+  "provider_seconds": 42.171902292000595,
+  "right": "task-3/local/personal-memory/2025/10",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

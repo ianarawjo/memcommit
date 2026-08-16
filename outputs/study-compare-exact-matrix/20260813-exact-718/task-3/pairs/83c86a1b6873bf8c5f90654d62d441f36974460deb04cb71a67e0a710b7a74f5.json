@@ -1,0 +1,415 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:36:23.833340+00:00",
+      "frames": [
+        {
+          "context_digest": "4c7d7890b4c8dbd807acc103affd0572c325fd2e0f58346a97c3ed49e48ba34e",
+          "context_name": "task-3/local/personal-memory/2024/02",
+          "context_uid": "7bedad96-d78b-5977-a4c9-71049dcfcec8",
+          "memories": [
+            {
+              "content": "The user's maternal aunt keeps one spare key to the user's home.",
+              "content_digest": "2e45c292a3cbc26a1c9928c4546c6029c7dcd2aa6aa0a45a7cfb4be7888dd5c6",
+              "position": 0,
+              "uid": "1c627e4c-c393-5bd3-a5ae-b3318821be73"
+            },
+            {
+              "content": "If the door is locked, the user is accustomed to contacting their maternal aunt, who has the spare key, before contacting building management.",
+              "content_digest": "709cc4a1ae26126bd3238ea8c0e343415d95d084ddaf022590ff4197003c7b81",
+              "position": 1,
+              "uid": "e80936de-87af-5dbb-ab94-d456bbfaab0a"
+            },
+            {
+              "content": "When going to collect the spare key from their maternal aunt, the user wants to give an arrival time first so neither person has to wait.",
+              "content_digest": "5dab57d537091a28848dfa3592d16e038d6e78eeb8159489c17475befeb62a53",
+              "position": 2,
+              "uid": "7c26cf33-0630-5138-910a-6d37d6ed2b63"
+            },
+            {
+              "content": "The user feels at ease only after returning a borrowed spare key in person on the same day.",
+              "content_digest": "d3b9e78e166fb3af3dc248bcddbf1c1df15d3eed57655991a52c23b4ebb6ba14",
+              "position": 3,
+              "uid": "c3f0f26c-8d89-55e3-8bf3-398271e417e7"
+            },
+            {
+              "content": "The user feels uneasy about writing down a new entrance passcode on paper.",
+              "content_digest": "fe40a50fb7f0b0e1514a2f7e6ea3748e73cbd76fa45b862b4880c9eba68a2312",
+              "position": 4,
+              "uid": "7d7d00a3-c5af-5441-bb50-9631fbfd7979"
+            },
+            {
+              "content": "The user found it difficult when a family member arrived without notice during a meeting and the user could not respond immediately.",
+              "content_digest": "30d2126eb016f1fab8b8bd670bc00ee6ac5182f28b0afe696b2c30f4d7bc128f",
+              "position": 5,
+              "uid": "2e0df581-bd54-54f5-94ef-b719427fc88c"
+            },
+            {
+              "content": "On a day their younger brother received a package for them, the user felt reassured after checking the delivery photo.",
+              "content_digest": "54eacbc39b057a6a18f8ddd8e1db587dbef231ecb10ed8cd84a46b3575ac470c",
+              "position": 6,
+              "uid": "9278b64e-7550-5eb6-bbfd-544a2ae4ec3d"
+            },
+            {
+              "content": "The user's maternal aunt wants confirmation that the user is coming in person before handing over the spare key.",
+              "content_digest": "5d780f2fb96eac2d3c65e7417ee00e64e29c2f8873c432b291e62773723182c9",
+              "position": 7,
+              "uid": "76fb9115-a3f2-5ce3-a445-c3d1e38e4253"
+            },
+            {
+              "content": "Confirm with the user before sharing the spare key's storage location or the maternal aunt's contact information.",
+              "content_digest": "ac00da1acd77d05fd277a0a92d2ab62cbefb3c334e6e7c2cb3b046fbea217a6c",
+              "position": 8,
+              "uid": "6fa50e1d-8bd1-557a-9b03-1e4a4dc664bd"
+            },
+            {
+              "content": "The management office of a multi-unit residential building does not hold a unit key without verifying identity.",
+              "content_digest": "841f44fddced7681d5c9b47aaa2536f14536f1309b1f73104df7cb44738efbd1",
+              "position": 9,
+              "uid": "b18ff5b4-4f0d-5b93-8c41-439e5b15c710"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "b7950866-8b31-45c3-8b74-c4ce9c1d20ce"
+        },
+        {
+          "context_digest": "df0924e320cd14a29eaed60f78e82fd509c4062949b35706b2a7cb94571fb599",
+          "context_name": "task-3/local/personal-memory/2026/04",
+          "context_uid": "16e860a8-7a90-5b7a-adc3-1c487ef97e03",
+          "memories": [
+            {
+              "content": "The user collects clothes for donation in a large bag beside the entrance.",
+              "content_digest": "39f2f01c59b7fa4ca7529d510e1b0a6ffab6706861042f771cfe97f6f806efac",
+              "position": 0,
+              "uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            },
+            {
+              "content": "After emptying an entire drawer at once, the user could not find a charger they needed.",
+              "content_digest": "674c33ba6475f42b29b03e6f8711e0216f983f3d37fee3dacf9336e3bb4596bf",
+              "position": 1,
+              "uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            },
+            {
+              "content": "During the next organizing session, the user sorted items by type and put only items to be discarded in the bag.",
+              "content_digest": "63104b5a7fd380f818c8758c51f9550c7a7fa41ff91f1dd314225d1824b69643",
+              "position": 2,
+              "uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            },
+            {
+              "content": "Even after photographing unworn clothes, the user did not take them out again for one month.",
+              "content_digest": "519f131096440719dcd3412f4439c5cfe44b7f402684170209708040692dc5fd",
+              "position": 3,
+              "uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            },
+            {
+              "content": "After moving those clothes to the donation bag, the user cleared one closet compartment.",
+              "content_digest": "45db58ae108a299344d982d8606fff26f733252da691cf01417e760909ff6057",
+              "position": 4,
+              "uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            },
+            {
+              "content": "The user nearly discarded an important paper with advertising and checked the recycling box again.",
+              "content_digest": "6bf928f67944656e5f3c68d8869c0cefd039a588f0ba735f94520231ef58017c",
+              "position": 5,
+              "uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            },
+            {
+              "content": "During the next organizing session, the user kept a separate document box and did not mix the papers.",
+              "content_digest": "adac8d4266c6b11e15d29c484665bc5dcc915f9aa319198b6a69d0e7b0131bb3",
+              "position": 6,
+              "uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            },
+            {
+              "content": "The user's mother asks the user to check whether she needs kitchen items in good condition before discarding them.",
+              "content_digest": "0752bc2ac00c0b1301c45ab4c2e73f63c57e6ebc4255dcc1c13330ffda906612",
+              "position": 7,
+              "uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            },
+            {
+              "content": "Confirm with the user before marking a personal document or another person's property as a disposal candidate.",
+              "content_digest": "17062e2cd4738619e81e211cb2f53d14e78c5f4eab9ae49053ce7e06935a7db5",
+              "position": 8,
+              "uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            },
+            {
+              "content": "The local agent cannot determine an object's emotional meaning from frequency of use alone.",
+              "content_digest": "9c86bcfe2b209bf7957dced0eab000b42f97b6a435d705ccaccb15e49be3691d",
+              "position": 9,
+              "uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "f9de2720-9b4b-47ea-b202-d12bf2f7d8a5"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate practical domains without a shared operational claim: the reference concerns home access, privacy, visits, and delivery verification, while the compared frame concerns organizing, donation, disposal safeguards, and limits on inferring sentimental value.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7950866-8b31-45c3-8b74-c4ce9c1d20ce",
+              "memory_uid": "1c627e4c-c393-5bd3-a5ae-b3318821be73"
+            }
+          ],
+          "reason": "This is independently useful one-sided information about the home's access arrangement, with no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The maternal aunt keeps a spare key to the user's home.",
+          "uid": "8454f4da-1138-5ccd-8804-4215cb7e8d72"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7950866-8b31-45c3-8b74-c4ce9c1d20ce",
+              "memory_uid": "e80936de-87af-5dbb-ab94-d456bbfaab0a"
+            }
+          ],
+          "reason": "This is a one-sided lockout procedure not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "For a lockout, the user normally contacts the maternal aunt before building management.",
+          "uid": "6d4057f2-89c8-566b-a3a3-dd952d69cb8a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7950866-8b31-45c3-8b74-c4ce9c1d20ce",
+              "memory_uid": "7c26cf33-0630-5138-910a-6d37d6ed2b63"
+            },
+            {
+              "frame_uid": "b7950866-8b31-45c3-8b74-c4ce9c1d20ce",
+              "memory_uid": "76fb9115-a3f2-5ce3-a445-c3d1e38e4253"
+            }
+          ],
+          "reason": "These memories split one one-sided pickup-coordination practice: the user supplies an arrival time, and the aunt seeks confirmation of in-person collection.",
+          "status": "RESOLVED",
+          "summary": "Collecting the aunt-held spare key requires advance coordination about the user's in-person arrival.",
+          "uid": "2776cb50-1245-5eb6-abf3-32af0e86b36a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7950866-8b31-45c3-8b74-c4ce9c1d20ce",
+              "memory_uid": "c3f0f26c-8d89-55e3-8bf3-398271e417e7"
+            }
+          ],
+          "reason": "This is an independently useful preference about completing key return, absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user feels at ease after returning a borrowed spare key in person on the same day.",
+          "uid": "90d61d14-40ff-5d5f-a8b0-0dc6d652440b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7950866-8b31-45c3-8b74-c4ce9c1d20ce",
+              "memory_uid": "7d7d00a3-c5af-5441-bb50-9631fbfd7979"
+            }
+          ],
+          "reason": "This is a one-sided security preference with no corresponding organizing or disposal claim.",
+          "status": "RESOLVED",
+          "summary": "The user is uneasy about recording a new entrance passcode on paper.",
+          "uid": "d0d50fc3-3063-59b9-8d16-1db0d64483ba"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7950866-8b31-45c3-8b74-c4ce9c1d20ce",
+              "memory_uid": "2e0df581-bd54-54f5-94ef-b719427fc88c"
+            }
+          ],
+          "reason": "This is independently useful context about visit notice and availability, not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "An unannounced family arrival during a meeting was difficult because the user could not respond immediately.",
+          "uid": "bfe4cdd7-175a-52eb-bf46-d9b86d799885"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7950866-8b31-45c3-8b74-c4ce9c1d20ce",
+              "memory_uid": "9278b64e-7550-5eb6-bbfd-544a2ae4ec3d"
+            }
+          ],
+          "reason": "This is one-sided information about delivery verification and reassurance.",
+          "status": "RESOLVED",
+          "summary": "The user felt reassured by checking a delivery photo after their younger brother received a package.",
+          "uid": "df3e4ebb-a484-5280-a551-f63b4ab76f70"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7950866-8b31-45c3-8b74-c4ce9c1d20ce",
+              "memory_uid": "6fa50e1d-8bd1-557a-9b03-1e4a4dc664bd"
+            }
+          ],
+          "reason": "This is a security-sensitive disclosure policy with no materially corresponding decision in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user must be consulted before the spare key's location or the aunt's contact information is shared.",
+          "uid": "bc5f4dc7-1107-5bdb-b10c-c2cbd5bad283"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7950866-8b31-45c3-8b74-c4ce9c1d20ce",
+              "memory_uid": "b18ff5b4-4f0d-5b93-8c41-439e5b15c710"
+            }
+          ],
+          "reason": "This is independently useful one-sided information about management-office key and identity controls.",
+          "status": "RESOLVED",
+          "summary": "A multi-unit building's management office does not hold a unit key without identity verification.",
+          "uid": "dbb08a4f-b1fc-5f35-ba8d-c7ffdd49c64d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f9de2720-9b4b-47ea-b202-d12bf2f7d8a5",
+              "memory_uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            }
+          ],
+          "reason": "This is independently useful one-sided information about donation staging.",
+          "status": "RESOLVED",
+          "summary": "The user collects donation clothes in a large bag beside the entrance.",
+          "uid": "749b99dc-a5b5-5152-a316-77ec37c53733"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f9de2720-9b4b-47ea-b202-d12bf2f7d8a5",
+              "memory_uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            },
+            {
+              "frame_uid": "f9de2720-9b4b-47ea-b202-d12bf2f7d8a5",
+              "memory_uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            }
+          ],
+          "reason": "These memories describe one one-sided organizing lesson, pairing the failed broad-emptying approach with the later sorting method.",
+          "status": "RESOLVED",
+          "summary": "After losing track of a needed charger when emptying a whole drawer, the user adopted type-based sorting and reserved the bag for discarded items.",
+          "uid": "7807fe73-8ef1-5c7b-9e3d-f5cc4a5432be"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f9de2720-9b4b-47ea-b202-d12bf2f7d8a5",
+              "memory_uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            },
+            {
+              "frame_uid": "f9de2720-9b4b-47ea-b202-d12bf2f7d8a5",
+              "memory_uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            }
+          ],
+          "reason": "These memories split one one-sided clothing-decluttering episode from observed nonuse through the resulting cleared space.",
+          "status": "RESOLVED",
+          "summary": "Clothes left unused for a month after being photographed were moved into the donation bag, clearing a closet compartment.",
+          "uid": "94d9f70e-88eb-5e46-b8c4-d4a09e267cfd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f9de2720-9b4b-47ea-b202-d12bf2f7d8a5",
+              "memory_uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            },
+            {
+              "frame_uid": "f9de2720-9b4b-47ea-b202-d12bf2f7d8a5",
+              "memory_uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            }
+          ],
+          "reason": "These memories form one one-sided document-sorting lesson, connecting the near loss with the later separation practice.",
+          "status": "RESOLVED",
+          "summary": "After nearly recycling an important paper with advertising, the user kept documents in a separate box during the next organizing session.",
+          "uid": "8601b51b-0c2e-58bb-bb72-ee9fa798149a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f9de2720-9b4b-47ea-b202-d12bf2f7d8a5",
+              "memory_uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            }
+          ],
+          "reason": "This is independently useful one-sided information about another person's interest in potential discards.",
+          "status": "RESOLVED",
+          "summary": "The user's mother asks to be consulted about useful kitchen items before they are discarded.",
+          "uid": "dde868b3-c227-539e-80e6-6400246c8325"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f9de2720-9b4b-47ea-b202-d12bf2f7d8a5",
+              "memory_uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            }
+          ],
+          "reason": "This is a one-sided disposal-candidate confirmation policy, materially separate from the reference frame's security-information disclosure policy.",
+          "status": "RESOLVED",
+          "summary": "The user must be consulted before a personal document or another person's property is marked for disposal.",
+          "uid": "60e798b2-1062-5421-9a95-0ef1be3b9cca"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f9de2720-9b4b-47ea-b202-d12bf2f7d8a5",
+              "memory_uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "reason": "This is an independently useful one-sided limit on disposal-related inference.",
+          "status": "RESOLVED",
+          "summary": "The local agent cannot infer an object's emotional meaning solely from how often it is used.",
+          "uid": "567fd3b8-26d1-54c2-9609-c8065696ad77"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame describes donation staging, safer sorting methods, clothing and document organization, consultation before disposal, and caution against inferring emotional value from use frequency.",
+        "differences": "",
+        "reference_only": "The reference describes spare-key custody and handling, lockout procedures, security-sensitive sharing, passcode concerns, visit coordination, delivery reassurance, and building-management identity checks."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "f7478953-6348-40c5-9f72-9cb8b5898009"
+    },
+    "analysis_digest": "6e49a5d5f1a2ec479b0ddeb5aa1400fede010fc65b2b23e463e06c524492951b",
+    "key": "5f894c38d34a85c02bf749d29512b55cbb4301cabe1e780d1234c06a07644ccf",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 49.02643820800222,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "5f894c38d34a85c02bf749d29512b55cbb4301cabe1e780d1234c06a07644ccf",
+  "created_at": "2026-08-13T18:37:12.859331Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/02",
+  "pair_key": "83c86a1b6873bf8c5f90654d62d441f36974460deb04cb71a67e0a710b7a74f5",
+  "provider_seconds": 49.02643820800222,
+  "right": "task-3/local/personal-memory/2026/04",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

@@ -1,0 +1,358 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:29:00.141294+00:00",
+      "frames": [
+        {
+          "context_digest": "587a9d2fb6abf2b486ccfc50ff85ae7280d7d7bd4003d85ce5877a4edfc9293f",
+          "context_name": "task-2/advisor1/terminology",
+          "context_uid": "7699c7c5-e48b-5548-b0aa-256d793c6c06",
+          "memories": [
+            {
+              "content": "Use the same term throughout the proposal for the same interaction concept or interface element.",
+              "content_digest": "2f11d02134609c6397d8f60105cc452e34129bc1c427a512455247e54951f18a",
+              "position": 0,
+              "uid": "949a884d-b348-5fa0-b1dd-adbebafe10a9"
+            },
+            {
+              "content": "Use abbreviations only for recurring terms of three or more words.",
+              "content_digest": "dcceb4407d24df4034dceca613413471bb46898a487aed0cc0905e48ede482e7",
+              "position": 1,
+              "uid": "2f484151-b5fc-51a9-8a88-b30a403617b3"
+            },
+            {
+              "content": "Present the full name and abbreviation together when using an abbreviation for the first time.",
+              "content_digest": "02e1b2b4cbc8f9a61e299bf1500663ae8cd4036155b2a7dec8c2ce40087ac29b",
+              "position": 2,
+              "uid": "21131a6f-d35c-51e3-895f-46cd21a3b566"
+            },
+            {
+              "content": "Prioritize the research role over diagnostic labels or deficits when referring to participants.",
+              "content_digest": "7b99c6ec90abdbb68d4af8e95a03df3149b9d2d4d637fbd33a70a2acf7073a12",
+              "position": 3,
+              "uid": "e02c3110-05c4-58a4-8d76-c8fd2426a0d5"
+            },
+            {
+              "content": "Reviewers from different subfields struggle to infer undefined abbreviations from context alone.",
+              "content_digest": "13af5eb9fe88f3f2d73192adfb48f7a20de09e22e777a952daa83ca1c030f9ee",
+              "position": 4,
+              "uid": "af028910-e48b-5605-b92b-9378bdfa525c"
+            },
+            {
+              "content": "Use the term formative evaluation for studies seeking design modification evidence, and distinguish it from final efficacy judgments.",
+              "content_digest": "4ba9bca850286ff6286cf4b3bf44395d608ec700c46acd8cd26c54e26d43b378",
+              "position": 5,
+              "uid": "39792d18-2be0-5135-a063-c5213247d330"
+            },
+            {
+              "content": "The user can have contribution labels such as principles, models, or guidelines approved only if they align with the abstraction level of the actual deliverables.",
+              "content_digest": "efed93b748ce74e3e9ed96949bf539c809ea4c36ae77bbb54670285f691f74e9",
+              "position": 6,
+              "uid": "bcaa8c30-ca6e-5b9f-af93-88513a2f16b1"
+            },
+            {
+              "content": "Design principles describe the relationship between conditions and outcomes rather than serving as instructions that merely replicate a single screen layout.",
+              "content_digest": "22385c2bb345db07d19c442e5d99a5c527c2795848b9e29fe198d0ede6255d6f",
+              "position": 7,
+              "uid": "82ad9fe2-4063-5e89-9097-c975aa2920cb"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "33e3797f-c27d-4e54-9d4f-a543e9c98fbb"
+        },
+        {
+          "context_digest": "1396f236b90acd99b836eb5367828f8319d0465ea25b66f696a7f583f4f5ecf6",
+          "context_name": "task-2/advisor2/terminology",
+          "context_uid": "a2976fe7-0e07-5045-9e91-6a214128a482",
+          "memories": [
+            {
+              "content": "Do not change names referring to the same user roles, system functions, or operational stages midway.",
+              "content_digest": "a0f821f4497e7518806857e9005d12e27f6043fda6dbd91ba33ef188e0a3be16",
+              "position": 0,
+              "uid": "e2ae95ed-9033-5625-9179-33f4cf4a95c1"
+            },
+            {
+              "content": "Use abbreviations only for long recurring terms in a two-page proposal.",
+              "content_digest": "e6cad365bd42a8327e3cac92b8cf49cc456fa3e2f5c6624797fa509c0aac6846",
+              "position": 1,
+              "uid": "4be60357-09fa-523d-8c8d-8e03ace8fde9"
+            },
+            {
+              "content": "Present the full term and abbreviation together when using an abbreviation for the first time.",
+              "content_digest": "7b7c1f90727c822edbc13af17d64d45552d1c7ddb5fa18e665369423fd93ffbe",
+              "position": 2,
+              "uid": "0dd5d707-7d13-5be0-8377-421507650cba"
+            },
+            {
+              "content": "Refer to participants based on the roles they perform in the study rather than their status.",
+              "content_digest": "d89feff6e3dad0eea0ba4b1b291b140048af9f0f89d84c8ac196ae547a7b03bd",
+              "position": 3,
+              "uid": "9b3f0cde-7c3e-5b6a-9500-855f31d65ef2"
+            },
+            {
+              "content": "Reviewers from different subfields find it difficult to infer an abbreviation from context alone when it is not defined at first use.",
+              "content_digest": "4ffe91fb52db337a4ad30dc56d0439e12851f17f411c414b6d673e79bd91e68b",
+              "position": 4,
+              "uid": "8c896114-85e6-5c3c-ae3f-6e8e6b59f2fe"
+            },
+            {
+              "content": "When introducing an operational role for the first time, define both the decisions it can make and the actions it performs.",
+              "content_digest": "916b66a818f988f69e2e3c90f0ed0dbb7d29fc9e030b3fc7f822b3817106cbc3",
+              "position": 5,
+              "uid": "dc9e3f25-7aac-500b-b431-f6d810dd09bb"
+            },
+            {
+              "content": "Individuals holding identical job titles may possess different system modification privileges and data access rights depending on their deployment site.",
+              "content_digest": "e0315abc2f42a8f2657aa52e04899096ce799ba790fcd77d22b4196f917790ac",
+              "position": 6,
+              "uid": "04956cab-eb3a-5b71-be45-b1edd6c4a216"
+            },
+            {
+              "content": "The user tends to group distinct field roles under the single label “user.”",
+              "content_digest": "ba75af998618324dbdfa225a2cd503c42888f77daf4d44eb4f79b3a7db8e4bbe",
+              "position": 7,
+              "uid": "fc8613e8-86ca-5322-bb5d-03dfbca71c46"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "c04f0946-c9c6-4449-a00e-eb540b6a9bd5"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [
+        {
+          "options": [
+            {
+              "label": "Same threshold",
+              "text": "Treat “long” as three or more words, with the same rule applying to proposals generally.",
+              "uid": "22f1a502-0701-589a-a9c1-5d2300e1f0c0"
+            },
+            {
+              "label": "Two-page scope",
+              "text": "Treat the three-word threshold as the applicable interpretation specifically for two-page proposals.",
+              "uid": "cfc586af-fcda-5e7f-bb5b-976a75f86e64"
+            },
+            {
+              "label": "Different standards",
+              "text": "Treat “long” as a separate criterion that is not defined by the three-word threshold.",
+              "uid": "1eb3e156-d691-5210-a4b2-663659c75149"
+            }
+          ],
+          "priority": "REQUIRED",
+          "question": "For a two-page proposal, does “long recurring terms” mean every recurring term of three or more words, and is that threshold intended outside two-page proposals?",
+          "relation_uids": [
+            "b7a201f2-ccaa-5b7c-a6e9-27ee492c885d"
+          ],
+          "title": "Clarify abbreviation eligibility",
+          "uid": "055acd78-a1f4-5ab7-98e4-5f70dcee2e52",
+          "why_it_matters": "The answer determines whether the policies are aligned, scoped by document length, or impose different eligibility standards on the same term."
+        }
+      ],
+      "overview": "The frames align on terminology consistency, abbreviation expansion, participant framing, and cross-subfield readability. Abbreviation eligibility remains ambiguous because one frame supplies a word-count threshold while the other uses “long” within a two-page proposal. Each frame also contributes separate guidance in different areas.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "33e3797f-c27d-4e54-9d4f-a543e9c98fbb",
+              "memory_uid": "949a884d-b348-5fa0-b1dd-adbebafe10a9"
+            },
+            {
+              "frame_uid": "c04f0946-c9c6-4449-a00e-eb540b6a9bd5",
+              "memory_uid": "e2ae95ed-9033-5625-9179-33f4cf4a95c1"
+            }
+          ],
+          "reason": "Both prohibit mid-proposal terminology changes for the same referent; their listed referent categories differ but support the same naming policy without contradiction.",
+          "status": "RESOLVED",
+          "summary": "Use stable names throughout a proposal for entities or concepts that remain the same.",
+          "uid": "a6dd8d64-4f59-5f64-8b20-bc5ec80127e4"
+        },
+        {
+          "kind": "UNCLEAR",
+          "members": [
+            {
+              "frame_uid": "33e3797f-c27d-4e54-9d4f-a543e9c98fbb",
+              "memory_uid": "2f484151-b5fc-51a9-8a88-b30a403617b3"
+            },
+            {
+              "frame_uid": "c04f0946-c9c6-4449-a00e-eb540b6a9bd5",
+              "memory_uid": "4be60357-09fa-523d-8c8d-8e03ace8fde9"
+            }
+          ],
+          "reason": "One frame sets a threshold of three or more words, while the other says “long” and explicitly mentions a two-page proposal; the payload does not establish whether these standards coincide.",
+          "status": "UNRESOLVED",
+          "summary": "Restrict abbreviations to recurring multiword terms, with differing descriptions of the qualifying length and document scope.",
+          "uid": "b7a201f2-ccaa-5b7c-a6e9-27ee492c885d"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            {
+              "frame_uid": "33e3797f-c27d-4e54-9d4f-a543e9c98fbb",
+              "memory_uid": "21131a6f-d35c-51e3-895f-46cd21a3b566"
+            },
+            {
+              "frame_uid": "c04f0946-c9c6-4449-a00e-eb540b6a9bd5",
+              "memory_uid": "0dd5d707-7d13-5be0-8377-421507650cba"
+            }
+          ],
+          "reason": "Both state the same first-use expansion requirement under the same abbreviation scope.",
+          "status": "RESOLVED",
+          "summary": "Give the full term together with its abbreviation at first use.",
+          "uid": "07e0955e-809e-59ec-bc79-cbadd13fc01b"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            {
+              "frame_uid": "33e3797f-c27d-4e54-9d4f-a543e9c98fbb",
+              "memory_uid": "e02c3110-05c4-58a4-8d76-c8fd2426a0d5"
+            },
+            {
+              "frame_uid": "c04f0946-c9c6-4449-a00e-eb540b6a9bd5",
+              "memory_uid": "9b3f0cde-7c3e-5b6a-9500-855f31d65ef2"
+            }
+          ],
+          "reason": "Both prescribe role-first participant terminology and reject status-centered framing under the same participant-reference scope.",
+          "status": "RESOLVED",
+          "summary": "Describe participants by their study roles rather than status-based, diagnostic, or deficit-oriented labels.",
+          "uid": "bea06df0-52a9-5f4e-abdf-4da9611283b3"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            {
+              "frame_uid": "33e3797f-c27d-4e54-9d4f-a543e9c98fbb",
+              "memory_uid": "af028910-e48b-5605-b92b-9378bdfa525c"
+            },
+            {
+              "frame_uid": "c04f0946-c9c6-4449-a00e-eb540b6a9bd5",
+              "memory_uid": "8c896114-85e6-5c3c-ae3f-6e8e6b59f2fe"
+            }
+          ],
+          "reason": "Both identify the same cross-subfield comprehension problem caused by relying on contextual inference for undefined abbreviations.",
+          "status": "RESOLVED",
+          "summary": "Reviewers across subfields cannot reliably infer abbreviations that have not been defined.",
+          "uid": "5433fddc-eae7-570e-89ad-68d902aa279c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "33e3797f-c27d-4e54-9d4f-a543e9c98fbb",
+              "memory_uid": "39792d18-2be0-5135-a063-c5213247d330"
+            }
+          ],
+          "reason": "This is independently useful terminology guidance supplied only by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Reserve “formative evaluation” for studies seeking evidence to modify a design, distinct from final efficacy judgment.",
+          "uid": "ca28a994-1785-5a22-9a48-300590c119dc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "33e3797f-c27d-4e54-9d4f-a543e9c98fbb",
+              "memory_uid": "bcaa8c30-ca6e-5b9f-af93-88513a2f16b1"
+            }
+          ],
+          "reason": "This is an independent reference-only policy for selecting labels such as principles, models, or guidelines.",
+          "status": "RESOLVED",
+          "summary": "Approve contribution labels only when their abstraction level matches the actual deliverables.",
+          "uid": "d10bc4c0-d1d4-5e61-9488-99ed7111a06c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "33e3797f-c27d-4e54-9d4f-a543e9c98fbb",
+              "memory_uid": "82ad9fe2-4063-5e89-9097-c975aa2920cb"
+            }
+          ],
+          "reason": "This is an independent reference-only definition of the appropriate abstraction for design principles.",
+          "status": "RESOLVED",
+          "summary": "Treat design principles as relationships between conditions and outcomes, not instructions reproducing one screen layout.",
+          "uid": "35313b7f-478d-5c85-b6b5-af8ca55f6d5d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c04f0946-c9c6-4449-a00e-eb540b6a9bd5",
+              "memory_uid": "dc9e3f25-7aac-500b-b431-f6d810dd09bb"
+            }
+          ],
+          "reason": "This is independently useful role-definition guidance supplied only by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Define a newly introduced operational role by both its decision authority and its performed actions.",
+          "uid": "50fa5a07-48ce-5a33-8813-38e1b034554c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c04f0946-c9c6-4449-a00e-eb540b6a9bd5",
+              "memory_uid": "04956cab-eb3a-5b71-be45-b1edd6c4a216"
+            }
+          ],
+          "reason": "This is an independent compared-only claim about site-specific variation in operational authority.",
+          "status": "RESOLVED",
+          "summary": "Recognize that identical job titles can carry different modification and data-access privileges across deployment sites.",
+          "uid": "5570d47e-dc7e-5dba-81d2-5ba828a9ca38"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c04f0946-c9c6-4449-a00e-eb540b6a9bd5",
+              "memory_uid": "fc8613e8-86ca-5322-bb5d-03dfbca71c46"
+            }
+          ],
+          "reason": "This is an independent compared-only observation about the user's role-labeling tendency.",
+          "status": "RESOLVED",
+          "summary": "Distinct field roles are liable to be collapsed under the generic label “user.”",
+          "uid": "5b231dd9-d1d6-5ef1-b75f-4a56ab22985e"
+        }
+      ],
+      "reports": {
+        "both": "Both favor stable terminology, expanding abbreviations at first use, role-based participant descriptions, and avoiding undefined abbreviations that burden cross-subfield reviewers.",
+        "compared_only": "The compared frame adds operational-role definitions, site-dependent privilege distinctions, and a warning against collapsing distinct field roles into “user.”",
+        "differences": "Abbreviation eligibility differs between a three-or-more-word threshold and an undefined “long recurring terms” standard scoped to a two-page proposal.",
+        "reference_only": "The reference adds formative-evaluation terminology, deliverable-aligned contribution labels, and an outcome-oriented definition of design principles."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "f7c5a5e8-7fe8-4992-a271-caf9e8b936b3"
+    },
+    "analysis_digest": "6fb4c4ca5370b10a0eb4eb85e8dbbca2107b5bbcc983ffb59e7aecea94bf8d9a",
+    "key": "d5a6b81003ac9b86fb984130988472cf0302bdba5719d42c83a62989c70d8498",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 50.74706454199986,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "d5a6b81003ac9b86fb984130988472cf0302bdba5719d42c83a62989c70d8498",
+  "created_at": "2026-08-13T18:29:50.887928Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/terminology",
+  "pair_key": "001b63a30b549c5532932916cc18ee16328104d79183ef66248694eb6c9cbd83",
+  "provider_seconds": 50.74706454199986,
+  "right": "task-2/advisor2/terminology",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

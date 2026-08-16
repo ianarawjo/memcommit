@@ -1,0 +1,261 @@
+"""Dedup projection into the common Viewer/Responses/Items/To-Do shell."""
+
+from __future__ import annotations
+
+from collections.abc import Callable
+
+from prompt_toolkit.input import Input
+from prompt_toolkit.output import Output
+
+from memcommit.dedup_application import (
+    DedupComponent,
+    DedupReceipt,
+    DedupSelection,
+    FrozenDedupPlan,
+)
+from memcommit.interfaces.console.text import safe_terminal_text
+from memcommit.interfaces.tui.components.exact_command_review import (
+    ExactCommandReview,
+)
+from memcommit.interfaces.tui.components.plain_text_clipboard import ClipboardWriter
+from memcommit.interfaces.tui.viewers.semantic import (
+    SemanticViewerBlock,
+    SemanticViewerDocument,
+    SemanticViewerSection,
+)
+from memcommit.interfaces.tui.workbenches.resolution import (
+    ResolutionChoice,
+    ResolutionItem,
+    ResolutionOutcome,
+    ResolutionWorkbenchSpec,
+    run_resolution_workbench,
+)
+from memcommit.quality_finding_handoff import quality_finding_handoff_json
+
+
+def _component_detail(component: DedupComponent) -> SemanticViewerDocument:
+    fragments: list[tuple[str, str]] = [
+        ("class:title", "DEDUP COMPONENT · EXISTING SURVIVOR ONLY\n"),
+        ("class:report-label", f"ID · {safe_terminal_text(component.uid)}\n"),
+        (
+            "class:viewer-body",
+            "Choose one existing UID. Its wording stays unchanged; every other "
+            "member UID is absorbed.\n\n",
+        ),
+        ("class:report-label", "MEMBERS\n"),
+    ]
+    for member in component.members:
+        recommended = member.uid == component.recommended_survivor_uid
+        fragments.extend(
+            [
+                (
+                    "class:impact.keep" if recommended else "class:report-label",
+                    f"  {'RECOMMENDED · ' if recommended else ''}"
+                    f"#{member.ordinal} · [{safe_terminal_text(member.uid)}]\n",
+                ),
+                (
+                    "class:memory-object",
+                    f"  {safe_terminal_text(member.content)}\n",
+                ),
+            ]
+        )
+    fragments.append(("class:report-label", "\nCONFIRMED EVIDENCE\n"))
+    for evidence in component.evidence:
+        fragments.extend(
+            [
+                (
+                    "class:viewer-body",
+                    f"  {safe_terminal_text(evidence.relation)} · "
+                    f"[{safe_terminal_text(evidence.left_uid[:8])}] ↔ "
+                    f"[{safe_terminal_text(evidence.right_uid[:8])}]\n",
+                ),
+                (
+                    "class:viewer-body",
+                    f"  WHY · {safe_terminal_text(evidence.reason)}\n",
+                ),
+            ]
+        )
+    return SemanticViewerDocument(
+        (
+            SemanticViewerSection(
+                uid=component.uid,
+                kind="COMPONENT",
+                block=SemanticViewerBlock(tuple(fragments), anchor="both"),
+            ),
+        )
+    )
+
+
+def project_dedup_plan(plan: FrozenDedupPlan) -> SemanticViewerDocument:
+    fragments: list[tuple[str, str]] = [
+        ("class:title", "DEDUP · CONFIRMED DUPLICATE COMPONENTS\n"),
+        (
+            "class:report-label",
+            f"CONTEXT · {safe_terminal_text(plan.display_name)}\n"
+            f"REVISION · {safe_terminal_text(plan.revision)}\n"
+            f"COMPONENTS · {len(plan.components)}\n",
+        ),
+        (
+            "class:viewer-body",
+            "\nDETERMINISTIC BOUNDARY\n"
+            "Only EXACT, SURFACE_EQUIVALENT, and SEMANTIC_EQUIVALENT finder "
+            "links are present. Dedup does not rewrite or integrate content.\n",
+        ),
+    ]
+    for index, component in enumerate(plan.components, 1):
+        fragments.extend(
+            [
+                (
+                    "class:section",
+                    f"\nCOMPONENT {index} · {len(component.members)} MEMBERS\n",
+                ),
+                (
+                    "class:impact.keep",
+                    "RECOMMENDED SURVIVOR · "
+                    f"[{safe_terminal_text(component.recommended_survivor_uid)}]\n",
+                ),
+                (
+                    "class:viewer-body",
+                    f"CONFIRMED LINKS · {len(component.evidence)}\n",
+                ),
+            ]
+        )
+    fragments.append(
+        (
+            "class:impact.remove",
+            "\nAPPLY · one checkpoint · inbound references to absorbed UIDs block "
+            "the complete operation.\n",
+        )
+    )
+    return SemanticViewerDocument(
+        (
+            SemanticViewerSection(
+                uid="dedup-report",
+                kind="REPORT",
+                block=SemanticViewerBlock(tuple(fragments), anchor="both"),
+            ),
+        )
+    )
+
+
+def _selections(outcome: ResolutionOutcome) -> tuple[DedupSelection, ...]:
+    return tuple(
+        DedupSelection(component_uid, survivor_uid)
+        for component_uid, survivor_uid in outcome.decisions
+    )
+
+
+def dedup_exact_review(
+    plan: FrozenDedupPlan,
+    outcome: ResolutionOutcome,
+) -> ExactCommandReview:
+    selections = _selections(outcome)
+    member_count = sum(len(component.members) for component in plan.components)
+    argv = ["mem", "dedup"]
+    for handoff in plan.request.handoffs:
+        argv.extend(("--finding-handoff", quality_finding_handoff_json(handoff)))
+    for selection in selections:
+        argv.extend(
+            (
+                "--survivor",
+                f"{selection.component_uid}={selection.survivor_uid}",
+            )
+        )
+    argv.extend(("--expected-revision", plan.revision, "--apply"))
+    survivor_uids = {selection.survivor_uid for selection in selections}
+    absorbed = tuple(
+        member.uid
+        for component in plan.components
+        for member in component.members
+        if member.uid not in survivor_uids
+    )
+    return ExactCommandReview(
+        argv=tuple(argv),
+        effects=(
+            f"Frozen Context revision · {plan.revision}.",
+            f"Keep {len(selections)} unchanged existing survivor UID(s).",
+            f"Absorb {len(absorbed)} of {member_count} component member UID(s): "
+            + ", ".join(absorbed),
+            "No replacement wording is generated and unrelated Memories stay unchanged.",
+            "Inbound references block the whole Apply; recovery is mem undo.",
+        ),
+    )
+
+
+def dedup_resolution_spec(plan: FrozenDedupPlan) -> ResolutionWorkbenchSpec:
+    placeholder = ResolutionOutcome(
+        tuple(
+            (component.uid, component.recommended_survivor_uid)
+            for component in plan.components
+        )
+    )
+    return ResolutionWorkbenchSpec(
+        title="MEM DEDUP · RESOLUTION SESSION",
+        subtitle="DETERMINISTIC · EXISTING UID SURVIVOR · EXACT WHOLE-SET APPLY",
+        report=project_dedup_plan(plan),
+        items=tuple(
+            ResolutionItem(
+                uid=component.uid,
+                label=f"Choose one unchanged survivor from {len(component.members)} members.",
+                classification="DUPLICATE COMPONENT",
+                detail=_component_detail(component),
+                choices=tuple(
+                    ResolutionChoice(
+                        member.uid,
+                        (
+                            f"KEEP [{member.uid[:8]}] · RECOMMENDED"
+                            if member.uid == component.recommended_survivor_uid
+                            else f"KEEP [{member.uid[:8]}]"
+                        ),
+                        f"Keep Context item #{member.ordinal} unchanged; absorb the other UIDs.",
+                    )
+                    for member in component.members
+                ),
+            )
+            for component in plan.components
+        ),
+        exact_review=dedup_exact_review(plan, placeholder),
+        detail_title="VIEWER · DUPLICATE COMPONENT EVIDENCE",
+        responses_title="RESPONSES · REQUIRED · EXISTING SURVIVOR",
+        items_title="ITEMS · REQUIRED DUPLICATE COMPONENTS",
+    )
+
+
+def _receipt(receipt: DedupReceipt) -> str:
+    return (
+        f"CONTEXT · {receipt.context_name}\n"
+        f"COMPONENTS · {len(receipt.selections)}\n"
+        f"SURVIVORS · {len(receipt.survivor_uids)}\n"
+        f"ABSORBED · {len(receipt.absorbed_uids)}\n"
+        f"CHECKPOINT · {receipt.checkpoint_uid}\n"
+        "RECOVERY · mem undo"
+    )
+
+
+def run_dedup_tui(
+    plan: FrozenDedupPlan,
+    *,
+    apply_selections: Callable[[tuple[DedupSelection, ...]], DedupReceipt],
+    clipboard_writer: ClipboardWriter | None = None,
+    app_input: Input | None = None,
+    app_output: Output | None = None,
+    require_tty: bool = True,
+) -> DedupReceipt | None:
+    return run_resolution_workbench(
+        dedup_resolution_spec(plan),
+        apply_outcome=lambda outcome: apply_selections(_selections(outcome)),
+        receipt_text=_receipt,
+        review_outcome=lambda outcome: dedup_exact_review(plan, outcome),
+        clipboard_writer=clipboard_writer,
+        app_input=app_input,
+        app_output=app_output,
+        require_tty=require_tty,
+    )
+
+
+__all__ = [
+    "dedup_exact_review",
+    "dedup_resolution_spec",
+    "project_dedup_plan",
+    "run_dedup_tui",
+]

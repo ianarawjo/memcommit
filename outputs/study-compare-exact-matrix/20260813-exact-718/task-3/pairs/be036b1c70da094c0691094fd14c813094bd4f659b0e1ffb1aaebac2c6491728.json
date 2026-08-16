@@ -1,0 +1,388 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:52:14.032386+00:00",
+      "frames": [
+        {
+          "context_digest": "a2ea3c6aa8c1680fcf9a7dd71d0dbff822c6af5493b34b79022f5e740bb35259",
+          "context_name": "task-3/local/personal-memory/2025/07",
+          "context_uid": "5c264a7f-0300-587c-ad1c-0439cedc7737",
+          "memories": [
+            {
+              "content": "The user keeps a travel power bank in the first drawer beneath the desk.",
+              "content_digest": "deb13f4eae5e32bc035da0558fa1b290f4bac0dfa5ca350d5abd0456af07ab7f",
+              "position": 0,
+              "uid": "447bfd8d-1490-5404-a2b4-13b4587e6aba"
+            },
+            {
+              "content": "The user packed three pairs of shoes for a two-night trip but wore only one pair.",
+              "content_digest": "097601b179049e1c4dd6b20a2fe2703ffb0d4a89d5ae15a763d339b989da50d8",
+              "position": 1,
+              "uid": "3ab0326a-a006-51ea-9348-7ada19a23bce"
+            },
+            {
+              "content": "For the next two-night trip, the user packed only one pair of walking shoes and reduced the bag's weight.",
+              "content_digest": "afd02b05250a60ad461e01132a94f0105d419521803082d1057205a2bc9a92ad",
+              "position": 2,
+              "uid": "ef467ab6-8ba6-5f81-8f12-578ec1824e09"
+            },
+            {
+              "content": "On a trip when the user forgot a charging cable, they bought a new one after arrival.",
+              "content_digest": "bbe1ac80a2311e0e631446b811d799494dc5ca4db408fc63d1cb09a01e2cd105",
+              "position": 3,
+              "uid": "aa4defc3-2b65-5688-accb-aaa49f2430b6"
+            },
+            {
+              "content": "Before the next trip, the user checked charging items against a photo and packed all of them.",
+              "content_digest": "cc2663db793bec80657023ccd545add403ec7dcc6dc39da4d03a95b5a9f65ff9",
+              "position": 4,
+              "uid": "2d937b4b-d73d-5382-abbe-3cd4e596b3a5"
+            },
+            {
+              "content": "The user packed toiletries on the departure day and arrived 15 minutes late at the meeting place.",
+              "content_digest": "1f5f7eb4cf651ee44244315e52de31cbd7bffe70489315bda287d1ca3cb9a8d4",
+              "position": 5,
+              "uid": "0be8b327-0a06-5241-b98d-daa6b0a4aa50"
+            },
+            {
+              "content": "The next time, the user closed the bag the night before and departed on time.",
+              "content_digest": "61f6c02e4637501f5ad9b1a9f668e298e566558a3d9e611a8b521c17256513b7",
+              "position": 6,
+              "uid": "90059fcc-436d-5453-98f0-a9b23a08faf1"
+            },
+            {
+              "content": "The user's older sister considers it safer to pack an extra cable even for a short trip to avoid charging problems.",
+              "content_digest": "f06b38b34e0f27bc01d8a79733173673d37a209e8619ad3df816a73718ffd89f",
+              "position": 7,
+              "uid": "12ef03f9-8cda-5ed7-be83-891b4702f872"
+            },
+            {
+              "content": "When creating a travel preparation list, confirm the trip length and actual activities with the user.",
+              "content_digest": "f34a0a341cd8ce9c641c16b780c4e53ccae4b6dca2c8f176be7579f5b0115654",
+              "position": 8,
+              "uid": "54136935-a460-573d-ac40-f5edb0ca7e6c"
+            },
+            {
+              "content": "The local agent cannot establish what the next trip requires from the luggage used on the previous trip alone.",
+              "content_digest": "4accbe60aa4e53ff75a18cc0291a870f106ac69a10a2cff96147c2dbd74892e3",
+              "position": 9,
+              "uid": "029c0777-bdbb-5d48-9309-1b1e6c7d88f4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "78a2d8d3-112f-42fd-a071-7f190ba917fe"
+        },
+        {
+          "context_digest": "df0924e320cd14a29eaed60f78e82fd509c4062949b35706b2a7cb94571fb599",
+          "context_name": "task-3/local/personal-memory/2026/04",
+          "context_uid": "16e860a8-7a90-5b7a-adc3-1c487ef97e03",
+          "memories": [
+            {
+              "content": "The user collects clothes for donation in a large bag beside the entrance.",
+              "content_digest": "39f2f01c59b7fa4ca7529d510e1b0a6ffab6706861042f771cfe97f6f806efac",
+              "position": 0,
+              "uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            },
+            {
+              "content": "After emptying an entire drawer at once, the user could not find a charger they needed.",
+              "content_digest": "674c33ba6475f42b29b03e6f8711e0216f983f3d37fee3dacf9336e3bb4596bf",
+              "position": 1,
+              "uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            },
+            {
+              "content": "During the next organizing session, the user sorted items by type and put only items to be discarded in the bag.",
+              "content_digest": "63104b5a7fd380f818c8758c51f9550c7a7fa41ff91f1dd314225d1824b69643",
+              "position": 2,
+              "uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            },
+            {
+              "content": "Even after photographing unworn clothes, the user did not take them out again for one month.",
+              "content_digest": "519f131096440719dcd3412f4439c5cfe44b7f402684170209708040692dc5fd",
+              "position": 3,
+              "uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            },
+            {
+              "content": "After moving those clothes to the donation bag, the user cleared one closet compartment.",
+              "content_digest": "45db58ae108a299344d982d8606fff26f733252da691cf01417e760909ff6057",
+              "position": 4,
+              "uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            },
+            {
+              "content": "The user nearly discarded an important paper with advertising and checked the recycling box again.",
+              "content_digest": "6bf928f67944656e5f3c68d8869c0cefd039a588f0ba735f94520231ef58017c",
+              "position": 5,
+              "uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            },
+            {
+              "content": "During the next organizing session, the user kept a separate document box and did not mix the papers.",
+              "content_digest": "adac8d4266c6b11e15d29c484665bc5dcc915f9aa319198b6a69d0e7b0131bb3",
+              "position": 6,
+              "uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            },
+            {
+              "content": "The user's mother asks the user to check whether she needs kitchen items in good condition before discarding them.",
+              "content_digest": "0752bc2ac00c0b1301c45ab4c2e73f63c57e6ebc4255dcc1c13330ffda906612",
+              "position": 7,
+              "uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            },
+            {
+              "content": "Confirm with the user before marking a personal document or another person's property as a disposal candidate.",
+              "content_digest": "17062e2cd4738619e81e211cb2f53d14e78c5f4eab9ae49053ce7e06935a7db5",
+              "position": 8,
+              "uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            },
+            {
+              "content": "The local agent cannot determine an object's emotional meaning from frequency of use alone.",
+              "content_digest": "9c86bcfe2b209bf7957dced0eab000b42f97b6a435d705ccaccb15e49be3691d",
+              "position": 9,
+              "uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "1e804797-92cc-4abb-bd8d-5cfb4c6aa3ea"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate practical domains: travel preparation in the reference frame and household decluttering in the compared frame. Each contains lessons from prior mishaps, improved routines, family preferences, and limits on inference, but none governs the same operational decision.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78a2d8d3-112f-42fd-a071-7f190ba917fe",
+              "memory_uid": "447bfd8d-1490-5404-a2b4-13b4587e6aba"
+            }
+          ],
+          "reason": "This is independently useful reference-only location information with no counterpart concerning the same object or storage decision.",
+          "status": "RESOLVED",
+          "summary": "The travel power bank is stored in the first drawer beneath the desk.",
+          "uid": "35fb4235-3489-5cf2-9e4f-4018750368d6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78a2d8d3-112f-42fd-a071-7f190ba917fe",
+              "memory_uid": "3ab0326a-a006-51ea-9348-7ada19a23bce"
+            },
+            {
+              "frame_uid": "78a2d8d3-112f-42fd-a071-7f190ba917fe",
+              "memory_uid": "ef467ab6-8ba6-5f81-8f12-578ec1824e09"
+            }
+          ],
+          "reason": "These reference memories form one travel-packing lesson about correcting unnecessary shoe volume; the compared frame does not address travel footwear.",
+          "status": "RESOLVED",
+          "summary": "After overpacking shoes for a two-night trip, the user later took one walking pair and reduced bag weight.",
+          "uid": "a167110d-9e45-5140-8e78-93c42b56d908"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78a2d8d3-112f-42fd-a071-7f190ba917fe",
+              "memory_uid": "aa4defc3-2b65-5688-accb-aaa49f2430b6"
+            },
+            {
+              "frame_uid": "78a2d8d3-112f-42fd-a071-7f190ba917fe",
+              "memory_uid": "2d937b4b-d73d-5382-abbe-3cd4e596b3a5"
+            }
+          ],
+          "reason": "These reference memories split one travel-charging preparation lesson with no compared-side claim about packing charging equipment.",
+          "status": "RESOLVED",
+          "summary": "After forgetting a charging cable, the user used a photo-based check to pack all charging items on the next trip.",
+          "uid": "ba4ee086-eb65-53d4-99f2-db3987bf98ba"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78a2d8d3-112f-42fd-a071-7f190ba917fe",
+              "memory_uid": "0be8b327-0a06-5241-b98d-daa6b0a4aa50"
+            },
+            {
+              "frame_uid": "78a2d8d3-112f-42fd-a071-7f190ba917fe",
+              "memory_uid": "90059fcc-436d-5453-98f0-a9b23a08faf1"
+            }
+          ],
+          "reason": "These reference memories describe one travel-timing improvement absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "After departure-day toiletry packing caused lateness, closing the bag the night before supported an on-time departure.",
+          "uid": "77f51778-efff-593d-8e35-e14d6c1cc860"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78a2d8d3-112f-42fd-a071-7f190ba917fe",
+              "memory_uid": "12ef03f9-8cda-5ed7-be83-891b4702f872"
+            }
+          ],
+          "reason": "This is a reference-only family preference about travel charging redundancy.",
+          "status": "RESOLVED",
+          "summary": "The user’s older sister prefers packing an extra cable even for short trips to reduce charging risk.",
+          "uid": "d193fb56-60e4-56c9-b5f7-fa07a237d3fc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78a2d8d3-112f-42fd-a071-7f190ba917fe",
+              "memory_uid": "54136935-a460-573d-ac40-f5edb0ca7e6c"
+            },
+            {
+              "frame_uid": "78a2d8d3-112f-42fd-a071-7f190ba917fe",
+              "memory_uid": "029c0777-bdbb-5d48-9309-1b1e6c7d88f4"
+            }
+          ],
+          "reason": "These reference memories jointly state one current-context requirement for travel planning; disposal-context guidance concerns a different operational decision.",
+          "status": "RESOLVED",
+          "summary": "Travel preparation should use confirmed trip length and activities because prior luggage alone cannot establish current requirements.",
+          "uid": "99883bcf-4ef6-5a89-bf20-fbfe92f09a8e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1e804797-92cc-4abb-bd8d-5cfb4c6aa3ea",
+              "memory_uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            }
+          ],
+          "reason": "This is independently useful compared-only location information with no counterpart concerning the same items or storage purpose.",
+          "status": "RESOLVED",
+          "summary": "The user keeps clothes intended for donation in a large bag beside the entrance.",
+          "uid": "54d3ccb4-7760-5ee1-a0a9-278f7e217fca"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1e804797-92cc-4abb-bd8d-5cfb4c6aa3ea",
+              "memory_uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            },
+            {
+              "frame_uid": "1e804797-92cc-4abb-bd8d-5cfb4c6aa3ea",
+              "memory_uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            }
+          ],
+          "reason": "These compared memories form one decluttering-process lesson about controlled sorting; the reference frame does not govern household organizing.",
+          "status": "RESOLVED",
+          "summary": "After losing track of a needed charger while emptying a drawer, the user later sorted by type and bagged only discard items.",
+          "uid": "3914e972-2036-5b20-8d38-3fdfdf8008d5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1e804797-92cc-4abb-bd8d-5cfb4c6aa3ea",
+              "memory_uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            },
+            {
+              "frame_uid": "1e804797-92cc-4abb-bd8d-5cfb4c6aa3ea",
+              "memory_uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            }
+          ],
+          "reason": "These compared memories split one lesson about physically advancing clothing donation rather than merely documenting candidates.",
+          "status": "RESOLVED",
+          "summary": "Photographing unworn clothes did not prompt action, while moving them to the donation bag cleared closet space.",
+          "uid": "80bb1c83-193b-59af-b404-e45ed525a6fd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1e804797-92cc-4abb-bd8d-5cfb4c6aa3ea",
+              "memory_uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            },
+            {
+              "frame_uid": "1e804797-92cc-4abb-bd8d-5cfb4c6aa3ea",
+              "memory_uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            }
+          ],
+          "reason": "These compared memories form one paper-sorting safeguard with no reference-side claim about document disposal.",
+          "status": "RESOLVED",
+          "summary": "After nearly recycling an important paper, the user kept documents separate during the next organizing session.",
+          "uid": "dad93629-2bee-5cfc-91b4-b1b90ebd0664"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1e804797-92cc-4abb-bd8d-5cfb4c6aa3ea",
+              "memory_uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            }
+          ],
+          "reason": "This is a compared-only family preference concerning ownership or reuse during decluttering.",
+          "status": "RESOLVED",
+          "summary": "The user’s mother wants usable kitchen items offered to her before they are discarded.",
+          "uid": "843ecf8c-02d0-5a30-bccd-a6babf054d09"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1e804797-92cc-4abb-bd8d-5cfb4c6aa3ea",
+              "memory_uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            }
+          ],
+          "reason": "This is an independently useful compared-only safeguard for sensitive disposal candidates.",
+          "status": "RESOLVED",
+          "summary": "The user should be consulted before a personal document or another person’s property is marked for disposal.",
+          "uid": "ca7cc86b-727d-58d2-8797-685664dffe82"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1e804797-92cc-4abb-bd8d-5cfb4c6aa3ea",
+              "memory_uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "reason": "This is an independently useful compared-only limitation on evaluating possessions, distinct from rules based on document type or ownership.",
+          "status": "RESOLVED",
+          "summary": "An object’s emotional meaning cannot be inferred from its frequency of use alone.",
+          "uid": "bfb1f822-5e25-545a-a5d1-977acb1b5795"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame records donation-bag storage, safer item and paper sorting, effective removal of unworn clothes, a mother’s preference for reusable kitchen items, confirmation before sensitive disposal decisions, and limits on inferring emotional value from use frequency.",
+        "differences": "",
+        "reference_only": "The reference frame records travel-item storage, lighter shoe packing, charging safeguards, earlier packing, a sister’s spare-cable preference, and the need to confirm current trip details rather than infer requirements from prior luggage."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "2dc1048f-03eb-43de-ad7a-356dfae4edc0"
+    },
+    "analysis_digest": "74bd0167cea6bab44a81e35b2de362ba6f9c89d145e4598576c24818b976fe05",
+    "key": "0508f113f43a74a13eafe15d0107b958593a19aad19176468a1f03a287e5e44f",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 47.61882479199994,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "0508f113f43a74a13eafe15d0107b958593a19aad19176468a1f03a287e5e44f",
+  "created_at": "2026-08-13T18:53:01.650975Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/07",
+  "pair_key": "be036b1c70da094c0691094fd14c813094bd4f659b0e1ffb1aaebac2c6491728",
+  "provider_seconds": 47.61882479199994,
+  "right": "task-3/local/personal-memory/2026/04",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

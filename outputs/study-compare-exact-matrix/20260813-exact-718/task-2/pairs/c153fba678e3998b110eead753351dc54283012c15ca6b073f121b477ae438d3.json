@@ -1,0 +1,321 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:21:06.521792+00:00",
+      "frames": [
+        {
+          "context_digest": "c4484b7a8284d7e31066ad3f4c4edf8844a2e0ce8695a323093f753243b6b18f",
+          "context_name": "task-2/advisor1/expression",
+          "context_uid": "39a6f298-c511-5c21-a106-998c1df9d951",
+          "memories": [
+            {
+              "content": "Use a flow diagram rather than a sequence table when alternate procedural branches lead to different outcomes.",
+              "content_digest": "48075a546ef4f1c2735e202cf43df2c164e4382f323007f542915195d025bf58",
+              "position": 0,
+              "uid": "51fa3fcc-9d5f-52f0-809d-62d7cdd8a865"
+            },
+            {
+              "content": "Draw alternate branches and their resulting outcomes in the same flow diagram so readers can compare them at once.",
+              "content_digest": "85d1fdc887f442e05b4089e28a6dc671e757eb781eae9c39646673054306ec34",
+              "position": 1,
+              "uid": "e686bd4d-3ebd-5e55-ba39-f26971247965"
+            },
+            {
+              "content": "The visual fidelity of a prototype may differ from its functional fidelity.",
+              "content_digest": "bfc110d2df084fd4f8393284db693ead012f2bfd9a4e804fd89f9a4e45e16e8c",
+              "position": 2,
+              "uid": "019662a9-6f03-527f-9b6d-be5a2966d9e9"
+            },
+            {
+              "content": "A flow diagram can make alternate branches and their different outcomes visible in one view.",
+              "content_digest": "8f69a73784cb0c304671161a6c42c63480c0ce0cc4864e613d8dde466365d496",
+              "position": 3,
+              "uid": "a6dfe9a7-1df8-561f-8d3e-fc19518beca9"
+            },
+            {
+              "content": "HCI reviewers often skim prototype screens and interaction flow diagrams before reading the main text.",
+              "content_digest": "ee7009a111b29298f748336d571f4d0233e08ef0255f6cfe69cb4c26def96394",
+              "position": 4,
+              "uid": "7047a23d-45b3-5d5c-a00b-c12552e9680d"
+            },
+            {
+              "content": "Readers can understand the overall branching shape of a procedure more quickly from a flow diagram than from rows read one at a time.",
+              "content_digest": "beb9438eb216e54223266b4f592245450812228d69f7a38908e4c260a0aaca01",
+              "position": 5,
+              "uid": "50a71968-7e3f-5b99-b3fa-769af386d0c0"
+            },
+            {
+              "content": "Redrawing a branching flow diagram after a procedural change usually takes longer than updating one row in a table.",
+              "content_digest": "cb0e535e1e58a4dbf42c5f22a3eded19fa0c228c6531b70530b226eeb2dbf24c",
+              "position": 6,
+              "uid": "ae1610f6-a855-56c1-a0fb-fd3207dab615"
+            },
+            {
+              "content": "Reviewers often inspect the proposal’s main visual before reading the procedural explanation in full.",
+              "content_digest": "a609677d56e7297c736ee92c7a45eb4d83824985a780d8ca4df664f1494c5cb2",
+              "position": 7,
+              "uid": "d2825b84-b4a6-58c9-8f8e-9e19c6192a03"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "a300dc27-0542-4b25-be44-a206bb05d00d"
+        },
+        {
+          "context_digest": "1396f236b90acd99b836eb5367828f8319d0465ea25b66f696a7f583f4f5ecf6",
+          "context_name": "task-2/advisor2/terminology",
+          "context_uid": "a2976fe7-0e07-5045-9e91-6a214128a482",
+          "memories": [
+            {
+              "content": "Do not change names referring to the same user roles, system functions, or operational stages midway.",
+              "content_digest": "a0f821f4497e7518806857e9005d12e27f6043fda6dbd91ba33ef188e0a3be16",
+              "position": 0,
+              "uid": "e2ae95ed-9033-5625-9179-33f4cf4a95c1"
+            },
+            {
+              "content": "Use abbreviations only for long recurring terms in a two-page proposal.",
+              "content_digest": "e6cad365bd42a8327e3cac92b8cf49cc456fa3e2f5c6624797fa509c0aac6846",
+              "position": 1,
+              "uid": "4be60357-09fa-523d-8c8d-8e03ace8fde9"
+            },
+            {
+              "content": "Present the full term and abbreviation together when using an abbreviation for the first time.",
+              "content_digest": "7b7c1f90727c822edbc13af17d64d45552d1c7ddb5fa18e665369423fd93ffbe",
+              "position": 2,
+              "uid": "0dd5d707-7d13-5be0-8377-421507650cba"
+            },
+            {
+              "content": "Refer to participants based on the roles they perform in the study rather than their status.",
+              "content_digest": "d89feff6e3dad0eea0ba4b1b291b140048af9f0f89d84c8ac196ae547a7b03bd",
+              "position": 3,
+              "uid": "9b3f0cde-7c3e-5b6a-9500-855f31d65ef2"
+            },
+            {
+              "content": "Reviewers from different subfields find it difficult to infer an abbreviation from context alone when it is not defined at first use.",
+              "content_digest": "4ffe91fb52db337a4ad30dc56d0439e12851f17f411c414b6d673e79bd91e68b",
+              "position": 4,
+              "uid": "8c896114-85e6-5c3c-ae3f-6e8e6b59f2fe"
+            },
+            {
+              "content": "When introducing an operational role for the first time, define both the decisions it can make and the actions it performs.",
+              "content_digest": "916b66a818f988f69e2e3c90f0ed0dbb7d29fc9e030b3fc7f822b3817106cbc3",
+              "position": 5,
+              "uid": "dc9e3f25-7aac-500b-b431-f6d810dd09bb"
+            },
+            {
+              "content": "Individuals holding identical job titles may possess different system modification privileges and data access rights depending on their deployment site.",
+              "content_digest": "e0315abc2f42a8f2657aa52e04899096ce799ba790fcd77d22b4196f917790ac",
+              "position": 6,
+              "uid": "04956cab-eb3a-5b71-be45-b1edd6c4a216"
+            },
+            {
+              "content": "The user tends to group distinct field roles under the single label “user.”",
+              "content_digest": "ba75af998618324dbdfa225a2cd503c42888f77daf4d44eb4f79b3a7db8e4bbe",
+              "position": 7,
+              "uid": "fc8613e8-86ca-5322-bb5d-03dfbca71c46"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "e32eba2b-30f3-45c4-8ade-d97b38ba0dd4"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate but complementary proposal-design concerns without making scope-aligned competing claims. The reference frame focuses on visualizing branching procedures, prototype fidelity, reviewer attention, and diagram maintenance, while the compared frame focuses on terminology, abbreviations, and precise operational-role descriptions.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a300dc27-0542-4b25-be44-a206bb05d00d",
+              "memory_uid": "51fa3fcc-9d5f-52f0-809d-62d7cdd8a865"
+            },
+            {
+              "frame_uid": "a300dc27-0542-4b25-be44-a206bb05d00d",
+              "memory_uid": "e686bd4d-3ebd-5e55-ba39-f26971247965"
+            },
+            {
+              "frame_uid": "a300dc27-0542-4b25-be44-a206bb05d00d",
+              "memory_uid": "a6dfe9a7-1df8-561f-8d3e-fc19518beca9"
+            },
+            {
+              "frame_uid": "a300dc27-0542-4b25-be44-a206bb05d00d",
+              "memory_uid": "50a71968-7e3f-5b99-b3fa-769af386d0c0"
+            }
+          ],
+          "reason": "These memories jointly state and support one reference-only recommendation about choosing and composing a flow diagram for branching procedures.",
+          "status": "RESOLVED",
+          "summary": "Flow diagrams should show alternate procedural branches and outcomes together because they communicate branching structure more directly and quickly than sequential table rows.",
+          "uid": "71173a0b-1fb9-51bd-ae0b-fdea01a31888"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a300dc27-0542-4b25-be44-a206bb05d00d",
+              "memory_uid": "019662a9-6f03-527f-9b6d-be5a2966d9e9"
+            }
+          ],
+          "reason": "This is an independently useful reference-only distinction about prototype evaluation.",
+          "status": "RESOLVED",
+          "summary": "A prototype’s visual fidelity and functional fidelity may differ.",
+          "uid": "5f9ce946-0653-5381-8742-fbf99309c1ab"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a300dc27-0542-4b25-be44-a206bb05d00d",
+              "memory_uid": "7047a23d-45b3-5d5c-a00b-c12552e9680d"
+            },
+            {
+              "frame_uid": "a300dc27-0542-4b25-be44-a206bb05d00d",
+              "memory_uid": "d2825b84-b4a6-58c9-8f8e-9e19c6192a03"
+            }
+          ],
+          "reason": "Both memories express the same reference-only observation about reviewers’ visual-first reading behavior.",
+          "status": "RESOLVED",
+          "summary": "Reviewers often inspect a proposal’s principal visuals, including prototype screens and interaction-flow diagrams, before reading its full explanation.",
+          "uid": "5aab3dab-a6c0-5936-bae9-48ede503d33f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a300dc27-0542-4b25-be44-a206bb05d00d",
+              "memory_uid": "ae1610f6-a855-56c1-a0fb-fd3207dab615"
+            }
+          ],
+          "reason": "This is an independently useful reference-only maintenance tradeoff.",
+          "status": "RESOLVED",
+          "summary": "Revising a branching flow diagram after a procedural change usually takes longer than updating a single table row.",
+          "uid": "43498eeb-4df6-504f-81ba-8f7fd0cf51ce"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e32eba2b-30f3-45c4-8ade-d97b38ba0dd4",
+              "memory_uid": "e2ae95ed-9033-5625-9179-33f4cf4a95c1"
+            }
+          ],
+          "reason": "This is an independently useful compared-only terminology policy.",
+          "status": "RESOLVED",
+          "summary": "Names for the same roles, system functions, and operational stages should remain consistent throughout a proposal.",
+          "uid": "b1c48584-b5da-5396-a78d-52639b92b481"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e32eba2b-30f3-45c4-8ade-d97b38ba0dd4",
+              "memory_uid": "4be60357-09fa-523d-8c8d-8e03ace8fde9"
+            }
+          ],
+          "reason": "This is an independently useful compared-only constraint on when abbreviations are appropriate.",
+          "status": "RESOLVED",
+          "summary": "In a two-page proposal, abbreviations should be reserved for long terms that recur.",
+          "uid": "abc6c973-07fa-532d-8cac-9825c9540197"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e32eba2b-30f3-45c4-8ade-d97b38ba0dd4",
+              "memory_uid": "0dd5d707-7d13-5be0-8377-421507650cba"
+            },
+            {
+              "frame_uid": "e32eba2b-30f3-45c4-8ade-d97b38ba0dd4",
+              "memory_uid": "8c896114-85e6-5c3c-ae3f-6e8e6b59f2fe"
+            }
+          ],
+          "reason": "The memories state and justify one compared-only first-use abbreviation policy.",
+          "status": "RESOLVED",
+          "summary": "An abbreviation should be introduced alongside its full term because reviewers may not reliably infer an undefined abbreviation from context.",
+          "uid": "d4dfc30e-01cd-5cd8-a8dd-c88c71de4d00"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e32eba2b-30f3-45c4-8ade-d97b38ba0dd4",
+              "memory_uid": "9b3f0cde-7c3e-5b6a-9500-855f31d65ef2"
+            },
+            {
+              "frame_uid": "e32eba2b-30f3-45c4-8ade-d97b38ba0dd4",
+              "memory_uid": "fc8613e8-86ca-5322-bb5d-03dfbca71c46"
+            }
+          ],
+          "reason": "The memories jointly describe one compared-only need for role-specific participant labels and the observed overgeneralization it addresses.",
+          "status": "RESOLVED",
+          "summary": "Participants should be labeled by their study roles rather than status, avoiding the collapse of distinct field roles into the generic label “user.”",
+          "uid": "78d6524c-5f73-552f-92bf-a33661708e35"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e32eba2b-30f3-45c4-8ade-d97b38ba0dd4",
+              "memory_uid": "dc9e3f25-7aac-500b-b431-f6d810dd09bb"
+            }
+          ],
+          "reason": "This is an independently useful compared-only requirement for defining operational roles.",
+          "status": "RESOLVED",
+          "summary": "A newly introduced operational role should be defined by both its decision authority and its performed actions.",
+          "uid": "7b7ccc01-c4ae-52c4-91fe-81a0e83d31fb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e32eba2b-30f3-45c4-8ade-d97b38ba0dd4",
+              "memory_uid": "04956cab-eb3a-5b71-be45-b1edd6c4a216"
+            }
+          ],
+          "reason": "This is an independently useful compared-only observation about site-dependent authority.",
+          "status": "RESOLVED",
+          "summary": "People with identical job titles may have different modification privileges and data-access rights at different deployment sites.",
+          "uid": "f1580eea-a326-5d8c-ae9c-1323e32967ee"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame promotes stable terminology, restrained and defined abbreviations, role-based participant labels, explicit role authority, and attention to site-specific access differences.",
+        "differences": "",
+        "reference_only": "The reference emphasizes flow diagrams for quickly comparing procedural branches, distinguishes prototype fidelities, notes reviewers’ visual-first reading behavior, and identifies diagram-update costs."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "f540483d-a80f-4d00-859f-84b8e6cd7502"
+    },
+    "analysis_digest": "cf45579b3dc6eacaac4708d496a9559e395de1ed897ae0419942f21a0350f9da",
+    "key": "3735f8f862232ce03c18ed2e9bd12bc3b0ac02044561d6e3125af56cf96f0538",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 40.15309866700045,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "3735f8f862232ce03c18ed2e9bd12bc3b0ac02044561d6e3125af56cf96f0538",
+  "created_at": "2026-08-13T18:21:46.674464Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/expression",
+  "pair_key": "c153fba678e3998b110eead753351dc54283012c15ca6b073f121b477ae438d3",
+  "provider_seconds": 40.15309866700045,
+  "right": "task-2/advisor2/terminology",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

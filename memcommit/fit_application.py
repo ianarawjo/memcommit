@@ -37,7 +37,7 @@ class FitPropositionsResult:
 
 @dataclass(frozen=True)
 class FitRequest:
-    """Legacy Ground adapter: run or reopen one immutable receipt."""
+    """Ground graph adapter: run or reopen one immutable receipt."""
 
     ground_name: str
     receipt_uid: str | None = None

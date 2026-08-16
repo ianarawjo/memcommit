@@ -1,0 +1,370 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:51:36.096950+00:00",
+      "frames": [
+        {
+          "context_digest": "ca8765e237d85d9bf3ecb78fe1d9a2487066ae14dae9509e40b324ac1277d75a",
+          "context_name": "task-3/local/personal-memory/2025/06",
+          "context_uid": "870f7336-726a-5d9c-bae4-12585311463e",
+          "memories": [
+            {
+              "content": "The user keeps a portable fan charger on a living-room shelf.",
+              "content_digest": "5ab7fad8ae1b3f56bdbc1c3ebf593a3d452590341b6de115f830fdf0d994c12e",
+              "position": 0,
+              "uid": "853a158c-edf9-578a-8e75-3d5daff6e4db"
+            },
+            {
+              "content": "On a hot day, the user worked with only the window open and lost focus in the afternoon.",
+              "content_digest": "3c4225f055db293c53a5a137d0c6353005bcb55b71dbc61bc69831aa5c3c08de",
+              "position": 1,
+              "uid": "f7d5ebdc-0cae-5e07-a060-e129b5a05570"
+            },
+            {
+              "content": "In the room where the user closed the curtains the next morning, the temperature rose less.",
+              "content_digest": "4cb4d1892db8769f4c066859dbb021c67d5015114f8522dfd904057061600ab5",
+              "position": 2,
+              "uid": "99e5c522-535b-5015-8617-06f645147f8b"
+            },
+            {
+              "content": "The user took the portable fan out without charging it, and it turned off after an hour.",
+              "content_digest": "0e1e0e9e985bea5be6976010a390f484b60a931ea7dfaf50a73c66616a73d5da",
+              "position": 3,
+              "uid": "7b3bf50c-63aa-5a1e-9a53-7befea25a468"
+            },
+            {
+              "content": "Before the next outing, the user charged it the night before and used the fan throughout the trip.",
+              "content_digest": "fd4282d169da18d902fc5f766d4e38131240bf3a51e6fa0c5bad69f80f1492af",
+              "position": 4,
+              "uid": "ca8de091-afb2-537f-a83a-09769056879d"
+            },
+            {
+              "content": "On a hot weekend, the user was eating lunch in their father's yard and moved indoors.",
+              "content_digest": "44e7d3bc5eaecec68ad6e7c0979572102f3c717b37712fcfada769959443ae8e",
+              "position": 5,
+              "uid": "4a0604fb-10b4-5132-a6de-ab6a229ff2be"
+            },
+            {
+              "content": "When the user returned to the yard in the evening, shade and wind led them to stay another hour.",
+              "content_digest": "7495f1d4ba2d1d732ab5c962f45b5b0c9c765ee21767373552247a823cf90984",
+              "position": 6,
+              "uid": "1f90941e-776f-5cba-9783-c392983dd72c"
+            },
+            {
+              "content": "The user's father prefers to move an outdoor meal to the evening rather than proceed at midday when the temperature is high.",
+              "content_digest": "5f9628a28b5c6f3b20a371d1c039f37f26c50832970936c8a243f161fd8288f4",
+              "position": 7,
+              "uid": "63391d26-7417-5ea6-ac0a-460af7489963"
+            },
+            {
+              "content": "The local agent can compare past responses to heat but cannot know the current felt temperature without an indoor temperature record.",
+              "content_digest": "815f4fb2c833d75e30cb0e323f5708e356bf38e0bbb573865092be48fbf2746a",
+              "position": 8,
+              "uid": "31502797-1379-5ec4-bd1b-a2e1515fa56e"
+            },
+            {
+              "content": "A room with a west-facing window can warm rapidly in the late afternoon.",
+              "content_digest": "448908f6242021de6d41ddee8121714a1388db6e4e3d067de27e6950ee712c23",
+              "position": 9,
+              "uid": "68f85c30-62c4-579d-97cd-9f401c686e63"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "9a090027-da0f-4470-98fe-01bc3598f89e"
+        },
+        {
+          "context_digest": "1d47d83944d91bc0316a61894412e9b4361758603b9532687cf68473f1d30198",
+          "context_name": "task-3/local/personal-memory/2026/01",
+          "context_uid": "e48e6eac-20f7-599d-9f76-4238bd9dd96d",
+          "memories": [
+            {
+              "content": "The user keeps gloves and scarves in a basket inside the entrance.",
+              "content_digest": "df54c52cb6bc89e2e66c747df9807c6892db272c2a23ac5ac91e3f64aaa2a5da",
+              "position": 0,
+              "uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409"
+            },
+            {
+              "content": "On a day the user could not find their gloves, they walked with their hands in their pockets and missed the bus.",
+              "content_digest": "d4205aee5fe3f2c18adc3622930cc7f74de231de9812ca594dbd95a0af7199ff",
+              "position": 1,
+              "uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5"
+            },
+            {
+              "content": "Before the next outing, the user put the gloves in the entrance basket the night before and left on time.",
+              "content_digest": "23a7026d7d1a7edd3278e7b8aa147ef0d315059663f78da5498ad6c1b4a5407c",
+              "position": 2,
+              "uid": "a11f0943-8ee1-5305-87fb-64982fb36f82"
+            },
+            {
+              "content": "On a snowy day, the user chose a shorter route but turned back at stairs that had not been cleared of snow.",
+              "content_digest": "e9e241d2bc4d7c2fa9a44471aa6d1c16d42d50fe2ed99ccfb50713107714be9b",
+              "position": 3,
+              "uid": "f623f245-cdd5-5080-8869-b52cf2914076"
+            },
+            {
+              "content": "The next day, the user took a cleared sidewalk along the main road and avoided slippery sections.",
+              "content_digest": "62c8ec8b38778e9922cf433af4ceb4d59f60bee52dc758e3b88bb1163637f108",
+              "position": 4,
+              "uid": "17ac56f1-1302-5350-99d5-b95ef7feb768"
+            },
+            {
+              "content": "The user fell asleep with the heat turned up, became too warm before dawn, and woke twice.",
+              "content_digest": "912dbbc88a0f4a174b714a794793781f4d2f6c889f73cd7f825338addcab5d6c",
+              "position": 5,
+              "uid": "96988fa9-44b1-511e-8c99-4372f902cfe3"
+            },
+            {
+              "content": "The next night, the user turned down the heat and used one additional thin blanket.",
+              "content_digest": "3d12a4609d4731ebe71bacc841c979ac3497553238c3b5c2191842bbf075ba89",
+              "position": 6,
+              "uid": "b628acaa-50da-552c-8665-244dc4ab8263"
+            },
+            {
+              "content": "On a morning with heavy snow, the user's father expects the user will worry about road conditions and sends a text before departure.",
+              "content_digest": "dcd6bcb23bee46e49813bb14dd8dcb91983d5830f0536d7f23fcdb3a8af0667c",
+              "position": 7,
+              "uid": "08dfb937-7b28-55b5-801c-c0da00cbd414"
+            },
+            {
+              "content": "Before proposing a winter travel route, check recent snow-clearing conditions and accessible entrances.",
+              "content_digest": "dcab87102a9979c51dd369d5ba5ed00b7445c8ccd14450edcb8bec7859689606",
+              "position": 8,
+              "uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d"
+            },
+            {
+              "content": "The local agent cannot know the actual condition of the sidewalk the user will take from a weather forecast alone.",
+              "content_digest": "6b4bcc2f2f508f130c047ff677cadae0eae5b4cc5e5dd6bb3a1fb3784d7793b1",
+              "position": 9,
+              "uid": "802c4031-57de-592a-9bc8-6ee3d54921c8"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "b297ec6d-acdc-4357-8627-9b9cdc4168b8"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "Both frames favor advance preparation and recognize limits on inferring immediate local conditions, with those limits scoped to heat versus sidewalk safety. Otherwise, they preserve separate observations about summer comfort and fan use on one side, and winter clothing, travel, sleep, and family communication on the other.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "9a090027-da0f-4470-98fe-01bc3598f89e",
+              "memory_uid": "7b3bf50c-63aa-5a1e-9a53-7befea25a468"
+            },
+            {
+              "frame_uid": "9a090027-da0f-4470-98fe-01bc3598f89e",
+              "memory_uid": "ca8de091-afb2-537f-a83a-09769056879d"
+            },
+            {
+              "frame_uid": "b297ec6d-acdc-4357-8627-9b9cdc4168b8",
+              "memory_uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5"
+            },
+            {
+              "frame_uid": "b297ec6d-acdc-4357-8627-9b9cdc4168b8",
+              "memory_uid": "a11f0943-8ee1-5305-87fb-64982fb36f82"
+            }
+          ],
+          "reason": "Charging the fan and staging the gloves are different implementations of the same operational preparation policy, and both can govern without contradiction.",
+          "status": "RESOLVED",
+          "summary": "Preparing a needed outing item the night before avoids a repeat of an earlier preventable disruption.",
+          "uid": "bad59580-7fca-54e3-a1a5-2674a3b0ded2"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "9a090027-da0f-4470-98fe-01bc3598f89e",
+              "memory_uid": "31502797-1379-5ec4-bd1b-a2e1515fa56e"
+            },
+            {
+              "frame_uid": "b297ec6d-acdc-4357-8627-9b9cdc4168b8",
+              "memory_uid": "802c4031-57de-592a-9bc8-6ee3d54921c8"
+            }
+          ],
+          "reason": "The heat case requires an indoor temperature record, whereas the winter travel case requires actual sidewalk-condition evidence beyond a weather forecast; the explicit domains explain and preserve the difference.",
+          "status": "RESOLVED",
+          "summary": "The local agent cannot infer an immediate localized condition from indirect information alone, with the necessary direct evidence depending on the domain.",
+          "uid": "ae09740f-2668-5c4d-a9e7-2c11850efca1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9a090027-da0f-4470-98fe-01bc3598f89e",
+              "memory_uid": "853a158c-edf9-578a-8e75-3d5daff6e4db"
+            }
+          ],
+          "reason": "This is independently useful location information about fan equipment and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A portable fan charger is kept on a living-room shelf.",
+          "uid": "52b800e6-3934-5211-b982-386fc9205f47"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9a090027-da0f-4470-98fe-01bc3598f89e",
+              "memory_uid": "f7d5ebdc-0cae-5e07-a060-e129b5a05570"
+            }
+          ],
+          "reason": "This records a one-sided experience linking inadequate hot-room relief with reduced concentration.",
+          "status": "RESOLVED",
+          "summary": "Working on a hot day with only an open window was followed by afternoon loss of focus.",
+          "uid": "0dd6b3d5-74ee-5ecd-8311-9c61b4c9fe3e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9a090027-da0f-4470-98fe-01bc3598f89e",
+              "memory_uid": "99e5c522-535b-5015-8617-06f645147f8b"
+            }
+          ],
+          "reason": "This is a one-sided observation about curtain use moderating indoor heating.",
+          "status": "RESOLVED",
+          "summary": "Closing the curtains was associated with a smaller room-temperature rise the following morning.",
+          "uid": "9ca70d65-5e6b-589a-add4-20c7467e9bb7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9a090027-da0f-4470-98fe-01bc3598f89e",
+              "memory_uid": "4a0604fb-10b4-5132-a6de-ab6a229ff2be"
+            },
+            {
+              "frame_uid": "9a090027-da0f-4470-98fe-01bc3598f89e",
+              "memory_uid": "1f90941e-776f-5cba-9783-c392983dd72c"
+            },
+            {
+              "frame_uid": "9a090027-da0f-4470-98fe-01bc3598f89e",
+              "memory_uid": "63391d26-7417-5ea6-ac0a-460af7489963"
+            }
+          ],
+          "reason": "These memories jointly describe one summer-specific pattern favoring evening rather than midday outdoor meals.",
+          "status": "RESOLVED",
+          "summary": "High midday heat discouraged an outdoor meal, while evening shade and wind supported staying outside longer and aligned with the father’s preference for evening meals.",
+          "uid": "e4cc7a7a-ead2-5c8f-b1a6-9d9d56cb702e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9a090027-da0f-4470-98fe-01bc3598f89e",
+              "memory_uid": "68f85c30-62c4-579d-97cd-9f401c686e63"
+            }
+          ],
+          "reason": "This independently useful room-heating factor appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A west-facing window can cause rapid late-afternoon warming.",
+          "uid": "19dc053d-1d2d-586b-a8f5-253ee39ef800"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b297ec6d-acdc-4357-8627-9b9cdc4168b8",
+              "memory_uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409"
+            }
+          ],
+          "reason": "This is one-sided location information for winter clothing, separate from the cross-frame preparation policy.",
+          "status": "RESOLVED",
+          "summary": "Gloves and scarves are kept in a basket inside the entrance.",
+          "uid": "5358aa9a-f198-5472-aae4-67940793b8fa"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b297ec6d-acdc-4357-8627-9b9cdc4168b8",
+              "memory_uid": "f623f245-cdd5-5080-8869-b52cf2914076"
+            },
+            {
+              "frame_uid": "b297ec6d-acdc-4357-8627-9b9cdc4168b8",
+              "memory_uid": "17ac56f1-1302-5350-99d5-b95ef7feb768"
+            },
+            {
+              "frame_uid": "b297ec6d-acdc-4357-8627-9b9cdc4168b8",
+              "memory_uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d"
+            }
+          ],
+          "reason": "These memories jointly provide experience and guidance for choosing an accessible snow-cleared route, with no corresponding route policy in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Winter routes should be selected using recent clearing and accessibility conditions, as uncleared stairs can block travel while a cleared main-road sidewalk avoids slippery sections.",
+          "uid": "2d73cdc0-42c0-5707-9f58-b284716e0461"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b297ec6d-acdc-4357-8627-9b9cdc4168b8",
+              "memory_uid": "96988fa9-44b1-511e-8c99-4372f902cfe3"
+            },
+            {
+              "frame_uid": "b297ec6d-acdc-4357-8627-9b9cdc4168b8",
+              "memory_uid": "b628acaa-50da-552c-8665-244dc4ab8263"
+            }
+          ],
+          "reason": "The two memories form one one-sided sleep-temperature adjustment sequence.",
+          "status": "RESOLVED",
+          "summary": "After excessive overnight heating caused warmth and repeated waking, the user lowered the heat and added one thin blanket the next night.",
+          "uid": "96307f3a-ef67-559e-bab0-51aacd223450"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b297ec6d-acdc-4357-8627-9b9cdc4168b8",
+              "memory_uid": "08dfb937-7b28-55b5-801c-c0da00cbd414"
+            }
+          ],
+          "reason": "This independently useful family communication pattern appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "During heavy snow, the user’s father anticipates concern about road conditions and texts before departure.",
+          "uid": "00db0120-0602-5dea-ad4e-bf0434be08a5"
+        }
+      ],
+      "reports": {
+        "both": "Both describe preparing a needed portable item the night before to prevent avoidable disruption during the next outing.",
+        "compared_only": "The compared frame covers entrance storage, snow-cleared route selection, cooler sleep arrangements, and a father’s pre-departure message about hazardous roads.",
+        "differences": "Both limit the agent’s knowledge of immediate local conditions, but one requires indoor temperature records while the other requires evidence about the actual sidewalk beyond a forecast.",
+        "reference_only": "The reference covers charger storage, indoor and outdoor heat responses, curtain and window effects, fan endurance, and shifting hot-weather meals toward evening."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "d43b1e4c-0866-41b2-a5c5-daebc157c5d9"
+    },
+    "analysis_digest": "ef0fd9e704386f5a8e16fc9b7dd7feefaad196a857c34b0d76f72e8e341b8250",
+    "key": "1626ad0505e85e5df496c4a0fed472fac089fd8120b1e0d29ee0670b7c0ca1b5",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 57.07457883399911,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "1626ad0505e85e5df496c4a0fed472fac089fd8120b1e0d29ee0670b7c0ca1b5",
+  "created_at": "2026-08-13T18:52:33.171119Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/06",
+  "pair_key": "12594dc24125192ee18e4af082ed61faa0528256c962e324cbb27b706f4b3ed3",
+  "provider_seconds": 57.07457883399911,
+  "right": "task-3/local/personal-memory/2026/01",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

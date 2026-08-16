@@ -1,0 +1,340 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:22:33.505593+00:00",
+      "frames": [
+        {
+          "context_digest": "d216a114524e2b755fff42b8577d5027d3e528aed50c5f588cebf57767bb7fc8",
+          "context_name": "task-2/advisor1/methods",
+          "context_uid": "d2f78b99-5dcf-5876-89a9-1058bceca333",
+          "memories": [
+            {
+              "content": "Link each HCI research question directly to corresponding user data and analysis procedures.",
+              "content_digest": "21e2d5e7eb4ec06057a8405359656cd03a98f4ae67956016d98582af44bfb402",
+              "position": 0,
+              "uid": "c8bcefee-c64a-5a1f-911c-502cc4522701"
+            },
+            {
+              "content": "In preregistered studies, specify the conditions under which deviations from the plan are permissible.",
+              "content_digest": "0ecac6de4eb5e3eec39477c5a6324acb8a1bd6cefb17eacc2c73cdd53160b85f",
+              "position": 1,
+              "uid": "8747b27e-6c2b-5498-9eac-c403e26101a6"
+            },
+            {
+              "content": "In preregistered studies, specify how to record content that deviates from the plan.",
+              "content_digest": "821b3ad70335f24d96aeffd2260e3bc27bb6efd1108a68b00ecc5cb7e7adb242",
+              "position": 2,
+              "uid": "c3ad4ad8-4c5c-54c5-8d65-2dae15fa69a0"
+            },
+            {
+              "content": "Commit to one exact target number of participants so the schedule, workload, and budget can be checked against the same quantity.",
+              "content_digest": "7ff7f3d29fc21399565b4047d3f78e6415e1b51a9247139fc156ea7d4f6d2f13",
+              "position": 3,
+              "uid": "df53a41c-2fbf-532a-a5b0-560a196bf5cb"
+            },
+            {
+              "content": "Specify the interview protocols, recording devices, or log tools used to collect each type of user data.",
+              "content_digest": "0396cbcbfd6e96ef9fd2af507855c4b71eb3003a15fc79d240cd0b751b6b5788",
+              "position": 4,
+              "uid": "24d49198-fd7b-5810-bc56-1910a796f76e"
+            },
+            {
+              "content": "Specify whether each type of user data is collected before, during, or after the interaction.",
+              "content_digest": "80a3ff6e82631a044e8859709930b675163439d11564d1b59601bca0ee030fba",
+              "position": 5,
+              "uid": "2f367cf3-50c5-59bc-972e-6173e56343ac"
+            },
+            {
+              "content": "Readers cannot tell whether the schedule and budget agree when different sections imply different target counts.",
+              "content_digest": "9b5de55faa7e64cf1149ef1bb60cf990815e789e7d1c4a3c0e6297fbbd300aae",
+              "position": 6,
+              "uid": "91db3bd1-4417-5db6-b7a6-3e79c87ebe88"
+            },
+            {
+              "content": "In formative evaluation prototypes, implementation instability exists as an independent cause of task failure alongside design choices.",
+              "content_digest": "dab5f616c4354c0e9f381b0e860e5ec5ff1afc249a4ad427f194c559781b83a8",
+              "position": 7,
+              "uid": "49746579-92d7-51ea-b158-7d770443d101"
+            },
+            {
+              "content": "If a prototype safety signal occurs during formative evaluation, existing institutional safety procedures take precedence over planned data collection.",
+              "content_digest": "2f2768eb4fbce9367786ab13ca8a608e82104cee45200f4aa59854efcf2edc3e",
+              "position": 8,
+              "uid": "20d116ab-f9cc-5f61-808b-8555da09d707"
+            },
+            {
+              "content": "Reviewers judge answerability by tracing the path from each research question to the data and analysis.",
+              "content_digest": "0fac56a79481bdcd7b169c7e3d9ab8fbd0b4f76d33dfe9f4a2f703f80e84aea9",
+              "position": 9,
+              "uid": "881bc037-c099-50e4-b7e0-d38fba5146c9"
+            },
+            {
+              "content": "The author of this proposal tends to present implemented feature lists directly as design contributions.",
+              "content_digest": "6cf2a1292756154c2a0a045f1e4bd4889994faaa838f93e8a2b9c949957ed920",
+              "position": 10,
+              "uid": "9a969676-6093-5fac-bda8-92ebdac70c37"
+            },
+            {
+              "content": "Calculate the required sessions, facilitator hours, and participant payments from the same exact target rather than from separate rough estimates.",
+              "content_digest": "ea6c96c9e5e7d5db7bd2210fd484e715e35727bd1e6f7c2ea2a2c4c12e488f2a",
+              "position": 11,
+              "uid": "0ecc319a-ae60-5510-883d-52e613138164"
+            },
+            {
+              "content": "If recruitment falls below the exact target, state the shortfall explicitly and revise the affected schedule or deliverable.",
+              "content_digest": "bdf962f17a92886e7a5ec0003460dce9ed9c02d02473f66c6f6b4e97c0c304b9",
+              "position": 12,
+              "uid": "c4dfdb65-e673-52c0-a40c-e909d6014e00"
+            },
+            {
+              "content": "Do not use a wide range merely to postpone choosing the quantity that the rest of the proposal must support.",
+              "content_digest": "332385b05f91f97c398bc954b6fc9e62da182f7e42de6dd5691435df6922fd43",
+              "position": 13,
+              "uid": "a7c3a123-3f05-52e0-b33e-c450d1a070ac"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "fe9561cb-49cb-48f4-9cd6-dd4122d14546"
+        },
+        {
+          "context_digest": "bb54539faeedf2db9ada09643c11270aabf235d8e3e6df98500f90f9b82aed49",
+          "context_name": "task-2/advisor2/reproducibility",
+          "context_uid": "5f2f3c0f-4cb1-5151-b381-847df75b6457",
+          "memories": [
+            {
+              "content": "HCI reviewers find it difficult to assess result reproducibility if the system version used in the field deployment is not disclosed.",
+              "content_digest": "83ac18cb56f74dbeb7834909b999669bb9a46d320b288bf38fb7b6c9bd0812f2",
+              "position": 0,
+              "uid": "40f11374-d91b-546a-9e93-fcf98a0fde98"
+            },
+            {
+              "content": "Record changes in system configurations, field procedures, and data collection tools during deployment, along with their timestamps and rationales.",
+              "content_digest": "ac399146f49e6ae5d21272de0cd13db6346d4cd67b096ecfa9bd314b026f403e",
+              "position": 1,
+              "uid": "cc72ad54-4cf3-56cd-9119-46776f5b2184"
+            },
+            {
+              "content": "The history of deployment versions and configuration changes provides necessary evidence for interpreting results from different field sites.",
+              "content_digest": "39ae70de900b646362a96cfa7d734a6404604b468398b09da9fb05783b389d25",
+              "position": 2,
+              "uid": "75f22b45-fb1b-568c-bb05-080fdacdcab2"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "d55eaac5-af9a-4349-936e-0ed0b60f1228"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover largely separate HCI proposal concerns. The reference emphasizes research traceability, preregistration, participant planning, collection design, prototype risk, and proposal framing; the compared frame emphasizes deployment version evidence. Their limited overlap concerns change documentation, with distinct study contexts and recording requirements.",
+      "relations": [
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "fe9561cb-49cb-48f4-9cd6-dd4122d14546",
+              "memory_uid": "c3ad4ad8-4c5c-54c5-8d65-2dae15fa69a0"
+            },
+            {
+              "frame_uid": "d55eaac5-af9a-4349-936e-0ed0b60f1228",
+              "memory_uid": "cc72ad54-4cf3-56cd-9119-46776f5b2184"
+            }
+          ],
+          "reason": "The preregistration claim requires specifying how plan-deviating content will be recorded, while the deployment claim requires timestamped, reasoned records of configuration, procedure, and tool changes; these explicit contexts and metadata requirements must be preserved.",
+          "status": "RESOLVED",
+          "summary": "Both require documenting changes from an expected study state, under different study-stage conditions.",
+          "uid": "39cd4815-a268-55a7-9266-54189742aa77"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fe9561cb-49cb-48f4-9cd6-dd4122d14546",
+              "memory_uid": "c8bcefee-c64a-5a1f-911c-502cc4522701"
+            },
+            {
+              "frame_uid": "fe9561cb-49cb-48f4-9cd6-dd4122d14546",
+              "memory_uid": "881bc037-c099-50e4-b7e0-d38fba5146c9"
+            }
+          ],
+          "reason": "The reference provides the requirement and its reviewer-facing rationale, while the compared frame does not address question-to-evidence traceability.",
+          "status": "RESOLVED",
+          "summary": "Research questions should be directly traceable to the user data and analyses that make them answerable.",
+          "uid": "66d38b38-43c5-57a6-8150-b85e30808ffb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fe9561cb-49cb-48f4-9cd6-dd4122d14546",
+              "memory_uid": "8747b27e-6c2b-5498-9eac-c403e26101a6"
+            }
+          ],
+          "reason": "This governs authorization conditions for deviations, which is independently useful and is not addressed by the compared frame's documentation requirements.",
+          "status": "RESOLVED",
+          "summary": "Preregistered studies should define when deviations from the plan are permissible.",
+          "uid": "7fcbfe7b-81c6-526d-9ff5-67e371960c8c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fe9561cb-49cb-48f4-9cd6-dd4122d14546",
+              "memory_uid": "df53a41c-2fbf-532a-a5b0-560a196bf5cb"
+            },
+            {
+              "frame_uid": "fe9561cb-49cb-48f4-9cd6-dd4122d14546",
+              "memory_uid": "91db3bd1-4417-5db6-b7a6-3e79c87ebe88"
+            },
+            {
+              "frame_uid": "fe9561cb-49cb-48f4-9cd6-dd4122d14546",
+              "memory_uid": "0ecc319a-ae60-5510-883d-52e613138164"
+            },
+            {
+              "frame_uid": "fe9561cb-49cb-48f4-9cd6-dd4122d14546",
+              "memory_uid": "a7c3a123-3f05-52e0-b33e-c450d1a070ac"
+            }
+          ],
+          "reason": "These reference statements collectively express and justify one proposal-wide quantity-coherence requirement; the compared frame contains no participant-planning claim.",
+          "status": "RESOLVED",
+          "summary": "A proposal should use one exact participant target consistently across scheduling, workload, budgeting, sessions, staffing, and payments rather than relying on divergent counts or a wide range.",
+          "uid": "5dc0f94e-0912-5f55-a229-555c8c4a7847"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fe9561cb-49cb-48f4-9cd6-dd4122d14546",
+              "memory_uid": "24d49198-fd7b-5810-bc56-1910a796f76e"
+            }
+          ],
+          "reason": "This specifies planned collection instruments, an independently useful design detail absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Each user-data type should identify the protocol, recording device, or logging tool used to collect it.",
+          "uid": "d5659d4c-c840-5148-9281-5071ee2fe5be"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fe9561cb-49cb-48f4-9cd6-dd4122d14546",
+              "memory_uid": "2f367cf3-50c5-59bc-972e-6173e56343ac"
+            }
+          ],
+          "reason": "This specifies the temporal placement of planned data collection, which neither duplicates instrument selection nor appears in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Each user-data type should state whether collection occurs before, during, or after interaction.",
+          "uid": "84061cf3-b9d7-5d56-b1b6-abf04cde0c57"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fe9561cb-49cb-48f4-9cd6-dd4122d14546",
+              "memory_uid": "49746579-92d7-51ea-b158-7d770443d101"
+            }
+          ],
+          "reason": "This causal interpretation rule appears only in the reference and is separate from deployment change-history requirements.",
+          "status": "RESOLVED",
+          "summary": "Implementation instability should be treated as an independent possible cause of task failure in formative prototype evaluation.",
+          "uid": "9afce21a-6b20-5e0c-8690-d0f7527a5e2f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fe9561cb-49cb-48f4-9cd6-dd4122d14546",
+              "memory_uid": "20d116ab-f9cc-5f61-808b-8555da09d707"
+            }
+          ],
+          "reason": "This conditional safety-priority rule appears only in the reference and addresses a distinct operational decision.",
+          "status": "RESOLVED",
+          "summary": "Institutional safety procedures should override planned data collection when a prototype safety signal occurs during formative evaluation.",
+          "uid": "95ee1b1f-254d-537b-bcf5-48e067289ab1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fe9561cb-49cb-48f4-9cd6-dd4122d14546",
+              "memory_uid": "9a969676-6093-5fac-bda8-92ebdac70c37"
+            }
+          ],
+          "reason": "This is a one-sided observation about contribution framing and is not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to present implemented feature lists directly as design contributions.",
+          "uid": "057b8b2d-82c8-5e75-84cd-590c9af16433"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fe9561cb-49cb-48f4-9cd6-dd4122d14546",
+              "memory_uid": "c4dfdb65-e673-52c0-a40c-e909d6014e00"
+            }
+          ],
+          "reason": "This contingency rule is independently useful beyond choosing a coherent target and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A recruitment shortfall against the exact participant target should be disclosed and reflected in affected schedules or deliverables.",
+          "uid": "41d0cd4e-eb49-5314-9fa8-08d7c7d1c951"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d55eaac5-af9a-4349-936e-0ed0b60f1228",
+              "memory_uid": "40f11374-d91b-546a-9e93-fcf98a0fde98"
+            },
+            {
+              "frame_uid": "d55eaac5-af9a-4349-936e-0ed0b60f1228",
+              "memory_uid": "75f22b45-fb1b-568c-bb05-080fdacdcab2"
+            }
+          ],
+          "reason": "The compared statements jointly express the need for version-history evidence and its interpretive purposes; the reference does not address deployment version disclosure.",
+          "status": "RESOLVED",
+          "summary": "Deployment version and configuration history should be disclosed because it supports reproducibility and interpretation across field sites.",
+          "uid": "114db256-a3a6-5f26-b6cb-b9c94c67f19b"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame uniquely identifies deployment version and configuration history as evidence needed for reproducibility and cross-site interpretation.",
+        "differences": "Both address documenting departures or changes, but preregistered-plan deviations and deployment-time configuration, procedure, and tool changes retain different scopes and metadata expectations.",
+        "reference_only": "The reference covers question-to-evidence traceability, deviation permission, participant-target coherence and shortfalls, collection methods and timing, prototype instability and safety, and problematic contribution framing."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "3b2f719a-16bb-428e-a417-183c3c4edc2b"
+    },
+    "analysis_digest": "e8ee151ad188e61e6f7799fdc932933e797d3a481d5114af9e2eee506a2f4a10",
+    "key": "4bc281baf0a84f371c9dd96c2a71f8b5b20f758ce641c8578ade3fb2e7247bb7",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 50.368975959001546,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "4bc281baf0a84f371c9dd96c2a71f8b5b20f758ce641c8578ade3fb2e7247bb7",
+  "created_at": "2026-08-13T18:23:23.874174Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/methods",
+  "pair_key": "8f7039110fd05f4786af75d64df31da3d28001d406006bab34a27a125c16d344",
+  "provider_seconds": 50.368975959001546,
+  "right": "task-2/advisor2/reproducibility",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

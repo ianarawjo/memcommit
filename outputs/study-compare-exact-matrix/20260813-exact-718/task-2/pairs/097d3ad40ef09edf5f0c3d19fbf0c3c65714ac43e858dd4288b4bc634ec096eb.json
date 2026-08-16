@@ -1,0 +1,273 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:14:59.689435+00:00",
+      "frames": [
+        {
+          "context_digest": "30f0425cad991a5bb1b473f7e73c2c039db2d91dc0c95116413d0a8e7b6fed29",
+          "context_name": "task-2/advisor1/budget",
+          "context_uid": "d6d3ee9e-eb0f-5c28-9463-7a680d53b470",
+          "memories": [
+            {
+              "content": "Keep the total, major cost categories, and one-line estimate basis in the main text so the resource argument can be understood without leaving the proposal.",
+              "content_digest": "5dc9db0be6499fc408063be04c9e1cc344986512f4d24d5697f5c53a08529c9a",
+              "position": 0,
+              "uid": "05e0261e-5c52-5030-8176-0f02d4522931"
+            },
+            {
+              "content": "Place each major cost beside the activity or deliverable it enables in the main text.",
+              "content_digest": "b97219830051faf46cff7c9541c331012571866926740ed4d6a7925c12fb21a8",
+              "position": 1,
+              "uid": "1083e9b3-698a-57b1-91ab-ce04cec1e5e5"
+            },
+            {
+              "content": "State the quantity and unit-rate basis for each major cost in the same paragraph that requests it.",
+              "content_digest": "5ce37d95d9d037bbab71276fa8f0e8e383b472d0122817ab7b711c971b8cbf5d",
+              "position": 2,
+              "uid": "3652f268-d86f-55d6-935d-d3bdc487aae6"
+            },
+            {
+              "content": "Readers may question a proposed priority when its cost cannot be checked on the same page as the claimed benefit.",
+              "content_digest": "26fa14ff80ece7682cb51c7356a47a8e60e94edd4551f59ecd2fa3017bd9bffd",
+              "position": 3,
+              "uid": "4e1e1201-94b8-5a7a-8737-edc4c62881ff"
+            },
+            {
+              "content": "Update the cost sentence whenever the related activity changes so the narrative and requested amount cannot drift apart.",
+              "content_digest": "343c11198b38874476e0cda3707dd07436699852db0934e2e8f8c95a7ea3c3ea",
+              "position": 4,
+              "uid": "2f5f9039-e038-51c1-8af0-21a78772c512"
+            },
+            {
+              "content": "Accept a denser main-text paragraph when the estimate basis is essential to deciding whether the request is proportionate.",
+              "content_digest": "59ca1aafc11b37b097251b4b7c6b15e249262304f79b261bd4351d3ca89cb5fe",
+              "position": 5,
+              "uid": "f7a16d08-fbe2-5508-890d-cdbf70c1146e"
+            },
+            {
+              "content": "The user tends to revise the work plan but forget a detached budget table unless the key amount is repeated beside the activity.",
+              "content_digest": "393651043824d9e9c528e5de7618854b71970967d172ee1e9bc3c77aec3baab0",
+              "position": 6,
+              "uid": "2ca1d5a1-d78a-55b2-ab21-fd6ad73366b4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "e9bf77a1-d4d7-49cf-ac03-743307e2a82d"
+        },
+        {
+          "context_digest": "b598a4ff3268ef8c6c0d7bc5ff34af370074bcdd30d61bd3623fcdfb167f37d6",
+          "context_name": "task-2/advisor2/safety",
+          "context_uid": "4283d797-6a33-5f39-b7f6-f4dbd3264389",
+          "memories": [
+            {
+              "content": "List whom to notify and in what order if serious discomfort is reported during the study.",
+              "content_digest": "3453feb8597fb15c827f22297d58dc804fdc1d8080b9e93ba35b85a4425092b6",
+              "position": 0,
+              "uid": "ceb095a9-3068-55ea-a06f-d954c121e007"
+            },
+            {
+              "content": "Field staff rely on the pre-defined contact sequence when serious discomfort is reported.",
+              "content_digest": "ba38f8a5c993c810e19b9120f4492c3accf962c8b8fd7642539ac24f363099e0",
+              "position": 1,
+              "uid": "962d7645-02b3-5611-8415-4370794c10d4"
+            },
+            {
+              "content": "Define the thresholds for participant harm, operational disruption, and data anomalies at which deployment and data collection must cease.",
+              "content_digest": "7f7f124d266efd8255c4615ebc7eb375447047ed5a2b96327f28f8f17d048813",
+              "position": 2,
+              "uid": "a3270872-1901-5d24-8ef1-374833599bf9"
+            },
+            {
+              "content": "Establish procedures to restore existing systems and workflow states after suspending field deployment.",
+              "content_digest": "1a5f7636ec45e60df11db8b0d3763345c0bfaf9a92c1e5d581e6b36452c31208",
+              "position": 3,
+              "uid": "f6dd1368-0d90-5f1a-97d0-56594ce8f4b3"
+            },
+            {
+              "content": "The user's stop plan can be judged feasible only when it identifies who has authority to order recovery and who is responsible for carrying it out.",
+              "content_digest": "3fa05bd19fdeeb320a37cfb89ad853a868b64055f7b21eb182798b0119f6620c",
+              "position": 4,
+              "uid": "342e4697-873f-56a8-b4a4-896efe910144"
+            },
+            {
+              "content": "In organizations where error reporting is linked to individual performance evaluations, safety signal records may be separated from research decision logs, potentially breaking the traceability path for the same incident.",
+              "content_digest": "2bf13ff8ab1a778e8a793ede627b28d40798ae40d25c7a6d25eb5e2e79dd8e97",
+              "position": 5,
+              "uid": "6c4e9175-4590-5689-ae2b-678f0eb930b9"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "942ffce3-0eb3-4582-a5fc-fcb0814810fc"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate operational domains rather than competing policies. The reference frame governs how proposal costs are presented, justified, and maintained; the compared frame governs study-safety escalation, stopping, recovery, accountability, and incident traceability. Neither frame supplies a scope bridge supporting a cross-frame relation.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e9bf77a1-d4d7-49cf-ac03-743307e2a82d",
+              "memory_uid": "05e0261e-5c52-5030-8176-0f02d4522931"
+            }
+          ],
+          "reason": "This is independently useful guidance about making the overall resource argument understandable without consulting detached material, and the compared frame contains no corresponding budget-presentation claim.",
+          "status": "RESOLVED",
+          "summary": "The proposal’s main text should contain the total, major cost categories, and a brief estimate basis.",
+          "uid": "dfb3faf5-1623-5da4-8edb-942e641aa513"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e9bf77a1-d4d7-49cf-ac03-743307e2a82d",
+              "memory_uid": "1083e9b3-698a-57b1-91ab-ce04cec1e5e5"
+            },
+            {
+              "frame_uid": "e9bf77a1-d4d7-49cf-ac03-743307e2a82d",
+              "memory_uid": "4e1e1201-94b8-5a7a-8737-edc4c62881ff"
+            },
+            {
+              "frame_uid": "e9bf77a1-d4d7-49cf-ac03-743307e2a82d",
+              "memory_uid": "2ca1d5a1-d78a-55b2-ab21-fd6ad73366b4"
+            }
+          ],
+          "reason": "These memories jointly state and motivate one placement rule: same-page adjacency preserves evaluability and reduces omission when the work plan changes. The compared frame does not address cost placement.",
+          "status": "RESOLVED",
+          "summary": "Key costs should appear beside the activities or benefits they support so readers can assess priorities and revisions do not leave essential amounts detached.",
+          "uid": "146bd31e-c034-5efc-bc9a-d92529b760ab"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e9bf77a1-d4d7-49cf-ac03-743307e2a82d",
+              "memory_uid": "3652f268-d86f-55d6-935d-d3bdc487aae6"
+            },
+            {
+              "frame_uid": "e9bf77a1-d4d7-49cf-ac03-743307e2a82d",
+              "memory_uid": "f7a16d08-fbe2-5508-890d-cdbf70c1146e"
+            }
+          ],
+          "reason": "The memories split one underlying presentation claim between the required estimate detail and the accepted density tradeoff. No compared-side memory addresses estimate-basis detail.",
+          "status": "RESOLVED",
+          "summary": "Each major cost’s quantity and unit-rate basis should remain in the requesting paragraph even when that makes the main text denser.",
+          "uid": "ff5fc327-dcc1-56e6-ad3b-5453679a121c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e9bf77a1-d4d7-49cf-ac03-743307e2a82d",
+              "memory_uid": "2f5f9039-e038-51c1-8af0-21a78772c512"
+            }
+          ],
+          "reason": "This independently useful maintenance rule prevents the narrative and requested amount from drifting apart, a concern absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A cost sentence should be updated whenever its related activity changes.",
+          "uid": "dc15a1a4-0d7f-5cca-9998-bb69ee0486cd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "942ffce3-0eb3-4582-a5fc-fcb0814810fc",
+              "memory_uid": "ceb095a9-3068-55ea-a06f-d954c121e007"
+            },
+            {
+              "frame_uid": "942ffce3-0eb3-4582-a5fc-fcb0814810fc",
+              "memory_uid": "962d7645-02b3-5611-8415-4370794c10d4"
+            }
+          ],
+          "reason": "The memories state the same underlying escalation requirement from specification and field-use perspectives. The reference frame has no participant-safety notification policy.",
+          "status": "RESOLVED",
+          "summary": "Serious participant discomfort should trigger a predefined notification sequence that identifies whom field staff contact and in what order.",
+          "uid": "30e03983-602e-504a-a7f2-87ea943498ad"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "942ffce3-0eb3-4582-a5fc-fcb0814810fc",
+              "memory_uid": "a3270872-1901-5d24-8ef1-374833599bf9"
+            }
+          ],
+          "reason": "This is an independently useful stopping-policy requirement with no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Explicit harm, disruption, and data-anomaly thresholds should determine when deployment and data collection cease.",
+          "uid": "42b5f18c-8c1a-5fe8-aea4-be733dfb0b69"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "942ffce3-0eb3-4582-a5fc-fcb0814810fc",
+              "memory_uid": "f6dd1368-0d90-5f1a-97d0-56594ce8f4b3"
+            },
+            {
+              "frame_uid": "942ffce3-0eb3-4582-a5fc-fcb0814810fc",
+              "memory_uid": "342e4697-873f-56a8-b4a4-896efe910144"
+            }
+          ],
+          "reason": "The memories divide one operational recovery requirement into restoration mechanics and accountable roles. The reference frame does not address suspension recovery.",
+          "status": "RESOLVED",
+          "summary": "A suspension recovery plan should define restoration procedures and identify both the authority ordering recovery and the people responsible for execution.",
+          "uid": "1e72a6da-b335-5f92-aefa-7cf28e79ccec"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "942ffce3-0eb3-4582-a5fc-fcb0814810fc",
+              "memory_uid": "6c4e9175-4590-5689-ae2b-678f0eb930b9"
+            }
+          ],
+          "reason": "This is a conditional, independently useful organizational risk concerning safety-record governance, with no corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Linking error reports to individual performance evaluations can separate safety records from research decision logs and break incident traceability.",
+          "uid": "ed78840d-96b5-5b6a-9298-fee29ef89be6"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame defines discomfort escalation, stopping thresholds, system recovery procedures and ownership, and a conditional risk to incident traceability when safety reporting affects performance evaluations.",
+        "differences": "",
+        "reference_only": "The reference frame keeps decision-relevant costs, estimate bases, enabled activities, and benefits together in the proposal, while requiring cost language to track work-plan revisions."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "a928b966-fae4-4be7-9d84-ff95b5f85a83"
+    },
+    "analysis_digest": "c1c4a779b2b9a033b877477f550b26f4814aba72dd007ce7ce25ff351008b43f",
+    "key": "a0562db37ce18833f146e0de389af9a4a0bffdaa554ae9982f01ab0497030243",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 34.89777362500172,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "a0562db37ce18833f146e0de389af9a4a0bffdaa554ae9982f01ab0497030243",
+  "created_at": "2026-08-13T18:15:34.586815Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/budget",
+  "pair_key": "097d3ad40ef09edf5f0c3d19fbf0c3c65714ac43e858dd4288b4bc634ec096eb",
+  "provider_seconds": 34.89777362500172,
+  "right": "task-2/advisor2/safety",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

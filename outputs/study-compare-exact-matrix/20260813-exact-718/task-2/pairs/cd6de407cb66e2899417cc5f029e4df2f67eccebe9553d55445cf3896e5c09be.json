@@ -1,0 +1,398 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:16:35.600831+00:00",
+      "frames": [
+        {
+          "context_digest": "e76b6eea5af0e4d970d4db385b4100a788a8b1ed5ef6e68709bd92c943ab3b6b",
+          "context_name": "task-2/advisor1/compensation",
+          "context_uid": "7ba75d6b-cef6-5c8b-9b17-d3901e168d24",
+          "memories": [
+            {
+              "content": "Calculate user study compensation budgets based on estimated participation burden, combining session time and preparation effort.",
+              "content_digest": "2dc18d8ddeb900741b2a8f936a59d5fc72423e2d3144e8b2232a6435dc9a68f1",
+              "position": 0,
+              "uid": "0ae46268-cca7-57d5-a0ee-6eb3b85cda84"
+            },
+            {
+              "content": "Compensate for required travel time in face-to-face user studies as well.",
+              "content_digest": "688ba9df95e18254a5a33ab6c0e59066cf0674137b6802178e3fb8eae4ba38e5",
+              "position": 1,
+              "uid": "bdda6e22-ea06-5a13-8854-67f7521724db"
+            },
+            {
+              "content": "Compensate for the actual time participants spent in sessions, regardless of research modality.",
+              "content_digest": "8673c2b5b5913f0e8bcf0035eea4bc87430bb1fcf8ffb27b354bde0ca3a7ae4e",
+              "position": 2,
+              "uid": "f49b1d0a-7a1a-53b5-b7fc-815cc2cc134a"
+            },
+            {
+              "content": "Leave cash payment as an available compensation method for face-to-face studies.",
+              "content_digest": "72f9e1b33de0c05bb711c2d8162ab62f382a75871a710db37b858125eae6fcde",
+              "position": 3,
+              "uid": "1f4d05e4-2a79-572c-8050-beb1464fb781"
+            },
+            {
+              "content": "If compensation equity is explained, do not require finalizing the payment method at the proposal stage.",
+              "content_digest": "6945260e986651e7992034801b6151a3f93184013fea77d17b630f55fcdc943b",
+              "position": 4,
+              "uid": "abcba764-6f35-5dae-bb3d-7860fb72ccf2"
+            },
+            {
+              "content": "Apply the same base hourly rate to face-to-face and remote studies if task burden is equal.",
+              "content_digest": "144477b358e6e8931042d1793a5ffd10f56d69aa90523d69d20a622528a9dad0",
+              "position": 5,
+              "uid": "c6a28f37-1a7c-5dbd-b75c-c829f0461504"
+            },
+            {
+              "content": "Participants judge compensation fairness based on the total burden, combining session time with required travel and preparation time.",
+              "content_digest": "54e8900c7049e048484db8b523a41e98cbb911b45be2adbd103fd2f1635bf026",
+              "position": 6,
+              "uid": "874de649-9c04-5960-b3a9-e68356ef666c"
+            },
+            {
+              "content": "Account in compensation for the burden of rescheduling iterations and returning for multiple formative evaluation sessions.",
+              "content_digest": "f09be004defb4019ba7476919b6780cc2b6bbac088f79dbd0ec66bf2753af27d",
+              "position": 7,
+              "uid": "529559f5-850d-5920-8e27-0b1e7138dc36"
+            },
+            {
+              "content": "Compensate participants for time already invested even if a session is terminated early due to prototype errors.",
+              "content_digest": "64b65cc0b307b48d64641d126594a5b8a9258518c3aa27d7846be2306c25a9f4",
+              "position": 8,
+              "uid": "c8be56ee-860a-5f6c-abbf-02c8dbc59eb5"
+            },
+            {
+              "content": "The author of this proposal tends to exclude preparation burden between sessions when calculating compensation for iterative studies.",
+              "content_digest": "177f041fcb9fe768dcc1c476b592e99c8609d06ebf727aeca1379d21256b43d8",
+              "position": 9,
+              "uid": "bdac8cf8-dd11-5794-b4b2-9774ff344436"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "9542d62d-e856-4363-9b04-57011e49dbe2"
+        },
+        {
+          "context_digest": "0c296942d89f44af52c83dcba02568af2b56ed1016260f3d3b9c95e919a51339",
+          "context_name": "task-2/advisor2/ethics",
+          "context_uid": "fa36b485-422d-54c3-a145-0f60a077757c",
+          "memories": [
+            {
+              "content": "Link anticipated participant burden with its mitigation strategies for each field user study task.",
+              "content_digest": "120fdee3ad17815fe2e9aa806aab19843cf6597753cf0d35aa0618a3116a1bd2",
+              "position": 0,
+              "uid": "bc8c1327-993c-51ce-8f53-919dc253e0f8"
+            },
+            {
+              "content": "Specify the accommodations necessary for participants to access the field system and research tasks.",
+              "content_digest": "e09cce7cc60d904d618dffa5619cac9c44e4dbcc4f2a0d8547b9ede06586a82b",
+              "position": 1,
+              "uid": "578f6fdf-6bbc-5d1b-8f03-c7460a5cdc7b"
+            },
+            {
+              "content": "Specify how accessibility accommodations will be provided in the field user study.",
+              "content_digest": "98a13f5b544276eaafd5d0b1aea63b2e313ce327f5881f0e4bbcff19724e8c6e",
+              "position": 2,
+              "uid": "6804d5db-c872-5ded-bf68-14fd30e1b645"
+            },
+            {
+              "content": "Describe how personal identifiers will be separated from research data immediately upon collection.",
+              "content_digest": "0bf884cd31610ba663854e8c273ec6769666b38ee72714ba63f0b390d69b8ba3",
+              "position": 3,
+              "uid": "448f23d0-9607-5977-9d13-a99af48a6fc1"
+            },
+            {
+              "content": "List equipment to be loaned when participants lack necessary gear.",
+              "content_digest": "665d4e26cc8390ca2334d4740650e77977b60fd0e3eed2464ade0ca55a806eb2",
+              "position": 4,
+              "uid": "b97f3e2f-e132-5f6f-a748-f406a89a1bc5"
+            },
+            {
+              "content": "Describe the procedure for returning equipment loaned to participants.",
+              "content_digest": "100ffbad1288c3263bc4a1044b2d42da35c36a3f73786e58e4391fbac98c84f2",
+              "position": 5,
+              "uid": "d05964ea-0423-5642-86e1-9e9c19edffbe"
+            },
+            {
+              "content": "The HCI ethics reviewer verifies that anticipated burden and mitigation strategies correspond for each field user study task.",
+              "content_digest": "067bbafce95c77b4a9acc5ba9652db92dba6dc96e14588841db158919bf044b2",
+              "position": 6,
+              "uid": "26407eb8-5c02-551f-a960-1652eb080f90"
+            },
+            {
+              "content": "Ensure that participants can safely return to existing work procedures if they discontinue research participation.",
+              "content_digest": "213cff51d754811573c78ba0ca92f37e614e9fa4ae1080aa7fcfb550c85437fb",
+              "position": 7,
+              "uid": "7e0ba411-3fd9-53ec-8a3f-4499316c06bb"
+            },
+            {
+              "content": "Specify that organizational members who decline research participation will not face disadvantages in task assignment or performance evaluation.",
+              "content_digest": "46b2b0857255b48ed6001191b089c1d6ecba859690818cbff8fe7676fa1f860a",
+              "position": 8,
+              "uid": "a6fbea37-335c-544b-8bac-01f759bc3855"
+            },
+            {
+              "content": "The user's withdrawal risk can be adequately assessed only when a safe alternative procedure exists for field tasks.",
+              "content_digest": "604a38c44856b4407cf2b1d83df216510e77f84ce76ef4dbc7f9be21cd32393b",
+              "position": 9,
+              "uid": "885d1cf3-8bcd-513c-9591-a548fcbd3992"
+            },
+            {
+              "content": "The user tends to assume that a short session also entails little burden from work interruption and exposure to a manager.",
+              "content_digest": "0c48fd9dd3b393f73a8005db56bf2c11320d82b84040af105ca65c3ff9ce6f17",
+              "position": 10,
+              "uid": "520b4c9f-306e-5749-83b5-2218c97f89e6"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "48e6ddfa-622e-49ec-aba0-2fcf89dcfd8c"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address complementary but operationally separate ethics concerns. The reference frame focuses on equitable compensation across burden components and study circumstances, while the compared frame covers field-study safeguards involving mitigation, accessibility, privacy, equipment, withdrawal, non-retaliation, and overlooked workplace burdens.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9542d62d-e856-4363-9b04-57011e49dbe2",
+              "memory_uid": "0ae46268-cca7-57d5-a0ee-6eb3b85cda84"
+            },
+            {
+              "frame_uid": "9542d62d-e856-4363-9b04-57011e49dbe2",
+              "memory_uid": "bdda6e22-ea06-5a13-8854-67f7521724db"
+            },
+            {
+              "frame_uid": "9542d62d-e856-4363-9b04-57011e49dbe2",
+              "memory_uid": "f49b1d0a-7a1a-53b5-b7fc-815cc2cc134a"
+            },
+            {
+              "frame_uid": "9542d62d-e856-4363-9b04-57011e49dbe2",
+              "memory_uid": "874de649-9c04-5960-b3a9-e68356ef666c"
+            },
+            {
+              "frame_uid": "9542d62d-e856-4363-9b04-57011e49dbe2",
+              "memory_uid": "529559f5-850d-5920-8e27-0b1e7138dc36"
+            }
+          ],
+          "reason": "These reference-side statements split one compensation principle into its budget basis, relevant time components, fairness rationale, and iterative-study application; the compared frame does not state a compensation rule.",
+          "status": "RESOLVED",
+          "summary": "Compensation should reflect total participation burden, including session, preparation, travel, and repeated-participation time.",
+          "uid": "6cd45d99-352b-58ee-9823-c46d6585b1c7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9542d62d-e856-4363-9b04-57011e49dbe2",
+              "memory_uid": "1f4d05e4-2a79-572c-8050-beb1464fb781"
+            }
+          ],
+          "reason": "This is a standalone reference-side payment-method policy with no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "Cash should remain an available compensation method for face-to-face studies.",
+          "uid": "5daf5907-bab3-5e24-be2f-448cfcd05795"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9542d62d-e856-4363-9b04-57011e49dbe2",
+              "memory_uid": "abcba764-6f35-5dae-bb3d-7860fb72ccf2"
+            }
+          ],
+          "reason": "This reference-side rule concerns proposal-stage payment-method flexibility, which the compared frame does not address.",
+          "status": "RESOLVED",
+          "summary": "A proposal need not finalize the payment method when compensation equity is adequately explained.",
+          "uid": "ec687bd0-0cad-5b25-b379-341836f08d47"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9542d62d-e856-4363-9b04-57011e49dbe2",
+              "memory_uid": "c6a28f37-1a7c-5dbd-b75c-c829f0461504"
+            }
+          ],
+          "reason": "This is a distinct reference-side modality-equity rule without a compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Equal task burden should receive the same base hourly rate across face-to-face and remote studies.",
+          "uid": "6ba4b5c3-291e-586f-8e5e-f4a6aea94ab2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9542d62d-e856-4363-9b04-57011e49dbe2",
+              "memory_uid": "c8be56ee-860a-5f6c-abbf-02c8dbc59eb5"
+            }
+          ],
+          "reason": "This reference-side exception protects accrued compensation after study-caused disruption and is not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Participants should be compensated for time already invested when prototype errors terminate a session early.",
+          "uid": "3dcb5765-07ba-5448-bc51-cb06ad99d91b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9542d62d-e856-4363-9b04-57011e49dbe2",
+              "memory_uid": "bdac8cf8-dd11-5794-b4b2-9774ff344436"
+            }
+          ],
+          "reason": "This is a reference-side observation about a recurring calculation tendency, not a policy stated in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to omit between-session preparation burden from iterative-study compensation calculations.",
+          "uid": "22f53e7a-a56f-5a6d-a90b-efef29b1d9cd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "48e6ddfa-622e-49ec-aba0-2fcf89dcfd8c",
+              "memory_uid": "bc8c1327-993c-51ce-8f53-919dc253e0f8"
+            },
+            {
+              "frame_uid": "48e6ddfa-622e-49ec-aba0-2fcf89dcfd8c",
+              "memory_uid": "26407eb8-5c02-551f-a960-1652eb080f90"
+            }
+          ],
+          "reason": "The compared-side statements express the same task-level burden–mitigation correspondence through proposal documentation and reviewer verification; compensation is a different operational decision.",
+          "status": "RESOLVED",
+          "summary": "Each field-study task should have corresponding anticipated burdens and mitigation strategies that an ethics reviewer can verify.",
+          "uid": "b8709910-f0d3-58a4-85f5-b54dddb93abe"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "48e6ddfa-622e-49ec-aba0-2fcf89dcfd8c",
+              "memory_uid": "578f6fdf-6bbc-5d1b-8f03-c7460a5cdc7b"
+            },
+            {
+              "frame_uid": "48e6ddfa-622e-49ec-aba0-2fcf89dcfd8c",
+              "memory_uid": "6804d5db-c872-5ded-bf68-14fd30e1b645"
+            }
+          ],
+          "reason": "These compared-side statements are complementary parts of one accessibility plan, absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Field studies should identify necessary accessibility accommodations and explain how they will be provided.",
+          "uid": "d0a65165-9330-5b59-ace4-72f582a1ea96"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "48e6ddfa-622e-49ec-aba0-2fcf89dcfd8c",
+              "memory_uid": "448f23d0-9607-5977-9d13-a99af48a6fc1"
+            }
+          ],
+          "reason": "This compared-side data-handling safeguard has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Personal identifiers should be separated from research data immediately upon collection.",
+          "uid": "2887eb2e-ef4c-5fb9-beeb-3526eed4fd8d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "48e6ddfa-622e-49ec-aba0-2fcf89dcfd8c",
+              "memory_uid": "b97f3e2f-e132-5f6f-a748-f406a89a1bc5"
+            },
+            {
+              "frame_uid": "48e6ddfa-622e-49ec-aba0-2fcf89dcfd8c",
+              "memory_uid": "d05964ea-0423-5642-86e1-9e9c19edffbe"
+            }
+          ],
+          "reason": "The compared-side statements split one equipment-loan plan into provision and return logistics, neither addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Equipment lending should identify gear supplied to participants and define its return procedure.",
+          "uid": "067730ef-9334-59c7-bf40-2596b38c6abb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "48e6ddfa-622e-49ec-aba0-2fcf89dcfd8c",
+              "memory_uid": "7e0ba411-3fd9-53ec-8a3f-4499316c06bb"
+            },
+            {
+              "frame_uid": "48e6ddfa-622e-49ec-aba0-2fcf89dcfd8c",
+              "memory_uid": "885d1cf3-8bcd-513c-9591-a548fcbd3992"
+            }
+          ],
+          "reason": "The compared-side statements present the practical safeguard and its assessment rationale as one withdrawal-safety requirement, absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Field participation requires a safe alternative work procedure so withdrawal risk can be assessed and participants can resume existing work.",
+          "uid": "1e0673a9-2651-5e8f-a860-1b56817f210c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "48e6ddfa-622e-49ec-aba0-2fcf89dcfd8c",
+              "memory_uid": "a6fbea37-335c-544b-8bac-01f759bc3855"
+            }
+          ],
+          "reason": "This compared-side non-retaliation protection is independently useful and has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Organizational members who decline participation should face no disadvantage in task assignment or performance evaluation.",
+          "uid": "bcb97e53-3754-530f-9049-9125d52d9223"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "48e6ddfa-622e-49ec-aba0-2fcf89dcfd8c",
+              "memory_uid": "520b4c9f-306e-5749-83b5-2218c97f89e6"
+            }
+          ],
+          "reason": "This compared-side observation identifies a field-study assessment tendency not described in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user tends to underestimate burdens from work interruption and exposure to a manager when sessions are short.",
+          "uid": "d2d8b0a4-7105-5827-bd18-3d24358a5d53"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame requires task-level burden mitigation, accessibility planning, data separation, equipment logistics, safe withdrawal, and protection from workplace disadvantage, while noting underestimated interruption and managerial-exposure burdens.",
+        "differences": "",
+        "reference_only": "The reference frame defines compensation around total participation burden, modality parity, payment flexibility, iterative participation, and disrupted sessions, while noting a tendency to omit between-session preparation."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "e290d9f8-f465-41ce-b263-fec212d432d3"
+    },
+    "analysis_digest": "d29e58e8597a67d48cc79ee16b6496458ab0d2d455720cc5277749e0eca7feb1",
+    "key": "f97198fc72015893bc77283d1e95e33531fdf3a45492fe141c2de91883a50fd0",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 55.703224417000456,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "f97198fc72015893bc77283d1e95e33531fdf3a45492fe141c2de91883a50fd0",
+  "created_at": "2026-08-13T18:17:31.303329Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/compensation",
+  "pair_key": "cd6de407cb66e2899417cc5f029e4df2f67eccebe9553d55445cf3896e5c09be",
+  "provider_seconds": 55.703224417000456,
+  "right": "task-2/advisor2/ethics",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

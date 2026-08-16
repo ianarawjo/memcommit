@@ -1,0 +1,162 @@
+{
+  "coverage": {
+    "expected": 9,
+    "observed": 9
+  },
+  "created_at": "2026-08-11T00:09:09.166205Z",
+  "description_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+  "issues": [],
+  "kind": "STUDY_COMPARE_GRAPH_PAIR",
+  "left": {
+    "context_digest": "1cd906c069598145e690d00cbcc873c6ef2fbe27739a635cb9dead1a4b59bf97",
+    "context_uid": "9c41c876-5c77-4c4e-9520-3679059aa93a",
+    "memory_count": 1,
+    "name": "task-2"
+  },
+  "method": "COMPACT_DECISION_VECTOR_V1",
+  "operation": "COMPARE",
+  "pair_key": "5df4b84fb542ead60f6a5341e75531eaa386d3abf6a4279afa770f9f8b4fee69",
+  "provider": {
+    "condition": "COMPACT_DECISION_VECTOR",
+    "contract_valid": true,
+    "elapsed_seconds": 13.380489290997502,
+    "error_type": null,
+    "failure_category": null,
+    "operation": "compare_contexts_compact_ab_v1",
+    "prompt_chars": 6098,
+    "provider_calls": 1,
+    "provider_run": {
+      "completion_tokens": null,
+      "identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "operation": "compare_contexts_compact_ab_v1",
+      "prompt_tokens": null,
+      "upstream_model": "gpt-5.6-sol",
+      "upstream_provider": "openai-codex"
+    },
+    "provider_seconds": 13.379223833006108,
+    "response_bytes": 329,
+    "response_chars": 329,
+    "schema_chars": 1375,
+    "validation_error": null,
+    "validation_seconds": 0.001239916993654333
+  },
+  "relations": [
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "62ecc8ac-5e2c-5f54-87ad-fcd420259aa2",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000001",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "4a1de8df-6f03-5a3d-bbfa-7c1144d2ec5c",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "a42891a1-b674-5747-a77c-43699b0b9723",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000002",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "b5b6a901-9047-5482-a0e1-d29e5f7171e8",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000003",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "e89de514-48a5-5e9b-96ca-f194c0ed79ab",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000004",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "f7025cbb-4005-53c6-9031-e33f04a86b92",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000005",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "9d7169d5-058f-5f7c-b1ac-30cabd8ba02e",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000006",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "f8931b4e-9656-548d-84a1-f2f2c3eb47b1",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000007",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "9bf9e735-7598-5977-abe2-87b2c9c38a24",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000008",
+      "status": "RESOLVED"
+    }
+  ],
+  "right": {
+    "context_digest": "52dc61895a6d116135c474d4828efde944579b3a5949b6d64c07dd9853f60801",
+    "context_uid": "6f253a9e-f504-53bf-a1d1-de2c4532171e",
+    "memory_count": 8,
+    "name": "task-2/advisor1/emphasis"
+  },
+  "schema_version": 1,
+  "semantic_content_in_participant_report": false,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

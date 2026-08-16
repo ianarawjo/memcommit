@@ -1,0 +1,381 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:19:56.087488+00:00",
+      "frames": [
+        {
+          "context_digest": "42df7e2f7640040d1d6f6f6e566e80d178668a05ab6918b64eed91b91a41b7fb",
+          "context_name": "task-2/advisor1/evaluation",
+          "context_uid": "30568e2f-ce17-50ce-a25b-1cc4bdb94689",
+          "memories": [
+            {
+              "content": "Specify a single representative measure that serves as the criterion for retaining, modifying, or discarding compared design alternatives.",
+              "content_digest": "53aa7c1f81a4fac9e76985be094717aa122e7077a6fcfde46946babd5929d390",
+              "position": 0,
+              "uid": "a50f6ecb-de38-5769-8a6e-23b84a7eb35c"
+            },
+            {
+              "content": "HCI review panels verify whether clear criteria for judging design alternatives are established using the declared primary measure.",
+              "content_digest": "fabd83103e5c3474f56de113c477f7ced5e863a508ec39bd4ae23653d63ad354",
+              "position": 1,
+              "uid": "44c61beb-24a2-584a-ad96-e622690d8171"
+            },
+            {
+              "content": "Collect process measures to diagnose interaction steps where problems occurred, alongside the primary outcome measure.",
+              "content_digest": "6cc2fedef1b0af1c594e48610e08a169f3bca2405bf8773945eca33396aecb36",
+              "position": 2,
+              "uid": "23202824-b576-5d77-b591-8b4cc0757632"
+            },
+            {
+              "content": "Interpret evaluation results as differences between compared design alternatives rather than as success or failure of a single prototype.",
+              "content_digest": "5c578d52a7dbbf4e4b646e707bbee4ac37bcd23bceb0b4d5e09ef3c08df9c2f4",
+              "position": 3,
+              "uid": "65ae88bf-8002-5ada-8590-eaf345b38863"
+            },
+            {
+              "content": "Check boundary cases to verify whether the derived design principles retain explanatory power for adjacent situations not included in the comparison.",
+              "content_digest": "3edc3e181a8086233d889f35cb98c9448875fe3fee915467f712ca3eb2886de1",
+              "position": 4,
+              "uid": "79af5e5f-4868-5e76-bcd5-3f8e1d6a0bd1"
+            },
+            {
+              "content": "Controlled evaluation environments do not reproduce time pressure, peer intervention, or voluntary termination conditions found in daily use.",
+              "content_digest": "e58a1bc6a423874525aca9f864b9b0dbd1e3ef9961410608c5837c88f1153d9b",
+              "position": 5,
+              "uid": "3a65fc8b-a5b4-50fc-a60e-fc6f3fc44547"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "31e2906a-3a26-4770-8bb7-e4be5fd8c9c7"
+        },
+        {
+          "context_digest": "5f537c105ac26d5b710957c611c114c6834953adc14933beda6f44d0a404e410",
+          "context_name": "task-2/advisor2/methods",
+          "context_uid": "531f5f15-65f7-5315-8ccf-0cea6e53b76a",
+          "memories": [
+            {
+              "content": "Specify field and user data sources and analysis procedures corresponding to all HCI research questions.",
+              "content_digest": "0fecdff0f7b1204928239ca5665756cbf5dda44709758e5a093df8187927029e",
+              "position": 0,
+              "uid": "90be328f-1c05-5574-9657-1b0cc04a10b8"
+            },
+            {
+              "content": "In preregistered studies, clarify the criteria for judging plan changes.",
+              "content_digest": "5df2c60004dfd796d0af2a2e16e25f0804164517d00b4c393a65609a3dfb7534",
+              "position": 1,
+              "uid": "452ab231-3131-5697-a728-475289deafd0"
+            },
+            {
+              "content": "In preregistered studies, clarify the location for recording plan changes.",
+              "content_digest": "b05214535147a4c880d7500036b4640a0c479b0b05e2c1061ebfde88cb3c9866",
+              "position": 2,
+              "uid": "9c979f39-9660-5392-a1cd-0d1317af0e0f"
+            },
+            {
+              "content": "Use a justified minimum-to-maximum target range when confirmations can change, and tie the minimum and maximum to different workload and budget cases.",
+              "content_digest": "6c5e9bcd656dc10013c47e9c953409dbb20b06ee9ab758e1915d5f4d37d2604c",
+              "position": 3,
+              "uid": "8a49f598-804e-5a81-8e88-add7b665633a"
+            },
+            {
+              "content": "Specify the observation records, system logs, or interview tools used to collect each type of field and user data.",
+              "content_digest": "04c875971ca30ee5e3909e2c4e0632512d285401d5c9c4c1f42f4aaa592b34c1",
+              "position": 4,
+              "uid": "629cb159-6f6c-5476-870d-716ab573aef8"
+            },
+            {
+              "content": "Specify whether each type of field and user data will be collected before, during, or after deployment.",
+              "content_digest": "b105c5c373365987dff3fc4b709ffd88ba64c8358c179f81d780dc12d6b11bce",
+              "position": 5,
+              "uid": "b565c5c9-a0f7-5aff-a3b1-19696c4d3b39"
+            },
+            {
+              "content": "Readers cannot assess a target range unless both bounds have a stated consequence for schedule, workload, or cost.",
+              "content_digest": "308b499d832f2780b8a0c7d4acf0c9168ddc0e960b837a7f77e6e9574b235066",
+              "position": 6,
+              "uid": "251a4b3c-58fd-5d66-b5bc-74dcbeaa7a0d"
+            },
+            {
+              "content": "In field deployments, network and service instability exist as independent causes of task failure alongside design choices.",
+              "content_digest": "90f270d2544ce92c7ab245e0eb1eca5836f0a885ea652d40b6aad08c1572b039",
+              "position": 7,
+              "uid": "f150891e-7635-5c35-b986-d369bc630ef4"
+            },
+            {
+              "content": "If a safety signal occurs in the field system, existing institutional safety procedures take precedence over the research schedule and data collection plan.",
+              "content_digest": "96e1d7012cce82f901994e7b454d3f7e0a0b1dd18c5af6b9b14694e939356f25",
+              "position": 8,
+              "uid": "7860d9d6-5c2e-5969-b956-f71398218d02"
+            },
+            {
+              "content": "Reviewers judge answerability by tracing the path from each research question to its data sources and analysis procedures.",
+              "content_digest": "90ba5b91064c53361b4e6cf80cb4ec6a23aea3a02becfae03342046ffa2adf0d",
+              "position": 9,
+              "uid": "4fc24f87-e7b5-5d34-b850-f90cdc9b1ea2"
+            },
+            {
+              "content": "The user authoring this proposal tends to present implemented feature lists directly as design contributions.",
+              "content_digest": "d75cc3bb9bd2475fc87a88dc4a72de982101a5c9f03efaf823bcab6ca95dfe5d",
+              "position": 10,
+              "uid": "2db331a6-28d7-5c32-8372-7d3f8bc5b04a"
+            },
+            {
+              "content": "Define what can still be completed at the minimum target instead of treating every number inside the range as operationally identical.",
+              "content_digest": "b6cead2c6a19be091d8594da052baadd184eb3ef18580860e54b2aa337986354",
+              "position": 11,
+              "uid": "40f23f85-561e-55b3-825b-5000f9638f8a"
+            },
+            {
+              "content": "Use a bounded range to absorb expected confirmation changes without pretending that one early estimate is guaranteed.",
+              "content_digest": "1bc0df6bfbc6936b8a390368b5647a93ea8aab7316e9c7d233690b1206e6f17c",
+              "position": 12,
+              "uid": "9527ccb8-6662-58e3-8edd-daf7c0a713af"
+            },
+            {
+              "content": "Show how session count and facilitator time change at the minimum and maximum bounds.",
+              "content_digest": "2167c3e6d6bafad2818bb211b2c735f47ea040318a944c3402abea86b3faa316",
+              "position": 13,
+              "uid": "3ff9ec36-b70d-5dbd-9692-27fdf734fd20"
+            },
+            {
+              "content": "Define the additional workload or deliverable enabled at the maximum target so the upper bound is not an arbitrary cushion.",
+              "content_digest": "30d71498d24e6f7640b3f128824bf4c917f18c9317f164cd864f862f4c81e7fb",
+              "position": 14,
+              "uid": "9e1c3629-641f-5c09-915d-8a2ad1c8013a"
+            },
+            {
+              "content": "A bounded range preserves uncertainty honestly but makes the final workload and budget less certain than one fixed target.",
+              "content_digest": "c9015c18fd3140429386ae5ff3a0e45ffc86d009590772374f8354d4efb85234",
+              "position": 15,
+              "uid": "7ba672db-131e-5795-89c9-46f56344e7ed"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "6cd0bcb7-a49f-4401-9ffb-1ffe072a0012"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames emphasize different parts of HCI evaluation planning. Reference centers comparative design judgment, diagnostic measures, interpretation, transfer, and controlled-setting limits; Compared centers research traceability, preregistration, bounded resource targets, field contingencies, safety precedence, and an authoring tendency. Their environmental cautions are complementary but explicitly setting-dependent.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "31e2906a-3a26-4770-8bb7-e4be5fd8c9c7",
+              "memory_uid": "a50f6ecb-de38-5769-8a6e-23b84a7eb35c"
+            },
+            {
+              "frame_uid": "31e2906a-3a26-4770-8bb7-e4be5fd8c9c7",
+              "memory_uid": "44c61beb-24a2-584a-ad96-e622690d8171"
+            }
+          ],
+          "reason": "Both Reference memories split one underlying one-sided policy: establish the decision criterion through a primary measure and have review panels verify that criterion.",
+          "status": "RESOLVED",
+          "summary": "A declared primary measure should govern decisions among design alternatives and provide a clear criterion for review.",
+          "uid": "058a6fd2-3144-56da-977e-a0972adbc855"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "31e2906a-3a26-4770-8bb7-e4be5fd8c9c7",
+              "memory_uid": "23202824-b576-5d77-b591-8b4cc0757632"
+            }
+          ],
+          "reason": "This diagnostic measurement requirement appears only in Reference and is independently useful from its primary-measure governance policy.",
+          "status": "RESOLVED",
+          "summary": "Process measures should accompany the primary outcome measure to locate problematic interaction steps.",
+          "uid": "6b945e2f-ba3d-52d2-ae97-f0a795d6b1a0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "31e2906a-3a26-4770-8bb7-e4be5fd8c9c7",
+              "memory_uid": "65ae88bf-8002-5ada-8590-eaf345b38863"
+            }
+          ],
+          "reason": "This interpretation rule appears only in Reference and governs a separate analytical decision.",
+          "status": "RESOLVED",
+          "summary": "Evaluation findings should be interpreted comparatively across alternatives, not as pass-or-fail judgments about one prototype.",
+          "uid": "83035a00-3f41-5e56-86aa-f702a44c908b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "31e2906a-3a26-4770-8bb7-e4be5fd8c9c7",
+              "memory_uid": "79af5e5f-4868-5e76-bcd5-3f8e1d6a0bd1"
+            }
+          ],
+          "reason": "This transferability check appears only in Reference and is independent of measurement and result-interpretation policies.",
+          "status": "RESOLVED",
+          "summary": "Adjacent boundary cases should test whether derived design principles retain explanatory power beyond the original comparison.",
+          "uid": "efb02731-2e9f-551b-8280-caa3e8480085"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "31e2906a-3a26-4770-8bb7-e4be5fd8c9c7",
+              "memory_uid": "3a65fc8b-a5b4-50fc-a60e-fc6f3fc44547"
+            },
+            {
+              "frame_uid": "6cd0bcb7-a49f-4401-9ffb-1ffe072a0012",
+              "memory_uid": "f150891e-7635-5c35-b986-d369bc630ef4"
+            }
+          ],
+          "reason": "The explicit controlled-versus-field conditions explain and preserve the difference; the claims complement rather than contradict one another under their respective settings.",
+          "status": "RESOLVED",
+          "summary": "Evaluation-setting conditions constrain causal interpretation: controlled settings omit everyday pressures, while field settings add infrastructure-related failure causes.",
+          "uid": "e73a0bb6-9747-5cbb-a8b3-1ac2acbed6db"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6cd0bcb7-a49f-4401-9ffb-1ffe072a0012",
+              "memory_uid": "90be328f-1c05-5574-9657-1b0cc04a10b8"
+            },
+            {
+              "frame_uid": "6cd0bcb7-a49f-4401-9ffb-1ffe072a0012",
+              "memory_uid": "629cb159-6f6c-5476-870d-716ab573aef8"
+            },
+            {
+              "frame_uid": "6cd0bcb7-a49f-4401-9ffb-1ffe072a0012",
+              "memory_uid": "b565c5c9-a0f7-5aff-a3b1-19696c4d3b39"
+            },
+            {
+              "frame_uid": "6cd0bcb7-a49f-4401-9ffb-1ffe072a0012",
+              "memory_uid": "4fc24f87-e7b5-5d34-b850-f90cdc9b1ea2"
+            }
+          ],
+          "reason": "These Compared memories split one planning claim across source and analysis mapping, collection tools, collection timing, and reviewer assessment of the resulting trace.",
+          "status": "RESOLVED",
+          "summary": "Field and user research plans should make each question traceable to data sources, collection arrangements, and analysis procedures so answerability can be reviewed.",
+          "uid": "794463ef-9e1b-59e7-acbf-47fe8770d999"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6cd0bcb7-a49f-4401-9ffb-1ffe072a0012",
+              "memory_uid": "452ab231-3131-5697-a728-475289deafd0"
+            },
+            {
+              "frame_uid": "6cd0bcb7-a49f-4401-9ffb-1ffe072a0012",
+              "memory_uid": "9c979f39-9660-5392-a1cd-0d1317af0e0f"
+            }
+          ],
+          "reason": "The two Compared memories split one change-control requirement into decision criteria and documentation location.",
+          "status": "RESOLVED",
+          "summary": "Preregistered studies should specify how plan changes are judged and where they are recorded.",
+          "uid": "48a26e35-2384-57ae-8f51-11335755cb54"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6cd0bcb7-a49f-4401-9ffb-1ffe072a0012",
+              "memory_uid": "8a49f598-804e-5a81-8e88-add7b665633a"
+            },
+            {
+              "frame_uid": "6cd0bcb7-a49f-4401-9ffb-1ffe072a0012",
+              "memory_uid": "251a4b3c-58fd-5d66-b5bc-74dcbeaa7a0d"
+            },
+            {
+              "frame_uid": "6cd0bcb7-a49f-4401-9ffb-1ffe072a0012",
+              "memory_uid": "40f23f85-561e-55b3-825b-5000f9638f8a"
+            },
+            {
+              "frame_uid": "6cd0bcb7-a49f-4401-9ffb-1ffe072a0012",
+              "memory_uid": "9527ccb8-6662-58e3-8edd-daf7c0a713af"
+            },
+            {
+              "frame_uid": "6cd0bcb7-a49f-4401-9ffb-1ffe072a0012",
+              "memory_uid": "3ff9ec36-b70d-5dbd-9692-27fdf734fd20"
+            },
+            {
+              "frame_uid": "6cd0bcb7-a49f-4401-9ffb-1ffe072a0012",
+              "memory_uid": "9e1c3629-641f-5c09-915d-8a2ad1c8013a"
+            },
+            {
+              "frame_uid": "6cd0bcb7-a49f-4401-9ffb-1ffe072a0012",
+              "memory_uid": "7ba672db-131e-5795-89c9-46f56344e7ed"
+            }
+          ],
+          "reason": "These Compared memories jointly elaborate one bounded-range policy through its rationale, minimum and maximum meanings, staffing effects, assessability requirements, and uncertainty tradeoff.",
+          "status": "RESOLVED",
+          "summary": "A variable confirmation target should use justified minimum and maximum bounds with distinct deliverables, workload, schedule, and budget consequences while acknowledging residual uncertainty.",
+          "uid": "d196c506-6f61-57d3-bcd6-3ca118392f6f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6cd0bcb7-a49f-4401-9ffb-1ffe072a0012",
+              "memory_uid": "7860d9d6-5c2e-5969-b956-f71398218d02"
+            }
+          ],
+          "reason": "This safety-precedence rule appears only in Compared and is operationally independent of its other field-planning claims.",
+          "status": "RESOLVED",
+          "summary": "A field-system safety signal should trigger existing institutional procedures ahead of research scheduling and data collection.",
+          "uid": "ab4a2f20-4027-5bd4-baab-933e65113cc9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6cd0bcb7-a49f-4401-9ffb-1ffe072a0012",
+              "memory_uid": "2db331a6-28d7-5c32-8372-7d3f8bc5b04a"
+            }
+          ],
+          "reason": "This author-specific framing observation appears only in Compared and is independent of the methodological policies.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to present implemented feature lists directly as design contributions.",
+          "uid": "e3d5a20a-1d04-5943-9063-80ff7180b1c1"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared uniquely covers question-to-method traceability, preregistered change records, consequence-based target ranges, safety overrides, and feature-list framing.",
+        "differences": "Controlled studies omit everyday pressures, whereas field deployments introduce infrastructure failures independent of design; these cautions apply in different evaluation settings.",
+        "reference_only": "Reference uniquely defines primary-measure governance, process diagnostics, comparative interpretation, and boundary-case testing."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "0067f051-f4a8-4848-b3ca-d3536c352c6c"
+    },
+    "analysis_digest": "9db0d2c1364359a7932fa74d66008f61bef13ef4b98d2c2efa7c2c49af5fba73",
+    "key": "f913a1d214c62fdf2de1b837dc9733ecbb8c48ccbea36ea4c9a5a74989397a6c",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 48.28848662499877,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "f913a1d214c62fdf2de1b837dc9733ecbb8c48ccbea36ea4c9a5a74989397a6c",
+  "created_at": "2026-08-13T18:20:44.375652Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/evaluation",
+  "pair_key": "68a04739b14f7fafbaea040c7c865f0b379a0ded97bd1f75cb9bde99b221fa66",
+  "provider_seconds": 48.28848662499877,
+  "right": "task-2/advisor2/methods",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

@@ -1,0 +1,388 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:52:51.800896+00:00",
+      "frames": [
+        {
+          "context_digest": "ac4f93d71b525f6156f0b669075a833a2a41161be6abe677ec382bff6e6060e8",
+          "context_name": "task-3/local/personal-memory/2025/08",
+          "context_uid": "ed84de75-8e18-5bec-908c-a1ff9827b3e3",
+          "memories": [
+            {
+              "content": "The user keeps packing tape for returns in an upper kitchen drawer.",
+              "content_digest": "ed359d883caffd7ce4daddc297ddcc9d26da233dc2a36dc4dbc96e300b2248e9",
+              "position": 0,
+              "uid": "15c3941e-ed44-508f-ae30-b51456b5ba86"
+            },
+            {
+              "content": "The user arrived ten minutes before the post office closed and found that numbered-ticket intake had ended.",
+              "content_digest": "3c4609eea9455bbd46a6f238aa750f61f348ce7b2cf421a4d123f1b707b52550",
+              "position": 1,
+              "uid": "84d1fd1c-9508-5f05-9a7c-1d5f20ecf4a4"
+            },
+            {
+              "content": "Before the next visit, the user checked the operating hours and arrived one hour before closing.",
+              "content_digest": "b2997262abf4ba476c63de3550e54269ef7d61bb56d3adb5b6d9f54ba13fc078",
+              "position": 2,
+              "uid": "8946f9da-e325-59c3-9260-2d2f590d3701"
+            },
+            {
+              "content": "The user went to the counter without closing a return box and had to go back to the packing station.",
+              "content_digest": "759122c3f88ca71b992a725e357beab72f9820de872a7bd895b808c2df21f2b2",
+              "position": 3,
+              "uid": "67e8b160-a57d-56e5-a766-741b7ce0e939"
+            },
+            {
+              "content": "For the next return, the user sealed the box at home and completed intake in one attempt.",
+              "content_digest": "007fcec32ea3788854161e68c95c2aaba90e94a721d03b350e1619afc54840e3",
+              "position": 4,
+              "uid": "efd0706b-600a-5ac1-926e-cc0602ca0086"
+            },
+            {
+              "content": "The user scheduled bank and post-office errands for the same day, but they took a long time because the destinations were in different directions.",
+              "content_digest": "000e1975fde79f4d6caf36adad0c2e481a032537cfa410e46649866d985567c2",
+              "position": 5,
+              "uid": "1e8a6f7e-0911-5a34-ad82-172479d1a7a4"
+            },
+            {
+              "content": "The following week, after checking the locations on a map, the user visited nearby branches in sequence.",
+              "content_digest": "c3de08c5b6074dff2b3f6303f5efc3740cc430b634cb365a5d570061a30a53fa",
+              "position": 6,
+              "uid": "a8670161-257e-51ab-8e30-0e282952278f"
+            },
+            {
+              "content": "Postal staff expect a return-label barcode to arrive affixed flat, without a fold.",
+              "content_digest": "6293ace2d67781644694976af71d5696cad28979d9641718ccd59f16b3397a47",
+              "position": 7,
+              "uid": "2db70f53-99ee-556c-a8c1-b809881cbebd"
+            },
+            {
+              "content": "Before grouping errands into one outing, check each institution's location and operating hours that day.",
+              "content_digest": "7fef923f9ed507db5aad6cf65eaee2c965075e51fef0ff73fa669f1e7f69314a",
+              "position": 8,
+              "uid": "38d60cc4-2f91-5cc2-b511-55cdbbe12c32"
+            },
+            {
+              "content": "Postal and financial counters may operate on different hours than usual around public holidays.",
+              "content_digest": "2d5dc709c468405ea894f343e922dc2546b826ed7488e613f4d4dd730bccccfd",
+              "position": 9,
+              "uid": "1272087c-a535-5612-8c7a-1bc257183788"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "2b7e57d5-55bc-4dcf-b921-1c234084f84a"
+        },
+        {
+          "context_digest": "5a45aaafce189f861f7195d3a753aa86812f64c689213961136327ca721c9d3e",
+          "context_name": "task-3/local/personal-memory/2026/06",
+          "context_uid": "f2e6c2e0-886a-52d8-98d4-03009ea37991",
+          "memories": [
+            {
+              "content": "The user keeps four folding chairs for family barbecues in storage.",
+              "content_digest": "7e2bb593a723adbac468184af4063e0ef74420baa03d6249ef77a84f2e6bc9df",
+              "position": 0,
+              "uid": "cce43b8e-c1c1-5208-8d9a-ee665b805d4c"
+            },
+            {
+              "content": "When six family members gathered in a noisy indoor restaurant, the user asked several times for the person across from them to repeat what was said.",
+              "content_digest": "d858d40478a37bed08580523df1915b85b4e2217b2fc506acedacaca55d2158d",
+              "position": 1,
+              "uid": "e682f0fd-e92f-566e-b1ec-1d5ebf091b60"
+            },
+            {
+              "content": "The user held the next gathering in their father's yard and moved between seats while speaking with everyone.",
+              "content_digest": "44843518c924955fa15e245dc41763a6fe21a95f6f590bd395f7b8a2d6357256",
+              "position": 2,
+              "uid": "c1f2b53e-6184-552b-a321-9796bb121055"
+            },
+            {
+              "content": "On a day the user started the barbecue at midday, sunlight led them to finish the meal quickly.",
+              "content_digest": "f275c2211b4bd69f40351800db57965b8ba44afbadb6e90a0291acae4e7a541b",
+              "position": 3,
+              "uid": "56d5befe-d5f4-59df-82e4-a66ba868dfc2"
+            },
+            {
+              "content": "The next time, the user started at 6 p.m. and remained outside until sunset.",
+              "content_digest": "13c413fbf16ea0704c10d09c5ee065a49ab789b0a3dadb1fc5068631dd95b292",
+              "position": 4,
+              "uid": "83d73ede-6f5a-550e-ba1c-c146b73a9917"
+            },
+            {
+              "content": "Because the side dishes brought by the user's mother and older sister had no labels, the user opened the same container twice.",
+              "content_digest": "5cc4205a743f5d8adca15876d7b0dd864089595ce729f4e3c1cc9a2272c6849b",
+              "position": 5,
+              "uid": "cf0947e8-c133-5259-bac2-e8ee6d74929e"
+            },
+            {
+              "content": "At the next gathering, the user wrote each food's name and who brought it on a small piece of paper.",
+              "content_digest": "6a93e0b5f7e3da8eff2e5c69a3f86c28dfc1a39c1ba7602a61cc1f6a96b837f9",
+              "position": 6,
+              "uid": "d42e48ca-39de-529f-bba2-332b779bd6c2"
+            },
+            {
+              "content": "After a barbecue, the user's younger brother prefers to divide leftover food into small containers to take home rather than discard it.",
+              "content_digest": "9febf1dab1f5000cddc636cd753d3c418b84810cbc6e394df7e8917d3fa29b72",
+              "position": 7,
+              "uid": "3958627e-a0fa-5e32-9e87-7ee874fc6fe7"
+            },
+            {
+              "content": "The local agent can summarize preparation and responses from prior family barbecues but cannot know the next attendees or weather.",
+              "content_digest": "6be2ed6916fc8a6200a4646b5db3b5ea0df7650e664bd098f973fb5229257cec",
+              "position": 8,
+              "uid": "1f24b5c2-554c-5356-b335-c6879e53ba7f"
+            },
+            {
+              "content": "The user's father's yard receives strong direct sunlight at midday; after 6 p.m., shade and wind lower the felt temperature.",
+              "content_digest": "a0bf855f5bb0422568bbed468e5299d111143362d7b9fe2dcf35dbaf8bcbf4c6",
+              "position": 9,
+              "uid": "d88b1b21-c58f-51d5-a60b-54bb11473d96"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "7eb916ff-c9f7-48fa-bc19-b8d381ba21f5"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover independent domains: the reference concerns postal returns and multi-stop errands, while the compared frame concerns planning and learning from family barbecues. Neither frame supplies a scope-aligned counterpart to the other, and no conflict or ambiguity is present.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2b7e57d5-55bc-4dcf-b921-1c234084f84a",
+              "memory_uid": "15c3941e-ed44-508f-ae30-b51456b5ba86"
+            }
+          ],
+          "reason": "This is independently useful reference-side information about return-supply storage, with no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Packing tape for returns is stored in an upper kitchen drawer.",
+          "uid": "b7dc67bb-ab4f-52b5-a817-161ae7df8763"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2b7e57d5-55bc-4dcf-b921-1c234084f84a",
+              "memory_uid": "84d1fd1c-9508-5f05-9a7c-1d5f20ecf4a4"
+            },
+            {
+              "frame_uid": "2b7e57d5-55bc-4dcf-b921-1c234084f84a",
+              "memory_uid": "8946f9da-e325-59c3-9260-2d2f590d3701"
+            }
+          ],
+          "reason": "Both memories form one reference-side experience-and-adjustment claim about allowing sufficient time before post-office closing; the compared frame does not address it.",
+          "status": "RESOLVED",
+          "summary": "After arriving too near closing for numbered-ticket intake, the user planned the next visit by checking hours and arriving substantially earlier.",
+          "uid": "bcc8d89c-db3a-5923-b1b6-1db55256319f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2b7e57d5-55bc-4dcf-b921-1c234084f84a",
+              "memory_uid": "67e8b160-a57d-56e5-a766-741b7ce0e939"
+            },
+            {
+              "frame_uid": "2b7e57d5-55bc-4dcf-b921-1c234084f84a",
+              "memory_uid": "efd0706b-600a-5ac1-926e-cc0602ca0086"
+            }
+          ],
+          "reason": "Both memories form one reference-side experience-and-adjustment claim about completing parcel sealing before counter intake; there is no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "After an unsealed return box caused an extra trip to the packing station, sealing the next box at home enabled one-attempt intake.",
+          "uid": "61d1ed46-b366-5f17-b1cd-6be83bb5d7a2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2b7e57d5-55bc-4dcf-b921-1c234084f84a",
+              "memory_uid": "1e8a6f7e-0911-5a34-ad82-172479d1a7a4"
+            },
+            {
+              "frame_uid": "2b7e57d5-55bc-4dcf-b921-1c234084f84a",
+              "memory_uid": "a8670161-257e-51ab-8e30-0e282952278f"
+            }
+          ],
+          "reason": "Both memories form one reference-side experience-and-adjustment claim about routing combined institutional errands; the compared frame offers no matching claim.",
+          "status": "RESOLVED",
+          "summary": "After distant bank and post-office destinations made a combined outing slow, the user mapped and visited nearby branches in sequence.",
+          "uid": "f817a3b4-bfaa-5856-a0aa-16107ef22f1b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2b7e57d5-55bc-4dcf-b921-1c234084f84a",
+              "memory_uid": "2db70f53-99ee-556c-a8c1-b809881cbebd"
+            }
+          ],
+          "reason": "This reference-side parcel-label requirement is independently useful and absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Postal staff expect a return-label barcode to be affixed flat and without a fold.",
+          "uid": "9b36bc7e-9372-5ccc-849f-398dfcd1c46f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2b7e57d5-55bc-4dcf-b921-1c234084f84a",
+              "memory_uid": "38d60cc4-2f91-5cc2-b511-55cdbbe12c32"
+            }
+          ],
+          "reason": "This is an independent reference-side planning policy combining same-day location and schedule checks, without a compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Before combining errands, check each institution's location and operating hours for that day.",
+          "uid": "2b5059c9-e078-594f-b409-a16f383eecf2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2b7e57d5-55bc-4dcf-b921-1c234084f84a",
+              "memory_uid": "1272087c-a535-5612-8c7a-1bc257183788"
+            }
+          ],
+          "reason": "This independently useful reference-side holiday-hours caveat is not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Postal and financial counter hours may differ from usual around public holidays.",
+          "uid": "088778b5-43a1-5735-887c-c336b5528490"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7eb916ff-c9f7-48fa-bc19-b8d381ba21f5",
+              "memory_uid": "cce43b8e-c1c1-5208-8d9a-ee665b805d4c"
+            }
+          ],
+          "reason": "This is independently useful compared-side information about barbecue seating supplies, with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Four folding chairs for family barbecues are kept in storage.",
+          "uid": "e627dd96-e3ea-5742-8ae7-64877f24ba01"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7eb916ff-c9f7-48fa-bc19-b8d381ba21f5",
+              "memory_uid": "e682f0fd-e92f-566e-b1ec-1d5ebf091b60"
+            },
+            {
+              "frame_uid": "7eb916ff-c9f7-48fa-bc19-b8d381ba21f5",
+              "memory_uid": "c1f2b53e-6184-552b-a321-9796bb121055"
+            }
+          ],
+          "reason": "Both memories form one compared-side experience-and-adjustment claim about how gathering setting and seating access affect conversation; the reference frame does not address it.",
+          "status": "RESOLVED",
+          "summary": "After indoor restaurant noise hindered conversation across a six-person gathering, the next gathering used the father's yard and movement between seats to support conversations.",
+          "uid": "3cc57dc4-f47a-58db-a047-094b0c0a110c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7eb916ff-c9f7-48fa-bc19-b8d381ba21f5",
+              "memory_uid": "56d5befe-d5f4-59df-82e4-a66ba868dfc2"
+            },
+            {
+              "frame_uid": "7eb916ff-c9f7-48fa-bc19-b8d381ba21f5",
+              "memory_uid": "83d73ede-6f5a-550e-ba1c-c146b73a9917"
+            },
+            {
+              "frame_uid": "7eb916ff-c9f7-48fa-bc19-b8d381ba21f5",
+              "memory_uid": "d88b1b21-c58f-51d5-a60b-54bb11473d96"
+            }
+          ],
+          "reason": "These memories jointly describe one compared-side claim that conditions and comfort in the father's yard vary with barbecue timing; the reference frame has no counterpart.",
+          "status": "RESOLVED",
+          "summary": "Midday direct sunlight shortened a barbecue meal, whereas a 6 p.m. start aligned with shade, wind, and a longer stay outside until sunset.",
+          "uid": "923df3bf-06dd-5228-89af-e37e5ed2b45a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7eb916ff-c9f7-48fa-bc19-b8d381ba21f5",
+              "memory_uid": "cf0947e8-c133-5259-bac2-e8ee6d74929e"
+            },
+            {
+              "frame_uid": "7eb916ff-c9f7-48fa-bc19-b8d381ba21f5",
+              "memory_uid": "d42e48ca-39de-529f-bba2-332b779bd6c2"
+            }
+          ],
+          "reason": "Both memories form one compared-side experience-and-adjustment claim about labeling contributed dishes; it is absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "After unlabeled side dishes caused the same container to be opened twice, the next gathering used notes naming each food and its contributor.",
+          "uid": "656b1630-060b-5f96-8693-6698b6a6fd87"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7eb916ff-c9f7-48fa-bc19-b8d381ba21f5",
+              "memory_uid": "3958627e-a0fa-5e32-9e87-7ee874fc6fe7"
+            }
+          ],
+          "reason": "This compared-side family preference is independently useful and has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user's younger brother prefers taking barbecue leftovers home in small containers instead of discarding them.",
+          "uid": "8729fa84-a906-5aaa-9948-b8ecc9c4de7d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7eb916ff-c9f7-48fa-bc19-b8d381ba21f5",
+              "memory_uid": "1f24b5c2-554c-5356-b335-c6879e53ba7f"
+            }
+          ],
+          "reason": "This is an independent compared-side capability-and-uncertainty boundary not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The local agent can summarize prior barbecue preparation and responses but cannot know future attendees or weather.",
+          "uid": "6211cd0f-31fb-521d-b682-848c8d7c77f9"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame records chair storage and barbecue lessons involving conversational settings, sunlight and start times, food labels, leftover sharing, and the limits of predicting attendance or weather from prior gatherings.",
+        "differences": "",
+        "reference_only": "The reference records where packing tape is kept, lessons about arrival time and parcel preparation, route planning for combined errands, barcode presentation, same-day location and hours checks, and possible holiday counter-hour changes."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "b1f33d20-8529-4b2f-a9d0-9710278e8878"
+    },
+    "analysis_digest": "c4b69a4669de010acd5b5e46fefe6713ea22c097a05a3f432fd34476cb86e0a3",
+    "key": "3be29a610af680514e7da0c975388381bad5fcce5e80bcac7ecaba46684300f2",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 50.85383616699983,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "3be29a610af680514e7da0c975388381bad5fcce5e80bcac7ecaba46684300f2",
+  "created_at": "2026-08-13T18:53:42.654301Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/08",
+  "pair_key": "7c12bb88d9fbeb1cd514991f2100825d87ee3d8078b27b18bcbf8990e1c511b3",
+  "provider_seconds": 50.85383616699983,
+  "right": "task-3/local/personal-memory/2026/06",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

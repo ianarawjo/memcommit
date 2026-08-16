@@ -52,6 +52,10 @@ from memcommit.profile_config import (
     validate_grant_resource_name,
     validate_profile_name,
 )
+from memcommit.storage_permissions import (
+    ensure_private_directory,
+    open_private_exclusive,
+)
 from memcommit.translation_view import TranslationCatalog
 
 
@@ -900,7 +904,10 @@ def _ensure_control_dirs() -> None:
             raise ProfileError(f"{label} directory cannot be a symbolic link.")
         if path.exists() and not path.is_dir():
             raise ProfileError(f"{label} storage is invalid.")
-        path.mkdir(parents=True, exist_ok=True)
+        try:
+            ensure_private_directory(path, parents=True)
+        except ValueError as error:
+            raise ProfileError(str(error)) from error
 
 
 @contextmanager
@@ -938,10 +945,11 @@ def authority_grant_snapshot_lock() -> Iterator[ProfileRegistry]:
 
 def _write_registry(registry: ProfileRegistry) -> None:
     path = profile_registry_file()
-    path.parent.mkdir(parents=True, exist_ok=True)
+    ensure_private_directory(path.parent, parents=True)
     temporary = path.parent / f".{path.name}.write-{uuid.uuid4().hex}"
     try:
-        with open(temporary, "x", encoding="utf-8") as file:
+        descriptor = open_private_exclusive(temporary)
+        with os.fdopen(descriptor, "w", encoding="utf-8") as file:
             json.dump(registry.to_dict(), file, ensure_ascii=False, indent=2)
             file.write("\n")
             file.flush()

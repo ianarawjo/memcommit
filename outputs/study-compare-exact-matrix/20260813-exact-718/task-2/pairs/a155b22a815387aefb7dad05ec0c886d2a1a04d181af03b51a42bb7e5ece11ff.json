@@ -1,0 +1,368 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:18:42.982020+00:00",
+      "frames": [
+        {
+          "context_digest": "89608fbad1167ce0da41a7a6312a1b4e92ee55ff6a7d97bb480a0c75d588a7f2",
+          "context_name": "task-2/advisor1/ethics",
+          "context_uid": "5cdea05f-b6ec-586d-a87f-5347d1d51f96",
+          "memories": [
+            {
+              "content": "Link expected participant burden in each user study task to its corresponding mitigation strategy.",
+              "content_digest": "3595c8f1662100b6c6345bb709c7b2eba285f1979f8d3a5b925c4f32ed9aa4dc",
+              "position": 0,
+              "uid": "e93ea2ee-a8b0-5f3d-b6fd-c76f385eef50"
+            },
+            {
+              "content": "Specify the accommodations necessary for participants to access the prototype and research tasks.",
+              "content_digest": "9879ddf2306813f412b89c1f67f4b1a4779ff9acf55b0b34942bc6f1f555f695",
+              "position": 1,
+              "uid": "6ecf6a7b-f4e9-5d96-a52c-520197d4a2a6"
+            },
+            {
+              "content": "Specify how accessibility accommodations will be provided during user study sessions.",
+              "content_digest": "cce1831f8b2bb3015bc4e69e64a2b1cd4ea6f7249daf28da6686eec262038dc5",
+              "position": 2,
+              "uid": "bc41fce0-dbfc-5d23-9d97-9f81531c098c"
+            },
+            {
+              "content": "Describe how personal identifiers will be separated from research data immediately after collection.",
+              "content_digest": "bd80d3a47e10f1c8a9aec0362cb51995bfe9ecd22f86be916cb0a9009b5f23bf",
+              "position": 3,
+              "uid": "9768e0d9-ef46-52a4-af04-8f6ca3c176c5"
+            },
+            {
+              "content": "Specify the equipment to be loaned to participants who lack necessary devices.",
+              "content_digest": "69991f284e369e31da55a2a23afef032bd50f43dfe66d417a816b242d10c9926",
+              "position": 4,
+              "uid": "e874407e-4d36-55a6-949e-44e5944f1bb4"
+            },
+            {
+              "content": "Describe the procedure for returning equipment loaned to participants.",
+              "content_digest": "100ffbad1288c3263bc4a1044b2d42da35c36a3f73786e58e4391fbac98c84f2",
+              "position": 5,
+              "uid": "df16dca6-0b48-5753-aa18-7e5524187a1e"
+            },
+            {
+              "content": "HCI ethics reviewers verify that expected burdens and mitigation strategies correspond to each user study task.",
+              "content_digest": "1ce06fdbd6b8c4542063ab2413ba80a40c86336dcc43ebb4e1590a246e76d968",
+              "position": 6,
+              "uid": "7d0b3072-7bac-5bc6-9c79-acc808c38f1f"
+            },
+            {
+              "content": "Inform participants that the formative evaluation prototype is not a finished service.",
+              "content_digest": "b02788b149a575392cc58dcba87c21026eec4d733f4e1ef0b3149fcc0e318e74",
+              "position": 7,
+              "uid": "407a4c1c-c333-5764-8d89-252bed150f99"
+            },
+            {
+              "content": "Set an upper limit on cumulative task burden when requesting repeated evaluations from the same participant.",
+              "content_digest": "9d8e4304568abc398445be0aeddc4d1c9945bf48e0295240d48c071dd979646e",
+              "position": 8,
+              "uid": "28646fd3-54af-51f9-97da-ad9489ecda79"
+            },
+            {
+              "content": "The author of this proposal tends to emphasize expected benefits of the prototype over participant burden.",
+              "content_digest": "ffb40ab90087893e20227797ee997e40803e3b812f8a1634e282ab9920cf28d4",
+              "position": 9,
+              "uid": "218aafb6-9332-5693-a2e7-c7777dc64de7"
+            },
+            {
+              "content": "In organizations where leaders or institutional staff handle recruitment, recruitment authority and academic or professional evaluation authority may be combined in the same role.",
+              "content_digest": "d7baf962a2cae0da6c9057f909918788101229b54d57340fb1d5aad459597c05",
+              "position": 10,
+              "uid": "1ecb7268-f77a-5643-a456-357df6cd8f6e"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "a2bf4082-51e2-4929-9756-e7213a4a238d"
+        },
+        {
+          "context_digest": "e70e4eaff26e4baf1b346a4ecd2b44ed9f9ccac9e205b7b82572dc8ef0e217c4",
+          "context_name": "task-2/advisor2/emphasis",
+          "context_uid": "398f9930-3a0f-5de0-a339-ceba7dd5d1c6",
+          "memories": [
+            {
+              "content": "Do not exceed two primary HCI contributions that readers must remember.",
+              "content_digest": "59786866cf953172c2697f09398356a861e8ea448093102c32c9149f16b2e5c5",
+              "position": 0,
+              "uid": "d59dc83b-ce6a-5ac7-ab64-e5436df1f945"
+            },
+            {
+              "content": "Present each design or operational contribution as a single named sentence.",
+              "content_digest": "e0de5a9f1c1ca585fe062d7e11f8d2536cbe5ec4eefc16da6f7a0b62c0247d45",
+              "position": 1,
+              "uid": "328de462-17a4-551f-9f74-cb3118519e45"
+            },
+            {
+              "content": "In studies recruiting organizational members, emphasize workflow constraints.",
+              "content_digest": "c46efadebd89f3d757993baea79a5ef1386bbf6b4769ae3704ae62102397fc3b",
+              "position": 2,
+              "uid": "eab1dac5-8b61-5793-a56f-c4e3e64af190"
+            },
+            {
+              "content": "In studies recruiting organizational members, emphasize manager approval constraints.",
+              "content_digest": "2387fb9f3ab907e671fc9dcc2e7f067a84bdf1f5713d8385a32e39eb1e14751d",
+              "position": 3,
+              "uid": "f90e616a-d5a4-5cc2-86e4-62534a1faf83"
+            },
+            {
+              "content": "HCI reviewers find it difficult to identify primary contributions when named design and operational contributions exceed two.",
+              "content_digest": "04e080bfdf7277d04f0efc1b1d6775d06cba88aab5ff78bfd430674b004722a5",
+              "position": 4,
+              "uid": "78a1c87a-6936-516c-b578-8e97dc2e91f4"
+            },
+            {
+              "content": "Highlight one primary field operational decision to be changed by evaluation results as the central claim.",
+              "content_digest": "9a6bda883e68a2553a1238114d5de2746dc220948aebc1c2965cbb435318fe9c",
+              "position": 5,
+              "uid": "7af2db41-9091-5452-9beb-8fd7b48b7872"
+            },
+            {
+              "content": "Specify prototype features unnecessary for reviewing the primary field problem as secondary scope.",
+              "content_digest": "419ed0b0bccf1af7b30e0351f5e87b9e37e469cfa567e684695ffe4b6d39178a",
+              "position": 6,
+              "uid": "2312f35d-c17d-5af3-b84f-d2e671d7663f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "fb6769e7-1481-44bd-8052-537e387a9b34"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames mostly cover independent concerns: the reference emphasizes participant protections and study logistics, while the compared frame emphasizes contribution framing and field relevance. They overlap only in recognizing organizational recruitment constraints involving managerial authority or approval.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "a2bf4082-51e2-4929-9756-e7213a4a238d",
+              "memory_uid": "1ecb7268-f77a-5643-a456-357df6cd8f6e"
+            },
+            {
+              "frame_uid": "fb6769e7-1481-44bd-8052-537e387a9b34",
+              "memory_uid": "f90e616a-d5a4-5cc2-86e4-62534a1faf83"
+            }
+          ],
+          "reason": "Combined recruitment and evaluation authority and manager-approval constraints are complementary aspects of the same recruitment-governance concern and can jointly guide organizational studies.",
+          "status": "RESOLVED",
+          "summary": "Organizational recruitment should account for managerial or institutional control over participation.",
+          "uid": "c02e15ef-529d-5e32-97f4-aeea529ad9a8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a2bf4082-51e2-4929-9756-e7213a4a238d",
+              "memory_uid": "e93ea2ee-a8b0-5f3d-b6fd-c76f385eef50"
+            },
+            {
+              "frame_uid": "a2bf4082-51e2-4929-9756-e7213a4a238d",
+              "memory_uid": "7d0b3072-7bac-5bc6-9c79-acc808c38f1f"
+            }
+          ],
+          "reason": "The requirement and reviewer check split one reference-only control for task-level burden-to-mitigation correspondence.",
+          "status": "RESOLVED",
+          "summary": "Expected participant burdens and mitigations should correspond to individual study tasks and be reviewable as such.",
+          "uid": "b013275e-a8a3-5cd5-8ba7-d218fc8c590f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a2bf4082-51e2-4929-9756-e7213a4a238d",
+              "memory_uid": "6ecf6a7b-f4e9-5d96-a52c-520197d4a2a6"
+            },
+            {
+              "frame_uid": "a2bf4082-51e2-4929-9756-e7213a4a238d",
+              "memory_uid": "bc41fce0-dbfc-5d23-9d97-9f81531c098c"
+            }
+          ],
+          "reason": "These reference-only statements split the specification of accommodation needs and their provision within one accessibility-support requirement.",
+          "status": "RESOLVED",
+          "summary": "Study plans should identify necessary accessibility accommodations and explain their session delivery.",
+          "uid": "79d1687a-7acf-5a3d-99f3-cf6a75132baf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a2bf4082-51e2-4929-9756-e7213a4a238d",
+              "memory_uid": "9768e0d9-ef46-52a4-af04-8f6ca3c176c5"
+            }
+          ],
+          "reason": "This is an independently useful reference-only data-handling safeguard.",
+          "status": "RESOLVED",
+          "summary": "Personal identifiers should be separated from research data immediately after collection.",
+          "uid": "17ee5de5-84bd-55eb-8af9-2dfccb52d32e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a2bf4082-51e2-4929-9756-e7213a4a238d",
+              "memory_uid": "e874407e-4d36-55a6-949e-44e5944f1bb4"
+            },
+            {
+              "frame_uid": "a2bf4082-51e2-4929-9756-e7213a4a238d",
+              "memory_uid": "df16dca6-0b48-5753-aa18-7e5524187a1e"
+            }
+          ],
+          "reason": "The reference-only statements split one equipment-loan lifecycle requirement into provisioning and return steps.",
+          "status": "RESOLVED",
+          "summary": "Participant equipment support should specify both loaned devices and their return procedure.",
+          "uid": "0668dc20-5114-59ec-a9aa-344aa8f92444"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a2bf4082-51e2-4929-9756-e7213a4a238d",
+              "memory_uid": "407a4c1c-c333-5764-8d89-252bed150f99"
+            }
+          ],
+          "reason": "This is an independently useful reference-only participant disclosure.",
+          "status": "RESOLVED",
+          "summary": "Participants should be told that the formative prototype is not a finished service.",
+          "uid": "62ae7079-a4a5-5512-83f2-d9783a56ec4f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a2bf4082-51e2-4929-9756-e7213a4a238d",
+              "memory_uid": "28646fd3-54af-51f9-97da-ad9489ecda79"
+            }
+          ],
+          "reason": "This is an independently useful reference-only safeguard for repeated participation.",
+          "status": "RESOLVED",
+          "summary": "Repeated evaluations with one participant should be subject to an upper cumulative burden limit.",
+          "uid": "d748c115-e733-5748-b2a6-3930b32c717d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a2bf4082-51e2-4929-9756-e7213a4a238d",
+              "memory_uid": "218aafb6-9332-5693-a2e7-c7777dc64de7"
+            }
+          ],
+          "reason": "This reference-only observation identifies a framing tendency distinct from the operational safeguards.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to emphasize prototype benefits over participant burden.",
+          "uid": "37f4ebfd-5464-5eb5-9ee5-c2b5e3d0254f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fb6769e7-1481-44bd-8052-537e387a9b34",
+              "memory_uid": "d59dc83b-ce6a-5ac7-ab64-e5436df1f945"
+            },
+            {
+              "frame_uid": "fb6769e7-1481-44bd-8052-537e387a9b34",
+              "memory_uid": "78a1c87a-6936-516c-b578-8e97dc2e91f4"
+            }
+          ],
+          "reason": "The compared-only prescription and reviewer observation express one underlying contribution-count constraint and its rationale.",
+          "status": "RESOLVED",
+          "summary": "Readers should be asked to retain no more than two primary HCI contributions because larger sets impede reviewer identification.",
+          "uid": "8db7fdff-04d1-54af-a9a3-f929e6200523"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fb6769e7-1481-44bd-8052-537e387a9b34",
+              "memory_uid": "328de462-17a4-551f-9f74-cb3118519e45"
+            }
+          ],
+          "reason": "This is an independently useful compared-only presentation rule.",
+          "status": "RESOLVED",
+          "summary": "Each design or operational contribution should be presented as one named sentence.",
+          "uid": "31dfb345-6286-5acd-8b8a-8bf5b98a124d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fb6769e7-1481-44bd-8052-537e387a9b34",
+              "memory_uid": "eab1dac5-8b61-5793-a56f-c4e3e64af190"
+            }
+          ],
+          "reason": "This compared-only concern addresses operational workflow and is not reducible to recruitment authority or approval.",
+          "status": "RESOLVED",
+          "summary": "Studies recruiting organizational members should emphasize workflow constraints.",
+          "uid": "27a88899-3265-558d-afa5-444d79aa58ac"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fb6769e7-1481-44bd-8052-537e387a9b34",
+              "memory_uid": "7af2db41-9091-5452-9beb-8fd7b48b7872"
+            }
+          ],
+          "reason": "This is an independently useful compared-only rule for centering evaluation relevance.",
+          "status": "RESOLVED",
+          "summary": "The central claim should identify one primary field operational decision that evaluation results will change.",
+          "uid": "32b14f9e-59f6-59ad-9ada-79b0afbd7f50"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fb6769e7-1481-44bd-8052-537e387a9b34",
+              "memory_uid": "2312f35d-c17d-5af3-b84f-d2e671d7663f"
+            }
+          ],
+          "reason": "This is an independently useful compared-only boundary for prototype relevance.",
+          "status": "RESOLVED",
+          "summary": "Prototype features unnecessary for reviewing the primary field problem should be identified as secondary scope.",
+          "uid": "35ae1bff-f690-59d1-826d-66581c13cfb3"
+        }
+      ],
+      "reports": {
+        "both": "Both recognize that organizational recruitment can be shaped by managerial authority and approval constraints.",
+        "compared_only": "The compared frame adds contribution limits and naming, workflow emphasis, a central field decision, and explicit secondary prototype scope.",
+        "differences": "",
+        "reference_only": "The reference adds task-level burden controls, accessibility and equipment support, data separation, prototype disclosure, repeated-participation limits, and attention to benefit-biased framing."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "40b5e079-9557-47fe-9a15-d2318365679e"
+    },
+    "analysis_digest": "46f4fdc00f64f77d8b4bd9b5d3b1ddb4b8b4750c995b561852199844a696bb7d",
+    "key": "4f87cb6f6e30d690b3956330d68ec0f23f59188680185b906cc7a3180e67efe1",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 46.97725400000127,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "4f87cb6f6e30d690b3956330d68ec0f23f59188680185b906cc7a3180e67efe1",
+  "created_at": "2026-08-13T18:19:29.958312Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/ethics",
+  "pair_key": "a155b22a815387aefb7dad05ec0c886d2a1a04d181af03b51a42bb7e5ece11ff",
+  "provider_seconds": 46.97725400000127,
+  "right": "task-2/advisor2/emphasis",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

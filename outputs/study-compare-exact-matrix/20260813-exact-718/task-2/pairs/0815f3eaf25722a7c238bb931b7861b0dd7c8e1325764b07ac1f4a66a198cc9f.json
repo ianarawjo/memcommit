@@ -1,0 +1,330 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:25:09.973854+00:00",
+      "frames": [
+        {
+          "context_digest": "3dd1208c3f947a57bc5f1d490a28c999913d43cad775b2b01e50c6059d6b660e",
+          "context_name": "task-2/advisor1/safety",
+          "context_uid": "cd6c1fab-786a-52ea-9437-9a4d209ba419",
+          "memories": [
+            {
+              "content": "Specify the order and recipients for reporting serious discomfort during the study.",
+              "content_digest": "1de38a3ec5fc3267ebeb35482a458d4aaf50d2aea44c6dba334f184e50ddddd2",
+              "position": 0,
+              "uid": "9d6f5228-d182-571a-83d2-6a67becb7736"
+            },
+            {
+              "content": "Field staff rely on a pre-defined contact sequence when serious discomfort is reported.",
+              "content_digest": "ed3a3b19d92a50c7dd324981b702bac31e0130fda38fe37150e500481ed11d84",
+              "position": 1,
+              "uid": "00ed485d-66c2-59ad-9c5b-9ae445412690"
+            },
+            {
+              "content": "Establish criteria for halting the use of a design alternative if recurring severe errors appear during formative evaluation.",
+              "content_digest": "dcca56df756b89f89a0a9dbf2bf45aee6480392b368c9cf3402223d3084b801b",
+              "position": 2,
+              "uid": "9c6e1561-f671-52cb-aa67-245cc4987ad4"
+            },
+            {
+              "content": "Do not include a design alternative halted for safety reasons in subsequent evaluation iterations without modification.",
+              "content_digest": "01668098161666622f4d7ed8298e3e63a06fa9b10a4cfd53b200d820f96f5c50",
+              "position": 3,
+              "uid": "2381ecf7-2b11-583d-91d9-0a5cfc279ba1"
+            },
+            {
+              "content": "Even in controlled environments, delayed prototype recovery procedures increase session interruption time and alter data collection conditions for the same task.",
+              "content_digest": "fd0f364ef66cfa7be937779ed4ce3ffb1a406bc227d09c26b288a751c5e0d427",
+              "position": 4,
+              "uid": "c5ce1b00-36d9-5cdd-a318-93b88ca0e322"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "fc19b681-ad18-4587-adde-011b8f7098b7"
+        },
+        {
+          "context_digest": "b379636c1034c71339b717628e5e233c5f245d0452c487967c8e881d38e4b4a7",
+          "context_name": "task-2/advisor2/feasibility",
+          "context_uid": "2a4a102a-14f5-53bb-88ef-681448ebecff",
+          "memories": [
+            {
+              "content": "Mark unverified schedule assumptions as such.",
+              "content_digest": "d4cdcdbcdb51d96f9a7435e72c2e4ef25a3e3822a765a88afafeca5194bda96e",
+              "position": 0,
+              "uid": "5c9755f8-78bd-5654-a3c7-8be0864e4f12"
+            },
+            {
+              "content": "Mark unverified recruitment assumptions as such.",
+              "content_digest": "4cc28528fee1c7b09f709638e2b57d3bc9efe635d20500ee98567f8f59b8cf21",
+              "position": 1,
+              "uid": "75af48aa-b39e-5b55-95d9-f7f7d2becbad"
+            },
+            {
+              "content": "Mark unverified technical assumptions as such.",
+              "content_digest": "8942e49cd46e3e9746330349df11e49d4a6c9250c7aa4c52c2d9ade1c97c735c",
+              "position": 2,
+              "uid": "292e33b0-4bfd-5e3a-9379-0fbf3619c42d"
+            },
+            {
+              "content": "Trace back the resources required for each core prototype feature and field research procedure.",
+              "content_digest": "b1ac088b664c62c3c1cfb96f6bb31a3ab5fc0fd77d0d1fba58e1da621b5dd56a",
+              "position": 3,
+              "uid": "c0c1fd8d-1aae-51a3-a1d4-66c1481d7b48"
+            },
+            {
+              "content": "Operations reviewers judge feasibility by examining the personnel required for each procedure.",
+              "content_digest": "3199aba38f58f677147b94eca54221e4d0add145a2a58194c3851efcc22e8fab",
+              "position": 4,
+              "uid": "7be25c27-6d67-50fe-90b5-76fca32a93d8"
+            },
+            {
+              "content": "Operations reviewers judge feasibility by examining the equipment required for each procedure.",
+              "content_digest": "13f9b86391d66cf558fc6eead29969c80acdf78d2164c96aa99641bf6c2891fd",
+              "position": 5,
+              "uid": "1aae182f-4eb3-58b7-b8cd-5ce517ead36a"
+            },
+            {
+              "content": "Operations reviewers judge feasibility by examining the time required for each procedure.",
+              "content_digest": "29efef51e7b8e35c459099af93b8ea90d019d83de3cf894e04b184078619fff4",
+              "position": 6,
+              "uid": "84f6e5e3-96b4-538b-a633-1b656204a296"
+            },
+            {
+              "content": "Document separately the commitments and confirmation status of field partners required for recruitment, installation, and operational support.",
+              "content_digest": "ba0ceb0fa886251bfe2b5a83154500862f8c2d4a82ed74fc9ddb3600010cc0b3",
+              "position": 7,
+              "uid": "16a461c4-d90d-5d0f-bfd0-4c1a116ec2be"
+            },
+            {
+              "content": "Designate a responsible party for software updates, equipment inspections, and user support during the deployment period.",
+              "content_digest": "54caa62836c502faf35561d45fba1d02a059c8ed6436ce714114bd392cb3bc9d",
+              "position": 8,
+              "uid": "0ce26892-666f-5ebe-95b2-c6f48915f18b"
+            },
+            {
+              "content": "The user's deployment readiness can be assessed only when dependencies on external services and field personnel are visible.",
+              "content_digest": "931fa67dd8ea84954ce3f0b9631301c320fdcf1bf46fb7fda0214e77636c8c1c",
+              "position": 9,
+              "uid": "4f35fd0c-005a-56a7-b33a-d74bde2d65eb"
+            },
+            {
+              "content": "Field schedules and assigned personnel may change due to operational factors beyond the researcher’s control.",
+              "content_digest": "71739481ce3043f342d9c7c52297c7644931a0a096215fc15150915b74968d84",
+              "position": 10,
+              "uid": "3b96bf66-59e4-5dbf-98d3-937402abc67b"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "b9ec5371-e8cb-4717-8430-469f25b514be"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate operational domains. The reference focuses on participant-safety escalation, unsafe-design controls, and prototype recovery effects; the compared frame focuses on assumption transparency, feasibility dependencies, partner commitments, deployment ownership, and operational uncertainty. No contradiction or shared operational policy is established.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fc19b681-ad18-4587-adde-011b8f7098b7",
+              "memory_uid": "9d6f5228-d182-571a-83d2-6a67becb7736"
+            },
+            {
+              "frame_uid": "fc19b681-ad18-4587-adde-011b8f7098b7",
+              "memory_uid": "00ed485d-66c2-59ad-9c5b-9ae445412690"
+            }
+          ],
+          "reason": "Both memories express complementary parts of one reference-only escalation protocol: defining the contact order and relying on it in the field.",
+          "status": "RESOLVED",
+          "summary": "Serious discomfort is handled through a predefined reporting sequence with specified recipients.",
+          "uid": "bfe6f3aa-e332-5f76-a13e-c5dc79749bf2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fc19b681-ad18-4587-adde-011b8f7098b7",
+              "memory_uid": "9c6e1561-f671-52cb-aa67-245cc4987ad4"
+            }
+          ],
+          "reason": "This is an independently useful reference-only rule for deciding when safety-related evaluation must stop.",
+          "status": "RESOLVED",
+          "summary": "Formative evaluation should use established criteria to halt alternatives that produce recurring severe errors.",
+          "uid": "1e256c65-205f-516e-8412-00b1cf8944cb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fc19b681-ad18-4587-adde-011b8f7098b7",
+              "memory_uid": "2381ecf7-2b11-583d-91d9-0a5cfc279ba1"
+            }
+          ],
+          "reason": "This reference-only rule governs reentry after a safety halt, independently of the criteria used to initiate the halt.",
+          "status": "RESOLVED",
+          "summary": "An alternative halted for safety reasons must be modified before entering later evaluation iterations.",
+          "uid": "0ba750a7-4f21-5930-be43-7f1727655eef"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fc19b681-ad18-4587-adde-011b8f7098b7",
+              "memory_uid": "c5ce1b00-36d9-5cdd-a318-93b88ca0e322"
+            }
+          ],
+          "reason": "This is a separate reference-only observation about recovery timing and evaluation validity.",
+          "status": "RESOLVED",
+          "summary": "Delayed prototype recovery increases interruptions and changes data-collection conditions even in controlled settings.",
+          "uid": "33c701f5-77c6-55ea-9831-dfe3711b59fd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b9ec5371-e8cb-4717-8430-469f25b514be",
+              "memory_uid": "5c9755f8-78bd-5654-a3c7-8be0864e4f12"
+            },
+            {
+              "frame_uid": "b9ec5371-e8cb-4717-8430-469f25b514be",
+              "memory_uid": "75af48aa-b39e-5b55-95d9-f7f7d2becbad"
+            },
+            {
+              "frame_uid": "b9ec5371-e8cb-4717-8430-469f25b514be",
+              "memory_uid": "292e33b0-4bfd-5e3a-9379-0fbf3619c42d"
+            }
+          ],
+          "reason": "The memories split one compared-only transparency policy across three assumption categories.",
+          "status": "RESOLVED",
+          "summary": "Unverified schedule, recruitment, and technical assumptions should be explicitly labeled.",
+          "uid": "03101a5d-2031-5ada-b5de-0a6a3124bf9c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b9ec5371-e8cb-4717-8430-469f25b514be",
+              "memory_uid": "c0c1fd8d-1aae-51a3-a1d4-66c1481d7b48"
+            }
+          ],
+          "reason": "This is a compared-only requirement for resource traceability across both prototype and research work.",
+          "status": "RESOLVED",
+          "summary": "Required resources should be traceable for every core prototype feature and field research procedure.",
+          "uid": "e60d1d19-bd9f-57c9-a2a5-64cdb964ff5d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b9ec5371-e8cb-4717-8430-469f25b514be",
+              "memory_uid": "7be25c27-6d67-50fe-90b5-76fca32a93d8"
+            },
+            {
+              "frame_uid": "b9ec5371-e8cb-4717-8430-469f25b514be",
+              "memory_uid": "1aae182f-4eb3-58b7-b8cd-5ce517ead36a"
+            },
+            {
+              "frame_uid": "b9ec5371-e8cb-4717-8430-469f25b514be",
+              "memory_uid": "84f6e5e3-96b4-538b-a633-1b656204a296"
+            }
+          ],
+          "reason": "The memories divide one compared-only feasibility assessment into three required resource dimensions.",
+          "status": "RESOLVED",
+          "summary": "Procedure feasibility is reviewed through its personnel, equipment, and time requirements.",
+          "uid": "fed27047-ac7d-5bc3-8852-ab8b36cbbbfb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b9ec5371-e8cb-4717-8430-469f25b514be",
+              "memory_uid": "16a461c4-d90d-5d0f-bfd0-4c1a116ec2be"
+            }
+          ],
+          "reason": "This is an independent compared-only documentation policy concerning external partner commitments.",
+          "status": "RESOLVED",
+          "summary": "Field-partner commitments and confirmation status should be documented separately for recruitment, installation, and operational support.",
+          "uid": "931660ea-abcd-51fa-a659-196d6692e018"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b9ec5371-e8cb-4717-8430-469f25b514be",
+              "memory_uid": "0ce26892-666f-5ebe-95b2-c6f48915f18b"
+            }
+          ],
+          "reason": "This is an independent compared-only accountability requirement for deployment-period support.",
+          "status": "RESOLVED",
+          "summary": "Responsible parties should be designated for updates, inspections, and user support during deployment.",
+          "uid": "72ca9e13-f092-57e3-bfd7-acca4cbc847d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b9ec5371-e8cb-4717-8430-469f25b514be",
+              "memory_uid": "4f35fd0c-005a-56a7-b33a-d74bde2d65eb"
+            }
+          ],
+          "reason": "This is an independent compared-only prerequisite for assessing readiness.",
+          "status": "RESOLVED",
+          "summary": "Deployment readiness assessment requires visible dependencies on external services and field personnel.",
+          "uid": "7df18f3f-8de4-5690-9138-d90c77d6a237"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b9ec5371-e8cb-4717-8430-469f25b514be",
+              "memory_uid": "3b96bf66-59e4-5dbf-98d3-937402abc67b"
+            }
+          ],
+          "reason": "This is an independent compared-only statement of operational uncertainty affecting field execution.",
+          "status": "RESOLVED",
+          "summary": "Operational factors outside researcher control may change field schedules and assigned personnel.",
+          "uid": "06ff0b7d-e365-5ea8-bb4a-2451e3737b75"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame addresses labeling uncertain assumptions, tracing and evaluating required resources, documenting partner commitments, assigning deployment support ownership, exposing readiness dependencies, and recognizing schedule and staffing volatility.",
+        "differences": "",
+        "reference_only": "The reference addresses serious-discomfort escalation, criteria and safeguards for halting unsafe alternatives, and the effect of delayed prototype recovery on sessions and data collection."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "81c99b32-9f64-41cb-b948-f09620b1d264"
+    },
+    "analysis_digest": "0537f03dde991242a0d068adc650d205423a8a41b6e4fddff3154d0e81d3414d",
+    "key": "a38c28433df9946bdc8e6008f6eca1add9996a26d426d8e6e3abf27881c0cc1b",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 32.82193141699827,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "a38c28433df9946bdc8e6008f6eca1add9996a26d426d8e6e3abf27881c0cc1b",
+  "created_at": "2026-08-13T18:25:42.795315Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/safety",
+  "pair_key": "0815f3eaf25722a7c238bb931b7861b0dd7c8e1325764b07ac1f4a66a198cc9f",
+  "provider_seconds": 32.82193141699827,
+  "right": "task-2/advisor2/feasibility",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

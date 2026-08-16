@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:45:14.804434+00:00",
+      "frames": [
+        {
+          "context_digest": "17b940da39446a9f934dff43ea7db561d14060561065852a34658fe4aaa1702f",
+          "context_name": "task-3/local/personal-memory/2024/10",
+          "context_uid": "7c55b789-a7d0-5070-9cf8-6f5e205415dc",
+          "memories": [
+            {
+              "content": "The user renewed their local library membership in October 2024.",
+              "content_digest": "eb9209032856bdbc69fbfa67e053bf8cd2bc23f8e8e25c0be9a5aa3f7e05f4e9",
+              "position": 0,
+              "uid": "04711182-acef-52a9-bd58-7fe98a54854a"
+            },
+            {
+              "content": "On an evening walk, the user saw an unlit street and took a detour along a main road.",
+              "content_digest": "62d001de1c6c4599e51c4e0713f577a2838e95e03f26064778e64542f390a599",
+              "position": 1,
+              "uid": "0229d0b1-750c-521b-a126-22c9d9d001c4"
+            },
+            {
+              "content": "On a day the user chose a well-lit pedestrian route, the walk took 12 minutes longer than usual.",
+              "content_digest": "ad3770626bef71bc9a29ec7772aeebeb70231e89b417b05b4da9c62a65b89afe",
+              "position": 2,
+              "uid": "e310fe87-8cde-5399-be00-9f8d7ec44e94"
+            },
+            {
+              "content": "On a day the user sat by the library window, they heard vehicle noise with every page they read.",
+              "content_digest": "090a190c68a5166d84cde1eed20f9a03c2b99722ed383eb3b5703489c01d85e0",
+              "position": 3,
+              "uid": "4f37306b-08cd-512a-b92e-ca6761da1a5b"
+            },
+            {
+              "content": "On the next visit, the user sat farther inside and did not move for an hour.",
+              "content_digest": "a071b4c7699fe17f63f0ab6263da1259aea00ad635169a313d4821f57071a86a",
+              "position": 4,
+              "uid": "5897ffa4-cfc6-5012-8931-15420ec5cf7c"
+            },
+            {
+              "content": "The user wrote the due date of a borrowed book on paper and then lost the paper.",
+              "content_digest": "43ef22512c79634cb9e3dc59006c7d06c3513a9d5d1f89eedbb392964cc34f02",
+              "position": 5,
+              "uid": "ce38bd13-3d51-5bff-9eba-ed70a8217356"
+            },
+            {
+              "content": "After entering the due date on their phone, the user saw a reminder the day before and put the book in their bag.",
+              "content_digest": "38782cba2f3bf260d62cf8e80c4a7e4a3a196d4d29ced3c4fe19d050e12c1e0a",
+              "position": 6,
+              "uid": "a304315b-bc0a-591b-b8c2-7eea5145819d"
+            },
+            {
+              "content": "Library staff expect a person requesting a replacement membership card to bring identity-verification material.",
+              "content_digest": "1ac59309aedbfa946661bf5bbc4d5141c420df059937893caba88725dfe77d24",
+              "position": 7,
+              "uid": "ef060b89-6c54-5c20-86be-c07766a35daa"
+            },
+            {
+              "content": "Check recent lighting and pedestrian conditions before proposing an evening walking route.",
+              "content_digest": "1b247adfb3723d14979b2cc7ecf6786c457d60e521b8708a6d08d38d3d1af437",
+              "position": 8,
+              "uid": "7669e5eb-c0fd-5182-ae9a-5f9ae95ddf2f"
+            },
+            {
+              "content": "The local agent can compare past reasons for detours but cannot directly observe current lighting and pedestrian conditions.",
+              "content_digest": "8a5f0e4cbb2fa6c19f2cb5d4e500ed460189b515604c87c6c2a4c8348c4efc44",
+              "position": 9,
+              "uid": "e96f7007-5814-5986-b121-4ce3b22506e1"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "692b417e-efbf-4a02-92fd-e15024f56026"
+        },
+        {
+          "context_digest": "ac4f93d71b525f6156f0b669075a833a2a41161be6abe677ec382bff6e6060e8",
+          "context_name": "task-3/local/personal-memory/2025/08",
+          "context_uid": "ed84de75-8e18-5bec-908c-a1ff9827b3e3",
+          "memories": [
+            {
+              "content": "The user keeps packing tape for returns in an upper kitchen drawer.",
+              "content_digest": "ed359d883caffd7ce4daddc297ddcc9d26da233dc2a36dc4dbc96e300b2248e9",
+              "position": 0,
+              "uid": "15c3941e-ed44-508f-ae30-b51456b5ba86"
+            },
+            {
+              "content": "The user arrived ten minutes before the post office closed and found that numbered-ticket intake had ended.",
+              "content_digest": "3c4609eea9455bbd46a6f238aa750f61f348ce7b2cf421a4d123f1b707b52550",
+              "position": 1,
+              "uid": "84d1fd1c-9508-5f05-9a7c-1d5f20ecf4a4"
+            },
+            {
+              "content": "Before the next visit, the user checked the operating hours and arrived one hour before closing.",
+              "content_digest": "b2997262abf4ba476c63de3550e54269ef7d61bb56d3adb5b6d9f54ba13fc078",
+              "position": 2,
+              "uid": "8946f9da-e325-59c3-9260-2d2f590d3701"
+            },
+            {
+              "content": "The user went to the counter without closing a return box and had to go back to the packing station.",
+              "content_digest": "759122c3f88ca71b992a725e357beab72f9820de872a7bd895b808c2df21f2b2",
+              "position": 3,
+              "uid": "67e8b160-a57d-56e5-a766-741b7ce0e939"
+            },
+            {
+              "content": "For the next return, the user sealed the box at home and completed intake in one attempt.",
+              "content_digest": "007fcec32ea3788854161e68c95c2aaba90e94a721d03b350e1619afc54840e3",
+              "position": 4,
+              "uid": "efd0706b-600a-5ac1-926e-cc0602ca0086"
+            },
+            {
+              "content": "The user scheduled bank and post-office errands for the same day, but they took a long time because the destinations were in different directions.",
+              "content_digest": "000e1975fde79f4d6caf36adad0c2e481a032537cfa410e46649866d985567c2",
+              "position": 5,
+              "uid": "1e8a6f7e-0911-5a34-ad82-172479d1a7a4"
+            },
+            {
+              "content": "The following week, after checking the locations on a map, the user visited nearby branches in sequence.",
+              "content_digest": "c3de08c5b6074dff2b3f6303f5efc3740cc430b634cb365a5d570061a30a53fa",
+              "position": 6,
+              "uid": "a8670161-257e-51ab-8e30-0e282952278f"
+            },
+            {
+              "content": "Postal staff expect a return-label barcode to arrive affixed flat, without a fold.",
+              "content_digest": "6293ace2d67781644694976af71d5696cad28979d9641718ccd59f16b3397a47",
+              "position": 7,
+              "uid": "2db70f53-99ee-556c-a8c1-b809881cbebd"
+            },
+            {
+              "content": "Before grouping errands into one outing, check each institution's location and operating hours that day.",
+              "content_digest": "7fef923f9ed507db5aad6cf65eaee2c965075e51fef0ff73fa669f1e7f69314a",
+              "position": 8,
+              "uid": "38d60cc4-2f91-5cc2-b511-55cdbbe12c32"
+            },
+            {
+              "content": "Postal and financial counters may operate on different hours than usual around public holidays.",
+              "content_digest": "2d5dc709c468405ea894f343e922dc2546b826ed7488e613f4d4dd730bccccfd",
+              "position": 9,
+              "uid": "1272087c-a535-5612-8c7a-1bc257183788"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "065ec9bc-ed32-46ee-8c7a-ac7b53fca76d"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames contain separate, noncompeting context: the reference covers library use and safer evening walking, while the compared frame covers postal returns and efficient errand planning. No claims govern the same operational decision closely enough to form a shared or differing relation.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "692b417e-efbf-4a02-92fd-e15024f56026",
+              "memory_uid": "04711182-acef-52a9-bd58-7fe98a54854a"
+            }
+          ],
+          "reason": "This is independently useful reference-side membership history with no counterpart concerning the same event or decision.",
+          "status": "RESOLVED",
+          "summary": "The user renewed a local library membership in October 2024.",
+          "uid": "503c299e-a839-5282-83d8-31694488bb8c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "692b417e-efbf-4a02-92fd-e15024f56026",
+              "memory_uid": "0229d0b1-750c-521b-a126-22c9d9d001c4"
+            }
+          ],
+          "reason": "This is a one-sided observation about an actual walking detour, not a claim about postal or errand operations.",
+          "status": "RESOLVED",
+          "summary": "The user detoured to a main road after encountering an unlit street during an evening walk.",
+          "uid": "b8747b13-e0f4-5126-a676-0955f0af7944"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "692b417e-efbf-4a02-92fd-e15024f56026",
+              "memory_uid": "e310fe87-8cde-5399-be00-9f8d7ec44e94"
+            }
+          ],
+          "reason": "This independently records the time cost of a safer route choice and has no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Choosing a well-lit pedestrian route once added 12 minutes to the user's walk.",
+          "uid": "27764b48-8b2b-5ccc-804a-957aa15653c4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "692b417e-efbf-4a02-92fd-e15024f56026",
+              "memory_uid": "4f37306b-08cd-512a-b92e-ca6761da1a5b"
+            }
+          ],
+          "reason": "This is a one-sided experience about a library seating location.",
+          "status": "RESOLVED",
+          "summary": "Vehicle noise repeatedly disturbed the user's reading beside the library window.",
+          "uid": "bf563d10-609c-5f1b-83c4-51fdc392d31e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "692b417e-efbf-4a02-92fd-e15024f56026",
+              "memory_uid": "5897ffa4-cfc6-5012-8931-15420ec5cf7c"
+            }
+          ],
+          "reason": "This independently records a later seating choice and outcome, with no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "On the next library visit, the user sat farther inside and remained there for an hour.",
+          "uid": "714dddd5-58c8-5793-9311-5b835b06314e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "692b417e-efbf-4a02-92fd-e15024f56026",
+              "memory_uid": "ce38bd13-3d51-5bff-9eba-ed70a8217356"
+            }
+          ],
+          "reason": "This is a one-sided experience with a paper-based due-date record.",
+          "status": "RESOLVED",
+          "summary": "The user wrote a borrowed book's due date on paper and lost the note.",
+          "uid": "4e17f6e2-7984-5f70-a339-c8a9ce180e31"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "692b417e-efbf-4a02-92fd-e15024f56026",
+              "memory_uid": "a304315b-bc0a-591b-b8c2-7eea5145819d"
+            }
+          ],
+          "reason": "This independently records the outcome of a phone reminder and has no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "A phone due-date entry produced a prior-day reminder that prompted the user to pack the book.",
+          "uid": "89d9d200-a50e-5f79-80aa-35730714d012"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "692b417e-efbf-4a02-92fd-e15024f56026",
+              "memory_uid": "ef060b89-6c54-5c20-86be-c07766a35daa"
+            }
+          ],
+          "reason": "This is a library-specific procedural requirement absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Library staff expect identity-verification material when someone requests a replacement membership card.",
+          "uid": "aefd60c0-c4c0-5c56-8ad8-b41b8f8af37e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "692b417e-efbf-4a02-92fd-e15024f56026",
+              "memory_uid": "7669e5eb-c0fd-5182-ae9a-5f9ae95ddf2f"
+            }
+          ],
+          "reason": "This governs evening route proposals, a different operational decision from grouping institutional errands.",
+          "status": "RESOLVED",
+          "summary": "Recent lighting and pedestrian conditions should be checked before proposing an evening walking route.",
+          "uid": "47edb5f2-d86c-572c-8f25-dd6fa70eb808"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "692b417e-efbf-4a02-92fd-e15024f56026",
+              "memory_uid": "e96f7007-5814-5986-b121-4ce3b22506e1"
+            }
+          ],
+          "reason": "This is a one-sided capability limitation relevant to walking-route advice.",
+          "status": "RESOLVED",
+          "summary": "The local agent can compare past detour reasons but cannot directly observe current lighting or pedestrian conditions.",
+          "uid": "653e1640-efbd-553f-aa5c-d593d1a38412"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "065ec9bc-ed32-46ee-8c7a-ac7b53fca76d",
+              "memory_uid": "15c3941e-ed44-508f-ae30-b51456b5ba86"
+            }
+          ],
+          "reason": "This is independently useful compared-side information about the location of a return supply.",
+          "status": "RESOLVED",
+          "summary": "The user stores return packing tape in an upper kitchen drawer.",
+          "uid": "cf821b4f-c5b5-5697-93c5-d6aafd2c1419"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "065ec9bc-ed32-46ee-8c7a-ac7b53fca76d",
+              "memory_uid": "84d1fd1c-9508-5f05-9a7c-1d5f20ecf4a4"
+            }
+          ],
+          "reason": "This is a one-sided postal timing experience.",
+          "status": "RESOLVED",
+          "summary": "Arriving ten minutes before post-office closing was too late for numbered-ticket intake.",
+          "uid": "8b0c195b-79df-57c2-a437-bae7ec549ddb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "065ec9bc-ed32-46ee-8c7a-ac7b53fca76d",
+              "memory_uid": "8946f9da-e325-59c3-9260-2d2f590d3701"
+            }
+          ],
+          "reason": "This independently records a later timing practice and has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Before a later post-office visit, the user checked operating hours and arrived one hour before closing.",
+          "uid": "bf364e4b-b6e8-5664-9e5a-a811af8aea30"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "065ec9bc-ed32-46ee-8c7a-ac7b53fca76d",
+              "memory_uid": "67e8b160-a57d-56e5-a766-741b7ce0e939"
+            }
+          ],
+          "reason": "This is a one-sided postal return-preparation experience.",
+          "status": "RESOLVED",
+          "summary": "The user approached the counter with an unsealed return box and had to revisit the packing station.",
+          "uid": "dde764b3-3e72-5c6a-9d72-fccd4d3572e7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "065ec9bc-ed32-46ee-8c7a-ac7b53fca76d",
+              "memory_uid": "efd0706b-600a-5ac1-926e-cc0602ca0086"
+            }
+          ],
+          "reason": "This independently records the outcome of advance return preparation.",
+          "status": "RESOLVED",
+          "summary": "For a later return, sealing the box at home allowed the user to complete intake in one attempt.",
+          "uid": "fef830fd-697e-5139-b696-e6206888619d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "065ec9bc-ed32-46ee-8c7a-ac7b53fca76d",
+              "memory_uid": "1e8a6f7e-0911-5a34-ad82-172479d1a7a4"
+            }
+          ],
+          "reason": "This is a one-sided experience about inefficient multi-stop errand planning.",
+          "status": "RESOLVED",
+          "summary": "Combining bank and post-office errands took a long time because the destinations lay in different directions.",
+          "uid": "d71bfc66-23dd-56f7-9e57-8c46f531f82b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "065ec9bc-ed32-46ee-8c7a-ac7b53fca76d",
+              "memory_uid": "a8670161-257e-51ab-8e30-0e282952278f"
+            }
+          ],
+          "reason": "This independently records a later location-based errand strategy.",
+          "status": "RESOLVED",
+          "summary": "After checking a map, the user visited nearby bank and postal branches in sequence the following week.",
+          "uid": "14159935-7eee-5756-8d68-9e0f57974652"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "065ec9bc-ed32-46ee-8c7a-ac7b53fca76d",
+              "memory_uid": "2db70f53-99ee-556c-a8c1-b809881cbebd"
+            }
+          ],
+          "reason": "This is a postal return-label requirement absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Postal staff expect a return-label barcode to be affixed flat and without a fold.",
+          "uid": "ae59cef4-e7ce-5f9b-837a-0829b41003a1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "065ec9bc-ed32-46ee-8c7a-ac7b53fca76d",
+              "memory_uid": "38d60cc4-2f91-5cc2-b511-55cdbbe12c32"
+            }
+          ],
+          "reason": "This governs combined-errand planning rather than the reference frame's evening walking-route decision.",
+          "status": "RESOLVED",
+          "summary": "Locations and same-day operating hours should be checked before grouping institutional errands into one outing.",
+          "uid": "fc94f8f6-a98b-5a2b-97a8-ebe286365bb3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "065ec9bc-ed32-46ee-8c7a-ac7b53fca76d",
+              "memory_uid": "1272087c-a535-5612-8c7a-1bc257183788"
+            }
+          ],
+          "reason": "This is a one-sided scheduling caveat for institutional errands.",
+          "status": "RESOLVED",
+          "summary": "Postal and financial counters may use unusual operating hours around public holidays.",
+          "uid": "c3353505-ec52-56e2-9316-b9411866e2a3"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame records return supplies and preparation, post-office timing and barcode requirements, and location- and hours-aware planning for combined errands.",
+        "differences": "",
+        "reference_only": "The reference records library membership, reading-seat and due-date experiences, replacement-card requirements, and safety-aware evening route planning under limited current visibility."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "7288f3e4-1ebc-4fb8-be7e-304707241bd8"
+    },
+    "analysis_digest": "0ef852aeefdec9dbd02a87a89cbcafd3e1ba5f513166864fbdd31a7c1494c676",
+    "key": "08dbe8e1f3112d01f6f04ef23f981e3b50ef3094eb3f775f579098e3120c36a9",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 40.96023858299668,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "08dbe8e1f3112d01f6f04ef23f981e3b50ef3094eb3f775f579098e3120c36a9",
+  "created_at": "2026-08-13T18:45:55.764186Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/10",
+  "pair_key": "5e5659c1c2213df0bc0d23550cb02b5659dc9d4811587775286b104774a05a3b",
+  "provider_seconds": 40.96023858299668,
+  "right": "task-3/local/personal-memory/2025/08",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

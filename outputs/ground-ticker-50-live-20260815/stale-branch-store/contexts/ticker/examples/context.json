@@ -1,0 +1,14 @@
+{
+  "uid": "8a4865d0-082d-43bd-aee7-37dc86fbe76f",
+  "name": "ticker/examples",
+  "memories": {
+    "0f183eb9-127d-493f-b3c1-01adb5e56365": {
+      "type": "memory",
+      "uid": "0f183eb9-127d-493f-b3c1-01adb5e56365",
+      "content": "A newly added Context Memory after Ground binding."
+    }
+  },
+  "order": [
+    "0f183eb9-127d-493f-b3c1-01adb5e56365"
+  ]
+}

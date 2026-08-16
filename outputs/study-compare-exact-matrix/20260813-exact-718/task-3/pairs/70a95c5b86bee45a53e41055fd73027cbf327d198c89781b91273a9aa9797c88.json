@@ -1,0 +1,361 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:46:31.302321+00:00",
+      "frames": [
+        {
+          "context_digest": "492e513a553a9191e2c646cca49364b336ae6d163de5688eeca8cc661bbbdb32",
+          "context_name": "task-3/local/personal-memory/2024/11",
+          "context_uid": "0d5e1eef-1669-5589-94ba-b46c9c2080dc",
+          "memories": [
+            {
+              "content": "The user changed their schedule once in November 2024 because of their mother's hospital visit.",
+              "content_digest": "f08f07dda1b468ab191a59d87e7ceb8068189964edee2010abdae6e525d6103f",
+              "position": 0,
+              "uid": "bb17c696-0c1c-516f-8ad9-68a4b159ce22"
+            },
+            {
+              "content": "After seeing the reason for the schedule change written in a calendar invitation, the user asked for it to be removed.",
+              "content_digest": "7bfc906526c255f90a85b6dcc4b28ea1b0a9389e9f17ba989a4ce098280578c8",
+              "position": 1,
+              "uid": "195ba5ab-3ee0-5594-a859-9f2b5eadf9ea"
+            },
+            {
+              "content": "The user was able to reschedule the appointment after providing only a new time, without a reason.",
+              "content_digest": "14f1bd0410c76aa3a0eb28a2212fd06558ab23b6dc012aa5529980a67efe3e2b",
+              "position": 2,
+              "uid": "4c8759cc-66aa-527c-a9d5-197d39b5d2b7"
+            },
+            {
+              "content": "On a day the user traveled in their father's car, they photographed the parking location.",
+              "content_digest": "111e71af27be5d109557440569352964544e9b702810741445172a6cf51f94f5",
+              "position": 3,
+              "uid": "d4b27ea7-d329-5dc7-b7ca-91d0cd50a958"
+            },
+            {
+              "content": "On the next visit, when the user did not take a photo, they walked one circuit of the parking garage while looking for the exit.",
+              "content_digest": "6d61d67e35552cb739d0220e480189706ec5bbac74f93b87149a6948d9ac2805",
+              "position": 4,
+              "uid": "32a19a57-9b04-5f86-92ba-202a9ac803e4"
+            },
+            {
+              "content": "After hearing preparation items from their mother by phone, the user omitted two items.",
+              "content_digest": "449dc73aad797f5acd3d898292cf9942f7d3b65b9faf52769ae5b3332285b4f3",
+              "position": 5,
+              "uid": "0eeffd8c-acd6-57bf-950d-20cfa1fe62b3"
+            },
+            {
+              "content": "After receiving the preparation items again by text, the user put all of them in their bag.",
+              "content_digest": "9539ab90f598a96d97a73b7954db8834d3106861ba6ecc814e579a348e0145d6",
+              "position": 6,
+              "uid": "07ea3801-8666-581d-b846-2f45bf99ca19"
+            },
+            {
+              "content": "The user's mother does not want the reason for her visit disclosed in the user's external schedule.",
+              "content_digest": "b1aff7bb5b5df1ec773fd8875205cd9fdfa2fd5b520cf91b7c84c9e3054b4feb",
+              "position": 7,
+              "uid": "9e70b92e-1d8d-51ef-962d-bd9b348a56d5"
+            },
+            {
+              "content": "Do not include the mother's reason for a visit when conveying the user's availability externally.",
+              "content_digest": "b9473919c63f233fc66c49bbf00b20a8ab9532bcb1b8ce3896c442afed4229d9",
+              "position": 8,
+              "uid": "d76686fd-9f1d-5d94-931b-4b49c86a8f4e"
+            },
+            {
+              "content": "Some daily-life services may operate for shorter hours during the year-end holiday period.",
+              "content_digest": "48d4487aba4c395527f9dfeac9488f45556d1bd89475f8620b0a64d84e4479fc",
+              "position": 9,
+              "uid": "820a5de9-9e08-52c7-8747-5155fe341bb4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "0ff803d6-5790-43e3-844e-6e081f7d64ae"
+        },
+        {
+          "context_digest": "07c43eb0b8ecd9107f1d879a409b45289e236f48f620ff85f1d30ce594809149",
+          "context_name": "task-3/local/personal-memory/2025/09",
+          "context_uid": "5cd8ed5f-2f1f-5deb-8347-fc3bfa484d99",
+          "memories": [
+            {
+              "content": "The user keeps the book they are reading and a note-taking notebook on a small living-room desk.",
+              "content_digest": "d2c70cf4c27fe62f5915f2f5c669484c4a875e4ee21f8d7d89a5ff6746f14cf1",
+              "position": 0,
+              "uid": "3d3f7960-daf5-5a51-98b3-14261c5aa66c"
+            },
+            {
+              "content": "While reading in the living room with the television on, the user read the same paragraph three times.",
+              "content_digest": "00e41e6d5fe1dcfe961fa0f739860823ecf338dc55d5b9beea265ca823974582",
+              "position": 1,
+              "uid": "28714a4e-bc14-5703-b594-126471ae0585"
+            },
+            {
+              "content": "The next day, after turning off the television, the user read 40 pages without interruption.",
+              "content_digest": "c28ba9c872757b6683ab03d73e6ad61f71484d55986aae4c0976862a85e3a8b1",
+              "position": 2,
+              "uid": "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df"
+            },
+            {
+              "content": "On a day the phone was on the desk, the user stopped taking notes each time they checked a notification.",
+              "content_digest": "f95cb8b1b8abe89d7bf597ca5fb78f0862fe97a7cf0d8bc5a46c04026ebd6889",
+              "position": 3,
+              "uid": "1b1c9f90-2561-53d5-88fe-d54618450143"
+            },
+            {
+              "content": "During the next reading period, the user left the phone in another room and did not check it for an hour.",
+              "content_digest": "89dc50732e19b88a77657b285ce71c399d229b510265cc9adfbdf6ad706680cd",
+              "position": 4,
+              "uid": "076a7caa-5dcf-5f9d-8bee-efc952652efa"
+            },
+            {
+              "content": "A note attached to a paper book fell out, and the user had to find their place again.",
+              "content_digest": "723e48ceeba6c94e627c79af0518c811cfc8337f9eeae3a80ae388ec98786994",
+              "position": 5,
+              "uid": "1dad71ec-6a5d-550e-89d2-a86dc3dacb11"
+            },
+            {
+              "content": "With the next book, the user recorded the page number in the notebook and resumed reading immediately.",
+              "content_digest": "c74c2f80bf403da64f0a6de97ff04bc1f41cf68d0d33829fa926cc2549e8ea75",
+              "position": 6,
+              "uid": "58494743-fc7f-59e9-8e17-80b8a644470a"
+            },
+            {
+              "content": "The user's father expects that lowering the television volume while the user reads will make it easier for the user to concentrate.",
+              "content_digest": "281b1f8f55f8d22fbebdb2220405dc3e2300e29e0a568c1fac36d4bb1c39c186",
+              "position": 7,
+              "uid": "cce66589-892c-5d73-bdbc-2c6e94e0992e"
+            },
+            {
+              "content": "The local agent can summarize past reading environments and interruption records but cannot predict the next reading time.",
+              "content_digest": "50e5376e22f503048a7f1bf4055bfb31cb4aa3c75b1c816f2febce913716eb58",
+              "position": 8,
+              "uid": "20b2a27f-908f-5ed7-a288-f7c1030674fc"
+            },
+            {
+              "content": "The user feels that repeated notifications interrupt their flow of concentration.",
+              "content_digest": "d777b2a01cfac23e6ef7701c04c33592f8382fa78f8e307bae9ddbffc9a8e2ef",
+              "position": 9,
+              "uid": "310f4cfc-b117-5511-8e13-2bd2ebec9fe5"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "afdb3aa9-49e7-46cf-9e8e-bd3095a463de"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames contain independently useful information in separate domains. The reference covers scheduling privacy, practical memory aids, and holiday service hours, while the compared frame covers reading setup, concentration, place-keeping, and agent limitations; no cross-frame operational claim is established.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0ff803d6-5790-43e3-844e-6e081f7d64ae",
+              "memory_uid": "bb17c696-0c1c-516f-8ad9-68a4b159ce22"
+            }
+          ],
+          "reason": "This is a one-sided historical scheduling fact with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user once changed a November 2024 schedule because of their mother's hospital visit.",
+          "uid": "a4a7721d-1e00-5200-8e19-e1f4789cbe00"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0ff803d6-5790-43e3-844e-6e081f7d64ae",
+              "memory_uid": "195ba5ab-3ee0-5594-a859-9f2b5eadf9ea"
+            },
+            {
+              "frame_uid": "0ff803d6-5790-43e3-844e-6e081f7d64ae",
+              "memory_uid": "4c8759cc-66aa-527c-a9d5-197d39b5d2b7"
+            },
+            {
+              "frame_uid": "0ff803d6-5790-43e3-844e-6e081f7d64ae",
+              "memory_uid": "9e70b92e-1d8d-51ef-962d-bd9b348a56d5"
+            },
+            {
+              "frame_uid": "0ff803d6-5790-43e3-844e-6e081f7d64ae",
+              "memory_uid": "d76686fd-9f1d-5d94-931b-4b49c86a8f4e"
+            }
+          ],
+          "reason": "These memories split one privacy-preserving scheduling claim across the removal request, demonstrated sufficiency of a new time, the mother's preference, and the resulting directive; the compared frame has no counterpart.",
+          "status": "RESOLVED",
+          "summary": "External scheduling should omit the mother's visit reason, and rescheduling can proceed using only the new time.",
+          "uid": "44ea4d68-fdca-56e2-a7b9-657267323319"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0ff803d6-5790-43e3-844e-6e081f7d64ae",
+              "memory_uid": "d4b27ea7-d329-5dc7-b7ca-91d0cd50a958"
+            },
+            {
+              "frame_uid": "0ff803d6-5790-43e3-844e-6e081f7d64ae",
+              "memory_uid": "32a19a57-9b04-5f86-92ba-202a9ac803e4"
+            }
+          ],
+          "reason": "The paired visits provide complementary parts of one one-sided claim about a parking-location memory aid, without a compared-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "Photographing a parking location is associated with easier later navigation than leaving it unrecorded.",
+          "uid": "cfa334b9-75d0-560f-ab9d-d254e771cb7b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0ff803d6-5790-43e3-844e-6e081f7d64ae",
+              "memory_uid": "0eeffd8c-acd6-57bf-950d-20cfa1fe62b3"
+            },
+            {
+              "frame_uid": "0ff803d6-5790-43e3-844e-6e081f7d64ae",
+              "memory_uid": "07ea3801-8666-581d-b846-2f45bf99ca19"
+            }
+          ],
+          "reason": "The two observations form one contrast about instruction format and packing completeness, with no corresponding compared-frame claim.",
+          "status": "RESOLVED",
+          "summary": "A written preparation list supported complete packing where phone-delivered instructions had led to omissions.",
+          "uid": "0fa58c6b-30b9-5b85-8239-f5f9e171893b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0ff803d6-5790-43e3-844e-6e081f7d64ae",
+              "memory_uid": "820a5de9-9e08-52c7-8747-5155fe341bb4"
+            }
+          ],
+          "reason": "This independent one-sided service-availability caution is not addressed in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Some daily-life services may have shorter hours during the year-end holiday period.",
+          "uid": "ce869385-4d1b-5827-94c9-d4a5a8a95399"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "afdb3aa9-49e7-46cf-9e8e-bd3095a463de",
+              "memory_uid": "3d3f7960-daf5-5a51-98b3-14261c5aa66c"
+            }
+          ],
+          "reason": "This is a one-sided fact about the user's reading setup, with no corresponding reference-frame claim.",
+          "status": "RESOLVED",
+          "summary": "The user keeps their current book and note-taking notebook on a small living-room desk.",
+          "uid": "dec92bb5-8a68-520c-92e1-eec417f64259"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "afdb3aa9-49e7-46cf-9e8e-bd3095a463de",
+              "memory_uid": "28714a4e-bc14-5703-b594-126471ae0585"
+            },
+            {
+              "frame_uid": "afdb3aa9-49e7-46cf-9e8e-bd3095a463de",
+              "memory_uid": "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df"
+            },
+            {
+              "frame_uid": "afdb3aa9-49e7-46cf-9e8e-bd3095a463de",
+              "memory_uid": "cce66589-892c-5d73-bdbc-2c6e94e0992e"
+            }
+          ],
+          "reason": "The reading outcomes and the father's expectation are complementary parts of one television-distraction claim, with no reference-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "Reducing or removing television sound while reading is associated with, and expected to support, better concentration.",
+          "uid": "b0c17436-4c3c-5c21-84de-59ddee549439"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "afdb3aa9-49e7-46cf-9e8e-bd3095a463de",
+              "memory_uid": "1b1c9f90-2561-53d5-88fe-d54618450143"
+            },
+            {
+              "frame_uid": "afdb3aa9-49e7-46cf-9e8e-bd3095a463de",
+              "memory_uid": "076a7caa-5dcf-5f9d-8bee-efc952652efa"
+            },
+            {
+              "frame_uid": "afdb3aa9-49e7-46cf-9e8e-bd3095a463de",
+              "memory_uid": "310f4cfc-b117-5511-8e13-2bd2ebec9fe5"
+            }
+          ],
+          "reason": "The observations and the user's stated experience express one notification-related concentration claim absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Phone notifications disrupt the user's reading and note-taking flow, while leaving the phone elsewhere prevents checking interruptions.",
+          "uid": "28d026c7-12fc-545f-89a9-a6666aa4dc9e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "afdb3aa9-49e7-46cf-9e8e-bd3095a463de",
+              "memory_uid": "1dad71ec-6a5d-550e-89d2-a86dc3dacb11"
+            },
+            {
+              "frame_uid": "afdb3aa9-49e7-46cf-9e8e-bd3095a463de",
+              "memory_uid": "58494743-fc7f-59e9-8e17-80b8a644470a"
+            }
+          ],
+          "reason": "The failed and successful place-keeping episodes form one one-sided operational contrast with no reference-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "Recording a page number in a notebook provides more reliable reading-place recovery than using a loose attached note.",
+          "uid": "25515714-4464-5ec1-a532-76ec9a5a25f0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "afdb3aa9-49e7-46cf-9e8e-bd3095a463de",
+              "memory_uid": "20b2a27f-908f-5ed7-a288-f7c1030674fc"
+            }
+          ],
+          "reason": "This independent one-sided capability boundary is not addressed in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The local agent can summarize prior reading conditions and interruptions but cannot predict the next reading time.",
+          "uid": "e0aa6523-42bc-5057-a582-f1e5f4ea263e"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only content concerns reading materials, television and notification distractions, reliable page tracking, and limits on predicting future reading times.",
+        "differences": "",
+        "reference_only": "Reference-only content concerns a schedule change, privacy-preserving external scheduling, parking-location photos, written preparation lists, and possible year-end service-hour reductions."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "da6e0707-d937-429a-99b5-6fb534f377ac"
+    },
+    "analysis_digest": "5c7241b23756026e2330d021d9445fe270d21357dae13d108f8eee1f84a32008",
+    "key": "d6d5c14c166fd3b2b6e81e4dfcf2914e7fac0284f4041fd15e613a42960e23af",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 44.19351670899778,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "d6d5c14c166fd3b2b6e81e4dfcf2914e7fac0284f4041fd15e613a42960e23af",
+  "created_at": "2026-08-13T18:47:15.495463Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/11",
+  "pair_key": "70a95c5b86bee45a53e41055fd73027cbf327d198c89781b91273a9aa9797c88",
+  "provider_seconds": 44.19351670899778,
+  "right": "task-3/local/personal-memory/2025/09",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

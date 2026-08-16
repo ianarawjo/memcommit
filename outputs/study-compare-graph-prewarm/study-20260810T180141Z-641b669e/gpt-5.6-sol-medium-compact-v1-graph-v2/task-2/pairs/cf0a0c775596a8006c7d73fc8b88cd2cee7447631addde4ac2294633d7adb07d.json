@@ -1,0 +1,182 @@
+{
+  "coverage": {
+    "expected": 14,
+    "observed": 14
+  },
+  "created_at": "2026-08-11T00:27:09.096845Z",
+  "description_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+  "issues": [],
+  "kind": "STUDY_COMPARE_GRAPH_PAIR",
+  "left": {
+    "context_digest": "4efbf2f6c096022137cee2c075c75219bb4fd0f441579901b8445bb2d92101f5",
+    "context_uid": "ae02c2b2-49d3-5c30-b686-81ea17a8a87e",
+    "memory_count": 7,
+    "name": "task-2/advisor2/budget"
+  },
+  "method": "COMPACT_DECISION_VECTOR_V1",
+  "operation": "COMPARE",
+  "pair_key": "cf0a0c775596a8006c7d73fc8b88cd2cee7447631addde4ac2294633d7adb07d",
+  "provider": {
+    "condition": "COMPACT_DECISION_VECTOR",
+    "contract_valid": true,
+    "elapsed_seconds": 20.753142499990645,
+    "error_type": null,
+    "failure_category": null,
+    "operation": "compare_contexts_compact_ab_v1",
+    "prompt_chars": 6781,
+    "provider_calls": 1,
+    "provider_run": {
+      "completion_tokens": null,
+      "identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "operation": "compare_contexts_compact_ab_v1",
+      "prompt_tokens": null,
+      "upstream_model": "gpt-5.6-sol",
+      "upstream_provider": "openai-codex"
+    },
+    "provider_seconds": 20.75183333401219,
+    "response_bytes": 677,
+    "response_chars": 677,
+    "schema_chars": 1378,
+    "validation_error": null,
+    "validation_seconds": 0.0012832500069634989
+  },
+  "relations": [
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "d614b55d-d9f6-5347-8d02-2d219d621a09",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "675956de-2c61-53e1-bb89-9b49d92558ba",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000001",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Both prescribe stable table structures, scoped respectively to budget fields and procedural fields.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "24500129-4b07-564f-ba67-39e40d7d7860",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "07bad409-af9c-512a-b829-7ceb28273f91",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "22254f16-4628-5fd9-b1af-6e66dc2572b3",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000002",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Both support stepwise verification in tables, but budget arithmetic and procedural sequence have different review properties.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "abf6d361-c2eb-512f-87e0-f3af9c5eb677",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "939ee3d0-b611-574a-a25b-82708394bd5e",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000003",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Both favor row-level revision for changing material, scoped respectively to estimates and repeatedly revised procedures.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "473cf3ca-9832-5d9c-97df-974f1d9b0d1b",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "4264c20d-3e44-578d-866e-7787cc7b59e2",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "32028269-5d43-5a65-b22b-9e570ceabfde",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000004",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "f4371f72-f222-5066-b2f4-0a6be5d6865e",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000005",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "70a8c3f0-0f6a-5881-abd6-29f52833b7bd",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000006",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "b410aa8d-db87-586b-a1cd-4af5767a9f7a",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000007",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "a385fbb1-85b4-5132-bbc7-8fd8daedb715",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000008",
+      "status": "RESOLVED"
+    }
+  ],
+  "right": {
+    "context_digest": "4371a72e6fb939731cb550ca5363a3b5210680482f84c18b36ba933f4454ecc1",
+    "context_uid": "cf8e8baf-292e-57c3-8e2c-3f9b3d52f3d3",
+    "memory_count": 7,
+    "name": "task-2/advisor2/expression"
+  },
+  "schema_version": 1,
+  "semantic_content_in_participant_report": false,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

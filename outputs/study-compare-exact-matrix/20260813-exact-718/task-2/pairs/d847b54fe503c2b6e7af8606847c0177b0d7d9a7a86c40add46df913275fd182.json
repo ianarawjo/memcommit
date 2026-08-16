@@ -1,0 +1,255 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:21:03.329551+00:00",
+      "frames": [
+        {
+          "context_digest": "c4484b7a8284d7e31066ad3f4c4edf8844a2e0ce8695a323093f753243b6b18f",
+          "context_name": "task-2/advisor1/expression",
+          "context_uid": "39a6f298-c511-5c21-a106-998c1df9d951",
+          "memories": [
+            {
+              "content": "Use a flow diagram rather than a sequence table when alternate procedural branches lead to different outcomes.",
+              "content_digest": "48075a546ef4f1c2735e202cf43df2c164e4382f323007f542915195d025bf58",
+              "position": 0,
+              "uid": "51fa3fcc-9d5f-52f0-809d-62d7cdd8a865"
+            },
+            {
+              "content": "Draw alternate branches and their resulting outcomes in the same flow diagram so readers can compare them at once.",
+              "content_digest": "85d1fdc887f442e05b4089e28a6dc671e757eb781eae9c39646673054306ec34",
+              "position": 1,
+              "uid": "e686bd4d-3ebd-5e55-ba39-f26971247965"
+            },
+            {
+              "content": "The visual fidelity of a prototype may differ from its functional fidelity.",
+              "content_digest": "bfc110d2df084fd4f8393284db693ead012f2bfd9a4e804fd89f9a4e45e16e8c",
+              "position": 2,
+              "uid": "019662a9-6f03-527f-9b6d-be5a2966d9e9"
+            },
+            {
+              "content": "A flow diagram can make alternate branches and their different outcomes visible in one view.",
+              "content_digest": "8f69a73784cb0c304671161a6c42c63480c0ce0cc4864e613d8dde466365d496",
+              "position": 3,
+              "uid": "a6dfe9a7-1df8-561f-8d3e-fc19518beca9"
+            },
+            {
+              "content": "HCI reviewers often skim prototype screens and interaction flow diagrams before reading the main text.",
+              "content_digest": "ee7009a111b29298f748336d571f4d0233e08ef0255f6cfe69cb4c26def96394",
+              "position": 4,
+              "uid": "7047a23d-45b3-5d5c-a00b-c12552e9680d"
+            },
+            {
+              "content": "Readers can understand the overall branching shape of a procedure more quickly from a flow diagram than from rows read one at a time.",
+              "content_digest": "beb9438eb216e54223266b4f592245450812228d69f7a38908e4c260a0aaca01",
+              "position": 5,
+              "uid": "50a71968-7e3f-5b99-b3fa-769af386d0c0"
+            },
+            {
+              "content": "Redrawing a branching flow diagram after a procedural change usually takes longer than updating one row in a table.",
+              "content_digest": "cb0e535e1e58a4dbf42c5f22a3eded19fa0c228c6531b70530b226eeb2dbf24c",
+              "position": 6,
+              "uid": "ae1610f6-a855-56c1-a0fb-fd3207dab615"
+            },
+            {
+              "content": "Reviewers often inspect the proposal’s main visual before reading the procedural explanation in full.",
+              "content_digest": "a609677d56e7297c736ee92c7a45eb4d83824985a780d8ca4df664f1494c5cb2",
+              "position": 7,
+              "uid": "d2825b84-b4a6-58c9-8f8e-9e19c6192a03"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "27c95d8b-fc9e-426f-a070-48f99da2b78e"
+        },
+        {
+          "context_digest": "3cadca09eeabe1389261c2e43133d8b304ed2cad66332f3444e686a824f10a21",
+          "context_name": "task-2/advisor2/scope",
+          "context_uid": "86efd53c-c08d-537c-983f-91a7b915640d",
+          "memories": [
+            {
+              "content": "Specify in one sentence the user population and actual usage environment to which the design knowledge applies.",
+              "content_digest": "3bb25f3252678a84fe361c9562692c27556d31b6fac53da87b763648e80ed6ac",
+              "position": 0,
+              "uid": "6cfd5026-0c04-5ed8-baac-a56e68723aa3"
+            },
+            {
+              "content": "Reviewers judge the generalization boundary of results through the specified target population and environment.",
+              "content_digest": "9119780de23a4734bc8e0ba3c39dce251611932fd86bec479b522adaf1882758",
+              "position": 1,
+              "uid": "5bc7cf05-8c47-57d4-a749-ec7d2ec45e3e"
+            },
+            {
+              "content": "Specify the workflow, technical infrastructure, and operational-authority conditions that must match before applying the design guidelines at another field site.",
+              "content_digest": "2970e43d1b52b63b6f76c3c55a5534d24508bcd32402e66098d75dbb52d8083b",
+              "position": 2,
+              "uid": "25731e2b-8535-5b37-a377-0a3a99dbe189"
+            },
+            {
+              "content": "The transferability of field design knowledge depends not only on user characteristics but also on workflow and technological–organizational infrastructure.",
+              "content_digest": "71b7cbcf151114f17886e57f026c2b2ebdd666c7aa88f95c85880a1bc96fdcd2",
+              "position": 3,
+              "uid": "d79ba448-76b6-592e-b4ba-8cfd98683755"
+            },
+            {
+              "content": "The user tends to apply results confirmed at one deployment site to all similar organizations.",
+              "content_digest": "810ee3a6b79606e7f199a30aa146f47e405ff71d1728a3bbfef16b601f5c0d5e",
+              "position": 4,
+              "uid": "cde0ee2b-af3c-5c0d-b23c-632778c93e20"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "38da20c1-461e-4b9c-8144-6af74dff324e"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The reference frame concentrates on choosing and maintaining flow diagrams for branching procedures, distinguishing prototype fidelities, and anticipating visual-first review. The compared frame concentrates on defining transferability boundaries for field design knowledge and recognizing a tendency to overgeneralize site-specific results. No substantive cross-frame overlap or contradiction is present.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "27c95d8b-fc9e-426f-a070-48f99da2b78e",
+              "memory_uid": "51fa3fcc-9d5f-52f0-809d-62d7cdd8a865"
+            },
+            {
+              "frame_uid": "27c95d8b-fc9e-426f-a070-48f99da2b78e",
+              "memory_uid": "e686bd4d-3ebd-5e55-ba39-f26971247965"
+            },
+            {
+              "frame_uid": "27c95d8b-fc9e-426f-a070-48f99da2b78e",
+              "memory_uid": "a6dfe9a7-1df8-561f-8d3e-fc19518beca9"
+            },
+            {
+              "frame_uid": "27c95d8b-fc9e-426f-a070-48f99da2b78e",
+              "memory_uid": "50a71968-7e3f-5b99-b3fa-769af386d0c0"
+            }
+          ],
+          "reason": "These memories split one reference-only design claim across format choice, diagram composition, simultaneous visibility, and faster comprehension.",
+          "status": "RESOLVED",
+          "summary": "Flow diagrams should show alternate procedural branches and outcomes together when they communicate branching structure more effectively than sequential table rows.",
+          "uid": "c1b9b3c9-3d20-5d59-9972-68af8225d9b9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "27c95d8b-fc9e-426f-a070-48f99da2b78e",
+              "memory_uid": "019662a9-6f03-527f-9b6d-be5a2966d9e9"
+            }
+          ],
+          "reason": "This independently useful distinction appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A prototype’s visual fidelity and functional fidelity may differ.",
+          "uid": "f6ae3e7d-477b-5c45-b348-5eeaf5f0b9c0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "27c95d8b-fc9e-426f-a070-48f99da2b78e",
+              "memory_uid": "7047a23d-45b3-5d5c-a00b-c12552e9680d"
+            },
+            {
+              "frame_uid": "27c95d8b-fc9e-426f-a070-48f99da2b78e",
+              "memory_uid": "d2825b84-b4a6-58c9-8f8e-9e19c6192a03"
+            }
+          ],
+          "reason": "The reference memories restate one visual-first review behavior at different levels of specificity.",
+          "status": "RESOLVED",
+          "summary": "Reviewers often inspect prototype or proposal visuals and interaction-flow material before reading the full explanation.",
+          "uid": "2b6d9204-466d-523a-b161-e4446e491a3f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "27c95d8b-fc9e-426f-a070-48f99da2b78e",
+              "memory_uid": "ae1610f6-a855-56c1-a0fb-fd3207dab615"
+            }
+          ],
+          "reason": "This reference-only maintenance tradeoff is independent of the diagram’s communication benefits.",
+          "status": "RESOLVED",
+          "summary": "Updating a branching flow diagram after a procedural change usually takes longer than changing one table row.",
+          "uid": "6556756e-6143-5946-a497-6fe0265b90f9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "38da20c1-461e-4b9c-8144-6af74dff324e",
+              "memory_uid": "6cfd5026-0c04-5ed8-baac-a56e68723aa3"
+            },
+            {
+              "frame_uid": "38da20c1-461e-4b9c-8144-6af74dff324e",
+              "memory_uid": "5bc7cf05-8c47-57d4-a749-ec7d2ec45e3e"
+            },
+            {
+              "frame_uid": "38da20c1-461e-4b9c-8144-6af74dff324e",
+              "memory_uid": "25731e2b-8535-5b37-a377-0a3a99dbe189"
+            },
+            {
+              "frame_uid": "38da20c1-461e-4b9c-8144-6af74dff324e",
+              "memory_uid": "d79ba448-76b6-592e-b4ba-8cfd98683755"
+            }
+          ],
+          "reason": "These compared-only memories split one transferability claim across required boundary statements, evaluation rationale, site-matching conditions, and relevant contextual dimensions.",
+          "status": "RESOLVED",
+          "summary": "The applicability boundary of field design knowledge should be specified and judged using population, environment, workflow, technical infrastructure, and organizational-authority conditions.",
+          "uid": "57e64ab5-a932-5787-bd3f-dcf43c3a2be4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "38da20c1-461e-4b9c-8144-6af74dff324e",
+              "memory_uid": "cde0ee2b-af3c-5c0d-b23c-632778c93e20"
+            }
+          ],
+          "reason": "This compared-only behavioral observation is independently useful and is not itself a statement of the transferability criteria.",
+          "status": "RESOLVED",
+          "summary": "The user tends to generalize results from one deployment site to all similar organizations.",
+          "uid": "a33736a0-7abf-5689-ad1b-469139aa19b9"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only guidance defines field-knowledge applicability through population, environment, workflow, infrastructure, and authority conditions, while noting a tendency to generalize one site’s results too broadly.",
+        "differences": "",
+        "reference_only": "Reference-only guidance favors unified flow diagrams for branching procedures, notes their comprehension and maintenance tradeoffs, distinguishes visual from functional prototype fidelity, and describes reviewers’ tendency to inspect visuals first."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "41f291fe-ddcf-41a4-80c5-72c5b0ceb1f7"
+    },
+    "analysis_digest": "004175bce1d9d3f5554784090a98951911036e3dde9d2bdbcbcf756d4be56782",
+    "key": "18d936be1da81effdefb267660e60a25bdce4527ce7c3f80f35227a0eea9c0a4",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 32.120996583002125,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "18d936be1da81effdefb267660e60a25bdce4527ce7c3f80f35227a0eea9c0a4",
+  "created_at": "2026-08-13T18:21:35.450194Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/expression",
+  "pair_key": "d847b54fe503c2b6e7af8606847c0177b0d7d9a7a86c40add46df913275fd182",
+  "provider_seconds": 32.120996583002125,
+  "right": "task-2/advisor2/scope",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

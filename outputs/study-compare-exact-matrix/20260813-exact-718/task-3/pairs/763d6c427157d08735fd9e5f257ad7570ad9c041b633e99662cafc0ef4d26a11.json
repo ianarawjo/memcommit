@@ -1,0 +1,406 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:35:04.796183+00:00",
+      "frames": [
+        {
+          "context_digest": "2f00e067f4f35600b73e87b5555d405e2801a33ba18a54c91e63e23a79f27a4c",
+          "context_name": "task-3/local/personal-memory/2024/01",
+          "context_uid": "cbd2e4d6-2601-5d3f-8bf2-2f66b755b007",
+          "memories": [
+            {
+              "content": "The user's mother's birthday falls in the third week of January.",
+              "content_digest": "d635ded9b470acdd462156515700e66c23dcb513a7034bb365be0ac139ec0422",
+              "position": 0,
+              "uid": "2cd0229d-b7f1-581b-8019-25bdb485afd9"
+            },
+            {
+              "content": "At the user's last family meal out, noise from the next table made conversation nearly impossible.",
+              "content_digest": "dc337d32e4b09167289e19a6b1c8fe970e7eaa6fdd6868ed1c7c300e018fcd15",
+              "position": 1,
+              "uid": "c62f1669-11c9-5a81-b5f5-304acce69c23"
+            },
+            {
+              "content": "At a barbecue at home in the same month, the user was comfortable because no one had to raise their voice.",
+              "content_digest": "63763b293a491200bf1f7a251467c1fa8c2cb8d4d8450732c01666dcdea183e3",
+              "position": 2,
+              "uid": "674f4bdf-27c3-5870-a68e-91e4a093dd93"
+            },
+            {
+              "content": "During their mother's birthday meal, the user left a restaurant with loud music after 30 minutes.",
+              "content_digest": "560755c6f051ec6f85e32dc4ee9447dfc97418fca6f9f414f6910c518a52c2c0",
+              "position": 3,
+              "uid": "21509788-2e3d-548b-8303-f34cfea68c9b"
+            },
+            {
+              "content": "When discussing postponed matters with family, the user prefers a quiet, one-on-one dining environment.",
+              "content_digest": "f22bedcf60a64b3666a7e4363d6a55c48547535492010fcb205a182c1ee920a8",
+              "position": 4,
+              "uid": "74eaea9d-7640-51ba-aa77-9c050581dc46"
+            },
+            {
+              "content": "At a large banquet hall reserved by their older sister, the user remembered the surrounding noise more than the food.",
+              "content_digest": "566e443c69410f1672ab209ba2257604e373cd305ab27243a39574481407af71",
+              "position": 5,
+              "uid": "1384df1d-2173-5673-96f5-a4d86835d404"
+            },
+            {
+              "content": "On a day the user ate grilled food at home with their younger brother, conversation was easy to continue, so the user stayed another hour after the meal.",
+              "content_digest": "c93ccbe3524946f1def05a1b385fbe3387945f51164b00c56f1ff80b477d011f",
+              "position": 6,
+              "uid": "3cf68c8e-5da9-51d3-a402-c10f4137b1f4"
+            },
+            {
+              "content": "The user's mother considers having the whole family eat at the same time more important than receiving a birthday gift.",
+              "content_digest": "d302cf7db2b83b103ea11323ab1b9d36168d224b405d4d0dd51b46b494014291",
+              "position": 7,
+              "uid": "a1984768-d20d-59cd-84c9-cb08c6b7affb"
+            },
+            {
+              "content": "When proposing a birthday meal for the user's mother, check the schedule and attendees; if conversation is the purpose, first consider a low-noise location, then confirm the final choice with the user.",
+              "content_digest": "481169c62cf6fae6b4f29184ffacef9c3c9d825a34d1545ca592bc35537bc65c",
+              "position": 8,
+              "uid": "f52d11e2-2449-5c9d-887b-96c8b5cd0184"
+            },
+            {
+              "content": "The local agent can compare past dining environments and the user's responses, but those records alone cannot determine the location of the next gathering.",
+              "content_digest": "b05fef8420abe3c47c2cd9f2de9149c9c6bda7dca301f09ac7f94eac1a29d2fa",
+              "position": 9,
+              "uid": "c8fccfbe-7756-5d62-9cd7-403dd6741915"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "aa783396-4a1c-4857-abed-2858d6b0f663"
+        },
+        {
+          "context_digest": "4b8dc68a205171fe661b04620d0fba2bbb386ff21d494699c34a74dc2ab86080",
+          "context_name": "task-3/local/personal-memory/2026/03",
+          "context_uid": "97d36150-4792-5a5c-9332-5eb1de8bcf04",
+          "memories": [
+            {
+              "content": "The user stores tax-related receipts in digital folders by year.",
+              "content_digest": "778f983547572b31798b7041899812a7b0b574d74b585baf6883e94919dee6ec",
+              "position": 0,
+              "uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393"
+            },
+            {
+              "content": "The user found three paper receipts late and recalculated the expense total already prepared.",
+              "content_digest": "542368a141ec82a1bd7da4b534d88ea62c487d16a37f454569bf6400cbc749e9",
+              "position": 1,
+              "uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878"
+            },
+            {
+              "content": "Starting the next month, the user photographed receipts on the day they were received and reduced omissions.",
+              "content_digest": "b95e0a1afa1196a9bff117bf12b1630edcc4eb65bfdfeb3128ae5937563a492e",
+              "position": 2,
+              "uid": "ff436ea5-1b3e-55df-8302-bd8a96740671"
+            },
+            {
+              "content": "The user named every file with only the photo date and spent a long time looking for a needed receipt.",
+              "content_digest": "c3aa33e0b7e007bdfc5c12dcda659e2a52938548fbf53d5a1ab034487a528857",
+              "position": 3,
+              "uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e"
+            },
+            {
+              "content": "The user later included the expense category in the filename and found the receipt immediately through search.",
+              "content_digest": "cdae97761f614b932d3b330723627bee8b0e3d033e2bf1061b721367237acee1",
+              "position": 4,
+              "uid": "89d6fa9a-b795-59df-be34-1c05a9861d35"
+            },
+            {
+              "content": "While reviewing documents just before submission, the user discovered one blank signature field.",
+              "content_digest": "a525c117b97eec82c678f276b319158703bf9cc558fb83cb81c0820d5c9e3174",
+              "position": 5,
+              "uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2"
+            },
+            {
+              "content": "Before submitting an administrative document, the user checks the signature field as the final item on the checklist.",
+              "content_digest": "542bec3cbc3fc8b22c95da274e479e96bfbf061a3b644d0d7f213de5a030dbd5",
+              "position": 6,
+              "uid": "5551622f-66cf-5542-8c47-1cddadab5c02"
+            },
+            {
+              "content": "Staff at a tax-support counter expect to receive an electronic copy in which every item is legible rather than a blurred or cropped photo.",
+              "content_digest": "d328ca248fdeecf0756e23b1202e7007bc8c3c25ae769439b0fd2efdbbe47580",
+              "position": 7,
+              "uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f"
+            },
+            {
+              "content": "The local agent can organize receipts by date and category but cannot determine whether an expense is deductible.",
+              "content_digest": "bcc769721a99b099ca20e5e527fa8904d54ecbaf9ae7d7616b95e1adaf1f89a9",
+              "position": 8,
+              "uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094"
+            },
+            {
+              "content": "The accepted scope and submission deadlines for administrative documents may vary under that year's guidance.",
+              "content_digest": "1ab61126b8efb0c2a9c6114c367018158f2e136bafa87e33f60aadb0686d0537",
+              "position": 9,
+              "uid": "de398064-3179-590b-8c62-effb17060115"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "89e2b452-a548-4391-ad39-0f6534a9dd41"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate domains: the reference frame concerns planning a quiet, conversation-friendly family birthday meal, while the compared frame concerns reliable receipt organization and administrative-document submission. Neither frame supplies a scope-aligned claim that substantively overlaps or contradicts the other.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "aa783396-4a1c-4857-abed-2858d6b0f663",
+              "memory_uid": "2cd0229d-b7f1-581b-8019-25bdb485afd9"
+            }
+          ],
+          "reason": "This is independently useful calendar information found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user's mother's birthday occurs during the third week of January.",
+          "uid": "915a93b9-205c-5e9c-9a79-e399dce4a6f8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "aa783396-4a1c-4857-abed-2858d6b0f663",
+              "memory_uid": "c62f1669-11c9-5a81-b5f5-304acce69c23"
+            },
+            {
+              "frame_uid": "aa783396-4a1c-4857-abed-2858d6b0f663",
+              "memory_uid": "21509788-2e3d-548b-8303-f34cfea68c9b"
+            },
+            {
+              "frame_uid": "aa783396-4a1c-4857-abed-2858d6b0f663",
+              "memory_uid": "1384df1d-2173-5673-96f5-a4d86835d404"
+            }
+          ],
+          "reason": "Several reference memories provide consistent examples of one underlying sensitivity to noisy restaurant or banquet settings, with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Noise at family dining venues has seriously disrupted the user's conversation and experience.",
+          "uid": "7554b60a-7988-5a49-a331-e728496b14d4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "aa783396-4a1c-4857-abed-2858d6b0f663",
+              "memory_uid": "674f4bdf-27c3-5870-a68e-91e4a093dd93"
+            },
+            {
+              "frame_uid": "aa783396-4a1c-4857-abed-2858d6b0f663",
+              "memory_uid": "3cf68c8e-5da9-51d3-a402-c10f4137b1f4"
+            }
+          ],
+          "reason": "The reference memories provide complementary examples of the same positive response to low-noise home dining, absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Quiet meals at home enabled comfortable, sustained family conversation for the user.",
+          "uid": "0f9f9ba7-8cd6-5b9f-893e-45360d6d30b0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "aa783396-4a1c-4857-abed-2858d6b0f663",
+              "memory_uid": "74eaea9d-7640-51ba-aa77-9c050581dc46"
+            }
+          ],
+          "reason": "This specific conversational-environment preference appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "For discussing postponed family matters, the user prefers quiet, one-on-one dining.",
+          "uid": "392f9085-f40f-542c-8a3d-800ba5ca5c56"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "aa783396-4a1c-4857-abed-2858d6b0f663",
+              "memory_uid": "a1984768-d20d-59cd-84c9-cb08c6b7affb"
+            }
+          ],
+          "reason": "This family-attendance priority is independently useful and appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user's mother values having the whole family eat together more than receiving a birthday gift.",
+          "uid": "460d94d2-c659-5730-9339-7398e9e5c975"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "aa783396-4a1c-4857-abed-2858d6b0f663",
+              "memory_uid": "f52d11e2-2449-5c9d-887b-96c8b5cd0184"
+            }
+          ],
+          "reason": "This operational planning policy appears only in the reference frame and has no substantively related policy in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A proposed birthday meal should account for schedules and attendees, favor low noise when conversation matters, and leave the final choice to the user.",
+          "uid": "352fe9b5-bec1-5ece-94b2-26c920be6b1d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "aa783396-4a1c-4857-abed-2858d6b0f663",
+              "memory_uid": "c8fccfbe-7756-5d62-9cd7-403dd6741915"
+            }
+          ],
+          "reason": "This capability and decision-boundary statement is unique to the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Past dining responses can be compared, but they cannot alone determine the next gathering's location.",
+          "uid": "0194bc20-d85a-558e-9ea1-08803f33cf2e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "89e2b452-a548-4391-ad39-0f6534a9dd41",
+              "memory_uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393"
+            }
+          ],
+          "reason": "This receipt-storage practice appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user stores tax receipts in digital folders organized by year.",
+          "uid": "b8c48ee3-2557-563f-a6c6-8023f69d3149"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "89e2b452-a548-4391-ad39-0f6534a9dd41",
+              "memory_uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878"
+            }
+          ],
+          "reason": "This omission consequence is independently useful information unique to the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Late discovery of paper receipts forced the user to recalculate a prepared expense total.",
+          "uid": "eb824b12-142a-5717-b8ae-48ee2484dc86"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "89e2b452-a548-4391-ad39-0f6534a9dd41",
+              "memory_uid": "ff436ea5-1b3e-55df-8302-bd8a96740671"
+            }
+          ],
+          "reason": "This capture practice and its observed benefit appear only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Photographing receipts on the day of receipt reduced omissions.",
+          "uid": "e3445aff-bff1-54e2-add2-f689d3df4688"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "89e2b452-a548-4391-ad39-0f6534a9dd41",
+              "memory_uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e"
+            },
+            {
+              "frame_uid": "89e2b452-a548-4391-ad39-0f6534a9dd41",
+              "memory_uid": "89d6fa9a-b795-59df-be34-1c05a9861d35"
+            }
+          ],
+          "reason": "The compared memories describe contrasting stages of one underlying filename-searchability lesson, with no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Adding expense categories to receipt filenames improved retrieval compared with date-only naming.",
+          "uid": "836db54b-eec9-59e4-9de7-d608a40759b8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "89e2b452-a548-4391-ad39-0f6534a9dd41",
+              "memory_uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2"
+            },
+            {
+              "frame_uid": "89e2b452-a548-4391-ad39-0f6534a9dd41",
+              "memory_uid": "5551622f-66cf-5542-8c47-1cddadab5c02"
+            }
+          ],
+          "reason": "The compared memories split one underlying administrative-document signature-control practice and its motivating incident.",
+          "status": "RESOLVED",
+          "summary": "Discovering an unsigned field during review led to signature verification being treated as the final pre-submission checklist item.",
+          "uid": "9f635b5a-7a09-5c84-bb95-e0a9ecbd9a8b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "89e2b452-a548-4391-ad39-0f6534a9dd41",
+              "memory_uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f"
+            }
+          ],
+          "reason": "This submission-quality requirement appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Tax-support staff expect electronic document copies to be complete and legible rather than blurred or cropped.",
+          "uid": "e7f27dbc-6e76-5b25-9406-59fda9355aff"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "89e2b452-a548-4391-ad39-0f6534a9dd41",
+              "memory_uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094"
+            }
+          ],
+          "reason": "This capability and tax-judgment boundary is unique to the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The local agent can organize receipts by date and category but cannot decide expense deductibility.",
+          "uid": "ce7b9107-fdb9-578b-8850-1d4950ee78f5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "89e2b452-a548-4391-ad39-0f6534a9dd41",
+              "memory_uid": "de398064-3179-590b-8c62-effb17060115"
+            }
+          ],
+          "reason": "This time-sensitive qualification appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Administrative-document scope and deadlines may vary with the applicable year's guidance.",
+          "uid": "42fb4ac1-ed7a-5e7c-88f8-91a88951b87a"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers receipt capture and yearly storage, searchable filenames, signature checks, legible electronic copies, changing submission guidance, and limits on determining tax deductibility.",
+        "differences": "",
+        "reference_only": "The reference frame records January birthday timing, family attendance priorities, strong sensitivity to noisy dining, preference for quiet conversation, a cautious meal-planning workflow, and limits on inferring the next venue."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "fc472772-5319-460d-ad76-267156263e93"
+    },
+    "analysis_digest": "9376c57a6c7742fa71cb3b0b39911b2b33402b9751ac13e65bbbab868845583d",
+    "key": "97e677093f82ae70001dbe62ebf3d1381811fbde9ac9075e59b89e805af103ae",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 40.30182525000055,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "97e677093f82ae70001dbe62ebf3d1381811fbde9ac9075e59b89e805af103ae",
+  "created_at": "2026-08-13T18:35:45.097557Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/01",
+  "pair_key": "763d6c427157d08735fd9e5f257ad7570ad9c041b633e99662cafc0ef4d26a11",
+  "provider_seconds": 40.30182525000055,
+  "right": "task-3/local/personal-memory/2026/03",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

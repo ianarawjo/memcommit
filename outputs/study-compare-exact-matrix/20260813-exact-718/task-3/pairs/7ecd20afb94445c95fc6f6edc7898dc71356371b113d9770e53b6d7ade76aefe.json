@@ -1,0 +1,397 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:41:31.517657+00:00",
+      "frames": [
+        {
+          "context_digest": "58f58090449931225a941a4219f3fce7ebcf23bbabc0e0aa93a8733d4ba32701",
+          "context_name": "task-3/local/personal-memory/2024/07",
+          "context_uid": "8747b4f6-d17c-5b02-83f4-fc3af73e2da0",
+          "memories": [
+            {
+              "content": "The user updated the utility account for their residence in July 2024.",
+              "content_digest": "89c6a8e8dd7ad799b9ef4cb2b10963ce0b9ad55e713716d9729f903e76c0f71a",
+              "position": 0,
+              "uid": "65a332a2-2707-55f8-b7a6-a7378e6fbb7a"
+            },
+            {
+              "content": "After putting a paper bill in a drawer, the user checked it one day after the payment date.",
+              "content_digest": "474d42322de3190caee3e4feeb831bcb6a7b57e58427667d74be084ee9c64257",
+              "position": 1,
+              "uid": "fb94e1fd-9b3d-567a-81d8-d7a0ee90e04e"
+            },
+            {
+              "content": "In the month after receiving an electronic billing alert, the user paid two days before the deadline.",
+              "content_digest": "c16cf32e0018eb1cdf94e3070036d7fb93b0ccc8adb633a057642ff41284eaa0",
+              "position": 2,
+              "uid": "7d8db31a-c330-5852-9d7c-c9da7f98d899"
+            },
+            {
+              "content": "The user saw a water-inspection notice late and started washing dishes during the scheduled shutoff.",
+              "content_digest": "d5bea20cc35a46502ba919c52bee7519453346789d4bb881c82a9c08e6840cb0",
+              "position": 3,
+              "uid": "008dd110-feb2-5b4b-b602-bb3e23475a95"
+            },
+            {
+              "content": "After transferring a management-office notice to their phone calendar, the user did not miss the inspection time.",
+              "content_digest": "ce2c06404fcb8988b61da98f2ddd58d3db6506ff74aa1c7dfd43f841fa6fb25d",
+              "position": 4,
+              "uid": "a03ed01a-3d15-5eaf-9415-529705fd1245"
+            },
+            {
+              "content": "During a boiler technician's visit, the user had not cleared boxes from the entrance in advance and had to rearrange the passage.",
+              "content_digest": "39f4ca86667c0622dce2b6fee2b04df73131bf9d98e81478f1fa818b5dfe70c2",
+              "position": 5,
+              "uid": "2fb4b0bd-1257-5e50-881a-7f312940e1c5"
+            },
+            {
+              "content": "The user cleared the entrance the day before the next visit so the inspection could begin immediately.",
+              "content_digest": "e99fb029e3ca864e4f293358a85f33d73f4d7d2b9fda7dcd437ffdf183350666",
+              "position": 6,
+              "uid": "d05286e8-f183-5f4a-99d8-3dcca1aeaa09"
+            },
+            {
+              "content": "The building manager expects that a one-day advance visit notice gives a resident enough time to prepare the work area.",
+              "content_digest": "f992e380bfa87fa04c9f7dde8eceee69eb6b0aa3ad79c180d9023dafd7dd2abd",
+              "position": 7,
+              "uid": "44d28aa3-1aa4-5276-b545-86ee2cb17078"
+            },
+            {
+              "content": "Confirm the user's available time before finalizing a service visit to the residence.",
+              "content_digest": "dee4efa145a0f8b25c47a1c6855c02feee2de292e78b2e3790763796981db1e5",
+              "position": 8,
+              "uid": "77f77450-ab10-5469-8e2f-5445060926bc"
+            },
+            {
+              "content": "The local agent can compare payment records with notice times but cannot verify whether a residential service problem was resolved.",
+              "content_digest": "09e052010507ce17344888df5171f58996245cceb9012e160d540f030e7ba98a",
+              "position": 9,
+              "uid": "fd7f98b4-d5b9-5196-ad5e-c4356681ecf4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "04b75681-6f71-48c1-ba1c-b9d62f59ad0e"
+        },
+        {
+          "context_digest": "14adbc31fc3a2dc50b7b980d1e24569b16fff058104a812c7f3b4e1542b7abf0",
+          "context_name": "task-3/local/personal-memory/2025/03",
+          "context_uid": "913e0bfd-f6d9-579e-9a37-ba5daa9d17f1",
+          "memories": [
+            {
+              "content": "The user stores prepared meals on the second shelf of the freezer.",
+              "content_digest": "cd837b62b643f752da54b21de2f4f7a3d963a7c658d5b83dff39d1d92e0fdbad",
+              "position": 0,
+              "uid": "5d989bab-c471-5de9-bb73-29cabc4753dd"
+            },
+            {
+              "content": "The user went to the market without a shopping list and bought onions that were already at home.",
+              "content_digest": "f667c860e046bb27662b26d7cc4ed083ee48d9d7915237dc4b92ec378481a093",
+              "position": 1,
+              "uid": "d1725ae4-3fd3-5250-92b3-73d84d9152a7"
+            },
+            {
+              "content": "On a day the user shopped after checking a refrigerator photo, they did not make a duplicate purchase.",
+              "content_digest": "7283d4afe58c0ab05d9cb426bb80bed0e26e0b1783ff7cdd00a5f6e89d21861b",
+              "position": 2,
+              "uid": "904ff225-26df-5424-8a82-23d733649106"
+            },
+            {
+              "content": "On a day the user made a spicy stew, they left part of one bowl uneaten.",
+              "content_digest": "2765ec701f8e058d35ddee4a485c40221523ee2d9b56301ec1658ec4e419cbc2",
+              "position": 3,
+              "uid": "67a003c7-648a-59dc-8e82-03f9e452ffce"
+            },
+            {
+              "content": "The next time the user cooked it, they used half as much chili powder and finished the meal.",
+              "content_digest": "bdd7df7c762bbce31a40a45c2124e49ae3a6439dfc2133c574443d7eb3a7b1bb",
+              "position": 4,
+              "uid": "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9"
+            },
+            {
+              "content": "When cooking with their younger brother, the user assigned the cooking sequence only verbally and they did the same task twice.",
+              "content_digest": "bd92611cfc05fd42bb5d25e8dd7838ca1b2f6d99869bf1f61921b46950a4b532",
+              "position": 5,
+              "uid": "64bf4401-e972-5d15-a526-21ca901a6a9f"
+            },
+            {
+              "content": "The next time, the user and their younger brother split ingredient preparation and heat control and finished the meal 20 minutes earlier.",
+              "content_digest": "c3a28e7256d781ecb2d8710145880ffe79495e32d47ae1949c4be54e52a44555",
+              "position": 6,
+              "uid": "57e09ea5-54ff-5fce-aada-68daffbacc8b"
+            },
+            {
+              "content": "When cooking together, the user's younger brother prefers to divide the cooking and dishwashing roles in advance.",
+              "content_digest": "3bbc428c4f3b4e28a8e2341206ac78b39240eea53a9862192528029b0a57d12b",
+              "position": 7,
+              "uid": "0a5d054f-94bd-5955-bdb7-9b5427e2260b"
+            },
+            {
+              "content": "The local agent can compare responses across several meals, but it cannot conclude from one unfinished food item that the user dislikes that ingredient.",
+              "content_digest": "5787c1636d9dd4a5cb5bd70533b7dd44b2d6cff1047f5c408f5bcaa1b6577fe1",
+              "position": 8,
+              "uid": "1f94b78b-1635-551c-b90c-bea2a67ca595"
+            },
+            {
+              "content": "The condition of frozen prepared food may vary with its packaging and storage duration.",
+              "content_digest": "84bdac276dce5b50b19bc0c7c471468a22cc9945b1da7357700a58c157cf4ca1",
+              "position": 9,
+              "uid": "f64ef6c4-7665-5574-9d58-fc124b0bfe3f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "94269685-7ec8-4e08-8b9b-22d2b8e7259c"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate domains: residential utilities and service visits versus food storage, shopping, cooking, and meal coordination. Each side contains behavioral examples, practical preferences or guidance, and limits on what the local agent may infer, but no claims govern the same operational decision.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "04b75681-6f71-48c1-ba1c-b9d62f59ad0e",
+              "memory_uid": "65a332a2-2707-55f8-b7a6-a7378e6fbb7a"
+            }
+          ],
+          "reason": "This is one-sided historical information about utility-account administration, with no compared-side claim addressing that subject.",
+          "status": "RESOLVED",
+          "summary": "The user updated the residential utility account in July 2024.",
+          "uid": "bb79e8cb-c22f-53d9-8ddb-13fd3065531b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "04b75681-6f71-48c1-ba1c-b9d62f59ad0e",
+              "memory_uid": "fb94e1fd-9b3d-567a-81d8-d7a0ee90e04e"
+            },
+            {
+              "frame_uid": "04b75681-6f71-48c1-ba1c-b9d62f59ad0e",
+              "memory_uid": "7d8db31a-c330-5852-9d7c-c9da7f98d899"
+            }
+          ],
+          "reason": "Together these memories describe one reference-side change in payment timeliness associated with different bill-reminder handling; the compared frame has no claim about billing or payments.",
+          "status": "RESOLVED",
+          "summary": "The user checked a paper bill after its payment date but, after an electronic billing alert the following month, paid before the deadline.",
+          "uid": "958c2831-50b8-51f0-bb21-c8d715b5052a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "04b75681-6f71-48c1-ba1c-b9d62f59ad0e",
+              "memory_uid": "008dd110-feb2-5b4b-b602-bb3e23475a95"
+            },
+            {
+              "frame_uid": "04b75681-6f71-48c1-ba1c-b9d62f59ad0e",
+              "memory_uid": "a03ed01a-3d15-5eaf-9415-529705fd1245"
+            }
+          ],
+          "reason": "The memories jointly describe one reference-side pattern in which calendar handling improved attendance at residential inspection events; no compared-side claim addresses such notices.",
+          "status": "RESOLVED",
+          "summary": "Late attention to one inspection notice caused a shutoff-time mistake, while transferring a later notice to the phone calendar prevented missing the inspection time.",
+          "uid": "a520ba76-2bdb-50ad-946b-bd9c812a62ed"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "04b75681-6f71-48c1-ba1c-b9d62f59ad0e",
+              "memory_uid": "2fb4b0bd-1257-5e50-881a-7f312940e1c5"
+            },
+            {
+              "frame_uid": "04b75681-6f71-48c1-ba1c-b9d62f59ad0e",
+              "memory_uid": "d05286e8-f183-5f4a-99d8-3dcca1aeaa09"
+            }
+          ],
+          "reason": "These memories form one reference-side before-and-after claim about preparing residential access for service visits, absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "After boxes obstructed a technician visit, the user cleared the entrance before the next visit so work could begin immediately.",
+          "uid": "35c83e50-a9f0-5fe2-a808-e08622d381b0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "04b75681-6f71-48c1-ba1c-b9d62f59ad0e",
+              "memory_uid": "44d28aa3-1aa4-5276-b545-86ee2cb17078"
+            }
+          ],
+          "reason": "This is an independently useful reference-side expectation about service-visit notice, not a claim made by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The building manager considers one day of advance notice sufficient for a resident to prepare a work area.",
+          "uid": "8cc1f865-c94f-5178-8cd8-75d202045547"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "04b75681-6f71-48c1-ba1c-b9d62f59ad0e",
+              "memory_uid": "77f77450-ab10-5469-8e2f-5445060926bc"
+            }
+          ],
+          "reason": "This reference-side scheduling instruction governs residential visits, while the compared frame contains no corresponding scheduling policy.",
+          "status": "RESOLVED",
+          "summary": "A service visit should be finalized only after confirming the user’s availability.",
+          "uid": "4cb2cc51-6eca-593d-bc12-62b0b9dee668"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "04b75681-6f71-48c1-ba1c-b9d62f59ad0e",
+              "memory_uid": "fd7f98b4-d5b9-5196-ad5e-c4356681ecf4"
+            }
+          ],
+          "reason": "This is a reference-side capability boundary specific to payments, notices, and service resolution; the compared-side boundary concerns meal evidence instead.",
+          "status": "RESOLVED",
+          "summary": "The local agent may compare payment records with notice times but cannot verify whether a residential service problem was resolved.",
+          "uid": "92801ca3-d9b5-5997-bb24-c2add63e2f0c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "94269685-7ec8-4e08-8b9b-22d2b8e7259c",
+              "memory_uid": "5d989bab-c471-5de9-bb73-29cabc4753dd"
+            }
+          ],
+          "reason": "This is one-sided information about food-storage location, with no reference-side claim addressing it.",
+          "status": "RESOLVED",
+          "summary": "The user stores prepared meals on the freezer’s second shelf.",
+          "uid": "8b18e493-e572-55ea-b3de-5bdaabc4a90d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "94269685-7ec8-4e08-8b9b-22d2b8e7259c",
+              "memory_uid": "d1725ae4-3fd3-5250-92b3-73d84d9152a7"
+            },
+            {
+              "frame_uid": "94269685-7ec8-4e08-8b9b-22d2b8e7259c",
+              "memory_uid": "904ff225-26df-5424-8a82-23d733649106"
+            }
+          ],
+          "reason": "Together these memories describe one compared-side before-and-after claim about inventory checking and duplicate purchases, absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Shopping without an inventory aid led to duplicate onions, while checking a refrigerator photo before a later trip avoided a duplicate purchase.",
+          "uid": "1021ac84-0c4e-5e43-8fff-0968c05c06b6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "94269685-7ec8-4e08-8b9b-22d2b8e7259c",
+              "memory_uid": "67a003c7-648a-59dc-8e82-03f9e452ffce"
+            },
+            {
+              "frame_uid": "94269685-7ec8-4e08-8b9b-22d2b8e7259c",
+              "memory_uid": "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9"
+            }
+          ],
+          "reason": "These memories jointly describe one compared-side adjustment to a dish and its observed meal outcome; the reference frame has no cooking-preference claim.",
+          "status": "RESOLVED",
+          "summary": "After leaving spicy stew unfinished, the user used half as much chili powder the next time and finished the meal.",
+          "uid": "5be2c24e-9650-530c-b7cf-5278e8bb437a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "94269685-7ec8-4e08-8b9b-22d2b8e7259c",
+              "memory_uid": "64bf4401-e972-5d15-a526-21ca901a6a9f"
+            },
+            {
+              "frame_uid": "94269685-7ec8-4e08-8b9b-22d2b8e7259c",
+              "memory_uid": "57e09ea5-54ff-5fce-aada-68daffbacc8b"
+            }
+          ],
+          "reason": "The memories form one compared-side before-and-after claim about explicit cooking-role division and efficiency, with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "After verbal-only sequencing caused duplicated work, the user and their younger brother divided preparation and heat-control tasks and finished a later meal earlier.",
+          "uid": "48b310d0-1d0a-54de-972a-0f50bbb29430"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "94269685-7ec8-4e08-8b9b-22d2b8e7259c",
+              "memory_uid": "0a5d054f-94bd-5955-bdb7-9b5427e2260b"
+            }
+          ],
+          "reason": "This is an independently useful compared-side preference about shared meal work, not stated in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "When cooking together, the user’s younger brother prefers assigning cooking and dishwashing roles in advance.",
+          "uid": "72845b1b-ddec-522b-82dc-9947e1d32b79"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "94269685-7ec8-4e08-8b9b-22d2b8e7259c",
+              "memory_uid": "1f94b78b-1635-551c-b90c-bea2a67ca595"
+            }
+          ],
+          "reason": "This is a compared-side evidentiary boundary specific to food preferences; the reference-side capability boundary concerns residential service matters.",
+          "status": "RESOLVED",
+          "summary": "The local agent may compare responses across meals but cannot infer ingredient dislike from one unfinished food item.",
+          "uid": "60965fe4-38f4-561a-8907-b2bfe1ac909b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "94269685-7ec8-4e08-8b9b-22d2b8e7259c",
+              "memory_uid": "f64ef6c4-7665-5574-9d58-fc124b0bfe3f"
+            }
+          ],
+          "reason": "This is a one-sided qualification about frozen-food condition, with no reference-side claim addressing food storage.",
+          "status": "RESOLVED",
+          "summary": "The condition of frozen prepared food may depend on packaging and storage duration.",
+          "uid": "1fbe10f8-1260-503e-810b-ed405944b688"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers freezer storage, inventory checks, spice adjustment, coordinated cooking roles, a brother’s role preference, and limits or qualifications concerning food-condition and preference inferences.",
+        "differences": "",
+        "reference_only": "The reference covers utility-account administration, reminder-supported payment and inspection attendance, visit preparation, scheduling guidance, a manager’s notice expectation, and limits on verifying service resolution."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "8cb09705-75b0-46fb-b24a-b9ac5fa6ed65"
+    },
+    "analysis_digest": "bacfcc0060fd72e6b827c309bf6602f5f471f44fe98c6a9c6f3898457e52af74",
+    "key": "d93dcfda862d26d3e570c0ccd80604706bae49448ac9e27269719121b035b52d",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 39.44520525000189,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "d93dcfda862d26d3e570c0ccd80604706bae49448ac9e27269719121b035b52d",
+  "created_at": "2026-08-13T18:42:10.962564Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/07",
+  "pair_key": "7ecd20afb94445c95fc6f6edc7898dc71356371b113d9770e53b6d7ade76aefe",
+  "provider_seconds": 39.44520525000189,
+  "right": "task-3/local/personal-memory/2025/03",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

@@ -15,7 +15,7 @@ from memcommit.commands.session_endpoint_setup import (
     EndpointSetupDraft,
     choose_session_endpoints,
 )
-from memcommit.commands.context_picker import ContextMemoryRow
+from memcommit.context_targeting.tui.picker import ContextMemoryRow
 
 
 @dataclass(frozen=True)

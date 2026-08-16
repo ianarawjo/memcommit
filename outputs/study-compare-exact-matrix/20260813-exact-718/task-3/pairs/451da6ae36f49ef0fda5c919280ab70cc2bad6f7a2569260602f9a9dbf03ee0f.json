@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:41:44.807459+00:00",
+      "frames": [
+        {
+          "context_digest": "58f58090449931225a941a4219f3fce7ebcf23bbabc0e0aa93a8733d4ba32701",
+          "context_name": "task-3/local/personal-memory/2024/07",
+          "context_uid": "8747b4f6-d17c-5b02-83f4-fc3af73e2da0",
+          "memories": [
+            {
+              "content": "The user updated the utility account for their residence in July 2024.",
+              "content_digest": "89c6a8e8dd7ad799b9ef4cb2b10963ce0b9ad55e713716d9729f903e76c0f71a",
+              "position": 0,
+              "uid": "65a332a2-2707-55f8-b7a6-a7378e6fbb7a"
+            },
+            {
+              "content": "After putting a paper bill in a drawer, the user checked it one day after the payment date.",
+              "content_digest": "474d42322de3190caee3e4feeb831bcb6a7b57e58427667d74be084ee9c64257",
+              "position": 1,
+              "uid": "fb94e1fd-9b3d-567a-81d8-d7a0ee90e04e"
+            },
+            {
+              "content": "In the month after receiving an electronic billing alert, the user paid two days before the deadline.",
+              "content_digest": "c16cf32e0018eb1cdf94e3070036d7fb93b0ccc8adb633a057642ff41284eaa0",
+              "position": 2,
+              "uid": "7d8db31a-c330-5852-9d7c-c9da7f98d899"
+            },
+            {
+              "content": "The user saw a water-inspection notice late and started washing dishes during the scheduled shutoff.",
+              "content_digest": "d5bea20cc35a46502ba919c52bee7519453346789d4bb881c82a9c08e6840cb0",
+              "position": 3,
+              "uid": "008dd110-feb2-5b4b-b602-bb3e23475a95"
+            },
+            {
+              "content": "After transferring a management-office notice to their phone calendar, the user did not miss the inspection time.",
+              "content_digest": "ce2c06404fcb8988b61da98f2ddd58d3db6506ff74aa1c7dfd43f841fa6fb25d",
+              "position": 4,
+              "uid": "a03ed01a-3d15-5eaf-9415-529705fd1245"
+            },
+            {
+              "content": "During a boiler technician's visit, the user had not cleared boxes from the entrance in advance and had to rearrange the passage.",
+              "content_digest": "39f4ca86667c0622dce2b6fee2b04df73131bf9d98e81478f1fa818b5dfe70c2",
+              "position": 5,
+              "uid": "2fb4b0bd-1257-5e50-881a-7f312940e1c5"
+            },
+            {
+              "content": "The user cleared the entrance the day before the next visit so the inspection could begin immediately.",
+              "content_digest": "e99fb029e3ca864e4f293358a85f33d73f4d7d2b9fda7dcd437ffdf183350666",
+              "position": 6,
+              "uid": "d05286e8-f183-5f4a-99d8-3dcca1aeaa09"
+            },
+            {
+              "content": "The building manager expects that a one-day advance visit notice gives a resident enough time to prepare the work area.",
+              "content_digest": "f992e380bfa87fa04c9f7dde8eceee69eb6b0aa3ad79c180d9023dafd7dd2abd",
+              "position": 7,
+              "uid": "44d28aa3-1aa4-5276-b545-86ee2cb17078"
+            },
+            {
+              "content": "Confirm the user's available time before finalizing a service visit to the residence.",
+              "content_digest": "dee4efa145a0f8b25c47a1c6855c02feee2de292e78b2e3790763796981db1e5",
+              "position": 8,
+              "uid": "77f77450-ab10-5469-8e2f-5445060926bc"
+            },
+            {
+              "content": "The local agent can compare payment records with notice times but cannot verify whether a residential service problem was resolved.",
+              "content_digest": "09e052010507ce17344888df5171f58996245cceb9012e160d540f030e7ba98a",
+              "position": 9,
+              "uid": "fd7f98b4-d5b9-5196-ad5e-c4356681ecf4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "78f59f3c-f161-42f2-ae70-a4a676ae65d0"
+        },
+        {
+          "context_digest": "ac4f93d71b525f6156f0b669075a833a2a41161be6abe677ec382bff6e6060e8",
+          "context_name": "task-3/local/personal-memory/2025/08",
+          "context_uid": "ed84de75-8e18-5bec-908c-a1ff9827b3e3",
+          "memories": [
+            {
+              "content": "The user keeps packing tape for returns in an upper kitchen drawer.",
+              "content_digest": "ed359d883caffd7ce4daddc297ddcc9d26da233dc2a36dc4dbc96e300b2248e9",
+              "position": 0,
+              "uid": "15c3941e-ed44-508f-ae30-b51456b5ba86"
+            },
+            {
+              "content": "The user arrived ten minutes before the post office closed and found that numbered-ticket intake had ended.",
+              "content_digest": "3c4609eea9455bbd46a6f238aa750f61f348ce7b2cf421a4d123f1b707b52550",
+              "position": 1,
+              "uid": "84d1fd1c-9508-5f05-9a7c-1d5f20ecf4a4"
+            },
+            {
+              "content": "Before the next visit, the user checked the operating hours and arrived one hour before closing.",
+              "content_digest": "b2997262abf4ba476c63de3550e54269ef7d61bb56d3adb5b6d9f54ba13fc078",
+              "position": 2,
+              "uid": "8946f9da-e325-59c3-9260-2d2f590d3701"
+            },
+            {
+              "content": "The user went to the counter without closing a return box and had to go back to the packing station.",
+              "content_digest": "759122c3f88ca71b992a725e357beab72f9820de872a7bd895b808c2df21f2b2",
+              "position": 3,
+              "uid": "67e8b160-a57d-56e5-a766-741b7ce0e939"
+            },
+            {
+              "content": "For the next return, the user sealed the box at home and completed intake in one attempt.",
+              "content_digest": "007fcec32ea3788854161e68c95c2aaba90e94a721d03b350e1619afc54840e3",
+              "position": 4,
+              "uid": "efd0706b-600a-5ac1-926e-cc0602ca0086"
+            },
+            {
+              "content": "The user scheduled bank and post-office errands for the same day, but they took a long time because the destinations were in different directions.",
+              "content_digest": "000e1975fde79f4d6caf36adad0c2e481a032537cfa410e46649866d985567c2",
+              "position": 5,
+              "uid": "1e8a6f7e-0911-5a34-ad82-172479d1a7a4"
+            },
+            {
+              "content": "The following week, after checking the locations on a map, the user visited nearby branches in sequence.",
+              "content_digest": "c3de08c5b6074dff2b3f6303f5efc3740cc430b634cb365a5d570061a30a53fa",
+              "position": 6,
+              "uid": "a8670161-257e-51ab-8e30-0e282952278f"
+            },
+            {
+              "content": "Postal staff expect a return-label barcode to arrive affixed flat, without a fold.",
+              "content_digest": "6293ace2d67781644694976af71d5696cad28979d9641718ccd59f16b3397a47",
+              "position": 7,
+              "uid": "2db70f53-99ee-556c-a8c1-b809881cbebd"
+            },
+            {
+              "content": "Before grouping errands into one outing, check each institution's location and operating hours that day.",
+              "content_digest": "7fef923f9ed507db5aad6cf65eaee2c965075e51fef0ff73fa669f1e7f69314a",
+              "position": 8,
+              "uid": "38d60cc4-2f91-5cc2-b511-55cdbbe12c32"
+            },
+            {
+              "content": "Postal and financial counters may operate on different hours than usual around public holidays.",
+              "content_digest": "2d5dc709c468405ea894f343e922dc2546b826ed7488e613f4d4dd730bccccfd",
+              "position": 9,
+              "uid": "1272087c-a535-5612-8c7a-1bc257183788"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "bbcb68c7-5e1e-4167-8575-f8c5e8216053"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate domains. The reference frame concerns residential utilities, notices, inspections, visit preparation, scheduling, and verification limits; the compared frame concerns postal returns, counter timing, errand routing, barcode preparation, and holiday hours. No claim materially governs the same operational decision across both frames.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78f59f3c-f161-42f2-ae70-a4a676ae65d0",
+              "memory_uid": "65a332a2-2707-55f8-b7a6-a7378e6fbb7a"
+            }
+          ],
+          "reason": "This residential account-history fact has no counterpart addressing the same claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The utility account for the user's residence was updated in July 2024.",
+          "uid": "1dff622c-d17d-5142-9bb8-9468a64b249f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78f59f3c-f161-42f2-ae70-a4a676ae65d0",
+              "memory_uid": "fb94e1fd-9b3d-567a-81d8-d7a0ee90e04e"
+            }
+          ],
+          "reason": "This billing-timeliness episode is independently useful and is not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A paper bill stored in a drawer was checked one day after its payment date.",
+          "uid": "6c7eb8dc-cd98-58c9-aada-400827ea2c48"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78f59f3c-f161-42f2-ae70-a4a676ae65d0",
+              "memory_uid": "7d8db31a-c330-5852-9d7c-c9da7f98d899"
+            }
+          ],
+          "reason": "This electronic-alert and payment-timing episode has no claim-level counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "After an electronic billing alert, the user paid two days before the following month's deadline.",
+          "uid": "8ef0a7ce-f6c0-51d9-922f-029f8b3db437"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78f59f3c-f161-42f2-ae70-a4a676ae65d0",
+              "memory_uid": "008dd110-feb2-5b4b-b602-bb3e23475a95"
+            }
+          ],
+          "reason": "This residential notice and shutoff episode is absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user saw a water-inspection notice late and began washing dishes during the scheduled shutoff.",
+          "uid": "6e174912-32f0-52d9-8a1f-9484e759f60d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78f59f3c-f161-42f2-ae70-a4a676ae65d0",
+              "memory_uid": "a03ed01a-3d15-5eaf-9415-529705fd1245"
+            }
+          ],
+          "reason": "This calendar-based handling of a residential inspection notice is not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Transferring a management-office notice to a phone calendar helped the user avoid missing the inspection time.",
+          "uid": "ab9eb264-c0e3-52c0-bce8-1a4029e8dd08"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78f59f3c-f161-42f2-ae70-a4a676ae65d0",
+              "memory_uid": "2fb4b0bd-1257-5e50-881a-7f312940e1c5"
+            }
+          ],
+          "reason": "This residential access-preparation failure has no counterpart governing the same task in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Uncleared boxes at the entrance delayed preparation during a boiler technician's visit.",
+          "uid": "68cff7a0-e1d4-525b-a8c6-2f7a98e2e9a6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78f59f3c-f161-42f2-ae70-a4a676ae65d0",
+              "memory_uid": "d05286e8-f183-5f4a-99d8-3dcca1aeaa09"
+            }
+          ],
+          "reason": "This successful residential work-area preparation episode is not covered by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Before the next visit, the user cleared the entrance a day early so the inspection could start immediately.",
+          "uid": "a0b3e609-95ac-54a2-b0d8-eb68ba55a178"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78f59f3c-f161-42f2-ae70-a4a676ae65d0",
+              "memory_uid": "44d28aa3-1aa4-5276-b545-86ee2cb17078"
+            }
+          ],
+          "reason": "This building-management expectation is a one-sided residential service claim.",
+          "status": "RESOLVED",
+          "summary": "The building manager considers one day's advance notice sufficient for a resident to prepare the work area.",
+          "uid": "2bbac3c5-ee60-5781-abb7-ee6b6a54e97d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78f59f3c-f161-42f2-ae70-a4a676ae65d0",
+              "memory_uid": "77f77450-ab10-5469-8e2f-5445060926bc"
+            }
+          ],
+          "reason": "This service-visit scheduling policy addresses a different operational decision from the compared frame's errand-planning guidance.",
+          "status": "RESOLVED",
+          "summary": "The user's availability should be confirmed before a residential service visit is finalized.",
+          "uid": "5823460d-889b-5291-bbf3-0fbdab6b531e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78f59f3c-f161-42f2-ae70-a4a676ae65d0",
+              "memory_uid": "fd7f98b4-d5b9-5196-ad5e-c4356681ecf4"
+            }
+          ],
+          "reason": "This capability boundary appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The local agent can compare payment and notice timing but cannot verify resolution of a residential service problem.",
+          "uid": "9a18b79e-91db-56dc-bc2c-8511f335c9a5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbcb68c7-5e1e-4167-8575-f8c5e8216053",
+              "memory_uid": "15c3941e-ed44-508f-ae30-b51456b5ba86"
+            }
+          ],
+          "reason": "This supply-location fact has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user stores return-packing tape in an upper kitchen drawer.",
+          "uid": "e00fd528-80e0-5f58-a452-323b5c0873eb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbcb68c7-5e1e-4167-8575-f8c5e8216053",
+              "memory_uid": "84d1fd1c-9508-5f05-9a7c-1d5f20ecf4a4"
+            }
+          ],
+          "reason": "This postal intake-timing episode is not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Arriving ten minutes before post-office closing was too late because numbered-ticket intake had ended.",
+          "uid": "f2a50e26-57ec-5b72-81f3-d58b500205d6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbcb68c7-5e1e-4167-8575-f8c5e8216053",
+              "memory_uid": "8946f9da-e325-59c3-9260-2d2f590d3701"
+            }
+          ],
+          "reason": "This successful postal-hours planning episode has no claim-level counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Before a later post-office visit, the user checked operating hours and arrived one hour before closing.",
+          "uid": "72fd0628-6a93-5d1f-973f-570862933ab8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbcb68c7-5e1e-4167-8575-f8c5e8216053",
+              "memory_uid": "67e8b160-a57d-56e5-a766-741b7ce0e939"
+            }
+          ],
+          "reason": "This return-packaging failure is independently useful and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user reached the counter with an unsealed return box and had to revisit the packing station.",
+          "uid": "4f19fae5-11a0-581b-928a-458a063daf86"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbcb68c7-5e1e-4167-8575-f8c5e8216053",
+              "memory_uid": "efd0706b-600a-5ac1-926e-cc0602ca0086"
+            }
+          ],
+          "reason": "This successful postal-return preparation episode is not covered by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "For a later return, sealing the box at home allowed intake to be completed in one attempt.",
+          "uid": "fbc89e62-6526-588c-b026-9a2a27644bf4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbcb68c7-5e1e-4167-8575-f8c5e8216053",
+              "memory_uid": "1e8a6f7e-0911-5a34-ad82-172479d1a7a4"
+            }
+          ],
+          "reason": "This errand-routing episode has no counterpart addressing the same decision in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Combining bank and post-office errands took a long time because the destinations lay in different directions.",
+          "uid": "e7e65c47-b9f8-521a-98ff-429e0bf4beea"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbcb68c7-5e1e-4167-8575-f8c5e8216053",
+              "memory_uid": "a8670161-257e-51ab-8e30-0e282952278f"
+            }
+          ],
+          "reason": "This successful route-planning episode appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "After consulting a map, the user visited nearby branches sequentially the following week.",
+          "uid": "23e72029-8809-5efb-9af2-3885cb517ddc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbcb68c7-5e1e-4167-8575-f8c5e8216053",
+              "memory_uid": "2db70f53-99ee-556c-a8c1-b809881cbebd"
+            }
+          ],
+          "reason": "This postal packaging requirement has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Postal staff expect a return-label barcode to be affixed flat and without a fold.",
+          "uid": "61499b98-e84a-5ff8-9fc8-97e8e61fc99f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbcb68c7-5e1e-4167-8575-f8c5e8216053",
+              "memory_uid": "38d60cc4-2f91-5cc2-b511-55cdbbe12c32"
+            }
+          ],
+          "reason": "This multi-errand planning policy addresses a different operational decision from residential visit scheduling.",
+          "status": "RESOLVED",
+          "summary": "Locations and same-day operating hours should be checked before institutions are grouped into one outing.",
+          "uid": "0d13ee91-3bdb-5c12-b4e2-ea3edeccf012"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbcb68c7-5e1e-4167-8575-f8c5e8216053",
+              "memory_uid": "1272087c-a535-5612-8c7a-1bc257183788"
+            }
+          ],
+          "reason": "This holiday-hours qualification appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Postal and financial counters may use unusual operating hours around public holidays.",
+          "uid": "aa8b6826-47fd-5d13-be3f-ea94497fa9cc"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only content describes return supplies and packaging, post-office intake timing, route planning across errands, barcode presentation, and holiday-related counter hours.",
+        "differences": "",
+        "reference_only": "Reference-only content describes utility-account history, billing behavior, residential notices and inspections, work-area preparation, visit scheduling, and limits on verifying service resolution."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "f3abb2d1-b229-42d6-a22e-f8ba1081b901"
+    },
+    "analysis_digest": "1fad037e98fa09d368a725784b42e524079241021e1ffe2437034610f907543f",
+    "key": "69aaff037c82bdc9009e2ce3958093294823aa85f9eb3f307c31adf4f3d2eb57",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 41.641156333000254,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "69aaff037c82bdc9009e2ce3958093294823aa85f9eb3f307c31adf4f3d2eb57",
+  "created_at": "2026-08-13T18:42:26.448252Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/07",
+  "pair_key": "451da6ae36f49ef0fda5c919280ab70cc2bad6f7a2569260602f9a9dbf03ee0f",
+  "provider_seconds": 41.641156333000254,
+  "right": "task-3/local/personal-memory/2025/08",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

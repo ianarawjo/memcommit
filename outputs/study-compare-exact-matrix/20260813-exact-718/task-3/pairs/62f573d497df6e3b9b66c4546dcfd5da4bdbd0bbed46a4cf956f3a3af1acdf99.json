@@ -1,0 +1,406 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:37:27.133352+00:00",
+      "frames": [
+        {
+          "context_digest": "9fdb8cdfae14edf54f7410c0e8dd59527179de290b3d7c5f1b0f58494275b076",
+          "context_name": "task-3/local/personal-memory/2024/03",
+          "context_uid": "97c5905c-359b-5497-956f-b92db9ddbd2f",
+          "memories": [
+            {
+              "content": "The instructions for one medication the user takes say to take it after the evening meal.",
+              "content_digest": "32bba9f2936e560ddd5f4c5515895f2954b9c8722fcd501644569d1ff4f7b97c",
+              "position": 0,
+              "uid": "12ba4249-9450-5f2e-b648-5369a7997b26"
+            },
+            {
+              "content": "On a day with a morning appointment, the user miscalculated the fasting period and checked again at the reception desk.",
+              "content_digest": "532396ed2265321fbd4ca28ed1de2962211a357195bc9839503330c6cb0ab281",
+              "position": 1,
+              "uid": "051e79ff-5363-5160-9a13-46568fd13306"
+            },
+            {
+              "content": "For an afternoon visit, the user felt less rushed while preparing to travel than for a morning visit.",
+              "content_digest": "276fa255e4a4945f1475fa66129069ea33514bc24c98a246e9ab0d0000c156fa",
+              "position": 2,
+              "uid": "e7f1fcf7-ee2f-57d8-98cb-781e31e481e8"
+            },
+            {
+              "content": "On a day there was no waiting chair, the user stood for 20 minutes and their back became uncomfortable.",
+              "content_digest": "1c412785950057f01b1e7c10b716977cdb8bfb2b0605ef5bfdbdc6e349f6aaf8",
+              "position": 3,
+              "uid": "18d58666-2cfa-5959-8da9-2745bed56e11"
+            },
+            {
+              "content": "On a day medication instructions were explained all at once and at length, the user failed to write down an important time.",
+              "content_digest": "f3629bba06d053fa20712982f70b8dfd574b41a1b5ecd29d7c29f1b60742f647",
+              "position": 4,
+              "uid": "8fdede6e-64ed-5e4c-81f4-7a1075165568"
+            },
+            {
+              "content": "On a day medication times were confirmed one line at a time, the user copied them directly into their schedule after returning home.",
+              "content_digest": "acade505d6c0cdfddae0d169dea81c06a757aa7d7d2c760f6cdc253b06af5ded",
+              "position": 5,
+              "uid": "21f679f7-7d75-5c01-b6c3-b0d4bea5f2f0"
+            },
+            {
+              "content": "On a visit when their younger brother drove them, the user did not have to find a separate route home.",
+              "content_digest": "5e17c1227c7cbee7e995728edd17b4301903dfdc7a7bdc5f5ff3e06edfd357b3",
+              "position": 6,
+              "uid": "3ec03d39-3240-56d1-80da-313f79f2bf3a"
+            },
+            {
+              "content": "The user's younger brother prefers to receive a request for weekday-afternoon transportation two days beforehand rather than on the day itself.",
+              "content_digest": "7d1bf920ff730ddff86f328aaa3c3edf9d424170044bcd789a3ac55bffb5a839",
+              "position": 7,
+              "uid": "3069baac-fa68-5e94-8ba3-e888cf622f8c"
+            },
+            {
+              "content": "The local agent cannot determine the current prescription or whether use continues from medication notes alone.",
+              "content_digest": "89990815daa01f70a77b970b6a38cb9063f32fed898bd36e39a85551a1ad6200",
+              "position": 8,
+              "uid": "d7f215c6-57ea-561a-9627-3ce94203d507"
+            },
+            {
+              "content": "The waiting area at that clinic has too few chairs, so there may be periods when people must wait standing.",
+              "content_digest": "66c27ba4d6f3fb0d16b322a6de6d8afeb5c650fbe04162006a3288dd886ce1f0",
+              "position": 9,
+              "uid": "e6023aed-938d-5954-b8a7-8cb01340ee37"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "b978331a-e016-40f1-976c-e592390ae556"
+        },
+        {
+          "context_digest": "4b8dc68a205171fe661b04620d0fba2bbb386ff21d494699c34a74dc2ab86080",
+          "context_name": "task-3/local/personal-memory/2026/03",
+          "context_uid": "97d36150-4792-5a5c-9332-5eb1de8bcf04",
+          "memories": [
+            {
+              "content": "The user stores tax-related receipts in digital folders by year.",
+              "content_digest": "778f983547572b31798b7041899812a7b0b574d74b585baf6883e94919dee6ec",
+              "position": 0,
+              "uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393"
+            },
+            {
+              "content": "The user found three paper receipts late and recalculated the expense total already prepared.",
+              "content_digest": "542368a141ec82a1bd7da4b534d88ea62c487d16a37f454569bf6400cbc749e9",
+              "position": 1,
+              "uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878"
+            },
+            {
+              "content": "Starting the next month, the user photographed receipts on the day they were received and reduced omissions.",
+              "content_digest": "b95e0a1afa1196a9bff117bf12b1630edcc4eb65bfdfeb3128ae5937563a492e",
+              "position": 2,
+              "uid": "ff436ea5-1b3e-55df-8302-bd8a96740671"
+            },
+            {
+              "content": "The user named every file with only the photo date and spent a long time looking for a needed receipt.",
+              "content_digest": "c3aa33e0b7e007bdfc5c12dcda659e2a52938548fbf53d5a1ab034487a528857",
+              "position": 3,
+              "uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e"
+            },
+            {
+              "content": "The user later included the expense category in the filename and found the receipt immediately through search.",
+              "content_digest": "cdae97761f614b932d3b330723627bee8b0e3d033e2bf1061b721367237acee1",
+              "position": 4,
+              "uid": "89d6fa9a-b795-59df-be34-1c05a9861d35"
+            },
+            {
+              "content": "While reviewing documents just before submission, the user discovered one blank signature field.",
+              "content_digest": "a525c117b97eec82c678f276b319158703bf9cc558fb83cb81c0820d5c9e3174",
+              "position": 5,
+              "uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2"
+            },
+            {
+              "content": "Before submitting an administrative document, the user checks the signature field as the final item on the checklist.",
+              "content_digest": "542bec3cbc3fc8b22c95da274e479e96bfbf061a3b644d0d7f213de5a030dbd5",
+              "position": 6,
+              "uid": "5551622f-66cf-5542-8c47-1cddadab5c02"
+            },
+            {
+              "content": "Staff at a tax-support counter expect to receive an electronic copy in which every item is legible rather than a blurred or cropped photo.",
+              "content_digest": "d328ca248fdeecf0756e23b1202e7007bc8c3c25ae769439b0fd2efdbbe47580",
+              "position": 7,
+              "uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f"
+            },
+            {
+              "content": "The local agent can organize receipts by date and category but cannot determine whether an expense is deductible.",
+              "content_digest": "bcc769721a99b099ca20e5e527fa8904d54ecbaf9ae7d7616b95e1adaf1f89a9",
+              "position": 8,
+              "uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094"
+            },
+            {
+              "content": "The accepted scope and submission deadlines for administrative documents may vary under that year's guidance.",
+              "content_digest": "1ab61126b8efb0c2a9c6114c367018158f2e136bafa87e33f60aadb0686d0537",
+              "position": 9,
+              "uid": "de398064-3179-590b-8c62-effb17060115"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "ff9fd7c0-fc41-455f-8375-af69da3e1eb2"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate practical domains: clinic visits and medication handling versus tax-receipt and document workflows. No claims govern the same operational decision, and no conflict or ambiguity is evident; each side contributes independently useful information.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b978331a-e016-40f1-976c-e592390ae556",
+              "memory_uid": "12ba4249-9450-5f2e-b648-5369a7997b26"
+            }
+          ],
+          "reason": "This medication-timing instruction is independently useful and has no counterpart concerning the same decision in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "One medication is instructed to be taken after the evening meal.",
+          "uid": "248029cd-e289-590b-afee-dda6f2ece659"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b978331a-e016-40f1-976c-e592390ae556",
+              "memory_uid": "051e79ff-5363-5160-9a13-46568fd13306"
+            }
+          ],
+          "reason": "This appointment-preparation experience is one-sided and operationally independent of the compared frame's administrative-document content.",
+          "status": "RESOLVED",
+          "summary": "A fasting-period miscalculation for a morning appointment led the user to verify the requirement at reception.",
+          "uid": "7df198c3-2056-5d38-a597-e54d75ca0f2c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b978331a-e016-40f1-976c-e592390ae556",
+              "memory_uid": "e7f1fcf7-ee2f-57d8-98cb-781e31e481e8"
+            }
+          ],
+          "reason": "This visit-timing preference has no claim on the compared side addressing the same scheduling decision.",
+          "status": "RESOLVED",
+          "summary": "The user felt less rushed preparing to travel for an afternoon visit than for a morning visit.",
+          "uid": "a8c4339a-e140-5dfe-8a88-daad7bac3fa7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b978331a-e016-40f1-976c-e592390ae556",
+              "memory_uid": "18d58666-2cfa-5959-8da9-2745bed56e11"
+            },
+            {
+              "frame_uid": "b978331a-e016-40f1-976c-e592390ae556",
+              "memory_uid": "e6023aed-938d-5954-b8a7-8cb01340ee37"
+            }
+          ],
+          "reason": "The memories state the general seating constraint and a concrete consequence of that same one-sided clinic condition.",
+          "status": "RESOLVED",
+          "summary": "Insufficient clinic seating can require standing, and one 20-minute standing wait caused the user's back discomfort.",
+          "uid": "9a7084d7-6a16-5ee0-97f3-2c9baf18bc8a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b978331a-e016-40f1-976c-e592390ae556",
+              "memory_uid": "8fdede6e-64ed-5e4c-81f4-7a1075165568"
+            },
+            {
+              "frame_uid": "b978331a-e016-40f1-976c-e592390ae556",
+              "memory_uid": "21f679f7-7d75-5c01-b6c3-b0d4bea5f2f0"
+            }
+          ],
+          "reason": "These memories jointly describe contrasting outcomes of medication-instruction formats, with no compared-side claim governing that communication practice.",
+          "status": "RESOLVED",
+          "summary": "Lengthy all-at-once medication explanations contributed to missing an important time, whereas line-by-line confirmation supported accurate schedule entry.",
+          "uid": "f303cfca-adf1-5f24-ae80-4818ce02fe18"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b978331a-e016-40f1-976c-e592390ae556",
+              "memory_uid": "3ec03d39-3240-56d1-80da-313f79f2bf3a"
+            }
+          ],
+          "reason": "This transportation benefit is independently useful and absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "When the user's younger brother drove, the user did not need to arrange a separate route home.",
+          "uid": "8c925629-bbdf-5442-8b59-2eb3f94b3a08"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b978331a-e016-40f1-976c-e592390ae556",
+              "memory_uid": "3069baac-fa68-5e94-8ba3-e888cf622f8c"
+            }
+          ],
+          "reason": "This advance-notice preference is a distinct transportation-planning rule with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user's younger brother prefers two days' notice for weekday-afternoon transportation requests.",
+          "uid": "ee5e7b57-6487-5dd0-93c7-b6cd1e9b6a6e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b978331a-e016-40f1-976c-e592390ae556",
+              "memory_uid": "d7f215c6-57ea-561a-9627-3ce94203d507"
+            }
+          ],
+          "reason": "This is a domain-specific epistemic limit concerning medication status, not the same operational claim as the compared frame's deductibility limit.",
+          "status": "RESOLVED",
+          "summary": "Medication notes alone do not let the local agent determine the current prescription or whether use continues.",
+          "uid": "c43ff07d-f75a-55e3-987d-065f894c3b9f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ff9fd7c0-fc41-455f-8375-af69da3e1eb2",
+              "memory_uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393"
+            }
+          ],
+          "reason": "This receipt-storage practice is independently useful and has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user stores tax-related receipts in digital folders organized by year.",
+          "uid": "3180fa01-b3cb-587d-938d-6fa9fc761757"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ff9fd7c0-fc41-455f-8375-af69da3e1eb2",
+              "memory_uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878"
+            },
+            {
+              "frame_uid": "ff9fd7c0-fc41-455f-8375-af69da3e1eb2",
+              "memory_uid": "ff436ea5-1b3e-55df-8302-bd8a96740671"
+            }
+          ],
+          "reason": "These memories describe the problem and improvement within one receipt-capture workflow, which the reference frame does not address.",
+          "status": "RESOLVED",
+          "summary": "Late-discovered paper receipts forced recalculation, while photographing receipts upon receipt subsequently reduced omissions.",
+          "uid": "baef15a5-78a3-5b2e-94fa-a828a560baf4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ff9fd7c0-fc41-455f-8375-af69da3e1eb2",
+              "memory_uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e"
+            },
+            {
+              "frame_uid": "ff9fd7c0-fc41-455f-8375-af69da3e1eb2",
+              "memory_uid": "89d6fa9a-b795-59df-be34-1c05a9861d35"
+            }
+          ],
+          "reason": "These memories describe the before-and-after effect of one filename-design refinement, with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Date-only filenames made receipt retrieval slow, while adding expense categories enabled immediate search retrieval.",
+          "uid": "b529c0a1-90fc-5b58-9737-ae356cdeb5bd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ff9fd7c0-fc41-455f-8375-af69da3e1eb2",
+              "memory_uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2"
+            },
+            {
+              "frame_uid": "ff9fd7c0-fc41-455f-8375-af69da3e1eb2",
+              "memory_uid": "5551622f-66cf-5542-8c47-1cddadab5c02"
+            }
+          ],
+          "reason": "These memories present the triggering omission and the resulting preventive check within one document-submission practice.",
+          "status": "RESOLVED",
+          "summary": "After discovering a blank signature field near submission, the user adopted a final checklist check for the signature field.",
+          "uid": "8699ff87-7d1f-57b2-922e-00c3f01524f7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ff9fd7c0-fc41-455f-8375-af69da3e1eb2",
+              "memory_uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f"
+            }
+          ],
+          "reason": "This submission-quality requirement is one-sided and unrelated to any reference-frame operational decision.",
+          "status": "RESOLVED",
+          "summary": "Tax-support staff expect electronic copies whose items are fully legible rather than blurred or cropped.",
+          "uid": "e73cf5f2-32de-5806-aefc-11961c8a55e6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ff9fd7c0-fc41-455f-8375-af69da3e1eb2",
+              "memory_uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094"
+            }
+          ],
+          "reason": "This capability boundary specifically concerns tax classification and does not overlap operationally with the reference frame's medication-status limitation.",
+          "status": "RESOLVED",
+          "summary": "The local agent can organize receipts by date and category but cannot determine expense deductibility.",
+          "uid": "b23b3041-f300-504f-a02e-d14688ec374d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ff9fd7c0-fc41-455f-8375-af69da3e1eb2",
+              "memory_uid": "de398064-3179-590b-8c62-effb17060115"
+            }
+          ],
+          "reason": "This time-dependent administrative constraint is independently useful and has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Accepted document scope and submission deadlines may vary with the year's guidance.",
+          "uid": "7e167d4f-966a-5220-89e2-afc828e16db0"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers receipt capture, storage and retrieval, signature checks, submission quality, changing annual requirements, and limits on determining deductibility.",
+        "differences": "",
+        "reference_only": "The reference covers medication timing and communication, appointment preparation, clinic seating, transportation support, and limits on inferring prescription status."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "91660482-57bc-4779-adca-8ab5af349798"
+    },
+    "analysis_digest": "58b8fa157fb0a7f302d6dc7492dd2819772757f63d78042ea73b53398cde199b",
+    "key": "560c23f6dc2cc5c3aa7092a8e544dc0e7443edcffd8d02dfdceee2206861e40b",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 39.06002683299812,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "560c23f6dc2cc5c3aa7092a8e544dc0e7443edcffd8d02dfdceee2206861e40b",
+  "created_at": "2026-08-13T18:38:06.193038Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/03",
+  "pair_key": "62f573d497df6e3b9b66c4546dcfd5da4bdbd0bbed46a4cf956f3a3af1acdf99",
+  "provider_seconds": 39.06002683299812,
+  "right": "task-3/local/personal-memory/2026/03",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

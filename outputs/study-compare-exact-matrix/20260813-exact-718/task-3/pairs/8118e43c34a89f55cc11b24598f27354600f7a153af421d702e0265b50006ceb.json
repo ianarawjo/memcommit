@@ -1,0 +1,388 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:45:59.412807+00:00",
+      "frames": [
+        {
+          "context_digest": "492e513a553a9191e2c646cca49364b336ae6d163de5688eeca8cc661bbbdb32",
+          "context_name": "task-3/local/personal-memory/2024/11",
+          "context_uid": "0d5e1eef-1669-5589-94ba-b46c9c2080dc",
+          "memories": [
+            {
+              "content": "The user changed their schedule once in November 2024 because of their mother's hospital visit.",
+              "content_digest": "f08f07dda1b468ab191a59d87e7ceb8068189964edee2010abdae6e525d6103f",
+              "position": 0,
+              "uid": "bb17c696-0c1c-516f-8ad9-68a4b159ce22"
+            },
+            {
+              "content": "After seeing the reason for the schedule change written in a calendar invitation, the user asked for it to be removed.",
+              "content_digest": "7bfc906526c255f90a85b6dcc4b28ea1b0a9389e9f17ba989a4ce098280578c8",
+              "position": 1,
+              "uid": "195ba5ab-3ee0-5594-a859-9f2b5eadf9ea"
+            },
+            {
+              "content": "The user was able to reschedule the appointment after providing only a new time, without a reason.",
+              "content_digest": "14f1bd0410c76aa3a0eb28a2212fd06558ab23b6dc012aa5529980a67efe3e2b",
+              "position": 2,
+              "uid": "4c8759cc-66aa-527c-a9d5-197d39b5d2b7"
+            },
+            {
+              "content": "On a day the user traveled in their father's car, they photographed the parking location.",
+              "content_digest": "111e71af27be5d109557440569352964544e9b702810741445172a6cf51f94f5",
+              "position": 3,
+              "uid": "d4b27ea7-d329-5dc7-b7ca-91d0cd50a958"
+            },
+            {
+              "content": "On the next visit, when the user did not take a photo, they walked one circuit of the parking garage while looking for the exit.",
+              "content_digest": "6d61d67e35552cb739d0220e480189706ec5bbac74f93b87149a6948d9ac2805",
+              "position": 4,
+              "uid": "32a19a57-9b04-5f86-92ba-202a9ac803e4"
+            },
+            {
+              "content": "After hearing preparation items from their mother by phone, the user omitted two items.",
+              "content_digest": "449dc73aad797f5acd3d898292cf9942f7d3b65b9faf52769ae5b3332285b4f3",
+              "position": 5,
+              "uid": "0eeffd8c-acd6-57bf-950d-20cfa1fe62b3"
+            },
+            {
+              "content": "After receiving the preparation items again by text, the user put all of them in their bag.",
+              "content_digest": "9539ab90f598a96d97a73b7954db8834d3106861ba6ecc814e579a348e0145d6",
+              "position": 6,
+              "uid": "07ea3801-8666-581d-b846-2f45bf99ca19"
+            },
+            {
+              "content": "The user's mother does not want the reason for her visit disclosed in the user's external schedule.",
+              "content_digest": "b1aff7bb5b5df1ec773fd8875205cd9fdfa2fd5b520cf91b7c84c9e3054b4feb",
+              "position": 7,
+              "uid": "9e70b92e-1d8d-51ef-962d-bd9b348a56d5"
+            },
+            {
+              "content": "Do not include the mother's reason for a visit when conveying the user's availability externally.",
+              "content_digest": "b9473919c63f233fc66c49bbf00b20a8ab9532bcb1b8ce3896c442afed4229d9",
+              "position": 8,
+              "uid": "d76686fd-9f1d-5d94-931b-4b49c86a8f4e"
+            },
+            {
+              "content": "Some daily-life services may operate for shorter hours during the year-end holiday period.",
+              "content_digest": "48d4487aba4c395527f9dfeac9488f45556d1bd89475f8620b0a64d84e4479fc",
+              "position": 9,
+              "uid": "820a5de9-9e08-52c7-8747-5155fe341bb4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "8e8c2304-216b-4ae3-817c-121b58cce4ca"
+        },
+        {
+          "context_digest": "e56d4062f59b72f23e5414f759cd9f2b09c659d820a29a979fe2edb8bfc3e7a4",
+          "context_name": "task-3/local/personal-memory/2025/01",
+          "context_uid": "2ce7ce06-145c-50c7-bfb4-cb175b9a5255",
+          "memories": [
+            {
+              "content": "One of the user's identity documents needs renewal in the second half of 2025.",
+              "content_digest": "0ade63adc8aedc4dbc0003f2cbc2759010c8bf2645a95fedd3db28b7cfbe0daa",
+              "position": 0,
+              "uid": "50911f7e-75a1-5099-99f1-e471bb8e6cb6"
+            },
+            {
+              "content": "The user postponed an application until the next day after spending time looking for document photos in scattered folders.",
+              "content_digest": "fa1703848374c3364cf49be01e115e08897e16a4ccda3c9edef1212189159ce6",
+              "position": 1,
+              "uid": "d5bd9f79-7295-5014-9668-83b7cffc78e2"
+            },
+            {
+              "content": "After gathering the necessary copies in one folder, the user completed the renewal form in one sitting.",
+              "content_digest": "133721b244e02fce2fe24312b703e59225c023d65bea31bf65decb36a18b4ba5",
+              "position": 2,
+              "uid": "5f92f6a3-1739-580c-bd63-1a936098ccd0"
+            },
+            {
+              "content": "The user entered an abbreviated name on an official form and then discovered that it differed from the supporting document.",
+              "content_digest": "d32485dcfd1311d0739bf9887a330f25bf9b3f47f077c56ec7cdb667bde20a55",
+              "position": 3,
+              "uid": "929107ac-c62d-5920-9f71-12d4c9a102e9"
+            },
+            {
+              "content": "On the next application, after comparing the name with the source document, the user did not receive a correction request.",
+              "content_digest": "e6aa9e63c72f762c00824787c3b971f2cdf76a343c336f329e5b28b0f164d02d",
+              "position": 4,
+              "uid": "df8b90c2-4310-5e89-b979-508309bf6b04"
+            },
+            {
+              "content": "The user put only the submission deadline in the calendar and missed the application deadline by one day because they did not check the issuance period.",
+              "content_digest": "995703686975cdd718d999557d4b5ca13a95c3c1eabfbb73808bb5150eda824b",
+              "position": 5,
+              "uid": "306b9df1-d713-5413-b448-e2b42376d827"
+            },
+            {
+              "content": "On the next application, the user recorded the expected issuance date separately in the calendar.",
+              "content_digest": "b83c9061bf30d64e48b74959513fd37e7ab043446dae7e4fd284102a249a1240",
+              "position": 6,
+              "uid": "870b57b5-4cdb-54fc-b17f-8ffb86dad802"
+            },
+            {
+              "content": "Staff at a public-service counter expect a person requesting identity verification to bring an original as well as a copy.",
+              "content_digest": "eae3721b7f1d905172c169c5a483d2af74aa40bced23d1bbcb8d571ab27df706",
+              "position": 7,
+              "uid": "a0fe456c-0794-5bce-8ef9-9558e9833471"
+            },
+            {
+              "content": "When planning an official application, put both the submission deadline and expected issuance date in the calendar and verify them.",
+              "content_digest": "c5b37d86ef85d5023b60578e7f5f6af1bc49711e32ecc0255bc826a743dce0e1",
+              "position": 8,
+              "uid": "111972b9-e05f-5e1b-b121-ef9e51572d1d"
+            },
+            {
+              "content": "The local agent cannot determine the current validity of an identity document without its expiration date.",
+              "content_digest": "ebc9f4fe21d4ad7e53681d32ded2c049c7d4bf57e24ef71213a5ebdbaaaee521",
+              "position": 9,
+              "uid": "c9872898-ec4f-576e-b154-ff6fda581a1a"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "c3f744ca-bcc2-415e-9a2b-4b7331574d88"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate practical domains. The reference centers on schedule privacy, parking navigation, preparation reminders, and holiday hours; the compared frame centers on identity-document renewal, application accuracy, document organization, calendar planning, counter requirements, and validity uncertainty.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8e8c2304-216b-4ae3-817c-121b58cce4ca",
+              "memory_uid": "bb17c696-0c1c-516f-8ad9-68a4b159ce22"
+            }
+          ],
+          "reason": "This is independently useful reference-only context about a specific schedule change, with no operational counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user once changed a November 2024 schedule because of their mother’s hospital visit.",
+          "uid": "941d4245-1278-5d95-9bf3-43e4487bd74d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8e8c2304-216b-4ae3-817c-121b58cce4ca",
+              "memory_uid": "195ba5ab-3ee0-5594-a859-9f2b5eadf9ea"
+            },
+            {
+              "frame_uid": "8e8c2304-216b-4ae3-817c-121b58cce4ca",
+              "memory_uid": "9e70b92e-1d8d-51ef-962d-bd9b348a56d5"
+            },
+            {
+              "frame_uid": "8e8c2304-216b-4ae3-817c-121b58cce4ca",
+              "memory_uid": "d76686fd-9f1d-5d94-931b-4b49c86a8f4e"
+            }
+          ],
+          "reason": "The removal request, the mother’s preference, and the explicit instruction jointly express one reference-only privacy policy.",
+          "status": "RESOLVED",
+          "summary": "The mother’s visit reason should not appear when the user’s schedule or availability is conveyed externally.",
+          "uid": "9cc64465-3af0-5450-9f27-1a6c6f44e7a2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8e8c2304-216b-4ae3-817c-121b58cce4ca",
+              "memory_uid": "4c8759cc-66aa-527c-a9d5-197d39b5d2b7"
+            }
+          ],
+          "reason": "This is a distinct reference-only fact about the information required for rescheduling.",
+          "status": "RESOLVED",
+          "summary": "The user could reschedule by supplying a new time without disclosing a reason.",
+          "uid": "16555f1f-5fd1-527c-8918-cea6bc8c2c33"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8e8c2304-216b-4ae3-817c-121b58cce4ca",
+              "memory_uid": "d4b27ea7-d329-5dc7-b7ca-91d0cd50a958"
+            }
+          ],
+          "reason": "This is a specific reference-only parking-navigation practice not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user photographed the parking location while traveling in their father’s car.",
+          "uid": "69559ef2-a279-58e2-9825-b79bd7fbb7ea"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8e8c2304-216b-4ae3-817c-121b58cce4ca",
+              "memory_uid": "32a19a57-9b04-5f86-92ba-202a9ac803e4"
+            }
+          ],
+          "reason": "This is an independently useful reference-only consequence from a later visit.",
+          "status": "RESOLVED",
+          "summary": "Without a parking photo on the next visit, the user walked around the garage while searching for the exit.",
+          "uid": "26efb0cd-f95b-5042-87e1-eec47c989794"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8e8c2304-216b-4ae3-817c-121b58cce4ca",
+              "memory_uid": "0eeffd8c-acd6-57bf-950d-20cfa1fe62b3"
+            },
+            {
+              "frame_uid": "8e8c2304-216b-4ae3-817c-121b58cce4ca",
+              "memory_uid": "07ea3801-8666-581d-b846-2f45bf99ca19"
+            }
+          ],
+          "reason": "Both memories form one reference-only comparison showing that a written preparation list supported completeness.",
+          "status": "RESOLVED",
+          "summary": "The user omitted preparation items after hearing them by phone but packed them all after receiving them by text.",
+          "uid": "c9159439-8974-5b24-8df1-4399c7f5b782"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8e8c2304-216b-4ae3-817c-121b58cce4ca",
+              "memory_uid": "820a5de9-9e08-52c7-8747-5155fe341bb4"
+            }
+          ],
+          "reason": "This is an independent reference-only service-hours caution.",
+          "status": "RESOLVED",
+          "summary": "Daily-life services may have shorter operating hours during the year-end holiday period.",
+          "uid": "07db897d-c638-5afa-a951-9cf2b33c6145"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c3f744ca-bcc2-415e-9a2b-4b7331574d88",
+              "memory_uid": "50911f7e-75a1-5099-99f1-e471bb8e6cb6"
+            }
+          ],
+          "reason": "This is a compared-only renewal requirement with no corresponding reference claim.",
+          "status": "RESOLVED",
+          "summary": "One identity document needs renewal in the second half of 2025.",
+          "uid": "e23f379b-7c8a-55e8-8d6d-4d545e1c205c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c3f744ca-bcc2-415e-9a2b-4b7331574d88",
+              "memory_uid": "d5bd9f79-7295-5014-9668-83b7cffc78e2"
+            },
+            {
+              "frame_uid": "c3f744ca-bcc2-415e-9a2b-4b7331574d88",
+              "memory_uid": "5f92f6a3-1739-580c-bd63-1a936098ccd0"
+            }
+          ],
+          "reason": "Both memories express one compared-only claim about organizing application materials before starting.",
+          "status": "RESOLVED",
+          "summary": "Scattered document photos delayed an application, while gathering required copies in one folder supported completing the renewal form in one sitting.",
+          "uid": "e8e2cca4-88e7-54e1-b768-88239819a993"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c3f744ca-bcc2-415e-9a2b-4b7331574d88",
+              "memory_uid": "929107ac-c62d-5920-9f71-12d4c9a102e9"
+            },
+            {
+              "frame_uid": "c3f744ca-bcc2-415e-9a2b-4b7331574d88",
+              "memory_uid": "df8b90c2-4310-5e89-b979-508309bf6b04"
+            }
+          ],
+          "reason": "Both memories express one compared-only claim about matching official-form names to source documents.",
+          "status": "RESOLVED",
+          "summary": "An abbreviated name conflicted with supporting documentation, while checking the source document on the next application avoided a correction request.",
+          "uid": "681d6958-79da-54d1-9410-c80210ab3a13"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c3f744ca-bcc2-415e-9a2b-4b7331574d88",
+              "memory_uid": "306b9df1-d713-5413-b448-e2b42376d827"
+            },
+            {
+              "frame_uid": "c3f744ca-bcc2-415e-9a2b-4b7331574d88",
+              "memory_uid": "870b57b5-4cdb-54fc-b17f-8ffb86dad802"
+            },
+            {
+              "frame_uid": "c3f744ca-bcc2-415e-9a2b-4b7331574d88",
+              "memory_uid": "111972b9-e05f-5e1b-b121-ef9e51572d1d"
+            }
+          ],
+          "reason": "The missed deadline, subsequent separate issuance entry, and explicit instruction form one compared-only calendar-planning policy.",
+          "status": "RESOLVED",
+          "summary": "Official applications should track and verify both the submission deadline and expected issuance date in the calendar.",
+          "uid": "f0f0ca02-e646-546b-be0d-0fe158fb3572"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c3f744ca-bcc2-415e-9a2b-4b7331574d88",
+              "memory_uid": "a0fe456c-0794-5bce-8ef9-9558e9833471"
+            }
+          ],
+          "reason": "This is an independent compared-only document requirement.",
+          "status": "RESOLVED",
+          "summary": "Public-service counter staff expect identity-verification requesters to bring both an original and a copy.",
+          "uid": "fabf9936-817c-5bef-91ad-0187aa91151e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c3f744ca-bcc2-415e-9a2b-4b7331574d88",
+              "memory_uid": "c9872898-ec4f-576e-b154-ff6fda581a1a"
+            }
+          ],
+          "reason": "This is an independent compared-only limitation on determining validity.",
+          "status": "RESOLVED",
+          "summary": "A local agent cannot determine an identity document’s current validity without its expiration date.",
+          "uid": "115f6b01-30ec-5826-b234-c3ea2360d2ed"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only material covers identity-document renewal, organized application files, exact-name verification, submission and issuance planning, original-document requirements, and uncertainty without an expiration date.",
+        "differences": "",
+        "reference_only": "Reference-only material covers private schedule changes, omitting a mother’s visit reason, parking-location photos, written preparation lists, and possible holiday service reductions."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "68821512-cc10-4ff1-9663-e4a09713149a"
+    },
+    "analysis_digest": "96d447599c2e1017d95fce6cb4bf3f47fa6bbcf1ce4ceb429ed67b03e7011ba6",
+    "key": "c9d09fff8aa766b6f0cc59144825db5165dbac8a73daada7d232693c69bbda48",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 54.98853033400155,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "c9d09fff8aa766b6f0cc59144825db5165dbac8a73daada7d232693c69bbda48",
+  "created_at": "2026-08-13T18:46:54.400906Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/11",
+  "pair_key": "8118e43c34a89f55cc11b24598f27354600f7a153af421d702e0265b50006ceb",
+  "provider_seconds": 54.98853033400155,
+  "right": "task-3/local/personal-memory/2025/01",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

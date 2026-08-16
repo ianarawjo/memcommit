@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:47:48.874564+00:00",
+      "frames": [
+        {
+          "context_digest": "0b8af0ea4e580cc332939d026149e543e9251c54de246e3eabb83c941e6c12f2",
+          "context_name": "task-3/local/personal-memory/2024/12",
+          "context_uid": "66c3e5de-61bb-5795-8e5a-4e28f64be857",
+          "memories": [
+            {
+              "content": "The user used an accessible entrance at a clinic in December 2024.",
+              "content_digest": "a940bc9fb7423a1bdb9dde547cd39eb8ad66d4fa3051649c62b042fc63935263",
+              "position": 0,
+              "uid": "a6923620-267d-5129-b8c4-cd9b1e1a1e7b"
+            },
+            {
+              "content": "On a day snow had accumulated and blocked the main-entrance ramp, the user went to a side entrance.",
+              "content_digest": "460c05d8e8b4b7443ff42cbeead66e07201846394bcbe5948f63e585a197006f",
+              "position": 1,
+              "uid": "fb0e1d1f-0ef5-5214-b6d7-f6ca5c68f582"
+            },
+            {
+              "content": "The user learned on site that the elevator was under inspection and delayed the appointment.",
+              "content_digest": "b5efa024c597b57651178431d22173d4ca1242c3a4c9607f8bd5a7ff681af6f4",
+              "position": 2,
+              "uid": "4cb45120-4376-5c7b-ae92-faa9e4b9330c"
+            },
+            {
+              "content": "The day before the next visit, the user called to check whether the elevator would be operating.",
+              "content_digest": "93c66066de480a4d2f30b7b7c4d955acfceb227ac898766b6375829804b580eb",
+              "position": 3,
+              "uid": "479f4434-879c-5335-b0c9-c0bfa19ecdcd"
+            },
+            {
+              "content": "The user waited for their turn in front of a ticket machine near the waiting chairs.",
+              "content_digest": "fada8c09d46af2e1bcbd2b1e97d9cb786ceca83fc13d1240627639dd6cb96e65",
+              "position": 4,
+              "uid": "0f2c78a7-8f92-573d-af8a-a360ceb77b24"
+            },
+            {
+              "content": "On a day the user waited in a corridor without chairs, they leaned against the wall and changed position several times.",
+              "content_digest": "0037afaeb85d94f985b1628b7b8f8194fb00d7d7e72e1746c6bae2c2ba66fe6f",
+              "position": 5,
+              "uid": "7b9197ac-4263-5169-8d3b-d34f5d893d36"
+            },
+            {
+              "content": "On a day their older sister accompanied them, the user found a place to sit immediately after reception.",
+              "content_digest": "1ae59de552a922fd3b4d39e7e5dc1ec65ff08ee68e3448f2152f27dfec710a5a",
+              "position": 6,
+              "uid": "7b0b7571-f29c-56e5-a27a-82d69a4a6982"
+            },
+            {
+              "content": "Reception staff expect that a first-time visitor may ask where the accessible entrance is.",
+              "content_digest": "7dc3300dc630b737c0f7b437eba30179aa6aaa03efd61c968604ee505a43aa73",
+              "position": 7,
+              "uid": "e9515d6b-10d9-579f-abf7-5030db64218a"
+            },
+            {
+              "content": "The local agent cannot infer the user's condition from a record of using an accessible route alone.",
+              "content_digest": "2d8a50f62f32c43ca62e1e23b75c34361ece43fd8367964174fdc73d66795df4",
+              "position": 8,
+              "uid": "8e57141d-c603-56cd-ab9e-c14b4e944b45"
+            },
+            {
+              "content": "Snow accumulation and snow-removal work can temporarily block an entrance route used under ordinary conditions.",
+              "content_digest": "4fb152c120860688789bdd4b825de45799e9fa00c0c18c334492dd4b274adde9",
+              "position": 9,
+              "uid": "a6076438-307c-56fe-9d2c-848181846ce5"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "9c280821-e968-4d20-a730-82ba53c3fc5b"
+        },
+        {
+          "context_digest": "07c43eb0b8ecd9107f1d879a409b45289e236f48f620ff85f1d30ce594809149",
+          "context_name": "task-3/local/personal-memory/2025/09",
+          "context_uid": "5cd8ed5f-2f1f-5deb-8347-fc3bfa484d99",
+          "memories": [
+            {
+              "content": "The user keeps the book they are reading and a note-taking notebook on a small living-room desk.",
+              "content_digest": "d2c70cf4c27fe62f5915f2f5c669484c4a875e4ee21f8d7d89a5ff6746f14cf1",
+              "position": 0,
+              "uid": "3d3f7960-daf5-5a51-98b3-14261c5aa66c"
+            },
+            {
+              "content": "While reading in the living room with the television on, the user read the same paragraph three times.",
+              "content_digest": "00e41e6d5fe1dcfe961fa0f739860823ecf338dc55d5b9beea265ca823974582",
+              "position": 1,
+              "uid": "28714a4e-bc14-5703-b594-126471ae0585"
+            },
+            {
+              "content": "The next day, after turning off the television, the user read 40 pages without interruption.",
+              "content_digest": "c28ba9c872757b6683ab03d73e6ad61f71484d55986aae4c0976862a85e3a8b1",
+              "position": 2,
+              "uid": "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df"
+            },
+            {
+              "content": "On a day the phone was on the desk, the user stopped taking notes each time they checked a notification.",
+              "content_digest": "f95cb8b1b8abe89d7bf597ca5fb78f0862fe97a7cf0d8bc5a46c04026ebd6889",
+              "position": 3,
+              "uid": "1b1c9f90-2561-53d5-88fe-d54618450143"
+            },
+            {
+              "content": "During the next reading period, the user left the phone in another room and did not check it for an hour.",
+              "content_digest": "89dc50732e19b88a77657b285ce71c399d229b510265cc9adfbdf6ad706680cd",
+              "position": 4,
+              "uid": "076a7caa-5dcf-5f9d-8bee-efc952652efa"
+            },
+            {
+              "content": "A note attached to a paper book fell out, and the user had to find their place again.",
+              "content_digest": "723e48ceeba6c94e627c79af0518c811cfc8337f9eeae3a80ae388ec98786994",
+              "position": 5,
+              "uid": "1dad71ec-6a5d-550e-89d2-a86dc3dacb11"
+            },
+            {
+              "content": "With the next book, the user recorded the page number in the notebook and resumed reading immediately.",
+              "content_digest": "c74c2f80bf403da64f0a6de97ff04bc1f41cf68d0d33829fa926cc2549e8ea75",
+              "position": 6,
+              "uid": "58494743-fc7f-59e9-8e17-80b8a644470a"
+            },
+            {
+              "content": "The user's father expects that lowering the television volume while the user reads will make it easier for the user to concentrate.",
+              "content_digest": "281b1f8f55f8d22fbebdb2220405dc3e2300e29e0a568c1fac36d4bb1c39c186",
+              "position": 7,
+              "uid": "cce66589-892c-5d73-bdbc-2c6e94e0992e"
+            },
+            {
+              "content": "The local agent can summarize past reading environments and interruption records but cannot predict the next reading time.",
+              "content_digest": "50e5376e22f503048a7f1bf4055bfb31cb4aa3c75b1c816f2febce913716eb58",
+              "position": 8,
+              "uid": "20b2a27f-908f-5ed7-a288-f7c1030674fc"
+            },
+            {
+              "content": "The user feels that repeated notifications interrupt their flow of concentration.",
+              "content_digest": "d777b2a01cfac23e6ef7701c04c33592f8382fa78f8e307bae9ddbffc9a8e2ef",
+              "position": 9,
+              "uid": "310f4cfc-b117-5511-8e13-2bd2ebec9fe5"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "ae6731ab-9b09-4155-bda4-99331ec28541"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover unrelated domains: clinic accessibility and visit logistics versus home reading habits and distraction management. No claim in either frame materially addresses the same operational decision as a claim in the other, so all information remains independently useful and one-sided.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9c280821-e968-4d20-a730-82ba53c3fc5b",
+              "memory_uid": "a6923620-267d-5129-b8c4-cd9b1e1a1e7b"
+            }
+          ],
+          "reason": "The compared frame contains no claim about this clinic visit or entrance use.",
+          "status": "RESOLVED",
+          "summary": "The user used an accessible clinic entrance in December 2024.",
+          "uid": "f223b2ba-bfcf-5ca7-b700-ac04798a6d11"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9c280821-e968-4d20-a730-82ba53c3fc5b",
+              "memory_uid": "fb0e1d1f-0ef5-5214-b6d7-f6ca5c68f582"
+            }
+          ],
+          "reason": "The compared frame contains no claim about entrance obstruction or an alternate clinic route.",
+          "status": "RESOLVED",
+          "summary": "When snow blocked the clinic’s main-entrance ramp, the user used a side entrance.",
+          "uid": "1a87c7a3-7fe2-5f9a-94e7-457b9fb99336"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9c280821-e968-4d20-a730-82ba53c3fc5b",
+              "memory_uid": "4cb45120-4376-5c7b-ae92-faa9e4b9330c"
+            }
+          ],
+          "reason": "The compared frame contains no claim about clinic elevator availability or appointment delay.",
+          "status": "RESOLVED",
+          "summary": "An elevator inspection discovered on site delayed the user’s appointment.",
+          "uid": "64d7e89f-d320-5861-abaa-7ac03e41c959"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9c280821-e968-4d20-a730-82ba53c3fc5b",
+              "memory_uid": "479f4434-879c-5335-b0c9-c0bfa19ecdcd"
+            }
+          ],
+          "reason": "The compared frame contains no claim about checking clinic accessibility before a visit.",
+          "status": "RESOLVED",
+          "summary": "Before a later visit, the user called to confirm whether the elevator would operate.",
+          "uid": "c3d75d60-f1fa-5647-a9ee-67966bd0775a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9c280821-e968-4d20-a730-82ba53c3fc5b",
+              "memory_uid": "0f2c78a7-8f92-573d-af8a-a360ceb77b24"
+            }
+          ],
+          "reason": "The compared frame contains no claim about clinic queuing or this waiting area.",
+          "status": "RESOLVED",
+          "summary": "The user waited for their turn by a ticket machine near waiting chairs.",
+          "uid": "1796c2c4-d7f4-558d-b87b-20ff137d9eba"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9c280821-e968-4d20-a730-82ba53c3fc5b",
+              "memory_uid": "7b9197ac-4263-5169-8d3b-d34f5d893d36"
+            }
+          ],
+          "reason": "The compared frame contains no claim about chairless clinic waiting conditions or the user’s response.",
+          "status": "RESOLVED",
+          "summary": "While waiting in a corridor without chairs, the user leaned against a wall and repeatedly changed position.",
+          "uid": "7b194e50-e126-5ee3-a511-42ee920b0f84"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9c280821-e968-4d20-a730-82ba53c3fc5b",
+              "memory_uid": "7b0b7571-f29c-56e5-a27a-82d69a4a6982"
+            }
+          ],
+          "reason": "The compared frame contains no claim about accompaniment, reception, or clinic seating.",
+          "status": "RESOLVED",
+          "summary": "When accompanied by an older sister, the user found seating immediately after reception.",
+          "uid": "5d004a7b-e08d-5029-b6a3-199e7e789e11"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9c280821-e968-4d20-a730-82ba53c3fc5b",
+              "memory_uid": "e9515d6b-10d9-579f-abf7-5030db64218a"
+            }
+          ],
+          "reason": "The compared frame contains no claim about reception expectations or visitor navigation.",
+          "status": "RESOLVED",
+          "summary": "Reception staff expect first-time visitors may ask where the accessible entrance is.",
+          "uid": "11a3edd5-1a61-5cf6-9c6a-bd5cbdf53354"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9c280821-e968-4d20-a730-82ba53c3fc5b",
+              "memory_uid": "8e57141d-c603-56cd-ab9e-c14b4e944b45"
+            }
+          ],
+          "reason": "The compared frame’s agent limitation concerns predicting reading time, a different inference task and decision.",
+          "status": "RESOLVED",
+          "summary": "Accessible-route use alone does not let the local agent infer the user’s condition.",
+          "uid": "a145d16d-a700-5cf9-9512-1bb2281c78ca"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9c280821-e968-4d20-a730-82ba53c3fc5b",
+              "memory_uid": "a6076438-307c-56fe-9d2c-848181846ce5"
+            }
+          ],
+          "reason": "The compared frame contains no general claim about temporary route blockage.",
+          "status": "RESOLVED",
+          "summary": "Snow accumulation and removal work can temporarily block an ordinarily used entrance route.",
+          "uid": "b8e50787-7c99-594e-9dbc-56f752e47768"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ae6731ab-9b09-4155-bda4-99331ec28541",
+              "memory_uid": "3d3f7960-daf5-5a51-98b3-14261c5aa66c"
+            }
+          ],
+          "reason": "The reference frame contains no claim about reading materials or their storage.",
+          "status": "RESOLVED",
+          "summary": "The user keeps a current book and note-taking notebook on a small living-room desk.",
+          "uid": "33bb4e65-b5f4-50d7-8354-f2c4d020f908"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ae6731ab-9b09-4155-bda4-99331ec28541",
+              "memory_uid": "28714a4e-bc14-5703-b594-126471ae0585"
+            }
+          ],
+          "reason": "The reference frame contains no claim about television-related reading difficulty.",
+          "status": "RESOLVED",
+          "summary": "With the television on during living-room reading, the user reread the same paragraph three times.",
+          "uid": "3e399972-0f23-5c55-ad52-f26a2a76594d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ae6731ab-9b09-4155-bda4-99331ec28541",
+              "memory_uid": "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df"
+            }
+          ],
+          "reason": "The reference frame contains no claim about uninterrupted reading or controlling television distraction.",
+          "status": "RESOLVED",
+          "summary": "After turning off the television the next day, the user read forty pages without interruption.",
+          "uid": "c2a0396f-b631-5556-86dd-1a2ce997eabb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ae6731ab-9b09-4155-bda4-99331ec28541",
+              "memory_uid": "1b1c9f90-2561-53d5-88fe-d54618450143"
+            }
+          ],
+          "reason": "The reference frame contains no claim about phone notifications or note-taking interruptions.",
+          "status": "RESOLVED",
+          "summary": "When the phone was on the desk, each notification check interrupted the user’s note-taking.",
+          "uid": "36b3ff90-34fe-54a9-a405-eaa7b0e047c4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ae6731ab-9b09-4155-bda4-99331ec28541",
+              "memory_uid": "076a7caa-5dcf-5f9d-8bee-efc952652efa"
+            }
+          ],
+          "reason": "The reference frame contains no claim about removing a phone during reading.",
+          "status": "RESOLVED",
+          "summary": "During a later reading period, the user left the phone elsewhere and did not check it for an hour.",
+          "uid": "df93bca4-6783-5c06-b5fa-2f229cb39702"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ae6731ab-9b09-4155-bda4-99331ec28541",
+              "memory_uid": "1dad71ec-6a5d-550e-89d2-a86dc3dacb11"
+            }
+          ],
+          "reason": "The reference frame contains no claim about losing a place in a book.",
+          "status": "RESOLVED",
+          "summary": "A note fell from a paper book, requiring the user to find their reading place again.",
+          "uid": "990837dd-9dee-58cc-9072-9b59bf561506"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ae6731ab-9b09-4155-bda4-99331ec28541",
+              "memory_uid": "58494743-fc7f-59e9-8e17-80b8a644470a"
+            }
+          ],
+          "reason": "The reference frame contains no claim about recording reading position or resuming a book.",
+          "status": "RESOLVED",
+          "summary": "For the next book, recording the page number in a notebook allowed the user to resume immediately.",
+          "uid": "9fc7bf95-8c47-5256-ba4b-4379c3851e04"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ae6731ab-9b09-4155-bda4-99331ec28541",
+              "memory_uid": "cce66589-892c-5d73-bdbc-2c6e94e0992e"
+            }
+          ],
+          "reason": "The reference frame contains no claim about family expectations or managing reading noise.",
+          "status": "RESOLVED",
+          "summary": "The user’s father expects lower television volume to make concentration while reading easier.",
+          "uid": "bccef199-073d-5de2-85a4-f67bfc32cf15"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ae6731ab-9b09-4155-bda4-99331ec28541",
+              "memory_uid": "20b2a27f-908f-5ed7-a288-f7c1030674fc"
+            }
+          ],
+          "reason": "The reference frame’s agent limitation concerns inferring a condition from route use, not forecasting reading time.",
+          "status": "RESOLVED",
+          "summary": "The local agent may summarize recorded reading environments and interruptions but cannot predict the next reading time.",
+          "uid": "22a52d5e-b238-5bf7-a069-01b3903f42d0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ae6731ab-9b09-4155-bda4-99331ec28541",
+              "memory_uid": "310f4cfc-b117-5511-8e13-2bd2ebec9fe5"
+            }
+          ],
+          "reason": "The reference frame contains no claim about the user’s perceived effect of notifications.",
+          "status": "RESOLVED",
+          "summary": "The user feels repeated notifications disrupt their concentration flow.",
+          "uid": "c2b301c5-a877-540b-9592-c3c277354091"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame records reading setup, television and notification distractions, place-keeping methods, a family expectation about concentration, and limits on predicting future reading time.",
+        "differences": "",
+        "reference_only": "The reference records accessible-route use, temporary entrance and elevator barriers, waiting conditions, accompaniment, visitor expectations, and limits on inferring the user’s condition."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "ee681730-b33d-4eff-87f2-d433fc2c1012"
+    },
+    "analysis_digest": "3f851e91a5dbe56cd1863efeab316ab63c6736621029865caca6572c4380d385",
+    "key": "434557119c74a19d878db01c6eb6e6dc1d7b0907649645e5e663914fb2a162f3",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 43.97158670900171,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "434557119c74a19d878db01c6eb6e6dc1d7b0907649645e5e663914fb2a162f3",
+  "created_at": "2026-08-13T18:48:32.845761Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/12",
+  "pair_key": "891dc3115fb0122bf95f6cdc0e30f69f4a0f04aa33febc3bac4ab67a946b7d4e",
+  "provider_seconds": 43.97158670900171,
+  "right": "task-3/local/personal-memory/2025/09",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

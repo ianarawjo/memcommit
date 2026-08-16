@@ -1,0 +1,262 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:23:23.904764+00:00",
+      "frames": [
+        {
+          "context_digest": "9d55b4a5604285e426b317f7f4732b35ca1e9df044f7015b3ae6a6be0df5492b",
+          "context_name": "task-2/advisor1/reproducibility",
+          "context_uid": "7d293f75-52b6-5f27-99c4-54f2be3d8e59",
+          "memories": [
+            {
+              "content": "HCI reviewers find it difficult to assess the reproducibility of results if the prototype version used in the evaluation is not disclosed.",
+              "content_digest": "9b89217d4ef2c7524af665ea80d7d60e61f1663fd8ea4bdde533c8d3a0da2044",
+              "position": 0,
+              "uid": "fb400759-63ed-568a-b94e-5f0c2fe94b67"
+            },
+            {
+              "content": "Record the manipulated and fixed elements of compared design alternatives so that other researchers can reconstruct them.",
+              "content_digest": "26b84b5f0644980de51d764218ce90fb614eb02a2df38fb3632f44d360a93cd3",
+              "position": 1,
+              "uid": "e52e8470-6419-5306-9ddd-00a86003dcf3"
+            },
+            {
+              "content": "Records of formative evaluation decisions enable the reconstruction of connections between raw data, interpretation, and design modifications.",
+              "content_digest": "f213479e4bd1947d418083139346ed7f666bc597133962617d94bdd3a9af0083",
+              "position": 2,
+              "uid": "8f4edf8c-491d-56fe-bde4-d9ce25d6de50"
+            },
+            {
+              "content": "The user must make it possible to trace which observations each prototype version reflects so the process of deriving design knowledge can be reviewed.",
+              "content_digest": "1c9b8a6f650f2eb652b1e9cbb62ad9dcbb3ec13f2e160b52db83492640eb0ae9",
+              "position": 3,
+              "uid": "87662a7e-ffc7-521a-a06c-7db8184377e8"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "383dbfe8-294a-4472-a490-30147d709d5d"
+        },
+        {
+          "context_digest": "4371a72e6fb939731cb550ca5363a3b5210680482f84c18b36ba933f4454ecc1",
+          "context_name": "task-2/advisor2/expression",
+          "context_uid": "cf8e8baf-292e-57c3-8e2c-3f9b3d52f3d3",
+          "memories": [
+            {
+              "content": "Use a sequence table rather than a flow diagram when the procedure is likely to change repeatedly during drafting.",
+              "content_digest": "575bb4530af1e93b215ea57f0fd63e1e09136554da98aecf87288cc39ea9697c",
+              "position": 0,
+              "uid": "4264c20d-3e44-578d-866e-7787cc7b59e2"
+            },
+            {
+              "content": "The visual fidelity of a prototype and its level of connection to actual data and services may differ.",
+              "content_digest": "9478cb005a07ca7edfa924579b3d5221b1fa1143b5d8327369e7ee799b76aa9f",
+              "position": 1,
+              "uid": "70a8c3f0-0f6a-5881-abd6-29f52833b7bd"
+            },
+            {
+              "content": "Service flow diagrams indicate human-system transitions that are not revealed by individual screens alone.",
+              "content_digest": "5e3e18a38b1e62724d2ae0445549e214a219d205a80735bc6b4c0e643a96b8b3",
+              "position": 2,
+              "uid": "b410aa8d-db87-586b-a1cd-4af5767a9f7a"
+            },
+            {
+              "content": "HCI reviewers often scan system structure and service flow diagrams before the main text.",
+              "content_digest": "22a46440a6aeda0cb7d39cc6fedf6bbff6cac91232ec0cb163bf1fc17ff257d4",
+              "position": 3,
+              "uid": "a385fbb1-85b4-5132-bbc7-8fd8daedb715"
+            },
+            {
+              "content": "Give each step, actor, condition, and outcome a stable row in the sequence table.",
+              "content_digest": "2a073bf2ec4c5592ddc405d83cb438a5ed880699d3c157f310fb3dbff7851622",
+              "position": 4,
+              "uid": "22254f16-4628-5fd9-b1af-6e66dc2572b3"
+            },
+            {
+              "content": "Updating one row in a sequence table is usually faster than redrawing a branching diagram after a procedural change.",
+              "content_digest": "cf97dbf66018a6be1ee42dfc79ff8de44e8742db2b42c9d1ef70b3f252805a39",
+              "position": 5,
+              "uid": "32028269-5d43-5a65-b22b-9e570ceabfde"
+            },
+            {
+              "content": "Readers can check sequence tables step by step but may find the overall branching shape less immediate.",
+              "content_digest": "18b5de0cdd22ef1774151332afdbc408f9f591cf889e51271f81a372f74ef86d",
+              "position": 6,
+              "uid": "939ee3d0-b611-574a-a25b-82708394bd5e"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "78ef388e-a1cc-4c86-930b-3ade7fcdd30d"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The reference frame focuses on reproducible prototype evaluation through version disclosure, controlled-alternative records, and evidence-to-design traceability. The compared frame independently addresses representation choices: prototype fidelity dimensions, service-flow diagrams, and sequence tables for procedures that change during drafting.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "383dbfe8-294a-4472-a490-30147d709d5d",
+              "memory_uid": "fb400759-63ed-568a-b94e-5f0c2fe94b67"
+            }
+          ],
+          "reason": "Only the reference frame states that reviewers cannot adequately assess reproducibility when the evaluated prototype version is undisclosed.",
+          "status": "RESOLVED",
+          "summary": "Disclose the prototype version used in an evaluation to support reproducibility assessment.",
+          "uid": "a43385c5-852f-5742-82b8-130878a8e487"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "383dbfe8-294a-4472-a490-30147d709d5d",
+              "memory_uid": "e52e8470-6419-5306-9ddd-00a86003dcf3"
+            }
+          ],
+          "reason": "Only the reference frame specifies documentation of manipulated and fixed elements in compared alternatives.",
+          "status": "RESOLVED",
+          "summary": "Record which elements differ and remain fixed across design alternatives so others can reconstruct the comparison.",
+          "uid": "ae57d4fb-0b40-5fdb-a80e-c9fe8a48ddd1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "383dbfe8-294a-4472-a490-30147d709d5d",
+              "memory_uid": "8f4edf8c-491d-56fe-bde4-d9ce25d6de50"
+            },
+            {
+              "frame_uid": "383dbfe8-294a-4472-a490-30147d709d5d",
+              "memory_uid": "87662a7e-ffc7-521a-a06c-7db8184377e8"
+            }
+          ],
+          "reason": "The reference memories jointly describe complementary parts of one provenance chain linking evaluation evidence and decisions to evolving prototypes and design knowledge; the compared frame has no corresponding traceability claim.",
+          "status": "RESOLVED",
+          "summary": "Preserve traceability from observations and formative decisions through prototype versions, interpretations, and design modifications so the derivation process can be reviewed.",
+          "uid": "c663416b-0d46-533e-95da-ed607105a7e3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78ef388e-a1cc-4c86-930b-3ade7fcdd30d",
+              "memory_uid": "4264c20d-3e44-578d-866e-7787cc7b59e2"
+            },
+            {
+              "frame_uid": "78ef388e-a1cc-4c86-930b-3ade7fcdd30d",
+              "memory_uid": "32028269-5d43-5a65-b22b-9e570ceabfde"
+            }
+          ],
+          "reason": "The compared memories state the same representation choice and its editing-efficiency rationale; the reference frame does not address procedural representation.",
+          "status": "RESOLVED",
+          "summary": "Prefer a sequence table for procedures expected to change repeatedly because row-level updates are easier than redrawing a branching diagram.",
+          "uid": "33804b6a-f3c9-52ab-8088-16efece2df02"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78ef388e-a1cc-4c86-930b-3ade7fcdd30d",
+              "memory_uid": "70a8c3f0-0f6a-5881-abd6-29f52833b7bd"
+            }
+          ],
+          "reason": "Only the compared frame distinguishes these prototype characteristics.",
+          "status": "RESOLVED",
+          "summary": "Treat visual fidelity and connection to real data and services as dimensions that may vary independently.",
+          "uid": "459d33ef-9a29-579d-a177-c12e65ef5c03"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78ef388e-a1cc-4c86-930b-3ade7fcdd30d",
+              "memory_uid": "b410aa8d-db87-586b-a1cd-4af5767a9f7a"
+            }
+          ],
+          "reason": "Only the compared frame identifies this informational value of service-flow diagrams.",
+          "status": "RESOLVED",
+          "summary": "Use service-flow diagrams to reveal human-system transitions that individual screens do not show.",
+          "uid": "41f29527-2281-5c80-9aa0-ecb6639ad664"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78ef388e-a1cc-4c86-930b-3ade7fcdd30d",
+              "memory_uid": "a385fbb1-85b4-5132-bbc7-8fd8daedb715"
+            }
+          ],
+          "reason": "Only the compared frame describes this reviewer navigation behavior.",
+          "status": "RESOLVED",
+          "summary": "Reviewers may inspect system-structure and service-flow diagrams before reading the main text.",
+          "uid": "0ac95b21-8bf7-5c2f-8c38-3e8f0823fb0b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78ef388e-a1cc-4c86-930b-3ade7fcdd30d",
+              "memory_uid": "22254f16-4628-5fd9-b1af-6e66dc2572b3"
+            }
+          ],
+          "reason": "Only the compared frame prescribes this table structure.",
+          "status": "RESOLVED",
+          "summary": "Assign each procedural step, actor, condition, and outcome a stable row in a sequence table.",
+          "uid": "09adcc69-cff1-51b5-b095-7fcb236e25e4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78ef388e-a1cc-4c86-930b-3ade7fcdd30d",
+              "memory_uid": "939ee3d0-b611-574a-a25b-82708394bd5e"
+            }
+          ],
+          "reason": "Only the compared frame states this readability tradeoff.",
+          "status": "RESOLVED",
+          "summary": "Sequence tables support step-by-step checking but make the overall branching shape less immediate.",
+          "uid": "e0b678ab-cac2-56be-99e6-a670655f3063"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame distinguishes prototype fidelity dimensions and explains the uses, readership, and tradeoffs of service-flow diagrams and sequence tables, including stable row structure and easier procedural updates.",
+        "differences": "",
+        "reference_only": "The reference emphasizes documenting prototype versions, controlled design differences, and links among observations, formative decisions, interpretations, and modifications so evaluations and design knowledge can be reconstructed and reviewed."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "809622ec-afa6-4ff5-ab5c-ae233210dd6f"
+    },
+    "analysis_digest": "87856360773600fa17dc6723863c012a9eb0719edb3c57fb2c9a44224de1912a",
+    "key": "26b9122c4bfc5a3db10bdaff8264e732fc23ee40cfbb2ad23343d14eb64988f8",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 29.23479754100117,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "26b9122c4bfc5a3db10bdaff8264e732fc23ee40cfbb2ad23343d14eb64988f8",
+  "created_at": "2026-08-13T18:23:53.139254Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/reproducibility",
+  "pair_key": "53ed023defe177dd86939e9c009ccacf8cc55a5de9c0ecfb710ec2877a7879f5",
+  "provider_seconds": 29.23479754100117,
+  "right": "task-2/advisor2/expression",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

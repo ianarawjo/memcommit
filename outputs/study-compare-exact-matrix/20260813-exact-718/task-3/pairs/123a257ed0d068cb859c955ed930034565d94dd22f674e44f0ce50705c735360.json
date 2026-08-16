@@ -1,0 +1,424 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:36:27.052384+00:00",
+      "frames": [
+        {
+          "context_digest": "4c7d7890b4c8dbd807acc103affd0572c325fd2e0f58346a97c3ed49e48ba34e",
+          "context_name": "task-3/local/personal-memory/2024/02",
+          "context_uid": "7bedad96-d78b-5977-a4c9-71049dcfcec8",
+          "memories": [
+            {
+              "content": "The user's maternal aunt keeps one spare key to the user's home.",
+              "content_digest": "2e45c292a3cbc26a1c9928c4546c6029c7dcd2aa6aa0a45a7cfb4be7888dd5c6",
+              "position": 0,
+              "uid": "1c627e4c-c393-5bd3-a5ae-b3318821be73"
+            },
+            {
+              "content": "If the door is locked, the user is accustomed to contacting their maternal aunt, who has the spare key, before contacting building management.",
+              "content_digest": "709cc4a1ae26126bd3238ea8c0e343415d95d084ddaf022590ff4197003c7b81",
+              "position": 1,
+              "uid": "e80936de-87af-5dbb-ab94-d456bbfaab0a"
+            },
+            {
+              "content": "When going to collect the spare key from their maternal aunt, the user wants to give an arrival time first so neither person has to wait.",
+              "content_digest": "5dab57d537091a28848dfa3592d16e038d6e78eeb8159489c17475befeb62a53",
+              "position": 2,
+              "uid": "7c26cf33-0630-5138-910a-6d37d6ed2b63"
+            },
+            {
+              "content": "The user feels at ease only after returning a borrowed spare key in person on the same day.",
+              "content_digest": "d3b9e78e166fb3af3dc248bcddbf1c1df15d3eed57655991a52c23b4ebb6ba14",
+              "position": 3,
+              "uid": "c3f0f26c-8d89-55e3-8bf3-398271e417e7"
+            },
+            {
+              "content": "The user feels uneasy about writing down a new entrance passcode on paper.",
+              "content_digest": "fe40a50fb7f0b0e1514a2f7e6ea3748e73cbd76fa45b862b4880c9eba68a2312",
+              "position": 4,
+              "uid": "7d7d00a3-c5af-5441-bb50-9631fbfd7979"
+            },
+            {
+              "content": "The user found it difficult when a family member arrived without notice during a meeting and the user could not respond immediately.",
+              "content_digest": "30d2126eb016f1fab8b8bd670bc00ee6ac5182f28b0afe696b2c30f4d7bc128f",
+              "position": 5,
+              "uid": "2e0df581-bd54-54f5-94ef-b719427fc88c"
+            },
+            {
+              "content": "On a day their younger brother received a package for them, the user felt reassured after checking the delivery photo.",
+              "content_digest": "54eacbc39b057a6a18f8ddd8e1db587dbef231ecb10ed8cd84a46b3575ac470c",
+              "position": 6,
+              "uid": "9278b64e-7550-5eb6-bbfd-544a2ae4ec3d"
+            },
+            {
+              "content": "The user's maternal aunt wants confirmation that the user is coming in person before handing over the spare key.",
+              "content_digest": "5d780f2fb96eac2d3c65e7417ee00e64e29c2f8873c432b291e62773723182c9",
+              "position": 7,
+              "uid": "76fb9115-a3f2-5ce3-a445-c3d1e38e4253"
+            },
+            {
+              "content": "Confirm with the user before sharing the spare key's storage location or the maternal aunt's contact information.",
+              "content_digest": "ac00da1acd77d05fd277a0a92d2ab62cbefb3c334e6e7c2cb3b046fbea217a6c",
+              "position": 8,
+              "uid": "6fa50e1d-8bd1-557a-9b03-1e4a4dc664bd"
+            },
+            {
+              "content": "The management office of a multi-unit residential building does not hold a unit key without verifying identity.",
+              "content_digest": "841f44fddced7681d5c9b47aaa2536f14536f1309b1f73104df7cb44738efbd1",
+              "position": 9,
+              "uid": "b18ff5b4-4f0d-5b93-8c41-439e5b15c710"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "9a8c4d33-d7bd-4942-9316-1f490ef7a14a"
+        },
+        {
+          "context_digest": "4eadf16a0c655a266bec3ebe56b056075c55e7f716f6879a0b6a905fe34136df",
+          "context_name": "task-3/local/personal-memory/2026/05",
+          "context_uid": "fd476504-4d4e-54d9-80b8-3dc2b18555d8",
+          "memories": [
+            {
+              "content": "The user keeps a picnic mat on the bottom shelf of the entrance storage cabinet.",
+              "content_digest": "c17479bd6a0f978f71b106b562507e702c3b84af5119be6bce48e4ee1664e728",
+              "position": 0,
+              "uid": "a9da4cfc-a6aa-51ae-9ec4-0de5c7a09227"
+            },
+            {
+              "content": "On a day the user went to the riverside, they sat in a place without shade and moved after an hour.",
+              "content_digest": "f9ab1da828ca5af06cb8bf54fe85136e316f503dab465fad514ab5a3f8243633",
+              "position": 1,
+              "uid": "fa2735e1-f4af-57d3-a18c-795715b6715b"
+            },
+            {
+              "content": "At the next outdoor meal, the user chose a place near a large tree and stayed for two hours.",
+              "content_digest": "189b7d85561df45986a6b7c9fe681b5ef53b22ca1f5e83fa8d64a7d93b35a577",
+              "position": 2,
+              "uid": "3bd8b8f2-c5b4-5004-8b9e-e388cc26ea7a"
+            },
+            {
+              "content": "On a hot day when the user brought only one bottle of water, they bought another drink partway through the outing.",
+              "content_digest": "92aa494a12664105a4bffc50a9026fadbec78332f750636093ea82ecc68e9597",
+              "position": 3,
+              "uid": "c7c4b494-39a6-5f5c-b37f-51c5061ac926"
+            },
+            {
+              "content": "On the next outing, the user brought two small bottles of water after freezing them.",
+              "content_digest": "69b3035b57b58b1aa778bd0da75dc806c1c449e7e35dc448aff92f7499c3148d",
+              "position": 4,
+              "uid": "dd9f5b3c-9c2e-5dbc-bf6e-eb7761eeb075"
+            },
+            {
+              "content": "When meeting their maternal uncle at a park, the user and the uncle waited at different entrances for 15 minutes.",
+              "content_digest": "9785e87b9fe79813762eb2e19e6d4f256a55f4799c92d095aaf695a8a1de5851",
+              "position": 5,
+              "uid": "2ed2a41c-f6ae-54d6-875c-a195d8fdacee"
+            },
+            {
+              "content": "For the next meeting, the user sent a photo of the entrance sign, and they met at the same place.",
+              "content_digest": "de40b6b7df84784639b97cf7ce153ad8af6e77320d75f3869979e5e3d39169e2",
+              "position": 6,
+              "uid": "23f3a4fc-d51e-5d0b-87f0-d5be407a57f3"
+            },
+            {
+              "content": "For a park meeting, the user's maternal uncle prefers an entrance that requires less walking from the parking area.",
+              "content_digest": "552a43b869c6f06cbf571f794106727406d87841d43addc92f31a3532f73d6f3",
+              "position": 7,
+              "uid": "e9f459f3-8ff0-5a0e-b78b-eda8d18b914e"
+            },
+            {
+              "content": "When making an outdoor plan, confirm the exact entrance and an alternative location in case of rain.",
+              "content_digest": "a265a6364c182de35363b58135b1da60d11595d1e3e0029f6851ac272261a959",
+              "position": 8,
+              "uid": "70277b86-d5db-5b58-8a94-e77372d15a4c"
+            },
+            {
+              "content": "Some park restrooms and drinking fountains may be closed seasonally.",
+              "content_digest": "8e5c4f5f85d4d27dc2211f46e3ab3bbed7f3d9687070b9028992b670986b09ca",
+              "position": 9,
+              "uid": "5a54437b-9b0e-5103-860d-d878be70b3ef"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "cc5bf3e5-2f05-47a3-98b9-6e91ad93b44c"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames contain independently useful information in separate domains: the reference centers on home access, key handling, privacy, and household coordination, while the compared frame covers outdoor comfort, supplies, meeting logistics, and park contingencies. No shared operational claim or governing difference is established.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9a8c4d33-d7bd-4942-9316-1f490ef7a14a",
+              "memory_uid": "1c627e4c-c393-5bd3-a5ae-b3318821be73"
+            }
+          ],
+          "reason": "Only the reference states who holds the home's spare key; the compared frame contains no corresponding access-custody claim.",
+          "status": "RESOLVED",
+          "summary": "The maternal aunt keeps a spare key to the user's home.",
+          "uid": "fef0a282-2503-568d-bb10-66e474fa299b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9a8c4d33-d7bd-4942-9316-1f490ef7a14a",
+              "memory_uid": "e80936de-87af-5dbb-ab94-d456bbfaab0a"
+            }
+          ],
+          "reason": "This lockout escalation order appears only in the reference and is independently useful from the other key-handling details.",
+          "status": "RESOLVED",
+          "summary": "When locked out, the user normally contacts the maternal aunt before building management.",
+          "uid": "516e027a-1133-5919-8afe-137c766fb63c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9a8c4d33-d7bd-4942-9316-1f490ef7a14a",
+              "memory_uid": "7c26cf33-0630-5138-910a-6d37d6ed2b63"
+            }
+          ],
+          "reason": "Only the reference gives this timing preference for spare-key collection.",
+          "status": "RESOLVED",
+          "summary": "The user wants to provide an arrival time before collecting the spare key so neither party waits.",
+          "uid": "26f2b531-5b9c-5693-9cee-6f93d471c6dd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9a8c4d33-d7bd-4942-9316-1f490ef7a14a",
+              "memory_uid": "c3f0f26c-8d89-55e3-8bf3-398271e417e7"
+            }
+          ],
+          "reason": "This return-method and timing preference is present only in the reference.",
+          "status": "RESOLVED",
+          "summary": "The user feels comfortable after returning a borrowed spare key in person on the same day.",
+          "uid": "410ca9da-1624-5614-a211-9b1a6a3d1eb5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9a8c4d33-d7bd-4942-9316-1f490ef7a14a",
+              "memory_uid": "7d7d00a3-c5af-5441-bb50-9631fbfd7979"
+            }
+          ],
+          "reason": "Only the reference describes this passcode-recording concern.",
+          "status": "RESOLVED",
+          "summary": "The user is uneasy about recording a new entrance passcode on paper.",
+          "uid": "f9f1a4de-7eac-528c-9783-ff20419d009d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9a8c4d33-d7bd-4942-9316-1f490ef7a14a",
+              "memory_uid": "2e0df581-bd54-54f5-94ef-b719427fc88c"
+            }
+          ],
+          "reason": "This household-arrival experience appears only in the reference and does not govern the park-meeting claims.",
+          "status": "RESOLVED",
+          "summary": "An unannounced family arrival during a meeting was difficult because the user could not respond immediately.",
+          "uid": "41b36c65-8556-50b2-ada9-f9906e5fa3a1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9a8c4d33-d7bd-4942-9316-1f490ef7a14a",
+              "memory_uid": "9278b64e-7550-5eb6-bbfd-544a2ae4ec3d"
+            }
+          ],
+          "reason": "Only the reference describes delivery-photo verification and its reassuring effect.",
+          "status": "RESOLVED",
+          "summary": "The user felt reassured by checking a delivery photo after their younger brother received a package.",
+          "uid": "b059fd3b-6840-5f41-98d0-443c75993f83"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9a8c4d33-d7bd-4942-9316-1f490ef7a14a",
+              "memory_uid": "76fb9115-a3f2-5ce3-a445-c3d1e38e4253"
+            }
+          ],
+          "reason": "This handover condition is stated only in the reference and is distinct from merely providing an arrival time.",
+          "status": "RESOLVED",
+          "summary": "The maternal aunt wants confirmation that the user will collect the spare key in person before handing it over.",
+          "uid": "cd397a6a-e145-5925-a6cb-77eb230a4084"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9a8c4d33-d7bd-4942-9316-1f490ef7a14a",
+              "memory_uid": "6fa50e1d-8bd1-557a-9b03-1e4a4dc664bd"
+            }
+          ],
+          "reason": "Only the reference establishes this disclosure-control policy.",
+          "status": "RESOLVED",
+          "summary": "The user must be consulted before disclosing the spare key's location or the maternal aunt's contact information.",
+          "uid": "00eaad9a-14e9-5a8d-a3bc-ccd23b2a8074"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9a8c4d33-d7bd-4942-9316-1f490ef7a14a",
+              "memory_uid": "b18ff5b4-4f0d-5b93-8c41-439e5b15c710"
+            }
+          ],
+          "reason": "This building-management identity requirement appears only in the reference.",
+          "status": "RESOLVED",
+          "summary": "A multi-unit building's management office does not hold a unit key without verifying identity.",
+          "uid": "840520d6-9d3a-544a-9778-9fa7beeb17d2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cc5bf3e5-2f05-47a3-98b9-6e91ad93b44c",
+              "memory_uid": "a9da4cfc-a6aa-51ae-9ec4-0de5c7a09227"
+            }
+          ],
+          "reason": "Only the compared frame identifies the picnic mat's storage location.",
+          "status": "RESOLVED",
+          "summary": "The picnic mat is stored on the bottom shelf of the entrance storage cabinet.",
+          "uid": "d7b8c8fd-f831-510b-8a84-9eeee320c96f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cc5bf3e5-2f05-47a3-98b9-6e91ad93b44c",
+              "memory_uid": "fa2735e1-f4af-57d3-a18c-795715b6715b"
+            },
+            {
+              "frame_uid": "cc5bf3e5-2f05-47a3-98b9-6e91ad93b44c",
+              "memory_uid": "3bd8b8f2-c5b4-5004-8b9e-e388cc26ea7a"
+            }
+          ],
+          "reason": "The compared memories form one before-and-after account of adapting outdoor seating to obtain shade; the reference contains no matching outing claim.",
+          "status": "RESOLVED",
+          "summary": "After leaving an unshaded riverside spot within an hour, the user chose shade near a large tree at the next outdoor meal and stayed longer.",
+          "uid": "bbc67061-4da7-5c25-8b20-785f8833aeff"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cc5bf3e5-2f05-47a3-98b9-6e91ad93b44c",
+              "memory_uid": "c7c4b494-39a6-5f5c-b37f-51c5061ac926"
+            },
+            {
+              "frame_uid": "cc5bf3e5-2f05-47a3-98b9-6e91ad93b44c",
+              "memory_uid": "dd9f5b3c-9c2e-5dbc-bf6e-eb7761eeb075"
+            }
+          ],
+          "reason": "The compared memories jointly describe one adaptation in hydration preparation; the reference contains no corresponding claim.",
+          "status": "RESOLVED",
+          "summary": "After needing an extra drink when one bottle was insufficient on a hot day, the user brought two frozen water bottles on the next outing.",
+          "uid": "f3983f43-143a-55e3-b4b1-2631919cfa72"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cc5bf3e5-2f05-47a3-98b9-6e91ad93b44c",
+              "memory_uid": "2ed2a41c-f6ae-54d6-875c-a195d8fdacee"
+            },
+            {
+              "frame_uid": "cc5bf3e5-2f05-47a3-98b9-6e91ad93b44c",
+              "memory_uid": "23f3a4fc-d51e-5d0b-87f0-d5be407a57f3"
+            }
+          ],
+          "reason": "The compared memories form one before-and-after account of improving entrance identification; the reference does not address park rendezvous points.",
+          "status": "RESOLVED",
+          "summary": "After waiting at different park entrances, the user sent an entrance-sign photo for the next meeting and successfully coordinated the location.",
+          "uid": "ba40bf76-c612-5a12-9b34-02184e525f2c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cc5bf3e5-2f05-47a3-98b9-6e91ad93b44c",
+              "memory_uid": "e9f459f3-8ff0-5a0e-b78b-eda8d18b914e"
+            }
+          ],
+          "reason": "Only the compared frame states this accessibility and convenience preference.",
+          "status": "RESOLVED",
+          "summary": "For park meetings, the maternal uncle prefers an entrance requiring less walking from the parking area.",
+          "uid": "8fcc0086-d602-5eb5-90c2-fd86c5bb3901"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cc5bf3e5-2f05-47a3-98b9-6e91ad93b44c",
+              "memory_uid": "70277b86-d5db-5b58-8a94-e77372d15a4c"
+            }
+          ],
+          "reason": "Only the compared frame provides this two-part planning instruction.",
+          "status": "RESOLVED",
+          "summary": "Outdoor plans should confirm the exact entrance and include an alternative location for rain.",
+          "uid": "20b7d812-e8d9-5c65-a41d-d3d983fb3518"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cc5bf3e5-2f05-47a3-98b9-6e91ad93b44c",
+              "memory_uid": "5a54437b-9b0e-5103-860d-d878be70b3ef"
+            }
+          ],
+          "reason": "Only the compared frame supplies this facility-availability caveat.",
+          "status": "RESOLVED",
+          "summary": "Park restrooms and drinking fountains may be seasonally closed.",
+          "uid": "db6575bb-3f5e-5768-a078-cf0b3e1f9095"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers picnic storage, learning about shade and water needs, coordinating park entrances, accommodating parking access, planning for rain, and anticipating seasonal facility closures.",
+        "differences": "",
+        "reference_only": "The reference covers spare-key custody and pickup, return, disclosure, and lockout practices, alongside passcode concerns, identity verification, unannounced visits, and delivery-photo reassurance."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "56b22e28-3f8c-4df0-9583-f0b7a7e78297"
+    },
+    "analysis_digest": "d621ecc8a031b8cf242f4077cc4494c8c553337c1cf2c9d7ebb677ab86e1d276",
+    "key": "0dd6ba5af1c858127f9edd176e603985875c9ce1301b99d827c3419d139bb2a6",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 51.81057445799888,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "0dd6ba5af1c858127f9edd176e603985875c9ce1301b99d827c3419d139bb2a6",
+  "created_at": "2026-08-13T18:37:18.862619Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/02",
+  "pair_key": "123a257ed0d068cb859c955ed930034565d94dd22f674e44f0ce50705c735360",
+  "provider_seconds": 51.81057445799888,
+  "right": "task-3/local/personal-memory/2026/05",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:40:46.980691+00:00",
+      "frames": [
+        {
+          "context_digest": "6cb54691fcd12037c24daa71882bad82cd67c16ea72979f2a41e1e1b8eae22a8",
+          "context_name": "task-3/local/personal-memory/2024/06",
+          "context_uid": "8c641e5b-01d9-560c-a8c0-b52cee7402c8",
+          "memories": [
+            {
+              "content": "The user stores copies of identity documents in an encrypted folder.",
+              "content_digest": "83efe427335c1415d4a8d601d6e1c5d7a129c6962b74468d313b123e045b052f",
+              "position": 0,
+              "uid": "79576c1e-fa88-5d6e-b5e2-3d4ec11c3e06"
+            },
+            {
+              "content": "On a day the user transferred between buses twice, they rested for an hour after the trip.",
+              "content_digest": "907b9cc4c16b4b3fe53c2323d31afc83347ddc63775bd865bc42b62ca539f5bb",
+              "position": 1,
+              "uid": "28a1ff0b-e2d4-5cb6-9c26-949d86f76bac"
+            },
+            {
+              "content": "On a day the user took a direct route with a similar travel time, they remained seated to the destination.",
+              "content_digest": "0c0d1b12aa0ad393ac43982fe7d36d08f75d9e634c933593ef6a0a96614bb9ea",
+              "position": 2,
+              "uid": "0ad4a1f9-e3e9-517e-8cfc-f8e6307f1d3e"
+            },
+            {
+              "content": "After arriving at an entrance with stairs only, the user went around to an entrance on the other side of the building.",
+              "content_digest": "775d4c0a211f4509a0488cb3b2a790ae22c1b2ba2e96ed6b9100ae3cfb454315",
+              "position": 3,
+              "uid": "f772b0c7-502f-55b7-b431-ee6b20518d38"
+            },
+            {
+              "content": "On a day the user checked the accessible entrance location in advance, they arrived before the agreed time.",
+              "content_digest": "4e087a4e0ca48a3414580ce0d974da4b2221b304302de01cf305945866320a6a",
+              "position": 4,
+              "uid": "0b2d800b-a4ab-5422-bf06-56d17b98f604"
+            },
+            {
+              "content": "On a rainy day, the user's clothes became wet while crossing an uncovered section at a transfer stop.",
+              "content_digest": "dad5c9f35f0469edc528091e47f22365c1cb5de1b32e70335826d67a576fb47d",
+              "position": 5,
+              "uid": "b233f332-4927-549b-8dab-b554977fe363"
+            },
+            {
+              "content": "On a day the user traveled with their maternal uncle, they agreed to meet at an entrance near the elevator.",
+              "content_digest": "c81b012ae6686f47d54809c50ab559077b0e170d54792d34038f0f8fc32c6a96",
+              "position": 6,
+              "uid": "b38d0d63-c4b0-5955-857d-03cbcfd27f5b"
+            },
+            {
+              "content": "The user's maternal uncle prefers an aisle seat from which it is easy to stand during long-distance travel.",
+              "content_digest": "3ea31753296866c1bf438b51eba4110b0c6ed2e907e86dc21796166ed19d82df",
+              "position": 7,
+              "uid": "4668d326-b11c-5467-bca4-e8d5e242e375"
+            },
+            {
+              "content": "The local agent cannot know whether an accessible entrance is operating that day from past route records alone.",
+              "content_digest": "00fc09badcb1d569e3cb1e392ad18406a032d17749f71b44ed7bc121d5d72b4c",
+              "position": 8,
+              "uid": "a77c985c-3986-5141-9805-e3321b3cfa2c"
+            },
+            {
+              "content": "The transfer route the user takes has more boarding and alighting events and walking segments than the direct route.",
+              "content_digest": "f9320e36494ea5beb854d6bbe38a817ae73cd9fe68b75977438d35e44fb38fe6",
+              "position": 9,
+              "uid": "988926a1-3e28-5b3e-a41c-d9338971643e"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "ca7cb2a2-57db-4d89-b49d-625126b99589"
+        },
+        {
+          "context_digest": "5e42fc3dcfbf5576148277f6841977ca8a5cabd4a3fc67a5581f6f6cc816c900",
+          "context_name": "task-3/local/personal-memory/2025/10",
+          "context_uid": "8130b676-dc51-5c31-b7dc-185afdf9cf07",
+          "memories": [
+            {
+              "content": "The user keeps waterproof shoes for rainy days to the left of the entrance.",
+              "content_digest": "5b9e5a20153c7865010318800d740a410faef0c13fe2278c20ce984a89b7dea5",
+              "position": 0,
+              "uid": "82c1e806-de3a-5633-8a08-175487e69fd6"
+            },
+            {
+              "content": "On a day the user walked in the rain wearing thin shoes, their socks became wet and they changed them after arrival.",
+              "content_digest": "fdbdab8c08a4b1d933ff8ac3ddedee8541ddf070e8c6e6020b6c1d14b992c621",
+              "position": 1,
+              "uid": "25df6384-836f-5f8e-bd97-73a1fb171c48"
+            },
+            {
+              "content": "On the next rainy day, the user wore waterproof shoes and their feet remained dry.",
+              "content_digest": "0e87d74fb93fe062cd12efe2f5a04fbae5ce13a60491fd9ad04c4e006acbd87f",
+              "position": 2,
+              "uid": "55abae4f-206a-586e-8b35-406d7525c0a1"
+            },
+            {
+              "content": "On a day the user walked for a long time in new shoes, their heel chafed and they shortened the route home.",
+              "content_digest": "aeb369b995cdf17ea73ae8546b454eab70f33bf6d3c67a09aee2805c1c598b6d",
+              "position": 3,
+              "uid": "c6d21ec4-6bdf-55df-b4d4-05cb531bf4bd"
+            },
+            {
+              "content": "The user wore the same shoes on two short outings before using them on a long walk.",
+              "content_digest": "0d7ed5656f35f4fe025c6ba80e4c829f5b9851c193f981de9a461f848317d60a",
+              "position": 4,
+              "uid": "a6424854-e51e-5afc-8b9f-9e2f0273f70e"
+            },
+            {
+              "content": "On a day the user dried an umbrella outside the entrance, they found it immediately before the next outing.",
+              "content_digest": "dbc2453ca5f895e2cfe7f58e5624cf4c5d6793468af3b25df7e9a4ddb7d50159",
+              "position": 5,
+              "uid": "1b436b46-3d1f-5aa2-99e3-94b7c2412bfd"
+            },
+            {
+              "content": "On a day the user put a folded wet umbrella in their bag, documents inside became wet.",
+              "content_digest": "1f63fbc8c6b491a734f0f7a4190e26aec22826c1ff839242e0ca71d933312c9c",
+              "position": 6,
+              "uid": "ccd1f422-6130-5f19-869e-681102a3a1fa"
+            },
+            {
+              "content": "When rain is forecast, the user's mother expects the user may forget an umbrella and sets out a spare at the entrance.",
+              "content_digest": "80bdfaefb6f781aa91ef7217331e75f09b4766650c2b078dfadf592b2eb27b08",
+              "position": 7,
+              "uid": "c69a8e87-2b6f-5514-ab0d-0037531592f8"
+            },
+            {
+              "content": "When proposing a long-distance walking plan, check both the weather that day and recent records of shoe discomfort.",
+              "content_digest": "f54a546d423099c3abbb65bb49e4ddf773a8191dcffbb8b3d5153dfd70553b73",
+              "position": 8,
+              "uid": "4567ea9f-1800-51ed-bfac-f4cdf674d4cf"
+            },
+            {
+              "content": "Even if the local agent knows a shoe's location, it cannot know its current condition or whether it is usable.",
+              "content_digest": "28202c222ca800a5e19dbaebea2b3c992748f530a695517cf123b10187a31bc8",
+              "position": 9,
+              "uid": "a4ff1b76-755d-530a-b24c-8655115e4fbe"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "6a445b55-c38c-4dda-8439-f6be69b869fb"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate practical domains: the reference records transit accessibility, route effort, companions, and document storage, while the compared frame records rain gear, footwear, umbrella handling, and walking-plan safeguards. No claims govern the same operational decision closely enough for a cross-frame relation.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ca7cb2a2-57db-4d89-b49d-625126b99589",
+              "memory_uid": "79576c1e-fa88-5d6e-b5e2-3d4ec11c3e06"
+            }
+          ],
+          "reason": "This is independently useful reference-only information about secure document storage; the compared frame’s moisture incident does not address the same storage decision.",
+          "status": "RESOLVED",
+          "summary": "Identity-document copies are stored in an encrypted folder.",
+          "uid": "6adca225-ff3b-5341-9cf4-093d1dfb38a3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ca7cb2a2-57db-4d89-b49d-625126b99589",
+              "memory_uid": "28a1ff0b-e2d4-5cb6-9c26-949d86f76bac"
+            }
+          ],
+          "reason": "This reference-only observation concerns recovery after a transfer-heavy journey and has no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "A trip involving two bus transfers was followed by an hour of rest.",
+          "uid": "bb694082-b735-5d31-a6c2-5c7d10eb299d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ca7cb2a2-57db-4d89-b49d-625126b99589",
+              "memory_uid": "0ad4a1f9-e3e9-517e-8cfc-f8e6307f1d3e"
+            }
+          ],
+          "reason": "This reference-only observation concerns the experience of a direct route and has no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user remained seated throughout a direct trip of similar duration.",
+          "uid": "23b4aabe-f0fc-538a-97db-8649ad8e9b1b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ca7cb2a2-57db-4d89-b49d-625126b99589",
+              "memory_uid": "f772b0c7-502f-55b7-b431-ee6b20518d38"
+            }
+          ],
+          "reason": "This reference-only event concerns adapting to an inaccessible entrance and has no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "When faced with a stairs-only entrance, the user went to another entrance across the building.",
+          "uid": "8f8d6d84-ce21-5b5f-91de-e5718f24f700"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ca7cb2a2-57db-4d89-b49d-625126b99589",
+              "memory_uid": "0b2d800b-a4ab-5422-bf06-56d17b98f604"
+            }
+          ],
+          "reason": "This reference-only observation concerns advance accessibility planning and has no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Checking the accessible entrance beforehand coincided with arriving early.",
+          "uid": "e3f8f004-b5ac-59f8-b14d-91d458f23064"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ca7cb2a2-57db-4d89-b49d-625126b99589",
+              "memory_uid": "b233f332-4927-549b-8dab-b554977fe363"
+            }
+          ],
+          "reason": "This reference-only event identifies rain exposure caused by transfer infrastructure; the compared rain events concern footwear and do not govern the same operational decision.",
+          "status": "RESOLVED",
+          "summary": "The user’s clothes became wet while crossing an uncovered part of a transfer stop in rain.",
+          "uid": "0d78f7d0-3f2b-54b7-ae54-72990141a947"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ca7cb2a2-57db-4d89-b49d-625126b99589",
+              "memory_uid": "b38d0d63-c4b0-5955-857d-03cbcfd27f5b"
+            }
+          ],
+          "reason": "This reference-only information concerns a specific accessible meeting arrangement and has no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user and their maternal uncle arranged to meet at an entrance near an elevator.",
+          "uid": "b8257047-2db9-5a31-8d27-3d6b8475ec30"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ca7cb2a2-57db-4d89-b49d-625126b99589",
+              "memory_uid": "4668d326-b11c-5467-bca4-e8d5e242e375"
+            }
+          ],
+          "reason": "This reference-only preference concerns long-distance seating and has no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user’s maternal uncle prefers an aisle seat that permits easy standing on long trips.",
+          "uid": "c3519785-e41a-5bb8-b2ce-5cb29bc34143"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ca7cb2a2-57db-4d89-b49d-625126b99589",
+              "memory_uid": "a77c985c-3986-5141-9805-e3321b3cfa2c"
+            }
+          ],
+          "reason": "This is a reference-only epistemic limit for entrance planning; uncertainty about shoe usability concerns a different operational decision.",
+          "status": "RESOLVED",
+          "summary": "Past route records alone cannot establish whether an accessible entrance is operating on a given day.",
+          "uid": "7c96196a-42c5-51ac-b2ff-9305ee9ba2d4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ca7cb2a2-57db-4d89-b49d-625126b99589",
+              "memory_uid": "988926a1-3e28-5b3e-a41c-d9338971643e"
+            }
+          ],
+          "reason": "This reference-only route comparison has no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The transfer route involves more boarding, alighting, and walking than the direct route.",
+          "uid": "57e06c40-ffce-52fa-9a18-28bdf6d8471d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6a445b55-c38c-4dda-8439-f6be69b869fb",
+              "memory_uid": "82c1e806-de3a-5633-8a08-175487e69fd6"
+            }
+          ],
+          "reason": "This compared-only location fact is independently useful and has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Waterproof shoes for rainy days are kept to the left of the entrance.",
+          "uid": "be8656ab-4756-5452-9258-d34760681f3f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6a445b55-c38c-4dda-8439-f6be69b869fb",
+              "memory_uid": "25df6384-836f-5f8e-bd97-73a1fb171c48"
+            }
+          ],
+          "reason": "This compared-only event concerns inadequate footwear protection; the reference rain event concerns an uncovered transfer segment and a different operational choice.",
+          "status": "RESOLVED",
+          "summary": "Walking in rain with thin shoes left the user’s socks wet and requiring replacement after arrival.",
+          "uid": "b82f37b9-e122-5ff0-9650-6b12e002b760"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6a445b55-c38c-4dda-8439-f6be69b869fb",
+              "memory_uid": "55abae4f-206a-586e-8b35-406d7525c0a1"
+            }
+          ],
+          "reason": "This compared-only observation concerns waterproof footwear performance and has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Wearing waterproof shoes on a later rainy day kept the user’s feet dry.",
+          "uid": "6f8c7ad1-2cbb-500c-8e36-d06d7b48d0f5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6a445b55-c38c-4dda-8439-f6be69b869fb",
+              "memory_uid": "c6d21ec4-6bdf-55df-b4d4-05cb531bf4bd"
+            }
+          ],
+          "reason": "This compared-only event concerns footwear discomfort during extended walking and has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "A long walk in new shoes caused heel chafing and led the user to shorten the route home.",
+          "uid": "315913bd-95b7-5ec8-a46b-1c0503e05f9f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6a445b55-c38c-4dda-8439-f6be69b869fb",
+              "memory_uid": "a6424854-e51e-5afc-8b9f-9e2f0273f70e"
+            }
+          ],
+          "reason": "This compared-only usage history is independently useful evidence and is not itself the discomfort outcome or planning policy.",
+          "status": "RESOLVED",
+          "summary": "The same shoes were worn on two short outings before a long walk.",
+          "uid": "56a08bb4-ba33-5dcd-9648-c28082872f7e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6a445b55-c38c-4dda-8439-f6be69b869fb",
+              "memory_uid": "1b436b46-3d1f-5aa2-99e3-94b7c2412bfd"
+            }
+          ],
+          "reason": "This compared-only event concerns umbrella placement and retrieval and has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "An umbrella dried outside the entrance was immediately found before the next outing.",
+          "uid": "7d1bb4fd-706f-50c2-8c2e-04aa65c33baa"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6a445b55-c38c-4dda-8439-f6be69b869fb",
+              "memory_uid": "ccd1f422-6130-5f19-869e-681102a3a1fa"
+            }
+          ],
+          "reason": "This compared-only incident concerns moisture damage during transport; encrypted identity-document storage addresses a different protection decision.",
+          "status": "RESOLVED",
+          "summary": "Putting a folded wet umbrella in a bag caused documents inside to become wet.",
+          "uid": "a7c53558-ed45-58e6-a69e-0cca36c710d1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6a445b55-c38c-4dda-8439-f6be69b869fb",
+              "memory_uid": "c69a8e87-2b6f-5514-ab0d-0037531592f8"
+            }
+          ],
+          "reason": "This compared-only reminder practice has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "When rain is forecast, the user’s mother places a spare umbrella at the entrance because the user may forget one.",
+          "uid": "e8976660-92a6-55cf-b3c6-6b1c10f0ec6b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6a445b55-c38c-4dda-8439-f6be69b869fb",
+              "memory_uid": "4567ea9f-1800-51ed-bfac-f4cdf674d4cf"
+            }
+          ],
+          "reason": "This compared-only planning policy concerns long walks, weather, and footwear history and has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Long-distance walking proposals should check the day’s weather and recent shoe-discomfort records.",
+          "uid": "62d5dfe9-0678-5e36-ad3d-241832b827ea"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6a445b55-c38c-4dda-8439-f6be69b869fb",
+              "memory_uid": "a4ff1b76-755d-530a-b24c-8655115e4fbe"
+            }
+          ],
+          "reason": "This is a compared-only epistemic limit for footwear selection; uncertainty about entrance operation concerns a different operational decision.",
+          "status": "RESOLVED",
+          "summary": "Knowing a shoe’s location does not establish its current condition or usability.",
+          "uid": "40cce6b2-b177-57fc-abda-372513c1256d"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame uniquely describes waterproof-shoe placement and performance, wet socks, shoe chafing and prior short use, umbrella storage and reminders, moisture-damaged documents, walking-plan checks, and uncertainty about footwear condition.",
+        "differences": "",
+        "reference_only": "The reference uniquely describes encrypted identity-document storage, transit fatigue and route complexity, accessible-entrance planning and uncertainty, rain exposure during transfers, and the maternal uncle’s meeting and seating preferences."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "0db1e2c8-09d5-49df-af31-c431f3ac49e8"
+    },
+    "analysis_digest": "53a0aaebec9228c3fbd4fe8b5e373fdfad34ccf86666f1c3f886d9760372f6fe",
+    "key": "ae9cfd5a9ba0d3feb76d5f205f336ec36d476f39913f61e9d0da7a32ad70cf99",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 51.63765895799952,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "ae9cfd5a9ba0d3feb76d5f205f336ec36d476f39913f61e9d0da7a32ad70cf99",
+  "created_at": "2026-08-13T18:41:38.617909Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/06",
+  "pair_key": "d557a7647d98d0152eb488f3228d7814a5a7e925d669307b1f276425df203d4c",
+  "provider_seconds": 51.63765895799952,
+  "right": "task-3/local/personal-memory/2025/10",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

@@ -1,0 +1,406 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:49:45.687635+00:00",
+      "frames": [
+        {
+          "context_digest": "3e738289251b9bdf3deb1c7a7540e6ce811b09e26a020af3a76d47b4c85c7ab1",
+          "context_name": "task-3/local/personal-memory/2025/02",
+          "context_uid": "ce7367b8-8532-5f43-972a-1665ca8e3e80",
+          "memories": [
+            {
+              "content": "The user reviewed their emergency-contact list in February 2025.",
+              "content_digest": "b2f108376dbbf53e8885b9c61080d4c873209d8c6e399c37412fa507fec08b0b",
+              "position": 0,
+              "uid": "3ff046b1-5810-51ca-8d43-c99ef6a90b41"
+            },
+            {
+              "content": "When preparation instructions arrived as a long paragraph, the user missed two items.",
+              "content_digest": "43bde452a403f85bcffa6f7ba6b3142ed45604730083327c6f57092b98f397aa",
+              "position": 1,
+              "uid": "e2a304e5-6100-5a5f-b508-0a7f28f6bda7"
+            },
+            {
+              "content": "After changing the same content into a checklist, the user marked every item they had prepared.",
+              "content_digest": "0f8115061b489894115fd252f079ee673504ed09dea4d88d558e64ed6189f1be",
+              "position": 2,
+              "uid": "51d03bff-3e33-5f68-9df6-ed7efa8e3de9"
+            },
+            {
+              "content": "The user called their mother on a weekend evening, but they spoke only briefly because the mother was out.",
+              "content_digest": "a9a1e7d87532667781677f4760beeb086f1e423365a915a0ec0b494892cbb361",
+              "position": 3,
+              "uid": "0987293e-3e21-5cbc-bb46-59245a5fa041"
+            },
+            {
+              "content": "The user called again on Saturday morning the following week and spoke for 40 minutes.",
+              "content_digest": "f08c9f170345686b2091e3b0ecd49f049e245d584886da62d586185010f713bf",
+              "position": 4,
+              "uid": "dc3de6ad-56ea-528a-a9b7-349e79af2326"
+            },
+            {
+              "content": "The user sent a text to an old number for an emergency contact and saw that delivery failed.",
+              "content_digest": "692321e996b9ac8e3500a2da7765f77e0d14c6f040cf2c33944cbdcb39c706de",
+              "position": 5,
+              "uid": "6546d41b-3d5b-5802-a9e7-ac028405e3f2"
+            },
+            {
+              "content": "After confirming the new number with their older sister, the user updated the contact list.",
+              "content_digest": "8d2e954a978e35c1da92948ccc8e45f38fcc25ea3fafe7c389ef546f6eda1ae1",
+              "position": 6,
+              "uid": "ea6eb9d2-9b01-5330-a4d5-886d4bc6cd85"
+            },
+            {
+              "content": "For nonurgent contact, the user's older sister prefers to reply by text when available rather than take a call immediately.",
+              "content_digest": "86639aee50903bc3261e6f88ac7d649c8197927fe214d5d17e0e6f5b3d69a59d",
+              "position": 7,
+              "uid": "12fe7e64-192e-5359-8f96-d2875f7e5399"
+            },
+            {
+              "content": "Before using an emergency contact, reconfirm the number and relationship information with the user.",
+              "content_digest": "78e41f61ba99eaf8840d5d318d08327ca6bb087addd6e22269e8b63281bb67c7",
+              "position": 8,
+              "uid": "e6f89ded-5687-5c25-8df8-88f288d450c6"
+            },
+            {
+              "content": "The user feels that a reminder the day before an appointment gives them enough time to recheck preparation items.",
+              "content_digest": "1a9fcc01df362c76b6d9c8e4fa2d33229a2ae2762c0c6d25e0fc89312a6e0ed4",
+              "position": 9,
+              "uid": "f9197c33-ff93-5215-a3a5-e4087bea2a0d"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "36205e89-7784-4607-bc01-b8af34ec7ebd"
+        },
+        {
+          "context_digest": "d28031209c5edc768a592166e26351dd5bce0c7568d379fcaceab173450041c8",
+          "context_name": "task-3/local/personal-memory/2026/02",
+          "context_uid": "7ffcbc10-1703-54b0-9545-99742b51d333",
+          "memories": [
+            {
+              "content": "The user keeps basic repair tools in a box beneath the sink.",
+              "content_digest": "c2a23bace63735c502081b19682a8ceb3e37156b9aadd6f7739e2005c20469d6",
+              "position": 0,
+              "uid": "7d3daf76-a21e-5117-a534-6175ab2d2861"
+            },
+            {
+              "content": "On a day the faucet leaked, the user placed only a towel beneath it, and the floor became wet as well.",
+              "content_digest": "ad6baa7e1848e4e61bdaf22bc5c8665122330b5c70c8ae192216abbba17c6134",
+              "position": 1,
+              "uid": "70a6d9f5-180f-5174-b247-690e10baa23e"
+            },
+            {
+              "content": "After sending a photo to building management, the user finalized the time for a repair visit.",
+              "content_digest": "82b36c7a95e51a0dfa32768c2a437d509b75c0f93bc51a99a636f2c9739a20da",
+              "position": 2,
+              "uid": "9fcd922c-147c-517b-82b3-180fdfb13f33"
+            },
+            {
+              "content": "Before the technician's visit, the user emptied the area beneath the sink so work could begin immediately.",
+              "content_digest": "dbc3b48e5bc4b406dc17067dd93d92e845e3706f47c8706f9a5d5ef17bf64617",
+              "position": 3,
+              "uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5"
+            },
+            {
+              "content": "On a day the user wrote the visit time only in the calendar and turned off the reminder, they heard the doorbell late.",
+              "content_digest": "95fab6bcab815dd8bdd5fecb867f84c6d2f1a901771603b1dbf197cde3c1d19d",
+              "position": 4,
+              "uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65"
+            },
+            {
+              "content": "For the next visit, the user enabled a reminder 30 minutes beforehand and answered immediately at the entrance.",
+              "content_digest": "818783ff21b2d369935b9994c17b28f93f84ea7558dab9f2de20d0aad21f86a3",
+              "position": 5,
+              "uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a"
+            },
+            {
+              "content": "After the repair, the user called their maternal aunt to confirm that the spare key entrusted to her was still there.",
+              "content_digest": "ac01b9816dda2d6bf16f22b41157120b7ffdd75d19638f6313a88e1ce6e7a1f1",
+              "position": 6,
+              "uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441"
+            },
+            {
+              "content": "The user's maternal aunt considers it unsafe to hand the spare key to a repair technician without the user's explicit request.",
+              "content_digest": "f7c7c0306c81cc6de9f02aa1aed7d411db3f29757d024e7d5a1679b1ff308948",
+              "position": 7,
+              "uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd"
+            },
+            {
+              "content": "Obtain the user's reconfirmation before scheduling an external worker to enter the residential unit.",
+              "content_digest": "34382e40f4907bea82728787fdeb150e299d46a0079ae2847d4eda6d6d892d22",
+              "position": 8,
+              "uid": "4716a67b-8602-564c-9e89-85cd4ee158f9"
+            },
+            {
+              "content": "A multi-unit residential building's repair schedule may change because of emergency work or parts availability.",
+              "content_digest": "d701fdd1ffbf17ff0890c583b5bf39849e3c6e3cc296fde7e00d3d1ecc0ef196",
+              "position": 9,
+              "uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "b081c53c-62a6-4ee9-a92c-bfeff0f75178"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate domains: emergency contacts, communication, and appointment preparation versus home repair access, scheduling, and key safety. Their only substantive intersection is reminder use, with different timing tied to distinct preparation and arrival tasks; no contradiction is established.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "36205e89-7784-4607-bc01-b8af34ec7ebd",
+              "memory_uid": "3ff046b1-5810-51ca-8d43-c99ef6a90b41"
+            }
+          ],
+          "reason": "This dated review event is independently useful reference-only information and has no counterpart concerning contact-list review in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user reviewed their emergency-contact list in February 2025.",
+          "uid": "4fb5b0f7-f557-5e55-8357-23a00855444b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "36205e89-7784-4607-bc01-b8af34ec7ebd",
+              "memory_uid": "e2a304e5-6100-5a5f-b508-0a7f28f6bda7"
+            },
+            {
+              "frame_uid": "36205e89-7784-4607-bc01-b8af34ec7ebd",
+              "memory_uid": "51d03bff-3e33-5f68-9df6-ed7efa8e3de9"
+            }
+          ],
+          "reason": "The paired observations form one reference-only claim about instruction format affecting preparation tracking; the compared frame does not address presentation format or checklists.",
+          "status": "RESOLVED",
+          "summary": "Presenting preparation instructions as a checklist enabled complete tracking after items were missed in paragraph form.",
+          "uid": "492e964d-b597-52fc-8534-872cc26b98dd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "36205e89-7784-4607-bc01-b8af34ec7ebd",
+              "memory_uid": "0987293e-3e21-5cbc-bb46-59245a5fa041"
+            },
+            {
+              "frame_uid": "36205e89-7784-4607-bc01-b8af34ec7ebd",
+              "memory_uid": "dc3de6ad-56ea-528a-a9b7-349e79af2326"
+            }
+          ],
+          "reason": "These events jointly describe a reference-only communication pattern involving the mother’s availability; no compared memory addresses calls to her.",
+          "status": "RESOLVED",
+          "summary": "Calls to the user’s mother had different outcomes at different weekend times, with a later Saturday-morning call lasting 40 minutes.",
+          "uid": "80ca547a-b1f6-5e50-91ab-33697717cf4a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "36205e89-7784-4607-bc01-b8af34ec7ebd",
+              "memory_uid": "6546d41b-3d5b-5802-a9e7-ac028405e3f2"
+            },
+            {
+              "frame_uid": "36205e89-7784-4607-bc01-b8af34ec7ebd",
+              "memory_uid": "ea6eb9d2-9b01-5330-a4d5-886d4bc6cd85"
+            }
+          ],
+          "reason": "The two memories describe one reference-only correction sequence from detecting an invalid number through updating it.",
+          "status": "RESOLVED",
+          "summary": "After a message to an obsolete emergency-contact number failed, the user confirmed the replacement with their older sister and updated the list.",
+          "uid": "2d9e7532-378b-562d-b1b6-f41cd3e30dfe"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "36205e89-7784-4607-bc01-b8af34ec7ebd",
+              "memory_uid": "12fe7e64-192e-5359-8f96-d2875f7e5399"
+            }
+          ],
+          "reason": "This communication preference is independently useful reference-only information and is not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "For nonurgent contact, the user’s older sister prefers replying by text when available over taking an immediate call.",
+          "uid": "4a7a7157-5e0c-5547-baec-14c62bea85d6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "36205e89-7784-4607-bc01-b8af34ec7ebd",
+              "memory_uid": "e6f89ded-5687-5c25-8df8-88f288d450c6"
+            }
+          ],
+          "reason": "This policy specifically governs verification before using an emergency contact; residential worker access in the compared frame is a different operational decision.",
+          "status": "RESOLVED",
+          "summary": "An emergency contact’s number and relationship information should be reconfirmed with the user before use.",
+          "uid": "f30211f5-45c7-5ecd-a88d-2e107d22ff16"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "36205e89-7784-4607-bc01-b8af34ec7ebd",
+              "memory_uid": "f9197c33-ff93-5215-a3a5-e4087bea2a0d"
+            },
+            {
+              "frame_uid": "b081c53c-62a6-4ee9-a92c-bfeff0f75178",
+              "memory_uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65"
+            },
+            {
+              "frame_uid": "b081c53c-62a6-4ee9-a92c-bfeff0f75178",
+              "memory_uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a"
+            }
+          ],
+          "reason": "The claims differ through explicit task and timing scopes rather than contradiction: advance preparation review and immediate readiness for a technician require their distinct conditions to be preserved.",
+          "status": "RESOLVED",
+          "summary": "Reminder timing serves different tasks: a day-before reminder supports appointment-preparation review, while a 30-minute repair-visit reminder supports prompt entrance response, and disabling it was associated with lateness.",
+          "uid": "0e46b369-dd51-5f81-8f87-be710bf34480"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b081c53c-62a6-4ee9-a92c-bfeff0f75178",
+              "memory_uid": "7d3daf76-a21e-5117-a534-6175ab2d2861"
+            }
+          ],
+          "reason": "This storage-location fact is independently useful compared-only information and has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user stores basic repair tools in a box beneath the sink.",
+          "uid": "4802c9c0-6d7f-5729-aa26-4ca80492d07b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b081c53c-62a6-4ee9-a92c-bfeff0f75178",
+              "memory_uid": "70a6d9f5-180f-5174-b247-690e10baa23e"
+            }
+          ],
+          "reason": "This compared-only event records the consequence of inadequate leak containment, which the reference frame does not address.",
+          "status": "RESOLVED",
+          "summary": "Using only a towel beneath a leaking faucet did not prevent the surrounding floor from becoming wet.",
+          "uid": "69f3203a-91cf-5c42-83f7-c0af8f911184"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b081c53c-62a6-4ee9-a92c-bfeff0f75178",
+              "memory_uid": "9fcd922c-147c-517b-82b3-180fdfb13f33"
+            }
+          ],
+          "reason": "This compared-only fact concerns arranging a repair visit through building management and has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user sent building management a photo and then finalized a repair-visit time.",
+          "uid": "86d19bdc-6d7c-5bde-82f6-2e3e8c466c8c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b081c53c-62a6-4ee9-a92c-bfeff0f75178",
+              "memory_uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5"
+            }
+          ],
+          "reason": "This compared-only preparation action concerns clearing a repair workspace, not the reference frame’s instruction-format or appointment-checking claims.",
+          "status": "RESOLVED",
+          "summary": "The user emptied the area beneath the sink before the technician arrived so work could start immediately.",
+          "uid": "8a3d4a80-304f-5ea5-bf3e-58a7eeefefc8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b081c53c-62a6-4ee9-a92c-bfeff0f75178",
+              "memory_uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441"
+            }
+          ],
+          "reason": "This compared-only verification concerns the custody and continued presence of a spare key, which the reference frame does not address.",
+          "status": "RESOLVED",
+          "summary": "After the repair, the user confirmed with their maternal aunt that the entrusted spare key remained with her.",
+          "uid": "fa0382ff-74ae-5afe-860f-206fb1063576"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b081c53c-62a6-4ee9-a92c-bfeff0f75178",
+              "memory_uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd"
+            }
+          ],
+          "reason": "This is an independently useful compared-only restriction on releasing a key to a technician, distinct from merely verifying where the key remains.",
+          "status": "RESOLVED",
+          "summary": "The user’s maternal aunt considers releasing the spare key to a repair technician unsafe without the user’s explicit request.",
+          "uid": "a94c4275-7b6b-545e-863f-86f3a46294c9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b081c53c-62a6-4ee9-a92c-bfeff0f75178",
+              "memory_uid": "4716a67b-8602-564c-9e89-85cd4ee158f9"
+            }
+          ],
+          "reason": "This policy specifically governs authorization for residential entry; emergency-contact verification in the reference frame governs a separate operational decision.",
+          "status": "RESOLVED",
+          "summary": "The user’s reconfirmation should be obtained before scheduling an external worker to enter the residence.",
+          "uid": "ffb2be2e-0e76-53a3-b05b-1f6140a3225b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b081c53c-62a6-4ee9-a92c-bfeff0f75178",
+              "memory_uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+            }
+          ],
+          "reason": "This compared-only scheduling contingency is independently useful and has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Repair schedules in multi-unit residential buildings may change because of emergency work or parts availability.",
+          "uid": "f5439688-ac20-5cf7-b642-c718afa0c845"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers leak response, repair coordination and workspace preparation, tools, schedule uncertainty, residential-entry confirmation, and spare-key custody and release safety.",
+        "differences": "Reminder timing is task-specific: a day-before reminder supports preparation checks, while a 30-minute repair reminder supports prompt entry response; disabling that reminder was associated with lateness.",
+        "reference_only": "The reference covers checklist effectiveness, emergency-contact maintenance and verification, family communication patterns, and a sister’s nonurgent texting preference."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "57f0d8aa-61f3-430f-9eeb-2d2adaf2acbc"
+    },
+    "analysis_digest": "d61eac2d14d791003676d3444da29984451aba2e19e948954063cda13fe9e847",
+    "key": "ee35605dc37d4612618348f95a5c1c18a2660d5148b944d5f33efec2415a807e",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 48.039538499997434,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "ee35605dc37d4612618348f95a5c1c18a2660d5148b944d5f33efec2415a807e",
+  "created_at": "2026-08-13T18:50:33.726508Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/02",
+  "pair_key": "4de294d27c0a379101bb67337fb90071ada425d903dd912595000acbb07383d7",
+  "provider_seconds": 48.039538499997434,
+  "right": "task-3/local/personal-memory/2026/02",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

@@ -1,0 +1,83 @@
+{
+  "coverage": {
+    "expected": 4,
+    "observed": 4
+  },
+  "created_at": "2026-08-11T00:22:59.123156Z",
+  "description_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+  "issues": [],
+  "kind": "STUDY_COMPARE_GRAPH_PAIR",
+  "left": {
+    "context_digest": "9d55b4a5604285e426b317f7f4732b35ca1e9df044f7015b3ae6a6be0df5492b",
+    "context_uid": "7d293f75-52b6-5f27-99c4-54f2be3d8e59",
+    "memory_count": 4,
+    "name": "task-2/advisor1/reproducibility"
+  },
+  "method": "DETERMINISTIC_EMPTY_VIEW",
+  "operation": "COMPARE",
+  "pair_key": "70975ccc2474c24684df83fdc6fc811c4d91c86f7f9f9740d941a3163afd7d48",
+  "provider": {
+    "provider_calls": 0,
+    "provider_seconds": 0.0
+  },
+  "relations": [
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "fb400759-63ed-568a-b94e-5f0c2fe94b67",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000001",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "e52e8470-6419-5306-9ddd-00a86003dcf3",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000002",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "8f4edf8c-491d-56fe-bde4-d9ce25d6de50",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000003",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "87662a7e-ffc7-521a-a06c-7db8184377e8",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000004",
+      "status": "RESOLVED"
+    }
+  ],
+  "right": {
+    "context_digest": "4f418de80380fe9f5a221e35394c0170a3e99b0cde0bfca316db082d07101538",
+    "context_uid": "b839b146-7576-5ec4-93a5-a98f64eba1ec",
+    "memory_count": 0,
+    "name": "task-2/participant/proposal-workspace"
+  },
+  "schema_version": 1,
+  "semantic_content_in_participant_report": false,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

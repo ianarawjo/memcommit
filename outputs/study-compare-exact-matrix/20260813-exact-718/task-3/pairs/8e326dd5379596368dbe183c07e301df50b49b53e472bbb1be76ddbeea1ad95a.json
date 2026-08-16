@@ -1,0 +1,379 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:37:51.825121+00:00",
+      "frames": [
+        {
+          "context_digest": "db438345c3ec4b3f69562a274c9f81a93bd6e6df97bc89b60abcd193dc89b562",
+          "context_name": "task-3/local/personal-memory/2024/04",
+          "context_uid": "206e1cd3-93da-5341-bda3-95cde4814c20",
+          "memories": [
+            {
+              "content": "The user completed a routine dental checkup in April 2024.",
+              "content_digest": "bbaa093f8dee5b5ee42c4a180e683fce00bc9364f5a009b9fa1e7f2ac233bc01",
+              "position": 0,
+              "uid": "9cea83cd-e39f-53bd-9e79-d30aa465ad02"
+            },
+            {
+              "content": "When the user heard three checkup questions in succession, they asked for the first question again.",
+              "content_digest": "e1b76973991f009295489249af1a7cd0fa7957f24f330e39337e01e5b1acdcbb",
+              "position": 1,
+              "uid": "51f8326f-60d4-5ba3-ba32-a04331dcb930"
+            },
+            {
+              "content": "At the next visit, when questions were asked one at a time, the user answered each without omission.",
+              "content_digest": "30c943f2e043f485a7a7e1ac19343c753ed8f834d00716725322505e28e0b15a",
+              "position": 2,
+              "uid": "cd0bce79-71d5-5d46-9c68-8a1d096dd53a"
+            },
+            {
+              "content": "The user called to reschedule an appointment at lunchtime but did not reach anyone.",
+              "content_digest": "1d4bd2122c160d35080b232ebb8ae5080c2ce34124645b3ec8040d7d29af9752",
+              "position": 3,
+              "uid": "71e27b0c-5c10-5102-aeac-98b0841723f2"
+            },
+            {
+              "content": "After returning home, the user kept a photo of the paper instructions received at the clinic.",
+              "content_digest": "68cddec62167a3910122a129dcfdb3c5604a4fea996d01f870734739dd3b0221",
+              "position": 4,
+              "uid": "86ad5410-0cc7-5876-8e3a-a3f0dd1680c7"
+            },
+            {
+              "content": "On a day the user put only the visit address in the calendar, they had to search again for the floor.",
+              "content_digest": "0d6926aba2c90930bfa984d7af1b12c60f35e53ba9916dfbee2c2391961db1a9",
+              "position": 5,
+              "uid": "aab36950-7e2b-588f-bb7c-d3bd6e36c501"
+            },
+            {
+              "content": "On a day the user shared the checkup time with their older sister, the sister called to check in after the user returned home.",
+              "content_digest": "b7d0fea8e8f2fc13126453039dcedebcda3c67ce2ea96c4a2d5b60365448e0e3",
+              "position": 6,
+              "uid": "50ac9268-9259-56fd-8678-1dfc8f919efb"
+            },
+            {
+              "content": "The scheduling staff at that clinic expect requests to change appointments to arrive by telephone.",
+              "content_digest": "28eec4f0ef0b96764a3f7ea54ee3db9fd4d5f1b62a5a2fa29d0a6193f1d8a18c",
+              "position": 7,
+              "uid": "5141ca66-9860-5ec5-b028-ac8670f586ca"
+            },
+            {
+              "content": "Before adding a follow-up visit to the calendar, confirm the date, time, address, and floor with the user.",
+              "content_digest": "0555c837f721fccd5918b2275086bb39c75e016e27574027185cfbada1c766af",
+              "position": 8,
+              "uid": "e265e637-fa41-53d0-aa9b-0102e9962f9a"
+            },
+            {
+              "content": "The local agent can track completed checkups and scheduled appointments but cannot determine whether a follow-up visit is needed.",
+              "content_digest": "be24b47ccb071438fd01bb99b11af3c63f22e260312a26d901824e6bb0d4cd89",
+              "position": 9,
+              "uid": "7aece7ae-b327-537e-9cef-fe24ee8fc618"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "1c39bf1d-aba0-4c9b-8b32-5bc61abeef42"
+        },
+        {
+          "context_digest": "e56d4062f59b72f23e5414f759cd9f2b09c659d820a29a979fe2edb8bfc3e7a4",
+          "context_name": "task-3/local/personal-memory/2025/01",
+          "context_uid": "2ce7ce06-145c-50c7-bfb4-cb175b9a5255",
+          "memories": [
+            {
+              "content": "One of the user's identity documents needs renewal in the second half of 2025.",
+              "content_digest": "0ade63adc8aedc4dbc0003f2cbc2759010c8bf2645a95fedd3db28b7cfbe0daa",
+              "position": 0,
+              "uid": "50911f7e-75a1-5099-99f1-e471bb8e6cb6"
+            },
+            {
+              "content": "The user postponed an application until the next day after spending time looking for document photos in scattered folders.",
+              "content_digest": "fa1703848374c3364cf49be01e115e08897e16a4ccda3c9edef1212189159ce6",
+              "position": 1,
+              "uid": "d5bd9f79-7295-5014-9668-83b7cffc78e2"
+            },
+            {
+              "content": "After gathering the necessary copies in one folder, the user completed the renewal form in one sitting.",
+              "content_digest": "133721b244e02fce2fe24312b703e59225c023d65bea31bf65decb36a18b4ba5",
+              "position": 2,
+              "uid": "5f92f6a3-1739-580c-bd63-1a936098ccd0"
+            },
+            {
+              "content": "The user entered an abbreviated name on an official form and then discovered that it differed from the supporting document.",
+              "content_digest": "d32485dcfd1311d0739bf9887a330f25bf9b3f47f077c56ec7cdb667bde20a55",
+              "position": 3,
+              "uid": "929107ac-c62d-5920-9f71-12d4c9a102e9"
+            },
+            {
+              "content": "On the next application, after comparing the name with the source document, the user did not receive a correction request.",
+              "content_digest": "e6aa9e63c72f762c00824787c3b971f2cdf76a343c336f329e5b28b0f164d02d",
+              "position": 4,
+              "uid": "df8b90c2-4310-5e89-b979-508309bf6b04"
+            },
+            {
+              "content": "The user put only the submission deadline in the calendar and missed the application deadline by one day because they did not check the issuance period.",
+              "content_digest": "995703686975cdd718d999557d4b5ca13a95c3c1eabfbb73808bb5150eda824b",
+              "position": 5,
+              "uid": "306b9df1-d713-5413-b448-e2b42376d827"
+            },
+            {
+              "content": "On the next application, the user recorded the expected issuance date separately in the calendar.",
+              "content_digest": "b83c9061bf30d64e48b74959513fd37e7ab043446dae7e4fd284102a249a1240",
+              "position": 6,
+              "uid": "870b57b5-4cdb-54fc-b17f-8ffb86dad802"
+            },
+            {
+              "content": "Staff at a public-service counter expect a person requesting identity verification to bring an original as well as a copy.",
+              "content_digest": "eae3721b7f1d905172c169c5a483d2af74aa40bced23d1bbcb8d571ab27df706",
+              "position": 7,
+              "uid": "a0fe456c-0794-5bce-8ef9-9558e9833471"
+            },
+            {
+              "content": "When planning an official application, put both the submission deadline and expected issuance date in the calendar and verify them.",
+              "content_digest": "c5b37d86ef85d5023b60578e7f5f6af1bc49711e32ecc0255bc826a743dce0e1",
+              "position": 8,
+              "uid": "111972b9-e05f-5e1b-b121-ef9e51572d1d"
+            },
+            {
+              "content": "The local agent cannot determine the current validity of an identity document without its expiration date.",
+              "content_digest": "ebc9f4fe21d4ad7e53681d32ded2c049c7d4bf57e24ef71213a5ebdbaaaee521",
+              "position": 9,
+              "uid": "c9872898-ec4f-576e-b154-ff6fda581a1a"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "ffcf6741-6f85-4891-9db1-d233e4e413a2"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames share no equivalent claim, but they contain parallel, scope-dependent calendar practices and limits on unsupported local-agent determinations. Otherwise, each contributes independent observations and policies concerning dental visits or identity-document applications, with no substantive conflict or ambiguity.",
+      "relations": [
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "1c39bf1d-aba0-4c9b-8b32-5bc61abeef42",
+              "memory_uid": "aab36950-7e2b-588f-bb7c-d3bd6e36c501"
+            },
+            {
+              "frame_uid": "1c39bf1d-aba0-4c9b-8b32-5bc61abeef42",
+              "memory_uid": "e265e637-fa41-53d0-aa9b-0102e9962f9a"
+            },
+            {
+              "frame_uid": "ffcf6741-6f85-4891-9db1-d233e4e413a2",
+              "memory_uid": "306b9df1-d713-5413-b448-e2b42376d827"
+            },
+            {
+              "frame_uid": "ffcf6741-6f85-4891-9db1-d233e4e413a2",
+              "memory_uid": "870b57b5-4cdb-54fc-b17f-8ffb86dad802"
+            },
+            {
+              "frame_uid": "ffcf6741-6f85-4891-9db1-d233e4e413a2",
+              "memory_uid": "111972b9-e05f-5e1b-b121-ef9e51572d1d"
+            }
+          ],
+          "reason": "The explicit task scope explains the difference: visit planning requires date, time, address, and floor, whereas application planning requires the submission deadline and expected issuance date.",
+          "status": "RESOLVED",
+          "summary": "Calendar completeness requires different verified details for clinic visits and official applications.",
+          "uid": "99492dcd-47f8-5ed8-8eac-c3c02fcb0d76"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "1c39bf1d-aba0-4c9b-8b32-5bc61abeef42",
+              "memory_uid": "7aece7ae-b327-537e-9cef-fe24ee8fc618"
+            },
+            {
+              "frame_uid": "ffcf6741-6f85-4891-9db1-d233e4e413a2",
+              "memory_uid": "c9872898-ec4f-576e-b154-ff6fda581a1a"
+            }
+          ],
+          "reason": "For dental care it cannot determine whether follow-up is needed, while for identity documents it cannot determine current validity without an expiration date; the distinct domains and determinations must be preserved.",
+          "status": "RESOLVED",
+          "summary": "The local agent has domain-specific limits on determining an unresolved status.",
+          "uid": "2f060cca-accc-558b-aba3-560b39273fd5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1c39bf1d-aba0-4c9b-8b32-5bc61abeef42",
+              "memory_uid": "9cea83cd-e39f-53bd-9e79-d30aa465ad02"
+            }
+          ],
+          "reason": "This is an independently useful dental-history fact with no corresponding identity-document claim.",
+          "status": "RESOLVED",
+          "summary": "The user completed a routine dental checkup in April 2024.",
+          "uid": "441a757c-6cd9-5ce9-81d8-c7b05e046f19"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1c39bf1d-aba0-4c9b-8b32-5bc61abeef42",
+              "memory_uid": "51f8326f-60d4-5ba3-ba32-a04331dcb930"
+            },
+            {
+              "frame_uid": "1c39bf1d-aba0-4c9b-8b32-5bc61abeef42",
+              "memory_uid": "cd0bce79-71d5-5d46-9c68-8a1d096dd53a"
+            }
+          ],
+          "reason": "The paired observations describe one dental-communication pacing effect absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Presenting checkup questions one at a time supported complete responses, unlike asking several in succession.",
+          "uid": "3088a53d-b4dd-51d3-9b68-9538b467f7b1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1c39bf1d-aba0-4c9b-8b32-5bc61abeef42",
+              "memory_uid": "71e27b0c-5c10-5102-aeac-98b0841723f2"
+            }
+          ],
+          "reason": "This specific failed contact attempt is independently useful and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A lunchtime call to reschedule an appointment went unanswered.",
+          "uid": "26c5edc5-b756-5bd1-963d-808ea157bcec"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1c39bf1d-aba0-4c9b-8b32-5bc61abeef42",
+              "memory_uid": "86ad5410-0cc7-5876-8e3a-a3f0dd1680c7"
+            }
+          ],
+          "reason": "This information-retention behavior is unique to the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user retained a photograph of the clinic's paper instructions after returning home.",
+          "uid": "5aed5991-becc-50ac-8735-4368bd1f9cdf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1c39bf1d-aba0-4c9b-8b32-5bc61abeef42",
+              "memory_uid": "50ac9268-9259-56fd-8678-1dfc8f919efb"
+            }
+          ],
+          "reason": "This family-support observation is independently useful and appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Sharing the checkup time enabled the user's older sister to check in after the visit.",
+          "uid": "3533e8ca-d331-5c42-b05d-b003ee190d23"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1c39bf1d-aba0-4c9b-8b32-5bc61abeef42",
+              "memory_uid": "5141ca66-9860-5ec5-b028-ac8670f586ca"
+            }
+          ],
+          "reason": "This clinic communication policy is one-sided and distinct from the compared frame's public-service requirements.",
+          "status": "RESOLVED",
+          "summary": "The clinic expects appointment-change requests to be made by telephone.",
+          "uid": "157f2d52-9376-5e64-933e-5a5e9a5f627c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ffcf6741-6f85-4891-9db1-d233e4e413a2",
+              "memory_uid": "50911f7e-75a1-5099-99f1-e471bb8e6cb6"
+            }
+          ],
+          "reason": "This renewal-timing fact has no corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "One identity document required renewal in the second half of 2025.",
+          "uid": "3bce19db-0123-5779-b24e-b1da4eb56c5f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ffcf6741-6f85-4891-9db1-d233e4e413a2",
+              "memory_uid": "d5bd9f79-7295-5014-9668-83b7cffc78e2"
+            },
+            {
+              "frame_uid": "ffcf6741-6f85-4891-9db1-d233e4e413a2",
+              "memory_uid": "5f92f6a3-1739-580c-bd63-1a936098ccd0"
+            }
+          ],
+          "reason": "The paired observations express one application-preparation effect unique to the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Centralizing necessary document copies avoided the delay associated with searching scattered folders and supported completing the form in one sitting.",
+          "uid": "320d2c17-5676-5929-a3a5-9a50c9a5444c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ffcf6741-6f85-4891-9db1-d233e4e413a2",
+              "memory_uid": "929107ac-c62d-5920-9f71-12d4c9a102e9"
+            },
+            {
+              "frame_uid": "ffcf6741-6f85-4891-9db1-d233e4e413a2",
+              "memory_uid": "df8b90c2-4310-5e89-b979-508309bf6b04"
+            }
+          ],
+          "reason": "The paired application observations establish one name-verification practice absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Comparing the official-form name with the supporting document prevented the mismatch previously caused by using an abbreviated name.",
+          "uid": "83697f4b-1057-5b07-af44-72ff202c3449"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ffcf6741-6f85-4891-9db1-d233e4e413a2",
+              "memory_uid": "a0fe456c-0794-5bce-8ef9-9558e9833471"
+            }
+          ],
+          "reason": "This documentary requirement is independently useful and appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Identity verification at the public-service counter requires both an original document and a copy.",
+          "uid": "1e96b8cd-972e-5be2-8d90-f6804cd7f3b5"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers renewal timing, document organization, exact-name checking, and original-and-copy requirements for identity verification.",
+        "differences": "Calendar details depend on the task: clinic visits require complete location information, while applications require submission and issuance dates. Local-agent limits likewise differ between assessing follow-up need and document validity.",
+        "reference_only": "The reference covers a completed checkup, question pacing, rescheduling by telephone, retained instructions, family check-ins, and clinic communication practice."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "ccddc470-06c0-4c92-a3a4-7bd7a21eeb5d"
+    },
+    "analysis_digest": "f55ea730bcfb49b5ca5c1cef1814188f5f64d8f30646a5601a876f76ec15ef68",
+    "key": "d40bda395cbe116d65c96f0899899cf7fd68f2045d8f09b32964eb4625a5ed49",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 50.304629791997286,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "d40bda395cbe116d65c96f0899899cf7fd68f2045d8f09b32964eb4625a5ed49",
+  "created_at": "2026-08-13T18:38:42.129462Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/04",
+  "pair_key": "8e326dd5379596368dbe183c07e301df50b49b53e472bbb1be76ddbeea1ad95a",
+  "provider_seconds": 50.304629791997286,
+  "right": "task-3/local/personal-memory/2025/01",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

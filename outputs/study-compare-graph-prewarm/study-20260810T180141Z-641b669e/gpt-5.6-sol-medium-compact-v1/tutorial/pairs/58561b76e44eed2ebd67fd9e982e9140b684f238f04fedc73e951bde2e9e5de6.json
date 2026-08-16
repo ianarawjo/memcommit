@@ -1,0 +1,110 @@
+{
+  "coverage": {
+    "expected": 4,
+    "observed": 4
+  },
+  "created_at": "2026-08-10T23:43:57.571295Z",
+  "description_digest": "5fe9e2dcbf53886546aa294a60698676924bbb49337e5fdf37d33e2c5c40f159",
+  "issues": [],
+  "kind": "STUDY_COMPARE_GRAPH_PAIR",
+  "left": {
+    "context_digest": "5fe9e2dcbf53886546aa294a60698676924bbb49337e5fdf37d33e2c5c40f159",
+    "context_uid": "d5d0a8b4-d425-5c9f-9325-56329df711ef",
+    "memory_count": 3,
+    "name": "practice/description"
+  },
+  "method": "COMPACT_DECISION_VECTOR_V1",
+  "operation": "COMPARE",
+  "pair_key": "58561b76e44eed2ebd67fd9e982e9140b684f238f04fedc73e951bde2e9e5de6",
+  "provider": {
+    "condition": "COMPACT_DECISION_VECTOR",
+    "contract_valid": true,
+    "elapsed_seconds": 10.75396533300227,
+    "error_type": null,
+    "failure_category": null,
+    "operation": "compare_contexts_compact_ab_v1",
+    "prompt_chars": 5509,
+    "provider_calls": 1,
+    "provider_run": {
+      "completion_tokens": null,
+      "identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "operation": "compare_contexts_compact_ab_v1",
+      "prompt_tokens": null,
+      "upstream_model": "gpt-5.6-sol",
+      "upstream_provider": "openai-codex"
+    },
+    "provider_seconds": 10.753483417007374,
+    "response_bytes": 199,
+    "response_chars": 199,
+    "schema_chars": 1375,
+    "validation_error": null,
+    "validation_seconds": 0.00047250000352505594
+  },
+  "relations": [
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "89ff1887-d807-5a04-94d7-424fff9a93b9",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000001",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "1e046596-b6f1-5623-aebb-52c46b4a54be",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000002",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "5faaf0a4-d5b8-54d0-af25-c056e9058c98",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000003",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "ac614cce-7803-539d-b05f-44a802da25fa",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000004",
+      "status": "RESOLVED"
+    }
+  ],
+  "right": {
+    "context_digest": "f695e7516f6376fadb5a3c6887c345ef1f3f834fd60ce7e149a774321801dec0",
+    "context_uid": "7e48e68e-3c6f-541b-bfc1-e307abcc7a4f",
+    "memory_count": 1,
+    "name": "practice/source"
+  },
+  "schema_version": 1,
+  "semantic_content_in_participant_report": false,
+  "state": "EXACT_PREWARM",
+  "task": "tutorial"
+}

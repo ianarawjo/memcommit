@@ -1,0 +1,388 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:47:43.779529+00:00",
+      "frames": [
+        {
+          "context_digest": "0b8af0ea4e580cc332939d026149e543e9251c54de246e3eabb83c941e6c12f2",
+          "context_name": "task-3/local/personal-memory/2024/12",
+          "context_uid": "66c3e5de-61bb-5795-8e5a-4e28f64be857",
+          "memories": [
+            {
+              "content": "The user used an accessible entrance at a clinic in December 2024.",
+              "content_digest": "a940bc9fb7423a1bdb9dde547cd39eb8ad66d4fa3051649c62b042fc63935263",
+              "position": 0,
+              "uid": "a6923620-267d-5129-b8c4-cd9b1e1a1e7b"
+            },
+            {
+              "content": "On a day snow had accumulated and blocked the main-entrance ramp, the user went to a side entrance.",
+              "content_digest": "460c05d8e8b4b7443ff42cbeead66e07201846394bcbe5948f63e585a197006f",
+              "position": 1,
+              "uid": "fb0e1d1f-0ef5-5214-b6d7-f6ca5c68f582"
+            },
+            {
+              "content": "The user learned on site that the elevator was under inspection and delayed the appointment.",
+              "content_digest": "b5efa024c597b57651178431d22173d4ca1242c3a4c9607f8bd5a7ff681af6f4",
+              "position": 2,
+              "uid": "4cb45120-4376-5c7b-ae92-faa9e4b9330c"
+            },
+            {
+              "content": "The day before the next visit, the user called to check whether the elevator would be operating.",
+              "content_digest": "93c66066de480a4d2f30b7b7c4d955acfceb227ac898766b6375829804b580eb",
+              "position": 3,
+              "uid": "479f4434-879c-5335-b0c9-c0bfa19ecdcd"
+            },
+            {
+              "content": "The user waited for their turn in front of a ticket machine near the waiting chairs.",
+              "content_digest": "fada8c09d46af2e1bcbd2b1e97d9cb786ceca83fc13d1240627639dd6cb96e65",
+              "position": 4,
+              "uid": "0f2c78a7-8f92-573d-af8a-a360ceb77b24"
+            },
+            {
+              "content": "On a day the user waited in a corridor without chairs, they leaned against the wall and changed position several times.",
+              "content_digest": "0037afaeb85d94f985b1628b7b8f8194fb00d7d7e72e1746c6bae2c2ba66fe6f",
+              "position": 5,
+              "uid": "7b9197ac-4263-5169-8d3b-d34f5d893d36"
+            },
+            {
+              "content": "On a day their older sister accompanied them, the user found a place to sit immediately after reception.",
+              "content_digest": "1ae59de552a922fd3b4d39e7e5dc1ec65ff08ee68e3448f2152f27dfec710a5a",
+              "position": 6,
+              "uid": "7b0b7571-f29c-56e5-a27a-82d69a4a6982"
+            },
+            {
+              "content": "Reception staff expect that a first-time visitor may ask where the accessible entrance is.",
+              "content_digest": "7dc3300dc630b737c0f7b437eba30179aa6aaa03efd61c968604ee505a43aa73",
+              "position": 7,
+              "uid": "e9515d6b-10d9-579f-abf7-5030db64218a"
+            },
+            {
+              "content": "The local agent cannot infer the user's condition from a record of using an accessible route alone.",
+              "content_digest": "2d8a50f62f32c43ca62e1e23b75c34361ece43fd8367964174fdc73d66795df4",
+              "position": 8,
+              "uid": "8e57141d-c603-56cd-ab9e-c14b4e944b45"
+            },
+            {
+              "content": "Snow accumulation and snow-removal work can temporarily block an entrance route used under ordinary conditions.",
+              "content_digest": "4fb152c120860688789bdd4b825de45799e9fa00c0c18c334492dd4b274adde9",
+              "position": 9,
+              "uid": "a6076438-307c-56fe-9d2c-848181846ce5"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "1ff50216-e902-4061-b5cf-0da2692d9795"
+        },
+        {
+          "context_digest": "ca8765e237d85d9bf3ecb78fe1d9a2487066ae14dae9509e40b324ac1277d75a",
+          "context_name": "task-3/local/personal-memory/2025/06",
+          "context_uid": "870f7336-726a-5d9c-bae4-12585311463e",
+          "memories": [
+            {
+              "content": "The user keeps a portable fan charger on a living-room shelf.",
+              "content_digest": "5ab7fad8ae1b3f56bdbc1c3ebf593a3d452590341b6de115f830fdf0d994c12e",
+              "position": 0,
+              "uid": "853a158c-edf9-578a-8e75-3d5daff6e4db"
+            },
+            {
+              "content": "On a hot day, the user worked with only the window open and lost focus in the afternoon.",
+              "content_digest": "3c4225f055db293c53a5a137d0c6353005bcb55b71dbc61bc69831aa5c3c08de",
+              "position": 1,
+              "uid": "f7d5ebdc-0cae-5e07-a060-e129b5a05570"
+            },
+            {
+              "content": "In the room where the user closed the curtains the next morning, the temperature rose less.",
+              "content_digest": "4cb4d1892db8769f4c066859dbb021c67d5015114f8522dfd904057061600ab5",
+              "position": 2,
+              "uid": "99e5c522-535b-5015-8617-06f645147f8b"
+            },
+            {
+              "content": "The user took the portable fan out without charging it, and it turned off after an hour.",
+              "content_digest": "0e1e0e9e985bea5be6976010a390f484b60a931ea7dfaf50a73c66616a73d5da",
+              "position": 3,
+              "uid": "7b3bf50c-63aa-5a1e-9a53-7befea25a468"
+            },
+            {
+              "content": "Before the next outing, the user charged it the night before and used the fan throughout the trip.",
+              "content_digest": "fd4282d169da18d902fc5f766d4e38131240bf3a51e6fa0c5bad69f80f1492af",
+              "position": 4,
+              "uid": "ca8de091-afb2-537f-a83a-09769056879d"
+            },
+            {
+              "content": "On a hot weekend, the user was eating lunch in their father's yard and moved indoors.",
+              "content_digest": "44e7d3bc5eaecec68ad6e7c0979572102f3c717b37712fcfada769959443ae8e",
+              "position": 5,
+              "uid": "4a0604fb-10b4-5132-a6de-ab6a229ff2be"
+            },
+            {
+              "content": "When the user returned to the yard in the evening, shade and wind led them to stay another hour.",
+              "content_digest": "7495f1d4ba2d1d732ab5c962f45b5b0c9c765ee21767373552247a823cf90984",
+              "position": 6,
+              "uid": "1f90941e-776f-5cba-9783-c392983dd72c"
+            },
+            {
+              "content": "The user's father prefers to move an outdoor meal to the evening rather than proceed at midday when the temperature is high.",
+              "content_digest": "5f9628a28b5c6f3b20a371d1c039f37f26c50832970936c8a243f161fd8288f4",
+              "position": 7,
+              "uid": "63391d26-7417-5ea6-ac0a-460af7489963"
+            },
+            {
+              "content": "The local agent can compare past responses to heat but cannot know the current felt temperature without an indoor temperature record.",
+              "content_digest": "815f4fb2c833d75e30cb0e323f5708e356bf38e0bbb573865092be48fbf2746a",
+              "position": 8,
+              "uid": "31502797-1379-5ec4-bd1b-a2e1515fa56e"
+            },
+            {
+              "content": "A room with a west-facing window can warm rapidly in the late afternoon.",
+              "content_digest": "448908f6242021de6d41ddee8121714a1388db6e4e3d067de27e6950ee712c23",
+              "position": 9,
+              "uid": "68f85c30-62c4-579d-97cd-9f401c686e63"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "57ea1efa-91aa-41bf-971a-e087628d5c47"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The reference frame concerns clinic access, elevator availability, and waiting conditions; the compared frame concerns managing heat at home and outdoors. Their details are independently useful, with no shared operational claim, scope-based variation, or direct contradiction supported by the payload.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1ff50216-e902-4061-b5cf-0da2692d9795",
+              "memory_uid": "a6923620-267d-5129-b8c4-cd9b1e1a1e7b"
+            },
+            {
+              "frame_uid": "1ff50216-e902-4061-b5cf-0da2692d9795",
+              "memory_uid": "fb0e1d1f-0ef5-5214-b6d7-f6ca5c68f582"
+            }
+          ],
+          "reason": "These memories form one clinic-entry account absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user used clinic access routes, including a side entrance when snow blocked the main ramp.",
+          "uid": "3a67769d-0e46-5d51-aa94-e8cdf5e6ea7f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1ff50216-e902-4061-b5cf-0da2692d9795",
+              "memory_uid": "4cb45120-4376-5c7b-ae92-faa9e4b9330c"
+            },
+            {
+              "frame_uid": "1ff50216-e902-4061-b5cf-0da2692d9795",
+              "memory_uid": "479f4434-879c-5335-b0c9-c0bfa19ecdcd"
+            }
+          ],
+          "reason": "These memories describe one disruption-and-follow-up sequence absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "An elevator inspection delayed an appointment and prompted the user to check availability before the next visit.",
+          "uid": "7f192f88-a57a-56e0-9e55-832200a0b8cc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1ff50216-e902-4061-b5cf-0da2692d9795",
+              "memory_uid": "0f2c78a7-8f92-573d-af8a-a360ceb77b24"
+            },
+            {
+              "frame_uid": "1ff50216-e902-4061-b5cf-0da2692d9795",
+              "memory_uid": "7b9197ac-4263-5169-8d3b-d34f5d893d36"
+            },
+            {
+              "frame_uid": "1ff50216-e902-4061-b5cf-0da2692d9795",
+              "memory_uid": "7b0b7571-f29c-56e5-a27a-82d69a4a6982"
+            }
+          ],
+          "reason": "These memories jointly document variable clinic seating and waiting experiences not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user's clinic waiting conditions varied between queuing near chairs, standing in a chairless corridor, and finding immediate seating when accompanied.",
+          "uid": "5f58e058-a866-5787-a816-b77658302fb1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1ff50216-e902-4061-b5cf-0da2692d9795",
+              "memory_uid": "e9515d6b-10d9-579f-abf7-5030db64218a"
+            }
+          ],
+          "reason": "This staff expectation is independently useful and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Reception staff expect first-time visitors may request directions to the accessible entrance.",
+          "uid": "bc21fecf-4a18-56a4-aebf-3a64f546cab6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1ff50216-e902-4061-b5cf-0da2692d9795",
+              "memory_uid": "8e57141d-c603-56cd-ab9e-c14b4e944b45"
+            }
+          ],
+          "reason": "This inference constraint concerns accessibility-route evidence, which the compared frame does not address.",
+          "status": "RESOLVED",
+          "summary": "Using an accessible route alone does not justify inferring the user's condition.",
+          "uid": "b35b1131-f897-5e78-b9ae-23e73bfae26c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1ff50216-e902-4061-b5cf-0da2692d9795",
+              "memory_uid": "a6076438-307c-56fe-9d2c-848181846ce5"
+            }
+          ],
+          "reason": "This general access-route condition is absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Snow accumulation and removal work can temporarily obstruct an ordinarily used entrance route.",
+          "uid": "e78f7d83-a888-5b31-95fc-848559e28629"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "57ea1efa-91aa-41bf-971a-e087628d5c47",
+              "memory_uid": "853a158c-edf9-578a-8e75-3d5daff6e4db"
+            }
+          ],
+          "reason": "This storage detail is independently useful and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user keeps a portable fan charger on a living-room shelf.",
+          "uid": "de8e37db-04fc-50b8-9695-c2e0e08969f1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "57ea1efa-91aa-41bf-971a-e087628d5c47",
+              "memory_uid": "f7d5ebdc-0cae-5e07-a060-e129b5a05570"
+            },
+            {
+              "frame_uid": "57ea1efa-91aa-41bf-971a-e087628d5c47",
+              "memory_uid": "99e5c522-535b-5015-8617-06f645147f8b"
+            }
+          ],
+          "reason": "These memories jointly describe passive indoor heat-management experience not covered by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Indoor heat affected the user's focus, while closing curtains the next morning reduced the room's temperature rise.",
+          "uid": "6972b940-0da4-5a80-b820-d721e7f43b79"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "57ea1efa-91aa-41bf-971a-e087628d5c47",
+              "memory_uid": "7b3bf50c-63aa-5a1e-9a53-7befea25a468"
+            },
+            {
+              "frame_uid": "57ea1efa-91aa-41bf-971a-e087628d5c47",
+              "memory_uid": "ca8de091-afb2-537f-a83a-09769056879d"
+            }
+          ],
+          "reason": "These memories form one charging failure-and-follow-up sequence absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "After an uncharged fan stopped within an hour, charging it the night before enabled use throughout the next trip.",
+          "uid": "e1a4a5ca-b437-595b-b035-19c4cd140314"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "57ea1efa-91aa-41bf-971a-e087628d5c47",
+              "memory_uid": "4a0604fb-10b4-5132-a6de-ab6a229ff2be"
+            },
+            {
+              "frame_uid": "57ea1efa-91aa-41bf-971a-e087628d5c47",
+              "memory_uid": "1f90941e-776f-5cba-9783-c392983dd72c"
+            }
+          ],
+          "reason": "These memories jointly describe time-dependent outdoor heat response not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user moved indoors during a hot outdoor lunch but later stayed in the yard when evening shade and wind improved conditions.",
+          "uid": "6236e446-304d-5578-83e3-b5c5ec237686"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "57ea1efa-91aa-41bf-971a-e087628d5c47",
+              "memory_uid": "63391d26-7417-5ea6-ac0a-460af7489963"
+            }
+          ],
+          "reason": "This heat-related scheduling preference has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user's father prefers moving outdoor meals to the evening when midday temperatures are high.",
+          "uid": "8ecfa61e-2c27-5a53-b198-984b688c6390"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "57ea1efa-91aa-41bf-971a-e087628d5c47",
+              "memory_uid": "31502797-1379-5ec4-bd1b-a2e1515fa56e"
+            }
+          ],
+          "reason": "This inference constraint concerns present thermal experience, which the reference frame does not address.",
+          "status": "RESOLVED",
+          "summary": "Past heat responses can be compared, but current felt temperature cannot be known without an indoor temperature record.",
+          "uid": "0673ae69-d3fa-5120-9b70-9d5e83cfb0a1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "57ea1efa-91aa-41bf-971a-e087628d5c47",
+              "memory_uid": "68f85c30-62c4-579d-97cd-9f401c686e63"
+            }
+          ],
+          "reason": "This environmental heat factor is absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A west-facing window can cause rapid late-afternoon room warming.",
+          "uid": "a43441f3-aad9-5d38-9a62-c5b294fdc972"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame uniquely covers passive heat management, fan storage and charging, outdoor timing choices, heat-related concentration, room-warming factors, and limits on inferring current felt temperature.",
+        "differences": "",
+        "reference_only": "The reference uniquely describes clinic entrance navigation, weather-related access barriers, elevator disruption and advance checking, variable seating, staff expectations, and limits on inferring a condition from route use."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "8f807f88-e04f-4ac0-ae59-059d472ac89b"
+    },
+    "analysis_digest": "1987f2efbcf2867c1c33f07359d8d5172f5b03634eca51b04e68fffab586b768",
+    "key": "b7a4d23c6b7740643a19da9e4952a110dcd761638a6dbe114ef0ab6dcea1b256",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 45.28286633400057,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "b7a4d23c6b7740643a19da9e4952a110dcd761638a6dbe114ef0ab6dcea1b256",
+  "created_at": "2026-08-13T18:48:29.061960Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/12",
+  "pair_key": "1d1259d0da892047f0dea877365480d35bd647b4867f05f9a333c1431ce6b9c1",
+  "provider_seconds": 45.28286633400057,
+  "right": "task-3/local/personal-memory/2025/06",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

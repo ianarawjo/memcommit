@@ -1,0 +1,272 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:24:56.502566+00:00",
+      "frames": [
+        {
+          "context_digest": "3dd1208c3f947a57bc5f1d490a28c999913d43cad775b2b01e50c6059d6b660e",
+          "context_name": "task-2/advisor1/safety",
+          "context_uid": "cd6c1fab-786a-52ea-9437-9a4d209ba419",
+          "memories": [
+            {
+              "content": "Specify the order and recipients for reporting serious discomfort during the study.",
+              "content_digest": "1de38a3ec5fc3267ebeb35482a458d4aaf50d2aea44c6dba334f184e50ddddd2",
+              "position": 0,
+              "uid": "9d6f5228-d182-571a-83d2-6a67becb7736"
+            },
+            {
+              "content": "Field staff rely on a pre-defined contact sequence when serious discomfort is reported.",
+              "content_digest": "ed3a3b19d92a50c7dd324981b702bac31e0130fda38fe37150e500481ed11d84",
+              "position": 1,
+              "uid": "00ed485d-66c2-59ad-9c5b-9ae445412690"
+            },
+            {
+              "content": "Establish criteria for halting the use of a design alternative if recurring severe errors appear during formative evaluation.",
+              "content_digest": "dcca56df756b89f89a0a9dbf2bf45aee6480392b368c9cf3402223d3084b801b",
+              "position": 2,
+              "uid": "9c6e1561-f671-52cb-aa67-245cc4987ad4"
+            },
+            {
+              "content": "Do not include a design alternative halted for safety reasons in subsequent evaluation iterations without modification.",
+              "content_digest": "01668098161666622f4d7ed8298e3e63a06fa9b10a4cfd53b200d820f96f5c50",
+              "position": 3,
+              "uid": "2381ecf7-2b11-583d-91d9-0a5cfc279ba1"
+            },
+            {
+              "content": "Even in controlled environments, delayed prototype recovery procedures increase session interruption time and alter data collection conditions for the same task.",
+              "content_digest": "fd0f364ef66cfa7be937779ed4ce3ffb1a406bc227d09c26b288a751c5e0d427",
+              "position": 4,
+              "uid": "c5ce1b00-36d9-5cdd-a318-93b88ca0e322"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "d9158ca9-6618-4a79-a44c-41cf83e08564"
+        },
+        {
+          "context_digest": "e70e4eaff26e4baf1b346a4ecd2b44ed9f9ccac9e205b7b82572dc8ef0e217c4",
+          "context_name": "task-2/advisor2/emphasis",
+          "context_uid": "398f9930-3a0f-5de0-a339-ceba7dd5d1c6",
+          "memories": [
+            {
+              "content": "Do not exceed two primary HCI contributions that readers must remember.",
+              "content_digest": "59786866cf953172c2697f09398356a861e8ea448093102c32c9149f16b2e5c5",
+              "position": 0,
+              "uid": "d59dc83b-ce6a-5ac7-ab64-e5436df1f945"
+            },
+            {
+              "content": "Present each design or operational contribution as a single named sentence.",
+              "content_digest": "e0de5a9f1c1ca585fe062d7e11f8d2536cbe5ec4eefc16da6f7a0b62c0247d45",
+              "position": 1,
+              "uid": "328de462-17a4-551f-9f74-cb3118519e45"
+            },
+            {
+              "content": "In studies recruiting organizational members, emphasize workflow constraints.",
+              "content_digest": "c46efadebd89f3d757993baea79a5ef1386bbf6b4769ae3704ae62102397fc3b",
+              "position": 2,
+              "uid": "eab1dac5-8b61-5793-a56f-c4e3e64af190"
+            },
+            {
+              "content": "In studies recruiting organizational members, emphasize manager approval constraints.",
+              "content_digest": "2387fb9f3ab907e671fc9dcc2e7f067a84bdf1f5713d8385a32e39eb1e14751d",
+              "position": 3,
+              "uid": "f90e616a-d5a4-5cc2-86e4-62534a1faf83"
+            },
+            {
+              "content": "HCI reviewers find it difficult to identify primary contributions when named design and operational contributions exceed two.",
+              "content_digest": "04e080bfdf7277d04f0efc1b1d6775d06cba88aab5ff78bfd430674b004722a5",
+              "position": 4,
+              "uid": "78a1c87a-6936-516c-b578-8e97dc2e91f4"
+            },
+            {
+              "content": "Highlight one primary field operational decision to be changed by evaluation results as the central claim.",
+              "content_digest": "9a6bda883e68a2553a1238114d5de2746dc220948aebc1c2965cbb435318fe9c",
+              "position": 5,
+              "uid": "7af2db41-9091-5452-9beb-8fd7b48b7872"
+            },
+            {
+              "content": "Specify prototype features unnecessary for reviewing the primary field problem as secondary scope.",
+              "content_digest": "419ed0b0bccf1af7b30e0351f5e87b9e37e469cfa567e684695ffe4b6d39178a",
+              "position": 6,
+              "uid": "2312f35d-c17d-5af3-b84f-d2e671d7663f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "5e2a0c9c-ed8b-490e-bb3e-65dc95ac44ba"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate concerns. The reference focuses on participant-safety escalation, safety-based design handling, and prototype recovery effects, while the compared frame focuses on contribution framing, organizational recruitment constraints, a central operational claim, and secondary prototype scope.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d9158ca9-6618-4a79-a44c-41cf83e08564",
+              "memory_uid": "9d6f5228-d182-571a-83d2-6a67becb7736"
+            },
+            {
+              "frame_uid": "d9158ca9-6618-4a79-a44c-41cf83e08564",
+              "memory_uid": "00ed485d-66c2-59ad-9c5b-9ae445412690"
+            }
+          ],
+          "reason": "These reference-side statements express the same one-sided operational requirement and its field-use premise; the compared frame contains no claim about discomfort escalation.",
+          "status": "RESOLVED",
+          "summary": "Serious discomfort during a study is handled through a specified reporting sequence and set of recipients used by field staff.",
+          "uid": "3fe336e6-3193-5a85-99bb-8a641c3ed587"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d9158ca9-6618-4a79-a44c-41cf83e08564",
+              "memory_uid": "9c6e1561-f671-52cb-aa67-245cc4987ad4"
+            }
+          ],
+          "reason": "This is an independently useful reference-side rule about safety-triggered evaluation stopping, with no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "Formative evaluation should define criteria for halting a design alternative when severe errors recur.",
+          "uid": "17b47d5c-4b10-5109-a68a-2027f92ad138"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d9158ca9-6618-4a79-a44c-41cf83e08564",
+              "memory_uid": "2381ecf7-2b11-583d-91d9-0a5cfc279ba1"
+            }
+          ],
+          "reason": "This is an independently useful reference-side rule governing subsequent reuse after a safety halt, with no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "A design alternative halted for safety reasons must not enter later evaluation iterations unchanged.",
+          "uid": "32ffabe2-9b51-52ee-bed6-7a80d43ba9ae"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d9158ca9-6618-4a79-a44c-41cf83e08564",
+              "memory_uid": "c5ce1b00-36d9-5cdd-a318-93b88ca0e322"
+            }
+          ],
+          "reason": "This is an independently useful reference-side observation about session and data effects, with no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "Delayed prototype recovery increases interruption time and changes data-collection conditions even in controlled environments.",
+          "uid": "806ff7ac-9184-514f-85b1-e3c8d490dfc4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5e2a0c9c-ed8b-490e-bb3e-65dc95ac44ba",
+              "memory_uid": "d59dc83b-ce6a-5ac7-ab64-e5436df1f945"
+            },
+            {
+              "frame_uid": "5e2a0c9c-ed8b-490e-bb3e-65dc95ac44ba",
+              "memory_uid": "78a1c87a-6936-516c-b578-8e97dc2e91f4"
+            }
+          ],
+          "reason": "These compared-side statements express one contribution-limit policy together with its reviewer-centered rationale; the reference frame contains no corresponding claim.",
+          "status": "RESOLVED",
+          "summary": "Primary HCI contributions should not exceed two because larger sets are difficult for reviewers to identify and remember.",
+          "uid": "e48051fa-f2f0-5219-b465-4155e18ac657"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5e2a0c9c-ed8b-490e-bb3e-65dc95ac44ba",
+              "memory_uid": "328de462-17a4-551f-9f74-cb3118519e45"
+            }
+          ],
+          "reason": "This is an independently useful compared-side presentation rule, with no corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "Each design or operational contribution should be presented as one named sentence.",
+          "uid": "9d9e7b00-f986-5f30-8f5f-af32015690fa"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5e2a0c9c-ed8b-490e-bb3e-65dc95ac44ba",
+              "memory_uid": "eab1dac5-8b61-5793-a56f-c4e3e64af190"
+            },
+            {
+              "frame_uid": "5e2a0c9c-ed8b-490e-bb3e-65dc95ac44ba",
+              "memory_uid": "f90e616a-d5a4-5cc2-86e4-62534a1faf83"
+            }
+          ],
+          "reason": "These compared-side statements split one recruitment-context framing requirement into complementary constraint types; the reference frame contains no corresponding claim.",
+          "status": "RESOLVED",
+          "summary": "Studies recruiting organizational members should emphasize both workflow and manager-approval constraints.",
+          "uid": "83a8afc7-0b93-5a1e-92f3-ca51dad3fa25"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5e2a0c9c-ed8b-490e-bb3e-65dc95ac44ba",
+              "memory_uid": "7af2db41-9091-5452-9beb-8fd7b48b7872"
+            }
+          ],
+          "reason": "This is an independently useful compared-side claim-framing rule, with no corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "The central claim should identify one primary field operational decision that evaluation results are intended to change.",
+          "uid": "08aafb3f-e29a-5bab-ba5d-ba8a26ac2540"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5e2a0c9c-ed8b-490e-bb3e-65dc95ac44ba",
+              "memory_uid": "2312f35d-c17d-5af3-b84f-d2e671d7663f"
+            }
+          ],
+          "reason": "This is an independently useful compared-side scoping rule, with no corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "Prototype features unnecessary for reviewing the primary field problem should be explicitly designated as secondary scope.",
+          "uid": "0e72a0ba-e514-58fa-91f6-96cb87cb8841"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame limits and structures contributions, highlights organizational workflow and approval constraints, centers evaluation on one field decision, and separates unnecessary prototype features as secondary scope.",
+        "differences": "",
+        "reference_only": "The reference specifies serious-discomfort escalation, safety-based stopping and reuse rules for design alternatives, and the effects of delayed prototype recovery on sessions and data conditions."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "cfe56593-4e91-4092-9125-3c230412824f"
+    },
+    "analysis_digest": "d8c07004d440a90958eff3144c185e25fd2deb000be674d9d5cc9e09fad22d38",
+    "key": "874752275e3d03eea4a1bf9a18e08b0d937061cc7ddebc558e6ee6ffe26af54d",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 28.21920908299944,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "874752275e3d03eea4a1bf9a18e08b0d937061cc7ddebc558e6ee6ffe26af54d",
+  "created_at": "2026-08-13T18:25:24.721327Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/safety",
+  "pair_key": "9d7e389b744e72e3a36f8248bb36283b177cd6afd0389b73dceb7eaae2f1d346",
+  "provider_seconds": 28.21920908299944,
+  "right": "task-2/advisor2/emphasis",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

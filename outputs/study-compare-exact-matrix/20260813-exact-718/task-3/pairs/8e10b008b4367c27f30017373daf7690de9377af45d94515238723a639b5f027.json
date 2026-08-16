@@ -1,0 +1,352 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:45:01.359180+00:00",
+      "frames": [
+        {
+          "context_digest": "17b940da39446a9f934dff43ea7db561d14060561065852a34658fe4aaa1702f",
+          "context_name": "task-3/local/personal-memory/2024/10",
+          "context_uid": "7c55b789-a7d0-5070-9cf8-6f5e205415dc",
+          "memories": [
+            {
+              "content": "The user renewed their local library membership in October 2024.",
+              "content_digest": "eb9209032856bdbc69fbfa67e053bf8cd2bc23f8e8e25c0be9a5aa3f7e05f4e9",
+              "position": 0,
+              "uid": "04711182-acef-52a9-bd58-7fe98a54854a"
+            },
+            {
+              "content": "On an evening walk, the user saw an unlit street and took a detour along a main road.",
+              "content_digest": "62d001de1c6c4599e51c4e0713f577a2838e95e03f26064778e64542f390a599",
+              "position": 1,
+              "uid": "0229d0b1-750c-521b-a126-22c9d9d001c4"
+            },
+            {
+              "content": "On a day the user chose a well-lit pedestrian route, the walk took 12 minutes longer than usual.",
+              "content_digest": "ad3770626bef71bc9a29ec7772aeebeb70231e89b417b05b4da9c62a65b89afe",
+              "position": 2,
+              "uid": "e310fe87-8cde-5399-be00-9f8d7ec44e94"
+            },
+            {
+              "content": "On a day the user sat by the library window, they heard vehicle noise with every page they read.",
+              "content_digest": "090a190c68a5166d84cde1eed20f9a03c2b99722ed383eb3b5703489c01d85e0",
+              "position": 3,
+              "uid": "4f37306b-08cd-512a-b92e-ca6761da1a5b"
+            },
+            {
+              "content": "On the next visit, the user sat farther inside and did not move for an hour.",
+              "content_digest": "a071b4c7699fe17f63f0ab6263da1259aea00ad635169a313d4821f57071a86a",
+              "position": 4,
+              "uid": "5897ffa4-cfc6-5012-8931-15420ec5cf7c"
+            },
+            {
+              "content": "The user wrote the due date of a borrowed book on paper and then lost the paper.",
+              "content_digest": "43ef22512c79634cb9e3dc59006c7d06c3513a9d5d1f89eedbb392964cc34f02",
+              "position": 5,
+              "uid": "ce38bd13-3d51-5bff-9eba-ed70a8217356"
+            },
+            {
+              "content": "After entering the due date on their phone, the user saw a reminder the day before and put the book in their bag.",
+              "content_digest": "38782cba2f3bf260d62cf8e80c4a7e4a3a196d4d29ced3c4fe19d050e12c1e0a",
+              "position": 6,
+              "uid": "a304315b-bc0a-591b-b8c2-7eea5145819d"
+            },
+            {
+              "content": "Library staff expect a person requesting a replacement membership card to bring identity-verification material.",
+              "content_digest": "1ac59309aedbfa946661bf5bbc4d5141c420df059937893caba88725dfe77d24",
+              "position": 7,
+              "uid": "ef060b89-6c54-5c20-86be-c07766a35daa"
+            },
+            {
+              "content": "Check recent lighting and pedestrian conditions before proposing an evening walking route.",
+              "content_digest": "1b247adfb3723d14979b2cc7ecf6786c457d60e521b8708a6d08d38d3d1af437",
+              "position": 8,
+              "uid": "7669e5eb-c0fd-5182-ae9a-5f9ae95ddf2f"
+            },
+            {
+              "content": "The local agent can compare past reasons for detours but cannot directly observe current lighting and pedestrian conditions.",
+              "content_digest": "8a5f0e4cbb2fa6c19f2cb5d4e500ed460189b515604c87c6c2a4c8348c4efc44",
+              "position": 9,
+              "uid": "e96f7007-5814-5986-b121-4ce3b22506e1"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "6c672e39-5b2f-40c5-9241-580b88bfa112"
+        },
+        {
+          "context_digest": "e56d4062f59b72f23e5414f759cd9f2b09c659d820a29a979fe2edb8bfc3e7a4",
+          "context_name": "task-3/local/personal-memory/2025/01",
+          "context_uid": "2ce7ce06-145c-50c7-bfb4-cb175b9a5255",
+          "memories": [
+            {
+              "content": "One of the user's identity documents needs renewal in the second half of 2025.",
+              "content_digest": "0ade63adc8aedc4dbc0003f2cbc2759010c8bf2645a95fedd3db28b7cfbe0daa",
+              "position": 0,
+              "uid": "50911f7e-75a1-5099-99f1-e471bb8e6cb6"
+            },
+            {
+              "content": "The user postponed an application until the next day after spending time looking for document photos in scattered folders.",
+              "content_digest": "fa1703848374c3364cf49be01e115e08897e16a4ccda3c9edef1212189159ce6",
+              "position": 1,
+              "uid": "d5bd9f79-7295-5014-9668-83b7cffc78e2"
+            },
+            {
+              "content": "After gathering the necessary copies in one folder, the user completed the renewal form in one sitting.",
+              "content_digest": "133721b244e02fce2fe24312b703e59225c023d65bea31bf65decb36a18b4ba5",
+              "position": 2,
+              "uid": "5f92f6a3-1739-580c-bd63-1a936098ccd0"
+            },
+            {
+              "content": "The user entered an abbreviated name on an official form and then discovered that it differed from the supporting document.",
+              "content_digest": "d32485dcfd1311d0739bf9887a330f25bf9b3f47f077c56ec7cdb667bde20a55",
+              "position": 3,
+              "uid": "929107ac-c62d-5920-9f71-12d4c9a102e9"
+            },
+            {
+              "content": "On the next application, after comparing the name with the source document, the user did not receive a correction request.",
+              "content_digest": "e6aa9e63c72f762c00824787c3b971f2cdf76a343c336f329e5b28b0f164d02d",
+              "position": 4,
+              "uid": "df8b90c2-4310-5e89-b979-508309bf6b04"
+            },
+            {
+              "content": "The user put only the submission deadline in the calendar and missed the application deadline by one day because they did not check the issuance period.",
+              "content_digest": "995703686975cdd718d999557d4b5ca13a95c3c1eabfbb73808bb5150eda824b",
+              "position": 5,
+              "uid": "306b9df1-d713-5413-b448-e2b42376d827"
+            },
+            {
+              "content": "On the next application, the user recorded the expected issuance date separately in the calendar.",
+              "content_digest": "b83c9061bf30d64e48b74959513fd37e7ab043446dae7e4fd284102a249a1240",
+              "position": 6,
+              "uid": "870b57b5-4cdb-54fc-b17f-8ffb86dad802"
+            },
+            {
+              "content": "Staff at a public-service counter expect a person requesting identity verification to bring an original as well as a copy.",
+              "content_digest": "eae3721b7f1d905172c169c5a483d2af74aa40bced23d1bbcb8d571ab27df706",
+              "position": 7,
+              "uid": "a0fe456c-0794-5bce-8ef9-9558e9833471"
+            },
+            {
+              "content": "When planning an official application, put both the submission deadline and expected issuance date in the calendar and verify them.",
+              "content_digest": "c5b37d86ef85d5023b60578e7f5f6af1bc49711e32ecc0255bc826a743dce0e1",
+              "position": 8,
+              "uid": "111972b9-e05f-5e1b-b121-ef9e51572d1d"
+            },
+            {
+              "content": "The local agent cannot determine the current validity of an identity document without its expiration date.",
+              "content_digest": "ebc9f4fe21d4ad7e53681d32ded2c049c7d4bf57e24ef71213a5ebdbaaaee521",
+              "position": 9,
+              "uid": "c9872898-ec4f-576e-b154-ff6fda581a1a"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "a1c3d17a-a683-4d51-9832-4a08d7068bdd"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames share planning themes but apply them to different domains: library use and evening walking versus official-document applications. Their closest links are scope-dependent scheduling and identity-verification practices; the remaining material records separate experiences, strategies, requirements, and information limits.",
+      "relations": [
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "6c672e39-5b2f-40c5-9241-580b88bfa112",
+              "memory_uid": "ce38bd13-3d51-5bff-9eba-ed70a8217356"
+            },
+            {
+              "frame_uid": "6c672e39-5b2f-40c5-9241-580b88bfa112",
+              "memory_uid": "a304315b-bc0a-591b-b8c2-7eea5145819d"
+            },
+            {
+              "frame_uid": "a1c3d17a-a683-4d51-9832-4a08d7068bdd",
+              "memory_uid": "306b9df1-d713-5413-b448-e2b42376d827"
+            },
+            {
+              "frame_uid": "a1c3d17a-a683-4d51-9832-4a08d7068bdd",
+              "memory_uid": "870b57b5-4cdb-54fc-b17f-8ffb86dad802"
+            },
+            {
+              "frame_uid": "a1c3d17a-a683-4d51-9832-4a08d7068bdd",
+              "memory_uid": "111972b9-e05f-5e1b-b121-ef9e51572d1d"
+            }
+          ],
+          "reason": "The memories address the same operational choice of tracking consequential dates, but explicit library-return and application-planning contexts require different date sets and preserve the distinction.",
+          "status": "RESOLVED",
+          "summary": "Recording dates electronically supports timely action, with a single return due date governing borrowed books and both submission and issuance dates governing official applications.",
+          "uid": "6d5b2551-3914-5f66-8764-e31d71ca6099"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "6c672e39-5b2f-40c5-9241-580b88bfa112",
+              "memory_uid": "ef060b89-6c54-5c20-86be-c07766a35daa"
+            },
+            {
+              "frame_uid": "a1c3d17a-a683-4d51-9832-4a08d7068bdd",
+              "memory_uid": "a0fe456c-0794-5bce-8ef9-9558e9833471"
+            }
+          ],
+          "reason": "Both claims govern preparation for identity verification, but their explicit service contexts differ, and only the public-service-counter claim specifies an original plus a copy.",
+          "status": "RESOLVED",
+          "summary": "People should bring identity-verification materials when seeking identity-related service, with the required materials specified differently for a replacement library card and verification at a public-service counter.",
+          "uid": "a8b8e236-db4f-5637-86f1-944547f8752d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6c672e39-5b2f-40c5-9241-580b88bfa112",
+              "memory_uid": "04711182-acef-52a9-bd58-7fe98a54854a"
+            }
+          ],
+          "reason": "This is independently useful historical information about library membership and has no matching operational claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user renewed a local library membership in October 2024.",
+          "uid": "a3da25f6-5688-5dbf-8b55-41e5274e43f7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6c672e39-5b2f-40c5-9241-580b88bfa112",
+              "memory_uid": "0229d0b1-750c-521b-a126-22c9d9d001c4"
+            },
+            {
+              "frame_uid": "6c672e39-5b2f-40c5-9241-580b88bfa112",
+              "memory_uid": "e310fe87-8cde-5399-be00-9f8d7ec44e94"
+            },
+            {
+              "frame_uid": "6c672e39-5b2f-40c5-9241-580b88bfa112",
+              "memory_uid": "7669e5eb-c0fd-5182-ae9a-5f9ae95ddf2f"
+            },
+            {
+              "frame_uid": "6c672e39-5b2f-40c5-9241-580b88bfa112",
+              "memory_uid": "e96f7007-5814-5986-b121-4ce3b22506e1"
+            }
+          ],
+          "reason": "These memories jointly describe the reference frame's evidence, planning rule, and capability boundary for choosing an evening walking route; the compared frame contains no corresponding route-planning claim.",
+          "status": "RESOLVED",
+          "summary": "Evening-route planning should account for lighting, pedestrian conditions, safety-driven detours, and added travel time, while relying on a current external check for conditions the local agent cannot observe.",
+          "uid": "c09b3924-20f5-5710-adfa-f9d10cef23d6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6c672e39-5b2f-40c5-9241-580b88bfa112",
+              "memory_uid": "4f37306b-08cd-512a-b92e-ca6761da1a5b"
+            },
+            {
+              "frame_uid": "6c672e39-5b2f-40c5-9241-580b88bfa112",
+              "memory_uid": "5897ffa4-cfc6-5012-8931-15420ec5cf7c"
+            }
+          ],
+          "reason": "The memories form one library-seating experience about avoiding vehicle noise, with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Moving from a noisy library window seat to a place farther inside supported an uninterrupted hour of sitting.",
+          "uid": "5e3e9e71-fa4f-5879-b3bc-20270d4daa7b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a1c3d17a-a683-4d51-9832-4a08d7068bdd",
+              "memory_uid": "50911f7e-75a1-5099-99f1-e471bb8e6cb6"
+            }
+          ],
+          "reason": "This is independently useful renewal-timing information and does not correspond to the reference frame's library-membership renewal.",
+          "status": "RESOLVED",
+          "summary": "One identity document was expected to need renewal in the second half of 2025.",
+          "uid": "e889c2dc-ee95-555f-9675-faf7ddc8076a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a1c3d17a-a683-4d51-9832-4a08d7068bdd",
+              "memory_uid": "d5bd9f79-7295-5014-9668-83b7cffc78e2"
+            },
+            {
+              "frame_uid": "a1c3d17a-a683-4d51-9832-4a08d7068bdd",
+              "memory_uid": "5f92f6a3-1739-580c-bd63-1a936098ccd0"
+            }
+          ],
+          "reason": "The memories describe one application-preparation improvement concerning document organization, which has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Collecting necessary document copies into one folder enabled completion of a renewal form in one sitting after scattered photos had previously caused postponement.",
+          "uid": "7116615c-d94a-561b-9338-9379fa53a609"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a1c3d17a-a683-4d51-9832-4a08d7068bdd",
+              "memory_uid": "929107ac-c62d-5920-9f71-12d4c9a102e9"
+            },
+            {
+              "frame_uid": "a1c3d17a-a683-4d51-9832-4a08d7068bdd",
+              "memory_uid": "df8b90c2-4310-5e89-b979-508309bf6b04"
+            }
+          ],
+          "reason": "The memories form one application-accuracy lesson about matching names exactly, absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Comparing an official-form name with the supporting document avoided the correction problem previously associated with an abbreviated, mismatched name.",
+          "uid": "83de9557-8334-50e8-a3fb-b90ed504409e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a1c3d17a-a683-4d51-9832-4a08d7068bdd",
+              "memory_uid": "c9872898-ec4f-576e-b154-ff6fda581a1a"
+            }
+          ],
+          "reason": "This is a distinct information requirement for assessing document validity and does not govern the reference frame's assessment of current walking conditions.",
+          "status": "RESOLVED",
+          "summary": "The local agent cannot determine an identity document's current validity without its expiration date.",
+          "uid": "3b7f0d47-6ccc-5bc4-8fac-77baea181645"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers document renewal, file preparation, exact-name checking, and limits on determining document validity.",
+        "differences": "Scheduling practices differ between borrowed-book returns and official applications, while required identity materials depend on the service context.",
+        "reference_only": "The reference covers library membership and seating, evening-route safety, and limits on assessing current walking conditions."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "4f25cbd0-42b3-4ed5-9b6d-6cd9d7107abe"
+    },
+    "analysis_digest": "8ca3379bd71ed0f8a21c1e085c82115fd4a8cfe27fe0b01b05f93fc1a784d4ab",
+    "key": "a5f71b8b14a27aa50e9fdfd131e830cf7f424364cedbc0c9e2e84d45320e89be",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 44.25026670799707,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "a5f71b8b14a27aa50e9fdfd131e830cf7f424364cedbc0c9e2e84d45320e89be",
+  "created_at": "2026-08-13T18:45:45.608963Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/10",
+  "pair_key": "8e10b008b4367c27f30017373daf7690de9377af45d94515238723a639b5f027",
+  "provider_seconds": 44.25026670799707,
+  "right": "task-3/local/personal-memory/2025/01",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

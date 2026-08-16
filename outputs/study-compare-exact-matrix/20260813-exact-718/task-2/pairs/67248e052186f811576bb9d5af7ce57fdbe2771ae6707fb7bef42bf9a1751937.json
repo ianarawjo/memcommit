@@ -1,0 +1,281 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:20:09.230382+00:00",
+      "frames": [
+        {
+          "context_digest": "42df7e2f7640040d1d6f6f6e566e80d178668a05ab6918b64eed91b91a41b7fb",
+          "context_name": "task-2/advisor1/evaluation",
+          "context_uid": "30568e2f-ce17-50ce-a25b-1cc4bdb94689",
+          "memories": [
+            {
+              "content": "Specify a single representative measure that serves as the criterion for retaining, modifying, or discarding compared design alternatives.",
+              "content_digest": "53aa7c1f81a4fac9e76985be094717aa122e7077a6fcfde46946babd5929d390",
+              "position": 0,
+              "uid": "a50f6ecb-de38-5769-8a6e-23b84a7eb35c"
+            },
+            {
+              "content": "HCI review panels verify whether clear criteria for judging design alternatives are established using the declared primary measure.",
+              "content_digest": "fabd83103e5c3474f56de113c477f7ced5e863a508ec39bd4ae23653d63ad354",
+              "position": 1,
+              "uid": "44c61beb-24a2-584a-ad96-e622690d8171"
+            },
+            {
+              "content": "Collect process measures to diagnose interaction steps where problems occurred, alongside the primary outcome measure.",
+              "content_digest": "6cc2fedef1b0af1c594e48610e08a169f3bca2405bf8773945eca33396aecb36",
+              "position": 2,
+              "uid": "23202824-b576-5d77-b591-8b4cc0757632"
+            },
+            {
+              "content": "Interpret evaluation results as differences between compared design alternatives rather than as success or failure of a single prototype.",
+              "content_digest": "5c578d52a7dbbf4e4b646e707bbee4ac37bcd23bceb0b4d5e09ef3c08df9c2f4",
+              "position": 3,
+              "uid": "65ae88bf-8002-5ada-8590-eaf345b38863"
+            },
+            {
+              "content": "Check boundary cases to verify whether the derived design principles retain explanatory power for adjacent situations not included in the comparison.",
+              "content_digest": "3edc3e181a8086233d889f35cb98c9448875fe3fee915467f712ca3eb2886de1",
+              "position": 4,
+              "uid": "79af5e5f-4868-5e76-bcd5-3f8e1d6a0bd1"
+            },
+            {
+              "content": "Controlled evaluation environments do not reproduce time pressure, peer intervention, or voluntary termination conditions found in daily use.",
+              "content_digest": "e58a1bc6a423874525aca9f864b9b0dbd1e3ef9961410608c5837c88f1153d9b",
+              "position": 5,
+              "uid": "3a65fc8b-a5b4-50fc-a60e-fc6f3fc44547"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "8816c1b3-196e-4b7b-b637-d1731f2249b6"
+        },
+        {
+          "context_digest": "b598a4ff3268ef8c6c0d7bc5ff34af370074bcdd30d61bd3623fcdfb167f37d6",
+          "context_name": "task-2/advisor2/safety",
+          "context_uid": "4283d797-6a33-5f39-b7f6-f4dbd3264389",
+          "memories": [
+            {
+              "content": "List whom to notify and in what order if serious discomfort is reported during the study.",
+              "content_digest": "3453feb8597fb15c827f22297d58dc804fdc1d8080b9e93ba35b85a4425092b6",
+              "position": 0,
+              "uid": "ceb095a9-3068-55ea-a06f-d954c121e007"
+            },
+            {
+              "content": "Field staff rely on the pre-defined contact sequence when serious discomfort is reported.",
+              "content_digest": "ba38f8a5c993c810e19b9120f4492c3accf962c8b8fd7642539ac24f363099e0",
+              "position": 1,
+              "uid": "962d7645-02b3-5611-8415-4370794c10d4"
+            },
+            {
+              "content": "Define the thresholds for participant harm, operational disruption, and data anomalies at which deployment and data collection must cease.",
+              "content_digest": "7f7f124d266efd8255c4615ebc7eb375447047ed5a2b96327f28f8f17d048813",
+              "position": 2,
+              "uid": "a3270872-1901-5d24-8ef1-374833599bf9"
+            },
+            {
+              "content": "Establish procedures to restore existing systems and workflow states after suspending field deployment.",
+              "content_digest": "1a5f7636ec45e60df11db8b0d3763345c0bfaf9a92c1e5d581e6b36452c31208",
+              "position": 3,
+              "uid": "f6dd1368-0d90-5f1a-97d0-56594ce8f4b3"
+            },
+            {
+              "content": "The user's stop plan can be judged feasible only when it identifies who has authority to order recovery and who is responsible for carrying it out.",
+              "content_digest": "3fa05bd19fdeeb320a37cfb89ad853a868b64055f7b21eb182798b0119f6620c",
+              "position": 4,
+              "uid": "342e4697-873f-56a8-b4a4-896efe910144"
+            },
+            {
+              "content": "In organizations where error reporting is linked to individual performance evaluations, safety signal records may be separated from research decision logs, potentially breaking the traceability path for the same incident.",
+              "content_digest": "2bf13ff8ab1a778e8a793ede627b28d40798ae40d25c7a6d25eb5e2e79dd8e97",
+              "position": 5,
+              "uid": "6c4e9175-4590-5689-ae2b-678f0eb930b9"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "fcd61ab3-1294-4ef2-afb0-3c9001c9d4f2"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address complementary but independent concerns: the reference frame governs comparative HCI evaluation and generalization, while the compared frame governs field-study safety escalation, shutdown, recovery, and incident traceability. Neither supplies an operationally matching claim for the other.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8816c1b3-196e-4b7b-b637-d1731f2249b6",
+              "memory_uid": "a50f6ecb-de38-5769-8a6e-23b84a7eb35c"
+            }
+          ],
+          "reason": "This is an independently useful comparative-design decision criterion stated only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A single representative primary measure determines whether compared design alternatives are retained, modified, or discarded.",
+          "uid": "a8ee5026-afc9-5ca8-8714-c242cf831271"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8816c1b3-196e-4b7b-b637-d1731f2249b6",
+              "memory_uid": "44c61beb-24a2-584a-ad96-e622690d8171"
+            }
+          ],
+          "reason": "This independently specifies review-panel oversight of evaluation criteria and appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "HCI review panels verify that the declared primary measure establishes clear criteria for judging design alternatives.",
+          "uid": "87509297-1e96-5851-8fe5-b6506c36c401"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8816c1b3-196e-4b7b-b637-d1731f2249b6",
+              "memory_uid": "23202824-b576-5d77-b591-8b4cc0757632"
+            }
+          ],
+          "reason": "This diagnostic measurement practice is independently useful and appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Process measures accompany the primary outcome measure to locate problematic interaction steps.",
+          "uid": "edb62696-c1dd-59ac-b136-80c251b7af0b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8816c1b3-196e-4b7b-b637-d1731f2249b6",
+              "memory_uid": "65ae88bf-8002-5ada-8590-eaf345b38863"
+            }
+          ],
+          "reason": "This interpretation rule is independently useful and appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Evaluation results are interpreted as differences among alternatives rather than as a single prototype's success or failure.",
+          "uid": "47860905-114d-5261-9b6f-313facb917d1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8816c1b3-196e-4b7b-b637-d1731f2249b6",
+              "memory_uid": "79af5e5f-4868-5e76-bcd5-3f8e1d6a0bd1"
+            }
+          ],
+          "reason": "This generalization check is independently useful and appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Adjacent, untested situations are examined to assess whether derived design principles retain explanatory power.",
+          "uid": "0383e809-3697-5011-869f-7433880891a0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8816c1b3-196e-4b7b-b637-d1731f2249b6",
+              "memory_uid": "3a65fc8b-a5b4-50fc-a60e-fc6f3fc44547"
+            }
+          ],
+          "reason": "This limitation on ecological realism is independently useful and appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Controlled evaluations omit daily-use conditions including time pressure, peer intervention, and voluntary termination.",
+          "uid": "a4cb400b-fa94-5cb8-8f83-ddcd2f089339"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fcd61ab3-1294-4ef2-afb0-3c9001c9d4f2",
+              "memory_uid": "ceb095a9-3068-55ea-a06f-d954c121e007"
+            },
+            {
+              "frame_uid": "fcd61ab3-1294-4ef2-afb0-3c9001c9d4f2",
+              "memory_uid": "962d7645-02b3-5611-8415-4370794c10d4"
+            }
+          ],
+          "reason": "The compared memories jointly state the definition and operational use of one discomfort-escalation sequence, with no matching claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A predefined sequence identifies whom field staff notify, and in what order, when serious discomfort is reported.",
+          "uid": "9bcf4669-6f6e-56c0-844c-ddae3bf4f843"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fcd61ab3-1294-4ef2-afb0-3c9001c9d4f2",
+              "memory_uid": "a3270872-1901-5d24-8ef1-374833599bf9"
+            }
+          ],
+          "reason": "This field-study shutdown criterion is independently useful and appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Explicit harm, disruption, and data-anomaly thresholds determine when deployment and data collection must cease.",
+          "uid": "654cc273-ce21-5ee6-9992-85e8ef9d1821"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fcd61ab3-1294-4ef2-afb0-3c9001c9d4f2",
+              "memory_uid": "f6dd1368-0d90-5f1a-97d0-56594ce8f4b3"
+            },
+            {
+              "frame_uid": "fcd61ab3-1294-4ef2-afb0-3c9001c9d4f2",
+              "memory_uid": "342e4697-873f-56a8-b4a4-896efe910144"
+            }
+          ],
+          "reason": "The compared memories split one recovery-planning requirement across workflow restoration and accountable roles, with no matching claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A feasible stop plan defines restoration procedures and identifies both the authority ordering recovery and the party carrying it out.",
+          "uid": "14ff83a2-8d8a-5c3b-a47a-69f103bd09a9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fcd61ab3-1294-4ef2-afb0-3c9001c9d4f2",
+              "memory_uid": "6c4e9175-4590-5689-ae2b-678f0eb930b9"
+            }
+          ],
+          "reason": "This organizational recordkeeping risk is independently useful and appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Performance-linked error reporting may separate safety records from research decision logs and break incident traceability.",
+          "uid": "439b9c96-3e44-585f-be6d-8e788e61304c"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame defines discomfort escalation, cessation thresholds, system recovery and responsible roles, plus a traceability risk when safety and research records are separated.",
+        "differences": "",
+        "reference_only": "The reference frame defines comparative evaluation criteria, diagnostic process measures, alternative-relative interpretation, boundary-case testing, and limits of controlled environments."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "9139ddd0-2e0b-4834-9ef5-f9bfe5f050eb"
+    },
+    "analysis_digest": "1a927f0c62a1bacd4624a9a23aca6c76dad13c1386b5c9cc943d818df914a318",
+    "key": "4449351337040f616e94157f098358c85e75ccac8ba6fa9701b77dd107169a86",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 27.335714916000143,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "4449351337040f616e94157f098358c85e75ccac8ba6fa9701b77dd107169a86",
+  "created_at": "2026-08-13T18:20:36.565709Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/evaluation",
+  "pair_key": "67248e052186f811576bb9d5af7ce57fdbe2771ae6707fb7bef42bf9a1751937",
+  "provider_seconds": 27.335714916000143,
+  "right": "task-2/advisor2/safety",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

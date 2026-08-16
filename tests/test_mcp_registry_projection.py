@@ -14,6 +14,7 @@ from memcommit.interfaces.agent import (
     ATOMIZE_AGENT_TOOL_NAME,
     ATOMIZE_GROUNDING_AGENT_TOOL_NAME,
     COMPARE_AGENT_TOOL_NAME,
+    DEDUP_AGENT_TOOL_NAME,
     DISTILL_AGENT_TOOL_NAME,
     ELABORATE_AGENT_TOOL_NAME,
     FIT_AGENT_TOOL_NAME,
@@ -73,6 +74,7 @@ def test_default_registry_projects_parameters_to_fresh_mcp_input_schemas(tmp_pat
         ELABORATE_AGENT_TOOL_NAME,
         FIT_AGENT_TOOL_NAME,
         RESOLVE_AGENT_TOOL_NAME,
+        DEDUP_AGENT_TOOL_NAME,
     )
     registry_schemas = registry.tool_schemas()
     for tool, schema in zip(first, registry_schemas, strict=True):

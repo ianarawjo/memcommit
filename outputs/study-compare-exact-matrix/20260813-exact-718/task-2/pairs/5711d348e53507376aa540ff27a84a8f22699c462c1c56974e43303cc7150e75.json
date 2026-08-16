@@ -1,0 +1,349 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:16:20.186008+00:00",
+      "frames": [
+        {
+          "context_digest": "e76b6eea5af0e4d970d4db385b4100a788a8b1ed5ef6e68709bd92c943ab3b6b",
+          "context_name": "task-2/advisor1/compensation",
+          "context_uid": "7ba75d6b-cef6-5c8b-9b17-d3901e168d24",
+          "memories": [
+            {
+              "content": "Calculate user study compensation budgets based on estimated participation burden, combining session time and preparation effort.",
+              "content_digest": "2dc18d8ddeb900741b2a8f936a59d5fc72423e2d3144e8b2232a6435dc9a68f1",
+              "position": 0,
+              "uid": "0ae46268-cca7-57d5-a0ee-6eb3b85cda84"
+            },
+            {
+              "content": "Compensate for required travel time in face-to-face user studies as well.",
+              "content_digest": "688ba9df95e18254a5a33ab6c0e59066cf0674137b6802178e3fb8eae4ba38e5",
+              "position": 1,
+              "uid": "bdda6e22-ea06-5a13-8854-67f7521724db"
+            },
+            {
+              "content": "Compensate for the actual time participants spent in sessions, regardless of research modality.",
+              "content_digest": "8673c2b5b5913f0e8bcf0035eea4bc87430bb1fcf8ffb27b354bde0ca3a7ae4e",
+              "position": 2,
+              "uid": "f49b1d0a-7a1a-53b5-b7fc-815cc2cc134a"
+            },
+            {
+              "content": "Leave cash payment as an available compensation method for face-to-face studies.",
+              "content_digest": "72f9e1b33de0c05bb711c2d8162ab62f382a75871a710db37b858125eae6fcde",
+              "position": 3,
+              "uid": "1f4d05e4-2a79-572c-8050-beb1464fb781"
+            },
+            {
+              "content": "If compensation equity is explained, do not require finalizing the payment method at the proposal stage.",
+              "content_digest": "6945260e986651e7992034801b6151a3f93184013fea77d17b630f55fcdc943b",
+              "position": 4,
+              "uid": "abcba764-6f35-5dae-bb3d-7860fb72ccf2"
+            },
+            {
+              "content": "Apply the same base hourly rate to face-to-face and remote studies if task burden is equal.",
+              "content_digest": "144477b358e6e8931042d1793a5ffd10f56d69aa90523d69d20a622528a9dad0",
+              "position": 5,
+              "uid": "c6a28f37-1a7c-5dbd-b75c-c829f0461504"
+            },
+            {
+              "content": "Participants judge compensation fairness based on the total burden, combining session time with required travel and preparation time.",
+              "content_digest": "54e8900c7049e048484db8b523a41e98cbb911b45be2adbd103fd2f1635bf026",
+              "position": 6,
+              "uid": "874de649-9c04-5960-b3a9-e68356ef666c"
+            },
+            {
+              "content": "Account in compensation for the burden of rescheduling iterations and returning for multiple formative evaluation sessions.",
+              "content_digest": "f09be004defb4019ba7476919b6780cc2b6bbac088f79dbd0ec66bf2753af27d",
+              "position": 7,
+              "uid": "529559f5-850d-5920-8e27-0b1e7138dc36"
+            },
+            {
+              "content": "Compensate participants for time already invested even if a session is terminated early due to prototype errors.",
+              "content_digest": "64b65cc0b307b48d64641d126594a5b8a9258518c3aa27d7846be2306c25a9f4",
+              "position": 8,
+              "uid": "c8be56ee-860a-5f6c-abbf-02c8dbc59eb5"
+            },
+            {
+              "content": "The author of this proposal tends to exclude preparation burden between sessions when calculating compensation for iterative studies.",
+              "content_digest": "177f041fcb9fe768dcc1c476b592e99c8609d06ebf727aeca1379d21256b43d8",
+              "position": 9,
+              "uid": "bdac8cf8-dd11-5794-b4b2-9774ff344436"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "40846ebc-42ef-4694-9414-2dbc7e8e61bf"
+        },
+        {
+          "context_digest": "4efbf2f6c096022137cee2c075c75219bb4fd0f441579901b8445bb2d92101f5",
+          "context_name": "task-2/advisor2/budget",
+          "context_uid": "ae02c2b2-49d3-5c30-b686-81ea17a8a87e",
+          "memories": [
+            {
+              "content": "Keep the main text to the total and major categories, and place quantities, unit rates, and assumptions in one compact budget table or appendix.",
+              "content_digest": "2e0d76a9c09d14facdf93e8b82cb1c4f583b8a6063b74552f2c23b7d37224e9c",
+              "position": 0,
+              "uid": "d614b55d-d9f6-5347-8d02-2d219d621a09"
+            },
+            {
+              "content": "Give each cost category, quantity, unit rate, and subtotal a stable row in the separate budget table.",
+              "content_digest": "ecd8aa50fc469bb763f36784d140b871b82a283b39f30f46e9e166776321c602",
+              "position": 1,
+              "uid": "24500129-4b07-564f-ba67-39e40d7d7860"
+            },
+            {
+              "content": "Put the estimate basis in a dedicated table column so one assumption can be checked or revised without rewriting the narrative.",
+              "content_digest": "6ed604ab2ca300f215d13f18cb5344e9322635ad047ce36c08242765e7fb09f4",
+              "position": 2,
+              "uid": "07bad409-af9c-512a-b829-7ceb28273f91"
+            },
+            {
+              "content": "Readers can verify arithmetic and compare categories faster in a consistent table than in amounts distributed across prose.",
+              "content_digest": "1dc966a0ade3af3bc636cb99d456edbdb918c2a23efd4a5792db9f8ede061195",
+              "position": 3,
+              "uid": "abf6d361-c2eb-512f-87e0-f3af9c5eb677"
+            },
+            {
+              "content": "Revise one table row and its subtotal when an estimate changes instead of repeating the new amount across several prose paragraphs.",
+              "content_digest": "dcd7d010f7d2c1898fffe71ccc7a0067233dcbcf66fe4b429043b1900d097f84",
+              "position": 4,
+              "uid": "473cf3ca-9832-5d9c-97df-974f1d9b0d1b"
+            },
+            {
+              "content": "Keep detailed arithmetic out of the main argument when readers can reach the complete table from a clear reference.",
+              "content_digest": "940a8cdee63c326d9c9be89cc07e7f223f239e3537113d32c098f711bd816cf7",
+              "position": 5,
+              "uid": "675956de-2c61-53e1-bb89-9b49d92558ba"
+            },
+            {
+              "content": "The user tends to interrupt the argument with long cost enumerations when no separate budget table is available.",
+              "content_digest": "2c0715ec3cfa247a35c3acc854b0716dca764619050aa635c0c242a5b56aa2f1",
+              "position": 6,
+              "uid": "f4371f72-f222-5066-b2f4-0a6be5d6865e"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "6590acbd-98d2-4c97-a0b2-4fe356e4879a"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate but complementary layers of budgeting: the reference frame defines participant-compensation policy and burden inputs, while the compared frame governs how budget details are structured, presented, checked, and maintained. Neither frame supplies a scope-aligned counterpart to the other’s claims.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "40846ebc-42ef-4694-9414-2dbc7e8e61bf",
+              "memory_uid": "0ae46268-cca7-57d5-a0ee-6eb3b85cda84"
+            },
+            {
+              "frame_uid": "40846ebc-42ef-4694-9414-2dbc7e8e61bf",
+              "memory_uid": "bdda6e22-ea06-5a13-8854-67f7521724db"
+            },
+            {
+              "frame_uid": "40846ebc-42ef-4694-9414-2dbc7e8e61bf",
+              "memory_uid": "f49b1d0a-7a1a-53b5-b7fc-815cc2cc134a"
+            },
+            {
+              "frame_uid": "40846ebc-42ef-4694-9414-2dbc7e8e61bf",
+              "memory_uid": "874de649-9c04-5960-b3a9-e68356ef666c"
+            }
+          ],
+          "reason": "These memories jointly define total participation burden as the basis for compensation; the compared frame addresses budget presentation rather than what participant effort should be paid.",
+          "status": "RESOLVED",
+          "summary": "Participant compensation should reflect actual session time plus required preparation and, for face-to-face studies, travel time.",
+          "uid": "a529cb7e-b85c-527c-b018-0a6eb67ddd9d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "40846ebc-42ef-4694-9414-2dbc7e8e61bf",
+              "memory_uid": "1f4d05e4-2a79-572c-8050-beb1464fb781"
+            }
+          ],
+          "reason": "This is an independent payment-method policy with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Cash should remain an available compensation method for face-to-face studies.",
+          "uid": "21845afd-e120-5b84-87ba-fbc0b41dd5a3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "40846ebc-42ef-4694-9414-2dbc7e8e61bf",
+              "memory_uid": "abcba764-6f35-5dae-bb3d-7860fb72ccf2"
+            }
+          ],
+          "reason": "This independently governs proposal-stage commitment and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The payment method need not be finalized at the proposal stage when compensation equity is explained.",
+          "uid": "6458b775-4f6e-58d2-b7aa-ced32da30dc4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "40846ebc-42ef-4694-9414-2dbc7e8e61bf",
+              "memory_uid": "c6a28f37-1a7c-5dbd-b75c-c829f0461504"
+            }
+          ],
+          "reason": "This is an independent modality-equity rule absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Face-to-face and remote studies should use the same base hourly rate when task burden is equal.",
+          "uid": "11d81281-7b62-5882-911c-09a05944d9cb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "40846ebc-42ef-4694-9414-2dbc7e8e61bf",
+              "memory_uid": "529559f5-850d-5920-8e27-0b1e7138dc36"
+            }
+          ],
+          "reason": "This independently addresses burdens created by iterative participation, which the compared frame does not discuss.",
+          "status": "RESOLVED",
+          "summary": "Compensation should account for rescheduling and repeated attendance across formative evaluation sessions.",
+          "uid": "fba3ffb0-4c62-58cd-8103-19be5145c279"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "40846ebc-42ef-4694-9414-2dbc7e8e61bf",
+              "memory_uid": "c8be56ee-860a-5f6c-abbf-02c8dbc59eb5"
+            }
+          ],
+          "reason": "This independently governs compensation after an interrupted session and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Participants should be paid for time already invested when prototype errors terminate a session early.",
+          "uid": "16ec94be-335e-5b8c-a351-4caeb35e58f5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "40846ebc-42ef-4694-9414-2dbc7e8e61bf",
+              "memory_uid": "bdac8cf8-dd11-5794-b4b2-9774ff344436"
+            }
+          ],
+          "reason": "This is a one-sided observation about a compensation-calculation tendency, not a claim about budget-table presentation.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to omit between-session preparation burden from iterative-study compensation calculations.",
+          "uid": "8d6d5bb1-910c-5f20-8f7c-51b7d819fdff"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6590acbd-98d2-4c97-a0b2-4fe356e4879a",
+              "memory_uid": "d614b55d-d9f6-5347-8d02-2d219d621a09"
+            },
+            {
+              "frame_uid": "6590acbd-98d2-4c97-a0b2-4fe356e4879a",
+              "memory_uid": "675956de-2c61-53e1-bb89-9b49d92558ba"
+            }
+          ],
+          "reason": "These memories express one presentation policy separating detailed budget calculations from narrative prose; the reference frame instead defines compensation substance.",
+          "status": "RESOLVED",
+          "summary": "The main argument should retain totals and major categories while detailed arithmetic is placed in a complete, clearly referenced table or appendix.",
+          "uid": "35146bb5-baa0-5b6a-84f1-841a0afd383c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6590acbd-98d2-4c97-a0b2-4fe356e4879a",
+              "memory_uid": "24500129-4b07-564f-ba67-39e40d7d7860"
+            },
+            {
+              "frame_uid": "6590acbd-98d2-4c97-a0b2-4fe356e4879a",
+              "memory_uid": "07bad409-af9c-512a-b829-7ceb28273f91"
+            }
+          ],
+          "reason": "These memories jointly specify the table structure needed to isolate and revise budget inputs, with no corresponding structural guidance in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A separate budget table should use stable category rows and a dedicated estimate-basis column for quantities, rates, subtotals, and assumptions.",
+          "uid": "242d4866-059e-51bb-99ed-2db9d0633782"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6590acbd-98d2-4c97-a0b2-4fe356e4879a",
+              "memory_uid": "abf6d361-c2eb-512f-87e0-f3af9c5eb677"
+            }
+          ],
+          "reason": "This independently states an auditability benefit of tabular presentation that the reference frame does not address.",
+          "status": "RESOLVED",
+          "summary": "A consistent budget table lets readers verify arithmetic and compare cost categories more quickly than dispersed prose.",
+          "uid": "26eb230a-e25e-587e-bcb5-e2f52d2c522f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6590acbd-98d2-4c97-a0b2-4fe356e4879a",
+              "memory_uid": "473cf3ca-9832-5d9c-97df-974f1d9b0d1b"
+            }
+          ],
+          "reason": "This independently addresses budget-maintenance efficiency and has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Changed estimates should be updated in one table row and subtotal rather than repeated across prose paragraphs.",
+          "uid": "64a3cae8-a268-54ef-bfc8-d93ea9f07fb6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6590acbd-98d2-4c97-a0b2-4fe356e4879a",
+              "memory_uid": "f4371f72-f222-5066-b2f4-0a6be5d6865e"
+            }
+          ],
+          "reason": "This is a one-sided observation about a presentation tendency, distinct from the reference frame’s compensation-policy content.",
+          "status": "RESOLVED",
+          "summary": "The user tends to interrupt the argument with lengthy cost enumerations when no separate budget table exists.",
+          "uid": "e2a3b0b2-42c9-5c2e-be6f-79e070a13760"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame addresses concise narrative presentation, structured budget tables, auditability, easier revisions, and a tendency to embed lengthy cost enumerations in prose.",
+        "differences": "",
+        "reference_only": "The reference frame addresses compensation fairness, burden components, modality parity, payment flexibility, repeated participation, early termination, and a tendency to omit preparation effort."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "5f6a785e-921d-41e9-943a-6606ee1097ee"
+    },
+    "analysis_digest": "4546116fbcd043289bca316b6177546ea1de92893d240848fd1be0f80f1de6c3",
+    "key": "442c84161b79e38a2f04130faecb8ac40840e9fb8075b306c5869b0fe586980a",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 45.546607416999905,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "442c84161b79e38a2f04130faecb8ac40840e9fb8075b306c5869b0fe586980a",
+  "created_at": "2026-08-13T18:17:05.732228Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/compensation",
+  "pair_key": "5711d348e53507376aa540ff27a84a8f22699c462c1c56974e43303cc7150e75",
+  "provider_seconds": 45.546607416999905,
+  "right": "task-2/advisor2/budget",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

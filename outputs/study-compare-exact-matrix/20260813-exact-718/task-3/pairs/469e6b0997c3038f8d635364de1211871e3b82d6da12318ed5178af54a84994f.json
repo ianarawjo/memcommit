@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:47:27.234786+00:00",
+      "frames": [
+        {
+          "context_digest": "0b8af0ea4e580cc332939d026149e543e9251c54de246e3eabb83c941e6c12f2",
+          "context_name": "task-3/local/personal-memory/2024/12",
+          "context_uid": "66c3e5de-61bb-5795-8e5a-4e28f64be857",
+          "memories": [
+            {
+              "content": "The user used an accessible entrance at a clinic in December 2024.",
+              "content_digest": "a940bc9fb7423a1bdb9dde547cd39eb8ad66d4fa3051649c62b042fc63935263",
+              "position": 0,
+              "uid": "a6923620-267d-5129-b8c4-cd9b1e1a1e7b"
+            },
+            {
+              "content": "On a day snow had accumulated and blocked the main-entrance ramp, the user went to a side entrance.",
+              "content_digest": "460c05d8e8b4b7443ff42cbeead66e07201846394bcbe5948f63e585a197006f",
+              "position": 1,
+              "uid": "fb0e1d1f-0ef5-5214-b6d7-f6ca5c68f582"
+            },
+            {
+              "content": "The user learned on site that the elevator was under inspection and delayed the appointment.",
+              "content_digest": "b5efa024c597b57651178431d22173d4ca1242c3a4c9607f8bd5a7ff681af6f4",
+              "position": 2,
+              "uid": "4cb45120-4376-5c7b-ae92-faa9e4b9330c"
+            },
+            {
+              "content": "The day before the next visit, the user called to check whether the elevator would be operating.",
+              "content_digest": "93c66066de480a4d2f30b7b7c4d955acfceb227ac898766b6375829804b580eb",
+              "position": 3,
+              "uid": "479f4434-879c-5335-b0c9-c0bfa19ecdcd"
+            },
+            {
+              "content": "The user waited for their turn in front of a ticket machine near the waiting chairs.",
+              "content_digest": "fada8c09d46af2e1bcbd2b1e97d9cb786ceca83fc13d1240627639dd6cb96e65",
+              "position": 4,
+              "uid": "0f2c78a7-8f92-573d-af8a-a360ceb77b24"
+            },
+            {
+              "content": "On a day the user waited in a corridor without chairs, they leaned against the wall and changed position several times.",
+              "content_digest": "0037afaeb85d94f985b1628b7b8f8194fb00d7d7e72e1746c6bae2c2ba66fe6f",
+              "position": 5,
+              "uid": "7b9197ac-4263-5169-8d3b-d34f5d893d36"
+            },
+            {
+              "content": "On a day their older sister accompanied them, the user found a place to sit immediately after reception.",
+              "content_digest": "1ae59de552a922fd3b4d39e7e5dc1ec65ff08ee68e3448f2152f27dfec710a5a",
+              "position": 6,
+              "uid": "7b0b7571-f29c-56e5-a27a-82d69a4a6982"
+            },
+            {
+              "content": "Reception staff expect that a first-time visitor may ask where the accessible entrance is.",
+              "content_digest": "7dc3300dc630b737c0f7b437eba30179aa6aaa03efd61c968604ee505a43aa73",
+              "position": 7,
+              "uid": "e9515d6b-10d9-579f-abf7-5030db64218a"
+            },
+            {
+              "content": "The local agent cannot infer the user's condition from a record of using an accessible route alone.",
+              "content_digest": "2d8a50f62f32c43ca62e1e23b75c34361ece43fd8367964174fdc73d66795df4",
+              "position": 8,
+              "uid": "8e57141d-c603-56cd-ab9e-c14b4e944b45"
+            },
+            {
+              "content": "Snow accumulation and snow-removal work can temporarily block an entrance route used under ordinary conditions.",
+              "content_digest": "4fb152c120860688789bdd4b825de45799e9fa00c0c18c334492dd4b274adde9",
+              "position": 9,
+              "uid": "a6076438-307c-56fe-9d2c-848181846ce5"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "0f60f7c8-fb4d-430f-b2e3-37346b18752c"
+        },
+        {
+          "context_digest": "e56d4062f59b72f23e5414f759cd9f2b09c659d820a29a979fe2edb8bfc3e7a4",
+          "context_name": "task-3/local/personal-memory/2025/01",
+          "context_uid": "2ce7ce06-145c-50c7-bfb4-cb175b9a5255",
+          "memories": [
+            {
+              "content": "One of the user's identity documents needs renewal in the second half of 2025.",
+              "content_digest": "0ade63adc8aedc4dbc0003f2cbc2759010c8bf2645a95fedd3db28b7cfbe0daa",
+              "position": 0,
+              "uid": "50911f7e-75a1-5099-99f1-e471bb8e6cb6"
+            },
+            {
+              "content": "The user postponed an application until the next day after spending time looking for document photos in scattered folders.",
+              "content_digest": "fa1703848374c3364cf49be01e115e08897e16a4ccda3c9edef1212189159ce6",
+              "position": 1,
+              "uid": "d5bd9f79-7295-5014-9668-83b7cffc78e2"
+            },
+            {
+              "content": "After gathering the necessary copies in one folder, the user completed the renewal form in one sitting.",
+              "content_digest": "133721b244e02fce2fe24312b703e59225c023d65bea31bf65decb36a18b4ba5",
+              "position": 2,
+              "uid": "5f92f6a3-1739-580c-bd63-1a936098ccd0"
+            },
+            {
+              "content": "The user entered an abbreviated name on an official form and then discovered that it differed from the supporting document.",
+              "content_digest": "d32485dcfd1311d0739bf9887a330f25bf9b3f47f077c56ec7cdb667bde20a55",
+              "position": 3,
+              "uid": "929107ac-c62d-5920-9f71-12d4c9a102e9"
+            },
+            {
+              "content": "On the next application, after comparing the name with the source document, the user did not receive a correction request.",
+              "content_digest": "e6aa9e63c72f762c00824787c3b971f2cdf76a343c336f329e5b28b0f164d02d",
+              "position": 4,
+              "uid": "df8b90c2-4310-5e89-b979-508309bf6b04"
+            },
+            {
+              "content": "The user put only the submission deadline in the calendar and missed the application deadline by one day because they did not check the issuance period.",
+              "content_digest": "995703686975cdd718d999557d4b5ca13a95c3c1eabfbb73808bb5150eda824b",
+              "position": 5,
+              "uid": "306b9df1-d713-5413-b448-e2b42376d827"
+            },
+            {
+              "content": "On the next application, the user recorded the expected issuance date separately in the calendar.",
+              "content_digest": "b83c9061bf30d64e48b74959513fd37e7ab043446dae7e4fd284102a249a1240",
+              "position": 6,
+              "uid": "870b57b5-4cdb-54fc-b17f-8ffb86dad802"
+            },
+            {
+              "content": "Staff at a public-service counter expect a person requesting identity verification to bring an original as well as a copy.",
+              "content_digest": "eae3721b7f1d905172c169c5a483d2af74aa40bced23d1bbcb8d571ab27df706",
+              "position": 7,
+              "uid": "a0fe456c-0794-5bce-8ef9-9558e9833471"
+            },
+            {
+              "content": "When planning an official application, put both the submission deadline and expected issuance date in the calendar and verify them.",
+              "content_digest": "c5b37d86ef85d5023b60578e7f5f6af1bc49711e32ecc0255bc826a743dce0e1",
+              "position": 8,
+              "uid": "111972b9-e05f-5e1b-b121-ef9e51572d1d"
+            },
+            {
+              "content": "The local agent cannot determine the current validity of an identity document without its expiration date.",
+              "content_digest": "ebc9f4fe21d4ad7e53681d32ded2c049c7d4bf57e24ef71213a5ebdbaaaee521",
+              "position": 9,
+              "uid": "c9872898-ec4f-576e-b154-ff6fda581a1a"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "ad41aa2e-1069-4e6c-86ce-55d8e69708c5"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover independent domains: clinic accessibility experiences and expectations versus identity-document renewal and application practices. No claims govern the same operational decision, and neither frame contradicts or qualifies the other.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0f60f7c8-fb4d-430f-b2e3-37346b18752c",
+              "memory_uid": "a6923620-267d-5129-b8c4-cd9b1e1a1e7b"
+            }
+          ],
+          "reason": "This clinic-access event is independently useful and has no counterpart addressing the same claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user used an accessible clinic entrance in December 2024.",
+          "uid": "49c9f358-02e1-5384-b2d2-fd21844fd6ef"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0f60f7c8-fb4d-430f-b2e3-37346b18752c",
+              "memory_uid": "fb0e1d1f-0ef5-5214-b6d7-f6ca5c68f582"
+            }
+          ],
+          "reason": "This specific access-route detour is not addressed by the identity-document memories.",
+          "status": "RESOLVED",
+          "summary": "Snow blocking the main-entrance ramp led the user to use a side entrance.",
+          "uid": "23c97834-ceab-5b1b-824d-e7176e3536ab"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0f60f7c8-fb4d-430f-b2e3-37346b18752c",
+              "memory_uid": "4cb45120-4376-5c7b-ae92-faa9e4b9330c"
+            }
+          ],
+          "reason": "This clinic elevator disruption is independently useful and unmatched in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "An elevator inspection discovered on site delayed the user’s appointment.",
+          "uid": "63f53df0-d386-5a21-9128-c953fcb2ea8c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0f60f7c8-fb4d-430f-b2e3-37346b18752c",
+              "memory_uid": "479f4434-879c-5335-b0c9-c0bfa19ecdcd"
+            }
+          ],
+          "reason": "This precaution for clinic access has no claim-level counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Before a later visit, the user called to verify elevator operation.",
+          "uid": "aadb2bc3-c36f-5d06-8a89-2b35975909c9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0f60f7c8-fb4d-430f-b2e3-37346b18752c",
+              "memory_uid": "0f2c78a7-8f92-573d-af8a-a360ceb77b24"
+            }
+          ],
+          "reason": "This waiting-location experience is one-sided information unrelated to the compared frame’s application claims.",
+          "status": "RESOLVED",
+          "summary": "The user waited near the waiting chairs for a turn at a ticket machine.",
+          "uid": "a26d418a-e492-5043-9708-898f32dff62b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0f60f7c8-fb4d-430f-b2e3-37346b18752c",
+              "memory_uid": "7b9197ac-4263-5169-8d3b-d34f5d893d36"
+            }
+          ],
+          "reason": "This specific waiting-condition experience is absent from and operationally independent of the compared frame.",
+          "status": "RESOLVED",
+          "summary": "While waiting in a chairless corridor, the user leaned against the wall and repeatedly changed position.",
+          "uid": "f761d8c8-b544-5f33-bce1-5cb5d73854b9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0f60f7c8-fb4d-430f-b2e3-37346b18752c",
+              "memory_uid": "7b0b7571-f29c-56e5-a27a-82d69a4a6982"
+            }
+          ],
+          "reason": "This accompanied clinic-visit experience has no counterpart governing the same matter in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "When accompanied by an older sister, the user found seating immediately after reception.",
+          "uid": "8fca218a-9542-5221-b4d3-024f9ca2d42d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0f60f7c8-fb4d-430f-b2e3-37346b18752c",
+              "memory_uid": "e9515d6b-10d9-579f-abf7-5030db64218a"
+            }
+          ],
+          "reason": "This clinic guidance expectation does not overlap operationally with the public-service counter expectation.",
+          "status": "RESOLVED",
+          "summary": "Clinic reception staff expect first-time visitors may ask for the accessible entrance’s location.",
+          "uid": "6f09cd83-b129-5bf8-a34d-c8fe0be8e7ed"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0f60f7c8-fb4d-430f-b2e3-37346b18752c",
+              "memory_uid": "8e57141d-c603-56cd-ab9e-c14b4e944b45"
+            }
+          ],
+          "reason": "This inference limit concerns accessibility evidence, unlike the compared frame’s document-validity uncertainty.",
+          "status": "RESOLVED",
+          "summary": "Using an accessible route alone does not justify inferring the user’s condition.",
+          "uid": "dc62310f-1166-5a91-a0d8-67678ef6d25a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0f60f7c8-fb4d-430f-b2e3-37346b18752c",
+              "memory_uid": "a6076438-307c-56fe-9d2c-848181846ce5"
+            }
+          ],
+          "reason": "This general accessibility constraint is independently useful and has no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Snow accumulation and removal work can temporarily obstruct an ordinarily used entrance route.",
+          "uid": "d580b269-8684-52d4-869c-4f49da57d3f1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ad41aa2e-1069-4e6c-86ce-55d8e69708c5",
+              "memory_uid": "50911f7e-75a1-5099-99f1-e471bb8e6cb6"
+            }
+          ],
+          "reason": "This renewal-timing fact is not addressed by any clinic-access memory.",
+          "status": "RESOLVED",
+          "summary": "An identity document needs renewal in the second half of 2025.",
+          "uid": "94c3430c-0fe7-5d2b-88aa-d37ff531bdd8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ad41aa2e-1069-4e6c-86ce-55d8e69708c5",
+              "memory_uid": "d5bd9f79-7295-5014-9668-83b7cffc78e2"
+            }
+          ],
+          "reason": "This application-preparation delay is independently useful and unmatched in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Searching scattered folders for document photos caused the user to postpone an application until the next day.",
+          "uid": "23c0b775-8ce5-51b4-a029-01a6a614a871"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ad41aa2e-1069-4e6c-86ce-55d8e69708c5",
+              "memory_uid": "5f92f6a3-1739-580c-bd63-1a936098ccd0"
+            }
+          ],
+          "reason": "This document-organization outcome has no counterpart addressing the same operational claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "After consolidating necessary copies in one folder, the user completed the renewal form in one sitting.",
+          "uid": "167d9bd4-446a-5c63-af30-3d09b01ca223"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ad41aa2e-1069-4e6c-86ce-55d8e69708c5",
+              "memory_uid": "929107ac-c62d-5920-9f71-12d4c9a102e9"
+            }
+          ],
+          "reason": "This form-data mismatch is absent from and operationally independent of the clinic-access frame.",
+          "status": "RESOLVED",
+          "summary": "An abbreviated name entered on an official form differed from the supporting document.",
+          "uid": "0e89d5df-f008-5ec6-87dc-07e30df6d892"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ad41aa2e-1069-4e6c-86ce-55d8e69708c5",
+              "memory_uid": "df8b90c2-4310-5e89-b979-508309bf6b04"
+            }
+          ],
+          "reason": "This name-verification outcome has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "After comparing the name with the source document on a later application, the user received no correction request.",
+          "uid": "a4846364-5695-5948-b3ec-826fdbf338e1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ad41aa2e-1069-4e6c-86ce-55d8e69708c5",
+              "memory_uid": "306b9df1-d713-5413-b448-e2b42376d827"
+            }
+          ],
+          "reason": "This scheduling failure is independently useful and unrelated to the reference frame’s clinic events.",
+          "status": "RESOLVED",
+          "summary": "Recording only the submission deadline and overlooking issuance time caused the user to miss the application deadline by one day.",
+          "uid": "6fd9cdb2-dbbd-5fa5-a3eb-19d11a7deb65"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ad41aa2e-1069-4e6c-86ce-55d8e69708c5",
+              "memory_uid": "870b57b5-4cdb-54fc-b17f-8ffb86dad802"
+            }
+          ],
+          "reason": "This calendar practice has no claim-level counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "On a later application, the user separately recorded the expected issuance date.",
+          "uid": "dd673838-ec42-546e-aa6b-653bdd7103f0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ad41aa2e-1069-4e6c-86ce-55d8e69708c5",
+              "memory_uid": "a0fe456c-0794-5bce-8ef9-9558e9833471"
+            }
+          ],
+          "reason": "This document requirement is operationally distinct from clinic reception guidance.",
+          "status": "RESOLVED",
+          "summary": "Public-service counter staff expect identity-verification requesters to bring both an original and a copy.",
+          "uid": "16be3435-97aa-5305-ac8b-5058a8a105de"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ad41aa2e-1069-4e6c-86ce-55d8e69708c5",
+              "memory_uid": "111972b9-e05f-5e1b-b121-ef9e51572d1d"
+            }
+          ],
+          "reason": "This application-planning policy is not addressed in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Official-application planning should record and verify both the submission deadline and expected issuance date.",
+          "uid": "e2862faf-ee57-5cd5-9159-93df238e1b12"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ad41aa2e-1069-4e6c-86ce-55d8e69708c5",
+              "memory_uid": "c9872898-ec4f-576e-b154-ff6fda581a1a"
+            }
+          ],
+          "reason": "This inference limit depends on identity-document expiration data and does not overlap with the reference frame’s accessibility inference limit.",
+          "status": "RESOLVED",
+          "summary": "A document’s current validity cannot be determined without its expiration date.",
+          "uid": "5191e64d-a6dd-5e36-b325-05b727245cad"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers identity-document renewal timing, file preparation, name verification, deadline and issuance tracking, counter-document expectations, and limits on determining document validity.",
+        "differences": "",
+        "reference_only": "The reference covers accessible clinic routes, temporary snow and elevator barriers, waiting-area seating, entrance guidance, and limits on inferring a user’s condition."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "2f4d3831-f365-4789-b495-6c8cf4423711"
+    },
+    "analysis_digest": "12a4146b8f3ad6d9c5ff5eed94b248762118a35fd9933850375ce316b0f5e5c5",
+    "key": "c01590e59f19ea072bfce3cfce720861e1838ef52d6a0dee7934ce2c029b87cc",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 55.389070583998546,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "c01590e59f19ea072bfce3cfce720861e1838ef52d6a0dee7934ce2c029b87cc",
+  "created_at": "2026-08-13T18:48:22.623445Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/12",
+  "pair_key": "469e6b0997c3038f8d635364de1211871e3b82d6da12318ed5178af54a84994f",
+  "provider_seconds": 55.389070583998546,
+  "right": "task-3/local/personal-memory/2025/01",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

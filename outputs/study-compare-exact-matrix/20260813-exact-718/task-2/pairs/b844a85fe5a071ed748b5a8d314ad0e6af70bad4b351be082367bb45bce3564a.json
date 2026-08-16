@@ -1,0 +1,196 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:25:16.707733+00:00",
+      "frames": [
+        {
+          "context_digest": "3dd1208c3f947a57bc5f1d490a28c999913d43cad775b2b01e50c6059d6b660e",
+          "context_name": "task-2/advisor1/safety",
+          "context_uid": "cd6c1fab-786a-52ea-9437-9a4d209ba419",
+          "memories": [
+            {
+              "content": "Specify the order and recipients for reporting serious discomfort during the study.",
+              "content_digest": "1de38a3ec5fc3267ebeb35482a458d4aaf50d2aea44c6dba334f184e50ddddd2",
+              "position": 0,
+              "uid": "9d6f5228-d182-571a-83d2-6a67becb7736"
+            },
+            {
+              "content": "Field staff rely on a pre-defined contact sequence when serious discomfort is reported.",
+              "content_digest": "ed3a3b19d92a50c7dd324981b702bac31e0130fda38fe37150e500481ed11d84",
+              "position": 1,
+              "uid": "00ed485d-66c2-59ad-9c5b-9ae445412690"
+            },
+            {
+              "content": "Establish criteria for halting the use of a design alternative if recurring severe errors appear during formative evaluation.",
+              "content_digest": "dcca56df756b89f89a0a9dbf2bf45aee6480392b368c9cf3402223d3084b801b",
+              "position": 2,
+              "uid": "9c6e1561-f671-52cb-aa67-245cc4987ad4"
+            },
+            {
+              "content": "Do not include a design alternative halted for safety reasons in subsequent evaluation iterations without modification.",
+              "content_digest": "01668098161666622f4d7ed8298e3e63a06fa9b10a4cfd53b200d820f96f5c50",
+              "position": 3,
+              "uid": "2381ecf7-2b11-583d-91d9-0a5cfc279ba1"
+            },
+            {
+              "content": "Even in controlled environments, delayed prototype recovery procedures increase session interruption time and alter data collection conditions for the same task.",
+              "content_digest": "fd0f364ef66cfa7be937779ed4ce3ffb1a406bc227d09c26b288a751c5e0d427",
+              "position": 4,
+              "uid": "c5ce1b00-36d9-5cdd-a318-93b88ca0e322"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "f4a5611a-831e-496b-8066-e865020fdfcb"
+        },
+        {
+          "context_digest": "bb54539faeedf2db9ada09643c11270aabf235d8e3e6df98500f90f9b82aed49",
+          "context_name": "task-2/advisor2/reproducibility",
+          "context_uid": "5f2f3c0f-4cb1-5151-b381-847df75b6457",
+          "memories": [
+            {
+              "content": "HCI reviewers find it difficult to assess result reproducibility if the system version used in the field deployment is not disclosed.",
+              "content_digest": "83ac18cb56f74dbeb7834909b999669bb9a46d320b288bf38fb7b6c9bd0812f2",
+              "position": 0,
+              "uid": "40f11374-d91b-546a-9e93-fcf98a0fde98"
+            },
+            {
+              "content": "Record changes in system configurations, field procedures, and data collection tools during deployment, along with their timestamps and rationales.",
+              "content_digest": "ac399146f49e6ae5d21272de0cd13db6346d4cd67b096ecfa9bd314b026f403e",
+              "position": 1,
+              "uid": "cc72ad54-4cf3-56cd-9119-46776f5b2184"
+            },
+            {
+              "content": "The history of deployment versions and configuration changes provides necessary evidence for interpreting results from different field sites.",
+              "content_digest": "39ae70de900b646362a96cfa7d734a6404604b468398b09da9fb05783b389d25",
+              "position": 2,
+              "uid": "75f22b45-fb1b-568c-bb05-080fdacdcab2"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "9aeab1ad-6b81-4048-b371-9d2615187e93"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate operational areas. The reference covers discomfort escalation, safety-based evaluation controls, and prototype-recovery effects, while the compared frame focuses on deployment provenance needed to interpret and reproduce field results. No scope-aligned overlap or contradiction is established.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f4a5611a-831e-496b-8066-e865020fdfcb",
+              "memory_uid": "9d6f5228-d182-571a-83d2-6a67becb7736"
+            },
+            {
+              "frame_uid": "f4a5611a-831e-496b-8066-e865020fdfcb",
+              "memory_uid": "00ed485d-66c2-59ad-9c5b-9ae445412690"
+            }
+          ],
+          "reason": "The reference memories state complementary parts of one escalation-protocol claim: the sequence must be specified, and field staff rely on it. The compared frame contains no corresponding claim.",
+          "status": "RESOLVED",
+          "summary": "Serious discomfort is handled through a specified reporting sequence with defined recipients.",
+          "uid": "94ec150f-a9cb-5d59-81ef-c5e24d6999b9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f4a5611a-831e-496b-8066-e865020fdfcb",
+              "memory_uid": "9c6e1561-f671-52cb-aa67-245cc4987ad4"
+            }
+          ],
+          "reason": "This is an independently useful safety decision rule present only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Formative evaluation requires criteria for halting a design alternative when severe errors recur.",
+          "uid": "31c74d07-13cb-5046-9785-672107aa06b5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f4a5611a-831e-496b-8066-e865020fdfcb",
+              "memory_uid": "2381ecf7-2b11-583d-91d9-0a5cfc279ba1"
+            }
+          ],
+          "reason": "This independently governs treatment after a safety halt and appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A design alternative halted for safety reasons must not re-enter later evaluation unchanged.",
+          "uid": "56d756f4-a394-5248-93d8-a42461247c0b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f4a5611a-831e-496b-8066-e865020fdfcb",
+              "memory_uid": "c5ce1b00-36d9-5cdd-a318-93b88ca0e322"
+            }
+          ],
+          "reason": "This methodological consequence is independently useful and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Delayed prototype recovery can lengthen interruptions and alter data-collection conditions even in controlled settings.",
+          "uid": "898d15b4-3344-58b8-a849-f7e7949e04ad"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9aeab1ad-6b81-4048-b371-9d2615187e93",
+              "memory_uid": "40f11374-d91b-546a-9e93-fcf98a0fde98"
+            },
+            {
+              "frame_uid": "9aeab1ad-6b81-4048-b371-9d2615187e93",
+              "memory_uid": "cc72ad54-4cf3-56cd-9119-46776f5b2184"
+            },
+            {
+              "frame_uid": "9aeab1ad-6b81-4048-b371-9d2615187e93",
+              "memory_uid": "75f22b45-fb1b-568c-bb05-080fdacdcab2"
+            }
+          ],
+          "reason": "The compared memories split one provenance claim across version disclosure, timestamped change records with rationales, and the evidentiary value of deployment history. The reference frame contains no corresponding provenance policy.",
+          "status": "RESOLVED",
+          "summary": "Deployment versions and operational changes should be disclosed and documented to support interpretation and reproducibility of field results.",
+          "uid": "b5f36356-5b53-5355-9e13-808b51bd2234"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame emphasizes disclosing deployment versions and documenting configuration, procedure, and tool changes so field results remain interpretable and reproducible.",
+        "differences": "",
+        "reference_only": "The reference specifies serious-discomfort escalation, criteria and follow-up restrictions for unsafe design alternatives, and the methodological effects of delayed prototype recovery."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "0737cba9-aea1-4585-847c-215571cb66d1"
+    },
+    "analysis_digest": "0a169e2f06ca914f3d75134a1c0912f6829902183213f5940859f6611cedd8a8",
+    "key": "0c9a570bceac9f34d34093c57595648a30228b639ed79c600d034655f5a105b6",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 21.46680812499835,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "0c9a570bceac9f34d34093c57595648a30228b639ed79c600d034655f5a105b6",
+  "created_at": "2026-08-13T18:25:38.174220Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/safety",
+  "pair_key": "b844a85fe5a071ed748b5a8d314ad0e6af70bad4b351be082367bb45bce3564a",
+  "provider_seconds": 21.46680812499835,
+  "right": "task-2/advisor2/reproducibility",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

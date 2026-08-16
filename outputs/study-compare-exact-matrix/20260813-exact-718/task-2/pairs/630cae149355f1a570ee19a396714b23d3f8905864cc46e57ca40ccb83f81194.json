@@ -1,0 +1,342 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:24:09.912561+00:00",
+      "frames": [
+        {
+          "context_digest": "adcb1ff51b2facc8282e8a56d8fec5150dd8e7376b7889d21013f71fee66b9b8",
+          "context_name": "task-2/advisor1/review",
+          "context_uid": "57ec8c37-1a0a-5f3b-82e9-51adad82677c",
+          "memories": [
+            {
+              "content": "Conduct one review prior to submission focusing solely on the validity of user problems, design interventions, and evaluation logic.",
+              "content_digest": "3dd669e72e74416ccd0b8eaf32f6b24dc7400ceb50c133a18f3ff33f89075334",
+              "position": 0,
+              "uid": "0dda8eb3-3287-5bb6-9b26-b1c00cc038d9"
+            },
+            {
+              "content": "Cross-check whether research questions align with the core functions of the prototype.",
+              "content_digest": "b3fbab30f9c640c7b3f6424f2cbc7d66bfa1f455f937f7fb28a6cc8b3763597d",
+              "position": 1,
+              "uid": "c8e0c9dd-dc4a-5a7d-9a82-e7ee449a4b25"
+            },
+            {
+              "content": "Cross-check whether evaluation tasks align with representative measures.",
+              "content_digest": "1e49d1844cb2a0a66a3dec114e44713885299f7a80763ae4e9a416eba505d61f",
+              "position": 2,
+              "uid": "f93c5baa-3c2b-5e37-b07b-0b00e8b22ab9"
+            },
+            {
+              "content": "Cross-check whether collected evidence aligns with design and operational decisions to be changed.",
+              "content_digest": "bc977c73db48b06ad23b68fa58f2fa5f64b19d09856b0e80c8ddac0b039568f8",
+              "position": 3,
+              "uid": "8dae0ad6-2a6d-5d99-98db-b0d48a1140e5"
+            },
+            {
+              "content": "Verify at the end that user problems, design interventions, user studies, and expected contributions form a coherent logical flow.",
+              "content_digest": "8b8d84adb9296241a03a4e6b91acee829ff1eaea443f9dd0b132d7b64a53dcff",
+              "position": 4,
+              "uid": "0f89ab25-d9ee-5669-aa99-a0fe07803915"
+            },
+            {
+              "content": "HCI reviewers view the validity of design interventions as low if research questions are not linked to prototype functions.",
+              "content_digest": "e7e5bb6d9618adc9d4903a4d4cbbf53007381999a95e4ed2137e3705a988fa13",
+              "position": 5,
+              "uid": "3e4a9a3b-abc2-54ed-9b87-f81abf61b541"
+            },
+            {
+              "content": "HCI reviewers view the validity of evaluation plans as low if evaluation tasks do not produce representative measures.",
+              "content_digest": "b23af1197034e73ce7b5bf0c6870ee410e44a07810ebaae12259087f2c12f8f1",
+              "position": 6,
+              "uid": "fb785649-1947-5e7d-aafb-308f14fb21b4"
+            },
+            {
+              "content": "HCI reviewers view the practicality of contributions as low if collected evidence cannot change design or operational decisions.",
+              "content_digest": "3720d356aa625bea8226fb668004f599e61140f1ad1543b643eb72b7a39ec43d",
+              "position": 7,
+              "uid": "02f8ddd8-32b0-5e3b-b358-5e0472a6e0d2"
+            },
+            {
+              "content": "Cross-check at the end whether each research question, formative evaluation data, and design modification judgment are seamlessly connected.",
+              "content_digest": "f3b3d431c05e942ff3cea0ac2d239eeee33e224047a452debe0246c57472f74d",
+              "position": 8,
+              "uid": "d17ba26c-187e-57bc-8468-c9c053fc303d"
+            },
+            {
+              "content": "Review whether the application conditions of proposed design principles and boundary cases of failure are presented together.",
+              "content_digest": "28ab914aa4a03e8f1908176b235017a80838ed660d996773a44b3963b927bcb3",
+              "position": 9,
+              "uid": "48a91d19-cc68-5400-8971-8125236f3fbf"
+            },
+            {
+              "content": "The user can have contributions reviewed only if prototype outcomes and the transferable design knowledge derived from them are separated.",
+              "content_digest": "2deadd2cfeed19a3e544c81a345a40f2f3b4561a8d28b073b70400a5e82ae0cb",
+              "position": 10,
+              "uid": "774341c9-b92d-53a5-a24c-59c75e39756b"
+            },
+            {
+              "content": "The scope of observation in controlled formative evaluations does not include long-term adaptation and operational changes in real-world usage contexts.",
+              "content_digest": "76a1a3c03c7d93acc8a6aca832fd24ab9624ea9e53c8207876160ed1055682e2",
+              "position": 11,
+              "uid": "877015ae-ab0b-561c-9fe3-3abb2d0aaa4e"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "7c5f45eb-3e3b-43e7-af4c-1649a01cbb77"
+        },
+        {
+          "context_digest": "673626cf0c3650052d63b04173d43516860e2035d7038878998898bc5bebb2e3",
+          "context_name": "task-2/advisor2/evaluation",
+          "context_uid": "6e9f8ad5-a43d-5dfd-99a3-604f2757da0d",
+          "memories": [
+            {
+              "content": "Specify a single representative measure that will drive operational decisions to maintain, modify, or discontinue the deployed design.",
+              "content_digest": "dd9abb7bbbdf6846921a984789426b27a45df60ce38408422b6b0774835b44f8",
+              "position": 0,
+              "uid": "f27576c7-6f53-5412-901c-19df7e1d5e2e"
+            },
+            {
+              "content": "The HCI review panel verifies whether operational decisions can be made based on the declared primary measure.",
+              "content_digest": "1d88ce414bdbfcf9565c712f8f0d72378569d723c0c5b5c6007dc18a96f6378f",
+              "position": 1,
+              "uid": "8608bdf3-49d7-54d0-a2fb-c883c24e40ef"
+            },
+            {
+              "content": "Establish decision thresholds indicating at what levels key metrics trigger maintaining, modifying, or discontinuing the design.",
+              "content_digest": "866bad632421bfd3487fba69b855ccb36aeb9e31c6208b339db22301bdd3fc28",
+              "position": 2,
+              "uid": "b06bb706-f911-5767-8e27-b64c74d0e592"
+            },
+            {
+              "content": "Evaluate whether reducing workload for one role creates new tasks for other roles through the proposed design changes.",
+              "content_digest": "6b38b84cdc2a78f61f3163cccd787dec39167596f4f720788ec4c930f698fa9f",
+              "position": 3,
+              "uid": "473ec6e8-29f0-5c83-b36d-b7d32eeb25a3"
+            },
+            {
+              "content": "Distinguish usability from organizational adoption intent as separate evaluation outcomes.",
+              "content_digest": "7328bf54063078377068871ee3970709d9a8763204c2c3a08321e025e028868c",
+              "position": 4,
+              "uid": "935cf79f-3e67-567d-ab55-35e8fad7eb37"
+            },
+            {
+              "content": "Implementation fidelity indicates whether planned features and operational procedures were delivered in the field according to intended specifications.",
+              "content_digest": "b04d0bc0590dd77d3bc0bde581481992d57ad48c14517a2a1d63f996e51290b2",
+              "position": 5,
+              "uid": "bea0e97f-1217-507b-87a7-09ce85bae9fe"
+            },
+            {
+              "content": "Initial evaluations and long-term operation do not share identical measurement conditions due to differences in system exposure duration and frequency of repeated use.",
+              "content_digest": "49e90b293b90d173b11d1bb89e85f688c55cb923c2a19eb2058a539388327715",
+              "position": 6,
+              "uid": "dbe435ff-fe32-54fe-a2e6-7b46694ce151"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "02ecda0b-a820-489a-8881-b1a3492f603c"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "Both frames connect evaluation evidence to consequential design and operational decisions. They differ mainly in emphasis: the reference stresses submission-time coherence, transferable knowledge, and evaluation boundaries, while the compared frame adds decision thresholds, organizational effects, adoption, and field-delivery measures.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "7c5f45eb-3e3b-43e7-af4c-1649a01cbb77",
+              "memory_uid": "f93c5baa-3c2b-5e37-b07b-0b00e8b22ab9"
+            },
+            {
+              "frame_uid": "7c5f45eb-3e3b-43e7-af4c-1649a01cbb77",
+              "memory_uid": "8dae0ad6-2a6d-5d99-98db-b0d48a1140e5"
+            },
+            {
+              "frame_uid": "7c5f45eb-3e3b-43e7-af4c-1649a01cbb77",
+              "memory_uid": "fb785649-1947-5e7d-aafb-308f14fb21b4"
+            },
+            {
+              "frame_uid": "7c5f45eb-3e3b-43e7-af4c-1649a01cbb77",
+              "memory_uid": "02f8ddd8-32b0-5e3b-b358-5e0472a6e0d2"
+            },
+            {
+              "frame_uid": "02ecda0b-a820-489a-8881-b1a3492f603c",
+              "memory_uid": "f27576c7-6f53-5412-901c-19df7e1d5e2e"
+            },
+            {
+              "frame_uid": "02ecda0b-a820-489a-8881-b1a3492f603c",
+              "memory_uid": "8608bdf3-49d7-54d0-a2fb-c883c24e40ef"
+            },
+            {
+              "frame_uid": "02ecda0b-a820-489a-8881-b1a3492f603c",
+              "memory_uid": "b06bb706-f911-5767-8e27-b64c74d0e592"
+            }
+          ],
+          "reason": "The reference states alignment and review-validity requirements, while the compared frame specifies a primary measure, panel verification, and decision thresholds; these are complementary requirements for evidence-based decisions.",
+          "status": "RESOLVED",
+          "summary": "Representative measures and collected evidence should be aligned with evaluation tasks and capable of supporting explicit design or operational decisions.",
+          "uid": "ffb3a24b-626e-5727-a2e6-cedfa2663db7"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "7c5f45eb-3e3b-43e7-af4c-1649a01cbb77",
+              "memory_uid": "877015ae-ab0b-561c-9fe3-3abb2d0aaa4e"
+            },
+            {
+              "frame_uid": "02ecda0b-a820-489a-8881-b1a3492f603c",
+              "memory_uid": "dbe435ff-fe32-54fe-a2e6-7b46694ce151"
+            }
+          ],
+          "reason": "The reference excludes long-term adaptation and real-world operational change from controlled formative observation, while the compared frame attributes nonidentical measurement conditions to exposure duration and repeated use; the evaluation horizon explains and preserves the distinction.",
+          "status": "RESOLVED",
+          "summary": "Controlled or initial evaluation and long-term field operation have different observational and measurement scopes.",
+          "uid": "164762bf-2480-5502-9da0-2ef3af96cec1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7c5f45eb-3e3b-43e7-af4c-1649a01cbb77",
+              "memory_uid": "0dda8eb3-3287-5bb6-9b26-b1c00cc038d9"
+            },
+            {
+              "frame_uid": "7c5f45eb-3e3b-43e7-af4c-1649a01cbb77",
+              "memory_uid": "0f89ab25-d9ee-5669-aa99-a0fe07803915"
+            },
+            {
+              "frame_uid": "7c5f45eb-3e3b-43e7-af4c-1649a01cbb77",
+              "memory_uid": "d17ba26c-187e-57bc-8468-c9c053fc303d"
+            }
+          ],
+          "reason": "These reference memories divide one overall coherence audit into its timing, focus, broad logical flow, and specific research-question-to-modification connections, with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A focused submission-time review should verify coherent logical connections among user problems, research questions, interventions, formative evidence, design judgments, studies, and contributions.",
+          "uid": "31474f4d-eff4-5afc-915b-f60b36ae71ca"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7c5f45eb-3e3b-43e7-af4c-1649a01cbb77",
+              "memory_uid": "c8e0c9dd-dc4a-5a7d-9a82-e7ee449a4b25"
+            },
+            {
+              "frame_uid": "7c5f45eb-3e3b-43e7-af4c-1649a01cbb77",
+              "memory_uid": "3e4a9a3b-abc2-54ed-9b87-f81abf61b541"
+            }
+          ],
+          "reason": "The reference supplies both the cross-check and its review consequence as two parts of one underlying validity claim, which the compared frame does not address.",
+          "status": "RESOLVED",
+          "summary": "Research questions should be linked to the prototype’s core functions to sustain the validity of design interventions.",
+          "uid": "4b60d715-e2d9-5f84-9bd2-6f194f81fdc0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7c5f45eb-3e3b-43e7-af4c-1649a01cbb77",
+              "memory_uid": "48a91d19-cc68-5400-8971-8125236f3fbf"
+            }
+          ],
+          "reason": "This is an independent reference-only requirement concerning the qualified scope of design principles.",
+          "status": "RESOLVED",
+          "summary": "Proposed design principles should present their application conditions together with failure boundary cases.",
+          "uid": "cffe9113-e38e-5bdf-8acd-d959d809e12d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7c5f45eb-3e3b-43e7-af4c-1649a01cbb77",
+              "memory_uid": "774341c9-b92d-53a5-a24c-59c75e39756b"
+            }
+          ],
+          "reason": "This is an independent reference-only condition for making the nature of contributions reviewable.",
+          "status": "RESOLVED",
+          "summary": "Prototype outcomes should be separated from the transferable design knowledge derived from them when presenting contributions for review.",
+          "uid": "bd1ed714-461c-50f9-815e-313d9cd7190e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "02ecda0b-a820-489a-8881-b1a3492f603c",
+              "memory_uid": "473ec6e8-29f0-5c83-b36d-b7d32eeb25a3"
+            }
+          ],
+          "reason": "This compared-only claim introduces an independent cross-role consequence of design changes.",
+          "status": "RESOLVED",
+          "summary": "Evaluation should determine whether workload reductions for one role create new tasks for other roles.",
+          "uid": "10c26aa6-d9f8-5a15-bcaa-e3bda038e32a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "02ecda0b-a820-489a-8881-b1a3492f603c",
+              "memory_uid": "935cf79f-3e67-567d-ab55-35e8fad7eb37"
+            }
+          ],
+          "reason": "This compared-only claim establishes an independent distinction between interaction quality and organizational willingness to adopt.",
+          "status": "RESOLVED",
+          "summary": "Usability and organizational adoption intent should be evaluated as separate outcomes.",
+          "uid": "f3411b00-2f15-56a9-9fa7-4f1187ab4774"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "02ecda0b-a820-489a-8881-b1a3492f603c",
+              "memory_uid": "bea0e97f-1217-507b-87a7-09ce85bae9fe"
+            }
+          ],
+          "reason": "This compared-only claim defines implementation fidelity as an independent field-delivery outcome.",
+          "status": "RESOLVED",
+          "summary": "Field evaluation should assess whether planned features and operational procedures were delivered according to intended specifications.",
+          "uid": "85295412-dbf8-5b27-8242-e8f17aecc545"
+        }
+      ],
+      "reports": {
+        "both": "Both require representative evaluation evidence to support design and operational decisions.",
+        "compared_only": "The compared frame adds cross-role workload effects, separate usability and adoption outcomes, and implementation fidelity.",
+        "differences": "Controlled formative evaluation is distinguished from long-term operation, whose exposure, repeated use, adaptation, and operational conditions require preserving different measurement scope.",
+        "reference_only": "The reference adds submission-time coherence checks, prototype–research-question linkage, design-principle boundaries, and separation of prototype outcomes from transferable knowledge."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "6d97c906-d9a6-475e-a29e-e87a539be900"
+    },
+    "analysis_digest": "ff361755d12ee8233c2ad93a1d9cd8dd01d50ed01caa5bd20c7267bb3d208d27",
+    "key": "08fd635c64696930b22239d66efee72b0058e802f57623c46afcb78747e8caa0",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 41.68703383400134,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "08fd635c64696930b22239d66efee72b0058e802f57623c46afcb78747e8caa0",
+  "created_at": "2026-08-13T18:24:51.598545Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/review",
+  "pair_key": "630cae149355f1a570ee19a396714b23d3f8905864cc46e57ca40ccb83f81194",
+  "provider_seconds": 41.68703383400134,
+  "right": "task-2/advisor2/evaluation",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

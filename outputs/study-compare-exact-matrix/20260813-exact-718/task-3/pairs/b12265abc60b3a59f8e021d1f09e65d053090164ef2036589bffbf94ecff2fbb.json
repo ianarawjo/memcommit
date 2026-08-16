@@ -1,0 +1,379 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:49:09.428423+00:00",
+      "frames": [
+        {
+          "context_digest": "e56d4062f59b72f23e5414f759cd9f2b09c659d820a29a979fe2edb8bfc3e7a4",
+          "context_name": "task-3/local/personal-memory/2025/01",
+          "context_uid": "2ce7ce06-145c-50c7-bfb4-cb175b9a5255",
+          "memories": [
+            {
+              "content": "One of the user's identity documents needs renewal in the second half of 2025.",
+              "content_digest": "0ade63adc8aedc4dbc0003f2cbc2759010c8bf2645a95fedd3db28b7cfbe0daa",
+              "position": 0,
+              "uid": "50911f7e-75a1-5099-99f1-e471bb8e6cb6"
+            },
+            {
+              "content": "The user postponed an application until the next day after spending time looking for document photos in scattered folders.",
+              "content_digest": "fa1703848374c3364cf49be01e115e08897e16a4ccda3c9edef1212189159ce6",
+              "position": 1,
+              "uid": "d5bd9f79-7295-5014-9668-83b7cffc78e2"
+            },
+            {
+              "content": "After gathering the necessary copies in one folder, the user completed the renewal form in one sitting.",
+              "content_digest": "133721b244e02fce2fe24312b703e59225c023d65bea31bf65decb36a18b4ba5",
+              "position": 2,
+              "uid": "5f92f6a3-1739-580c-bd63-1a936098ccd0"
+            },
+            {
+              "content": "The user entered an abbreviated name on an official form and then discovered that it differed from the supporting document.",
+              "content_digest": "d32485dcfd1311d0739bf9887a330f25bf9b3f47f077c56ec7cdb667bde20a55",
+              "position": 3,
+              "uid": "929107ac-c62d-5920-9f71-12d4c9a102e9"
+            },
+            {
+              "content": "On the next application, after comparing the name with the source document, the user did not receive a correction request.",
+              "content_digest": "e6aa9e63c72f762c00824787c3b971f2cdf76a343c336f329e5b28b0f164d02d",
+              "position": 4,
+              "uid": "df8b90c2-4310-5e89-b979-508309bf6b04"
+            },
+            {
+              "content": "The user put only the submission deadline in the calendar and missed the application deadline by one day because they did not check the issuance period.",
+              "content_digest": "995703686975cdd718d999557d4b5ca13a95c3c1eabfbb73808bb5150eda824b",
+              "position": 5,
+              "uid": "306b9df1-d713-5413-b448-e2b42376d827"
+            },
+            {
+              "content": "On the next application, the user recorded the expected issuance date separately in the calendar.",
+              "content_digest": "b83c9061bf30d64e48b74959513fd37e7ab043446dae7e4fd284102a249a1240",
+              "position": 6,
+              "uid": "870b57b5-4cdb-54fc-b17f-8ffb86dad802"
+            },
+            {
+              "content": "Staff at a public-service counter expect a person requesting identity verification to bring an original as well as a copy.",
+              "content_digest": "eae3721b7f1d905172c169c5a483d2af74aa40bced23d1bbcb8d571ab27df706",
+              "position": 7,
+              "uid": "a0fe456c-0794-5bce-8ef9-9558e9833471"
+            },
+            {
+              "content": "When planning an official application, put both the submission deadline and expected issuance date in the calendar and verify them.",
+              "content_digest": "c5b37d86ef85d5023b60578e7f5f6af1bc49711e32ecc0255bc826a743dce0e1",
+              "position": 8,
+              "uid": "111972b9-e05f-5e1b-b121-ef9e51572d1d"
+            },
+            {
+              "content": "The local agent cannot determine the current validity of an identity document without its expiration date.",
+              "content_digest": "ebc9f4fe21d4ad7e53681d32ded2c049c7d4bf57e24ef71213a5ebdbaaaee521",
+              "position": 9,
+              "uid": "c9872898-ec4f-576e-b154-ff6fda581a1a"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "4127ece6-f30a-44ed-862f-a70f92a3410f"
+        },
+        {
+          "context_digest": "5a45aaafce189f861f7195d3a753aa86812f64c689213961136327ca721c9d3e",
+          "context_name": "task-3/local/personal-memory/2026/06",
+          "context_uid": "f2e6c2e0-886a-52d8-98d4-03009ea37991",
+          "memories": [
+            {
+              "content": "The user keeps four folding chairs for family barbecues in storage.",
+              "content_digest": "7e2bb593a723adbac468184af4063e0ef74420baa03d6249ef77a84f2e6bc9df",
+              "position": 0,
+              "uid": "cce43b8e-c1c1-5208-8d9a-ee665b805d4c"
+            },
+            {
+              "content": "When six family members gathered in a noisy indoor restaurant, the user asked several times for the person across from them to repeat what was said.",
+              "content_digest": "d858d40478a37bed08580523df1915b85b4e2217b2fc506acedacaca55d2158d",
+              "position": 1,
+              "uid": "e682f0fd-e92f-566e-b1ec-1d5ebf091b60"
+            },
+            {
+              "content": "The user held the next gathering in their father's yard and moved between seats while speaking with everyone.",
+              "content_digest": "44843518c924955fa15e245dc41763a6fe21a95f6f590bd395f7b8a2d6357256",
+              "position": 2,
+              "uid": "c1f2b53e-6184-552b-a321-9796bb121055"
+            },
+            {
+              "content": "On a day the user started the barbecue at midday, sunlight led them to finish the meal quickly.",
+              "content_digest": "f275c2211b4bd69f40351800db57965b8ba44afbadb6e90a0291acae4e7a541b",
+              "position": 3,
+              "uid": "56d5befe-d5f4-59df-82e4-a66ba868dfc2"
+            },
+            {
+              "content": "The next time, the user started at 6 p.m. and remained outside until sunset.",
+              "content_digest": "13c413fbf16ea0704c10d09c5ee065a49ab789b0a3dadb1fc5068631dd95b292",
+              "position": 4,
+              "uid": "83d73ede-6f5a-550e-ba1c-c146b73a9917"
+            },
+            {
+              "content": "Because the side dishes brought by the user's mother and older sister had no labels, the user opened the same container twice.",
+              "content_digest": "5cc4205a743f5d8adca15876d7b0dd864089595ce729f4e3c1cc9a2272c6849b",
+              "position": 5,
+              "uid": "cf0947e8-c133-5259-bac2-e8ee6d74929e"
+            },
+            {
+              "content": "At the next gathering, the user wrote each food's name and who brought it on a small piece of paper.",
+              "content_digest": "6a93e0b5f7e3da8eff2e5c69a3f86c28dfc1a39c1ba7602a61cc1f6a96b837f9",
+              "position": 6,
+              "uid": "d42e48ca-39de-529f-bba2-332b779bd6c2"
+            },
+            {
+              "content": "After a barbecue, the user's younger brother prefers to divide leftover food into small containers to take home rather than discard it.",
+              "content_digest": "9febf1dab1f5000cddc636cd753d3c418b84810cbc6e394df7e8917d3fa29b72",
+              "position": 7,
+              "uid": "3958627e-a0fa-5e32-9e87-7ee874fc6fe7"
+            },
+            {
+              "content": "The local agent can summarize preparation and responses from prior family barbecues but cannot know the next attendees or weather.",
+              "content_digest": "6be2ed6916fc8a6200a4646b5db3b5ea0df7650e664bd098f973fb5229257cec",
+              "position": 8,
+              "uid": "1f24b5c2-554c-5356-b335-c6879e53ba7f"
+            },
+            {
+              "content": "The user's father's yard receives strong direct sunlight at midday; after 6 p.m., shade and wind lower the felt temperature.",
+              "content_digest": "a0bf855f5bb0422568bbed468e5299d111143362d7b9fe2dcf35dbaf8bcbf4c6",
+              "position": 9,
+              "uid": "d88b1b21-c58f-51d5-a60b-54bb11473d96"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "66f1fd9d-3d42-45ac-bd11-d4a9fb5d85af"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover unrelated planning domains. The reference centers on identity-document renewals, form accuracy, supporting documents, and calendar control; the compared frame centers on family-barbecue seating, venue conditions, food handling, and planning uncertainty. Neither supplies a scope-aligned counterpart to the other.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4127ece6-f30a-44ed-862f-a70f92a3410f",
+              "memory_uid": "50911f7e-75a1-5099-99f1-e471bb8e6cb6"
+            }
+          ],
+          "reason": "This is independently useful renewal-timing information with no counterpart in the barbecue-focused compared frame.",
+          "status": "RESOLVED",
+          "summary": "An identity document needs renewal during the latter half of 2025.",
+          "uid": "d3dc1245-0218-586b-b1a7-de4486554380"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4127ece6-f30a-44ed-862f-a70f92a3410f",
+              "memory_uid": "d5bd9f79-7295-5014-9668-83b7cffc78e2"
+            },
+            {
+              "frame_uid": "4127ece6-f30a-44ed-862f-a70f92a3410f",
+              "memory_uid": "5f92f6a3-1739-580c-bd63-1a936098ccd0"
+            }
+          ],
+          "reason": "The memories form one preparation-and-completion account that appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Scattered document materials delayed an application, while consolidating the necessary copies enabled completion in one sitting.",
+          "uid": "f1d5674a-39fb-55d8-8b0c-ff47425299e9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4127ece6-f30a-44ed-862f-a70f92a3410f",
+              "memory_uid": "929107ac-c62d-5920-9f71-12d4c9a102e9"
+            },
+            {
+              "frame_uid": "4127ece6-f30a-44ed-862f-a70f92a3410f",
+              "memory_uid": "df8b90c2-4310-5e89-b979-508309bf6b04"
+            }
+          ],
+          "reason": "The memories provide paired experience supporting one form-accuracy practice, absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Matching the entered name exactly against the supporting document avoids the correction problem previously caused by an abbreviation.",
+          "uid": "c63e09c1-767f-50bb-a91d-146f4481c703"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4127ece6-f30a-44ed-862f-a70f92a3410f",
+              "memory_uid": "306b9df1-d713-5413-b448-e2b42376d827"
+            },
+            {
+              "frame_uid": "4127ece6-f30a-44ed-862f-a70f92a3410f",
+              "memory_uid": "870b57b5-4cdb-54fc-b17f-8ffb86dad802"
+            },
+            {
+              "frame_uid": "4127ece6-f30a-44ed-862f-a70f92a3410f",
+              "memory_uid": "111972b9-e05f-5e1b-b121-ef9e51572d1d"
+            }
+          ],
+          "reason": "The missed deadline, later calendar practice, and general instruction jointly express one calendar-control claim found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Official applications should track and verify both the submission deadline and expected issuance date separately.",
+          "uid": "f9bb9d55-b9ab-597f-ba02-53420f384588"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4127ece6-f30a-44ed-862f-a70f92a3410f",
+              "memory_uid": "a0fe456c-0794-5bce-8ef9-9558e9833471"
+            }
+          ],
+          "reason": "This is a standalone supporting-document requirement with no compared-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "Public-service staff expect identity-verification requests to include both an original document and a copy.",
+          "uid": "9266b15d-d337-5799-98e1-ec2fbee03de1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4127ece6-f30a-44ed-862f-a70f92a3410f",
+              "memory_uid": "c9872898-ec4f-576e-b154-ff6fda581a1a"
+            }
+          ],
+          "reason": "This is a standalone informational limitation specific to identity documents and absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Current document validity cannot be determined without the document's expiration date.",
+          "uid": "6bcbaa16-bcd1-5dbb-8222-e5532b330946"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "66f1fd9d-3d42-45ac-bd11-d4a9fb5d85af",
+              "memory_uid": "cce43b8e-c1c1-5208-8d9a-ee665b805d4c"
+            }
+          ],
+          "reason": "This is independently useful barbecue-equipment information with no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user stores four folding chairs for family barbecues.",
+          "uid": "70d59aab-cf27-5d7b-8ed4-d54f54d62ffb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "66f1fd9d-3d42-45ac-bd11-d4a9fb5d85af",
+              "memory_uid": "e682f0fd-e92f-566e-b1ec-1d5ebf091b60"
+            },
+            {
+              "frame_uid": "66f1fd9d-3d42-45ac-bd11-d4a9fb5d85af",
+              "memory_uid": "c1f2b53e-6184-552b-a321-9796bb121055"
+            }
+          ],
+          "reason": "The memories form one venue-and-interaction account found only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A noisy indoor gathering caused repeated hearing difficulty, while the next gathering in the father's yard allowed the user to move among seats while talking.",
+          "uid": "1a4bd07e-3df4-542a-9292-0813f5d99930"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "66f1fd9d-3d42-45ac-bd11-d4a9fb5d85af",
+              "memory_uid": "56d5befe-d5f4-59df-82e4-a66ba868dfc2"
+            },
+            {
+              "frame_uid": "66f1fd9d-3d42-45ac-bd11-d4a9fb5d85af",
+              "memory_uid": "83d73ede-6f5a-550e-ba1c-c146b73a9917"
+            },
+            {
+              "frame_uid": "66f1fd9d-3d42-45ac-bd11-d4a9fb5d85af",
+              "memory_uid": "d88b1b21-c58f-51d5-a60b-54bb11473d96"
+            }
+          ],
+          "reason": "The memories jointly describe how timing and yard conditions shape barbecue comfort and duration, without a reference-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "Midday direct sun shortened a barbecue, whereas a 6 p.m. start aligned with later shade, wind, and a longer outdoor stay.",
+          "uid": "774f56bf-8d16-5c7e-b791-12cf76161d25"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "66f1fd9d-3d42-45ac-bd11-d4a9fb5d85af",
+              "memory_uid": "cf0947e8-c133-5259-bac2-e8ee6d74929e"
+            },
+            {
+              "frame_uid": "66f1fd9d-3d42-45ac-bd11-d4a9fb5d85af",
+              "memory_uid": "d42e48ca-39de-529f-bba2-332b779bd6c2"
+            }
+          ],
+          "reason": "The memories form one problem-and-response account about food identification, found only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Unlabeled side dishes caused duplicate container opening, leading the user to label each food and its contributor at the next gathering.",
+          "uid": "dd4c4cc2-33c4-593c-a6c9-26f4096a175d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "66f1fd9d-3d42-45ac-bd11-d4a9fb5d85af",
+              "memory_uid": "3958627e-a0fa-5e32-9e87-7ee874fc6fe7"
+            }
+          ],
+          "reason": "This is a standalone family preference about leftover handling with no reference-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user's younger brother prefers taking leftovers home in small containers instead of discarding them.",
+          "uid": "ddfa12a8-ecc0-5e23-8204-e6e659623649"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "66f1fd9d-3d42-45ac-bd11-d4a9fb5d85af",
+              "memory_uid": "1f24b5c2-554c-5356-b335-c6879e53ba7f"
+            }
+          ],
+          "reason": "This is a standalone planning limitation specific to future barbecues and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Past barbecue preparation and responses can be summarized, but future attendees and weather cannot be known from that history.",
+          "uid": "a73075a0-2c0d-5138-b8ac-2f18853ac7a2"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Family-barbecue material covers seating and conversation, venue timing and weather effects, food labels and leftovers, stored chairs, and uncertainty about future conditions.",
+        "differences": "",
+        "reference_only": "Identity-document material covers renewal timing, document organization, exact-name checks, required originals and copies, calendar tracking, and limits on assessing validity."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "fba3ce7e-0846-42c2-8793-2d53b5bbf10d"
+    },
+    "analysis_digest": "41316c888330e1ac4ed89064bfced55e2812f3e04d925050da93329c2edadbd8",
+    "key": "f2fe2f4199902340b03c43b026619a25fbe18b82c353ccdcaa5bf88cc4c5736a",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 36.56134804099929,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "f2fe2f4199902340b03c43b026619a25fbe18b82c353ccdcaa5bf88cc4c5736a",
+  "created_at": "2026-08-13T18:49:45.989501Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/01",
+  "pair_key": "b12265abc60b3a59f8e021d1f09e65d053090164ef2036589bffbf94ecff2fbb",
+  "provider_seconds": 36.56134804099929,
+  "right": "task-3/local/personal-memory/2026/06",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

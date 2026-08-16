@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ ! ticker-context-fit · 4/6 checks · CONTEXT 1 · VERTICAL 1 · PEER 0                                                                                                             ^┃
+┃                                                                                                                                                                                  ┃
+┃ k1 · RAW_EVIDENCE                                                                                                                                                                ┃
+┃ ticker/raw · 1 direct Memories                                                                                                                                                   ┃
+┃                                                                                                                                                                                  ┃
+┃ k2 · WORKING_CANDIDATES                                                                                                                                                          ┃
+┃ ticker/examples · 0 direct Memories                                                                                                                                              ┃
+┃                                                                                                                                                                                  ┃
+┃ k3 · PUBLICATION_TARGET                                                                                                                                                          ┃
+┃ ticker/output · 0 direct Memories                                                                                                                                                ┃
+┃                                                                                                                                                                                  ┃
+┃ ! g1 · Learn how real United States company ticker symbols are formed.                                                                                                           ┃
+┃   VERTICAL · CONTRADICTS · The unsupported synthetic Example does not exercise the Goal's real-company boundary.                                                                 ┃
+┃                                                                                                                                                                                  ┃
+┃ ✓ r1 · Use actual companies and their observed tickers.                                                                                                                          ┃
+┃                                                                                                                                                                                  ┃
+┃ ! e1 · North Star Energy Inc. has ticker NSE.                                                                                                                                    ┃
+┃   CONTEXT · UNDERDETERMINED · The real-company scope has no source-linked Context Memory supporting this concrete ticker claim.                                                  ┃
+┃   VERTICAL · CONTRADICTS · The unsupported synthetic Example does not exercise the Goal's real-company boundary.                                                                 ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ FIT · ↑/↓ section · PgUp/PgDn page · Home/End · y focused · Y all · Esc/Backspace/Q close · read-only

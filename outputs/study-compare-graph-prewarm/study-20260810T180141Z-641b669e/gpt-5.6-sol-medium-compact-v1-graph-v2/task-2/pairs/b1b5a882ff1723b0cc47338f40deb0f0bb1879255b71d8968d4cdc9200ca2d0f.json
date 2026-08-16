@@ -1,0 +1,150 @@
+{
+  "coverage": {
+    "expected": 10,
+    "observed": 10
+  },
+  "created_at": "2026-08-11T00:23:08.347838Z",
+  "description_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+  "issues": [],
+  "kind": "STUDY_COMPARE_GRAPH_PAIR",
+  "left": {
+    "context_digest": "9d55b4a5604285e426b317f7f4732b35ca1e9df044f7015b3ae6a6be0df5492b",
+    "context_uid": "7d293f75-52b6-5f27-99c4-54f2be3d8e59",
+    "memory_count": 4,
+    "name": "task-2/advisor1/reproducibility"
+  },
+  "method": "COMPACT_DECISION_VECTOR_V1",
+  "operation": "COMPARE",
+  "pair_key": "b1b5a882ff1723b0cc47338f40deb0f0bb1879255b71d8968d4cdc9200ca2d0f",
+  "provider": {
+    "condition": "COMPACT_DECISION_VECTOR",
+    "contract_valid": true,
+    "elapsed_seconds": 19.270057791,
+    "error_type": null,
+    "failure_category": null,
+    "operation": "compare_contexts_compact_ab_v1",
+    "prompt_chars": 6012,
+    "provider_calls": 1,
+    "provider_run": {
+      "completion_tokens": null,
+      "identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "operation": "compare_contexts_compact_ab_v1",
+      "prompt_tokens": null,
+      "upstream_model": "gpt-5.6-sol",
+      "upstream_provider": "openai-codex"
+    },
+    "provider_seconds": 19.269514709012583,
+    "response_bytes": 464,
+    "response_chars": 464,
+    "schema_chars": 1378,
+    "validation_error": null,
+    "validation_seconds": 0.0005310420092428103
+  },
+  "relations": [
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "fb400759-63ed-568a-b94e-5f0c2fe94b67",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000001",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "e52e8470-6419-5306-9ddd-00a86003dcf3",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000002",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Traceability across observations, interpretations, and prototype changes may be disrupted when performance-linked error reporting causes safety records and research decision logs to be separated.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "8f4edf8c-491d-56fe-bde4-d9ce25d6de50",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "87662a7e-ffc7-521a-a06c-7db8184377e8",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "6c4e9175-4590-5689-ae2b-678f0eb930b9",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000003",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "ceb095a9-3068-55ea-a06f-d954c121e007",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "962d7645-02b3-5611-8415-4370794c10d4",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000004",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "a3270872-1901-5d24-8ef1-374833599bf9",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000005",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "f6dd1368-0d90-5f1a-97d0-56594ce8f4b3",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "342e4697-873f-56a8-b4a4-896efe910144",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000006",
+      "status": "RESOLVED"
+    }
+  ],
+  "right": {
+    "context_digest": "b598a4ff3268ef8c6c0d7bc5ff34af370074bcdd30d61bd3623fcdfb167f37d6",
+    "context_uid": "4283d797-6a33-5f39-b7f6-f4dbd3264389",
+    "memory_count": 6,
+    "name": "task-2/advisor2/safety"
+  },
+  "schema_version": 1,
+  "semantic_content_in_participant_report": false,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

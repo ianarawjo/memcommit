@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:51:20.629136+00:00",
+      "frames": [
+        {
+          "context_digest": "43b741cd1df20a084f3517aec7f886d4e5022812f0536eb126a6caf2d5570489",
+          "context_name": "task-3/local/personal-memory/2025/05",
+          "context_uid": "1f913bb6-790c-5490-a20d-127c7aab5892",
+          "memories": [
+            {
+              "content": "The user keeps two potted herbs beside a south-facing window.",
+              "content_digest": "b79056c033f208bb02b99fef1c011e5537e2ea8c19c3894863c3a5ad56054e08",
+              "position": 0,
+              "uid": "cb09b8ab-c7c4-51bb-a227-039c7cdfae5d"
+            },
+            {
+              "content": "During a week when the user watered every day based only on the soil surface, the leaves of one plant turned yellow.",
+              "content_digest": "042f4be9fd5481a7252d1c0065e95085e11e81e475531afe45b9f1d268d4c5b4",
+              "position": 1,
+              "uid": "95978183-0070-5b12-b117-be39bb343a5e"
+            },
+            {
+              "content": "During a week when the user checked below the soil surface with a finger before watering, the plant grew new leaves.",
+              "content_digest": "06ca2ec53f03677fdfd78bb1d391f197d3f49b974f6e812f25ba49ce34f74249",
+              "position": 2,
+              "uid": "8c610ce5-1eb7-52e5-ad81-e8062d23cd19"
+            },
+            {
+              "content": "On a day the user left the window open for a long time, strong wind knocked over one pot.",
+              "content_digest": "914f67a75fdf73cee064a465a9f0e6ee9ba012f1a40c614e199a9354756203a8",
+              "position": 3,
+              "uid": "3f886c0c-071b-5f2d-adad-da01345d702f"
+            },
+            {
+              "content": "The next day, the user moved the pot inward from the windowsill so the same wind would not knock it over.",
+              "content_digest": "f190916b360b6543865ced49cf5d9a987e96c9147966181e5920342bb41ba50c",
+              "position": 4,
+              "uid": "afe855b8-f5ad-559c-a63f-6f655ba371a2"
+            },
+            {
+              "content": "The user put a plant-name label in a small pot received from their maternal aunt.",
+              "content_digest": "82284f0102305db41eaaecafe86bc05833090853320f2ebb8e5f44abb2d78a63",
+              "position": 5,
+              "uid": "384c4f5f-b15c-5742-ac79-20106d0dd30b"
+            },
+            {
+              "content": "The user confused the care instructions for an unlabeled pot with those for another plant.",
+              "content_digest": "824267db866253690527d5ab08166f4228401443ed903708d33ac22542811750",
+              "position": 6,
+              "uid": "48dc89af-ed9d-51a5-a4b1-b809fd818143"
+            },
+            {
+              "content": "The user's maternal aunt considers understanding the sunlight at a pot's location more important than watering frequency when caring for it.",
+              "content_digest": "8a24f6df4a58db3e538f77e572a3cf152b7a4aff3527ec3d8616e85a675bc7c0",
+              "position": 7,
+              "uid": "a2426820-65d6-5c78-ac50-0f32b366ae47"
+            },
+            {
+              "content": "Before creating a plant-care reminder, check each plant's name and most recent watering date.",
+              "content_digest": "ecd7ef911951f3c2383cd916a4efbd94bdf439f63de1687c2f637a161ac8a60d",
+              "position": 8,
+              "uid": "efd51196-ed48-5699-a0f4-c5b8e149d11c"
+            },
+            {
+              "content": "The soil in the user's potted herbs beside the south-facing window dries at different rates depending on the season and amount of sunlight.",
+              "content_digest": "f716b16e802d30d4c2d1ed4bff855812682e53a9fc4e29988e2662ae321d0a4f",
+              "position": 9,
+              "uid": "4c93eeff-566e-5a1a-afb9-035c97fb9c73"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "1c6f493e-137e-4ca8-9f44-2f8050297b1b"
+        },
+        {
+          "context_digest": "df0924e320cd14a29eaed60f78e82fd509c4062949b35706b2a7cb94571fb599",
+          "context_name": "task-3/local/personal-memory/2026/04",
+          "context_uid": "16e860a8-7a90-5b7a-adc3-1c487ef97e03",
+          "memories": [
+            {
+              "content": "The user collects clothes for donation in a large bag beside the entrance.",
+              "content_digest": "39f2f01c59b7fa4ca7529d510e1b0a6ffab6706861042f771cfe97f6f806efac",
+              "position": 0,
+              "uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            },
+            {
+              "content": "After emptying an entire drawer at once, the user could not find a charger they needed.",
+              "content_digest": "674c33ba6475f42b29b03e6f8711e0216f983f3d37fee3dacf9336e3bb4596bf",
+              "position": 1,
+              "uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            },
+            {
+              "content": "During the next organizing session, the user sorted items by type and put only items to be discarded in the bag.",
+              "content_digest": "63104b5a7fd380f818c8758c51f9550c7a7fa41ff91f1dd314225d1824b69643",
+              "position": 2,
+              "uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            },
+            {
+              "content": "Even after photographing unworn clothes, the user did not take them out again for one month.",
+              "content_digest": "519f131096440719dcd3412f4439c5cfe44b7f402684170209708040692dc5fd",
+              "position": 3,
+              "uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            },
+            {
+              "content": "After moving those clothes to the donation bag, the user cleared one closet compartment.",
+              "content_digest": "45db58ae108a299344d982d8606fff26f733252da691cf01417e760909ff6057",
+              "position": 4,
+              "uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            },
+            {
+              "content": "The user nearly discarded an important paper with advertising and checked the recycling box again.",
+              "content_digest": "6bf928f67944656e5f3c68d8869c0cefd039a588f0ba735f94520231ef58017c",
+              "position": 5,
+              "uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            },
+            {
+              "content": "During the next organizing session, the user kept a separate document box and did not mix the papers.",
+              "content_digest": "adac8d4266c6b11e15d29c484665bc5dcc915f9aa319198b6a69d0e7b0131bb3",
+              "position": 6,
+              "uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            },
+            {
+              "content": "The user's mother asks the user to check whether she needs kitchen items in good condition before discarding them.",
+              "content_digest": "0752bc2ac00c0b1301c45ab4c2e73f63c57e6ebc4255dcc1c13330ffda906612",
+              "position": 7,
+              "uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            },
+            {
+              "content": "Confirm with the user before marking a personal document or another person's property as a disposal candidate.",
+              "content_digest": "17062e2cd4738619e81e211cb2f53d14e78c5f4eab9ae49053ce7e06935a7db5",
+              "position": 8,
+              "uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            },
+            {
+              "content": "The local agent cannot determine an object's emotional meaning from frequency of use alone.",
+              "content_digest": "9c86bcfe2b209bf7957dced0eab000b42f97b6a435d705ccaccb15e49be3691d",
+              "position": 9,
+              "uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "106e5346-3d6c-45d9-a7dd-65a57dfa627d"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate practical domains: the reference records herb care, location risks, identification, and reminder prerequisites, while the compared frame records decluttering practices, disposal safeguards, and limits on inferring sentimental value. No operational claim materially overlaps or conflicts across the frames.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1c6f493e-137e-4ca8-9f44-2f8050297b1b",
+              "memory_uid": "cb09b8ab-c7c4-51bb-a227-039c7cdfae5d"
+            }
+          ],
+          "reason": "This plant-location fact is independently useful and has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Two potted herbs are kept beside a south-facing window.",
+          "uid": "e9b68c52-6fcb-5f3d-8f68-5e1aaae66072"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1c6f493e-137e-4ca8-9f44-2f8050297b1b",
+              "memory_uid": "95978183-0070-5b12-b117-be39bb343a5e"
+            }
+          ],
+          "reason": "This watering observation is independently useful and has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Daily watering based only on surface soil coincided with yellowing leaves in one plant.",
+          "uid": "8d8afa38-1fcc-5eb8-bcb1-e31de9d378bc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1c6f493e-137e-4ca8-9f44-2f8050297b1b",
+              "memory_uid": "8c610ce5-1eb7-52e5-ad81-e8062d23cd19"
+            }
+          ],
+          "reason": "This watering observation is independently useful and has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Checking below the soil surface before watering coincided with new leaf growth.",
+          "uid": "9656b804-8687-5dbd-82b1-3177d65f3cb0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1c6f493e-137e-4ca8-9f44-2f8050297b1b",
+              "memory_uid": "3f886c0c-071b-5f2d-adad-da01345d702f"
+            }
+          ],
+          "reason": "This environmental-risk event is independently useful and has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Strong wind through an open window knocked over a pot.",
+          "uid": "24d32713-fb13-5004-a638-90d28475f944"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1c6f493e-137e-4ca8-9f44-2f8050297b1b",
+              "memory_uid": "afe855b8-f5ad-559c-a63f-6f655ba371a2"
+            }
+          ],
+          "reason": "This plant-safety precaution is independently useful and has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user moved the pot inward to prevent another wind-related knockover.",
+          "uid": "b4f5f406-0b9a-5800-989a-5868e77ca0f1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1c6f493e-137e-4ca8-9f44-2f8050297b1b",
+              "memory_uid": "384c4f5f-b15c-5742-ac79-20106d0dd30b"
+            }
+          ],
+          "reason": "This plant-identification fact is independently useful and has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user labeled a small plant pot received from their maternal aunt.",
+          "uid": "ee4f7ad4-392e-5370-ac61-fc0a534f1bcc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1c6f493e-137e-4ca8-9f44-2f8050297b1b",
+              "memory_uid": "48dc89af-ed9d-51a5-a4b1-b809fd818143"
+            }
+          ],
+          "reason": "This plant-identification problem is independently useful and has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "An unlabeled pot caused the user to confuse care instructions between plants.",
+          "uid": "bfca688a-89c5-5624-8515-a744f1bde9ab"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1c6f493e-137e-4ca8-9f44-2f8050297b1b",
+              "memory_uid": "a2426820-65d6-5c78-ac50-0f32b366ae47"
+            }
+          ],
+          "reason": "This relative’s plant-care preference is independently useful and has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s maternal aunt prioritizes understanding location-specific sunlight over watering frequency in plant care.",
+          "uid": "48ccd519-f62b-5ea7-9edb-275b77e02dc0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1c6f493e-137e-4ca8-9f44-2f8050297b1b",
+              "memory_uid": "efd51196-ed48-5699-a0f4-c5b8e149d11c"
+            }
+          ],
+          "reason": "This reminder-specific prerequisite is independently useful and has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Plant name and latest watering date should be checked before creating a care reminder.",
+          "uid": "e5c94487-f812-5146-bad4-b3b7b5874dda"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1c6f493e-137e-4ca8-9f44-2f8050297b1b",
+              "memory_uid": "4c93eeff-566e-5a1a-afb9-035c97fb9c73"
+            }
+          ],
+          "reason": "This plant-care condition is independently useful and has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The herbs’ soil dries at rates that vary with season and sunlight.",
+          "uid": "d3b3fc7a-2044-50c4-ba02-6965384486a4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "106e5346-3d6c-45d9-a7dd-65a57dfa627d",
+              "memory_uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            }
+          ],
+          "reason": "This donation-storage fact is independently useful and has no materially corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user collects donation clothes in a large bag beside the entrance.",
+          "uid": "0927e4a3-d3d7-5bfc-9ec8-8a5b717e83ea"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "106e5346-3d6c-45d9-a7dd-65a57dfa627d",
+              "memory_uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            }
+          ],
+          "reason": "This organizing failure is independently useful and has no materially corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Emptying an entire drawer at once left the user unable to find a needed charger.",
+          "uid": "8ea5988f-193b-56f7-83e4-021b30de1185"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "106e5346-3d6c-45d9-a7dd-65a57dfa627d",
+              "memory_uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            }
+          ],
+          "reason": "This organizing method is independently useful and has no materially corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user later sorted items by type and placed only discard items in the bag.",
+          "uid": "bf1dfbdd-3411-54bc-ac4f-7334df212f50"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "106e5346-3d6c-45d9-a7dd-65a57dfa627d",
+              "memory_uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            }
+          ],
+          "reason": "This observation about clothing use is independently useful and has no materially corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Photographing unworn clothes did not lead the user to retrieve them during the following month.",
+          "uid": "a9c7fe80-6cfd-5154-b3c0-89e065f24f0f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "106e5346-3d6c-45d9-a7dd-65a57dfa627d",
+              "memory_uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            }
+          ],
+          "reason": "This decluttering outcome is independently useful and has no materially corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Moving the unworn clothes into the donation bag cleared a closet compartment.",
+          "uid": "fd3ce534-da95-571b-8d3f-be0382e577bd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "106e5346-3d6c-45d9-a7dd-65a57dfa627d",
+              "memory_uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            }
+          ],
+          "reason": "This disposal near-miss is independently useful and has no materially corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user nearly recycled an important paper with advertising and rechecked the recycling box.",
+          "uid": "7cd5e212-4829-5491-84c8-ea3103c37128"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "106e5346-3d6c-45d9-a7dd-65a57dfa627d",
+              "memory_uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            }
+          ],
+          "reason": "This document-sorting safeguard is independently useful and has no materially corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user later kept documents in a separate box so papers were not mixed.",
+          "uid": "45a59a5b-0ba6-5954-8785-19b7eabeb867"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "106e5346-3d6c-45d9-a7dd-65a57dfa627d",
+              "memory_uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            }
+          ],
+          "reason": "This relative’s disposal preference is independently useful and has no materially corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s mother asks to be consulted about usable kitchen items before they are discarded.",
+          "uid": "e5ccb4ed-47bf-5011-8057-d66e9be8efba"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "106e5346-3d6c-45d9-a7dd-65a57dfa627d",
+              "memory_uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            }
+          ],
+          "reason": "This disposal-confirmation policy is independently useful and has no materially corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "User confirmation is required before treating a personal document or another person’s property as a disposal candidate.",
+          "uid": "acbe6a94-abe4-57b0-9967-33304aeac469"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "106e5346-3d6c-45d9-a7dd-65a57dfa627d",
+              "memory_uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "reason": "This inference limitation is independently useful and has no materially corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The local agent cannot infer an object’s emotional meaning from usage frequency alone.",
+          "uid": "67b86e24-897e-5c20-bad3-7940908ec67a"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame describes donation storage and outcomes, safer sorting and document separation, consultation before disposal, and uncertainty about emotional significance.",
+        "differences": "",
+        "reference_only": "The reference describes seasonal herb-care conditions, watering observations, wind precautions, plant identification, a relative’s care priority, and checks required before reminders."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "9fbc43ab-77e6-433d-8003-4affcc32f240"
+    },
+    "analysis_digest": "7d30f1ba4d157eb210c7d00a459bb2bd4e84e6df2c9ab73124c5a76da41ccfe7",
+    "key": "7adc1cc51038f89dbac85298ae22f1a6275fdcb14efc60b3115488d073c67b96",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 45.473955041998124,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "7adc1cc51038f89dbac85298ae22f1a6275fdcb14efc60b3115488d073c67b96",
+  "created_at": "2026-08-13T18:52:06.102743Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/05",
+  "pair_key": "76161c03190cadc4fa04cfd0bbdc9bed4b59a5829b3eb9ee5fb439bdd124e4da",
+  "provider_seconds": 45.473955041998124,
+  "right": "task-3/local/personal-memory/2026/04",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

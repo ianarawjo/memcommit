@@ -1,0 +1,238 @@
+{
+  "coverage": {
+    "expected": 24,
+    "observed": 24
+  },
+  "created_at": "2026-08-11T00:29:28.073211Z",
+  "description_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+  "issues": [],
+  "kind": "STUDY_COMPARE_GRAPH_PAIR",
+  "left": {
+    "context_digest": "4371a72e6fb939731cb550ca5363a3b5210680482f84c18b36ba933f4454ecc1",
+    "context_uid": "cf8e8baf-292e-57c3-8e2c-3f9b3d52f3d3",
+    "memory_count": 7,
+    "name": "task-2/advisor2/expression"
+  },
+  "method": "COMPACT_DECISION_VECTOR_V1",
+  "operation": "COMPARE",
+  "pair_key": "8407bf307152ae998241760725994ae06e221a269263518fe92a89138f5fa2f3",
+  "provider": {
+    "condition": "COMPACT_DECISION_VECTOR",
+    "contract_valid": true,
+    "elapsed_seconds": 34.93123287499475,
+    "error_type": null,
+    "failure_category": null,
+    "operation": "compare_contexts_compact_ab_v1",
+    "prompt_chars": 9438,
+    "provider_calls": 1,
+    "provider_run": {
+      "completion_tokens": null,
+      "identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "operation": "compare_contexts_compact_ab_v1",
+      "prompt_tokens": null,
+      "upstream_model": "gpt-5.6-sol",
+      "upstream_provider": "openai-codex"
+    },
+    "provider_seconds": 34.92924925000989,
+    "response_bytes": 790,
+    "response_chars": 790,
+    "schema_chars": 1380,
+    "validation_error": null,
+    "validation_seconds": 0.0019591250020312145
+  },
+  "relations": [
+    {
+      "comment": "For repeatedly revised procedures, the reference specifies an editable sequence table and its tradeoff, while the compared frame requires a compact visual summary when the procedure is unfamiliar.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "4264c20d-3e44-578d-866e-7787cc7b59e2",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "22254f16-4628-5fd9-b1af-6e66dc2572b3",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "32028269-5d43-5a65-b22b-9e570ceabfde",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "939ee3d0-b611-574a-a25b-82708394bd5e",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "e34bce0c-7d07-5fe6-b03f-39faa801640b",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000001",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "70a8c3f0-0f6a-5881-abd6-29f52833b7bd",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000002",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "The reference addresses human-system transitions in service flows, while the compared frame requires step-transition conditions in summaries of unfamiliar interaction procedures.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "b410aa8d-db87-586b-a1cd-4af5767a9f7a",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "68ad56f9-6ca2-587a-9182-fd98a79d3d5c",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000003",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "a385fbb1-85b4-5132-bbc7-8fd8daedb715",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000004",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "e32f543b-1637-572a-ab96-319d74ee7e21",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "6bbb0f69-ca99-539a-a810-a0fb34fe9cc3",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "0ac685f9-e338-5549-bf91-32078cf36f15",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "5567fb3c-de90-5363-af1b-62fb5b8e0bb1",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000005",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "48e887dc-7fc8-5a23-9999-890acb870251",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000006",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "eca301ff-9feb-502d-b955-055c48342542",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "cbd977cd-1b78-5ca6-823a-7a5b4b92d77a",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000007",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "9283aedb-6818-5c99-8fe0-502b488acb66",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000008",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "c5c04ab1-10e8-52a3-98a1-aa9cbede57c1",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "87203bcf-6724-543a-ad19-60a2becc4598",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "32cef408-4c66-5ef2-9a59-eea6fc67b16e",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "3579fcc0-c74e-5006-901b-6406a3106fa1",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "2c2aa1af-c450-5c8d-a907-042c5757d3ee",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "1fb62d5b-532b-5664-842c-57622e3c8b9d",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000009",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "c9591180-6f3a-5909-8695-31704b9b6f01",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000010",
+      "status": "RESOLVED"
+    }
+  ],
+  "right": {
+    "context_digest": "19032e7fed99072de4fcaeff084874da452865e9958a1301ec01260d60e01867",
+    "context_uid": "09c95ce6-baa2-5823-a035-e4b0d323200b",
+    "memory_count": 17,
+    "name": "task-2/advisor2/structure"
+  },
+  "schema_version": 1,
+  "semantic_content_in_participant_report": false,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

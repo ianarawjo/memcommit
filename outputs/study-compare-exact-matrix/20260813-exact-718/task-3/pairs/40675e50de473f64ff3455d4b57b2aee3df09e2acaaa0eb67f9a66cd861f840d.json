@@ -1,0 +1,343 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:39:35.731158+00:00",
+      "frames": [
+        {
+          "context_digest": "3f1b018c2a3a8594d00bffba053626a876fef4893e678dd9600986d9d41c0f31",
+          "context_name": "task-3/local/personal-memory/2024/05",
+          "context_uid": "683986e6-d517-5a53-9dc1-16b69cf0d12e",
+          "memories": [
+            {
+              "content": "The user keeps a small table fan beside the bedroom window.",
+              "content_digest": "b8a464f5e2a33edcef1259af4a412b047ba190bae9cfe42aaf1dbd722efc7f0c",
+              "position": 0,
+              "uid": "3088c235-435c-52ee-9ffc-26cf85ec196e"
+            },
+            {
+              "content": "On a day the user drank coffee late in the afternoon, they could not fall asleep until dawn.",
+              "content_digest": "ef4cf019ebc163fc24f03b8bd505599cd13fc83f33565d51ffb4379dc21d72b8",
+              "position": 1,
+              "uid": "7811ed66-2f22-54d8-a215-62a843264ba5"
+            },
+            {
+              "content": "On a day the user drank coffee before 2 p.m., they fell asleep at their usual time.",
+              "content_digest": "046ac3f8454da623f73d1293fb954b72a3ea056642fd9ee7948c35f110e77669",
+              "position": 2,
+              "uid": "d0f94a56-5cf8-5215-9cfa-5993b3b781be"
+            },
+            {
+              "content": "On a tired day, the user ate dinner out and postponed even washing the dishes after returning home.",
+              "content_digest": "ac36f6c1039dc74f764b4671f718f1e124823dc75fd45abda010285523280b71",
+              "position": 3,
+              "uid": "fc19394a-6634-5aae-bfa5-bba91e707954"
+            },
+            {
+              "content": "In the same week, on a day the user made simple noodles at home, they rested immediately after the meal.",
+              "content_digest": "45bb543f6c6ca213b856683b3c53448ac0d044bcf24f694eda292d6c4923ac5c",
+              "position": 4,
+              "uid": "be7aa7f3-1b67-5677-950d-9942ca337a99"
+            },
+            {
+              "content": "On a night the window was left open, street noise woke the user twice.",
+              "content_digest": "13f3dd86b869b25ee75e1b80d9cdb890b79434fa976fbd7246e89ba808f1a6c6",
+              "position": 5,
+              "uid": "47faaefd-2d60-5693-9847-2c1d5d2f9092"
+            },
+            {
+              "content": "On a night the table fan was running, the user was not too warm even with the window closed.",
+              "content_digest": "96ce23df1cf4f913e3b4c339cc3a857a6a8776e3f3f48e865eae65f02297bba8",
+              "position": 6,
+              "uid": "d6eea310-1313-5a51-b032-f3f518620610"
+            },
+            {
+              "content": "The user's father prefers to have coffee available after dinner and believes it will not cause a sleep problem.",
+              "content_digest": "197616278309e370f0d0e633700b1bde2c6e4395dbc8ed2b942e14fb6c1c9cc5",
+              "position": 7,
+              "uid": "056defa1-8256-561d-a2b4-a70df4058c33"
+            },
+            {
+              "content": "When making a sleep-related suggestion, do not treat one or two records as a general lifestyle habit.",
+              "content_digest": "963795e89a1e2365dd81abf463fb9a80c1c22b9c0e59b121681f89c09860e583",
+              "position": 8,
+              "uid": "7cecee60-fabd-55a3-998b-78810bd9eaf4"
+            },
+            {
+              "content": "The user tends to go to bed much later after drinking coffee late in the afternoon.",
+              "content_digest": "e54652939c104807d5c501753f85aee97883cc55e1d056787b86857cd5b8292d",
+              "position": 9,
+              "uid": "9ace13d3-d881-5720-bfd5-f7884db67756"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "388c3303-c915-4da3-863a-7a13ee3046b7"
+        },
+        {
+          "context_digest": "1d47d83944d91bc0316a61894412e9b4361758603b9532687cf68473f1d30198",
+          "context_name": "task-3/local/personal-memory/2026/01",
+          "context_uid": "e48e6eac-20f7-599d-9f76-4238bd9dd96d",
+          "memories": [
+            {
+              "content": "The user keeps gloves and scarves in a basket inside the entrance.",
+              "content_digest": "df54c52cb6bc89e2e66c747df9807c6892db272c2a23ac5ac91e3f64aaa2a5da",
+              "position": 0,
+              "uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409"
+            },
+            {
+              "content": "On a day the user could not find their gloves, they walked with their hands in their pockets and missed the bus.",
+              "content_digest": "d4205aee5fe3f2c18adc3622930cc7f74de231de9812ca594dbd95a0af7199ff",
+              "position": 1,
+              "uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5"
+            },
+            {
+              "content": "Before the next outing, the user put the gloves in the entrance basket the night before and left on time.",
+              "content_digest": "23a7026d7d1a7edd3278e7b8aa147ef0d315059663f78da5498ad6c1b4a5407c",
+              "position": 2,
+              "uid": "a11f0943-8ee1-5305-87fb-64982fb36f82"
+            },
+            {
+              "content": "On a snowy day, the user chose a shorter route but turned back at stairs that had not been cleared of snow.",
+              "content_digest": "e9e241d2bc4d7c2fa9a44471aa6d1c16d42d50fe2ed99ccfb50713107714be9b",
+              "position": 3,
+              "uid": "f623f245-cdd5-5080-8869-b52cf2914076"
+            },
+            {
+              "content": "The next day, the user took a cleared sidewalk along the main road and avoided slippery sections.",
+              "content_digest": "62c8ec8b38778e9922cf433af4ceb4d59f60bee52dc758e3b88bb1163637f108",
+              "position": 4,
+              "uid": "17ac56f1-1302-5350-99d5-b95ef7feb768"
+            },
+            {
+              "content": "The user fell asleep with the heat turned up, became too warm before dawn, and woke twice.",
+              "content_digest": "912dbbc88a0f4a174b714a794793781f4d2f6c889f73cd7f825338addcab5d6c",
+              "position": 5,
+              "uid": "96988fa9-44b1-511e-8c99-4372f902cfe3"
+            },
+            {
+              "content": "The next night, the user turned down the heat and used one additional thin blanket.",
+              "content_digest": "3d12a4609d4731ebe71bacc841c979ac3497553238c3b5c2191842bbf075ba89",
+              "position": 6,
+              "uid": "b628acaa-50da-552c-8665-244dc4ab8263"
+            },
+            {
+              "content": "On a morning with heavy snow, the user's father expects the user will worry about road conditions and sends a text before departure.",
+              "content_digest": "dcd6bcb23bee46e49813bb14dd8dcb91983d5830f0536d7f23fcdb3a8af0667c",
+              "position": 7,
+              "uid": "08dfb937-7b28-55b5-801c-c0da00cbd414"
+            },
+            {
+              "content": "Before proposing a winter travel route, check recent snow-clearing conditions and accessible entrances.",
+              "content_digest": "dcab87102a9979c51dd369d5ba5ed00b7445c8ccd14450edcb8bec7859689606",
+              "position": 8,
+              "uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d"
+            },
+            {
+              "content": "The local agent cannot know the actual condition of the sidewalk the user will take from a weather forecast alone.",
+              "content_digest": "6b4bcc2f2f508f130c047ff677cadae0eae5b4cc5e5dd6bb3a1fb3784d7793b1",
+              "position": 9,
+              "uid": "802c4031-57de-592a-9bc8-6ee3d54921c8"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "1d7bafe2-0aa1-40eb-93e8-4dbe30657565"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames overlap on managing bedroom conditions for sleep but otherwise cover separate domains. The reference focuses on coffee timing, evening recovery, and sleep-evidence caution; the compared frame focuses on winter preparation, route accessibility, and condition-aware travel guidance.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "388c3303-c915-4da3-863a-7a13ee3046b7",
+              "memory_uid": "3088c235-435c-52ee-9ffc-26cf85ec196e"
+            },
+            {
+              "frame_uid": "388c3303-c915-4da3-863a-7a13ee3046b7",
+              "memory_uid": "47faaefd-2d60-5693-9847-2c1d5d2f9092"
+            },
+            {
+              "frame_uid": "388c3303-c915-4da3-863a-7a13ee3046b7",
+              "memory_uid": "d6eea310-1313-5a51-b032-f3f518620610"
+            },
+            {
+              "frame_uid": "1d7bafe2-0aa1-40eb-93e8-4dbe30657565",
+              "memory_uid": "96988fa9-44b1-511e-8c99-4372f902cfe3"
+            },
+            {
+              "frame_uid": "1d7bafe2-0aa1-40eb-93e8-4dbe30657565",
+              "memory_uid": "b628acaa-50da-552c-8665-244dc4ab8263"
+            }
+          ],
+          "reason": "The reference describes an available table fan, noise from an open window, and comfortable cooling with the window closed; the compared frame describes overheating with high heat and a subsequent lower-heat, thin-blanket configuration. These jointly inform the same sleep-environment decision without contradiction.",
+          "status": "RESOLVED",
+          "summary": "Both frames provide complementary evidence for configuring the bedroom to avoid excessive warmth and sleep disruption.",
+          "uid": "f16efd65-d76f-5de9-916c-4147a5ba06b2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "388c3303-c915-4da3-863a-7a13ee3046b7",
+              "memory_uid": "7811ed66-2f22-54d8-a215-62a843264ba5"
+            },
+            {
+              "frame_uid": "388c3303-c915-4da3-863a-7a13ee3046b7",
+              "memory_uid": "d0f94a56-5cf8-5215-9cfa-5993b3b781be"
+            },
+            {
+              "frame_uid": "388c3303-c915-4da3-863a-7a13ee3046b7",
+              "memory_uid": "9ace13d3-d881-5720-bfd5-f7884db67756"
+            }
+          ],
+          "reason": "These memories collectively express one timing-sensitive coffee-and-sleep pattern absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The reference alone links late-afternoon coffee with substantially delayed sleep while recording usual sleep after coffee before 2 p.m.",
+          "uid": "c05ba417-8044-5311-ba88-fc1a10597ee6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "388c3303-c915-4da3-863a-7a13ee3046b7",
+              "memory_uid": "fc19394a-6634-5aae-bfa5-bba91e707954"
+            },
+            {
+              "frame_uid": "388c3303-c915-4da3-863a-7a13ee3046b7",
+              "memory_uid": "be7aa7f3-1b67-5677-950d-9942ca337a99"
+            }
+          ],
+          "reason": "The restaurant and simple-noodle episodes are separate examples of one underlying observation about conserving effort after dinner.",
+          "status": "RESOLVED",
+          "summary": "The reference alone records immediate rest or postponed chores after comparatively low-effort dinner arrangements.",
+          "uid": "7288043d-0e6b-5c14-ad6f-4f68f7468390"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "388c3303-c915-4da3-863a-7a13ee3046b7",
+              "memory_uid": "056defa1-8256-561d-a2b4-a70df4058c33"
+            }
+          ],
+          "reason": "This is independently useful information about another person’s preference and belief, with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The reference alone records the user’s father’s preference to keep coffee available after dinner and his belief that it will not impair sleep.",
+          "uid": "41076901-f731-5173-b10c-04947233686e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "388c3303-c915-4da3-863a-7a13ee3046b7",
+              "memory_uid": "7cecee60-fabd-55a3-998b-78810bd9eaf4"
+            }
+          ],
+          "reason": "This is a distinct evidentiary constraint on sleep-related suggestions and has no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The reference alone cautions against treating one or two sleep records as evidence of a general lifestyle habit.",
+          "uid": "bac1fa36-bbae-5b46-97ee-e0da8817850d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1d7bafe2-0aa1-40eb-93e8-4dbe30657565",
+              "memory_uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409"
+            },
+            {
+              "frame_uid": "1d7bafe2-0aa1-40eb-93e8-4dbe30657565",
+              "memory_uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5"
+            },
+            {
+              "frame_uid": "1d7bafe2-0aa1-40eb-93e8-4dbe30657565",
+              "memory_uid": "a11f0943-8ee1-5305-87fb-64982fb36f82"
+            }
+          ],
+          "reason": "The basket location, missed-bus episode, and successful advance preparation together express one winter-departure organization claim.",
+          "status": "RESOLVED",
+          "summary": "The compared frame alone links storing and pre-positioning gloves in the entrance basket with avoiding search delays and leaving on time.",
+          "uid": "eec0c7c9-ced3-5a18-a90f-586bb0bbdabd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1d7bafe2-0aa1-40eb-93e8-4dbe30657565",
+              "memory_uid": "f623f245-cdd5-5080-8869-b52cf2914076"
+            },
+            {
+              "frame_uid": "1d7bafe2-0aa1-40eb-93e8-4dbe30657565",
+              "memory_uid": "17ac56f1-1302-5350-99d5-b95ef7feb768"
+            },
+            {
+              "frame_uid": "1d7bafe2-0aa1-40eb-93e8-4dbe30657565",
+              "memory_uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d"
+            },
+            {
+              "frame_uid": "1d7bafe2-0aa1-40eb-93e8-4dbe30657565",
+              "memory_uid": "802c4031-57de-592a-9bc8-6ee3d54921c8"
+            }
+          ],
+          "reason": "The blocked stairs, successful cleared-sidewalk route, checking policy, and forecast limitation jointly support one condition-aware winter-route decision.",
+          "status": "RESOLVED",
+          "summary": "The compared frame alone supports choosing routes from recent clearing and entrance-access information rather than weather forecasts alone.",
+          "uid": "a6a32afa-6f1b-5dde-a738-35a26870646c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1d7bafe2-0aa1-40eb-93e8-4dbe30657565",
+              "memory_uid": "08dfb937-7b28-55b5-801c-c0da00cbd414"
+            }
+          ],
+          "reason": "This is independently useful information about the father’s snow-related expectation and behavior, without a reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The compared frame alone records the user’s father anticipating road-condition worry and texting before departure during heavy snow.",
+          "uid": "e6d8a4d5-5683-5a12-a14c-6ded20552c08"
+        }
+      ],
+      "reports": {
+        "both": "Both describe adjusting bedroom conditions to limit overheating or nighttime waking, using a fan and closed window or reduced heat with a thin blanket.",
+        "compared_only": "The compared frame covers staging winter clothing, choosing cleared accessible routes, checking actual clearing conditions, and a father’s pre-departure snow concern.",
+        "differences": "",
+        "reference_only": "The reference records coffee-related sleep timing, low-effort evening recovery, a father’s coffee preference, and caution against inferring habits from sparse observations."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "362de47a-f29a-4677-a276-277691f5c13c"
+    },
+    "analysis_digest": "3b51dabe4d759f7cf217fcd4bb75cfc692a2811baae73ea0bd6d441506c16d3c",
+    "key": "82a98354ac28a9635e827efc707c801cfe79a1fed34832b7de0482299497493e",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 43.46992300000056,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "82a98354ac28a9635e827efc707c801cfe79a1fed34832b7de0482299497493e",
+  "created_at": "2026-08-13T18:40:19.199965Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/05",
+  "pair_key": "40675e50de473f64ff3455d4b57b2aee3df09e2acaaa0eb67f9a66cd861f840d",
+  "provider_seconds": 43.46992300000056,
+  "right": "task-3/local/personal-memory/2026/01",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

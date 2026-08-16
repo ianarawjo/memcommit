@@ -1,0 +1,340 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:19:54.008219+00:00",
+      "frames": [
+        {
+          "context_digest": "42df7e2f7640040d1d6f6f6e566e80d178668a05ab6918b64eed91b91a41b7fb",
+          "context_name": "task-2/advisor1/evaluation",
+          "context_uid": "30568e2f-ce17-50ce-a25b-1cc4bdb94689",
+          "memories": [
+            {
+              "content": "Specify a single representative measure that serves as the criterion for retaining, modifying, or discarding compared design alternatives.",
+              "content_digest": "53aa7c1f81a4fac9e76985be094717aa122e7077a6fcfde46946babd5929d390",
+              "position": 0,
+              "uid": "a50f6ecb-de38-5769-8a6e-23b84a7eb35c"
+            },
+            {
+              "content": "HCI review panels verify whether clear criteria for judging design alternatives are established using the declared primary measure.",
+              "content_digest": "fabd83103e5c3474f56de113c477f7ced5e863a508ec39bd4ae23653d63ad354",
+              "position": 1,
+              "uid": "44c61beb-24a2-584a-ad96-e622690d8171"
+            },
+            {
+              "content": "Collect process measures to diagnose interaction steps where problems occurred, alongside the primary outcome measure.",
+              "content_digest": "6cc2fedef1b0af1c594e48610e08a169f3bca2405bf8773945eca33396aecb36",
+              "position": 2,
+              "uid": "23202824-b576-5d77-b591-8b4cc0757632"
+            },
+            {
+              "content": "Interpret evaluation results as differences between compared design alternatives rather than as success or failure of a single prototype.",
+              "content_digest": "5c578d52a7dbbf4e4b646e707bbee4ac37bcd23bceb0b4d5e09ef3c08df9c2f4",
+              "position": 3,
+              "uid": "65ae88bf-8002-5ada-8590-eaf345b38863"
+            },
+            {
+              "content": "Check boundary cases to verify whether the derived design principles retain explanatory power for adjacent situations not included in the comparison.",
+              "content_digest": "3edc3e181a8086233d889f35cb98c9448875fe3fee915467f712ca3eb2886de1",
+              "position": 4,
+              "uid": "79af5e5f-4868-5e76-bcd5-3f8e1d6a0bd1"
+            },
+            {
+              "content": "Controlled evaluation environments do not reproduce time pressure, peer intervention, or voluntary termination conditions found in daily use.",
+              "content_digest": "e58a1bc6a423874525aca9f864b9b0dbd1e3ef9961410608c5837c88f1153d9b",
+              "position": 5,
+              "uid": "3a65fc8b-a5b4-50fc-a60e-fc6f3fc44547"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "91c569c0-e589-4afb-a968-b30041bb8c3f"
+        },
+        {
+          "context_digest": "b379636c1034c71339b717628e5e233c5f245d0452c487967c8e881d38e4b4a7",
+          "context_name": "task-2/advisor2/feasibility",
+          "context_uid": "2a4a102a-14f5-53bb-88ef-681448ebecff",
+          "memories": [
+            {
+              "content": "Mark unverified schedule assumptions as such.",
+              "content_digest": "d4cdcdbcdb51d96f9a7435e72c2e4ef25a3e3822a765a88afafeca5194bda96e",
+              "position": 0,
+              "uid": "5c9755f8-78bd-5654-a3c7-8be0864e4f12"
+            },
+            {
+              "content": "Mark unverified recruitment assumptions as such.",
+              "content_digest": "4cc28528fee1c7b09f709638e2b57d3bc9efe635d20500ee98567f8f59b8cf21",
+              "position": 1,
+              "uid": "75af48aa-b39e-5b55-95d9-f7f7d2becbad"
+            },
+            {
+              "content": "Mark unverified technical assumptions as such.",
+              "content_digest": "8942e49cd46e3e9746330349df11e49d4a6c9250c7aa4c52c2d9ade1c97c735c",
+              "position": 2,
+              "uid": "292e33b0-4bfd-5e3a-9379-0fbf3619c42d"
+            },
+            {
+              "content": "Trace back the resources required for each core prototype feature and field research procedure.",
+              "content_digest": "b1ac088b664c62c3c1cfb96f6bb31a3ab5fc0fd77d0d1fba58e1da621b5dd56a",
+              "position": 3,
+              "uid": "c0c1fd8d-1aae-51a3-a1d4-66c1481d7b48"
+            },
+            {
+              "content": "Operations reviewers judge feasibility by examining the personnel required for each procedure.",
+              "content_digest": "3199aba38f58f677147b94eca54221e4d0add145a2a58194c3851efcc22e8fab",
+              "position": 4,
+              "uid": "7be25c27-6d67-50fe-90b5-76fca32a93d8"
+            },
+            {
+              "content": "Operations reviewers judge feasibility by examining the equipment required for each procedure.",
+              "content_digest": "13f9b86391d66cf558fc6eead29969c80acdf78d2164c96aa99641bf6c2891fd",
+              "position": 5,
+              "uid": "1aae182f-4eb3-58b7-b8cd-5ce517ead36a"
+            },
+            {
+              "content": "Operations reviewers judge feasibility by examining the time required for each procedure.",
+              "content_digest": "29efef51e7b8e35c459099af93b8ea90d019d83de3cf894e04b184078619fff4",
+              "position": 6,
+              "uid": "84f6e5e3-96b4-538b-a633-1b656204a296"
+            },
+            {
+              "content": "Document separately the commitments and confirmation status of field partners required for recruitment, installation, and operational support.",
+              "content_digest": "ba0ceb0fa886251bfe2b5a83154500862f8c2d4a82ed74fc9ddb3600010cc0b3",
+              "position": 7,
+              "uid": "16a461c4-d90d-5d0f-bfd0-4c1a116ec2be"
+            },
+            {
+              "content": "Designate a responsible party for software updates, equipment inspections, and user support during the deployment period.",
+              "content_digest": "54caa62836c502faf35561d45fba1d02a059c8ed6436ce714114bd392cb3bc9d",
+              "position": 8,
+              "uid": "0ce26892-666f-5ebe-95b2-c6f48915f18b"
+            },
+            {
+              "content": "The user's deployment readiness can be assessed only when dependencies on external services and field personnel are visible.",
+              "content_digest": "931fa67dd8ea84954ce3f0b9631301c320fdcf1bf46fb7fda0214e77636c8c1c",
+              "position": 9,
+              "uid": "4f35fd0c-005a-56a7-b33a-d74bde2d65eb"
+            },
+            {
+              "content": "Field schedules and assigned personnel may change due to operational factors beyond the researcher’s control.",
+              "content_digest": "71739481ce3043f342d9c7c52297c7644931a0a096215fc15150915b74968d84",
+              "position": 10,
+              "uid": "3b96bf66-59e4-5dbf-98d3-937402abc67b"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "bda54c34-b2e5-4a33-9519-231170c487f3"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address complementary but separate concerns: the reference centers comparative HCI evaluation design, interpretation, generalization, and ecological limits, while the compared frame centers operational feasibility, assumption visibility, deployment dependencies, partner commitments, ownership, and field uncertainty.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "91c569c0-e589-4afb-a968-b30041bb8c3f",
+              "memory_uid": "a50f6ecb-de38-5769-8a6e-23b84a7eb35c"
+            },
+            {
+              "frame_uid": "91c569c0-e589-4afb-a968-b30041bb8c3f",
+              "memory_uid": "44c61beb-24a2-584a-ad96-e622690d8171"
+            }
+          ],
+          "reason": "Only the reference establishes and verifies a primary evaluation measure as the decision criterion for retaining, modifying, or discarding alternatives.",
+          "status": "RESOLVED",
+          "summary": "A declared primary measure provides the criterion for judging compared design alternatives and is subject to HCI review.",
+          "uid": "bf92c88a-03bc-544c-b8e1-14b554268a10"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "91c569c0-e589-4afb-a968-b30041bb8c3f",
+              "memory_uid": "23202824-b576-5d77-b591-8b4cc0757632"
+            }
+          ],
+          "reason": "This diagnostic measurement practice appears only in the reference and is independently useful from defining the primary criterion.",
+          "status": "RESOLVED",
+          "summary": "Process measures should accompany the primary outcome measure to identify problematic interaction steps.",
+          "uid": "2ba16ef8-b27c-5e9d-8e36-aaa14e588949"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "91c569c0-e589-4afb-a968-b30041bb8c3f",
+              "memory_uid": "65ae88bf-8002-5ada-8590-eaf345b38863"
+            }
+          ],
+          "reason": "Only the reference states this rule for interpreting comparative evaluation results.",
+          "status": "RESOLVED",
+          "summary": "Evaluation results should be interpreted as differences among alternatives rather than as a single prototype’s success or failure.",
+          "uid": "5330ca1b-793c-5afe-b2b7-54b7b2d3c673"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "91c569c0-e589-4afb-a968-b30041bb8c3f",
+              "memory_uid": "79af5e5f-4868-5e76-bcd5-3f8e1d6a0bd1"
+            }
+          ],
+          "reason": "Only the reference addresses generalization through boundary-case checks.",
+          "status": "RESOLVED",
+          "summary": "Derived design principles should be checked against adjacent, untested situations for retained explanatory power.",
+          "uid": "313f6a70-bdef-5254-8069-6e28d39b77e5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "91c569c0-e589-4afb-a968-b30041bb8c3f",
+              "memory_uid": "3a65fc8b-a5b4-50fc-a60e-fc6f3fc44547"
+            }
+          ],
+          "reason": "Only the reference identifies these ecological limitations of controlled evaluation environments.",
+          "status": "RESOLVED",
+          "summary": "Controlled evaluations omit important daily-use conditions such as time pressure, peer intervention, and voluntary termination.",
+          "uid": "b4f2191c-4443-56ed-8820-685046eadf61"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bda54c34-b2e5-4a33-9519-231170c487f3",
+              "memory_uid": "5c9755f8-78bd-5654-a3c7-8be0864e4f12"
+            },
+            {
+              "frame_uid": "bda54c34-b2e5-4a33-9519-231170c487f3",
+              "memory_uid": "75af48aa-b39e-5b55-95d9-f7f7d2becbad"
+            },
+            {
+              "frame_uid": "bda54c34-b2e5-4a33-9519-231170c487f3",
+              "memory_uid": "292e33b0-4bfd-5e3a-9379-0fbf3619c42d"
+            }
+          ],
+          "reason": "The compared memories split one operational documentation rule across three assumption categories; the reference contains no corresponding claim.",
+          "status": "RESOLVED",
+          "summary": "Unverified schedule, recruitment, and technical assumptions should be explicitly marked.",
+          "uid": "2b49ac82-66ec-52bd-80b0-209fff1c59d7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bda54c34-b2e5-4a33-9519-231170c487f3",
+              "memory_uid": "c0c1fd8d-1aae-51a3-a1d4-66c1481d7b48"
+            },
+            {
+              "frame_uid": "bda54c34-b2e5-4a33-9519-231170c487f3",
+              "memory_uid": "7be25c27-6d67-50fe-90b5-76fca32a93d8"
+            },
+            {
+              "frame_uid": "bda54c34-b2e5-4a33-9519-231170c487f3",
+              "memory_uid": "1aae182f-4eb3-58b7-b8cd-5ce517ead36a"
+            },
+            {
+              "frame_uid": "bda54c34-b2e5-4a33-9519-231170c487f3",
+              "memory_uid": "84f6e5e3-96b4-538b-a633-1b656204a296"
+            }
+          ],
+          "reason": "These compared memories jointly specify resource tracing and category-based operational feasibility assessment, which the reference does not address.",
+          "status": "RESOLVED",
+          "summary": "Required resources should be traced for core features and field procedures, with procedure feasibility reviewed through personnel, equipment, and time needs.",
+          "uid": "9ee29972-6684-5c18-b753-883267574747"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bda54c34-b2e5-4a33-9519-231170c487f3",
+              "memory_uid": "16a461c4-d90d-5d0f-bfd0-4c1a116ec2be"
+            }
+          ],
+          "reason": "Only the compared frame addresses explicit tracking of partner commitments across field activities.",
+          "status": "RESOLVED",
+          "summary": "Field-partner commitments and confirmation status should be separately documented for recruitment, installation, and operational support.",
+          "uid": "e49d5b64-a5c3-50c6-8806-7c77f9e7d9a5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bda54c34-b2e5-4a33-9519-231170c487f3",
+              "memory_uid": "0ce26892-666f-5ebe-95b2-c6f48915f18b"
+            }
+          ],
+          "reason": "Only the compared frame establishes operational ownership during the deployment period.",
+          "status": "RESOLVED",
+          "summary": "A responsible party should be designated for updates, inspections, and user support during deployment.",
+          "uid": "b1f79a34-6ced-5369-b6aa-54fee7acce84"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bda54c34-b2e5-4a33-9519-231170c487f3",
+              "memory_uid": "4f35fd0c-005a-56a7-b33a-d74bde2d65eb"
+            }
+          ],
+          "reason": "Only the compared frame states dependency visibility as a prerequisite for assessing deployment readiness.",
+          "status": "RESOLVED",
+          "summary": "Deployment readiness assessment requires visible dependencies on external services and field personnel.",
+          "uid": "6e355711-5b4d-573f-8595-4d2f0033fa42"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bda54c34-b2e5-4a33-9519-231170c487f3",
+              "memory_uid": "3b96bf66-59e4-5dbf-98d3-937402abc67b"
+            }
+          ],
+          "reason": "Only the compared frame records this operational uncertainty affecting field execution.",
+          "status": "RESOLVED",
+          "summary": "Field schedules and personnel assignments may change because of operational factors outside researcher control.",
+          "uid": "685cf055-6a7f-511f-8580-9d0adc1479f2"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers assumption labeling, resource-based feasibility review, partner commitments, deployment ownership and dependencies, and operational volatility.",
+        "differences": "",
+        "reference_only": "The reference specifies outcome and diagnostic measures, comparative interpretation, boundary-case testing, and limits of controlled environments."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "df55eae3-6c95-46eb-afd5-6049cd588730"
+    },
+    "analysis_digest": "1f4f9c4b8651eaa01d89ffb1ddce80b06fe3f09412fedfab4dc76d9a893bb5ad",
+    "key": "67b5911054db1be13bcc34b1f1e4fd5003e394665557439063d1b60638da50a0",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 28.78679183300119,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "67b5911054db1be13bcc34b1f1e4fd5003e394665557439063d1b60638da50a0",
+  "created_at": "2026-08-13T18:20:22.794387Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/evaluation",
+  "pair_key": "a85cfe52dfbd7c8e4702543ecad93c832a612df463dfc5bd4a64a0dd73d0f309",
+  "provider_seconds": 28.78679183300119,
+  "right": "task-2/advisor2/feasibility",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

@@ -1,0 +1,369 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:23:53.179371+00:00",
+      "frames": [
+        {
+          "context_digest": "adcb1ff51b2facc8282e8a56d8fec5150dd8e7376b7889d21013f71fee66b9b8",
+          "context_name": "task-2/advisor1/review",
+          "context_uid": "57ec8c37-1a0a-5f3b-82e9-51adad82677c",
+          "memories": [
+            {
+              "content": "Conduct one review prior to submission focusing solely on the validity of user problems, design interventions, and evaluation logic.",
+              "content_digest": "3dd669e72e74416ccd0b8eaf32f6b24dc7400ceb50c133a18f3ff33f89075334",
+              "position": 0,
+              "uid": "0dda8eb3-3287-5bb6-9b26-b1c00cc038d9"
+            },
+            {
+              "content": "Cross-check whether research questions align with the core functions of the prototype.",
+              "content_digest": "b3fbab30f9c640c7b3f6424f2cbc7d66bfa1f455f937f7fb28a6cc8b3763597d",
+              "position": 1,
+              "uid": "c8e0c9dd-dc4a-5a7d-9a82-e7ee449a4b25"
+            },
+            {
+              "content": "Cross-check whether evaluation tasks align with representative measures.",
+              "content_digest": "1e49d1844cb2a0a66a3dec114e44713885299f7a80763ae4e9a416eba505d61f",
+              "position": 2,
+              "uid": "f93c5baa-3c2b-5e37-b07b-0b00e8b22ab9"
+            },
+            {
+              "content": "Cross-check whether collected evidence aligns with design and operational decisions to be changed.",
+              "content_digest": "bc977c73db48b06ad23b68fa58f2fa5f64b19d09856b0e80c8ddac0b039568f8",
+              "position": 3,
+              "uid": "8dae0ad6-2a6d-5d99-98db-b0d48a1140e5"
+            },
+            {
+              "content": "Verify at the end that user problems, design interventions, user studies, and expected contributions form a coherent logical flow.",
+              "content_digest": "8b8d84adb9296241a03a4e6b91acee829ff1eaea443f9dd0b132d7b64a53dcff",
+              "position": 4,
+              "uid": "0f89ab25-d9ee-5669-aa99-a0fe07803915"
+            },
+            {
+              "content": "HCI reviewers view the validity of design interventions as low if research questions are not linked to prototype functions.",
+              "content_digest": "e7e5bb6d9618adc9d4903a4d4cbbf53007381999a95e4ed2137e3705a988fa13",
+              "position": 5,
+              "uid": "3e4a9a3b-abc2-54ed-9b87-f81abf61b541"
+            },
+            {
+              "content": "HCI reviewers view the validity of evaluation plans as low if evaluation tasks do not produce representative measures.",
+              "content_digest": "b23af1197034e73ce7b5bf0c6870ee410e44a07810ebaae12259087f2c12f8f1",
+              "position": 6,
+              "uid": "fb785649-1947-5e7d-aafb-308f14fb21b4"
+            },
+            {
+              "content": "HCI reviewers view the practicality of contributions as low if collected evidence cannot change design or operational decisions.",
+              "content_digest": "3720d356aa625bea8226fb668004f599e61140f1ad1543b643eb72b7a39ec43d",
+              "position": 7,
+              "uid": "02f8ddd8-32b0-5e3b-b358-5e0472a6e0d2"
+            },
+            {
+              "content": "Cross-check at the end whether each research question, formative evaluation data, and design modification judgment are seamlessly connected.",
+              "content_digest": "f3b3d431c05e942ff3cea0ac2d239eeee33e224047a452debe0246c57472f74d",
+              "position": 8,
+              "uid": "d17ba26c-187e-57bc-8468-c9c053fc303d"
+            },
+            {
+              "content": "Review whether the application conditions of proposed design principles and boundary cases of failure are presented together.",
+              "content_digest": "28ab914aa4a03e8f1908176b235017a80838ed660d996773a44b3963b927bcb3",
+              "position": 9,
+              "uid": "48a91d19-cc68-5400-8971-8125236f3fbf"
+            },
+            {
+              "content": "The user can have contributions reviewed only if prototype outcomes and the transferable design knowledge derived from them are separated.",
+              "content_digest": "2deadd2cfeed19a3e544c81a345a40f2f3b4561a8d28b073b70400a5e82ae0cb",
+              "position": 10,
+              "uid": "774341c9-b92d-53a5-a24c-59c75e39756b"
+            },
+            {
+              "content": "The scope of observation in controlled formative evaluations does not include long-term adaptation and operational changes in real-world usage contexts.",
+              "content_digest": "76a1a3c03c7d93acc8a6aca832fd24ab9624ea9e53c8207876160ed1055682e2",
+              "position": 11,
+              "uid": "877015ae-ab0b-561c-9fe3-3abb2d0aaa4e"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "fd1f0621-576a-42bf-8787-cb010ecd78a1"
+        },
+        {
+          "context_digest": "4efbf2f6c096022137cee2c075c75219bb4fd0f441579901b8445bb2d92101f5",
+          "context_name": "task-2/advisor2/budget",
+          "context_uid": "ae02c2b2-49d3-5c30-b686-81ea17a8a87e",
+          "memories": [
+            {
+              "content": "Keep the main text to the total and major categories, and place quantities, unit rates, and assumptions in one compact budget table or appendix.",
+              "content_digest": "2e0d76a9c09d14facdf93e8b82cb1c4f583b8a6063b74552f2c23b7d37224e9c",
+              "position": 0,
+              "uid": "d614b55d-d9f6-5347-8d02-2d219d621a09"
+            },
+            {
+              "content": "Give each cost category, quantity, unit rate, and subtotal a stable row in the separate budget table.",
+              "content_digest": "ecd8aa50fc469bb763f36784d140b871b82a283b39f30f46e9e166776321c602",
+              "position": 1,
+              "uid": "24500129-4b07-564f-ba67-39e40d7d7860"
+            },
+            {
+              "content": "Put the estimate basis in a dedicated table column so one assumption can be checked or revised without rewriting the narrative.",
+              "content_digest": "6ed604ab2ca300f215d13f18cb5344e9322635ad047ce36c08242765e7fb09f4",
+              "position": 2,
+              "uid": "07bad409-af9c-512a-b829-7ceb28273f91"
+            },
+            {
+              "content": "Readers can verify arithmetic and compare categories faster in a consistent table than in amounts distributed across prose.",
+              "content_digest": "1dc966a0ade3af3bc636cb99d456edbdb918c2a23efd4a5792db9f8ede061195",
+              "position": 3,
+              "uid": "abf6d361-c2eb-512f-87e0-f3af9c5eb677"
+            },
+            {
+              "content": "Revise one table row and its subtotal when an estimate changes instead of repeating the new amount across several prose paragraphs.",
+              "content_digest": "dcd7d010f7d2c1898fffe71ccc7a0067233dcbcf66fe4b429043b1900d097f84",
+              "position": 4,
+              "uid": "473cf3ca-9832-5d9c-97df-974f1d9b0d1b"
+            },
+            {
+              "content": "Keep detailed arithmetic out of the main argument when readers can reach the complete table from a clear reference.",
+              "content_digest": "940a8cdee63c326d9c9be89cc07e7f223f239e3537113d32c098f711bd816cf7",
+              "position": 5,
+              "uid": "675956de-2c61-53e1-bb89-9b49d92558ba"
+            },
+            {
+              "content": "The user tends to interrupt the argument with long cost enumerations when no separate budget table is available.",
+              "content_digest": "2c0715ec3cfa247a35c3acc854b0716dca764619050aa635c0c242a5b56aa2f1",
+              "position": 6,
+              "uid": "f4371f72-f222-5066-b2f4-0a6be5d6865e"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "5d290180-128e-4dc7-a8b0-f58e0f484f63"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate operational domains. The reference frame governs validity and coherence checks for HCI research and design claims, while the compared frame governs concise, auditable budget presentation and revision. Neither side supplies a claim that materially addresses the other side’s decisions.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fd1f0621-576a-42bf-8787-cb010ecd78a1",
+              "memory_uid": "0dda8eb3-3287-5bb6-9b26-b1c00cc038d9"
+            }
+          ],
+          "reason": "This is an independently useful HCI review mandate with no budget-presentation counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Conduct a focused pre-submission review of user-problem validity, design interventions, and evaluation logic.",
+          "uid": "346a75ed-0259-53ea-9e4d-4e6df12f0010"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fd1f0621-576a-42bf-8787-cb010ecd78a1",
+              "memory_uid": "c8e0c9dd-dc4a-5a7d-9a82-e7ee449a4b25"
+            },
+            {
+              "frame_uid": "fd1f0621-576a-42bf-8787-cb010ecd78a1",
+              "memory_uid": "3e4a9a3b-abc2-54ed-9b87-f81abf61b541"
+            }
+          ],
+          "reason": "The memories state the alignment check and its reviewer-facing validity rationale; the compared frame does not address research-question or prototype-function alignment.",
+          "status": "RESOLVED",
+          "summary": "Research questions should be linked to core prototype functions to support the validity of design interventions.",
+          "uid": "47607ff3-964c-5238-a74a-7215418135b1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fd1f0621-576a-42bf-8787-cb010ecd78a1",
+              "memory_uid": "f93c5baa-3c2b-5e37-b07b-0b00e8b22ab9"
+            },
+            {
+              "frame_uid": "fd1f0621-576a-42bf-8787-cb010ecd78a1",
+              "memory_uid": "fb785649-1947-5e7d-aafb-308f14fb21b4"
+            }
+          ],
+          "reason": "The memories express one evaluation-alignment claim through a prescribed check and its reviewer-facing consequence, without a counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Evaluation tasks should produce representative measures to support the validity of the evaluation plan.",
+          "uid": "c7cab46d-d8ad-5e67-bb31-21c437a6ace9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fd1f0621-576a-42bf-8787-cb010ecd78a1",
+              "memory_uid": "8dae0ad6-2a6d-5d99-98db-b0d48a1140e5"
+            },
+            {
+              "frame_uid": "fd1f0621-576a-42bf-8787-cb010ecd78a1",
+              "memory_uid": "02f8ddd8-32b0-5e3b-b358-5e0472a6e0d2"
+            }
+          ],
+          "reason": "The memories combine the prescribed evidence-to-decision check with its consequence for perceived contribution practicality; no compared-side memory addresses this decision.",
+          "status": "RESOLVED",
+          "summary": "Collected evidence should be capable of informing changes to design or operational decisions so contributions remain practical.",
+          "uid": "917761dd-06c0-5fa9-a54e-298e57e4badb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fd1f0621-576a-42bf-8787-cb010ecd78a1",
+              "memory_uid": "0f89ab25-d9ee-5669-aa99-a0fe07803915"
+            }
+          ],
+          "reason": "This broad end-to-end coherence check is independently useful and has no corresponding budget-organization claim.",
+          "status": "RESOLVED",
+          "summary": "Verify that user problems, design interventions, user studies, and expected contributions form a coherent logical flow.",
+          "uid": "2b8ab896-bbd3-5ade-91ba-2689b1c17bba"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fd1f0621-576a-42bf-8787-cb010ecd78a1",
+              "memory_uid": "d17ba26c-187e-57bc-8468-c9c053fc303d"
+            }
+          ],
+          "reason": "This specifically requires traceability through the formative design cycle, which is distinct from both the broader coherence check and all compared-side budget guidance.",
+          "status": "RESOLVED",
+          "summary": "Check that each research question, formative-evaluation dataset, and design-modification judgment is connected.",
+          "uid": "e6fb47d5-bd2f-5f7a-abc8-766b00d541f0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fd1f0621-576a-42bf-8787-cb010ecd78a1",
+              "memory_uid": "48a91d19-cc68-5400-8971-8125236f3fbf"
+            }
+          ],
+          "reason": "This qualifies the transferability of design knowledge and has no materially related claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Present proposed design principles together with their application conditions and failure boundary cases.",
+          "uid": "a5112d78-6300-5235-88ad-e4188575c0b2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fd1f0621-576a-42bf-8787-cb010ecd78a1",
+              "memory_uid": "774341c9-b92d-53a5-a24c-59c75e39756b"
+            }
+          ],
+          "reason": "This concerns the structure and reviewability of HCI contributions, not the placement or maintenance of budget information.",
+          "status": "RESOLVED",
+          "summary": "Separate prototype outcomes from the transferable design knowledge derived from them so contributions can be reviewed.",
+          "uid": "73ced0f6-e52d-5c9d-b827-0535ac9494e5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fd1f0621-576a-42bf-8787-cb010ecd78a1",
+              "memory_uid": "877015ae-ab0b-561c-9fe3-3abb2d0aaa4e"
+            }
+          ],
+          "reason": "This states a substantive limitation on evaluation scope that is absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Controlled formative evaluations do not observe long-term adaptation or operational change in real-world use.",
+          "uid": "1363a54b-b6e4-506b-bf57-b77619136d33"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5d290180-128e-4dc7-a8b0-f58e0f484f63",
+              "memory_uid": "24500129-4b07-564f-ba67-39e40d7d7860"
+            },
+            {
+              "frame_uid": "5d290180-128e-4dc7-a8b0-f58e0f484f63",
+              "memory_uid": "abf6d361-c2eb-512f-87e0-f3af9c5eb677"
+            }
+          ],
+          "reason": "The memories state one structured-table practice and its verification benefit; the reference frame contains no budget-documentation counterpart.",
+          "status": "RESOLVED",
+          "summary": "Use stable budget-table rows for categories, quantities, unit rates, and subtotals so readers can verify arithmetic and compare categories efficiently.",
+          "uid": "e4ea8b75-eea2-5958-8750-ccc56cd83d28"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5d290180-128e-4dc7-a8b0-f58e0f484f63",
+              "memory_uid": "07bad409-af9c-512a-b829-7ceb28273f91"
+            },
+            {
+              "frame_uid": "5d290180-128e-4dc7-a8b0-f58e0f484f63",
+              "memory_uid": "473cf3ca-9832-5d9c-97df-974f1d9b0d1b"
+            }
+          ],
+          "reason": "Both memories support modular revision without rewriting or repeating narrative amounts, an operational concern absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Place estimate assumptions in dedicated table fields and revise affected rows and subtotals locally when estimates change.",
+          "uid": "7415cc27-e7c2-50de-898c-4920a6fd6a16"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5d290180-128e-4dc7-a8b0-f58e0f484f63",
+              "memory_uid": "d614b55d-d9f6-5347-8d02-2d219d621a09"
+            },
+            {
+              "frame_uid": "5d290180-128e-4dc7-a8b0-f58e0f484f63",
+              "memory_uid": "675956de-2c61-53e1-bb89-9b49d92558ba"
+            },
+            {
+              "frame_uid": "5d290180-128e-4dc7-a8b0-f58e0f484f63",
+              "memory_uid": "f4371f72-f222-5066-b2f4-0a6be5d6865e"
+            }
+          ],
+          "reason": "The memories prescribe separating detailed enumerations from prose and identify narrative interruption when no separate table exists; the reference frame does not address budget presentation.",
+          "status": "RESOLVED",
+          "summary": "Keep detailed cost arithmetic outside the main argument in a compact, clearly referenced budget table or appendix.",
+          "uid": "cc70b66d-183a-50f1-99bd-fb883a762fcd"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame advocates moving detailed costs into a stable, clearly referenced budget table so arithmetic and assumptions remain verifiable, locally revisable, and unobtrusive to the main argument.",
+        "differences": "",
+        "reference_only": "The reference frame covers pre-submission validity review, alignment among research questions, prototype functions, evaluation measures, evidence, and decisions, plus contribution framing, design-principle boundaries, and limits of controlled formative evaluation."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "a9604ca3-85e7-49a8-9907-5e39b697b673"
+    },
+    "analysis_digest": "35388aa4d67d980feaff9e9d4015a32759ba98c4e37f2838cf0200d32aac4dfd",
+    "key": "6d9960b81cf041cd7bddc4974d54f37552117949cba04ccbaef59e805aac7d23",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 36.905514875001245,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "6d9960b81cf041cd7bddc4974d54f37552117949cba04ccbaef59e805aac7d23",
+  "created_at": "2026-08-13T18:24:30.084746Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/review",
+  "pair_key": "bcc60d0c28236c273bee807d2c80b71c469f1902141b903dc336628e602f2387",
+  "provider_seconds": 36.905514875001245,
+  "right": "task-2/advisor2/budget",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

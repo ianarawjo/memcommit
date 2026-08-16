@@ -1,0 +1,337 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:14:26.586842+00:00",
+      "frames": [
+        {
+          "context_digest": "30f0425cad991a5bb1b473f7e73c2c039db2d91dc0c95116413d0a8e7b6fed29",
+          "context_name": "task-2/advisor1/budget",
+          "context_uid": "d6d3ee9e-eb0f-5c28-9463-7a680d53b470",
+          "memories": [
+            {
+              "content": "Keep the total, major cost categories, and one-line estimate basis in the main text so the resource argument can be understood without leaving the proposal.",
+              "content_digest": "5dc9db0be6499fc408063be04c9e1cc344986512f4d24d5697f5c53a08529c9a",
+              "position": 0,
+              "uid": "05e0261e-5c52-5030-8176-0f02d4522931"
+            },
+            {
+              "content": "Place each major cost beside the activity or deliverable it enables in the main text.",
+              "content_digest": "b97219830051faf46cff7c9541c331012571866926740ed4d6a7925c12fb21a8",
+              "position": 1,
+              "uid": "1083e9b3-698a-57b1-91ab-ce04cec1e5e5"
+            },
+            {
+              "content": "State the quantity and unit-rate basis for each major cost in the same paragraph that requests it.",
+              "content_digest": "5ce37d95d9d037bbab71276fa8f0e8e383b472d0122817ab7b711c971b8cbf5d",
+              "position": 2,
+              "uid": "3652f268-d86f-55d6-935d-d3bdc487aae6"
+            },
+            {
+              "content": "Readers may question a proposed priority when its cost cannot be checked on the same page as the claimed benefit.",
+              "content_digest": "26fa14ff80ece7682cb51c7356a47a8e60e94edd4551f59ecd2fa3017bd9bffd",
+              "position": 3,
+              "uid": "4e1e1201-94b8-5a7a-8737-edc4c62881ff"
+            },
+            {
+              "content": "Update the cost sentence whenever the related activity changes so the narrative and requested amount cannot drift apart.",
+              "content_digest": "343c11198b38874476e0cda3707dd07436699852db0934e2e8f8c95a7ea3c3ea",
+              "position": 4,
+              "uid": "2f5f9039-e038-51c1-8af0-21a78772c512"
+            },
+            {
+              "content": "Accept a denser main-text paragraph when the estimate basis is essential to deciding whether the request is proportionate.",
+              "content_digest": "59ca1aafc11b37b097251b4b7c6b15e249262304f79b261bd4351d3ca89cb5fe",
+              "position": 5,
+              "uid": "f7a16d08-fbe2-5508-890d-cdbf70c1146e"
+            },
+            {
+              "content": "The user tends to revise the work plan but forget a detached budget table unless the key amount is repeated beside the activity.",
+              "content_digest": "393651043824d9e9c528e5de7618854b71970967d172ee1e9bc3c77aec3baab0",
+              "position": 6,
+              "uid": "2ca1d5a1-d78a-55b2-ab21-fd6ad73366b4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "b73fb985-c793-4e0e-95f4-d8142d3b7ac7"
+        },
+        {
+          "context_digest": "673626cf0c3650052d63b04173d43516860e2035d7038878998898bc5bebb2e3",
+          "context_name": "task-2/advisor2/evaluation",
+          "context_uid": "6e9f8ad5-a43d-5dfd-99a3-604f2757da0d",
+          "memories": [
+            {
+              "content": "Specify a single representative measure that will drive operational decisions to maintain, modify, or discontinue the deployed design.",
+              "content_digest": "dd9abb7bbbdf6846921a984789426b27a45df60ce38408422b6b0774835b44f8",
+              "position": 0,
+              "uid": "f27576c7-6f53-5412-901c-19df7e1d5e2e"
+            },
+            {
+              "content": "The HCI review panel verifies whether operational decisions can be made based on the declared primary measure.",
+              "content_digest": "1d88ce414bdbfcf9565c712f8f0d72378569d723c0c5b5c6007dc18a96f6378f",
+              "position": 1,
+              "uid": "8608bdf3-49d7-54d0-a2fb-c883c24e40ef"
+            },
+            {
+              "content": "Establish decision thresholds indicating at what levels key metrics trigger maintaining, modifying, or discontinuing the design.",
+              "content_digest": "866bad632421bfd3487fba69b855ccb36aeb9e31c6208b339db22301bdd3fc28",
+              "position": 2,
+              "uid": "b06bb706-f911-5767-8e27-b64c74d0e592"
+            },
+            {
+              "content": "Evaluate whether reducing workload for one role creates new tasks for other roles through the proposed design changes.",
+              "content_digest": "6b38b84cdc2a78f61f3163cccd787dec39167596f4f720788ec4c930f698fa9f",
+              "position": 3,
+              "uid": "473ec6e8-29f0-5c83-b36d-b7d32eeb25a3"
+            },
+            {
+              "content": "Distinguish usability from organizational adoption intent as separate evaluation outcomes.",
+              "content_digest": "7328bf54063078377068871ee3970709d9a8763204c2c3a08321e025e028868c",
+              "position": 4,
+              "uid": "935cf79f-3e67-567d-ab55-35e8fad7eb37"
+            },
+            {
+              "content": "Implementation fidelity indicates whether planned features and operational procedures were delivered in the field according to intended specifications.",
+              "content_digest": "b04d0bc0590dd77d3bc0bde581481992d57ad48c14517a2a1d63f996e51290b2",
+              "position": 5,
+              "uid": "bea0e97f-1217-507b-87a7-09ce85bae9fe"
+            },
+            {
+              "content": "Initial evaluations and long-term operation do not share identical measurement conditions due to differences in system exposure duration and frequency of repeated use.",
+              "content_digest": "49e90b293b90d173b11d1bb89e85f688c55cb923c2a19eb2058a539388327715",
+              "position": 6,
+              "uid": "dbe435ff-fe32-54fe-a2e6-7b46694ce151"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "1f5a0e2d-ea43-43bf-acde-7f9fd7dfb28c"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate but complementary proposal concerns: the reference frame focuses on keeping costs transparent, attributable, and synchronized with activities, while the compared frame defines evaluation measures, decision rules, implementation checks, and operational impacts. No shared or contradictory operational claim is present.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b73fb985-c793-4e0e-95f4-d8142d3b7ac7",
+              "memory_uid": "05e0261e-5c52-5030-8176-0f02d4522931"
+            }
+          ],
+          "reason": "This is independently useful guidance about making the overall resource argument understandable without consulting detached material.",
+          "status": "RESOLVED",
+          "summary": "The proposal’s main text should retain the total, major cost categories, and a brief estimate basis.",
+          "uid": "5f7b595b-43f2-527f-8dd3-5ea5e62af6ad"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b73fb985-c793-4e0e-95f4-d8142d3b7ac7",
+              "memory_uid": "1083e9b3-698a-57b1-91ab-ce04cec1e5e5"
+            }
+          ],
+          "reason": "This is a one-sided placement rule linking requested resources directly to their intended use.",
+          "status": "RESOLVED",
+          "summary": "Each major cost should appear beside the activity or deliverable it enables.",
+          "uid": "670e7f6e-ed80-51c4-96e1-3a4b9dffb939"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b73fb985-c793-4e0e-95f4-d8142d3b7ac7",
+              "memory_uid": "3652f268-d86f-55d6-935d-d3bdc487aae6"
+            }
+          ],
+          "reason": "This independently specifies the calculation detail and location needed for checking individual costs.",
+          "status": "RESOLVED",
+          "summary": "Each major cost request should state its quantity and unit-rate basis in the same paragraph.",
+          "uid": "40a8eea3-d9ff-5a08-8943-c64664f2b8b1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b73fb985-c793-4e0e-95f4-d8142d3b7ac7",
+              "memory_uid": "4e1e1201-94b8-5a7a-8737-edc4c62881ff"
+            }
+          ],
+          "reason": "This supplies a one-sided rationale about reader scrutiny and confidence in proposed priorities.",
+          "status": "RESOLVED",
+          "summary": "A priority may appear less credible when its cost cannot be checked on the same page as its claimed benefit.",
+          "uid": "ba40539b-1643-5f2d-97dd-57ba501c3b70"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b73fb985-c793-4e0e-95f4-d8142d3b7ac7",
+              "memory_uid": "2f5f9039-e038-51c1-8af0-21a78772c512"
+            }
+          ],
+          "reason": "This independently governs revision discipline so the narrative and requested amount do not drift apart.",
+          "status": "RESOLVED",
+          "summary": "Cost wording should be updated whenever its related activity changes.",
+          "uid": "8691f12e-ead8-5f47-9951-dec411bd981c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b73fb985-c793-4e0e-95f4-d8142d3b7ac7",
+              "memory_uid": "f7a16d08-fbe2-5508-890d-cdbf70c1146e"
+            }
+          ],
+          "reason": "This is a one-sided presentation tradeoff that prioritizes decision-relevant cost evidence over brevity.",
+          "status": "RESOLVED",
+          "summary": "A denser main-text paragraph is acceptable when estimate details are essential to judging proportionality.",
+          "uid": "43cdfbcc-5033-53c3-82b2-5f898919b855"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b73fb985-c793-4e0e-95f4-d8142d3b7ac7",
+              "memory_uid": "2ca1d5a1-d78a-55b2-ab21-fd6ad73366b4"
+            }
+          ],
+          "reason": "This records a one-sided user tendency and the specific duplication practice motivated by it.",
+          "status": "RESOLVED",
+          "summary": "Key amounts should be repeated beside activities because work-plan revisions may leave detached budget tables outdated.",
+          "uid": "63d37177-387e-50de-bf8f-af67a8cd6e35"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1f5a0e2d-ea43-43bf-acde-7f9fd7dfb28c",
+              "memory_uid": "f27576c7-6f53-5412-901c-19df7e1d5e2e"
+            }
+          ],
+          "reason": "This is independently useful guidance for selecting the primary operational decision measure.",
+          "status": "RESOLVED",
+          "summary": "A single representative measure should drive decisions to maintain, modify, or discontinue a deployed design.",
+          "uid": "6fba1018-851b-5db5-8b56-0c38ffd2874a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1f5a0e2d-ea43-43bf-acde-7f9fd7dfb28c",
+              "memory_uid": "8608bdf3-49d7-54d0-a2fb-c883c24e40ef"
+            }
+          ],
+          "reason": "This independently identifies the panel’s verification responsibility for decision usability.",
+          "status": "RESOLVED",
+          "summary": "The HCI review panel checks whether the declared primary measure supports operational decisions.",
+          "uid": "354ab780-0450-5ee5-9144-b82c12f8f347"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1f5a0e2d-ea43-43bf-acde-7f9fd7dfb28c",
+              "memory_uid": "b06bb706-f911-5767-8e27-b64c74d0e592"
+            }
+          ],
+          "reason": "This independently requires explicit action boundaries rather than measure selection alone.",
+          "status": "RESOLVED",
+          "summary": "Key metrics should have thresholds that trigger maintaining, modifying, or discontinuing the design.",
+          "uid": "9994b904-2955-56af-8889-8ab26501fac4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1f5a0e2d-ea43-43bf-acde-7f9fd7dfb28c",
+              "memory_uid": "473ec6e8-29f0-5c83-b36d-b7d32eeb25a3"
+            }
+          ],
+          "reason": "This is an independent assessment of cross-role operational consequences.",
+          "status": "RESOLVED",
+          "summary": "Evaluation should test whether workload reductions for one role create tasks for other roles.",
+          "uid": "42901d61-df3e-583d-a54b-3c328e6691d1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1f5a0e2d-ea43-43bf-acde-7f9fd7dfb28c",
+              "memory_uid": "935cf79f-3e67-567d-ab55-35e8fad7eb37"
+            }
+          ],
+          "reason": "This independently prevents two materially different evaluation constructs from being conflated.",
+          "status": "RESOLVED",
+          "summary": "Usability and organizational adoption intent should be evaluated as separate outcomes.",
+          "uid": "d38e082a-b16b-5f60-a9d6-c892e6752c9e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1f5a0e2d-ea43-43bf-acde-7f9fd7dfb28c",
+              "memory_uid": "bea0e97f-1217-507b-87a7-09ce85bae9fe"
+            }
+          ],
+          "reason": "This independently defines an evaluation dimension concerning conformity between plan and deployment.",
+          "status": "RESOLVED",
+          "summary": "Implementation fidelity assesses whether planned features and procedures were delivered as intended in the field.",
+          "uid": "0d1596af-c304-5e18-9fb7-95b4e048e167"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1f5a0e2d-ea43-43bf-acde-7f9fd7dfb28c",
+              "memory_uid": "dbe435ff-fe32-54fe-a2e6-7b46694ce151"
+            }
+          ],
+          "reason": "This independently identifies a temporal limitation on treating measurements as directly comparable.",
+          "status": "RESOLVED",
+          "summary": "Initial evaluation and long-term operation involve different measurement conditions because exposure and repeated use differ.",
+          "uid": "0fa9079d-4ab8-5bb5-9983-75df3dc301c7"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers decision-driving measures and thresholds, panel review, workload redistribution, distinct evaluation outcomes, implementation fidelity, and changing measurement conditions over time.",
+        "differences": "",
+        "reference_only": "The reference frame emphasizes visible, activity-linked cost justification, sufficient estimate detail, same-page scrutiny, and narrative-budget synchronization, supported by observations about revision habits."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "6b61b15a-daf3-4c31-b547-b8b6ecc43648"
+    },
+    "analysis_digest": "60f5912e28f49dc6dcfb6834b9418dbb80d75c2e5c1f4b9fc5b1692fd3d667a0",
+    "key": "8c7a1329c0679055674ddbccc5f995ebf2b382e627becfd650c2b8692364e17d",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 33.952450542001316,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "8c7a1329c0679055674ddbccc5f995ebf2b382e627becfd650c2b8692364e17d",
+  "created_at": "2026-08-13T18:15:00.538992Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/budget",
+  "pair_key": "22e36bb22da22c693e0356e715bb63ed94af8acfca6c0edb0ebd69b0ac46794b",
+  "provider_seconds": 33.952450542001316,
+  "right": "task-2/advisor2/evaluation",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

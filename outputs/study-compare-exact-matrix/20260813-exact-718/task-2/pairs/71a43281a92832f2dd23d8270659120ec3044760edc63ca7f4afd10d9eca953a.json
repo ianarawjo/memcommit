@@ -1,0 +1,311 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:28:33.616789+00:00",
+      "frames": [
+        {
+          "context_digest": "587a9d2fb6abf2b486ccfc50ff85ae7280d7d7bd4003d85ce5877a4edfc9293f",
+          "context_name": "task-2/advisor1/terminology",
+          "context_uid": "7699c7c5-e48b-5548-b0aa-256d793c6c06",
+          "memories": [
+            {
+              "content": "Use the same term throughout the proposal for the same interaction concept or interface element.",
+              "content_digest": "2f11d02134609c6397d8f60105cc452e34129bc1c427a512455247e54951f18a",
+              "position": 0,
+              "uid": "949a884d-b348-5fa0-b1dd-adbebafe10a9"
+            },
+            {
+              "content": "Use abbreviations only for recurring terms of three or more words.",
+              "content_digest": "dcceb4407d24df4034dceca613413471bb46898a487aed0cc0905e48ede482e7",
+              "position": 1,
+              "uid": "2f484151-b5fc-51a9-8a88-b30a403617b3"
+            },
+            {
+              "content": "Present the full name and abbreviation together when using an abbreviation for the first time.",
+              "content_digest": "02e1b2b4cbc8f9a61e299bf1500663ae8cd4036155b2a7dec8c2ce40087ac29b",
+              "position": 2,
+              "uid": "21131a6f-d35c-51e3-895f-46cd21a3b566"
+            },
+            {
+              "content": "Prioritize the research role over diagnostic labels or deficits when referring to participants.",
+              "content_digest": "7b99c6ec90abdbb68d4af8e95a03df3149b9d2d4d637fbd33a70a2acf7073a12",
+              "position": 3,
+              "uid": "e02c3110-05c4-58a4-8d76-c8fd2426a0d5"
+            },
+            {
+              "content": "Reviewers from different subfields struggle to infer undefined abbreviations from context alone.",
+              "content_digest": "13af5eb9fe88f3f2d73192adfb48f7a20de09e22e777a952daa83ca1c030f9ee",
+              "position": 4,
+              "uid": "af028910-e48b-5605-b92b-9378bdfa525c"
+            },
+            {
+              "content": "Use the term formative evaluation for studies seeking design modification evidence, and distinguish it from final efficacy judgments.",
+              "content_digest": "4ba9bca850286ff6286cf4b3bf44395d608ec700c46acd8cd26c54e26d43b378",
+              "position": 5,
+              "uid": "39792d18-2be0-5135-a063-c5213247d330"
+            },
+            {
+              "content": "The user can have contribution labels such as principles, models, or guidelines approved only if they align with the abstraction level of the actual deliverables.",
+              "content_digest": "efed93b748ce74e3e9ed96949bf539c809ea4c36ae77bbb54670285f691f74e9",
+              "position": 6,
+              "uid": "bcaa8c30-ca6e-5b9f-af93-88513a2f16b1"
+            },
+            {
+              "content": "Design principles describe the relationship between conditions and outcomes rather than serving as instructions that merely replicate a single screen layout.",
+              "content_digest": "22385c2bb345db07d19c442e5d99a5c527c2795848b9e29fe198d0ede6255d6f",
+              "position": 7,
+              "uid": "82ad9fe2-4063-5e89-9097-c975aa2920cb"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "25719ef4-da1f-4e96-b1ee-1b43666e9640"
+        },
+        {
+          "context_digest": "673626cf0c3650052d63b04173d43516860e2035d7038878998898bc5bebb2e3",
+          "context_name": "task-2/advisor2/evaluation",
+          "context_uid": "6e9f8ad5-a43d-5dfd-99a3-604f2757da0d",
+          "memories": [
+            {
+              "content": "Specify a single representative measure that will drive operational decisions to maintain, modify, or discontinue the deployed design.",
+              "content_digest": "dd9abb7bbbdf6846921a984789426b27a45df60ce38408422b6b0774835b44f8",
+              "position": 0,
+              "uid": "f27576c7-6f53-5412-901c-19df7e1d5e2e"
+            },
+            {
+              "content": "The HCI review panel verifies whether operational decisions can be made based on the declared primary measure.",
+              "content_digest": "1d88ce414bdbfcf9565c712f8f0d72378569d723c0c5b5c6007dc18a96f6378f",
+              "position": 1,
+              "uid": "8608bdf3-49d7-54d0-a2fb-c883c24e40ef"
+            },
+            {
+              "content": "Establish decision thresholds indicating at what levels key metrics trigger maintaining, modifying, or discontinuing the design.",
+              "content_digest": "866bad632421bfd3487fba69b855ccb36aeb9e31c6208b339db22301bdd3fc28",
+              "position": 2,
+              "uid": "b06bb706-f911-5767-8e27-b64c74d0e592"
+            },
+            {
+              "content": "Evaluate whether reducing workload for one role creates new tasks for other roles through the proposed design changes.",
+              "content_digest": "6b38b84cdc2a78f61f3163cccd787dec39167596f4f720788ec4c930f698fa9f",
+              "position": 3,
+              "uid": "473ec6e8-29f0-5c83-b36d-b7d32eeb25a3"
+            },
+            {
+              "content": "Distinguish usability from organizational adoption intent as separate evaluation outcomes.",
+              "content_digest": "7328bf54063078377068871ee3970709d9a8763204c2c3a08321e025e028868c",
+              "position": 4,
+              "uid": "935cf79f-3e67-567d-ab55-35e8fad7eb37"
+            },
+            {
+              "content": "Implementation fidelity indicates whether planned features and operational procedures were delivered in the field according to intended specifications.",
+              "content_digest": "b04d0bc0590dd77d3bc0bde581481992d57ad48c14517a2a1d63f996e51290b2",
+              "position": 5,
+              "uid": "bea0e97f-1217-507b-87a7-09ce85bae9fe"
+            },
+            {
+              "content": "Initial evaluations and long-term operation do not share identical measurement conditions due to differences in system exposure duration and frequency of repeated use.",
+              "content_digest": "49e90b293b90d173b11d1bb89e85f688c55cb923c2a19eb2058a539388327715",
+              "position": 6,
+              "uid": "dbe435ff-fe32-54fe-a2e6-7b46694ce151"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "e494528c-0a4c-44ca-bcc0-28bd793ea450"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The reference frame concentrates on proposal language, participant framing, evaluation terminology, and contribution-label precision. The compared frame instead specifies field-evaluation decision criteria, outcome distinctions, implementation fidelity, workload redistribution, and measurement conditions. These are complementary one-sided concerns rather than shared or conflicting policies.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "25719ef4-da1f-4e96-b1ee-1b43666e9640",
+              "memory_uid": "949a884d-b348-5fa0-b1dd-adbebafe10a9"
+            }
+          ],
+          "reason": "The compared frame contains no corresponding policy about terminological consistency.",
+          "status": "RESOLVED",
+          "summary": "The reference uniquely requires consistent naming for the same interaction concept or interface element throughout a proposal.",
+          "uid": "5d2c738f-869f-5ccd-8b29-a5b4fef0ad73"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "25719ef4-da1f-4e96-b1ee-1b43666e9640",
+              "memory_uid": "2f484151-b5fc-51a9-8a88-b30a403617b3"
+            },
+            {
+              "frame_uid": "25719ef4-da1f-4e96-b1ee-1b43666e9640",
+              "memory_uid": "21131a6f-d35c-51e3-895f-46cd21a3b566"
+            },
+            {
+              "frame_uid": "25719ef4-da1f-4e96-b1ee-1b43666e9640",
+              "memory_uid": "af028910-e48b-5605-b92b-9378bdfa525c"
+            }
+          ],
+          "reason": "These memories jointly define and justify one abbreviation-clarity practice absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The reference uniquely limits abbreviations to recurring multiword terms, requires first-use expansion, and explains why undefined abbreviations impede cross-subfield review.",
+          "uid": "aa99c7e1-bed1-5431-9d33-59746f7db4cc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "25719ef4-da1f-4e96-b1ee-1b43666e9640",
+              "memory_uid": "e02c3110-05c4-58a4-8d76-c8fd2426a0d5"
+            }
+          ],
+          "reason": "The compared frame provides no participant-labeling guidance.",
+          "status": "RESOLVED",
+          "summary": "The reference uniquely prioritizes participants’ research roles over diagnostic or deficit-based labels.",
+          "uid": "c031f9d1-6b5a-5e59-8f50-765656234c50"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "25719ef4-da1f-4e96-b1ee-1b43666e9640",
+              "memory_uid": "39792d18-2be0-5135-a063-c5213247d330"
+            }
+          ],
+          "reason": "The compared frame distinguishes other evaluation dimensions but does not state this terminology rule.",
+          "status": "RESOLVED",
+          "summary": "The reference uniquely reserves formative evaluation for design-modification evidence and separates it from final efficacy judgment.",
+          "uid": "e0ed629b-2530-5cb7-bf4c-a1f6ef6188e0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "25719ef4-da1f-4e96-b1ee-1b43666e9640",
+              "memory_uid": "bcaa8c30-ca6e-5b9f-af93-88513a2f16b1"
+            },
+            {
+              "frame_uid": "25719ef4-da1f-4e96-b1ee-1b43666e9640",
+              "memory_uid": "82ad9fe2-4063-5e89-9097-c975aa2920cb"
+            }
+          ],
+          "reason": "These memories jointly govern accurate contribution labeling and the abstraction expected of design principles, with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The reference uniquely requires contribution labels to match deliverable abstraction and characterizes design principles as condition–outcome relationships rather than screen-replication instructions.",
+          "uid": "aee31f3f-de36-54ea-8538-a87a543735f7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e494528c-0a4c-44ca-bcc0-28bd793ea450",
+              "memory_uid": "f27576c7-6f53-5412-901c-19df7e1d5e2e"
+            },
+            {
+              "frame_uid": "e494528c-0a4c-44ca-bcc0-28bd793ea450",
+              "memory_uid": "8608bdf3-49d7-54d0-a2fb-c883c24e40ef"
+            },
+            {
+              "frame_uid": "e494528c-0a4c-44ca-bcc0-28bd793ea450",
+              "memory_uid": "b06bb706-f911-5767-8e27-b64c74d0e592"
+            }
+          ],
+          "reason": "These memories split one operational decision-readiness framework that is absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The compared frame uniquely requires a representative primary measure, actionable thresholds, and panel verification that evidence supports maintain, modify, or discontinue decisions.",
+          "uid": "0fff06ed-d082-50fe-90fb-020d9c6a17c6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e494528c-0a4c-44ca-bcc0-28bd793ea450",
+              "memory_uid": "473ec6e8-29f0-5c83-b36d-b7d32eeb25a3"
+            }
+          ],
+          "reason": "The reference frame contains no guidance about redistribution of work across roles.",
+          "status": "RESOLVED",
+          "summary": "The compared frame uniquely requires evaluation of whether workload reductions for one role create tasks for others.",
+          "uid": "1b6a5540-6d84-57cf-8ad0-374ddce67a44"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e494528c-0a4c-44ca-bcc0-28bd793ea450",
+              "memory_uid": "935cf79f-3e67-567d-ab55-35e8fad7eb37"
+            }
+          ],
+          "reason": "The reference frame’s formative-versus-efficacy distinction addresses a different classification and does not supply this outcome separation.",
+          "status": "RESOLVED",
+          "summary": "The compared frame uniquely treats usability and organizational adoption intent as separate evaluation outcomes.",
+          "uid": "dbce4532-c884-501c-9af3-57c758983715"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e494528c-0a4c-44ca-bcc0-28bd793ea450",
+              "memory_uid": "bea0e97f-1217-507b-87a7-09ce85bae9fe"
+            }
+          ],
+          "reason": "The reference frame contains no corresponding field-delivery criterion.",
+          "status": "RESOLVED",
+          "summary": "The compared frame uniquely defines implementation fidelity as delivery of planned features and procedures according to intended field specifications.",
+          "uid": "0973fc69-399f-5620-b898-b9f53d67892a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e494528c-0a4c-44ca-bcc0-28bd793ea450",
+              "memory_uid": "dbe435ff-fe32-54fe-a2e6-7b46694ce151"
+            }
+          ],
+          "reason": "The reference frame contains no temporal or exposure-based measurement guidance.",
+          "status": "RESOLVED",
+          "summary": "The compared frame uniquely notes that initial and long-term evaluations differ in measurement conditions because exposure duration and repeated-use frequency change.",
+          "uid": "f6c3c341-f9df-5495-8fb5-1b46036c8842"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only guidance covers decision-driving measures and thresholds, reviewer scrutiny, cross-role workload effects, distinct evaluation outcomes, implementation fidelity, and exposure-dependent measurement conditions.",
+        "differences": "",
+        "reference_only": "Reference-only guidance covers consistent terminology, disciplined abbreviation use, participant-first framing, formative evaluation language, and contribution labels matched to deliverable abstraction."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "a9611f34-3a06-408f-847b-9db860835d30"
+    },
+    "analysis_digest": "d55939503d33446338d211457bbce818e114aa68a091b75f627e70c561ab37c5",
+    "key": "3586df77ed8c8c4df075d27d0fcceb912a25b682139e1e336492098bc6845b17",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 39.61511050000263,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "3586df77ed8c8c4df075d27d0fcceb912a25b682139e1e336492098bc6845b17",
+  "created_at": "2026-08-13T18:29:13.231355Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/terminology",
+  "pair_key": "71a43281a92832f2dd23d8270659120ec3044760edc63ca7f4afd10d9eca953a",
+  "provider_seconds": 39.61511050000263,
+  "right": "task-2/advisor2/evaluation",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

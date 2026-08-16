@@ -1,0 +1,343 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:49:01.496215+00:00",
+      "frames": [
+        {
+          "context_digest": "e56d4062f59b72f23e5414f759cd9f2b09c659d820a29a979fe2edb8bfc3e7a4",
+          "context_name": "task-3/local/personal-memory/2025/01",
+          "context_uid": "2ce7ce06-145c-50c7-bfb4-cb175b9a5255",
+          "memories": [
+            {
+              "content": "One of the user's identity documents needs renewal in the second half of 2025.",
+              "content_digest": "0ade63adc8aedc4dbc0003f2cbc2759010c8bf2645a95fedd3db28b7cfbe0daa",
+              "position": 0,
+              "uid": "50911f7e-75a1-5099-99f1-e471bb8e6cb6"
+            },
+            {
+              "content": "The user postponed an application until the next day after spending time looking for document photos in scattered folders.",
+              "content_digest": "fa1703848374c3364cf49be01e115e08897e16a4ccda3c9edef1212189159ce6",
+              "position": 1,
+              "uid": "d5bd9f79-7295-5014-9668-83b7cffc78e2"
+            },
+            {
+              "content": "After gathering the necessary copies in one folder, the user completed the renewal form in one sitting.",
+              "content_digest": "133721b244e02fce2fe24312b703e59225c023d65bea31bf65decb36a18b4ba5",
+              "position": 2,
+              "uid": "5f92f6a3-1739-580c-bd63-1a936098ccd0"
+            },
+            {
+              "content": "The user entered an abbreviated name on an official form and then discovered that it differed from the supporting document.",
+              "content_digest": "d32485dcfd1311d0739bf9887a330f25bf9b3f47f077c56ec7cdb667bde20a55",
+              "position": 3,
+              "uid": "929107ac-c62d-5920-9f71-12d4c9a102e9"
+            },
+            {
+              "content": "On the next application, after comparing the name with the source document, the user did not receive a correction request.",
+              "content_digest": "e6aa9e63c72f762c00824787c3b971f2cdf76a343c336f329e5b28b0f164d02d",
+              "position": 4,
+              "uid": "df8b90c2-4310-5e89-b979-508309bf6b04"
+            },
+            {
+              "content": "The user put only the submission deadline in the calendar and missed the application deadline by one day because they did not check the issuance period.",
+              "content_digest": "995703686975cdd718d999557d4b5ca13a95c3c1eabfbb73808bb5150eda824b",
+              "position": 5,
+              "uid": "306b9df1-d713-5413-b448-e2b42376d827"
+            },
+            {
+              "content": "On the next application, the user recorded the expected issuance date separately in the calendar.",
+              "content_digest": "b83c9061bf30d64e48b74959513fd37e7ab043446dae7e4fd284102a249a1240",
+              "position": 6,
+              "uid": "870b57b5-4cdb-54fc-b17f-8ffb86dad802"
+            },
+            {
+              "content": "Staff at a public-service counter expect a person requesting identity verification to bring an original as well as a copy.",
+              "content_digest": "eae3721b7f1d905172c169c5a483d2af74aa40bced23d1bbcb8d571ab27df706",
+              "position": 7,
+              "uid": "a0fe456c-0794-5bce-8ef9-9558e9833471"
+            },
+            {
+              "content": "When planning an official application, put both the submission deadline and expected issuance date in the calendar and verify them.",
+              "content_digest": "c5b37d86ef85d5023b60578e7f5f6af1bc49711e32ecc0255bc826a743dce0e1",
+              "position": 8,
+              "uid": "111972b9-e05f-5e1b-b121-ef9e51572d1d"
+            },
+            {
+              "content": "The local agent cannot determine the current validity of an identity document without its expiration date.",
+              "content_digest": "ebc9f4fe21d4ad7e53681d32ded2c049c7d4bf57e24ef71213a5ebdbaaaee521",
+              "position": 9,
+              "uid": "c9872898-ec4f-576e-b154-ff6fda581a1a"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "9f66d3a8-d3df-41ab-b019-3a74edd28df2"
+        },
+        {
+          "context_digest": "4b8dc68a205171fe661b04620d0fba2bbb386ff21d494699c34a74dc2ab86080",
+          "context_name": "task-3/local/personal-memory/2026/03",
+          "context_uid": "97d36150-4792-5a5c-9332-5eb1de8bcf04",
+          "memories": [
+            {
+              "content": "The user stores tax-related receipts in digital folders by year.",
+              "content_digest": "778f983547572b31798b7041899812a7b0b574d74b585baf6883e94919dee6ec",
+              "position": 0,
+              "uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393"
+            },
+            {
+              "content": "The user found three paper receipts late and recalculated the expense total already prepared.",
+              "content_digest": "542368a141ec82a1bd7da4b534d88ea62c487d16a37f454569bf6400cbc749e9",
+              "position": 1,
+              "uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878"
+            },
+            {
+              "content": "Starting the next month, the user photographed receipts on the day they were received and reduced omissions.",
+              "content_digest": "b95e0a1afa1196a9bff117bf12b1630edcc4eb65bfdfeb3128ae5937563a492e",
+              "position": 2,
+              "uid": "ff436ea5-1b3e-55df-8302-bd8a96740671"
+            },
+            {
+              "content": "The user named every file with only the photo date and spent a long time looking for a needed receipt.",
+              "content_digest": "c3aa33e0b7e007bdfc5c12dcda659e2a52938548fbf53d5a1ab034487a528857",
+              "position": 3,
+              "uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e"
+            },
+            {
+              "content": "The user later included the expense category in the filename and found the receipt immediately through search.",
+              "content_digest": "cdae97761f614b932d3b330723627bee8b0e3d033e2bf1061b721367237acee1",
+              "position": 4,
+              "uid": "89d6fa9a-b795-59df-be34-1c05a9861d35"
+            },
+            {
+              "content": "While reviewing documents just before submission, the user discovered one blank signature field.",
+              "content_digest": "a525c117b97eec82c678f276b319158703bf9cc558fb83cb81c0820d5c9e3174",
+              "position": 5,
+              "uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2"
+            },
+            {
+              "content": "Before submitting an administrative document, the user checks the signature field as the final item on the checklist.",
+              "content_digest": "542bec3cbc3fc8b22c95da274e479e96bfbf061a3b644d0d7f213de5a030dbd5",
+              "position": 6,
+              "uid": "5551622f-66cf-5542-8c47-1cddadab5c02"
+            },
+            {
+              "content": "Staff at a tax-support counter expect to receive an electronic copy in which every item is legible rather than a blurred or cropped photo.",
+              "content_digest": "d328ca248fdeecf0756e23b1202e7007bc8c3c25ae769439b0fd2efdbbe47580",
+              "position": 7,
+              "uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f"
+            },
+            {
+              "content": "The local agent can organize receipts by date and category but cannot determine whether an expense is deductible.",
+              "content_digest": "bcc769721a99b099ca20e5e527fa8904d54ecbaf9ae7d7616b95e1adaf1f89a9",
+              "position": 8,
+              "uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094"
+            },
+            {
+              "content": "The accepted scope and submission deadlines for administrative documents may vary under that year's guidance.",
+              "content_digest": "1ab61126b8efb0c2a9c6114c367018158f2e136bafa87e33f60aadb0686d0537",
+              "position": 9,
+              "uid": "de398064-3179-590b-8c62-effb17060115"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "03d44e69-d85c-4604-a27c-f9ea54826ad5"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames share practical lessons on organizing records, checking forms, and managing deadlines, while preserving domain-specific requirements for identity applications and tax receipts. Each side also contributes independent timing, capture, and agent-capability information; no irreconcilable claims are present.",
+      "relations": [
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "9f66d3a8-d3df-41ab-b019-3a74edd28df2",
+              "memory_uid": "d5bd9f79-7295-5014-9668-83b7cffc78e2"
+            },
+            {
+              "frame_uid": "9f66d3a8-d3df-41ab-b019-3a74edd28df2",
+              "memory_uid": "5f92f6a3-1739-580c-bd63-1a936098ccd0"
+            },
+            {
+              "frame_uid": "03d44e69-d85c-4604-a27c-f9ea54826ad5",
+              "memory_uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393"
+            },
+            {
+              "frame_uid": "03d44e69-d85c-4604-a27c-f9ea54826ad5",
+              "memory_uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e"
+            },
+            {
+              "frame_uid": "03d44e69-d85c-4604-a27c-f9ea54826ad5",
+              "memory_uid": "89d6fa9a-b795-59df-be34-1c05a9861d35"
+            }
+          ],
+          "reason": "The explicit document purpose explains and preserves the different organization schemes and their respective retrieval or completion consequences.",
+          "status": "RESOLVED",
+          "summary": "Identity-application materials are consolidated for one application, while tax receipts are organized by year and searchable category information.",
+          "uid": "8c315534-8fa0-5690-8bc4-5101a6f9a5c5"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "9f66d3a8-d3df-41ab-b019-3a74edd28df2",
+              "memory_uid": "929107ac-c62d-5920-9f71-12d4c9a102e9"
+            },
+            {
+              "frame_uid": "9f66d3a8-d3df-41ab-b019-3a74edd28df2",
+              "memory_uid": "df8b90c2-4310-5e89-b979-508309bf6b04"
+            },
+            {
+              "frame_uid": "03d44e69-d85c-4604-a27c-f9ea54826ad5",
+              "memory_uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2"
+            },
+            {
+              "frame_uid": "03d44e69-d85c-4604-a27c-f9ea54826ad5",
+              "memory_uid": "5551622f-66cf-5542-8c47-1cddadab5c02"
+            }
+          ],
+          "reason": "Matching an official name to its source document and checking a signature field are complementary pre-submission controls for administrative forms.",
+          "status": "RESOLVED",
+          "summary": "Both frames show that checking critical form fields before submission helps avoid corrections or omissions.",
+          "uid": "63f941f8-47b9-593c-a8ac-d6418927cca0"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "9f66d3a8-d3df-41ab-b019-3a74edd28df2",
+              "memory_uid": "306b9df1-d713-5413-b448-e2b42376d827"
+            },
+            {
+              "frame_uid": "9f66d3a8-d3df-41ab-b019-3a74edd28df2",
+              "memory_uid": "870b57b5-4cdb-54fc-b17f-8ffb86dad802"
+            },
+            {
+              "frame_uid": "9f66d3a8-d3df-41ab-b019-3a74edd28df2",
+              "memory_uid": "111972b9-e05f-5e1b-b121-ef9e51572d1d"
+            },
+            {
+              "frame_uid": "03d44e69-d85c-4604-a27c-f9ea54826ad5",
+              "memory_uid": "de398064-3179-590b-8c62-effb17060115"
+            }
+          ],
+          "reason": "Separate submission and issuance planning complements the warning that accepted scope and deadlines may change under the applicable yearly guidance.",
+          "status": "RESOLVED",
+          "summary": "Both frames support verifying and tracking time-sensitive administrative requirements rather than relying on a single unverified deadline.",
+          "uid": "6e18cf0d-31df-5e37-b6bd-6c3c8845c0da"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "9f66d3a8-d3df-41ab-b019-3a74edd28df2",
+              "memory_uid": "a0fe456c-0794-5bce-8ef9-9558e9833471"
+            },
+            {
+              "frame_uid": "03d44e69-d85c-4604-a27c-f9ea54826ad5",
+              "memory_uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f"
+            }
+          ],
+          "reason": "The explicitly different counter purposes explain why the required document formats differ and require both conditions to be retained.",
+          "status": "RESOLVED",
+          "summary": "Identity verification requires an original and copy, whereas tax support expects a complete, legible electronic copy.",
+          "uid": "c25cef9f-5f22-568a-8aa5-2d2364b44634"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9f66d3a8-d3df-41ab-b019-3a74edd28df2",
+              "memory_uid": "50911f7e-75a1-5099-99f1-e471bb8e6cb6"
+            }
+          ],
+          "reason": "Only the reference frame supplies this document-specific renewal window.",
+          "status": "RESOLVED",
+          "summary": "An identity document needs renewal during the second half of 2025.",
+          "uid": "95c2e3ef-9099-5b6c-bea0-128fb4f51adf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9f66d3a8-d3df-41ab-b019-3a74edd28df2",
+              "memory_uid": "c9872898-ec4f-576e-b154-ff6fda581a1a"
+            }
+          ],
+          "reason": "Only the reference frame states this information requirement and capability boundary.",
+          "status": "RESOLVED",
+          "summary": "The local agent cannot assess an identity document's current validity without its expiration date.",
+          "uid": "ea08ab05-492d-5059-a349-c651704174f3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "03d44e69-d85c-4604-a27c-f9ea54826ad5",
+              "memory_uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878"
+            },
+            {
+              "frame_uid": "03d44e69-d85c-4604-a27c-f9ea54826ad5",
+              "memory_uid": "ff436ea5-1b3e-55df-8302-bd8a96740671"
+            }
+          ],
+          "reason": "These compared-side memories form one before-and-after lesson about timely receipt capture, with no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Late paper receipts forced recalculation, while photographing receipts upon receipt subsequently reduced omissions.",
+          "uid": "507852ad-9b21-5538-b39f-943d513eff79"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "03d44e69-d85c-4604-a27c-f9ea54826ad5",
+              "memory_uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094"
+            }
+          ],
+          "reason": "Only the compared frame distinguishes receipt-organization capability from tax-deductibility judgment.",
+          "status": "RESOLVED",
+          "summary": "The local agent can organize receipts but cannot decide whether an expense is deductible.",
+          "uid": "ff88d40f-0657-5eb1-8f11-a62376c31803"
+        }
+      ],
+      "reports": {
+        "both": "Both emphasize verifying critical form fields and tracking current application timing requirements.",
+        "compared_only": "Prompt receipt capture reduces omissions, and receipt organization does not establish tax deductibility.",
+        "differences": "Identity-application files are consolidated for completion, whereas tax receipts use year and category organization. Identity and tax counters also require different document formats.",
+        "reference_only": "The identity document has a stated renewal window, while validity cannot be assessed without its expiration date."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "e9bb713e-b0ce-4411-a96d-b01f15b32f09"
+    },
+    "analysis_digest": "e0c140fcc0b4a4f2ca76dfcbe4efe7a52ed34b724ae6fd402daacf68d3fd5ff9",
+    "key": "a177f0c90ff88e2d64f3849c6d2845e078cc7ae95d6bb706fb1de16ad74135b6",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 53.93025683399901,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "a177f0c90ff88e2d64f3849c6d2845e078cc7ae95d6bb706fb1de16ad74135b6",
+  "created_at": "2026-08-13T18:49:55.426014Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/01",
+  "pair_key": "e12a35c816ffa276ec4b55b7d2b8f09bde0fe24266f1c3e1292408c5b437f3f8",
+  "provider_seconds": 53.93025683399901,
+  "right": "task-3/local/personal-memory/2026/03",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

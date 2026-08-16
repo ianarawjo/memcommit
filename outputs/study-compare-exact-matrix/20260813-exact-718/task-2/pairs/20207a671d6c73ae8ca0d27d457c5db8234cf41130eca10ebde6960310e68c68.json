@@ -1,0 +1,377 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:17:41.492317+00:00",
+      "frames": [
+        {
+          "context_digest": "52dc61895a6d116135c474d4828efde944579b3a5949b6d64c07dd9853f60801",
+          "context_name": "task-2/advisor1/emphasis",
+          "context_uid": "6f253a9e-f504-53bf-a1d1-de2c4532171e",
+          "memories": [
+            {
+              "content": "Do not exceed two primary HCI contributions.",
+              "content_digest": "c605e418506d380237fb8ce4723bcc2fedebcd5da0d8dd78ef813e21aaf71a7a",
+              "position": 0,
+              "uid": "4a1de8df-6f03-5a3d-bbfa-7c1144d2ec5c"
+            },
+            {
+              "content": "Name each design or empirical contribution and present it in a single sentence.",
+              "content_digest": "286e33467b65e080f192172ae85d481a89c8e1b2d73e1089772eab30e0ae48fa",
+              "position": 1,
+              "uid": "b5b6a901-9047-5482-a0e1-d29e5f7171e8"
+            },
+            {
+              "content": "In studies recruiting community participants, emphasize the time burden associated with participation.",
+              "content_digest": "67a881933729e29cc0ce33f61f50af810f6f12ab5aa9598d453cf3a959a5977f",
+              "position": 2,
+              "uid": "e89de514-48a5-5e9b-96ca-f194c0ed79ab"
+            },
+            {
+              "content": "In studies recruiting community participants, emphasize the travel burden associated with participation.",
+              "content_digest": "3c4e20244bb88626ef1d2ebc89774e29ac85a9ce774a3faaa726131059b8ae33",
+              "position": 3,
+              "uid": "f7025cbb-4005-53c6-9031-e33f04a86b92"
+            },
+            {
+              "content": "HCI reviewers find it difficult to identify primary contributions when named design or empirical contributions exceed two.",
+              "content_digest": "70a2dccd85ce8ca18db239926980dfe13a20b90a9dffa6acae73e5034fce1fbc",
+              "position": 4,
+              "uid": "a42891a1-b674-5747-a77c-43699b0b9723"
+            },
+            {
+              "content": "Emphasize the core design decisions that formative evaluation will change rather than a polished product demonstration.",
+              "content_digest": "be5cad46c349a7c4b538f1a947d979ec25b0f6a34494e4d3a7bb9550508766d4",
+              "position": 5,
+              "uid": "9d7169d5-058f-5f7c-b1ac-30cabd8ba02e"
+            },
+            {
+              "content": "Emphasize design principles transferable to other similar interactions as the primary contribution, rather than the performance of a specific prototype.",
+              "content_digest": "a39c447e1b61b2204233800bafd380163fb5492ddd25cb730bbc6c6a95114e56",
+              "position": 6,
+              "uid": "f8931b4e-9656-548d-84a1-f2f2c3eb47b1"
+            },
+            {
+              "content": "Formative evaluation creates grounds for modification in subsequent iterations rather than definitively determining the superiority of design alternatives.",
+              "content_digest": "0cdd894b41de667b621d6c385d3373c799f4fea53898f65d324c26e86a1c8807",
+              "position": 7,
+              "uid": "9bf9e735-7598-5977-abe2-87b2c9c38a24"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "e386f3d8-15c1-4258-8aec-870c4466edee"
+        },
+        {
+          "context_digest": "74ec0b91876efe6caed2938aaf4a0b06272de678fbf74dc9da1c217aa0bd042f",
+          "context_name": "task-2/advisor2/compensation",
+          "context_uid": "4ffbd453-7d61-56f7-90ad-34d77b485ef8",
+          "memories": [
+            {
+              "content": "Calculate user research compensation budgets based on the estimated participation burden, combining session time with required technical and travel preparation.",
+              "content_digest": "ba439fe3920339f56e377d8f82a64ab3ad27fb25e0eec3c65b610c81af53d175",
+              "position": 0,
+              "uid": "be9e402b-8d3b-58da-9766-2cf2ec25b9ae"
+            },
+            {
+              "content": "Compensate participants who withdraw from the study midway for their actual participation time.",
+              "content_digest": "599f542ec6f4a5a1a61f5c1a31547088e015439978a64b268879b5a2b65c9be4",
+              "position": 1,
+              "uid": "85157c57-410f-5c7d-8183-b37d61eebf8a"
+            },
+            {
+              "content": "Compensate for the time actually spent in sessions, regardless of the research modality.",
+              "content_digest": "b19b9dbece5d564de69e703491018fbd78ab834149eed0590a552773526b6e29",
+              "position": 2,
+              "uid": "8abeab95-3e41-5378-8409-08200aee9d58"
+            },
+            {
+              "content": "Allow the issuance of gift cards of equivalent value to participants in remote studies who cannot use electronic transfers.",
+              "content_digest": "8ac881488d0064f4b4c6143e2d8c69ab9806b419044adef266c50738c7afb291",
+              "position": 3,
+              "uid": "9b59c6ed-5dbe-5ccc-87b5-6be31f414e68"
+            },
+            {
+              "content": "Do not treat an unresolved payment method as a deficiency at the proposal stage.",
+              "content_digest": "80109274870eb1023e4cbcc6861a906a4d94db5dab2b2659bcebccde125c9ac3",
+              "position": 4,
+              "uid": "5c6c461d-05e5-5b0c-b801-245de2f9c8d7"
+            },
+            {
+              "content": "Allow differential compensation amounts for on-site and remote studies when participation burden varies due to travel or technical preparation.",
+              "content_digest": "556c5e49f7996a651a64825df2389f070629b9bc664c758d934f308c7fd6eea2",
+              "position": 5,
+              "uid": "44abc098-8c9f-5abb-bc49-9deb25066d93"
+            },
+            {
+              "content": "Participants judge the fairness of compensation based on the combined burden of session time and required technical and travel preparation.",
+              "content_digest": "80dd84e8b183e02f1fd772890b48712bb04a04852055eece98957a0c9028288c",
+              "position": 6,
+              "uid": "2a252668-f3f2-5582-b248-43ad81c54a48"
+            },
+            {
+              "content": "In longitudinal studies requiring diary entries and repeated reporting, include out-of-session recording time in compensation calculations.",
+              "content_digest": "7d103d93741e40d54c8df8347f2ce648a1cd96e19589663fa515bfb24b5bd844",
+              "position": 7,
+              "uid": "7e647a83-81b0-52d6-9362-e513dc2a5032"
+            },
+            {
+              "content": "Distinguish between participant research compensation and labor costs for field staff performing installation and operational support as part of their duties.",
+              "content_digest": "b1566527e9c1d7d3f93631d1503b08ddb4a6818daa570c118f265b47603592f0",
+              "position": 8,
+              "uid": "d77affab-60c8-5403-b189-17022b484640"
+            },
+            {
+              "content": "The user tends to count session time but omit participants’ advance setup and follow-up reporting time.",
+              "content_digest": "98911b7db2d8c3962d7ef48919265f40cdb61a711062e5459a4f6d43f71d6fd9",
+              "position": 9,
+              "uid": "0c470c6b-26a6-5501-93ac-c51fecd708ae"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "47cbe3df-27e0-4a5c-bf03-410116150b3e"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address largely separate operational areas. The reference centers HCI contribution framing, participant-burden emphasis, and formative evaluation, while the compared frame provides detailed participant-compensation policies; no supplied claims safely establish a shared policy, scoped variation, or conflict.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e386f3d8-15c1-4258-8aec-870c4466edee",
+              "memory_uid": "4a1de8df-6f03-5a3d-bbfa-7c1144d2ec5c"
+            },
+            {
+              "frame_uid": "e386f3d8-15c1-4258-8aec-870c4466edee",
+              "memory_uid": "a42891a1-b674-5747-a77c-43699b0b9723"
+            }
+          ],
+          "reason": "The reference supplies the contribution limit and its reviewer-identifiability rationale; the compared frame contains no claim about contribution count.",
+          "status": "RESOLVED",
+          "summary": "Primary HCI contributions should be limited to two so reviewers can identify them clearly.",
+          "uid": "c5fda5ff-dcfa-5a5f-826e-11c6ec25caf3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e386f3d8-15c1-4258-8aec-870c4466edee",
+              "memory_uid": "b5b6a901-9047-5482-a0e1-d29e5f7171e8"
+            }
+          ],
+          "reason": "This contribution-presentation rule appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Each design or empirical contribution should be named and expressed in one sentence.",
+          "uid": "093dc27d-a255-5ac3-873f-459ab58626b3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e386f3d8-15c1-4258-8aec-870c4466edee",
+              "memory_uid": "e89de514-48a5-5e9b-96ca-f194c0ed79ab"
+            }
+          ],
+          "reason": "The reference governs what such studies should emphasize, whereas the compared claims govern compensation calculations and do not state this communication requirement.",
+          "status": "RESOLVED",
+          "summary": "Studies recruiting community participants should emphasize participation time burden.",
+          "uid": "d1d7831c-55ee-5f75-af73-a2edf7ab6fdf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e386f3d8-15c1-4258-8aec-870c4466edee",
+              "memory_uid": "f7025cbb-4005-53c6-9031-e33f04a86b92"
+            }
+          ],
+          "reason": "The reference supplies a specific emphasis requirement for community recruitment; compensation adjustments for travel in the compared frame are a different operational policy.",
+          "status": "RESOLVED",
+          "summary": "Studies recruiting community participants should emphasize participation travel burden.",
+          "uid": "c648cb31-f529-5275-83e7-ae591512d92a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e386f3d8-15c1-4258-8aec-870c4466edee",
+              "memory_uid": "9d7169d5-058f-5f7c-b1ac-30cabd8ba02e"
+            },
+            {
+              "frame_uid": "e386f3d8-15c1-4258-8aec-870c4466edee",
+              "memory_uid": "9bf9e735-7598-5977-abe2-87b2c9c38a24"
+            }
+          ],
+          "reason": "The reference states the intended focus and epistemic role of formative evaluation; the compared frame does not address evaluation framing.",
+          "status": "RESOLVED",
+          "summary": "Formative evaluation should foreground design decisions open to later modification, not polished demonstrations or definitive superiority claims.",
+          "uid": "c50653fb-6808-5f5b-b6e5-f4a1c7f74d3f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e386f3d8-15c1-4258-8aec-870c4466edee",
+              "memory_uid": "f8931b4e-9656-548d-84a1-f2f2c3eb47b1"
+            }
+          ],
+          "reason": "This HCI contribution-framing policy appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Transferable design principles should be presented as the primary contribution rather than a particular prototype’s performance.",
+          "uid": "58005862-820e-5b8b-a88d-6c5e669dac00"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "47cbe3df-27e0-4a5c-bf03-410116150b3e",
+              "memory_uid": "be9e402b-8d3b-58da-9766-2cf2ec25b9ae"
+            },
+            {
+              "frame_uid": "47cbe3df-27e0-4a5c-bf03-410116150b3e",
+              "memory_uid": "2a252668-f3f2-5582-b248-43ad81c54a48"
+            },
+            {
+              "frame_uid": "47cbe3df-27e0-4a5c-bf03-410116150b3e",
+              "memory_uid": "0c470c6b-26a6-5501-93ac-c51fecd708ae"
+            }
+          ],
+          "reason": "The compared frame states the budgeting principle, participant fairness basis, and a recurring omission motivating it; the reference only calls for emphasizing selected burdens and does not prescribe compensation calculation.",
+          "status": "RESOLVED",
+          "summary": "Compensation planning should account for combined participation burden, including sessions, technical or travel preparation, setup, and follow-up reporting.",
+          "uid": "89ae53bb-3343-5891-bbf2-d96d88df208a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "47cbe3df-27e0-4a5c-bf03-410116150b3e",
+              "memory_uid": "85157c57-410f-5c7d-8183-b37d61eebf8a"
+            }
+          ],
+          "reason": "This withdrawal-specific compensation policy appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Participants who withdraw midway should be compensated for their actual participation time.",
+          "uid": "d8fa546d-f13e-5451-9ca7-341a9d95848f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "47cbe3df-27e0-4a5c-bf03-410116150b3e",
+              "memory_uid": "8abeab95-3e41-5378-8409-08200aee9d58"
+            }
+          ],
+          "reason": "This modality-independent rule for session-time compensation appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Actual session time should be compensated regardless of research modality.",
+          "uid": "533bb581-1e5d-51cc-9007-e6e2c4d9ca1e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "47cbe3df-27e0-4a5c-bf03-410116150b3e",
+              "memory_uid": "9b59c6ed-5dbe-5ccc-87b5-6be31f414e68"
+            }
+          ],
+          "reason": "This alternative payment-method policy appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Remote participants unable to use electronic transfers may receive gift cards of equivalent value.",
+          "uid": "c3b8f2a6-52cf-5bad-b964-6afd13fed0b2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "47cbe3df-27e0-4a5c-bf03-410116150b3e",
+              "memory_uid": "5c6c461d-05e5-5b0c-b801-245de2f9c8d7"
+            }
+          ],
+          "reason": "This proposal-review policy appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "An unresolved payment method should not be treated as a proposal-stage deficiency.",
+          "uid": "005eae6b-bd76-5cad-9f25-6cef1f5e74d7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "47cbe3df-27e0-4a5c-bf03-410116150b3e",
+              "memory_uid": "44abc098-8c9f-5abb-bc49-9deb25066d93"
+            }
+          ],
+          "reason": "This permission for burden-based compensation differences between modalities appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "On-site and remote compensation may differ when travel or technical-preparation burdens differ.",
+          "uid": "be8bdd21-cf4f-57c9-9f19-8b452043151b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "47cbe3df-27e0-4a5c-bf03-410116150b3e",
+              "memory_uid": "7e647a83-81b0-52d6-9362-e513dc2a5032"
+            }
+          ],
+          "reason": "This longitudinal-study calculation rule appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Longitudinal-study compensation should include time spent on diary entries and repeated reporting outside sessions.",
+          "uid": "d3549a5a-87d5-5e82-a5cb-0418e3b6657e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "47cbe3df-27e0-4a5c-bf03-410116150b3e",
+              "memory_uid": "d77affab-60c8-5403-b189-17022b484640"
+            }
+          ],
+          "reason": "This cost-classification boundary appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Participant research compensation should be distinguished from labor costs for field staff performing installation and operational support.",
+          "uid": "2fcef936-d7a4-557b-bdac-211cf89cfe78"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame bases compensation on total participation burden, covers withdrawal, modality, payment alternatives, longitudinal reporting, and proposal-stage flexibility, and distinguishes participant compensation from staff labor costs.",
+        "differences": "",
+        "reference_only": "The reference limits and formats primary HCI contributions, highlights community participants’ time and travel burdens, and frames formative evaluation around revisable design decisions and transferable principles rather than prototype polish or superiority."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "6c15cd37-4770-4377-8073-a0a6f9341a0f"
+    },
+    "analysis_digest": "9454b875eb2428be82faf8103084193d500dc636aa9cd771138eca556fa75b61",
+    "key": "86bd0b0da02943966da71a28f28e5358a80ea4dab7e98de897815fd2b1ce0641",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 45.85689437500332,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "86bd0b0da02943966da71a28f28e5358a80ea4dab7e98de897815fd2b1ce0641",
+  "created_at": "2026-08-13T18:18:27.348848Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/emphasis",
+  "pair_key": "20207a671d6c73ae8ca0d27d457c5db8234cf41130eca10ebde6960310e68c68",
+  "provider_seconds": 45.85689437500332,
+  "right": "task-2/advisor2/compensation",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

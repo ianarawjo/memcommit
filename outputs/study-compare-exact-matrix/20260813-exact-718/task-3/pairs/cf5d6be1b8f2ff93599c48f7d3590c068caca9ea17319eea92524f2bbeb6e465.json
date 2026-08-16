@@ -1,0 +1,388 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:47:10.634342+00:00",
+      "frames": [
+        {
+          "context_digest": "492e513a553a9191e2c646cca49364b336ae6d163de5688eeca8cc661bbbdb32",
+          "context_name": "task-3/local/personal-memory/2024/11",
+          "context_uid": "0d5e1eef-1669-5589-94ba-b46c9c2080dc",
+          "memories": [
+            {
+              "content": "The user changed their schedule once in November 2024 because of their mother's hospital visit.",
+              "content_digest": "f08f07dda1b468ab191a59d87e7ceb8068189964edee2010abdae6e525d6103f",
+              "position": 0,
+              "uid": "bb17c696-0c1c-516f-8ad9-68a4b159ce22"
+            },
+            {
+              "content": "After seeing the reason for the schedule change written in a calendar invitation, the user asked for it to be removed.",
+              "content_digest": "7bfc906526c255f90a85b6dcc4b28ea1b0a9389e9f17ba989a4ce098280578c8",
+              "position": 1,
+              "uid": "195ba5ab-3ee0-5594-a859-9f2b5eadf9ea"
+            },
+            {
+              "content": "The user was able to reschedule the appointment after providing only a new time, without a reason.",
+              "content_digest": "14f1bd0410c76aa3a0eb28a2212fd06558ab23b6dc012aa5529980a67efe3e2b",
+              "position": 2,
+              "uid": "4c8759cc-66aa-527c-a9d5-197d39b5d2b7"
+            },
+            {
+              "content": "On a day the user traveled in their father's car, they photographed the parking location.",
+              "content_digest": "111e71af27be5d109557440569352964544e9b702810741445172a6cf51f94f5",
+              "position": 3,
+              "uid": "d4b27ea7-d329-5dc7-b7ca-91d0cd50a958"
+            },
+            {
+              "content": "On the next visit, when the user did not take a photo, they walked one circuit of the parking garage while looking for the exit.",
+              "content_digest": "6d61d67e35552cb739d0220e480189706ec5bbac74f93b87149a6948d9ac2805",
+              "position": 4,
+              "uid": "32a19a57-9b04-5f86-92ba-202a9ac803e4"
+            },
+            {
+              "content": "After hearing preparation items from their mother by phone, the user omitted two items.",
+              "content_digest": "449dc73aad797f5acd3d898292cf9942f7d3b65b9faf52769ae5b3332285b4f3",
+              "position": 5,
+              "uid": "0eeffd8c-acd6-57bf-950d-20cfa1fe62b3"
+            },
+            {
+              "content": "After receiving the preparation items again by text, the user put all of them in their bag.",
+              "content_digest": "9539ab90f598a96d97a73b7954db8834d3106861ba6ecc814e579a348e0145d6",
+              "position": 6,
+              "uid": "07ea3801-8666-581d-b846-2f45bf99ca19"
+            },
+            {
+              "content": "The user's mother does not want the reason for her visit disclosed in the user's external schedule.",
+              "content_digest": "b1aff7bb5b5df1ec773fd8875205cd9fdfa2fd5b520cf91b7c84c9e3054b4feb",
+              "position": 7,
+              "uid": "9e70b92e-1d8d-51ef-962d-bd9b348a56d5"
+            },
+            {
+              "content": "Do not include the mother's reason for a visit when conveying the user's availability externally.",
+              "content_digest": "b9473919c63f233fc66c49bbf00b20a8ab9532bcb1b8ce3896c442afed4229d9",
+              "position": 8,
+              "uid": "d76686fd-9f1d-5d94-931b-4b49c86a8f4e"
+            },
+            {
+              "content": "Some daily-life services may operate for shorter hours during the year-end holiday period.",
+              "content_digest": "48d4487aba4c395527f9dfeac9488f45556d1bd89475f8620b0a64d84e4479fc",
+              "position": 9,
+              "uid": "820a5de9-9e08-52c7-8747-5155fe341bb4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "b9f8af88-3d7b-4445-bf97-e87d16a95016"
+        },
+        {
+          "context_digest": "5a45aaafce189f861f7195d3a753aa86812f64c689213961136327ca721c9d3e",
+          "context_name": "task-3/local/personal-memory/2026/06",
+          "context_uid": "f2e6c2e0-886a-52d8-98d4-03009ea37991",
+          "memories": [
+            {
+              "content": "The user keeps four folding chairs for family barbecues in storage.",
+              "content_digest": "7e2bb593a723adbac468184af4063e0ef74420baa03d6249ef77a84f2e6bc9df",
+              "position": 0,
+              "uid": "cce43b8e-c1c1-5208-8d9a-ee665b805d4c"
+            },
+            {
+              "content": "When six family members gathered in a noisy indoor restaurant, the user asked several times for the person across from them to repeat what was said.",
+              "content_digest": "d858d40478a37bed08580523df1915b85b4e2217b2fc506acedacaca55d2158d",
+              "position": 1,
+              "uid": "e682f0fd-e92f-566e-b1ec-1d5ebf091b60"
+            },
+            {
+              "content": "The user held the next gathering in their father's yard and moved between seats while speaking with everyone.",
+              "content_digest": "44843518c924955fa15e245dc41763a6fe21a95f6f590bd395f7b8a2d6357256",
+              "position": 2,
+              "uid": "c1f2b53e-6184-552b-a321-9796bb121055"
+            },
+            {
+              "content": "On a day the user started the barbecue at midday, sunlight led them to finish the meal quickly.",
+              "content_digest": "f275c2211b4bd69f40351800db57965b8ba44afbadb6e90a0291acae4e7a541b",
+              "position": 3,
+              "uid": "56d5befe-d5f4-59df-82e4-a66ba868dfc2"
+            },
+            {
+              "content": "The next time, the user started at 6 p.m. and remained outside until sunset.",
+              "content_digest": "13c413fbf16ea0704c10d09c5ee065a49ab789b0a3dadb1fc5068631dd95b292",
+              "position": 4,
+              "uid": "83d73ede-6f5a-550e-ba1c-c146b73a9917"
+            },
+            {
+              "content": "Because the side dishes brought by the user's mother and older sister had no labels, the user opened the same container twice.",
+              "content_digest": "5cc4205a743f5d8adca15876d7b0dd864089595ce729f4e3c1cc9a2272c6849b",
+              "position": 5,
+              "uid": "cf0947e8-c133-5259-bac2-e8ee6d74929e"
+            },
+            {
+              "content": "At the next gathering, the user wrote each food's name and who brought it on a small piece of paper.",
+              "content_digest": "6a93e0b5f7e3da8eff2e5c69a3f86c28dfc1a39c1ba7602a61cc1f6a96b837f9",
+              "position": 6,
+              "uid": "d42e48ca-39de-529f-bba2-332b779bd6c2"
+            },
+            {
+              "content": "After a barbecue, the user's younger brother prefers to divide leftover food into small containers to take home rather than discard it.",
+              "content_digest": "9febf1dab1f5000cddc636cd753d3c418b84810cbc6e394df7e8917d3fa29b72",
+              "position": 7,
+              "uid": "3958627e-a0fa-5e32-9e87-7ee874fc6fe7"
+            },
+            {
+              "content": "The local agent can summarize preparation and responses from prior family barbecues but cannot know the next attendees or weather.",
+              "content_digest": "6be2ed6916fc8a6200a4646b5db3b5ea0df7650e664bd098f973fb5229257cec",
+              "position": 8,
+              "uid": "1f24b5c2-554c-5356-b335-c6879e53ba7f"
+            },
+            {
+              "content": "The user's father's yard receives strong direct sunlight at midday; after 6 p.m., shade and wind lower the felt temperature.",
+              "content_digest": "a0bf855f5bb0422568bbed468e5299d111143362d7b9fe2dcf35dbaf8bcbf4c6",
+              "position": 9,
+              "uid": "d88b1b21-c58f-51d5-a60b-54bb11473d96"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "5c2e4a08-6e0c-4804-865b-1fba2aa717c3"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate domains: the reference centers on scheduling privacy, practical memory aids, and holiday service hours, while the compared frame centers on family-barbecue logistics, communication, comfort, food handling, and forecasting limits. No cross-frame claim materially governs the same decision.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b9f8af88-3d7b-4445-bf97-e87d16a95016",
+              "memory_uid": "bb17c696-0c1c-516f-8ad9-68a4b159ce22"
+            }
+          ],
+          "reason": "This is a one-sided historical scheduling fact with no compared-side claim about the same event or decision.",
+          "status": "RESOLVED",
+          "summary": "A November 2024 schedule change was caused by the user's mother's hospital visit.",
+          "uid": "68c29fb9-f810-535d-98b7-45be2034e4ac"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b9f8af88-3d7b-4445-bf97-e87d16a95016",
+              "memory_uid": "195ba5ab-3ee0-5594-a859-9f2b5eadf9ea"
+            },
+            {
+              "frame_uid": "b9f8af88-3d7b-4445-bf97-e87d16a95016",
+              "memory_uid": "9e70b92e-1d8d-51ef-962d-bd9b348a56d5"
+            },
+            {
+              "frame_uid": "b9f8af88-3d7b-4445-bf97-e87d16a95016",
+              "memory_uid": "d76686fd-9f1d-5d94-931b-4b49c86a8f4e"
+            }
+          ],
+          "reason": "The memories describe the disclosure incident, the mother's privacy preference, and the resulting external-scheduling rule as parts of one one-sided privacy claim.",
+          "status": "RESOLVED",
+          "summary": "The mother's visit reason should not appear when the user's availability is shared externally.",
+          "uid": "6a6bc251-3a1b-52d7-bb50-f7cb2bb9f60c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b9f8af88-3d7b-4445-bf97-e87d16a95016",
+              "memory_uid": "4c8759cc-66aa-527c-a9d5-197d39b5d2b7"
+            }
+          ],
+          "reason": "This is a one-sided fact about the information needed to reschedule, not a counterpart to any barbecue-related claim.",
+          "status": "RESOLVED",
+          "summary": "The user successfully rescheduled an appointment by supplying a new time without giving a reason.",
+          "uid": "9af8de34-bcb5-5d3c-a96b-365a82dc21ba"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b9f8af88-3d7b-4445-bf97-e87d16a95016",
+              "memory_uid": "d4b27ea7-d329-5dc7-b7ca-91d0cd50a958"
+            },
+            {
+              "frame_uid": "b9f8af88-3d7b-4445-bf97-e87d16a95016",
+              "memory_uid": "32a19a57-9b04-5f86-92ba-202a9ac803e4"
+            }
+          ],
+          "reason": "Both memories form one one-sided account of using a location photo as a practical memory aid.",
+          "status": "RESOLVED",
+          "summary": "Photographing a parking location served as a navigation aid, while omitting the photo on the next visit preceded extra searching in the garage.",
+          "uid": "bb97d277-929f-50a7-b099-f67a74944b4a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b9f8af88-3d7b-4445-bf97-e87d16a95016",
+              "memory_uid": "0eeffd8c-acd6-57bf-950d-20cfa1fe62b3"
+            },
+            {
+              "frame_uid": "b9f8af88-3d7b-4445-bf97-e87d16a95016",
+              "memory_uid": "07ea3801-8666-581d-b846-2f45bf99ca19"
+            }
+          ],
+          "reason": "Both memories form one one-sided comparison of spoken and written preparation instructions.",
+          "status": "RESOLVED",
+          "summary": "Preparation items conveyed by text were packed completely, unlike items communicated only by phone.",
+          "uid": "c7190b7b-91bc-54b3-aaea-2b47ea27f3da"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b9f8af88-3d7b-4445-bf97-e87d16a95016",
+              "memory_uid": "820a5de9-9e08-52c7-8747-5155fe341bb4"
+            }
+          ],
+          "reason": "This standalone seasonal-service caution has no compared-side claim addressing that subject.",
+          "status": "RESOLVED",
+          "summary": "Some daily-life services may have shorter operating hours during the year-end holiday period.",
+          "uid": "8ba2674c-86de-50d3-870a-c47506480f47"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5c2e4a08-6e0c-4804-865b-1fba2aa717c3",
+              "memory_uid": "cce43b8e-c1c1-5208-8d9a-ee665b805d4c"
+            }
+          ],
+          "reason": "This is a standalone one-sided fact about barbecue equipment.",
+          "status": "RESOLVED",
+          "summary": "The user stores four folding chairs for family barbecues.",
+          "uid": "f8b42346-4c80-5acd-a2db-056ee0bbd8eb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5c2e4a08-6e0c-4804-865b-1fba2aa717c3",
+              "memory_uid": "e682f0fd-e92f-566e-b1ec-1d5ebf091b60"
+            }
+          ],
+          "reason": "This is a one-sided observation about communication difficulty in a particular gathering environment.",
+          "status": "RESOLVED",
+          "summary": "At a noisy indoor restaurant gathering of six relatives, the user repeatedly needed speech from across the table repeated.",
+          "uid": "3df4283a-f1ab-58b5-b351-f254dfce6c4b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5c2e4a08-6e0c-4804-865b-1fba2aa717c3",
+              "memory_uid": "c1f2b53e-6184-552b-a321-9796bb121055"
+            }
+          ],
+          "reason": "This is a one-sided fact about the later gathering's venue and interaction pattern.",
+          "status": "RESOLVED",
+          "summary": "At the next gathering in the user's father's yard, the user moved among seats to speak with everyone.",
+          "uid": "be74670b-acc5-5abf-9243-43c814d76656"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5c2e4a08-6e0c-4804-865b-1fba2aa717c3",
+              "memory_uid": "56d5befe-d5f4-59df-82e4-a66ba868dfc2"
+            },
+            {
+              "frame_uid": "5c2e4a08-6e0c-4804-865b-1fba2aa717c3",
+              "memory_uid": "83d73ede-6f5a-550e-ba1c-c146b73a9917"
+            },
+            {
+              "frame_uid": "5c2e4a08-6e0c-4804-865b-1fba2aa717c3",
+              "memory_uid": "d88b1b21-c58f-51d5-a60b-54bb11473d96"
+            }
+          ],
+          "reason": "The memories jointly describe one one-sided relationship among yard conditions, start time, and outdoor comfort.",
+          "status": "RESOLVED",
+          "summary": "Conditions in the father's yard favor later barbecues: midday direct sun shortened one meal, whereas a 6 p.m. start allowed the gathering to continue until sunset amid shade and cooler wind.",
+          "uid": "5abb32df-4c80-56b4-b9f4-c5dff160423d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5c2e4a08-6e0c-4804-865b-1fba2aa717c3",
+              "memory_uid": "cf0947e8-c133-5259-bac2-e8ee6d74929e"
+            },
+            {
+              "frame_uid": "5c2e4a08-6e0c-4804-865b-1fba2aa717c3",
+              "memory_uid": "d42e48ca-39de-529f-bba2-332b779bd6c2"
+            }
+          ],
+          "reason": "Both memories form one one-sided problem-and-response account concerning food identification.",
+          "status": "RESOLVED",
+          "summary": "After unlabeled side dishes caused duplicate opening of a container, the user labeled foods with their names and contributors at the next gathering.",
+          "uid": "642e5629-913c-545f-9c12-cde15e61215f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5c2e4a08-6e0c-4804-865b-1fba2aa717c3",
+              "memory_uid": "3958627e-a0fa-5e32-9e87-7ee874fc6fe7"
+            }
+          ],
+          "reason": "This is a standalone one-sided preference about leftover handling.",
+          "status": "RESOLVED",
+          "summary": "The user's younger brother prefers taking barbecue leftovers home in small containers instead of discarding them.",
+          "uid": "e443c57f-575e-52f6-8837-3c6245949dcd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5c2e4a08-6e0c-4804-865b-1fba2aa717c3",
+              "memory_uid": "1f24b5c2-554c-5356-b335-c6879e53ba7f"
+            }
+          ],
+          "reason": "This is a standalone one-sided boundary on retrospective summarization and future knowledge.",
+          "status": "RESOLVED",
+          "summary": "The local agent can summarize prior barbecue preparation and responses but cannot know future attendees or weather.",
+          "uid": "ae8f0053-0149-5a96-8915-e3d96ed1e950"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame describes barbecue supplies, venue communication, sunlight-sensitive timing, food labeling and leftovers, plus limits on predicting attendees or weather.",
+        "differences": "",
+        "reference_only": "The reference describes schedule-change experiences and privacy, photo and written-list memory aids, and possible year-end service-hour reductions."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "a2bcf564-e542-4dd1-813a-2b814287226c"
+    },
+    "analysis_digest": "7d1702d9325bd00afa7d1bd6f1a03d9b1cabd2a0100dd6b7df8658eae67a0121",
+    "key": "7c5a0a8fda00f005457fb667ce233ad7b685911459fce8f03ddaae43e5203b2f",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 39.46882391700274,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "7c5a0a8fda00f005457fb667ce233ad7b685911459fce8f03ddaae43e5203b2f",
+  "created_at": "2026-08-13T18:47:50.102793Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/11",
+  "pair_key": "cf5d6be1b8f2ff93599c48f7d3590c068caca9ea17319eea92524f2bbeb6e465",
+  "provider_seconds": 39.46882391700274,
+  "right": "task-3/local/personal-memory/2026/06",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

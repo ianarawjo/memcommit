@@ -44,7 +44,7 @@ from memcommit.context_targeting.tui.memory_selection import (
     DirectMemorySelectionState,
 )
 from memcommit.selection.tui import tree_choice_marker, tree_choice_styles
-from memcommit.commands.context_picker import (
+from memcommit.context_targeting.tui.picker import (
     CONTEXT_PICKER_STYLE,
     ContextMemoryPreviewController,
     ContextMemoryRow,

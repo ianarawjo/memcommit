@@ -1,0 +1,370 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:50:58.558611+00:00",
+      "frames": [
+        {
+          "context_digest": "b727ef7cf1cb7ca0f00ea3598d36577397e092dcb632f55c3eafb942850922d7",
+          "context_name": "task-3/local/personal-memory/2025/04",
+          "context_uid": "720d2021-1ec5-52ab-ace4-a93e02b05ad9",
+          "memories": [
+            {
+              "content": "The user keeps the shared laundry-room access card in an entrance drawer.",
+              "content_digest": "3c98e367c99e0867f1217c891dc5d982c115fd9d1b4bc3957cca6dbb6338203b",
+              "position": 0,
+              "uid": "a1c67646-6a75-504a-9508-d69e1d04b3e5"
+            },
+            {
+              "content": "The user went downstairs 25 minutes after the laundry finished and received a note from another household.",
+              "content_digest": "44968f6f10c0ae2d1dd775eb066564dada6346c6f59bdacf90d687c57e6c1e0f",
+              "position": 1,
+              "uid": "9479e799-95d7-50d2-af62-d1e0914a389b"
+            },
+            {
+              "content": "For the next load, the user set a reminder five minutes before the end and removed the laundry immediately.",
+              "content_digest": "bc77b81f6126e44bbffeb4ae2dfbb641d31a9742b7a196a106ac385321b48958",
+              "position": 2,
+              "uid": "528cb5ea-8c36-5206-beaa-19432250ec4d"
+            },
+            {
+              "content": "The user washed light-colored clothes with new jeans, and color transferred onto white socks.",
+              "content_digest": "ed0f36cf5ebe8f9542ad39ba45fc109634d72f1cb2b266c15dfe6655e3df3add",
+              "position": 3,
+              "uid": "85fb1639-2176-5329-b490-3325ff030db4"
+            },
+            {
+              "content": "The user later washed the new jeans separately, and the color of the other clothes did not change.",
+              "content_digest": "6e47fe1a02ac39064ea9db2d06d8a1f01f80302825bbe412df745401612e4a84",
+              "position": 4,
+              "uid": "431d170a-863f-596d-97c0-0c9634524ee5"
+            },
+            {
+              "content": "On a day the user did not check the dryer filter, the clothes needed another drying cycle.",
+              "content_digest": "8127e9f3ea34724673517f1e260a73acfb70e287a7e7de84e196ad1cb815f5a7",
+              "position": 5,
+              "uid": "4df33adc-cfba-50f2-b141-e2ebed38b81c"
+            },
+            {
+              "content": "On the next use, after emptying the filter, the user finished drying in one cycle.",
+              "content_digest": "932cfb8fc93277783d8990dad62cfd3e1c9a86e39ad1bd019ce00dac632c53d5",
+              "position": 6,
+              "uid": "ba7daae9-938d-55a1-af20-21cd10d395d8"
+            },
+            {
+              "content": "The building manager judges that not leaving finished laundry for a long time is fair to other households.",
+              "content_digest": "5eabe2d3dff252bb250abcde8fe2d528362afb0e73e7628e839715c3e8a3cd56",
+              "position": 7,
+              "uid": "abbf8742-38e3-5810-b222-fe91e3340962"
+            },
+            {
+              "content": "When creating a shared laundry-room reminder, base it on the end time of the machine the user started.",
+              "content_digest": "e00bc6fe09fea6fde6a27817bd6824a141c1ac4a656b9659067b7e1af9881b1f",
+              "position": 8,
+              "uid": "06273d22-0b42-5c55-9d70-eda14084219a"
+            },
+            {
+              "content": "Even if the local agent knows where the card is kept, it cannot know which machines in the shared laundry room are currently available.",
+              "content_digest": "d03f5583c9e4c686307af90ff00ff54e5ac0990e34296b3d241e4f299d15f4b7",
+              "position": 9,
+              "uid": "03ac930e-d745-5c29-8c24-5ced669817f9"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "8681e5fe-9534-4f39-98ea-4d3344780159"
+        },
+        {
+          "context_digest": "df0924e320cd14a29eaed60f78e82fd509c4062949b35706b2a7cb94571fb599",
+          "context_name": "task-3/local/personal-memory/2026/04",
+          "context_uid": "16e860a8-7a90-5b7a-adc3-1c487ef97e03",
+          "memories": [
+            {
+              "content": "The user collects clothes for donation in a large bag beside the entrance.",
+              "content_digest": "39f2f01c59b7fa4ca7529d510e1b0a6ffab6706861042f771cfe97f6f806efac",
+              "position": 0,
+              "uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            },
+            {
+              "content": "After emptying an entire drawer at once, the user could not find a charger they needed.",
+              "content_digest": "674c33ba6475f42b29b03e6f8711e0216f983f3d37fee3dacf9336e3bb4596bf",
+              "position": 1,
+              "uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            },
+            {
+              "content": "During the next organizing session, the user sorted items by type and put only items to be discarded in the bag.",
+              "content_digest": "63104b5a7fd380f818c8758c51f9550c7a7fa41ff91f1dd314225d1824b69643",
+              "position": 2,
+              "uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            },
+            {
+              "content": "Even after photographing unworn clothes, the user did not take them out again for one month.",
+              "content_digest": "519f131096440719dcd3412f4439c5cfe44b7f402684170209708040692dc5fd",
+              "position": 3,
+              "uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            },
+            {
+              "content": "After moving those clothes to the donation bag, the user cleared one closet compartment.",
+              "content_digest": "45db58ae108a299344d982d8606fff26f733252da691cf01417e760909ff6057",
+              "position": 4,
+              "uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            },
+            {
+              "content": "The user nearly discarded an important paper with advertising and checked the recycling box again.",
+              "content_digest": "6bf928f67944656e5f3c68d8869c0cefd039a588f0ba735f94520231ef58017c",
+              "position": 5,
+              "uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            },
+            {
+              "content": "During the next organizing session, the user kept a separate document box and did not mix the papers.",
+              "content_digest": "adac8d4266c6b11e15d29c484665bc5dcc915f9aa319198b6a69d0e7b0131bb3",
+              "position": 6,
+              "uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            },
+            {
+              "content": "The user's mother asks the user to check whether she needs kitchen items in good condition before discarding them.",
+              "content_digest": "0752bc2ac00c0b1301c45ab4c2e73f63c57e6ebc4255dcc1c13330ffda906612",
+              "position": 7,
+              "uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            },
+            {
+              "content": "Confirm with the user before marking a personal document or another person's property as a disposal candidate.",
+              "content_digest": "17062e2cd4738619e81e211cb2f53d14e78c5f4eab9ae49053ce7e06935a7db5",
+              "position": 8,
+              "uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            },
+            {
+              "content": "The local agent cannot determine an object's emotional meaning from frequency of use alone.",
+              "content_digest": "9c86bcfe2b209bf7957dced0eab000b42f97b6a435d705ccaccb15e49be3691d",
+              "position": 9,
+              "uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "352daa3b-a89d-49cb-8303-d367d092d737"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate practical domains: shared-laundry routines and household decluttering. Each contains locations, lessons from mishaps, improved practices, governing considerations, and agent limitations, but none addresses the same operational decision closely enough to form a cross-frame relation.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8681e5fe-9534-4f39-98ea-4d3344780159",
+              "memory_uid": "a1c67646-6a75-504a-9508-d69e1d04b3e5"
+            }
+          ],
+          "reason": "This is independently useful reference-side location information with no compared-side claim about storing or retrieving the laundry-room card.",
+          "status": "RESOLVED",
+          "summary": "The shared laundry-room access card is kept in an entrance drawer.",
+          "uid": "d4b138ef-900f-5f07-9478-b60c68402861"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8681e5fe-9534-4f39-98ea-4d3344780159",
+              "memory_uid": "9479e799-95d7-50d2-af62-d1e0914a389b"
+            },
+            {
+              "frame_uid": "8681e5fe-9534-4f39-98ea-4d3344780159",
+              "memory_uid": "528cb5ea-8c36-5206-beaa-19432250ec4d"
+            },
+            {
+              "frame_uid": "8681e5fe-9534-4f39-98ea-4d3344780159",
+              "memory_uid": "abbf8742-38e3-5810-b222-fe91e3340962"
+            },
+            {
+              "frame_uid": "8681e5fe-9534-4f39-98ea-4d3344780159",
+              "memory_uid": "06273d22-0b42-5c55-9d70-eda14084219a"
+            }
+          ],
+          "reason": "The memories jointly describe delayed retrieval and its social consequence, the successful reminder-based correction, the fairness rationale, and the operational reminder rule; the compared frame has no claim governing finished laundry.",
+          "status": "RESOLVED",
+          "summary": "Finished shared laundry should be retrieved promptly, with reminders tied to the machine end time supporting timely removal.",
+          "uid": "c1209337-20bb-532b-959e-b078543198f0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8681e5fe-9534-4f39-98ea-4d3344780159",
+              "memory_uid": "85fb1639-2176-5329-b490-3325ff030db4"
+            },
+            {
+              "frame_uid": "8681e5fe-9534-4f39-98ea-4d3344780159",
+              "memory_uid": "431d170a-863f-596d-97c0-0c9634524ee5"
+            }
+          ],
+          "reason": "These memories split one practical lesson about separating new jeans to prevent color transfer, which has no counterpart in the organizing frame.",
+          "status": "RESOLVED",
+          "summary": "New jeans transferred color when washed with light clothes, while washing them separately avoided changing other clothes.",
+          "uid": "1ef8b06e-4ce5-574f-98bd-e45fede5ea16"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8681e5fe-9534-4f39-98ea-4d3344780159",
+              "memory_uid": "4df33adc-cfba-50f2-b141-e2ebed38b81c"
+            },
+            {
+              "frame_uid": "8681e5fe-9534-4f39-98ea-4d3344780159",
+              "memory_uid": "ba7daae9-938d-55a1-af20-21cd10d395d8"
+            }
+          ],
+          "reason": "The paired experiences support one laundry-maintenance lesson, and the compared frame contains no dryer-filter or drying-efficiency claim.",
+          "status": "RESOLVED",
+          "summary": "Emptying the dryer filter was associated with completing drying in one cycle, unlike the unchecked-filter use that required another cycle.",
+          "uid": "f4ca63c3-6cae-5ac6-9825-c09b586bf39f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8681e5fe-9534-4f39-98ea-4d3344780159",
+              "memory_uid": "03ac930e-d745-5c29-8c24-5ced669817f9"
+            }
+          ],
+          "reason": "This is a specific capability boundary for laundry-room availability, distinct from the compared frame's unrelated limitation about emotional meaning.",
+          "status": "RESOLVED",
+          "summary": "Knowing the card location does not enable the local agent to know current shared-laundry machine availability.",
+          "uid": "5da3edbb-0a11-5e7b-a709-4f12af72c97d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "352daa3b-a89d-49cb-8303-d367d092d737",
+              "memory_uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            }
+          ],
+          "reason": "This is independently useful compared-side storage information with no reference-side claim about donation collection.",
+          "status": "RESOLVED",
+          "summary": "Clothes intended for donation are collected in a large bag beside the entrance.",
+          "uid": "5877ff55-bf1e-5b83-8049-e1cee1212486"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "352daa3b-a89d-49cb-8303-d367d092d737",
+              "memory_uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            },
+            {
+              "frame_uid": "352daa3b-a89d-49cb-8303-d367d092d737",
+              "memory_uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            }
+          ],
+          "reason": "The memories describe a mishap and the corresponding safer organizing practice; the reference frame contains no claim about drawer sorting or disposal selection.",
+          "status": "RESOLVED",
+          "summary": "After losing track of a needed charger when emptying a drawer wholesale, the user adopted type-based sorting and placed only discard items in the bag.",
+          "uid": "5b889d29-d10e-5bea-8947-3ada1d36407c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "352daa3b-a89d-49cb-8303-d367d092d737",
+              "memory_uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            },
+            {
+              "frame_uid": "352daa3b-a89d-49cb-8303-d367d092d737",
+              "memory_uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            }
+          ],
+          "reason": "These memories form one decluttering observation and outcome with no reference-side counterpart concerning unworn clothes or closet space.",
+          "status": "RESOLVED",
+          "summary": "Photographed unworn clothes remained unused for a month, and moving them to the donation bag freed a closet compartment.",
+          "uid": "ff8b24ba-f54c-5f0d-a473-725b4aa5e25c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "352daa3b-a89d-49cb-8303-d367d092d737",
+              "memory_uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            },
+            {
+              "frame_uid": "352daa3b-a89d-49cb-8303-d367d092d737",
+              "memory_uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            }
+          ],
+          "reason": "The memories jointly describe a document-sorting risk and its corrective practice, while the reference frame has no paper-disposal claim.",
+          "status": "RESOLVED",
+          "summary": "After nearly recycling an important paper with advertising, the user kept documents in a separate box during the next organizing session.",
+          "uid": "b6f1ce5a-7d16-5ebe-878b-f9fa2df5ff7a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "352daa3b-a89d-49cb-8303-d367d092d737",
+              "memory_uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            },
+            {
+              "frame_uid": "352daa3b-a89d-49cb-8303-d367d092d737",
+              "memory_uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            }
+          ],
+          "reason": "The memories express one confirmation safeguard for potentially sensitive or other-owned items, with no corresponding disposal-governance claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Before treating personal documents, another person's property, or usable kitchen items wanted by another person as disposable, the relevant person's needs or permission should be checked.",
+          "uid": "b3b8e6ba-40a3-50fe-8c9e-4f1900225370"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "352daa3b-a89d-49cb-8303-d367d092d737",
+              "memory_uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "reason": "This is a specific limitation on decluttering judgments, distinct from the reference frame's unrelated limitation concerning live machine availability.",
+          "status": "RESOLVED",
+          "summary": "The local agent cannot infer an object's emotional meaning from frequency of use alone.",
+          "uid": "afd9d6f7-6c69-5e96-8e51-eae7381e7223"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers donation-bag storage, cautious sorting, moving unworn clothes, separating documents, consulting others before disposal, confirmation safeguards, and limits on inferring emotional value.",
+        "differences": "",
+        "reference_only": "The reference covers card storage, prompt laundry retrieval, color separation, dryer-filter maintenance, shared-room fairness, reminder timing, and limits on knowing machine availability."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "1de896d3-0a5a-4b4f-bece-fd865c0e3a5c"
+    },
+    "analysis_digest": "15723fea218aa3443fd4645ff8d5026d39f54af2c1a7edd5b8dc48df00a017f9",
+    "key": "b64f41b419b9a889fbec62687702956d2c934c6b3d322ca2895eeef9360e1421",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 37.50872291699852,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "b64f41b419b9a889fbec62687702956d2c934c6b3d322ca2895eeef9360e1421",
+  "created_at": "2026-08-13T18:51:36.066957Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/04",
+  "pair_key": "b554ed999eff6c35776c390e13ff9239bcf9bc359c68258cac52655844f33aa2",
+  "provider_seconds": 37.50872291699852,
+  "right": "task-3/local/personal-memory/2026/04",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

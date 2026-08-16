@@ -1,0 +1,361 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:46:03.137809+00:00",
+      "frames": [
+        {
+          "context_digest": "492e513a553a9191e2c646cca49364b336ae6d163de5688eeca8cc661bbbdb32",
+          "context_name": "task-3/local/personal-memory/2024/11",
+          "context_uid": "0d5e1eef-1669-5589-94ba-b46c9c2080dc",
+          "memories": [
+            {
+              "content": "The user changed their schedule once in November 2024 because of their mother's hospital visit.",
+              "content_digest": "f08f07dda1b468ab191a59d87e7ceb8068189964edee2010abdae6e525d6103f",
+              "position": 0,
+              "uid": "bb17c696-0c1c-516f-8ad9-68a4b159ce22"
+            },
+            {
+              "content": "After seeing the reason for the schedule change written in a calendar invitation, the user asked for it to be removed.",
+              "content_digest": "7bfc906526c255f90a85b6dcc4b28ea1b0a9389e9f17ba989a4ce098280578c8",
+              "position": 1,
+              "uid": "195ba5ab-3ee0-5594-a859-9f2b5eadf9ea"
+            },
+            {
+              "content": "The user was able to reschedule the appointment after providing only a new time, without a reason.",
+              "content_digest": "14f1bd0410c76aa3a0eb28a2212fd06558ab23b6dc012aa5529980a67efe3e2b",
+              "position": 2,
+              "uid": "4c8759cc-66aa-527c-a9d5-197d39b5d2b7"
+            },
+            {
+              "content": "On a day the user traveled in their father's car, they photographed the parking location.",
+              "content_digest": "111e71af27be5d109557440569352964544e9b702810741445172a6cf51f94f5",
+              "position": 3,
+              "uid": "d4b27ea7-d329-5dc7-b7ca-91d0cd50a958"
+            },
+            {
+              "content": "On the next visit, when the user did not take a photo, they walked one circuit of the parking garage while looking for the exit.",
+              "content_digest": "6d61d67e35552cb739d0220e480189706ec5bbac74f93b87149a6948d9ac2805",
+              "position": 4,
+              "uid": "32a19a57-9b04-5f86-92ba-202a9ac803e4"
+            },
+            {
+              "content": "After hearing preparation items from their mother by phone, the user omitted two items.",
+              "content_digest": "449dc73aad797f5acd3d898292cf9942f7d3b65b9faf52769ae5b3332285b4f3",
+              "position": 5,
+              "uid": "0eeffd8c-acd6-57bf-950d-20cfa1fe62b3"
+            },
+            {
+              "content": "After receiving the preparation items again by text, the user put all of them in their bag.",
+              "content_digest": "9539ab90f598a96d97a73b7954db8834d3106861ba6ecc814e579a348e0145d6",
+              "position": 6,
+              "uid": "07ea3801-8666-581d-b846-2f45bf99ca19"
+            },
+            {
+              "content": "The user's mother does not want the reason for her visit disclosed in the user's external schedule.",
+              "content_digest": "b1aff7bb5b5df1ec773fd8875205cd9fdfa2fd5b520cf91b7c84c9e3054b4feb",
+              "position": 7,
+              "uid": "9e70b92e-1d8d-51ef-962d-bd9b348a56d5"
+            },
+            {
+              "content": "Do not include the mother's reason for a visit when conveying the user's availability externally.",
+              "content_digest": "b9473919c63f233fc66c49bbf00b20a8ab9532bcb1b8ce3896c442afed4229d9",
+              "position": 8,
+              "uid": "d76686fd-9f1d-5d94-931b-4b49c86a8f4e"
+            },
+            {
+              "content": "Some daily-life services may operate for shorter hours during the year-end holiday period.",
+              "content_digest": "48d4487aba4c395527f9dfeac9488f45556d1bd89475f8620b0a64d84e4479fc",
+              "position": 9,
+              "uid": "820a5de9-9e08-52c7-8747-5155fe341bb4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "9731ef41-d463-4c03-a959-8ac06b2f3ac7"
+        },
+        {
+          "context_digest": "3e738289251b9bdf3deb1c7a7540e6ce811b09e26a020af3a76d47b4c85c7ab1",
+          "context_name": "task-3/local/personal-memory/2025/02",
+          "context_uid": "ce7367b8-8532-5f43-972a-1665ca8e3e80",
+          "memories": [
+            {
+              "content": "The user reviewed their emergency-contact list in February 2025.",
+              "content_digest": "b2f108376dbbf53e8885b9c61080d4c873209d8c6e399c37412fa507fec08b0b",
+              "position": 0,
+              "uid": "3ff046b1-5810-51ca-8d43-c99ef6a90b41"
+            },
+            {
+              "content": "When preparation instructions arrived as a long paragraph, the user missed two items.",
+              "content_digest": "43bde452a403f85bcffa6f7ba6b3142ed45604730083327c6f57092b98f397aa",
+              "position": 1,
+              "uid": "e2a304e5-6100-5a5f-b508-0a7f28f6bda7"
+            },
+            {
+              "content": "After changing the same content into a checklist, the user marked every item they had prepared.",
+              "content_digest": "0f8115061b489894115fd252f079ee673504ed09dea4d88d558e64ed6189f1be",
+              "position": 2,
+              "uid": "51d03bff-3e33-5f68-9df6-ed7efa8e3de9"
+            },
+            {
+              "content": "The user called their mother on a weekend evening, but they spoke only briefly because the mother was out.",
+              "content_digest": "a9a1e7d87532667781677f4760beeb086f1e423365a915a0ec0b494892cbb361",
+              "position": 3,
+              "uid": "0987293e-3e21-5cbc-bb46-59245a5fa041"
+            },
+            {
+              "content": "The user called again on Saturday morning the following week and spoke for 40 minutes.",
+              "content_digest": "f08c9f170345686b2091e3b0ecd49f049e245d584886da62d586185010f713bf",
+              "position": 4,
+              "uid": "dc3de6ad-56ea-528a-a9b7-349e79af2326"
+            },
+            {
+              "content": "The user sent a text to an old number for an emergency contact and saw that delivery failed.",
+              "content_digest": "692321e996b9ac8e3500a2da7765f77e0d14c6f040cf2c33944cbdcb39c706de",
+              "position": 5,
+              "uid": "6546d41b-3d5b-5802-a9e7-ac028405e3f2"
+            },
+            {
+              "content": "After confirming the new number with their older sister, the user updated the contact list.",
+              "content_digest": "8d2e954a978e35c1da92948ccc8e45f38fcc25ea3fafe7c389ef546f6eda1ae1",
+              "position": 6,
+              "uid": "ea6eb9d2-9b01-5330-a4d5-886d4bc6cd85"
+            },
+            {
+              "content": "For nonurgent contact, the user's older sister prefers to reply by text when available rather than take a call immediately.",
+              "content_digest": "86639aee50903bc3261e6f88ac7d649c8197927fe214d5d17e0e6f5b3d69a59d",
+              "position": 7,
+              "uid": "12fe7e64-192e-5359-8f96-d2875f7e5399"
+            },
+            {
+              "content": "Before using an emergency contact, reconfirm the number and relationship information with the user.",
+              "content_digest": "78e41f61ba99eaf8840d5d318d08327ca6bb087addd6e22269e8b63281bb67c7",
+              "position": 8,
+              "uid": "e6f89ded-5687-5c25-8df8-88f288d450c6"
+            },
+            {
+              "content": "The user feels that a reminder the day before an appointment gives them enough time to recheck preparation items.",
+              "content_digest": "1a9fcc01df362c76b6d9c8e4fa2d33229a2ae2762c0c6d25e0fc89312a6e0ed4",
+              "position": 9,
+              "uid": "f9197c33-ff93-5215-a3a5-e4087bea2a0d"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "047f89b9-3b1c-4831-a815-0e050151aba4"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "Both frames connect preparation success to how instructions are presented, under different communication conditions. The reference additionally covers schedule privacy, parking navigation, and holiday hours, while the compared frame covers emergency-contact maintenance, family communication timing, contact preferences, and reminder timing.",
+      "relations": [
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "9731ef41-d463-4c03-a959-8ac06b2f3ac7",
+              "memory_uid": "0eeffd8c-acd6-57bf-950d-20cfa1fe62b3"
+            },
+            {
+              "frame_uid": "9731ef41-d463-4c03-a959-8ac06b2f3ac7",
+              "memory_uid": "07ea3801-8666-581d-b846-2f45bf99ca19"
+            },
+            {
+              "frame_uid": "047f89b9-3b1c-4831-a815-0e050151aba4",
+              "memory_uid": "e2a304e5-6100-5a5f-b508-0a7f28f6bda7"
+            },
+            {
+              "frame_uid": "047f89b9-3b1c-4831-a815-0e050151aba4",
+              "memory_uid": "51d03bff-3e33-5f68-9df6-ed7efa8e3de9"
+            }
+          ],
+          "reason": "Both frames associate missed items with a less usable presentation and full preparation with a more reviewable form, while preserving distinct conditions: phone versus text and paragraph versus checklist.",
+          "status": "RESOLVED",
+          "summary": "Preparation completion varied with the form in which instructions were presented.",
+          "uid": "316c799e-5d9b-557d-9967-7f717fac4b37"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9731ef41-d463-4c03-a959-8ac06b2f3ac7",
+              "memory_uid": "bb17c696-0c1c-516f-8ad9-68a4b159ce22"
+            }
+          ],
+          "reason": "This is independently useful historical context found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A November 2024 schedule change was prompted by the user’s mother visiting the hospital.",
+          "uid": "e0b36f36-8c56-5246-96d0-a42a494c32ef"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9731ef41-d463-4c03-a959-8ac06b2f3ac7",
+              "memory_uid": "195ba5ab-3ee0-5594-a859-9f2b5eadf9ea"
+            },
+            {
+              "frame_uid": "9731ef41-d463-4c03-a959-8ac06b2f3ac7",
+              "memory_uid": "9e70b92e-1d8d-51ef-962d-bd9b348a56d5"
+            },
+            {
+              "frame_uid": "9731ef41-d463-4c03-a959-8ac06b2f3ac7",
+              "memory_uid": "d76686fd-9f1d-5d94-931b-4b49c86a8f4e"
+            }
+          ],
+          "reason": "The reference frame records the removal request, the mother’s disclosure preference, and the corresponding operational instruction; the compared frame has no matching claim.",
+          "status": "RESOLVED",
+          "summary": "The mother’s visit reason should not appear in the user’s externally conveyed schedule or availability.",
+          "uid": "e1648866-765e-5cdc-ae40-c91d40704127"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9731ef41-d463-4c03-a959-8ac06b2f3ac7",
+              "memory_uid": "4c8759cc-66aa-527c-a9d5-197d39b5d2b7"
+            }
+          ],
+          "reason": "This independently useful capability is stated only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user successfully rescheduled an appointment by providing only a new time.",
+          "uid": "8f569121-b4e8-5b25-8bff-8218ca67d5fe"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9731ef41-d463-4c03-a959-8ac06b2f3ac7",
+              "memory_uid": "d4b27ea7-d329-5dc7-b7ca-91d0cd50a958"
+            },
+            {
+              "frame_uid": "9731ef41-d463-4c03-a959-8ac06b2f3ac7",
+              "memory_uid": "32a19a57-9b04-5f86-92ba-202a9ac803e4"
+            }
+          ],
+          "reason": "The reference frame supplies the paired parking experiences as one one-sided navigation episode.",
+          "status": "RESOLVED",
+          "summary": "Photographing a parking location was associated with easier orientation than a later visit without a photo.",
+          "uid": "08f81734-b707-51ac-8120-7209143d7e98"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9731ef41-d463-4c03-a959-8ac06b2f3ac7",
+              "memory_uid": "820a5de9-9e08-52c7-8747-5155fe341bb4"
+            }
+          ],
+          "reason": "This seasonal service-hours caution appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Daily-life services may have reduced hours during the year-end holiday period.",
+          "uid": "7aa4dc86-c69a-5f28-a4ba-a46b6e6f4e5a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "047f89b9-3b1c-4831-a815-0e050151aba4",
+              "memory_uid": "3ff046b1-5810-51ca-8d43-c99ef6a90b41"
+            },
+            {
+              "frame_uid": "047f89b9-3b1c-4831-a815-0e050151aba4",
+              "memory_uid": "6546d41b-3d5b-5802-a9e7-ac028405e3f2"
+            },
+            {
+              "frame_uid": "047f89b9-3b1c-4831-a815-0e050151aba4",
+              "memory_uid": "ea6eb9d2-9b01-5330-a4d5-886d4bc6cd85"
+            },
+            {
+              "frame_uid": "047f89b9-3b1c-4831-a815-0e050151aba4",
+              "memory_uid": "e6f89ded-5687-5c25-8df8-88f288d450c6"
+            }
+          ],
+          "reason": "The compared frame presents these details as one contact-accuracy and maintenance claim with no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Emergency-contact records were reviewed, corrected after a failed delivery, and should be reconfirmed before use.",
+          "uid": "1395f594-dd65-5ca1-bb41-703262411559"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "047f89b9-3b1c-4831-a815-0e050151aba4",
+              "memory_uid": "0987293e-3e21-5cbc-bb46-59245a5fa041"
+            },
+            {
+              "frame_uid": "047f89b9-3b1c-4831-a815-0e050151aba4",
+              "memory_uid": "dc3de6ad-56ea-528a-a9b7-349e79af2326"
+            }
+          ],
+          "reason": "The compared frame supplies the brief evening call and longer following-Saturday morning call as one paired communication-timing episode.",
+          "status": "RESOLVED",
+          "summary": "Calls with the user’s mother differed in duration under two weekend timing conditions.",
+          "uid": "6128e173-d90b-58b8-b331-fc570ab503d0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "047f89b9-3b1c-4831-a815-0e050151aba4",
+              "memory_uid": "12fe7e64-192e-5359-8f96-d2875f7e5399"
+            }
+          ],
+          "reason": "This contact-channel preference appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "For nonurgent contact, the user’s older sister prefers replying by text when available instead of immediately taking a call.",
+          "uid": "8dad0363-349e-59c1-9974-54a8da803a5c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "047f89b9-3b1c-4831-a815-0e050151aba4",
+              "memory_uid": "f9197c33-ff93-5215-a3a5-e4087bea2a0d"
+            }
+          ],
+          "reason": "This reminder-timing preference is independently useful and appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user considers a reminder one day before an appointment sufficient for rechecking preparation items.",
+          "uid": "887fbfed-54f1-5e7e-8642-6824addbca43"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers emergency-contact verification and updating, successful and unsuccessful call timing, an older sister’s nonurgent text preference, and day-before preparation reminders.",
+        "differences": "Preparation omissions and completion are tied to distinct presentation conditions: spoken versus text instructions in the reference, and a long paragraph versus a checklist in the compared frame.",
+        "reference_only": "The reference covers minimizing disclosure in external schedules, a private schedule-change episode, reason-free rescheduling, photographed parking locations, and possible holiday service reductions."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "6ab22a01-deb5-4467-adf2-aaa2ca27b95e"
+    },
+    "analysis_digest": "2fe445f32c4bc9e249d3de8a372ed7f7f811ef2bb18f11d82f918d02a51c3ed2",
+    "key": "9b23c991750efde1141a3b0463176c4d2d68aff3650fc20308eca5eb8d2728d3",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 52.59361187500326,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "9b23c991750efde1141a3b0463176c4d2d68aff3650fc20308eca5eb8d2728d3",
+  "created_at": "2026-08-13T18:46:55.731003Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/11",
+  "pair_key": "c8add7e5aa9fc6cac35c6e9abf44dd5eb7e792f7489ad840bc525675d6f1c6b5",
+  "provider_seconds": 52.59361187500326,
+  "right": "task-3/local/personal-memory/2025/02",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

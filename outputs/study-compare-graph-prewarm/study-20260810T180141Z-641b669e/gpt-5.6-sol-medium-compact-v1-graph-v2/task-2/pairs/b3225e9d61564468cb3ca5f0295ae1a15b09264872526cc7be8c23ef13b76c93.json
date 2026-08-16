@@ -1,0 +1,254 @@
+{
+  "coverage": {
+    "expected": 24,
+    "observed": 24
+  },
+  "created_at": "2026-08-11T00:26:48.112738Z",
+  "description_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+  "issues": [],
+  "kind": "STUDY_COMPARE_GRAPH_PAIR",
+  "left": {
+    "context_digest": "ea897f5484a40cff96a5be5b246258a16ce1af6660b5f96c17e3b0528c06d090",
+    "context_uid": "a759f597-4f26-5782-828b-55f1c90076bf",
+    "memory_count": 13,
+    "name": "task-2/advisor1/style"
+  },
+  "method": "COMPACT_DECISION_VECTOR_V1",
+  "operation": "COMPARE",
+  "pair_key": "b3225e9d61564468cb3ca5f0295ae1a15b09264872526cc7be8c23ef13b76c93",
+  "provider": {
+    "condition": "COMPACT_DECISION_VECTOR",
+    "contract_valid": true,
+    "elapsed_seconds": 52.70148345800408,
+    "error_type": null,
+    "failure_category": null,
+    "operation": "compare_contexts_compact_ab_v1",
+    "prompt_chars": 9343,
+    "provider_calls": 1,
+    "provider_run": {
+      "completion_tokens": null,
+      "identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "operation": "compare_contexts_compact_ab_v1",
+      "prompt_tokens": null,
+      "upstream_model": "gpt-5.6-sol",
+      "upstream_provider": "openai-codex"
+    },
+    "provider_seconds": 52.70070762500109,
+    "response_bytes": 620,
+    "response_chars": 620,
+    "schema_chars": 1382,
+    "validation_error": null,
+    "validation_seconds": 0.0007646250014659017
+  },
+  "relations": [
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "33503d41-7b99-5526-a028-0a1a20652c0d",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "13dc50e1-ecaa-504e-a602-7a10a09d5484",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "358230d3-9ff0-51b9-9bf6-0752a2d9845a",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000001",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "79437c17-1f08-5188-8177-c622429dc4f9",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000002",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "807a906c-d519-59b1-8406-43c8015ef068",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "ff8f0b12-9df4-5968-90b2-cd8d971dcc1b",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "bec16e02-b267-50b8-9c0e-964184f2a6b4",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000003",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Both distinguish established from pending states, but one applies to prototype operations and the other to field partners and equipment.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "e463a3b5-263f-58da-9895-242965892e60",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "fef78af8-1774-5da0-8345-571eb8c9cc3c",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "f5ad6933-3e22-5c47-bdaf-bacc9c9a5b3c",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000004",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "6c282ef7-4326-5d69-a7c4-d3f4f3a3a508",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000005",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "58565355-bec5-5b2b-89ed-f0b8cab0351a",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000006",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "cc860653-ad91-52f8-91db-5b26371dca0a",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "af0d191d-d23e-562b-997b-b1024dacefda",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "f8253f92-c60c-57e1-a630-6b31abe080ae",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000007",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "6d203c86-b6e0-586a-b896-b654fa319ed1",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "6ba1d344-5d98-5c25-ba1e-b28c08d39747",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000008",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "6b75bfb1-67f5-50bb-9e0c-04026062de96",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "4a85ebbd-a4ee-5c88-9e93-5fc545f41c64",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000009",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "3abfda89-82ab-5cc5-bdcd-5e2f274fd727",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "75c4c71d-28e3-559c-99d1-f0dccc31a9e2",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000010",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "f14f1974-9035-5a2c-931a-89a5004a2567",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "577e5506-78e8-5768-b288-7a5986347cce",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000011",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "9ce34a9a-4ba2-5b32-a1de-b0469ddc3f95",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000012",
+      "status": "RESOLVED"
+    }
+  ],
+  "right": {
+    "context_digest": "bf5136a518ce85246184349a0194e446748710ed6da95e5c97d4a31d74ddc1b9",
+    "context_uid": "3398ba87-f01e-56bd-9da2-0ed0894524fa",
+    "memory_count": 11,
+    "name": "task-2/advisor2/review"
+  },
+  "schema_version": 1,
+  "semantic_content_in_participant_report": false,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

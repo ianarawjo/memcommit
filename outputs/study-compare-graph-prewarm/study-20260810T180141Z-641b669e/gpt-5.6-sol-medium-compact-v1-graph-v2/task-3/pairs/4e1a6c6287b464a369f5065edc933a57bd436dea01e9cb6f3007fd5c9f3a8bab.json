@@ -1,0 +1,217 @@
+{
+  "coverage": {
+    "expected": 16,
+    "observed": 16
+  },
+  "created_at": "2026-08-11T00:40:11.060717Z",
+  "description_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+  "issues": [
+    {
+      "options": [
+        {
+          "label": "Separate approval",
+          "text": "Require user approval for each secondary processor.",
+          "uid": "5b45b625-c052-5519-8d02-303a550f99fa"
+        },
+        {
+          "label": "Original approval",
+          "text": "Treat necessary secondary processors as covered by the original approval.",
+          "uid": "9c963af4-0024-595a-bff4-0bf6ec9423a1"
+        },
+        {
+          "label": "Conditional coverage",
+          "text": "Treat a secondary processor as covered only when the reviewed approval explicitly includes that processor category.",
+          "uid": "fe89c996-9097-5222-a0b4-22b0fe3ab866"
+        }
+      ],
+      "priority": "REQUIRED",
+      "question": "Must every secondary processor receive separate user approval, or may an organization treat necessary secondary processors as covered by the original approval?",
+      "relation_keys": [
+        "r000001"
+      ],
+      "title": "Secondary processor approval",
+      "why_it_matters": "The answer determines whether information may be forwarded to an unreviewed processor without another approval step."
+    }
+  ],
+  "kind": "STUDY_COMPARE_GRAPH_PAIR",
+  "left": {
+    "context_digest": "4bf42c36daf8e8c65e73bc045af519ad29b4bcca4a73b34b352c4e30a565be85",
+    "context_uid": "62523a5e-66f1-5023-a78b-9151bd72055f",
+    "memory_count": 8,
+    "name": "task-3/local/guardrails/downstream-use"
+  },
+  "method": "COMPACT_DECISION_VECTOR_V1",
+  "operation": "COMPARE",
+  "pair_key": "4e1a6c6287b464a369f5065edc933a57bd436dea01e9cb6f3007fd5c9f3a8bab",
+  "provider": {
+    "condition": "COMPACT_DECISION_VECTOR",
+    "contract_valid": true,
+    "elapsed_seconds": 38.51559279199864,
+    "error_type": null,
+    "failure_category": null,
+    "operation": "compare_contexts_compact_ab_v1",
+    "prompt_chars": 6767,
+    "provider_calls": 1,
+    "provider_run": {
+      "completion_tokens": null,
+      "identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "operation": "compare_contexts_compact_ab_v1",
+      "prompt_tokens": null,
+      "upstream_model": "gpt-5.6-sol",
+      "upstream_provider": "openai-codex"
+    },
+    "provider_seconds": 38.51492766699812,
+    "response_bytes": 1250,
+    "response_chars": 1250,
+    "schema_chars": 1378,
+    "validation_error": null,
+    "validation_seconds": 0.0006563329952768981
+  },
+  "relations": [
+    {
+      "comment": "The frames disagree on whether secondary processors may be treated as covered by the original recipient approval or require separate approval.",
+      "kind": "CONFLICT",
+      "members": [
+        {
+          "memory_uid": "e8c87c6c-1c32-534b-87be-32b5bb93584f",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "c2f154f8-6340-57d6-bd12-efa5411592b1",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "9b320cc6-d3d3-5135-82dc-93b48c4bfb71",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "e0133c8a-5382-50d2-9d9a-74e3ff700f69",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000001",
+      "status": "UNRESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "8cd6d58b-9325-584d-8c5c-396e1af03423",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "58850532-c154-5e64-87cb-91c81d3e5ca5",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000002",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "00564a98-72a6-57ce-9fc6-20a918e9e593",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000003",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "aeb15a51-9870-5e89-bcef-d5ad49792a02",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "62a622be-5e30-50f6-b1c0-f3b6454d0a64",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "3d3749df-7036-548b-b939-7b6b32c79af6",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "b5618dee-42df-583f-a839-e8e611ccdabd",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000004",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "975278ec-2ea5-5dec-b9bc-8054d880d0e3",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000005",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "c971c24d-2543-5874-91e3-b97aec8bc77a",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "75944d44-d6e7-52fc-a68a-676b0df123ed",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000006",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "78bba4e2-c5d0-5df3-8f81-6641515e4875",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000007",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "05953013-6bb7-5f2c-8024-23ef357161fa",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000008",
+      "status": "RESOLVED"
+    }
+  ],
+  "right": {
+    "context_digest": "dd9148dc81399f484999854189f0ef908d9b244551d50fe7576d8d5e5dc5a615",
+    "context_uid": "900828d4-48ca-5a05-9807-620165233930",
+    "memory_count": 8,
+    "name": "task-3/local/guardrails/purpose-and-scope"
+  },
+  "schema_version": 1,
+  "semantic_content_in_participant_report": false,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

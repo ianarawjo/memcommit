@@ -1,0 +1,234 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:23:43.646804+00:00",
+      "frames": [
+        {
+          "context_digest": "9d55b4a5604285e426b317f7f4732b35ca1e9df044f7015b3ae6a6be0df5492b",
+          "context_name": "task-2/advisor1/reproducibility",
+          "context_uid": "7d293f75-52b6-5f27-99c4-54f2be3d8e59",
+          "memories": [
+            {
+              "content": "HCI reviewers find it difficult to assess the reproducibility of results if the prototype version used in the evaluation is not disclosed.",
+              "content_digest": "9b89217d4ef2c7524af665ea80d7d60e61f1663fd8ea4bdde533c8d3a0da2044",
+              "position": 0,
+              "uid": "fb400759-63ed-568a-b94e-5f0c2fe94b67"
+            },
+            {
+              "content": "Record the manipulated and fixed elements of compared design alternatives so that other researchers can reconstruct them.",
+              "content_digest": "26b84b5f0644980de51d764218ce90fb614eb02a2df38fb3632f44d360a93cd3",
+              "position": 1,
+              "uid": "e52e8470-6419-5306-9ddd-00a86003dcf3"
+            },
+            {
+              "content": "Records of formative evaluation decisions enable the reconstruction of connections between raw data, interpretation, and design modifications.",
+              "content_digest": "f213479e4bd1947d418083139346ed7f666bc597133962617d94bdd3a9af0083",
+              "position": 2,
+              "uid": "8f4edf8c-491d-56fe-bde4-d9ce25d6de50"
+            },
+            {
+              "content": "The user must make it possible to trace which observations each prototype version reflects so the process of deriving design knowledge can be reviewed.",
+              "content_digest": "1c9b8a6f650f2eb652b1e9cbb62ad9dcbb3ec13f2e160b52db83492640eb0ae9",
+              "position": 3,
+              "uid": "87662a7e-ffc7-521a-a06c-7db8184377e8"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "119a6a69-2b4f-485a-a7df-1f6073c321c6"
+        },
+        {
+          "context_digest": "b598a4ff3268ef8c6c0d7bc5ff34af370074bcdd30d61bd3623fcdfb167f37d6",
+          "context_name": "task-2/advisor2/safety",
+          "context_uid": "4283d797-6a33-5f39-b7f6-f4dbd3264389",
+          "memories": [
+            {
+              "content": "List whom to notify and in what order if serious discomfort is reported during the study.",
+              "content_digest": "3453feb8597fb15c827f22297d58dc804fdc1d8080b9e93ba35b85a4425092b6",
+              "position": 0,
+              "uid": "ceb095a9-3068-55ea-a06f-d954c121e007"
+            },
+            {
+              "content": "Field staff rely on the pre-defined contact sequence when serious discomfort is reported.",
+              "content_digest": "ba38f8a5c993c810e19b9120f4492c3accf962c8b8fd7642539ac24f363099e0",
+              "position": 1,
+              "uid": "962d7645-02b3-5611-8415-4370794c10d4"
+            },
+            {
+              "content": "Define the thresholds for participant harm, operational disruption, and data anomalies at which deployment and data collection must cease.",
+              "content_digest": "7f7f124d266efd8255c4615ebc7eb375447047ed5a2b96327f28f8f17d048813",
+              "position": 2,
+              "uid": "a3270872-1901-5d24-8ef1-374833599bf9"
+            },
+            {
+              "content": "Establish procedures to restore existing systems and workflow states after suspending field deployment.",
+              "content_digest": "1a5f7636ec45e60df11db8b0d3763345c0bfaf9a92c1e5d581e6b36452c31208",
+              "position": 3,
+              "uid": "f6dd1368-0d90-5f1a-97d0-56594ce8f4b3"
+            },
+            {
+              "content": "The user's stop plan can be judged feasible only when it identifies who has authority to order recovery and who is responsible for carrying it out.",
+              "content_digest": "3fa05bd19fdeeb320a37cfb89ad853a868b64055f7b21eb182798b0119f6620c",
+              "position": 4,
+              "uid": "342e4697-873f-56a8-b4a4-896efe910144"
+            },
+            {
+              "content": "In organizations where error reporting is linked to individual performance evaluations, safety signal records may be separated from research decision logs, potentially breaking the traceability path for the same incident.",
+              "content_digest": "2bf13ff8ab1a778e8a793ede627b28d40798ae40d25c7a6d25eb5e2e79dd8e97",
+              "position": 5,
+              "uid": "6c4e9175-4590-5689-ae2b-678f0eb930b9"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "e87ef674-49a4-43b7-bf83-89eb939d4eac"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address complementary governance needs: the reference emphasizes reproducible design provenance, while the compared frame emphasizes field-safety escalation, stopping, and recovery. Their only substantive intersection is traceability, with an organizational condition that can disrupt links between incident evidence and research decisions.",
+      "relations": [
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "119a6a69-2b4f-485a-a7df-1f6073c321c6",
+              "memory_uid": "8f4edf8c-491d-56fe-bde4-d9ce25d6de50"
+            },
+            {
+              "frame_uid": "119a6a69-2b4f-485a-a7df-1f6073c321c6",
+              "memory_uid": "87662a7e-ffc7-521a-a06c-7db8184377e8"
+            },
+            {
+              "frame_uid": "e87ef674-49a4-43b7-bf83-89eb939d4eac",
+              "memory_uid": "6c4e9175-4590-5689-ae2b-678f0eb930b9"
+            }
+          ],
+          "reason": "The reference memories establish evidence-to-design provenance across formative decisions and prototype versions; the compared memory adds an explicit organizational condition under which that provenance path may be broken.",
+          "status": "RESOLVED",
+          "summary": "Research evidence should remain traceable through interpretation and design changes, but performance-linked error reporting can cause safety records for an incident to be separated from the relevant decision history.",
+          "uid": "aadbcee8-a769-50c1-b108-0180e7eab98c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "119a6a69-2b4f-485a-a7df-1f6073c321c6",
+              "memory_uid": "fb400759-63ed-568a-b94e-5f0c2fe94b67"
+            }
+          ],
+          "reason": "This is an independently useful reproducibility requirement found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The evaluated prototype version should be disclosed so reviewers can assess reproducibility.",
+          "uid": "9d2c10f7-09af-51d4-a239-cec20260c142"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "119a6a69-2b4f-485a-a7df-1f6073c321c6",
+              "memory_uid": "e52e8470-6419-5306-9ddd-00a86003dcf3"
+            }
+          ],
+          "reason": "This is an independently useful documentation requirement found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Manipulated and fixed elements of compared design alternatives should be recorded to permit reconstruction.",
+          "uid": "03d594a1-0beb-534d-a1ad-d2cffb062b54"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e87ef674-49a4-43b7-bf83-89eb939d4eac",
+              "memory_uid": "ceb095a9-3068-55ea-a06f-d954c121e007"
+            },
+            {
+              "frame_uid": "e87ef674-49a4-43b7-bf83-89eb939d4eac",
+              "memory_uid": "962d7645-02b3-5611-8415-4370794c10d4"
+            }
+          ],
+          "reason": "The compared memories state complementary parts of one operational escalation rule found only in that frame.",
+          "status": "RESOLVED",
+          "summary": "A predefined notification sequence should identify whom field staff contact, and in what order, after serious discomfort is reported.",
+          "uid": "fa010bf0-8f73-5a7d-87c1-32e495f4e99e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e87ef674-49a4-43b7-bf83-89eb939d4eac",
+              "memory_uid": "a3270872-1901-5d24-8ef1-374833599bf9"
+            }
+          ],
+          "reason": "This is an independently useful stopping-policy requirement found only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Thresholds for participant harm, operational disruption, and data anomalies should determine when deployment and data collection cease.",
+          "uid": "d5f2c229-707e-53a8-8b30-f8c9d0e23b92"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e87ef674-49a4-43b7-bf83-89eb939d4eac",
+              "memory_uid": "f6dd1368-0d90-5f1a-97d0-56594ce8f4b3"
+            }
+          ],
+          "reason": "This is an independently useful recovery-procedure requirement found only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Procedures should restore existing systems and workflow states after field deployment is suspended.",
+          "uid": "414240a9-d3bd-57dc-8c4c-38079967d902"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e87ef674-49a4-43b7-bf83-89eb939d4eac",
+              "memory_uid": "342e4697-873f-56a8-b4a4-896efe910144"
+            }
+          ],
+          "reason": "This is an independently useful recovery-governance requirement found only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A feasible stop plan should identify who may order recovery and who must execute it.",
+          "uid": "0af2adee-487e-5a56-95b3-69da7cea01d6"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame uniquely specifies discomfort escalation, cessation thresholds, restoration procedures, and recovery authority and responsibility.",
+        "differences": "Both address traceable evidence-to-decision paths, while performance-linked error reporting may cause safety records to be separated and break that traceability.",
+        "reference_only": "The reference uniquely requires disclosure of evaluated prototype versions and documentation of controlled differences between design alternatives."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "d3c9dfc3-554f-40df-8e04-e7b71798849f"
+    },
+    "analysis_digest": "17589c84a4fb858b0fc04b369a3f1b80aeb421492e0295943e0fe04bf65ede48",
+    "key": "b1865d9c5b2a9343c619c919d6e8262850b9ea0facdafb32ede01882175e74c1",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 25.658594500000618,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "b1865d9c5b2a9343c619c919d6e8262850b9ea0facdafb32ede01882175e74c1",
+  "created_at": "2026-08-13T18:24:09.305094Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/reproducibility",
+  "pair_key": "6db4c62d1df6ed43c00176f57f82d2edb8551e777df20a974c7e12d27ab4c24b",
+  "provider_seconds": 25.658594500000618,
+  "right": "task-2/advisor2/safety",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

@@ -1,0 +1,7 @@
+GROUND CLOSED · READ-ONLY VERIFICATION                                                                                                                                              
+  GROUND REVISION · 2                                                                                                                                                               
+  GROUND UNCHANGED · True                                                                                                                                                           
+  FIT RECEIPTS · 1                                                                                                                                                                  
+  LATEST CURRENT · True                                                                                                                                                             
+  PROVIDER CALLS · 2                                                                                                                                                                
+  CLOSE STATUS · CLOSED

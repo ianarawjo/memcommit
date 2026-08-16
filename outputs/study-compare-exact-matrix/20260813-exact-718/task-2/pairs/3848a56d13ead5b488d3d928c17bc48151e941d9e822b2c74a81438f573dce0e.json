@@ -1,0 +1,329 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:25:38.201309+00:00",
+      "frames": [
+        {
+          "context_digest": "d2c716d52357c4200adc8772d5823715ffd736eb766028c1c62bbb32852bc344",
+          "context_name": "task-2/advisor1/scope",
+          "context_uid": "6db29abe-5784-5eec-acaa-060bac0e11f1",
+          "memories": [
+            {
+              "content": "Define in one sentence the user groups and usage contexts to which the design knowledge does not apply.",
+              "content_digest": "3193ffe501a06d6148b39c333853b42bc0278b2ab3c3df88162b049548ff16bb",
+              "position": 0,
+              "uid": "e594a6ab-81e9-5e5f-8ef5-e6bb8f3760d7"
+            },
+            {
+              "content": "Reviewers judge the generalization boundary of results through explicitly excluded targets and situations.",
+              "content_digest": "a929649a7bd07f29f31a8cd1969a3c160ba5f61c0def76e204443c30234f84b0",
+              "position": 1,
+              "uid": "31cdacff-7c49-547d-9f97-598a07b67fb6"
+            },
+            {
+              "content": "Specify user goals, interaction conditions, and technological constraints under which the proposed design knowledge can be transferred.",
+              "content_digest": "6ae1bfaeadb1863db1997685527706d210a379a376a24d3de1168e952f847627",
+              "position": 2,
+              "uid": "1459d986-4dc9-51f3-bf13-dbb0b07045c8"
+            },
+            {
+              "content": "Small-scale formative studies can support analytic generalization distinct from statistical representativeness when results are expressed in terms of design conditions and mechanisms.",
+              "content_digest": "1963572a303acbf383890b7d97b52349f572df761e89ea3fd5116058cd2e1cea",
+              "position": 3,
+              "uid": "1db5fcd6-f93c-5630-9810-053c10b5ceba"
+            },
+            {
+              "content": "The author of this proposal tends to apply design knowledge derived from an accessible sample to a broader user population.",
+              "content_digest": "df2a7f1284c1994c6dec49eb7995acd1ed341a9e6b8f4b06c854d85fa9d77d6c",
+              "position": 4,
+              "uid": "fd29c315-521f-53c0-add5-c668ec318a43"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "42fc7afe-469c-4158-a7b4-4cefa247dc1c"
+        },
+        {
+          "context_digest": "74ec0b91876efe6caed2938aaf4a0b06272de678fbf74dc9da1c217aa0bd042f",
+          "context_name": "task-2/advisor2/compensation",
+          "context_uid": "4ffbd453-7d61-56f7-90ad-34d77b485ef8",
+          "memories": [
+            {
+              "content": "Calculate user research compensation budgets based on the estimated participation burden, combining session time with required technical and travel preparation.",
+              "content_digest": "ba439fe3920339f56e377d8f82a64ab3ad27fb25e0eec3c65b610c81af53d175",
+              "position": 0,
+              "uid": "be9e402b-8d3b-58da-9766-2cf2ec25b9ae"
+            },
+            {
+              "content": "Compensate participants who withdraw from the study midway for their actual participation time.",
+              "content_digest": "599f542ec6f4a5a1a61f5c1a31547088e015439978a64b268879b5a2b65c9be4",
+              "position": 1,
+              "uid": "85157c57-410f-5c7d-8183-b37d61eebf8a"
+            },
+            {
+              "content": "Compensate for the time actually spent in sessions, regardless of the research modality.",
+              "content_digest": "b19b9dbece5d564de69e703491018fbd78ab834149eed0590a552773526b6e29",
+              "position": 2,
+              "uid": "8abeab95-3e41-5378-8409-08200aee9d58"
+            },
+            {
+              "content": "Allow the issuance of gift cards of equivalent value to participants in remote studies who cannot use electronic transfers.",
+              "content_digest": "8ac881488d0064f4b4c6143e2d8c69ab9806b419044adef266c50738c7afb291",
+              "position": 3,
+              "uid": "9b59c6ed-5dbe-5ccc-87b5-6be31f414e68"
+            },
+            {
+              "content": "Do not treat an unresolved payment method as a deficiency at the proposal stage.",
+              "content_digest": "80109274870eb1023e4cbcc6861a906a4d94db5dab2b2659bcebccde125c9ac3",
+              "position": 4,
+              "uid": "5c6c461d-05e5-5b0c-b801-245de2f9c8d7"
+            },
+            {
+              "content": "Allow differential compensation amounts for on-site and remote studies when participation burden varies due to travel or technical preparation.",
+              "content_digest": "556c5e49f7996a651a64825df2389f070629b9bc664c758d934f308c7fd6eea2",
+              "position": 5,
+              "uid": "44abc098-8c9f-5abb-bc49-9deb25066d93"
+            },
+            {
+              "content": "Participants judge the fairness of compensation based on the combined burden of session time and required technical and travel preparation.",
+              "content_digest": "80dd84e8b183e02f1fd772890b48712bb04a04852055eece98957a0c9028288c",
+              "position": 6,
+              "uid": "2a252668-f3f2-5582-b248-43ad81c54a48"
+            },
+            {
+              "content": "In longitudinal studies requiring diary entries and repeated reporting, include out-of-session recording time in compensation calculations.",
+              "content_digest": "7d103d93741e40d54c8df8347f2ce648a1cd96e19589663fa515bfb24b5bd844",
+              "position": 7,
+              "uid": "7e647a83-81b0-52d6-9362-e513dc2a5032"
+            },
+            {
+              "content": "Distinguish between participant research compensation and labor costs for field staff performing installation and operational support as part of their duties.",
+              "content_digest": "b1566527e9c1d7d3f93631d1503b08ddb4a6818daa570c118f265b47603592f0",
+              "position": 8,
+              "uid": "d77affab-60c8-5403-b189-17022b484640"
+            },
+            {
+              "content": "The user tends to count session time but omit participants’ advance setup and follow-up reporting time.",
+              "content_digest": "98911b7db2d8c3962d7ef48919265f40cdb61a711062e5459a4f6d43f71d6fd9",
+              "position": 9,
+              "uid": "0c470c6b-26a6-5501-93ac-c51fecd708ae"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "813d6f59-aeee-4991-b6f9-de27e04060e1"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address independent concerns: the reference defines boundaries for transferring and generalizing design knowledge, while the compared frame governs participant compensation, payment methods, burden accounting, and staff labor distinctions. Neither frame supplies a scope-aligned counterpart to the other.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "42fc7afe-469c-4158-a7b4-4cefa247dc1c",
+              "memory_uid": "e594a6ab-81e9-5e5f-8ef5-e6bb8f3760d7"
+            },
+            {
+              "frame_uid": "42fc7afe-469c-4158-a7b4-4cefa247dc1c",
+              "memory_uid": "31cdacff-7c49-547d-9f97-598a07b67fb6"
+            }
+          ],
+          "reason": "Both memories express the one-sided claim that explicit exclusions define and communicate where results do not apply.",
+          "status": "RESOLVED",
+          "summary": "Design knowledge should state excluded user groups and contexts so its generalization boundary can be judged.",
+          "uid": "3f1825c1-0477-53ea-af61-7c36ab7868c2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "42fc7afe-469c-4158-a7b4-4cefa247dc1c",
+              "memory_uid": "1459d986-4dc9-51f3-bf13-dbb0b07045c8"
+            }
+          ],
+          "reason": "The compared frame contains no claim about conditions for transferring design knowledge.",
+          "status": "RESOLVED",
+          "summary": "Transferability should be specified through user goals, interaction conditions, and technological constraints.",
+          "uid": "50846fa8-01d8-560b-b7ec-921cdc268412"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "42fc7afe-469c-4158-a7b4-4cefa247dc1c",
+              "memory_uid": "1db5fcd6-f93c-5630-9810-053c10b5ceba"
+            }
+          ],
+          "reason": "The compared frame contains no claim about evidentiary forms of generalization.",
+          "status": "RESOLVED",
+          "summary": "Small formative studies can support analytic rather than statistically representative generalization when framed through design conditions and mechanisms.",
+          "uid": "85a30cb1-7a8e-5cae-bd89-8bdf2113a437"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "42fc7afe-469c-4158-a7b4-4cefa247dc1c",
+              "memory_uid": "fd29c315-521f-53c0-add5-c668ec318a43"
+            }
+          ],
+          "reason": "This one-sided diagnostic observation has no compensation-related counterpart.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to extend design knowledge from an accessible sample to a broader population.",
+          "uid": "bf72ae71-7c59-5d44-9935-1525c6d93fdd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "813d6f59-aeee-4991-b6f9-de27e04060e1",
+              "memory_uid": "be9e402b-8d3b-58da-9766-2cf2ec25b9ae"
+            },
+            {
+              "frame_uid": "813d6f59-aeee-4991-b6f9-de27e04060e1",
+              "memory_uid": "2a252668-f3f2-5582-b248-43ad81c54a48"
+            }
+          ],
+          "reason": "Both memories express the underlying one-sided claim that total participation burden should govern compensation.",
+          "status": "RESOLVED",
+          "summary": "Compensation budgets and perceived fairness should reflect session time plus required technical and travel preparation.",
+          "uid": "8bde47b2-cf3d-5d2a-989b-496077e7631c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "813d6f59-aeee-4991-b6f9-de27e04060e1",
+              "memory_uid": "85157c57-410f-5c7d-8183-b37d61eebf8a"
+            },
+            {
+              "frame_uid": "813d6f59-aeee-4991-b6f9-de27e04060e1",
+              "memory_uid": "8abeab95-3e41-5378-8409-08200aee9d58"
+            }
+          ],
+          "reason": "Both memories split the one-sided policy of paying for actual session participation.",
+          "status": "RESOLVED",
+          "summary": "Participants should be compensated for time actually spent in sessions, including when they withdraw midway and regardless of modality.",
+          "uid": "e456a63b-ac46-5a1b-9eea-faa3cc43c1de"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "813d6f59-aeee-4991-b6f9-de27e04060e1",
+              "memory_uid": "9b59c6ed-5dbe-5ccc-87b5-6be31f414e68"
+            }
+          ],
+          "reason": "The reference frame contains no claim about alternative payment instruments.",
+          "status": "RESOLVED",
+          "summary": "Remote participants unable to use electronic transfers may receive equal-value gift cards.",
+          "uid": "3ab5a96b-a55a-55f7-bee1-318281f3ee86"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "813d6f59-aeee-4991-b6f9-de27e04060e1",
+              "memory_uid": "5c6c461d-05e5-5b0c-b801-245de2f9c8d7"
+            }
+          ],
+          "reason": "The reference frame contains no claim about when compensation logistics must be resolved.",
+          "status": "RESOLVED",
+          "summary": "An unresolved payment method should not be treated as a proposal-stage deficiency.",
+          "uid": "78336191-3f7f-5158-af27-2a393fcfad5b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "813d6f59-aeee-4991-b6f9-de27e04060e1",
+              "memory_uid": "44abc098-8c9f-5abb-bc49-9deb25066d93"
+            }
+          ],
+          "reason": "The reference frame contains no claim about burden-based compensation differences between modalities.",
+          "status": "RESOLVED",
+          "summary": "On-site and remote compensation may differ when their travel or technical-preparation burdens differ.",
+          "uid": "75a9da34-6c20-501c-8dc4-0e0048292ede"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "813d6f59-aeee-4991-b6f9-de27e04060e1",
+              "memory_uid": "7e647a83-81b0-52d6-9362-e513dc2a5032"
+            }
+          ],
+          "reason": "The reference frame contains no claim about compensating longitudinal reporting effort.",
+          "status": "RESOLVED",
+          "summary": "Longitudinal compensation calculations should include time spent recording diary entries and repeated reports outside sessions.",
+          "uid": "95e3d760-ba77-5988-a779-97dfb2b56531"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "813d6f59-aeee-4991-b6f9-de27e04060e1",
+              "memory_uid": "d77affab-60c8-5403-b189-17022b484640"
+            }
+          ],
+          "reason": "The reference frame contains no claim about separating participant payments from staff labor costs.",
+          "status": "RESOLVED",
+          "summary": "Participant compensation should be distinguished from labor costs for field staff providing installation and operational support as job duties.",
+          "uid": "7e31193b-b4b3-5e3d-ba7c-94dd7ff2efcb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "813d6f59-aeee-4991-b6f9-de27e04060e1",
+              "memory_uid": "0c470c6b-26a6-5501-93ac-c51fecd708ae"
+            }
+          ],
+          "reason": "This one-sided diagnostic observation has no design-generalization counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user tends to count session time while omitting advance setup and follow-up reporting effort.",
+          "uid": "3e52c783-79e0-5fbb-9f97-677190e69328"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame bases compensation on actual and ancillary burden, addresses modality, withdrawal, longitudinal reporting and payment methods, distinguishes staff labor, and identifies commonly omitted participant effort.",
+        "differences": "",
+        "reference_only": "The reference emphasizes explicit exclusions, transfer conditions, analytic generalization, and the risk of extending findings from accessible samples too broadly."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "500610e9-0853-41ae-83e6-c086f9d894b6"
+    },
+    "analysis_digest": "ffa23f1ad39db273d46d3de721ba60ba5e1b79d33ca7e471cac2b4bd73577317",
+    "key": "625e9ff36000da6c3670e349347f567fa8611ad70902c3320b24870202bc9ba7",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 32.45984116700129,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "625e9ff36000da6c3670e349347f567fa8611ad70902c3320b24870202bc9ba7",
+  "created_at": "2026-08-13T18:26:10.660949Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/scope",
+  "pair_key": "3848a56d13ead5b488d3d928c17bc48151e941d9e822b2c74a81438f573dce0e",
+  "provider_seconds": 32.45984116700129,
+  "right": "task-2/advisor2/compensation",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

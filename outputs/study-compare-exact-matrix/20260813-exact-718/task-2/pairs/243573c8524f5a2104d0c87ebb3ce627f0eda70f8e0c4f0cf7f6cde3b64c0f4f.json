@@ -1,0 +1,359 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:14:45.386978+00:00",
+      "frames": [
+        {
+          "context_digest": "30f0425cad991a5bb1b473f7e73c2c039db2d91dc0c95116413d0a8e7b6fed29",
+          "context_name": "task-2/advisor1/budget",
+          "context_uid": "d6d3ee9e-eb0f-5c28-9463-7a680d53b470",
+          "memories": [
+            {
+              "content": "Keep the total, major cost categories, and one-line estimate basis in the main text so the resource argument can be understood without leaving the proposal.",
+              "content_digest": "5dc9db0be6499fc408063be04c9e1cc344986512f4d24d5697f5c53a08529c9a",
+              "position": 0,
+              "uid": "05e0261e-5c52-5030-8176-0f02d4522931"
+            },
+            {
+              "content": "Place each major cost beside the activity or deliverable it enables in the main text.",
+              "content_digest": "b97219830051faf46cff7c9541c331012571866926740ed4d6a7925c12fb21a8",
+              "position": 1,
+              "uid": "1083e9b3-698a-57b1-91ab-ce04cec1e5e5"
+            },
+            {
+              "content": "State the quantity and unit-rate basis for each major cost in the same paragraph that requests it.",
+              "content_digest": "5ce37d95d9d037bbab71276fa8f0e8e383b472d0122817ab7b711c971b8cbf5d",
+              "position": 2,
+              "uid": "3652f268-d86f-55d6-935d-d3bdc487aae6"
+            },
+            {
+              "content": "Readers may question a proposed priority when its cost cannot be checked on the same page as the claimed benefit.",
+              "content_digest": "26fa14ff80ece7682cb51c7356a47a8e60e94edd4551f59ecd2fa3017bd9bffd",
+              "position": 3,
+              "uid": "4e1e1201-94b8-5a7a-8737-edc4c62881ff"
+            },
+            {
+              "content": "Update the cost sentence whenever the related activity changes so the narrative and requested amount cannot drift apart.",
+              "content_digest": "343c11198b38874476e0cda3707dd07436699852db0934e2e8f8c95a7ea3c3ea",
+              "position": 4,
+              "uid": "2f5f9039-e038-51c1-8af0-21a78772c512"
+            },
+            {
+              "content": "Accept a denser main-text paragraph when the estimate basis is essential to deciding whether the request is proportionate.",
+              "content_digest": "59ca1aafc11b37b097251b4b7c6b15e249262304f79b261bd4351d3ca89cb5fe",
+              "position": 5,
+              "uid": "f7a16d08-fbe2-5508-890d-cdbf70c1146e"
+            },
+            {
+              "content": "The user tends to revise the work plan but forget a detached budget table unless the key amount is repeated beside the activity.",
+              "content_digest": "393651043824d9e9c528e5de7618854b71970967d172ee1e9bc3c77aec3baab0",
+              "position": 6,
+              "uid": "2ca1d5a1-d78a-55b2-ab21-fd6ad73366b4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "90c8d032-e8b1-4632-9405-ca6b27a17c07"
+        },
+        {
+          "context_digest": "b379636c1034c71339b717628e5e233c5f245d0452c487967c8e881d38e4b4a7",
+          "context_name": "task-2/advisor2/feasibility",
+          "context_uid": "2a4a102a-14f5-53bb-88ef-681448ebecff",
+          "memories": [
+            {
+              "content": "Mark unverified schedule assumptions as such.",
+              "content_digest": "d4cdcdbcdb51d96f9a7435e72c2e4ef25a3e3822a765a88afafeca5194bda96e",
+              "position": 0,
+              "uid": "5c9755f8-78bd-5654-a3c7-8be0864e4f12"
+            },
+            {
+              "content": "Mark unverified recruitment assumptions as such.",
+              "content_digest": "4cc28528fee1c7b09f709638e2b57d3bc9efe635d20500ee98567f8f59b8cf21",
+              "position": 1,
+              "uid": "75af48aa-b39e-5b55-95d9-f7f7d2becbad"
+            },
+            {
+              "content": "Mark unverified technical assumptions as such.",
+              "content_digest": "8942e49cd46e3e9746330349df11e49d4a6c9250c7aa4c52c2d9ade1c97c735c",
+              "position": 2,
+              "uid": "292e33b0-4bfd-5e3a-9379-0fbf3619c42d"
+            },
+            {
+              "content": "Trace back the resources required for each core prototype feature and field research procedure.",
+              "content_digest": "b1ac088b664c62c3c1cfb96f6bb31a3ab5fc0fd77d0d1fba58e1da621b5dd56a",
+              "position": 3,
+              "uid": "c0c1fd8d-1aae-51a3-a1d4-66c1481d7b48"
+            },
+            {
+              "content": "Operations reviewers judge feasibility by examining the personnel required for each procedure.",
+              "content_digest": "3199aba38f58f677147b94eca54221e4d0add145a2a58194c3851efcc22e8fab",
+              "position": 4,
+              "uid": "7be25c27-6d67-50fe-90b5-76fca32a93d8"
+            },
+            {
+              "content": "Operations reviewers judge feasibility by examining the equipment required for each procedure.",
+              "content_digest": "13f9b86391d66cf558fc6eead29969c80acdf78d2164c96aa99641bf6c2891fd",
+              "position": 5,
+              "uid": "1aae182f-4eb3-58b7-b8cd-5ce517ead36a"
+            },
+            {
+              "content": "Operations reviewers judge feasibility by examining the time required for each procedure.",
+              "content_digest": "29efef51e7b8e35c459099af93b8ea90d019d83de3cf894e04b184078619fff4",
+              "position": 6,
+              "uid": "84f6e5e3-96b4-538b-a633-1b656204a296"
+            },
+            {
+              "content": "Document separately the commitments and confirmation status of field partners required for recruitment, installation, and operational support.",
+              "content_digest": "ba0ceb0fa886251bfe2b5a83154500862f8c2d4a82ed74fc9ddb3600010cc0b3",
+              "position": 7,
+              "uid": "16a461c4-d90d-5d0f-bfd0-4c1a116ec2be"
+            },
+            {
+              "content": "Designate a responsible party for software updates, equipment inspections, and user support during the deployment period.",
+              "content_digest": "54caa62836c502faf35561d45fba1d02a059c8ed6436ce714114bd392cb3bc9d",
+              "position": 8,
+              "uid": "0ce26892-666f-5ebe-95b2-c6f48915f18b"
+            },
+            {
+              "content": "The user's deployment readiness can be assessed only when dependencies on external services and field personnel are visible.",
+              "content_digest": "931fa67dd8ea84954ce3f0b9631301c320fdcf1bf46fb7fda0214e77636c8c1c",
+              "position": 9,
+              "uid": "4f35fd0c-005a-56a7-b33a-d74bde2d65eb"
+            },
+            {
+              "content": "Field schedules and assigned personnel may change due to operational factors beyond the researcher’s control.",
+              "content_digest": "71739481ce3043f342d9c7c52297c7644931a0a096215fc15150915b74968d84",
+              "position": 10,
+              "uid": "3b96bf66-59e4-5dbf-98d3-937402abc67b"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "625f9947-52d9-480a-8a92-a3624109541a"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "Both frames favor tracing resources to the work they enable. The reference otherwise concentrates on presenting, checking, and maintaining cost estimates in the proposal narrative, while the compared frame adds assumption labeling, operational dependencies, partner commitments, deployment ownership, and changing field conditions.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "90c8d032-e8b1-4632-9405-ca6b27a17c07",
+              "memory_uid": "1083e9b3-698a-57b1-91ab-ce04cec1e5e5"
+            },
+            {
+              "frame_uid": "625f9947-52d9-480a-8a92-a3624109541a",
+              "memory_uid": "c0c1fd8d-1aae-51a3-a1d4-66c1481d7b48"
+            },
+            {
+              "frame_uid": "625f9947-52d9-480a-8a92-a3624109541a",
+              "memory_uid": "7be25c27-6d67-50fe-90b5-76fca32a93d8"
+            },
+            {
+              "frame_uid": "625f9947-52d9-480a-8a92-a3624109541a",
+              "memory_uid": "1aae182f-4eb3-58b7-b8cd-5ce517ead36a"
+            },
+            {
+              "frame_uid": "625f9947-52d9-480a-8a92-a3624109541a",
+              "memory_uid": "84f6e5e3-96b4-538b-a633-1b656204a296"
+            }
+          ],
+          "reason": "Activity-level cost placement and procedure-level tracing of personnel, equipment, and time can jointly govern resource justification and materially address the same traceability policy.",
+          "status": "RESOLVED",
+          "summary": "Resource requirements should be visibly tied to the activities, features, deliverables, or procedures they enable so feasibility can be assessed.",
+          "uid": "9638ddc5-065d-5003-ac55-c8c906362de7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "90c8d032-e8b1-4632-9405-ca6b27a17c07",
+              "memory_uid": "05e0261e-5c52-5030-8176-0f02d4522931"
+            }
+          ],
+          "reason": "This is an independently useful requirement for a self-contained financial summary with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The main text should contain the total, major cost categories, and a brief estimate basis.",
+          "uid": "f96166f6-dd46-5c91-8cdf-d608f1408978"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "90c8d032-e8b1-4632-9405-ca6b27a17c07",
+              "memory_uid": "3652f268-d86f-55d6-935d-d3bdc487aae6"
+            }
+          ],
+          "reason": "This adds a specific colocated calculation-detail requirement not supplied by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Each major cost request should state its quantity and unit-rate basis in the same paragraph.",
+          "uid": "5a3ffe14-ee21-53ed-bf06-d9cecae555b6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "90c8d032-e8b1-4632-9405-ca6b27a17c07",
+              "memory_uid": "4e1e1201-94b8-5a7a-8737-edc4c62881ff"
+            }
+          ],
+          "reason": "This identifies a distinct review risk concerning same-page cost-benefit verification that the compared frame does not address.",
+          "status": "RESOLVED",
+          "summary": "A priority may appear less credible when its cost cannot be checked on the same page as its claimed benefit.",
+          "uid": "631139c0-0e13-56eb-9b90-3ace8130083f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "90c8d032-e8b1-4632-9405-ca6b27a17c07",
+              "memory_uid": "2f5f9039-e038-51c1-8af0-21a78772c512"
+            }
+          ],
+          "reason": "This is a distinct revision-control policy absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Cost language should be updated whenever its related activity changes to prevent narrative and amount drift.",
+          "uid": "519e7d6d-68e4-5cdf-aaa8-c21815af8074"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "90c8d032-e8b1-4632-9405-ca6b27a17c07",
+              "memory_uid": "f7a16d08-fbe2-5508-890d-cdbf70c1146e"
+            }
+          ],
+          "reason": "This establishes a distinct conditional presentation preference with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Greater main-text density is acceptable when estimate details are essential to judging proportionality.",
+          "uid": "71f689e2-87de-5f74-831a-db8f2d9ce00e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "90c8d032-e8b1-4632-9405-ca6b27a17c07",
+              "memory_uid": "2ca1d5a1-d78a-55b2-ab21-fd6ad73366b4"
+            }
+          ],
+          "reason": "This records a distinct user-specific revision risk not described by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Detached budget tables are prone to being overlooked during work-plan revisions unless key amounts are repeated beside activities.",
+          "uid": "ff3012cc-fb61-5c63-b37a-7e8a945ae9ff"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "625f9947-52d9-480a-8a92-a3624109541a",
+              "memory_uid": "5c9755f8-78bd-5654-a3c7-8be0864e4f12"
+            },
+            {
+              "frame_uid": "625f9947-52d9-480a-8a92-a3624109541a",
+              "memory_uid": "75af48aa-b39e-5b55-95d9-f7f7d2becbad"
+            },
+            {
+              "frame_uid": "625f9947-52d9-480a-8a92-a3624109541a",
+              "memory_uid": "292e33b0-4bfd-5e3a-9379-0fbf3619c42d"
+            }
+          ],
+          "reason": "These memories split one labeling policy across three assumption domains, and the reference frame provides no corresponding policy.",
+          "status": "RESOLVED",
+          "summary": "Unverified schedule, recruitment, and technical assumptions should be explicitly marked.",
+          "uid": "14831055-9c95-5d55-a375-16321bcb084f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "625f9947-52d9-480a-8a92-a3624109541a",
+              "memory_uid": "16a461c4-d90d-5d0f-bfd0-4c1a116ec2be"
+            }
+          ],
+          "reason": "This is an independent partner-dependency documentation requirement absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Field-partner commitments and confirmation status should be documented separately for recruitment, installation, and operational support.",
+          "uid": "4b808acd-b0c9-564f-aa2b-2cd815a10d24"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "625f9947-52d9-480a-8a92-a3624109541a",
+              "memory_uid": "0ce26892-666f-5ebe-95b2-c6f48915f18b"
+            }
+          ],
+          "reason": "This is an independent deployment-ownership requirement absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Responsible parties should be designated for software updates, equipment inspections, and user support during deployment.",
+          "uid": "5371a785-eb1b-5ece-bbcf-84241e156251"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "625f9947-52d9-480a-8a92-a3624109541a",
+              "memory_uid": "4f35fd0c-005a-56a7-b33a-d74bde2d65eb"
+            }
+          ],
+          "reason": "This supplies an independent readiness criterion not present in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Deployment-readiness assessment depends on making external-service and field-personnel dependencies visible.",
+          "uid": "5ed65bf5-e232-5ad9-b72c-e6ceaafc7001"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "625f9947-52d9-480a-8a92-a3624109541a",
+              "memory_uid": "3b96bf66-59e4-5dbf-98d3-937402abc67b"
+            }
+          ],
+          "reason": "This records an independent operational contingency absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Field schedules and personnel assignments may change because of operational factors outside the researcher’s control.",
+          "uid": "a1fe8157-e12a-589b-bf94-5205fea67329"
+        }
+      ],
+      "reports": {
+        "both": "Resources and costs should be traceable to the activities, features, or procedures they enable so feasibility can be evaluated.",
+        "compared_only": "The compared frame covers unverified assumptions, partner confirmation, deployment responsibilities, dependency visibility, and operationally driven schedule or staffing changes.",
+        "differences": "",
+        "reference_only": "The reference emphasizes visible estimate totals and bases, same-page cost checking, synchronized revisions, and tolerating necessary narrative density."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "f8707808-24cc-4846-b2c5-3807f981223f"
+    },
+    "analysis_digest": "c86d055c4c25c116ce591cfb7bb9c00d48ea1bdc1f6d04c40bd9e9bab69855ba",
+    "key": "ecd78a25869cf91623b71e53ca90e2bfb9c8e999cc3b6ba2dc0e71b4b9ba244e",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 48.33952029100328,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "ecd78a25869cf91623b71e53ca90e2bfb9c8e999cc3b6ba2dc0e71b4b9ba244e",
+  "created_at": "2026-08-13T18:15:33.725800Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/budget",
+  "pair_key": "243573c8524f5a2104d0c87ebb3ce627f0eda70f8e0c4f0cf7f6cde3b64c0f4f",
+  "provider_seconds": 48.33952029100328,
+  "right": "task-2/advisor2/feasibility",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

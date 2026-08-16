@@ -1,0 +1,397 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:45:48.176096+00:00",
+      "frames": [
+        {
+          "context_digest": "17b940da39446a9f934dff43ea7db561d14060561065852a34658fe4aaa1702f",
+          "context_name": "task-3/local/personal-memory/2024/10",
+          "context_uid": "7c55b789-a7d0-5070-9cf8-6f5e205415dc",
+          "memories": [
+            {
+              "content": "The user renewed their local library membership in October 2024.",
+              "content_digest": "eb9209032856bdbc69fbfa67e053bf8cd2bc23f8e8e25c0be9a5aa3f7e05f4e9",
+              "position": 0,
+              "uid": "04711182-acef-52a9-bd58-7fe98a54854a"
+            },
+            {
+              "content": "On an evening walk, the user saw an unlit street and took a detour along a main road.",
+              "content_digest": "62d001de1c6c4599e51c4e0713f577a2838e95e03f26064778e64542f390a599",
+              "position": 1,
+              "uid": "0229d0b1-750c-521b-a126-22c9d9d001c4"
+            },
+            {
+              "content": "On a day the user chose a well-lit pedestrian route, the walk took 12 minutes longer than usual.",
+              "content_digest": "ad3770626bef71bc9a29ec7772aeebeb70231e89b417b05b4da9c62a65b89afe",
+              "position": 2,
+              "uid": "e310fe87-8cde-5399-be00-9f8d7ec44e94"
+            },
+            {
+              "content": "On a day the user sat by the library window, they heard vehicle noise with every page they read.",
+              "content_digest": "090a190c68a5166d84cde1eed20f9a03c2b99722ed383eb3b5703489c01d85e0",
+              "position": 3,
+              "uid": "4f37306b-08cd-512a-b92e-ca6761da1a5b"
+            },
+            {
+              "content": "On the next visit, the user sat farther inside and did not move for an hour.",
+              "content_digest": "a071b4c7699fe17f63f0ab6263da1259aea00ad635169a313d4821f57071a86a",
+              "position": 4,
+              "uid": "5897ffa4-cfc6-5012-8931-15420ec5cf7c"
+            },
+            {
+              "content": "The user wrote the due date of a borrowed book on paper and then lost the paper.",
+              "content_digest": "43ef22512c79634cb9e3dc59006c7d06c3513a9d5d1f89eedbb392964cc34f02",
+              "position": 5,
+              "uid": "ce38bd13-3d51-5bff-9eba-ed70a8217356"
+            },
+            {
+              "content": "After entering the due date on their phone, the user saw a reminder the day before and put the book in their bag.",
+              "content_digest": "38782cba2f3bf260d62cf8e80c4a7e4a3a196d4d29ced3c4fe19d050e12c1e0a",
+              "position": 6,
+              "uid": "a304315b-bc0a-591b-b8c2-7eea5145819d"
+            },
+            {
+              "content": "Library staff expect a person requesting a replacement membership card to bring identity-verification material.",
+              "content_digest": "1ac59309aedbfa946661bf5bbc4d5141c420df059937893caba88725dfe77d24",
+              "position": 7,
+              "uid": "ef060b89-6c54-5c20-86be-c07766a35daa"
+            },
+            {
+              "content": "Check recent lighting and pedestrian conditions before proposing an evening walking route.",
+              "content_digest": "1b247adfb3723d14979b2cc7ecf6786c457d60e521b8708a6d08d38d3d1af437",
+              "position": 8,
+              "uid": "7669e5eb-c0fd-5182-ae9a-5f9ae95ddf2f"
+            },
+            {
+              "content": "The local agent can compare past reasons for detours but cannot directly observe current lighting and pedestrian conditions.",
+              "content_digest": "8a5f0e4cbb2fa6c19f2cb5d4e500ed460189b515604c87c6c2a4c8348c4efc44",
+              "position": 9,
+              "uid": "e96f7007-5814-5986-b121-4ce3b22506e1"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "091bd8f6-2120-4ad5-a7e7-7f0306470882"
+        },
+        {
+          "context_digest": "4b8dc68a205171fe661b04620d0fba2bbb386ff21d494699c34a74dc2ab86080",
+          "context_name": "task-3/local/personal-memory/2026/03",
+          "context_uid": "97d36150-4792-5a5c-9332-5eb1de8bcf04",
+          "memories": [
+            {
+              "content": "The user stores tax-related receipts in digital folders by year.",
+              "content_digest": "778f983547572b31798b7041899812a7b0b574d74b585baf6883e94919dee6ec",
+              "position": 0,
+              "uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393"
+            },
+            {
+              "content": "The user found three paper receipts late and recalculated the expense total already prepared.",
+              "content_digest": "542368a141ec82a1bd7da4b534d88ea62c487d16a37f454569bf6400cbc749e9",
+              "position": 1,
+              "uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878"
+            },
+            {
+              "content": "Starting the next month, the user photographed receipts on the day they were received and reduced omissions.",
+              "content_digest": "b95e0a1afa1196a9bff117bf12b1630edcc4eb65bfdfeb3128ae5937563a492e",
+              "position": 2,
+              "uid": "ff436ea5-1b3e-55df-8302-bd8a96740671"
+            },
+            {
+              "content": "The user named every file with only the photo date and spent a long time looking for a needed receipt.",
+              "content_digest": "c3aa33e0b7e007bdfc5c12dcda659e2a52938548fbf53d5a1ab034487a528857",
+              "position": 3,
+              "uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e"
+            },
+            {
+              "content": "The user later included the expense category in the filename and found the receipt immediately through search.",
+              "content_digest": "cdae97761f614b932d3b330723627bee8b0e3d033e2bf1061b721367237acee1",
+              "position": 4,
+              "uid": "89d6fa9a-b795-59df-be34-1c05a9861d35"
+            },
+            {
+              "content": "While reviewing documents just before submission, the user discovered one blank signature field.",
+              "content_digest": "a525c117b97eec82c678f276b319158703bf9cc558fb83cb81c0820d5c9e3174",
+              "position": 5,
+              "uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2"
+            },
+            {
+              "content": "Before submitting an administrative document, the user checks the signature field as the final item on the checklist.",
+              "content_digest": "542bec3cbc3fc8b22c95da274e479e96bfbf061a3b644d0d7f213de5a030dbd5",
+              "position": 6,
+              "uid": "5551622f-66cf-5542-8c47-1cddadab5c02"
+            },
+            {
+              "content": "Staff at a tax-support counter expect to receive an electronic copy in which every item is legible rather than a blurred or cropped photo.",
+              "content_digest": "d328ca248fdeecf0756e23b1202e7007bc8c3c25ae769439b0fd2efdbbe47580",
+              "position": 7,
+              "uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f"
+            },
+            {
+              "content": "The local agent can organize receipts by date and category but cannot determine whether an expense is deductible.",
+              "content_digest": "bcc769721a99b099ca20e5e527fa8904d54ecbaf9ae7d7616b95e1adaf1f89a9",
+              "position": 8,
+              "uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094"
+            },
+            {
+              "content": "The accepted scope and submission deadlines for administrative documents may vary under that year's guidance.",
+              "content_digest": "1ab61126b8efb0c2a9c6114c367018158f2e136bafa87e33f60aadb0686d0537",
+              "position": 9,
+              "uid": "de398064-3179-590b-8c62-effb17060115"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "40bb6e59-d282-4e7f-bd75-fcb2b07d9021"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate practical domains: library use and evening-route safety on the reference side, and receipt management and administrative submission on the compared side. Each contributes independent observations, practices, requirements, and capability limits; none governs the same operational decision across frames.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "091bd8f6-2120-4ad5-a7e7-7f0306470882",
+              "memory_uid": "04711182-acef-52a9-bd58-7fe98a54854a"
+            }
+          ],
+          "reason": "This is a one-sided historical membership event with no claim about the same matter in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user renewed a local library membership in October 2024.",
+          "uid": "1df31278-ae4e-5a47-b096-63528e978fae"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "091bd8f6-2120-4ad5-a7e7-7f0306470882",
+              "memory_uid": "0229d0b1-750c-521b-a126-22c9d9d001c4"
+            },
+            {
+              "frame_uid": "091bd8f6-2120-4ad5-a7e7-7f0306470882",
+              "memory_uid": "e310fe87-8cde-5399-be00-9f8d7ec44e94"
+            }
+          ],
+          "reason": "These memories jointly supply one-sided evidence about the practical time and route costs of avoiding poorly lit pedestrian paths.",
+          "status": "RESOLVED",
+          "summary": "The user’s preference for better-lit walking routes led to a main-road detour and, on another occasion, a longer walk.",
+          "uid": "6120e7c2-3466-59b1-9431-ce2d01f70e05"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "091bd8f6-2120-4ad5-a7e7-7f0306470882",
+              "memory_uid": "4f37306b-08cd-512a-b92e-ca6761da1a5b"
+            },
+            {
+              "frame_uid": "091bd8f6-2120-4ad5-a7e7-7f0306470882",
+              "memory_uid": "5897ffa4-cfc6-5012-8931-15420ec5cf7c"
+            }
+          ],
+          "reason": "The memories form one one-sided sequence connecting a noisy seating location with the user’s subsequent choice of an interior seat.",
+          "status": "RESOLVED",
+          "summary": "After vehicle noise disrupted reading by a library window, the user sat farther inside on the next visit and remained there for an hour.",
+          "uid": "fd54f498-7990-5871-9637-30b78ab749e7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "091bd8f6-2120-4ad5-a7e7-7f0306470882",
+              "memory_uid": "ce38bd13-3d51-5bff-9eba-ed70a8217356"
+            },
+            {
+              "frame_uid": "091bd8f6-2120-4ad5-a7e7-7f0306470882",
+              "memory_uid": "a304315b-bc0a-591b-b8c2-7eea5145819d"
+            }
+          ],
+          "reason": "The memories split one one-sided account of replacing an ineffective paper reminder with an effective phone reminder.",
+          "status": "RESOLVED",
+          "summary": "A paper due-date note was lost, whereas entering the date on the phone produced a timely reminder and prompted the user to pack the book.",
+          "uid": "fbaa3411-19be-528a-b536-75a12d57bc6a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "091bd8f6-2120-4ad5-a7e7-7f0306470882",
+              "memory_uid": "ef060b89-6c54-5c20-86be-c07766a35daa"
+            }
+          ],
+          "reason": "This one-sided service requirement has no counterpart concerning replacement library cards in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Library staff expect identity-verification material from a person requesting a replacement membership card.",
+          "uid": "1dc2183b-3b79-505a-ae6d-63b43a3e105b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "091bd8f6-2120-4ad5-a7e7-7f0306470882",
+              "memory_uid": "7669e5eb-c0fd-5182-ae9a-5f9ae95ddf2f"
+            }
+          ],
+          "reason": "This is a one-sided routing policy addressing current street conditions, not the administrative or receipt decisions described in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Recent lighting and pedestrian conditions should be checked before proposing an evening walking route.",
+          "uid": "4947a80a-232b-5483-adc7-e6c604f88de7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "091bd8f6-2120-4ad5-a7e7-7f0306470882",
+              "memory_uid": "e96f7007-5814-5986-b121-4ce3b22506e1"
+            }
+          ],
+          "reason": "This one-sided capability boundary is specific to evaluating evening-route conditions and does not address the compared frame’s tax-expense limitation.",
+          "status": "RESOLVED",
+          "summary": "The local agent can compare past detour reasons but cannot directly observe current lighting or pedestrian conditions.",
+          "uid": "aff8386d-7b4e-57e0-b483-b643850820db"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "40bb6e59-d282-4e7f-bd75-fcb2b07d9021",
+              "memory_uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393"
+            }
+          ],
+          "reason": "This is a one-sided receipt-storage practice with no claim about the same operational matter in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user stores tax-related receipts in digital folders organized by year.",
+          "uid": "81aed42b-f8c2-531d-a229-827a35fc11bf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "40bb6e59-d282-4e7f-bd75-fcb2b07d9021",
+              "memory_uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878"
+            },
+            {
+              "frame_uid": "40bb6e59-d282-4e7f-bd75-fcb2b07d9021",
+              "memory_uid": "ff436ea5-1b3e-55df-8302-bd8a96740671"
+            }
+          ],
+          "reason": "The memories form one one-sided sequence linking missed paper receipts to a more reliable capture practice.",
+          "status": "RESOLVED",
+          "summary": "After late paper receipts forced recalculation, the user began photographing receipts on receipt day and reduced omissions.",
+          "uid": "6a5bbad4-867e-5b25-a2a3-75ffe38052b3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "40bb6e59-d282-4e7f-bd75-fcb2b07d9021",
+              "memory_uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e"
+            },
+            {
+              "frame_uid": "40bb6e59-d282-4e7f-bd75-fcb2b07d9021",
+              "memory_uid": "89d6fa9a-b795-59df-be34-1c05a9861d35"
+            }
+          ],
+          "reason": "The memories jointly describe one one-sided refinement to receipt naming and its effect on retrieval.",
+          "status": "RESOLVED",
+          "summary": "Date-only filenames made a receipt difficult to locate, while adding the expense category enabled immediate search retrieval.",
+          "uid": "089967f3-5e97-515b-9c32-5837919c0f40"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "40bb6e59-d282-4e7f-bd75-fcb2b07d9021",
+              "memory_uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2"
+            },
+            {
+              "frame_uid": "40bb6e59-d282-4e7f-bd75-fcb2b07d9021",
+              "memory_uid": "5551622f-66cf-5542-8c47-1cddadab5c02"
+            }
+          ],
+          "reason": "The memories split one one-sided account of a detected omission and the resulting submission-check practice.",
+          "status": "RESOLVED",
+          "summary": "Discovering a blank signature field just before submission led to checking the signature field as the final checklist item for administrative documents.",
+          "uid": "d4061e9b-43c7-55ed-ac51-8ac8f4718694"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "40bb6e59-d282-4e7f-bd75-fcb2b07d9021",
+              "memory_uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f"
+            }
+          ],
+          "reason": "This one-sided document-quality requirement has no matching claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Tax-support staff expect an electronic copy whose items are all legible rather than blurred or cropped.",
+          "uid": "f2897773-2d4c-52ea-8de2-6580eabfe577"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "40bb6e59-d282-4e7f-bd75-fcb2b07d9021",
+              "memory_uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094"
+            }
+          ],
+          "reason": "This one-sided capability boundary concerns tax classification, a different operational decision from the reference frame’s route-observation boundary.",
+          "status": "RESOLVED",
+          "summary": "The local agent can organize receipts by date and category but cannot determine expense deductibility.",
+          "uid": "b0a9e67b-76f3-53b5-a078-1154dad886d3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "40bb6e59-d282-4e7f-bd75-fcb2b07d9021",
+              "memory_uid": "de398064-3179-590b-8c62-effb17060115"
+            }
+          ],
+          "reason": "This is one-sided information about guidance-dependent administrative requirements and has no claim on the same matter in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Accepted scope and submission deadlines for administrative documents may vary with the applicable year’s guidance.",
+          "uid": "698d60e1-8741-5ad5-8d53-e2f2354cfe38"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame describes receipt capture, storage and retrieval improvements, signature checks, electronic-copy quality, tax-related capability limits, and guidance-dependent document scope and deadlines.",
+        "differences": "",
+        "reference_only": "The reference describes library membership, reading-location choices, due-date reminders, replacement-card requirements, and evening-route safety, including the need for current conditions beyond the local agent’s observation."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "52df4134-5938-4fac-afb4-647dd37f4381"
+    },
+    "analysis_digest": "816bbfb517457107dd743ad55046ee628ca488028d0513cc9324503704f4b5ec",
+    "key": "865c0176fe46f440a6580e606bf498bd5fdc47c48121c46c67bc36e8b2d57f68",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 60.88478145800036,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "865c0176fe46f440a6580e606bf498bd5fdc47c48121c46c67bc36e8b2d57f68",
+  "created_at": "2026-08-13T18:46:49.060503Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/10",
+  "pair_key": "1568e7b031421cf8e40a3469fa3fae6f8ba74720eab18380315f27aefb369a01",
+  "provider_seconds": 60.88478145800036,
+  "right": "task-3/local/personal-memory/2026/03",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

@@ -1,0 +1,352 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:46:49.088751+00:00",
+      "frames": [
+        {
+          "context_digest": "492e513a553a9191e2c646cca49364b336ae6d163de5688eeca8cc661bbbdb32",
+          "context_name": "task-3/local/personal-memory/2024/11",
+          "context_uid": "0d5e1eef-1669-5589-94ba-b46c9c2080dc",
+          "memories": [
+            {
+              "content": "The user changed their schedule once in November 2024 because of their mother's hospital visit.",
+              "content_digest": "f08f07dda1b468ab191a59d87e7ceb8068189964edee2010abdae6e525d6103f",
+              "position": 0,
+              "uid": "bb17c696-0c1c-516f-8ad9-68a4b159ce22"
+            },
+            {
+              "content": "After seeing the reason for the schedule change written in a calendar invitation, the user asked for it to be removed.",
+              "content_digest": "7bfc906526c255f90a85b6dcc4b28ea1b0a9389e9f17ba989a4ce098280578c8",
+              "position": 1,
+              "uid": "195ba5ab-3ee0-5594-a859-9f2b5eadf9ea"
+            },
+            {
+              "content": "The user was able to reschedule the appointment after providing only a new time, without a reason.",
+              "content_digest": "14f1bd0410c76aa3a0eb28a2212fd06558ab23b6dc012aa5529980a67efe3e2b",
+              "position": 2,
+              "uid": "4c8759cc-66aa-527c-a9d5-197d39b5d2b7"
+            },
+            {
+              "content": "On a day the user traveled in their father's car, they photographed the parking location.",
+              "content_digest": "111e71af27be5d109557440569352964544e9b702810741445172a6cf51f94f5",
+              "position": 3,
+              "uid": "d4b27ea7-d329-5dc7-b7ca-91d0cd50a958"
+            },
+            {
+              "content": "On the next visit, when the user did not take a photo, they walked one circuit of the parking garage while looking for the exit.",
+              "content_digest": "6d61d67e35552cb739d0220e480189706ec5bbac74f93b87149a6948d9ac2805",
+              "position": 4,
+              "uid": "32a19a57-9b04-5f86-92ba-202a9ac803e4"
+            },
+            {
+              "content": "After hearing preparation items from their mother by phone, the user omitted two items.",
+              "content_digest": "449dc73aad797f5acd3d898292cf9942f7d3b65b9faf52769ae5b3332285b4f3",
+              "position": 5,
+              "uid": "0eeffd8c-acd6-57bf-950d-20cfa1fe62b3"
+            },
+            {
+              "content": "After receiving the preparation items again by text, the user put all of them in their bag.",
+              "content_digest": "9539ab90f598a96d97a73b7954db8834d3106861ba6ecc814e579a348e0145d6",
+              "position": 6,
+              "uid": "07ea3801-8666-581d-b846-2f45bf99ca19"
+            },
+            {
+              "content": "The user's mother does not want the reason for her visit disclosed in the user's external schedule.",
+              "content_digest": "b1aff7bb5b5df1ec773fd8875205cd9fdfa2fd5b520cf91b7c84c9e3054b4feb",
+              "position": 7,
+              "uid": "9e70b92e-1d8d-51ef-962d-bd9b348a56d5"
+            },
+            {
+              "content": "Do not include the mother's reason for a visit when conveying the user's availability externally.",
+              "content_digest": "b9473919c63f233fc66c49bbf00b20a8ab9532bcb1b8ce3896c442afed4229d9",
+              "position": 8,
+              "uid": "d76686fd-9f1d-5d94-931b-4b49c86a8f4e"
+            },
+            {
+              "content": "Some daily-life services may operate for shorter hours during the year-end holiday period.",
+              "content_digest": "48d4487aba4c395527f9dfeac9488f45556d1bd89475f8620b0a64d84e4479fc",
+              "position": 9,
+              "uid": "820a5de9-9e08-52c7-8747-5155fe341bb4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "13bea2a7-6072-43ef-988f-5cfbce5d2776"
+        },
+        {
+          "context_digest": "40dca3509f1e21c564970ebb7664df755d25c1c19c4e79b458c803662fb827ce",
+          "context_name": "task-3/local/personal-memory/2025/11",
+          "context_uid": "af363401-7cdc-5426-ad00-4f98635e2dab",
+          "memories": [
+            {
+              "content": "The user recorded a family dinner in the calendar for the final week of November.",
+              "content_digest": "59755036ea9e7d172a5e673253fc7f089e61efe043b2e660f429fe2fa9003d34",
+              "position": 0,
+              "uid": "3f6eaf6c-00e7-5bd7-9809-367f54a0f707"
+            },
+            {
+              "content": "In a crowded restaurant, the user had to ask several times for orders to be repeated, interrupting the flow of conversation.",
+              "content_digest": "2d79e2f4f88a70bc8fbf9efca1b1751fbf51d88667f304c8e8c965a0a536cee7",
+              "position": 1,
+              "uid": "9fd0b9b6-986d-54b0-965e-45feaf9cd482"
+            },
+            {
+              "content": "When the user held the next gathering at their father's home, they continued the conversation on the sofa after the meal.",
+              "content_digest": "4b22fa055bb342db0589b0c54e415f4fa2af02445d3c55b3f38510bd6ca62f38",
+              "position": 2,
+              "uid": "cbc477c4-83c4-506b-9da8-9252d14d7f6b"
+            },
+            {
+              "content": "At a gathering with loud music prepared by their older sister, the user developed a headache and went outside briefly.",
+              "content_digest": "c9b34c3e3211ca7f15eb9a6f8ba97941222bc35ec0253d3da3f383c7247c3e83",
+              "position": 3,
+              "uid": "bbfc537e-3fcc-5065-ab93-4777bcdfc10c"
+            },
+            {
+              "content": "On a day the user held a yard barbecue with their younger brother, the open space dispersed the sound and made conversation easier.",
+              "content_digest": "dd35056c7731d3249a3c2689ee9fb6bfe6974544e302630de6ea230378fea9eb",
+              "position": 4,
+              "uid": "b61367fa-dd17-5ff2-9d6b-f81f6123735a"
+            },
+            {
+              "content": "After seeing a message that their maternal aunt would arrive at 5 p.m., the user delayed meal preparation by an hour.",
+              "content_digest": "31992a8945bfacfc9422f3180b203865f951f200561cd23dad901ec795c5de10",
+              "position": 5,
+              "uid": "681cdbd5-595d-5211-914d-edfd9a6b130d"
+            },
+            {
+              "content": "On a day the user waited without knowing their maternal uncle's arrival time, they reheated the food twice.",
+              "content_digest": "fae7c462a85e844648cb99419e6fdb3a2cd8c7721209ea49a40b4df597635176",
+              "position": 6,
+              "uid": "81c0c4e9-5ae4-5e8a-b11c-7d33032fd8ec"
+            },
+            {
+              "content": "The user's maternal uncle considers it easier to time his departure when he knows the family meal's start time in advance.",
+              "content_digest": "793f47adaa4c5274d15377b0f4adbc2415c0bd5243baf7a1c77c0d92e987a7e8",
+              "position": 7,
+              "uid": "56078821-34d0-540f-ae66-03bdd7bd1df3"
+            },
+            {
+              "content": "Before scheduling a family meal, confirm the attendees' arrival times and the location with the user.",
+              "content_digest": "d057fab5cbe97472da2a796114018a7491d20db6a826cd56943268f73ffeb792",
+              "position": 8,
+              "uid": "19c8ae40-1f5b-5fec-9538-e7bc7cfb036a"
+            },
+            {
+              "content": "Available restaurant reservation times may diminish quickly during the year-end gathering season.",
+              "content_digest": "7bfc817a42ab2d2c67ad04eae58fb3c86bbede15b7cc4ef431a75528bb425e7e",
+              "position": 9,
+              "uid": "3ea9fa3b-4411-55d0-ac90-2ed5515e6ef7"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "9043fb34-e886-4b04-b733-72ccbce761e5"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "Both frames note year-end availability constraints, while otherwise preserving different practical histories and preferences. The reference emphasizes schedule privacy, written reminders, and parking-location capture; the compared frame emphasizes family-meal logistics and gathering environments. No conflict or unsafe ambiguity appears.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "13bea2a7-6072-43ef-988f-5cfbce5d2776",
+              "memory_uid": "820a5de9-9e08-52c7-8747-5155fe341bb4"
+            },
+            {
+              "frame_uid": "9043fb34-e886-4b04-b733-72ccbce761e5",
+              "memory_uid": "3ea9fa3b-4411-55d0-ac90-2ed5515e6ef7"
+            }
+          ],
+          "reason": "Both claims support advance consideration of availability during the year-end period while addressing complementary forms of constraint.",
+          "status": "RESOLVED",
+          "summary": "Year-end availability may be constrained by shorter service hours and quickly diminishing restaurant reservation times.",
+          "uid": "29e35fa2-6797-5202-8044-aee760f53837"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "13bea2a7-6072-43ef-988f-5cfbce5d2776",
+              "memory_uid": "bb17c696-0c1c-516f-8ad9-68a4b159ce22"
+            }
+          ],
+          "reason": "This is a one-sided historical fact about a particular schedule change and its cause.",
+          "status": "RESOLVED",
+          "summary": "The user once changed their November 2024 schedule because of their mother's hospital visit.",
+          "uid": "0c9e7811-1938-5bf1-befe-9ff5bfa789e2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "13bea2a7-6072-43ef-988f-5cfbce5d2776",
+              "memory_uid": "195ba5ab-3ee0-5594-a859-9f2b5eadf9ea"
+            },
+            {
+              "frame_uid": "13bea2a7-6072-43ef-988f-5cfbce5d2776",
+              "memory_uid": "4c8759cc-66aa-527c-a9d5-197d39b5d2b7"
+            },
+            {
+              "frame_uid": "13bea2a7-6072-43ef-988f-5cfbce5d2776",
+              "memory_uid": "9e70b92e-1d8d-51ef-962d-bd9b348a56d5"
+            },
+            {
+              "frame_uid": "13bea2a7-6072-43ef-988f-5cfbce5d2776",
+              "memory_uid": "d76686fd-9f1d-5d94-931b-4b49c86a8f4e"
+            }
+          ],
+          "reason": "These memories jointly establish the preference, instruction, removal request, and demonstrated feasibility underlying one external-schedule privacy practice.",
+          "status": "RESOLVED",
+          "summary": "The mother's visit reason should be omitted from external scheduling, and the user demonstrated that rescheduling with only a new time was sufficient.",
+          "uid": "beda6e6d-34d5-5d43-b7b2-53b05f7642f4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "13bea2a7-6072-43ef-988f-5cfbce5d2776",
+              "memory_uid": "d4b27ea7-d329-5dc7-b7ca-91d0cd50a958"
+            },
+            {
+              "frame_uid": "13bea2a7-6072-43ef-988f-5cfbce5d2776",
+              "memory_uid": "32a19a57-9b04-5f86-92ba-202a9ac803e4"
+            }
+          ],
+          "reason": "The paired episodes uniquely describe the user's parking-location recording and subsequent navigation experience.",
+          "status": "RESOLVED",
+          "summary": "The user photographed a parking location on one visit and, on the next visit without a photo, searched the garage while looking for the exit.",
+          "uid": "c590eff3-5e68-5571-9225-6f23f6e14743"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "13bea2a7-6072-43ef-988f-5cfbce5d2776",
+              "memory_uid": "0eeffd8c-acd6-57bf-950d-20cfa1fe62b3"
+            },
+            {
+              "frame_uid": "13bea2a7-6072-43ef-988f-5cfbce5d2776",
+              "memory_uid": "07ea3801-8666-581d-b846-2f45bf99ca19"
+            }
+          ],
+          "reason": "The paired observations form one one-sided claim about preparation completion under spoken versus written delivery.",
+          "status": "RESOLVED",
+          "summary": "The user omitted preparation items after hearing them by phone but packed every item after receiving them by text.",
+          "uid": "40543af3-e623-5c3f-a701-6a39297dbcb1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9043fb34-e886-4b04-b733-72ccbce761e5",
+              "memory_uid": "3f6eaf6c-00e7-5bd7-9809-367f54a0f707"
+            }
+          ],
+          "reason": "This is an independent one-sided calendar event.",
+          "status": "RESOLVED",
+          "summary": "The user recorded a family dinner in the calendar for the final week of November.",
+          "uid": "b62ac329-cb02-56ba-b8a0-119e0ab8e7d0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9043fb34-e886-4b04-b733-72ccbce761e5",
+              "memory_uid": "9fd0b9b6-986d-54b0-965e-45feaf9cd482"
+            },
+            {
+              "frame_uid": "9043fb34-e886-4b04-b733-72ccbce761e5",
+              "memory_uid": "bbfc537e-3fcc-5065-ab93-4777bcdfc10c"
+            },
+            {
+              "frame_uid": "9043fb34-e886-4b04-b733-72ccbce761e5",
+              "memory_uid": "b61367fa-dd17-5ff2-9d6b-f81f6123735a"
+            }
+          ],
+          "reason": "These episodes jointly describe how crowded, loud, and open acoustic settings affected the user's gathering experience.",
+          "status": "RESOLVED",
+          "summary": "Gathering environments affected conversation or comfort: a crowded restaurant required repeated orders, loud music caused a headache, and an open yard dispersed sound and eased conversation.",
+          "uid": "82329b25-5a03-5edf-85c5-ca3f6c9f892e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9043fb34-e886-4b04-b733-72ccbce761e5",
+              "memory_uid": "cbc477c4-83c4-506b-9da8-9252d14d7f6b"
+            }
+          ],
+          "reason": "This is an independent one-sided observation about the setting and continuation of a family conversation.",
+          "status": "RESOLVED",
+          "summary": "At a gathering at the user's father's home, conversation continued on the sofa after the meal.",
+          "uid": "f9280127-1598-5bad-845d-6fca61e99f23"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9043fb34-e886-4b04-b733-72ccbce761e5",
+              "memory_uid": "681cdbd5-595d-5211-914d-edfd9a6b130d"
+            },
+            {
+              "frame_uid": "9043fb34-e886-4b04-b733-72ccbce761e5",
+              "memory_uid": "81c0c4e9-5ae4-5e8a-b11c-7d33032fd8ec"
+            },
+            {
+              "frame_uid": "9043fb34-e886-4b04-b733-72ccbce761e5",
+              "memory_uid": "56078821-34d0-540f-ae66-03bdd7bd1df3"
+            },
+            {
+              "frame_uid": "9043fb34-e886-4b04-b733-72ccbce761e5",
+              "memory_uid": "19c8ae40-1f5b-5fec-9538-e7bc7cfb036a"
+            }
+          ],
+          "reason": "These memories collectively establish one family-meal coordination theme centered on obtaining logistical information in advance.",
+          "status": "RESOLVED",
+          "summary": "Advance family-meal logistics aided coordination: known timing informed preparation and departure planning, uncertainty caused reheating, and scheduling guidance calls for confirming arrival times and location.",
+          "uid": "6a9e7f2d-d091-50e8-a454-765036ce03bb"
+        }
+      ],
+      "reports": {
+        "both": "Year-end plans may face constrained availability through shorter service hours and rapidly diminishing restaurant reservation times.",
+        "compared_only": "The compared frame covers family gatherings, sensitivity to crowded or loud settings, easier conversation in open or home settings, and advance timing and location information for meal coordination.",
+        "differences": "",
+        "reference_only": "The reference records private schedule changes, omission of visit reasons, successful time-only rescheduling, parking-photo use, and better preparation-item completion after written instructions."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "d3d9742d-f37c-4bea-a3b8-adcea0344c24"
+    },
+    "analysis_digest": "8ba3e289223176dc7233062346111373076d2d50e30d23324985e3064d59d32d",
+    "key": "da6acf38d6767a19d1af03b19517a638760a349b3f841ae399e1a983c00d8322",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 64.74499962499976,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "da6acf38d6767a19d1af03b19517a638760a349b3f841ae399e1a983c00d8322",
+  "created_at": "2026-08-13T18:47:53.833355Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/11",
+  "pair_key": "e4803254626eb88147669e1ffc0124da9fd22bb2d2f646a713d7f63577773aee",
+  "provider_seconds": 64.74499962499976,
+  "right": "task-3/local/personal-memory/2025/11",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

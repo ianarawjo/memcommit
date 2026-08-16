@@ -1,0 +1,397 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:37:15.252851+00:00",
+      "frames": [
+        {
+          "context_digest": "9fdb8cdfae14edf54f7410c0e8dd59527179de290b3d7c5f1b0f58494275b076",
+          "context_name": "task-3/local/personal-memory/2024/03",
+          "context_uid": "97c5905c-359b-5497-956f-b92db9ddbd2f",
+          "memories": [
+            {
+              "content": "The instructions for one medication the user takes say to take it after the evening meal.",
+              "content_digest": "32bba9f2936e560ddd5f4c5515895f2954b9c8722fcd501644569d1ff4f7b97c",
+              "position": 0,
+              "uid": "12ba4249-9450-5f2e-b648-5369a7997b26"
+            },
+            {
+              "content": "On a day with a morning appointment, the user miscalculated the fasting period and checked again at the reception desk.",
+              "content_digest": "532396ed2265321fbd4ca28ed1de2962211a357195bc9839503330c6cb0ab281",
+              "position": 1,
+              "uid": "051e79ff-5363-5160-9a13-46568fd13306"
+            },
+            {
+              "content": "For an afternoon visit, the user felt less rushed while preparing to travel than for a morning visit.",
+              "content_digest": "276fa255e4a4945f1475fa66129069ea33514bc24c98a246e9ab0d0000c156fa",
+              "position": 2,
+              "uid": "e7f1fcf7-ee2f-57d8-98cb-781e31e481e8"
+            },
+            {
+              "content": "On a day there was no waiting chair, the user stood for 20 minutes and their back became uncomfortable.",
+              "content_digest": "1c412785950057f01b1e7c10b716977cdb8bfb2b0605ef5bfdbdc6e349f6aaf8",
+              "position": 3,
+              "uid": "18d58666-2cfa-5959-8da9-2745bed56e11"
+            },
+            {
+              "content": "On a day medication instructions were explained all at once and at length, the user failed to write down an important time.",
+              "content_digest": "f3629bba06d053fa20712982f70b8dfd574b41a1b5ecd29d7c29f1b60742f647",
+              "position": 4,
+              "uid": "8fdede6e-64ed-5e4c-81f4-7a1075165568"
+            },
+            {
+              "content": "On a day medication times were confirmed one line at a time, the user copied them directly into their schedule after returning home.",
+              "content_digest": "acade505d6c0cdfddae0d169dea81c06a757aa7d7d2c760f6cdc253b06af5ded",
+              "position": 5,
+              "uid": "21f679f7-7d75-5c01-b6c3-b0d4bea5f2f0"
+            },
+            {
+              "content": "On a visit when their younger brother drove them, the user did not have to find a separate route home.",
+              "content_digest": "5e17c1227c7cbee7e995728edd17b4301903dfdc7a7bdc5f5ff3e06edfd357b3",
+              "position": 6,
+              "uid": "3ec03d39-3240-56d1-80da-313f79f2bf3a"
+            },
+            {
+              "content": "The user's younger brother prefers to receive a request for weekday-afternoon transportation two days beforehand rather than on the day itself.",
+              "content_digest": "7d1bf920ff730ddff86f328aaa3c3edf9d424170044bcd789a3ac55bffb5a839",
+              "position": 7,
+              "uid": "3069baac-fa68-5e94-8ba3-e888cf622f8c"
+            },
+            {
+              "content": "The local agent cannot determine the current prescription or whether use continues from medication notes alone.",
+              "content_digest": "89990815daa01f70a77b970b6a38cb9063f32fed898bd36e39a85551a1ad6200",
+              "position": 8,
+              "uid": "d7f215c6-57ea-561a-9627-3ce94203d507"
+            },
+            {
+              "content": "The waiting area at that clinic has too few chairs, so there may be periods when people must wait standing.",
+              "content_digest": "66c27ba4d6f3fb0d16b322a6de6d8afeb5c650fbe04162006a3288dd886ce1f0",
+              "position": 9,
+              "uid": "e6023aed-938d-5954-b8a7-8cb01340ee37"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "6f023ce9-ae08-4cf9-acba-063318445abc"
+        },
+        {
+          "context_digest": "5e42fc3dcfbf5576148277f6841977ca8a5cabd4a3fc67a5581f6f6cc816c900",
+          "context_name": "task-3/local/personal-memory/2025/10",
+          "context_uid": "8130b676-dc51-5c31-b7dc-185afdf9cf07",
+          "memories": [
+            {
+              "content": "The user keeps waterproof shoes for rainy days to the left of the entrance.",
+              "content_digest": "5b9e5a20153c7865010318800d740a410faef0c13fe2278c20ce984a89b7dea5",
+              "position": 0,
+              "uid": "82c1e806-de3a-5633-8a08-175487e69fd6"
+            },
+            {
+              "content": "On a day the user walked in the rain wearing thin shoes, their socks became wet and they changed them after arrival.",
+              "content_digest": "fdbdab8c08a4b1d933ff8ac3ddedee8541ddf070e8c6e6020b6c1d14b992c621",
+              "position": 1,
+              "uid": "25df6384-836f-5f8e-bd97-73a1fb171c48"
+            },
+            {
+              "content": "On the next rainy day, the user wore waterproof shoes and their feet remained dry.",
+              "content_digest": "0e87d74fb93fe062cd12efe2f5a04fbae5ce13a60491fd9ad04c4e006acbd87f",
+              "position": 2,
+              "uid": "55abae4f-206a-586e-8b35-406d7525c0a1"
+            },
+            {
+              "content": "On a day the user walked for a long time in new shoes, their heel chafed and they shortened the route home.",
+              "content_digest": "aeb369b995cdf17ea73ae8546b454eab70f33bf6d3c67a09aee2805c1c598b6d",
+              "position": 3,
+              "uid": "c6d21ec4-6bdf-55df-b4d4-05cb531bf4bd"
+            },
+            {
+              "content": "The user wore the same shoes on two short outings before using them on a long walk.",
+              "content_digest": "0d7ed5656f35f4fe025c6ba80e4c829f5b9851c193f981de9a461f848317d60a",
+              "position": 4,
+              "uid": "a6424854-e51e-5afc-8b9f-9e2f0273f70e"
+            },
+            {
+              "content": "On a day the user dried an umbrella outside the entrance, they found it immediately before the next outing.",
+              "content_digest": "dbc2453ca5f895e2cfe7f58e5624cf4c5d6793468af3b25df7e9a4ddb7d50159",
+              "position": 5,
+              "uid": "1b436b46-3d1f-5aa2-99e3-94b7c2412bfd"
+            },
+            {
+              "content": "On a day the user put a folded wet umbrella in their bag, documents inside became wet.",
+              "content_digest": "1f63fbc8c6b491a734f0f7a4190e26aec22826c1ff839242e0ca71d933312c9c",
+              "position": 6,
+              "uid": "ccd1f422-6130-5f19-869e-681102a3a1fa"
+            },
+            {
+              "content": "When rain is forecast, the user's mother expects the user may forget an umbrella and sets out a spare at the entrance.",
+              "content_digest": "80bdfaefb6f781aa91ef7217331e75f09b4766650c2b078dfadf592b2eb27b08",
+              "position": 7,
+              "uid": "c69a8e87-2b6f-5514-ab0d-0037531592f8"
+            },
+            {
+              "content": "When proposing a long-distance walking plan, check both the weather that day and recent records of shoe discomfort.",
+              "content_digest": "f54a546d423099c3abbb65bb49e4ddf773a8191dcffbb8b3d5153dfd70553b73",
+              "position": 8,
+              "uid": "4567ea9f-1800-51ed-bfac-f4cdf674d4cf"
+            },
+            {
+              "content": "Even if the local agent knows a shoe's location, it cannot know its current condition or whether it is usable.",
+              "content_digest": "28202c222ca800a5e19dbaebea2b3c992748f530a695517cf123b10187a31bc8",
+              "position": 9,
+              "uid": "a4ff1b76-755d-530a-b24c-8655115e4fbe"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "f8dd9fe0-5f9a-4979-b528-75bd017a0572"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address largely separate practical domains: clinic visits, medication communication, transportation, rain gear, footwear, and umbrella handling. They share a compatible caution that static records or location knowledge do not establish an item’s current status or usability. No conflict or unsafe ambiguity appears.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "6f023ce9-ae08-4cf9-acba-063318445abc",
+              "memory_uid": "d7f215c6-57ea-561a-9627-3ce94203d507"
+            },
+            {
+              "frame_uid": "f8dd9fe0-5f9a-4979-b528-75bd017a0572",
+              "memory_uid": "a4ff1b76-755d-530a-b24c-8655115e4fbe"
+            }
+          ],
+          "reason": "Medication notes cannot establish a current prescription or continued use, while a shoe’s known location cannot establish its present condition or usability; both support the same operational caution within explicit object scopes.",
+          "status": "RESOLVED",
+          "summary": "Static contextual knowledge alone does not establish an item’s current status or suitability for use.",
+          "uid": "de27bc41-4809-5d20-a760-7b2b54ae2ee9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6f023ce9-ae08-4cf9-acba-063318445abc",
+              "memory_uid": "12ba4249-9450-5f2e-b648-5369a7997b26"
+            }
+          ],
+          "reason": "This is independently useful reference-side medication-timing information with no substantively corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "A medication instruction specifies administration after the evening meal.",
+          "uid": "963f2ac3-6df4-52af-a869-74bdf8cbf8f9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6f023ce9-ae08-4cf9-acba-063318445abc",
+              "memory_uid": "051e79ff-5363-5160-9a13-46568fd13306"
+            }
+          ],
+          "reason": "This is a distinct reference-side preparation episode without a compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "A fasting-period miscalculation for a morning appointment led the user to verify the requirement at reception.",
+          "uid": "8c138f66-9a2b-582d-b232-57b2c9124b35"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6f023ce9-ae08-4cf9-acba-063318445abc",
+              "memory_uid": "e7f1fcf7-ee2f-57d8-98cb-781e31e481e8"
+            }
+          ],
+          "reason": "This reference-side appointment-timing preference is independently useful and unmatched in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user felt less rushed preparing to travel for an afternoon visit than for a morning visit.",
+          "uid": "c1b806fe-1527-5e8f-b102-da6f58ae6c82"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6f023ce9-ae08-4cf9-acba-063318445abc",
+              "memory_uid": "18d58666-2cfa-5959-8da9-2745bed56e11"
+            },
+            {
+              "frame_uid": "6f023ce9-ae08-4cf9-acba-063318445abc",
+              "memory_uid": "e6023aed-938d-5954-b8a7-8cb01340ee37"
+            }
+          ],
+          "reason": "The reference memories describe the same underlying one-sided accessibility problem through a general seating shortage and a concrete uncomfortable standing episode.",
+          "status": "RESOLVED",
+          "summary": "Insufficient clinic seating can require standing long enough to cause the user back discomfort.",
+          "uid": "4ced3109-9b4e-5b9f-9ed8-619875b523a8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6f023ce9-ae08-4cf9-acba-063318445abc",
+              "memory_uid": "8fdede6e-64ed-5e4c-81f4-7a1075165568"
+            },
+            {
+              "frame_uid": "6f023ce9-ae08-4cf9-acba-063318445abc",
+              "memory_uid": "21f679f7-7d75-5c01-b6c3-b0d4bea5f2f0"
+            }
+          ],
+          "reason": "The reference memories jointly contrast an unsuccessful lengthy all-at-once explanation with successful line-by-line confirmation, forming one one-sided communication claim.",
+          "status": "RESOLVED",
+          "summary": "How medication times are presented affects the user’s ability to record and transfer them into a schedule.",
+          "uid": "c4ced882-dc3c-5116-afd7-15cc8f632509"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6f023ce9-ae08-4cf9-acba-063318445abc",
+              "memory_uid": "3ec03d39-3240-56d1-80da-313f79f2bf3a"
+            }
+          ],
+          "reason": "This is an independently useful reference-side transportation outcome with no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "A ride from the user’s younger brother removed the need to find a separate route home.",
+          "uid": "0cc4e07f-ac21-520a-b565-87c81571362f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6f023ce9-ae08-4cf9-acba-063318445abc",
+              "memory_uid": "3069baac-fa68-5e94-8ba3-e888cf622f8c"
+            }
+          ],
+          "reason": "This is a distinct reference-side coordination preference not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s younger brother prefers weekday-afternoon transportation requests two days in advance.",
+          "uid": "28a59a11-4a19-5760-b342-b1c4f307af1a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f8dd9fe0-5f9a-4979-b528-75bd017a0572",
+              "memory_uid": "82c1e806-de3a-5633-8a08-175487e69fd6"
+            }
+          ],
+          "reason": "This is independently useful compared-side location information with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user keeps rainy-day waterproof shoes to the left of the entrance.",
+          "uid": "799a099a-0b3c-50a4-99d9-a5cf6c818909"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f8dd9fe0-5f9a-4979-b528-75bd017a0572",
+              "memory_uid": "25df6384-836f-5f8e-bd97-73a1fb171c48"
+            },
+            {
+              "frame_uid": "f8dd9fe0-5f9a-4979-b528-75bd017a0572",
+              "memory_uid": "55abae4f-206a-586e-8b35-406d7525c0a1"
+            }
+          ],
+          "reason": "The compared memories form one one-sided experiential claim by contrasting wet socks in thin shoes with dry feet in waterproof shoes.",
+          "status": "RESOLVED",
+          "summary": "Footwear choice affected whether the user’s feet stayed dry while walking in rain.",
+          "uid": "fdc603b7-2fab-54dd-9877-bce766419705"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f8dd9fe0-5f9a-4979-b528-75bd017a0572",
+              "memory_uid": "c6d21ec4-6bdf-55df-b4d4-05cb531bf4bd"
+            },
+            {
+              "frame_uid": "f8dd9fe0-5f9a-4979-b528-75bd017a0572",
+              "memory_uid": "a6424854-e51e-5afc-8b9f-9e2f0273f70e"
+            }
+          ],
+          "reason": "The compared memories jointly describe prior short trials and the later long-walk consequence as one footwear-tolerance history.",
+          "status": "RESOLVED",
+          "summary": "Shoes used successfully on short outings still caused heel chafing during a long walk and forced a shorter return route.",
+          "uid": "8072fbe8-9003-5c5d-a851-c1f70be9ff24"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f8dd9fe0-5f9a-4979-b528-75bd017a0572",
+              "memory_uid": "1b436b46-3d1f-5aa2-99e3-94b7c2412bfd"
+            },
+            {
+              "frame_uid": "f8dd9fe0-5f9a-4979-b528-75bd017a0572",
+              "memory_uid": "ccd1f422-6130-5f19-869e-681102a3a1fa"
+            }
+          ],
+          "reason": "The compared memories contrast a useful outside-the-entrance drying placement with damaging storage of a folded wet umbrella in a bag, forming one handling claim.",
+          "status": "RESOLVED",
+          "summary": "Wet-umbrella handling affected both later retrieval and protection of documents from moisture.",
+          "uid": "3de9b803-73f7-56a6-99b3-be945a57670e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f8dd9fe0-5f9a-4979-b528-75bd017a0572",
+              "memory_uid": "c69a8e87-2b6f-5514-ab0d-0037531592f8"
+            }
+          ],
+          "reason": "This is a distinct compared-side family reminder practice without a reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "When rain is forecast, the user’s mother sets out a spare umbrella because she expects the user may forget one.",
+          "uid": "3c3ad812-a27b-53a6-afab-072746bcfa1f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f8dd9fe0-5f9a-4979-b528-75bd017a0572",
+              "memory_uid": "4567ea9f-1800-51ed-bfac-f4cdf674d4cf"
+            }
+          ],
+          "reason": "This compared-side planning policy is independently useful and has no substantively corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "Long-distance walking proposals should account for both current weather and recent shoe-discomfort records.",
+          "uid": "cbde6f82-07c1-59d0-8ae6-e4f9e252c41c"
+        }
+      ],
+      "reports": {
+        "both": "Both frames caution against inferring current status or usability from static notes or location knowledge alone.",
+        "compared_only": "Compared-only material covers rain footwear, shoe chafing, umbrella placement and moisture risks, family reminders, and weather-aware walking plans.",
+        "differences": "",
+        "reference_only": "Reference-only material covers medication timing and communication, fasting preparation, appointment timing, clinic seating, and advance transportation arrangements."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "6832507c-54b4-4a24-81a6-9f2b62270533"
+    },
+    "analysis_digest": "49bb0e440918a5191f4348c723470d4803a852e55b8b591d4cbf77df43ecd7d5",
+    "key": "470ce215b9a71608cc7b7b34799719fdeab07a5f05694cc0a670d1dc4d1701bc",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 41.770484790999035,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "470ce215b9a71608cc7b7b34799719fdeab07a5f05694cc0a670d1dc4d1701bc",
+  "created_at": "2026-08-13T18:37:57.023047Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/03",
+  "pair_key": "2616d6482564911c206873887cc4b1a322e5cf7f96a0837ce6e02c953833423d",
+  "provider_seconds": 41.770484790999035,
+  "right": "task-3/local/personal-memory/2025/10",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

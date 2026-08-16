@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:51:20.863281+00:00",
+      "frames": [
+        {
+          "context_digest": "43b741cd1df20a084f3517aec7f886d4e5022812f0536eb126a6caf2d5570489",
+          "context_name": "task-3/local/personal-memory/2025/05",
+          "context_uid": "1f913bb6-790c-5490-a20d-127c7aab5892",
+          "memories": [
+            {
+              "content": "The user keeps two potted herbs beside a south-facing window.",
+              "content_digest": "b79056c033f208bb02b99fef1c011e5537e2ea8c19c3894863c3a5ad56054e08",
+              "position": 0,
+              "uid": "cb09b8ab-c7c4-51bb-a227-039c7cdfae5d"
+            },
+            {
+              "content": "During a week when the user watered every day based only on the soil surface, the leaves of one plant turned yellow.",
+              "content_digest": "042f4be9fd5481a7252d1c0065e95085e11e81e475531afe45b9f1d268d4c5b4",
+              "position": 1,
+              "uid": "95978183-0070-5b12-b117-be39bb343a5e"
+            },
+            {
+              "content": "During a week when the user checked below the soil surface with a finger before watering, the plant grew new leaves.",
+              "content_digest": "06ca2ec53f03677fdfd78bb1d391f197d3f49b974f6e812f25ba49ce34f74249",
+              "position": 2,
+              "uid": "8c610ce5-1eb7-52e5-ad81-e8062d23cd19"
+            },
+            {
+              "content": "On a day the user left the window open for a long time, strong wind knocked over one pot.",
+              "content_digest": "914f67a75fdf73cee064a465a9f0e6ee9ba012f1a40c614e199a9354756203a8",
+              "position": 3,
+              "uid": "3f886c0c-071b-5f2d-adad-da01345d702f"
+            },
+            {
+              "content": "The next day, the user moved the pot inward from the windowsill so the same wind would not knock it over.",
+              "content_digest": "f190916b360b6543865ced49cf5d9a987e96c9147966181e5920342bb41ba50c",
+              "position": 4,
+              "uid": "afe855b8-f5ad-559c-a63f-6f655ba371a2"
+            },
+            {
+              "content": "The user put a plant-name label in a small pot received from their maternal aunt.",
+              "content_digest": "82284f0102305db41eaaecafe86bc05833090853320f2ebb8e5f44abb2d78a63",
+              "position": 5,
+              "uid": "384c4f5f-b15c-5742-ac79-20106d0dd30b"
+            },
+            {
+              "content": "The user confused the care instructions for an unlabeled pot with those for another plant.",
+              "content_digest": "824267db866253690527d5ab08166f4228401443ed903708d33ac22542811750",
+              "position": 6,
+              "uid": "48dc89af-ed9d-51a5-a4b1-b809fd818143"
+            },
+            {
+              "content": "The user's maternal aunt considers understanding the sunlight at a pot's location more important than watering frequency when caring for it.",
+              "content_digest": "8a24f6df4a58db3e538f77e572a3cf152b7a4aff3527ec3d8616e85a675bc7c0",
+              "position": 7,
+              "uid": "a2426820-65d6-5c78-ac50-0f32b366ae47"
+            },
+            {
+              "content": "Before creating a plant-care reminder, check each plant's name and most recent watering date.",
+              "content_digest": "ecd7ef911951f3c2383cd916a4efbd94bdf439f63de1687c2f637a161ac8a60d",
+              "position": 8,
+              "uid": "efd51196-ed48-5699-a0f4-c5b8e149d11c"
+            },
+            {
+              "content": "The soil in the user's potted herbs beside the south-facing window dries at different rates depending on the season and amount of sunlight.",
+              "content_digest": "f716b16e802d30d4c2d1ed4bff855812682e53a9fc4e29988e2662ae321d0a4f",
+              "position": 9,
+              "uid": "4c93eeff-566e-5a1a-afb9-035c97fb9c73"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "d50e6830-dbc0-4f6d-a9a8-39ad353517be"
+        },
+        {
+          "context_digest": "4eadf16a0c655a266bec3ebe56b056075c55e7f716f6879a0b6a905fe34136df",
+          "context_name": "task-3/local/personal-memory/2026/05",
+          "context_uid": "fd476504-4d4e-54d9-80b8-3dc2b18555d8",
+          "memories": [
+            {
+              "content": "The user keeps a picnic mat on the bottom shelf of the entrance storage cabinet.",
+              "content_digest": "c17479bd6a0f978f71b106b562507e702c3b84af5119be6bce48e4ee1664e728",
+              "position": 0,
+              "uid": "a9da4cfc-a6aa-51ae-9ec4-0de5c7a09227"
+            },
+            {
+              "content": "On a day the user went to the riverside, they sat in a place without shade and moved after an hour.",
+              "content_digest": "f9ab1da828ca5af06cb8bf54fe85136e316f503dab465fad514ab5a3f8243633",
+              "position": 1,
+              "uid": "fa2735e1-f4af-57d3-a18c-795715b6715b"
+            },
+            {
+              "content": "At the next outdoor meal, the user chose a place near a large tree and stayed for two hours.",
+              "content_digest": "189b7d85561df45986a6b7c9fe681b5ef53b22ca1f5e83fa8d64a7d93b35a577",
+              "position": 2,
+              "uid": "3bd8b8f2-c5b4-5004-8b9e-e388cc26ea7a"
+            },
+            {
+              "content": "On a hot day when the user brought only one bottle of water, they bought another drink partway through the outing.",
+              "content_digest": "92aa494a12664105a4bffc50a9026fadbec78332f750636093ea82ecc68e9597",
+              "position": 3,
+              "uid": "c7c4b494-39a6-5f5c-b37f-51c5061ac926"
+            },
+            {
+              "content": "On the next outing, the user brought two small bottles of water after freezing them.",
+              "content_digest": "69b3035b57b58b1aa778bd0da75dc806c1c449e7e35dc448aff92f7499c3148d",
+              "position": 4,
+              "uid": "dd9f5b3c-9c2e-5dbc-bf6e-eb7761eeb075"
+            },
+            {
+              "content": "When meeting their maternal uncle at a park, the user and the uncle waited at different entrances for 15 minutes.",
+              "content_digest": "9785e87b9fe79813762eb2e19e6d4f256a55f4799c92d095aaf695a8a1de5851",
+              "position": 5,
+              "uid": "2ed2a41c-f6ae-54d6-875c-a195d8fdacee"
+            },
+            {
+              "content": "For the next meeting, the user sent a photo of the entrance sign, and they met at the same place.",
+              "content_digest": "de40b6b7df84784639b97cf7ce153ad8af6e77320d75f3869979e5e3d39169e2",
+              "position": 6,
+              "uid": "23f3a4fc-d51e-5d0b-87f0-d5be407a57f3"
+            },
+            {
+              "content": "For a park meeting, the user's maternal uncle prefers an entrance that requires less walking from the parking area.",
+              "content_digest": "552a43b869c6f06cbf571f794106727406d87841d43addc92f31a3532f73d6f3",
+              "position": 7,
+              "uid": "e9f459f3-8ff0-5a0e-b78b-eda8d18b914e"
+            },
+            {
+              "content": "When making an outdoor plan, confirm the exact entrance and an alternative location in case of rain.",
+              "content_digest": "a265a6364c182de35363b58135b1da60d11595d1e3e0029f6851ac272261a959",
+              "position": 8,
+              "uid": "70277b86-d5db-5b58-8a94-e77372d15a4c"
+            },
+            {
+              "content": "Some park restrooms and drinking fountains may be closed seasonally.",
+              "content_digest": "8e5c4f5f85d4d27dc2211f46e3ab3bbed7f3d9687070b9028992b670986b09ca",
+              "position": 9,
+              "uid": "5a54437b-9b0e-5103-860d-d878be70b3ef"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "b1e993c4-bddd-444f-a6f0-526de28c305d"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate practical domains: the reference records household herb care, while the compared frame records outdoor outings and park coordination. Neither contains a claim addressing the same operational decision as a claim on the other side.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d50e6830-dbc0-4f6d-a9a8-39ad353517be",
+              "memory_uid": "cb09b8ab-c7c4-51bb-a227-039c7cdfae5d"
+            }
+          ],
+          "reason": "This household plant-location fact is independently useful and has no substantively corresponding outdoor-outing claim.",
+          "status": "RESOLVED",
+          "summary": "The user keeps two potted herbs beside a south-facing window.",
+          "uid": "094a98be-db21-55f5-a440-11533a27ca49"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d50e6830-dbc0-4f6d-a9a8-39ad353517be",
+              "memory_uid": "95978183-0070-5b12-b117-be39bb343a5e"
+            }
+          ],
+          "reason": "This plant-watering observation is independently useful and does not address any operational decision recorded in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Daily watering based only on the soil surface coincided with yellow leaves in one plant.",
+          "uid": "2fee743f-ff47-54b7-adc6-e21cc3aa9a4d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d50e6830-dbc0-4f6d-a9a8-39ad353517be",
+              "memory_uid": "8c610ce5-1eb7-52e5-ad81-e8062d23cd19"
+            }
+          ],
+          "reason": "This distinct plant-watering observation has no substantively corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Checking below the soil surface before watering coincided with new leaf growth.",
+          "uid": "7ce39ca0-b3ac-5477-827f-3e2fce602dc6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d50e6830-dbc0-4f6d-a9a8-39ad353517be",
+              "memory_uid": "3f886c0c-071b-5f2d-adad-da01345d702f"
+            }
+          ],
+          "reason": "This indoor plant-risk event is independently useful and is not matched by an outdoor-planning claim.",
+          "status": "RESOLVED",
+          "summary": "Strong wind through an open window knocked over a pot.",
+          "uid": "7235e677-6570-51dd-8dfd-4eeec5c4bc88"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d50e6830-dbc0-4f6d-a9a8-39ad353517be",
+              "memory_uid": "afe855b8-f5ad-559c-a63f-6f655ba371a2"
+            }
+          ],
+          "reason": "This preventive plant-placement action has no counterpart governing the same case in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user moved the pot inward to prevent another wind knockover.",
+          "uid": "7dc60f83-5f71-5ff1-96b0-9fcf20306528"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d50e6830-dbc0-4f6d-a9a8-39ad353517be",
+              "memory_uid": "384c4f5f-b15c-5742-ac79-20106d0dd30b"
+            }
+          ],
+          "reason": "This plant-identification and provenance fact is independently useful and unmatched by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user labeled a small plant pot received from their maternal aunt.",
+          "uid": "b8601922-6fb0-5d59-867f-264d1c072fb1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d50e6830-dbc0-4f6d-a9a8-39ad353517be",
+              "memory_uid": "48dc89af-ed9d-51a5-a4b1-b809fd818143"
+            }
+          ],
+          "reason": "This plant-identification problem does not materially address the same decision as any compared-side memory.",
+          "status": "RESOLVED",
+          "summary": "An unlabeled pot caused the user to confuse care instructions between plants.",
+          "uid": "bd9c9f0d-14a4-5491-9820-0d3102763e14"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d50e6830-dbc0-4f6d-a9a8-39ad353517be",
+              "memory_uid": "a2426820-65d6-5c78-ac50-0f32b366ae47"
+            }
+          ],
+          "reason": "This relative’s plant-care preference is independently useful and has no corresponding compared-side policy.",
+          "status": "RESOLVED",
+          "summary": "The user’s maternal aunt prioritizes understanding location-specific sunlight over watering frequency for pot care.",
+          "uid": "49224ca3-9bd6-51f8-b5bf-5759e46f1442"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d50e6830-dbc0-4f6d-a9a8-39ad353517be",
+              "memory_uid": "efd51196-ed48-5699-a0f4-c5b8e149d11c"
+            }
+          ],
+          "reason": "This plant-reminder procedure governs a separate operational domain from the compared frame’s planning guidance.",
+          "status": "RESOLVED",
+          "summary": "Plant name and latest watering date should be checked before creating a care reminder.",
+          "uid": "64689983-d960-57b8-b06d-fd3918dcce9d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d50e6830-dbc0-4f6d-a9a8-39ad353517be",
+              "memory_uid": "4c93eeff-566e-5a1a-afb9-035c97fb9c73"
+            }
+          ],
+          "reason": "This environmental plant-care condition is independently useful and has no substantive counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The herbs’ soil dries at different rates with season and sunlight.",
+          "uid": "22c69dbc-6662-53d9-891f-d52a867b0206"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b1e993c4-bddd-444f-a6f0-526de28c305d",
+              "memory_uid": "a9da4cfc-a6aa-51ae-9ec4-0de5c7a09227"
+            }
+          ],
+          "reason": "This outdoor-equipment storage fact is independently useful and has no corresponding plant-care claim.",
+          "status": "RESOLVED",
+          "summary": "The user stores a picnic mat on the entrance cabinet’s bottom shelf.",
+          "uid": "32b64e47-bb6a-52d4-93c9-8fa624c20acf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b1e993c4-bddd-444f-a6f0-526de28c305d",
+              "memory_uid": "fa2735e1-f4af-57d3-a18c-795715b6715b"
+            }
+          ],
+          "reason": "This outdoor shade experience does not materially address the same decision as any reference-side memory.",
+          "status": "RESOLVED",
+          "summary": "At the riverside, the user left an unshaded spot after one hour.",
+          "uid": "67470b69-8681-5988-86fc-45045ff3c647"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b1e993c4-bddd-444f-a6f0-526de28c305d",
+              "memory_uid": "3bd8b8f2-c5b4-5004-8b9e-e388cc26ea7a"
+            }
+          ],
+          "reason": "This later shade-selection experience is independently useful and lacks a substantive reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "At the next outdoor meal, the user stayed two hours near a large tree.",
+          "uid": "3e699913-7a14-59d5-8352-fba7e8a93027"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b1e993c4-bddd-444f-a6f0-526de28c305d",
+              "memory_uid": "c7c4b494-39a6-5f5c-b37f-51c5061ac926"
+            }
+          ],
+          "reason": "This outing-hydration observation governs a separate practical decision from household herb watering.",
+          "status": "RESOLVED",
+          "summary": "On a hot outing, one bottle was insufficient and the user bought another drink.",
+          "uid": "a5f1a139-bd5f-5e29-b0bd-ec52e37e5334"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b1e993c4-bddd-444f-a6f0-526de28c305d",
+              "memory_uid": "dd9f5b3c-9c2e-5dbc-bf6e-eb7761eeb075"
+            }
+          ],
+          "reason": "This hydration-preparation action has no counterpart addressing the same operational case in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "For the next outing, the user brought two small frozen water bottles.",
+          "uid": "0224d3f9-75f5-556d-9609-ae6ec10bd102"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b1e993c4-bddd-444f-a6f0-526de28c305d",
+              "memory_uid": "2ed2a41c-f6ae-54d6-875c-a195d8fdacee"
+            }
+          ],
+          "reason": "This meeting-coordination problem is independently useful and unmatched by any reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "The user and their maternal uncle waited at different park entrances for 15 minutes.",
+          "uid": "743d9e0d-3c33-5f04-96b3-a2687ad18236"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b1e993c4-bddd-444f-a6f0-526de28c305d",
+              "memory_uid": "23f3a4fc-d51e-5d0b-87f0-d5be407a57f3"
+            }
+          ],
+          "reason": "This entrance-coordination action has no substantive counterpart in the plant-care frame.",
+          "status": "RESOLVED",
+          "summary": "For the next meeting, an entrance-sign photo helped the user and uncle meet at the same place.",
+          "uid": "b97fb11f-e806-59b8-a266-34d41eaa38be"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b1e993c4-bddd-444f-a6f0-526de28c305d",
+              "memory_uid": "e9f459f3-8ff0-5a0e-b78b-eda8d18b914e"
+            }
+          ],
+          "reason": "This relative’s park-access preference is independently useful and does not correspond to the aunt’s unrelated plant-care preference.",
+          "status": "RESOLVED",
+          "summary": "The user’s maternal uncle prefers a park entrance requiring less walking from parking.",
+          "uid": "9bd58110-cc2f-53a7-99ea-0cbf6eb17343"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b1e993c4-bddd-444f-a6f0-526de28c305d",
+              "memory_uid": "70277b86-d5db-5b58-8a94-e77372d15a4c"
+            }
+          ],
+          "reason": "This planning procedure governs park logistics rather than the reference frame’s plant-reminder checks.",
+          "status": "RESOLVED",
+          "summary": "Outdoor planning should confirm the exact entrance and a rain alternative.",
+          "uid": "6db64ac4-112c-5af1-80c8-a0c196513d11"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b1e993c4-bddd-444f-a6f0-526de28c305d",
+              "memory_uid": "5a54437b-9b0e-5103-860d-d878be70b3ef"
+            }
+          ],
+          "reason": "This park-facility availability condition is independently useful and does not correspond to seasonal soil-drying behavior.",
+          "status": "RESOLVED",
+          "summary": "Some park restrooms and drinking fountains may close seasonally.",
+          "uid": "7b49837d-b0ab-507a-9509-034db1e5644a"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers picnic storage, shade and hydration experiences, entrance coordination, a relative’s access preference, outdoor-plan checks, and seasonal facility closures.",
+        "differences": "",
+        "reference_only": "The reference covers herb placement, watering observations, wind protection, plant identification, a relative’s care priority, reminder checks, and seasonal drying variation."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "e74e6bcd-15a3-41ac-a3db-c696aa841c9d"
+    },
+    "analysis_digest": "eb293f437d7d8ddc0c4478e56d77edccc28554eb55cd89eb67cb1b77536416e4",
+    "key": "686f1f95ae5f4ea6ac9cb393f9035c722793416927af68d846ce493c20d220d0",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 56.43533191700044,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "686f1f95ae5f4ea6ac9cb393f9035c722793416927af68d846ce493c20d220d0",
+  "created_at": "2026-08-13T18:52:17.298189Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/05",
+  "pair_key": "0f5c1088199803074033c997f24b9b8f885fd09b5ed00d6ccb17b0720799fea4",
+  "provider_seconds": 56.43533191700044,
+  "right": "task-3/local/personal-memory/2026/05",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

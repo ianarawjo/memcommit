@@ -1,0 +1,397 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:37:10.787929+00:00",
+      "frames": [
+        {
+          "context_digest": "9fdb8cdfae14edf54f7410c0e8dd59527179de290b3d7c5f1b0f58494275b076",
+          "context_name": "task-3/local/personal-memory/2024/03",
+          "context_uid": "97c5905c-359b-5497-956f-b92db9ddbd2f",
+          "memories": [
+            {
+              "content": "The instructions for one medication the user takes say to take it after the evening meal.",
+              "content_digest": "32bba9f2936e560ddd5f4c5515895f2954b9c8722fcd501644569d1ff4f7b97c",
+              "position": 0,
+              "uid": "12ba4249-9450-5f2e-b648-5369a7997b26"
+            },
+            {
+              "content": "On a day with a morning appointment, the user miscalculated the fasting period and checked again at the reception desk.",
+              "content_digest": "532396ed2265321fbd4ca28ed1de2962211a357195bc9839503330c6cb0ab281",
+              "position": 1,
+              "uid": "051e79ff-5363-5160-9a13-46568fd13306"
+            },
+            {
+              "content": "For an afternoon visit, the user felt less rushed while preparing to travel than for a morning visit.",
+              "content_digest": "276fa255e4a4945f1475fa66129069ea33514bc24c98a246e9ab0d0000c156fa",
+              "position": 2,
+              "uid": "e7f1fcf7-ee2f-57d8-98cb-781e31e481e8"
+            },
+            {
+              "content": "On a day there was no waiting chair, the user stood for 20 minutes and their back became uncomfortable.",
+              "content_digest": "1c412785950057f01b1e7c10b716977cdb8bfb2b0605ef5bfdbdc6e349f6aaf8",
+              "position": 3,
+              "uid": "18d58666-2cfa-5959-8da9-2745bed56e11"
+            },
+            {
+              "content": "On a day medication instructions were explained all at once and at length, the user failed to write down an important time.",
+              "content_digest": "f3629bba06d053fa20712982f70b8dfd574b41a1b5ecd29d7c29f1b60742f647",
+              "position": 4,
+              "uid": "8fdede6e-64ed-5e4c-81f4-7a1075165568"
+            },
+            {
+              "content": "On a day medication times were confirmed one line at a time, the user copied them directly into their schedule after returning home.",
+              "content_digest": "acade505d6c0cdfddae0d169dea81c06a757aa7d7d2c760f6cdc253b06af5ded",
+              "position": 5,
+              "uid": "21f679f7-7d75-5c01-b6c3-b0d4bea5f2f0"
+            },
+            {
+              "content": "On a visit when their younger brother drove them, the user did not have to find a separate route home.",
+              "content_digest": "5e17c1227c7cbee7e995728edd17b4301903dfdc7a7bdc5f5ff3e06edfd357b3",
+              "position": 6,
+              "uid": "3ec03d39-3240-56d1-80da-313f79f2bf3a"
+            },
+            {
+              "content": "The user's younger brother prefers to receive a request for weekday-afternoon transportation two days beforehand rather than on the day itself.",
+              "content_digest": "7d1bf920ff730ddff86f328aaa3c3edf9d424170044bcd789a3ac55bffb5a839",
+              "position": 7,
+              "uid": "3069baac-fa68-5e94-8ba3-e888cf622f8c"
+            },
+            {
+              "content": "The local agent cannot determine the current prescription or whether use continues from medication notes alone.",
+              "content_digest": "89990815daa01f70a77b970b6a38cb9063f32fed898bd36e39a85551a1ad6200",
+              "position": 8,
+              "uid": "d7f215c6-57ea-561a-9627-3ce94203d507"
+            },
+            {
+              "content": "The waiting area at that clinic has too few chairs, so there may be periods when people must wait standing.",
+              "content_digest": "66c27ba4d6f3fb0d16b322a6de6d8afeb5c650fbe04162006a3288dd886ce1f0",
+              "position": 9,
+              "uid": "e6023aed-938d-5954-b8a7-8cb01340ee37"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "8c84a51c-95a2-4ec9-a9a4-099b2a9fb81f"
+        },
+        {
+          "context_digest": "a2ea3c6aa8c1680fcf9a7dd71d0dbff822c6af5493b34b79022f5e740bb35259",
+          "context_name": "task-3/local/personal-memory/2025/07",
+          "context_uid": "5c264a7f-0300-587c-ad1c-0439cedc7737",
+          "memories": [
+            {
+              "content": "The user keeps a travel power bank in the first drawer beneath the desk.",
+              "content_digest": "deb13f4eae5e32bc035da0558fa1b290f4bac0dfa5ca350d5abd0456af07ab7f",
+              "position": 0,
+              "uid": "447bfd8d-1490-5404-a2b4-13b4587e6aba"
+            },
+            {
+              "content": "The user packed three pairs of shoes for a two-night trip but wore only one pair.",
+              "content_digest": "097601b179049e1c4dd6b20a2fe2703ffb0d4a89d5ae15a763d339b989da50d8",
+              "position": 1,
+              "uid": "3ab0326a-a006-51ea-9348-7ada19a23bce"
+            },
+            {
+              "content": "For the next two-night trip, the user packed only one pair of walking shoes and reduced the bag's weight.",
+              "content_digest": "afd02b05250a60ad461e01132a94f0105d419521803082d1057205a2bc9a92ad",
+              "position": 2,
+              "uid": "ef467ab6-8ba6-5f81-8f12-578ec1824e09"
+            },
+            {
+              "content": "On a trip when the user forgot a charging cable, they bought a new one after arrival.",
+              "content_digest": "bbe1ac80a2311e0e631446b811d799494dc5ca4db408fc63d1cb09a01e2cd105",
+              "position": 3,
+              "uid": "aa4defc3-2b65-5688-accb-aaa49f2430b6"
+            },
+            {
+              "content": "Before the next trip, the user checked charging items against a photo and packed all of them.",
+              "content_digest": "cc2663db793bec80657023ccd545add403ec7dcc6dc39da4d03a95b5a9f65ff9",
+              "position": 4,
+              "uid": "2d937b4b-d73d-5382-abbe-3cd4e596b3a5"
+            },
+            {
+              "content": "The user packed toiletries on the departure day and arrived 15 minutes late at the meeting place.",
+              "content_digest": "1f5f7eb4cf651ee44244315e52de31cbd7bffe70489315bda287d1ca3cb9a8d4",
+              "position": 5,
+              "uid": "0be8b327-0a06-5241-b98d-daa6b0a4aa50"
+            },
+            {
+              "content": "The next time, the user closed the bag the night before and departed on time.",
+              "content_digest": "61f6c02e4637501f5ad9b1a9f668e298e566558a3d9e611a8b521c17256513b7",
+              "position": 6,
+              "uid": "90059fcc-436d-5453-98f0-a9b23a08faf1"
+            },
+            {
+              "content": "The user's older sister considers it safer to pack an extra cable even for a short trip to avoid charging problems.",
+              "content_digest": "f06b38b34e0f27bc01d8a79733173673d37a209e8619ad3df816a73718ffd89f",
+              "position": 7,
+              "uid": "12ef03f9-8cda-5ed7-be83-891b4702f872"
+            },
+            {
+              "content": "When creating a travel preparation list, confirm the trip length and actual activities with the user.",
+              "content_digest": "f34a0a341cd8ce9c641c16b780c4e53ccae4b6dca2c8f176be7579f5b0115654",
+              "position": 8,
+              "uid": "54136935-a460-573d-ac40-f5edb0ca7e6c"
+            },
+            {
+              "content": "The local agent cannot establish what the next trip requires from the luggage used on the previous trip alone.",
+              "content_digest": "4accbe60aa4e53ff75a18cc0291a870f106ac69a10a2cff96147c2dbd74892e3",
+              "position": 9,
+              "uid": "029c0777-bdbb-5d48-9309-1b1e6c7d88f4"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "9e4b0321-6f42-44e1-8c9e-673dc59fb21d"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover independent domains: clinic visits, medication handling, transportation, and waiting conditions on one side, versus trip packing, charging supplies, departure timing, and preparation planning on the other. No operational claim materially overlaps, differs by shared scope, or conflicts.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8c84a51c-95a2-4ec9-a9a4-099b2a9fb81f",
+              "memory_uid": "12ba4249-9450-5f2e-b648-5369a7997b26"
+            }
+          ],
+          "reason": "Only the reference frame contains this specific medication-timing instruction; the travel material does not address the same operational decision.",
+          "status": "RESOLVED",
+          "summary": "One medication carries an instruction to be taken after the evening meal.",
+          "uid": "706bce2c-07a3-5d46-bc5c-1df9f7860d47"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8c84a51c-95a2-4ec9-a9a4-099b2a9fb81f",
+              "memory_uid": "051e79ff-5363-5160-9a13-46568fd13306"
+            }
+          ],
+          "reason": "This is a one-sided account of appointment fasting preparation and subsequent verification, without a materially related claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A fasting-period miscalculation for a morning appointment led the user to verify the timing at reception.",
+          "uid": "66c57b2c-8db6-54f1-9819-94b8339b2ce7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8c84a51c-95a2-4ec9-a9a4-099b2a9fb81f",
+              "memory_uid": "e7f1fcf7-ee2f-57d8-98cb-781e31e481e8"
+            }
+          ],
+          "reason": "This one-sided observation concerns appointment time and travel pressure, which the compared frame does not address.",
+          "status": "RESOLVED",
+          "summary": "Preparing to travel for an afternoon visit felt less rushed than preparing for a morning visit.",
+          "uid": "dd9dee13-e2c9-5191-938a-8eede52eb9d3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8c84a51c-95a2-4ec9-a9a4-099b2a9fb81f",
+              "memory_uid": "18d58666-2cfa-5959-8da9-2745bed56e11"
+            },
+            {
+              "frame_uid": "8c84a51c-95a2-4ec9-a9a4-099b2a9fb81f",
+              "memory_uid": "e6023aed-938d-5954-b8a7-8cb01340ee37"
+            }
+          ],
+          "reason": "The reference memories split a single clinic-seating claim into the recurring condition and an experienced consequence; no compared memory addresses waiting-area accommodation.",
+          "status": "RESOLVED",
+          "summary": "Insufficient clinic seating can require standing, and one such wait caused the user back discomfort.",
+          "uid": "103d867e-bafc-50ad-9a58-66854df06c4d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8c84a51c-95a2-4ec9-a9a4-099b2a9fb81f",
+              "memory_uid": "8fdede6e-64ed-5e4c-81f4-7a1075165568"
+            },
+            {
+              "frame_uid": "8c84a51c-95a2-4ec9-a9a4-099b2a9fb81f",
+              "memory_uid": "21f679f7-7d75-5c01-b6c3-b0d4bea5f2f0"
+            }
+          ],
+          "reason": "These reference memories jointly express one communication-and-recording pattern that has no counterpart in the travel-preparation frame.",
+          "status": "RESOLVED",
+          "summary": "The format of medication-time explanations affected recording: lengthy all-at-once delivery led to an omission, while line-by-line confirmation supported later schedule entry.",
+          "uid": "ef5c983c-cd12-5305-9807-bd8a66e245e7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8c84a51c-95a2-4ec9-a9a4-099b2a9fb81f",
+              "memory_uid": "3ec03d39-3240-56d1-80da-313f79f2bf3a"
+            }
+          ],
+          "reason": "This is independently useful one-sided information about the effect of having a driver for a visit.",
+          "status": "RESOLVED",
+          "summary": "When the younger brother drove, the user did not need to arrange a separate route home.",
+          "uid": "5c11690c-3735-5aa8-8128-b4979f431973"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8c84a51c-95a2-4ec9-a9a4-099b2a9fb81f",
+              "memory_uid": "3069baac-fa68-5e94-8ba3-e888cf622f8c"
+            }
+          ],
+          "reason": "This is a distinct one-sided coordination preference not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The younger brother prefers weekday-afternoon transportation requests two days in advance rather than on the day.",
+          "uid": "a0761fa5-db9a-5bd7-b7fb-6df464125887"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8c84a51c-95a2-4ec9-a9a4-099b2a9fb81f",
+              "memory_uid": "d7f215c6-57ea-561a-9627-3ce94203d507"
+            }
+          ],
+          "reason": "This one-sided epistemic limitation governs medication status, not the separate travel-planning decisions in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Medication notes alone do not establish the current prescription or whether its use continues.",
+          "uid": "226537c3-1014-5a44-a052-0d0ce6a83ce3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9e4b0321-6f42-44e1-8c9e-673dc59fb21d",
+              "memory_uid": "447bfd8d-1490-5404-a2b4-13b4587e6aba"
+            }
+          ],
+          "reason": "Only the compared frame supplies this specific storage-location information.",
+          "status": "RESOLVED",
+          "summary": "The travel power bank is stored in the first drawer beneath the desk.",
+          "uid": "191f6551-b860-5e2d-82e6-31c50f8f84d8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9e4b0321-6f42-44e1-8c9e-673dc59fb21d",
+              "memory_uid": "3ab0326a-a006-51ea-9348-7ada19a23bce"
+            },
+            {
+              "frame_uid": "9e4b0321-6f42-44e1-8c9e-673dc59fb21d",
+              "memory_uid": "ef467ab6-8ba6-5f81-8f12-578ec1824e09"
+            }
+          ],
+          "reason": "The compared memories form one packing-adjustment sequence, with no related footwear or luggage claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "After packing unused extra shoes for a two-night trip, the user next packed one walking pair and reduced bag weight.",
+          "uid": "38b6740a-471f-5e65-830b-43ae2a0e5b79"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9e4b0321-6f42-44e1-8c9e-673dc59fb21d",
+              "memory_uid": "aa4defc3-2b65-5688-accb-aaa49f2430b6"
+            },
+            {
+              "frame_uid": "9e4b0321-6f42-44e1-8c9e-673dc59fb21d",
+              "memory_uid": "2d937b4b-d73d-5382-abbe-3cd4e596b3a5"
+            }
+          ],
+          "reason": "These compared memories split one charging-preparation learning sequence that is absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "After forgetting a charging cable and buying a replacement, the user used a photo-based check before the next trip and packed all charging items.",
+          "uid": "3844a560-dc98-5caa-8223-5fa15e12fd4a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9e4b0321-6f42-44e1-8c9e-673dc59fb21d",
+              "memory_uid": "0be8b327-0a06-5241-b98d-daa6b0a4aa50"
+            },
+            {
+              "frame_uid": "9e4b0321-6f42-44e1-8c9e-673dc59fb21d",
+              "memory_uid": "90059fcc-436d-5453-98f0-a9b23a08faf1"
+            }
+          ],
+          "reason": "The compared memories jointly describe one change in packing timing and its travel-departure outcome.",
+          "status": "RESOLVED",
+          "summary": "After departure-day toiletry packing caused lateness, closing the bag the night before supported an on-time departure.",
+          "uid": "b8b3bf47-4107-5247-9040-98e4cbf5da1d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9e4b0321-6f42-44e1-8c9e-673dc59fb21d",
+              "memory_uid": "12ef03f9-8cda-5ed7-be83-891b4702f872"
+            }
+          ],
+          "reason": "This is an independently useful one-sided preference about charging redundancy.",
+          "status": "RESOLVED",
+          "summary": "The older sister considers an extra cable safer even for a short trip because it may prevent charging problems.",
+          "uid": "5651d277-80fb-5eb7-9746-53c42c7a9b06"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9e4b0321-6f42-44e1-8c9e-673dc59fb21d",
+              "memory_uid": "54136935-a460-573d-ac40-f5edb0ca7e6c"
+            },
+            {
+              "frame_uid": "9e4b0321-6f42-44e1-8c9e-673dc59fb21d",
+              "memory_uid": "029c0777-bdbb-5d48-9309-1b1e6c7d88f4"
+            }
+          ],
+          "reason": "The compared memories split one principle for establishing trip-specific preparation needs, with no matching travel-list policy in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Future travel requirements should be determined from the trip’s length and actual activities, because previous luggage alone is insufficient.",
+          "uid": "2a44fe8a-ae3f-5c07-8c9f-b3d611c0f5eb"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame records lighter packing, charging-item checks and redundancy, earlier bag preparation, power-bank storage, and determining future trip needs from trip-specific details rather than prior luggage alone.",
+        "differences": "",
+        "reference_only": "The reference records medication timing and communication, appointment preparation, clinic seating limitations, and advance coordination of transportation with the user’s brother."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "4495edf5-4279-470b-890a-cfc38c1a7c7d"
+    },
+    "analysis_digest": "867c0ee79028a6e76d9d77bfdd89357230e568d3b529d2f63c65ed7d20dc8097",
+    "key": "252b4ba97f7e77f7cfa4438da9666f10fe427bd9c12576c3f0cf605c908aff74",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 52.855558791001386,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "252b4ba97f7e77f7cfa4438da9666f10fe427bd9c12576c3f0cf605c908aff74",
+  "created_at": "2026-08-13T18:38:03.643036Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/03",
+  "pair_key": "0fdb2b3c033e19730615c1ac7a98cf43febecf737bbe7249f1e023ede4df3bfb",
+  "provider_seconds": 52.855558791001386,
+  "right": "task-3/local/personal-memory/2025/07",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

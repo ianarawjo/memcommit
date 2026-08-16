@@ -1,0 +1,380 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:18:24.785570+00:00",
+      "frames": [
+        {
+          "context_digest": "52dc61895a6d116135c474d4828efde944579b3a5949b6d64c07dd9853f60801",
+          "context_name": "task-2/advisor1/emphasis",
+          "context_uid": "6f253a9e-f504-53bf-a1d1-de2c4532171e",
+          "memories": [
+            {
+              "content": "Do not exceed two primary HCI contributions.",
+              "content_digest": "c605e418506d380237fb8ce4723bcc2fedebcd5da0d8dd78ef813e21aaf71a7a",
+              "position": 0,
+              "uid": "4a1de8df-6f03-5a3d-bbfa-7c1144d2ec5c"
+            },
+            {
+              "content": "Name each design or empirical contribution and present it in a single sentence.",
+              "content_digest": "286e33467b65e080f192172ae85d481a89c8e1b2d73e1089772eab30e0ae48fa",
+              "position": 1,
+              "uid": "b5b6a901-9047-5482-a0e1-d29e5f7171e8"
+            },
+            {
+              "content": "In studies recruiting community participants, emphasize the time burden associated with participation.",
+              "content_digest": "67a881933729e29cc0ce33f61f50af810f6f12ab5aa9598d453cf3a959a5977f",
+              "position": 2,
+              "uid": "e89de514-48a5-5e9b-96ca-f194c0ed79ab"
+            },
+            {
+              "content": "In studies recruiting community participants, emphasize the travel burden associated with participation.",
+              "content_digest": "3c4e20244bb88626ef1d2ebc89774e29ac85a9ce774a3faaa726131059b8ae33",
+              "position": 3,
+              "uid": "f7025cbb-4005-53c6-9031-e33f04a86b92"
+            },
+            {
+              "content": "HCI reviewers find it difficult to identify primary contributions when named design or empirical contributions exceed two.",
+              "content_digest": "70a2dccd85ce8ca18db239926980dfe13a20b90a9dffa6acae73e5034fce1fbc",
+              "position": 4,
+              "uid": "a42891a1-b674-5747-a77c-43699b0b9723"
+            },
+            {
+              "content": "Emphasize the core design decisions that formative evaluation will change rather than a polished product demonstration.",
+              "content_digest": "be5cad46c349a7c4b538f1a947d979ec25b0f6a34494e4d3a7bb9550508766d4",
+              "position": 5,
+              "uid": "9d7169d5-058f-5f7c-b1ac-30cabd8ba02e"
+            },
+            {
+              "content": "Emphasize design principles transferable to other similar interactions as the primary contribution, rather than the performance of a specific prototype.",
+              "content_digest": "a39c447e1b61b2204233800bafd380163fb5492ddd25cb730bbc6c6a95114e56",
+              "position": 6,
+              "uid": "f8931b4e-9656-548d-84a1-f2f2c3eb47b1"
+            },
+            {
+              "content": "Formative evaluation creates grounds for modification in subsequent iterations rather than definitively determining the superiority of design alternatives.",
+              "content_digest": "0cdd894b41de667b621d6c385d3373c799f4fea53898f65d324c26e86a1c8807",
+              "position": 7,
+              "uid": "9bf9e735-7598-5977-abe2-87b2c9c38a24"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "2c62145b-0df5-4288-aff1-9dbd502a4f44"
+        },
+        {
+          "context_digest": "7842b257aa1d32e6e598b019791827a580a1864e19e05d9101413b11d5b0227d",
+          "context_name": "task-2/advisor2/style",
+          "context_uid": "f0ea0447-bfe6-503c-89da-e90f24af6e2d",
+          "memories": [
+            {
+              "content": "Use an em dash only for a deliberate interruption or sharp contrast; otherwise split the sentence or choose ordinary punctuation.",
+              "content_digest": "3c37a896774ebccbec1e4bb3ad4a4e61ece1bb4ae246226c93b1d78c651bee7b",
+              "position": 0,
+              "uid": "9bd2a9da-9720-5001-b958-f7a2a2658f87"
+            },
+            {
+              "content": "In procedural passages, begin each sentence with the action, condition, or output instead of repeating “we” so the steps remain easy to follow and reuse.",
+              "content_digest": "c61f6b8ae3612497403f306de2cbe4e6a25db285109e89f74d61439abf5fae30",
+              "position": 1,
+              "uid": "e3e20261-e03c-52fb-be9e-04f5f9b1294d"
+            },
+            {
+              "content": "Write system behaviors confirmed in the actual usage environment as observed states.",
+              "content_digest": "972e1f5ba9188f1a423c2b47782e1a3938749419e8c170fabc97e6dd4f86cab2",
+              "position": 2,
+              "uid": "8d8d0e8d-dad1-50b5-9438-049052748a6a"
+            },
+            {
+              "content": "Write system behaviors not yet confirmed in the field as conditional plans.",
+              "content_digest": "9b7f3fffb87af8004e9645b6494bd2b990a1f1bfb054ca0efecea2bfb74d850d",
+              "position": 3,
+              "uid": "8c74ba87-822b-5ce2-9a3a-3adc02ab9744"
+            },
+            {
+              "content": "Readers can reconstruct a sequence more accurately when each sentence begins with the action or condition rather than the author.",
+              "content_digest": "e6748d23d892cb074ac5259f3c733727746640973a5b62c0ed1b7c6a684e9db8",
+              "position": 4,
+              "uid": "1f29de31-5429-5dfc-ab27-01779fa16704"
+            },
+            {
+              "content": "Do not mechanically split connected thoughts into separate short sentences when doing so destroys the intended reading rhythm.",
+              "content_digest": "754be36b29f7b647390c9308fb7a1cfd9e3228ab0f875c8d53e01febbbb3fd8c",
+              "position": 5,
+              "uid": "1d181223-f750-57d2-97a5-b79f276a589f"
+            },
+            {
+              "content": "Preserve a longer sentence when its clauses form one continuous movement that is easier to follow together than apart.",
+              "content_digest": "074e374f77a4fa6f559e3d69746ab3c706d2b1f3d2e4b98a21e8d1e4d59ef087",
+              "position": 6,
+              "uid": "a5ce5f9f-8852-5080-ae35-21abcf4a0973"
+            },
+            {
+              "content": "The user understands that short sentences are easier to scan but feels that uniformly segmented prose loses its reading rhythm.",
+              "content_digest": "acf7ca20f09995c87c51434dc2ff489efc886ada5b2282dc4bc4014befd8fdc0",
+              "position": 7,
+              "uid": "888ce8af-a36e-5e74-9a0c-604aac48d3b7"
+            },
+            {
+              "content": "Write procedural sentences so their opening phrase can be reused as a checklist item without changing the step's meaning.",
+              "content_digest": "7fd5b55fc09e74df05628f1c61bd543b39b906847b86e7f09337a67b47553156",
+              "position": 8,
+              "uid": "ddf40413-3274-5662-ba5e-d6cae2a1e546"
+            },
+            {
+              "content": "The user should choose “I” as an individual author or “we” for a named team and should not mix them when describing the same responsible party.",
+              "content_digest": "951763104930e99be0182b59dbaa6d7d7a20fd23fe968e39a15bd0798a1bd1b7",
+              "position": 9,
+              "uid": "6b7aaddf-5bbd-5015-811d-9f4d7a4b4ad1"
+            },
+            {
+              "content": "Action-first procedural sentences can be reordered or copied into a checklist more easily because their subject is the step rather than the proposal author.",
+              "content_digest": "397e3c0b9262e13d94969669930081ac76d4967adec4c5fd1f681869b613bc36",
+              "position": 10,
+              "uid": "89c2ce30-d6aa-5762-bf17-c697caac68e4"
+            },
+            {
+              "content": "The user can explain whether an em dash marks an intentional interruption or contrast rather than using it decoratively.",
+              "content_digest": "ec27bb0d2ba0656602348660944cb483789dfaec189d6e32ad6145c8e17f81b2",
+              "position": 11,
+              "uid": "9f1b647a-bd2b-50df-8141-5b8c142c0fa5"
+            },
+            {
+              "content": "An em dash creates a stronger interruption than a comma and can make a deliberate contrast easier to hear in the sentence.",
+              "content_digest": "aa3c3cdb31d26aeeb33b047a22860bf1dbe0819e9cc93f03da112b04367b844e",
+              "position": 12,
+              "uid": "49a42872-adcc-5bf8-9029-1d134cac6267"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "590ebd2e-e466-4938-ad8d-02579d871799"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The reference frame governs HCI contribution framing, participant burdens, and formative-evaluation claims, while the compared frame governs prose mechanics, procedural phrasing, evidentiary modality, and authorial voice. These are independently useful policies; no supplied claims address the same operational decision closely enough for a cross-frame relation.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2c62145b-0df5-4288-aff1-9dbd502a4f44",
+              "memory_uid": "4a1de8df-6f03-5a3d-bbfa-7c1144d2ec5c"
+            },
+            {
+              "frame_uid": "2c62145b-0df5-4288-aff1-9dbd502a4f44",
+              "memory_uid": "a42891a1-b674-5747-a77c-43699b0b9723"
+            }
+          ],
+          "reason": "The policy and its reviewer-centered rationale form one reference-only claim about contribution count.",
+          "status": "RESOLVED",
+          "summary": "Primary HCI contributions should be limited to two so reviewers can identify them clearly.",
+          "uid": "ebdba95c-f8e8-55c4-ad02-bf599fecc87e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2c62145b-0df5-4288-aff1-9dbd502a4f44",
+              "memory_uid": "b5b6a901-9047-5482-a0e1-d29e5f7171e8"
+            }
+          ],
+          "reason": "This is an independent reference-only formatting requirement for presenting contributions.",
+          "status": "RESOLVED",
+          "summary": "Each design or empirical contribution should be named and stated in one sentence.",
+          "uid": "dacd2b7e-d977-56f5-abf0-bbbf414dda3c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2c62145b-0df5-4288-aff1-9dbd502a4f44",
+              "memory_uid": "e89de514-48a5-5e9b-96ca-f194c0ed79ab"
+            },
+            {
+              "frame_uid": "2c62145b-0df5-4288-aff1-9dbd502a4f44",
+              "memory_uid": "f7025cbb-4005-53c6-9031-e33f04a86b92"
+            }
+          ],
+          "reason": "The memories split one reference-only disclosure policy into two coordinated burden dimensions.",
+          "status": "RESOLVED",
+          "summary": "Community-participant study descriptions should emphasize the time and travel burdens of participation.",
+          "uid": "311bd363-7ac1-5bbc-aa7a-8090647519ea"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2c62145b-0df5-4288-aff1-9dbd502a4f44",
+              "memory_uid": "9d7169d5-058f-5f7c-b1ac-30cabd8ba02e"
+            }
+          ],
+          "reason": "This is an independent reference-only policy about what formative work should foreground.",
+          "status": "RESOLVED",
+          "summary": "Formative-evaluation accounts should emphasize design decisions subject to change rather than polished product demonstrations.",
+          "uid": "7bd58a99-0c0b-5533-942b-f778c57bdce5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2c62145b-0df5-4288-aff1-9dbd502a4f44",
+              "memory_uid": "f8931b4e-9656-548d-84a1-f2f2c3eb47b1"
+            }
+          ],
+          "reason": "This is an independent reference-only policy about the level at which a contribution should be claimed.",
+          "status": "RESOLVED",
+          "summary": "Transferable design principles, rather than a particular prototype’s performance, should be presented as the primary contribution.",
+          "uid": "19fbd8a5-882d-5401-b55a-a26df11f85fb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2c62145b-0df5-4288-aff1-9dbd502a4f44",
+              "memory_uid": "9bf9e735-7598-5977-abe2-87b2c9c38a24"
+            }
+          ],
+          "reason": "This is an independent reference-only constraint on conclusions drawn from formative evaluation.",
+          "status": "RESOLVED",
+          "summary": "Formative evaluation should support later modification rather than definitive claims that one design alternative is superior.",
+          "uid": "030960d6-7e8d-5268-aba5-00121a2b378e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "590ebd2e-e466-4938-ad8d-02579d871799",
+              "memory_uid": "9bd2a9da-9720-5001-b958-f7a2a2658f87"
+            },
+            {
+              "frame_uid": "590ebd2e-e466-4938-ad8d-02579d871799",
+              "memory_uid": "9f1b647a-bd2b-50df-8141-5b8c142c0fa5"
+            },
+            {
+              "frame_uid": "590ebd2e-e466-4938-ad8d-02579d871799",
+              "memory_uid": "49a42872-adcc-5bf8-9029-1d134cac6267"
+            }
+          ],
+          "reason": "The compared-only memories state one punctuation rule together with its interpretive test and rationale.",
+          "status": "RESOLVED",
+          "summary": "Em dashes should mark intentional interruption or sharp contrast, reflecting their stronger break, rather than serve as decoration.",
+          "uid": "e057b6ab-c61e-5ad2-bb8e-103a6521a9d5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "590ebd2e-e466-4938-ad8d-02579d871799",
+              "memory_uid": "e3e20261-e03c-52fb-be9e-04f5f9b1294d"
+            },
+            {
+              "frame_uid": "590ebd2e-e466-4938-ad8d-02579d871799",
+              "memory_uid": "1f29de31-5429-5dfc-ab27-01779fa16704"
+            },
+            {
+              "frame_uid": "590ebd2e-e466-4938-ad8d-02579d871799",
+              "memory_uid": "ddf40413-3274-5662-ba5e-d6cae2a1e546"
+            },
+            {
+              "frame_uid": "590ebd2e-e466-4938-ad8d-02579d871799",
+              "memory_uid": "89c2ce30-d6aa-5762-bf17-c697caac68e4"
+            }
+          ],
+          "reason": "The compared-only memories restate one action-first procedural-writing policy and its reuse and comprehension benefits.",
+          "status": "RESOLVED",
+          "summary": "Procedural sentences should open with the action, condition, or output so sequences remain reconstructable and steps can be reused or reordered as checklist items.",
+          "uid": "4991a5e7-68b2-50b3-8877-ab2e220ef17a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "590ebd2e-e466-4938-ad8d-02579d871799",
+              "memory_uid": "8d8d0e8d-dad1-50b5-9438-049052748a6a"
+            },
+            {
+              "frame_uid": "590ebd2e-e466-4938-ad8d-02579d871799",
+              "memory_uid": "8c74ba87-822b-5ce2-9a3a-3adc02ab9744"
+            }
+          ],
+          "reason": "The compared-only memories provide complementary branches of one evidence-sensitive writing policy.",
+          "status": "RESOLVED",
+          "summary": "System behavior should be written as an observed state when field-confirmed and as a conditional plan when not yet confirmed.",
+          "uid": "c7f2347f-84f3-5666-bace-282e9d112f36"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "590ebd2e-e466-4938-ad8d-02579d871799",
+              "memory_uid": "1d181223-f750-57d2-97a5-b79f276a589f"
+            },
+            {
+              "frame_uid": "590ebd2e-e466-4938-ad8d-02579d871799",
+              "memory_uid": "a5ce5f9f-8852-5080-ae35-21abcf4a0973"
+            },
+            {
+              "frame_uid": "590ebd2e-e466-4938-ad8d-02579d871799",
+              "memory_uid": "888ce8af-a36e-5e74-9a0c-604aac48d3b7"
+            }
+          ],
+          "reason": "The compared-only memories express one preference against uniform mechanical segmentation and explain its readability tradeoff.",
+          "status": "RESOLVED",
+          "summary": "Connected clauses should remain in a longer sentence when splitting them would damage an otherwise clear continuous reading rhythm.",
+          "uid": "fc107735-3949-5f5c-96e8-85699dfa8b19"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "590ebd2e-e466-4938-ad8d-02579d871799",
+              "memory_uid": "6b7aaddf-5bbd-5015-811d-9f4d7a4b4ad1"
+            }
+          ],
+          "reason": "This is an independent compared-only policy for consistent authorial voice.",
+          "status": "RESOLVED",
+          "summary": "Descriptions of one responsible party should consistently use “I” for an individual author or “we” for a named team.",
+          "uid": "bf24ed98-9aba-5631-8bb1-368a8ecd347f"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame alone governs purposeful em dashes, action-first reusable procedures, field-sensitive behavioral claims, sentence rhythm, and consistent individual or team voice.",
+        "differences": "",
+        "reference_only": "The reference alone limits and formats HCI contributions, highlights community-participant burdens, and frames formative evaluation around transferable principles, revisable design decisions, and appropriately limited conclusions."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "afd0198c-75ef-44e0-81d9-eafc3932cc31"
+    },
+    "analysis_digest": "5cf51ed632b68db07c6b0ce3c72d1d5eac06e7cd3b57af651f2432698029794d",
+    "key": "c7854b638592d924bd0ce71419b8c1b2301edcd502d64a8c3b8f3184995f6377",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 37.63256449999972,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "c7854b638592d924bd0ce71419b8c1b2301edcd502d64a8c3b8f3184995f6377",
+  "created_at": "2026-08-13T18:19:02.417501Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/emphasis",
+  "pair_key": "e6287096368c9108485ded89ee2d5da102538dfc9f3173be349a5cdd6a969851",
+  "provider_seconds": 37.63256449999972,
+  "right": "task-2/advisor2/style",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

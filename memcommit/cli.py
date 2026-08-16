@@ -14,6 +14,7 @@ from memcommit.commands import (
     chunk,
     compare,
     contexts,
+    dedup,
     delete,
     diff,
     distill,
@@ -224,6 +225,10 @@ app.command(
     "resolve",
     help=operation_summary("resolve"),
 )(resolve.cmd)
+app.command(
+    "dedup",
+    help=operation_summary("dedup"),
+)(dedup.cmd)
 app.command(
     "checkpoint",
     help=operation_summary("checkpoint"),

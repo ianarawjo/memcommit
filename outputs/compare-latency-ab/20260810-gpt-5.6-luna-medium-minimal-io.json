@@ -1,0 +1,2244 @@
+{
+  "call": {
+    "condition": "MINIMAL_IO_DECISION_ONLY",
+    "contract_valid": true,
+    "elapsed_seconds": 68.70251716701023,
+    "error_type": null,
+    "failure_category": null,
+    "normalized_analysis": {
+      "analysis_digest": "c9ae0741b6310f0dd6813e7a2454453dc2b0cc4963d473d1986169a2f3e0ea06",
+      "issue_count": 0,
+      "kind_counts": {
+        "DISTINCT": 300
+      },
+      "relation_count": 300,
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000001"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000002"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000003"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000004"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000005"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000006"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000007"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000008"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000009"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000010"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000011"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000012"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000013"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000014"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000015"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000016"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000017"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000018"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000019"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000020"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000021"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000022"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000023"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000024"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000025"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000026"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000027"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000028"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000029"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000030"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000031"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000032"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000033"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000034"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000035"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000036"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000037"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000038"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000039"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000040"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000041"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000042"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000043"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000044"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000045"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000046"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000047"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000048"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000049"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000050"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000051"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000052"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000053"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000054"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000055"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000056"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000057"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000058"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000059"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000060"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000061"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000062"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000063"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000064"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000065"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000066"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000067"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000068"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000069"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000070"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000071"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000072"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000073"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000074"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000075"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000076"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000077"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000078"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000079"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000080"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000081"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000082"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000083"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000084"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000085"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000086"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000087"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000088"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000089"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000090"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000091"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000092"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000093"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000094"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000095"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000096"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000097"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000098"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000099"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000100"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000101"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000102"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000103"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000104"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000105"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000106"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000107"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000108"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000109"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000110"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000111"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000112"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000113"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000114"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000115"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000116"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000117"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000118"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000119"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000120"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000121"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000122"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000123"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000124"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000125"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000126"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000127"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000128"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000129"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000130"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000131"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000132"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000133"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000134"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000135"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000136"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000137"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000138"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000139"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000140"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000141"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000142"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000143"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000144"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000145"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000146"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000147"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000148"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000149"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000150"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000001"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000002"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000003"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000004"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000005"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000006"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000007"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000008"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000009"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000010"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000011"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000012"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000013"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000014"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000015"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000016"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000017"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000018"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000019"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000020"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000021"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000022"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000023"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000024"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000025"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000026"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000027"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000028"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000029"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000030"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000031"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000032"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000033"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000034"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000035"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000036"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000037"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000038"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000039"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000040"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000041"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000042"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000043"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000044"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000045"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000046"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000047"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000048"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000049"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000050"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000051"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000052"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000053"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000054"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000055"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000056"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000057"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000058"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000059"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000060"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000061"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000062"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000063"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000064"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000065"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000066"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000067"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000068"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000069"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000070"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000071"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000072"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000073"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000074"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000075"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000076"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000077"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000078"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000079"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000080"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000081"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000082"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000083"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000084"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000085"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000086"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000087"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000088"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000089"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000090"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000091"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000092"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000093"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000094"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000095"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000096"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000097"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000098"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000099"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000100"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000101"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000102"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000103"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000104"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000105"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000106"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000107"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000108"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000109"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000110"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000111"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000112"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000113"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000114"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000115"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000116"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000117"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000118"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000119"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000120"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000121"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000122"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000123"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000124"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000125"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000126"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000127"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000128"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000129"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000130"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000131"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000132"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000133"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000134"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000135"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000136"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000137"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000138"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000139"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000140"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000141"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000142"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000143"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000144"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000145"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000146"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000147"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000148"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000149"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000150"
+          ],
+          "status": "RESOLVED"
+        }
+      ],
+      "required_issue_count": 0
+    },
+    "operation": "compare_contexts_minimal_io_v1",
+    "prompt_chars": 36482,
+    "prompt_digest": "4bf7938087a37d6e29d3ca141b95d5bf55d1f456ca48b34e360ccbceb05d19d2",
+    "provider_run": {
+      "completion_tokens": null,
+      "identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-luna",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "operation": "compare_contexts_minimal_io_v1",
+      "prompt_tokens": null,
+      "upstream_model": "gpt-5.6-luna",
+      "upstream_provider": "openai-codex"
+    },
+    "provider_seconds": 68.68740570799855,
+    "raw_response": "{\"a\":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150],\"b\":[151,152,153,154,155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177,178,179,180,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,205,206,207,208,209,210,211,212,213,214,215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240,241,242,243,244,245,246,247,248,249,250,251,252,253,254,255,256,257,258,259,260,261,262,263,264,265,266,267,268,269,270,271,272,273,274,275,276,277,278,279,280,281,282,283,284,285,286,287,288,289,290,291,292,293,294,295,296,297,298,299,300],\"k\":[\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\"]}",
+    "response_bytes": 2311,
+    "response_chars": 2311,
+    "response_digest": "0586035c214875374ce3121ef142360a8dd612146c80ccae42187e3758248bc9",
+    "schema_chars": 350,
+    "schema_digest": "b6902ca01ebb36cfb41961fab6d64c9369e5959c5a1ef9260462d0eabb77576b",
+    "validation_error": null,
+    "validation_seconds": 0.015053708004415967
+  },
+  "comparisons": {
+    "BASELINE_EXHAUSTIVE": {
+      "candidate_relation_count": 300,
+      "exact_relation_signature_overlap": 27,
+      "pairwise_same_group": {
+        "f1": 0.0,
+        "false_negative": 686,
+        "false_positive": 0,
+        "precision": 1.0,
+        "recall": 0.0,
+        "true_positive": 0
+      },
+      "provider_speedup_ratio": 4.978284530713929,
+      "reference_is_not_ground_truth": true,
+      "reference_relation_count": 101,
+      "response_char_reduction": 0.958279173887926,
+      "source_count": 300,
+      "source_exact_group_and_kind_agreement": 0.09,
+      "source_kind_agreement": 0.16
+    },
+    "COMPACT_DECISION_VECTOR": {
+      "candidate_relation_count": 300,
+      "exact_relation_signature_overlap": 27,
+      "pairwise_same_group": {
+        "f1": 0.0,
+        "false_negative": 594,
+        "false_positive": 0,
+        "precision": 1.0,
+        "recall": 0.0,
+        "true_positive": 0
+      },
+      "provider_speedup_ratio": 2.4756443447999987,
+      "reference_is_not_ground_truth": true,
+      "reference_relation_count": 105,
+      "response_char_reduction": 0.7952148870181657,
+      "source_count": 300,
+      "source_exact_group_and_kind_agreement": 0.09,
+      "source_kind_agreement": 0.14666666666666667
+    }
+  },
+  "corpus": {
+    "all_content_preserved_in_order": true,
+    "compared_count": 150,
+    "content_sequence_digest": "2d1ec84afa2f73069cdeaf7cd08fc872d7fca2c1d0239d087ae809ee2074515a",
+    "fixture": "task2-advisor1-vs-task2-advisor2",
+    "language": "en",
+    "minimal_payload_chars": 35005,
+    "minimal_payload_digest": "701e90b395303c69d4f55be4f76afe98ea24ab13e93878f5f1b1949d6405d340",
+    "reference_count": 150,
+    "source_count": 300
+  },
+  "experiment": {
+    "calls": 1,
+    "changed_from_compact_ab": [
+      "CONTENT_ONLY_POSITIONAL_INPUT",
+      "ONE_LETTER_KIND_VECTOR",
+      "NO_PROVIDER_NOTES",
+      "NO_PROVIDER_ISSUES"
+    ],
+    "condition": "MINIMAL_IO_DECISION_ONLY",
+    "host_generated_projection": [
+      "status",
+      "relation_uid",
+      "members",
+      "summary",
+      "reason",
+      "overview",
+      "category_reports",
+      "unresolved_review_marker"
+    ],
+    "production_behavior_changed": false,
+    "prompt_version": 1
+  },
+  "kind": "memcommit.semantic-eval.compare-minimal-io-v1",
+  "provider": {
+    "endpoint": null,
+    "model": "gpt-5.6-luna",
+    "model_digest": null,
+    "provider": "codex_chatgpt",
+    "reasoning_effort": "medium",
+    "runtime": "codex-cli"
+  },
+  "reference_ledger": {
+    "digest": "db71b006236dd9c15f2c1aa02626e8dd190a54364c6033c59c78f32dc6feaa8e",
+    "kind": "memcommit.semantic-eval.compare-latency-ab-v1",
+    "run_id": "20260810T195758565018Z-2ce209de"
+  },
+  "run_id": "20260811T002523160965Z-c78014bd",
+  "schema_version": 1,
+  "started_at": "2026-08-11T00:25:23.160965Z",
+  "status": "VALID",
+  "timing": {
+    "campaign_seconds": 68.70251716701023,
+    "provider_connection_seconds": 0.03516170800139662,
+    "provider_seconds": 68.68740570799855,
+    "total_seconds": 68.73767887501162
+  }
+}

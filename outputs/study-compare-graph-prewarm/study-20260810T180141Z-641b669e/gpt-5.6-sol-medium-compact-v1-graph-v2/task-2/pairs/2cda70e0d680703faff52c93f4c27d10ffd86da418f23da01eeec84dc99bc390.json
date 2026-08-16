@@ -1,0 +1,218 @@
+{
+  "coverage": {
+    "expected": 17,
+    "observed": 17
+  },
+  "created_at": "2026-08-11T00:22:30.081132Z",
+  "description_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+  "issues": [],
+  "kind": "STUDY_COMPARE_GRAPH_PAIR",
+  "left": {
+    "context_digest": "d216a114524e2b755fff42b8577d5027d3e528aed50c5f588cebf57767bb7fc8",
+    "context_uid": "d2f78b99-5dcf-5876-89a9-1058bceca333",
+    "memory_count": 14,
+    "name": "task-2/advisor1/methods"
+  },
+  "method": "COMPACT_DECISION_VECTOR_V1",
+  "operation": "COMPARE",
+  "pair_key": "2cda70e0d680703faff52c93f4c27d10ffd86da418f23da01eeec84dc99bc390",
+  "provider": {
+    "condition": "COMPACT_DECISION_VECTOR",
+    "contract_valid": true,
+    "elapsed_seconds": 29.813675208002678,
+    "error_type": null,
+    "failure_category": null,
+    "operation": "compare_contexts_compact_ab_v1",
+    "prompt_chars": 7637,
+    "provider_calls": 1,
+    "provider_run": {
+      "completion_tokens": null,
+      "identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "operation": "compare_contexts_compact_ab_v1",
+      "prompt_tokens": null,
+      "upstream_model": "gpt-5.6-sol",
+      "upstream_provider": "openai-codex"
+    },
+    "provider_seconds": 29.812237499994808,
+    "response_bytes": 596,
+    "response_chars": 596,
+    "schema_chars": 1380,
+    "validation_error": null,
+    "validation_seconds": 0.0014145830064080656
+  },
+  "relations": [
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "c8bcefee-c64a-5a1f-911c-502cc4522701",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "881bc037-c099-50e4-b7e0-d38fba5146c9",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000001",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "8747b27e-6c2b-5498-9eac-c403e26101a6",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000002",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Preregistered-plan deviation records and timestamped deployment change logs govern different explicit study phases and preserve different metadata requirements.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "c3ad4ad8-4c5c-54c5-8d65-2dae15fa69a0",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "cc72ad54-4cf3-56cd-9119-46776f5b2184",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000003",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "df53a41c-2fbf-532a-a5b0-560a196bf5cb",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "91db3bd1-4417-5db6-b7a6-3e79c87ebe88",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "0ecc319a-ae60-5510-883d-52e613138164",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "a7c3a123-3f05-52e0-b33e-c450d1a070ac",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000004",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "24d49198-fd7b-5810-bc56-1910a796f76e",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000005",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "2f367cf3-50c5-59bc-972e-6173e56343ac",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000006",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "49746579-92d7-51ea-b158-7d770443d101",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000007",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "20d116ab-f9cc-5f61-808b-8555da09d707",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000008",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "9a969676-6093-5fac-bda8-92ebdac70c37",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000009",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "c4dfdb65-e673-52c0-a40c-e909d6014e00",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000010",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "40f11374-d91b-546a-9e93-fcf98a0fde98",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "75f22b45-fb1b-568c-bb05-080fdacdcab2",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000011",
+      "status": "RESOLVED"
+    }
+  ],
+  "right": {
+    "context_digest": "bb54539faeedf2db9ada09643c11270aabf235d8e3e6df98500f90f9b82aed49",
+    "context_uid": "5f2f3c0f-4cb1-5151-b381-847df75b6457",
+    "memory_count": 3,
+    "name": "task-2/advisor2/reproducibility"
+  },
+  "schema_version": 1,
+  "semantic_content_in_participant_report": false,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

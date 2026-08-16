@@ -1,0 +1,284 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:17:45.112629+00:00",
+      "frames": [
+        {
+          "context_digest": "52dc61895a6d116135c474d4828efde944579b3a5949b6d64c07dd9853f60801",
+          "context_name": "task-2/advisor1/emphasis",
+          "context_uid": "6f253a9e-f504-53bf-a1d1-de2c4532171e",
+          "memories": [
+            {
+              "content": "Do not exceed two primary HCI contributions.",
+              "content_digest": "c605e418506d380237fb8ce4723bcc2fedebcd5da0d8dd78ef813e21aaf71a7a",
+              "position": 0,
+              "uid": "4a1de8df-6f03-5a3d-bbfa-7c1144d2ec5c"
+            },
+            {
+              "content": "Name each design or empirical contribution and present it in a single sentence.",
+              "content_digest": "286e33467b65e080f192172ae85d481a89c8e1b2d73e1089772eab30e0ae48fa",
+              "position": 1,
+              "uid": "b5b6a901-9047-5482-a0e1-d29e5f7171e8"
+            },
+            {
+              "content": "In studies recruiting community participants, emphasize the time burden associated with participation.",
+              "content_digest": "67a881933729e29cc0ce33f61f50af810f6f12ab5aa9598d453cf3a959a5977f",
+              "position": 2,
+              "uid": "e89de514-48a5-5e9b-96ca-f194c0ed79ab"
+            },
+            {
+              "content": "In studies recruiting community participants, emphasize the travel burden associated with participation.",
+              "content_digest": "3c4e20244bb88626ef1d2ebc89774e29ac85a9ce774a3faaa726131059b8ae33",
+              "position": 3,
+              "uid": "f7025cbb-4005-53c6-9031-e33f04a86b92"
+            },
+            {
+              "content": "HCI reviewers find it difficult to identify primary contributions when named design or empirical contributions exceed two.",
+              "content_digest": "70a2dccd85ce8ca18db239926980dfe13a20b90a9dffa6acae73e5034fce1fbc",
+              "position": 4,
+              "uid": "a42891a1-b674-5747-a77c-43699b0b9723"
+            },
+            {
+              "content": "Emphasize the core design decisions that formative evaluation will change rather than a polished product demonstration.",
+              "content_digest": "be5cad46c349a7c4b538f1a947d979ec25b0f6a34494e4d3a7bb9550508766d4",
+              "position": 5,
+              "uid": "9d7169d5-058f-5f7c-b1ac-30cabd8ba02e"
+            },
+            {
+              "content": "Emphasize design principles transferable to other similar interactions as the primary contribution, rather than the performance of a specific prototype.",
+              "content_digest": "a39c447e1b61b2204233800bafd380163fb5492ddd25cb730bbc6c6a95114e56",
+              "position": 6,
+              "uid": "f8931b4e-9656-548d-84a1-f2f2c3eb47b1"
+            },
+            {
+              "content": "Formative evaluation creates grounds for modification in subsequent iterations rather than definitively determining the superiority of design alternatives.",
+              "content_digest": "0cdd894b41de667b621d6c385d3373c799f4fea53898f65d324c26e86a1c8807",
+              "position": 7,
+              "uid": "9bf9e735-7598-5977-abe2-87b2c9c38a24"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "471e43c9-dbed-4535-accc-24a198ec5a1f"
+        },
+        {
+          "context_digest": "673626cf0c3650052d63b04173d43516860e2035d7038878998898bc5bebb2e3",
+          "context_name": "task-2/advisor2/evaluation",
+          "context_uid": "6e9f8ad5-a43d-5dfd-99a3-604f2757da0d",
+          "memories": [
+            {
+              "content": "Specify a single representative measure that will drive operational decisions to maintain, modify, or discontinue the deployed design.",
+              "content_digest": "dd9abb7bbbdf6846921a984789426b27a45df60ce38408422b6b0774835b44f8",
+              "position": 0,
+              "uid": "f27576c7-6f53-5412-901c-19df7e1d5e2e"
+            },
+            {
+              "content": "The HCI review panel verifies whether operational decisions can be made based on the declared primary measure.",
+              "content_digest": "1d88ce414bdbfcf9565c712f8f0d72378569d723c0c5b5c6007dc18a96f6378f",
+              "position": 1,
+              "uid": "8608bdf3-49d7-54d0-a2fb-c883c24e40ef"
+            },
+            {
+              "content": "Establish decision thresholds indicating at what levels key metrics trigger maintaining, modifying, or discontinuing the design.",
+              "content_digest": "866bad632421bfd3487fba69b855ccb36aeb9e31c6208b339db22301bdd3fc28",
+              "position": 2,
+              "uid": "b06bb706-f911-5767-8e27-b64c74d0e592"
+            },
+            {
+              "content": "Evaluate whether reducing workload for one role creates new tasks for other roles through the proposed design changes.",
+              "content_digest": "6b38b84cdc2a78f61f3163cccd787dec39167596f4f720788ec4c930f698fa9f",
+              "position": 3,
+              "uid": "473ec6e8-29f0-5c83-b36d-b7d32eeb25a3"
+            },
+            {
+              "content": "Distinguish usability from organizational adoption intent as separate evaluation outcomes.",
+              "content_digest": "7328bf54063078377068871ee3970709d9a8763204c2c3a08321e025e028868c",
+              "position": 4,
+              "uid": "935cf79f-3e67-567d-ab55-35e8fad7eb37"
+            },
+            {
+              "content": "Implementation fidelity indicates whether planned features and operational procedures were delivered in the field according to intended specifications.",
+              "content_digest": "b04d0bc0590dd77d3bc0bde581481992d57ad48c14517a2a1d63f996e51290b2",
+              "position": 5,
+              "uid": "bea0e97f-1217-507b-87a7-09ce85bae9fe"
+            },
+            {
+              "content": "Initial evaluations and long-term operation do not share identical measurement conditions due to differences in system exposure duration and frequency of repeated use.",
+              "content_digest": "49e90b293b90d173b11d1bb89e85f688c55cb923c2a19eb2058a539388327715",
+              "position": 6,
+              "uid": "dbe435ff-fe32-54fe-a2e6-7b46694ce151"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "e1e871f2-a233-4d88-b324-534fd2e9dc3c"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address complementary parts of HCI evaluation. One focuses on concise, transferable contribution framing and community-participant burdens; the other adds field-operation measures and outcomes. Their evaluation guidance differs coherently by lifecycle stage, separating formative iteration from deployed operational decision-making.",
+      "relations": [
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "471e43c9-dbed-4535-accc-24a198ec5a1f",
+              "memory_uid": "9d7169d5-058f-5f7c-b1ac-30cabd8ba02e"
+            },
+            {
+              "frame_uid": "471e43c9-dbed-4535-accc-24a198ec5a1f",
+              "memory_uid": "9bf9e735-7598-5977-abe2-87b2c9c38a24"
+            },
+            {
+              "frame_uid": "e1e871f2-a233-4d88-b324-534fd2e9dc3c",
+              "memory_uid": "f27576c7-6f53-5412-901c-19df7e1d5e2e"
+            },
+            {
+              "frame_uid": "e1e871f2-a233-4d88-b324-534fd2e9dc3c",
+              "memory_uid": "8608bdf3-49d7-54d0-a2fb-c883c24e40ef"
+            },
+            {
+              "frame_uid": "e1e871f2-a233-4d88-b324-534fd2e9dc3c",
+              "memory_uid": "b06bb706-f911-5767-8e27-b64c74d0e592"
+            },
+            {
+              "frame_uid": "e1e871f2-a233-4d88-b324-534fd2e9dc3c",
+              "memory_uid": "dbe435ff-fe32-54fe-a2e6-7b46694ce151"
+            }
+          ],
+          "reason": "The formative condition limits conclusions to revisable design decisions rather than polished demonstrations or definitive superiority; the deployment condition calls for operational measures, reviewability, thresholds, and attention to changed exposure conditions.",
+          "status": "RESOLVED",
+          "summary": "Evaluation evidence governs different decisions by lifecycle stage: formative work guides design modification, while deployed or long-term evaluation supports operational continuation decisions through declared measures and thresholds.",
+          "uid": "5024de73-68b3-56f4-9824-db3b990d04b8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "471e43c9-dbed-4535-accc-24a198ec5a1f",
+              "memory_uid": "4a1de8df-6f03-5a3d-bbfa-7c1144d2ec5c"
+            },
+            {
+              "frame_uid": "471e43c9-dbed-4535-accc-24a198ec5a1f",
+              "memory_uid": "b5b6a901-9047-5482-a0e1-d29e5f7171e8"
+            },
+            {
+              "frame_uid": "471e43c9-dbed-4535-accc-24a198ec5a1f",
+              "memory_uid": "a42891a1-b674-5747-a77c-43699b0b9723"
+            }
+          ],
+          "reason": "These reference-side statements jointly specify and justify one contribution-presentation policy, with reviewer difficulty supplying the rationale for the limit.",
+          "status": "RESOLVED",
+          "summary": "Primary HCI contributions should be limited to two, explicitly named, and presented individually in single sentences so reviewers can identify them.",
+          "uid": "aff1e046-6fbf-58a4-8d2b-0f8cc0d5460c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "471e43c9-dbed-4535-accc-24a198ec5a1f",
+              "memory_uid": "e89de514-48a5-5e9b-96ca-f194c0ed79ab"
+            },
+            {
+              "frame_uid": "471e43c9-dbed-4535-accc-24a198ec5a1f",
+              "memory_uid": "f7025cbb-4005-53c6-9031-e33f04a86b92"
+            }
+          ],
+          "reason": "The reference-side statements split one participant-burden disclosure claim into its time and travel components.",
+          "status": "RESOLVED",
+          "summary": "Community-participant studies should emphasize both the time and travel burdens imposed by participation.",
+          "uid": "b0ee8214-0389-5ef1-9b84-91bc56f9d74f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "471e43c9-dbed-4535-accc-24a198ec5a1f",
+              "memory_uid": "f8931b4e-9656-548d-84a1-f2f2c3eb47b1"
+            }
+          ],
+          "reason": "This is an independently useful reference-side claim about the proper level of generality for a design contribution.",
+          "status": "RESOLVED",
+          "summary": "Transferable design principles, rather than the performance of a particular prototype, should be presented as the primary contribution.",
+          "uid": "89ee5743-e48a-5cb0-b94d-b1c262333c47"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e1e871f2-a233-4d88-b324-534fd2e9dc3c",
+              "memory_uid": "473ec6e8-29f0-5c83-b36d-b7d32eeb25a3"
+            }
+          ],
+          "reason": "This compared-side claim independently addresses redistribution of work across organizational roles.",
+          "status": "RESOLVED",
+          "summary": "Evaluation should test whether workload reductions for one role create additional tasks for other roles.",
+          "uid": "bed1e777-1f83-5a3e-904a-fd8d8ea89a12"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e1e871f2-a233-4d88-b324-534fd2e9dc3c",
+              "memory_uid": "935cf79f-3e67-567d-ab55-35e8fad7eb37"
+            }
+          ],
+          "reason": "This compared-side claim independently distinguishes two outcome constructs that could otherwise be conflated.",
+          "status": "RESOLVED",
+          "summary": "Usability and organizational adoption intent should be treated as separate evaluation outcomes.",
+          "uid": "f1af3053-500f-5d58-99ba-e897b3ed7309"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e1e871f2-a233-4d88-b324-534fd2e9dc3c",
+              "memory_uid": "bea0e97f-1217-507b-87a7-09ce85bae9fe"
+            }
+          ],
+          "reason": "This compared-side claim independently defines a field-delivery evaluation construct.",
+          "status": "RESOLVED",
+          "summary": "Implementation fidelity indicates whether planned features and procedures were delivered in the field as specified.",
+          "uid": "0b42b9f9-665d-5481-b4fc-a4c4ca347891"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame uniquely covers cross-role workload transfer, usability versus adoption intent, and implementation fidelity.",
+        "differences": "Formative evaluation supports design revision without definitive comparative claims, whereas deployed and long-term evaluation uses declared measures and thresholds for operational decisions under different exposure conditions.",
+        "reference_only": "The reference uniquely covers contribution limits and presentation, participant time and travel burdens, and transferable design principles."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "af3525cd-aabb-4212-9fe0-5e5a804af0ba"
+    },
+    "analysis_digest": "8e3e096c7406fde898a4e9dba22c85f8fc715f014e54c096c7f6b3d9a465b7c3",
+    "key": "27601ad4d41d420379a3f1e5f9541fdab2d0a95b0de6b59f8af138253f922100",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 38.5963108750002,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "27601ad4d41d420379a3f1e5f9541fdab2d0a95b0de6b59f8af138253f922100",
+  "created_at": "2026-08-13T18:18:23.708543Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/emphasis",
+  "pair_key": "61aeecef965fbbb65d98da05d3af205b1e064eaea691f02f2d168d7f15a79f4a",
+  "provider_seconds": 38.5963108750002,
+  "right": "task-2/advisor2/evaluation",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

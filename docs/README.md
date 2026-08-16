@@ -144,6 +144,10 @@ considered sufficient design history.
   define one Store-free operation-discovery query shared by plain/TUI Help,
   public Python, agent, and MCP projections while keeping CLI syntax and layout
   interface-owned.
+- [`switch-application-boundary-matrix.md`](switch-application-boundary-matrix.md)
+  records the typed locator/READ/current-CAS use case, neutral Context picker,
+  independent Switch TUI adapter, and Ground's process-local direct-picker
+  reuse without sharing its locator-only recommendation policy.
 - [`tui-component-architecture-design-rationale.md`](tui-component-architecture-design-rationale.md)
   records the interface-owned frame, focus, scrollable-pane, and Viewer
   hierarchy, the no-facade consumer migration, Summarize routing contract,
@@ -217,6 +221,10 @@ considered sufficient design history.
   defines public Resolve's whole-frame Fit repair, grounded effect generation,
   independent verification, Pareto minimum-change choices, Grant capability
   intersection, exact replay, and one-checkpoint Apply boundary.
+- [`dedup-design-rationale.md`](dedup-design-rationale.md) defines the typed
+  confirmed-finding batch, provider-free connected components, unchanged
+  existing-survivor choices, Grant-aware deletion, reference blocking, shared
+  Resolution Session projection, exact replay, and one-checkpoint Apply.
 - [`meld-session-lifecycle-design-rationale.md`](meld-session-lifecycle-design-rationale.md)
   defines Meld's open-version-mutate contract, stale-before-provider boundary,
   exact Apply retry reconstruction, and Python/agent parity without merging its

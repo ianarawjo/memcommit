@@ -1,0 +1,383 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:26:35.007684+00:00",
+      "frames": [
+        {
+          "context_digest": "130876ecc1e3921197d330f5ad8493b927360f3505da3eff8df01d4f595a4934",
+          "context_name": "task-2/advisor1/structure",
+          "context_uid": "0ff7abfd-58d3-58c2-b42a-31dca38cb7bd",
+          "memories": [
+            {
+              "content": "Complete the problem framing within the first two sentences so the reader reaches the proposal's central issue before any supporting background.",
+              "content_digest": "4096d07c1d883f8ba3973fd247207f8e86964ff2172e8580c81cb53e64772a6c",
+              "position": 0,
+              "uid": "44249c8a-e84f-5c20-a9cd-a55457e98511"
+            },
+            {
+              "content": "Use the first sentence for the concrete problem and the second for its consequence; reserve later sentences for the proposed response.",
+              "content_digest": "8d72b732a389d0c1bbb22112fa3ba6d8113c8b9d29d252d751c5a55cf7abc648",
+              "position": 1,
+              "uid": "21371c6c-c74f-5791-8f9b-6d099306bfb5"
+            },
+            {
+              "content": "Specify the user, context, and interaction to be explored in the primary HCI research question.",
+              "content_digest": "cc6e0085a02b6df0b572f7393a15292e7fd6c8204f78c66f50fd15190ef49dd0",
+              "position": 2,
+              "uid": "f69ea80c-0d56-5fe8-9d24-8793eefa6643"
+            },
+            {
+              "content": "Provide one compact visual summary when proposing an unfamiliar interaction procedure.",
+              "content_digest": "1e4299abe1691fbbfc826fc59d4276831d9a49abd3588820ba2f50311fd56d2c",
+              "position": 3,
+              "uid": "18ebdcbc-cf5a-5e6c-b2cd-b4cd07d7e59e"
+            },
+            {
+              "content": "Mark the conditions that move an unfamiliar interaction procedure from one step to the next in its visual summary.",
+              "content_digest": "9e7d7547cac76b4b6665ea585fedd7678682c7f9a4eadf129202ac2ea2c6b2b8",
+              "position": 4,
+              "uid": "5ab99a77-8836-50cf-8377-fdd23a208bc4"
+            },
+            {
+              "content": "Present the master’s research schedule as phased periods for exploration, design, prototyping, and user evaluation.",
+              "content_digest": "de00ac53757731455605eb2a3568fcbb4ea3660401a8e6aaf2cb9698795decec",
+              "position": 5,
+              "uid": "b9b7932b-85c1-5a14-80f7-0983dbf22380"
+            },
+            {
+              "content": "Link one reviewable deliverable to each phase of the master’s research.",
+              "content_digest": "cac76eb15b96d8fa32e3041fd5a067a3b5e2085fa832755b5740fe7cf2b57c17",
+              "position": 6,
+              "uid": "fc0a3a72-2da2-5843-be3a-a4ff2adf8fac"
+            },
+            {
+              "content": "Place the gap left by HCI-related research and the proposed design and empirical contributions in close proximity.",
+              "content_digest": "94c1e46dec54f1af7649582c49adbd9f998d3b82300cd234c58604e68619c6d9",
+              "position": 7,
+              "uid": "2f7092a7-2625-5d27-bd76-a13ee5809cc2"
+            },
+            {
+              "content": "Divide a two-page proposal with short descriptive subheadings so a reader can jump directly to the problem, proposed response, and next steps.",
+              "content_digest": "9a65c457d63f97379a188faea00bbc6dfc4ea30ad54aee1386f724a765e88e90",
+              "position": 8,
+              "uid": "a1857f07-36cd-5a6c-946d-a308e712e9eb"
+            },
+            {
+              "content": "Give the problem and proposed response their own descriptive subheadings instead of relying only on paragraph transitions.",
+              "content_digest": "3f5d0cf36befd2b1cb66ae8038719d3f8cd4472303e5173c48c1f96f67d9e969",
+              "position": 9,
+              "uid": "895b5ac9-1aa4-51d2-b89a-94e9fe5b869d"
+            },
+            {
+              "content": "Give the next steps and requested support their own descriptive subheading so they remain easy to find on a return visit.",
+              "content_digest": "008352fbd9cb0d40bd64afe1db74efb2a833adc4146924743b836dbd1941bd90",
+              "position": 10,
+              "uid": "3005f4c5-e17b-531b-b9bf-c9d69411c71f"
+            },
+            {
+              "content": "Place pilot observation or initial prototype results near sentences supporting feasibility claims.",
+              "content_digest": "60e9dcff7041a8df6d3471976e828c8a4713a24ec1b8fa6b6af77afd75b78cf8",
+              "position": 11,
+              "uid": "4913f63e-ceb9-587a-ade9-494fc8f28849"
+            },
+            {
+              "content": "Readers often decide what a proposal is about from its first two sentences before scanning the rest of the page.",
+              "content_digest": "0d8addaa334e762de0ef2ec08c78102bc005a6b81f0baf418c83be2a2981934b",
+              "position": 12,
+              "uid": "8ecaec22-7c25-5a39-a85b-56db9c3b607e"
+            },
+            {
+              "content": "When setup continues past the second sentence, readers who are skimming often retain the background topic but miss the exact problem being proposed.",
+              "content_digest": "5976e248ce36164afb87182216974b972f783352ae5b500398052387ee628710",
+              "position": 13,
+              "uid": "a4536b84-40f2-57db-84e4-024c97c9fecb"
+            },
+            {
+              "content": "Reuse the same short subheadings in discussion so a reader can return to a section without searching through the whole page.",
+              "content_digest": "276c3060f1479291f0d0dd7eba9899e91191555c65cfa60a48d28d1f5b877538",
+              "position": 14,
+              "uid": "2312cb6e-4f50-56f5-b725-ba5e45697a73"
+            },
+            {
+              "content": "Use visible subheadings as a completeness check: an empty or missing section makes an omitted part of the proposal immediately apparent.",
+              "content_digest": "2a68f989965d7f20482be421bc6145ea22d769c78e9c833a842694480dc097f5",
+              "position": 15,
+              "uid": "1d90043b-f010-5a14-9493-77f636c13975"
+            },
+            {
+              "content": "Readers often scan section labels before deciding which paragraph to read closely.",
+              "content_digest": "95e51e9236f82b7ace59c6a24359f398583142c762cc1dd607717a9f297e804a",
+              "position": 16,
+              "uid": "b77fe6ec-676b-5bb9-9119-45aefea2aa27"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "d43b2aac-ad96-4ad8-8887-0e7c4050be59"
+        },
+        {
+          "context_digest": "4371a72e6fb939731cb550ca5363a3b5210680482f84c18b36ba933f4454ecc1",
+          "context_name": "task-2/advisor2/expression",
+          "context_uid": "cf8e8baf-292e-57c3-8e2c-3f9b3d52f3d3",
+          "memories": [
+            {
+              "content": "Use a sequence table rather than a flow diagram when the procedure is likely to change repeatedly during drafting.",
+              "content_digest": "575bb4530af1e93b215ea57f0fd63e1e09136554da98aecf87288cc39ea9697c",
+              "position": 0,
+              "uid": "4264c20d-3e44-578d-866e-7787cc7b59e2"
+            },
+            {
+              "content": "The visual fidelity of a prototype and its level of connection to actual data and services may differ.",
+              "content_digest": "9478cb005a07ca7edfa924579b3d5221b1fa1143b5d8327369e7ee799b76aa9f",
+              "position": 1,
+              "uid": "70a8c3f0-0f6a-5881-abd6-29f52833b7bd"
+            },
+            {
+              "content": "Service flow diagrams indicate human-system transitions that are not revealed by individual screens alone.",
+              "content_digest": "5e3e18a38b1e62724d2ae0445549e214a219d205a80735bc6b4c0e643a96b8b3",
+              "position": 2,
+              "uid": "b410aa8d-db87-586b-a1cd-4af5767a9f7a"
+            },
+            {
+              "content": "HCI reviewers often scan system structure and service flow diagrams before the main text.",
+              "content_digest": "22a46440a6aeda0cb7d39cc6fedf6bbff6cac91232ec0cb163bf1fc17ff257d4",
+              "position": 3,
+              "uid": "a385fbb1-85b4-5132-bbc7-8fd8daedb715"
+            },
+            {
+              "content": "Give each step, actor, condition, and outcome a stable row in the sequence table.",
+              "content_digest": "2a073bf2ec4c5592ddc405d83cb438a5ed880699d3c157f310fb3dbff7851622",
+              "position": 4,
+              "uid": "22254f16-4628-5fd9-b1af-6e66dc2572b3"
+            },
+            {
+              "content": "Updating one row in a sequence table is usually faster than redrawing a branching diagram after a procedural change.",
+              "content_digest": "cf97dbf66018a6be1ee42dfc79ff8de44e8742db2b42c9d1ef70b3f252805a39",
+              "position": 5,
+              "uid": "32028269-5d43-5a65-b22b-9e570ceabfde"
+            },
+            {
+              "content": "Readers can check sequence tables step by step but may find the overall branching shape less immediate.",
+              "content_digest": "18b5de0cdd22ef1774151332afdbc408f9f591cf889e51271f81a372f74ef86d",
+              "position": 6,
+              "uid": "939ee3d0-b611-574a-a25b-82708394bd5e"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "750f3a78-0f6d-4713-8ce0-968672173811"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames converge on making unfamiliar procedures visually inspectable, while the compared frame adds a drafting-conditioned choice between sequence tables and diagrams. The reference alone covers proposal framing, research questions, schedules, contribution placement, headings, and feasibility evidence; the compared frame alone separates prototype fidelity from service integration.",
+      "relations": [
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "d43b2aac-ad96-4ad8-8887-0e7c4050be59",
+              "memory_uid": "18ebdcbc-cf5a-5e6c-b2cd-b4cd07d7e59e"
+            },
+            {
+              "frame_uid": "d43b2aac-ad96-4ad8-8887-0e7c4050be59",
+              "memory_uid": "5ab99a77-8836-50cf-8377-fdd23a208bc4"
+            },
+            {
+              "frame_uid": "750f3a78-0f6d-4713-8ce0-968672173811",
+              "memory_uid": "4264c20d-3e44-578d-866e-7787cc7b59e2"
+            },
+            {
+              "frame_uid": "750f3a78-0f6d-4713-8ce0-968672173811",
+              "memory_uid": "b410aa8d-db87-586b-a1cd-4af5767a9f7a"
+            },
+            {
+              "frame_uid": "750f3a78-0f6d-4713-8ce0-968672173811",
+              "memory_uid": "a385fbb1-85b4-5132-bbc7-8fd8daedb715"
+            },
+            {
+              "frame_uid": "750f3a78-0f6d-4713-8ce0-968672173811",
+              "memory_uid": "22254f16-4628-5fd9-b1af-6e66dc2572b3"
+            },
+            {
+              "frame_uid": "750f3a78-0f6d-4713-8ce0-968672173811",
+              "memory_uid": "32028269-5d43-5a65-b22b-9e570ceabfde"
+            },
+            {
+              "frame_uid": "750f3a78-0f6d-4713-8ce0-968672173811",
+              "memory_uid": "939ee3d0-b611-574a-a25b-82708394bd5e"
+            }
+          ],
+          "reason": "The claims govern the same representation decision. The compared frame supplies an explicit mutability condition for choosing a table, its required row contents and tradeoff, while retaining a complementary role for diagrams; this qualifies rather than contradicts the reference guidance.",
+          "status": "RESOLVED",
+          "summary": "Unfamiliar procedures should be visually summarized with transitions and conditions visible; when repeated drafting changes are likely, a stable-row sequence table favors easy updates, while service-flow diagrams better expose overall human-system transitions and attract early reviewer scanning.",
+          "uid": "6843bd88-8305-54e0-bba7-be8df9ac8604"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d43b2aac-ad96-4ad8-8887-0e7c4050be59",
+              "memory_uid": "44249c8a-e84f-5c20-a9cd-a55457e98511"
+            },
+            {
+              "frame_uid": "d43b2aac-ad96-4ad8-8887-0e7c4050be59",
+              "memory_uid": "21371c6c-c74f-5791-8f9b-6d099306bfb5"
+            },
+            {
+              "frame_uid": "d43b2aac-ad96-4ad8-8887-0e7c4050be59",
+              "memory_uid": "8ecaec22-7c25-5a39-a85b-56db9c3b607e"
+            },
+            {
+              "frame_uid": "d43b2aac-ad96-4ad8-8887-0e7c4050be59",
+              "memory_uid": "a4536b84-40f2-57db-84e4-024c97c9fecb"
+            }
+          ],
+          "reason": "These memories jointly express and motivate one reference-only rule for early proposal framing, with no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "State the concrete problem and its consequence within the opening two sentences, because readers often infer the proposal’s subject there and extended setup can obscure the exact problem.",
+          "uid": "3828f910-f64a-5699-ae6a-0df2c5269d99"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d43b2aac-ad96-4ad8-8887-0e7c4050be59",
+              "memory_uid": "f69ea80c-0d56-5fe8-9d24-8793eefa6643"
+            }
+          ],
+          "reason": "This is an independently useful reference-only requirement for research-question specificity.",
+          "status": "RESOLVED",
+          "summary": "The primary HCI research question should identify the user, context, and interaction under study.",
+          "uid": "1b58260e-2b01-50e6-a625-776733088f59"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d43b2aac-ad96-4ad8-8887-0e7c4050be59",
+              "memory_uid": "b9b7932b-85c1-5a14-80f7-0983dbf22380"
+            },
+            {
+              "frame_uid": "d43b2aac-ad96-4ad8-8887-0e7c4050be59",
+              "memory_uid": "fc0a3a72-2da2-5843-be3a-a4ff2adf8fac"
+            }
+          ],
+          "reason": "The two reference memories form one schedule-design prescription combining phased timing with phase-level outputs.",
+          "status": "RESOLVED",
+          "summary": "Organize the master’s research schedule into exploration, design, prototyping, and evaluation phases, each linked to a reviewable deliverable.",
+          "uid": "a6281fb0-0403-5af4-8037-93b4be776706"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d43b2aac-ad96-4ad8-8887-0e7c4050be59",
+              "memory_uid": "2f7092a7-2625-5d27-bd76-a13ee5809cc2"
+            }
+          ],
+          "reason": "This is an independent reference-only guidance claim about connecting the identified gap to the proposal’s contributions.",
+          "status": "RESOLVED",
+          "summary": "Place the HCI research gap close to the proposed design and empirical contributions.",
+          "uid": "9daf481f-95ea-5824-94d5-7c884fb71d49"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d43b2aac-ad96-4ad8-8887-0e7c4050be59",
+              "memory_uid": "a1857f07-36cd-5a6c-946d-a308e712e9eb"
+            },
+            {
+              "frame_uid": "d43b2aac-ad96-4ad8-8887-0e7c4050be59",
+              "memory_uid": "895b5ac9-1aa4-51d2-b89a-94e9fe5b869d"
+            },
+            {
+              "frame_uid": "d43b2aac-ad96-4ad8-8887-0e7c4050be59",
+              "memory_uid": "3005f4c5-e17b-531b-b9bf-c9d69411c71f"
+            },
+            {
+              "frame_uid": "d43b2aac-ad96-4ad8-8887-0e7c4050be59",
+              "memory_uid": "2312cb6e-4f50-56f5-b725-ba5e45697a73"
+            },
+            {
+              "frame_uid": "d43b2aac-ad96-4ad8-8887-0e7c4050be59",
+              "memory_uid": "1d90043b-f010-5a14-9493-77f636c13975"
+            },
+            {
+              "frame_uid": "d43b2aac-ad96-4ad8-8887-0e7c4050be59",
+              "memory_uid": "b77fe6ec-676b-5bb9-9119-45aefea2aa27"
+            }
+          ],
+          "reason": "These reference memories elaborate one underlying structural policy: visible section labels support navigation, return visits, and completeness checking in a short proposal.",
+          "status": "RESOLVED",
+          "summary": "Use short, descriptive, reusable subheadings for the problem, response, and next steps so readers can scan, revisit, and check the proposal for missing sections.",
+          "uid": "7ec59458-f648-56b7-984f-fbb00cd1fb2c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d43b2aac-ad96-4ad8-8887-0e7c4050be59",
+              "memory_uid": "4913f63e-ceb9-587a-ade9-494fc8f28849"
+            }
+          ],
+          "reason": "This is an independent reference-only rule for positioning evidence beside feasibility assertions.",
+          "status": "RESOLVED",
+          "summary": "Place pilot observations or initial prototype results near the feasibility claims they support.",
+          "uid": "b7b33690-f1d5-5caf-8921-260a9c6f14c3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "750f3a78-0f6d-4713-8ce0-968672173811",
+              "memory_uid": "70a8c3f0-0f6a-5881-abd6-29f52833b7bd"
+            }
+          ],
+          "reason": "This compared-only claim distinguishes two prototype dimensions and has no operational counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A prototype’s visual fidelity and its connection to real data and services can vary independently.",
+          "uid": "103aa972-9688-51f4-8bfe-42f373fb9583"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Prototype visual fidelity and connection to real data or services are independent dimensions.",
+        "differences": "Both favor inspectable procedure visuals; for frequently changing drafts, the compared frame specifies stable-row sequence tables, their update advantage and branching tradeoff, while preserving service-flow diagrams for transitions and reviewer scanning.",
+        "reference_only": "The reference uniquely addresses opening problem framing, research-question specificity, phased schedules and deliverables, gap–contribution proximity, navigable section headings, and nearby feasibility evidence."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "176eb9d4-2230-4ce2-9b68-c5f6faa26dd9"
+    },
+    "analysis_digest": "52b4f51b6a47250aa4172c211ace330419ea55d098c2dbfbc7b0d3216cdab4d3",
+    "key": "f57bd8df4ae8ea29089deae771793e3f0cbb882b3816bfd6d3feca332a9d9f52",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 55.41957037500106,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "f57bd8df4ae8ea29089deae771793e3f0cbb882b3816bfd6d3feca332a9d9f52",
+  "created_at": "2026-08-13T18:27:30.426610Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/structure",
+  "pair_key": "7151885ff0eab5eea1c0845ea8135c83ae6fa22409feca5540f765c2d0436b90",
+  "provider_seconds": 55.41957037500106,
+  "right": "task-2/advisor2/expression",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

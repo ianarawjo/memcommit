@@ -1,0 +1,458 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:22:56.082380+00:00",
+      "frames": [
+        {
+          "context_digest": "d216a114524e2b755fff42b8577d5027d3e528aed50c5f588cebf57767bb7fc8",
+          "context_name": "task-2/advisor1/methods",
+          "context_uid": "d2f78b99-5dcf-5876-89a9-1058bceca333",
+          "memories": [
+            {
+              "content": "Link each HCI research question directly to corresponding user data and analysis procedures.",
+              "content_digest": "21e2d5e7eb4ec06057a8405359656cd03a98f4ae67956016d98582af44bfb402",
+              "position": 0,
+              "uid": "c8bcefee-c64a-5a1f-911c-502cc4522701"
+            },
+            {
+              "content": "In preregistered studies, specify the conditions under which deviations from the plan are permissible.",
+              "content_digest": "0ecac6de4eb5e3eec39477c5a6324acb8a1bd6cefb17eacc2c73cdd53160b85f",
+              "position": 1,
+              "uid": "8747b27e-6c2b-5498-9eac-c403e26101a6"
+            },
+            {
+              "content": "In preregistered studies, specify how to record content that deviates from the plan.",
+              "content_digest": "821b3ad70335f24d96aeffd2260e3bc27bb6efd1108a68b00ecc5cb7e7adb242",
+              "position": 2,
+              "uid": "c3ad4ad8-4c5c-54c5-8d65-2dae15fa69a0"
+            },
+            {
+              "content": "Commit to one exact target number of participants so the schedule, workload, and budget can be checked against the same quantity.",
+              "content_digest": "7ff7f3d29fc21399565b4047d3f78e6415e1b51a9247139fc156ea7d4f6d2f13",
+              "position": 3,
+              "uid": "df53a41c-2fbf-532a-a5b0-560a196bf5cb"
+            },
+            {
+              "content": "Specify the interview protocols, recording devices, or log tools used to collect each type of user data.",
+              "content_digest": "0396cbcbfd6e96ef9fd2af507855c4b71eb3003a15fc79d240cd0b751b6b5788",
+              "position": 4,
+              "uid": "24d49198-fd7b-5810-bc56-1910a796f76e"
+            },
+            {
+              "content": "Specify whether each type of user data is collected before, during, or after the interaction.",
+              "content_digest": "80a3ff6e82631a044e8859709930b675163439d11564d1b59601bca0ee030fba",
+              "position": 5,
+              "uid": "2f367cf3-50c5-59bc-972e-6173e56343ac"
+            },
+            {
+              "content": "Readers cannot tell whether the schedule and budget agree when different sections imply different target counts.",
+              "content_digest": "9b5de55faa7e64cf1149ef1bb60cf990815e789e7d1c4a3c0e6297fbbd300aae",
+              "position": 6,
+              "uid": "91db3bd1-4417-5db6-b7a6-3e79c87ebe88"
+            },
+            {
+              "content": "In formative evaluation prototypes, implementation instability exists as an independent cause of task failure alongside design choices.",
+              "content_digest": "dab5f616c4354c0e9f381b0e860e5ec5ff1afc249a4ad427f194c559781b83a8",
+              "position": 7,
+              "uid": "49746579-92d7-51ea-b158-7d770443d101"
+            },
+            {
+              "content": "If a prototype safety signal occurs during formative evaluation, existing institutional safety procedures take precedence over planned data collection.",
+              "content_digest": "2f2768eb4fbce9367786ab13ca8a608e82104cee45200f4aa59854efcf2edc3e",
+              "position": 8,
+              "uid": "20d116ab-f9cc-5f61-808b-8555da09d707"
+            },
+            {
+              "content": "Reviewers judge answerability by tracing the path from each research question to the data and analysis.",
+              "content_digest": "0fac56a79481bdcd7b169c7e3d9ab8fbd0b4f76d33dfe9f4a2f703f80e84aea9",
+              "position": 9,
+              "uid": "881bc037-c099-50e4-b7e0-d38fba5146c9"
+            },
+            {
+              "content": "The author of this proposal tends to present implemented feature lists directly as design contributions.",
+              "content_digest": "6cf2a1292756154c2a0a045f1e4bd4889994faaa838f93e8a2b9c949957ed920",
+              "position": 10,
+              "uid": "9a969676-6093-5fac-bda8-92ebdac70c37"
+            },
+            {
+              "content": "Calculate the required sessions, facilitator hours, and participant payments from the same exact target rather than from separate rough estimates.",
+              "content_digest": "ea6c96c9e5e7d5db7bd2210fd484e715e35727bd1e6f7c2ea2a2c4c12e488f2a",
+              "position": 11,
+              "uid": "0ecc319a-ae60-5510-883d-52e613138164"
+            },
+            {
+              "content": "If recruitment falls below the exact target, state the shortfall explicitly and revise the affected schedule or deliverable.",
+              "content_digest": "bdf962f17a92886e7a5ec0003460dce9ed9c02d02473f66c6f6b4e97c0c304b9",
+              "position": 12,
+              "uid": "c4dfdb65-e673-52c0-a40c-e909d6014e00"
+            },
+            {
+              "content": "Do not use a wide range merely to postpone choosing the quantity that the rest of the proposal must support.",
+              "content_digest": "332385b05f91f97c398bc954b6fc9e62da182f7e42de6dd5691435df6922fd43",
+              "position": 13,
+              "uid": "a7c3a123-3f05-52e0-b33e-c450d1a070ac"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "8c8197b2-2fb0-48de-9b41-f03704b9e785"
+        },
+        {
+          "context_digest": "7842b257aa1d32e6e598b019791827a580a1864e19e05d9101413b11d5b0227d",
+          "context_name": "task-2/advisor2/style",
+          "context_uid": "f0ea0447-bfe6-503c-89da-e90f24af6e2d",
+          "memories": [
+            {
+              "content": "Use an em dash only for a deliberate interruption or sharp contrast; otherwise split the sentence or choose ordinary punctuation.",
+              "content_digest": "3c37a896774ebccbec1e4bb3ad4a4e61ece1bb4ae246226c93b1d78c651bee7b",
+              "position": 0,
+              "uid": "9bd2a9da-9720-5001-b958-f7a2a2658f87"
+            },
+            {
+              "content": "In procedural passages, begin each sentence with the action, condition, or output instead of repeating “we” so the steps remain easy to follow and reuse.",
+              "content_digest": "c61f6b8ae3612497403f306de2cbe4e6a25db285109e89f74d61439abf5fae30",
+              "position": 1,
+              "uid": "e3e20261-e03c-52fb-be9e-04f5f9b1294d"
+            },
+            {
+              "content": "Write system behaviors confirmed in the actual usage environment as observed states.",
+              "content_digest": "972e1f5ba9188f1a423c2b47782e1a3938749419e8c170fabc97e6dd4f86cab2",
+              "position": 2,
+              "uid": "8d8d0e8d-dad1-50b5-9438-049052748a6a"
+            },
+            {
+              "content": "Write system behaviors not yet confirmed in the field as conditional plans.",
+              "content_digest": "9b7f3fffb87af8004e9645b6494bd2b990a1f1bfb054ca0efecea2bfb74d850d",
+              "position": 3,
+              "uid": "8c74ba87-822b-5ce2-9a3a-3adc02ab9744"
+            },
+            {
+              "content": "Readers can reconstruct a sequence more accurately when each sentence begins with the action or condition rather than the author.",
+              "content_digest": "e6748d23d892cb074ac5259f3c733727746640973a5b62c0ed1b7c6a684e9db8",
+              "position": 4,
+              "uid": "1f29de31-5429-5dfc-ab27-01779fa16704"
+            },
+            {
+              "content": "Do not mechanically split connected thoughts into separate short sentences when doing so destroys the intended reading rhythm.",
+              "content_digest": "754be36b29f7b647390c9308fb7a1cfd9e3228ab0f875c8d53e01febbbb3fd8c",
+              "position": 5,
+              "uid": "1d181223-f750-57d2-97a5-b79f276a589f"
+            },
+            {
+              "content": "Preserve a longer sentence when its clauses form one continuous movement that is easier to follow together than apart.",
+              "content_digest": "074e374f77a4fa6f559e3d69746ab3c706d2b1f3d2e4b98a21e8d1e4d59ef087",
+              "position": 6,
+              "uid": "a5ce5f9f-8852-5080-ae35-21abcf4a0973"
+            },
+            {
+              "content": "The user understands that short sentences are easier to scan but feels that uniformly segmented prose loses its reading rhythm.",
+              "content_digest": "acf7ca20f09995c87c51434dc2ff489efc886ada5b2282dc4bc4014befd8fdc0",
+              "position": 7,
+              "uid": "888ce8af-a36e-5e74-9a0c-604aac48d3b7"
+            },
+            {
+              "content": "Write procedural sentences so their opening phrase can be reused as a checklist item without changing the step's meaning.",
+              "content_digest": "7fd5b55fc09e74df05628f1c61bd543b39b906847b86e7f09337a67b47553156",
+              "position": 8,
+              "uid": "ddf40413-3274-5662-ba5e-d6cae2a1e546"
+            },
+            {
+              "content": "The user should choose “I” as an individual author or “we” for a named team and should not mix them when describing the same responsible party.",
+              "content_digest": "951763104930e99be0182b59dbaa6d7d7a20fd23fe968e39a15bd0798a1bd1b7",
+              "position": 9,
+              "uid": "6b7aaddf-5bbd-5015-811d-9f4d7a4b4ad1"
+            },
+            {
+              "content": "Action-first procedural sentences can be reordered or copied into a checklist more easily because their subject is the step rather than the proposal author.",
+              "content_digest": "397e3c0b9262e13d94969669930081ac76d4967adec4c5fd1f681869b613bc36",
+              "position": 10,
+              "uid": "89c2ce30-d6aa-5762-bf17-c697caac68e4"
+            },
+            {
+              "content": "The user can explain whether an em dash marks an intentional interruption or contrast rather than using it decoratively.",
+              "content_digest": "ec27bb0d2ba0656602348660944cb483789dfaec189d6e32ad6145c8e17f81b2",
+              "position": 11,
+              "uid": "9f1b647a-bd2b-50df-8141-5b8c142c0fa5"
+            },
+            {
+              "content": "An em dash creates a stronger interruption than a comma and can make a deliberate contrast easier to hear in the sentence.",
+              "content_digest": "aa3c3cdb31d26aeeb33b047a22860bf1dbe0819e9cc93f03da112b04367b844e",
+              "position": 12,
+              "uid": "49a42872-adcc-5bf8-9029-1d134cac6267"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "afe36452-bbae-4694-a37c-82893b86e228"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate but internally coherent concerns: the reference focuses on HCI study design, evidence traceability, participant planning, prototype risk, and proposal habits, while the compared frame focuses on procedural prose, evidential phrasing, sentence rhythm, pronouns, and em-dash use. Neither side supplies a directly corresponding operational claim.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8c8197b2-2fb0-48de-9b41-f03704b9e785",
+              "memory_uid": "c8bcefee-c64a-5a1f-911c-502cc4522701"
+            },
+            {
+              "frame_uid": "8c8197b2-2fb0-48de-9b41-f03704b9e785",
+              "memory_uid": "881bc037-c099-50e4-b7e0-d38fba5146c9"
+            }
+          ],
+          "reason": "The reference memories state the traceability requirement and its reviewer-facing rationale; the compared frame has no corresponding research-design claim.",
+          "status": "RESOLVED",
+          "summary": "Each HCI research question should be traceable to the user data and analysis that make it answerable.",
+          "uid": "95176a79-7a4e-5911-af06-4a0764785f74"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8c8197b2-2fb0-48de-9b41-f03704b9e785",
+              "memory_uid": "8747b27e-6c2b-5498-9eac-c403e26101a6"
+            },
+            {
+              "frame_uid": "8c8197b2-2fb0-48de-9b41-f03704b9e785",
+              "memory_uid": "c3ad4ad8-4c5c-54c5-8d65-2dae15fa69a0"
+            }
+          ],
+          "reason": "Both reference memories specify complementary parts of one deviation-governance policy, which is absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Preregistered studies should define when plan deviations are permitted and how deviating content is recorded.",
+          "uid": "e780b86f-5b98-5d21-8233-fe9c91239b70"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8c8197b2-2fb0-48de-9b41-f03704b9e785",
+              "memory_uid": "df53a41c-2fbf-532a-a5b0-560a196bf5cb"
+            },
+            {
+              "frame_uid": "8c8197b2-2fb0-48de-9b41-f03704b9e785",
+              "memory_uid": "91db3bd1-4417-5db6-b7a6-3e79c87ebe88"
+            },
+            {
+              "frame_uid": "8c8197b2-2fb0-48de-9b41-f03704b9e785",
+              "memory_uid": "0ecc319a-ae60-5510-883d-52e613138164"
+            },
+            {
+              "frame_uid": "8c8197b2-2fb0-48de-9b41-f03704b9e785",
+              "memory_uid": "c4dfdb65-e673-52c0-a40c-e909d6014e00"
+            },
+            {
+              "frame_uid": "8c8197b2-2fb0-48de-9b41-f03704b9e785",
+              "memory_uid": "a7c3a123-3f05-52e0-b33e-c450d1a070ac"
+            }
+          ],
+          "reason": "These reference memories jointly reject inconsistent or deferred quantities and apply one target across dependent planning decisions; the compared frame does not address participant planning.",
+          "status": "RESOLVED",
+          "summary": "One exact participant target should govern scheduling, workload, payments, budgeting, and explicit handling of recruitment shortfalls.",
+          "uid": "1d2cafc5-0bfd-51d5-b61d-b92c4a7ccc60"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8c8197b2-2fb0-48de-9b41-f03704b9e785",
+              "memory_uid": "24d49198-fd7b-5810-bc56-1910a796f76e"
+            }
+          ],
+          "reason": "This is an independently useful reference-side requirement about collection mechanisms with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The collection instrument or protocol should be specified for each type of user data.",
+          "uid": "29a29f20-ef30-549b-8ead-4e623addf9ff"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8c8197b2-2fb0-48de-9b41-f03704b9e785",
+              "memory_uid": "2f367cf3-50c5-59bc-972e-6173e56343ac"
+            }
+          ],
+          "reason": "This is an independently useful reference-side requirement about collection timing with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The interaction-relative timing of collection should be specified for each type of user data.",
+          "uid": "3ea0411c-c620-587c-86a6-1abe29de7b59"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8c8197b2-2fb0-48de-9b41-f03704b9e785",
+              "memory_uid": "49746579-92d7-51ea-b158-7d770443d101"
+            }
+          ],
+          "reason": "The reference frame uniquely identifies an interpretation risk in prototype evaluation; the compared frame contains no evaluation-causality policy.",
+          "status": "RESOLVED",
+          "summary": "Formative evaluation should treat prototype implementation instability as a failure cause distinct from design choices.",
+          "uid": "b39cdcbf-a1de-5979-95ca-16268a8b44e1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8c8197b2-2fb0-48de-9b41-f03704b9e785",
+              "memory_uid": "20d116ab-f9cc-5f61-808b-8555da09d707"
+            }
+          ],
+          "reason": "This conditional safety-precedence rule appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "During formative evaluation, institutional safety procedures supersede planned data collection when a prototype safety signal occurs.",
+          "uid": "d9d61214-22b1-562b-9c45-a79883d99b3f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8c8197b2-2fb0-48de-9b41-f03704b9e785",
+              "memory_uid": "9a969676-6093-5fac-bda8-92ebdac70c37"
+            }
+          ],
+          "reason": "This author-specific diagnostic is independently useful and appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to present implemented feature lists as design contributions.",
+          "uid": "736bcb86-1c92-57e9-866a-aaac9da3663b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "afe36452-bbae-4694-a37c-82893b86e228",
+              "memory_uid": "9bd2a9da-9720-5001-b958-f7a2a2658f87"
+            },
+            {
+              "frame_uid": "afe36452-bbae-4694-a37c-82893b86e228",
+              "memory_uid": "9f1b647a-bd2b-50df-8141-5b8c142c0fa5"
+            },
+            {
+              "frame_uid": "afe36452-bbae-4694-a37c-82893b86e228",
+              "memory_uid": "49a42872-adcc-5bf8-9029-1d134cac6267"
+            }
+          ],
+          "reason": "The compared memories express one punctuation policy, its effect, and the user's ability to justify it; the reference frame has no punctuation claim.",
+          "status": "RESOLVED",
+          "summary": "Em dashes should mark deliberate interruption or sharp contrast, with their stronger rhetorical effect used intentionally rather than decoratively.",
+          "uid": "427c9d57-9322-5b6e-9ab6-1770d7cdf7d9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "afe36452-bbae-4694-a37c-82893b86e228",
+              "memory_uid": "e3e20261-e03c-52fb-be9e-04f5f9b1294d"
+            },
+            {
+              "frame_uid": "afe36452-bbae-4694-a37c-82893b86e228",
+              "memory_uid": "1f29de31-5429-5dfc-ab27-01779fa16704"
+            },
+            {
+              "frame_uid": "afe36452-bbae-4694-a37c-82893b86e228",
+              "memory_uid": "ddf40413-3274-5662-ba5e-d6cae2a1e546"
+            },
+            {
+              "frame_uid": "afe36452-bbae-4694-a37c-82893b86e228",
+              "memory_uid": "89c2ce30-d6aa-5762-bf17-c697caac68e4"
+            }
+          ],
+          "reason": "These compared memories state and justify one action-first procedural-writing policy; the reference frame does not address sentence construction.",
+          "status": "RESOLVED",
+          "summary": "Procedural sentences should open with the action, condition, or output so steps remain traceable, reusable, reorderable, and checklist-ready.",
+          "uid": "c5cc6cad-f286-53f2-a113-c482bb647dc2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "afe36452-bbae-4694-a37c-82893b86e228",
+              "memory_uid": "8d8d0e8d-dad1-50b5-9438-049052748a6a"
+            },
+            {
+              "frame_uid": "afe36452-bbae-4694-a37c-82893b86e228",
+              "memory_uid": "8c74ba87-822b-5ce2-9a3a-3adc02ab9744"
+            }
+          ],
+          "reason": "The compared memories divide system-behavior wording by explicit confirmation status; the reference frame has no matching evidential-language policy.",
+          "status": "RESOLVED",
+          "summary": "Confirmed field behavior should be written as observed state, while behavior not yet confirmed should be written as a conditional plan.",
+          "uid": "45950b01-24cc-5128-8d56-423225d42b4b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "afe36452-bbae-4694-a37c-82893b86e228",
+              "memory_uid": "1d181223-f750-57d2-97a5-b79f276a589f"
+            },
+            {
+              "frame_uid": "afe36452-bbae-4694-a37c-82893b86e228",
+              "memory_uid": "a5ce5f9f-8852-5080-ae35-21abcf4a0973"
+            },
+            {
+              "frame_uid": "afe36452-bbae-4694-a37c-82893b86e228",
+              "memory_uid": "888ce8af-a36e-5e74-9a0c-604aac48d3b7"
+            }
+          ],
+          "reason": "The compared memories combine the user's stated preference with a coherent sentence-length policy absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Connected clauses should remain together when mechanical segmentation would sacrifice a clearer continuous movement or the user's intended reading rhythm.",
+          "uid": "2bdee124-6519-5fd1-babc-7b7ab6c01326"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "afe36452-bbae-4694-a37c-82893b86e228",
+              "memory_uid": "6b7aaddf-5bbd-5015-811d-9f4d7a4b4ad1"
+            }
+          ],
+          "reason": "This independently useful voice-consistency rule appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Authorship pronouns should consistently use “I” for an individual or “we” for a named team representing the same responsible party.",
+          "uid": "979fbdc9-f11e-50c2-b2b0-f7d554394ef3"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only material addresses action-first procedures, checklist reuse, observed-versus-conditional claims, sentence rhythm, pronoun consistency, and deliberate em-dash usage.",
+        "differences": "",
+        "reference_only": "Reference-only material addresses research-question traceability, preregistration deviations, participant-target consistency, data-collection specification, prototype failure and safety, and a proposal-authoring tendency."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "1f32db8c-8b16-4fe3-8433-27a41b1dbdc0"
+    },
+    "analysis_digest": "0ac9cb35c68e935c8ede5d8e4e87c0ae0c813eca183e3266e85aa1735b028f82",
+    "key": "ddc073d66aced3967dd8420657c58246d5ba48ce167dd60b939438a647879e51",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 44.07281308399979,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "ddc073d66aced3967dd8420657c58246d5ba48ce167dd60b939438a647879e51",
+  "created_at": "2026-08-13T18:23:40.155031Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/methods",
+  "pair_key": "cd22186bff5b55b0e6d8f670f07a7681e381cdb8af4654f18df58f4731c19ff3",
+  "provider_seconds": 44.07281308399979,
+  "right": "task-2/advisor2/style",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

@@ -1,0 +1,182 @@
+{
+  "coverage": {
+    "expected": 14,
+    "observed": 14
+  },
+  "created_at": "2026-08-11T00:45:14.919146Z",
+  "description_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+  "issues": [],
+  "kind": "STUDY_COMPARE_GRAPH_PAIR",
+  "left": {
+    "context_digest": "9e11f33b9619a9eda81da9aea4a85fb5ae35ae17ef83ddb6f2611920c825e3bb",
+    "context_uid": "755575aa-19e8-5649-83d1-2b7b6499f2e5",
+    "memory_count": 6,
+    "name": "task-3/local/guardrails/privacy-and-others"
+  },
+  "method": "COMPACT_DECISION_VECTOR_V1",
+  "operation": "COMPARE",
+  "pair_key": "2c02f0cc9f275d99367f99fb2d9e836962fe74214986ca4d3dcd4cf549666789",
+  "provider": {
+    "condition": "COMPACT_DECISION_VECTOR",
+    "contract_valid": true,
+    "elapsed_seconds": 34.93470245899516,
+    "error_type": null,
+    "failure_category": null,
+    "operation": "compare_contexts_compact_ab_v1",
+    "prompt_chars": 6438,
+    "provider_calls": 1,
+    "provider_run": {
+      "completion_tokens": null,
+      "identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "operation": "compare_contexts_compact_ab_v1",
+      "prompt_tokens": null,
+      "upstream_model": "gpt-5.6-sol",
+      "upstream_provider": "openai-codex"
+    },
+    "provider_seconds": 34.933494583994616,
+    "response_bytes": 703,
+    "response_chars": 703,
+    "schema_chars": 1378,
+    "validation_error": null,
+    "validation_seconds": 0.00118674999976065
+  },
+  "relations": [
+    {
+      "comment": "The reference applies an essentiality threshold specifically to third-party contact information, while the compared claims apply purpose-necessity minimization generally.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "67035ffd-3709-592a-9d42-601fffb9ff79",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "c971c24d-2543-5874-91e3-b97aec8bc77a",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "75944d44-d6e7-52fc-a68a-676b0df123ed",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000001",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "The reference requires consent-scope confirmation specifically for third-party-authored content, while the compared claims define purpose, recipient, and item bounds for sharing approvals generally.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "47174c75-1951-5f0f-be2f-e79315d88b91",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "3d3749df-7036-548b-b939-7b6b32c79af6",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "e0133c8a-5382-50d2-9d9a-74e3ff700f69",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "58850532-c154-5e64-87cb-91c81d3e5ca5",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "05953013-6bb7-5f2c-8024-23ef357161fa",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000002",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "73411861-8d89-5bf4-9987-f7757e403089",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000003",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "4af0efc1-3442-580c-b2da-7725249adbbd",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000004",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "5cd7bde0-0d4f-5946-a551-65836f41cb3e",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000005",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "eafc4a2b-8e2a-5e58-9813-f1346bbdc2ad",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000006",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "78bba4e2-c5d0-5df3-8f81-6641515e4875",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000007",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "b5618dee-42df-583f-a839-e8e611ccdabd",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000008",
+      "status": "RESOLVED"
+    }
+  ],
+  "right": {
+    "context_digest": "dd9148dc81399f484999854189f0ef908d9b244551d50fe7576d8d5e5dc5a615",
+    "context_uid": "900828d4-48ca-5a05-9807-620165233930",
+    "memory_count": 8,
+    "name": "task-3/local/guardrails/purpose-and-scope"
+  },
+  "schema_version": 1,
+  "semantic_content_in_participant_report": false,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

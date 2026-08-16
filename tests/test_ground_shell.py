@@ -55,6 +55,44 @@ def test_context_pane_places_direct_tree_entry_below_suggestions() -> None:
     assert rendered.index("MAIN? · temp/task-1") < rendered.index("DIRECT SELECT")
 
 
+def test_direct_context_tree_selection_stays_process_local(
+    isolated_store,
+) -> None:
+    """Ground P reuses the neutral picker without invoking Switch state."""
+
+    state_file = isolated_store / "state.json"
+    before = state_file.read_bytes() if state_file.exists() else None
+
+    with create_pipe_input() as pipe_input:
+        def feed() -> None:
+            time.sleep(0.05)
+            pipe_input.send_text("p")
+            time.sleep(0.15)
+            pipe_input.send_text("\x1b[A\r")
+            time.sleep(0.15)
+            pipe_input.send_text("\x1b")
+
+        feeder = threading.Thread(target=feed)
+        feeder.start()
+        result = run_ground_shell(
+            interpret=proposal_with_contexts,
+            apply=lambda _value: pytest.fail("direct selection must not apply"),
+            initial_request="Review Task 1.",
+            current_context_name="beta",
+            context_catalog_names=("alpha", "beta"),
+            context_catalog_count=2,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+        feeder.join(timeout=2)
+
+    assert result.status == "CANCELLED"
+    assert result.selected_context_names == ("alpha",)
+    after = state_file.read_bytes() if state_file.exists() else None
+    assert after == before
+
+
 class SizedDummyOutput(DummyOutput):
     def __init__(self, *, rows: int, columns: int) -> None:
         super().__init__()

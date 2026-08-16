@@ -1,0 +1,406 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:39:37.096658+00:00",
+      "frames": [
+        {
+          "context_digest": "3f1b018c2a3a8594d00bffba053626a876fef4893e678dd9600986d9d41c0f31",
+          "context_name": "task-3/local/personal-memory/2024/05",
+          "context_uid": "683986e6-d517-5a53-9dc1-16b69cf0d12e",
+          "memories": [
+            {
+              "content": "The user keeps a small table fan beside the bedroom window.",
+              "content_digest": "b8a464f5e2a33edcef1259af4a412b047ba190bae9cfe42aaf1dbd722efc7f0c",
+              "position": 0,
+              "uid": "3088c235-435c-52ee-9ffc-26cf85ec196e"
+            },
+            {
+              "content": "On a day the user drank coffee late in the afternoon, they could not fall asleep until dawn.",
+              "content_digest": "ef4cf019ebc163fc24f03b8bd505599cd13fc83f33565d51ffb4379dc21d72b8",
+              "position": 1,
+              "uid": "7811ed66-2f22-54d8-a215-62a843264ba5"
+            },
+            {
+              "content": "On a day the user drank coffee before 2 p.m., they fell asleep at their usual time.",
+              "content_digest": "046ac3f8454da623f73d1293fb954b72a3ea056642fd9ee7948c35f110e77669",
+              "position": 2,
+              "uid": "d0f94a56-5cf8-5215-9cfa-5993b3b781be"
+            },
+            {
+              "content": "On a tired day, the user ate dinner out and postponed even washing the dishes after returning home.",
+              "content_digest": "ac36f6c1039dc74f764b4671f718f1e124823dc75fd45abda010285523280b71",
+              "position": 3,
+              "uid": "fc19394a-6634-5aae-bfa5-bba91e707954"
+            },
+            {
+              "content": "In the same week, on a day the user made simple noodles at home, they rested immediately after the meal.",
+              "content_digest": "45bb543f6c6ca213b856683b3c53448ac0d044bcf24f694eda292d6c4923ac5c",
+              "position": 4,
+              "uid": "be7aa7f3-1b67-5677-950d-9942ca337a99"
+            },
+            {
+              "content": "On a night the window was left open, street noise woke the user twice.",
+              "content_digest": "13f3dd86b869b25ee75e1b80d9cdb890b79434fa976fbd7246e89ba808f1a6c6",
+              "position": 5,
+              "uid": "47faaefd-2d60-5693-9847-2c1d5d2f9092"
+            },
+            {
+              "content": "On a night the table fan was running, the user was not too warm even with the window closed.",
+              "content_digest": "96ce23df1cf4f913e3b4c339cc3a857a6a8776e3f3f48e865eae65f02297bba8",
+              "position": 6,
+              "uid": "d6eea310-1313-5a51-b032-f3f518620610"
+            },
+            {
+              "content": "The user's father prefers to have coffee available after dinner and believes it will not cause a sleep problem.",
+              "content_digest": "197616278309e370f0d0e633700b1bde2c6e4395dbc8ed2b942e14fb6c1c9cc5",
+              "position": 7,
+              "uid": "056defa1-8256-561d-a2b4-a70df4058c33"
+            },
+            {
+              "content": "When making a sleep-related suggestion, do not treat one or two records as a general lifestyle habit.",
+              "content_digest": "963795e89a1e2365dd81abf463fb9a80c1c22b9c0e59b121681f89c09860e583",
+              "position": 8,
+              "uid": "7cecee60-fabd-55a3-998b-78810bd9eaf4"
+            },
+            {
+              "content": "The user tends to go to bed much later after drinking coffee late in the afternoon.",
+              "content_digest": "e54652939c104807d5c501753f85aee97883cc55e1d056787b86857cd5b8292d",
+              "position": 9,
+              "uid": "9ace13d3-d881-5720-bfd5-f7884db67756"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "b2c721c0-28a7-4a03-a0c0-5463f9c0095a"
+        },
+        {
+          "context_digest": "d28031209c5edc768a592166e26351dd5bce0c7568d379fcaceab173450041c8",
+          "context_name": "task-3/local/personal-memory/2026/02",
+          "context_uid": "7ffcbc10-1703-54b0-9545-99742b51d333",
+          "memories": [
+            {
+              "content": "The user keeps basic repair tools in a box beneath the sink.",
+              "content_digest": "c2a23bace63735c502081b19682a8ceb3e37156b9aadd6f7739e2005c20469d6",
+              "position": 0,
+              "uid": "7d3daf76-a21e-5117-a534-6175ab2d2861"
+            },
+            {
+              "content": "On a day the faucet leaked, the user placed only a towel beneath it, and the floor became wet as well.",
+              "content_digest": "ad6baa7e1848e4e61bdaf22bc5c8665122330b5c70c8ae192216abbba17c6134",
+              "position": 1,
+              "uid": "70a6d9f5-180f-5174-b247-690e10baa23e"
+            },
+            {
+              "content": "After sending a photo to building management, the user finalized the time for a repair visit.",
+              "content_digest": "82b36c7a95e51a0dfa32768c2a437d509b75c0f93bc51a99a636f2c9739a20da",
+              "position": 2,
+              "uid": "9fcd922c-147c-517b-82b3-180fdfb13f33"
+            },
+            {
+              "content": "Before the technician's visit, the user emptied the area beneath the sink so work could begin immediately.",
+              "content_digest": "dbc3b48e5bc4b406dc17067dd93d92e845e3706f47c8706f9a5d5ef17bf64617",
+              "position": 3,
+              "uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5"
+            },
+            {
+              "content": "On a day the user wrote the visit time only in the calendar and turned off the reminder, they heard the doorbell late.",
+              "content_digest": "95fab6bcab815dd8bdd5fecb867f84c6d2f1a901771603b1dbf197cde3c1d19d",
+              "position": 4,
+              "uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65"
+            },
+            {
+              "content": "For the next visit, the user enabled a reminder 30 minutes beforehand and answered immediately at the entrance.",
+              "content_digest": "818783ff21b2d369935b9994c17b28f93f84ea7558dab9f2de20d0aad21f86a3",
+              "position": 5,
+              "uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a"
+            },
+            {
+              "content": "After the repair, the user called their maternal aunt to confirm that the spare key entrusted to her was still there.",
+              "content_digest": "ac01b9816dda2d6bf16f22b41157120b7ffdd75d19638f6313a88e1ce6e7a1f1",
+              "position": 6,
+              "uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441"
+            },
+            {
+              "content": "The user's maternal aunt considers it unsafe to hand the spare key to a repair technician without the user's explicit request.",
+              "content_digest": "f7c7c0306c81cc6de9f02aa1aed7d411db3f29757d024e7d5a1679b1ff308948",
+              "position": 7,
+              "uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd"
+            },
+            {
+              "content": "Obtain the user's reconfirmation before scheduling an external worker to enter the residential unit.",
+              "content_digest": "34382e40f4907bea82728787fdeb150e299d46a0079ae2847d4eda6d6d892d22",
+              "position": 8,
+              "uid": "4716a67b-8602-564c-9e89-85cd4ee158f9"
+            },
+            {
+              "content": "A multi-unit residential building's repair schedule may change because of emergency work or parts availability.",
+              "content_digest": "d701fdd1ffbf17ff0890c583b5bf39849e3c6e3cc296fde7e00d3d1ecc0ef196",
+              "position": 9,
+              "uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "2ce780e9-740d-40c0-a2d8-95fc5764dbc6"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate domains: the reference focuses on sleep, coffee timing, bedroom comfort, and limited-evidence caution, while the compared frame concerns leak repair, appointment readiness, reminders, access consent, spare-key safety, and schedule uncertainty. No cross-frame operational claims materially overlap or conflict.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b2c721c0-28a7-4a03-a0c0-5463f9c0095a",
+              "memory_uid": "3088c235-435c-52ee-9ffc-26cf85ec196e"
+            },
+            {
+              "frame_uid": "b2c721c0-28a7-4a03-a0c0-5463f9c0095a",
+              "memory_uid": "d6eea310-1313-5a51-b032-f3f518620610"
+            }
+          ],
+          "reason": "The memories jointly state the fan's placement and its observed usefulness as a closed-window cooling option, with no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "A bedside table fan is available and has kept the user comfortable with the window closed.",
+          "uid": "5a0d606d-50ec-5392-be4f-344c07df5e8b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b2c721c0-28a7-4a03-a0c0-5463f9c0095a",
+              "memory_uid": "7811ed66-2f22-54d8-a215-62a843264ba5"
+            },
+            {
+              "frame_uid": "b2c721c0-28a7-4a03-a0c0-5463f9c0095a",
+              "memory_uid": "d0f94a56-5cf8-5215-9cfa-5993b3b781be"
+            },
+            {
+              "frame_uid": "b2c721c0-28a7-4a03-a0c0-5463f9c0095a",
+              "memory_uid": "9ace13d3-d881-5720-bfd5-f7884db67756"
+            }
+          ],
+          "reason": "These observations and the stated tendency form one timing-dependent sleep claim found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Late-afternoon coffee is associated with substantially delayed sleep, whereas coffee before 2 p.m. was followed by the usual sleep time.",
+          "uid": "2a4939c0-5d4d-536c-acce-457bac14060a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b2c721c0-28a7-4a03-a0c0-5463f9c0095a",
+              "memory_uid": "fc19394a-6634-5aae-bfa5-bba91e707954"
+            }
+          ],
+          "reason": "This is a specific reference-only observation about fatigue and deferred household work.",
+          "status": "RESOLVED",
+          "summary": "After eating out on a tired day, the user postponed washing dishes upon returning home.",
+          "uid": "07509839-87ff-52a0-b7dd-2e60b4d3e2cf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b2c721c0-28a7-4a03-a0c0-5463f9c0095a",
+              "memory_uid": "be7aa7f3-1b67-5677-950d-9942ca337a99"
+            }
+          ],
+          "reason": "This is an independently useful reference-only observation about a low-effort meal and immediate rest.",
+          "status": "RESOLVED",
+          "summary": "After making simple noodles at home, the user rested immediately after eating.",
+          "uid": "5c9352cf-7654-5836-9262-40ae94ef1569"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b2c721c0-28a7-4a03-a0c0-5463f9c0095a",
+              "memory_uid": "47faaefd-2d60-5693-9847-2c1d5d2f9092"
+            }
+          ],
+          "reason": "This reference-only observation identifies a sleep consequence of an open window.",
+          "status": "RESOLVED",
+          "summary": "Street noise woke the user twice on a night when the window remained open.",
+          "uid": "aa48f50a-1b96-5f25-9767-45b6f28cde44"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b2c721c0-28a7-4a03-a0c0-5463f9c0095a",
+              "memory_uid": "056defa1-8256-561d-a2b4-a70df4058c33"
+            }
+          ],
+          "reason": "This is a reference-only preference and belief belonging to the user's father, not a claim about the user's own response.",
+          "status": "RESOLVED",
+          "summary": "The user's father wants coffee available after dinner and believes it will not impair sleep.",
+          "uid": "8fe3c7c5-9076-58ee-a2e5-3930f4c7b015"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b2c721c0-28a7-4a03-a0c0-5463f9c0095a",
+              "memory_uid": "7cecee60-fabd-55a3-998b-78810bd9eaf4"
+            }
+          ],
+          "reason": "This reference-only instruction governs evidentiary caution when forming sleep-related suggestions.",
+          "status": "RESOLVED",
+          "summary": "Sleep suggestions should not infer a general lifestyle habit from only one or two records.",
+          "uid": "dc17dfcc-daed-5df8-9969-dc095d53c0ee"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2ce780e9-740d-40c0-a2d8-95fc5764dbc6",
+              "memory_uid": "7d3daf76-a21e-5117-a534-6175ab2d2861"
+            }
+          ],
+          "reason": "This compared-only fact concerns the location and availability of household tools.",
+          "status": "RESOLVED",
+          "summary": "The user stores basic repair tools in a box beneath the sink.",
+          "uid": "be70fd36-dc96-57de-b7c7-83dc5cfd43a6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2ce780e9-740d-40c0-a2d8-95fc5764dbc6",
+              "memory_uid": "70a6d9f5-180f-5174-b247-690e10baa23e"
+            }
+          ],
+          "reason": "This compared-only incident records the inadequacy of a specific leak-containment response.",
+          "status": "RESOLVED",
+          "summary": "Using only a towel beneath a leaking faucet did not prevent the floor from becoming wet.",
+          "uid": "3776e615-8f30-5715-b778-235d140c8d39"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2ce780e9-740d-40c0-a2d8-95fc5764dbc6",
+              "memory_uid": "9fcd922c-147c-517b-82b3-180fdfb13f33"
+            }
+          ],
+          "reason": "This compared-only event describes how a repair appointment was arranged.",
+          "status": "RESOLVED",
+          "summary": "The user finalized a repair-visit time with building management after sending a photo.",
+          "uid": "2dac293a-0593-5c6d-a021-548afafd44c3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2ce780e9-740d-40c0-a2d8-95fc5764dbc6",
+              "memory_uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5"
+            }
+          ],
+          "reason": "This compared-only event records practical preparation for repair access.",
+          "status": "RESOLVED",
+          "summary": "The user cleared the area beneath the sink before the technician arrived so work could start immediately.",
+          "uid": "55832bd9-4b67-59a7-ad0c-c21dde31718e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2ce780e9-740d-40c0-a2d8-95fc5764dbc6",
+              "memory_uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65"
+            },
+            {
+              "frame_uid": "2ce780e9-740d-40c0-a2d8-95fc5764dbc6",
+              "memory_uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a"
+            }
+          ],
+          "reason": "The paired compared-side observations form one claim about reminder configuration and readiness for repair visits.",
+          "status": "RESOLVED",
+          "summary": "A calendar entry without a reminder was followed by a late response to the doorbell, while a 30-minute reminder preceded an immediate response on the next visit.",
+          "uid": "d3cd92ac-2984-589f-b509-c5db5da7ce9c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2ce780e9-740d-40c0-a2d8-95fc5764dbc6",
+              "memory_uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441"
+            },
+            {
+              "frame_uid": "2ce780e9-740d-40c0-a2d8-95fc5764dbc6",
+              "memory_uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd"
+            }
+          ],
+          "reason": "The compared-side memories jointly describe spare-key custody and the custodian's access-safety boundary.",
+          "status": "RESOLVED",
+          "summary": "The user's maternal aunt retains the spare key and regards giving it to a technician without the user's explicit request as unsafe.",
+          "uid": "97f83c6b-7235-5be4-bcde-652c646dc097"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2ce780e9-740d-40c0-a2d8-95fc5764dbc6",
+              "memory_uid": "4716a67b-8602-564c-9e89-85cd4ee158f9"
+            }
+          ],
+          "reason": "This compared-only instruction establishes a consent requirement for residential entry.",
+          "status": "RESOLVED",
+          "summary": "The user's reconfirmation must be obtained before scheduling an external worker to enter the residence.",
+          "uid": "615d2ab6-e8e4-5aaa-9e40-6f8dfad25719"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2ce780e9-740d-40c0-a2d8-95fc5764dbc6",
+              "memory_uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+            }
+          ],
+          "reason": "This compared-only information identifies independent causes of appointment uncertainty.",
+          "status": "RESOLVED",
+          "summary": "Repair schedules in multi-unit buildings may change because of emergencies or parts availability.",
+          "uid": "0ad50a78-0b73-5247-bbee-88c4341f7d5e"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only material covers leak response and repair logistics, visit reminders, workspace preparation, spare-key security, consent before residential entry, and possible schedule changes.",
+        "differences": "",
+        "reference_only": "Reference-only material describes coffee-related sleep patterns, bedroom cooling and noise, low-energy evenings, a family belief about coffee, and caution against generalizing from sparse records."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "f72342ba-e5b6-4856-931a-d6e46abedf99"
+    },
+    "analysis_digest": "feedb39064e34d7cb2bd32dc52f2cd6b5111ad5e44aea4bdc163310ef1a0cee5",
+    "key": "4ebb16ea00ac1c0e737c90305f5bf181fcb9ececd097ee138136aef3ad17c057",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 47.074231916001736,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "4ebb16ea00ac1c0e737c90305f5bf181fcb9ececd097ee138136aef3ad17c057",
+  "created_at": "2026-08-13T18:40:24.170292Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/05",
+  "pair_key": "0ee0c9426fe2a3a02acd2c488ccb5d02cfa243a9d4efa5ec9c286f1069c18383",
+  "provider_seconds": 47.074231916001736,
+  "right": "task-3/local/personal-memory/2026/02",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

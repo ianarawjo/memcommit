@@ -1,0 +1,397 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:50:56.546537+00:00",
+      "frames": [
+        {
+          "context_digest": "b727ef7cf1cb7ca0f00ea3598d36577397e092dcb632f55c3eafb942850922d7",
+          "context_name": "task-3/local/personal-memory/2025/04",
+          "context_uid": "720d2021-1ec5-52ab-ace4-a93e02b05ad9",
+          "memories": [
+            {
+              "content": "The user keeps the shared laundry-room access card in an entrance drawer.",
+              "content_digest": "3c98e367c99e0867f1217c891dc5d982c115fd9d1b4bc3957cca6dbb6338203b",
+              "position": 0,
+              "uid": "a1c67646-6a75-504a-9508-d69e1d04b3e5"
+            },
+            {
+              "content": "The user went downstairs 25 minutes after the laundry finished and received a note from another household.",
+              "content_digest": "44968f6f10c0ae2d1dd775eb066564dada6346c6f59bdacf90d687c57e6c1e0f",
+              "position": 1,
+              "uid": "9479e799-95d7-50d2-af62-d1e0914a389b"
+            },
+            {
+              "content": "For the next load, the user set a reminder five minutes before the end and removed the laundry immediately.",
+              "content_digest": "bc77b81f6126e44bbffeb4ae2dfbb641d31a9742b7a196a106ac385321b48958",
+              "position": 2,
+              "uid": "528cb5ea-8c36-5206-beaa-19432250ec4d"
+            },
+            {
+              "content": "The user washed light-colored clothes with new jeans, and color transferred onto white socks.",
+              "content_digest": "ed0f36cf5ebe8f9542ad39ba45fc109634d72f1cb2b266c15dfe6655e3df3add",
+              "position": 3,
+              "uid": "85fb1639-2176-5329-b490-3325ff030db4"
+            },
+            {
+              "content": "The user later washed the new jeans separately, and the color of the other clothes did not change.",
+              "content_digest": "6e47fe1a02ac39064ea9db2d06d8a1f01f80302825bbe412df745401612e4a84",
+              "position": 4,
+              "uid": "431d170a-863f-596d-97c0-0c9634524ee5"
+            },
+            {
+              "content": "On a day the user did not check the dryer filter, the clothes needed another drying cycle.",
+              "content_digest": "8127e9f3ea34724673517f1e260a73acfb70e287a7e7de84e196ad1cb815f5a7",
+              "position": 5,
+              "uid": "4df33adc-cfba-50f2-b141-e2ebed38b81c"
+            },
+            {
+              "content": "On the next use, after emptying the filter, the user finished drying in one cycle.",
+              "content_digest": "932cfb8fc93277783d8990dad62cfd3e1c9a86e39ad1bd019ce00dac632c53d5",
+              "position": 6,
+              "uid": "ba7daae9-938d-55a1-af20-21cd10d395d8"
+            },
+            {
+              "content": "The building manager judges that not leaving finished laundry for a long time is fair to other households.",
+              "content_digest": "5eabe2d3dff252bb250abcde8fe2d528362afb0e73e7628e839715c3e8a3cd56",
+              "position": 7,
+              "uid": "abbf8742-38e3-5810-b222-fe91e3340962"
+            },
+            {
+              "content": "When creating a shared laundry-room reminder, base it on the end time of the machine the user started.",
+              "content_digest": "e00bc6fe09fea6fde6a27817bd6824a141c1ac4a656b9659067b7e1af9881b1f",
+              "position": 8,
+              "uid": "06273d22-0b42-5c55-9d70-eda14084219a"
+            },
+            {
+              "content": "Even if the local agent knows where the card is kept, it cannot know which machines in the shared laundry room are currently available.",
+              "content_digest": "d03f5583c9e4c686307af90ff00ff54e5ac0990e34296b3d241e4f299d15f4b7",
+              "position": 9,
+              "uid": "03ac930e-d745-5c29-8c24-5ced669817f9"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "8fd486f4-763f-411e-b6f6-73278f369f80"
+        },
+        {
+          "context_digest": "4b8dc68a205171fe661b04620d0fba2bbb386ff21d494699c34a74dc2ab86080",
+          "context_name": "task-3/local/personal-memory/2026/03",
+          "context_uid": "97d36150-4792-5a5c-9332-5eb1de8bcf04",
+          "memories": [
+            {
+              "content": "The user stores tax-related receipts in digital folders by year.",
+              "content_digest": "778f983547572b31798b7041899812a7b0b574d74b585baf6883e94919dee6ec",
+              "position": 0,
+              "uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393"
+            },
+            {
+              "content": "The user found three paper receipts late and recalculated the expense total already prepared.",
+              "content_digest": "542368a141ec82a1bd7da4b534d88ea62c487d16a37f454569bf6400cbc749e9",
+              "position": 1,
+              "uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878"
+            },
+            {
+              "content": "Starting the next month, the user photographed receipts on the day they were received and reduced omissions.",
+              "content_digest": "b95e0a1afa1196a9bff117bf12b1630edcc4eb65bfdfeb3128ae5937563a492e",
+              "position": 2,
+              "uid": "ff436ea5-1b3e-55df-8302-bd8a96740671"
+            },
+            {
+              "content": "The user named every file with only the photo date and spent a long time looking for a needed receipt.",
+              "content_digest": "c3aa33e0b7e007bdfc5c12dcda659e2a52938548fbf53d5a1ab034487a528857",
+              "position": 3,
+              "uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e"
+            },
+            {
+              "content": "The user later included the expense category in the filename and found the receipt immediately through search.",
+              "content_digest": "cdae97761f614b932d3b330723627bee8b0e3d033e2bf1061b721367237acee1",
+              "position": 4,
+              "uid": "89d6fa9a-b795-59df-be34-1c05a9861d35"
+            },
+            {
+              "content": "While reviewing documents just before submission, the user discovered one blank signature field.",
+              "content_digest": "a525c117b97eec82c678f276b319158703bf9cc558fb83cb81c0820d5c9e3174",
+              "position": 5,
+              "uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2"
+            },
+            {
+              "content": "Before submitting an administrative document, the user checks the signature field as the final item on the checklist.",
+              "content_digest": "542bec3cbc3fc8b22c95da274e479e96bfbf061a3b644d0d7f213de5a030dbd5",
+              "position": 6,
+              "uid": "5551622f-66cf-5542-8c47-1cddadab5c02"
+            },
+            {
+              "content": "Staff at a tax-support counter expect to receive an electronic copy in which every item is legible rather than a blurred or cropped photo.",
+              "content_digest": "d328ca248fdeecf0756e23b1202e7007bc8c3c25ae769439b0fd2efdbbe47580",
+              "position": 7,
+              "uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f"
+            },
+            {
+              "content": "The local agent can organize receipts by date and category but cannot determine whether an expense is deductible.",
+              "content_digest": "bcc769721a99b099ca20e5e527fa8904d54ecbaf9ae7d7616b95e1adaf1f89a9",
+              "position": 8,
+              "uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094"
+            },
+            {
+              "content": "The accepted scope and submission deadlines for administrative documents may vary under that year's guidance.",
+              "content_digest": "1ab61126b8efb0c2a9c6114c367018158f2e136bafa87e33f60aadb0686d0537",
+              "position": 9,
+              "uid": "de398064-3179-590b-8c62-effb17060115"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "5344e1ff-5fb7-4a49-b8cb-be4f56bb3756"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames provide complementary but nonoverlapping practical knowledge: the reference concerns shared-laundry access, etiquette, garment handling, drying, reminders, and availability limits, while the compared frame concerns receipt organization, document checks, submission quality, tax-judgment limits, and changing annual guidance.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8fd486f4-763f-411e-b6f6-73278f369f80",
+              "memory_uid": "a1c67646-6a75-504a-9508-d69e1d04b3e5"
+            }
+          ],
+          "reason": "This is independently useful reference-only access information with no corresponding claim about card storage in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The shared laundry-room access card is kept in an entrance drawer.",
+          "uid": "4f864e5b-a891-5f86-979b-80d1a7fa4406"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8fd486f4-763f-411e-b6f6-73278f369f80",
+              "memory_uid": "9479e799-95d7-50d2-af62-d1e0914a389b"
+            },
+            {
+              "frame_uid": "8fd486f4-763f-411e-b6f6-73278f369f80",
+              "memory_uid": "528cb5ea-8c36-5206-beaa-19432250ec4d"
+            }
+          ],
+          "reason": "These memories form one reference-only problem-and-response account about timely removal, with no compared-side claim governing shared-laundry pickup.",
+          "status": "RESOLVED",
+          "summary": "A delayed laundry pickup prompted a pre-completion reminder that enabled immediate removal on the next load.",
+          "uid": "cf7a597f-d787-5e03-b74b-9be0fcecd81d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8fd486f4-763f-411e-b6f6-73278f369f80",
+              "memory_uid": "85fb1639-2176-5329-b490-3325ff030db4"
+            },
+            {
+              "frame_uid": "8fd486f4-763f-411e-b6f6-73278f369f80",
+              "memory_uid": "431d170a-863f-596d-97c0-0c9634524ee5"
+            }
+          ],
+          "reason": "These memories split one reference-only before-and-after lesson about preventing dye transfer; the compared frame contains no garment-sorting claim.",
+          "status": "RESOLVED",
+          "summary": "Color transferred when new jeans were washed with light clothes, while separating the jeans avoided further color change.",
+          "uid": "998fd163-0594-5151-8b22-3da4e2f5a23d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8fd486f4-763f-411e-b6f6-73278f369f80",
+              "memory_uid": "4df33adc-cfba-50f2-b141-e2ebed38b81c"
+            },
+            {
+              "frame_uid": "8fd486f4-763f-411e-b6f6-73278f369f80",
+              "memory_uid": "ba7daae9-938d-55a1-af20-21cd10d395d8"
+            }
+          ],
+          "reason": "These memories provide one reference-only contrast about dryer-filter handling and drying performance, absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Skipping the dryer-filter check required another cycle, while emptying the filter allowed drying in one cycle.",
+          "uid": "ebfa82ac-98bb-5c9d-8889-e30f29d72061"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8fd486f4-763f-411e-b6f6-73278f369f80",
+              "memory_uid": "abbf8742-38e3-5810-b222-fe91e3340962"
+            }
+          ],
+          "reason": "This reference-only fairness judgment is independently useful and has no counterpart concerning shared-facility etiquette in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The building manager considers prompt removal of finished laundry fair to other households.",
+          "uid": "5d5ec7aa-2f63-5aba-b426-2eb39c046470"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8fd486f4-763f-411e-b6f6-73278f369f80",
+              "memory_uid": "06273d22-0b42-5c55-9d70-eda14084219a"
+            }
+          ],
+          "reason": "This is a reference-only operational rule for reminder creation, with no corresponding scheduling policy in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Shared laundry-room reminders should be based on the end time of the machine the user started.",
+          "uid": "5760f714-431f-5b67-9d5c-b8e18d285818"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8fd486f4-763f-411e-b6f6-73278f369f80",
+              "memory_uid": "03ac930e-d745-5c29-8c24-5ced669817f9"
+            }
+          ],
+          "reason": "This reference-only capability boundary concerns live laundry-room status and is not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The local agent may know the card location but cannot know current shared-laundry machine availability.",
+          "uid": "4a71a5be-ffa3-5861-be7d-fd46213ae166"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5344e1ff-5fb7-4a49-b8cb-be4f56bb3756",
+              "memory_uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393"
+            }
+          ],
+          "reason": "This compared-only filing practice is independently useful and has no corresponding receipt-organization claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Tax-related receipts are stored in digital folders organized by year.",
+          "uid": "1bf075de-53d5-52ad-84c9-ef773d43d0eb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5344e1ff-5fb7-4a49-b8cb-be4f56bb3756",
+              "memory_uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878"
+            },
+            {
+              "frame_uid": "5344e1ff-5fb7-4a49-b8cb-be4f56bb3756",
+              "memory_uid": "ff436ea5-1b3e-55df-8302-bd8a96740671"
+            }
+          ],
+          "reason": "These memories form one compared-only problem-and-response account about timely receipt capture, absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Late paper receipts forced recalculation, while photographing receipts upon receipt reduced later omissions.",
+          "uid": "95ec2262-4931-5eac-a178-38ed489fc138"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5344e1ff-5fb7-4a49-b8cb-be4f56bb3756",
+              "memory_uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e"
+            },
+            {
+              "frame_uid": "5344e1ff-5fb7-4a49-b8cb-be4f56bb3756",
+              "memory_uid": "89d6fa9a-b795-59df-be34-1c05a9861d35"
+            }
+          ],
+          "reason": "These memories split one compared-only before-and-after lesson about searchable receipt filenames, with no reference-side document-naming claim.",
+          "status": "RESOLVED",
+          "summary": "Date-only filenames hindered receipt retrieval, while adding expense categories enabled immediate search results.",
+          "uid": "3619ec42-a294-59c2-a28b-4d582d06a76b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5344e1ff-5fb7-4a49-b8cb-be4f56bb3756",
+              "memory_uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2"
+            },
+            {
+              "frame_uid": "5344e1ff-5fb7-4a49-b8cb-be4f56bb3756",
+              "memory_uid": "5551622f-66cf-5542-8c47-1cddadab5c02"
+            }
+          ],
+          "reason": "These memories form one compared-only problem-and-response account about final signature verification, absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Finding a blank signature field before submission led to checking the signature field last on the administrative-document checklist.",
+          "uid": "c3760ce8-82e8-5098-9307-9554ede401eb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5344e1ff-5fb7-4a49-b8cb-be4f56bb3756",
+              "memory_uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f"
+            }
+          ],
+          "reason": "This compared-only submission-quality expectation is independently useful and has no corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Tax-support staff expect a legible electronic copy rather than a blurred or cropped receipt photo.",
+          "uid": "cc644e14-f872-5b77-ad63-76d413af086a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5344e1ff-5fb7-4a49-b8cb-be4f56bb3756",
+              "memory_uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094"
+            }
+          ],
+          "reason": "This compared-only capability boundary concerns receipt organization and tax judgment, neither of which is addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The local agent can organize receipts by date and category but cannot determine expense deductibility.",
+          "uid": "06536b19-724e-5d2d-825e-69c28bf5cf3b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5344e1ff-5fb7-4a49-b8cb-be4f56bb3756",
+              "memory_uid": "de398064-3179-590b-8c62-effb17060115"
+            }
+          ],
+          "reason": "This compared-only warning about annually variable requirements is independently useful and has no corresponding administrative-guidance claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Accepted scope and submission deadlines for administrative documents may vary with each year's guidance.",
+          "uid": "db99c800-3f46-5781-82b9-b5cd13740004"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers receipt capture and retrieval, yearly filing, signature checks, legible electronic submissions, limits on deductibility judgments, and annually variable requirements and deadlines.",
+        "differences": "",
+        "reference_only": "The reference covers laundry-card storage, prompt machine clearing, color-transfer prevention, dryer-filter effects, shared-room fairness, reminder timing, and unavailable live machine-status knowledge."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "de8fd81e-bacf-40aa-85ba-320635f2a007"
+    },
+    "analysis_digest": "2ada7b7bb52b5553bd0d2cf76cf81e87c19aeaa0e6acf0cb12f52638095c9592",
+    "key": "b7f07dc3a94b545912927eb334fc41445984e8e1f05212d769f454de29c95f3f",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 42.247846582999045,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "b7f07dc3a94b545912927eb334fc41445984e8e1f05212d769f454de29c95f3f",
+  "created_at": "2026-08-13T18:51:38.793953Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/04",
+  "pair_key": "f9bd125577e3f4399c93fe5bd2305f048c60069b2fa8054ed3787199c329d29a",
+  "provider_seconds": 42.247846582999045,
+  "right": "task-3/local/personal-memory/2026/03",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

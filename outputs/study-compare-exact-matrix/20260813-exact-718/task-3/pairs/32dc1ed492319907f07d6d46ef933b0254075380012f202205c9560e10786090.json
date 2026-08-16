@@ -1,0 +1,406 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:53:30.059680+00:00",
+      "frames": [
+        {
+          "context_digest": "5e42fc3dcfbf5576148277f6841977ca8a5cabd4a3fc67a5581f6f6cc816c900",
+          "context_name": "task-3/local/personal-memory/2025/10",
+          "context_uid": "8130b676-dc51-5c31-b7dc-185afdf9cf07",
+          "memories": [
+            {
+              "content": "The user keeps waterproof shoes for rainy days to the left of the entrance.",
+              "content_digest": "5b9e5a20153c7865010318800d740a410faef0c13fe2278c20ce984a89b7dea5",
+              "position": 0,
+              "uid": "82c1e806-de3a-5633-8a08-175487e69fd6"
+            },
+            {
+              "content": "On a day the user walked in the rain wearing thin shoes, their socks became wet and they changed them after arrival.",
+              "content_digest": "fdbdab8c08a4b1d933ff8ac3ddedee8541ddf070e8c6e6020b6c1d14b992c621",
+              "position": 1,
+              "uid": "25df6384-836f-5f8e-bd97-73a1fb171c48"
+            },
+            {
+              "content": "On the next rainy day, the user wore waterproof shoes and their feet remained dry.",
+              "content_digest": "0e87d74fb93fe062cd12efe2f5a04fbae5ce13a60491fd9ad04c4e006acbd87f",
+              "position": 2,
+              "uid": "55abae4f-206a-586e-8b35-406d7525c0a1"
+            },
+            {
+              "content": "On a day the user walked for a long time in new shoes, their heel chafed and they shortened the route home.",
+              "content_digest": "aeb369b995cdf17ea73ae8546b454eab70f33bf6d3c67a09aee2805c1c598b6d",
+              "position": 3,
+              "uid": "c6d21ec4-6bdf-55df-b4d4-05cb531bf4bd"
+            },
+            {
+              "content": "The user wore the same shoes on two short outings before using them on a long walk.",
+              "content_digest": "0d7ed5656f35f4fe025c6ba80e4c829f5b9851c193f981de9a461f848317d60a",
+              "position": 4,
+              "uid": "a6424854-e51e-5afc-8b9f-9e2f0273f70e"
+            },
+            {
+              "content": "On a day the user dried an umbrella outside the entrance, they found it immediately before the next outing.",
+              "content_digest": "dbc2453ca5f895e2cfe7f58e5624cf4c5d6793468af3b25df7e9a4ddb7d50159",
+              "position": 5,
+              "uid": "1b436b46-3d1f-5aa2-99e3-94b7c2412bfd"
+            },
+            {
+              "content": "On a day the user put a folded wet umbrella in their bag, documents inside became wet.",
+              "content_digest": "1f63fbc8c6b491a734f0f7a4190e26aec22826c1ff839242e0ca71d933312c9c",
+              "position": 6,
+              "uid": "ccd1f422-6130-5f19-869e-681102a3a1fa"
+            },
+            {
+              "content": "When rain is forecast, the user's mother expects the user may forget an umbrella and sets out a spare at the entrance.",
+              "content_digest": "80bdfaefb6f781aa91ef7217331e75f09b4766650c2b078dfadf592b2eb27b08",
+              "position": 7,
+              "uid": "c69a8e87-2b6f-5514-ab0d-0037531592f8"
+            },
+            {
+              "content": "When proposing a long-distance walking plan, check both the weather that day and recent records of shoe discomfort.",
+              "content_digest": "f54a546d423099c3abbb65bb49e4ddf773a8191dcffbb8b3d5153dfd70553b73",
+              "position": 8,
+              "uid": "4567ea9f-1800-51ed-bfac-f4cdf674d4cf"
+            },
+            {
+              "content": "Even if the local agent knows a shoe's location, it cannot know its current condition or whether it is usable.",
+              "content_digest": "28202c222ca800a5e19dbaebea2b3c992748f530a695517cf123b10187a31bc8",
+              "position": 9,
+              "uid": "a4ff1b76-755d-530a-b24c-8655115e4fbe"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "f6d4b615-9877-491c-b699-f63f368a56fa"
+        },
+        {
+          "context_digest": "df0924e320cd14a29eaed60f78e82fd509c4062949b35706b2a7cb94571fb599",
+          "context_name": "task-3/local/personal-memory/2026/04",
+          "context_uid": "16e860a8-7a90-5b7a-adc3-1c487ef97e03",
+          "memories": [
+            {
+              "content": "The user collects clothes for donation in a large bag beside the entrance.",
+              "content_digest": "39f2f01c59b7fa4ca7529d510e1b0a6ffab6706861042f771cfe97f6f806efac",
+              "position": 0,
+              "uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            },
+            {
+              "content": "After emptying an entire drawer at once, the user could not find a charger they needed.",
+              "content_digest": "674c33ba6475f42b29b03e6f8711e0216f983f3d37fee3dacf9336e3bb4596bf",
+              "position": 1,
+              "uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            },
+            {
+              "content": "During the next organizing session, the user sorted items by type and put only items to be discarded in the bag.",
+              "content_digest": "63104b5a7fd380f818c8758c51f9550c7a7fa41ff91f1dd314225d1824b69643",
+              "position": 2,
+              "uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            },
+            {
+              "content": "Even after photographing unworn clothes, the user did not take them out again for one month.",
+              "content_digest": "519f131096440719dcd3412f4439c5cfe44b7f402684170209708040692dc5fd",
+              "position": 3,
+              "uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            },
+            {
+              "content": "After moving those clothes to the donation bag, the user cleared one closet compartment.",
+              "content_digest": "45db58ae108a299344d982d8606fff26f733252da691cf01417e760909ff6057",
+              "position": 4,
+              "uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            },
+            {
+              "content": "The user nearly discarded an important paper with advertising and checked the recycling box again.",
+              "content_digest": "6bf928f67944656e5f3c68d8869c0cefd039a588f0ba735f94520231ef58017c",
+              "position": 5,
+              "uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            },
+            {
+              "content": "During the next organizing session, the user kept a separate document box and did not mix the papers.",
+              "content_digest": "adac8d4266c6b11e15d29c484665bc5dcc915f9aa319198b6a69d0e7b0131bb3",
+              "position": 6,
+              "uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            },
+            {
+              "content": "The user's mother asks the user to check whether she needs kitchen items in good condition before discarding them.",
+              "content_digest": "0752bc2ac00c0b1301c45ab4c2e73f63c57e6ebc4255dcc1c13330ffda906612",
+              "position": 7,
+              "uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            },
+            {
+              "content": "Confirm with the user before marking a personal document or another person's property as a disposal candidate.",
+              "content_digest": "17062e2cd4738619e81e211cb2f53d14e78c5f4eab9ae49053ce7e06935a7db5",
+              "position": 8,
+              "uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            },
+            {
+              "content": "The local agent cannot determine an object's emotional meaning from frequency of use alone.",
+              "content_digest": "9c86bcfe2b209bf7957dced0eab000b42f97b6a435d705ccaccb15e49be3691d",
+              "position": 9,
+              "uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "2166f509-27c7-45fe-9c35-93e4c7d27c40"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate practical domains: rainy-weather footwear and umbrella use on one side, and household sorting and disposal on the other. Each also records distinct family involvement, decision safeguards, and limits on what a local agent can infer; no claims overlap operationally or conflict.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f6d4b615-9877-491c-b699-f63f368a56fa",
+              "memory_uid": "82c1e806-de3a-5633-8a08-175487e69fd6"
+            }
+          ],
+          "reason": "This is independently useful location and readiness information with no operational counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Waterproof shoes are kept to the left of the entrance for rainy days.",
+          "uid": "4030c9c1-ba5c-555c-8f6e-a2bd5bb60f82"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f6d4b615-9877-491c-b699-f63f368a56fa",
+              "memory_uid": "25df6384-836f-5f8e-bd97-73a1fb171c48"
+            },
+            {
+              "frame_uid": "f6d4b615-9877-491c-b699-f63f368a56fa",
+              "memory_uid": "55abae4f-206a-586e-8b35-406d7525c0a1"
+            }
+          ],
+          "reason": "These memories jointly establish a footwear-dependent rain outcome absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Rain exposure produced wet socks with thin shoes, whereas waterproof shoes kept the user's feet dry on the next rainy day.",
+          "uid": "66dbcb6a-cc85-5a45-bf9c-2f11633dbeef"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f6d4b615-9877-491c-b699-f63f368a56fa",
+              "memory_uid": "c6d21ec4-6bdf-55df-b4d4-05cb531bf4bd"
+            },
+            {
+              "frame_uid": "f6d4b615-9877-491c-b699-f63f368a56fa",
+              "memory_uid": "a6424854-e51e-5afc-8b9f-9e2f0273f70e"
+            }
+          ],
+          "reason": "These memories jointly describe a long-walk discomfort risk not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Despite two short trial outings, the same new shoes chafed the user's heel during a long walk and caused a shortened return route.",
+          "uid": "0aa768ea-5617-5ba2-b0c6-8f3f6bb4e073"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f6d4b615-9877-491c-b699-f63f368a56fa",
+              "memory_uid": "1b436b46-3d1f-5aa2-99e3-94b7c2412bfd"
+            }
+          ],
+          "reason": "This is a one-sided observation about umbrella drying and retrieval.",
+          "status": "RESOLVED",
+          "summary": "Drying an umbrella outside the entrance made it immediately available before the next outing.",
+          "uid": "0a876575-3974-546a-a4b3-f593d1b35a98"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f6d4b615-9877-491c-b699-f63f368a56fa",
+              "memory_uid": "ccd1f422-6130-5f19-869e-681102a3a1fa"
+            }
+          ],
+          "reason": "This is a distinct warning about wet-umbrella storage with no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Putting a folded wet umbrella in a bag caused documents inside to become wet.",
+          "uid": "9025ba97-309f-5ad4-9948-fa82f17080a4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f6d4b615-9877-491c-b699-f63f368a56fa",
+              "memory_uid": "c69a8e87-2b6f-5514-ab0d-0037531592f8"
+            }
+          ],
+          "reason": "This family-assisted rain-preparation practice is not addressed in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "When rain is forecast, the user's mother anticipates possible umbrella forgetfulness and places a spare at the entrance.",
+          "uid": "ffe5caea-ffef-59da-a2fc-a0f9310b5e40"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f6d4b615-9877-491c-b699-f63f368a56fa",
+              "memory_uid": "4567ea9f-1800-51ed-bfac-f4cdf674d4cf"
+            }
+          ],
+          "reason": "This planning policy governs walking recommendations, an operational decision absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Long-distance walking proposals should consider both that day's weather and recent records of shoe discomfort.",
+          "uid": "dee4a6f6-c0d1-538a-a12c-fe24fe94b536"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f6d4b615-9877-491c-b699-f63f368a56fa",
+              "memory_uid": "a4ff1b76-755d-530a-b24c-8655115e4fbe"
+            }
+          ],
+          "reason": "This is a specific inference limit concerning shoe usability, distinct from the compared frame's limit concerning emotional meaning.",
+          "status": "RESOLVED",
+          "summary": "Knowing a shoe's location does not reveal its current condition or usability to the local agent.",
+          "uid": "d8719dd7-a1a2-5ef5-8a9a-ac1adfc00e7d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2166f509-27c7-45fe-9c35-93e4c7d27c40",
+              "memory_uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            }
+          ],
+          "reason": "This is independently useful donation-storage information with no operational counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Clothes intended for donation are collected in a large bag beside the entrance.",
+          "uid": "a7db1573-3b2e-5db6-a423-a90e554f622d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2166f509-27c7-45fe-9c35-93e4c7d27c40",
+              "memory_uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            },
+            {
+              "frame_uid": "2166f509-27c7-45fe-9c35-93e4c7d27c40",
+              "memory_uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            }
+          ],
+          "reason": "These memories jointly describe the problem with wholesale emptying and the user's subsequent controlled sorting method.",
+          "status": "RESOLVED",
+          "summary": "After losing track of a needed charger when emptying a whole drawer, the user later sorted by type and bagged only discard items.",
+          "uid": "86fb61bb-4044-55a8-a1a5-34450a8bdf31"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2166f509-27c7-45fe-9c35-93e4c7d27c40",
+              "memory_uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            },
+            {
+              "frame_uid": "2166f509-27c7-45fe-9c35-93e4c7d27c40",
+              "memory_uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            }
+          ],
+          "reason": "These memories jointly describe evidence of continued nonuse and the space gained through donation staging.",
+          "status": "RESOLVED",
+          "summary": "Clothes remained unused for a month after being photographed, and moving them to the donation bag cleared a closet compartment.",
+          "uid": "13513f7a-a777-5713-81a7-775882305d29"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2166f509-27c7-45fe-9c35-93e4c7d27c40",
+              "memory_uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            },
+            {
+              "frame_uid": "2166f509-27c7-45fe-9c35-93e4c7d27c40",
+              "memory_uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            }
+          ],
+          "reason": "These memories jointly establish a paper-mixing hazard and the later separation practice.",
+          "status": "RESOLVED",
+          "summary": "After nearly recycling an important paper with advertising, the user kept documents in a separate box during the next organizing session.",
+          "uid": "92bd6772-98c0-5fce-8f1e-7046fcdb2989"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2166f509-27c7-45fe-9c35-93e4c7d27c40",
+              "memory_uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            }
+          ],
+          "reason": "This is a one-sided family consultation preference concerning disposal.",
+          "status": "RESOLVED",
+          "summary": "The user's mother asks to be consulted about kitchen items in good condition before they are discarded.",
+          "uid": "59b68e6f-2156-5d44-ab98-6371ddb4cc55"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2166f509-27c7-45fe-9c35-93e4c7d27c40",
+              "memory_uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            }
+          ],
+          "reason": "This is a specific disposal safeguard not present in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user should be consulted before a personal document or another person's property is marked as a disposal candidate.",
+          "uid": "ebd5d3ad-e59e-58e4-a287-10e6e6e25f92"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2166f509-27c7-45fe-9c35-93e4c7d27c40",
+              "memory_uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "reason": "This is a specific inference limit concerning sentimental significance, distinct from the reference frame's limit concerning shoe condition and usability.",
+          "status": "RESOLVED",
+          "summary": "Frequency of use alone does not let the local agent determine an object's emotional meaning.",
+          "uid": "6a545377-7912-5ebe-b702-60517970f2b7"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers staged sorting, donation-driven decluttering, document separation, family consultation before disposal, confirmation for sensitive property, and uncertainty about emotional significance.",
+        "differences": "",
+        "reference_only": "The reference covers rain-ready footwear placement and outcomes, shoe discomfort during long walks, umbrella handling, family help with rain preparation, planning checks, and uncertainty about item condition."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "a156d191-d217-43d3-8471-d5efd67e38dc"
+    },
+    "analysis_digest": "a3c1afe559dc36ac7f30dae3bd3f2f3af7f5e0bf98ddf5a477bcc4b3d9e5a0df",
+    "key": "80f6680e894a0dcc1352b688ccfa5078bde33dbfc67dba39db06778ef4c10993",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 41.24172308299967,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "80f6680e894a0dcc1352b688ccfa5078bde33dbfc67dba39db06778ef4c10993",
+  "created_at": "2026-08-13T18:54:11.300999Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/10",
+  "pair_key": "32dc1ed492319907f07d6d46ef933b0254075380012f202205c9560e10786090",
+  "provider_seconds": 41.24172308299967,
+  "right": "task-3/local/personal-memory/2026/04",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

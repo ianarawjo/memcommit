@@ -1,0 +1,360 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:28:49.588957+00:00",
+      "frames": [
+        {
+          "context_digest": "587a9d2fb6abf2b486ccfc50ff85ae7280d7d7bd4003d85ce5877a4edfc9293f",
+          "context_name": "task-2/advisor1/terminology",
+          "context_uid": "7699c7c5-e48b-5548-b0aa-256d793c6c06",
+          "memories": [
+            {
+              "content": "Use the same term throughout the proposal for the same interaction concept or interface element.",
+              "content_digest": "2f11d02134609c6397d8f60105cc452e34129bc1c427a512455247e54951f18a",
+              "position": 0,
+              "uid": "949a884d-b348-5fa0-b1dd-adbebafe10a9"
+            },
+            {
+              "content": "Use abbreviations only for recurring terms of three or more words.",
+              "content_digest": "dcceb4407d24df4034dceca613413471bb46898a487aed0cc0905e48ede482e7",
+              "position": 1,
+              "uid": "2f484151-b5fc-51a9-8a88-b30a403617b3"
+            },
+            {
+              "content": "Present the full name and abbreviation together when using an abbreviation for the first time.",
+              "content_digest": "02e1b2b4cbc8f9a61e299bf1500663ae8cd4036155b2a7dec8c2ce40087ac29b",
+              "position": 2,
+              "uid": "21131a6f-d35c-51e3-895f-46cd21a3b566"
+            },
+            {
+              "content": "Prioritize the research role over diagnostic labels or deficits when referring to participants.",
+              "content_digest": "7b99c6ec90abdbb68d4af8e95a03df3149b9d2d4d637fbd33a70a2acf7073a12",
+              "position": 3,
+              "uid": "e02c3110-05c4-58a4-8d76-c8fd2426a0d5"
+            },
+            {
+              "content": "Reviewers from different subfields struggle to infer undefined abbreviations from context alone.",
+              "content_digest": "13af5eb9fe88f3f2d73192adfb48f7a20de09e22e777a952daa83ca1c030f9ee",
+              "position": 4,
+              "uid": "af028910-e48b-5605-b92b-9378bdfa525c"
+            },
+            {
+              "content": "Use the term formative evaluation for studies seeking design modification evidence, and distinguish it from final efficacy judgments.",
+              "content_digest": "4ba9bca850286ff6286cf4b3bf44395d608ec700c46acd8cd26c54e26d43b378",
+              "position": 5,
+              "uid": "39792d18-2be0-5135-a063-c5213247d330"
+            },
+            {
+              "content": "The user can have contribution labels such as principles, models, or guidelines approved only if they align with the abstraction level of the actual deliverables.",
+              "content_digest": "efed93b748ce74e3e9ed96949bf539c809ea4c36ae77bbb54670285f691f74e9",
+              "position": 6,
+              "uid": "bcaa8c30-ca6e-5b9f-af93-88513a2f16b1"
+            },
+            {
+              "content": "Design principles describe the relationship between conditions and outcomes rather than serving as instructions that merely replicate a single screen layout.",
+              "content_digest": "22385c2bb345db07d19c442e5d99a5c527c2795848b9e29fe198d0ede6255d6f",
+              "position": 7,
+              "uid": "82ad9fe2-4063-5e89-9097-c975aa2920cb"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "09b387c8-5a7e-4189-9329-abbf46bd6937"
+        },
+        {
+          "context_digest": "bf5136a518ce85246184349a0194e446748710ed6da95e5c97d4a31d74ddc1b9",
+          "context_name": "task-2/advisor2/review",
+          "context_uid": "3398ba87-f01e-56bd-9da2-0ed0894524fa",
+          "memories": [
+            {
+              "content": "Conduct one review prior to submission focusing solely on the validity of user problems, system interventions, and field evaluation logic.",
+              "content_digest": "9b0b5596ec5924a6141926bfc337ec6e23d77dfb7b65facb26b42109f05f1fe4",
+              "position": 0,
+              "uid": "6d203c86-b6e0-586a-b896-b654fa319ed1"
+            },
+            {
+              "content": "Cross-check whether research questions align with the core functions of the system.",
+              "content_digest": "f7f9f49efe539881dae49a96adce0ec349435e4cc7f55229c88097e54fe03f93",
+              "position": 1,
+              "uid": "6b75bfb1-67f5-50bb-9e0c-04026062de96"
+            },
+            {
+              "content": "Cross-check whether field tasks align with representative measures.",
+              "content_digest": "3e993f6c978e14b5b0f6e8ada40d8a0067981e943c67636e9599fb652dca44a4",
+              "position": 2,
+              "uid": "3abfda89-82ab-5cc5-bdcd-5e2f274fd727"
+            },
+            {
+              "content": "Cross-check whether the evidence to be collected aligns with the design and operational decisions to be changed.",
+              "content_digest": "a4761a8dac6c60a2132619c8c8e963aca0d61216d689786b18574f5e30f1f3aa",
+              "position": 3,
+              "uid": "f14f1974-9035-5a2c-931a-89a5004a2567"
+            },
+            {
+              "content": "Finally verify that the user problem, system intervention, field evaluation, and expected contribution form one coherent logical flow.",
+              "content_digest": "47198a770770dc805e0f40a5f9b9c34ae1999f39ec2f9fa1c34b3280f21f5477",
+              "position": 4,
+              "uid": "6ba1d344-5d98-5c25-ba1e-b28c08d39747"
+            },
+            {
+              "content": "HCI reviewers view the validity of design interventions as low if research questions do not connect to system functions.",
+              "content_digest": "ffa754352dfecc597f84cff7cbf8607a12bbfd99ac22250cc84392bd85e37e73",
+              "position": 5,
+              "uid": "4a85ebbd-a4ee-5c88-9e93-5fc545f41c64"
+            },
+            {
+              "content": "HCI reviewers view the validity of evaluation plans as low if field tasks fail to generate representative measures.",
+              "content_digest": "f29eb5429d767b0fa171b7e9862b3d8d06dfd388739e95acd67b2321aaf1a91e",
+              "position": 6,
+              "uid": "75c4c71d-28e3-559c-99d1-f0dccc31a9e2"
+            },
+            {
+              "content": "HCI reviewers view the practical utility of contributions as low if collected evidence cannot change design or operational decisions.",
+              "content_digest": "6b9ae0bc59cda995d674479dfe95f43359ff04e68cb07633957885ee5cf1336c",
+              "position": 7,
+              "uid": "577e5506-78e8-5768-b288-7a5986347cce"
+            },
+            {
+              "content": "Before submission, conduct a sequential walkthrough with field liaisons of installation failures, operational interruptions, and recovery scenarios.",
+              "content_digest": "115fa1f22eb7f55918620418f89def51ba84bd36e102875a5f5e560de5305dda",
+              "position": 8,
+              "uid": "9ce34a9a-4ba2-5b32-a1de-b0469ddc3f95"
+            },
+            {
+              "content": "Verify in one sentence how each proposed contribution could actually alter specific design or operational decisions.",
+              "content_digest": "1c6ef38e42f40e9cd6ab5323deaa825efb1136b926b66af9337ea6debaf8600e",
+              "position": 9,
+              "uid": "f8253f92-c60c-57e1-a630-6b31abe080ae"
+            },
+            {
+              "content": "The user must distinguish unconfirmed field partners and equipment from finalized ones so remaining execution risks can be assessed.",
+              "content_digest": "c2eb0936c09d8796092950aba699664f79f2222f27523e37a1af5feabe2b8058",
+              "position": 10,
+              "uid": "f5ad6933-3e22-5c47-bdaf-bacc9c9a5b3c"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "ad9e5865-2ff6-4c1b-9fb4-bc3cf90ee1de"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames complement one another on substantiating contribution claims, while otherwise addressing separate proposal-quality concerns. The reference emphasizes terminology, participant framing, and evaluation naming; the compared frame emphasizes research logic, measurement validity, operational readiness, and execution risk.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "09b387c8-5a7e-4189-9329-abbf46bd6937",
+              "memory_uid": "bcaa8c30-ca6e-5b9f-af93-88513a2f16b1"
+            },
+            {
+              "frame_uid": "09b387c8-5a7e-4189-9329-abbf46bd6937",
+              "memory_uid": "82ad9fe2-4063-5e89-9097-c975aa2920cb"
+            },
+            {
+              "frame_uid": "ad9e5865-2ff6-4c1b-9fb4-bc3cf90ee1de",
+              "memory_uid": "f14f1974-9035-5a2c-931a-89a5004a2567"
+            },
+            {
+              "frame_uid": "ad9e5865-2ff6-4c1b-9fb4-bc3cf90ee1de",
+              "memory_uid": "577e5506-78e8-5768-b288-7a5986347cce"
+            },
+            {
+              "frame_uid": "ad9e5865-2ff6-4c1b-9fb4-bc3cf90ee1de",
+              "memory_uid": "f8253f92-c60c-57e1-a630-6b31abe080ae"
+            }
+          ],
+          "reason": "The reference defines valid contribution labeling and the meaning of design principles, while the compared frame requires actionable evidence and decision impact; these are complementary criteria for substantiating contributions.",
+          "status": "RESOLVED",
+          "summary": "Contribution claims should reflect the abstraction of actual deliverables and demonstrate evidence-based consequences for design or operational decisions.",
+          "uid": "c1fa4587-1b4f-5ea4-ac0d-812864484056"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "09b387c8-5a7e-4189-9329-abbf46bd6937",
+              "memory_uid": "949a884d-b348-5fa0-b1dd-adbebafe10a9"
+            }
+          ],
+          "reason": "Only the reference supplies this independently useful terminology-consistency rule.",
+          "status": "RESOLVED",
+          "summary": "The same interaction concept or interface element should retain one term throughout the proposal.",
+          "uid": "6253e638-b164-53a5-877e-37a46100976d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "09b387c8-5a7e-4189-9329-abbf46bd6937",
+              "memory_uid": "2f484151-b5fc-51a9-8a88-b30a403617b3"
+            }
+          ],
+          "reason": "Only the reference specifies when abbreviation is appropriate.",
+          "status": "RESOLVED",
+          "summary": "Abbreviations should be reserved for recurring terms containing at least three words.",
+          "uid": "d9c4c28a-a488-5eed-94c8-b30e38fc3a85"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "09b387c8-5a7e-4189-9329-abbf46bd6937",
+              "memory_uid": "21131a6f-d35c-51e3-895f-46cd21a3b566"
+            },
+            {
+              "frame_uid": "09b387c8-5a7e-4189-9329-abbf46bd6937",
+              "memory_uid": "af028910-e48b-5605-b92b-9378bdfa525c"
+            }
+          ],
+          "reason": "The reference supplies both the first-use rule and its cross-subfield reviewer rationale as one underlying claim.",
+          "status": "RESOLVED",
+          "summary": "An abbreviation should be introduced with its full name because reviewers cannot safely infer undefined abbreviations from context.",
+          "uid": "3aafb8dc-0a21-5854-b94d-2d0b307623ce"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "09b387c8-5a7e-4189-9329-abbf46bd6937",
+              "memory_uid": "e02c3110-05c4-58a4-8d76-c8fd2426a0d5"
+            }
+          ],
+          "reason": "Only the reference provides this participant-framing policy.",
+          "status": "RESOLVED",
+          "summary": "Participant descriptions should foreground the research role rather than diagnoses or deficits.",
+          "uid": "e37bd1bb-6dc7-509b-954f-922f5ca4aa17"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "09b387c8-5a7e-4189-9329-abbf46bd6937",
+              "memory_uid": "39792d18-2be0-5135-a063-c5213247d330"
+            }
+          ],
+          "reason": "Only the reference defines this evaluation terminology and boundary.",
+          "status": "RESOLVED",
+          "summary": "Studies seeking evidence for design modification should be called formative evaluations and distinguished from final efficacy judgments.",
+          "uid": "f8f9233e-fc57-5547-9ba3-a53d260b310d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ad9e5865-2ff6-4c1b-9fb4-bc3cf90ee1de",
+              "memory_uid": "6d203c86-b6e0-586a-b896-b654fa319ed1"
+            },
+            {
+              "frame_uid": "ad9e5865-2ff6-4c1b-9fb4-bc3cf90ee1de",
+              "memory_uid": "6ba1d344-5d98-5c25-ba1e-b28c08d39747"
+            }
+          ],
+          "reason": "The compared memories describe complementary parts of one proposal-level validity and coherence review.",
+          "status": "RESOLVED",
+          "summary": "A focused pre-submission review should verify the coherent logic connecting the user problem, intervention, field evaluation, and expected contribution.",
+          "uid": "3b030692-37ac-52d0-b83a-8a674514d634"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ad9e5865-2ff6-4c1b-9fb4-bc3cf90ee1de",
+              "memory_uid": "6b75bfb1-67f5-50bb-9e0c-04026062de96"
+            },
+            {
+              "frame_uid": "ad9e5865-2ff6-4c1b-9fb4-bc3cf90ee1de",
+              "memory_uid": "4a85ebbd-a4ee-5c88-9e93-5fc545f41c64"
+            }
+          ],
+          "reason": "The compared frame supplies the alignment check and its reviewer-facing validity rationale as one underlying claim.",
+          "status": "RESOLVED",
+          "summary": "Research questions should align with core system functions so the design intervention remains valid.",
+          "uid": "80288d7e-9ba9-534e-b989-e99e8f614c1f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ad9e5865-2ff6-4c1b-9fb4-bc3cf90ee1de",
+              "memory_uid": "3abfda89-82ab-5cc5-bdcd-5e2f274fd727"
+            },
+            {
+              "frame_uid": "ad9e5865-2ff6-4c1b-9fb4-bc3cf90ee1de",
+              "memory_uid": "75c4c71d-28e3-559c-99d1-f0dccc31a9e2"
+            }
+          ],
+          "reason": "The compared frame supplies the measurement-alignment check and its reviewer-facing rationale as one underlying claim.",
+          "status": "RESOLVED",
+          "summary": "Field tasks should generate representative measures so the evaluation plan remains valid.",
+          "uid": "c6693c5f-f76e-5413-8014-68f877c4f8b8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ad9e5865-2ff6-4c1b-9fb4-bc3cf90ee1de",
+              "memory_uid": "9ce34a9a-4ba2-5b32-a1de-b0469ddc3f95"
+            }
+          ],
+          "reason": "Only the compared frame specifies this operational walkthrough.",
+          "status": "RESOLVED",
+          "summary": "Before submission, field liaisons should sequentially review installation failures, operational interruptions, and recovery scenarios.",
+          "uid": "e73c7344-d273-5b8f-9403-162bf09e27f8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ad9e5865-2ff6-4c1b-9fb4-bc3cf90ee1de",
+              "memory_uid": "f5ad6933-3e22-5c47-bdaf-bacc9c9a5b3c"
+            }
+          ],
+          "reason": "Only the compared frame establishes this execution-risk disclosure requirement.",
+          "status": "RESOLVED",
+          "summary": "Unconfirmed field partners and equipment should be distinguished from finalized resources so execution risks remain assessable.",
+          "uid": "527aadba-0005-59d5-ae92-b2ef2b9a9666"
+        }
+      ],
+      "reports": {
+        "both": "Both require contribution claims to be warranted by what the work delivers and by evidence of meaningful design or operational consequences.",
+        "compared_only": "The compared frame uniquely covers pre-submission logic review, research-question and measurement alignment, failure-recovery walkthroughs, and disclosure of unresolved partners or equipment.",
+        "differences": "",
+        "reference_only": "The reference uniquely covers consistent terminology, controlled abbreviation use, participant-respectful language, and precise formative-evaluation terminology."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "2ab6fc1b-8e9d-4a2f-8400-e56912957101"
+    },
+    "analysis_digest": "3b0140ac2d9e9c16429aad1c5915cf115cd2637fa5948ff418fb457d962495f4",
+    "key": "c309aa0cea58683669ef307ff16093fd23607f052165ca2da020d05ce526826a",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 64.0187144579977,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "c309aa0cea58683669ef307ff16093fd23607f052165ca2da020d05ce526826a",
+  "created_at": "2026-08-13T18:29:53.607084Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/terminology",
+  "pair_key": "89a0f06f967578c781403b244fb97467779ad18c9f39eb2fab14e0a962b6dc22",
+  "provider_seconds": 64.0187144579977,
+  "right": "task-2/advisor2/review",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

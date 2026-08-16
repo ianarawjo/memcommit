@@ -1,0 +1,415 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:40:20.406506+00:00",
+      "frames": [
+        {
+          "context_digest": "6cb54691fcd12037c24daa71882bad82cd67c16ea72979f2a41e1e1b8eae22a8",
+          "context_name": "task-3/local/personal-memory/2024/06",
+          "context_uid": "8c641e5b-01d9-560c-a8c0-b52cee7402c8",
+          "memories": [
+            {
+              "content": "The user stores copies of identity documents in an encrypted folder.",
+              "content_digest": "83efe427335c1415d4a8d601d6e1c5d7a129c6962b74468d313b123e045b052f",
+              "position": 0,
+              "uid": "79576c1e-fa88-5d6e-b5e2-3d4ec11c3e06"
+            },
+            {
+              "content": "On a day the user transferred between buses twice, they rested for an hour after the trip.",
+              "content_digest": "907b9cc4c16b4b3fe53c2323d31afc83347ddc63775bd865bc42b62ca539f5bb",
+              "position": 1,
+              "uid": "28a1ff0b-e2d4-5cb6-9c26-949d86f76bac"
+            },
+            {
+              "content": "On a day the user took a direct route with a similar travel time, they remained seated to the destination.",
+              "content_digest": "0c0d1b12aa0ad393ac43982fe7d36d08f75d9e634c933593ef6a0a96614bb9ea",
+              "position": 2,
+              "uid": "0ad4a1f9-e3e9-517e-8cfc-f8e6307f1d3e"
+            },
+            {
+              "content": "After arriving at an entrance with stairs only, the user went around to an entrance on the other side of the building.",
+              "content_digest": "775d4c0a211f4509a0488cb3b2a790ae22c1b2ba2e96ed6b9100ae3cfb454315",
+              "position": 3,
+              "uid": "f772b0c7-502f-55b7-b431-ee6b20518d38"
+            },
+            {
+              "content": "On a day the user checked the accessible entrance location in advance, they arrived before the agreed time.",
+              "content_digest": "4e087a4e0ca48a3414580ce0d974da4b2221b304302de01cf305945866320a6a",
+              "position": 4,
+              "uid": "0b2d800b-a4ab-5422-bf06-56d17b98f604"
+            },
+            {
+              "content": "On a rainy day, the user's clothes became wet while crossing an uncovered section at a transfer stop.",
+              "content_digest": "dad5c9f35f0469edc528091e47f22365c1cb5de1b32e70335826d67a576fb47d",
+              "position": 5,
+              "uid": "b233f332-4927-549b-8dab-b554977fe363"
+            },
+            {
+              "content": "On a day the user traveled with their maternal uncle, they agreed to meet at an entrance near the elevator.",
+              "content_digest": "c81b012ae6686f47d54809c50ab559077b0e170d54792d34038f0f8fc32c6a96",
+              "position": 6,
+              "uid": "b38d0d63-c4b0-5955-857d-03cbcfd27f5b"
+            },
+            {
+              "content": "The user's maternal uncle prefers an aisle seat from which it is easy to stand during long-distance travel.",
+              "content_digest": "3ea31753296866c1bf438b51eba4110b0c6ed2e907e86dc21796166ed19d82df",
+              "position": 7,
+              "uid": "4668d326-b11c-5467-bca4-e8d5e242e375"
+            },
+            {
+              "content": "The local agent cannot know whether an accessible entrance is operating that day from past route records alone.",
+              "content_digest": "00fc09badcb1d569e3cb1e392ad18406a032d17749f71b44ed7bc121d5d72b4c",
+              "position": 8,
+              "uid": "a77c985c-3986-5141-9805-e3321b3cfa2c"
+            },
+            {
+              "content": "The transfer route the user takes has more boarding and alighting events and walking segments than the direct route.",
+              "content_digest": "f9320e36494ea5beb854d6bbe38a817ae73cd9fe68b75977438d35e44fb38fe6",
+              "position": 9,
+              "uid": "988926a1-3e28-5b3e-a41c-d9338971643e"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "379ab18b-5fe1-4ef7-9e9c-eff0718b64e9"
+        },
+        {
+          "context_digest": "43b741cd1df20a084f3517aec7f886d4e5022812f0536eb126a6caf2d5570489",
+          "context_name": "task-3/local/personal-memory/2025/05",
+          "context_uid": "1f913bb6-790c-5490-a20d-127c7aab5892",
+          "memories": [
+            {
+              "content": "The user keeps two potted herbs beside a south-facing window.",
+              "content_digest": "b79056c033f208bb02b99fef1c011e5537e2ea8c19c3894863c3a5ad56054e08",
+              "position": 0,
+              "uid": "cb09b8ab-c7c4-51bb-a227-039c7cdfae5d"
+            },
+            {
+              "content": "During a week when the user watered every day based only on the soil surface, the leaves of one plant turned yellow.",
+              "content_digest": "042f4be9fd5481a7252d1c0065e95085e11e81e475531afe45b9f1d268d4c5b4",
+              "position": 1,
+              "uid": "95978183-0070-5b12-b117-be39bb343a5e"
+            },
+            {
+              "content": "During a week when the user checked below the soil surface with a finger before watering, the plant grew new leaves.",
+              "content_digest": "06ca2ec53f03677fdfd78bb1d391f197d3f49b974f6e812f25ba49ce34f74249",
+              "position": 2,
+              "uid": "8c610ce5-1eb7-52e5-ad81-e8062d23cd19"
+            },
+            {
+              "content": "On a day the user left the window open for a long time, strong wind knocked over one pot.",
+              "content_digest": "914f67a75fdf73cee064a465a9f0e6ee9ba012f1a40c614e199a9354756203a8",
+              "position": 3,
+              "uid": "3f886c0c-071b-5f2d-adad-da01345d702f"
+            },
+            {
+              "content": "The next day, the user moved the pot inward from the windowsill so the same wind would not knock it over.",
+              "content_digest": "f190916b360b6543865ced49cf5d9a987e96c9147966181e5920342bb41ba50c",
+              "position": 4,
+              "uid": "afe855b8-f5ad-559c-a63f-6f655ba371a2"
+            },
+            {
+              "content": "The user put a plant-name label in a small pot received from their maternal aunt.",
+              "content_digest": "82284f0102305db41eaaecafe86bc05833090853320f2ebb8e5f44abb2d78a63",
+              "position": 5,
+              "uid": "384c4f5f-b15c-5742-ac79-20106d0dd30b"
+            },
+            {
+              "content": "The user confused the care instructions for an unlabeled pot with those for another plant.",
+              "content_digest": "824267db866253690527d5ab08166f4228401443ed903708d33ac22542811750",
+              "position": 6,
+              "uid": "48dc89af-ed9d-51a5-a4b1-b809fd818143"
+            },
+            {
+              "content": "The user's maternal aunt considers understanding the sunlight at a pot's location more important than watering frequency when caring for it.",
+              "content_digest": "8a24f6df4a58db3e538f77e572a3cf152b7a4aff3527ec3d8616e85a675bc7c0",
+              "position": 7,
+              "uid": "a2426820-65d6-5c78-ac50-0f32b366ae47"
+            },
+            {
+              "content": "Before creating a plant-care reminder, check each plant's name and most recent watering date.",
+              "content_digest": "ecd7ef911951f3c2383cd916a4efbd94bdf439f63de1687c2f637a161ac8a60d",
+              "position": 8,
+              "uid": "efd51196-ed48-5699-a0f4-c5b8e149d11c"
+            },
+            {
+              "content": "The soil in the user's potted herbs beside the south-facing window dries at different rates depending on the season and amount of sunlight.",
+              "content_digest": "f716b16e802d30d4c2d1ed4bff855812682e53a9fc4e29988e2662ae321d0a4f",
+              "position": 9,
+              "uid": "4c93eeff-566e-5a1a-afb9-035c97fb9c73"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "e80627dd-48d9-4e80-885f-53fa208bff19"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames contain independently useful information in unrelated domains. The reference covers document security and accessible travel experiences, constraints, and preferences, while the compared frame covers herb placement, watering, labeling, wind protection, reminders, and care guidance; no claims address the same operational decision.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "379ab18b-5fe1-4ef7-9e9c-eff0718b64e9",
+              "memory_uid": "79576c1e-fa88-5d6e-b5e2-3d4ec11c3e06"
+            }
+          ],
+          "reason": "This is an independently useful document-security practice with no counterpart addressing that practice in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user stores copies of identity documents in an encrypted folder.",
+          "uid": "6e1af82a-4792-5c6f-a6fa-01dd4b241e48"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "379ab18b-5fe1-4ef7-9e9c-eff0718b64e9",
+              "memory_uid": "28a1ff0b-e2d4-5cb6-9c26-949d86f76bac"
+            },
+            {
+              "frame_uid": "379ab18b-5fe1-4ef7-9e9c-eff0718b64e9",
+              "memory_uid": "0ad4a1f9-e3e9-517e-8cfc-f8e6307f1d3e"
+            },
+            {
+              "frame_uid": "379ab18b-5fe1-4ef7-9e9c-eff0718b64e9",
+              "memory_uid": "988926a1-3e28-5b3e-a41c-d9338971643e"
+            }
+          ],
+          "reason": "These memories jointly provide a one-sided comparison of the physical demands and observed outcomes of the user’s transfer and direct routes.",
+          "status": "RESOLVED",
+          "summary": "The transfer route involved more movement than a similarly timed direct route and was followed by rest, whereas the direct trip allowed the user to remain seated.",
+          "uid": "3661e548-5b4e-5f13-89b1-51c2eb07b318"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "379ab18b-5fe1-4ef7-9e9c-eff0718b64e9",
+              "memory_uid": "f772b0c7-502f-55b7-b431-ee6b20518d38"
+            }
+          ],
+          "reason": "This is a distinct observed accessibility workaround not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "When faced with a stairs-only entrance, the user went around the building to another entrance.",
+          "uid": "7d3e7e11-6ff7-5449-b46d-d1576df03219"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "379ab18b-5fe1-4ef7-9e9c-eff0718b64e9",
+              "memory_uid": "0b2d800b-a4ab-5422-bf06-56d17b98f604"
+            }
+          ],
+          "reason": "This is a distinct observation about advance accessibility planning and arrival timing, without a counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "After checking the accessible entrance location in advance, the user arrived before the agreed time.",
+          "uid": "3f86a63f-b5a4-5e6a-9652-cdf8c946c210"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "379ab18b-5fe1-4ef7-9e9c-eff0718b64e9",
+              "memory_uid": "b233f332-4927-549b-8dab-b554977fe363"
+            }
+          ],
+          "reason": "This is a distinct travel-weather exposure observation not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s clothes became wet while crossing an uncovered section at a transfer stop in the rain.",
+          "uid": "d662498d-f02c-5020-83c8-0e09194f604f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "379ab18b-5fe1-4ef7-9e9c-eff0718b64e9",
+              "memory_uid": "b38d0d63-c4b0-5955-857d-03cbcfd27f5b"
+            }
+          ],
+          "reason": "This is a distinct travel meeting arrangement with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "When traveling with their maternal uncle, the user arranged to meet at an entrance near the elevator.",
+          "uid": "9a24e255-4ca2-55fc-8e16-4f69822a2584"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "379ab18b-5fe1-4ef7-9e9c-eff0718b64e9",
+              "memory_uid": "4668d326-b11c-5467-bca4-e8d5e242e375"
+            }
+          ],
+          "reason": "This is a distinct seating preference concerning the uncle and is not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s maternal uncle prefers an aisle seat that makes standing easy during long-distance travel.",
+          "uid": "4428bca5-5548-5968-82a0-c5678641b44b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "379ab18b-5fe1-4ef7-9e9c-eff0718b64e9",
+              "memory_uid": "a77c985c-3986-5141-9805-e3321b3cfa2c"
+            }
+          ],
+          "reason": "This is a distinct limitation on route-record inference with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Past route records alone cannot establish whether an accessible entrance is operating on a particular day.",
+          "uid": "f5bff290-3647-5a5c-aa08-eb5928a92179"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e80627dd-48d9-4e80-885f-53fa208bff19",
+              "memory_uid": "cb09b8ab-c7c4-51bb-a227-039c7cdfae5d"
+            }
+          ],
+          "reason": "This is independently useful information about the user’s plants and their placement, absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user keeps two potted herbs beside a south-facing window.",
+          "uid": "346628d6-a136-5642-9e4d-f6debe9a182b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e80627dd-48d9-4e80-885f-53fa208bff19",
+              "memory_uid": "95978183-0070-5b12-b117-be39bb343a5e"
+            },
+            {
+              "frame_uid": "e80627dd-48d9-4e80-885f-53fa208bff19",
+              "memory_uid": "8c610ce5-1eb7-52e5-ad81-e8062d23cd19"
+            }
+          ],
+          "reason": "These memories jointly express a one-sided contrast between observed outcomes under two soil-assessment approaches.",
+          "status": "RESOLVED",
+          "summary": "Daily watering based only on the soil surface coincided with yellowing leaves, while checking below the surface before watering coincided with new growth.",
+          "uid": "4bf933c9-afee-5bba-b999-548c3c808681"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e80627dd-48d9-4e80-885f-53fa208bff19",
+              "memory_uid": "3f886c0c-071b-5f2d-adad-da01345d702f"
+            },
+            {
+              "frame_uid": "e80627dd-48d9-4e80-885f-53fa208bff19",
+              "memory_uid": "afe855b8-f5ad-559c-a63f-6f655ba371a2"
+            }
+          ],
+          "reason": "These memories split one one-sided incident-and-mitigation sequence that is not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "After strong wind through an open window knocked over a pot, the user moved it inward to prevent recurrence.",
+          "uid": "91421a2f-4ef2-5c9d-bdbc-09a952ae1ec0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e80627dd-48d9-4e80-885f-53fa208bff19",
+              "memory_uid": "384c4f5f-b15c-5742-ac79-20106d0dd30b"
+            }
+          ],
+          "reason": "This is a distinct labeling action involving a gifted pot, with no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user placed a plant-name label in a small pot received from their maternal aunt.",
+          "uid": "6937b9be-9597-53f6-89e9-18375a09377a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e80627dd-48d9-4e80-885f-53fa208bff19",
+              "memory_uid": "48dc89af-ed9d-51a5-a4b1-b809fd818143"
+            }
+          ],
+          "reason": "This is a distinct plant-identification error not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user confused an unlabeled pot’s care instructions with those for another plant.",
+          "uid": "67d864bb-f274-524f-8f6f-911f76eafd3c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e80627dd-48d9-4e80-885f-53fa208bff19",
+              "memory_uid": "a2426820-65d6-5c78-ac50-0f32b366ae47"
+            }
+          ],
+          "reason": "This is a distinct plant-care preference attributed to the aunt and has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s maternal aunt prioritizes understanding sunlight at a pot’s location over watering frequency.",
+          "uid": "632f02db-ae9c-5921-9f99-0455811d8e5c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e80627dd-48d9-4e80-885f-53fa208bff19",
+              "memory_uid": "efd51196-ed48-5699-a0f4-c5b8e149d11c"
+            }
+          ],
+          "reason": "This is a distinct operational prerequisite for reminder creation not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Each plant’s name and most recent watering date should be checked before creating a plant-care reminder.",
+          "uid": "a6075c45-f5b3-5f9f-9f10-bd3559b78c7a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e80627dd-48d9-4e80-885f-53fa208bff19",
+              "memory_uid": "4c93eeff-566e-5a1a-afb9-035c97fb9c73"
+            }
+          ],
+          "reason": "This is a distinct environmental variability claim about the user’s herbs, without a counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The herbs’ soil dries at different rates depending on season and sunlight.",
+          "uid": "281cd5c7-dc48-52af-92fd-e830ad952a7c"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame describes herb placement and variable soil drying, observed watering outcomes, wind mitigation, plant identification problems and labeling, reminder prerequisites, and the user’s aunt’s care priority.",
+        "differences": "",
+        "reference_only": "The reference describes encrypted identity-document storage, route exertion and weather exposure, accessible-entrance planning and uncertainty, and travel arrangements and seating preferences involving the user’s uncle."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "69479b55-68b8-4b60-b0a9-441a6643c3f5"
+    },
+    "analysis_digest": "46b1d884a45f33092d0eecfcc190a2ad147e48e758a887a89bb37cd41a910307",
+    "key": "e1aa36681766dfb20afb75ae37aa5fcda927fa69f93dcf5413d1b7f57fc713ee",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 52.5643287089988,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "e1aa36681766dfb20afb75ae37aa5fcda927fa69f93dcf5413d1b7f57fc713ee",
+  "created_at": "2026-08-13T18:41:12.970465Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/06",
+  "pair_key": "ac88a12ed65f0a855b9efa0b010451f86da6f1493dfbd6837d2a9c851ed2f135",
+  "provider_seconds": 52.5643287089988,
+  "right": "task-3/local/personal-memory/2025/05",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

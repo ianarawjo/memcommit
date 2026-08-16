@@ -1,0 +1,370 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:54:20.279548+00:00",
+      "frames": [
+        {
+          "context_digest": "0af669f138c2617a4b35c0974627a23c7e5cb2405da5e306648b130efac7fbdf",
+          "context_name": "task-3/local/personal-memory/2025/12",
+          "context_uid": "c54e9dde-005a-5d20-b41b-1313b4713061",
+          "memories": [
+            {
+              "content": "The user stores wrapping paper and empty gift boxes on the upper shelf of the bedroom closet.",
+              "content_digest": "8f3b67dea69e1fa656f1e42e39700a71ebc250c4f6ec18dc4d4f88d467e86ad2",
+              "position": 0,
+              "uid": "bd69b616-6e7c-5440-8b29-586de68bcff6"
+            },
+            {
+              "content": "From photographs, the user discovered that they had given their mother the same type of kitchen item two years in a row.",
+              "content_digest": "6962b8dc03fd90e1c8badfda0d827008cc675b940e5975a5833ebe504af7d635",
+              "position": 1,
+              "uid": "90c60e57-d7db-5783-9ca8-2fd27b94d847"
+            },
+            {
+              "content": "This year, the user went to the market with their mother and let her choose a needed item directly.",
+              "content_digest": "9a27aa187ad2964f985ffcf376490f4b69d3c83f2034591187273bd89f61637a",
+              "position": 2,
+              "uid": "53bc23b2-8242-58b5-b496-a45c70bb8e41"
+            },
+            {
+              "content": "The user once ordered a gift late and had it delivered the day after the gathering.",
+              "content_digest": "245bb316eb5d0b0203c63eb9a2832c6cf73cb9e7e368bdb48a08bb6b702642d7",
+              "position": 3,
+              "uid": "3b097446-2c73-5414-8c06-6bacdf00a4c1"
+            },
+            {
+              "content": "The next year, the user checked the expected delivery date and ordered one week before the gathering.",
+              "content_digest": "97aed11c6b4f7d03bd6a55e27ef34ef539da85204787bb0468f1e2df51d958fc",
+              "position": 4,
+              "uid": "ce18c7a5-d1e9-5e5c-8739-b14fa7298feb"
+            },
+            {
+              "content": "The user did not put names on wrapped boxes and handed their older sister and younger brother each other's gifts.",
+              "content_digest": "48464eb29ee2d2e01cda00f0e3a13d116d4aa121d424aecc59644431e89f8957",
+              "position": 5,
+              "uid": "7657f424-cd24-54dd-8409-e04974dd1531"
+            },
+            {
+              "content": "The next time the user wrapped gifts, they wrote the recipient on the bottom of each box.",
+              "content_digest": "551e74aebf85d4ffee86b960c520b17f3f7e4d50428493934831a774d9e31db6",
+              "position": 6,
+              "uid": "d8e82ad3-902e-5f0c-aa8e-b23ce874982a"
+            },
+            {
+              "content": "The user's younger brother welcomes a snack the family can share immediately more than an item for his use alone.",
+              "content_digest": "ec32111520e2f12afc684c6441c075dcc0715fc450d0ce8f20408dfb955634a9",
+              "position": 7,
+              "uid": "8a941bf1-73bd-51d3-a069-62ecc9d56439"
+            },
+            {
+              "content": "The local agent can find past gift records and flag duplicates but cannot know what is needed this year.",
+              "content_digest": "f7574c7f91999992680a7e88e79270747fd744a46355800012c63319c286d731",
+              "position": 8,
+              "uid": "036edf8f-4680-5822-924e-0fdc691c8135"
+            },
+            {
+              "content": "Year-end deliveries may take longer than usual or have their expected dates changed.",
+              "content_digest": "cc0955e132cf6f4bec7f416e54ed2ffdbac22169adeeae7372a6ddc496da4b9e",
+              "position": 9,
+              "uid": "b9e9e222-a559-56e3-93b5-1f49a0e0d3ab"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "b02fe88f-ea2f-4adb-ae4f-cf3db2ad4256"
+        },
+        {
+          "context_digest": "5a45aaafce189f861f7195d3a753aa86812f64c689213961136327ca721c9d3e",
+          "context_name": "task-3/local/personal-memory/2026/06",
+          "context_uid": "f2e6c2e0-886a-52d8-98d4-03009ea37991",
+          "memories": [
+            {
+              "content": "The user keeps four folding chairs for family barbecues in storage.",
+              "content_digest": "7e2bb593a723adbac468184af4063e0ef74420baa03d6249ef77a84f2e6bc9df",
+              "position": 0,
+              "uid": "cce43b8e-c1c1-5208-8d9a-ee665b805d4c"
+            },
+            {
+              "content": "When six family members gathered in a noisy indoor restaurant, the user asked several times for the person across from them to repeat what was said.",
+              "content_digest": "d858d40478a37bed08580523df1915b85b4e2217b2fc506acedacaca55d2158d",
+              "position": 1,
+              "uid": "e682f0fd-e92f-566e-b1ec-1d5ebf091b60"
+            },
+            {
+              "content": "The user held the next gathering in their father's yard and moved between seats while speaking with everyone.",
+              "content_digest": "44843518c924955fa15e245dc41763a6fe21a95f6f590bd395f7b8a2d6357256",
+              "position": 2,
+              "uid": "c1f2b53e-6184-552b-a321-9796bb121055"
+            },
+            {
+              "content": "On a day the user started the barbecue at midday, sunlight led them to finish the meal quickly.",
+              "content_digest": "f275c2211b4bd69f40351800db57965b8ba44afbadb6e90a0291acae4e7a541b",
+              "position": 3,
+              "uid": "56d5befe-d5f4-59df-82e4-a66ba868dfc2"
+            },
+            {
+              "content": "The next time, the user started at 6 p.m. and remained outside until sunset.",
+              "content_digest": "13c413fbf16ea0704c10d09c5ee065a49ab789b0a3dadb1fc5068631dd95b292",
+              "position": 4,
+              "uid": "83d73ede-6f5a-550e-ba1c-c146b73a9917"
+            },
+            {
+              "content": "Because the side dishes brought by the user's mother and older sister had no labels, the user opened the same container twice.",
+              "content_digest": "5cc4205a743f5d8adca15876d7b0dd864089595ce729f4e3c1cc9a2272c6849b",
+              "position": 5,
+              "uid": "cf0947e8-c133-5259-bac2-e8ee6d74929e"
+            },
+            {
+              "content": "At the next gathering, the user wrote each food's name and who brought it on a small piece of paper.",
+              "content_digest": "6a93e0b5f7e3da8eff2e5c69a3f86c28dfc1a39c1ba7602a61cc1f6a96b837f9",
+              "position": 6,
+              "uid": "d42e48ca-39de-529f-bba2-332b779bd6c2"
+            },
+            {
+              "content": "After a barbecue, the user's younger brother prefers to divide leftover food into small containers to take home rather than discard it.",
+              "content_digest": "9febf1dab1f5000cddc636cd753d3c418b84810cbc6e394df7e8917d3fa29b72",
+              "position": 7,
+              "uid": "3958627e-a0fa-5e32-9e87-7ee874fc6fe7"
+            },
+            {
+              "content": "The local agent can summarize preparation and responses from prior family barbecues but cannot know the next attendees or weather.",
+              "content_digest": "6be2ed6916fc8a6200a4646b5db3b5ea0df7650e664bd098f973fb5229257cec",
+              "position": 8,
+              "uid": "1f24b5c2-554c-5356-b335-c6879e53ba7f"
+            },
+            {
+              "content": "The user's father's yard receives strong direct sunlight at midday; after 6 p.m., shade and wind lower the felt temperature.",
+              "content_digest": "a0bf855f5bb0422568bbed468e5299d111143362d7b9fe2dcf35dbaf8bcbf4c6",
+              "position": 9,
+              "uid": "d88b1b21-c58f-51d5-a60b-54bb11473d96"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "bb65f15c-fbc7-414e-a6d6-0bbea74e1f6a"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames share a consistent boundary for local-agent assistance: past family-event records are usable, while future circumstances remain unknowable. Otherwise, they preserve separate but thematically parallel histories about gift preparation and family barbecues, including planning lessons, labeling practices, environmental conditions, storage, and food preferences.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "b02fe88f-ea2f-4adb-ae4f-cf3db2ad4256",
+              "memory_uid": "036edf8f-4680-5822-924e-0fdc691c8135"
+            },
+            {
+              "frame_uid": "bb65f15c-fbc7-414e-a6d6-0bbea74e1f6a",
+              "memory_uid": "1f24b5c2-554c-5356-b335-c6879e53ba7f"
+            }
+          ],
+          "reason": "Both claims govern reliance on local-agent assistance: historical information can support preparation, while future-specific facts remain outside its knowledge.",
+          "status": "RESOLVED",
+          "summary": "The local agent can use records of prior family events but cannot determine important circumstances of the next event.",
+          "uid": "08372d33-4c38-570a-b3dc-12bc1e1be658"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b02fe88f-ea2f-4adb-ae4f-cf3db2ad4256",
+              "memory_uid": "bd69b616-6e7c-5440-8b29-586de68bcff6"
+            }
+          ],
+          "reason": "This is independently useful storage information found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Wrapping paper and empty gift boxes are stored on the bedroom closet’s upper shelf.",
+          "uid": "6621c740-cbfc-5e8a-85b0-e8682b268f32"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b02fe88f-ea2f-4adb-ae4f-cf3db2ad4256",
+              "memory_uid": "90c60e57-d7db-5783-9ca8-2fd27b94d847"
+            },
+            {
+              "frame_uid": "b02fe88f-ea2f-4adb-ae4f-cf3db2ad4256",
+              "memory_uid": "53bc23b2-8242-58b5-b496-a45c70bb8e41"
+            }
+          ],
+          "reason": "These memories form one reference-only problem-and-response history about avoiding an unsuitable or duplicate gift for the user’s mother.",
+          "status": "RESOLVED",
+          "summary": "After discovering repeated kitchen gifts in photographs, the user let their mother directly choose a needed item this year.",
+          "uid": "764b8978-6624-5ec3-ba49-6758eb5325b0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b02fe88f-ea2f-4adb-ae4f-cf3db2ad4256",
+              "memory_uid": "3b097446-2c73-5414-8c06-6bacdf00a4c1"
+            },
+            {
+              "frame_uid": "b02fe88f-ea2f-4adb-ae4f-cf3db2ad4256",
+              "memory_uid": "ce18c7a5-d1e9-5e5c-8739-b14fa7298feb"
+            },
+            {
+              "frame_uid": "b02fe88f-ea2f-4adb-ae4f-cf3db2ad4256",
+              "memory_uid": "b9e9e222-a559-56e3-93b5-1f49a0e0d3ab"
+            }
+          ],
+          "reason": "These memories split one reference-only lesson about planning gift orders against seasonal delivery uncertainty.",
+          "status": "RESOLVED",
+          "summary": "A late gift delivery led the user to order a week ahead after checking the expected date, while recognizing that year-end delivery estimates can lengthen or change.",
+          "uid": "e9d27058-7374-5111-a7bf-1e16a3f32a1b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b02fe88f-ea2f-4adb-ae4f-cf3db2ad4256",
+              "memory_uid": "7657f424-cd24-54dd-8409-e04974dd1531"
+            },
+            {
+              "frame_uid": "b02fe88f-ea2f-4adb-ae4f-cf3db2ad4256",
+              "memory_uid": "d8e82ad3-902e-5f0c-aa8e-b23ce874982a"
+            }
+          ],
+          "reason": "These memories form one reference-only problem-and-response history about labeling wrapped gifts by recipient.",
+          "status": "RESOLVED",
+          "summary": "After exchanging the siblings’ unlabeled gifts by mistake, the user began writing each recipient’s name on the bottom of the box.",
+          "uid": "fae46f16-6871-59f1-803a-c2da4cdf491b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b02fe88f-ea2f-4adb-ae4f-cf3db2ad4256",
+              "memory_uid": "8a941bf1-73bd-51d3-a069-62ecc9d56439"
+            }
+          ],
+          "reason": "This is independently useful gift-preference information found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The younger brother prefers a snack the family can share immediately over an item intended only for him.",
+          "uid": "988cb363-c889-5dc6-984c-2b33546d2432"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bb65f15c-fbc7-414e-a6d6-0bbea74e1f6a",
+              "memory_uid": "cce43b8e-c1c1-5208-8d9a-ee665b805d4c"
+            }
+          ],
+          "reason": "This is independently useful barbecue-equipment information found only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user keeps four folding chairs in storage for family barbecues.",
+          "uid": "e30f39b5-92ec-5b15-ae1b-4aa7424d120b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bb65f15c-fbc7-414e-a6d6-0bbea74e1f6a",
+              "memory_uid": "e682f0fd-e92f-566e-b1ec-1d5ebf091b60"
+            },
+            {
+              "frame_uid": "bb65f15c-fbc7-414e-a6d6-0bbea74e1f6a",
+              "memory_uid": "c1f2b53e-6184-552b-a321-9796bb121055"
+            }
+          ],
+          "reason": "These memories form one compared-only problem-and-response history about choosing and using a gathering setting to support conversation.",
+          "status": "RESOLVED",
+          "summary": "After difficulty hearing across a noisy indoor restaurant, the user held the next gathering in their father’s yard and moved among seats to speak with everyone.",
+          "uid": "5fe570c2-7f65-5fc1-9464-e7243d376e8a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bb65f15c-fbc7-414e-a6d6-0bbea74e1f6a",
+              "memory_uid": "56d5befe-d5f4-59df-82e4-a66ba868dfc2"
+            },
+            {
+              "frame_uid": "bb65f15c-fbc7-414e-a6d6-0bbea74e1f6a",
+              "memory_uid": "83d73ede-6f5a-550e-ba1c-c146b73a9917"
+            },
+            {
+              "frame_uid": "bb65f15c-fbc7-414e-a6d6-0bbea74e1f6a",
+              "memory_uid": "d88b1b21-c58f-51d5-a60b-54bb11473d96"
+            }
+          ],
+          "reason": "These memories split one compared-only lesson connecting barbecue timing with changing conditions in the father’s yard.",
+          "status": "RESOLVED",
+          "summary": "Strong midday sunlight shortened one barbecue, while a later 6 p.m. start allowed the user to remain outside until sunset as shade and wind lowered the felt temperature.",
+          "uid": "d7035469-82e2-5b68-9060-19c6d88f7b52"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bb65f15c-fbc7-414e-a6d6-0bbea74e1f6a",
+              "memory_uid": "cf0947e8-c133-5259-bac2-e8ee6d74929e"
+            },
+            {
+              "frame_uid": "bb65f15c-fbc7-414e-a6d6-0bbea74e1f6a",
+              "memory_uid": "d42e48ca-39de-529f-bba2-332b779bd6c2"
+            }
+          ],
+          "reason": "These memories form one compared-only problem-and-response history about identifying food containers at gatherings.",
+          "status": "RESOLVED",
+          "summary": "After opening the same unlabeled side-dish container twice, the user began labeling each food with its name and contributor.",
+          "uid": "c0728b1a-80c6-5c31-b4ee-a5fa53a4ca3d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bb65f15c-fbc7-414e-a6d6-0bbea74e1f6a",
+              "memory_uid": "3958627e-a0fa-5e32-9e87-7ee874fc6fe7"
+            }
+          ],
+          "reason": "This is independently useful leftover-handling information found only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "After a barbecue, the younger brother prefers portioning leftover food into small take-home containers rather than discarding it.",
+          "uid": "f6c69c65-9ca2-5b4f-aa0f-1fe1396ddd73"
+        }
+      ],
+      "reports": {
+        "both": "Both frames limit the local agent to learning from prior family events while excluding reliable knowledge of future needs, attendance, weather, or similar circumstances.",
+        "compared_only": "The compared frame covers barbecue seating, venue and timing adaptations, food labeling, leftovers, chair storage, and sunlight, shade, and wind conditions.",
+        "differences": "",
+        "reference_only": "The reference covers gift storage, recipient selection, delivery planning, gift labeling, and the younger brother’s preference for shareable snacks."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "93f96f86-726b-413c-995c-806ef90554be"
+    },
+    "analysis_digest": "80804b78cb28f02aef2f28ed8ab0ce7af1fe760ac8007df10960ca946edbcbe3",
+    "key": "6903a60490b49456de5f22185ff30e2a11d57d99568a2cb5dadcca2dc8437aff",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 47.909711625001364,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "6903a60490b49456de5f22185ff30e2a11d57d99568a2cb5dadcca2dc8437aff",
+  "created_at": "2026-08-13T18:55:08.188951Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/12",
+  "pair_key": "2e7a71ba34eefc725bd80cc566c91fd337f7b318854af8804b40d5c52e48b3c5",
+  "provider_seconds": 47.909711625001364,
+  "right": "task-3/local/personal-memory/2026/06",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

@@ -1,0 +1,400 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:26:50.025416+00:00",
+      "frames": [
+        {
+          "context_digest": "130876ecc1e3921197d330f5ad8493b927360f3505da3eff8df01d4f595a4934",
+          "context_name": "task-2/advisor1/structure",
+          "context_uid": "0ff7abfd-58d3-58c2-b42a-31dca38cb7bd",
+          "memories": [
+            {
+              "content": "Complete the problem framing within the first two sentences so the reader reaches the proposal's central issue before any supporting background.",
+              "content_digest": "4096d07c1d883f8ba3973fd247207f8e86964ff2172e8580c81cb53e64772a6c",
+              "position": 0,
+              "uid": "44249c8a-e84f-5c20-a9cd-a55457e98511"
+            },
+            {
+              "content": "Use the first sentence for the concrete problem and the second for its consequence; reserve later sentences for the proposed response.",
+              "content_digest": "8d72b732a389d0c1bbb22112fa3ba6d8113c8b9d29d252d751c5a55cf7abc648",
+              "position": 1,
+              "uid": "21371c6c-c74f-5791-8f9b-6d099306bfb5"
+            },
+            {
+              "content": "Specify the user, context, and interaction to be explored in the primary HCI research question.",
+              "content_digest": "cc6e0085a02b6df0b572f7393a15292e7fd6c8204f78c66f50fd15190ef49dd0",
+              "position": 2,
+              "uid": "f69ea80c-0d56-5fe8-9d24-8793eefa6643"
+            },
+            {
+              "content": "Provide one compact visual summary when proposing an unfamiliar interaction procedure.",
+              "content_digest": "1e4299abe1691fbbfc826fc59d4276831d9a49abd3588820ba2f50311fd56d2c",
+              "position": 3,
+              "uid": "18ebdcbc-cf5a-5e6c-b2cd-b4cd07d7e59e"
+            },
+            {
+              "content": "Mark the conditions that move an unfamiliar interaction procedure from one step to the next in its visual summary.",
+              "content_digest": "9e7d7547cac76b4b6665ea585fedd7678682c7f9a4eadf129202ac2ea2c6b2b8",
+              "position": 4,
+              "uid": "5ab99a77-8836-50cf-8377-fdd23a208bc4"
+            },
+            {
+              "content": "Present the master’s research schedule as phased periods for exploration, design, prototyping, and user evaluation.",
+              "content_digest": "de00ac53757731455605eb2a3568fcbb4ea3660401a8e6aaf2cb9698795decec",
+              "position": 5,
+              "uid": "b9b7932b-85c1-5a14-80f7-0983dbf22380"
+            },
+            {
+              "content": "Link one reviewable deliverable to each phase of the master’s research.",
+              "content_digest": "cac76eb15b96d8fa32e3041fd5a067a3b5e2085fa832755b5740fe7cf2b57c17",
+              "position": 6,
+              "uid": "fc0a3a72-2da2-5843-be3a-a4ff2adf8fac"
+            },
+            {
+              "content": "Place the gap left by HCI-related research and the proposed design and empirical contributions in close proximity.",
+              "content_digest": "94c1e46dec54f1af7649582c49adbd9f998d3b82300cd234c58604e68619c6d9",
+              "position": 7,
+              "uid": "2f7092a7-2625-5d27-bd76-a13ee5809cc2"
+            },
+            {
+              "content": "Divide a two-page proposal with short descriptive subheadings so a reader can jump directly to the problem, proposed response, and next steps.",
+              "content_digest": "9a65c457d63f97379a188faea00bbc6dfc4ea30ad54aee1386f724a765e88e90",
+              "position": 8,
+              "uid": "a1857f07-36cd-5a6c-946d-a308e712e9eb"
+            },
+            {
+              "content": "Give the problem and proposed response their own descriptive subheadings instead of relying only on paragraph transitions.",
+              "content_digest": "3f5d0cf36befd2b1cb66ae8038719d3f8cd4472303e5173c48c1f96f67d9e969",
+              "position": 9,
+              "uid": "895b5ac9-1aa4-51d2-b89a-94e9fe5b869d"
+            },
+            {
+              "content": "Give the next steps and requested support their own descriptive subheading so they remain easy to find on a return visit.",
+              "content_digest": "008352fbd9cb0d40bd64afe1db74efb2a833adc4146924743b836dbd1941bd90",
+              "position": 10,
+              "uid": "3005f4c5-e17b-531b-b9bf-c9d69411c71f"
+            },
+            {
+              "content": "Place pilot observation or initial prototype results near sentences supporting feasibility claims.",
+              "content_digest": "60e9dcff7041a8df6d3471976e828c8a4713a24ec1b8fa6b6af77afd75b78cf8",
+              "position": 11,
+              "uid": "4913f63e-ceb9-587a-ade9-494fc8f28849"
+            },
+            {
+              "content": "Readers often decide what a proposal is about from its first two sentences before scanning the rest of the page.",
+              "content_digest": "0d8addaa334e762de0ef2ec08c78102bc005a6b81f0baf418c83be2a2981934b",
+              "position": 12,
+              "uid": "8ecaec22-7c25-5a39-a85b-56db9c3b607e"
+            },
+            {
+              "content": "When setup continues past the second sentence, readers who are skimming often retain the background topic but miss the exact problem being proposed.",
+              "content_digest": "5976e248ce36164afb87182216974b972f783352ae5b500398052387ee628710",
+              "position": 13,
+              "uid": "a4536b84-40f2-57db-84e4-024c97c9fecb"
+            },
+            {
+              "content": "Reuse the same short subheadings in discussion so a reader can return to a section without searching through the whole page.",
+              "content_digest": "276c3060f1479291f0d0dd7eba9899e91191555c65cfa60a48d28d1f5b877538",
+              "position": 14,
+              "uid": "2312cb6e-4f50-56f5-b725-ba5e45697a73"
+            },
+            {
+              "content": "Use visible subheadings as a completeness check: an empty or missing section makes an omitted part of the proposal immediately apparent.",
+              "content_digest": "2a68f989965d7f20482be421bc6145ea22d769c78e9c833a842694480dc097f5",
+              "position": 15,
+              "uid": "1d90043b-f010-5a14-9493-77f636c13975"
+            },
+            {
+              "content": "Readers often scan section labels before deciding which paragraph to read closely.",
+              "content_digest": "95e51e9236f82b7ace59c6a24359f398583142c762cc1dd607717a9f297e804a",
+              "position": 16,
+              "uid": "b77fe6ec-676b-5bb9-9119-45aefea2aa27"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "c8acaace-e328-4cfe-90cb-36a557a18d23"
+        },
+        {
+          "context_digest": "b598a4ff3268ef8c6c0d7bc5ff34af370074bcdd30d61bd3623fcdfb167f37d6",
+          "context_name": "task-2/advisor2/safety",
+          "context_uid": "4283d797-6a33-5f39-b7f6-f4dbd3264389",
+          "memories": [
+            {
+              "content": "List whom to notify and in what order if serious discomfort is reported during the study.",
+              "content_digest": "3453feb8597fb15c827f22297d58dc804fdc1d8080b9e93ba35b85a4425092b6",
+              "position": 0,
+              "uid": "ceb095a9-3068-55ea-a06f-d954c121e007"
+            },
+            {
+              "content": "Field staff rely on the pre-defined contact sequence when serious discomfort is reported.",
+              "content_digest": "ba38f8a5c993c810e19b9120f4492c3accf962c8b8fd7642539ac24f363099e0",
+              "position": 1,
+              "uid": "962d7645-02b3-5611-8415-4370794c10d4"
+            },
+            {
+              "content": "Define the thresholds for participant harm, operational disruption, and data anomalies at which deployment and data collection must cease.",
+              "content_digest": "7f7f124d266efd8255c4615ebc7eb375447047ed5a2b96327f28f8f17d048813",
+              "position": 2,
+              "uid": "a3270872-1901-5d24-8ef1-374833599bf9"
+            },
+            {
+              "content": "Establish procedures to restore existing systems and workflow states after suspending field deployment.",
+              "content_digest": "1a5f7636ec45e60df11db8b0d3763345c0bfaf9a92c1e5d581e6b36452c31208",
+              "position": 3,
+              "uid": "f6dd1368-0d90-5f1a-97d0-56594ce8f4b3"
+            },
+            {
+              "content": "The user's stop plan can be judged feasible only when it identifies who has authority to order recovery and who is responsible for carrying it out.",
+              "content_digest": "3fa05bd19fdeeb320a37cfb89ad853a868b64055f7b21eb182798b0119f6620c",
+              "position": 4,
+              "uid": "342e4697-873f-56a8-b4a4-896efe910144"
+            },
+            {
+              "content": "In organizations where error reporting is linked to individual performance evaluations, safety signal records may be separated from research decision logs, potentially breaking the traceability path for the same incident.",
+              "content_digest": "2bf13ff8ab1a778e8a793ede627b28d40798ae40d25c7a6d25eb5e2e79dd8e97",
+              "position": 5,
+              "uid": "6c4e9175-4590-5689-ae2b-678f0eb930b9"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "6ba7ddeb-6ad0-44bc-aa14-6753c8dec979"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address independent concerns: the reference focuses on concise, navigable HCI proposal presentation, while the compared frame focuses on field-study safety escalation, suspension, recovery, and incident traceability. Neither supplies a scope-aligned counterpart to the other, and no contradiction is present.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c8acaace-e328-4cfe-90cb-36a557a18d23",
+              "memory_uid": "44249c8a-e84f-5c20-a9cd-a55457e98511"
+            },
+            {
+              "frame_uid": "c8acaace-e328-4cfe-90cb-36a557a18d23",
+              "memory_uid": "21371c6c-c74f-5791-8f9b-6d099306bfb5"
+            },
+            {
+              "frame_uid": "c8acaace-e328-4cfe-90cb-36a557a18d23",
+              "memory_uid": "8ecaec22-7c25-5a39-a85b-56db9c3b607e"
+            },
+            {
+              "frame_uid": "c8acaace-e328-4cfe-90cb-36a557a18d23",
+              "memory_uid": "a4536b84-40f2-57db-84e4-024c97c9fecb"
+            }
+          ],
+          "reason": "These memories jointly express and motivate one proposal-writing rule about front-loading the central problem; the compared frame has no corresponding presentation guidance.",
+          "status": "RESOLVED",
+          "summary": "State the concrete problem and its consequence within the opening two sentences, leaving the proposed response for later, because skimming readers may otherwise miss the exact issue.",
+          "uid": "29f03a2e-c215-5bf1-a198-5bd4230eb99a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c8acaace-e328-4cfe-90cb-36a557a18d23",
+              "memory_uid": "f69ea80c-0d56-5fe8-9d24-8793eefa6643"
+            }
+          ],
+          "reason": "This is independently useful guidance about research-question formulation with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The primary HCI research question should identify the user, context, and interaction under study.",
+          "uid": "6f4206d1-d4b4-5718-9be4-aa7cc9dd44a2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c8acaace-e328-4cfe-90cb-36a557a18d23",
+              "memory_uid": "18ebdcbc-cf5a-5e6c-b2cd-b4cd07d7e59e"
+            },
+            {
+              "frame_uid": "c8acaace-e328-4cfe-90cb-36a557a18d23",
+              "memory_uid": "5ab99a77-8836-50cf-8377-fdd23a208bc4"
+            }
+          ],
+          "reason": "The memories split one visualization requirement into the summary itself and its transition conditions; the compared frame contains no corresponding communication rule.",
+          "status": "RESOLVED",
+          "summary": "An unfamiliar interaction procedure should have a compact visual summary that marks the conditions governing transitions between steps.",
+          "uid": "3c4d2282-00c4-5e99-8387-bc53f7bc3bff"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c8acaace-e328-4cfe-90cb-36a557a18d23",
+              "memory_uid": "b9b7932b-85c1-5a14-80f7-0983dbf22380"
+            },
+            {
+              "frame_uid": "c8acaace-e328-4cfe-90cb-36a557a18d23",
+              "memory_uid": "fc0a3a72-2da2-5843-be3a-a4ff2adf8fac"
+            }
+          ],
+          "reason": "The memories describe complementary parts of one phased planning structure, which has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Organize the master’s research schedule into exploration, design, prototyping, and evaluation phases, each tied to a reviewable deliverable.",
+          "uid": "5ff539ca-c728-5633-9cbd-56fb82994a76"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c8acaace-e328-4cfe-90cb-36a557a18d23",
+              "memory_uid": "2f7092a7-2625-5d27-bd76-a13ee5809cc2"
+            }
+          ],
+          "reason": "This is a one-sided proposal-organization rule not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Place the HCI research gap close to the proposed design and empirical contributions.",
+          "uid": "c0d54254-be94-514a-a0a8-6ce63d04d00a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c8acaace-e328-4cfe-90cb-36a557a18d23",
+              "memory_uid": "a1857f07-36cd-5a6c-946d-a308e712e9eb"
+            },
+            {
+              "frame_uid": "c8acaace-e328-4cfe-90cb-36a557a18d23",
+              "memory_uid": "895b5ac9-1aa4-51d2-b89a-94e9fe5b869d"
+            },
+            {
+              "frame_uid": "c8acaace-e328-4cfe-90cb-36a557a18d23",
+              "memory_uid": "3005f4c5-e17b-531b-b9bf-c9d69411c71f"
+            },
+            {
+              "frame_uid": "c8acaace-e328-4cfe-90cb-36a557a18d23",
+              "memory_uid": "2312cb6e-4f50-56f5-b725-ba5e45697a73"
+            },
+            {
+              "frame_uid": "c8acaace-e328-4cfe-90cb-36a557a18d23",
+              "memory_uid": "1d90043b-f010-5a14-9493-77f636c13975"
+            },
+            {
+              "frame_uid": "c8acaace-e328-4cfe-90cb-36a557a18d23",
+              "memory_uid": "b77fe6ec-676b-5bb9-9119-45aefea2aa27"
+            }
+          ],
+          "reason": "These memories develop one subheading strategy through its required sections and its navigation and completeness purposes; the compared frame has no matching document-structure guidance.",
+          "status": "RESOLVED",
+          "summary": "Use consistent descriptive subheadings for the problem, proposed response, and next steps or requested support to support scanning, return navigation, and completeness checking.",
+          "uid": "703ad1da-90b6-5e47-98f0-703c561c9b88"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c8acaace-e328-4cfe-90cb-36a557a18d23",
+              "memory_uid": "4913f63e-ceb9-587a-ade9-494fc8f28849"
+            }
+          ],
+          "reason": "This is an independent rule about positioning evidence in a proposal and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Place pilot observations or initial prototype results near the feasibility claims they support.",
+          "uid": "f1ec9406-5c01-5210-af2a-a4dc81b61702"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6ba7ddeb-6ad0-44bc-aa14-6753c8dec979",
+              "memory_uid": "ceb095a9-3068-55ea-a06f-d954c121e007"
+            },
+            {
+              "frame_uid": "6ba7ddeb-6ad0-44bc-aa14-6753c8dec979",
+              "memory_uid": "962d7645-02b3-5611-8415-4370794c10d4"
+            }
+          ],
+          "reason": "The memories state the notification-sequence requirement and its operational use as one safety-escalation claim; the reference frame does not address it.",
+          "status": "RESOLVED",
+          "summary": "Predefine whom field staff must notify, and in what order, when serious discomfort is reported.",
+          "uid": "ad5f2a34-65e0-5cf9-aee5-0beac5b75cf6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6ba7ddeb-6ad0-44bc-aa14-6753c8dec979",
+              "memory_uid": "a3270872-1901-5d24-8ef1-374833599bf9"
+            }
+          ],
+          "reason": "This is independently useful field-study stopping guidance absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Define participant-harm, operational-disruption, and data-anomaly thresholds that require deployment and data collection to cease.",
+          "uid": "abbbf4cb-0c64-54f2-a9f2-7011a9c863a9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6ba7ddeb-6ad0-44bc-aa14-6753c8dec979",
+              "memory_uid": "f6dd1368-0d90-5f1a-97d0-56594ce8f4b3"
+            },
+            {
+              "frame_uid": "6ba7ddeb-6ad0-44bc-aa14-6753c8dec979",
+              "memory_uid": "342e4697-873f-56a8-b4a4-896efe910144"
+            }
+          ],
+          "reason": "The memories describe complementary procedural and responsibility requirements for one recovery plan; the reference frame has no corresponding operational-safety claim.",
+          "status": "RESOLVED",
+          "summary": "Specify how existing systems and workflow states will be restored after field deployment is suspended, including who may order recovery and who must execute it.",
+          "uid": "8351e15c-9d60-5a53-872c-8346ec8a2e95"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6ba7ddeb-6ad0-44bc-aa14-6753c8dec979",
+              "memory_uid": "6c4e9175-4590-5689-ae2b-678f0eb930b9"
+            }
+          ],
+          "reason": "This is a conditional, independently useful warning about organizational recordkeeping that is not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Where error reporting affects individual performance evaluations, separating safety records from research decision logs may break incident traceability.",
+          "uid": "59bcc205-925f-5e06-ade8-fa8b74bb4154"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers discomfort escalation, stop thresholds, system recovery authority and execution, and a conditional risk to incident traceability.",
+        "differences": "",
+        "reference_only": "The reference covers front-loaded problem framing, research-question specificity, procedural visuals, phased planning, contribution placement, descriptive navigation, and nearby feasibility evidence."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "b6659426-ccf2-49e9-b369-dc226364e42d"
+    },
+    "analysis_digest": "6a835baa75ab4f99ff2817d5fdaf77f43b791caf0533fcaea327f5ac3684a5af",
+    "key": "cfd00e05933bfe02790c8e5eadcbaeeaa6e01dcd9087d9f45bb302454abe0a0b",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 34.273132041998906,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "cfd00e05933bfe02790c8e5eadcbaeeaa6e01dcd9087d9f45bb302454abe0a0b",
+  "created_at": "2026-08-13T18:27:24.298177Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/structure",
+  "pair_key": "09494745d60d031e93d190197ea4a8f3270ffedc0f6c8f6a9a98406eb714ab1b",
+  "provider_seconds": 34.273132041998906,
+  "right": "task-2/advisor2/safety",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

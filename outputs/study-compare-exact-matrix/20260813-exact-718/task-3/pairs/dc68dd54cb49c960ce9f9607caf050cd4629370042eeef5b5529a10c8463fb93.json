@@ -1,0 +1,406 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:48:22.486857+00:00",
+      "frames": [
+        {
+          "context_digest": "0b8af0ea4e580cc332939d026149e543e9251c54de246e3eabb83c941e6c12f2",
+          "context_name": "task-3/local/personal-memory/2024/12",
+          "context_uid": "66c3e5de-61bb-5795-8e5a-4e28f64be857",
+          "memories": [
+            {
+              "content": "The user used an accessible entrance at a clinic in December 2024.",
+              "content_digest": "a940bc9fb7423a1bdb9dde547cd39eb8ad66d4fa3051649c62b042fc63935263",
+              "position": 0,
+              "uid": "a6923620-267d-5129-b8c4-cd9b1e1a1e7b"
+            },
+            {
+              "content": "On a day snow had accumulated and blocked the main-entrance ramp, the user went to a side entrance.",
+              "content_digest": "460c05d8e8b4b7443ff42cbeead66e07201846394bcbe5948f63e585a197006f",
+              "position": 1,
+              "uid": "fb0e1d1f-0ef5-5214-b6d7-f6ca5c68f582"
+            },
+            {
+              "content": "The user learned on site that the elevator was under inspection and delayed the appointment.",
+              "content_digest": "b5efa024c597b57651178431d22173d4ca1242c3a4c9607f8bd5a7ff681af6f4",
+              "position": 2,
+              "uid": "4cb45120-4376-5c7b-ae92-faa9e4b9330c"
+            },
+            {
+              "content": "The day before the next visit, the user called to check whether the elevator would be operating.",
+              "content_digest": "93c66066de480a4d2f30b7b7c4d955acfceb227ac898766b6375829804b580eb",
+              "position": 3,
+              "uid": "479f4434-879c-5335-b0c9-c0bfa19ecdcd"
+            },
+            {
+              "content": "The user waited for their turn in front of a ticket machine near the waiting chairs.",
+              "content_digest": "fada8c09d46af2e1bcbd2b1e97d9cb786ceca83fc13d1240627639dd6cb96e65",
+              "position": 4,
+              "uid": "0f2c78a7-8f92-573d-af8a-a360ceb77b24"
+            },
+            {
+              "content": "On a day the user waited in a corridor without chairs, they leaned against the wall and changed position several times.",
+              "content_digest": "0037afaeb85d94f985b1628b7b8f8194fb00d7d7e72e1746c6bae2c2ba66fe6f",
+              "position": 5,
+              "uid": "7b9197ac-4263-5169-8d3b-d34f5d893d36"
+            },
+            {
+              "content": "On a day their older sister accompanied them, the user found a place to sit immediately after reception.",
+              "content_digest": "1ae59de552a922fd3b4d39e7e5dc1ec65ff08ee68e3448f2152f27dfec710a5a",
+              "position": 6,
+              "uid": "7b0b7571-f29c-56e5-a27a-82d69a4a6982"
+            },
+            {
+              "content": "Reception staff expect that a first-time visitor may ask where the accessible entrance is.",
+              "content_digest": "7dc3300dc630b737c0f7b437eba30179aa6aaa03efd61c968604ee505a43aa73",
+              "position": 7,
+              "uid": "e9515d6b-10d9-579f-abf7-5030db64218a"
+            },
+            {
+              "content": "The local agent cannot infer the user's condition from a record of using an accessible route alone.",
+              "content_digest": "2d8a50f62f32c43ca62e1e23b75c34361ece43fd8367964174fdc73d66795df4",
+              "position": 8,
+              "uid": "8e57141d-c603-56cd-ab9e-c14b4e944b45"
+            },
+            {
+              "content": "Snow accumulation and snow-removal work can temporarily block an entrance route used under ordinary conditions.",
+              "content_digest": "4fb152c120860688789bdd4b825de45799e9fa00c0c18c334492dd4b274adde9",
+              "position": 9,
+              "uid": "a6076438-307c-56fe-9d2c-848181846ce5"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "899a1d16-4447-4fc2-bba4-5f676f8a148e"
+        },
+        {
+          "context_digest": "4b8dc68a205171fe661b04620d0fba2bbb386ff21d494699c34a74dc2ab86080",
+          "context_name": "task-3/local/personal-memory/2026/03",
+          "context_uid": "97d36150-4792-5a5c-9332-5eb1de8bcf04",
+          "memories": [
+            {
+              "content": "The user stores tax-related receipts in digital folders by year.",
+              "content_digest": "778f983547572b31798b7041899812a7b0b574d74b585baf6883e94919dee6ec",
+              "position": 0,
+              "uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393"
+            },
+            {
+              "content": "The user found three paper receipts late and recalculated the expense total already prepared.",
+              "content_digest": "542368a141ec82a1bd7da4b534d88ea62c487d16a37f454569bf6400cbc749e9",
+              "position": 1,
+              "uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878"
+            },
+            {
+              "content": "Starting the next month, the user photographed receipts on the day they were received and reduced omissions.",
+              "content_digest": "b95e0a1afa1196a9bff117bf12b1630edcc4eb65bfdfeb3128ae5937563a492e",
+              "position": 2,
+              "uid": "ff436ea5-1b3e-55df-8302-bd8a96740671"
+            },
+            {
+              "content": "The user named every file with only the photo date and spent a long time looking for a needed receipt.",
+              "content_digest": "c3aa33e0b7e007bdfc5c12dcda659e2a52938548fbf53d5a1ab034487a528857",
+              "position": 3,
+              "uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e"
+            },
+            {
+              "content": "The user later included the expense category in the filename and found the receipt immediately through search.",
+              "content_digest": "cdae97761f614b932d3b330723627bee8b0e3d033e2bf1061b721367237acee1",
+              "position": 4,
+              "uid": "89d6fa9a-b795-59df-be34-1c05a9861d35"
+            },
+            {
+              "content": "While reviewing documents just before submission, the user discovered one blank signature field.",
+              "content_digest": "a525c117b97eec82c678f276b319158703bf9cc558fb83cb81c0820d5c9e3174",
+              "position": 5,
+              "uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2"
+            },
+            {
+              "content": "Before submitting an administrative document, the user checks the signature field as the final item on the checklist.",
+              "content_digest": "542bec3cbc3fc8b22c95da274e479e96bfbf061a3b644d0d7f213de5a030dbd5",
+              "position": 6,
+              "uid": "5551622f-66cf-5542-8c47-1cddadab5c02"
+            },
+            {
+              "content": "Staff at a tax-support counter expect to receive an electronic copy in which every item is legible rather than a blurred or cropped photo.",
+              "content_digest": "d328ca248fdeecf0756e23b1202e7007bc8c3c25ae769439b0fd2efdbbe47580",
+              "position": 7,
+              "uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f"
+            },
+            {
+              "content": "The local agent can organize receipts by date and category but cannot determine whether an expense is deductible.",
+              "content_digest": "bcc769721a99b099ca20e5e527fa8904d54ecbaf9ae7d7616b95e1adaf1f89a9",
+              "position": 8,
+              "uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094"
+            },
+            {
+              "content": "The accepted scope and submission deadlines for administrative documents may vary under that year's guidance.",
+              "content_digest": "1ab61126b8efb0c2a9c6114c367018158f2e136bafa87e33f60aadb0686d0537",
+              "position": 9,
+              "uid": "de398064-3179-590b-8c62-effb17060115"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "618f0c17-8cc3-43d9-9832-197f0c6476a1"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover unrelated operational domains. The reference describes clinic access, elevator availability, waiting conditions, staff expectations, and inference limits; the compared frame describes receipt management, document checks, submission expectations, agent limits, and changing annual guidance. No cross-frame semantic overlap or disagreement is supported.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "899a1d16-4447-4fc2-bba4-5f676f8a148e",
+              "memory_uid": "a6923620-267d-5129-b8c4-cd9b1e1a1e7b"
+            }
+          ],
+          "reason": "This is a one-sided clinic-access event with no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user used an accessible clinic entrance in December 2024.",
+          "uid": "2605a1be-fc94-5b93-9470-d8fa618abca2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "899a1d16-4447-4fc2-bba4-5f676f8a148e",
+              "memory_uid": "fb0e1d1f-0ef5-5214-b6d7-f6ca5c68f582"
+            },
+            {
+              "frame_uid": "899a1d16-4447-4fc2-bba4-5f676f8a148e",
+              "memory_uid": "a6076438-307c-56fe-9d2c-848181846ce5"
+            }
+          ],
+          "reason": "These memories split the specific experience and general operational condition of snow obstructing a clinic route; the compared frame has no corresponding claim.",
+          "status": "RESOLVED",
+          "summary": "Snow-related conditions temporarily blocked or can block an ordinarily used entrance route.",
+          "uid": "8dad7da3-f45e-53e7-b3da-9735a4ccf128"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "899a1d16-4447-4fc2-bba4-5f676f8a148e",
+              "memory_uid": "4cb45120-4376-5c7b-ae92-faa9e4b9330c"
+            },
+            {
+              "frame_uid": "899a1d16-4447-4fc2-bba4-5f676f8a148e",
+              "memory_uid": "479f4434-879c-5335-b0c9-c0bfa19ecdcd"
+            }
+          ],
+          "reason": "These memories form one clinic-elevator disruption and subsequent precaution, absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "An unexpected elevator inspection delayed an appointment, leading the user to check elevator operation before a later visit.",
+          "uid": "a54a8d4a-4e81-5737-b468-faec38a4e0bf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "899a1d16-4447-4fc2-bba4-5f676f8a148e",
+              "memory_uid": "0f2c78a7-8f92-573d-af8a-a360ceb77b24"
+            }
+          ],
+          "reason": "This specific waiting arrangement has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user waited for a turn by a ticket machine near waiting chairs.",
+          "uid": "ef9b5b6b-3199-5a0c-82df-d0bcd8e30241"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "899a1d16-4447-4fc2-bba4-5f676f8a148e",
+              "memory_uid": "7b9197ac-4263-5169-8d3b-d34f5d893d36"
+            }
+          ],
+          "reason": "This one-sided account of waiting without seating has no corresponding compared-frame claim.",
+          "status": "RESOLVED",
+          "summary": "Without corridor chairs, the user leaned against a wall and repeatedly changed position while waiting.",
+          "uid": "35a92a35-f837-5128-9552-2f610c6878ee"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "899a1d16-4447-4fc2-bba4-5f676f8a148e",
+              "memory_uid": "7b0b7571-f29c-56e5-a27a-82d69a4a6982"
+            }
+          ],
+          "reason": "This conditioned clinic-seating experience is independently useful and absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "When accompanied by an older sister, the user found seating immediately after reception.",
+          "uid": "648f387f-6314-5831-a9f6-13aac8746bd0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "899a1d16-4447-4fc2-bba4-5f676f8a148e",
+              "memory_uid": "e9515d6b-10d9-579f-abf7-5030db64218a"
+            }
+          ],
+          "reason": "This clinic wayfinding expectation has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Reception staff anticipate that first-time visitors may ask for the accessible entrance.",
+          "uid": "d5b7caae-0aee-59e0-a0f0-b143b5fad271"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "899a1d16-4447-4fc2-bba4-5f676f8a148e",
+              "memory_uid": "8e57141d-c603-56cd-ab9e-c14b4e944b45"
+            }
+          ],
+          "reason": "This inference boundary concerns clinic accessibility and is not the same operational decision as the compared frame’s deductibility limit.",
+          "status": "RESOLVED",
+          "summary": "Accessible-route use alone does not justify inferring the user’s condition.",
+          "uid": "c32c9417-5d8e-5e9f-ab5f-56983248db9a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "618f0c17-8cc3-43d9-9832-197f0c6476a1",
+              "memory_uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393"
+            }
+          ],
+          "reason": "This receipt-storage practice has no materially corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user organizes digital tax-receipt folders by year.",
+          "uid": "035d6742-76b5-54b1-832b-bea73efa61c1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "618f0c17-8cc3-43d9-9832-197f0c6476a1",
+              "memory_uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878"
+            },
+            {
+              "frame_uid": "618f0c17-8cc3-43d9-9832-197f0c6476a1",
+              "memory_uid": "ff436ea5-1b3e-55df-8302-bd8a96740671"
+            }
+          ],
+          "reason": "These memories split one receipt-omission problem and the resulting capture improvement, absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Late-discovered paper receipts required recalculation, after which same-day receipt photography reduced omissions.",
+          "uid": "a03fb31d-30b3-52ae-b747-18752a746420"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "618f0c17-8cc3-43d9-9832-197f0c6476a1",
+              "memory_uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e"
+            },
+            {
+              "frame_uid": "618f0c17-8cc3-43d9-9832-197f0c6476a1",
+              "memory_uid": "89d6fa9a-b795-59df-be34-1c05a9861d35"
+            }
+          ],
+          "reason": "These memories jointly describe one filename-design change and its retrieval effect, with no reference-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "Date-only filenames hindered receipt retrieval, while adding expense categories enabled immediate search.",
+          "uid": "8aa7de7c-144f-53ba-8d15-3bc7f1ca4e37"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "618f0c17-8cc3-43d9-9832-197f0c6476a1",
+              "memory_uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2"
+            },
+            {
+              "frame_uid": "618f0c17-8cc3-43d9-9832-197f0c6476a1",
+              "memory_uid": "5551622f-66cf-5542-8c47-1cddadab5c02"
+            }
+          ],
+          "reason": "These memories split one signature-omission risk and the resulting checklist practice, absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Finding an unsigned field during final review is paired with checking the signature field last before submission.",
+          "uid": "60b082ee-d602-5b50-bfe6-aedf64e3c87e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "618f0c17-8cc3-43d9-9832-197f0c6476a1",
+              "memory_uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f"
+            }
+          ],
+          "reason": "This document-quality expectation has no materially corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Tax-support staff expect electronic copies to be complete and legible rather than blurred or cropped.",
+          "uid": "53d1ebb3-dc8d-51aa-9c38-9391c4f852f7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "618f0c17-8cc3-43d9-9832-197f0c6476a1",
+              "memory_uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094"
+            }
+          ],
+          "reason": "This capability boundary concerns tax classification and is not the same operational decision as inferring a condition from accessible-route use.",
+          "status": "RESOLVED",
+          "summary": "The local agent may organize receipts by date and category but cannot decide deductibility.",
+          "uid": "c75b3bba-2c3c-5cb0-aae1-703d2ee46010"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "618f0c17-8cc3-43d9-9832-197f0c6476a1",
+              "memory_uid": "de398064-3179-590b-8c62-effb17060115"
+            }
+          ],
+          "reason": "This time-sensitive administrative rule has no materially corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Accepted document scope and submission deadlines may vary with the year’s guidance.",
+          "uid": "0a6685c7-4391-5041-9fcf-dc9e48974a86"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Administrative practices cover receipt capture and retrieval, signature checks, legibility expectations, limited agent judgment, and year-specific submission rules.",
+        "differences": "",
+        "reference_only": "Clinic experiences include accessible-route disruption, elevator delays and advance checking, varied waiting conditions, entrance guidance, and limits on inferring a user’s condition."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "36237c31-5828-435c-afb3-c9ad9b33e6bd"
+    },
+    "analysis_digest": "a6ae6db248edbc91f633b59e0fbb26cf0de221d2f2be463b44b67f0c1c3de4e9",
+    "key": "ea25aa36b9b81d44dc401decd0026554edbb2eb821c312b14ca70988b6c18d74",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 44.854360249999445,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "ea25aa36b9b81d44dc401decd0026554edbb2eb821c312b14ca70988b6c18d74",
+  "created_at": "2026-08-13T18:49:07.340697Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/12",
+  "pair_key": "dc68dd54cb49c960ce9f9607caf050cd4629370042eeef5b5529a10c8463fb93",
+  "provider_seconds": 44.854360249999445,
+  "right": "task-3/local/personal-memory/2026/03",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

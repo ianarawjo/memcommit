@@ -1,0 +1,330 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:25:53.127629+00:00",
+      "frames": [
+        {
+          "context_digest": "d2c716d52357c4200adc8772d5823715ffd736eb766028c1c62bbb32852bc344",
+          "context_name": "task-2/advisor1/scope",
+          "context_uid": "6db29abe-5784-5eec-acaa-060bac0e11f1",
+          "memories": [
+            {
+              "content": "Define in one sentence the user groups and usage contexts to which the design knowledge does not apply.",
+              "content_digest": "3193ffe501a06d6148b39c333853b42bc0278b2ab3c3df88162b049548ff16bb",
+              "position": 0,
+              "uid": "e594a6ab-81e9-5e5f-8ef5-e6bb8f3760d7"
+            },
+            {
+              "content": "Reviewers judge the generalization boundary of results through explicitly excluded targets and situations.",
+              "content_digest": "a929649a7bd07f29f31a8cd1969a3c160ba5f61c0def76e204443c30234f84b0",
+              "position": 1,
+              "uid": "31cdacff-7c49-547d-9f97-598a07b67fb6"
+            },
+            {
+              "content": "Specify user goals, interaction conditions, and technological constraints under which the proposed design knowledge can be transferred.",
+              "content_digest": "6ae1bfaeadb1863db1997685527706d210a379a376a24d3de1168e952f847627",
+              "position": 2,
+              "uid": "1459d986-4dc9-51f3-bf13-dbb0b07045c8"
+            },
+            {
+              "content": "Small-scale formative studies can support analytic generalization distinct from statistical representativeness when results are expressed in terms of design conditions and mechanisms.",
+              "content_digest": "1963572a303acbf383890b7d97b52349f572df761e89ea3fd5116058cd2e1cea",
+              "position": 3,
+              "uid": "1db5fcd6-f93c-5630-9810-053c10b5ceba"
+            },
+            {
+              "content": "The author of this proposal tends to apply design knowledge derived from an accessible sample to a broader user population.",
+              "content_digest": "df2a7f1284c1994c6dec49eb7995acd1ed341a9e6b8f4b06c854d85fa9d77d6c",
+              "position": 4,
+              "uid": "fd29c315-521f-53c0-add5-c668ec318a43"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "e50910d6-c4c4-4024-89fc-b246631c1f77"
+        },
+        {
+          "context_digest": "b379636c1034c71339b717628e5e233c5f245d0452c487967c8e881d38e4b4a7",
+          "context_name": "task-2/advisor2/feasibility",
+          "context_uid": "2a4a102a-14f5-53bb-88ef-681448ebecff",
+          "memories": [
+            {
+              "content": "Mark unverified schedule assumptions as such.",
+              "content_digest": "d4cdcdbcdb51d96f9a7435e72c2e4ef25a3e3822a765a88afafeca5194bda96e",
+              "position": 0,
+              "uid": "5c9755f8-78bd-5654-a3c7-8be0864e4f12"
+            },
+            {
+              "content": "Mark unverified recruitment assumptions as such.",
+              "content_digest": "4cc28528fee1c7b09f709638e2b57d3bc9efe635d20500ee98567f8f59b8cf21",
+              "position": 1,
+              "uid": "75af48aa-b39e-5b55-95d9-f7f7d2becbad"
+            },
+            {
+              "content": "Mark unverified technical assumptions as such.",
+              "content_digest": "8942e49cd46e3e9746330349df11e49d4a6c9250c7aa4c52c2d9ade1c97c735c",
+              "position": 2,
+              "uid": "292e33b0-4bfd-5e3a-9379-0fbf3619c42d"
+            },
+            {
+              "content": "Trace back the resources required for each core prototype feature and field research procedure.",
+              "content_digest": "b1ac088b664c62c3c1cfb96f6bb31a3ab5fc0fd77d0d1fba58e1da621b5dd56a",
+              "position": 3,
+              "uid": "c0c1fd8d-1aae-51a3-a1d4-66c1481d7b48"
+            },
+            {
+              "content": "Operations reviewers judge feasibility by examining the personnel required for each procedure.",
+              "content_digest": "3199aba38f58f677147b94eca54221e4d0add145a2a58194c3851efcc22e8fab",
+              "position": 4,
+              "uid": "7be25c27-6d67-50fe-90b5-76fca32a93d8"
+            },
+            {
+              "content": "Operations reviewers judge feasibility by examining the equipment required for each procedure.",
+              "content_digest": "13f9b86391d66cf558fc6eead29969c80acdf78d2164c96aa99641bf6c2891fd",
+              "position": 5,
+              "uid": "1aae182f-4eb3-58b7-b8cd-5ce517ead36a"
+            },
+            {
+              "content": "Operations reviewers judge feasibility by examining the time required for each procedure.",
+              "content_digest": "29efef51e7b8e35c459099af93b8ea90d019d83de3cf894e04b184078619fff4",
+              "position": 6,
+              "uid": "84f6e5e3-96b4-538b-a633-1b656204a296"
+            },
+            {
+              "content": "Document separately the commitments and confirmation status of field partners required for recruitment, installation, and operational support.",
+              "content_digest": "ba0ceb0fa886251bfe2b5a83154500862f8c2d4a82ed74fc9ddb3600010cc0b3",
+              "position": 7,
+              "uid": "16a461c4-d90d-5d0f-bfd0-4c1a116ec2be"
+            },
+            {
+              "content": "Designate a responsible party for software updates, equipment inspections, and user support during the deployment period.",
+              "content_digest": "54caa62836c502faf35561d45fba1d02a059c8ed6436ce714114bd392cb3bc9d",
+              "position": 8,
+              "uid": "0ce26892-666f-5ebe-95b2-c6f48915f18b"
+            },
+            {
+              "content": "The user's deployment readiness can be assessed only when dependencies on external services and field personnel are visible.",
+              "content_digest": "931fa67dd8ea84954ce3f0b9631301c320fdcf1bf46fb7fda0214e77636c8c1c",
+              "position": 9,
+              "uid": "4f35fd0c-005a-56a7-b33a-d74bde2d65eb"
+            },
+            {
+              "content": "Field schedules and assigned personnel may change due to operational factors beyond the researcher’s control.",
+              "content_digest": "71739481ce3043f342d9c7c52297c7644931a0a096215fc15150915b74968d84",
+              "position": 10,
+              "uid": "3b96bf66-59e4-5dbf-98d3-937402abc67b"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "ca61cc0d-49d2-4e1e-9d30-dfdb76952cb0"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address complementary but independent concerns: the reference defines limits and transfer logic for design knowledge, while the compared frame documents operational feasibility, dependencies, responsibilities, and uncertainty. Neither frame supplies a scope-qualified counterpart to the other’s claims, and no conflict is present.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e50910d6-c4c4-4024-89fc-b246631c1f77",
+              "memory_uid": "e594a6ab-81e9-5e5f-8ef5-e6bb8f3760d7"
+            },
+            {
+              "frame_uid": "e50910d6-c4c4-4024-89fc-b246631c1f77",
+              "memory_uid": "31cdacff-7c49-547d-9f97-598a07b67fb6"
+            }
+          ],
+          "reason": "The reference memories express one one-sided claim linking a concise statement of excluded users and contexts to evaluation of the results’ generalization boundary.",
+          "status": "RESOLVED",
+          "summary": "Explicit exclusions define the boundary within which reviewers should judge the generalizability of design results.",
+          "uid": "17f35e88-178d-5fce-b2ec-550004edcf95"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e50910d6-c4c4-4024-89fc-b246631c1f77",
+              "memory_uid": "1459d986-4dc9-51f3-bf13-dbb0b07045c8"
+            }
+          ],
+          "reason": "This independently useful reference-side requirement has no operationally corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Transferability of proposed design knowledge should be bounded by user goals, interaction conditions, and technological constraints.",
+          "uid": "d5b14b4a-e0a9-5cbf-b23b-1663ec9e6342"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e50910d6-c4c4-4024-89fc-b246631c1f77",
+              "memory_uid": "1db5fcd6-f93c-5630-9810-053c10b5ceba"
+            }
+          ],
+          "reason": "This reference-side methodological claim is independent of the compared frame’s deployment-feasibility content.",
+          "status": "RESOLVED",
+          "summary": "Small formative studies may support analytic rather than statistical generalization when findings identify design conditions and mechanisms.",
+          "uid": "b0c04b1e-16f5-5876-ace2-ed36b2088af3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e50910d6-c4c4-4024-89fc-b246631c1f77",
+              "memory_uid": "fd29c315-521f-53c0-add5-c668ec318a43"
+            }
+          ],
+          "reason": "This reference-side observation identifies a specific generalization risk not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to extend design knowledge from an accessible sample to a broader population.",
+          "uid": "6626fc21-8951-52eb-91d4-e713b4541ba1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ca61cc0d-49d2-4e1e-9d30-dfdb76952cb0",
+              "memory_uid": "5c9755f8-78bd-5654-a3c7-8be0864e4f12"
+            },
+            {
+              "frame_uid": "ca61cc0d-49d2-4e1e-9d30-dfdb76952cb0",
+              "memory_uid": "75af48aa-b39e-5b55-95d9-f7f7d2becbad"
+            },
+            {
+              "frame_uid": "ca61cc0d-49d2-4e1e-9d30-dfdb76952cb0",
+              "memory_uid": "292e33b0-4bfd-5e3a-9379-0fbf3619c42d"
+            }
+          ],
+          "reason": "The compared memories split one documentation policy across three assumption categories, with no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Unverified schedule, recruitment, and technical assumptions should be explicitly marked as unverified.",
+          "uid": "ba75a842-447f-5e68-ba8c-5c8de7cedafd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ca61cc0d-49d2-4e1e-9d30-dfdb76952cb0",
+              "memory_uid": "c0c1fd8d-1aae-51a3-a1d4-66c1481d7b48"
+            }
+          ],
+          "reason": "This compared-side traceability requirement is independently useful and is not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Required resources should be traced to each core prototype feature and field-research procedure.",
+          "uid": "925cdbe0-7441-5f40-b692-680b1d070550"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ca61cc0d-49d2-4e1e-9d30-dfdb76952cb0",
+              "memory_uid": "7be25c27-6d67-50fe-90b5-76fca32a93d8"
+            },
+            {
+              "frame_uid": "ca61cc0d-49d2-4e1e-9d30-dfdb76952cb0",
+              "memory_uid": "1aae182f-4eb3-58b7-b8cd-5ce517ead36a"
+            },
+            {
+              "frame_uid": "ca61cc0d-49d2-4e1e-9d30-dfdb76952cb0",
+              "memory_uid": "84f6e5e3-96b4-538b-a633-1b656204a296"
+            }
+          ],
+          "reason": "The compared memories divide one feasibility-review criterion into its principal resource dimensions, none of which has a counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Operations reviewers assess procedure feasibility by examining required personnel, equipment, and time.",
+          "uid": "49530385-ec26-5800-ba6d-592691e8b45d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ca61cc0d-49d2-4e1e-9d30-dfdb76952cb0",
+              "memory_uid": "16a461c4-d90d-5d0f-bfd0-4c1a116ec2be"
+            }
+          ],
+          "reason": "This compared-side partner-readiness requirement is independent of the reference frame’s generalization claims.",
+          "status": "RESOLVED",
+          "summary": "Field-partner commitments and confirmation status should be documented separately for recruitment, installation, and operational support.",
+          "uid": "8f33d858-167f-5fcf-8978-6b5f78446516"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ca61cc0d-49d2-4e1e-9d30-dfdb76952cb0",
+              "memory_uid": "0ce26892-666f-5ebe-95b2-c6f48915f18b"
+            }
+          ],
+          "reason": "This compared-side ownership requirement has no corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A responsible party should be designated for updates, inspections, and user support throughout deployment.",
+          "uid": "1ceb2f04-44ce-51ae-b817-50e14195f8e8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ca61cc0d-49d2-4e1e-9d30-dfdb76952cb0",
+              "memory_uid": "4f35fd0c-005a-56a7-b33a-d74bde2d65eb"
+            }
+          ],
+          "reason": "This compared-side assessment prerequisite is not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Deployment readiness can be assessed only when dependencies on external services and field personnel are visible.",
+          "uid": "0105020e-2caf-513b-933f-0879bd974d5c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ca61cc0d-49d2-4e1e-9d30-dfdb76952cb0",
+              "memory_uid": "3b96bf66-59e4-5dbf-98d3-937402abc67b"
+            }
+          ],
+          "reason": "This compared-side uncertainty claim adds independently useful operational context absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Schedules and assigned personnel may change because of operational factors outside the researcher’s control.",
+          "uid": "1efdc9f7-f98e-5b82-9b73-ded2041e789f"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers assumption labeling, resource-based feasibility review, partner commitments, deployment ownership, dependency visibility, and operational volatility affecting schedules and staffing.",
+        "differences": "",
+        "reference_only": "The reference frame defines excluded populations and situations, transfer conditions, analytic generalization from formative studies, and a tendency to overextend findings from accessible samples."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "c9329dce-4f60-4549-82ac-dc426c64f9b3"
+    },
+    "analysis_digest": "68e9f363fb7074b6541bae5514746e9f6a04ce3afc5938e1c40d932f63faf952",
+    "key": "8e27fc8187254d1f44b52d0ae6f24cb173933f6684e6e7ba5b6027b6ea782597",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 31.233638542002154,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "8e27fc8187254d1f44b52d0ae6f24cb173933f6684e6e7ba5b6027b6ea782597",
+  "created_at": "2026-08-13T18:26:24.360865Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/scope",
+  "pair_key": "40c7f65cc5755becc85a680c423e4a4616bd13189260d41df8757291e88bdbc0",
+  "provider_seconds": 31.233638542002154,
+  "right": "task-2/advisor2/feasibility",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

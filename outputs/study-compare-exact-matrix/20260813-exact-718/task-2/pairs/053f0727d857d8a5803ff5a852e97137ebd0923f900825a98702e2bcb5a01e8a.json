@@ -1,0 +1,438 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:22:18.407266+00:00",
+      "frames": [
+        {
+          "context_digest": "d216a114524e2b755fff42b8577d5027d3e528aed50c5f588cebf57767bb7fc8",
+          "context_name": "task-2/advisor1/methods",
+          "context_uid": "d2f78b99-5dcf-5876-89a9-1058bceca333",
+          "memories": [
+            {
+              "content": "Link each HCI research question directly to corresponding user data and analysis procedures.",
+              "content_digest": "21e2d5e7eb4ec06057a8405359656cd03a98f4ae67956016d98582af44bfb402",
+              "position": 0,
+              "uid": "c8bcefee-c64a-5a1f-911c-502cc4522701"
+            },
+            {
+              "content": "In preregistered studies, specify the conditions under which deviations from the plan are permissible.",
+              "content_digest": "0ecac6de4eb5e3eec39477c5a6324acb8a1bd6cefb17eacc2c73cdd53160b85f",
+              "position": 1,
+              "uid": "8747b27e-6c2b-5498-9eac-c403e26101a6"
+            },
+            {
+              "content": "In preregistered studies, specify how to record content that deviates from the plan.",
+              "content_digest": "821b3ad70335f24d96aeffd2260e3bc27bb6efd1108a68b00ecc5cb7e7adb242",
+              "position": 2,
+              "uid": "c3ad4ad8-4c5c-54c5-8d65-2dae15fa69a0"
+            },
+            {
+              "content": "Commit to one exact target number of participants so the schedule, workload, and budget can be checked against the same quantity.",
+              "content_digest": "7ff7f3d29fc21399565b4047d3f78e6415e1b51a9247139fc156ea7d4f6d2f13",
+              "position": 3,
+              "uid": "df53a41c-2fbf-532a-a5b0-560a196bf5cb"
+            },
+            {
+              "content": "Specify the interview protocols, recording devices, or log tools used to collect each type of user data.",
+              "content_digest": "0396cbcbfd6e96ef9fd2af507855c4b71eb3003a15fc79d240cd0b751b6b5788",
+              "position": 4,
+              "uid": "24d49198-fd7b-5810-bc56-1910a796f76e"
+            },
+            {
+              "content": "Specify whether each type of user data is collected before, during, or after the interaction.",
+              "content_digest": "80a3ff6e82631a044e8859709930b675163439d11564d1b59601bca0ee030fba",
+              "position": 5,
+              "uid": "2f367cf3-50c5-59bc-972e-6173e56343ac"
+            },
+            {
+              "content": "Readers cannot tell whether the schedule and budget agree when different sections imply different target counts.",
+              "content_digest": "9b5de55faa7e64cf1149ef1bb60cf990815e789e7d1c4a3c0e6297fbbd300aae",
+              "position": 6,
+              "uid": "91db3bd1-4417-5db6-b7a6-3e79c87ebe88"
+            },
+            {
+              "content": "In formative evaluation prototypes, implementation instability exists as an independent cause of task failure alongside design choices.",
+              "content_digest": "dab5f616c4354c0e9f381b0e860e5ec5ff1afc249a4ad427f194c559781b83a8",
+              "position": 7,
+              "uid": "49746579-92d7-51ea-b158-7d770443d101"
+            },
+            {
+              "content": "If a prototype safety signal occurs during formative evaluation, existing institutional safety procedures take precedence over planned data collection.",
+              "content_digest": "2f2768eb4fbce9367786ab13ca8a608e82104cee45200f4aa59854efcf2edc3e",
+              "position": 8,
+              "uid": "20d116ab-f9cc-5f61-808b-8555da09d707"
+            },
+            {
+              "content": "Reviewers judge answerability by tracing the path from each research question to the data and analysis.",
+              "content_digest": "0fac56a79481bdcd7b169c7e3d9ab8fbd0b4f76d33dfe9f4a2f703f80e84aea9",
+              "position": 9,
+              "uid": "881bc037-c099-50e4-b7e0-d38fba5146c9"
+            },
+            {
+              "content": "The author of this proposal tends to present implemented feature lists directly as design contributions.",
+              "content_digest": "6cf2a1292756154c2a0a045f1e4bd4889994faaa838f93e8a2b9c949957ed920",
+              "position": 10,
+              "uid": "9a969676-6093-5fac-bda8-92ebdac70c37"
+            },
+            {
+              "content": "Calculate the required sessions, facilitator hours, and participant payments from the same exact target rather than from separate rough estimates.",
+              "content_digest": "ea6c96c9e5e7d5db7bd2210fd484e715e35727bd1e6f7c2ea2a2c4c12e488f2a",
+              "position": 11,
+              "uid": "0ecc319a-ae60-5510-883d-52e613138164"
+            },
+            {
+              "content": "If recruitment falls below the exact target, state the shortfall explicitly and revise the affected schedule or deliverable.",
+              "content_digest": "bdf962f17a92886e7a5ec0003460dce9ed9c02d02473f66c6f6b4e97c0c304b9",
+              "position": 12,
+              "uid": "c4dfdb65-e673-52c0-a40c-e909d6014e00"
+            },
+            {
+              "content": "Do not use a wide range merely to postpone choosing the quantity that the rest of the proposal must support.",
+              "content_digest": "332385b05f91f97c398bc954b6fc9e62da182f7e42de6dd5691435df6922fd43",
+              "position": 13,
+              "uid": "a7c3a123-3f05-52e0-b33e-c450d1a070ac"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "337ed673-a00b-4b73-a0ac-cc76078fa5b6"
+        },
+        {
+          "context_digest": "b379636c1034c71339b717628e5e233c5f245d0452c487967c8e881d38e4b4a7",
+          "context_name": "task-2/advisor2/feasibility",
+          "context_uid": "2a4a102a-14f5-53bb-88ef-681448ebecff",
+          "memories": [
+            {
+              "content": "Mark unverified schedule assumptions as such.",
+              "content_digest": "d4cdcdbcdb51d96f9a7435e72c2e4ef25a3e3822a765a88afafeca5194bda96e",
+              "position": 0,
+              "uid": "5c9755f8-78bd-5654-a3c7-8be0864e4f12"
+            },
+            {
+              "content": "Mark unverified recruitment assumptions as such.",
+              "content_digest": "4cc28528fee1c7b09f709638e2b57d3bc9efe635d20500ee98567f8f59b8cf21",
+              "position": 1,
+              "uid": "75af48aa-b39e-5b55-95d9-f7f7d2becbad"
+            },
+            {
+              "content": "Mark unverified technical assumptions as such.",
+              "content_digest": "8942e49cd46e3e9746330349df11e49d4a6c9250c7aa4c52c2d9ade1c97c735c",
+              "position": 2,
+              "uid": "292e33b0-4bfd-5e3a-9379-0fbf3619c42d"
+            },
+            {
+              "content": "Trace back the resources required for each core prototype feature and field research procedure.",
+              "content_digest": "b1ac088b664c62c3c1cfb96f6bb31a3ab5fc0fd77d0d1fba58e1da621b5dd56a",
+              "position": 3,
+              "uid": "c0c1fd8d-1aae-51a3-a1d4-66c1481d7b48"
+            },
+            {
+              "content": "Operations reviewers judge feasibility by examining the personnel required for each procedure.",
+              "content_digest": "3199aba38f58f677147b94eca54221e4d0add145a2a58194c3851efcc22e8fab",
+              "position": 4,
+              "uid": "7be25c27-6d67-50fe-90b5-76fca32a93d8"
+            },
+            {
+              "content": "Operations reviewers judge feasibility by examining the equipment required for each procedure.",
+              "content_digest": "13f9b86391d66cf558fc6eead29969c80acdf78d2164c96aa99641bf6c2891fd",
+              "position": 5,
+              "uid": "1aae182f-4eb3-58b7-b8cd-5ce517ead36a"
+            },
+            {
+              "content": "Operations reviewers judge feasibility by examining the time required for each procedure.",
+              "content_digest": "29efef51e7b8e35c459099af93b8ea90d019d83de3cf894e04b184078619fff4",
+              "position": 6,
+              "uid": "84f6e5e3-96b4-538b-a633-1b656204a296"
+            },
+            {
+              "content": "Document separately the commitments and confirmation status of field partners required for recruitment, installation, and operational support.",
+              "content_digest": "ba0ceb0fa886251bfe2b5a83154500862f8c2d4a82ed74fc9ddb3600010cc0b3",
+              "position": 7,
+              "uid": "16a461c4-d90d-5d0f-bfd0-4c1a116ec2be"
+            },
+            {
+              "content": "Designate a responsible party for software updates, equipment inspections, and user support during the deployment period.",
+              "content_digest": "54caa62836c502faf35561d45fba1d02a059c8ed6436ce714114bd392cb3bc9d",
+              "position": 8,
+              "uid": "0ce26892-666f-5ebe-95b2-c6f48915f18b"
+            },
+            {
+              "content": "The user's deployment readiness can be assessed only when dependencies on external services and field personnel are visible.",
+              "content_digest": "931fa67dd8ea84954ce3f0b9631301c320fdcf1bf46fb7fda0214e77636c8c1c",
+              "position": 9,
+              "uid": "4f35fd0c-005a-56a7-b33a-d74bde2d65eb"
+            },
+            {
+              "content": "Field schedules and assigned personnel may change due to operational factors beyond the researcher’s control.",
+              "content_digest": "71739481ce3043f342d9c7c52297c7644931a0a096215fc15150915b74968d84",
+              "position": 10,
+              "uid": "3b96bf66-59e4-5dbf-98d3-937402abc67b"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "f2cb9448-58ab-4242-acb2-37dd646a9f68"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "Both frames support auditable planning and procedure-level feasibility, while emphasizing different dimensions. The reference adds research answerability, preregistration, participant-target discipline, collection timing, prototype interpretation, and safety; the compared frame adds assumption labeling, dependency visibility, operational ownership, and field variability.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "337ed673-a00b-4b73-a0ac-cc76078fa5b6",
+              "memory_uid": "df53a41c-2fbf-532a-a5b0-560a196bf5cb"
+            },
+            {
+              "frame_uid": "337ed673-a00b-4b73-a0ac-cc76078fa5b6",
+              "memory_uid": "91db3bd1-4417-5db6-b7a6-3e79c87ebe88"
+            },
+            {
+              "frame_uid": "337ed673-a00b-4b73-a0ac-cc76078fa5b6",
+              "memory_uid": "0ecc319a-ae60-5510-883d-52e613138164"
+            },
+            {
+              "frame_uid": "337ed673-a00b-4b73-a0ac-cc76078fa5b6",
+              "memory_uid": "a7c3a123-3f05-52e0-b33e-c450d1a070ac"
+            },
+            {
+              "frame_uid": "f2cb9448-58ab-4242-acb2-37dd646a9f68",
+              "memory_uid": "5c9755f8-78bd-5654-a3c7-8be0864e4f12"
+            },
+            {
+              "frame_uid": "f2cb9448-58ab-4242-acb2-37dd646a9f68",
+              "memory_uid": "75af48aa-b39e-5b55-95d9-f7f7d2becbad"
+            }
+          ],
+          "reason": "The reference requires one shared participant target, exposes inconsistent counts, derives workload and costs from that target, and rejects deferring the choice through a range; the compared frame complements this by labeling unverified schedule and recruitment assumptions.",
+          "status": "RESOLVED",
+          "summary": "Schedule and recruitment planning should use explicit, internally checkable quantities and clearly identified assumptions.",
+          "uid": "e44bed55-eecb-5c46-ba0e-1a1b978955d8"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "337ed673-a00b-4b73-a0ac-cc76078fa5b6",
+              "memory_uid": "24d49198-fd7b-5810-bc56-1910a796f76e"
+            },
+            {
+              "frame_uid": "f2cb9448-58ab-4242-acb2-37dd646a9f68",
+              "memory_uid": "c0c1fd8d-1aae-51a3-a1d4-66c1481d7b48"
+            },
+            {
+              "frame_uid": "f2cb9448-58ab-4242-acb2-37dd646a9f68",
+              "memory_uid": "7be25c27-6d67-50fe-90b5-76fca32a93d8"
+            },
+            {
+              "frame_uid": "f2cb9448-58ab-4242-acb2-37dd646a9f68",
+              "memory_uid": "1aae182f-4eb3-58b7-b8cd-5ce517ead36a"
+            },
+            {
+              "frame_uid": "f2cb9448-58ab-4242-acb2-37dd646a9f68",
+              "memory_uid": "84f6e5e3-96b4-538b-a633-1b656204a296"
+            }
+          ],
+          "reason": "The reference specifies collection protocols and tools, while the compared frame traces feature and procedure requirements and evaluates their personnel, equipment, and time demands; these are complementary parts of the same feasibility decision.",
+          "status": "RESOLVED",
+          "summary": "Prototype features and research procedures should be connected to the operational resources needed to perform them and assess feasibility.",
+          "uid": "564bee5a-b545-5812-b131-6c61611a286f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "337ed673-a00b-4b73-a0ac-cc76078fa5b6",
+              "memory_uid": "c8bcefee-c64a-5a1f-911c-502cc4522701"
+            },
+            {
+              "frame_uid": "337ed673-a00b-4b73-a0ac-cc76078fa5b6",
+              "memory_uid": "881bc037-c099-50e4-b7e0-d38fba5146c9"
+            }
+          ],
+          "reason": "The reference states both the required linkage and the reviewer criterion for judging it; the compared frame contains no corresponding research-question-to-evidence claim.",
+          "status": "RESOLVED",
+          "summary": "Research answerability depends on a traceable path from each question to its user data and analysis.",
+          "uid": "1fa19379-4e88-57f8-8e1f-9fdb25b9d207"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "337ed673-a00b-4b73-a0ac-cc76078fa5b6",
+              "memory_uid": "8747b27e-6c2b-5498-9eac-c403e26101a6"
+            },
+            {
+              "frame_uid": "337ed673-a00b-4b73-a0ac-cc76078fa5b6",
+              "memory_uid": "c3ad4ad8-4c5c-54c5-8d65-2dae15fa69a0"
+            }
+          ],
+          "reason": "These reference memories split one policy for governing departures from a preregistered plan; the compared frame does not address preregistration.",
+          "status": "RESOLVED",
+          "summary": "Preregistered studies should define when deviations are permitted and how deviating content is recorded.",
+          "uid": "6917bc2d-72d5-50c4-997a-ac175e6cb03e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "337ed673-a00b-4b73-a0ac-cc76078fa5b6",
+              "memory_uid": "2f367cf3-50c5-59bc-972e-6173e56343ac"
+            }
+          ],
+          "reason": "This is a distinct reference-side requirement about collection timing, not covered by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Each user-data type should be located before, during, or after the interaction.",
+          "uid": "83bad326-5abf-5c59-844e-90461e131a19"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "337ed673-a00b-4b73-a0ac-cc76078fa5b6",
+              "memory_uid": "49746579-92d7-51ea-b158-7d770443d101"
+            }
+          ],
+          "reason": "This reference claim governs causal interpretation of evaluation failures, whereas the compared frame does not state that attribution rule.",
+          "status": "RESOLVED",
+          "summary": "Implementation instability should be treated as an independent possible cause of task failure in formative prototype evaluation.",
+          "uid": "fdde6e70-09de-5408-94cd-6077db75aef9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "337ed673-a00b-4b73-a0ac-cc76078fa5b6",
+              "memory_uid": "20d116ab-f9cc-5f61-808b-8555da09d707"
+            }
+          ],
+          "reason": "This conditional safety-priority rule appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Institutional safety procedures take precedence over planned data collection when a formative prototype produces a safety signal.",
+          "uid": "17ca6d1e-078d-542b-ad15-74e15fb06149"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "337ed673-a00b-4b73-a0ac-cc76078fa5b6",
+              "memory_uid": "9a969676-6093-5fac-bda8-92ebdac70c37"
+            }
+          ],
+          "reason": "This reference-side observation concerns contribution framing and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to present implemented feature lists directly as design contributions.",
+          "uid": "899ac4c9-d893-56ee-a873-f8e2dbe9ccb5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "337ed673-a00b-4b73-a0ac-cc76078fa5b6",
+              "memory_uid": "c4dfdb65-e673-52c0-a40c-e909d6014e00"
+            }
+          ],
+          "reason": "This reference claim specifies a response to under-recruitment; the compared frame notes operational variability but does not provide this shortfall rule.",
+          "status": "RESOLVED",
+          "summary": "A recruitment shortfall against the exact target should be disclosed and reflected in affected schedules or deliverables.",
+          "uid": "72beb627-42f6-5194-b806-46393274cc27"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f2cb9448-58ab-4242-acb2-37dd646a9f68",
+              "memory_uid": "292e33b0-4bfd-5e3a-9379-0fbf3619c42d"
+            }
+          ],
+          "reason": "This compared-side documentation requirement is independently useful and is not equivalent to the reference claim about attributing prototype task failures.",
+          "status": "RESOLVED",
+          "summary": "Unverified technical assumptions should be explicitly labeled.",
+          "uid": "99b9bbd1-bd2f-54f9-a48d-de38620df8f6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f2cb9448-58ab-4242-acb2-37dd646a9f68",
+              "memory_uid": "16a461c4-d90d-5d0f-bfd0-4c1a116ec2be"
+            },
+            {
+              "frame_uid": "f2cb9448-58ab-4242-acb2-37dd646a9f68",
+              "memory_uid": "4f35fd0c-005a-56a7-b33a-d74bde2d65eb"
+            }
+          ],
+          "reason": "The compared memories split one dependency-transparency requirement covering field personnel, external services, recruitment, installation, and operational support; the reference frame does not address it.",
+          "status": "RESOLVED",
+          "summary": "Deployment readiness requires visible external dependencies and separately documented field-partner commitments and confirmation status.",
+          "uid": "03954419-0c7a-5cc8-88be-142ce6014e28"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f2cb9448-58ab-4242-acb2-37dd646a9f68",
+              "memory_uid": "0ce26892-666f-5ebe-95b2-c6f48915f18b"
+            }
+          ],
+          "reason": "This compared-side operational ownership requirement has no corresponding reference claim.",
+          "status": "RESOLVED",
+          "summary": "A responsible party should be designated for software updates, equipment inspections, and user support during deployment.",
+          "uid": "5569f6d7-4fd7-5fca-9dd9-3b88c076bbbd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f2cb9448-58ab-4242-acb2-37dd646a9f68",
+              "memory_uid": "3b96bf66-59e4-5dbf-98d3-937402abc67b"
+            }
+          ],
+          "reason": "This compared-side constraint identifies external operational variability without duplicating the reference frame’s specific recruitment-shortfall response.",
+          "status": "RESOLVED",
+          "summary": "Field schedules and assigned personnel may change because of operational factors outside the researcher’s control.",
+          "uid": "d0987394-83ee-5148-9297-b419a6f05ce3"
+        }
+      ],
+      "reports": {
+        "both": "Both require schedule and recruitment planning to be explicit and checkable, and connect prototype or research procedures to the resources needed to assess feasibility.",
+        "compared_only": "The compared frame covers technical-assumption labeling, external-partner and service dependencies, deployment support ownership, and operationally driven changes to schedules and staffing.",
+        "differences": "",
+        "reference_only": "The reference covers question-to-evidence traceability, preregistration deviations, collection timing, recruitment shortfalls, prototype failure interpretation, safety precedence, and distinguishing features from contributions."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "8092c29f-4da6-42d7-a3c6-deb56a6722b4"
+    },
+    "analysis_digest": "42cf08639d9f28dff11ecd4e68f811c2e56c1c047626c3fbeb99239400d77dc6",
+    "key": "0475e31afce62fd079fe4b64878b600760e624c5ed6efe44ce90cfc63a3de833",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 60.634238957998605,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "0475e31afce62fd079fe4b64878b600760e624c5ed6efe44ce90cfc63a3de833",
+  "created_at": "2026-08-13T18:23:19.040421Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/methods",
+  "pair_key": "053f0727d857d8a5803ff5a852e97137ebd0923f900825a98702e2bcb5a01e8a",
+  "provider_seconds": 60.634238957998605,
+  "right": "task-2/advisor2/feasibility",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

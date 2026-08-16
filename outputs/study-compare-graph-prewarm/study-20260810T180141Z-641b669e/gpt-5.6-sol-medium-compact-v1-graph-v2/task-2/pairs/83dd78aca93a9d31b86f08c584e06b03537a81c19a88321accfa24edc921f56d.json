@@ -1,0 +1,174 @@
+{
+  "coverage": {
+    "expected": 12,
+    "observed": 12
+  },
+  "created_at": "2026-08-11T00:20:04.985065Z",
+  "description_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+  "issues": [],
+  "kind": "STUDY_COMPARE_GRAPH_PAIR",
+  "left": {
+    "context_digest": "c4484b7a8284d7e31066ad3f4c4edf8844a2e0ce8695a323093f753243b6b18f",
+    "context_uid": "39a6f298-c511-5c21-a106-998c1df9d951",
+    "memory_count": 8,
+    "name": "task-2/advisor1/expression"
+  },
+  "method": "COMPACT_DECISION_VECTOR_V1",
+  "operation": "COMPARE",
+  "pair_key": "83dd78aca93a9d31b86f08c584e06b03537a81c19a88321accfa24edc921f56d",
+  "provider": {
+    "condition": "COMPACT_DECISION_VECTOR",
+    "contract_valid": true,
+    "elapsed_seconds": 10.84611220798979,
+    "error_type": null,
+    "failure_category": null,
+    "operation": "compare_contexts_compact_ab_v1",
+    "prompt_chars": 6339,
+    "provider_calls": 1,
+    "provider_run": {
+      "completion_tokens": null,
+      "identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "operation": "compare_contexts_compact_ab_v1",
+      "prompt_tokens": null,
+      "upstream_model": "gpt-5.6-sol",
+      "upstream_provider": "openai-codex"
+    },
+    "provider_seconds": 10.845368624999537,
+    "response_bytes": 335,
+    "response_chars": 335,
+    "schema_chars": 1378,
+    "validation_error": null,
+    "validation_seconds": 0.0007321250013774261
+  },
+  "relations": [
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "51fa3fcc-9d5f-52f0-809d-62d7cdd8a865",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "e686bd4d-3ebd-5e55-ba39-f26971247965",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "a6dfe9a7-1df8-561f-8d3e-fc19518beca9",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "50a71968-7e3f-5b99-b3fa-769af386d0c0",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000001",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "019662a9-6f03-527f-9b6d-be5a2966d9e9",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000002",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "7047a23d-45b3-5d5c-a00b-c12552e9680d",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "d2825b84-b4a6-58c9-8f8e-9e19c6192a03",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000003",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "ae1610f6-a855-56c1-a0fb-fd3207dab615",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000004",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "fb400759-63ed-568a-b94e-5f0c2fe94b67",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000005",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "e52e8470-6419-5306-9ddd-00a86003dcf3",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000006",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "8f4edf8c-491d-56fe-bde4-d9ce25d6de50",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000007",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "87662a7e-ffc7-521a-a06c-7db8184377e8",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000008",
+      "status": "RESOLVED"
+    }
+  ],
+  "right": {
+    "context_digest": "9d55b4a5604285e426b317f7f4732b35ca1e9df044f7015b3ae6a6be0df5492b",
+    "context_uid": "7d293f75-52b6-5f27-99c4-54f2be3d8e59",
+    "memory_count": 4,
+    "name": "task-2/advisor1/reproducibility"
+  },
+  "schema_version": 1,
+  "semantic_content_in_participant_report": false,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

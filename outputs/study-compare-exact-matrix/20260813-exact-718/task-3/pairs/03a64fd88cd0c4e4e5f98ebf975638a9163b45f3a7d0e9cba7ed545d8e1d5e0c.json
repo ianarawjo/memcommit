@@ -1,0 +1,388 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:52:17.331455+00:00",
+      "frames": [
+        {
+          "context_digest": "a2ea3c6aa8c1680fcf9a7dd71d0dbff822c6af5493b34b79022f5e740bb35259",
+          "context_name": "task-3/local/personal-memory/2025/07",
+          "context_uid": "5c264a7f-0300-587c-ad1c-0439cedc7737",
+          "memories": [
+            {
+              "content": "The user keeps a travel power bank in the first drawer beneath the desk.",
+              "content_digest": "deb13f4eae5e32bc035da0558fa1b290f4bac0dfa5ca350d5abd0456af07ab7f",
+              "position": 0,
+              "uid": "447bfd8d-1490-5404-a2b4-13b4587e6aba"
+            },
+            {
+              "content": "The user packed three pairs of shoes for a two-night trip but wore only one pair.",
+              "content_digest": "097601b179049e1c4dd6b20a2fe2703ffb0d4a89d5ae15a763d339b989da50d8",
+              "position": 1,
+              "uid": "3ab0326a-a006-51ea-9348-7ada19a23bce"
+            },
+            {
+              "content": "For the next two-night trip, the user packed only one pair of walking shoes and reduced the bag's weight.",
+              "content_digest": "afd02b05250a60ad461e01132a94f0105d419521803082d1057205a2bc9a92ad",
+              "position": 2,
+              "uid": "ef467ab6-8ba6-5f81-8f12-578ec1824e09"
+            },
+            {
+              "content": "On a trip when the user forgot a charging cable, they bought a new one after arrival.",
+              "content_digest": "bbe1ac80a2311e0e631446b811d799494dc5ca4db408fc63d1cb09a01e2cd105",
+              "position": 3,
+              "uid": "aa4defc3-2b65-5688-accb-aaa49f2430b6"
+            },
+            {
+              "content": "Before the next trip, the user checked charging items against a photo and packed all of them.",
+              "content_digest": "cc2663db793bec80657023ccd545add403ec7dcc6dc39da4d03a95b5a9f65ff9",
+              "position": 4,
+              "uid": "2d937b4b-d73d-5382-abbe-3cd4e596b3a5"
+            },
+            {
+              "content": "The user packed toiletries on the departure day and arrived 15 minutes late at the meeting place.",
+              "content_digest": "1f5f7eb4cf651ee44244315e52de31cbd7bffe70489315bda287d1ca3cb9a8d4",
+              "position": 5,
+              "uid": "0be8b327-0a06-5241-b98d-daa6b0a4aa50"
+            },
+            {
+              "content": "The next time, the user closed the bag the night before and departed on time.",
+              "content_digest": "61f6c02e4637501f5ad9b1a9f668e298e566558a3d9e611a8b521c17256513b7",
+              "position": 6,
+              "uid": "90059fcc-436d-5453-98f0-a9b23a08faf1"
+            },
+            {
+              "content": "The user's older sister considers it safer to pack an extra cable even for a short trip to avoid charging problems.",
+              "content_digest": "f06b38b34e0f27bc01d8a79733173673d37a209e8619ad3df816a73718ffd89f",
+              "position": 7,
+              "uid": "12ef03f9-8cda-5ed7-be83-891b4702f872"
+            },
+            {
+              "content": "When creating a travel preparation list, confirm the trip length and actual activities with the user.",
+              "content_digest": "f34a0a341cd8ce9c641c16b780c4e53ccae4b6dca2c8f176be7579f5b0115654",
+              "position": 8,
+              "uid": "54136935-a460-573d-ac40-f5edb0ca7e6c"
+            },
+            {
+              "content": "The local agent cannot establish what the next trip requires from the luggage used on the previous trip alone.",
+              "content_digest": "4accbe60aa4e53ff75a18cc0291a870f106ac69a10a2cff96147c2dbd74892e3",
+              "position": 9,
+              "uid": "029c0777-bdbb-5d48-9309-1b1e6c7d88f4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "0c7a42e1-b0ca-4b81-98de-ac88626e85d7"
+        },
+        {
+          "context_digest": "4eadf16a0c655a266bec3ebe56b056075c55e7f716f6879a0b6a905fe34136df",
+          "context_name": "task-3/local/personal-memory/2026/05",
+          "context_uid": "fd476504-4d4e-54d9-80b8-3dc2b18555d8",
+          "memories": [
+            {
+              "content": "The user keeps a picnic mat on the bottom shelf of the entrance storage cabinet.",
+              "content_digest": "c17479bd6a0f978f71b106b562507e702c3b84af5119be6bce48e4ee1664e728",
+              "position": 0,
+              "uid": "a9da4cfc-a6aa-51ae-9ec4-0de5c7a09227"
+            },
+            {
+              "content": "On a day the user went to the riverside, they sat in a place without shade and moved after an hour.",
+              "content_digest": "f9ab1da828ca5af06cb8bf54fe85136e316f503dab465fad514ab5a3f8243633",
+              "position": 1,
+              "uid": "fa2735e1-f4af-57d3-a18c-795715b6715b"
+            },
+            {
+              "content": "At the next outdoor meal, the user chose a place near a large tree and stayed for two hours.",
+              "content_digest": "189b7d85561df45986a6b7c9fe681b5ef53b22ca1f5e83fa8d64a7d93b35a577",
+              "position": 2,
+              "uid": "3bd8b8f2-c5b4-5004-8b9e-e388cc26ea7a"
+            },
+            {
+              "content": "On a hot day when the user brought only one bottle of water, they bought another drink partway through the outing.",
+              "content_digest": "92aa494a12664105a4bffc50a9026fadbec78332f750636093ea82ecc68e9597",
+              "position": 3,
+              "uid": "c7c4b494-39a6-5f5c-b37f-51c5061ac926"
+            },
+            {
+              "content": "On the next outing, the user brought two small bottles of water after freezing them.",
+              "content_digest": "69b3035b57b58b1aa778bd0da75dc806c1c449e7e35dc448aff92f7499c3148d",
+              "position": 4,
+              "uid": "dd9f5b3c-9c2e-5dbc-bf6e-eb7761eeb075"
+            },
+            {
+              "content": "When meeting their maternal uncle at a park, the user and the uncle waited at different entrances for 15 minutes.",
+              "content_digest": "9785e87b9fe79813762eb2e19e6d4f256a55f4799c92d095aaf695a8a1de5851",
+              "position": 5,
+              "uid": "2ed2a41c-f6ae-54d6-875c-a195d8fdacee"
+            },
+            {
+              "content": "For the next meeting, the user sent a photo of the entrance sign, and they met at the same place.",
+              "content_digest": "de40b6b7df84784639b97cf7ce153ad8af6e77320d75f3869979e5e3d39169e2",
+              "position": 6,
+              "uid": "23f3a4fc-d51e-5d0b-87f0-d5be407a57f3"
+            },
+            {
+              "content": "For a park meeting, the user's maternal uncle prefers an entrance that requires less walking from the parking area.",
+              "content_digest": "552a43b869c6f06cbf571f794106727406d87841d43addc92f31a3532f73d6f3",
+              "position": 7,
+              "uid": "e9f459f3-8ff0-5a0e-b78b-eda8d18b914e"
+            },
+            {
+              "content": "When making an outdoor plan, confirm the exact entrance and an alternative location in case of rain.",
+              "content_digest": "a265a6364c182de35363b58135b1da60d11595d1e3e0029f6851ac272261a959",
+              "position": 8,
+              "uid": "70277b86-d5db-5b58-8a94-e77372d15a4c"
+            },
+            {
+              "content": "Some park restrooms and drinking fountains may be closed seasonally.",
+              "content_digest": "8e5c4f5f85d4d27dc2211f46e3ab3bbed7f3d9687070b9028992b670986b09ca",
+              "position": 9,
+              "uid": "5a54437b-9b0e-5103-860d-d878be70b3ef"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "a6f7c3f9-8370-4b4a-bea4-29ed3d5686e7"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate preparation domains: short-trip packing and outdoor outings. Each records lessons from prior mishaps, later adaptations, stored equipment, family preferences, and planning constraints. Their planning guidance shares a context-sensitive approach but requires different details for travel and park activities.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0c7a42e1-b0ca-4b81-98de-ac88626e85d7",
+              "memory_uid": "447bfd8d-1490-5404-a2b4-13b4587e6aba"
+            }
+          ],
+          "reason": "This is independently useful travel-equipment location information with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The travel power bank is stored in the first drawer beneath the desk.",
+          "uid": "78a949d8-fbe8-51dc-a5f5-aea218130803"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0c7a42e1-b0ca-4b81-98de-ac88626e85d7",
+              "memory_uid": "3ab0326a-a006-51ea-9348-7ada19a23bce"
+            },
+            {
+              "frame_uid": "0c7a42e1-b0ca-4b81-98de-ac88626e85d7",
+              "memory_uid": "ef467ab6-8ba6-5f81-8f12-578ec1824e09"
+            }
+          ],
+          "reason": "Both memories form one travel-specific observation-and-adjustment claim about minimizing footwear, with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "After overpacking shoes for a short trip, the user took only walking shoes on the next such trip and reduced bag weight.",
+          "uid": "9517df5f-e5c9-56c8-8d7f-44affee3fd24"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0c7a42e1-b0ca-4b81-98de-ac88626e85d7",
+              "memory_uid": "aa4defc3-2b65-5688-accb-aaa49f2430b6"
+            },
+            {
+              "frame_uid": "0c7a42e1-b0ca-4b81-98de-ac88626e85d7",
+              "memory_uid": "2d937b4b-d73d-5382-abbe-3cd4e596b3a5"
+            }
+          ],
+          "reason": "Both memories form one travel-specific charging-preparation lesson, with no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "After forgetting a charging cable and replacing it after arrival, the user used a photo-based check to pack all charging items next time.",
+          "uid": "d33e4bd6-b98f-5f50-a7e5-d06b0eaae486"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0c7a42e1-b0ca-4b81-98de-ac88626e85d7",
+              "memory_uid": "0be8b327-0a06-5241-b98d-daa6b0a4aa50"
+            },
+            {
+              "frame_uid": "0c7a42e1-b0ca-4b81-98de-ac88626e85d7",
+              "memory_uid": "90059fcc-436d-5453-98f0-a9b23a08faf1"
+            }
+          ],
+          "reason": "Both memories form one travel-specific timing lesson about packing in advance, with no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "After departure-day toiletry packing caused lateness, the user closed the bag the night before and departed on time next time.",
+          "uid": "6b430464-a306-51ed-a053-1deeccd9ffb6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0c7a42e1-b0ca-4b81-98de-ac88626e85d7",
+              "memory_uid": "12ef03f9-8cda-5ed7-be83-891b4702f872"
+            }
+          ],
+          "reason": "This is an independently useful family preference about travel redundancy with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s older sister prefers packing an extra cable even for short trips as a charging safeguard.",
+          "uid": "35027fff-869b-5f84-9257-12eba9834903"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "0c7a42e1-b0ca-4b81-98de-ac88626e85d7",
+              "memory_uid": "54136935-a460-573d-ac40-f5edb0ca7e6c"
+            },
+            {
+              "frame_uid": "a6f7c3f9-8370-4b4a-bea4-29ed3d5686e7",
+              "memory_uid": "70277b86-d5db-5b58-8a94-e77372d15a4c"
+            }
+          ],
+          "reason": "The claims share a policy of grounding plans in confirmed contextual details, while their explicit travel and outdoor scopes require preserving different inputs.",
+          "status": "RESOLVED",
+          "summary": "Planning should confirm logistics specific to the activity: trip length and actual activities for travel, and the exact entrance plus a rain alternative for outdoor plans.",
+          "uid": "c810a047-e2b3-509a-867b-48b5d0648360"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0c7a42e1-b0ca-4b81-98de-ac88626e85d7",
+              "memory_uid": "029c0777-bdbb-5d48-9309-1b1e6c7d88f4"
+            }
+          ],
+          "reason": "This is an independently useful limitation on travel-planning inference with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Previous luggage alone is insufficient to establish the requirements of the next trip.",
+          "uid": "f6074d48-c574-5c33-a4cb-91a5c0fc0cce"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a6f7c3f9-8370-4b4a-bea4-29ed3d5686e7",
+              "memory_uid": "a9da4cfc-a6aa-51ae-9ec4-0de5c7a09227"
+            }
+          ],
+          "reason": "This is independently useful outdoor-equipment location information with no corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The picnic mat is stored on the bottom shelf of the entrance storage cabinet.",
+          "uid": "83228434-e109-5d47-8453-b1ebd365ee05"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a6f7c3f9-8370-4b4a-bea4-29ed3d5686e7",
+              "memory_uid": "fa2735e1-f4af-57d3-a18c-795715b6715b"
+            },
+            {
+              "frame_uid": "a6f7c3f9-8370-4b4a-bea4-29ed3d5686e7",
+              "memory_uid": "3bd8b8f2-c5b4-5004-8b9e-e388cc26ea7a"
+            }
+          ],
+          "reason": "Both memories form one outdoor-specific observation-and-adjustment claim about choosing shade, with no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "After moving from an unshaded riverside spot, the user chose a place near a large tree for the next outdoor meal and stayed longer.",
+          "uid": "9237583a-a3da-50e2-bd33-a003772af5a9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a6f7c3f9-8370-4b4a-bea4-29ed3d5686e7",
+              "memory_uid": "c7c4b494-39a6-5f5c-b37f-51c5061ac926"
+            },
+            {
+              "frame_uid": "a6f7c3f9-8370-4b4a-bea4-29ed3d5686e7",
+              "memory_uid": "dd9f5b3c-9c2e-5dbc-bf6e-eb7761eeb075"
+            }
+          ],
+          "reason": "Both memories form one outdoor-specific hydration lesson, with no corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "After needing another drink on a hot outing, the user brought two small frozen water bottles next time.",
+          "uid": "06f04f6f-0bc8-5ef1-b338-f60ffa6559c4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a6f7c3f9-8370-4b4a-bea4-29ed3d5686e7",
+              "memory_uid": "2ed2a41c-f6ae-54d6-875c-a195d8fdacee"
+            },
+            {
+              "frame_uid": "a6f7c3f9-8370-4b4a-bea4-29ed3d5686e7",
+              "memory_uid": "23f3a4fc-d51e-5d0b-87f0-d5be407a57f3"
+            }
+          ],
+          "reason": "Both memories form one park-meeting coordination lesson, with no corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "After waiting at different park entrances, the user sent a photo of the entrance sign for the next meeting and met their uncle successfully.",
+          "uid": "db1ab2d8-f7a1-5085-85a1-7c095de1960d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a6f7c3f9-8370-4b4a-bea4-29ed3d5686e7",
+              "memory_uid": "e9f459f3-8ff0-5a0e-b78b-eda8d18b914e"
+            }
+          ],
+          "reason": "This is an independently useful family preference about park access with no corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s maternal uncle prefers a park entrance requiring less walking from the parking area.",
+          "uid": "888007c1-09f4-5a7b-9c1e-f71a73bcd609"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a6f7c3f9-8370-4b4a-bea4-29ed3d5686e7",
+              "memory_uid": "5a54437b-9b0e-5103-860d-d878be70b3ef"
+            }
+          ],
+          "reason": "This is an independently useful outdoor-planning constraint with no corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Some park restrooms and drinking fountains may be seasonally closed.",
+          "uid": "7e95649e-b79e-55e4-a53c-e78113c50668"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Outdoor information covers mat storage, shade and hydration improvements, entrance coordination, a relative’s accessibility preference, and possible seasonal facility closures.",
+        "differences": "Both advise confirming context-specific logistics before planning: trip duration and activities for travel, versus entrance details and a rain fallback for outdoor plans.",
+        "reference_only": "Travel information covers equipment storage, lighter shoe packing, charging safeguards, advance packing, a relative’s cable preference, and limits on inferring future needs from prior luggage."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "c4e24965-b9aa-4941-aed6-7421c70cbebf"
+    },
+    "analysis_digest": "7bdc0b1b9ef21599dd58b3c7f3ce13345424db5a25a449dba6a00cb285b5c08f",
+    "key": "2547d10f2d19259655d783f7aa99fc6e6a8925c483c5a89a2e39ed2d036d8998",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 40.77644712500114,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "2547d10f2d19259655d783f7aa99fc6e6a8925c483c5a89a2e39ed2d036d8998",
+  "created_at": "2026-08-13T18:52:58.107362Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/07",
+  "pair_key": "03a64fd88cd0c4e4e5f98ebf975638a9163b45f3a7d0e9cba7ed545d8e1d5e0c",
+  "provider_seconds": 40.77644712500114,
+  "right": "task-3/local/personal-memory/2026/05",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

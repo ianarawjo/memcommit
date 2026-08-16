@@ -61,6 +61,11 @@ __all__ = [
     "ComparisonRelationResult",
     "ComparisonReportsResult",
     "ComparisonResult",
+    "DedupApplyResult",
+    "DedupComponentResult",
+    "DedupEvidenceResult",
+    "DedupMemberResult",
+    "DedupPlanResult",
     "GrantedQueryResult",
     "HelpCatalogResult",
     "HelpError",
@@ -179,6 +184,16 @@ _LAZY_EXPORTS = {
     "MeldOptionResult": ("memcommit.api.meld", "MeldOptionResult"),
     "MeldProposalResult": ("memcommit.api.meld", "MeldProposalResult"),
     "MeldSessionResult": ("memcommit.api.meld", "MeldSessionResult"),
+    **{
+        name: ("memcommit.api.dedup", name)
+        for name in (
+            "DedupApplyResult",
+            "DedupComponentResult",
+            "DedupEvidenceResult",
+            "DedupMemberResult",
+            "DedupPlanResult",
+        )
+    },
     "GrantedQueryResult": ("memcommit.api.query", "GrantedQueryResult"),
     "OrdinaryQueryResult": ("memcommit.api.query", "OrdinaryQueryResult"),
     "QueryCatalogEntry": ("memcommit.api.query", "QueryCatalogEntry"),

@@ -1,0 +1,1239 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:50:37.287886+00:00",
+      "frames": [
+        {
+          "context_digest": "b727ef7cf1cb7ca0f00ea3598d36577397e092dcb632f55c3eafb942850922d7",
+          "context_name": "task-3/local/personal-memory/2025/04",
+          "context_uid": "720d2021-1ec5-52ab-ace4-a93e02b05ad9",
+          "memories": [
+            {
+              "content": "The user keeps the shared laundry-room access card in an entrance drawer.",
+              "content_digest": "3c98e367c99e0867f1217c891dc5d982c115fd9d1b4bc3957cca6dbb6338203b",
+              "position": 0,
+              "uid": "a1c67646-6a75-504a-9508-d69e1d04b3e5"
+            },
+            {
+              "content": "The user went downstairs 25 minutes after the laundry finished and received a note from another household.",
+              "content_digest": "44968f6f10c0ae2d1dd775eb066564dada6346c6f59bdacf90d687c57e6c1e0f",
+              "position": 1,
+              "uid": "9479e799-95d7-50d2-af62-d1e0914a389b"
+            },
+            {
+              "content": "For the next load, the user set a reminder five minutes before the end and removed the laundry immediately.",
+              "content_digest": "bc77b81f6126e44bbffeb4ae2dfbb641d31a9742b7a196a106ac385321b48958",
+              "position": 2,
+              "uid": "528cb5ea-8c36-5206-beaa-19432250ec4d"
+            },
+            {
+              "content": "The user washed light-colored clothes with new jeans, and color transferred onto white socks.",
+              "content_digest": "ed0f36cf5ebe8f9542ad39ba45fc109634d72f1cb2b266c15dfe6655e3df3add",
+              "position": 3,
+              "uid": "85fb1639-2176-5329-b490-3325ff030db4"
+            },
+            {
+              "content": "The user later washed the new jeans separately, and the color of the other clothes did not change.",
+              "content_digest": "6e47fe1a02ac39064ea9db2d06d8a1f01f80302825bbe412df745401612e4a84",
+              "position": 4,
+              "uid": "431d170a-863f-596d-97c0-0c9634524ee5"
+            },
+            {
+              "content": "On a day the user did not check the dryer filter, the clothes needed another drying cycle.",
+              "content_digest": "8127e9f3ea34724673517f1e260a73acfb70e287a7e7de84e196ad1cb815f5a7",
+              "position": 5,
+              "uid": "4df33adc-cfba-50f2-b141-e2ebed38b81c"
+            },
+            {
+              "content": "On the next use, after emptying the filter, the user finished drying in one cycle.",
+              "content_digest": "932cfb8fc93277783d8990dad62cfd3e1c9a86e39ad1bd019ce00dac632c53d5",
+              "position": 6,
+              "uid": "ba7daae9-938d-55a1-af20-21cd10d395d8"
+            },
+            {
+              "content": "The building manager judges that not leaving finished laundry for a long time is fair to other households.",
+              "content_digest": "5eabe2d3dff252bb250abcde8fe2d528362afb0e73e7628e839715c3e8a3cd56",
+              "position": 7,
+              "uid": "abbf8742-38e3-5810-b222-fe91e3340962"
+            },
+            {
+              "content": "When creating a shared laundry-room reminder, base it on the end time of the machine the user started.",
+              "content_digest": "e00bc6fe09fea6fde6a27817bd6824a141c1ac4a656b9659067b7e1af9881b1f",
+              "position": 8,
+              "uid": "06273d22-0b42-5c55-9d70-eda14084219a"
+            },
+            {
+              "content": "Even if the local agent knows where the card is kept, it cannot know which machines in the shared laundry room are currently available.",
+              "content_digest": "d03f5583c9e4c686307af90ff00ff54e5ac0990e34296b3d241e4f299d15f4b7",
+              "position": 9,
+              "uid": "03ac930e-d745-5c29-8c24-5ced669817f9"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "28f109c6-fdbc-4ef9-9368-32ba9c7cb68c"
+        },
+        {
+          "context_digest": "59726675e3eb707441472b8b9972d391dc154d1dc22dfd26c51db81f33917307",
+          "context_name": "task-3/local/personal-memory/2026",
+          "context_uid": "03415050-dcfb-519c-8666-1b35d3d84253",
+          "memories": [
+            {
+              "content": "[task-3/local/personal-memory/2026/01] The user keeps gloves and scarves in a basket inside the entrance.",
+              "content_digest": "df9e352e45b42f2e220dec233fd63d443d39805fa303aa4179f37d32047816c3",
+              "position": 0,
+              "uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/01] On a day the user could not find their gloves, they walked with their hands in their pockets and missed the bus.",
+              "content_digest": "df7bc9d9efe5c113b0f8a7de78a4535177dd84a272f5c2089425ab35bea3535d",
+              "position": 1,
+              "uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/01] Before the next outing, the user put the gloves in the entrance basket the night before and left on time.",
+              "content_digest": "1a487589a8688d44c4462ca3a705ef67424bb3ad69e3f07e893faa55f892e0fc",
+              "position": 2,
+              "uid": "a11f0943-8ee1-5305-87fb-64982fb36f82"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/01] On a snowy day, the user chose a shorter route but turned back at stairs that had not been cleared of snow.",
+              "content_digest": "06047d15a33db27fb683fcfca7ad6c33c640f6558221eeee01116aa5d9abbd99",
+              "position": 3,
+              "uid": "f623f245-cdd5-5080-8869-b52cf2914076"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/01] The next day, the user took a cleared sidewalk along the main road and avoided slippery sections.",
+              "content_digest": "33820c83331ff94238b04d182505b2285674f681f643141790bf5cd6456ac90a",
+              "position": 4,
+              "uid": "17ac56f1-1302-5350-99d5-b95ef7feb768"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/01] The user fell asleep with the heat turned up, became too warm before dawn, and woke twice.",
+              "content_digest": "1a716bd3eadaee16f327c701e4a9bd55effeb2294318b485589f98ea28825829",
+              "position": 5,
+              "uid": "96988fa9-44b1-511e-8c99-4372f902cfe3"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/01] The next night, the user turned down the heat and used one additional thin blanket.",
+              "content_digest": "7daba39629a61e642b0e1f20e40b6833b0b2e2543f55f515b2e54d9e88e53336",
+              "position": 6,
+              "uid": "b628acaa-50da-552c-8665-244dc4ab8263"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/01] On a morning with heavy snow, the user's father expects the user will worry about road conditions and sends a text before departure.",
+              "content_digest": "f1b28587816eb9c8864e385214a1c1d0ca41b3e7f2d8391e6e91cdeed6405a2d",
+              "position": 7,
+              "uid": "08dfb937-7b28-55b5-801c-c0da00cbd414"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/01] Before proposing a winter travel route, check recent snow-clearing conditions and accessible entrances.",
+              "content_digest": "a4a2883041b04a4ca9ecc310137b0cb769d7fa978a70750c26a629b0505e9ef9",
+              "position": 8,
+              "uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/01] The local agent cannot know the actual condition of the sidewalk the user will take from a weather forecast alone.",
+              "content_digest": "bb72bc41dc38049d449f638094344222dcaaa1171a343bd2358606b201c7310f",
+              "position": 9,
+              "uid": "802c4031-57de-592a-9bc8-6ee3d54921c8"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/02] The user keeps basic repair tools in a box beneath the sink.",
+              "content_digest": "49bf9b9c1ef85661ffc29f49203454e5886e5765a37658a4385fd649832b5a31",
+              "position": 10,
+              "uid": "7d3daf76-a21e-5117-a534-6175ab2d2861"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/02] On a day the faucet leaked, the user placed only a towel beneath it, and the floor became wet as well.",
+              "content_digest": "bb69c2c9c494cb26818f935576e632e7095e0112abb0b97bcc37e2315f93cd09",
+              "position": 11,
+              "uid": "70a6d9f5-180f-5174-b247-690e10baa23e"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/02] After sending a photo to building management, the user finalized the time for a repair visit.",
+              "content_digest": "d24a44b3ee212498ca9d35140e96c84c0e7e3c2cb4a5382be9c2ff5532c30f7d",
+              "position": 12,
+              "uid": "9fcd922c-147c-517b-82b3-180fdfb13f33"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/02] Before the technician's visit, the user emptied the area beneath the sink so work could begin immediately.",
+              "content_digest": "fa707d6c87fa5981a1879a8e25947bf4d4c2dd0ff7faf0dc6c3b9fd3423251d7",
+              "position": 13,
+              "uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/02] On a day the user wrote the visit time only in the calendar and turned off the reminder, they heard the doorbell late.",
+              "content_digest": "6edd4e45b51463d0c21c5332c913f4e6c0ebe6ef4aa2ac2a695f84b6ef96ba4d",
+              "position": 14,
+              "uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/02] For the next visit, the user enabled a reminder 30 minutes beforehand and answered immediately at the entrance.",
+              "content_digest": "e0d3e36e8eb4adb9c0385f5511fc0a57d75439aaf9cf76f23c587b88e83f73c7",
+              "position": 15,
+              "uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/02] After the repair, the user called their maternal aunt to confirm that the spare key entrusted to her was still there.",
+              "content_digest": "e456a457fe5fa7d4c1adc32b5be39c80f46dccecda905a8d89454d2ba6ee7e79",
+              "position": 16,
+              "uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/02] The user's maternal aunt considers it unsafe to hand the spare key to a repair technician without the user's explicit request.",
+              "content_digest": "7e5f54456352140813f071f9b068278a94bff0c5fe4351ae41d89266e65c6732",
+              "position": 17,
+              "uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/02] Obtain the user's reconfirmation before scheduling an external worker to enter the residential unit.",
+              "content_digest": "82db2ad21e08b6f56c8806abebe7d393638121db0eda91afa0520a5d7e3c53a0",
+              "position": 18,
+              "uid": "4716a67b-8602-564c-9e89-85cd4ee158f9"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/02] A multi-unit residential building's repair schedule may change because of emergency work or parts availability.",
+              "content_digest": "42aedf983cd53a86032fd686d610e3e3c607bbfe5ec43051a57a08fa5acfedc0",
+              "position": 19,
+              "uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/03] The user stores tax-related receipts in digital folders by year.",
+              "content_digest": "c2fe13dc6801abb1a75abbf32d81f73cb7e5bc771d2021408508fda14f67b2ff",
+              "position": 20,
+              "uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/03] The user found three paper receipts late and recalculated the expense total already prepared.",
+              "content_digest": "028da16979bffe5ae53dedabd51ad923222ae59299422ec92f4766fc5d71831a",
+              "position": 21,
+              "uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/03] Starting the next month, the user photographed receipts on the day they were received and reduced omissions.",
+              "content_digest": "d0a3cdcf0e656bba1489ad02def70cba9878b7bec0e39e0fb995a1fd6ec7af73",
+              "position": 22,
+              "uid": "ff436ea5-1b3e-55df-8302-bd8a96740671"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/03] The user named every file with only the photo date and spent a long time looking for a needed receipt.",
+              "content_digest": "2efe4254c120f2abdbe646b9d0da88572ff4c2898119184546518145ce863c55",
+              "position": 23,
+              "uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/03] The user later included the expense category in the filename and found the receipt immediately through search.",
+              "content_digest": "c2f7d43fe4d289dabec4df25de3d7a972dd198a831e7cc39f718ccf28f2ad58e",
+              "position": 24,
+              "uid": "89d6fa9a-b795-59df-be34-1c05a9861d35"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/03] While reviewing documents just before submission, the user discovered one blank signature field.",
+              "content_digest": "df792646b14ff0049f0f66ce8b6690493cd61eb151ca7733171be61b8f620c5e",
+              "position": 25,
+              "uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/03] Before submitting an administrative document, the user checks the signature field as the final item on the checklist.",
+              "content_digest": "f2cd46a8599c85439a8257a445f8087eddcee1be6b40e5b3f828510cb9ae0678",
+              "position": 26,
+              "uid": "5551622f-66cf-5542-8c47-1cddadab5c02"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/03] Staff at a tax-support counter expect to receive an electronic copy in which every item is legible rather than a blurred or cropped photo.",
+              "content_digest": "d3e2591b3622bf1cdc262156cc0f90ba65c8ff4f70b7724a3d35daea3e0cf1be",
+              "position": 27,
+              "uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/03] The local agent can organize receipts by date and category but cannot determine whether an expense is deductible.",
+              "content_digest": "1f04078c0251a140698ca29f006baf176574c7587240a20f6f7873aaf9fc4beb",
+              "position": 28,
+              "uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/03] The accepted scope and submission deadlines for administrative documents may vary under that year's guidance.",
+              "content_digest": "8cb67c50f43c3476ed0541f3cf8a3fa402c4c62d57684bcff359114331c43ba7",
+              "position": 29,
+              "uid": "de398064-3179-590b-8c62-effb17060115"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/04] The user collects clothes for donation in a large bag beside the entrance.",
+              "content_digest": "859a39369f862d1f25667e1ebf1dd3e4637d72b6eec3c0f2d016adfe5eddcbf3",
+              "position": 30,
+              "uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/04] After emptying an entire drawer at once, the user could not find a charger they needed.",
+              "content_digest": "9ae04d0da6ac254e1f3245b2acfbefa15020c30342b839963b1c48ebf23e69d1",
+              "position": 31,
+              "uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/04] During the next organizing session, the user sorted items by type and put only items to be discarded in the bag.",
+              "content_digest": "0f35ccc07489dbc5ea6d06300340063863f520ccf52dd7612176979878739bc6",
+              "position": 32,
+              "uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/04] Even after photographing unworn clothes, the user did not take them out again for one month.",
+              "content_digest": "3f8fb52d3bc13af85bf7008cbc4c843e71996ce13d996bcd1d1d2a7c9d92c5a3",
+              "position": 33,
+              "uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/04] After moving those clothes to the donation bag, the user cleared one closet compartment.",
+              "content_digest": "6b15ff1fcf849cfeb391778195a8e154c2524d554ea405ca40e1c6b5ab6243f8",
+              "position": 34,
+              "uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/04] The user nearly discarded an important paper with advertising and checked the recycling box again.",
+              "content_digest": "d9727cce7be424554cb7b6ae4e8ba307c52f7a2a9bcbc728f255c9411f6d0ba1",
+              "position": 35,
+              "uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/04] During the next organizing session, the user kept a separate document box and did not mix the papers.",
+              "content_digest": "47103273369a47668213b7d50f8bd49939e6595f7b4c4348ed7ab39a29c090b1",
+              "position": 36,
+              "uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/04] The user's mother asks the user to check whether she needs kitchen items in good condition before discarding them.",
+              "content_digest": "5ddb26d1b425b65865393f3e8c79589ff193d505271b9fbcdcdd8cfbb4092427",
+              "position": 37,
+              "uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/04] Confirm with the user before marking a personal document or another person's property as a disposal candidate.",
+              "content_digest": "c31e89e3d02d2681ddeb3364b24af759d3ca891d4fc281f9554c994d4b29dc1e",
+              "position": 38,
+              "uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/04] The local agent cannot determine an object's emotional meaning from frequency of use alone.",
+              "content_digest": "35aa5bc0eb12ab9de47abf06a0f6248f5f408caa0483ecef6c92b07b6c00e758",
+              "position": 39,
+              "uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/05] The user keeps a picnic mat on the bottom shelf of the entrance storage cabinet.",
+              "content_digest": "cc182894cd7fb336eb51dc1c8fb3488b5f99553d7ae3ef5a51d2c9c43d9722ac",
+              "position": 40,
+              "uid": "a9da4cfc-a6aa-51ae-9ec4-0de5c7a09227"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/05] On a day the user went to the riverside, they sat in a place without shade and moved after an hour.",
+              "content_digest": "9fb39b43085ced8f10bb5018025ddbb21a2cd0c2ac9732875e133511251d92fa",
+              "position": 41,
+              "uid": "fa2735e1-f4af-57d3-a18c-795715b6715b"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/05] At the next outdoor meal, the user chose a place near a large tree and stayed for two hours.",
+              "content_digest": "0b3484e62d8527aa9bfcd90851e650e61fedc5fac12da5643cd5b8ebebca996f",
+              "position": 42,
+              "uid": "3bd8b8f2-c5b4-5004-8b9e-e388cc26ea7a"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/05] On a hot day when the user brought only one bottle of water, they bought another drink partway through the outing.",
+              "content_digest": "9ceeb7f045a70a8cd4e758ee84b85ece27f9070e49a2a5af16c30f30be43d46d",
+              "position": 43,
+              "uid": "c7c4b494-39a6-5f5c-b37f-51c5061ac926"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/05] On the next outing, the user brought two small bottles of water after freezing them.",
+              "content_digest": "afeaa7eafa635256fb49090943102fe66be1ca478f91573db1c9fb82f575c5a3",
+              "position": 44,
+              "uid": "dd9f5b3c-9c2e-5dbc-bf6e-eb7761eeb075"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/05] When meeting their maternal uncle at a park, the user and the uncle waited at different entrances for 15 minutes.",
+              "content_digest": "21563a560e4034f2be1004c8f9779e0fa4031a2449338a53df94549c71ce674d",
+              "position": 45,
+              "uid": "2ed2a41c-f6ae-54d6-875c-a195d8fdacee"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/05] For the next meeting, the user sent a photo of the entrance sign, and they met at the same place.",
+              "content_digest": "8fc4af4f09f60e70cf2cef76e10124565d62a10f9b2f373f45fc5512768da3d6",
+              "position": 46,
+              "uid": "23f3a4fc-d51e-5d0b-87f0-d5be407a57f3"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/05] For a park meeting, the user's maternal uncle prefers an entrance that requires less walking from the parking area.",
+              "content_digest": "796d07b05abaca6d4f81afe275e7e3ba5ce765a76554382cfd9515542d0f7613",
+              "position": 47,
+              "uid": "e9f459f3-8ff0-5a0e-b78b-eda8d18b914e"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/05] When making an outdoor plan, confirm the exact entrance and an alternative location in case of rain.",
+              "content_digest": "bb446c205281da7f2deb681c80355ac3d415a94befda6b3522c2e284248a3cbc",
+              "position": 48,
+              "uid": "70277b86-d5db-5b58-8a94-e77372d15a4c"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/05] Some park restrooms and drinking fountains may be closed seasonally.",
+              "content_digest": "76e56db33422d508c73aa28f9609798fb7ed25c1590525d0f27b15fabf1c7d23",
+              "position": 49,
+              "uid": "5a54437b-9b0e-5103-860d-d878be70b3ef"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/06] The user keeps four folding chairs for family barbecues in storage.",
+              "content_digest": "75670ca0474f197532b42367efb09d4fdd773613b48e1ee7beca0247690c3cac",
+              "position": 50,
+              "uid": "cce43b8e-c1c1-5208-8d9a-ee665b805d4c"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/06] When six family members gathered in a noisy indoor restaurant, the user asked several times for the person across from them to repeat what was said.",
+              "content_digest": "21810ea4d1c9eb5011b6815efe1e09f63cb95c73e254a9a41cb2df8359888fd2",
+              "position": 51,
+              "uid": "e682f0fd-e92f-566e-b1ec-1d5ebf091b60"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/06] The user held the next gathering in their father's yard and moved between seats while speaking with everyone.",
+              "content_digest": "35d1f0ada1292703893b53b9d4944fc8a6313acb35d8244ea4800c4c378645a4",
+              "position": 52,
+              "uid": "c1f2b53e-6184-552b-a321-9796bb121055"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/06] On a day the user started the barbecue at midday, sunlight led them to finish the meal quickly.",
+              "content_digest": "709e7000dbbdb9fb3740ab6171f2d6867ad00877e801671edd664613b90d64c7",
+              "position": 53,
+              "uid": "56d5befe-d5f4-59df-82e4-a66ba868dfc2"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/06] The next time, the user started at 6 p.m. and remained outside until sunset.",
+              "content_digest": "5e83893a7db1c770479cc73753fa6ac223ff72de9ab397c1d44ce9422fc565ba",
+              "position": 54,
+              "uid": "83d73ede-6f5a-550e-ba1c-c146b73a9917"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/06] Because the side dishes brought by the user's mother and older sister had no labels, the user opened the same container twice.",
+              "content_digest": "1a0776319a95b3d1855743edcb590f83b626fad29403a3ad0ef71bd20f312b7b",
+              "position": 55,
+              "uid": "cf0947e8-c133-5259-bac2-e8ee6d74929e"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/06] At the next gathering, the user wrote each food's name and who brought it on a small piece of paper.",
+              "content_digest": "7a4c54c0a72b3284d8ac97782efef290e15ce1bd1094c4f3542ae504a11cc91f",
+              "position": 56,
+              "uid": "d42e48ca-39de-529f-bba2-332b779bd6c2"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/06] After a barbecue, the user's younger brother prefers to divide leftover food into small containers to take home rather than discard it.",
+              "content_digest": "745143f8590edccce90a0887a5a4bc05802c5d2c0f199fddd6c5fbffbd735f46",
+              "position": 57,
+              "uid": "3958627e-a0fa-5e32-9e87-7ee874fc6fe7"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/06] The local agent can summarize preparation and responses from prior family barbecues but cannot know the next attendees or weather.",
+              "content_digest": "64686d5257b3fdbcc3e1883bd593caf752fdf0c813928df2a03df9cc207d48e6",
+              "position": 58,
+              "uid": "1f24b5c2-554c-5356-b335-c6879e53ba7f"
+            },
+            {
+              "content": "[task-3/local/personal-memory/2026/06] The user's father's yard receives strong direct sunlight at midday; after 6 p.m., shade and wind lower the felt temperature.",
+              "content_digest": "468ef30a921990a25d14930e93ed1edb03a94460428631659b682fea515c22f2",
+              "position": 59,
+              "uid": "d88b1b21-c58f-51d5-a60b-54bb11473d96"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "bbfcadd7-f085-434b-a9db-1cde821054f1"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate practical domains rather than shared decisions: the reference concerns shared-laundry use, while the compared frame covers seasonal travel, home repair, records, decluttering, outings, and family gatherings. No conflict or uncertain overlap is present.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "28f109c6-fdbc-4ef9-9368-32ba9c7cb68c",
+              "memory_uid": "a1c67646-6a75-504a-9508-d69e1d04b3e5"
+            }
+          ],
+          "reason": "This is independently useful laundry-access information with no counterpart addressing the same storage fact.",
+          "status": "RESOLVED",
+          "summary": "The shared laundry-room access card is stored in an entrance drawer.",
+          "uid": "969a2ca1-549a-5e52-be89-f8a0130c4d6c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "28f109c6-fdbc-4ef9-9368-32ba9c7cb68c",
+              "memory_uid": "9479e799-95d7-50d2-af62-d1e0914a389b"
+            },
+            {
+              "frame_uid": "28f109c6-fdbc-4ef9-9368-32ba9c7cb68c",
+              "memory_uid": "528cb5ea-8c36-5206-beaa-19432250ec4d"
+            }
+          ],
+          "reason": "These linked experiences split one laundry-pickup improvement claim, which has no counterpart governing that task.",
+          "status": "RESOLVED",
+          "summary": "After delayed laundry collection prompted a household note, an early reminder supported immediate collection on the next load.",
+          "uid": "3d7554c9-3967-569c-b525-addb5cfd21e3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "28f109c6-fdbc-4ef9-9368-32ba9c7cb68c",
+              "memory_uid": "85fb1639-2176-5329-b490-3325ff030db4"
+            },
+            {
+              "frame_uid": "28f109c6-fdbc-4ef9-9368-32ba9c7cb68c",
+              "memory_uid": "431d170a-863f-596d-97c0-0c9634524ee5"
+            }
+          ],
+          "reason": "These linked wash outcomes form one color-separation claim with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Color transferred when new jeans were mixed with light clothes, while later washing the jeans separately avoided changing other clothes.",
+          "uid": "b297d38c-5841-5745-8b3a-c1fdf51bee6a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "28f109c6-fdbc-4ef9-9368-32ba9c7cb68c",
+              "memory_uid": "4df33adc-cfba-50f2-b141-e2ebed38b81c"
+            },
+            {
+              "frame_uid": "28f109c6-fdbc-4ef9-9368-32ba9c7cb68c",
+              "memory_uid": "ba7daae9-938d-55a1-af20-21cd10d395d8"
+            }
+          ],
+          "reason": "These linked outcomes form one dryer-filter claim with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Drying required an extra cycle without a filter check but finished in one cycle after the filter was emptied.",
+          "uid": "55459f82-6055-5e9d-9746-5ebaa554c10d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "28f109c6-fdbc-4ef9-9368-32ba9c7cb68c",
+              "memory_uid": "abbf8742-38e3-5810-b222-fe91e3340962"
+            }
+          ],
+          "reason": "This is an independently useful shared-laundry fairness judgment absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The building manager considers prompt removal of finished laundry fair to other households.",
+          "uid": "954b978b-59fe-5459-85de-5d432af1e981"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "28f109c6-fdbc-4ef9-9368-32ba9c7cb68c",
+              "memory_uid": "06273d22-0b42-5c55-9d70-eda14084219a"
+            }
+          ],
+          "reason": "This task-specific reminder rule has no counterpart addressing the same operational decision.",
+          "status": "RESOLVED",
+          "summary": "A shared-laundry reminder should be based on the end time of the machine the user started.",
+          "uid": "e48b649f-8234-5199-a8e0-60ccc61210b8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "28f109c6-fdbc-4ef9-9368-32ba9c7cb68c",
+              "memory_uid": "03ac930e-d745-5c29-8c24-5ced669817f9"
+            }
+          ],
+          "reason": "This is a laundry-specific knowledge boundary, distinct from limits concerning other environments.",
+          "status": "RESOLVED",
+          "summary": "Knowing the card location does not let the local agent know current shared-laundry machine availability.",
+          "uid": "881d9f71-4a11-54e3-82cd-9d4733f32a7e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409"
+            }
+          ],
+          "reason": "This is an independently useful winter-accessory storage fact with no reference counterpart.",
+          "status": "RESOLVED",
+          "summary": "Gloves and scarves are stored in an entrance basket.",
+          "uid": "e4bd2795-3b51-543c-b242-a91da5a540f3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5"
+            },
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "a11f0943-8ee1-5305-87fb-64982fb36f82"
+            }
+          ],
+          "reason": "These linked experiences split one departure-preparation claim absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Failure to find gloves contributed to a missed bus, while placing them in the entrance basket the night before supported an on-time departure.",
+          "uid": "07432d21-6829-55d2-a2db-ef4843d17bae"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "f623f245-cdd5-5080-8869-b52cf2914076"
+            },
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "17ac56f1-1302-5350-99d5-b95ef7feb768"
+            }
+          ],
+          "reason": "These linked route experiences form one snow-accessibility claim with no reference counterpart.",
+          "status": "RESOLVED",
+          "summary": "An uncleared snowy stairway blocked a short route, while a cleared main-road sidewalk avoided slippery sections the next day.",
+          "uid": "20cfe5b7-79b7-519d-9c26-124e79889769"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "96988fa9-44b1-511e-8c99-4372f902cfe3"
+            },
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "b628acaa-50da-552c-8665-244dc4ab8263"
+            }
+          ],
+          "reason": "These linked nights form one sleep-temperature adjustment claim absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "High overnight heat caused warmth and repeated waking, followed the next night by lower heat and an additional thin blanket.",
+          "uid": "324012c6-54aa-561a-b4c8-ae9c76143b30"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "08dfb937-7b28-55b5-801c-c0da00cbd414"
+            }
+          ],
+          "reason": "This is an independently useful family expectation and check-in pattern with no reference counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user's father expects road-condition worry during heavy snow and texts before departure.",
+          "uid": "139f3747-2913-57dd-bf24-fd11d0421ed9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d"
+            }
+          ],
+          "reason": "This winter-route rule addresses a decision not covered by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Recent snow-clearing conditions and accessible entrances should be checked before proposing a winter route.",
+          "uid": "9d94201a-d77b-57b4-996d-a02350585abd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "802c4031-57de-592a-9bc8-6ee3d54921c8"
+            }
+          ],
+          "reason": "This is a route-specific knowledge boundary, not the same operational claim as laundry-machine availability.",
+          "status": "RESOLVED",
+          "summary": "A weather forecast alone cannot establish the actual condition of the sidewalk the user will take.",
+          "uid": "5cc3d19d-82bf-5ff4-ab18-a0c8bf0f8432"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "7d3daf76-a21e-5117-a534-6175ab2d2861"
+            }
+          ],
+          "reason": "This is an independently useful storage fact with no reference counterpart.",
+          "status": "RESOLVED",
+          "summary": "Basic repair tools are stored in a box beneath the sink.",
+          "uid": "6775062c-21e7-5556-923b-0d8f9ba5764d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "70a6d9f5-180f-5174-b247-690e10baa23e"
+            }
+          ],
+          "reason": "This repair-containment experience has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Using only a towel beneath a leaking faucet did not prevent the floor from becoming wet.",
+          "uid": "9b60606e-bea8-58bc-b33f-1b82e4bb4c13"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "9fcd922c-147c-517b-82b3-180fdfb13f33"
+            }
+          ],
+          "reason": "This is independently useful repair-coordination information absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user finalized a repair-visit time after sending building management a photo.",
+          "uid": "4e3c2b77-c0b4-547b-9092-2f4a27d1c151"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5"
+            }
+          ],
+          "reason": "This repair-access preparation is an independent claim with no reference counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user cleared the area beneath the sink before a technician's visit so work could start immediately.",
+          "uid": "74ec0e02-57ca-5271-968d-283b48a7d0e2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65"
+            },
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a"
+            }
+          ],
+          "reason": "These linked visits form one appointment-reminder claim absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A calendar entry without an active reminder led to a late door response, while a 30-minute reminder supported an immediate response on the next visit.",
+          "uid": "b3e282af-3e00-568b-8ccf-13596d0b60a5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441"
+            }
+          ],
+          "reason": "This is independently useful spare-key custody information with no reference counterpart.",
+          "status": "RESOLVED",
+          "summary": "After the repair, the user confirmed with their maternal aunt that the entrusted spare key remained there.",
+          "uid": "41c85834-1bbb-59e0-897d-deb71bb993cb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd"
+            }
+          ],
+          "reason": "This is a distinct safety judgment concerning key release, absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user's maternal aunt considers giving a repair technician the spare key without the user's explicit request unsafe.",
+          "uid": "6ea0ceb1-723a-5bed-8154-beb9427aa92d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "4716a67b-8602-564c-9e89-85cd4ee158f9"
+            }
+          ],
+          "reason": "This residential-entry authorization rule has no reference counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user's reconfirmation should be obtained before scheduling an external worker to enter the residence.",
+          "uid": "bb5aad91-8bcf-5eeb-9c53-81b6d769def8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+            }
+          ],
+          "reason": "This repair-scheduling contingency is independently useful and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Emergency work or parts availability may change a multi-unit building's repair schedule.",
+          "uid": "1660f650-aff3-50f9-bb22-2fd5ec4e672c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393"
+            }
+          ],
+          "reason": "This is an independently useful records-storage fact with no reference counterpart.",
+          "status": "RESOLVED",
+          "summary": "Tax-related receipts are stored in digital folders by year.",
+          "uid": "e47e75c4-232a-5de9-a028-da4caca7d426"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878"
+            },
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "ff436ea5-1b3e-55df-8302-bd8a96740671"
+            }
+          ],
+          "reason": "These linked practices form one timely receipt-capture claim absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Late discovery of paper receipts required recalculation, while photographing receipts on receipt day later reduced omissions.",
+          "uid": "b13cc8a1-74c4-51e9-bd74-26e6cdf1981c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e"
+            },
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "89d6fa9a-b795-59df-be34-1c05a9861d35"
+            }
+          ],
+          "reason": "These linked outcomes form one receipt-naming claim with no reference counterpart.",
+          "status": "RESOLVED",
+          "summary": "Date-only filenames made receipt retrieval slow, while adding expense categories enabled immediate search retrieval.",
+          "uid": "75bbb7d2-dae9-53bd-91de-dd476139ee55"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2"
+            },
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "5551622f-66cf-5542-8c47-1cddadab5c02"
+            }
+          ],
+          "reason": "These linked details form one final signature-check claim absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Discovery of a blank signature field led to checking the signature field last before administrative-document submission.",
+          "uid": "7304514a-dba7-5251-8a49-22cbdeb1d497"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f"
+            }
+          ],
+          "reason": "This submission-quality expectation has no reference counterpart.",
+          "status": "RESOLVED",
+          "summary": "Tax-support staff expect electronic copies whose contents are fully legible rather than blurred or cropped.",
+          "uid": "3f21b22b-3b09-52a1-95bc-785df595c900"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094"
+            }
+          ],
+          "reason": "This tax-specific capability boundary is distinct from the reference frame's laundry knowledge limit.",
+          "status": "RESOLVED",
+          "summary": "The local agent can organize receipts by date and category but cannot determine expense deductibility.",
+          "uid": "6aecda9f-8c92-5ce9-8c89-4000e161f236"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "de398064-3179-590b-8c62-effb17060115"
+            }
+          ],
+          "reason": "This guidance-dependent contingency is independently useful and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Accepted administrative-document scope and deadlines may vary with the year's guidance.",
+          "uid": "4c184f98-c12e-516f-af82-bba4f66a6a45"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            }
+          ],
+          "reason": "This is an independently useful donation-storage fact with no reference counterpart.",
+          "status": "RESOLVED",
+          "summary": "Clothes intended for donation are collected in a large bag beside the entrance.",
+          "uid": "97d34237-995e-5c81-876f-164b7720c4f9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            },
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            }
+          ],
+          "reason": "These linked organizing experiences form one sorting claim absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Emptying a whole drawer caused difficulty finding a charger, while later sorting by type and bagging only discard items provided a more selective process.",
+          "uid": "a464d58c-3954-5375-a86e-7bcd7bd1ea9f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            },
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            }
+          ],
+          "reason": "These linked outcomes form one donation-action claim with no reference counterpart.",
+          "status": "RESOLVED",
+          "summary": "Photographing unworn clothes did not prompt action for a month, while moving them to the donation bag cleared a closet compartment.",
+          "uid": "b568e102-89c9-5d8c-994e-e4b2ab9c4148"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            },
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            }
+          ],
+          "reason": "These linked experiences form one document-separation claim absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "An important paper was nearly recycled with advertising, while a separate document box later prevented papers from being mixed.",
+          "uid": "37295764-b485-5037-9ea2-37d798c43439"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            }
+          ],
+          "reason": "This is an independently useful family reuse preference with no reference counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user's mother asks to be consulted about useful kitchen items before they are discarded.",
+          "uid": "01a07151-643c-5184-ab07-6c0a0a3ebb00"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            }
+          ],
+          "reason": "This disposal-authorization rule has no reference counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user should be consulted before a personal document or another person's property is marked for disposal.",
+          "uid": "d7c4f119-251c-5f3d-9cd4-0696741589e3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "reason": "This decluttering-specific knowledge boundary is distinct from the reference frame's laundry limit.",
+          "status": "RESOLVED",
+          "summary": "Frequency of use alone does not let the local agent determine an object's emotional meaning.",
+          "uid": "c4e1aa46-b234-51cf-a2eb-e27377fd8a13"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "a9da4cfc-a6aa-51ae-9ec4-0de5c7a09227"
+            }
+          ],
+          "reason": "This is an independently useful storage fact with no reference counterpart.",
+          "status": "RESOLVED",
+          "summary": "A picnic mat is stored on the bottom shelf of the entrance storage cabinet.",
+          "uid": "4aa02a79-3a3a-5fb7-99f6-98a7c82c4077"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "fa2735e1-f4af-57d3-a18c-795715b6715b"
+            },
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "3bd8b8f2-c5b4-5004-8b9e-e388cc26ea7a"
+            }
+          ],
+          "reason": "These linked outings form one shade-selection claim absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A riverside spot without shade was abandoned after an hour, while a later spot near a large tree supported a two-hour stay.",
+          "uid": "37374c84-d626-5ebc-9cfe-b2745aaf2149"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "c7c4b494-39a6-5f5c-b37f-51c5061ac926"
+            },
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "dd9f5b3c-9c2e-5dbc-bf6e-eb7761eeb075"
+            }
+          ],
+          "reason": "These linked outings form one hydration-preparation claim with no reference counterpart.",
+          "status": "RESOLVED",
+          "summary": "One water bottle proved insufficient on a hot outing, followed by bringing two small frozen bottles on the next outing.",
+          "uid": "e9915b34-610f-500c-84ad-429173123795"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "2ed2a41c-f6ae-54d6-875c-a195d8fdacee"
+            },
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "23f3a4fc-d51e-5d0b-87f0-d5be407a57f3"
+            }
+          ],
+          "reason": "These linked meetings form one entrance-identification claim absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Ambiguous park entrances caused a 15-minute separation, while sending an entrance-sign photo supported meeting at the same place next time.",
+          "uid": "ce15d442-90a3-5609-bece-719ebb0b9363"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "e9f459f3-8ff0-5a0e-b78b-eda8d18b914e"
+            }
+          ],
+          "reason": "This is an independently useful accessibility preference with no reference counterpart.",
+          "status": "RESOLVED",
+          "summary": "For park meetings, the user's maternal uncle prefers an entrance requiring less walking from parking.",
+          "uid": "625398b8-6b0d-5bcd-8071-82e52dca61a0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "70277b86-d5db-5b58-8a94-e77372d15a4c"
+            }
+          ],
+          "reason": "This outdoor-coordination rule has no reference counterpart.",
+          "status": "RESOLVED",
+          "summary": "Outdoor plans should confirm the exact entrance and an alternative location for rain.",
+          "uid": "03fb0e58-91fd-5c42-9608-eca2d61c3726"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "5a54437b-9b0e-5103-860d-d878be70b3ef"
+            }
+          ],
+          "reason": "This outdoor-facility contingency is independently useful and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Park restrooms and drinking fountains may be closed seasonally.",
+          "uid": "9621366d-b310-566d-bb98-428434a2cdb7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "cce43b8e-c1c1-5208-8d9a-ee665b805d4c"
+            }
+          ],
+          "reason": "This is an independently useful equipment-storage fact with no reference counterpart.",
+          "status": "RESOLVED",
+          "summary": "Four folding chairs for family barbecues are kept in storage.",
+          "uid": "3c24d0c1-0f7b-58af-ba24-c719ae0393e2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "e682f0fd-e92f-566e-b1ec-1d5ebf091b60"
+            }
+          ],
+          "reason": "This gathering-environment experience is an independent claim absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "At a six-person gathering in a noisy indoor restaurant, the user repeatedly needed the person across from them to repeat speech.",
+          "uid": "bb734b0e-a59b-5844-b982-c0f053ed1ba5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "c1f2b53e-6184-552b-a321-9796bb121055"
+            }
+          ],
+          "reason": "This gathering-format experience is independently useful and has no reference counterpart.",
+          "status": "RESOLVED",
+          "summary": "The next gathering was held in the user's father's yard, where the user moved between seats while speaking with everyone.",
+          "uid": "431fa2c2-8660-56f7-a016-9f34fbba4b8e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "56d5befe-d5f4-59df-82e4-a66ba868dfc2"
+            },
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "83d73ede-6f5a-550e-ba1c-c146b73a9917"
+            }
+          ],
+          "reason": "These linked gatherings form one barbecue-timing claim absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Midday sunlight shortened one barbecue meal, while a later 6 p.m. start supported remaining outside until sunset.",
+          "uid": "87d1d525-36f6-5219-a590-7870194919e1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "cf0947e8-c133-5259-bac2-e8ee6d74929e"
+            },
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "d42e48ca-39de-529f-bba2-332b779bd6c2"
+            }
+          ],
+          "reason": "These linked gatherings form one food-labeling claim with no reference counterpart.",
+          "status": "RESOLVED",
+          "summary": "Unlabeled side dishes caused duplicate opening, while later labels identified each food and its contributor.",
+          "uid": "f778c666-5b42-5025-902c-1d819c8c3012"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "3958627e-a0fa-5e32-9e87-7ee874fc6fe7"
+            }
+          ],
+          "reason": "This is an independently useful family preference with no reference counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user's younger brother prefers barbecue leftovers divided into small take-home containers instead of discarded.",
+          "uid": "fa187eb1-e138-5235-bacf-03157d3c9beb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "1f24b5c2-554c-5356-b335-c6879e53ba7f"
+            }
+          ],
+          "reason": "This event-planning capability boundary is distinct from the reference frame's laundry limit.",
+          "status": "RESOLVED",
+          "summary": "The local agent can summarize prior barbecue preparation and responses but cannot know the next attendees or weather.",
+          "uid": "2a8cea59-5379-5662-9143-79055176b62f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bbfcadd7-f085-434b-a9db-1cde821054f1",
+              "memory_uid": "d88b1b21-c58f-51d5-a60b-54bb11473d96"
+            }
+          ],
+          "reason": "This location-specific environmental pattern is independently useful and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user's father's yard has strong midday sun, while shade and wind reduce felt temperature after 6 p.m.",
+          "uid": "e879babd-41fb-506f-8559-4999dc6ced19"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame records winter preparation, repair access, receipt handling, decluttering safeguards, outdoor planning, and family gatherings, including storage habits, corrective routines, preferences, environmental contingencies, and limits on local-agent knowledge.",
+        "differences": "",
+        "reference_only": "The reference records laundry access, prompt collection, color separation, dryer-filter effects, fairness, reminder timing, and limits on knowing machine availability."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "ea127b44-0423-470c-b9bd-9b4216a993bb"
+    },
+    "analysis_digest": "585221a7bae06d8a35558a36e09a0bbbdc343b81fa311261a916bb8f842701da",
+    "key": "0e7aff0859f6d43f008d09602a8756c9dfe844262685906c01a36a649677f858",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 118.4159639999998,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "0e7aff0859f6d43f008d09602a8756c9dfe844262685906c01a36a649677f858",
+  "created_at": "2026-08-13T18:52:35.702743Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/04",
+  "pair_key": "df6eddb96e97a03a54040476f86958ffc8ecac3f7bf506801f55bdb9280d0338",
+  "provider_seconds": 118.4159639999998,
+  "right": "task-3/local/personal-memory/2026",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

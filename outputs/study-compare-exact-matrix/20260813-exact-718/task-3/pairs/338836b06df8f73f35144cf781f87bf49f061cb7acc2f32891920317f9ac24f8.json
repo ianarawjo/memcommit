@@ -1,0 +1,406 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:36:22.515176+00:00",
+      "frames": [
+        {
+          "context_digest": "4c7d7890b4c8dbd807acc103affd0572c325fd2e0f58346a97c3ed49e48ba34e",
+          "context_name": "task-3/local/personal-memory/2024/02",
+          "context_uid": "7bedad96-d78b-5977-a4c9-71049dcfcec8",
+          "memories": [
+            {
+              "content": "The user's maternal aunt keeps one spare key to the user's home.",
+              "content_digest": "2e45c292a3cbc26a1c9928c4546c6029c7dcd2aa6aa0a45a7cfb4be7888dd5c6",
+              "position": 0,
+              "uid": "1c627e4c-c393-5bd3-a5ae-b3318821be73"
+            },
+            {
+              "content": "If the door is locked, the user is accustomed to contacting their maternal aunt, who has the spare key, before contacting building management.",
+              "content_digest": "709cc4a1ae26126bd3238ea8c0e343415d95d084ddaf022590ff4197003c7b81",
+              "position": 1,
+              "uid": "e80936de-87af-5dbb-ab94-d456bbfaab0a"
+            },
+            {
+              "content": "When going to collect the spare key from their maternal aunt, the user wants to give an arrival time first so neither person has to wait.",
+              "content_digest": "5dab57d537091a28848dfa3592d16e038d6e78eeb8159489c17475befeb62a53",
+              "position": 2,
+              "uid": "7c26cf33-0630-5138-910a-6d37d6ed2b63"
+            },
+            {
+              "content": "The user feels at ease only after returning a borrowed spare key in person on the same day.",
+              "content_digest": "d3b9e78e166fb3af3dc248bcddbf1c1df15d3eed57655991a52c23b4ebb6ba14",
+              "position": 3,
+              "uid": "c3f0f26c-8d89-55e3-8bf3-398271e417e7"
+            },
+            {
+              "content": "The user feels uneasy about writing down a new entrance passcode on paper.",
+              "content_digest": "fe40a50fb7f0b0e1514a2f7e6ea3748e73cbd76fa45b862b4880c9eba68a2312",
+              "position": 4,
+              "uid": "7d7d00a3-c5af-5441-bb50-9631fbfd7979"
+            },
+            {
+              "content": "The user found it difficult when a family member arrived without notice during a meeting and the user could not respond immediately.",
+              "content_digest": "30d2126eb016f1fab8b8bd670bc00ee6ac5182f28b0afe696b2c30f4d7bc128f",
+              "position": 5,
+              "uid": "2e0df581-bd54-54f5-94ef-b719427fc88c"
+            },
+            {
+              "content": "On a day their younger brother received a package for them, the user felt reassured after checking the delivery photo.",
+              "content_digest": "54eacbc39b057a6a18f8ddd8e1db587dbef231ecb10ed8cd84a46b3575ac470c",
+              "position": 6,
+              "uid": "9278b64e-7550-5eb6-bbfd-544a2ae4ec3d"
+            },
+            {
+              "content": "The user's maternal aunt wants confirmation that the user is coming in person before handing over the spare key.",
+              "content_digest": "5d780f2fb96eac2d3c65e7417ee00e64e29c2f8873c432b291e62773723182c9",
+              "position": 7,
+              "uid": "76fb9115-a3f2-5ce3-a445-c3d1e38e4253"
+            },
+            {
+              "content": "Confirm with the user before sharing the spare key's storage location or the maternal aunt's contact information.",
+              "content_digest": "ac00da1acd77d05fd277a0a92d2ab62cbefb3c334e6e7c2cb3b046fbea217a6c",
+              "position": 8,
+              "uid": "6fa50e1d-8bd1-557a-9b03-1e4a4dc664bd"
+            },
+            {
+              "content": "The management office of a multi-unit residential building does not hold a unit key without verifying identity.",
+              "content_digest": "841f44fddced7681d5c9b47aaa2536f14536f1309b1f73104df7cb44738efbd1",
+              "position": 9,
+              "uid": "b18ff5b4-4f0d-5b93-8c41-439e5b15c710"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "afc01c6f-61fd-4bda-b8ba-88f1fda1f83c"
+        },
+        {
+          "context_digest": "d28031209c5edc768a592166e26351dd5bce0c7568d379fcaceab173450041c8",
+          "context_name": "task-3/local/personal-memory/2026/02",
+          "context_uid": "7ffcbc10-1703-54b0-9545-99742b51d333",
+          "memories": [
+            {
+              "content": "The user keeps basic repair tools in a box beneath the sink.",
+              "content_digest": "c2a23bace63735c502081b19682a8ceb3e37156b9aadd6f7739e2005c20469d6",
+              "position": 0,
+              "uid": "7d3daf76-a21e-5117-a534-6175ab2d2861"
+            },
+            {
+              "content": "On a day the faucet leaked, the user placed only a towel beneath it, and the floor became wet as well.",
+              "content_digest": "ad6baa7e1848e4e61bdaf22bc5c8665122330b5c70c8ae192216abbba17c6134",
+              "position": 1,
+              "uid": "70a6d9f5-180f-5174-b247-690e10baa23e"
+            },
+            {
+              "content": "After sending a photo to building management, the user finalized the time for a repair visit.",
+              "content_digest": "82b36c7a95e51a0dfa32768c2a437d509b75c0f93bc51a99a636f2c9739a20da",
+              "position": 2,
+              "uid": "9fcd922c-147c-517b-82b3-180fdfb13f33"
+            },
+            {
+              "content": "Before the technician's visit, the user emptied the area beneath the sink so work could begin immediately.",
+              "content_digest": "dbc3b48e5bc4b406dc17067dd93d92e845e3706f47c8706f9a5d5ef17bf64617",
+              "position": 3,
+              "uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5"
+            },
+            {
+              "content": "On a day the user wrote the visit time only in the calendar and turned off the reminder, they heard the doorbell late.",
+              "content_digest": "95fab6bcab815dd8bdd5fecb867f84c6d2f1a901771603b1dbf197cde3c1d19d",
+              "position": 4,
+              "uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65"
+            },
+            {
+              "content": "For the next visit, the user enabled a reminder 30 minutes beforehand and answered immediately at the entrance.",
+              "content_digest": "818783ff21b2d369935b9994c17b28f93f84ea7558dab9f2de20d0aad21f86a3",
+              "position": 5,
+              "uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a"
+            },
+            {
+              "content": "After the repair, the user called their maternal aunt to confirm that the spare key entrusted to her was still there.",
+              "content_digest": "ac01b9816dda2d6bf16f22b41157120b7ffdd75d19638f6313a88e1ce6e7a1f1",
+              "position": 6,
+              "uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441"
+            },
+            {
+              "content": "The user's maternal aunt considers it unsafe to hand the spare key to a repair technician without the user's explicit request.",
+              "content_digest": "f7c7c0306c81cc6de9f02aa1aed7d411db3f29757d024e7d5a1679b1ff308948",
+              "position": 7,
+              "uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd"
+            },
+            {
+              "content": "Obtain the user's reconfirmation before scheduling an external worker to enter the residential unit.",
+              "content_digest": "34382e40f4907bea82728787fdeb150e299d46a0079ae2847d4eda6d6d892d22",
+              "position": 8,
+              "uid": "4716a67b-8602-564c-9e89-85cd4ee158f9"
+            },
+            {
+              "content": "A multi-unit residential building's repair schedule may change because of emergency work or parts availability.",
+              "content_digest": "d701fdd1ffbf17ff0890c583b5bf39849e3c6e3cc296fde7e00d3d1ecc0ef196",
+              "position": 9,
+              "uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "6ca90b78-b262-4d9b-be4f-084c7cb64115"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "Both frames support the aunt’s continuing custody of the spare key. They add context-specific practices for coordinating arrivals, responding promptly, and authorizing key release, while separately covering lockouts, privacy, deliveries, repairs, worker access, and building procedures without contradiction.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "afc01c6f-61fd-4bda-b8ba-88f1fda1f83c",
+              "memory_uid": "1c627e4c-c393-5bd3-a5ae-b3318821be73"
+            },
+            {
+              "frame_uid": "6ca90b78-b262-4d9b-be4f-084c7cb64115",
+              "memory_uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441"
+            }
+          ],
+          "reason": "The standing custody arrangement and the later verification can jointly inform where the spare key is held.",
+          "status": "RESOLVED",
+          "summary": "The maternal aunt holds the user’s spare key, and its continued presence with her was later confirmed.",
+          "uid": "a14d5c19-3a73-5376-8fff-f24900e0dfd2"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "afc01c6f-61fd-4bda-b8ba-88f1fda1f83c",
+              "memory_uid": "7c26cf33-0630-5138-910a-6d37d6ed2b63"
+            },
+            {
+              "frame_uid": "6ca90b78-b262-4d9b-be4f-084c7cb64115",
+              "memory_uid": "9fcd922c-147c-517b-82b3-180fdfb13f33"
+            }
+          ],
+          "reason": "Both address setting a visit time, while the explicit purposes—key collection and repair access—preserve distinct coordination contexts.",
+          "status": "RESOLVED",
+          "summary": "The user coordinates arrival timing in advance for both collecting the spare key and receiving a repair visit.",
+          "uid": "cc8a5669-c4d1-5c83-9027-d4a75e6ccba1"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "afc01c6f-61fd-4bda-b8ba-88f1fda1f83c",
+              "memory_uid": "2e0df581-bd54-54f5-94ef-b719427fc88c"
+            },
+            {
+              "frame_uid": "6ca90b78-b262-4d9b-be4f-084c7cb64115",
+              "memory_uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65"
+            },
+            {
+              "frame_uid": "6ca90b78-b262-4d9b-be4f-084c7cb64115",
+              "memory_uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a"
+            }
+          ],
+          "reason": "An unannounced family arrival caused difficulty, while repair-visit experiences distinguish a disabled reminder from a successful advance reminder.",
+          "status": "RESOLVED",
+          "summary": "The user’s ability to respond promptly to an arrival varies with advance notice and reminder support.",
+          "uid": "0fa68f6c-47f1-5baa-aca8-50e5448aa64b"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "afc01c6f-61fd-4bda-b8ba-88f1fda1f83c",
+              "memory_uid": "76fb9115-a3f2-5ce3-a445-c3d1e38e4253"
+            },
+            {
+              "frame_uid": "6ca90b78-b262-4d9b-be4f-084c7cb64115",
+              "memory_uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd"
+            }
+          ],
+          "reason": "Personal collection requires confirmation that the user is coming, whereas technician handoff requires the user’s explicit request.",
+          "status": "RESOLVED",
+          "summary": "The aunt requires user confirmation before releasing the spare key, with different confirmation conditions for the user and a technician.",
+          "uid": "7803e22a-d631-5dc5-a2f5-da9211f9bb35"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "afc01c6f-61fd-4bda-b8ba-88f1fda1f83c",
+              "memory_uid": "e80936de-87af-5dbb-ab94-d456bbfaab0a"
+            }
+          ],
+          "reason": "Only the reference supplies this lockout escalation order.",
+          "status": "RESOLVED",
+          "summary": "When locked out, the user ordinarily contacts the aunt before building management.",
+          "uid": "2caeed6f-03de-5bbb-8c9d-54bc4c6335b1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "afc01c6f-61fd-4bda-b8ba-88f1fda1f83c",
+              "memory_uid": "c3f0f26c-8d89-55e3-8bf3-398271e417e7"
+            }
+          ],
+          "reason": "Only the reference states this return preference and emotional condition.",
+          "status": "RESOLVED",
+          "summary": "The user feels at ease after returning a borrowed spare key in person on the same day.",
+          "uid": "5c02d4c0-4a5c-5af5-821e-dcc20fb4cd6f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "afc01c6f-61fd-4bda-b8ba-88f1fda1f83c",
+              "memory_uid": "7d7d00a3-c5af-5441-bb50-9631fbfd7979"
+            }
+          ],
+          "reason": "Only the reference describes this passcode-handling concern.",
+          "status": "RESOLVED",
+          "summary": "The user is uneasy about recording a new entrance passcode on paper.",
+          "uid": "4f11d732-d77c-518d-97cf-b27e1c421109"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "afc01c6f-61fd-4bda-b8ba-88f1fda1f83c",
+              "memory_uid": "9278b64e-7550-5eb6-bbfd-544a2ae4ec3d"
+            }
+          ],
+          "reason": "Only the reference describes this package-verification experience.",
+          "status": "RESOLVED",
+          "summary": "A delivery photo reassured the user after their younger brother received a package for them.",
+          "uid": "8f5b97a1-dd95-5cf7-bb50-51c8259ad2d2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "afc01c6f-61fd-4bda-b8ba-88f1fda1f83c",
+              "memory_uid": "6fa50e1d-8bd1-557a-9b03-1e4a4dc664bd"
+            }
+          ],
+          "reason": "Only the reference supplies this disclosure-consent policy.",
+          "status": "RESOLVED",
+          "summary": "User confirmation is required before sharing the spare key’s storage location or the aunt’s contact information.",
+          "uid": "dc2b05dc-6d5b-5325-a42b-873d76df3628"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "afc01c6f-61fd-4bda-b8ba-88f1fda1f83c",
+              "memory_uid": "b18ff5b4-4f0d-5b93-8c41-439e5b15c710"
+            }
+          ],
+          "reason": "Only the reference states this management-office security procedure.",
+          "status": "RESOLVED",
+          "summary": "Building management does not release a unit key without identity verification.",
+          "uid": "e72a672a-40d7-505b-a54d-3a36a1b71cc3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6ca90b78-b262-4d9b-be4f-084c7cb64115",
+              "memory_uid": "7d3daf76-a21e-5117-a534-6175ab2d2861"
+            }
+          ],
+          "reason": "Only the compared frame states this tool-storage arrangement.",
+          "status": "RESOLVED",
+          "summary": "The user stores basic repair tools in a box beneath the sink.",
+          "uid": "87336c86-4eee-5f1b-8a05-919ea1ee8e77"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6ca90b78-b262-4d9b-be4f-084c7cb64115",
+              "memory_uid": "70a6d9f5-180f-5174-b247-690e10baa23e"
+            }
+          ],
+          "reason": "Only the compared frame records this leak-containment outcome.",
+          "status": "RESOLVED",
+          "summary": "Using only a towel beneath a leaking faucet allowed water to reach the floor.",
+          "uid": "46726954-8cc7-5bc1-97ae-5555bc27f866"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6ca90b78-b262-4d9b-be4f-084c7cb64115",
+              "memory_uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5"
+            }
+          ],
+          "reason": "Only the compared frame states this repair-preparation practice.",
+          "status": "RESOLVED",
+          "summary": "The user cleared the area beneath the sink before a technician arrived so work could start immediately.",
+          "uid": "47ffb575-511e-5a5d-89ca-4b47b9a33c31"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6ca90b78-b262-4d9b-be4f-084c7cb64115",
+              "memory_uid": "4716a67b-8602-564c-9e89-85cd4ee158f9"
+            }
+          ],
+          "reason": "Only the compared frame supplies this worker-entry authorization policy.",
+          "status": "RESOLVED",
+          "summary": "The user must reconfirm before an external worker is scheduled to enter the unit.",
+          "uid": "b6f6fce9-4950-5875-bb2f-979b0d149c7d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6ca90b78-b262-4d9b-be4f-084c7cb64115",
+              "memory_uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+            }
+          ],
+          "reason": "Only the compared frame describes these sources of scheduling uncertainty.",
+          "status": "RESOLVED",
+          "summary": "A building repair schedule may change because of emergency work or parts availability.",
+          "uid": "476f5732-0930-54c9-9bd8-2756e4b54dda"
+        }
+      ],
+      "reports": {
+        "both": "Both indicate that the maternal aunt continues to hold the user’s spare key, including a later check confirming its presence.",
+        "compared_only": "The compared frame adds repair tools, leak containment, workspace preparation, worker-entry reconfirmation, and repair-schedule uncertainty.",
+        "differences": "Timing practices vary between key collection and repair visits; arrival responsiveness depends on notice or reminders; and key-release confirmation differs for the user’s pickup versus technician access.",
+        "reference_only": "The reference adds lockout escalation, same-day key return, passcode privacy, package verification, disclosure consent, and management identity checks."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "52c5a38f-3915-4a09-8456-58c655890b31"
+    },
+    "analysis_digest": "ac842322fe20508eef07988326c389035324a18fc83646f88ff8159df4d98c0b",
+    "key": "1132d7bcc630bbbb4d638af6145652f1f2251becaa3504602b50b2d7642cc224",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 54.73372074999861,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "1132d7bcc630bbbb4d638af6145652f1f2251becaa3504602b50b2d7642cc224",
+  "created_at": "2026-08-13T18:37:17.247938Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/02",
+  "pair_key": "338836b06df8f73f35144cf781f87bf49f061cb7acc2f32891920317f9ac24f8",
+  "provider_seconds": 54.73372074999861,
+  "right": "task-3/local/personal-memory/2026/02",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

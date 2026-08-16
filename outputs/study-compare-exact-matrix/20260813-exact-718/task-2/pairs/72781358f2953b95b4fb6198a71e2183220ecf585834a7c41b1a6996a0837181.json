@@ -1,0 +1,411 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:21:03.347862+00:00",
+      "frames": [
+        {
+          "context_digest": "c4484b7a8284d7e31066ad3f4c4edf8844a2e0ce8695a323093f753243b6b18f",
+          "context_name": "task-2/advisor1/expression",
+          "context_uid": "39a6f298-c511-5c21-a106-998c1df9d951",
+          "memories": [
+            {
+              "content": "Use a flow diagram rather than a sequence table when alternate procedural branches lead to different outcomes.",
+              "content_digest": "48075a546ef4f1c2735e202cf43df2c164e4382f323007f542915195d025bf58",
+              "position": 0,
+              "uid": "51fa3fcc-9d5f-52f0-809d-62d7cdd8a865"
+            },
+            {
+              "content": "Draw alternate branches and their resulting outcomes in the same flow diagram so readers can compare them at once.",
+              "content_digest": "85d1fdc887f442e05b4089e28a6dc671e757eb781eae9c39646673054306ec34",
+              "position": 1,
+              "uid": "e686bd4d-3ebd-5e55-ba39-f26971247965"
+            },
+            {
+              "content": "The visual fidelity of a prototype may differ from its functional fidelity.",
+              "content_digest": "bfc110d2df084fd4f8393284db693ead012f2bfd9a4e804fd89f9a4e45e16e8c",
+              "position": 2,
+              "uid": "019662a9-6f03-527f-9b6d-be5a2966d9e9"
+            },
+            {
+              "content": "A flow diagram can make alternate branches and their different outcomes visible in one view.",
+              "content_digest": "8f69a73784cb0c304671161a6c42c63480c0ce0cc4864e613d8dde466365d496",
+              "position": 3,
+              "uid": "a6dfe9a7-1df8-561f-8d3e-fc19518beca9"
+            },
+            {
+              "content": "HCI reviewers often skim prototype screens and interaction flow diagrams before reading the main text.",
+              "content_digest": "ee7009a111b29298f748336d571f4d0233e08ef0255f6cfe69cb4c26def96394",
+              "position": 4,
+              "uid": "7047a23d-45b3-5d5c-a00b-c12552e9680d"
+            },
+            {
+              "content": "Readers can understand the overall branching shape of a procedure more quickly from a flow diagram than from rows read one at a time.",
+              "content_digest": "beb9438eb216e54223266b4f592245450812228d69f7a38908e4c260a0aaca01",
+              "position": 5,
+              "uid": "50a71968-7e3f-5b99-b3fa-769af386d0c0"
+            },
+            {
+              "content": "Redrawing a branching flow diagram after a procedural change usually takes longer than updating one row in a table.",
+              "content_digest": "cb0e535e1e58a4dbf42c5f22a3eded19fa0c228c6531b70530b226eeb2dbf24c",
+              "position": 6,
+              "uid": "ae1610f6-a855-56c1-a0fb-fd3207dab615"
+            },
+            {
+              "content": "Reviewers often inspect the proposal’s main visual before reading the procedural explanation in full.",
+              "content_digest": "a609677d56e7297c736ee92c7a45eb4d83824985a780d8ca4df664f1494c5cb2",
+              "position": 7,
+              "uid": "d2825b84-b4a6-58c9-8f8e-9e19c6192a03"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "a33bd375-8c84-4ddc-a2f4-148fc76d91ca"
+        },
+        {
+          "context_digest": "19032e7fed99072de4fcaeff084874da452865e9958a1301ec01260d60e01867",
+          "context_name": "task-2/advisor2/structure",
+          "context_uid": "09c95ce6-baa2-5823-a035-e4b0d323200b",
+          "memories": [
+            {
+              "content": "Allow the problem framing to extend through a third sentence when a concrete person, setting, or use situation is needed to make the issue understandable.",
+              "content_digest": "c027c1b4290ff04fe84e475af5aae8fa9e90dd839903b9fe772892e8b6b80323",
+              "position": 0,
+              "uid": "e32f543b-1637-572a-ab96-319d74ee7e21"
+            },
+            {
+              "content": "Use the third sentence for the specific setting and consequence rather than compressing them into an abstract two-sentence summary.",
+              "content_digest": "f02d2bd7ea21e7ebbaff85d3e77c77689dadead77276a3d472d2ad59f94ec5ff",
+              "position": 1,
+              "uid": "6bbb0f69-ca99-539a-a810-a0fb34fe9cc3"
+            },
+            {
+              "content": "Explicitly specify the users, operational stakeholders, and actual usage environment in the primary HCI research question.",
+              "content_digest": "3ab83046fede9de55435f98324226f435bcc4932d2a7440ef61fc21c2e0d71f3",
+              "position": 2,
+              "uid": "48e887dc-7fc8-5a23-9999-890acb870251"
+            },
+            {
+              "content": "Provide one compact visual summary when proposing an unfamiliar interaction procedure.",
+              "content_digest": "1e4299abe1691fbbfc826fc59d4276831d9a49abd3588820ba2f50311fd56d2c",
+              "position": 3,
+              "uid": "e34bce0c-7d07-5fe6-b03f-39faa801640b"
+            },
+            {
+              "content": "Mark the conditions that move an unfamiliar interaction procedure from one step to the next in its visual summary.",
+              "content_digest": "9e7d7547cac76b4b6665ea585fedd7678682c7f9a4eadf129202ac2ea2c6b2b8",
+              "position": 4,
+              "uid": "68ad56f9-6ca2-587a-9182-fd98a79d3d5c"
+            },
+            {
+              "content": "Present the master’s research schedule as phase-specific milestones for field understanding, system implementation, user study, and analysis.",
+              "content_digest": "035713de4f5d6577859b2602ae32a7561594bcbeca023049d4b0e2d4c930d94a",
+              "position": 5,
+              "uid": "eca301ff-9feb-502d-b955-055c48342542"
+            },
+            {
+              "content": "Link deliverables that determine entry into the next phase to each milestone of the master’s research.",
+              "content_digest": "dff2c02b66c97696644d04ee7e685c706443257101e7ee34182dcc5021aa8525",
+              "position": 6,
+              "uid": "cbd977cd-1b78-5ca6-823a-7a5b4b92d77a"
+            },
+            {
+              "content": "Directly connect the gap in the actual usage context with the proposed design and operational contributions in a single flow.",
+              "content_digest": "8da57ff6f210ec4a38d82a2550f96a6b30ba59b7f63f3f3c08e9dcec10dce381",
+              "position": 7,
+              "uid": "9283aedb-6818-5c99-8fe0-502b488acb66"
+            },
+            {
+              "content": "Avoid extra subheadings in a two-page proposal; use paragraph transitions to preserve one continuous argument from problem to proposed response and next steps.",
+              "content_digest": "f6dabe3ee8aba7aa81d707519ffc7d3839f3a74ddcd97fa61d14396e1581f69c",
+              "position": 8,
+              "uid": "c5c04ab1-10e8-52a3-98a1-aa9cbede57c1"
+            },
+            {
+              "content": "Begin each paragraph by connecting it to the previous claim so the short proposal reads as an argument rather than a stack of labeled fragments.",
+              "content_digest": "37d855da87b3b3437e6cc7d865a02d1852b7f7a01c3d7855b0584e399d086619",
+              "position": 9,
+              "uid": "87203bcf-6724-543a-ad19-60a2becc4598"
+            },
+            {
+              "content": "Place preliminary results from field observations or technical validations near sentences supporting feasibility claims.",
+              "content_digest": "8cb8b48f7f57c3248d28f4b82181c9ddbac16acb7b67435abdfb761233b3aecb",
+              "position": 10,
+              "uid": "c9591180-6f3a-5909-8695-31704b9b6f01"
+            },
+            {
+              "content": "Readers may misinterpret a compressed opening when the person, setting, or consequence is only implied.",
+              "content_digest": "2eb34b31c7da38508d152ae4d47ddb8b08479a2e28fbdb4a50c72e7f1999bbf2",
+              "position": 11,
+              "uid": "0ac685f9-e338-5549-bf91-32078cf36f15"
+            },
+            {
+              "content": "A two-sentence opening can become so general that readers understand the topic but cannot picture the situation the proposal intends to change.",
+              "content_digest": "21625e7040d1007bf6931fc1e3551dbbd46739ad339773d51cd00d9f21abf96e",
+              "position": 12,
+              "uid": "5567fb3c-de90-5363-af1b-62fb5b8e0bb1"
+            },
+            {
+              "content": "Use paragraph transitions instead of extra headings when the repeated labels would consume space needed for the argument itself.",
+              "content_digest": "50620b1c5db672532aea9ce8c9bfc11688a5b83bf5436bfc9a308a08fc719286",
+              "position": 13,
+              "uid": "32cef408-4c66-5ef2-9a59-eea6fc67b16e"
+            },
+            {
+              "content": "End each paragraph with the question or consequence that the next paragraph answers.",
+              "content_digest": "3d3639057c446bbd3d2bef5393bce0219451ba3c718d655c62dc51b1ea2df86f",
+              "position": 14,
+              "uid": "3579fcc0-c74e-5006-901b-6406a3106fa1"
+            },
+            {
+              "content": "A continuous sequence of problem, consequence, response, and next step makes the relationship among claims audible without repeating section labels.",
+              "content_digest": "8e1d12ba37953236e2f51510ac3e0382b75b43ff911190216550f82c5679eadf",
+              "position": 15,
+              "uid": "2c2aa1af-c450-5c8d-a907-042c5757d3ee"
+            },
+            {
+              "content": "Readers may experience very short headed sections as an outline because each new label interrupts the connection to the previous paragraph.",
+              "content_digest": "c355e847db92d4c27343283e9415debff2fbdb4b2b2c505d4e442dc78251578d",
+              "position": 16,
+              "uid": "1fb62d5b-532b-5664-842c-57622e3c8b9d"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "197fe1e7-4d49-4571-8636-13652709e533"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames converge on visual support for procedures but define different triggering conditions and visual details. The reference also contributes prototype-fidelity, reviewer-behavior, and maintenance observations, while the compared frame supplies extensive guidance for framing, research questions, schedules, evidence placement, and proposal continuity.",
+      "relations": [
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "a33bd375-8c84-4ddc-a2f4-148fc76d91ca",
+              "memory_uid": "51fa3fcc-9d5f-52f0-809d-62d7cdd8a865"
+            },
+            {
+              "frame_uid": "a33bd375-8c84-4ddc-a2f4-148fc76d91ca",
+              "memory_uid": "e686bd4d-3ebd-5e55-ba39-f26971247965"
+            },
+            {
+              "frame_uid": "a33bd375-8c84-4ddc-a2f4-148fc76d91ca",
+              "memory_uid": "a6dfe9a7-1df8-561f-8d3e-fc19518beca9"
+            },
+            {
+              "frame_uid": "a33bd375-8c84-4ddc-a2f4-148fc76d91ca",
+              "memory_uid": "50a71968-7e3f-5b99-b3fa-769af386d0c0"
+            },
+            {
+              "frame_uid": "197fe1e7-4d49-4571-8636-13652709e533",
+              "memory_uid": "e34bce0c-7d07-5fe6-b03f-39faa801640b"
+            },
+            {
+              "frame_uid": "197fe1e7-4d49-4571-8636-13652709e533",
+              "memory_uid": "68ad56f9-6ca2-587a-9182-fd98a79d3d5c"
+            }
+          ],
+          "reason": "The recommendations address the same visualization decision under explicit, complementary conditions that must remain visible rather than being collapsed into one unconditional rule.",
+          "status": "RESOLVED",
+          "summary": "Both frames support visualizing procedures, but the reference focuses on flow diagrams for comparing alternative branches and outcomes, whereas the compared frame focuses on compact summaries of unfamiliar interactions with transition conditions.",
+          "uid": "02c63dd2-6411-5d88-bfce-e1faca3b1798"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a33bd375-8c84-4ddc-a2f4-148fc76d91ca",
+              "memory_uid": "019662a9-6f03-527f-9b6d-be5a2966d9e9"
+            }
+          ],
+          "reason": "Only the reference supplies this independently useful distinction about prototype evaluation.",
+          "status": "RESOLVED",
+          "summary": "Visual fidelity and functional fidelity are separate dimensions of a prototype and may differ.",
+          "uid": "d87c5e48-28ec-545a-ace1-b1181e5d68a5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a33bd375-8c84-4ddc-a2f4-148fc76d91ca",
+              "memory_uid": "7047a23d-45b3-5d5c-a00b-c12552e9680d"
+            },
+            {
+              "frame_uid": "a33bd375-8c84-4ddc-a2f4-148fc76d91ca",
+              "memory_uid": "d2825b84-b4a6-58c9-8f8e-9e19c6192a03"
+            }
+          ],
+          "reason": "The reference memories restate one independently useful observation about review order; the compared frame makes no corresponding behavioral claim.",
+          "status": "RESOLVED",
+          "summary": "Reviewers often inspect a proposal’s principal visuals or interaction diagrams before reading its full explanation.",
+          "uid": "09585233-0fb6-5d25-97f0-b5f12b6ace8e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a33bd375-8c84-4ddc-a2f4-148fc76d91ca",
+              "memory_uid": "ae1610f6-a855-56c1-a0fb-fd3207dab615"
+            }
+          ],
+          "reason": "Only the reference identifies this independently useful maintenance tradeoff between diagrams and tables.",
+          "status": "RESOLVED",
+          "summary": "Updating a branching flow diagram after a procedural change generally takes longer than changing a single table row.",
+          "uid": "0dda125e-bfc9-5088-8df9-13ae72aa526c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "197fe1e7-4d49-4571-8636-13652709e533",
+              "memory_uid": "e32f543b-1637-572a-ab96-319d74ee7e21"
+            },
+            {
+              "frame_uid": "197fe1e7-4d49-4571-8636-13652709e533",
+              "memory_uid": "6bbb0f69-ca99-539a-a810-a0fb34fe9cc3"
+            },
+            {
+              "frame_uid": "197fe1e7-4d49-4571-8636-13652709e533",
+              "memory_uid": "0ac685f9-e338-5549-bf91-32078cf36f15"
+            },
+            {
+              "frame_uid": "197fe1e7-4d49-4571-8636-13652709e533",
+              "memory_uid": "5567fb3c-de90-5363-af1b-62fb5b8e0bb1"
+            }
+          ],
+          "reason": "These compared-side memories express one underlying guidance-and-rationale claim about preserving concrete situational detail in the opening.",
+          "status": "RESOLVED",
+          "summary": "A problem framing may need a third sentence to state the concrete person, setting, and consequence that an abstract two-sentence opening can obscure.",
+          "uid": "b463286f-1562-569c-8cf8-4e0e258a67c9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "197fe1e7-4d49-4571-8636-13652709e533",
+              "memory_uid": "48e887dc-7fc8-5a23-9999-890acb870251"
+            }
+          ],
+          "reason": "Only the compared frame provides this independently useful requirement for research-question scope.",
+          "status": "RESOLVED",
+          "summary": "The primary HCI research question should explicitly identify users, operational stakeholders, and the actual usage environment.",
+          "uid": "08a8df3f-b59a-56d0-bd3e-7326518a2535"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "197fe1e7-4d49-4571-8636-13652709e533",
+              "memory_uid": "eca301ff-9feb-502d-b955-055c48342542"
+            },
+            {
+              "frame_uid": "197fe1e7-4d49-4571-8636-13652709e533",
+              "memory_uid": "cbd977cd-1b78-5ca6-823a-7a5b4b92d77a"
+            }
+          ],
+          "reason": "The compared memories split one underlying schedule-governance claim into milestone structure and entry-gate deliverables.",
+          "status": "RESOLVED",
+          "summary": "A master’s research schedule should use phase-specific milestones and associate each phase transition with its required deliverables.",
+          "uid": "edb5f6c9-9454-57fc-a984-b8fb9c1789f8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "197fe1e7-4d49-4571-8636-13652709e533",
+              "memory_uid": "9283aedb-6818-5c99-8fe0-502b488acb66"
+            }
+          ],
+          "reason": "Only the compared frame supplies this independently useful guidance for linking the problem gap to the contribution.",
+          "status": "RESOLVED",
+          "summary": "The actual-context gap should connect directly to the proposed design and operational contributions in one flow.",
+          "uid": "c8d5b125-f435-5bbb-b632-fe5b4bd447e1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "197fe1e7-4d49-4571-8636-13652709e533",
+              "memory_uid": "c9591180-6f3a-5909-8695-31704b9b6f01"
+            }
+          ],
+          "reason": "Only the compared frame provides this independently useful evidence-placement rule.",
+          "status": "RESOLVED",
+          "summary": "Preliminary field or technical results should appear near the feasibility claims they support.",
+          "uid": "67439767-58e0-52f9-bd40-f40995d2a6a2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "197fe1e7-4d49-4571-8636-13652709e533",
+              "memory_uid": "c5c04ab1-10e8-52a3-98a1-aa9cbede57c1"
+            },
+            {
+              "frame_uid": "197fe1e7-4d49-4571-8636-13652709e533",
+              "memory_uid": "87203bcf-6724-543a-ad19-60a2becc4598"
+            },
+            {
+              "frame_uid": "197fe1e7-4d49-4571-8636-13652709e533",
+              "memory_uid": "32cef408-4c66-5ef2-9a59-eea6fc67b16e"
+            },
+            {
+              "frame_uid": "197fe1e7-4d49-4571-8636-13652709e533",
+              "memory_uid": "3579fcc0-c74e-5006-901b-6406a3106fa1"
+            },
+            {
+              "frame_uid": "197fe1e7-4d49-4571-8636-13652709e533",
+              "memory_uid": "2c2aa1af-c450-5c8d-a907-042c5757d3ee"
+            },
+            {
+              "frame_uid": "197fe1e7-4d49-4571-8636-13652709e533",
+              "memory_uid": "1fb62d5b-532b-5664-842c-57622e3c8b9d"
+            }
+          ],
+          "reason": "These compared-side memories provide complementary formulations, techniques, and rationale for one underlying policy of preserving argumentative continuity across paragraphs.",
+          "status": "RESOLVED",
+          "summary": "A short proposal should minimize space-consuming subheadings and use linked paragraph openings, endings, and transitions to sustain a continuous problem-to-next-step argument.",
+          "uid": "ef698a4d-7319-51eb-bfe5-2b4e2bca17d2"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers concrete problem framing, contextual research questions, gated research milestones, gap-to-contribution flow, locally placed feasibility evidence, and a continuous headings-light argument.",
+        "differences": "Both favor procedural visuals, with the reference emphasizing branching flow diagrams and simultaneous outcome comparison, and the compared frame emphasizing unfamiliar interactions and explicit transition conditions.",
+        "reference_only": "The reference distinguishes prototype fidelities, notes visual-first reviewer behavior, and identifies the greater maintenance cost of redrawing branching diagrams."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "4c95e375-3ec0-41eb-800f-39ea698e7cd5"
+    },
+    "analysis_digest": "7022eae369728f9e0464aa331cf4479295ea5e77bc93c6094c02c7890da7595d",
+    "key": "adb61dfef0fc16dfa91dc9916c594f71c24e0b99863d9231a1581dd850287adc",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 50.84561145800035,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "adb61dfef0fc16dfa91dc9916c594f71c24e0b99863d9231a1581dd850287adc",
+  "created_at": "2026-08-13T18:21:54.192931Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/expression",
+  "pair_key": "72781358f2953b95b4fb6198a71e2183220ecf585834a7c41b1a6996a0837181",
+  "provider_seconds": 50.84561145800035,
+  "right": "task-2/advisor2/structure",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

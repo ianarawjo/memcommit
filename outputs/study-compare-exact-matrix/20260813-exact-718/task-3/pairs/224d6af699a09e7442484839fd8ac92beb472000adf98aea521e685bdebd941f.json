@@ -1,0 +1,406 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:34:24.075591+00:00",
+      "frames": [
+        {
+          "context_digest": "2f00e067f4f35600b73e87b5555d405e2801a33ba18a54c91e63e23a79f27a4c",
+          "context_name": "task-3/local/personal-memory/2024/01",
+          "context_uid": "cbd2e4d6-2601-5d3f-8bf2-2f66b755b007",
+          "memories": [
+            {
+              "content": "The user's mother's birthday falls in the third week of January.",
+              "content_digest": "d635ded9b470acdd462156515700e66c23dcb513a7034bb365be0ac139ec0422",
+              "position": 0,
+              "uid": "2cd0229d-b7f1-581b-8019-25bdb485afd9"
+            },
+            {
+              "content": "At the user's last family meal out, noise from the next table made conversation nearly impossible.",
+              "content_digest": "dc337d32e4b09167289e19a6b1c8fe970e7eaa6fdd6868ed1c7c300e018fcd15",
+              "position": 1,
+              "uid": "c62f1669-11c9-5a81-b5f5-304acce69c23"
+            },
+            {
+              "content": "At a barbecue at home in the same month, the user was comfortable because no one had to raise their voice.",
+              "content_digest": "63763b293a491200bf1f7a251467c1fa8c2cb8d4d8450732c01666dcdea183e3",
+              "position": 2,
+              "uid": "674f4bdf-27c3-5870-a68e-91e4a093dd93"
+            },
+            {
+              "content": "During their mother's birthday meal, the user left a restaurant with loud music after 30 minutes.",
+              "content_digest": "560755c6f051ec6f85e32dc4ee9447dfc97418fca6f9f414f6910c518a52c2c0",
+              "position": 3,
+              "uid": "21509788-2e3d-548b-8303-f34cfea68c9b"
+            },
+            {
+              "content": "When discussing postponed matters with family, the user prefers a quiet, one-on-one dining environment.",
+              "content_digest": "f22bedcf60a64b3666a7e4363d6a55c48547535492010fcb205a182c1ee920a8",
+              "position": 4,
+              "uid": "74eaea9d-7640-51ba-aa77-9c050581dc46"
+            },
+            {
+              "content": "At a large banquet hall reserved by their older sister, the user remembered the surrounding noise more than the food.",
+              "content_digest": "566e443c69410f1672ab209ba2257604e373cd305ab27243a39574481407af71",
+              "position": 5,
+              "uid": "1384df1d-2173-5673-96f5-a4d86835d404"
+            },
+            {
+              "content": "On a day the user ate grilled food at home with their younger brother, conversation was easy to continue, so the user stayed another hour after the meal.",
+              "content_digest": "c93ccbe3524946f1def05a1b385fbe3387945f51164b00c56f1ff80b477d011f",
+              "position": 6,
+              "uid": "3cf68c8e-5da9-51d3-a402-c10f4137b1f4"
+            },
+            {
+              "content": "The user's mother considers having the whole family eat at the same time more important than receiving a birthday gift.",
+              "content_digest": "d302cf7db2b83b103ea11323ab1b9d36168d224b405d4d0dd51b46b494014291",
+              "position": 7,
+              "uid": "a1984768-d20d-59cd-84c9-cb08c6b7affb"
+            },
+            {
+              "content": "When proposing a birthday meal for the user's mother, check the schedule and attendees; if conversation is the purpose, first consider a low-noise location, then confirm the final choice with the user.",
+              "content_digest": "481169c62cf6fae6b4f29184ffacef9c3c9d825a34d1545ca592bc35537bc65c",
+              "position": 8,
+              "uid": "f52d11e2-2449-5c9d-887b-96c8b5cd0184"
+            },
+            {
+              "content": "The local agent can compare past dining environments and the user's responses, but those records alone cannot determine the location of the next gathering.",
+              "content_digest": "b05fef8420abe3c47c2cd9f2de9149c9c6bda7dca301f09ac7f94eac1a29d2fa",
+              "position": 9,
+              "uid": "c8fccfbe-7756-5d62-9cd7-403dd6741915"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "7a36f766-c958-4e60-af4c-5e82cb93609a"
+        },
+        {
+          "context_digest": "ca8765e237d85d9bf3ecb78fe1d9a2487066ae14dae9509e40b324ac1277d75a",
+          "context_name": "task-3/local/personal-memory/2025/06",
+          "context_uid": "870f7336-726a-5d9c-bae4-12585311463e",
+          "memories": [
+            {
+              "content": "The user keeps a portable fan charger on a living-room shelf.",
+              "content_digest": "5ab7fad8ae1b3f56bdbc1c3ebf593a3d452590341b6de115f830fdf0d994c12e",
+              "position": 0,
+              "uid": "853a158c-edf9-578a-8e75-3d5daff6e4db"
+            },
+            {
+              "content": "On a hot day, the user worked with only the window open and lost focus in the afternoon.",
+              "content_digest": "3c4225f055db293c53a5a137d0c6353005bcb55b71dbc61bc69831aa5c3c08de",
+              "position": 1,
+              "uid": "f7d5ebdc-0cae-5e07-a060-e129b5a05570"
+            },
+            {
+              "content": "In the room where the user closed the curtains the next morning, the temperature rose less.",
+              "content_digest": "4cb4d1892db8769f4c066859dbb021c67d5015114f8522dfd904057061600ab5",
+              "position": 2,
+              "uid": "99e5c522-535b-5015-8617-06f645147f8b"
+            },
+            {
+              "content": "The user took the portable fan out without charging it, and it turned off after an hour.",
+              "content_digest": "0e1e0e9e985bea5be6976010a390f484b60a931ea7dfaf50a73c66616a73d5da",
+              "position": 3,
+              "uid": "7b3bf50c-63aa-5a1e-9a53-7befea25a468"
+            },
+            {
+              "content": "Before the next outing, the user charged it the night before and used the fan throughout the trip.",
+              "content_digest": "fd4282d169da18d902fc5f766d4e38131240bf3a51e6fa0c5bad69f80f1492af",
+              "position": 4,
+              "uid": "ca8de091-afb2-537f-a83a-09769056879d"
+            },
+            {
+              "content": "On a hot weekend, the user was eating lunch in their father's yard and moved indoors.",
+              "content_digest": "44e7d3bc5eaecec68ad6e7c0979572102f3c717b37712fcfada769959443ae8e",
+              "position": 5,
+              "uid": "4a0604fb-10b4-5132-a6de-ab6a229ff2be"
+            },
+            {
+              "content": "When the user returned to the yard in the evening, shade and wind led them to stay another hour.",
+              "content_digest": "7495f1d4ba2d1d732ab5c962f45b5b0c9c765ee21767373552247a823cf90984",
+              "position": 6,
+              "uid": "1f90941e-776f-5cba-9783-c392983dd72c"
+            },
+            {
+              "content": "The user's father prefers to move an outdoor meal to the evening rather than proceed at midday when the temperature is high.",
+              "content_digest": "5f9628a28b5c6f3b20a371d1c039f37f26c50832970936c8a243f161fd8288f4",
+              "position": 7,
+              "uid": "63391d26-7417-5ea6-ac0a-460af7489963"
+            },
+            {
+              "content": "The local agent can compare past responses to heat but cannot know the current felt temperature without an indoor temperature record.",
+              "content_digest": "815f4fb2c833d75e30cb0e323f5708e356bf38e0bbb573865092be48fbf2746a",
+              "position": 8,
+              "uid": "31502797-1379-5ec4-bd1b-a2e1515fa56e"
+            },
+            {
+              "content": "A room with a west-facing window can warm rapidly in the late afternoon.",
+              "content_digest": "448908f6242021de6d41ddee8121714a1388db6e4e3d067de27e6950ee712c23",
+              "position": 9,
+              "uid": "68f85c30-62c4-579d-97cd-9f401c686e63"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "26d5e3ac-8bae-4def-b79b-debf107094a4"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate practical contexts. The reference frame concerns family birthday dining, conversational noise, and gathering choices, while the compared frame concerns heat management, portable-fan readiness, and timing or location changes. Neither side supplies a scope-aligned claim about the other’s decisions.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7a36f766-c958-4e60-af4c-5e82cb93609a",
+              "memory_uid": "2cd0229d-b7f1-581b-8019-25bdb485afd9"
+            }
+          ],
+          "reason": "Only the reference frame provides the birthday's calendar timing.",
+          "status": "RESOLVED",
+          "summary": "The user's mother's birthday occurs in the third week of January.",
+          "uid": "3639a57f-6f5b-568e-b713-3124349cb8ed"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7a36f766-c958-4e60-af4c-5e82cb93609a",
+              "memory_uid": "c62f1669-11c9-5a81-b5f5-304acce69c23"
+            },
+            {
+              "frame_uid": "7a36f766-c958-4e60-af4c-5e82cb93609a",
+              "memory_uid": "21509788-2e3d-548b-8303-f34cfea68c9b"
+            },
+            {
+              "frame_uid": "7a36f766-c958-4e60-af4c-5e82cb93609a",
+              "memory_uid": "1384df1d-2173-5673-96f5-a4d86835d404"
+            }
+          ],
+          "reason": "These reference-side episodes consistently describe adverse responses to loud shared dining environments, with no corresponding heat-management claim on the compared side.",
+          "status": "RESOLVED",
+          "summary": "Noise at restaurant and banquet settings substantially impaired the user's dining and conversational experience.",
+          "uid": "5e05c193-349f-5239-829a-f0dbfba577c9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7a36f766-c958-4e60-af4c-5e82cb93609a",
+              "memory_uid": "674f4bdf-27c3-5870-a68e-91e4a093dd93"
+            },
+            {
+              "frame_uid": "7a36f766-c958-4e60-af4c-5e82cb93609a",
+              "memory_uid": "3cf68c8e-5da9-51d3-a402-c10f4137b1f4"
+            }
+          ],
+          "reason": "The reference-side memories split one favorable pattern involving quiet home dining and sustained conversation; the compared frame does not address dining noise.",
+          "status": "RESOLVED",
+          "summary": "Low-noise meals at home allowed easy conversation and encouraged the user to remain longer.",
+          "uid": "55e3ae1e-1161-536a-bfee-3a70b5cb9496"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7a36f766-c958-4e60-af4c-5e82cb93609a",
+              "memory_uid": "74eaea9d-7640-51ba-aa77-9c050581dc46"
+            }
+          ],
+          "reason": "This is a specific reference-only preference concerning sensitive family conversation.",
+          "status": "RESOLVED",
+          "summary": "For postponed family discussions, the user prefers a quiet, one-on-one dining setting.",
+          "uid": "67b76128-92d1-5705-ae06-8edf1c63bd4f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7a36f766-c958-4e60-af4c-5e82cb93609a",
+              "memory_uid": "a1984768-d20d-59cd-84c9-cb08c6b7affb"
+            }
+          ],
+          "reason": "Only the reference frame states this family birthday priority.",
+          "status": "RESOLVED",
+          "summary": "The user's mother values having the whole family eat together more than receiving a birthday gift.",
+          "uid": "ac0b6bb1-8feb-5642-aa15-954566baa2bd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7a36f766-c958-4e60-af4c-5e82cb93609a",
+              "memory_uid": "f52d11e2-2449-5c9d-887b-96c8b5cd0184"
+            }
+          ],
+          "reason": "This reference-only guidance governs planning the mother's birthday meal and has no operational counterpart in the heat-focused frame.",
+          "status": "RESOLVED",
+          "summary": "Birthday-meal proposals should check schedules and attendees, prioritize low noise when conversation matters, and leave the final choice to the user.",
+          "uid": "ec207e0d-325f-5253-bce8-f016004a304b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7a36f766-c958-4e60-af4c-5e82cb93609a",
+              "memory_uid": "c8fccfbe-7756-5d62-9cd7-403dd6741915"
+            }
+          ],
+          "reason": "This is a reference-only limitation tied specifically to venue selection from dining history.",
+          "status": "RESOLVED",
+          "summary": "Past dining environments and responses can be compared but cannot alone determine the next gathering's location.",
+          "uid": "3f1948a8-4ec2-5673-8198-9575090b5b76"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "26d5e3ac-8bae-4def-b79b-debf107094a4",
+              "memory_uid": "853a158c-edf9-578a-8e75-3d5daff6e4db"
+            }
+          ],
+          "reason": "Only the compared frame supplies this equipment-location fact.",
+          "status": "RESOLVED",
+          "summary": "The user stores a portable-fan charger on a living-room shelf.",
+          "uid": "cfc2c940-d26e-5003-a213-cb910dd27da6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "26d5e3ac-8bae-4def-b79b-debf107094a4",
+              "memory_uid": "f7d5ebdc-0cae-5e07-a060-e129b5a05570"
+            }
+          ],
+          "reason": "This compared-only observation concerns heat and concentration, not family dining noise.",
+          "status": "RESOLVED",
+          "summary": "Working with only an open window on a hot day was followed by reduced afternoon focus.",
+          "uid": "3f6ccb10-6b96-56ee-81e4-580238131911"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "26d5e3ac-8bae-4def-b79b-debf107094a4",
+              "memory_uid": "99e5c522-535b-5015-8617-06f645147f8b"
+            }
+          ],
+          "reason": "Only the compared frame reports this room-cooling observation.",
+          "status": "RESOLVED",
+          "summary": "Closing the curtains was associated with a smaller temperature rise the following morning.",
+          "uid": "23d0e424-b475-5270-8417-0925d3cb32d5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "26d5e3ac-8bae-4def-b79b-debf107094a4",
+              "memory_uid": "7b3bf50c-63aa-5a1e-9a53-7befea25a468"
+            },
+            {
+              "frame_uid": "26d5e3ac-8bae-4def-b79b-debf107094a4",
+              "memory_uid": "ca8de091-afb2-537f-a83a-09769056879d"
+            }
+          ],
+          "reason": "The compared-side memories form one contrasting operational account of charging readiness and fan endurance.",
+          "status": "RESOLVED",
+          "summary": "The portable fan stopped early when uncharged but lasted through a later trip after overnight charging.",
+          "uid": "bf1f8071-7d2b-5bca-9098-03a152917665"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "26d5e3ac-8bae-4def-b79b-debf107094a4",
+              "memory_uid": "4a0604fb-10b4-5132-a6de-ab6a229ff2be"
+            },
+            {
+              "frame_uid": "26d5e3ac-8bae-4def-b79b-debf107094a4",
+              "memory_uid": "1f90941e-776f-5cba-9783-c392983dd72c"
+            }
+          ],
+          "reason": "These compared-side episodes split one pattern showing that outdoor comfort and willingness to remain vary with heat, shade, wind, and time.",
+          "status": "RESOLVED",
+          "summary": "The user left a hot midday yard meal but later stayed longer when evening shade and wind improved comfort.",
+          "uid": "205f9b32-2cf1-5d50-ae51-9bcf8f78928f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "26d5e3ac-8bae-4def-b79b-debf107094a4",
+              "memory_uid": "63391d26-7417-5ea6-ac0a-460af7489963"
+            }
+          ],
+          "reason": "Only the compared frame states this meal-timing preference.",
+          "status": "RESOLVED",
+          "summary": "The user's father prefers moving a hot outdoor meal to the evening instead of continuing at midday.",
+          "uid": "f474e95b-53aa-53ff-a731-7228abd31f2d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "26d5e3ac-8bae-4def-b79b-debf107094a4",
+              "memory_uid": "31502797-1379-5ec4-bd1b-a2e1515fa56e"
+            }
+          ],
+          "reason": "This compared-only limitation concerns assessing present thermal conditions rather than selecting a dining venue.",
+          "status": "RESOLVED",
+          "summary": "Past heat responses can be compared, but current felt temperature cannot be known without an indoor temperature record.",
+          "uid": "6a5733f6-61f7-5a2d-81a6-f4642bffcd46"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "26d5e3ac-8bae-4def-b79b-debf107094a4",
+              "memory_uid": "68f85c30-62c4-579d-97cd-9f401c686e63"
+            }
+          ],
+          "reason": "Only the compared frame supplies this general room-warming condition.",
+          "status": "RESOLVED",
+          "summary": "A west-facing room can warm rapidly in the late afternoon.",
+          "uid": "2a130051-140e-541f-8988-25fc32e9f3a2"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers heat responses, shade and curtain effects, portable-fan storage and charging, outdoor-meal timing, room warming, and limits on assessing current temperature.",
+        "differences": "",
+        "reference_only": "The reference covers birthday timing, family priorities, noise-sensitive dining experiences, quiet conversation preferences, gathering guidance, and limits on inferring a future venue."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "45b93595-3948-456e-b0e8-2fbc758b6a1b"
+    },
+    "analysis_digest": "4308c58982a42ad161471a870385c55412ed75431ebb6f7c5683de9a0d0b27ca",
+    "key": "0aa0330147ba8bf2fb173133ced68bb9cad69657f5db5dba9d0636eb2d25dd15",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 36.85703783400095,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "0aa0330147ba8bf2fb173133ced68bb9cad69657f5db5dba9d0636eb2d25dd15",
+  "created_at": "2026-08-13T18:35:00.931838Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/01",
+  "pair_key": "224d6af699a09e7442484839fd8ac92beb472000adf98aea521e685bdebd941f",
+  "provider_seconds": 36.85703783400095,
+  "right": "task-3/local/personal-memory/2025/06",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

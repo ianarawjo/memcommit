@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:35:45.132782+00:00",
+      "frames": [
+        {
+          "context_digest": "4c7d7890b4c8dbd807acc103affd0572c325fd2e0f58346a97c3ed49e48ba34e",
+          "context_name": "task-3/local/personal-memory/2024/02",
+          "context_uid": "7bedad96-d78b-5977-a4c9-71049dcfcec8",
+          "memories": [
+            {
+              "content": "The user's maternal aunt keeps one spare key to the user's home.",
+              "content_digest": "2e45c292a3cbc26a1c9928c4546c6029c7dcd2aa6aa0a45a7cfb4be7888dd5c6",
+              "position": 0,
+              "uid": "1c627e4c-c393-5bd3-a5ae-b3318821be73"
+            },
+            {
+              "content": "If the door is locked, the user is accustomed to contacting their maternal aunt, who has the spare key, before contacting building management.",
+              "content_digest": "709cc4a1ae26126bd3238ea8c0e343415d95d084ddaf022590ff4197003c7b81",
+              "position": 1,
+              "uid": "e80936de-87af-5dbb-ab94-d456bbfaab0a"
+            },
+            {
+              "content": "When going to collect the spare key from their maternal aunt, the user wants to give an arrival time first so neither person has to wait.",
+              "content_digest": "5dab57d537091a28848dfa3592d16e038d6e78eeb8159489c17475befeb62a53",
+              "position": 2,
+              "uid": "7c26cf33-0630-5138-910a-6d37d6ed2b63"
+            },
+            {
+              "content": "The user feels at ease only after returning a borrowed spare key in person on the same day.",
+              "content_digest": "d3b9e78e166fb3af3dc248bcddbf1c1df15d3eed57655991a52c23b4ebb6ba14",
+              "position": 3,
+              "uid": "c3f0f26c-8d89-55e3-8bf3-398271e417e7"
+            },
+            {
+              "content": "The user feels uneasy about writing down a new entrance passcode on paper.",
+              "content_digest": "fe40a50fb7f0b0e1514a2f7e6ea3748e73cbd76fa45b862b4880c9eba68a2312",
+              "position": 4,
+              "uid": "7d7d00a3-c5af-5441-bb50-9631fbfd7979"
+            },
+            {
+              "content": "The user found it difficult when a family member arrived without notice during a meeting and the user could not respond immediately.",
+              "content_digest": "30d2126eb016f1fab8b8bd670bc00ee6ac5182f28b0afe696b2c30f4d7bc128f",
+              "position": 5,
+              "uid": "2e0df581-bd54-54f5-94ef-b719427fc88c"
+            },
+            {
+              "content": "On a day their younger brother received a package for them, the user felt reassured after checking the delivery photo.",
+              "content_digest": "54eacbc39b057a6a18f8ddd8e1db587dbef231ecb10ed8cd84a46b3575ac470c",
+              "position": 6,
+              "uid": "9278b64e-7550-5eb6-bbfd-544a2ae4ec3d"
+            },
+            {
+              "content": "The user's maternal aunt wants confirmation that the user is coming in person before handing over the spare key.",
+              "content_digest": "5d780f2fb96eac2d3c65e7417ee00e64e29c2f8873c432b291e62773723182c9",
+              "position": 7,
+              "uid": "76fb9115-a3f2-5ce3-a445-c3d1e38e4253"
+            },
+            {
+              "content": "Confirm with the user before sharing the spare key's storage location or the maternal aunt's contact information.",
+              "content_digest": "ac00da1acd77d05fd277a0a92d2ab62cbefb3c334e6e7c2cb3b046fbea217a6c",
+              "position": 8,
+              "uid": "6fa50e1d-8bd1-557a-9b03-1e4a4dc664bd"
+            },
+            {
+              "content": "The management office of a multi-unit residential building does not hold a unit key without verifying identity.",
+              "content_digest": "841f44fddced7681d5c9b47aaa2536f14536f1309b1f73104df7cb44738efbd1",
+              "position": 9,
+              "uid": "b18ff5b4-4f0d-5b93-8c41-439e5b15c710"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "d6c78041-aaab-441e-bcb9-73e9666dbd1b"
+        },
+        {
+          "context_digest": "a2ea3c6aa8c1680fcf9a7dd71d0dbff822c6af5493b34b79022f5e740bb35259",
+          "context_name": "task-3/local/personal-memory/2025/07",
+          "context_uid": "5c264a7f-0300-587c-ad1c-0439cedc7737",
+          "memories": [
+            {
+              "content": "The user keeps a travel power bank in the first drawer beneath the desk.",
+              "content_digest": "deb13f4eae5e32bc035da0558fa1b290f4bac0dfa5ca350d5abd0456af07ab7f",
+              "position": 0,
+              "uid": "447bfd8d-1490-5404-a2b4-13b4587e6aba"
+            },
+            {
+              "content": "The user packed three pairs of shoes for a two-night trip but wore only one pair.",
+              "content_digest": "097601b179049e1c4dd6b20a2fe2703ffb0d4a89d5ae15a763d339b989da50d8",
+              "position": 1,
+              "uid": "3ab0326a-a006-51ea-9348-7ada19a23bce"
+            },
+            {
+              "content": "For the next two-night trip, the user packed only one pair of walking shoes and reduced the bag's weight.",
+              "content_digest": "afd02b05250a60ad461e01132a94f0105d419521803082d1057205a2bc9a92ad",
+              "position": 2,
+              "uid": "ef467ab6-8ba6-5f81-8f12-578ec1824e09"
+            },
+            {
+              "content": "On a trip when the user forgot a charging cable, they bought a new one after arrival.",
+              "content_digest": "bbe1ac80a2311e0e631446b811d799494dc5ca4db408fc63d1cb09a01e2cd105",
+              "position": 3,
+              "uid": "aa4defc3-2b65-5688-accb-aaa49f2430b6"
+            },
+            {
+              "content": "Before the next trip, the user checked charging items against a photo and packed all of them.",
+              "content_digest": "cc2663db793bec80657023ccd545add403ec7dcc6dc39da4d03a95b5a9f65ff9",
+              "position": 4,
+              "uid": "2d937b4b-d73d-5382-abbe-3cd4e596b3a5"
+            },
+            {
+              "content": "The user packed toiletries on the departure day and arrived 15 minutes late at the meeting place.",
+              "content_digest": "1f5f7eb4cf651ee44244315e52de31cbd7bffe70489315bda287d1ca3cb9a8d4",
+              "position": 5,
+              "uid": "0be8b327-0a06-5241-b98d-daa6b0a4aa50"
+            },
+            {
+              "content": "The next time, the user closed the bag the night before and departed on time.",
+              "content_digest": "61f6c02e4637501f5ad9b1a9f668e298e566558a3d9e611a8b521c17256513b7",
+              "position": 6,
+              "uid": "90059fcc-436d-5453-98f0-a9b23a08faf1"
+            },
+            {
+              "content": "The user's older sister considers it safer to pack an extra cable even for a short trip to avoid charging problems.",
+              "content_digest": "f06b38b34e0f27bc01d8a79733173673d37a209e8619ad3df816a73718ffd89f",
+              "position": 7,
+              "uid": "12ef03f9-8cda-5ed7-be83-891b4702f872"
+            },
+            {
+              "content": "When creating a travel preparation list, confirm the trip length and actual activities with the user.",
+              "content_digest": "f34a0a341cd8ce9c641c16b780c4e53ccae4b6dca2c8f176be7579f5b0115654",
+              "position": 8,
+              "uid": "54136935-a460-573d-ac40-f5edb0ca7e6c"
+            },
+            {
+              "content": "The local agent cannot establish what the next trip requires from the luggage used on the previous trip alone.",
+              "content_digest": "4accbe60aa4e53ff75a18cc0291a870f106ac69a10a2cff96147c2dbd74892e3",
+              "position": 9,
+              "uid": "029c0777-bdbb-5d48-9309-1b1e6c7d88f4"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "d3b34b04-5999-4da6-a5d5-0117e5ed4cf0"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate practical domains: the reference frame concerns home access, coordination, privacy, and related experiences, while the compared frame concerns travel packing, preparation, and lessons from prior trips. No claims govern the same operational decision closely enough to form a cross-frame relation.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6c78041-aaab-441e-bcb9-73e9666dbd1b",
+              "memory_uid": "1c627e4c-c393-5bd3-a5ae-b3318821be73"
+            }
+          ],
+          "reason": "Only the reference frame identifies the spare-key custodian; the compared frame contains no claim about home-key custody.",
+          "status": "RESOLVED",
+          "summary": "The maternal aunt keeps a spare key to the user's home.",
+          "uid": "f823f1a5-1e3a-53a1-9fb4-fe4487213a69"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6c78041-aaab-441e-bcb9-73e9666dbd1b",
+              "memory_uid": "e80936de-87af-5dbb-ab94-d456bbfaab0a"
+            }
+          ],
+          "reason": "Only the reference frame states the user's preferred escalation order for locked-door access.",
+          "status": "RESOLVED",
+          "summary": "When locked out, the user ordinarily contacts the maternal aunt before building management.",
+          "uid": "0dc00fdf-be37-5fad-9b93-5820771dbe99"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6c78041-aaab-441e-bcb9-73e9666dbd1b",
+              "memory_uid": "7c26cf33-0630-5138-910a-6d37d6ed2b63"
+            }
+          ],
+          "reason": "Only the reference frame provides this coordination preference for in-person key collection.",
+          "status": "RESOLVED",
+          "summary": "The user wants to provide an arrival time before collecting the spare key so neither person waits.",
+          "uid": "b80dad04-2c9c-5f62-9966-3e6a3fc723b7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6c78041-aaab-441e-bcb9-73e9666dbd1b",
+              "memory_uid": "c3f0f26c-8d89-55e3-8bf3-398271e417e7"
+            }
+          ],
+          "reason": "Only the reference frame states this emotional and procedural preference for returning the key.",
+          "status": "RESOLVED",
+          "summary": "The user feels at ease only after returning a borrowed spare key in person that day.",
+          "uid": "f608e081-9ad4-5736-9c40-0c43ca796f8b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6c78041-aaab-441e-bcb9-73e9666dbd1b",
+              "memory_uid": "7d7d00a3-c5af-5441-bb50-9631fbfd7979"
+            }
+          ],
+          "reason": "Only the reference frame describes this security-related discomfort.",
+          "status": "RESOLVED",
+          "summary": "The user is uneasy about recording a new entrance passcode on paper.",
+          "uid": "07d85d0e-047f-5822-a962-cbeeea358f67"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6c78041-aaab-441e-bcb9-73e9666dbd1b",
+              "memory_uid": "2e0df581-bd54-54f5-94ef-b719427fc88c"
+            }
+          ],
+          "reason": "Only the reference frame records this experience with an unexpected visit.",
+          "status": "RESOLVED",
+          "summary": "An unannounced family arrival during a meeting was difficult because the user could not respond immediately.",
+          "uid": "4254fe0c-277f-53aa-aad1-794591b75208"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6c78041-aaab-441e-bcb9-73e9666dbd1b",
+              "memory_uid": "9278b64e-7550-5eb6-bbfd-544a2ae4ec3d"
+            }
+          ],
+          "reason": "Only the reference frame describes reassurance from verifying that delivery.",
+          "status": "RESOLVED",
+          "summary": "The user felt reassured after checking the delivery photo when their younger brother received a package for them.",
+          "uid": "345aa852-8596-5ef0-989d-ce064fee9984"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6c78041-aaab-441e-bcb9-73e9666dbd1b",
+              "memory_uid": "76fb9115-a3f2-5ce3-a445-c3d1e38e4253"
+            }
+          ],
+          "reason": "Only the reference frame states the aunt's handover condition.",
+          "status": "RESOLVED",
+          "summary": "The maternal aunt wants confirmation of an in-person visit before handing over the spare key.",
+          "uid": "1882d2e0-ee48-5235-b721-94056a43e45c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6c78041-aaab-441e-bcb9-73e9666dbd1b",
+              "memory_uid": "6fa50e1d-8bd1-557a-9b03-1e4a4dc664bd"
+            }
+          ],
+          "reason": "Only the reference frame establishes this disclosure-control policy.",
+          "status": "RESOLVED",
+          "summary": "The user must be consulted before the spare-key location or maternal aunt's contact details are shared.",
+          "uid": "076a175f-ad8b-56cc-9b25-3d08c84bdc31"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6c78041-aaab-441e-bcb9-73e9666dbd1b",
+              "memory_uid": "b18ff5b4-4f0d-5b93-8c41-439e5b15c710"
+            }
+          ],
+          "reason": "Only the reference frame states this building-access verification rule.",
+          "status": "RESOLVED",
+          "summary": "A multi-unit building's management office does not release a unit key without identity verification.",
+          "uid": "ea7324f8-68db-550b-abae-20bc7b136481"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d3b34b04-5999-4da6-a5d5-0117e5ed4cf0",
+              "memory_uid": "447bfd8d-1490-5404-a2b4-13b4587e6aba"
+            }
+          ],
+          "reason": "Only the compared frame identifies this travel item's storage location.",
+          "status": "RESOLVED",
+          "summary": "The user's travel power bank is stored in the first drawer beneath the desk.",
+          "uid": "9876f81d-e809-5463-833d-c9fb81b31fe4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d3b34b04-5999-4da6-a5d5-0117e5ed4cf0",
+              "memory_uid": "3ab0326a-a006-51ea-9348-7ada19a23bce"
+            }
+          ],
+          "reason": "Only the compared frame records this overpacking outcome.",
+          "status": "RESOLVED",
+          "summary": "The user packed three shoe pairs for a two-night trip but used only one.",
+          "uid": "e645ef1f-cf53-5e37-8858-98a1f4d46cb2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d3b34b04-5999-4da6-a5d5-0117e5ed4cf0",
+              "memory_uid": "ef467ab6-8ba6-5f81-8f12-578ec1824e09"
+            }
+          ],
+          "reason": "Only the compared frame describes this later packing adjustment and benefit.",
+          "status": "RESOLVED",
+          "summary": "For a later two-night trip, packing one walking-shoe pair reduced the bag's weight.",
+          "uid": "c69695a6-289d-5f0b-8cf6-580c00685f28"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d3b34b04-5999-4da6-a5d5-0117e5ed4cf0",
+              "memory_uid": "aa4defc3-2b65-5688-accb-aaa49f2430b6"
+            }
+          ],
+          "reason": "Only the compared frame records this charging-item omission and response.",
+          "status": "RESOLVED",
+          "summary": "After forgetting a charging cable on a trip, the user purchased a replacement after arrival.",
+          "uid": "05d66762-b98a-5256-a4ce-8d41fcccd6b9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d3b34b04-5999-4da6-a5d5-0117e5ed4cf0",
+              "memory_uid": "2d937b4b-d73d-5382-abbe-3cd4e596b3a5"
+            }
+          ],
+          "reason": "Only the compared frame describes this travel-specific verification method and successful result.",
+          "status": "RESOLVED",
+          "summary": "Before a later trip, the user checked charging items against a photo and packed them all.",
+          "uid": "8331405e-64f0-597f-8f95-3a258066ff06"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d3b34b04-5999-4da6-a5d5-0117e5ed4cf0",
+              "memory_uid": "0be8b327-0a06-5241-b98d-daa6b0a4aa50"
+            }
+          ],
+          "reason": "Only the compared frame records this preparation-timing outcome.",
+          "status": "RESOLVED",
+          "summary": "Packing toiletries on departure day contributed to arriving 15 minutes late at the meeting place.",
+          "uid": "889e308b-82c5-5766-83bd-cdad97416eaa"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d3b34b04-5999-4da6-a5d5-0117e5ed4cf0",
+              "memory_uid": "90059fcc-436d-5453-98f0-a9b23a08faf1"
+            }
+          ],
+          "reason": "Only the compared frame describes this later preparation practice and punctual result.",
+          "status": "RESOLVED",
+          "summary": "On the next occasion, the user closed the bag the night before and departed on time.",
+          "uid": "1a03f14d-7ea1-5a8d-aae8-c7dd21e8f350"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d3b34b04-5999-4da6-a5d5-0117e5ed4cf0",
+              "memory_uid": "12ef03f9-8cda-5ed7-be83-891b4702f872"
+            }
+          ],
+          "reason": "Only the compared frame states this family member's travel-packing safety view.",
+          "status": "RESOLVED",
+          "summary": "The user's older sister considers an extra cable safer even for short trips to prevent charging problems.",
+          "uid": "e0b2973c-46ab-598b-970b-033ff10a390b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d3b34b04-5999-4da6-a5d5-0117e5ed4cf0",
+              "memory_uid": "54136935-a460-573d-ac40-f5edb0ca7e6c"
+            }
+          ],
+          "reason": "Only the compared frame establishes this user-confirmation policy for travel planning.",
+          "status": "RESOLVED",
+          "summary": "Creating a travel-preparation list requires confirming trip length and actual activities with the user.",
+          "uid": "21f95bfc-4d55-5bdb-b693-17f4336b65d8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d3b34b04-5999-4da6-a5d5-0117e5ed4cf0",
+              "memory_uid": "029c0777-bdbb-5d48-9309-1b1e6c7d88f4"
+            }
+          ],
+          "reason": "Only the compared frame states this limitation on inferring future travel needs.",
+          "status": "RESOLVED",
+          "summary": "Prior luggage alone cannot establish the requirements of the user's next trip.",
+          "uid": "8f9d2878-9a5e-5046-aac2-cedac8c4965d"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame describes travel-item storage, packing outcomes and improvements, charging preparation, departure timing, an extra-cable safety view, and the need to ground future lists in trip-specific requirements.",
+        "differences": "",
+        "reference_only": "The reference frame describes spare-key custody and retrieval, same-day return, access-information privacy, passcode discomfort, identity verification, and experiences involving an unannounced visit and package confirmation."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "7f18df20-f8ba-42a2-89a4-fef1e6e48f2a"
+    },
+    "analysis_digest": "caa132d94cb877c4be349e87536fb95dc852902cd78e2e6c94fd38d5a1164299",
+    "key": "d5333434d8028f56e751644cf7df8654e7d8ef47c7897fdd782f2ef716ec4596",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 38.64451999999801,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "d5333434d8028f56e751644cf7df8654e7d8ef47c7897fdd782f2ef716ec4596",
+  "created_at": "2026-08-13T18:36:23.777053Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/02",
+  "pair_key": "90fdf77833ce680405a88622df569bc71e5e02d3b0f47b361acb2080f004e342",
+  "provider_seconds": 38.64451999999801,
+  "right": "task-3/local/personal-memory/2025/07",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

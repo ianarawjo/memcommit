@@ -1,0 +1,250 @@
+{
+  "coverage": {
+    "expected": 19,
+    "observed": 19
+  },
+  "created_at": "2026-08-11T00:17:52.194183Z",
+  "description_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+  "issues": [],
+  "kind": "STUDY_COMPARE_GRAPH_PAIR",
+  "left": {
+    "context_digest": "52dc61895a6d116135c474d4828efde944579b3a5949b6d64c07dd9853f60801",
+    "context_uid": "6f253a9e-f504-53bf-a1d1-de2c4532171e",
+    "memory_count": 8,
+    "name": "task-2/advisor1/emphasis"
+  },
+  "method": "COMPACT_DECISION_VECTOR_V1",
+  "operation": "COMPARE",
+  "pair_key": "ad051d6b7bbfbd426fd4c6a353908bb7fb18f1783c6e72f5ab1f7f7893001918",
+  "provider": {
+    "condition": "COMPACT_DECISION_VECTOR",
+    "contract_valid": true,
+    "elapsed_seconds": 40.675078250002116,
+    "error_type": null,
+    "failure_category": null,
+    "operation": "compare_contexts_compact_ab_v1",
+    "prompt_chars": 7893,
+    "provider_calls": 1,
+    "provider_run": {
+      "completion_tokens": null,
+      "identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "operation": "compare_contexts_compact_ab_v1",
+      "prompt_tokens": null,
+      "upstream_model": "gpt-5.6-sol",
+      "upstream_provider": "openai-codex"
+    },
+    "provider_seconds": 40.67369795800187,
+    "response_bytes": 722,
+    "response_chars": 722,
+    "schema_chars": 1380,
+    "validation_error": null,
+    "validation_seconds": 0.0013637500087497756
+  },
+  "relations": [
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "4a1de8df-6f03-5a3d-bbfa-7c1144d2ec5c",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "a42891a1-b674-5747-a77c-43699b0b9723",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000001",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "b5b6a901-9047-5482-a0e1-d29e5f7171e8",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000002",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "The reference scopes burden emphasis to time and travel for community participants, while the compared frame requires and reviews task-level burden-to-mitigation mapping across user studies.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "e89de514-48a5-5e9b-96ca-f194c0ed79ab",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "f7025cbb-4005-53c6-9031-e33f04a86b92",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "e93ea2ee-a8b0-5f3d-b6fd-c76f385eef50",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "7d0b3072-7bac-5bc6-9c79-acc808c38f1f",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000003",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "9d7169d5-058f-5f7c-b1ac-30cabd8ba02e",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000004",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "f8931b4e-9656-548d-84a1-f2f2c3eb47b1",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000005",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "9bf9e735-7598-5977-abe2-87b2c9c38a24",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000006",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "6ecf6a7b-f4e9-5d96-a52c-520197d4a2a6",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "bc41fce0-dbfc-5d23-9d97-9f81531c098c",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000007",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "9768e0d9-ef46-52a4-af04-8f6ca3c176c5",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000008",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "e874407e-4d36-55a6-949e-44e5944f1bb4",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000009",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "df16dca6-0b48-5753-aa18-7e5524187a1e",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000010",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "407a4c1c-c333-5764-8d89-252bed150f99",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000011",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "28646fd3-54af-51f9-97da-ad9489ecda79",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000012",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "218aafb6-9332-5693-a2e7-c7777dc64de7",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000013",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "1ecb7268-f77a-5643-a456-357df6cd8f6e",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000014",
+      "status": "RESOLVED"
+    }
+  ],
+  "right": {
+    "context_digest": "89608fbad1167ce0da41a7a6312a1b4e92ee55ff6a7d97bb480a0c75d588a7f2",
+    "context_uid": "5cdea05f-b6ec-586d-a87f-5347d1d51f96",
+    "memory_count": 11,
+    "name": "task-2/advisor1/ethics"
+  },
+  "schema_version": 1,
+  "semantic_content_in_participant_report": false,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

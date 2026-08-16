@@ -1,0 +1,388 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:45:52.799268+00:00",
+      "frames": [
+        {
+          "context_digest": "17b940da39446a9f934dff43ea7db561d14060561065852a34658fe4aaa1702f",
+          "context_name": "task-3/local/personal-memory/2024/10",
+          "context_uid": "7c55b789-a7d0-5070-9cf8-6f5e205415dc",
+          "memories": [
+            {
+              "content": "The user renewed their local library membership in October 2024.",
+              "content_digest": "eb9209032856bdbc69fbfa67e053bf8cd2bc23f8e8e25c0be9a5aa3f7e05f4e9",
+              "position": 0,
+              "uid": "04711182-acef-52a9-bd58-7fe98a54854a"
+            },
+            {
+              "content": "On an evening walk, the user saw an unlit street and took a detour along a main road.",
+              "content_digest": "62d001de1c6c4599e51c4e0713f577a2838e95e03f26064778e64542f390a599",
+              "position": 1,
+              "uid": "0229d0b1-750c-521b-a126-22c9d9d001c4"
+            },
+            {
+              "content": "On a day the user chose a well-lit pedestrian route, the walk took 12 minutes longer than usual.",
+              "content_digest": "ad3770626bef71bc9a29ec7772aeebeb70231e89b417b05b4da9c62a65b89afe",
+              "position": 2,
+              "uid": "e310fe87-8cde-5399-be00-9f8d7ec44e94"
+            },
+            {
+              "content": "On a day the user sat by the library window, they heard vehicle noise with every page they read.",
+              "content_digest": "090a190c68a5166d84cde1eed20f9a03c2b99722ed383eb3b5703489c01d85e0",
+              "position": 3,
+              "uid": "4f37306b-08cd-512a-b92e-ca6761da1a5b"
+            },
+            {
+              "content": "On the next visit, the user sat farther inside and did not move for an hour.",
+              "content_digest": "a071b4c7699fe17f63f0ab6263da1259aea00ad635169a313d4821f57071a86a",
+              "position": 4,
+              "uid": "5897ffa4-cfc6-5012-8931-15420ec5cf7c"
+            },
+            {
+              "content": "The user wrote the due date of a borrowed book on paper and then lost the paper.",
+              "content_digest": "43ef22512c79634cb9e3dc59006c7d06c3513a9d5d1f89eedbb392964cc34f02",
+              "position": 5,
+              "uid": "ce38bd13-3d51-5bff-9eba-ed70a8217356"
+            },
+            {
+              "content": "After entering the due date on their phone, the user saw a reminder the day before and put the book in their bag.",
+              "content_digest": "38782cba2f3bf260d62cf8e80c4a7e4a3a196d4d29ced3c4fe19d050e12c1e0a",
+              "position": 6,
+              "uid": "a304315b-bc0a-591b-b8c2-7eea5145819d"
+            },
+            {
+              "content": "Library staff expect a person requesting a replacement membership card to bring identity-verification material.",
+              "content_digest": "1ac59309aedbfa946661bf5bbc4d5141c420df059937893caba88725dfe77d24",
+              "position": 7,
+              "uid": "ef060b89-6c54-5c20-86be-c07766a35daa"
+            },
+            {
+              "content": "Check recent lighting and pedestrian conditions before proposing an evening walking route.",
+              "content_digest": "1b247adfb3723d14979b2cc7ecf6786c457d60e521b8708a6d08d38d3d1af437",
+              "position": 8,
+              "uid": "7669e5eb-c0fd-5182-ae9a-5f9ae95ddf2f"
+            },
+            {
+              "content": "The local agent can compare past reasons for detours but cannot directly observe current lighting and pedestrian conditions.",
+              "content_digest": "8a5f0e4cbb2fa6c19f2cb5d4e500ed460189b515604c87c6c2a4c8348c4efc44",
+              "position": 9,
+              "uid": "e96f7007-5814-5986-b121-4ce3b22506e1"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "c393160c-6f65-466a-85c4-c9eaff58c5d7"
+        },
+        {
+          "context_digest": "4eadf16a0c655a266bec3ebe56b056075c55e7f716f6879a0b6a905fe34136df",
+          "context_name": "task-3/local/personal-memory/2026/05",
+          "context_uid": "fd476504-4d4e-54d9-80b8-3dc2b18555d8",
+          "memories": [
+            {
+              "content": "The user keeps a picnic mat on the bottom shelf of the entrance storage cabinet.",
+              "content_digest": "c17479bd6a0f978f71b106b562507e702c3b84af5119be6bce48e4ee1664e728",
+              "position": 0,
+              "uid": "a9da4cfc-a6aa-51ae-9ec4-0de5c7a09227"
+            },
+            {
+              "content": "On a day the user went to the riverside, they sat in a place without shade and moved after an hour.",
+              "content_digest": "f9ab1da828ca5af06cb8bf54fe85136e316f503dab465fad514ab5a3f8243633",
+              "position": 1,
+              "uid": "fa2735e1-f4af-57d3-a18c-795715b6715b"
+            },
+            {
+              "content": "At the next outdoor meal, the user chose a place near a large tree and stayed for two hours.",
+              "content_digest": "189b7d85561df45986a6b7c9fe681b5ef53b22ca1f5e83fa8d64a7d93b35a577",
+              "position": 2,
+              "uid": "3bd8b8f2-c5b4-5004-8b9e-e388cc26ea7a"
+            },
+            {
+              "content": "On a hot day when the user brought only one bottle of water, they bought another drink partway through the outing.",
+              "content_digest": "92aa494a12664105a4bffc50a9026fadbec78332f750636093ea82ecc68e9597",
+              "position": 3,
+              "uid": "c7c4b494-39a6-5f5c-b37f-51c5061ac926"
+            },
+            {
+              "content": "On the next outing, the user brought two small bottles of water after freezing them.",
+              "content_digest": "69b3035b57b58b1aa778bd0da75dc806c1c449e7e35dc448aff92f7499c3148d",
+              "position": 4,
+              "uid": "dd9f5b3c-9c2e-5dbc-bf6e-eb7761eeb075"
+            },
+            {
+              "content": "When meeting their maternal uncle at a park, the user and the uncle waited at different entrances for 15 minutes.",
+              "content_digest": "9785e87b9fe79813762eb2e19e6d4f256a55f4799c92d095aaf695a8a1de5851",
+              "position": 5,
+              "uid": "2ed2a41c-f6ae-54d6-875c-a195d8fdacee"
+            },
+            {
+              "content": "For the next meeting, the user sent a photo of the entrance sign, and they met at the same place.",
+              "content_digest": "de40b6b7df84784639b97cf7ce153ad8af6e77320d75f3869979e5e3d39169e2",
+              "position": 6,
+              "uid": "23f3a4fc-d51e-5d0b-87f0-d5be407a57f3"
+            },
+            {
+              "content": "For a park meeting, the user's maternal uncle prefers an entrance that requires less walking from the parking area.",
+              "content_digest": "552a43b869c6f06cbf571f794106727406d87841d43addc92f31a3532f73d6f3",
+              "position": 7,
+              "uid": "e9f459f3-8ff0-5a0e-b78b-eda8d18b914e"
+            },
+            {
+              "content": "When making an outdoor plan, confirm the exact entrance and an alternative location in case of rain.",
+              "content_digest": "a265a6364c182de35363b58135b1da60d11595d1e3e0029f6851ac272261a959",
+              "position": 8,
+              "uid": "70277b86-d5db-5b58-8a94-e77372d15a4c"
+            },
+            {
+              "content": "Some park restrooms and drinking fountains may be closed seasonally.",
+              "content_digest": "8e5c4f5f85d4d27dc2211f46e3ab3bbed7f3d9687070b9028992b670986b09ca",
+              "position": 9,
+              "uid": "5a54437b-9b0e-5103-860d-d878be70b3ef"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "143af7d3-fe3b-4238-9c62-53a6581dfa59"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames contain independent, non-conflicting context: the reference centers on library use and safer evening walking, while the compared frame covers park outings, comfort, hydration, meeting coordination, and seasonal facility availability. No shared operational claim or scope-dependent difference is established.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c393160c-6f65-466a-85c4-c9eaff58c5d7",
+              "memory_uid": "04711182-acef-52a9-bd58-7fe98a54854a"
+            }
+          ],
+          "reason": "This is independently useful reference-side membership history with no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user renewed their local library membership in October 2024.",
+          "uid": "137fc47d-e829-5d03-ad73-cb8000a1d601"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c393160c-6f65-466a-85c4-c9eaff58c5d7",
+              "memory_uid": "0229d0b1-750c-521b-a126-22c9d9d001c4"
+            },
+            {
+              "frame_uid": "c393160c-6f65-466a-85c4-c9eaff58c5d7",
+              "memory_uid": "e310fe87-8cde-5399-be00-9f8d7ec44e94"
+            }
+          ],
+          "reason": "These memories split one reference-side claim about the user's safety-oriented route choice and its time tradeoff; the compared frame contains no corresponding walking-route claim.",
+          "status": "RESOLVED",
+          "summary": "The user has chosen better-lit walking routes when lighting was poor, with a recorded cost of additional travel time.",
+          "uid": "d43729fe-92fb-5a8a-af9e-054a81e20124"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c393160c-6f65-466a-85c4-c9eaff58c5d7",
+              "memory_uid": "4f37306b-08cd-512a-b92e-ca6761da1a5b"
+            },
+            {
+              "frame_uid": "c393160c-6f65-466a-85c4-c9eaff58c5d7",
+              "memory_uid": "5897ffa4-cfc6-5012-8931-15420ec5cf7c"
+            }
+          ],
+          "reason": "These memories jointly describe one reference-side seating adaptation to library noise, which has no materially corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "Vehicle noise disrupted reading by the library window, while sitting farther inside supported an uninterrupted hour-long stay.",
+          "uid": "ff6e05af-1ae2-5a27-9fc4-3e9707a14e20"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c393160c-6f65-466a-85c4-c9eaff58c5d7",
+              "memory_uid": "ce38bd13-3d51-5bff-9eba-ed70a8217356"
+            },
+            {
+              "frame_uid": "c393160c-6f65-466a-85c4-c9eaff58c5d7",
+              "memory_uid": "a304315b-bc0a-591b-b8c2-7eea5145819d"
+            }
+          ],
+          "reason": "These memories split one reference-side claim about replacing an unreliable paper reminder with an effective phone reminder; no compared-side claim addresses borrowed-item due dates.",
+          "status": "RESOLVED",
+          "summary": "A paper due-date note was lost, whereas a phone reminder prompted the user to prepare the borrowed book for return.",
+          "uid": "4de9c9b5-69b5-59fe-a950-80b96b3833e5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c393160c-6f65-466a-85c4-c9eaff58c5d7",
+              "memory_uid": "ef060b89-6c54-5c20-86be-c07766a35daa"
+            }
+          ],
+          "reason": "This is an independently useful reference-side procedural requirement absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Library staff expect identity-verification material when someone requests a replacement membership card.",
+          "uid": "edd12a14-8425-5e37-ae9b-7f0dea46dde6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c393160c-6f65-466a-85c4-c9eaff58c5d7",
+              "memory_uid": "7669e5eb-c0fd-5182-ae9a-5f9ae95ddf2f"
+            },
+            {
+              "frame_uid": "c393160c-6f65-466a-85c4-c9eaff58c5d7",
+              "memory_uid": "e96f7007-5814-5986-b121-4ce3b22506e1"
+            }
+          ],
+          "reason": "These memories split one reference-side planning rule and its capability rationale; the compared frame does not address current evening walking conditions.",
+          "status": "RESOLVED",
+          "summary": "Evening route proposals require checking recent lighting and pedestrian conditions because the local agent can compare past detours but cannot directly observe current conditions.",
+          "uid": "27fa0919-9eb8-51ba-9023-4ee9b44f1717"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "143af7d3-fe3b-4238-9c62-53a6581dfa59",
+              "memory_uid": "a9da4cfc-a6aa-51ae-9ec4-0de5c7a09227"
+            }
+          ],
+          "reason": "This is independently useful compared-side storage information with no materially corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "The user stores a picnic mat on the bottom shelf of the entrance storage cabinet.",
+          "uid": "63fbc50c-088a-5cfd-a2e8-a9de6f4193d1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "143af7d3-fe3b-4238-9c62-53a6581dfa59",
+              "memory_uid": "fa2735e1-f4af-57d3-a18c-795715b6715b"
+            },
+            {
+              "frame_uid": "143af7d3-fe3b-4238-9c62-53a6581dfa59",
+              "memory_uid": "3bd8b8f2-c5b4-5004-8b9e-e388cc26ea7a"
+            }
+          ],
+          "reason": "These memories split one compared-side claim about adapting outdoor seating for shade and longer comfort; library noise avoidance is a different operational context and decision.",
+          "status": "RESOLVED",
+          "summary": "After leaving an unshaded riverside spot after an hour, the user chose a tree-shaded place at the next outdoor meal and stayed for two hours.",
+          "uid": "1535e54c-a2f8-5e2b-af44-faaa5e297341"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "143af7d3-fe3b-4238-9c62-53a6581dfa59",
+              "memory_uid": "c7c4b494-39a6-5f5c-b37f-51c5061ac926"
+            },
+            {
+              "frame_uid": "143af7d3-fe3b-4238-9c62-53a6581dfa59",
+              "memory_uid": "dd9f5b3c-9c2e-5dbc-bf6e-eb7761eeb075"
+            }
+          ],
+          "reason": "These memories split one compared-side claim about adapting hydration preparation; the reference frame has no corresponding hydration claim.",
+          "status": "RESOLVED",
+          "summary": "After one bottle proved insufficient on a hot outing, the user prepared two frozen small bottles for the next outing.",
+          "uid": "5da76f04-cfc9-5cff-bbf1-a3ff81df8701"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "143af7d3-fe3b-4238-9c62-53a6581dfa59",
+              "memory_uid": "2ed2a41c-f6ae-54d6-875c-a195d8fdacee"
+            },
+            {
+              "frame_uid": "143af7d3-fe3b-4238-9c62-53a6581dfa59",
+              "memory_uid": "23f3a4fc-d51e-5d0b-87f0-d5be407a57f3"
+            }
+          ],
+          "reason": "These memories split one compared-side claim about resolving park-entrance ambiguity; the reference frame contains no corresponding meeting-coordination claim.",
+          "status": "RESOLVED",
+          "summary": "After the user and their maternal uncle waited at different park entrances, sending a photo of the entrance sign enabled them to meet at the same place next time.",
+          "uid": "8b6d24c9-76e1-5356-8484-893afecf7a23"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "143af7d3-fe3b-4238-9c62-53a6581dfa59",
+              "memory_uid": "e9f459f3-8ff0-5a0e-b78b-eda8d18b914e"
+            }
+          ],
+          "reason": "This is an independently useful compared-side accessibility preference, distinct from entrance identification and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "For park meetings, the user's maternal uncle prefers an entrance requiring less walking from the parking area.",
+          "uid": "6473bfb1-36aa-52ba-a3c2-789905e78295"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "143af7d3-fe3b-4238-9c62-53a6581dfa59",
+              "memory_uid": "70277b86-d5db-5b58-8a94-e77372d15a4c"
+            }
+          ],
+          "reason": "This compared-side coordination and weather-contingency policy addresses a different operational decision from checking current evening walking conditions.",
+          "status": "RESOLVED",
+          "summary": "Outdoor plans should confirm the exact entrance and an alternative location for rain.",
+          "uid": "39f55a54-03c0-5448-83d3-7216df74ed91"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "143af7d3-fe3b-4238-9c62-53a6581dfa59",
+              "memory_uid": "5a54437b-9b0e-5103-860d-d878be70b3ef"
+            }
+          ],
+          "reason": "This is independently useful compared-side facility-availability context with no materially corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "Some park restrooms and drinking fountains may be closed seasonally.",
+          "uid": "13013fa9-f3f5-5710-a292-71f64839b01f"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame records picnic storage, shade and hydration adaptations, park entrance coordination and accessibility preferences, outdoor contingency planning, and possible seasonal facility closures.",
+        "differences": "",
+        "reference_only": "The reference records library membership and routines, seating and return-reminder adaptations, replacement-card requirements, and the need to verify current conditions when planning safer evening walks."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "d43ed378-e6cb-4801-bc1c-825208d4e727"
+    },
+    "analysis_digest": "bdd2e488fb1eedfec298eba030342e9ec70ce985f3b74ab06ff0c6ada01bd317",
+    "key": "41e4bbc1c109908f41b28848f2fc00917a308b29139354ade29216b1f465e004",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 38.474120999999286,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "41e4bbc1c109908f41b28848f2fc00917a308b29139354ade29216b1f465e004",
+  "created_at": "2026-08-13T18:46:31.272971Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/10",
+  "pair_key": "f13c804b23c6b04abe87c5da35e04256f1c36cbb06716af4e15c1283012c8f1e",
+  "provider_seconds": 38.474120999999286,
+  "right": "task-3/local/personal-memory/2026/05",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

@@ -1,0 +1,71 @@
+{
+  "coverage": {
+    "expected": 3,
+    "observed": 3
+  },
+  "created_at": "2026-08-11T00:29:39.015383Z",
+  "description_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+  "issues": [],
+  "kind": "STUDY_COMPARE_GRAPH_PAIR",
+  "left": {
+    "context_digest": "bb54539faeedf2db9ada09643c11270aabf235d8e3e6df98500f90f9b82aed49",
+    "context_uid": "5f2f3c0f-4cb1-5151-b381-847df75b6457",
+    "memory_count": 3,
+    "name": "task-2/advisor2/reproducibility"
+  },
+  "method": "DETERMINISTIC_EMPTY_VIEW",
+  "operation": "COMPARE",
+  "pair_key": "fc4c33a88aa97082874cf3388a4f860d6e9c0580b0821e86533f29bcfe38756d",
+  "provider": {
+    "provider_calls": 0,
+    "provider_seconds": 0.0
+  },
+  "relations": [
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "40f11374-d91b-546a-9e93-fcf98a0fde98",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000001",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "cc72ad54-4cf3-56cd-9119-46776f5b2184",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000002",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "75f22b45-fb1b-568c-bb05-080fdacdcab2",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000003",
+      "status": "RESOLVED"
+    }
+  ],
+  "right": {
+    "context_digest": "975b1478f5252472057ed204fc9f517de15a84679c501e8e97009878dfea572c",
+    "context_uid": "0e19f3b1-4107-48ab-9186-8773e48b812d",
+    "memory_count": 0,
+    "name": "task-2/participant"
+  },
+  "schema_version": 1,
+  "semantic_content_in_participant_report": false,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

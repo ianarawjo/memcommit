@@ -1,0 +1,388 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:53:01.686411+00:00",
+      "frames": [
+        {
+          "context_digest": "07c43eb0b8ecd9107f1d879a409b45289e236f48f620ff85f1d30ce594809149",
+          "context_name": "task-3/local/personal-memory/2025/09",
+          "context_uid": "5cd8ed5f-2f1f-5deb-8347-fc3bfa484d99",
+          "memories": [
+            {
+              "content": "The user keeps the book they are reading and a note-taking notebook on a small living-room desk.",
+              "content_digest": "d2c70cf4c27fe62f5915f2f5c669484c4a875e4ee21f8d7d89a5ff6746f14cf1",
+              "position": 0,
+              "uid": "3d3f7960-daf5-5a51-98b3-14261c5aa66c"
+            },
+            {
+              "content": "While reading in the living room with the television on, the user read the same paragraph three times.",
+              "content_digest": "00e41e6d5fe1dcfe961fa0f739860823ecf338dc55d5b9beea265ca823974582",
+              "position": 1,
+              "uid": "28714a4e-bc14-5703-b594-126471ae0585"
+            },
+            {
+              "content": "The next day, after turning off the television, the user read 40 pages without interruption.",
+              "content_digest": "c28ba9c872757b6683ab03d73e6ad61f71484d55986aae4c0976862a85e3a8b1",
+              "position": 2,
+              "uid": "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df"
+            },
+            {
+              "content": "On a day the phone was on the desk, the user stopped taking notes each time they checked a notification.",
+              "content_digest": "f95cb8b1b8abe89d7bf597ca5fb78f0862fe97a7cf0d8bc5a46c04026ebd6889",
+              "position": 3,
+              "uid": "1b1c9f90-2561-53d5-88fe-d54618450143"
+            },
+            {
+              "content": "During the next reading period, the user left the phone in another room and did not check it for an hour.",
+              "content_digest": "89dc50732e19b88a77657b285ce71c399d229b510265cc9adfbdf6ad706680cd",
+              "position": 4,
+              "uid": "076a7caa-5dcf-5f9d-8bee-efc952652efa"
+            },
+            {
+              "content": "A note attached to a paper book fell out, and the user had to find their place again.",
+              "content_digest": "723e48ceeba6c94e627c79af0518c811cfc8337f9eeae3a80ae388ec98786994",
+              "position": 5,
+              "uid": "1dad71ec-6a5d-550e-89d2-a86dc3dacb11"
+            },
+            {
+              "content": "With the next book, the user recorded the page number in the notebook and resumed reading immediately.",
+              "content_digest": "c74c2f80bf403da64f0a6de97ff04bc1f41cf68d0d33829fa926cc2549e8ea75",
+              "position": 6,
+              "uid": "58494743-fc7f-59e9-8e17-80b8a644470a"
+            },
+            {
+              "content": "The user's father expects that lowering the television volume while the user reads will make it easier for the user to concentrate.",
+              "content_digest": "281b1f8f55f8d22fbebdb2220405dc3e2300e29e0a568c1fac36d4bb1c39c186",
+              "position": 7,
+              "uid": "cce66589-892c-5d73-bdbc-2c6e94e0992e"
+            },
+            {
+              "content": "The local agent can summarize past reading environments and interruption records but cannot predict the next reading time.",
+              "content_digest": "50e5376e22f503048a7f1bf4055bfb31cb4aa3c75b1c816f2febce913716eb58",
+              "position": 8,
+              "uid": "20b2a27f-908f-5ed7-a288-f7c1030674fc"
+            },
+            {
+              "content": "The user feels that repeated notifications interrupt their flow of concentration.",
+              "content_digest": "d777b2a01cfac23e6ef7701c04c33592f8382fa78f8e307bae9ddbffc9a8e2ef",
+              "position": 9,
+              "uid": "310f4cfc-b117-5511-8e13-2bd2ebec9fe5"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "8107d8a7-01c7-4a67-9af2-296eeefc7070"
+        },
+        {
+          "context_digest": "4eadf16a0c655a266bec3ebe56b056075c55e7f716f6879a0b6a905fe34136df",
+          "context_name": "task-3/local/personal-memory/2026/05",
+          "context_uid": "fd476504-4d4e-54d9-80b8-3dc2b18555d8",
+          "memories": [
+            {
+              "content": "The user keeps a picnic mat on the bottom shelf of the entrance storage cabinet.",
+              "content_digest": "c17479bd6a0f978f71b106b562507e702c3b84af5119be6bce48e4ee1664e728",
+              "position": 0,
+              "uid": "a9da4cfc-a6aa-51ae-9ec4-0de5c7a09227"
+            },
+            {
+              "content": "On a day the user went to the riverside, they sat in a place without shade and moved after an hour.",
+              "content_digest": "f9ab1da828ca5af06cb8bf54fe85136e316f503dab465fad514ab5a3f8243633",
+              "position": 1,
+              "uid": "fa2735e1-f4af-57d3-a18c-795715b6715b"
+            },
+            {
+              "content": "At the next outdoor meal, the user chose a place near a large tree and stayed for two hours.",
+              "content_digest": "189b7d85561df45986a6b7c9fe681b5ef53b22ca1f5e83fa8d64a7d93b35a577",
+              "position": 2,
+              "uid": "3bd8b8f2-c5b4-5004-8b9e-e388cc26ea7a"
+            },
+            {
+              "content": "On a hot day when the user brought only one bottle of water, they bought another drink partway through the outing.",
+              "content_digest": "92aa494a12664105a4bffc50a9026fadbec78332f750636093ea82ecc68e9597",
+              "position": 3,
+              "uid": "c7c4b494-39a6-5f5c-b37f-51c5061ac926"
+            },
+            {
+              "content": "On the next outing, the user brought two small bottles of water after freezing them.",
+              "content_digest": "69b3035b57b58b1aa778bd0da75dc806c1c449e7e35dc448aff92f7499c3148d",
+              "position": 4,
+              "uid": "dd9f5b3c-9c2e-5dbc-bf6e-eb7761eeb075"
+            },
+            {
+              "content": "When meeting their maternal uncle at a park, the user and the uncle waited at different entrances for 15 minutes.",
+              "content_digest": "9785e87b9fe79813762eb2e19e6d4f256a55f4799c92d095aaf695a8a1de5851",
+              "position": 5,
+              "uid": "2ed2a41c-f6ae-54d6-875c-a195d8fdacee"
+            },
+            {
+              "content": "For the next meeting, the user sent a photo of the entrance sign, and they met at the same place.",
+              "content_digest": "de40b6b7df84784639b97cf7ce153ad8af6e77320d75f3869979e5e3d39169e2",
+              "position": 6,
+              "uid": "23f3a4fc-d51e-5d0b-87f0-d5be407a57f3"
+            },
+            {
+              "content": "For a park meeting, the user's maternal uncle prefers an entrance that requires less walking from the parking area.",
+              "content_digest": "552a43b869c6f06cbf571f794106727406d87841d43addc92f31a3532f73d6f3",
+              "position": 7,
+              "uid": "e9f459f3-8ff0-5a0e-b78b-eda8d18b914e"
+            },
+            {
+              "content": "When making an outdoor plan, confirm the exact entrance and an alternative location in case of rain.",
+              "content_digest": "a265a6364c182de35363b58135b1da60d11595d1e3e0029f6851ac272261a959",
+              "position": 8,
+              "uid": "70277b86-d5db-5b58-8a94-e77372d15a4c"
+            },
+            {
+              "content": "Some park restrooms and drinking fountains may be closed seasonally.",
+              "content_digest": "8e5c4f5f85d4d27dc2211f46e3ab3bbed7f3d9687070b9028992b670986b09ca",
+              "position": 9,
+              "uid": "5a54437b-9b0e-5103-860d-d878be70b3ef"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "78806acd-c22e-4428-9aa8-9449ca95f847"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate domains: the reference records reading setup, distractions, placekeeping, expectations, and agent limits, while the compared frame records outdoor supplies, comfort, hydration, meeting coordination, preferences, planning, and seasonal facility risks. No claims govern the same operational decision.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8107d8a7-01c7-4a67-9af2-296eeefc7070",
+              "memory_uid": "3d3f7960-daf5-5a51-98b3-14261c5aa66c"
+            }
+          ],
+          "reason": "This is independently useful reference-side information about reading-material storage, with no compared-side claim addressing that decision.",
+          "status": "RESOLVED",
+          "summary": "The user stores their current book and note-taking notebook on a small living-room desk.",
+          "uid": "15c6915b-3c73-5af8-b629-f49f3e647ade"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8107d8a7-01c7-4a67-9af2-296eeefc7070",
+              "memory_uid": "28714a4e-bc14-5703-b594-126471ae0585"
+            },
+            {
+              "frame_uid": "8107d8a7-01c7-4a67-9af2-296eeefc7070",
+              "memory_uid": "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df"
+            }
+          ],
+          "reason": "These reference-side observations jointly express one contrast about television conditions and reading continuity; the compared frame contains no corresponding reading-environment claim.",
+          "status": "RESOLVED",
+          "summary": "Television conditions were associated with interrupted rereading, while turning the television off preceded a long uninterrupted reading session.",
+          "uid": "d8278edb-7cfa-5423-9910-4450b78967ee"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8107d8a7-01c7-4a67-9af2-296eeefc7070",
+              "memory_uid": "1b1c9f90-2561-53d5-88fe-d54618450143"
+            },
+            {
+              "frame_uid": "8107d8a7-01c7-4a67-9af2-296eeefc7070",
+              "memory_uid": "076a7caa-5dcf-5f9d-8bee-efc952652efa"
+            },
+            {
+              "frame_uid": "8107d8a7-01c7-4a67-9af2-296eeefc7070",
+              "memory_uid": "310f4cfc-b117-5511-8e13-2bd2ebec9fe5"
+            }
+          ],
+          "reason": "These reference-side statements jointly describe one phone-notification interruption pattern and its avoidance; no compared-side claim addresses reading-time notifications.",
+          "status": "RESOLVED",
+          "summary": "Notifications disrupted the user’s note-taking and perceived concentration flow, while leaving the phone elsewhere enabled an hour without checking it.",
+          "uid": "7f0e9351-174b-598b-b4af-d0b136ec302b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8107d8a7-01c7-4a67-9af2-296eeefc7070",
+              "memory_uid": "1dad71ec-6a5d-550e-89d2-a86dc3dacb11"
+            },
+            {
+              "frame_uid": "8107d8a7-01c7-4a67-9af2-296eeefc7070",
+              "memory_uid": "58494743-fc7f-59e9-8e17-80b8a644470a"
+            }
+          ],
+          "reason": "These reference-side episodes form one contrast about preserving a place in a paper book; the compared frame has no corresponding placekeeping claim.",
+          "status": "RESOLVED",
+          "summary": "A loose note caused the user to lose their place, whereas recording the page number in a notebook enabled immediate resumption with the next book.",
+          "uid": "9742c515-fe1c-5c2f-a073-68b022379841"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8107d8a7-01c7-4a67-9af2-296eeefc7070",
+              "memory_uid": "cce66589-892c-5d73-bdbc-2c6e94e0992e"
+            }
+          ],
+          "reason": "This is an independently useful reference-side expectation about reading conditions, not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s father expects lower television volume during reading to improve the user’s concentration.",
+          "uid": "6b0ce98c-b2c4-578b-9fdd-1bd6b71a460f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8107d8a7-01c7-4a67-9af2-296eeefc7070",
+              "memory_uid": "20b2a27f-908f-5ed7-a288-f7c1030674fc"
+            }
+          ],
+          "reason": "This is an independently useful reference-side capability boundary, with no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The local agent can summarize prior reading environments and interruptions but cannot predict the next reading time.",
+          "uid": "d604c6e9-b407-5ed4-9818-025db9e20ea2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78806acd-c22e-4428-9aa8-9449ca95f847",
+              "memory_uid": "a9da4cfc-a6aa-51ae-9ec4-0de5c7a09227"
+            }
+          ],
+          "reason": "This is independently useful compared-side information about picnic-equipment storage, with no reference-side claim addressing it.",
+          "status": "RESOLVED",
+          "summary": "The user stores a picnic mat on the bottom shelf of the entrance storage cabinet.",
+          "uid": "aca6c890-4402-5180-b473-8a852f42e550"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78806acd-c22e-4428-9aa8-9449ca95f847",
+              "memory_uid": "fa2735e1-f4af-57d3-a18c-795715b6715b"
+            },
+            {
+              "frame_uid": "78806acd-c22e-4428-9aa8-9449ca95f847",
+              "memory_uid": "3bd8b8f2-c5b4-5004-8b9e-e388cc26ea7a"
+            }
+          ],
+          "reason": "These compared-side observations jointly express one contrast about shade selection and outing duration; the reference frame contains no outdoor-seating claim.",
+          "status": "RESOLVED",
+          "summary": "After leaving an unshaded riverside spot within an hour, the user chose shade near a large tree at the next outdoor meal and stayed for two hours.",
+          "uid": "8d93baa3-8dbd-52dd-855a-b2a2f301c58c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78806acd-c22e-4428-9aa8-9449ca95f847",
+              "memory_uid": "c7c4b494-39a6-5f5c-b37f-51c5061ac926"
+            },
+            {
+              "frame_uid": "78806acd-c22e-4428-9aa8-9449ca95f847",
+              "memory_uid": "dd9f5b3c-9c2e-5dbc-bf6e-eb7761eeb075"
+            }
+          ],
+          "reason": "These compared-side episodes jointly describe one hydration-supply adaptation; the reference frame has no corresponding outdoor-hydration claim.",
+          "status": "RESOLVED",
+          "summary": "After one bottle proved insufficient on a hot outing, the user brought two frozen small bottles on the next outing.",
+          "uid": "f6bd8992-8dc4-5c9b-937f-847c435c015e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78806acd-c22e-4428-9aa8-9449ca95f847",
+              "memory_uid": "2ed2a41c-f6ae-54d6-875c-a195d8fdacee"
+            },
+            {
+              "frame_uid": "78806acd-c22e-4428-9aa8-9449ca95f847",
+              "memory_uid": "23f3a4fc-d51e-5d0b-87f0-d5be407a57f3"
+            }
+          ],
+          "reason": "These compared-side episodes jointly describe one adaptation for resolving park-entrance ambiguity; the reference frame contains no meeting-coordination claim.",
+          "status": "RESOLVED",
+          "summary": "After the user and their maternal uncle waited at different park entrances, sending a photo of the entrance sign enabled them to meet at the same place next time.",
+          "uid": "7812bb81-9f5c-51b0-be39-e2e27f95dfe9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78806acd-c22e-4428-9aa8-9449ca95f847",
+              "memory_uid": "e9f459f3-8ff0-5a0e-b78b-eda8d18b914e"
+            }
+          ],
+          "reason": "This is an independently useful compared-side accessibility preference, absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s maternal uncle prefers a park entrance requiring less walking from the parking area.",
+          "uid": "bac7c4b3-5cfd-5cae-a937-94f8b54e3f2d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78806acd-c22e-4428-9aa8-9449ca95f847",
+              "memory_uid": "70277b86-d5db-5b58-8a94-e77372d15a4c"
+            }
+          ],
+          "reason": "This compared-side planning policy adds independently useful coordination and weather-contingency guidance not present in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Outdoor plans should confirm the exact entrance and an alternative location for rain.",
+          "uid": "9ac2da93-7acf-5eba-bce8-31c709f2178d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78806acd-c22e-4428-9aa8-9449ca95f847",
+              "memory_uid": "5a54437b-9b0e-5103-860d-d878be70b3ef"
+            }
+          ],
+          "reason": "This is an independently useful compared-side facility-availability risk, with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Some park restrooms and drinking fountains may close seasonally.",
+          "uid": "18b472a8-a45b-5170-b354-46292c2d68f3"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame describes picnic storage, shade and hydration adaptations, entrance coordination and accessibility preferences, contingency planning for rain, and possible seasonal closures of park facilities.",
+        "differences": "",
+        "reference_only": "The reference describes reading materials, television and notification distractions, strategies for sustained attention and placekeeping, a family expectation about television volume, and limits on the local agent’s forecasting ability."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "d5e7e510-97c6-4ef9-b810-81a2c1e4bce2"
+    },
+    "analysis_digest": "0e10e840d520fc8aaa9909dcbe039a461b83c09e3a2ae18449dc42e4adcc44f4",
+    "key": "92b51bdac1efd3936de7eb0c4acce0265beb736dd6c44fa9c92522b760888afe",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 36.15884358400217,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "92b51bdac1efd3936de7eb0c4acce0265beb736dd6c44fa9c92522b760888afe",
+  "created_at": "2026-08-13T18:53:37.844869Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/09",
+  "pair_key": "efeee862685628edff08638e00827297dc7df55bcf4525763342f188c7a36e65",
+  "provider_seconds": 36.15884358400217,
+  "right": "task-3/local/personal-memory/2026/05",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

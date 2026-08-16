@@ -1,0 +1,340 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:21:41.538608+00:00",
+      "frames": [
+        {
+          "context_digest": "4ae7659c0c6976de9bf2292f9e35962963b7931b470c2294d4f0e70b3500bff0",
+          "context_name": "task-2/advisor1/feasibility",
+          "context_uid": "52db6b06-e86a-556a-913e-30e45f7e9529",
+          "memories": [
+            {
+              "content": "Mark unverified schedule assumptions as such.",
+              "content_digest": "d4cdcdbcdb51d96f9a7435e72c2e4ef25a3e3822a765a88afafeca5194bda96e",
+              "position": 0,
+              "uid": "b150c774-27f6-5ec8-8cb9-9a00be19ce9b"
+            },
+            {
+              "content": "Mark unverified recruitment assumptions as such.",
+              "content_digest": "4cc28528fee1c7b09f709638e2b57d3bc9efe635d20500ee98567f8f59b8cf21",
+              "position": 1,
+              "uid": "6c7d14ed-67e5-56ff-befb-7648b95aa7a3"
+            },
+            {
+              "content": "Mark unverified technical assumptions as such.",
+              "content_digest": "8942e49cd46e3e9746330349df11e49d4a6c9250c7aa4c52c2d9ade1c97c735c",
+              "position": 2,
+              "uid": "00bf39b5-fe97-5fd0-b579-a5c13b5e6af7"
+            },
+            {
+              "content": "Clarify which stage of prototype fabrication or user study each requested resource is used for.",
+              "content_digest": "81ba64e23304f8fbbb3af4f2c30dfa3c517899c486e88ba211189a7911fcbd64",
+              "position": 3,
+              "uid": "3ae97c88-7537-5733-b48d-e02c9283f486"
+            },
+            {
+              "content": "Operations reviewers judge feasibility based on the personnel assigned to each procedure.",
+              "content_digest": "fe29bb7e592d116001a25ce11c603ae29f21d446925c28db692f14970d5b8134",
+              "position": 4,
+              "uid": "e2b5c1f0-97c2-5d46-af80-993d8d5606c9"
+            },
+            {
+              "content": "Operations reviewers judge feasibility based on the equipment assigned to each procedure.",
+              "content_digest": "859ab328c21506d11dd1f6d98e98d5a552446e774931a8bc13396750acf0793b",
+              "position": 5,
+              "uid": "f636b400-d3a2-5873-bf5b-c990b0f7ea42"
+            },
+            {
+              "content": "Operations reviewers judge feasibility based on the time allocated to each procedure.",
+              "content_digest": "08656886328ece4d813e36b1145805ffd3f3d4c6c855c20b1464143fb12868ab",
+              "position": 6,
+              "uid": "49385488-2315-51bc-bea0-749a1aea52f1"
+            },
+            {
+              "content": "Verify that the planned number of formative evaluation iterations is feasible within the time for prototype modification and recruitment resources.",
+              "content_digest": "9e181a14a97abd740a85679554395d7b315c07f0e4171ef276a2c31553b285c7",
+              "position": 7,
+              "uid": "f1c22a48-9d8d-5e82-9837-690d66e719db"
+            },
+            {
+              "content": "Include only the minimum functionality required to compare primary design assumptions in the scope of the formative evaluation prototype.",
+              "content_digest": "7769c2a4c03dc1c279bbf34bf0cefdcd076e3c1d8a1e56015bf20357ecfcf433",
+              "position": 8,
+              "uid": "4d69f030-0dc0-5df7-a153-0b595a3f68de"
+            },
+            {
+              "content": "The user's iterative design plan can be judged feasible only if time and personnel are allocated for modifying the prototype between iterations.",
+              "content_digest": "0339285cf9fd632814c5b5eb2b48fd46e3baf09ea95fb406f71b5d2cc804fa7e",
+              "position": 9,
+              "uid": "152f8621-f5fb-5c5e-a961-1fde77ed0bb3"
+            },
+            {
+              "content": "Delays in participant recruitment can compress the time available for prototype modification between formative evaluations.",
+              "content_digest": "9945f30dba63d2d070bad59cb2fb15b6a26d635f337949c3891b58d17c43973a",
+              "position": 10,
+              "uid": "1877a138-31f6-59a5-b666-ae57985f540d"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "ae8b1635-c72c-45e1-afff-908eeeb9ad25"
+        },
+        {
+          "context_digest": "b598a4ff3268ef8c6c0d7bc5ff34af370074bcdd30d61bd3623fcdfb167f37d6",
+          "context_name": "task-2/advisor2/safety",
+          "context_uid": "4283d797-6a33-5f39-b7f6-f4dbd3264389",
+          "memories": [
+            {
+              "content": "List whom to notify and in what order if serious discomfort is reported during the study.",
+              "content_digest": "3453feb8597fb15c827f22297d58dc804fdc1d8080b9e93ba35b85a4425092b6",
+              "position": 0,
+              "uid": "ceb095a9-3068-55ea-a06f-d954c121e007"
+            },
+            {
+              "content": "Field staff rely on the pre-defined contact sequence when serious discomfort is reported.",
+              "content_digest": "ba38f8a5c993c810e19b9120f4492c3accf962c8b8fd7642539ac24f363099e0",
+              "position": 1,
+              "uid": "962d7645-02b3-5611-8415-4370794c10d4"
+            },
+            {
+              "content": "Define the thresholds for participant harm, operational disruption, and data anomalies at which deployment and data collection must cease.",
+              "content_digest": "7f7f124d266efd8255c4615ebc7eb375447047ed5a2b96327f28f8f17d048813",
+              "position": 2,
+              "uid": "a3270872-1901-5d24-8ef1-374833599bf9"
+            },
+            {
+              "content": "Establish procedures to restore existing systems and workflow states after suspending field deployment.",
+              "content_digest": "1a5f7636ec45e60df11db8b0d3763345c0bfaf9a92c1e5d581e6b36452c31208",
+              "position": 3,
+              "uid": "f6dd1368-0d90-5f1a-97d0-56594ce8f4b3"
+            },
+            {
+              "content": "The user's stop plan can be judged feasible only when it identifies who has authority to order recovery and who is responsible for carrying it out.",
+              "content_digest": "3fa05bd19fdeeb320a37cfb89ad853a868b64055f7b21eb182798b0119f6620c",
+              "position": 4,
+              "uid": "342e4697-873f-56a8-b4a4-896efe910144"
+            },
+            {
+              "content": "In organizations where error reporting is linked to individual performance evaluations, safety signal records may be separated from research decision logs, potentially breaking the traceability path for the same incident.",
+              "content_digest": "2bf13ff8ab1a778e8a793ede627b28d40798ae40d25c7a6d25eb5e2e79dd8e97",
+              "position": 5,
+              "uid": "6c4e9175-4590-5689-ae2b-678f0eb930b9"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "4599a8c9-bf32-4746-accd-e1745298e786"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The reference frame focuses on formative-prototype scope, resource allocation, iteration feasibility, and transparent assumptions. The compared frame independently addresses serious-discomfort escalation, stopping and recovery controls, and safety-record traceability. Neither frame contains a substantively matching or scope-qualified counterpart to the other.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ae8b1635-c72c-45e1-afff-908eeeb9ad25",
+              "memory_uid": "b150c774-27f6-5ec8-8cb9-9a00be19ce9b"
+            },
+            {
+              "frame_uid": "ae8b1635-c72c-45e1-afff-908eeeb9ad25",
+              "memory_uid": "6c7d14ed-67e5-56ff-befb-7648b95aa7a3"
+            },
+            {
+              "frame_uid": "ae8b1635-c72c-45e1-afff-908eeeb9ad25",
+              "memory_uid": "00bf39b5-fe97-5fd0-b579-a5c13b5e6af7"
+            }
+          ],
+          "reason": "These reference-side memories split one disclosure policy across three project-planning domains, with no corresponding assumption-labeling claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Unverified schedule, recruitment, and technical assumptions should be explicitly identified as unverified.",
+          "uid": "0a6262d1-ee9f-58f6-ad5c-9fce095e5f71"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ae8b1635-c72c-45e1-afff-908eeeb9ad25",
+              "memory_uid": "3ae97c88-7537-5733-b48d-e02c9283f486"
+            }
+          ],
+          "reason": "This reference-side resource-to-stage clarification is independently useful and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Each requested resource should be tied to the prototype-fabrication or user-study stage where it will be used.",
+          "uid": "d339d38e-430e-5e29-b2f4-45225337ba39"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ae8b1635-c72c-45e1-afff-908eeeb9ad25",
+              "memory_uid": "e2b5c1f0-97c2-5d46-af80-993d8d5606c9"
+            },
+            {
+              "frame_uid": "ae8b1635-c72c-45e1-afff-908eeeb9ad25",
+              "memory_uid": "f636b400-d3a2-5873-bf5b-c990b0f7ea42"
+            },
+            {
+              "frame_uid": "ae8b1635-c72c-45e1-afff-908eeeb9ad25",
+              "memory_uid": "49385488-2315-51bc-bea0-749a1aea52f1"
+            }
+          ],
+          "reason": "These reference-side memories split one operations-review criterion across its principal resource inputs, without a corresponding procedural-resourcing claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Procedure feasibility is assessed from its assigned personnel, equipment, and time.",
+          "uid": "441e00d2-d604-50ea-a366-61e0c6c886c4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ae8b1635-c72c-45e1-afff-908eeeb9ad25",
+              "memory_uid": "f1c22a48-9d8d-5e82-9837-690d66e719db"
+            }
+          ],
+          "reason": "This reference-side iteration-capacity check is independently useful and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The planned number of formative evaluation iterations should be checked against prototype-modification time and recruitment resources.",
+          "uid": "9eaac8ea-e09c-52d3-9959-b707b9d382ee"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ae8b1635-c72c-45e1-afff-908eeeb9ad25",
+              "memory_uid": "4d69f030-0dc0-5df7-a153-0b595a3f68de"
+            }
+          ],
+          "reason": "This reference-side prototype-scoping rule is independently useful and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A formative evaluation prototype should include only the functionality needed to compare primary design assumptions.",
+          "uid": "86350deb-1454-5b1e-94cb-c8fa7fd2e9a0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ae8b1635-c72c-45e1-afff-908eeeb9ad25",
+              "memory_uid": "152f8621-f5fb-5c5e-a961-1fde77ed0bb3"
+            }
+          ],
+          "reason": "This reference-side feasibility condition concerns between-iteration modification capacity and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Iterative-design feasibility requires time and personnel for prototype modification between iterations.",
+          "uid": "e1a41457-322e-5700-a3e5-1c4eaff5217a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ae8b1635-c72c-45e1-afff-908eeeb9ad25",
+              "memory_uid": "1877a138-31f6-59a5-b666-ae57985f540d"
+            }
+          ],
+          "reason": "This reference-side schedule-risk mechanism is independently useful and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Participant-recruitment delays can reduce the prototype-modification time available between formative evaluations.",
+          "uid": "8588a648-6c37-5320-9556-d79f081dead3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4599a8c9-bf32-4746-accd-e1745298e786",
+              "memory_uid": "ceb095a9-3068-55ea-a06f-d954c121e007"
+            },
+            {
+              "frame_uid": "4599a8c9-bf32-4746-accd-e1745298e786",
+              "memory_uid": "962d7645-02b3-5611-8415-4370794c10d4"
+            }
+          ],
+          "reason": "These compared-side memories express the specification and operational use of one escalation sequence, with no corresponding participant-discomfort claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A predefined notification sequence should identify whom field staff contact, and in what order, after serious discomfort is reported.",
+          "uid": "9d173d3b-aef0-56cd-9662-d477201e8595"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4599a8c9-bf32-4746-accd-e1745298e786",
+              "memory_uid": "a3270872-1901-5d24-8ef1-374833599bf9"
+            }
+          ],
+          "reason": "This compared-side stopping rule is independently useful and has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Explicit harm, disruption, and data-anomaly thresholds should determine when deployment and data collection cease.",
+          "uid": "613b9be3-259a-57d8-b07d-eec9ff2f0321"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4599a8c9-bf32-4746-accd-e1745298e786",
+              "memory_uid": "f6dd1368-0d90-5f1a-97d0-56594ce8f4b3"
+            },
+            {
+              "frame_uid": "4599a8c9-bf32-4746-accd-e1745298e786",
+              "memory_uid": "342e4697-873f-56a8-b4a4-896efe910144"
+            }
+          ],
+          "reason": "These compared-side memories split one operational-recovery claim into restoration procedures and accountable roles, with no corresponding recovery-plan claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A field-deployment recovery plan should restore prior systems and workflow states while identifying both recovery authority and execution responsibility.",
+          "uid": "543bb500-8a50-5703-83be-d751fbf574a9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4599a8c9-bf32-4746-accd-e1745298e786",
+              "memory_uid": "6c4e9175-4590-5689-ae2b-678f0eb930b9"
+            }
+          ],
+          "reason": "This compared-side organizational traceability risk is independently useful and has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Performance-linked error reporting may separate safety records from research decision logs and break incident traceability.",
+          "uid": "df125bca-ba54-58c5-8b63-1390c83a8fdc"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only guidance covers serious-discomfort notification, stop thresholds, operational recovery and accountability, and traceability risks when safety records are separated from research logs.",
+        "differences": "",
+        "reference_only": "Reference-only guidance covers labeling uncertain assumptions, mapping resources to study stages, assessing procedural and iterative feasibility, limiting prototype functionality, and anticipating recruitment delays."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "998f25ac-0f5a-4b15-84ce-06bcfeac72cd"
+    },
+    "analysis_digest": "0019fdac42baec590f9e6a49de29dbab47d0834452cbee365e635c3b9d256e8f",
+    "key": "a18d0b391d4598511b807a0a3aa62582d984564bf1a225bbcb595e210d520ab0",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 35.07896079100101,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "a18d0b391d4598511b807a0a3aa62582d984564bf1a225bbcb595e210d520ab0",
+  "created_at": "2026-08-13T18:22:16.616987Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/feasibility",
+  "pair_key": "96f08685d64bc5b23e25d4178ba18ab75b22fe9aab4bc64c2297a37b3fd154f3",
+  "provider_seconds": 35.07896079100101,
+  "right": "task-2/advisor2/safety",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

@@ -1,0 +1,388 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:33:41.732807+00:00",
+      "frames": [
+        {
+          "context_digest": "2f00e067f4f35600b73e87b5555d405e2801a33ba18a54c91e63e23a79f27a4c",
+          "context_name": "task-3/local/personal-memory/2024/01",
+          "context_uid": "cbd2e4d6-2601-5d3f-8bf2-2f66b755b007",
+          "memories": [
+            {
+              "content": "The user's mother's birthday falls in the third week of January.",
+              "content_digest": "d635ded9b470acdd462156515700e66c23dcb513a7034bb365be0ac139ec0422",
+              "position": 0,
+              "uid": "2cd0229d-b7f1-581b-8019-25bdb485afd9"
+            },
+            {
+              "content": "At the user's last family meal out, noise from the next table made conversation nearly impossible.",
+              "content_digest": "dc337d32e4b09167289e19a6b1c8fe970e7eaa6fdd6868ed1c7c300e018fcd15",
+              "position": 1,
+              "uid": "c62f1669-11c9-5a81-b5f5-304acce69c23"
+            },
+            {
+              "content": "At a barbecue at home in the same month, the user was comfortable because no one had to raise their voice.",
+              "content_digest": "63763b293a491200bf1f7a251467c1fa8c2cb8d4d8450732c01666dcdea183e3",
+              "position": 2,
+              "uid": "674f4bdf-27c3-5870-a68e-91e4a093dd93"
+            },
+            {
+              "content": "During their mother's birthday meal, the user left a restaurant with loud music after 30 minutes.",
+              "content_digest": "560755c6f051ec6f85e32dc4ee9447dfc97418fca6f9f414f6910c518a52c2c0",
+              "position": 3,
+              "uid": "21509788-2e3d-548b-8303-f34cfea68c9b"
+            },
+            {
+              "content": "When discussing postponed matters with family, the user prefers a quiet, one-on-one dining environment.",
+              "content_digest": "f22bedcf60a64b3666a7e4363d6a55c48547535492010fcb205a182c1ee920a8",
+              "position": 4,
+              "uid": "74eaea9d-7640-51ba-aa77-9c050581dc46"
+            },
+            {
+              "content": "At a large banquet hall reserved by their older sister, the user remembered the surrounding noise more than the food.",
+              "content_digest": "566e443c69410f1672ab209ba2257604e373cd305ab27243a39574481407af71",
+              "position": 5,
+              "uid": "1384df1d-2173-5673-96f5-a4d86835d404"
+            },
+            {
+              "content": "On a day the user ate grilled food at home with their younger brother, conversation was easy to continue, so the user stayed another hour after the meal.",
+              "content_digest": "c93ccbe3524946f1def05a1b385fbe3387945f51164b00c56f1ff80b477d011f",
+              "position": 6,
+              "uid": "3cf68c8e-5da9-51d3-a402-c10f4137b1f4"
+            },
+            {
+              "content": "The user's mother considers having the whole family eat at the same time more important than receiving a birthday gift.",
+              "content_digest": "d302cf7db2b83b103ea11323ab1b9d36168d224b405d4d0dd51b46b494014291",
+              "position": 7,
+              "uid": "a1984768-d20d-59cd-84c9-cb08c6b7affb"
+            },
+            {
+              "content": "When proposing a birthday meal for the user's mother, check the schedule and attendees; if conversation is the purpose, first consider a low-noise location, then confirm the final choice with the user.",
+              "content_digest": "481169c62cf6fae6b4f29184ffacef9c3c9d825a34d1545ca592bc35537bc65c",
+              "position": 8,
+              "uid": "f52d11e2-2449-5c9d-887b-96c8b5cd0184"
+            },
+            {
+              "content": "The local agent can compare past dining environments and the user's responses, but those records alone cannot determine the location of the next gathering.",
+              "content_digest": "b05fef8420abe3c47c2cd9f2de9149c9c6bda7dca301f09ac7f94eac1a29d2fa",
+              "position": 9,
+              "uid": "c8fccfbe-7756-5d62-9cd7-403dd6741915"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "2d015458-51cc-4c24-9ebe-56cd107f63b9"
+        },
+        {
+          "context_digest": "e56d4062f59b72f23e5414f759cd9f2b09c659d820a29a979fe2edb8bfc3e7a4",
+          "context_name": "task-3/local/personal-memory/2025/01",
+          "context_uid": "2ce7ce06-145c-50c7-bfb4-cb175b9a5255",
+          "memories": [
+            {
+              "content": "One of the user's identity documents needs renewal in the second half of 2025.",
+              "content_digest": "0ade63adc8aedc4dbc0003f2cbc2759010c8bf2645a95fedd3db28b7cfbe0daa",
+              "position": 0,
+              "uid": "50911f7e-75a1-5099-99f1-e471bb8e6cb6"
+            },
+            {
+              "content": "The user postponed an application until the next day after spending time looking for document photos in scattered folders.",
+              "content_digest": "fa1703848374c3364cf49be01e115e08897e16a4ccda3c9edef1212189159ce6",
+              "position": 1,
+              "uid": "d5bd9f79-7295-5014-9668-83b7cffc78e2"
+            },
+            {
+              "content": "After gathering the necessary copies in one folder, the user completed the renewal form in one sitting.",
+              "content_digest": "133721b244e02fce2fe24312b703e59225c023d65bea31bf65decb36a18b4ba5",
+              "position": 2,
+              "uid": "5f92f6a3-1739-580c-bd63-1a936098ccd0"
+            },
+            {
+              "content": "The user entered an abbreviated name on an official form and then discovered that it differed from the supporting document.",
+              "content_digest": "d32485dcfd1311d0739bf9887a330f25bf9b3f47f077c56ec7cdb667bde20a55",
+              "position": 3,
+              "uid": "929107ac-c62d-5920-9f71-12d4c9a102e9"
+            },
+            {
+              "content": "On the next application, after comparing the name with the source document, the user did not receive a correction request.",
+              "content_digest": "e6aa9e63c72f762c00824787c3b971f2cdf76a343c336f329e5b28b0f164d02d",
+              "position": 4,
+              "uid": "df8b90c2-4310-5e89-b979-508309bf6b04"
+            },
+            {
+              "content": "The user put only the submission deadline in the calendar and missed the application deadline by one day because they did not check the issuance period.",
+              "content_digest": "995703686975cdd718d999557d4b5ca13a95c3c1eabfbb73808bb5150eda824b",
+              "position": 5,
+              "uid": "306b9df1-d713-5413-b448-e2b42376d827"
+            },
+            {
+              "content": "On the next application, the user recorded the expected issuance date separately in the calendar.",
+              "content_digest": "b83c9061bf30d64e48b74959513fd37e7ab043446dae7e4fd284102a249a1240",
+              "position": 6,
+              "uid": "870b57b5-4cdb-54fc-b17f-8ffb86dad802"
+            },
+            {
+              "content": "Staff at a public-service counter expect a person requesting identity verification to bring an original as well as a copy.",
+              "content_digest": "eae3721b7f1d905172c169c5a483d2af74aa40bced23d1bbcb8d571ab27df706",
+              "position": 7,
+              "uid": "a0fe456c-0794-5bce-8ef9-9558e9833471"
+            },
+            {
+              "content": "When planning an official application, put both the submission deadline and expected issuance date in the calendar and verify them.",
+              "content_digest": "c5b37d86ef85d5023b60578e7f5f6af1bc49711e32ecc0255bc826a743dce0e1",
+              "position": 8,
+              "uid": "111972b9-e05f-5e1b-b121-ef9e51572d1d"
+            },
+            {
+              "content": "The local agent cannot determine the current validity of an identity document without its expiration date.",
+              "content_digest": "ebc9f4fe21d4ad7e53681d32ded2c049c7d4bf57e24ef71213a5ebdbaaaee521",
+              "position": 9,
+              "uid": "c9872898-ec4f-576e-b154-ff6fda581a1a"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "a1518c44-a604-4762-a338-7a8d9b83e959"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate practical domains: family birthday dining and identity-document applications. No scope-aligned operational claim overlaps or conflicts; each side instead contributes independently useful preferences, experiences, procedures, timing facts, and limits on what the local agent can infer.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2d015458-51cc-4c24-9ebe-56cd107f63b9",
+              "memory_uid": "2cd0229d-b7f1-581b-8019-25bdb485afd9"
+            }
+          ],
+          "reason": "This one-sided calendar fact has no counterpart concerning family birthdays or event timing in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s mother has a birthday in the third week of January.",
+          "uid": "d374325e-cc71-5704-98b1-cc91104d14c4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2d015458-51cc-4c24-9ebe-56cd107f63b9",
+              "memory_uid": "c62f1669-11c9-5a81-b5f5-304acce69c23"
+            },
+            {
+              "frame_uid": "2d015458-51cc-4c24-9ebe-56cd107f63b9",
+              "memory_uid": "21509788-2e3d-548b-8303-f34cfea68c9b"
+            },
+            {
+              "frame_uid": "2d015458-51cc-4c24-9ebe-56cd107f63b9",
+              "memory_uid": "1384df1d-2173-5673-96f5-a4d86835d404"
+            }
+          ],
+          "reason": "Each member records a family meal where surrounding noise or loud music dominated, curtailed, or prevented meaningful enjoyment or conversation, with no corresponding dining claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Noisy restaurant and banquet environments substantially impaired the user’s family dining experiences.",
+          "uid": "702f64e3-636e-506b-b4b1-e7d0d2a2f964"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2d015458-51cc-4c24-9ebe-56cd107f63b9",
+              "memory_uid": "674f4bdf-27c3-5870-a68e-91e4a093dd93"
+            },
+            {
+              "frame_uid": "2d015458-51cc-4c24-9ebe-56cd107f63b9",
+              "memory_uid": "3cf68c8e-5da9-51d3-a402-c10f4137b1f4"
+            }
+          ],
+          "reason": "Both members describe home dining where voices did not need to be raised and conversation remained easy, an experience absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Quiet meals at home supported comfortable, sustained family conversation.",
+          "uid": "36025161-561a-5029-aa74-0d6901d44b7a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2d015458-51cc-4c24-9ebe-56cd107f63b9",
+              "memory_uid": "74eaea9d-7640-51ba-aa77-9c050581dc46"
+            }
+          ],
+          "reason": "This conditional setting preference is independently useful and has no application-planning counterpart addressing the same decision.",
+          "status": "RESOLVED",
+          "summary": "For postponed family discussions, the user prefers a quiet one-on-one dining environment.",
+          "uid": "bfa5cfb1-7411-5a2c-80a0-dc3b58b22f0a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2d015458-51cc-4c24-9ebe-56cd107f63b9",
+              "memory_uid": "a1984768-d20d-59cd-84c9-cb08c6b7affb"
+            }
+          ],
+          "reason": "This family priority appears only in the reference frame and does not overlap with any document-renewal claim.",
+          "status": "RESOLVED",
+          "summary": "The user’s mother values the whole family eating together more than receiving a birthday gift.",
+          "uid": "d4901d19-e0d6-53ea-85dd-197dec44baad"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2d015458-51cc-4c24-9ebe-56cd107f63b9",
+              "memory_uid": "f52d11e2-2449-5c9d-887b-96c8b5cd0184"
+            }
+          ],
+          "reason": "This composite planning procedure governs selection of the mother’s birthday meal and has no counterpart governing that decision in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Birthday-meal planning should check schedules and attendees, favor low noise when conversation matters, and confirm the final choice with the user.",
+          "uid": "d4aa2d9d-522a-5b3e-9f79-0338dafd22c1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2d015458-51cc-4c24-9ebe-56cd107f63b9",
+              "memory_uid": "c8fccfbe-7756-5d62-9cd7-403dd6741915"
+            }
+          ],
+          "reason": "This limits inference about a future family venue, a decision distinct from assessing an identity document’s validity.",
+          "status": "RESOLVED",
+          "summary": "Past dining environments and reactions alone cannot determine the next gathering’s location.",
+          "uid": "722975dd-47b1-5cad-a11f-dedda63118bd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a1518c44-a604-4762-a338-7a8d9b83e959",
+              "memory_uid": "50911f7e-75a1-5099-99f1-e471bb8e6cb6"
+            }
+          ],
+          "reason": "This one-sided renewal timing fact has no corresponding identity-document information in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "One identity document requires renewal in the second half of 2025.",
+          "uid": "0db66758-c6a0-507f-8f6c-ad2066081f65"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a1518c44-a604-4762-a338-7a8d9b83e959",
+              "memory_uid": "d5bd9f79-7295-5014-9668-83b7cffc78e2"
+            },
+            {
+              "frame_uid": "a1518c44-a604-4762-a338-7a8d9b83e959",
+              "memory_uid": "5f92f6a3-1739-580c-bd63-1a936098ccd0"
+            }
+          ],
+          "reason": "The paired experiences jointly express the application impact of document organization and have no counterpart in the family-dining frame.",
+          "status": "RESOLVED",
+          "summary": "Scattered document photos delayed an application, while consolidating required copies enabled completion in one sitting.",
+          "uid": "0e1302a4-aa93-51e4-b5b4-70e9e5dcd26e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a1518c44-a604-4762-a338-7a8d9b83e959",
+              "memory_uid": "929107ac-c62d-5920-9f71-12d4c9a102e9"
+            },
+            {
+              "frame_uid": "a1518c44-a604-4762-a338-7a8d9b83e959",
+              "memory_uid": "df8b90c2-4310-5e89-b979-508309bf6b04"
+            }
+          ],
+          "reason": "The two application episodes contrast an unchecked abbreviation with a successfully verified entry, forming one one-sided verification claim.",
+          "status": "RESOLVED",
+          "summary": "Checking the entered name against the source document avoids mismatches and subsequent correction requests.",
+          "uid": "e64970d7-9f0e-5b0c-8e2b-d37171948678"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a1518c44-a604-4762-a338-7a8d9b83e959",
+              "memory_uid": "306b9df1-d713-5413-b448-e2b42376d827"
+            },
+            {
+              "frame_uid": "a1518c44-a604-4762-a338-7a8d9b83e959",
+              "memory_uid": "870b57b5-4cdb-54fc-b17f-8ffb86dad802"
+            },
+            {
+              "frame_uid": "a1518c44-a604-4762-a338-7a8d9b83e959",
+              "memory_uid": "111972b9-e05f-5e1b-b121-ef9e51572d1d"
+            }
+          ],
+          "reason": "The missed deadline, later calendar practice, and explicit directive all support the same one-sided scheduling policy.",
+          "status": "RESOLVED",
+          "summary": "Application planning should separately record and verify both the submission deadline and expected issuance date.",
+          "uid": "af4420aa-2cf6-5d8d-ba32-fef6dab5a1f2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a1518c44-a604-4762-a338-7a8d9b83e959",
+              "memory_uid": "a0fe456c-0794-5bce-8ef9-9558e9833471"
+            }
+          ],
+          "reason": "This application-material expectation is independently useful and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Public-service staff expect identity-verification applicants to bring both an original document and a copy.",
+          "uid": "9b4f1e47-ab39-5f55-a101-e5df1d835f22"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a1518c44-a604-4762-a338-7a8d9b83e959",
+              "memory_uid": "c9872898-ec4f-576e-b154-ff6fda581a1a"
+            }
+          ],
+          "reason": "This limits inference about document validity and is operationally distinct from the reference frame’s limit on choosing a gathering venue.",
+          "status": "RESOLVED",
+          "summary": "The local agent cannot determine an identity document’s current validity without its expiration date.",
+          "uid": "5cf4bcdf-9331-592d-812c-cc1bfe6a6d0f"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers renewal timing, document organization, exact-name checking, calendar planning for submission and issuance, an original-and-copy expectation, and the inability to assess current validity without an expiration date.",
+        "differences": "",
+        "reference_only": "The reference frame covers the mother’s birthday timing and priorities, the user’s contrasting reactions to noisy and quiet family meals, a preference for private low-noise conversation, a birthday-meal selection process, and limits on inferring the next venue."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "dfbc5775-7317-465b-a7be-046c061fd0c1"
+    },
+    "analysis_digest": "e52e1e9ecc51d1e7742527171ab0c23eaac4c88fa5a2dd132dfde3a11b3eb59a",
+    "key": "9d605f70480227a9655060e55470d0d1be847b35eeb3f36ffa6c93b61a934932",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 42.30855833299938,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "9d605f70480227a9655060e55470d0d1be847b35eeb3f36ffa6c93b61a934932",
+  "created_at": "2026-08-13T18:34:24.041294Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/01",
+  "pair_key": "d4fbaeeecfefe30d747d4c9d247fe967c51ac7dc33a1a8ed3f617932570f1e2f",
+  "provider_seconds": 42.30855833299938,
+  "right": "task-3/local/personal-memory/2025/01",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

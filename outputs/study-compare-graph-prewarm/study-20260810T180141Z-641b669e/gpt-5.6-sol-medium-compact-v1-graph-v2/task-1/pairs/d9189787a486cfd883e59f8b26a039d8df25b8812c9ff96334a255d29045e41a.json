@@ -1,0 +1,1387 @@
+{
+  "coverage": {
+    "expected": 309,
+    "observed": 309
+  },
+  "created_at": "2026-08-11T00:06:21.658868Z",
+  "description_digest": "17a794e48857a8178811052488c3bd4cc66e9029847f2ce038825e49ed5afcc8",
+  "issues": [],
+  "kind": "STUDY_COMPARE_GRAPH_PAIR",
+  "left": {
+    "context_digest": "ef4fda9c2e859fa635c7e952a931d60a4f435e46d351cc7a65b343af6396d32a",
+    "context_uid": "a63350c9-cff1-5f32-a091-57e3cef17a77",
+    "memory_count": 300,
+    "name": "task-1/campus-wiki"
+  },
+  "method": "COMPACT_FALLBACK_EXHAUSTIVE_V1",
+  "operation": "COMPARE",
+  "pair_key": "d9189787a486cfd883e59f8b26a039d8df25b8812c9ff96334a255d29045e41a",
+  "provider": {
+    "compact_provider_seconds": 152.5144328329916,
+    "compact_validation_error": "Every compact group must be used by at least one source Memory.",
+    "condition": "COMPACT_WITH_EXHAUSTIVE_FALLBACK",
+    "fallback_provider_seconds": 213.85825529199792,
+    "provider_calls": 2,
+    "provider_seconds": 366.3726881249895
+  },
+  "relations": [
+    {
+      "comment": "The construction condition preserves the reference’s ordinary-route description while establishing temporary unavailability.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "6ded9e53-4073-5911-82c6-b3981c2daf98",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "8017409a-8af8-5a55-a49e-e9ccb44b9f34",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000001",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "The compared claim changes availability only for the explicit construction period, not the route’s physical connection.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "ee271f65-7387-52f2-8e6e-23ad7f224f03",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "dbb3c40c-7699-509d-901d-be9de2f110dc",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000002",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "The construction condition explains the difference between normal route utility and temporary closure.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "a81363fe-3ae5-5213-a555-e447515a1a73",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "8f2f2422-0ac3-5dc2-8a17-871c0deedcf3",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "6c4eeef5-0905-5923-b201-666b504b95f1",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "2d20c61d-ff20-5bb6-bcdc-3dcbf6c3e21f",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000003",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "The compared claim preserves the normal preference while adding its construction-specific consequence.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "4369c450-1ca1-58e7-b98f-c087552a0a5a",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "a8bb36e1-2629-5b8f-b4dc-af9b88020dc9",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000004",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the compared frame supplies this destination-specific direction.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "8276ab56-741f-5f60-ab77-79fe6dc0ba55",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000005",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "The reference describes the route’s segments; the compared frame adds their construction-specific designation and official entrance.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "494bc428-f0be-5a21-9475-14fc405c9fda",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "b7802de6-8e3c-5e90-8e2e-b7d949009352",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "065b33d3-3aae-5aa2-b9f0-f779f612e0ea",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "9af0f95c-0a5e-584e-ba7b-92789e071f7e",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "fd27f19b-5f2c-51ee-a9b2-7182120163cb",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000006",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "The general open-route policy and the construction-specific comparison rule jointly govern route selection without a missing scope distinction.",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "02df0e1e-fc32-5136-a0c2-5af11f99293e",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "78ebae58-9630-5674-90e7-a35951661d19",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "638f272f-9fbd-5d1f-bfd8-b01618424065",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000007",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "The compared claim adds a construction-specific precaution to the ordinary preference for the sheltered indoor route.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "f9832b10-f7cf-5ac0-a7bc-9e9da6ca3646",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "ba9d70f9-02c4-56d9-ac23-f2a532c22488",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000008",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame supplies these independently useful building-access policies and facts.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "1cb2aa88-4c31-5bbc-97be-ba2ebcef1388",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "a8b11b27-70d5-5077-98fb-678635369dad",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "62214c26-4b23-5c6b-ba8a-2fb585d39421",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "4902feb8-567c-5eb9-a817-726975164f16",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "c6b97453-d8d8-5aa9-baff-e2981ec4e9e6",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "614389e2-3b83-5fbb-bac1-07cb20f2e4fa",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "e3929a49-e9b9-566c-bdc2-296ad7ee086a",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "4ed338df-7bd0-5801-bb3b-535886f6d007",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "2af35f74-abb5-54ae-aca6-7d315270ae57",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "c30faae3-e8de-530c-a279-cb7a33133bc8",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "5b1a6f72-c56d-515f-bb2d-9cd443275bff",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "b6987cd9-7198-56b5-bf6f-0162624db30f",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "f80ad345-f0ce-54bc-bd8d-e2f0e1f1b1c0",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "732458c0-fedc-5bc7-965e-36f8d46c4d8a",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "cb1e0734-91ce-53f3-b00c-da4734df5cb5",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "36db4bf8-285c-573b-8127-0efa0c10f8bd",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "804bfc6b-188b-5579-bc83-10b04a28bd69",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "cc2a0d18-0b49-5923-9b53-2e68140b13a0",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "3ca6b6b2-c381-5247-83cc-cfad0ce862f7",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "4a01fd2b-fb4d-5759-88c9-1b6de1a30331",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "78298531-74b8-591b-ae32-b6175f476ca7",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "4189e656-a4ef-5fe0-af68-943d86e83a83",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "aee44d0a-5c4c-59ec-b350-b229570fbd09",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "d2f32d9e-7b85-5720-ad36-80c6f5f1c071",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "2d97d6b9-4287-5f52-9801-26d2081b111f",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "fef275b1-b2c1-5cc5-8f75-a1d01782a1e0",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "41d5bf0b-9a62-5821-b3fd-60f58ce2d980",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "7da885c1-0515-516c-ad1f-2a445db9b324",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "27f6e089-b303-59da-ba5d-4a845961c466",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "5e9fc7b5-cfb8-5e3f-9a53-35568e0fd216",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "bb601c38-6e41-5328-a7e0-117a8a101e49",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "efffd1fe-923a-5f12-bd50-afd997a41209",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "2b2642c9-32ff-51d5-8a3c-e48d64e191ea",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "e55771f0-7a62-5b9e-aa16-97beafed30fe",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "2ed45e16-4f36-5ecd-919e-65c622c1b493",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "9374def9-c634-5af1-96d8-4d7163608027",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "70fe5986-785a-51be-ad59-3e53aab0abb7",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "411fa9fb-6bf1-5514-8433-d6e1c186260c",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "66b1d3f3-b59f-572a-a729-012a3101cb98",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "e99d3f15-48ee-5dc7-8eb2-52ea2d725a09",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "430563f2-c0f4-53ee-9846-2ecd3f57877c",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "2052527b-612c-5af8-974a-ed21323a3b1a",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "5bf2c18d-2844-5471-a790-fa6b4689fb37",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "38a17415-7c46-562c-bb10-9fa23de62291",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "625a9fcb-4609-5a1d-b6af-437e5c722458",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "f3f4e4ff-720d-520f-ae1f-53823c277f1e",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "e3435ec0-eae9-560c-a2ef-76a89761386a",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "a24cd65b-b2c3-515e-997b-77a6e143c992",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "22dcad33-41cd-5b46-9df6-a98d005f03f3",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "da9f2a7d-5b3d-532d-928b-bab7c97f500b",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000009",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame supplies this coherent event-operations policy set.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "a0700edb-d51a-54f3-88e9-6096cec36b1e",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "63986020-57b0-574d-aa13-277405aed516",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "a2ec4e87-1f0c-5c29-af2c-5bb560286a2e",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "11e4782c-aad4-580a-9620-beab3072266d",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "ec3a4511-80d6-5881-9623-25a75c6a0899",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "a224b6db-0154-5174-86ff-9c1dfa558762",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "50369ec7-7a24-55e3-898c-d9dc9a4c86ed",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "a3c819d4-5ec6-5622-a27f-ce8b6e18b2d0",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "2a0f0a0e-1930-5983-9074-de449f8669d5",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "ed4e7c60-edeb-59e3-a590-f6e359069f77",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "0170aa1a-9723-5f87-9aa3-37150022f6ac",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "1929991c-36ee-5897-9409-d83400120362",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "c7b42a0e-e4c9-53d2-b2b5-87307bb4957f",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "a1b88b90-3b59-5f36-8ac4-e45f1962ae64",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "c4fe128d-067a-528d-8ef8-b2810e56884c",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "b79a722a-c043-5e7f-8469-1c761d85219a",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "4bc2268d-5966-53bd-9501-e8fb0861ddd0",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "d8cc31a3-a547-5691-92a9-efcb1c96367d",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "087bb085-9bc8-57f3-83ee-7e90895904ef",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "bf506b28-8854-567c-80de-477512ae1f11",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "5015ee36-4f8c-54c7-ae80-caa21c1c837f",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "bc10fe3c-0618-5c74-91c9-e50ef58d287e",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "a2b87746-8b25-5f2e-b5f9-78b2d8f8281d",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "f995af31-6820-58b1-a805-3d2d03c75014",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "cc720c59-0014-5460-9ccc-94316c641a3c",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "a72cb1ad-ea1d-5e17-a5cd-06b082340d0d",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "c70f4d03-7cc1-528b-a5f8-5944c2012b10",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "55540a25-fbd0-5cc8-b2db-b83ac4042735",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "9e496450-0188-5f64-84b2-295cd1e9c5da",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "819beea8-c827-53e1-9a95-cb22de35f9ee",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "a4c8e1a2-81e8-52a5-92cd-c79a382cb671",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "7795aa61-2921-549b-996c-64240f8e9b2a",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "fdae8ad0-8b99-543b-8c09-f0af60653036",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "232cd8db-6319-5bd0-a4b9-5861838268e3",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "3329f2cc-afc5-559f-bc3b-ea82df8881d1",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "f986e70e-4775-5ab3-9d8e-3ea9fc3df540",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "13211336-6483-5331-96e5-24490ce7da63",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "22f9c5bf-d01c-59e0-90e3-0cf93bdae8b6",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "e9c632bf-da2a-5b8a-86c0-87da4a8f3ffc",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "8ec61da7-e53e-5ef4-b7e6-edafc872ffd8",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "5fa014b2-5fca-581b-b07a-7990cea080af",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "bb2aa827-e021-5b02-b7ed-e005ca2c291b",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "cc2a4dc4-bf8a-5902-8ee1-c3c334549ef2",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "5bc6cebc-fff5-59e7-bec6-b6d8d83feb35",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "a32a3a9f-4d3e-5727-a91a-ce827831d7d2",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "ff9fa75e-f040-54a7-b4b6-30153da4eebd",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "83b95f40-46ad-54f6-b535-85e99a83ee99",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "d68f7446-40e6-54bf-b812-313b2595c2c8",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "4510b985-b70a-5606-8bbe-98bf494ab656",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "2fa16a36-c2d4-5fcd-ad8f-29780fc0bf06",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000010",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame supplies this coherent parking-operations policy set.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "5d690022-0ab6-52ed-b6a1-77d719c8c6ce",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "6960c0ca-295d-5449-91dc-d9293a6bb79d",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "67d07765-ac5f-58f6-b7a5-f733cc4228d2",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "489960d6-711f-55d0-a410-16bcd6e9acf8",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "df455ec8-c30d-5607-a9b8-8f84d93f0617",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "6a37c02f-4843-579f-b5b1-f90d6dbd0e5a",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "ccf54508-b01d-5fe5-bad3-083e3ce211cd",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "1a4e603c-7f69-5bfc-b974-281dc8618326",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "3bd9a7e3-af83-5d3d-9cca-0a3926c446e1",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "879b70b3-1404-559c-9cdb-9fdca1289e44",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "c89147c1-1b06-5e93-97a1-85d59fd33e57",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "c9b6827a-36c3-5895-916c-a7066f398f5b",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "07101ab9-cebf-5fd6-8967-2ea16a80d03d",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "39b76444-a4f8-53c2-ae7d-9ee71de43eea",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "9514e9f2-d556-50dc-8739-01c37b3322fc",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "9acc9ad2-3a59-5b37-9f08-010fe8731a79",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "6a38e1b0-b9bb-5941-aa03-3f29b492feaa",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "7063d138-91cf-5dbf-b7af-bb0451dd342d",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "efbe330f-eb79-5a05-8ef8-0664355d320c",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "c0ac84d9-367b-5809-856e-9f0d6c471b2b",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "96092024-bab8-5c6e-b100-ff87e06cb760",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "7b323c8d-eddd-5041-aee1-bbd8dbc06918",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "8180f5e5-fd9f-51a7-b239-c75a86c20da6",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "b7f4ae20-3bbf-51dd-b230-81c5e5107e48",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "27246135-eca5-56ed-81c3-bb75584703d6",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "dc40ae37-6f8d-5864-aab1-59462c325af3",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "077234a0-bc91-589a-8d91-2cdd1180e9a1",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "c578f6a4-6065-5752-950b-e79ff7228ce7",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "38ce79ed-cae6-5a9e-bdba-eb92559ebaa8",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "7471f5bc-555a-5db4-838e-74723bbd55fe",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "340389ed-6852-509c-a278-78bbbad4beb8",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "f617356c-98ff-5d40-a41b-dd4be0c8c311",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "35576f85-e20a-5bed-a9fd-f47e867c1fce",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "3fc6abeb-db56-5a34-ae34-b4cd394723c4",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "308c9814-4989-563e-b9dd-306be896940e",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "8061fc97-13ee-587e-ba5d-09ca5fb72171",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "7d5bdc29-c284-5027-bc5e-6589b53ab5e9",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "a77dadf9-5d20-57aa-bb81-b35058832bc6",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "012add6d-ba82-5674-a432-0c092d575d21",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "6ca42597-3142-5f24-9f29-14c694bc83e2",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "f1283ab9-f63b-5249-ac89-2dcc6f3dbee4",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "db986c20-8190-5a89-87db-4c56c5d6c82d",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "1a0b250f-c4f1-5a9f-a114-5420a859dd32",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "f201604e-92ae-5315-8359-5e68dd9eeecb",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "b5466afb-8d3b-51b0-8e44-9fd47165fe17",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "38b6565e-25a0-5b7c-ba03-747c1901af7e",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "11d0062b-7941-5512-b5dc-f2d1379741e6",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "a299c675-7179-5cb1-b5e4-552198bdc91f",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "a671229f-9c73-5183-bec3-8d23d0dd8d53",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000011",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame supplies this coherent amenities-information policy set.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "9e6dcc99-d2d7-54bd-adbf-ca20ebf22f83",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "3ecf1523-62fe-5bb1-be29-2b4a9b3384df",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "2e45bd48-390e-5b77-9082-fec388b4bd9f",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "5f686fb7-fc7a-5698-8cc5-d5ccff25dfe1",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "df0dbcfb-86c8-52a0-b303-71a6e2dfa4c6",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "65a4b93f-f1da-52c0-b013-34c876391794",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "ed7db155-c6c8-5a91-a574-fc44b081a92a",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "ce4dd3c2-790f-5ef7-b851-e693f750c1ef",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "46192dec-18a4-5404-b3fe-5c0c42be97da",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "644d9c0b-c300-51e4-b680-4318328aa4b9",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "b03652e7-6a61-5dd6-8484-f19f93536d59",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "5f43f896-6a76-51f2-b034-221955b4165f",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "b0fa660c-d579-5c27-bf74-c9b3839fd36d",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "16efed59-7583-5467-828e-b856ccf7c5e1",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "150a226f-2cfb-523a-ae59-a37becaa4310",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "0147df04-89c5-56a0-b119-5b6baf57bb29",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "91791ba2-e7cc-5437-9855-e10726378d20",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "39b4d014-8b9d-55ac-a5c2-ccc3e948a721",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "6248ac88-de59-5039-b01e-328669694909",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "a64be11d-06da-56b0-9dcb-9c26b75a1cbb",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "cf273ead-e557-5449-bc44-28b3fa5c1dc3",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "124a8981-a1c3-518a-a2cf-8c128b2e0c73",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "451e08d8-5b71-5655-af71-94e99eb46cb2",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "ad2ae9ae-4630-5d1d-8930-ff5e61469bed",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "5b24402f-f130-5110-aa9b-3d7d781d43f9",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "4b9bdbce-dc56-5ed3-b79c-a5dfc5bf586e",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "d0fb793a-0864-5db7-a568-3fc424ae126a",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "3b64fba2-0530-5ec2-87f0-858e0b15445a",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "7930a9bc-37f3-5344-8aef-9111f1007813",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "3e06443d-ca8e-5f52-8500-e4c961bd45b7",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "815ce86f-370a-51d0-8cb9-82aed0352946",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "07312b3b-fe85-51cf-8f96-b11cb830a5dd",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "56b07b71-d6b0-5cde-b3ca-e165ea0275f5",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "dc4bb95b-4196-552e-91c0-1f788dc081f7",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "eb08465c-7591-57d2-a932-ae4db8b73ef2",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "8a8f4943-ef7d-54d2-b797-25037a7b9ad7",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "53aa3f6e-1be2-5ccc-80c7-003286636621",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "3b187e27-31b2-543f-8c62-6b43135e7b40",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "fdbea8e9-d79b-5b0e-9742-406883f5aef6",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "209ddf18-2029-5fd1-82bf-e382dda2cf01",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "8d71aef9-b9e7-5ee5-914a-95a943c18090",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "fa47663f-27a3-5962-ac4d-b2f7a905ec6d",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "cf4cd9ec-c404-5fd8-bf58-2a68bd406fd0",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "1ff36f44-d288-52db-9f58-aa17a80a6259",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "3534e0d3-d005-50cc-bafa-887b1e0918fc",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "027bc3db-3b45-5d27-829d-678ecb2fed9e",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "45b26dcc-e2bc-554a-aeae-91aac780b121",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "c66e27a1-f73d-5da2-abfb-c14b76e2bd2d",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "0dfe62b6-7d78-5dc4-8ef0-e1fa8227dee5",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "5ea2bbd5-fc53-5bae-aaac-30aaa3e785da",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000012",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame supplies this coherent facility-directory information.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "d79aa629-3e49-5c45-993e-c80efc278889",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "50135594-9d2a-554a-9552-c74d35b60b4f",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "0a35d46b-a369-560e-8363-0844ad4f9ea2",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "b117c1ba-c88e-52ca-8dde-ccb21661e910",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "2a06fd43-23f0-5d12-8d7e-d8e1df97176c",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "6620e427-90a1-5f6c-9e99-12bd39277c3a",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "a1f3fd8f-3c17-5020-a6b0-e50bde147841",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "d307ffc0-44d6-52d8-9ad6-f76651f2603a",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "df86c8e5-275e-51d8-8e51-b4827e71d226",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "7f6b1eaa-72a9-509e-85e2-a3abdccbe8ac",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "69e3647a-9987-5052-8d81-a231f73aeec7",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "250dc7c8-024c-5d51-9bd7-e2eefbded504",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "d05a9731-1c25-5d54-b8a1-65195ca18327",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "fa07f2f5-bb84-56c0-9b9e-85e32b47453d",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "7aced411-0d52-54ba-96cf-6b7fefcf1ea9",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "2df2602b-fa8c-5715-a7c7-1606037e3b6d",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "24ad69ce-b1f5-5bde-ad59-d637f261cb99",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "11f4d4a4-85d0-5780-90f6-8d6e7edc10c6",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "411a27b6-e540-530b-a5b5-764e26855173",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "bd016a0a-0be5-52e9-a549-102ea5fe0148",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "1582377c-501e-57cc-9cd0-f3281289a2fa",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "16f54319-1da3-5a17-830b-6524fa183511",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "e06a605d-d4d2-5308-9cc5-b1cae7469f36",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "9da215bb-7f87-583d-9bc2-23e08305d4f1",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "710369be-287c-5c29-9da2-9631d099500e",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "e9107328-9e4b-5dcf-a74d-22c90a23b5e0",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "076ffc9d-2681-59f2-8f8f-1435c49c3f17",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "ba35ad87-8285-5130-add8-fc694deeb8f7",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "e59de198-f9a2-5f3f-be66-43eb9deab632",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "a3f16328-2a27-5b18-b802-11036a6d2be6",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "c6894aba-7d8e-5448-b775-e0303efb15d1",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "666e872c-e71a-5c64-a5cc-b12d2aac9916",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "b3bd402a-5af7-58df-bbcc-2857c956fa74",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "b33a6790-d94b-51d7-a737-92b9793a466c",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "70b6e9b8-4a12-5e39-a564-9de4e3882337",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "6132cf14-ab1b-54a6-aa32-c1039c8ab0e7",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "10e2336f-921e-54c3-872e-218a6e745277",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "0ce575cf-f16d-5434-9ac5-00d454d90a09",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "0fa245a2-0f0c-5ef4-9c6e-04faa98c9f5f",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "7b821e8c-2e26-52d0-b34e-314a614eeb26",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "9ab67289-f3b1-5918-9965-ecb4ab743400",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "e7272a72-48a5-544b-8771-9c9872ae34f2",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "f7817017-85a2-582d-bb63-2b77cd2e9311",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "a2c599c9-1218-5d37-a866-66222eb5e226",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "fdf4ee37-1183-5923-bccb-2c2b2d55cbb3",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "cc098a87-de11-594f-b59c-126a2cec29bd",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "b1e19dc4-db1f-5328-8448-aac4d37451d7",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "d842f429-c182-5fd0-baf8-8f023b85632f",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "90c6d663-e63e-591c-99c3-a300a7e7e253",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "38daa1a2-70e9-5815-957a-41c95ed6119e",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000013",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Only the reference frame supplies these general wayfinding facts and policies not otherwise assigned to construction relations.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "8a953afd-7a48-52e8-b48a-38d8c49b55c5",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "b54ac954-0a84-502c-a096-a4f85a0d317a",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "5e23ba3e-d573-54c3-99b0-fea607a63e46",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "9f4c539b-1205-5ed7-a441-d9a46615ea01",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "759a38f7-7b7f-5eae-bbec-f00df27c9f4b",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "f0864b5f-4148-5c8c-a778-de0a028146d7",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "056cce65-dd73-50e6-8745-27d4d71effb1",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "084210ca-d235-52d4-9801-3e78c7d53454",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "1fa0cf4f-6bc2-50f6-90a7-871b286b00bf",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "c33f2c68-d304-51e0-8489-7e8876775cfd",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "fd111f85-255e-5c35-acfb-b860f35cc4a8",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "4bad21e5-cc32-5995-93fd-d0938a41d427",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "d1aaec66-fff8-5270-b939-cd8877f75339",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "79728c8e-66d0-574d-aeee-2e6e4a928db3",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "41f16b3e-4ab3-5f38-9942-7e8896fec3b6",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "2af1d276-7a46-514d-b8c8-cd9f1e2a9ef2",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "cae9af0e-9225-5193-b581-5b2d8096fc14",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "a1617fa2-fa36-5af1-91c9-a8924ae1f5a9",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "03c25e0f-3cd1-5a27-a806-0d09664a3fc3",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "6fad00c2-1f97-5377-8a3a-b36d19705d4b",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "c3558237-458f-5487-8718-0c48b9bdf568",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "09862f9d-91cd-5e36-b6b9-b042b5d84d5b",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "034676e0-f7b6-52ea-90a3-e6d3f656bc2f",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "4dcddb86-e56c-552a-810d-c04a1934b475",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "ddcc1848-f9df-5772-9e9a-0c6ed42e557a",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "0a78908e-a479-5e5a-b54e-b09f2cb1f7bc",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "80355a5f-5170-59b1-82b1-517c5c20a1bb",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "27e0d8cf-02ac-5b42-8970-da451a27e055",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "08d5128e-e371-5251-a3e8-acf488ccbc59",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "d7a22205-1d0a-5106-a764-fc2e97769bc8",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "2db61a85-42af-5b31-b070-5ba2ef965cc7",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "5a6b05a2-e14b-5b88-a9b7-58db2e3b2845",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "49a1ffe4-b705-5503-9853-e755bef73239",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "2742f895-9179-5e72-bef7-2ab08c68db2c",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "3b535b19-637b-5f2a-8441-8c509e7a1bfa",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "2f6bcece-e018-5b44-8936-430839892e49",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "675f922d-084f-54bd-bc38-f7aae69a370b",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "30e5c146-ea97-5317-bf6f-dedbffaeaafa",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "da43a5f5-41af-5a8a-b867-b854fe4c4ae5",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000014",
+      "status": "RESOLVED"
+    }
+  ],
+  "right": {
+    "context_digest": "89449289c4bdbb1e379336d3718b50c3d3bacfc5e8fb80fcddc92a133d106896",
+    "context_uid": "725d4213-9ce1-569c-9e91-e4cd0d046bd5",
+    "memory_count": 9,
+    "name": "task-1/participant/construction-updates/route-changes"
+  },
+  "schema_version": 1,
+  "semantic_content_in_participant_report": false,
+  "state": "EXACT_PREWARM",
+  "task": "task-1"
+}

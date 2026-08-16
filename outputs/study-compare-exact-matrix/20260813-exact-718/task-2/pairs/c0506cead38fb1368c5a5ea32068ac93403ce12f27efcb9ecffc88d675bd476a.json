@@ -1,0 +1,302 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:28:12.720309+00:00",
+      "frames": [
+        {
+          "context_digest": "587a9d2fb6abf2b486ccfc50ff85ae7280d7d7bd4003d85ce5877a4edfc9293f",
+          "context_name": "task-2/advisor1/terminology",
+          "context_uid": "7699c7c5-e48b-5548-b0aa-256d793c6c06",
+          "memories": [
+            {
+              "content": "Use the same term throughout the proposal for the same interaction concept or interface element.",
+              "content_digest": "2f11d02134609c6397d8f60105cc452e34129bc1c427a512455247e54951f18a",
+              "position": 0,
+              "uid": "949a884d-b348-5fa0-b1dd-adbebafe10a9"
+            },
+            {
+              "content": "Use abbreviations only for recurring terms of three or more words.",
+              "content_digest": "dcceb4407d24df4034dceca613413471bb46898a487aed0cc0905e48ede482e7",
+              "position": 1,
+              "uid": "2f484151-b5fc-51a9-8a88-b30a403617b3"
+            },
+            {
+              "content": "Present the full name and abbreviation together when using an abbreviation for the first time.",
+              "content_digest": "02e1b2b4cbc8f9a61e299bf1500663ae8cd4036155b2a7dec8c2ce40087ac29b",
+              "position": 2,
+              "uid": "21131a6f-d35c-51e3-895f-46cd21a3b566"
+            },
+            {
+              "content": "Prioritize the research role over diagnostic labels or deficits when referring to participants.",
+              "content_digest": "7b99c6ec90abdbb68d4af8e95a03df3149b9d2d4d637fbd33a70a2acf7073a12",
+              "position": 3,
+              "uid": "e02c3110-05c4-58a4-8d76-c8fd2426a0d5"
+            },
+            {
+              "content": "Reviewers from different subfields struggle to infer undefined abbreviations from context alone.",
+              "content_digest": "13af5eb9fe88f3f2d73192adfb48f7a20de09e22e777a952daa83ca1c030f9ee",
+              "position": 4,
+              "uid": "af028910-e48b-5605-b92b-9378bdfa525c"
+            },
+            {
+              "content": "Use the term formative evaluation for studies seeking design modification evidence, and distinguish it from final efficacy judgments.",
+              "content_digest": "4ba9bca850286ff6286cf4b3bf44395d608ec700c46acd8cd26c54e26d43b378",
+              "position": 5,
+              "uid": "39792d18-2be0-5135-a063-c5213247d330"
+            },
+            {
+              "content": "The user can have contribution labels such as principles, models, or guidelines approved only if they align with the abstraction level of the actual deliverables.",
+              "content_digest": "efed93b748ce74e3e9ed96949bf539c809ea4c36ae77bbb54670285f691f74e9",
+              "position": 6,
+              "uid": "bcaa8c30-ca6e-5b9f-af93-88513a2f16b1"
+            },
+            {
+              "content": "Design principles describe the relationship between conditions and outcomes rather than serving as instructions that merely replicate a single screen layout.",
+              "content_digest": "22385c2bb345db07d19c442e5d99a5c527c2795848b9e29fe198d0ede6255d6f",
+              "position": 7,
+              "uid": "82ad9fe2-4063-5e89-9097-c975aa2920cb"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "dbb0501c-5a88-4c0b-8a7b-a57c2fb163c9"
+        },
+        {
+          "context_digest": "4efbf2f6c096022137cee2c075c75219bb4fd0f441579901b8445bb2d92101f5",
+          "context_name": "task-2/advisor2/budget",
+          "context_uid": "ae02c2b2-49d3-5c30-b686-81ea17a8a87e",
+          "memories": [
+            {
+              "content": "Keep the main text to the total and major categories, and place quantities, unit rates, and assumptions in one compact budget table or appendix.",
+              "content_digest": "2e0d76a9c09d14facdf93e8b82cb1c4f583b8a6063b74552f2c23b7d37224e9c",
+              "position": 0,
+              "uid": "d614b55d-d9f6-5347-8d02-2d219d621a09"
+            },
+            {
+              "content": "Give each cost category, quantity, unit rate, and subtotal a stable row in the separate budget table.",
+              "content_digest": "ecd8aa50fc469bb763f36784d140b871b82a283b39f30f46e9e166776321c602",
+              "position": 1,
+              "uid": "24500129-4b07-564f-ba67-39e40d7d7860"
+            },
+            {
+              "content": "Put the estimate basis in a dedicated table column so one assumption can be checked or revised without rewriting the narrative.",
+              "content_digest": "6ed604ab2ca300f215d13f18cb5344e9322635ad047ce36c08242765e7fb09f4",
+              "position": 2,
+              "uid": "07bad409-af9c-512a-b829-7ceb28273f91"
+            },
+            {
+              "content": "Readers can verify arithmetic and compare categories faster in a consistent table than in amounts distributed across prose.",
+              "content_digest": "1dc966a0ade3af3bc636cb99d456edbdb918c2a23efd4a5792db9f8ede061195",
+              "position": 3,
+              "uid": "abf6d361-c2eb-512f-87e0-f3af9c5eb677"
+            },
+            {
+              "content": "Revise one table row and its subtotal when an estimate changes instead of repeating the new amount across several prose paragraphs.",
+              "content_digest": "dcd7d010f7d2c1898fffe71ccc7a0067233dcbcf66fe4b429043b1900d097f84",
+              "position": 4,
+              "uid": "473cf3ca-9832-5d9c-97df-974f1d9b0d1b"
+            },
+            {
+              "content": "Keep detailed arithmetic out of the main argument when readers can reach the complete table from a clear reference.",
+              "content_digest": "940a8cdee63c326d9c9be89cc07e7f223f239e3537113d32c098f711bd816cf7",
+              "position": 5,
+              "uid": "675956de-2c61-53e1-bb89-9b49d92558ba"
+            },
+            {
+              "content": "The user tends to interrupt the argument with long cost enumerations when no separate budget table is available.",
+              "content_digest": "2c0715ec3cfa247a35c3acc854b0716dca764619050aa635c0c242a5b56aa2f1",
+              "position": 6,
+              "uid": "f4371f72-f222-5066-b2f4-0a6be5d6865e"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "c0708bc0-0eba-48f7-9b19-c7cd2a6636e0"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate proposal-writing concerns. The reference frame governs terminology, abbreviations, participant descriptions, evaluation naming, and contribution labels, while the compared frame governs the placement, structure, verification, and maintenance of budget details. Neither supplies a counterpart to the other’s policies.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "dbb0501c-5a88-4c0b-8a7b-a57c2fb163c9",
+              "memory_uid": "949a884d-b348-5fa0-b1dd-adbebafe10a9"
+            }
+          ],
+          "reason": "Only the reference frame states this terminology-consistency policy; the compared frame addresses budget presentation instead.",
+          "status": "RESOLVED",
+          "summary": "Use one consistent term for each interaction concept or interface element throughout a proposal.",
+          "uid": "e820a391-39f3-56a5-bf75-8e57e5a71bd4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "dbb0501c-5a88-4c0b-8a7b-a57c2fb163c9",
+              "memory_uid": "2f484151-b5fc-51a9-8a88-b30a403617b3"
+            }
+          ],
+          "reason": "This is an independent reference-only rule governing when abbreviations are warranted.",
+          "status": "RESOLVED",
+          "summary": "Reserve abbreviations for recurring terms containing at least three words.",
+          "uid": "442138cd-2fa1-50fe-9273-ed161be0cf10"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "dbb0501c-5a88-4c0b-8a7b-a57c2fb163c9",
+              "memory_uid": "21131a6f-d35c-51e3-895f-46cd21a3b566"
+            },
+            {
+              "frame_uid": "dbb0501c-5a88-4c0b-8a7b-a57c2fb163c9",
+              "memory_uid": "af028910-e48b-5605-b92b-9378bdfa525c"
+            }
+          ],
+          "reason": "The reference memories state the first-use rule and its reader-centered rationale; no compared memory addresses abbreviation definition.",
+          "status": "RESOLVED",
+          "summary": "Define an abbreviation alongside its full name at first use because cross-subfield reviewers may not infer it reliably.",
+          "uid": "ce77a26e-dee0-5b8e-a30f-48ab57045629"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "dbb0501c-5a88-4c0b-8a7b-a57c2fb163c9",
+              "memory_uid": "e02c3110-05c4-58a4-8d76-c8fd2426a0d5"
+            }
+          ],
+          "reason": "This reference-only policy governs respectful participant terminology and has no budget-related counterpart.",
+          "status": "RESOLVED",
+          "summary": "Describe participants by their research role before diagnostic labels or deficits.",
+          "uid": "51b0c1cf-0058-5e90-8fa9-41c7c76e770d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "dbb0501c-5a88-4c0b-8a7b-a57c2fb163c9",
+              "memory_uid": "39792d18-2be0-5135-a063-c5213247d330"
+            }
+          ],
+          "reason": "This is an independent reference-only rule about accurately naming a study purpose.",
+          "status": "RESOLVED",
+          "summary": "Use “formative evaluation” for studies seeking evidence to modify a design, distinguishing them from final efficacy judgments.",
+          "uid": "5a9f2378-daae-5139-839e-893215dd83fb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "dbb0501c-5a88-4c0b-8a7b-a57c2fb163c9",
+              "memory_uid": "bcaa8c30-ca6e-5b9f-af93-88513a2f16b1"
+            },
+            {
+              "frame_uid": "dbb0501c-5a88-4c0b-8a7b-a57c2fb163c9",
+              "memory_uid": "82ad9fe2-4063-5e89-9097-c975aa2920cb"
+            }
+          ],
+          "reason": "The reference memories jointly specify how contribution labels should be approved and what abstraction qualifies a deliverable as design principles.",
+          "status": "RESOLVED",
+          "summary": "Match contribution labels to deliverable abstraction, treating design principles as condition–outcome relationships rather than screen-specific replication instructions.",
+          "uid": "ba556a99-9024-5ccc-818a-b1e3e4f9e810"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c0708bc0-0eba-48f7-9b19-c7cd2a6636e0",
+              "memory_uid": "d614b55d-d9f6-5347-8d02-2d219d621a09"
+            },
+            {
+              "frame_uid": "c0708bc0-0eba-48f7-9b19-c7cd2a6636e0",
+              "memory_uid": "abf6d361-c2eb-512f-87e0-f3af9c5eb677"
+            },
+            {
+              "frame_uid": "c0708bc0-0eba-48f7-9b19-c7cd2a6636e0",
+              "memory_uid": "675956de-2c61-53e1-bb89-9b49d92558ba"
+            },
+            {
+              "frame_uid": "c0708bc0-0eba-48f7-9b19-c7cd2a6636e0",
+              "memory_uid": "f4371f72-f222-5066-b2f4-0a6be5d6865e"
+            }
+          ],
+          "reason": "The compared memories jointly state the separation policy, its navigational condition, and its readability and verification rationale; the reference frame contains no budget-presentation policy.",
+          "status": "RESOLVED",
+          "summary": "Keep the main argument focused on totals and major categories while placing accessible detailed arithmetic in a consistent budget table to improve verification and avoid disruptive cost enumerations.",
+          "uid": "8a1d3819-887b-52ec-8930-24aade422452"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c0708bc0-0eba-48f7-9b19-c7cd2a6636e0",
+              "memory_uid": "24500129-4b07-564f-ba67-39e40d7d7860"
+            },
+            {
+              "frame_uid": "c0708bc0-0eba-48f7-9b19-c7cd2a6636e0",
+              "memory_uid": "473cf3ca-9832-5d9c-97df-974f1d9b0d1b"
+            }
+          ],
+          "reason": "The compared memories split one maintainability rule between stable row structure and row-level revision behavior.",
+          "status": "RESOLVED",
+          "summary": "Give each cost item a stable table row with quantity, unit rate, and subtotal so estimate changes can be revised locally.",
+          "uid": "cb731f3c-06b3-5223-bf8e-ce198dbd2ac6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c0708bc0-0eba-48f7-9b19-c7cd2a6636e0",
+              "memory_uid": "07bad409-af9c-512a-b829-7ceb28273f91"
+            }
+          ],
+          "reason": "This is an independent compared-only requirement for organizing and maintaining budget assumptions.",
+          "status": "RESOLVED",
+          "summary": "Place each estimate basis in a dedicated table column so assumptions can be checked or revised without rewriting narrative prose.",
+          "uid": "f6491ae3-be26-5110-a9aa-afb17ec6668f"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame separates detailed costs from the main argument, structures budgets in stable rows with explicit estimate bases, and supports verification and localized revisions.",
+        "differences": "",
+        "reference_only": "The reference frame promotes consistent terminology, controlled and defined abbreviations, role-first participant descriptions, precise formative-evaluation language, and contribution labels matched to deliverable abstraction."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "5a587a97-c4ad-40c7-ad3d-a196240f2d82"
+    },
+    "analysis_digest": "5302a7f42fc804eea3d50c77ca2ad69db76207e7e89e172862b5faffc9f7d20e",
+    "key": "f62e32ff346fcfbb96a245c0d77360724cb7a082fa41634d7d46f2ec5a7d3aa9",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 38.46557274999941,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "f62e32ff346fcfbb96a245c0d77360724cb7a082fa41634d7d46f2ec5a7d3aa9",
+  "created_at": "2026-08-13T18:28:51.185543Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/terminology",
+  "pair_key": "c0506cead38fb1368c5a5ea32068ac93403ce12f27efcb9ecffc88d675bd476a",
+  "provider_seconds": 38.46557274999941,
+  "right": "task-2/advisor2/budget",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

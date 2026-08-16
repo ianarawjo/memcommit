@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:38:42.174154+00:00",
+      "frames": [
+        {
+          "context_digest": "db438345c3ec4b3f69562a274c9f81a93bd6e6df97bc89b60abcd193dc89b562",
+          "context_name": "task-3/local/personal-memory/2024/04",
+          "context_uid": "206e1cd3-93da-5341-bda3-95cde4814c20",
+          "memories": [
+            {
+              "content": "The user completed a routine dental checkup in April 2024.",
+              "content_digest": "bbaa093f8dee5b5ee42c4a180e683fce00bc9364f5a009b9fa1e7f2ac233bc01",
+              "position": 0,
+              "uid": "9cea83cd-e39f-53bd-9e79-d30aa465ad02"
+            },
+            {
+              "content": "When the user heard three checkup questions in succession, they asked for the first question again.",
+              "content_digest": "e1b76973991f009295489249af1a7cd0fa7957f24f330e39337e01e5b1acdcbb",
+              "position": 1,
+              "uid": "51f8326f-60d4-5ba3-ba32-a04331dcb930"
+            },
+            {
+              "content": "At the next visit, when questions were asked one at a time, the user answered each without omission.",
+              "content_digest": "30c943f2e043f485a7a7e1ac19343c753ed8f834d00716725322505e28e0b15a",
+              "position": 2,
+              "uid": "cd0bce79-71d5-5d46-9c68-8a1d096dd53a"
+            },
+            {
+              "content": "The user called to reschedule an appointment at lunchtime but did not reach anyone.",
+              "content_digest": "1d4bd2122c160d35080b232ebb8ae5080c2ce34124645b3ec8040d7d29af9752",
+              "position": 3,
+              "uid": "71e27b0c-5c10-5102-aeac-98b0841723f2"
+            },
+            {
+              "content": "After returning home, the user kept a photo of the paper instructions received at the clinic.",
+              "content_digest": "68cddec62167a3910122a129dcfdb3c5604a4fea996d01f870734739dd3b0221",
+              "position": 4,
+              "uid": "86ad5410-0cc7-5876-8e3a-a3f0dd1680c7"
+            },
+            {
+              "content": "On a day the user put only the visit address in the calendar, they had to search again for the floor.",
+              "content_digest": "0d6926aba2c90930bfa984d7af1b12c60f35e53ba9916dfbee2c2391961db1a9",
+              "position": 5,
+              "uid": "aab36950-7e2b-588f-bb7c-d3bd6e36c501"
+            },
+            {
+              "content": "On a day the user shared the checkup time with their older sister, the sister called to check in after the user returned home.",
+              "content_digest": "b7d0fea8e8f2fc13126453039dcedebcda3c67ce2ea96c4a2d5b60365448e0e3",
+              "position": 6,
+              "uid": "50ac9268-9259-56fd-8678-1dfc8f919efb"
+            },
+            {
+              "content": "The scheduling staff at that clinic expect requests to change appointments to arrive by telephone.",
+              "content_digest": "28eec4f0ef0b96764a3f7ea54ee3db9fd4d5f1b62a5a2fa29d0a6193f1d8a18c",
+              "position": 7,
+              "uid": "5141ca66-9860-5ec5-b028-ac8670f586ca"
+            },
+            {
+              "content": "Before adding a follow-up visit to the calendar, confirm the date, time, address, and floor with the user.",
+              "content_digest": "0555c837f721fccd5918b2275086bb39c75e016e27574027185cfbada1c766af",
+              "position": 8,
+              "uid": "e265e637-fa41-53d0-aa9b-0102e9962f9a"
+            },
+            {
+              "content": "The local agent can track completed checkups and scheduled appointments but cannot determine whether a follow-up visit is needed.",
+              "content_digest": "be24b47ccb071438fd01bb99b11af3c63f22e260312a26d901824e6bb0d4cd89",
+              "position": 9,
+              "uid": "7aece7ae-b327-537e-9cef-fe24ee8fc618"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "cbfce9ae-49d2-4d5b-b32d-d27534c34235"
+        },
+        {
+          "context_digest": "4eadf16a0c655a266bec3ebe56b056075c55e7f716f6879a0b6a905fe34136df",
+          "context_name": "task-3/local/personal-memory/2026/05",
+          "context_uid": "fd476504-4d4e-54d9-80b8-3dc2b18555d8",
+          "memories": [
+            {
+              "content": "The user keeps a picnic mat on the bottom shelf of the entrance storage cabinet.",
+              "content_digest": "c17479bd6a0f978f71b106b562507e702c3b84af5119be6bce48e4ee1664e728",
+              "position": 0,
+              "uid": "a9da4cfc-a6aa-51ae-9ec4-0de5c7a09227"
+            },
+            {
+              "content": "On a day the user went to the riverside, they sat in a place without shade and moved after an hour.",
+              "content_digest": "f9ab1da828ca5af06cb8bf54fe85136e316f503dab465fad514ab5a3f8243633",
+              "position": 1,
+              "uid": "fa2735e1-f4af-57d3-a18c-795715b6715b"
+            },
+            {
+              "content": "At the next outdoor meal, the user chose a place near a large tree and stayed for two hours.",
+              "content_digest": "189b7d85561df45986a6b7c9fe681b5ef53b22ca1f5e83fa8d64a7d93b35a577",
+              "position": 2,
+              "uid": "3bd8b8f2-c5b4-5004-8b9e-e388cc26ea7a"
+            },
+            {
+              "content": "On a hot day when the user brought only one bottle of water, they bought another drink partway through the outing.",
+              "content_digest": "92aa494a12664105a4bffc50a9026fadbec78332f750636093ea82ecc68e9597",
+              "position": 3,
+              "uid": "c7c4b494-39a6-5f5c-b37f-51c5061ac926"
+            },
+            {
+              "content": "On the next outing, the user brought two small bottles of water after freezing them.",
+              "content_digest": "69b3035b57b58b1aa778bd0da75dc806c1c449e7e35dc448aff92f7499c3148d",
+              "position": 4,
+              "uid": "dd9f5b3c-9c2e-5dbc-bf6e-eb7761eeb075"
+            },
+            {
+              "content": "When meeting their maternal uncle at a park, the user and the uncle waited at different entrances for 15 minutes.",
+              "content_digest": "9785e87b9fe79813762eb2e19e6d4f256a55f4799c92d095aaf695a8a1de5851",
+              "position": 5,
+              "uid": "2ed2a41c-f6ae-54d6-875c-a195d8fdacee"
+            },
+            {
+              "content": "For the next meeting, the user sent a photo of the entrance sign, and they met at the same place.",
+              "content_digest": "de40b6b7df84784639b97cf7ce153ad8af6e77320d75f3869979e5e3d39169e2",
+              "position": 6,
+              "uid": "23f3a4fc-d51e-5d0b-87f0-d5be407a57f3"
+            },
+            {
+              "content": "For a park meeting, the user's maternal uncle prefers an entrance that requires less walking from the parking area.",
+              "content_digest": "552a43b869c6f06cbf571f794106727406d87841d43addc92f31a3532f73d6f3",
+              "position": 7,
+              "uid": "e9f459f3-8ff0-5a0e-b78b-eda8d18b914e"
+            },
+            {
+              "content": "When making an outdoor plan, confirm the exact entrance and an alternative location in case of rain.",
+              "content_digest": "a265a6364c182de35363b58135b1da60d11595d1e3e0029f6851ac272261a959",
+              "position": 8,
+              "uid": "70277b86-d5db-5b58-8a94-e77372d15a4c"
+            },
+            {
+              "content": "Some park restrooms and drinking fountains may be closed seasonally.",
+              "content_digest": "8e5c4f5f85d4d27dc2211f46e3ab3bbed7f3d9687070b9028992b670986b09ca",
+              "position": 9,
+              "uid": "5a54437b-9b0e-5103-860d-d878be70b3ef"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "628873bc-b7c2-4e39-8046-a685367f687d"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames contain independent, non-overlapping context: the reference concerns dental visits and appointment support, while the compared frame concerns outdoor outings and park coordination. Neither side supplies a claim that governs the same operational decision as a claim on the other.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cbfce9ae-49d2-4d5b-b32d-d27534c34235",
+              "memory_uid": "9cea83cd-e39f-53bd-9e79-d30aa465ad02"
+            }
+          ],
+          "reason": "This dental-care history is independently useful and has no counterpart concerning the same matter in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user completed a routine dental checkup in April 2024.",
+          "uid": "a0d6e343-b002-51e1-bdea-6a3aa623d07f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cbfce9ae-49d2-4d5b-b32d-d27534c34235",
+              "memory_uid": "51f8326f-60d4-5ba3-ba32-a04331dcb930"
+            }
+          ],
+          "reason": "This observation about processing successive clinical questions is independently useful and is not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user requested repetition after receiving three checkup questions in succession.",
+          "uid": "3819368e-bdb0-5a07-96cb-44ffb0f0565d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cbfce9ae-49d2-4d5b-b32d-d27534c34235",
+              "memory_uid": "cd0bce79-71d5-5d46-9c68-8a1d096dd53a"
+            }
+          ],
+          "reason": "This observation about effective clinical question pacing is independently useful and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user answered all visit questions when they were presented individually.",
+          "uid": "27cd5eaa-248b-528e-a14b-353399c833f6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cbfce9ae-49d2-4d5b-b32d-d27534c34235",
+              "memory_uid": "71e27b0c-5c10-5102-aeac-98b0841723f2"
+            }
+          ],
+          "reason": "This appointment-contact experience is independently useful and is not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A lunchtime telephone attempt to reschedule an appointment went unanswered.",
+          "uid": "3ecbdd80-5a8c-59b4-86bf-355cb9917bc1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cbfce9ae-49d2-4d5b-b32d-d27534c34235",
+              "memory_uid": "86ad5410-0cc7-5876-8e3a-a3f0dd1680c7"
+            }
+          ],
+          "reason": "This record-retention detail is independently useful and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user retained a photograph of paper instructions received at the clinic.",
+          "uid": "2761fca3-3c1e-5ec8-8d14-1b360a513aed"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cbfce9ae-49d2-4d5b-b32d-d27534c34235",
+              "memory_uid": "aab36950-7e2b-588f-bb7c-d3bd6e36c501"
+            }
+          ],
+          "reason": "This experience identifies a dental-visit location-detail need not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Recording only the visit address left the user needing to search again for the floor.",
+          "uid": "3da0e3f3-f771-5dd6-bdc2-877f33adc936"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cbfce9ae-49d2-4d5b-b32d-d27534c34235",
+              "memory_uid": "50ac9268-9259-56fd-8678-1dfc8f919efb"
+            }
+          ],
+          "reason": "This family-support observation is independently useful and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "After receiving the checkup time, the user's older sister checked in following the visit.",
+          "uid": "e6c7bdb4-49c9-5baf-9002-3f64471efe9c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cbfce9ae-49d2-4d5b-b32d-d27534c34235",
+              "memory_uid": "5141ca66-9860-5ec5-b028-ac8670f586ca"
+            }
+          ],
+          "reason": "This clinic-specific communication policy is independently useful and is not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The clinic's scheduling staff expect appointment-change requests by telephone.",
+          "uid": "c9115098-a35d-5750-baaa-98a0ba040a58"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cbfce9ae-49d2-4d5b-b32d-d27534c34235",
+              "memory_uid": "e265e637-fa41-53d0-aa9b-0102e9962f9a"
+            }
+          ],
+          "reason": "This dental scheduling procedure governs a distinct operational decision absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Before calendaring a follow-up visit, the date, time, address, and floor should be confirmed with the user.",
+          "uid": "74c7bacc-9424-5f21-8011-6d3f6a04dbb4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cbfce9ae-49d2-4d5b-b32d-d27534c34235",
+              "memory_uid": "7aece7ae-b327-537e-9cef-fe24ee8fc618"
+            }
+          ],
+          "reason": "This capability boundary is independently useful and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The local agent can track checkups and appointments but cannot decide whether a follow-up visit is needed.",
+          "uid": "86b8b116-e4d3-5755-90f9-a2c2f487409f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "628873bc-b7c2-4e39-8046-a685367f687d",
+              "memory_uid": "a9da4cfc-a6aa-51ae-9ec4-0de5c7a09227"
+            }
+          ],
+          "reason": "This household storage detail is independently useful and is not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user stores a picnic mat on the bottom shelf of the entrance storage cabinet.",
+          "uid": "6e32e0fa-4bf2-5068-af70-348f51c90529"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "628873bc-b7c2-4e39-8046-a685367f687d",
+              "memory_uid": "fa2735e1-f4af-57d3-a18c-795715b6715b"
+            }
+          ],
+          "reason": "This outdoor comfort experience is independently useful and has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "At the riverside, the user moved after spending an hour in a place without shade.",
+          "uid": "bb0b2e63-b4da-58ab-8b31-9d4b84430b89"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "628873bc-b7c2-4e39-8046-a685367f687d",
+              "memory_uid": "3bd8b8f2-c5b4-5004-8b9e-e388cc26ea7a"
+            }
+          ],
+          "reason": "This outdoor seating experience is independently useful and is not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "At the next outdoor meal, the user chose a place near a large tree and stayed for two hours.",
+          "uid": "5e945b9d-66b9-5676-bd2b-112c585527ed"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "628873bc-b7c2-4e39-8046-a685367f687d",
+              "memory_uid": "c7c4b494-39a6-5f5c-b37f-51c5061ac926"
+            }
+          ],
+          "reason": "This hydration experience is independently useful and has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "On a hot outing with one bottle of water, the user bought another drink partway through.",
+          "uid": "df88f078-caf9-527c-b31a-5ca9d691d4e4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "628873bc-b7c2-4e39-8046-a685367f687d",
+              "memory_uid": "dd9f5b3c-9c2e-5dbc-bf6e-eb7761eeb075"
+            }
+          ],
+          "reason": "This outing-preparation behavior is independently useful and is not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "For the next outing, the user brought two small bottles of water after freezing them.",
+          "uid": "c75095ee-9b64-5b06-8910-ae32d71f9bc1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "628873bc-b7c2-4e39-8046-a685367f687d",
+              "memory_uid": "2ed2a41c-f6ae-54d6-875c-a195d8fdacee"
+            }
+          ],
+          "reason": "This meeting-coordination experience is independently useful and has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user and their maternal uncle waited at different park entrances for 15 minutes.",
+          "uid": "81387004-9f50-5212-8b1b-c70a5881987e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "628873bc-b7c2-4e39-8046-a685367f687d",
+              "memory_uid": "23f3a4fc-d51e-5d0b-87f0-d5be407a57f3"
+            }
+          ],
+          "reason": "This successful park-meeting coordination method is independently useful and is not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "For a later meeting, sharing a photograph of the entrance sign led the user and uncle to meet at the same place.",
+          "uid": "78fab3a5-21bc-53db-9b79-fb5d392fb1cb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "628873bc-b7c2-4e39-8046-a685367f687d",
+              "memory_uid": "e9f459f3-8ff0-5a0e-b78b-eda8d18b914e"
+            }
+          ],
+          "reason": "This participant-specific accessibility preference is independently useful and has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "For park meetings, the user's maternal uncle prefers an entrance requiring less walking from the parking area.",
+          "uid": "bfc7203e-baed-54c1-860f-33f6f7bd5846"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "628873bc-b7c2-4e39-8046-a685367f687d",
+              "memory_uid": "70277b86-d5db-5b58-8a94-e77372d15a4c"
+            }
+          ],
+          "reason": "This outdoor-planning procedure governs a distinct operational decision absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Outdoor plans should confirm the exact entrance and an alternative location for rain.",
+          "uid": "f65e1881-61a1-5ae0-aedf-43614e3bd43e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "628873bc-b7c2-4e39-8046-a685367f687d",
+              "memory_uid": "5a54437b-9b0e-5103-860d-d878be70b3ef"
+            }
+          ],
+          "reason": "This park-facility constraint is independently useful and has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Some park restrooms and drinking fountains may close seasonally.",
+          "uid": "6a085778-2117-53a4-a6e8-1cec57998924"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Outdoor context covers stored equipment, shade and hydration experiences, entrance coordination and preference, rain contingencies, and seasonal facility closures.",
+        "differences": "",
+        "reference_only": "Dental context covers visit history, question pacing, rescheduling, retained instructions, location details, family check-ins, clinic procedure, calendar confirmation, and agent limits."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "01068798-a9cb-4475-9bca-e9d6f94c2d15"
+    },
+    "analysis_digest": "c9589a413efe60ef9161367d07f5d07a56bfc39b9388e3defbf1529af3e9f5f7",
+    "key": "191021a15cac2d1422442e654b9df54dae0efc081c3e4772d53017f92c02a7f0",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 42.21686741599842,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "191021a15cac2d1422442e654b9df54dae0efc081c3e4772d53017f92c02a7f0",
+  "created_at": "2026-08-13T18:39:24.390779Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/04",
+  "pair_key": "a70daf9a1fd32b987dfffea93aa001e4351e10767acfe2415ffb86d517624d22",
+  "provider_seconds": 42.21686741599842,
+  "right": "task-3/local/personal-memory/2026/05",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

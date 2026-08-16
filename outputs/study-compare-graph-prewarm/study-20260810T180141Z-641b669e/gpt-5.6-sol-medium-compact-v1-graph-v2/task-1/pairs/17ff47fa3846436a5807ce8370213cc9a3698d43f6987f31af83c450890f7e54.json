@@ -1,0 +1,262 @@
+{
+  "coverage": {
+    "expected": 20,
+    "observed": 20
+  },
+  "created_at": "2026-08-11T00:08:59.171318Z",
+  "description_digest": "17a794e48857a8178811052488c3bd4cc66e9029847f2ce038825e49ed5afcc8",
+  "issues": [],
+  "kind": "STUDY_COMPARE_GRAPH_PAIR",
+  "left": {
+    "context_digest": "fb04a858e6072cc336b54c00ec7a569d457114431b9675e13e2342d1b0d21d2b",
+    "context_uid": "5a66e0ec-3497-5ccf-9d8f-08c966647677",
+    "memory_count": 11,
+    "name": "task-1/participant/construction-updates/building-access"
+  },
+  "method": "COMPACT_DECISION_VECTOR_V1",
+  "operation": "COMPARE",
+  "pair_key": "17ff47fa3846436a5807ce8370213cc9a3698d43f6987f31af83c450890f7e54",
+  "provider": {
+    "condition": "COMPACT_DECISION_VECTOR",
+    "contract_valid": true,
+    "elapsed_seconds": 48.556509125002776,
+    "error_type": null,
+    "failure_category": null,
+    "operation": "compare_contexts_compact_ab_v1",
+    "prompt_chars": 10081,
+    "provider_calls": 1,
+    "provider_run": {
+      "completion_tokens": null,
+      "identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "operation": "compare_contexts_compact_ab_v1",
+      "prompt_tokens": null,
+      "upstream_model": "gpt-5.6-sol",
+      "upstream_provider": "openai-codex"
+    },
+    "provider_seconds": 48.554988625008264,
+    "response_bytes": 1039,
+    "response_chars": 1039,
+    "schema_chars": 1380,
+    "validation_error": null,
+    "validation_seconds": 0.0014982080028858036
+  },
+  "relations": [
+    {
+      "comment": "The reference closes the rear entrance for general passage, while the compared frame states the narrower Central Library route closure.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "8b077f2a-6a9f-50f0-ae91-f6536fb226cb",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "dbb3c40c-7699-509d-901d-be9de2f110dc",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000001",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "8017409a-8af8-5a55-a49e-e9ccb44b9f34",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000002",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "2d20c61d-ff20-5bb6-bcdc-3dcbf6c3e21f",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000003",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "a8bb36e1-2629-5b8f-b4dc-af9b88020dc9",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000004",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "8276ab56-741f-5f60-ab77-79fe6dc0ba55",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000005",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "The reference covers an accessible route into the Main Building lobby, while the compared frame covers the alternative route and entrance for reaching the Central Library.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "89e6f853-8c98-51ba-98cc-ad5c84580a53",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "50fb8bfa-2764-5b4f-a83c-80bf2d3a73d0",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "9af0f95c-0a5e-584e-ba7b-92789e071f7e",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "fd27f19b-5f2c-51ee-a9b2-7182120163cb",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000006",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "The reference governs which closure facts may be prioritized in access guidance, while the compared frame governs which closed routes may be excluded from route comparison.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "be002fc9-b9e0-5d73-9c15-622c0688c73c",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "638f272f-9fbd-5d1f-bfd8-b01618424065",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000007",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "ba9d70f9-02c4-56d9-ac23-f2a532c22488",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000008",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "56c34a24-0954-5c64-9fd4-880995e6e53c",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000009",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "84a45a62-09c7-5187-8fa6-ff7063f9e8d0",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000010",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "f9d7eb4e-221f-5b5f-a237-213a31e04093",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000011",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "f1b7843e-2c8a-5434-94a4-1383534abb3a",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000012",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "2d8e8c75-1dad-5dbc-9eaa-04cd522410f0",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000013",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "ebc1d272-2f9a-5b2e-a5a4-6c0539f46527",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000014",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "31f5b67b-40f8-5690-b772-b329ce50e443",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000015",
+      "status": "RESOLVED"
+    }
+  ],
+  "right": {
+    "context_digest": "89449289c4bdbb1e379336d3718b50c3d3bacfc5e8fb80fcddc92a133d106896",
+    "context_uid": "725d4213-9ce1-569c-9e91-e4cd0d046bd5",
+    "memory_count": 9,
+    "name": "task-1/participant/construction-updates/route-changes"
+  },
+  "schema_version": 1,
+  "semantic_content_in_participant_report": false,
+  "state": "EXACT_PREWARM",
+  "task": "task-1"
+}

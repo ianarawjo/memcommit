@@ -1,0 +1,379 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:45:11.871384+00:00",
+      "frames": [
+        {
+          "context_digest": "17b940da39446a9f934dff43ea7db561d14060561065852a34658fe4aaa1702f",
+          "context_name": "task-3/local/personal-memory/2024/10",
+          "context_uid": "7c55b789-a7d0-5070-9cf8-6f5e205415dc",
+          "memories": [
+            {
+              "content": "The user renewed their local library membership in October 2024.",
+              "content_digest": "eb9209032856bdbc69fbfa67e053bf8cd2bc23f8e8e25c0be9a5aa3f7e05f4e9",
+              "position": 0,
+              "uid": "04711182-acef-52a9-bd58-7fe98a54854a"
+            },
+            {
+              "content": "On an evening walk, the user saw an unlit street and took a detour along a main road.",
+              "content_digest": "62d001de1c6c4599e51c4e0713f577a2838e95e03f26064778e64542f390a599",
+              "position": 1,
+              "uid": "0229d0b1-750c-521b-a126-22c9d9d001c4"
+            },
+            {
+              "content": "On a day the user chose a well-lit pedestrian route, the walk took 12 minutes longer than usual.",
+              "content_digest": "ad3770626bef71bc9a29ec7772aeebeb70231e89b417b05b4da9c62a65b89afe",
+              "position": 2,
+              "uid": "e310fe87-8cde-5399-be00-9f8d7ec44e94"
+            },
+            {
+              "content": "On a day the user sat by the library window, they heard vehicle noise with every page they read.",
+              "content_digest": "090a190c68a5166d84cde1eed20f9a03c2b99722ed383eb3b5703489c01d85e0",
+              "position": 3,
+              "uid": "4f37306b-08cd-512a-b92e-ca6761da1a5b"
+            },
+            {
+              "content": "On the next visit, the user sat farther inside and did not move for an hour.",
+              "content_digest": "a071b4c7699fe17f63f0ab6263da1259aea00ad635169a313d4821f57071a86a",
+              "position": 4,
+              "uid": "5897ffa4-cfc6-5012-8931-15420ec5cf7c"
+            },
+            {
+              "content": "The user wrote the due date of a borrowed book on paper and then lost the paper.",
+              "content_digest": "43ef22512c79634cb9e3dc59006c7d06c3513a9d5d1f89eedbb392964cc34f02",
+              "position": 5,
+              "uid": "ce38bd13-3d51-5bff-9eba-ed70a8217356"
+            },
+            {
+              "content": "After entering the due date on their phone, the user saw a reminder the day before and put the book in their bag.",
+              "content_digest": "38782cba2f3bf260d62cf8e80c4a7e4a3a196d4d29ced3c4fe19d050e12c1e0a",
+              "position": 6,
+              "uid": "a304315b-bc0a-591b-b8c2-7eea5145819d"
+            },
+            {
+              "content": "Library staff expect a person requesting a replacement membership card to bring identity-verification material.",
+              "content_digest": "1ac59309aedbfa946661bf5bbc4d5141c420df059937893caba88725dfe77d24",
+              "position": 7,
+              "uid": "ef060b89-6c54-5c20-86be-c07766a35daa"
+            },
+            {
+              "content": "Check recent lighting and pedestrian conditions before proposing an evening walking route.",
+              "content_digest": "1b247adfb3723d14979b2cc7ecf6786c457d60e521b8708a6d08d38d3d1af437",
+              "position": 8,
+              "uid": "7669e5eb-c0fd-5182-ae9a-5f9ae95ddf2f"
+            },
+            {
+              "content": "The local agent can compare past reasons for detours but cannot directly observe current lighting and pedestrian conditions.",
+              "content_digest": "8a5f0e4cbb2fa6c19f2cb5d4e500ed460189b515604c87c6c2a4c8348c4efc44",
+              "position": 9,
+              "uid": "e96f7007-5814-5986-b121-4ce3b22506e1"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "22ae6b45-8549-4beb-a4b6-20f737b2ad0e"
+        },
+        {
+          "context_digest": "ca8765e237d85d9bf3ecb78fe1d9a2487066ae14dae9509e40b324ac1277d75a",
+          "context_name": "task-3/local/personal-memory/2025/06",
+          "context_uid": "870f7336-726a-5d9c-bae4-12585311463e",
+          "memories": [
+            {
+              "content": "The user keeps a portable fan charger on a living-room shelf.",
+              "content_digest": "5ab7fad8ae1b3f56bdbc1c3ebf593a3d452590341b6de115f830fdf0d994c12e",
+              "position": 0,
+              "uid": "853a158c-edf9-578a-8e75-3d5daff6e4db"
+            },
+            {
+              "content": "On a hot day, the user worked with only the window open and lost focus in the afternoon.",
+              "content_digest": "3c4225f055db293c53a5a137d0c6353005bcb55b71dbc61bc69831aa5c3c08de",
+              "position": 1,
+              "uid": "f7d5ebdc-0cae-5e07-a060-e129b5a05570"
+            },
+            {
+              "content": "In the room where the user closed the curtains the next morning, the temperature rose less.",
+              "content_digest": "4cb4d1892db8769f4c066859dbb021c67d5015114f8522dfd904057061600ab5",
+              "position": 2,
+              "uid": "99e5c522-535b-5015-8617-06f645147f8b"
+            },
+            {
+              "content": "The user took the portable fan out without charging it, and it turned off after an hour.",
+              "content_digest": "0e1e0e9e985bea5be6976010a390f484b60a931ea7dfaf50a73c66616a73d5da",
+              "position": 3,
+              "uid": "7b3bf50c-63aa-5a1e-9a53-7befea25a468"
+            },
+            {
+              "content": "Before the next outing, the user charged it the night before and used the fan throughout the trip.",
+              "content_digest": "fd4282d169da18d902fc5f766d4e38131240bf3a51e6fa0c5bad69f80f1492af",
+              "position": 4,
+              "uid": "ca8de091-afb2-537f-a83a-09769056879d"
+            },
+            {
+              "content": "On a hot weekend, the user was eating lunch in their father's yard and moved indoors.",
+              "content_digest": "44e7d3bc5eaecec68ad6e7c0979572102f3c717b37712fcfada769959443ae8e",
+              "position": 5,
+              "uid": "4a0604fb-10b4-5132-a6de-ab6a229ff2be"
+            },
+            {
+              "content": "When the user returned to the yard in the evening, shade and wind led them to stay another hour.",
+              "content_digest": "7495f1d4ba2d1d732ab5c962f45b5b0c9c765ee21767373552247a823cf90984",
+              "position": 6,
+              "uid": "1f90941e-776f-5cba-9783-c392983dd72c"
+            },
+            {
+              "content": "The user's father prefers to move an outdoor meal to the evening rather than proceed at midday when the temperature is high.",
+              "content_digest": "5f9628a28b5c6f3b20a371d1c039f37f26c50832970936c8a243f161fd8288f4",
+              "position": 7,
+              "uid": "63391d26-7417-5ea6-ac0a-460af7489963"
+            },
+            {
+              "content": "The local agent can compare past responses to heat but cannot know the current felt temperature without an indoor temperature record.",
+              "content_digest": "815f4fb2c833d75e30cb0e323f5708e356bf38e0bbb573865092be48fbf2746a",
+              "position": 8,
+              "uid": "31502797-1379-5ec4-bd1b-a2e1515fa56e"
+            },
+            {
+              "content": "A room with a west-facing window can warm rapidly in the late afternoon.",
+              "content_digest": "448908f6242021de6d41ddee8121714a1388db6e4e3d067de27e6950ee712c23",
+              "position": 9,
+              "uid": "68f85c30-62c4-579d-97cd-9f401c686e63"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "9a16de05-c922-422b-b6c0-f0901c2cc7c4"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate domains: the reference records library use and evening-route safety, while the compared frame records heat management, portable-fan preparation, and outdoor-meal timing. No claims address the same operational policy closely enough to form a cross-frame relation.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "22ae6b45-8549-4beb-a4b6-20f737b2ad0e",
+              "memory_uid": "04711182-acef-52a9-bd58-7fe98a54854a"
+            }
+          ],
+          "reason": "This is independently useful reference-side membership history with no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user renewed a local library membership in October 2024.",
+          "uid": "a74352c7-ca5e-50bf-a1c4-14d751597717"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "22ae6b45-8549-4beb-a4b6-20f737b2ad0e",
+              "memory_uid": "0229d0b1-750c-521b-a126-22c9d9d001c4"
+            },
+            {
+              "frame_uid": "22ae6b45-8549-4beb-a4b6-20f737b2ad0e",
+              "memory_uid": "e310fe87-8cde-5399-be00-9f8d7ec44e94"
+            }
+          ],
+          "reason": "These reference-side observations jointly describe the safety and time tradeoff of choosing better-lit evening routes; the compared frame contains no claim about walking routes.",
+          "status": "RESOLVED",
+          "summary": "The user avoided an unlit street, and a well-lit pedestrian route was observed to add twelve minutes.",
+          "uid": "82ec4e8c-34e6-5f83-b6bd-0f5b796846a1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "22ae6b45-8549-4beb-a4b6-20f737b2ad0e",
+              "memory_uid": "4f37306b-08cd-512a-b92e-ca6761da1a5b"
+            },
+            {
+              "frame_uid": "22ae6b45-8549-4beb-a4b6-20f737b2ad0e",
+              "memory_uid": "5897ffa4-cfc6-5012-8931-15420ec5cf7c"
+            }
+          ],
+          "reason": "These reference-side observations split one useful claim about how library seating location affected distraction and persistence, without a compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Window seating exposed the user to persistent vehicle noise, while sitting farther inside supported an uninterrupted hour.",
+          "uid": "99bf8a1a-6c71-525d-b81a-2310b83832bf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "22ae6b45-8549-4beb-a4b6-20f737b2ad0e",
+              "memory_uid": "ce38bd13-3d51-5bff-9eba-ed70a8217356"
+            },
+            {
+              "frame_uid": "22ae6b45-8549-4beb-a4b6-20f737b2ad0e",
+              "memory_uid": "a304315b-bc0a-591b-b8c2-7eea5145819d"
+            }
+          ],
+          "reason": "These reference-side events jointly describe the relative reliability of two due-date tracking methods; the compared frame does not address borrowed-item reminders.",
+          "status": "RESOLVED",
+          "summary": "A paper due-date note was lost, whereas a phone reminder prompted the user to pack the borrowed book the day before it was due.",
+          "uid": "bc7f94f1-05d4-5c4c-a30e-8bc5d509052c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "22ae6b45-8549-4beb-a4b6-20f737b2ad0e",
+              "memory_uid": "ef060b89-6c54-5c20-86be-c07766a35daa"
+            }
+          ],
+          "reason": "This is an independently useful reference-side procedural expectation with no compared-side analogue.",
+          "status": "RESOLVED",
+          "summary": "Library staff expect identity-verification material for a replacement membership-card request.",
+          "uid": "a1b13161-085d-5cb9-a540-d6cfd31323bd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "22ae6b45-8549-4beb-a4b6-20f737b2ad0e",
+              "memory_uid": "7669e5eb-c0fd-5182-ae9a-5f9ae95ddf2f"
+            },
+            {
+              "frame_uid": "22ae6b45-8549-4beb-a4b6-20f737b2ad0e",
+              "memory_uid": "e96f7007-5814-5986-b121-4ce3b22506e1"
+            }
+          ],
+          "reason": "These reference-side claims split one operational constraint on proposing an evening walking route; the compared frame addresses heat assessment instead.",
+          "status": "RESOLVED",
+          "summary": "Evening-route proposals require recent lighting and pedestrian-condition information because the local agent can compare past detours but cannot directly observe current conditions.",
+          "uid": "4130e9fa-35e8-50e7-99a1-0af9ae16ca59"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9a16de05-c922-422b-b6c0-f0901c2cc7c4",
+              "memory_uid": "853a158c-edf9-578a-8e75-3d5daff6e4db"
+            }
+          ],
+          "reason": "This is independently useful compared-side location information with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user keeps a portable fan charger on a living-room shelf.",
+          "uid": "4e0ec07d-d052-53d6-a590-3114dc4dd714"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9a16de05-c922-422b-b6c0-f0901c2cc7c4",
+              "memory_uid": "f7d5ebdc-0cae-5e07-a060-e129b5a05570"
+            },
+            {
+              "frame_uid": "9a16de05-c922-422b-b6c0-f0901c2cc7c4",
+              "memory_uid": "99e5c522-535b-5015-8617-06f645147f8b"
+            }
+          ],
+          "reason": "These compared-side observations jointly describe indoor heat effects and a curtain-based response; the reference frame contains no indoor heat-management claim.",
+          "status": "RESOLVED",
+          "summary": "Working with only an open window on a hot day preceded lost afternoon focus, while closing the curtains the next morning limited the temperature rise.",
+          "uid": "65bb998b-18ef-5f46-a8d2-73364effeb87"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9a16de05-c922-422b-b6c0-f0901c2cc7c4",
+              "memory_uid": "7b3bf50c-63aa-5a1e-9a53-7befea25a468"
+            },
+            {
+              "frame_uid": "9a16de05-c922-422b-b6c0-f0901c2cc7c4",
+              "memory_uid": "ca8de091-afb2-537f-a83a-09769056879d"
+            }
+          ],
+          "reason": "These compared-side events split one useful claim about advance charging and portable-fan availability, without a reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "An uncharged portable fan stopped after an hour, whereas charging it the night before allowed use throughout the next trip.",
+          "uid": "a38013bc-3b77-517b-9f98-759fdb237719"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9a16de05-c922-422b-b6c0-f0901c2cc7c4",
+              "memory_uid": "4a0604fb-10b4-5132-a6de-ab6a229ff2be"
+            },
+            {
+              "frame_uid": "9a16de05-c922-422b-b6c0-f0901c2cc7c4",
+              "memory_uid": "1f90941e-776f-5cba-9783-c392983dd72c"
+            },
+            {
+              "frame_uid": "9a16de05-c922-422b-b6c0-f0901c2cc7c4",
+              "memory_uid": "63391d26-7417-5ea6-ac0a-460af7489963"
+            }
+          ],
+          "reason": "These compared-side memories jointly describe how heat, shade, wind, and family preference affect outdoor-meal timing; the reference frame has no corresponding meal policy.",
+          "status": "RESOLVED",
+          "summary": "Midday heat led the user to move indoors, while evening shade and wind supported a longer yard stay and aligned with the father’s preference to postpone hot-weather outdoor meals until evening.",
+          "uid": "74d242f4-2987-533d-a389-72aca91725e6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9a16de05-c922-422b-b6c0-f0901c2cc7c4",
+              "memory_uid": "31502797-1379-5ec4-bd1b-a2e1515fa56e"
+            }
+          ],
+          "reason": "This is an independently useful compared-side limitation on current heat assessment; the reference limitation concerns different environmental conditions and a different decision.",
+          "status": "RESOLVED",
+          "summary": "The local agent can compare past heat responses but cannot know the current felt temperature without an indoor temperature record.",
+          "uid": "7dbd6019-3aa7-5ef5-82df-cced5aa5d24a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9a16de05-c922-422b-b6c0-f0901c2cc7c4",
+              "memory_uid": "68f85c30-62c4-579d-97cd-9f401c686e63"
+            }
+          ],
+          "reason": "This is independently useful compared-side information about room warming with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "A room with a west-facing window can warm rapidly in the late afternoon.",
+          "uid": "d4f06641-478e-5a92-ac99-a2bf3c718dd7"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only content covers indoor and outdoor heat responses, curtain use, portable-fan storage and charging, evening meal preferences, limits on assessing current temperature, and late-afternoon warming from west-facing windows.",
+        "differences": "",
+        "reference_only": "Reference-only content covers membership, quieter library seating, due-date reminders, replacement-card verification, and the safety, delay, and current-condition checks involved in evening routes."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "c829f5e0-f758-4173-b724-4ffa87851d18"
+    },
+    "analysis_digest": "0584e5b846591baec91e1aff54dd13118348dbf0a13ab2474caefa25e0a6f94c",
+    "key": "c9e567dbdd49e629eb42226ca3a93089f048568094d6f1b8964629a7bb08d3c7",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 39.69586670799981,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "c9e567dbdd49e629eb42226ca3a93089f048568094d6f1b8964629a7bb08d3c7",
+  "created_at": "2026-08-13T18:45:51.566845Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/10",
+  "pair_key": "83cec58326384f6671b0a1fc3a95fba31c6ffd904991f1afdfab6a315c93a793",
+  "provider_seconds": 39.69586670799981,
+  "right": "task-3/local/personal-memory/2025/06",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

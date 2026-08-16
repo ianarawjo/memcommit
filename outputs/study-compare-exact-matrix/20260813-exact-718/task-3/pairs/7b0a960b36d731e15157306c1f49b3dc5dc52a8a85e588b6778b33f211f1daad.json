@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:52:32.553438+00:00",
+      "frames": [
+        {
+          "context_digest": "ac4f93d71b525f6156f0b669075a833a2a41161be6abe677ec382bff6e6060e8",
+          "context_name": "task-3/local/personal-memory/2025/08",
+          "context_uid": "ed84de75-8e18-5bec-908c-a1ff9827b3e3",
+          "memories": [
+            {
+              "content": "The user keeps packing tape for returns in an upper kitchen drawer.",
+              "content_digest": "ed359d883caffd7ce4daddc297ddcc9d26da233dc2a36dc4dbc96e300b2248e9",
+              "position": 0,
+              "uid": "15c3941e-ed44-508f-ae30-b51456b5ba86"
+            },
+            {
+              "content": "The user arrived ten minutes before the post office closed and found that numbered-ticket intake had ended.",
+              "content_digest": "3c4609eea9455bbd46a6f238aa750f61f348ce7b2cf421a4d123f1b707b52550",
+              "position": 1,
+              "uid": "84d1fd1c-9508-5f05-9a7c-1d5f20ecf4a4"
+            },
+            {
+              "content": "Before the next visit, the user checked the operating hours and arrived one hour before closing.",
+              "content_digest": "b2997262abf4ba476c63de3550e54269ef7d61bb56d3adb5b6d9f54ba13fc078",
+              "position": 2,
+              "uid": "8946f9da-e325-59c3-9260-2d2f590d3701"
+            },
+            {
+              "content": "The user went to the counter without closing a return box and had to go back to the packing station.",
+              "content_digest": "759122c3f88ca71b992a725e357beab72f9820de872a7bd895b808c2df21f2b2",
+              "position": 3,
+              "uid": "67e8b160-a57d-56e5-a766-741b7ce0e939"
+            },
+            {
+              "content": "For the next return, the user sealed the box at home and completed intake in one attempt.",
+              "content_digest": "007fcec32ea3788854161e68c95c2aaba90e94a721d03b350e1619afc54840e3",
+              "position": 4,
+              "uid": "efd0706b-600a-5ac1-926e-cc0602ca0086"
+            },
+            {
+              "content": "The user scheduled bank and post-office errands for the same day, but they took a long time because the destinations were in different directions.",
+              "content_digest": "000e1975fde79f4d6caf36adad0c2e481a032537cfa410e46649866d985567c2",
+              "position": 5,
+              "uid": "1e8a6f7e-0911-5a34-ad82-172479d1a7a4"
+            },
+            {
+              "content": "The following week, after checking the locations on a map, the user visited nearby branches in sequence.",
+              "content_digest": "c3de08c5b6074dff2b3f6303f5efc3740cc430b634cb365a5d570061a30a53fa",
+              "position": 6,
+              "uid": "a8670161-257e-51ab-8e30-0e282952278f"
+            },
+            {
+              "content": "Postal staff expect a return-label barcode to arrive affixed flat, without a fold.",
+              "content_digest": "6293ace2d67781644694976af71d5696cad28979d9641718ccd59f16b3397a47",
+              "position": 7,
+              "uid": "2db70f53-99ee-556c-a8c1-b809881cbebd"
+            },
+            {
+              "content": "Before grouping errands into one outing, check each institution's location and operating hours that day.",
+              "content_digest": "7fef923f9ed507db5aad6cf65eaee2c965075e51fef0ff73fa669f1e7f69314a",
+              "position": 8,
+              "uid": "38d60cc4-2f91-5cc2-b511-55cdbbe12c32"
+            },
+            {
+              "content": "Postal and financial counters may operate on different hours than usual around public holidays.",
+              "content_digest": "2d5dc709c468405ea894f343e922dc2546b826ed7488e613f4d4dd730bccccfd",
+              "position": 9,
+              "uid": "1272087c-a535-5612-8c7a-1bc257183788"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "55829816-c30b-497a-96c3-2ff1c799b090"
+        },
+        {
+          "context_digest": "1d47d83944d91bc0316a61894412e9b4361758603b9532687cf68473f1d30198",
+          "context_name": "task-3/local/personal-memory/2026/01",
+          "context_uid": "e48e6eac-20f7-599d-9f76-4238bd9dd96d",
+          "memories": [
+            {
+              "content": "The user keeps gloves and scarves in a basket inside the entrance.",
+              "content_digest": "df54c52cb6bc89e2e66c747df9807c6892db272c2a23ac5ac91e3f64aaa2a5da",
+              "position": 0,
+              "uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409"
+            },
+            {
+              "content": "On a day the user could not find their gloves, they walked with their hands in their pockets and missed the bus.",
+              "content_digest": "d4205aee5fe3f2c18adc3622930cc7f74de231de9812ca594dbd95a0af7199ff",
+              "position": 1,
+              "uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5"
+            },
+            {
+              "content": "Before the next outing, the user put the gloves in the entrance basket the night before and left on time.",
+              "content_digest": "23a7026d7d1a7edd3278e7b8aa147ef0d315059663f78da5498ad6c1b4a5407c",
+              "position": 2,
+              "uid": "a11f0943-8ee1-5305-87fb-64982fb36f82"
+            },
+            {
+              "content": "On a snowy day, the user chose a shorter route but turned back at stairs that had not been cleared of snow.",
+              "content_digest": "e9e241d2bc4d7c2fa9a44471aa6d1c16d42d50fe2ed99ccfb50713107714be9b",
+              "position": 3,
+              "uid": "f623f245-cdd5-5080-8869-b52cf2914076"
+            },
+            {
+              "content": "The next day, the user took a cleared sidewalk along the main road and avoided slippery sections.",
+              "content_digest": "62c8ec8b38778e9922cf433af4ceb4d59f60bee52dc758e3b88bb1163637f108",
+              "position": 4,
+              "uid": "17ac56f1-1302-5350-99d5-b95ef7feb768"
+            },
+            {
+              "content": "The user fell asleep with the heat turned up, became too warm before dawn, and woke twice.",
+              "content_digest": "912dbbc88a0f4a174b714a794793781f4d2f6c889f73cd7f825338addcab5d6c",
+              "position": 5,
+              "uid": "96988fa9-44b1-511e-8c99-4372f902cfe3"
+            },
+            {
+              "content": "The next night, the user turned down the heat and used one additional thin blanket.",
+              "content_digest": "3d12a4609d4731ebe71bacc841c979ac3497553238c3b5c2191842bbf075ba89",
+              "position": 6,
+              "uid": "b628acaa-50da-552c-8665-244dc4ab8263"
+            },
+            {
+              "content": "On a morning with heavy snow, the user's father expects the user will worry about road conditions and sends a text before departure.",
+              "content_digest": "dcd6bcb23bee46e49813bb14dd8dcb91983d5830f0536d7f23fcdb3a8af0667c",
+              "position": 7,
+              "uid": "08dfb937-7b28-55b5-801c-c0da00cbd414"
+            },
+            {
+              "content": "Before proposing a winter travel route, check recent snow-clearing conditions and accessible entrances.",
+              "content_digest": "dcab87102a9979c51dd369d5ba5ed00b7445c8ccd14450edcb8bec7859689606",
+              "position": 8,
+              "uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d"
+            },
+            {
+              "content": "The local agent cannot know the actual condition of the sidewalk the user will take from a weather forecast alone.",
+              "content_digest": "6b4bcc2f2f508f130c047ff677cadae0eae5b4cc5e5dd6bb3a1fb3784d7793b1",
+              "position": 9,
+              "uid": "802c4031-57de-592a-9bc8-6ee3d54921c8"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "28de6e5b-c0f8-4baf-bf69-882fddbe1691"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate practical domains. The reference frame concerns postal returns and coordinating errands, while the compared frame concerns winter clothing, snowy travel, heating, and family communication; no claims materially address the same operational decision.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "55829816-c30b-497a-96c3-2ff1c799b090",
+              "memory_uid": "15c3941e-ed44-508f-ae30-b51456b5ba86"
+            }
+          ],
+          "reason": "This is independently useful reference-side information about the location of return supplies, with no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "Packing tape for returns is stored in an upper kitchen drawer.",
+          "uid": "c8ba34a4-4176-5aa0-b83b-e823f968029f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "55829816-c30b-497a-96c3-2ff1c799b090",
+              "memory_uid": "84d1fd1c-9508-5f05-9a7c-1d5f20ecf4a4"
+            }
+          ],
+          "reason": "This reference-side experience concerns a postal intake cutoff and has no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "Arriving shortly before postal closing was too late for numbered-ticket intake.",
+          "uid": "7df9ce82-2a11-5081-9018-6eb4b406658f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "55829816-c30b-497a-96c3-2ff1c799b090",
+              "memory_uid": "8946f9da-e325-59c3-9260-2d2f590d3701"
+            }
+          ],
+          "reason": "This reference-side account concerns timing a postal visit and has no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "After checking postal hours, the user arrived substantially before closing.",
+          "uid": "479cc94c-f738-59b8-b8ea-bb3e38aeac31"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "55829816-c30b-497a-96c3-2ff1c799b090",
+              "memory_uid": "67e8b160-a57d-56e5-a766-741b7ce0e939"
+            }
+          ],
+          "reason": "This reference-side experience concerns return-package readiness and has no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "An unsealed return box required an extra trip from the counter to the packing station.",
+          "uid": "ef70a247-124b-5cb9-8586-1f9024b5b4c7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "55829816-c30b-497a-96c3-2ff1c799b090",
+              "memory_uid": "efd0706b-600a-5ac1-926e-cc0602ca0086"
+            }
+          ],
+          "reason": "This reference-side outcome concerns advance return preparation and has no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "Sealing a return box at home enabled intake in one attempt.",
+          "uid": "857a796f-5c10-5b02-9eca-1c94a4a6169c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "55829816-c30b-497a-96c3-2ff1c799b090",
+              "memory_uid": "1e8a6f7e-0911-5a34-ad82-172479d1a7a4"
+            }
+          ],
+          "reason": "This reference-side experience concerns geographic coordination of errands and has no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "Combining bank and postal errands was inefficient because the destinations lay in different directions.",
+          "uid": "70be923f-9b2b-5c62-b598-a7e0016086c8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "55829816-c30b-497a-96c3-2ff1c799b090",
+              "memory_uid": "a8670161-257e-51ab-8e30-0e282952278f"
+            }
+          ],
+          "reason": "This reference-side account concerns location-based errand planning and has no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "Mapping nearby branches enabled the user to visit them sequentially.",
+          "uid": "58858a98-dd4f-5adc-8c7d-c6d19b4d9e3f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "55829816-c30b-497a-96c3-2ff1c799b090",
+              "memory_uid": "2db70f53-99ee-556c-a8c1-b809881cbebd"
+            }
+          ],
+          "reason": "This reference-side postal packaging requirement has no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "Postal staff expect a return-label barcode to be attached flat and unfolded.",
+          "uid": "6487b254-b1a1-5e76-a93e-7e8687cb8361"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "55829816-c30b-497a-96c3-2ff1c799b090",
+              "memory_uid": "38d60cc4-2f91-5cc2-b511-55cdbbe12c32"
+            }
+          ],
+          "reason": "This reference-side errand-planning policy has no corresponding compared-side claim addressing institutional visits.",
+          "status": "RESOLVED",
+          "summary": "Locations and same-day operating hours should be checked before institutions are grouped into one outing.",
+          "uid": "17dc99bb-9332-5c5e-b15d-f632ef6aad69"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "55829816-c30b-497a-96c3-2ff1c799b090",
+              "memory_uid": "1272087c-a535-5612-8c7a-1bc257183788"
+            }
+          ],
+          "reason": "This reference-side caution about holiday schedules has no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "Postal and financial counter hours may vary around public holidays.",
+          "uid": "036769db-9e8e-50c9-a01a-b70f2cba14da"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "28de6e5b-c0f8-4baf-bf69-882fddbe1691",
+              "memory_uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409"
+            }
+          ],
+          "reason": "This is independently useful compared-side information about winter-accessory storage, with no corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "Gloves and scarves are stored in an entrance basket.",
+          "uid": "7358a523-2c55-5f49-9703-57048d78ea28"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "28de6e5b-c0f8-4baf-bf69-882fddbe1691",
+              "memory_uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5"
+            }
+          ],
+          "reason": "This compared-side experience concerns the consequence of unavailable winter accessories and has no corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "Failing to find gloves led the user to walk with pocketed hands and miss the bus.",
+          "uid": "6ee3c381-092a-5bde-8861-659177fc7ecd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "28de6e5b-c0f8-4baf-bf69-882fddbe1691",
+              "memory_uid": "a11f0943-8ee1-5305-87fb-64982fb36f82"
+            }
+          ],
+          "reason": "This compared-side outcome concerns advance preparation for a winter outing and has no corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "Placing gloves in the entrance basket the night before helped the user leave on time.",
+          "uid": "03ee090c-390e-5f76-aea1-a12240b4ed35"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "28de6e5b-c0f8-4baf-bf69-882fddbe1691",
+              "memory_uid": "f623f245-cdd5-5080-8869-b52cf2914076"
+            }
+          ],
+          "reason": "This compared-side experience concerns snow-related route accessibility and has no corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "A shorter snowy route proved unusable because its stairs had not been cleared.",
+          "uid": "01c27b4e-5317-5fc6-aecb-fb34a92ee842"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "28de6e5b-c0f8-4baf-bf69-882fddbe1691",
+              "memory_uid": "17ac56f1-1302-5350-99d5-b95ef7feb768"
+            }
+          ],
+          "reason": "This compared-side outcome concerns selecting a safer snowy route and has no corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "Using a cleared main-road sidewalk avoided slippery sections.",
+          "uid": "006cfe75-40c3-5bfc-9c87-5d7806d95376"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "28de6e5b-c0f8-4baf-bf69-882fddbe1691",
+              "memory_uid": "96988fa9-44b1-511e-8c99-4372f902cfe3"
+            }
+          ],
+          "reason": "This compared-side experience concerns nighttime temperature and sleep, with no corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "Sleeping with elevated heat caused overheating and repeated waking before dawn.",
+          "uid": "0b9912fc-4a9f-587c-a4e0-268259acdd60"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "28de6e5b-c0f8-4baf-bf69-882fddbe1691",
+              "memory_uid": "b628acaa-50da-552c-8665-244dc4ab8263"
+            }
+          ],
+          "reason": "This compared-side account concerns adjusting nighttime warmth and has no corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "The user subsequently lowered the heat and added a thin blanket.",
+          "uid": "fddf4674-eb0d-515b-8eff-54231e38f983"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "28de6e5b-c0f8-4baf-bf69-882fddbe1691",
+              "memory_uid": "08dfb937-7b28-55b5-801c-c0da00cbd414"
+            }
+          ],
+          "reason": "This compared-side information concerns family reassurance around winter travel and has no corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "During heavy snow, the user’s father anticipates road-condition worries and texts before departure.",
+          "uid": "587c67ed-b747-5397-b758-6f4bf2c37041"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "28de6e5b-c0f8-4baf-bf69-882fddbe1691",
+              "memory_uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d"
+            }
+          ],
+          "reason": "This compared-side winter-route policy has no corresponding reference-side claim addressing snowy travel.",
+          "status": "RESOLVED",
+          "summary": "Recent snow clearance and accessible entrances should be checked before proposing a winter route.",
+          "uid": "cbda0742-01a9-5bc2-ab1e-b53783293732"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "28de6e5b-c0f8-4baf-bf69-882fddbe1691",
+              "memory_uid": "802c4031-57de-592a-9bc8-6ee3d54921c8"
+            }
+          ],
+          "reason": "This compared-side limitation on route-condition knowledge has no corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "A weather forecast alone cannot establish the actual condition of the user’s sidewalk.",
+          "uid": "b7ed7765-8934-5d4c-8e50-1b9bf8eedea1"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame records winter-accessory preparation, route choices based on snow clearance and accessibility, nighttime heat adjustment, a father’s pre-departure reassurance, and limits on inferring sidewalk conditions from forecasts.",
+        "differences": "",
+        "reference_only": "The reference frame records return-packing habits and lessons, postal intake and barcode requirements, route planning for combined bank and postal errands, and checks for daily or holiday hours."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "9ea43584-618a-4fa0-b4b2-d8c1f4b34b0d"
+    },
+    "analysis_digest": "3c4c7ce24f9f303893c7961e4394b2b524ea78aec3754809e5bd4fbe09efca63",
+    "key": "6be9eedcb7e3994d86f0ce4ff06f3c80c94425fd7bdb3ce5e7907dde0fc13d98",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 36.9312346250008,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "6be9eedcb7e3994d86f0ce4ff06f3c80c94425fd7bdb3ce5e7907dde0fc13d98",
+  "created_at": "2026-08-13T18:53:09.484351Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/08",
+  "pair_key": "7b0a960b36d731e15157306c1f49b3dc5dc52a8a85e588b6778b33f211f1daad",
+  "provider_seconds": 36.9312346250008,
+  "right": "task-3/local/personal-memory/2026/01",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

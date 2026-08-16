@@ -1,0 +1,310 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:14:27.454421+00:00",
+      "frames": [
+        {
+          "context_digest": "30f0425cad991a5bb1b473f7e73c2c039db2d91dc0c95116413d0a8e7b6fed29",
+          "context_name": "task-2/advisor1/budget",
+          "context_uid": "d6d3ee9e-eb0f-5c28-9463-7a680d53b470",
+          "memories": [
+            {
+              "content": "Keep the total, major cost categories, and one-line estimate basis in the main text so the resource argument can be understood without leaving the proposal.",
+              "content_digest": "5dc9db0be6499fc408063be04c9e1cc344986512f4d24d5697f5c53a08529c9a",
+              "position": 0,
+              "uid": "05e0261e-5c52-5030-8176-0f02d4522931"
+            },
+            {
+              "content": "Place each major cost beside the activity or deliverable it enables in the main text.",
+              "content_digest": "b97219830051faf46cff7c9541c331012571866926740ed4d6a7925c12fb21a8",
+              "position": 1,
+              "uid": "1083e9b3-698a-57b1-91ab-ce04cec1e5e5"
+            },
+            {
+              "content": "State the quantity and unit-rate basis for each major cost in the same paragraph that requests it.",
+              "content_digest": "5ce37d95d9d037bbab71276fa8f0e8e383b472d0122817ab7b711c971b8cbf5d",
+              "position": 2,
+              "uid": "3652f268-d86f-55d6-935d-d3bdc487aae6"
+            },
+            {
+              "content": "Readers may question a proposed priority when its cost cannot be checked on the same page as the claimed benefit.",
+              "content_digest": "26fa14ff80ece7682cb51c7356a47a8e60e94edd4551f59ecd2fa3017bd9bffd",
+              "position": 3,
+              "uid": "4e1e1201-94b8-5a7a-8737-edc4c62881ff"
+            },
+            {
+              "content": "Update the cost sentence whenever the related activity changes so the narrative and requested amount cannot drift apart.",
+              "content_digest": "343c11198b38874476e0cda3707dd07436699852db0934e2e8f8c95a7ea3c3ea",
+              "position": 4,
+              "uid": "2f5f9039-e038-51c1-8af0-21a78772c512"
+            },
+            {
+              "content": "Accept a denser main-text paragraph when the estimate basis is essential to deciding whether the request is proportionate.",
+              "content_digest": "59ca1aafc11b37b097251b4b7c6b15e249262304f79b261bd4351d3ca89cb5fe",
+              "position": 5,
+              "uid": "f7a16d08-fbe2-5508-890d-cdbf70c1146e"
+            },
+            {
+              "content": "The user tends to revise the work plan but forget a detached budget table unless the key amount is repeated beside the activity.",
+              "content_digest": "393651043824d9e9c528e5de7618854b71970967d172ee1e9bc3c77aec3baab0",
+              "position": 6,
+              "uid": "2ca1d5a1-d78a-55b2-ab21-fd6ad73366b4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "8724abd2-6506-495c-9266-6ec6f4ae8d93"
+        },
+        {
+          "context_digest": "4371a72e6fb939731cb550ca5363a3b5210680482f84c18b36ba933f4454ecc1",
+          "context_name": "task-2/advisor2/expression",
+          "context_uid": "cf8e8baf-292e-57c3-8e2c-3f9b3d52f3d3",
+          "memories": [
+            {
+              "content": "Use a sequence table rather than a flow diagram when the procedure is likely to change repeatedly during drafting.",
+              "content_digest": "575bb4530af1e93b215ea57f0fd63e1e09136554da98aecf87288cc39ea9697c",
+              "position": 0,
+              "uid": "4264c20d-3e44-578d-866e-7787cc7b59e2"
+            },
+            {
+              "content": "The visual fidelity of a prototype and its level of connection to actual data and services may differ.",
+              "content_digest": "9478cb005a07ca7edfa924579b3d5221b1fa1143b5d8327369e7ee799b76aa9f",
+              "position": 1,
+              "uid": "70a8c3f0-0f6a-5881-abd6-29f52833b7bd"
+            },
+            {
+              "content": "Service flow diagrams indicate human-system transitions that are not revealed by individual screens alone.",
+              "content_digest": "5e3e18a38b1e62724d2ae0445549e214a219d205a80735bc6b4c0e643a96b8b3",
+              "position": 2,
+              "uid": "b410aa8d-db87-586b-a1cd-4af5767a9f7a"
+            },
+            {
+              "content": "HCI reviewers often scan system structure and service flow diagrams before the main text.",
+              "content_digest": "22a46440a6aeda0cb7d39cc6fedf6bbff6cac91232ec0cb163bf1fc17ff257d4",
+              "position": 3,
+              "uid": "a385fbb1-85b4-5132-bbc7-8fd8daedb715"
+            },
+            {
+              "content": "Give each step, actor, condition, and outcome a stable row in the sequence table.",
+              "content_digest": "2a073bf2ec4c5592ddc405d83cb438a5ed880699d3c157f310fb3dbff7851622",
+              "position": 4,
+              "uid": "22254f16-4628-5fd9-b1af-6e66dc2572b3"
+            },
+            {
+              "content": "Updating one row in a sequence table is usually faster than redrawing a branching diagram after a procedural change.",
+              "content_digest": "cf97dbf66018a6be1ee42dfc79ff8de44e8742db2b42c9d1ef70b3f252805a39",
+              "position": 5,
+              "uid": "32028269-5d43-5a65-b22b-9e570ceabfde"
+            },
+            {
+              "content": "Readers can check sequence tables step by step but may find the overall branching shape less immediate.",
+              "content_digest": "18b5de0cdd22ef1774151332afdbc408f9f591cf889e51271f81a372f74ef86d",
+              "position": 6,
+              "uid": "939ee3d0-b611-574a-a25b-82708394bd5e"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "df3a6d5f-74a9-49ba-91db-5a5fd488b8a2"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate proposal-design concerns: one keeps costs, activities, and estimate bases visibly synchronized in prose, while the other distinguishes prototype dimensions and weighs editable sequence tables against flow diagrams. Neither side contains a claim governing the other’s decisions.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8724abd2-6506-495c-9266-6ec6f4ae8d93",
+              "memory_uid": "05e0261e-5c52-5030-8176-0f02d4522931"
+            }
+          ],
+          "reason": "This is a one-sided policy for making the resource argument understandable without navigating elsewhere.",
+          "status": "RESOLVED",
+          "summary": "Keep the overall amount, major cost categories, and brief estimate basis in the proposal’s main text.",
+          "uid": "81f0856e-d91a-52a4-a471-dd241e89cde1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8724abd2-6506-495c-9266-6ec6f4ae8d93",
+              "memory_uid": "1083e9b3-698a-57b1-91ab-ce04cec1e5e5"
+            },
+            {
+              "frame_uid": "8724abd2-6506-495c-9266-6ec6f4ae8d93",
+              "memory_uid": "4e1e1201-94b8-5a7a-8737-edc4c62881ff"
+            }
+          ],
+          "reason": "The memories express the same underlying one-sided claim that proximity between cost and benefit enables scrutiny.",
+          "status": "RESOLVED",
+          "summary": "Place major costs beside the activities or benefits they support so readers can assess priorities on the same page.",
+          "uid": "e13e61c0-1110-5a4a-bc9a-01d9aa2efc2a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8724abd2-6506-495c-9266-6ec6f4ae8d93",
+              "memory_uid": "3652f268-d86f-55d6-935d-d3bdc487aae6"
+            }
+          ],
+          "reason": "This independently specifies the required granularity and location of estimate support.",
+          "status": "RESOLVED",
+          "summary": "State each major cost’s quantity and unit-rate basis in the paragraph requesting it.",
+          "uid": "a1eefb66-4df1-5034-be07-f6df7219b9a7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8724abd2-6506-495c-9266-6ec6f4ae8d93",
+              "memory_uid": "2f5f9039-e038-51c1-8af0-21a78772c512"
+            },
+            {
+              "frame_uid": "8724abd2-6506-495c-9266-6ec6f4ae8d93",
+              "memory_uid": "2ca1d5a1-d78a-55b2-ab21-fd6ad73366b4"
+            }
+          ],
+          "reason": "Both memories describe the same one-sided synchronization need arising when activities are revised while detached budget information is overlooked.",
+          "status": "RESOLVED",
+          "summary": "Repeat key amounts beside activities and update them when the work plan changes to prevent narrative and budget drift.",
+          "uid": "13588c89-4b64-5d4d-9fb6-6a7ec6161130"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8724abd2-6506-495c-9266-6ec6f4ae8d93",
+              "memory_uid": "f7a16d08-fbe2-5508-890d-cdbf70c1146e"
+            }
+          ],
+          "reason": "This independently establishes a presentation tradeoff favoring decision-relevant cost evidence.",
+          "status": "RESOLVED",
+          "summary": "Accept denser main text when estimate details are essential to judging proportionality.",
+          "uid": "4540f19d-f357-55ad-a50c-31d05145f0f2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "df3a6d5f-74a9-49ba-91db-5a5fd488b8a2",
+              "memory_uid": "4264c20d-3e44-578d-866e-7787cc7b59e2"
+            },
+            {
+              "frame_uid": "df3a6d5f-74a9-49ba-91db-5a5fd488b8a2",
+              "memory_uid": "32028269-5d43-5a65-b22b-9e570ceabfde"
+            }
+          ],
+          "reason": "Both memories support the same one-sided format choice based on drafting and revision effort.",
+          "status": "RESOLVED",
+          "summary": "Prefer a sequence table for procedures that will change repeatedly because individual rows are faster to update than branching diagrams.",
+          "uid": "e4920a51-261a-5aeb-94a2-f53a911789d4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "df3a6d5f-74a9-49ba-91db-5a5fd488b8a2",
+              "memory_uid": "70a8c3f0-0f6a-5881-abd6-29f52833b7bd"
+            }
+          ],
+          "reason": "This is an independent one-sided distinction about prototype characterization.",
+          "status": "RESOLVED",
+          "summary": "Treat a prototype’s visual fidelity and its connection to real data and services as separate dimensions.",
+          "uid": "933fa54b-8e0d-5908-963b-26d2519b6172"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "df3a6d5f-74a9-49ba-91db-5a5fd488b8a2",
+              "memory_uid": "b410aa8d-db87-586b-a1cd-4af5767a9f7a"
+            }
+          ],
+          "reason": "This independently identifies information uniquely conveyed by a flow representation.",
+          "status": "RESOLVED",
+          "summary": "Use service flow diagrams to reveal human-system transitions that individual screens do not show.",
+          "uid": "0eb34604-4b3a-5a90-9b5d-7ef25e6cdfe5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "df3a6d5f-74a9-49ba-91db-5a5fd488b8a2",
+              "memory_uid": "a385fbb1-85b4-5132-bbc7-8fd8daedb715"
+            }
+          ],
+          "reason": "This is independent one-sided information about reviewer navigation behavior.",
+          "status": "RESOLVED",
+          "summary": "HCI reviewers may inspect system-structure and service-flow diagrams before reading the main text.",
+          "uid": "c0e646da-99c1-5661-b4a8-fc5435c1cb04"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "df3a6d5f-74a9-49ba-91db-5a5fd488b8a2",
+              "memory_uid": "22254f16-4628-5fd9-b1af-6e66dc2572b3"
+            }
+          ],
+          "reason": "This independently specifies the table’s structural convention.",
+          "status": "RESOLVED",
+          "summary": "Assign every step, actor, condition, and outcome a stable row in a sequence table.",
+          "uid": "417079d0-044d-59d8-a9f0-d2186c83ddb5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "df3a6d5f-74a9-49ba-91db-5a5fd488b8a2",
+              "memory_uid": "939ee3d0-b611-574a-a25b-82708394bd5e"
+            }
+          ],
+          "reason": "This independently records the format’s paired inspection benefit and visual limitation.",
+          "status": "RESOLVED",
+          "summary": "Sequence tables support step-by-step checking but make the overall branching shape less immediate.",
+          "uid": "7cad720a-2f3e-5fde-8c3c-e7d58e22d3b6"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame distinguishes prototype fidelity from integration and explains how sequence tables and flow diagrams differently support revision, stepwise checking, branching visibility, transitions, and reviewer scanning.",
+        "differences": "",
+        "reference_only": "The reference emphasizes making costs checkable beside their benefits, preserving estimate detail despite denser prose, and keeping amounts synchronized with changing activities."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "17f0a34d-ae3e-4d53-888c-8570fcd50ba1"
+    },
+    "analysis_digest": "f3b52db2c0d40dc71ae3093afb2706525aad1b53d33dd0f20fbf1e698538c838",
+    "key": "18ea219721e87b25f3af0839902847e3fa38c511f9afce40e8c3b32c63bad2cd",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 37.50519725000049,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "18ea219721e87b25f3af0839902847e3fa38c511f9afce40e8c3b32c63bad2cd",
+  "created_at": "2026-08-13T18:15:04.959268Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/budget",
+  "pair_key": "9c9701dfa8fd5259b9d1eaefd8a2915569e40bb0248709dc6dae1f5ed45595e6",
+  "provider_seconds": 37.50519725000049,
+  "right": "task-2/advisor2/expression",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

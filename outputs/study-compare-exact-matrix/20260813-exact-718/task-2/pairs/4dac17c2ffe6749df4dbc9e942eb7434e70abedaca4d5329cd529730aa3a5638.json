@@ -1,0 +1,443 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:16:25.338685+00:00",
+      "frames": [
+        {
+          "context_digest": "e76b6eea5af0e4d970d4db385b4100a788a8b1ed5ef6e68709bd92c943ab3b6b",
+          "context_name": "task-2/advisor1/compensation",
+          "context_uid": "7ba75d6b-cef6-5c8b-9b17-d3901e168d24",
+          "memories": [
+            {
+              "content": "Calculate user study compensation budgets based on estimated participation burden, combining session time and preparation effort.",
+              "content_digest": "2dc18d8ddeb900741b2a8f936a59d5fc72423e2d3144e8b2232a6435dc9a68f1",
+              "position": 0,
+              "uid": "0ae46268-cca7-57d5-a0ee-6eb3b85cda84"
+            },
+            {
+              "content": "Compensate for required travel time in face-to-face user studies as well.",
+              "content_digest": "688ba9df95e18254a5a33ab6c0e59066cf0674137b6802178e3fb8eae4ba38e5",
+              "position": 1,
+              "uid": "bdda6e22-ea06-5a13-8854-67f7521724db"
+            },
+            {
+              "content": "Compensate for the actual time participants spent in sessions, regardless of research modality.",
+              "content_digest": "8673c2b5b5913f0e8bcf0035eea4bc87430bb1fcf8ffb27b354bde0ca3a7ae4e",
+              "position": 2,
+              "uid": "f49b1d0a-7a1a-53b5-b7fc-815cc2cc134a"
+            },
+            {
+              "content": "Leave cash payment as an available compensation method for face-to-face studies.",
+              "content_digest": "72f9e1b33de0c05bb711c2d8162ab62f382a75871a710db37b858125eae6fcde",
+              "position": 3,
+              "uid": "1f4d05e4-2a79-572c-8050-beb1464fb781"
+            },
+            {
+              "content": "If compensation equity is explained, do not require finalizing the payment method at the proposal stage.",
+              "content_digest": "6945260e986651e7992034801b6151a3f93184013fea77d17b630f55fcdc943b",
+              "position": 4,
+              "uid": "abcba764-6f35-5dae-bb3d-7860fb72ccf2"
+            },
+            {
+              "content": "Apply the same base hourly rate to face-to-face and remote studies if task burden is equal.",
+              "content_digest": "144477b358e6e8931042d1793a5ffd10f56d69aa90523d69d20a622528a9dad0",
+              "position": 5,
+              "uid": "c6a28f37-1a7c-5dbd-b75c-c829f0461504"
+            },
+            {
+              "content": "Participants judge compensation fairness based on the total burden, combining session time with required travel and preparation time.",
+              "content_digest": "54e8900c7049e048484db8b523a41e98cbb911b45be2adbd103fd2f1635bf026",
+              "position": 6,
+              "uid": "874de649-9c04-5960-b3a9-e68356ef666c"
+            },
+            {
+              "content": "Account in compensation for the burden of rescheduling iterations and returning for multiple formative evaluation sessions.",
+              "content_digest": "f09be004defb4019ba7476919b6780cc2b6bbac088f79dbd0ec66bf2753af27d",
+              "position": 7,
+              "uid": "529559f5-850d-5920-8e27-0b1e7138dc36"
+            },
+            {
+              "content": "Compensate participants for time already invested even if a session is terminated early due to prototype errors.",
+              "content_digest": "64b65cc0b307b48d64641d126594a5b8a9258518c3aa27d7846be2306c25a9f4",
+              "position": 8,
+              "uid": "c8be56ee-860a-5f6c-abbf-02c8dbc59eb5"
+            },
+            {
+              "content": "The author of this proposal tends to exclude preparation burden between sessions when calculating compensation for iterative studies.",
+              "content_digest": "177f041fcb9fe768dcc1c476b592e99c8609d06ebf727aeca1379d21256b43d8",
+              "position": 9,
+              "uid": "bdac8cf8-dd11-5794-b4b2-9774ff344436"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "6a6772bf-88e5-4470-9132-9c2d50a845e1"
+        },
+        {
+          "context_digest": "6cd44802c5b4878ee84adef31f52231d09d37ccc0ef9a7256d0421114835a6bd",
+          "context_name": "task-2/advisor2/claim-evidence",
+          "context_uid": "1ca4b72a-fcbb-5997-a1b5-f764662460a5",
+          "memories": [
+            {
+              "content": "Place observational evidence or sources adjacent to claims regarding user needs or field effects.",
+              "content_digest": "513b102a6ed66a1dd3fb3380065f34552036a6dffed20d7101487342096021e3",
+              "position": 0,
+              "uid": "b39cf79f-d174-5ecb-98c9-b3f62ce0696a"
+            },
+            {
+              "content": "Distinguish at the sentence level between facts already confirmed in the field and predictions to be examined in the user study.",
+              "content_digest": "63a7fdcf7da5c4fa36a2c7a6f8542837956fa0dcdedee781593f399516501067",
+              "position": 1,
+              "uid": "b95e0185-f933-508d-8da7-41c65e2cc340"
+            },
+            {
+              "content": "Do not use verbs implying proof of causality if the design does not support causal inference.",
+              "content_digest": "0db514f790eb85ba0800c1f8c659cd4236136b9e36c034899c36f6116c040f04",
+              "position": 2,
+              "uid": "f82f1e1f-3f27-5668-a5a4-e64b0f88b44a"
+            },
+            {
+              "content": "Prioritize citations of recent systems and field research in rapidly changing HCI topics.",
+              "content_digest": "e8cd0847480ba8d07f971f21978873d13b6bd34d4e4625dd3dde8039afd5b88c",
+              "position": 3,
+              "uid": "b5461283-9001-510c-9a30-bb367f247b25"
+            },
+            {
+              "content": "Explain the user or operational stakeholder needs that each design choice aims to address.",
+              "content_digest": "59df6b478a0e200ceaa520bb7c4535b2078a8354efae0eec77a06cb6843bfab6",
+              "position": 4,
+              "uid": "87340c01-2e0f-5b82-9410-2133648022da"
+            },
+            {
+              "content": "Support each important conclusion with the closest evidence that directly examined it.",
+              "content_digest": "6731286cd67ee18644df531752f10913f4df9e7c7acf936da99caafacd597c0a",
+              "position": 5,
+              "uid": "8b15a9ad-aa53-5a54-beb2-f1cc8d6da846"
+            },
+            {
+              "content": "Reviewers first check direct evidence placed closest to important conclusions.",
+              "content_digest": "940880f0ee481e00ff7f935c9b76af8137d0f8a8664a2c53fb3d044681980c8f",
+              "position": 6,
+              "uid": "565a2263-e3bc-5379-9a80-64665b491c88"
+            },
+            {
+              "content": "Use field cases in which people completed tasks by working around existing tools as evidence for the need for the design.",
+              "content_digest": "4c731184cb33bda8ab315870713872842339013be68cf5f79c43a8b9f4e297d4",
+              "position": 7,
+              "uid": "27b58ee9-5cad-5872-8eb7-a694728d8e79"
+            },
+            {
+              "content": "Distinguish between problems reported by operational stakeholders and those directly observed by the researcher as separate forms of evidence.",
+              "content_digest": "39586ea932c540d6c7a1b0faff870d7ef6433052792defdc110beb513276ffe6",
+              "position": 8,
+              "uid": "cf7e9410-2144-53c4-a236-a16a7b5be494"
+            },
+            {
+              "content": "Field breakdown logs can reveal both system failures and user adaptive behaviors, including their timing and conditions.",
+              "content_digest": "331910b18eef90e53453e700a55b43143b3e8d07d3bb2c88bade31fddb0e5965",
+              "position": 9,
+              "uid": "ad643b33-fba1-5643-b57f-3bb8c3829122"
+            },
+            {
+              "content": "In field sites introducing new systems, formal procedures often coexist with existing manual routines for a period, making it difficult to isolate the effects of single design changes.",
+              "content_digest": "7def8e340a5ae1ad7cce9228e3e4279f499f47f0d2576bbe23e59f3703f04084",
+              "position": 10,
+              "uid": "546548e3-c47a-5a74-a04a-0a328602ead4"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "a32d7d90-9e3b-4815-978f-87a650e477a0"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate concerns: the reference frame governs participant-compensation fairness and logistics, while the compared frame governs evidence placement, claim discipline, stakeholder grounding, and interpretation of field observations. Neither supplies a scope-aligned counterpart to the other’s operational claims.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6a6772bf-88e5-4470-9132-9c2d50a845e1",
+              "memory_uid": "0ae46268-cca7-57d5-a0ee-6eb3b85cda84"
+            },
+            {
+              "frame_uid": "6a6772bf-88e5-4470-9132-9c2d50a845e1",
+              "memory_uid": "874de649-9c04-5960-b3a9-e68356ef666c"
+            }
+          ],
+          "reason": "These reference-only claims jointly state the total-burden basis and its fairness rationale; the compared frame does not address compensation.",
+          "status": "RESOLVED",
+          "summary": "Compensation should reflect total participation burden, including session and preparation effort, because participants assess fairness across the combined burden.",
+          "uid": "79b36f1e-ba84-5f81-9c5e-845282a6940e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6a6772bf-88e5-4470-9132-9c2d50a845e1",
+              "memory_uid": "bdda6e22-ea06-5a13-8854-67f7521724db"
+            }
+          ],
+          "reason": "This is a distinct reference-only rule for an in-person burden component, with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Required travel time should be compensated in face-to-face studies.",
+          "uid": "96ac5c62-5b7b-5ad4-96bf-22166753bee1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6a6772bf-88e5-4470-9132-9c2d50a845e1",
+              "memory_uid": "f49b1d0a-7a1a-53b5-b7fc-815cc2cc134a"
+            }
+          ],
+          "reason": "This modality-wide payment rule appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Actual session time should be compensated regardless of study modality.",
+          "uid": "d174780a-6aeb-5458-9d03-e347d663455c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6a6772bf-88e5-4470-9132-9c2d50a845e1",
+              "memory_uid": "1f4d05e4-2a79-572c-8050-beb1464fb781"
+            }
+          ],
+          "reason": "This reference-only claim concerns payment method availability rather than compensation amount or evidence practice.",
+          "status": "RESOLVED",
+          "summary": "Cash should remain an available compensation method for face-to-face studies.",
+          "uid": "6da14128-c959-5394-a331-f627b0b13a41"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6a6772bf-88e5-4470-9132-9c2d50a845e1",
+              "memory_uid": "abcba764-6f35-5dae-bb3d-7860fb72ccf2"
+            }
+          ],
+          "reason": "This conditional proposal-stage flexibility appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "When compensation equity is explained, the payment method need not be finalized at the proposal stage.",
+          "uid": "8af12efb-ead6-5279-a6b6-f57b83732935"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6a6772bf-88e5-4470-9132-9c2d50a845e1",
+              "memory_uid": "c6a28f37-1a7c-5dbd-b75c-c829f0461504"
+            }
+          ],
+          "reason": "This conditional modality-equity rule has no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Face-to-face and remote studies should use the same base hourly rate when task burden is equal.",
+          "uid": "acc73be2-49aa-5e3d-84d1-9c4fa4084a9b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6a6772bf-88e5-4470-9132-9c2d50a845e1",
+              "memory_uid": "529559f5-850d-5920-8e27-0b1e7138dc36"
+            }
+          ],
+          "reason": "This reference-only policy addresses burdens created by iterative participation.",
+          "status": "RESOLVED",
+          "summary": "Compensation should account for rescheduling and repeat attendance across formative evaluation iterations.",
+          "uid": "d0bc4682-8a46-534a-a26e-f269be7bd2f9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6a6772bf-88e5-4470-9132-9c2d50a845e1",
+              "memory_uid": "c8be56ee-860a-5f6c-abbf-02c8dbc59eb5"
+            }
+          ],
+          "reason": "This reference-only rule addresses compensation after an unsuccessful early termination.",
+          "status": "RESOLVED",
+          "summary": "Participants should be compensated for time already invested when prototype errors terminate a session early.",
+          "uid": "0a515338-a214-5d4e-86ee-b9e255e772ca"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6a6772bf-88e5-4470-9132-9c2d50a845e1",
+              "memory_uid": "bdac8cf8-dd11-5794-b4b2-9774ff344436"
+            }
+          ],
+          "reason": "This is a distinct reference-only observation about the author’s calculation practice.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to omit between-session preparation burden from iterative-study compensation calculations.",
+          "uid": "2eac3a2c-5ee7-548a-a065-5136fb256a4f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a32d7d90-9e3b-4815-978f-87a650e477a0",
+              "memory_uid": "b39cf79f-d174-5ecb-98c9-b3f62ce0696a"
+            },
+            {
+              "frame_uid": "a32d7d90-9e3b-4815-978f-87a650e477a0",
+              "memory_uid": "8b15a9ad-aa53-5a54-beb2-f1cc8d6da846"
+            },
+            {
+              "frame_uid": "a32d7d90-9e3b-4815-978f-87a650e477a0",
+              "memory_uid": "565a2263-e3bc-5379-9a80-64665b491c88"
+            }
+          ],
+          "reason": "These compared-only memories express one evidence-proximity principle and its reviewer-behavior rationale; the reference frame does not discuss evidentiary presentation.",
+          "status": "RESOLVED",
+          "summary": "Important claims and conclusions should be supported by directly relevant evidence placed nearby, consistent with reviewers’ attention to proximal support.",
+          "uid": "dcab7b64-30aa-53e8-a32a-9654683c0d19"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a32d7d90-9e3b-4815-978f-87a650e477a0",
+              "memory_uid": "b95e0185-f933-508d-8da7-41c65e2cc340"
+            }
+          ],
+          "reason": "This sentence-level claim-status distinction appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Writing should distinguish confirmed field facts from predictions that the user study will examine.",
+          "uid": "d82bde22-e7f4-518e-88f0-5bd1c08a99c8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a32d7d90-9e3b-4815-978f-87a650e477a0",
+              "memory_uid": "f82f1e1f-3f27-5668-a5a4-e64b0f88b44a"
+            }
+          ],
+          "reason": "This compared-only rule governs alignment between rhetoric and inferential design.",
+          "status": "RESOLVED",
+          "summary": "Causal verbs should not be used when the study design cannot support causal inference.",
+          "uid": "b1a20f3b-73a4-5c47-a3db-952221055c6a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a32d7d90-9e3b-4815-978f-87a650e477a0",
+              "memory_uid": "b5461283-9001-510c-9a30-bb367f247b25"
+            }
+          ],
+          "reason": "This compared-only claim concerns the currency and domain relevance of sources.",
+          "status": "RESOLVED",
+          "summary": "Rapidly changing HCI topics should prioritize citations to recent systems and field research.",
+          "uid": "75dc2d68-b173-5722-bf23-c63d59790e7d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a32d7d90-9e3b-4815-978f-87a650e477a0",
+              "memory_uid": "87340c01-2e0f-5b82-9410-2133648022da"
+            }
+          ],
+          "reason": "This compared-only requirement concerns design rationale and stakeholder grounding.",
+          "status": "RESOLVED",
+          "summary": "Each design choice should be linked to the user or operational stakeholder need it addresses.",
+          "uid": "67edc62a-fc96-513b-8577-604b3d603bf4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a32d7d90-9e3b-4815-978f-87a650e477a0",
+              "memory_uid": "27b58ee9-5cad-5872-8eb7-a694728d8e79"
+            }
+          ],
+          "reason": "This compared-only claim identifies a specific evidentiary use of observed workarounds.",
+          "status": "RESOLVED",
+          "summary": "Field cases where people work around existing tools can evidence the need for a design.",
+          "uid": "4c14b7b7-76e2-51fe-815c-6631ea403d75"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a32d7d90-9e3b-4815-978f-87a650e477a0",
+              "memory_uid": "cf7e9410-2144-53c4-a236-a16a7b5be494"
+            }
+          ],
+          "reason": "This compared-only rule preserves distinctions in evidence provenance.",
+          "status": "RESOLVED",
+          "summary": "Stakeholder-reported problems and researcher-observed problems should be identified as separate evidence forms.",
+          "uid": "920718f9-2cc4-589e-a6f6-ca4a6d384061"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a32d7d90-9e3b-4815-978f-87a650e477a0",
+              "memory_uid": "ad643b33-fba1-5643-b57f-3bb8c3829122"
+            }
+          ],
+          "reason": "This compared-only claim describes the diagnostic value of a particular field-data source.",
+          "status": "RESOLVED",
+          "summary": "Field breakdown logs can expose system failures and adaptive user behavior together with their timing and conditions.",
+          "uid": "ee642edc-7b23-542c-9b78-2c66896ab1bd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a32d7d90-9e3b-4815-978f-87a650e477a0",
+              "memory_uid": "546548e3-c47a-5a74-a04a-0a328602ead4"
+            }
+          ],
+          "reason": "This compared-only observation identifies a field-transition condition that complicates causal attribution.",
+          "status": "RESOLVED",
+          "summary": "Temporary coexistence of formal procedures and manual routines during system introduction can hinder isolation of individual design effects.",
+          "uid": "6a58c228-0fd9-5014-9a4c-aa0de0a91379"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers evidence proximity and provenance, cautious causal language, current citations, stakeholder needs, field workarounds and logs, and confounding during system transitions.",
+        "differences": "",
+        "reference_only": "The reference frame covers burden-based compensation, modality equity, payment flexibility, iterative participation, early termination, and a preparation-time omission tendency."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "4eb209f5-2f82-486e-830b-dbe186228fd4"
+    },
+    "analysis_digest": "db51cdf354597173dd6f2a584baa909c19b259d9a7bda7ce628e6007a530b538",
+    "key": "1e1206cd0dfb3172a9dd9b3ceb27ed3d5ad456c8318c5a43764ee9e6bf3d7c6a",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 43.78579995800101,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "1e1206cd0dfb3172a9dd9b3ceb27ed3d5ad456c8318c5a43764ee9e6bf3d7c6a",
+  "created_at": "2026-08-13T18:17:09.123918Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/compensation",
+  "pair_key": "4dac17c2ffe6749df4dbc9e942eb7434e70abedaca4d5329cd529730aa3a5638",
+  "provider_seconds": 43.78579995800101,
+  "right": "task-2/advisor2/claim-evidence",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

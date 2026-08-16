@@ -1,0 +1,226 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:20:54.555817+00:00",
+      "frames": [
+        {
+          "context_digest": "c4484b7a8284d7e31066ad3f4c4edf8844a2e0ce8695a323093f753243b6b18f",
+          "context_name": "task-2/advisor1/expression",
+          "context_uid": "39a6f298-c511-5c21-a106-998c1df9d951",
+          "memories": [
+            {
+              "content": "Use a flow diagram rather than a sequence table when alternate procedural branches lead to different outcomes.",
+              "content_digest": "48075a546ef4f1c2735e202cf43df2c164e4382f323007f542915195d025bf58",
+              "position": 0,
+              "uid": "51fa3fcc-9d5f-52f0-809d-62d7cdd8a865"
+            },
+            {
+              "content": "Draw alternate branches and their resulting outcomes in the same flow diagram so readers can compare them at once.",
+              "content_digest": "85d1fdc887f442e05b4089e28a6dc671e757eb781eae9c39646673054306ec34",
+              "position": 1,
+              "uid": "e686bd4d-3ebd-5e55-ba39-f26971247965"
+            },
+            {
+              "content": "The visual fidelity of a prototype may differ from its functional fidelity.",
+              "content_digest": "bfc110d2df084fd4f8393284db693ead012f2bfd9a4e804fd89f9a4e45e16e8c",
+              "position": 2,
+              "uid": "019662a9-6f03-527f-9b6d-be5a2966d9e9"
+            },
+            {
+              "content": "A flow diagram can make alternate branches and their different outcomes visible in one view.",
+              "content_digest": "8f69a73784cb0c304671161a6c42c63480c0ce0cc4864e613d8dde466365d496",
+              "position": 3,
+              "uid": "a6dfe9a7-1df8-561f-8d3e-fc19518beca9"
+            },
+            {
+              "content": "HCI reviewers often skim prototype screens and interaction flow diagrams before reading the main text.",
+              "content_digest": "ee7009a111b29298f748336d571f4d0233e08ef0255f6cfe69cb4c26def96394",
+              "position": 4,
+              "uid": "7047a23d-45b3-5d5c-a00b-c12552e9680d"
+            },
+            {
+              "content": "Readers can understand the overall branching shape of a procedure more quickly from a flow diagram than from rows read one at a time.",
+              "content_digest": "beb9438eb216e54223266b4f592245450812228d69f7a38908e4c260a0aaca01",
+              "position": 5,
+              "uid": "50a71968-7e3f-5b99-b3fa-769af386d0c0"
+            },
+            {
+              "content": "Redrawing a branching flow diagram after a procedural change usually takes longer than updating one row in a table.",
+              "content_digest": "cb0e535e1e58a4dbf42c5f22a3eded19fa0c228c6531b70530b226eeb2dbf24c",
+              "position": 6,
+              "uid": "ae1610f6-a855-56c1-a0fb-fd3207dab615"
+            },
+            {
+              "content": "Reviewers often inspect the proposal’s main visual before reading the procedural explanation in full.",
+              "content_digest": "a609677d56e7297c736ee92c7a45eb4d83824985a780d8ca4df664f1494c5cb2",
+              "position": 7,
+              "uid": "d2825b84-b4a6-58c9-8f8e-9e19c6192a03"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "782f2005-97cb-42ae-906f-0bb90da0dfaa"
+        },
+        {
+          "context_digest": "bb54539faeedf2db9ada09643c11270aabf235d8e3e6df98500f90f9b82aed49",
+          "context_name": "task-2/advisor2/reproducibility",
+          "context_uid": "5f2f3c0f-4cb1-5151-b381-847df75b6457",
+          "memories": [
+            {
+              "content": "HCI reviewers find it difficult to assess result reproducibility if the system version used in the field deployment is not disclosed.",
+              "content_digest": "83ac18cb56f74dbeb7834909b999669bb9a46d320b288bf38fb7b6c9bd0812f2",
+              "position": 0,
+              "uid": "40f11374-d91b-546a-9e93-fcf98a0fde98"
+            },
+            {
+              "content": "Record changes in system configurations, field procedures, and data collection tools during deployment, along with their timestamps and rationales.",
+              "content_digest": "ac399146f49e6ae5d21272de0cd13db6346d4cd67b096ecfa9bd314b026f403e",
+              "position": 1,
+              "uid": "cc72ad54-4cf3-56cd-9119-46776f5b2184"
+            },
+            {
+              "content": "The history of deployment versions and configuration changes provides necessary evidence for interpreting results from different field sites.",
+              "content_digest": "39ae70de900b646362a96cfa7d734a6404604b468398b09da9fb05783b389d25",
+              "position": 2,
+              "uid": "75f22b45-fb1b-568c-bb05-080fdacdcab2"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "e47b93d0-2a01-413b-b881-2a3f9e9f9227"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate concerns. The reference addresses how branching procedures and prototypes should be presented and reviewed, including a maintenance tradeoff; the compared frame addresses deployment-version and change documentation for reproducibility and cross-site interpretation.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "782f2005-97cb-42ae-906f-0bb90da0dfaa",
+              "memory_uid": "51fa3fcc-9d5f-52f0-809d-62d7cdd8a865"
+            },
+            {
+              "frame_uid": "782f2005-97cb-42ae-906f-0bb90da0dfaa",
+              "memory_uid": "e686bd4d-3ebd-5e55-ba39-f26971247965"
+            },
+            {
+              "frame_uid": "782f2005-97cb-42ae-906f-0bb90da0dfaa",
+              "memory_uid": "a6dfe9a7-1df8-561f-8d3e-fc19518beca9"
+            },
+            {
+              "frame_uid": "782f2005-97cb-42ae-906f-0bb90da0dfaa",
+              "memory_uid": "50a71968-7e3f-5b99-b3fa-769af386d0c0"
+            }
+          ],
+          "reason": "These reference-side memories split one underlying presentation claim across format choice, diagram composition, visibility, and comprehension benefit; the compared frame contains no corresponding claim.",
+          "status": "RESOLVED",
+          "summary": "Flow diagrams provide a one-view presentation of alternate procedural branches and outcomes that supports quicker comparison and understanding than rowwise sequence tables.",
+          "uid": "8f3fcf75-71eb-5aef-9334-b3dbb364a275"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "782f2005-97cb-42ae-906f-0bb90da0dfaa",
+              "memory_uid": "019662a9-6f03-527f-9b6d-be5a2966d9e9"
+            }
+          ],
+          "reason": "This is an independently useful reference-only distinction about prototype evaluation, with no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "A prototype’s visual fidelity and functional fidelity may differ.",
+          "uid": "574ee576-10f1-5b47-b590-43bda1024daf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "782f2005-97cb-42ae-906f-0bb90da0dfaa",
+              "memory_uid": "7047a23d-45b3-5d5c-a00b-c12552e9680d"
+            },
+            {
+              "frame_uid": "782f2005-97cb-42ae-906f-0bb90da0dfaa",
+              "memory_uid": "d2825b84-b4a6-58c9-8f8e-9e19c6192a03"
+            }
+          ],
+          "reason": "The reference-side memories restate the same visual-first review behavior at general and HCI-specific levels; the compared frame does not address review order.",
+          "status": "RESOLVED",
+          "summary": "Reviewers often inspect key proposal visuals before reading the full written explanation.",
+          "uid": "4a7e2cb5-916a-51b8-9ca8-803a4624ab04"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "782f2005-97cb-42ae-906f-0bb90da0dfaa",
+              "memory_uid": "ae1610f6-a855-56c1-a0fb-fd3207dab615"
+            }
+          ],
+          "reason": "This is a separate reference-only maintenance tradeoff rather than another statement of the diagram’s comprehension benefit.",
+          "status": "RESOLVED",
+          "summary": "Updating a branching flow diagram after procedural change generally takes longer than changing a single table row.",
+          "uid": "0f0a522e-c711-5e10-b959-9baa20972719"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e47b93d0-2a01-413b-b881-2a3f9e9f9227",
+              "memory_uid": "40f11374-d91b-546a-9e93-fcf98a0fde98"
+            },
+            {
+              "frame_uid": "e47b93d0-2a01-413b-b881-2a3f9e9f9227",
+              "memory_uid": "cc72ad54-4cf3-56cd-9119-46776f5b2184"
+            },
+            {
+              "frame_uid": "e47b93d0-2a01-413b-b881-2a3f9e9f9227",
+              "memory_uid": "75f22b45-fb1b-568c-bb05-080fdacdcab2"
+            }
+          ],
+          "reason": "The compared-side memories split one documentation policy across version disclosure, timestamped change records with rationales, and their evidentiary value; the reference frame has no corresponding claim.",
+          "status": "RESOLVED",
+          "summary": "Deployment versions and operational changes should be disclosed and historically recorded to support reproducibility and interpretation across field sites.",
+          "uid": "89817680-7588-5921-95b4-6b98ac8b1c7f"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame calls for disclosed, timestamped deployment-version and configuration histories to support reproducibility and interpretation across field sites.",
+        "differences": "",
+        "reference_only": "The reference favors flow diagrams for branching procedures, distinguishes visual from functional prototype fidelity, notes reviewers’ visual-first reading behavior, and identifies higher diagram-update effort."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "3d4b69eb-a708-41de-8639-0154991cfe4f"
+    },
+    "analysis_digest": "9aeab3d60ecca9ac9ef839b6c1f65593641e0cf8386870b3a676ea1bc3163044",
+    "key": "7a374f0454979c54e2498fdaa1407b531e89ad0be107d81e8a63222e64df7987",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 44.40811279099944,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "7a374f0454979c54e2498fdaa1407b531e89ad0be107d81e8a63222e64df7987",
+  "created_at": "2026-08-13T18:21:38.963472Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/expression",
+  "pair_key": "65c0406889c97404bd94c37907bff03e59889401f5ff3434bbdcdc3a09e4892e",
+  "provider_seconds": 44.40811279099944,
+  "right": "task-2/advisor2/reproducibility",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

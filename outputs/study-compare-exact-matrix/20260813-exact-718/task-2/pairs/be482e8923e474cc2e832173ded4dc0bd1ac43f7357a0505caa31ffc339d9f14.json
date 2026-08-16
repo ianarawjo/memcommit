@@ -1,0 +1,338 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:15:06.734541+00:00",
+      "frames": [
+        {
+          "context_digest": "30f0425cad991a5bb1b473f7e73c2c039db2d91dc0c95116413d0a8e7b6fed29",
+          "context_name": "task-2/advisor1/budget",
+          "context_uid": "d6d3ee9e-eb0f-5c28-9463-7a680d53b470",
+          "memories": [
+            {
+              "content": "Keep the total, major cost categories, and one-line estimate basis in the main text so the resource argument can be understood without leaving the proposal.",
+              "content_digest": "5dc9db0be6499fc408063be04c9e1cc344986512f4d24d5697f5c53a08529c9a",
+              "position": 0,
+              "uid": "05e0261e-5c52-5030-8176-0f02d4522931"
+            },
+            {
+              "content": "Place each major cost beside the activity or deliverable it enables in the main text.",
+              "content_digest": "b97219830051faf46cff7c9541c331012571866926740ed4d6a7925c12fb21a8",
+              "position": 1,
+              "uid": "1083e9b3-698a-57b1-91ab-ce04cec1e5e5"
+            },
+            {
+              "content": "State the quantity and unit-rate basis for each major cost in the same paragraph that requests it.",
+              "content_digest": "5ce37d95d9d037bbab71276fa8f0e8e383b472d0122817ab7b711c971b8cbf5d",
+              "position": 2,
+              "uid": "3652f268-d86f-55d6-935d-d3bdc487aae6"
+            },
+            {
+              "content": "Readers may question a proposed priority when its cost cannot be checked on the same page as the claimed benefit.",
+              "content_digest": "26fa14ff80ece7682cb51c7356a47a8e60e94edd4551f59ecd2fa3017bd9bffd",
+              "position": 3,
+              "uid": "4e1e1201-94b8-5a7a-8737-edc4c62881ff"
+            },
+            {
+              "content": "Update the cost sentence whenever the related activity changes so the narrative and requested amount cannot drift apart.",
+              "content_digest": "343c11198b38874476e0cda3707dd07436699852db0934e2e8f8c95a7ea3c3ea",
+              "position": 4,
+              "uid": "2f5f9039-e038-51c1-8af0-21a78772c512"
+            },
+            {
+              "content": "Accept a denser main-text paragraph when the estimate basis is essential to deciding whether the request is proportionate.",
+              "content_digest": "59ca1aafc11b37b097251b4b7c6b15e249262304f79b261bd4351d3ca89cb5fe",
+              "position": 5,
+              "uid": "f7a16d08-fbe2-5508-890d-cdbf70c1146e"
+            },
+            {
+              "content": "The user tends to revise the work plan but forget a detached budget table unless the key amount is repeated beside the activity.",
+              "content_digest": "393651043824d9e9c528e5de7618854b71970967d172ee1e9bc3c77aec3baab0",
+              "position": 6,
+              "uid": "2ca1d5a1-d78a-55b2-ab21-fd6ad73366b4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "a3dade01-5fe4-46b7-993f-e9d29c9c1b26"
+        },
+        {
+          "context_digest": "1396f236b90acd99b836eb5367828f8319d0465ea25b66f696a7f583f4f5ecf6",
+          "context_name": "task-2/advisor2/terminology",
+          "context_uid": "a2976fe7-0e07-5045-9e91-6a214128a482",
+          "memories": [
+            {
+              "content": "Do not change names referring to the same user roles, system functions, or operational stages midway.",
+              "content_digest": "a0f821f4497e7518806857e9005d12e27f6043fda6dbd91ba33ef188e0a3be16",
+              "position": 0,
+              "uid": "e2ae95ed-9033-5625-9179-33f4cf4a95c1"
+            },
+            {
+              "content": "Use abbreviations only for long recurring terms in a two-page proposal.",
+              "content_digest": "e6cad365bd42a8327e3cac92b8cf49cc456fa3e2f5c6624797fa509c0aac6846",
+              "position": 1,
+              "uid": "4be60357-09fa-523d-8c8d-8e03ace8fde9"
+            },
+            {
+              "content": "Present the full term and abbreviation together when using an abbreviation for the first time.",
+              "content_digest": "7b7c1f90727c822edbc13af17d64d45552d1c7ddb5fa18e665369423fd93ffbe",
+              "position": 2,
+              "uid": "0dd5d707-7d13-5be0-8377-421507650cba"
+            },
+            {
+              "content": "Refer to participants based on the roles they perform in the study rather than their status.",
+              "content_digest": "d89feff6e3dad0eea0ba4b1b291b140048af9f0f89d84c8ac196ae547a7b03bd",
+              "position": 3,
+              "uid": "9b3f0cde-7c3e-5b6a-9500-855f31d65ef2"
+            },
+            {
+              "content": "Reviewers from different subfields find it difficult to infer an abbreviation from context alone when it is not defined at first use.",
+              "content_digest": "4ffe91fb52db337a4ad30dc56d0439e12851f17f411c414b6d673e79bd91e68b",
+              "position": 4,
+              "uid": "8c896114-85e6-5c3c-ae3f-6e8e6b59f2fe"
+            },
+            {
+              "content": "When introducing an operational role for the first time, define both the decisions it can make and the actions it performs.",
+              "content_digest": "916b66a818f988f69e2e3c90f0ed0dbb7d29fc9e030b3fc7f822b3817106cbc3",
+              "position": 5,
+              "uid": "dc9e3f25-7aac-500b-b431-f6d810dd09bb"
+            },
+            {
+              "content": "Individuals holding identical job titles may possess different system modification privileges and data access rights depending on their deployment site.",
+              "content_digest": "e0315abc2f42a8f2657aa52e04899096ce799ba790fcd77d22b4196f917790ac",
+              "position": 6,
+              "uid": "04956cab-eb3a-5b71-be45-b1edd6c4a216"
+            },
+            {
+              "content": "The user tends to group distinct field roles under the single label “user.”",
+              "content_digest": "ba75af998618324dbdfa225a2cd503c42888f77daf4d44eb4f79b3a7db8e4bbe",
+              "position": 7,
+              "uid": "fc8613e8-86ca-5322-bb5d-03dfbca71c46"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "04a86c36-1dfa-4604-8b45-50b5af7fdc21"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate but complementary proposal-writing concerns. The reference frame emphasizes visible, traceable, and maintainable cost justification, while the compared frame governs stable terminology, abbreviation clarity, and precise operational-role descriptions. Neither frame supplies a scope-aligned counterpart to the other’s claims.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a3dade01-5fe4-46b7-993f-e9d29c9c1b26",
+              "memory_uid": "05e0261e-5c52-5030-8176-0f02d4522931"
+            }
+          ],
+          "reason": "This is independently useful one-sided guidance about making the overall resource argument understandable without navigating elsewhere.",
+          "status": "RESOLVED",
+          "summary": "Keep the total, major cost categories, and concise estimate basis in the proposal’s main text.",
+          "uid": "82b4ff4f-5bbc-584e-bc3e-172ccc224738"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a3dade01-5fe4-46b7-993f-e9d29c9c1b26",
+              "memory_uid": "1083e9b3-698a-57b1-91ab-ce04cec1e5e5"
+            },
+            {
+              "frame_uid": "a3dade01-5fe4-46b7-993f-e9d29c9c1b26",
+              "memory_uid": "2ca1d5a1-d78a-55b2-ab21-fd6ad73366b4"
+            }
+          ],
+          "reason": "This one-sided claim links requested amounts directly to their purpose and addresses the observed risk that detached budget information is overlooked during work-plan revisions.",
+          "status": "RESOLVED",
+          "summary": "Place key costs beside the activities or deliverables they enable.",
+          "uid": "06f2b49f-1314-570b-aefe-3f190f9a7aa0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a3dade01-5fe4-46b7-993f-e9d29c9c1b26",
+              "memory_uid": "3652f268-d86f-55d6-935d-d3bdc487aae6"
+            }
+          ],
+          "reason": "This is a specific one-sided requirement for locally checkable cost calculations.",
+          "status": "RESOLVED",
+          "summary": "State quantities and unit rates in the paragraph requesting each major cost.",
+          "uid": "a202e257-a2c9-5c7d-976f-e0f056acf311"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a3dade01-5fe4-46b7-993f-e9d29c9c1b26",
+              "memory_uid": "4e1e1201-94b8-5a7a-8737-edc4c62881ff"
+            }
+          ],
+          "reason": "This independently identifies reviewer confidence in a priority as depending on immediate access to its cost justification.",
+          "status": "RESOLVED",
+          "summary": "Make proposed costs checkable on the same page as their claimed benefits.",
+          "uid": "5f53abdc-cff2-556c-acb5-152115352d08"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a3dade01-5fe4-46b7-993f-e9d29c9c1b26",
+              "memory_uid": "2f5f9039-e038-51c1-8af0-21a78772c512"
+            }
+          ],
+          "reason": "This is independently useful one-sided maintenance guidance intended to prevent narrative and requested amounts from drifting apart.",
+          "status": "RESOLVED",
+          "summary": "Update cost wording whenever the related activity changes.",
+          "uid": "12353f1c-9e48-5110-843e-1802a4df4e70"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a3dade01-5fe4-46b7-993f-e9d29c9c1b26",
+              "memory_uid": "f7a16d08-fbe2-5508-890d-cdbf70c1146e"
+            }
+          ],
+          "reason": "This is a one-sided presentation tradeoff that prioritizes decision-critical cost evidence over paragraph lightness.",
+          "status": "RESOLVED",
+          "summary": "Accept denser main text when estimate detail is essential to judging proportionality.",
+          "uid": "f4470e59-f5e5-54d8-b9b8-6cb1249cae69"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "04a86c36-1dfa-4604-8b45-50b5af7fdc21",
+              "memory_uid": "e2ae95ed-9033-5625-9179-33f4cf4a95c1"
+            }
+          ],
+          "reason": "This is independently useful one-sided guidance against terminology changes that could imply false distinctions.",
+          "status": "RESOLVED",
+          "summary": "Use stable names for the same roles, functions, and stages throughout the proposal.",
+          "uid": "b5a863e8-7a50-5255-8e3c-3aca435de54b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "04a86c36-1dfa-4604-8b45-50b5af7fdc21",
+              "memory_uid": "4be60357-09fa-523d-8c8d-8e03ace8fde9"
+            }
+          ],
+          "reason": "This is a one-sided policy limiting abbreviations according to term length, repetition, and document scale.",
+          "status": "RESOLVED",
+          "summary": "Reserve abbreviations for long terms that recur in a short proposal.",
+          "uid": "4d85b4ed-a82a-5438-a8fc-06820bd47180"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "04a86c36-1dfa-4604-8b45-50b5af7fdc21",
+              "memory_uid": "0dd5d707-7d13-5be0-8377-421507650cba"
+            },
+            {
+              "frame_uid": "04a86c36-1dfa-4604-8b45-50b5af7fdc21",
+              "memory_uid": "8c896114-85e6-5c3c-ae3f-6e8e6b59f2fe"
+            }
+          ],
+          "reason": "This one-sided claim and its reviewer-focused rationale jointly require first-use definition rather than relying on contextual inference.",
+          "status": "RESOLVED",
+          "summary": "Introduce an abbreviation alongside its full term at first use.",
+          "uid": "ca73cbf4-5975-5094-b87b-427788771e1c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "04a86c36-1dfa-4604-8b45-50b5af7fdc21",
+              "memory_uid": "9b3f0cde-7c3e-5b6a-9500-855f31d65ef2"
+            }
+          ],
+          "reason": "This is independently useful one-sided guidance for choosing participant labels.",
+          "status": "RESOLVED",
+          "summary": "Describe participants by their study roles rather than by status.",
+          "uid": "0ee94bde-a6f6-5f50-a919-e5bcc726a072"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "04a86c36-1dfa-4604-8b45-50b5af7fdc21",
+              "memory_uid": "dc9e3f25-7aac-500b-b431-f6d810dd09bb"
+            }
+          ],
+          "reason": "This is a distinct one-sided requirement for explaining the practical authority and responsibilities attached to a role.",
+          "status": "RESOLVED",
+          "summary": "Define a newly introduced operational role by both its decisions and its actions.",
+          "uid": "bb42dcc1-6650-5f0d-8fe8-67e459bf13bb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "04a86c36-1dfa-4604-8b45-50b5af7fdc21",
+              "memory_uid": "04956cab-eb3a-5b71-be45-b1edd6c4a216"
+            }
+          ],
+          "reason": "This independently useful one-sided observation requires role descriptions to preserve site-specific differences in modification and access rights.",
+          "status": "RESOLVED",
+          "summary": "Do not infer identical system and data privileges from identical job titles across deployment sites.",
+          "uid": "4bbd685c-9a22-55e0-a1ac-596a1cf60c93"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "04a86c36-1dfa-4604-8b45-50b5af7fdc21",
+              "memory_uid": "fc8613e8-86ca-5322-bb5d-03dfbca71c46"
+            }
+          ],
+          "reason": "This is a one-sided user-specific terminology risk concerning loss of meaningful role distinctions.",
+          "status": "RESOLVED",
+          "summary": "Distinguish field roles that the user tends to collapse under the generic label “user.”",
+          "uid": "6829e490-14a1-5879-bf2e-2bbe8de66476"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame promotes consistent naming, restrained and defined abbreviations, role-based participant labels, explicit authority descriptions, and distinctions reflecting site-specific privileges rather than generic titles or labels.",
+        "differences": "",
+        "reference_only": "The reference frame keeps costs, estimate bases, enabled activities, and updates together in the main narrative so readers can assess proportionality and revisions do not create budget drift."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "9bc6c454-0973-4d32-997b-e6e5a6038784"
+    },
+    "analysis_digest": "e4cde62738f7133a334b6253e0db20bbd8296dfb510bba67c0fe005a9947070e",
+    "key": "efb34a8d51db3223a2f4972e541c06955a479e5968581133366d917172e1bc91",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 32.782690416999685,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "efb34a8d51db3223a2f4972e541c06955a479e5968581133366d917172e1bc91",
+  "created_at": "2026-08-13T18:15:39.516867Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/budget",
+  "pair_key": "be482e8923e474cc2e832173ded4dc0bd1ac43f7357a0505caa31ffc339d9f14",
+  "provider_seconds": 32.782690416999685,
+  "right": "task-2/advisor2/terminology",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

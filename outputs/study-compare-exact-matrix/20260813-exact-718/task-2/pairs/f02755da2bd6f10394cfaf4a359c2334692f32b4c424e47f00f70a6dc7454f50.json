@@ -1,0 +1,417 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:19:15.904145+00:00",
+      "frames": [
+        {
+          "context_digest": "89608fbad1167ce0da41a7a6312a1b4e92ee55ff6a7d97bb480a0c75d588a7f2",
+          "context_name": "task-2/advisor1/ethics",
+          "context_uid": "5cdea05f-b6ec-586d-a87f-5347d1d51f96",
+          "memories": [
+            {
+              "content": "Link expected participant burden in each user study task to its corresponding mitigation strategy.",
+              "content_digest": "3595c8f1662100b6c6345bb709c7b2eba285f1979f8d3a5b925c4f32ed9aa4dc",
+              "position": 0,
+              "uid": "e93ea2ee-a8b0-5f3d-b6fd-c76f385eef50"
+            },
+            {
+              "content": "Specify the accommodations necessary for participants to access the prototype and research tasks.",
+              "content_digest": "9879ddf2306813f412b89c1f67f4b1a4779ff9acf55b0b34942bc6f1f555f695",
+              "position": 1,
+              "uid": "6ecf6a7b-f4e9-5d96-a52c-520197d4a2a6"
+            },
+            {
+              "content": "Specify how accessibility accommodations will be provided during user study sessions.",
+              "content_digest": "cce1831f8b2bb3015bc4e69e64a2b1cd4ea6f7249daf28da6686eec262038dc5",
+              "position": 2,
+              "uid": "bc41fce0-dbfc-5d23-9d97-9f81531c098c"
+            },
+            {
+              "content": "Describe how personal identifiers will be separated from research data immediately after collection.",
+              "content_digest": "bd80d3a47e10f1c8a9aec0362cb51995bfe9ecd22f86be916cb0a9009b5f23bf",
+              "position": 3,
+              "uid": "9768e0d9-ef46-52a4-af04-8f6ca3c176c5"
+            },
+            {
+              "content": "Specify the equipment to be loaned to participants who lack necessary devices.",
+              "content_digest": "69991f284e369e31da55a2a23afef032bd50f43dfe66d417a816b242d10c9926",
+              "position": 4,
+              "uid": "e874407e-4d36-55a6-949e-44e5944f1bb4"
+            },
+            {
+              "content": "Describe the procedure for returning equipment loaned to participants.",
+              "content_digest": "100ffbad1288c3263bc4a1044b2d42da35c36a3f73786e58e4391fbac98c84f2",
+              "position": 5,
+              "uid": "df16dca6-0b48-5753-aa18-7e5524187a1e"
+            },
+            {
+              "content": "HCI ethics reviewers verify that expected burdens and mitigation strategies correspond to each user study task.",
+              "content_digest": "1ce06fdbd6b8c4542063ab2413ba80a40c86336dcc43ebb4e1590a246e76d968",
+              "position": 6,
+              "uid": "7d0b3072-7bac-5bc6-9c79-acc808c38f1f"
+            },
+            {
+              "content": "Inform participants that the formative evaluation prototype is not a finished service.",
+              "content_digest": "b02788b149a575392cc58dcba87c21026eec4d733f4e1ef0b3149fcc0e318e74",
+              "position": 7,
+              "uid": "407a4c1c-c333-5764-8d89-252bed150f99"
+            },
+            {
+              "content": "Set an upper limit on cumulative task burden when requesting repeated evaluations from the same participant.",
+              "content_digest": "9d8e4304568abc398445be0aeddc4d1c9945bf48e0295240d48c071dd979646e",
+              "position": 8,
+              "uid": "28646fd3-54af-51f9-97da-ad9489ecda79"
+            },
+            {
+              "content": "The author of this proposal tends to emphasize expected benefits of the prototype over participant burden.",
+              "content_digest": "ffb40ab90087893e20227797ee997e40803e3b812f8a1634e282ab9920cf28d4",
+              "position": 9,
+              "uid": "218aafb6-9332-5693-a2e7-c7777dc64de7"
+            },
+            {
+              "content": "In organizations where leaders or institutional staff handle recruitment, recruitment authority and academic or professional evaluation authority may be combined in the same role.",
+              "content_digest": "d7baf962a2cae0da6c9057f909918788101229b54d57340fb1d5aad459597c05",
+              "position": 10,
+              "uid": "1ecb7268-f77a-5643-a456-357df6cd8f6e"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "a69b2e35-d236-4d21-9817-690bad337c84"
+        },
+        {
+          "context_digest": "bf5136a518ce85246184349a0194e446748710ed6da95e5c97d4a31d74ddc1b9",
+          "context_name": "task-2/advisor2/review",
+          "context_uid": "3398ba87-f01e-56bd-9da2-0ed0894524fa",
+          "memories": [
+            {
+              "content": "Conduct one review prior to submission focusing solely on the validity of user problems, system interventions, and field evaluation logic.",
+              "content_digest": "9b0b5596ec5924a6141926bfc337ec6e23d77dfb7b65facb26b42109f05f1fe4",
+              "position": 0,
+              "uid": "6d203c86-b6e0-586a-b896-b654fa319ed1"
+            },
+            {
+              "content": "Cross-check whether research questions align with the core functions of the system.",
+              "content_digest": "f7f9f49efe539881dae49a96adce0ec349435e4cc7f55229c88097e54fe03f93",
+              "position": 1,
+              "uid": "6b75bfb1-67f5-50bb-9e0c-04026062de96"
+            },
+            {
+              "content": "Cross-check whether field tasks align with representative measures.",
+              "content_digest": "3e993f6c978e14b5b0f6e8ada40d8a0067981e943c67636e9599fb652dca44a4",
+              "position": 2,
+              "uid": "3abfda89-82ab-5cc5-bdcd-5e2f274fd727"
+            },
+            {
+              "content": "Cross-check whether the evidence to be collected aligns with the design and operational decisions to be changed.",
+              "content_digest": "a4761a8dac6c60a2132619c8c8e963aca0d61216d689786b18574f5e30f1f3aa",
+              "position": 3,
+              "uid": "f14f1974-9035-5a2c-931a-89a5004a2567"
+            },
+            {
+              "content": "Finally verify that the user problem, system intervention, field evaluation, and expected contribution form one coherent logical flow.",
+              "content_digest": "47198a770770dc805e0f40a5f9b9c34ae1999f39ec2f9fa1c34b3280f21f5477",
+              "position": 4,
+              "uid": "6ba1d344-5d98-5c25-ba1e-b28c08d39747"
+            },
+            {
+              "content": "HCI reviewers view the validity of design interventions as low if research questions do not connect to system functions.",
+              "content_digest": "ffa754352dfecc597f84cff7cbf8607a12bbfd99ac22250cc84392bd85e37e73",
+              "position": 5,
+              "uid": "4a85ebbd-a4ee-5c88-9e93-5fc545f41c64"
+            },
+            {
+              "content": "HCI reviewers view the validity of evaluation plans as low if field tasks fail to generate representative measures.",
+              "content_digest": "f29eb5429d767b0fa171b7e9862b3d8d06dfd388739e95acd67b2321aaf1a91e",
+              "position": 6,
+              "uid": "75c4c71d-28e3-559c-99d1-f0dccc31a9e2"
+            },
+            {
+              "content": "HCI reviewers view the practical utility of contributions as low if collected evidence cannot change design or operational decisions.",
+              "content_digest": "6b9ae0bc59cda995d674479dfe95f43359ff04e68cb07633957885ee5cf1336c",
+              "position": 7,
+              "uid": "577e5506-78e8-5768-b288-7a5986347cce"
+            },
+            {
+              "content": "Before submission, conduct a sequential walkthrough with field liaisons of installation failures, operational interruptions, and recovery scenarios.",
+              "content_digest": "115fa1f22eb7f55918620418f89def51ba84bd36e102875a5f5e560de5305dda",
+              "position": 8,
+              "uid": "9ce34a9a-4ba2-5b32-a1de-b0469ddc3f95"
+            },
+            {
+              "content": "Verify in one sentence how each proposed contribution could actually alter specific design or operational decisions.",
+              "content_digest": "1c6ef38e42f40e9cd6ab5323deaa825efb1136b926b66af9337ea6debaf8600e",
+              "position": 9,
+              "uid": "f8253f92-c60c-57e1-a630-6b31abe080ae"
+            },
+            {
+              "content": "The user must distinguish unconfirmed field partners and equipment from finalized ones so remaining execution risks can be assessed.",
+              "content_digest": "c2eb0936c09d8796092950aba699664f79f2222f27523e37a1af5feabe2b8058",
+              "position": 10,
+              "uid": "f5ad6933-3e22-5c47-bdaf-bacc9c9a5b3c"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "83550318-f10a-47be-a414-67c04bc51408"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The reference frame concentrates on participant protection, access, equipment support, privacy, burden, and recruitment power. The compared frame concentrates on proposal coherence, evaluative validity, decision-relevant evidence, operational walkthroughs, and execution-risk disclosure. These are independently useful policy areas without a direct cross-frame semantic relation.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a69b2e35-d236-4d21-9817-690bad337c84",
+              "memory_uid": "e93ea2ee-a8b0-5f3d-b6fd-c76f385eef50"
+            },
+            {
+              "frame_uid": "a69b2e35-d236-4d21-9817-690bad337c84",
+              "memory_uid": "7d0b3072-7bac-5bc6-9c79-acc808c38f1f"
+            }
+          ],
+          "reason": "These reference memories state complementary parts of one task-level burden-control requirement, with no compared-side claim addressing participant burden mitigation.",
+          "status": "RESOLVED",
+          "summary": "Expected burden and mitigation must correspond to each study task and be subject to ethics review.",
+          "uid": "44290d2b-88b1-5330-b7b4-65fa1c4bf6c4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a69b2e35-d236-4d21-9817-690bad337c84",
+              "memory_uid": "6ecf6a7b-f4e9-5d96-a52c-520197d4a2a6"
+            },
+            {
+              "frame_uid": "a69b2e35-d236-4d21-9817-690bad337c84",
+              "memory_uid": "bc41fce0-dbfc-5d23-9d97-9f81531c098c"
+            }
+          ],
+          "reason": "These reference memories split one accommodation-planning claim into identifying access needs and explaining provision; the compared frame does not address accommodations.",
+          "status": "RESOLVED",
+          "summary": "Required accessibility accommodations and their delivery during study sessions must be specified.",
+          "uid": "9afbbaef-2fe5-5943-85c8-51b3baa146c1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a69b2e35-d236-4d21-9817-690bad337c84",
+              "memory_uid": "9768e0d9-ef46-52a4-af04-8f6ca3c176c5"
+            }
+          ],
+          "reason": "This is an independently useful privacy safeguard appearing only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Personal identifiers must be separated from research data immediately after collection.",
+          "uid": "adbeae33-a1b6-5e8c-837f-efe7d92706af"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a69b2e35-d236-4d21-9817-690bad337c84",
+              "memory_uid": "e874407e-4d36-55a6-949e-44e5944f1bb4"
+            },
+            {
+              "frame_uid": "a69b2e35-d236-4d21-9817-690bad337c84",
+              "memory_uid": "df16dca6-0b48-5753-aa18-7e5524187a1e"
+            }
+          ],
+          "reason": "These reference memories form one equipment-loan logistics policy; compared-side equipment confirmation concerns execution risk rather than participant lending.",
+          "status": "RESOLVED",
+          "summary": "Participant equipment loans must specify both the devices provided and the return procedure.",
+          "uid": "71ab1cf0-b251-5166-9b9c-dbc10abb3c7c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a69b2e35-d236-4d21-9817-690bad337c84",
+              "memory_uid": "407a4c1c-c333-5764-8d89-252bed150f99"
+            }
+          ],
+          "reason": "This participant-facing expectation safeguard appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Participants must be told that the formative prototype is not a finished service.",
+          "uid": "c91489b2-8bec-543c-812c-3d970cc30d18"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a69b2e35-d236-4d21-9817-690bad337c84",
+              "memory_uid": "28646fd3-54af-51f9-97da-ad9489ecda79"
+            }
+          ],
+          "reason": "This independently useful repeated-participation safeguard has no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "Repeated evaluations involving the same participant require an upper limit on cumulative task burden.",
+          "uid": "23912d7d-fdcc-5f44-afae-c8946522be33"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a69b2e35-d236-4d21-9817-690bad337c84",
+              "memory_uid": "218aafb6-9332-5693-a2e7-c7777dc64de7"
+            }
+          ],
+          "reason": "This one-sided diagnostic observation concerns framing bias and is not addressed by the compared frame's validity checks.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to emphasize prototype benefits over participant burden.",
+          "uid": "5cd1470d-2864-52e5-9c78-a4b1dcd08393"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a69b2e35-d236-4d21-9817-690bad337c84",
+              "memory_uid": "1ecb7268-f77a-5643-a456-357df6cd8f6e"
+            }
+          ],
+          "reason": "This independently useful observation about concentrated authority appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Institutional recruitment arrangements may combine recruitment authority with academic or professional evaluation authority in one role.",
+          "uid": "91640a9f-e976-510f-828c-108c6821e535"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "83550318-f10a-47be-a414-67c04bc51408",
+              "memory_uid": "6d203c86-b6e0-586a-b896-b654fa319ed1"
+            },
+            {
+              "frame_uid": "83550318-f10a-47be-a414-67c04bc51408",
+              "memory_uid": "6ba1d344-5d98-5c25-ba1e-b28c08d39747"
+            }
+          ],
+          "reason": "These compared memories describe complementary stages of one overall proposal-logic review, which the reference frame does not address.",
+          "status": "RESOLVED",
+          "summary": "A dedicated pre-submission review must test the coherent logic connecting user problems, interventions, field evaluation, and expected contribution.",
+          "uid": "5d411e88-b8fb-555d-baf8-8fd19818572a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "83550318-f10a-47be-a414-67c04bc51408",
+              "memory_uid": "6b75bfb1-67f5-50bb-9e0c-04026062de96"
+            },
+            {
+              "frame_uid": "83550318-f10a-47be-a414-67c04bc51408",
+              "memory_uid": "4a85ebbd-a4ee-5c88-9e93-5fc545f41c64"
+            }
+          ],
+          "reason": "These compared memories express one alignment criterion and its review consequence; no reference claim addresses this validity relationship.",
+          "status": "RESOLVED",
+          "summary": "Research questions must connect to core system functions or reviewers will judge intervention validity as low.",
+          "uid": "6166abd4-f071-59da-8476-23c6b3d512c4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "83550318-f10a-47be-a414-67c04bc51408",
+              "memory_uid": "3abfda89-82ab-5cc5-bdcd-5e2f274fd727"
+            },
+            {
+              "frame_uid": "83550318-f10a-47be-a414-67c04bc51408",
+              "memory_uid": "75c4c71d-28e3-559c-99d1-f0dccc31a9e2"
+            }
+          ],
+          "reason": "These compared memories state one field-evaluation alignment criterion and its consequence, absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Field tasks must generate representative measures or reviewers will judge the evaluation plan as weak.",
+          "uid": "19286000-8508-5f03-8a54-348882c1fa03"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "83550318-f10a-47be-a414-67c04bc51408",
+              "memory_uid": "f14f1974-9035-5a2c-931a-89a5004a2567"
+            },
+            {
+              "frame_uid": "83550318-f10a-47be-a414-67c04bc51408",
+              "memory_uid": "577e5506-78e8-5768-b288-7a5986347cce"
+            },
+            {
+              "frame_uid": "83550318-f10a-47be-a414-67c04bc51408",
+              "memory_uid": "f8253f92-c60c-57e1-a630-6b31abe080ae"
+            }
+          ],
+          "reason": "These compared memories restate and operationalize one decision-utility requirement; the reference frame contains no corresponding evidence-use policy.",
+          "status": "RESOLVED",
+          "summary": "Collected evidence and proposed contributions must be tied to specific design or operational decisions they could change.",
+          "uid": "0fc44084-8454-5631-aee6-390f6b9e55b0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "83550318-f10a-47be-a414-67c04bc51408",
+              "memory_uid": "9ce34a9a-4ba2-5b32-a1de-b0469ddc3f95"
+            }
+          ],
+          "reason": "This independently useful operational-resilience walkthrough appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Before submission, field liaisons must sequentially review installation failures, operational interruptions, and recovery scenarios.",
+          "uid": "11b31dc0-762b-5f59-b509-ff2ac92efd11"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "83550318-f10a-47be-a414-67c04bc51408",
+              "memory_uid": "f5ad6933-3e22-5c47-bdaf-bacc9c9a5b3c"
+            }
+          ],
+          "reason": "This independently useful readiness-disclosure requirement appears only in the compared frame and differs from participant equipment-loan logistics.",
+          "status": "RESOLVED",
+          "summary": "Unconfirmed field partners and equipment must be distinguished from finalized resources so execution risks remain assessable.",
+          "uid": "4bfd4c60-60e3-50c3-a0fe-4c1ee9e49133"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Proposal-quality controls cover logical alignment, decision-relevant evidence, operational failure walkthroughs, and disclosure of unresolved partners or equipment.",
+        "differences": "",
+        "reference_only": "Participant safeguards cover task burdens, accommodations, privacy, equipment loans, prototype expectations, cumulative burden, benefit bias, and recruitment power."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "aedce98a-ebbf-42c4-a135-9e44a39cab13"
+    },
+    "analysis_digest": "4cf4ee2eb535e88c81e5e6c54754bd9a04b9a89feeb2375571c6d4aff6d084c8",
+    "key": "83d3a9b3fe3228d5a60f0e9b1274568a64ee09852e8d1f133d69c9d388170cbd",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 40.14839724999911,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "83d3a9b3fe3228d5a60f0e9b1274568a64ee09852e8d1f133d69c9d388170cbd",
+  "created_at": "2026-08-13T18:19:56.051912Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/ethics",
+  "pair_key": "f02755da2bd6f10394cfaf4a359c2334692f32b4c424e47f00f70a6dc7454f50",
+  "provider_seconds": 40.14839724999911,
+  "right": "task-2/advisor2/review",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

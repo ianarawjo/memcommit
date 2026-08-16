@@ -1,0 +1,320 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:23:19.069462+00:00",
+      "frames": [
+        {
+          "context_digest": "9d55b4a5604285e426b317f7f4732b35ca1e9df044f7015b3ae6a6be0df5492b",
+          "context_name": "task-2/advisor1/reproducibility",
+          "context_uid": "7d293f75-52b6-5f27-99c4-54f2be3d8e59",
+          "memories": [
+            {
+              "content": "HCI reviewers find it difficult to assess the reproducibility of results if the prototype version used in the evaluation is not disclosed.",
+              "content_digest": "9b89217d4ef2c7524af665ea80d7d60e61f1663fd8ea4bdde533c8d3a0da2044",
+              "position": 0,
+              "uid": "fb400759-63ed-568a-b94e-5f0c2fe94b67"
+            },
+            {
+              "content": "Record the manipulated and fixed elements of compared design alternatives so that other researchers can reconstruct them.",
+              "content_digest": "26b84b5f0644980de51d764218ce90fb614eb02a2df38fb3632f44d360a93cd3",
+              "position": 1,
+              "uid": "e52e8470-6419-5306-9ddd-00a86003dcf3"
+            },
+            {
+              "content": "Records of formative evaluation decisions enable the reconstruction of connections between raw data, interpretation, and design modifications.",
+              "content_digest": "f213479e4bd1947d418083139346ed7f666bc597133962617d94bdd3a9af0083",
+              "position": 2,
+              "uid": "8f4edf8c-491d-56fe-bde4-d9ce25d6de50"
+            },
+            {
+              "content": "The user must make it possible to trace which observations each prototype version reflects so the process of deriving design knowledge can be reviewed.",
+              "content_digest": "1c9b8a6f650f2eb652b1e9cbb62ad9dcbb3ec13f2e160b52db83492640eb0ae9",
+              "position": 3,
+              "uid": "87662a7e-ffc7-521a-a06c-7db8184377e8"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "eee3f1da-8c0a-42b7-9017-920c6c4559b8"
+        },
+        {
+          "context_digest": "0c296942d89f44af52c83dcba02568af2b56ed1016260f3d3b9c95e919a51339",
+          "context_name": "task-2/advisor2/ethics",
+          "context_uid": "fa36b485-422d-54c3-a145-0f60a077757c",
+          "memories": [
+            {
+              "content": "Link anticipated participant burden with its mitigation strategies for each field user study task.",
+              "content_digest": "120fdee3ad17815fe2e9aa806aab19843cf6597753cf0d35aa0618a3116a1bd2",
+              "position": 0,
+              "uid": "bc8c1327-993c-51ce-8f53-919dc253e0f8"
+            },
+            {
+              "content": "Specify the accommodations necessary for participants to access the field system and research tasks.",
+              "content_digest": "e09cce7cc60d904d618dffa5619cac9c44e4dbcc4f2a0d8547b9ede06586a82b",
+              "position": 1,
+              "uid": "578f6fdf-6bbc-5d1b-8f03-c7460a5cdc7b"
+            },
+            {
+              "content": "Specify how accessibility accommodations will be provided in the field user study.",
+              "content_digest": "98a13f5b544276eaafd5d0b1aea63b2e313ce327f5881f0e4bbcff19724e8c6e",
+              "position": 2,
+              "uid": "6804d5db-c872-5ded-bf68-14fd30e1b645"
+            },
+            {
+              "content": "Describe how personal identifiers will be separated from research data immediately upon collection.",
+              "content_digest": "0bf884cd31610ba663854e8c273ec6769666b38ee72714ba63f0b390d69b8ba3",
+              "position": 3,
+              "uid": "448f23d0-9607-5977-9d13-a99af48a6fc1"
+            },
+            {
+              "content": "List equipment to be loaned when participants lack necessary gear.",
+              "content_digest": "665d4e26cc8390ca2334d4740650e77977b60fd0e3eed2464ade0ca55a806eb2",
+              "position": 4,
+              "uid": "b97f3e2f-e132-5f6f-a748-f406a89a1bc5"
+            },
+            {
+              "content": "Describe the procedure for returning equipment loaned to participants.",
+              "content_digest": "100ffbad1288c3263bc4a1044b2d42da35c36a3f73786e58e4391fbac98c84f2",
+              "position": 5,
+              "uid": "d05964ea-0423-5642-86e1-9e9c19edffbe"
+            },
+            {
+              "content": "The HCI ethics reviewer verifies that anticipated burden and mitigation strategies correspond for each field user study task.",
+              "content_digest": "067bbafce95c77b4a9acc5ba9652db92dba6dc96e14588841db158919bf044b2",
+              "position": 6,
+              "uid": "26407eb8-5c02-551f-a960-1652eb080f90"
+            },
+            {
+              "content": "Ensure that participants can safely return to existing work procedures if they discontinue research participation.",
+              "content_digest": "213cff51d754811573c78ba0ca92f37e614e9fa4ae1080aa7fcfb550c85437fb",
+              "position": 7,
+              "uid": "7e0ba411-3fd9-53ec-8a3f-4499316c06bb"
+            },
+            {
+              "content": "Specify that organizational members who decline research participation will not face disadvantages in task assignment or performance evaluation.",
+              "content_digest": "46b2b0857255b48ed6001191b089c1d6ecba859690818cbff8fe7676fa1f860a",
+              "position": 8,
+              "uid": "a6fbea37-335c-544b-8bac-01f759bc3855"
+            },
+            {
+              "content": "The user's withdrawal risk can be adequately assessed only when a safe alternative procedure exists for field tasks.",
+              "content_digest": "604a38c44856b4407cf2b1d83df216510e77f84ce76ef4dbc7f9be21cd32393b",
+              "position": 9,
+              "uid": "885d1cf3-8bcd-513c-9591-a548fcbd3992"
+            },
+            {
+              "content": "The user tends to assume that a short session also entails little burden from work interruption and exposure to a manager.",
+              "content_digest": "0c48fd9dd3b393f73a8005db56bf2c11320d82b84040af105ca65c3ff9ce6f17",
+              "position": 10,
+              "uid": "520b4c9f-306e-5749-83b5-2218c97f89e6"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "8ef20eec-764f-456f-9169-daa85b048bfe"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address different governance concerns: the reference emphasizes reproducible design and evaluation provenance, while the compared frame covers ethical safeguards for field studies. No supplied claims govern the same operational decision, and no conflict or ambiguity is evident.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eee3f1da-8c0a-42b7-9017-920c6c4559b8",
+              "memory_uid": "fb400759-63ed-568a-b94e-5f0c2fe94b67"
+            }
+          ],
+          "reason": "This is independently useful reference-only information about reproducibility through version identification; the compared frame contains no claim addressing evaluation-version disclosure.",
+          "status": "RESOLVED",
+          "summary": "Evaluation documentation should disclose which prototype version produced the assessed results.",
+          "uid": "f346d87e-d98c-5864-907d-a05362ba2221"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eee3f1da-8c0a-42b7-9017-920c6c4559b8",
+              "memory_uid": "e52e8470-6419-5306-9ddd-00a86003dcf3"
+            }
+          ],
+          "reason": "This is an independent reference-only documentation requirement for reconstructing design comparisons, with no operational counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Compared design alternatives should document their manipulated and fixed elements to permit reconstruction.",
+          "uid": "d9df6b46-faa7-50a5-8ec4-92babe13e2ca"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eee3f1da-8c0a-42b7-9017-920c6c4559b8",
+              "memory_uid": "8f4edf8c-491d-56fe-bde4-d9ce25d6de50"
+            },
+            {
+              "frame_uid": "eee3f1da-8c0a-42b7-9017-920c6c4559b8",
+              "memory_uid": "87662a7e-ffc7-521a-a06c-7db8184377e8"
+            }
+          ],
+          "reason": "The reference memories split one underlying provenance requirement across decision records and version-linked observations; the compared frame does not address formative design provenance.",
+          "status": "RESOLVED",
+          "summary": "Formative records should preserve traceability from observations and raw data through interpretation and decisions to prototype modifications or versions.",
+          "uid": "1f368885-68ea-5cd1-9037-3733654499e8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8ef20eec-764f-456f-9169-daa85b048bfe",
+              "memory_uid": "bc8c1327-993c-51ce-8f53-919dc253e0f8"
+            },
+            {
+              "frame_uid": "8ef20eec-764f-456f-9169-daa85b048bfe",
+              "memory_uid": "26407eb8-5c02-551f-a960-1652eb080f90"
+            }
+          ],
+          "reason": "The compared memories state the same underlying task-level burden-control requirement from documentation and reviewer perspectives; the reference frame does not address participant burden.",
+          "status": "RESOLVED",
+          "summary": "Anticipated participant burden and its mitigation should be linked for every field-study task so ethics review can verify their correspondence.",
+          "uid": "76b50a67-bf5d-59ff-b054-fcb110618c9f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8ef20eec-764f-456f-9169-daa85b048bfe",
+              "memory_uid": "578f6fdf-6bbc-5d1b-8f03-c7460a5cdc7b"
+            },
+            {
+              "frame_uid": "8ef20eec-764f-456f-9169-daa85b048bfe",
+              "memory_uid": "6804d5db-c872-5ded-bf68-14fd30e1b645"
+            }
+          ],
+          "reason": "These compared memories split one accommodation-planning claim between identifying necessary access support and describing its provision; no reference claim addresses accessibility.",
+          "status": "RESOLVED",
+          "summary": "Field-study documentation should specify the accessibility accommodations participants need and how those accommodations will be provided.",
+          "uid": "491adbb2-2ed4-5fac-ab49-a8014f932cb3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8ef20eec-764f-456f-9169-daa85b048bfe",
+              "memory_uid": "448f23d0-9607-5977-9d13-a99af48a6fc1"
+            }
+          ],
+          "reason": "This is an independent compared-only privacy safeguard with no corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Personal identifiers should be separated from research data immediately upon collection.",
+          "uid": "94d6aeca-3948-5c9b-90d5-24786f42e522"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8ef20eec-764f-456f-9169-daa85b048bfe",
+              "memory_uid": "b97f3e2f-e132-5f6f-a748-f406a89a1bc5"
+            }
+          ],
+          "reason": "This is independently useful compared-only information about enabling participation through equipment provision; it is distinct from the procedure for returning loans.",
+          "status": "RESOLVED",
+          "summary": "The study should identify equipment that will be loaned to participants who lack necessary gear.",
+          "uid": "1ce882b4-5b75-52f2-b55f-4288d8cd65ac"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8ef20eec-764f-456f-9169-daa85b048bfe",
+              "memory_uid": "d05964ea-0423-5642-86e1-9e9c19edffbe"
+            }
+          ],
+          "reason": "This is an independent compared-only operational requirement for equipment recovery, not a restatement of which equipment will be provided.",
+          "status": "RESOLVED",
+          "summary": "The study should document how participants return loaned equipment.",
+          "uid": "3e5309b5-7791-5c19-88f0-cdd6efe36a96"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8ef20eec-764f-456f-9169-daa85b048bfe",
+              "memory_uid": "7e0ba411-3fd9-53ec-8a3f-4499316c06bb"
+            },
+            {
+              "frame_uid": "8ef20eec-764f-456f-9169-daa85b048bfe",
+              "memory_uid": "885d1cf3-8bcd-513c-9591-a548fcbd3992"
+            }
+          ],
+          "reason": "The compared memories express one underlying safe-withdrawal requirement through participant protection and reviewability; the reference frame contains no withdrawal safeguard.",
+          "status": "RESOLVED",
+          "summary": "Field tasks should have a safe existing-work alternative that participants can resume after withdrawal and that permits assessment of withdrawal risk.",
+          "uid": "463b8636-decf-559c-846f-921beb498c64"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8ef20eec-764f-456f-9169-daa85b048bfe",
+              "memory_uid": "a6fbea37-335c-544b-8bac-01f759bc3855"
+            }
+          ],
+          "reason": "This is an independent compared-only protection against workplace coercion or retaliation, with no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Organizational members who decline participation should face no disadvantage in task assignment or performance evaluation.",
+          "uid": "a4aa7394-ce87-578a-b083-5d40b291a1db"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8ef20eec-764f-456f-9169-daa85b048bfe",
+              "memory_uid": "520b4c9f-306e-5749-83b5-2218c97f89e6"
+            }
+          ],
+          "reason": "This compared-only observation identifies a specific assumption that can distort burden assessment and is not restated elsewhere or addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Study planning should recognize that a short session may still impose burdens from work interruption and exposure to a manager.",
+          "uid": "16fa9236-79c6-5586-9a74-961b28ca398b"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only material covers burden mitigation, accessibility, data de-identification, equipment loans, safe withdrawal, protection against workplace disadvantage, and scrutiny of underestimated interruption or managerial-exposure burdens.",
+        "differences": "",
+        "reference_only": "Reference-only material requires prototype-version disclosure, reconstructable design alternatives, and traceability from observations and formative evidence through interpretations and design changes."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "a6939af6-451a-4d7a-929f-05374233dc91"
+    },
+    "analysis_digest": "d0714f109b78553f3632615b759eebabb6b0587ad1a0ae1a8c5e5d668e20dd1d",
+    "key": "4cb45364ec4b757ed9bf37da8742a0aaec8c2b7383702aa97bdd6818d7809d46",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 36.82677849999891,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "4cb45364ec4b757ed9bf37da8742a0aaec8c2b7383702aa97bdd6818d7809d46",
+  "created_at": "2026-08-13T18:23:55.896236Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/reproducibility",
+  "pair_key": "dd8caa70e8be5fe342bb5ca61cd5c4262dc87789652af57acede19fcd25aea82",
+  "provider_seconds": 36.82677849999891,
+  "right": "task-2/advisor2/ethics",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

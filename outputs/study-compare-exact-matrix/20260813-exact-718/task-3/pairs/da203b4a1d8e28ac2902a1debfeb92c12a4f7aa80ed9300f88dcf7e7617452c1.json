@@ -1,0 +1,370 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:52:55.974556+00:00",
+      "frames": [
+        {
+          "context_digest": "07c43eb0b8ecd9107f1d879a409b45289e236f48f620ff85f1d30ce594809149",
+          "context_name": "task-3/local/personal-memory/2025/09",
+          "context_uid": "5cd8ed5f-2f1f-5deb-8347-fc3bfa484d99",
+          "memories": [
+            {
+              "content": "The user keeps the book they are reading and a note-taking notebook on a small living-room desk.",
+              "content_digest": "d2c70cf4c27fe62f5915f2f5c669484c4a875e4ee21f8d7d89a5ff6746f14cf1",
+              "position": 0,
+              "uid": "3d3f7960-daf5-5a51-98b3-14261c5aa66c"
+            },
+            {
+              "content": "While reading in the living room with the television on, the user read the same paragraph three times.",
+              "content_digest": "00e41e6d5fe1dcfe961fa0f739860823ecf338dc55d5b9beea265ca823974582",
+              "position": 1,
+              "uid": "28714a4e-bc14-5703-b594-126471ae0585"
+            },
+            {
+              "content": "The next day, after turning off the television, the user read 40 pages without interruption.",
+              "content_digest": "c28ba9c872757b6683ab03d73e6ad61f71484d55986aae4c0976862a85e3a8b1",
+              "position": 2,
+              "uid": "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df"
+            },
+            {
+              "content": "On a day the phone was on the desk, the user stopped taking notes each time they checked a notification.",
+              "content_digest": "f95cb8b1b8abe89d7bf597ca5fb78f0862fe97a7cf0d8bc5a46c04026ebd6889",
+              "position": 3,
+              "uid": "1b1c9f90-2561-53d5-88fe-d54618450143"
+            },
+            {
+              "content": "During the next reading period, the user left the phone in another room and did not check it for an hour.",
+              "content_digest": "89dc50732e19b88a77657b285ce71c399d229b510265cc9adfbdf6ad706680cd",
+              "position": 4,
+              "uid": "076a7caa-5dcf-5f9d-8bee-efc952652efa"
+            },
+            {
+              "content": "A note attached to a paper book fell out, and the user had to find their place again.",
+              "content_digest": "723e48ceeba6c94e627c79af0518c811cfc8337f9eeae3a80ae388ec98786994",
+              "position": 5,
+              "uid": "1dad71ec-6a5d-550e-89d2-a86dc3dacb11"
+            },
+            {
+              "content": "With the next book, the user recorded the page number in the notebook and resumed reading immediately.",
+              "content_digest": "c74c2f80bf403da64f0a6de97ff04bc1f41cf68d0d33829fa926cc2549e8ea75",
+              "position": 6,
+              "uid": "58494743-fc7f-59e9-8e17-80b8a644470a"
+            },
+            {
+              "content": "The user's father expects that lowering the television volume while the user reads will make it easier for the user to concentrate.",
+              "content_digest": "281b1f8f55f8d22fbebdb2220405dc3e2300e29e0a568c1fac36d4bb1c39c186",
+              "position": 7,
+              "uid": "cce66589-892c-5d73-bdbc-2c6e94e0992e"
+            },
+            {
+              "content": "The local agent can summarize past reading environments and interruption records but cannot predict the next reading time.",
+              "content_digest": "50e5376e22f503048a7f1bf4055bfb31cb4aa3c75b1c816f2febce913716eb58",
+              "position": 8,
+              "uid": "20b2a27f-908f-5ed7-a288-f7c1030674fc"
+            },
+            {
+              "content": "The user feels that repeated notifications interrupt their flow of concentration.",
+              "content_digest": "d777b2a01cfac23e6ef7701c04c33592f8382fa78f8e307bae9ddbffc9a8e2ef",
+              "position": 9,
+              "uid": "310f4cfc-b117-5511-8e13-2bd2ebec9fe5"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "eb759f84-05a7-44ce-a683-e33400c74b6e"
+        },
+        {
+          "context_digest": "1d47d83944d91bc0316a61894412e9b4361758603b9532687cf68473f1d30198",
+          "context_name": "task-3/local/personal-memory/2026/01",
+          "context_uid": "e48e6eac-20f7-599d-9f76-4238bd9dd96d",
+          "memories": [
+            {
+              "content": "The user keeps gloves and scarves in a basket inside the entrance.",
+              "content_digest": "df54c52cb6bc89e2e66c747df9807c6892db272c2a23ac5ac91e3f64aaa2a5da",
+              "position": 0,
+              "uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409"
+            },
+            {
+              "content": "On a day the user could not find their gloves, they walked with their hands in their pockets and missed the bus.",
+              "content_digest": "d4205aee5fe3f2c18adc3622930cc7f74de231de9812ca594dbd95a0af7199ff",
+              "position": 1,
+              "uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5"
+            },
+            {
+              "content": "Before the next outing, the user put the gloves in the entrance basket the night before and left on time.",
+              "content_digest": "23a7026d7d1a7edd3278e7b8aa147ef0d315059663f78da5498ad6c1b4a5407c",
+              "position": 2,
+              "uid": "a11f0943-8ee1-5305-87fb-64982fb36f82"
+            },
+            {
+              "content": "On a snowy day, the user chose a shorter route but turned back at stairs that had not been cleared of snow.",
+              "content_digest": "e9e241d2bc4d7c2fa9a44471aa6d1c16d42d50fe2ed99ccfb50713107714be9b",
+              "position": 3,
+              "uid": "f623f245-cdd5-5080-8869-b52cf2914076"
+            },
+            {
+              "content": "The next day, the user took a cleared sidewalk along the main road and avoided slippery sections.",
+              "content_digest": "62c8ec8b38778e9922cf433af4ceb4d59f60bee52dc758e3b88bb1163637f108",
+              "position": 4,
+              "uid": "17ac56f1-1302-5350-99d5-b95ef7feb768"
+            },
+            {
+              "content": "The user fell asleep with the heat turned up, became too warm before dawn, and woke twice.",
+              "content_digest": "912dbbc88a0f4a174b714a794793781f4d2f6c889f73cd7f825338addcab5d6c",
+              "position": 5,
+              "uid": "96988fa9-44b1-511e-8c99-4372f902cfe3"
+            },
+            {
+              "content": "The next night, the user turned down the heat and used one additional thin blanket.",
+              "content_digest": "3d12a4609d4731ebe71bacc841c979ac3497553238c3b5c2191842bbf075ba89",
+              "position": 6,
+              "uid": "b628acaa-50da-552c-8665-244dc4ab8263"
+            },
+            {
+              "content": "On a morning with heavy snow, the user's father expects the user will worry about road conditions and sends a text before departure.",
+              "content_digest": "dcd6bcb23bee46e49813bb14dd8dcb91983d5830f0536d7f23fcdb3a8af0667c",
+              "position": 7,
+              "uid": "08dfb937-7b28-55b5-801c-c0da00cbd414"
+            },
+            {
+              "content": "Before proposing a winter travel route, check recent snow-clearing conditions and accessible entrances.",
+              "content_digest": "dcab87102a9979c51dd369d5ba5ed00b7445c8ccd14450edcb8bec7859689606",
+              "position": 8,
+              "uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d"
+            },
+            {
+              "content": "The local agent cannot know the actual condition of the sidewalk the user will take from a weather forecast alone.",
+              "content_digest": "6b4bcc2f2f508f130c047ff677cadae0eae5b4cc5e5dd6bb3a1fb3784d7793b1",
+              "position": 9,
+              "uid": "802c4031-57de-592a-9bc8-6ee3d54921c8"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "c1ca4157-4440-4897-995a-bfcaa28532ef"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate domains: the reference records reading setup, distraction, placekeeping, expectations, and agent limits, while the compared frame records winter preparation, route safety, sleep-temperature adjustment, concern, and route-information requirements. No claims govern the same operational decision.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eb759f84-05a7-44ce-a683-e33400c74b6e",
+              "memory_uid": "3d3f7960-daf5-5a51-98b3-14261c5aa66c"
+            }
+          ],
+          "reason": "This is independently useful information about the user's reading setup, with no counterpart addressing that setup in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user keeps current reading and note-taking materials on a small living-room desk.",
+          "uid": "abefac04-c763-57d0-8890-5c2a01de1224"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eb759f84-05a7-44ce-a683-e33400c74b6e",
+              "memory_uid": "28714a4e-bc14-5703-b594-126471ae0585"
+            },
+            {
+              "frame_uid": "eb759f84-05a7-44ce-a683-e33400c74b6e",
+              "memory_uid": "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df"
+            }
+          ],
+          "reason": "These memories jointly describe one-sided observations about television presence and reading continuity; the compared frame does not address this reading condition.",
+          "status": "RESOLVED",
+          "summary": "The user's recorded reading continuity differed between periods with the television on and off.",
+          "uid": "ccb2343d-9fdc-5bad-9475-f80f73f9e8ca"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eb759f84-05a7-44ce-a683-e33400c74b6e",
+              "memory_uid": "1b1c9f90-2561-53d5-88fe-d54618450143"
+            },
+            {
+              "frame_uid": "eb759f84-05a7-44ce-a683-e33400c74b6e",
+              "memory_uid": "076a7caa-5dcf-5f9d-8bee-efc952652efa"
+            },
+            {
+              "frame_uid": "eb759f84-05a7-44ce-a683-e33400c74b6e",
+              "memory_uid": "310f4cfc-b117-5511-8e13-2bd2ebec9fe5"
+            }
+          ],
+          "reason": "These memories provide observational and subjective parts of one claim about phone-related interruption, absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Phone notifications are associated with breaks in the user's note-taking and concentration, while leaving the phone elsewhere prevented checking during a later hour.",
+          "uid": "5e83b206-9a5c-52b0-a079-081896761f7d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eb759f84-05a7-44ce-a683-e33400c74b6e",
+              "memory_uid": "1dad71ec-6a5d-550e-89d2-a86dc3dacb11"
+            },
+            {
+              "frame_uid": "eb759f84-05a7-44ce-a683-e33400c74b6e",
+              "memory_uid": "58494743-fc7f-59e9-8e17-80b8a644470a"
+            }
+          ],
+          "reason": "The memories form one before-and-after account of reading-place recovery, which the compared frame does not address.",
+          "status": "RESOLVED",
+          "summary": "A loose note failed as a place marker, whereas recording the page number in the notebook supported immediate resumption.",
+          "uid": "bcda370e-2fa1-54de-a5a4-3c79d186c03f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eb759f84-05a7-44ce-a683-e33400c74b6e",
+              "memory_uid": "cce66589-892c-5d73-bdbc-2c6e94e0992e"
+            }
+          ],
+          "reason": "This is a distinct family expectation about reading concentration and has no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user's father expects lower television volume to make concentration easier while the user reads.",
+          "uid": "6026d9d7-28ec-5fc6-a5de-d1c1a9dbc67b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eb759f84-05a7-44ce-a683-e33400c74b6e",
+              "memory_uid": "20b2a27f-908f-5ed7-a288-f7c1030674fc"
+            }
+          ],
+          "reason": "This defines a one-sided capability boundary concerning reading records and scheduling, not the winter-route uncertainty described elsewhere.",
+          "status": "RESOLVED",
+          "summary": "The local agent can summarize past reading conditions and interruptions but cannot predict the next reading time.",
+          "uid": "815832e9-81bd-5783-b383-8e781b5cd743"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c1ca4157-4440-4897-995a-bfcaa28532ef",
+              "memory_uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409"
+            },
+            {
+              "frame_uid": "c1ca4157-4440-4897-995a-bfcaa28532ef",
+              "memory_uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5"
+            },
+            {
+              "frame_uid": "c1ca4157-4440-4897-995a-bfcaa28532ef",
+              "memory_uid": "a11f0943-8ee1-5305-87fb-64982fb36f82"
+            }
+          ],
+          "reason": "These memories form one account linking a designated storage place and advance glove preparation with departure readiness; the reference frame does not address winter accessories.",
+          "status": "RESOLVED",
+          "summary": "Keeping gloves in the entrance basket, including preparing them the night before, supports finding them and departing on time.",
+          "uid": "0b6cb087-2603-5b02-9d8a-3ecbdede4b7e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c1ca4157-4440-4897-995a-bfcaa28532ef",
+              "memory_uid": "f623f245-cdd5-5080-8869-b52cf2914076"
+            },
+            {
+              "frame_uid": "c1ca4157-4440-4897-995a-bfcaa28532ef",
+              "memory_uid": "17ac56f1-1302-5350-99d5-b95ef7feb768"
+            }
+          ],
+          "reason": "These memories jointly describe route outcomes under differing snow-clearing conditions, absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user's winter route viability depended on cleared surfaces: uncleared stairs forced a return, while a cleared main-road sidewalk avoided slippery sections.",
+          "uid": "9f6425fd-f143-5fb2-8b38-9ac6e00e4165"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c1ca4157-4440-4897-995a-bfcaa28532ef",
+              "memory_uid": "96988fa9-44b1-511e-8c99-4372f902cfe3"
+            },
+            {
+              "frame_uid": "c1ca4157-4440-4897-995a-bfcaa28532ef",
+              "memory_uid": "b628acaa-50da-552c-8665-244dc4ab8263"
+            }
+          ],
+          "reason": "These memories form one account of a sleep-temperature problem and the user's subsequent adjustment, with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Excess heat accompanied warmth-related waking, and the user later reduced the heat while adding a thin blanket.",
+          "uid": "63d4eacd-08d6-514a-8920-ece54f87fbb9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c1ca4157-4440-4897-995a-bfcaa28532ef",
+              "memory_uid": "08dfb937-7b28-55b5-801c-c0da00cbd414"
+            }
+          ],
+          "reason": "This is a distinct family expectation and action concerning winter travel, not the reference-side expectation about reading concentration.",
+          "status": "RESOLVED",
+          "summary": "On a heavily snowy morning, the user's father expects concern about road conditions and texts before departure.",
+          "uid": "225967cd-dd4d-51c7-9cf5-18e1b49f768a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c1ca4157-4440-4897-995a-bfcaa28532ef",
+              "memory_uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d"
+            },
+            {
+              "frame_uid": "c1ca4157-4440-4897-995a-bfcaa28532ef",
+              "memory_uid": "802c4031-57de-592a-9bc8-6ee3d54921c8"
+            }
+          ],
+          "reason": "These memories jointly state one route-information requirement and its epistemic basis; the reference frame contains no policy for winter travel proposals.",
+          "status": "RESOLVED",
+          "summary": "Winter route proposals require recent snow-clearing and entrance-access information because a weather forecast alone cannot establish actual sidewalk conditions.",
+          "uid": "ac3790e2-c575-520f-8496-d259b3bd38a8"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame describes winter accessory preparation, snow-aware route choices, nighttime temperature adjustment, a family concern about travel, and the need for current accessibility information.",
+        "differences": "",
+        "reference_only": "The reference describes reading materials, television and notification effects, page-place recovery, a family expectation about concentration, and limits on predicting reading time."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "f75d3251-492d-4740-b98f-b0c4e38a3ea8"
+    },
+    "analysis_digest": "8c9a2fd2c30f00cbc1d40c6cb5687046544c8a6d200876893db7f47077b662eb",
+    "key": "a003035bac68f5ea2a37f193253f34a6cab208e17c8e0bfa957540ff3a027d2f",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 51.04569612499836,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "a003035bac68f5ea2a37f193253f34a6cab208e17c8e0bfa957540ff3a027d2f",
+  "created_at": "2026-08-13T18:53:47.019763Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/09",
+  "pair_key": "da203b4a1d8e28ac2902a1debfeb92c12a4f7aa80ed9300f88dcf7e7617452c1",
+  "provider_seconds": 51.04569612499836,
+  "right": "task-3/local/personal-memory/2026/01",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

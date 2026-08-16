@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:37:00.462193+00:00",
+      "frames": [
+        {
+          "context_digest": "9fdb8cdfae14edf54f7410c0e8dd59527179de290b3d7c5f1b0f58494275b076",
+          "context_name": "task-3/local/personal-memory/2024/03",
+          "context_uid": "97c5905c-359b-5497-956f-b92db9ddbd2f",
+          "memories": [
+            {
+              "content": "The instructions for one medication the user takes say to take it after the evening meal.",
+              "content_digest": "32bba9f2936e560ddd5f4c5515895f2954b9c8722fcd501644569d1ff4f7b97c",
+              "position": 0,
+              "uid": "12ba4249-9450-5f2e-b648-5369a7997b26"
+            },
+            {
+              "content": "On a day with a morning appointment, the user miscalculated the fasting period and checked again at the reception desk.",
+              "content_digest": "532396ed2265321fbd4ca28ed1de2962211a357195bc9839503330c6cb0ab281",
+              "position": 1,
+              "uid": "051e79ff-5363-5160-9a13-46568fd13306"
+            },
+            {
+              "content": "For an afternoon visit, the user felt less rushed while preparing to travel than for a morning visit.",
+              "content_digest": "276fa255e4a4945f1475fa66129069ea33514bc24c98a246e9ab0d0000c156fa",
+              "position": 2,
+              "uid": "e7f1fcf7-ee2f-57d8-98cb-781e31e481e8"
+            },
+            {
+              "content": "On a day there was no waiting chair, the user stood for 20 minutes and their back became uncomfortable.",
+              "content_digest": "1c412785950057f01b1e7c10b716977cdb8bfb2b0605ef5bfdbdc6e349f6aaf8",
+              "position": 3,
+              "uid": "18d58666-2cfa-5959-8da9-2745bed56e11"
+            },
+            {
+              "content": "On a day medication instructions were explained all at once and at length, the user failed to write down an important time.",
+              "content_digest": "f3629bba06d053fa20712982f70b8dfd574b41a1b5ecd29d7c29f1b60742f647",
+              "position": 4,
+              "uid": "8fdede6e-64ed-5e4c-81f4-7a1075165568"
+            },
+            {
+              "content": "On a day medication times were confirmed one line at a time, the user copied them directly into their schedule after returning home.",
+              "content_digest": "acade505d6c0cdfddae0d169dea81c06a757aa7d7d2c760f6cdc253b06af5ded",
+              "position": 5,
+              "uid": "21f679f7-7d75-5c01-b6c3-b0d4bea5f2f0"
+            },
+            {
+              "content": "On a visit when their younger brother drove them, the user did not have to find a separate route home.",
+              "content_digest": "5e17c1227c7cbee7e995728edd17b4301903dfdc7a7bdc5f5ff3e06edfd357b3",
+              "position": 6,
+              "uid": "3ec03d39-3240-56d1-80da-313f79f2bf3a"
+            },
+            {
+              "content": "The user's younger brother prefers to receive a request for weekday-afternoon transportation two days beforehand rather than on the day itself.",
+              "content_digest": "7d1bf920ff730ddff86f328aaa3c3edf9d424170044bcd789a3ac55bffb5a839",
+              "position": 7,
+              "uid": "3069baac-fa68-5e94-8ba3-e888cf622f8c"
+            },
+            {
+              "content": "The local agent cannot determine the current prescription or whether use continues from medication notes alone.",
+              "content_digest": "89990815daa01f70a77b970b6a38cb9063f32fed898bd36e39a85551a1ad6200",
+              "position": 8,
+              "uid": "d7f215c6-57ea-561a-9627-3ce94203d507"
+            },
+            {
+              "content": "The waiting area at that clinic has too few chairs, so there may be periods when people must wait standing.",
+              "content_digest": "66c27ba4d6f3fb0d16b322a6de6d8afeb5c650fbe04162006a3288dd886ce1f0",
+              "position": 9,
+              "uid": "e6023aed-938d-5954-b8a7-8cb01340ee37"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "2a37ba7f-728f-4ce6-a26e-6f6a1287828e"
+        },
+        {
+          "context_digest": "ca8765e237d85d9bf3ecb78fe1d9a2487066ae14dae9509e40b324ac1277d75a",
+          "context_name": "task-3/local/personal-memory/2025/06",
+          "context_uid": "870f7336-726a-5d9c-bae4-12585311463e",
+          "memories": [
+            {
+              "content": "The user keeps a portable fan charger on a living-room shelf.",
+              "content_digest": "5ab7fad8ae1b3f56bdbc1c3ebf593a3d452590341b6de115f830fdf0d994c12e",
+              "position": 0,
+              "uid": "853a158c-edf9-578a-8e75-3d5daff6e4db"
+            },
+            {
+              "content": "On a hot day, the user worked with only the window open and lost focus in the afternoon.",
+              "content_digest": "3c4225f055db293c53a5a137d0c6353005bcb55b71dbc61bc69831aa5c3c08de",
+              "position": 1,
+              "uid": "f7d5ebdc-0cae-5e07-a060-e129b5a05570"
+            },
+            {
+              "content": "In the room where the user closed the curtains the next morning, the temperature rose less.",
+              "content_digest": "4cb4d1892db8769f4c066859dbb021c67d5015114f8522dfd904057061600ab5",
+              "position": 2,
+              "uid": "99e5c522-535b-5015-8617-06f645147f8b"
+            },
+            {
+              "content": "The user took the portable fan out without charging it, and it turned off after an hour.",
+              "content_digest": "0e1e0e9e985bea5be6976010a390f484b60a931ea7dfaf50a73c66616a73d5da",
+              "position": 3,
+              "uid": "7b3bf50c-63aa-5a1e-9a53-7befea25a468"
+            },
+            {
+              "content": "Before the next outing, the user charged it the night before and used the fan throughout the trip.",
+              "content_digest": "fd4282d169da18d902fc5f766d4e38131240bf3a51e6fa0c5bad69f80f1492af",
+              "position": 4,
+              "uid": "ca8de091-afb2-537f-a83a-09769056879d"
+            },
+            {
+              "content": "On a hot weekend, the user was eating lunch in their father's yard and moved indoors.",
+              "content_digest": "44e7d3bc5eaecec68ad6e7c0979572102f3c717b37712fcfada769959443ae8e",
+              "position": 5,
+              "uid": "4a0604fb-10b4-5132-a6de-ab6a229ff2be"
+            },
+            {
+              "content": "When the user returned to the yard in the evening, shade and wind led them to stay another hour.",
+              "content_digest": "7495f1d4ba2d1d732ab5c962f45b5b0c9c765ee21767373552247a823cf90984",
+              "position": 6,
+              "uid": "1f90941e-776f-5cba-9783-c392983dd72c"
+            },
+            {
+              "content": "The user's father prefers to move an outdoor meal to the evening rather than proceed at midday when the temperature is high.",
+              "content_digest": "5f9628a28b5c6f3b20a371d1c039f37f26c50832970936c8a243f161fd8288f4",
+              "position": 7,
+              "uid": "63391d26-7417-5ea6-ac0a-460af7489963"
+            },
+            {
+              "content": "The local agent can compare past responses to heat but cannot know the current felt temperature without an indoor temperature record.",
+              "content_digest": "815f4fb2c833d75e30cb0e323f5708e356bf38e0bbb573865092be48fbf2746a",
+              "position": 8,
+              "uid": "31502797-1379-5ec4-bd1b-a2e1515fa56e"
+            },
+            {
+              "content": "A room with a west-facing window can warm rapidly in the late afternoon.",
+              "content_digest": "448908f6242021de6d41ddee8121714a1388db6e4e3d067de27e6950ee712c23",
+              "position": 9,
+              "uid": "68f85c30-62c4-579d-97cd-9f401c686e63"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "443ef1da-e313-4a4a-b0e6-159b152ea912"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate practical domains: clinic visits and medication management versus heat management and portable-fan use. Each contributes independently useful observations, preferences, and information limits; no supplied claims govern the same operational decision closely enough to support a cross-frame relation.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2a37ba7f-728f-4ce6-a26e-6f6a1287828e",
+              "memory_uid": "12ba4249-9450-5f2e-b648-5369a7997b26"
+            }
+          ],
+          "reason": "Only the reference frame supplies this medication-timing instruction; the compared frame’s timing claims concern heat and outdoor meals, not medication use.",
+          "status": "RESOLVED",
+          "summary": "Medication instructions specify use after the evening meal.",
+          "uid": "ba10c474-b598-52ea-9b65-6177fbb3c6bb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2a37ba7f-728f-4ce6-a26e-6f6a1287828e",
+              "memory_uid": "051e79ff-5363-5160-9a13-46568fd13306"
+            }
+          ],
+          "reason": "This is a one-sided clinic-preparation experience with no compared-frame claim addressing fasting or appointment instructions.",
+          "status": "RESOLVED",
+          "summary": "A fasting-period miscalculation for a morning appointment prompted confirmation at reception.",
+          "uid": "084b2936-3132-5cef-83a4-08c89c0520b7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2a37ba7f-728f-4ce6-a26e-6f6a1287828e",
+              "memory_uid": "e7f1fcf7-ee2f-57d8-98cb-781e31e481e8"
+            }
+          ],
+          "reason": "Only the reference frame compares travel preparation across appointment times.",
+          "status": "RESOLVED",
+          "summary": "Preparing to travel for an afternoon visit felt less rushed than for a morning visit.",
+          "uid": "eac20dfc-0fe4-53e7-bffb-1b78aef67adb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2a37ba7f-728f-4ce6-a26e-6f6a1287828e",
+              "memory_uid": "18d58666-2cfa-5959-8da9-2745bed56e11"
+            }
+          ],
+          "reason": "This specific consequence of standing during a clinic wait appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Standing for twenty minutes when no chair was available caused back discomfort.",
+          "uid": "9b6ce8e1-dd48-5e33-a2b9-1f5fa9a800c4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2a37ba7f-728f-4ce6-a26e-6f6a1287828e",
+              "memory_uid": "8fdede6e-64ed-5e4c-81f4-7a1075165568"
+            }
+          ],
+          "reason": "Only the reference frame describes this medication-communication failure.",
+          "status": "RESOLVED",
+          "summary": "Receiving lengthy medication instructions all at once led to omission of an important time from the user’s notes.",
+          "uid": "076cfb1f-fbad-5e3e-b0c4-b752fa5440b7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2a37ba7f-728f-4ce6-a26e-6f6a1287828e",
+              "memory_uid": "21f679f7-7d75-5c01-b6c3-b0d4bea5f2f0"
+            }
+          ],
+          "reason": "Only the reference frame describes this medication-communication and scheduling outcome.",
+          "status": "RESOLVED",
+          "summary": "Line-by-line confirmation of medication times enabled the user to copy them into a schedule at home.",
+          "uid": "80f2ed5b-3965-5f66-a622-e5e8a16fe6fe"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2a37ba7f-728f-4ce6-a26e-6f6a1287828e",
+              "memory_uid": "3ec03d39-3240-56d1-80da-313f79f2bf3a"
+            }
+          ],
+          "reason": "This transportation benefit is present only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Being driven by the younger brother removed the need to find a separate route home.",
+          "uid": "96ae8fe3-2b0c-5907-9d9b-7b6243e6478b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2a37ba7f-728f-4ce6-a26e-6f6a1287828e",
+              "memory_uid": "3069baac-fa68-5e94-8ba3-e888cf622f8c"
+            }
+          ],
+          "reason": "Only the reference frame states this family transportation preference.",
+          "status": "RESOLVED",
+          "summary": "The younger brother prefers two days’ notice for weekday-afternoon transportation requests.",
+          "uid": "da4b9e71-6cfd-5947-820c-763256a7b3ae"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2a37ba7f-728f-4ce6-a26e-6f6a1287828e",
+              "memory_uid": "d7f215c6-57ea-561a-9627-3ce94203d507"
+            }
+          ],
+          "reason": "This information limit concerns prescription status and is independent of the compared frame’s temperature-record limitation.",
+          "status": "RESOLVED",
+          "summary": "Medication notes alone cannot establish the current prescription or whether its use continues.",
+          "uid": "306087e3-6a86-50f6-9758-2e5bf534118a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2a37ba7f-728f-4ce6-a26e-6f6a1287828e",
+              "memory_uid": "e6023aed-938d-5954-b8a7-8cb01340ee37"
+            }
+          ],
+          "reason": "Only the reference frame states this recurring clinic-seating constraint.",
+          "status": "RESOLVED",
+          "summary": "The clinic waiting area has insufficient chairs, sometimes requiring people to stand.",
+          "uid": "0ff5f72e-b969-5ebc-b8f1-744cb05a5139"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "443ef1da-e313-4a4a-b0e6-159b152ea912",
+              "memory_uid": "853a158c-edf9-578a-8e75-3d5daff6e4db"
+            }
+          ],
+          "reason": "This storage-location fact appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The portable fan charger is kept on a living-room shelf.",
+          "uid": "6baf5ead-9a2c-50b0-93db-659629a1901b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "443ef1da-e313-4a4a-b0e6-159b152ea912",
+              "memory_uid": "f7d5ebdc-0cae-5e07-a060-e129b5a05570"
+            }
+          ],
+          "reason": "Only the compared frame describes this heat-related work experience.",
+          "status": "RESOLVED",
+          "summary": "Working with only an open window on a hot day was followed by reduced afternoon focus.",
+          "uid": "a217db6c-4977-5b6a-8221-5b32f8404eb3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "443ef1da-e313-4a4a-b0e6-159b152ea912",
+              "memory_uid": "99e5c522-535b-5015-8617-06f645147f8b"
+            }
+          ],
+          "reason": "This indoor heat-management observation appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Closing the curtains was associated with a smaller temperature rise the next morning.",
+          "uid": "48892d98-8910-56a4-9cbc-d5cacbd8cea7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "443ef1da-e313-4a4a-b0e6-159b152ea912",
+              "memory_uid": "7b3bf50c-63aa-5a1e-9a53-7befea25a468"
+            }
+          ],
+          "reason": "Only the compared frame describes this consequence of omitted charging.",
+          "status": "RESOLVED",
+          "summary": "Taking the portable fan out uncharged resulted in it shutting down after an hour.",
+          "uid": "5c299d83-78b9-583b-b27e-20f048246273"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "443ef1da-e313-4a4a-b0e6-159b152ea912",
+              "memory_uid": "ca8de091-afb2-537f-a83a-09769056879d"
+            }
+          ],
+          "reason": "Only the compared frame describes this charging practice and outcome.",
+          "status": "RESOLVED",
+          "summary": "Charging the portable fan the night before allowed it to run throughout the next trip.",
+          "uid": "09282487-2d98-5c6e-a932-2f817161aeb7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "443ef1da-e313-4a4a-b0e6-159b152ea912",
+              "memory_uid": "4a0604fb-10b4-5132-a6de-ab6a229ff2be"
+            }
+          ],
+          "reason": "This outdoor-heat response appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "During a hot weekend lunch in the father’s yard, the user moved indoors.",
+          "uid": "cba50cce-233d-5acc-87b2-05e1309629d5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "443ef1da-e313-4a4a-b0e6-159b152ea912",
+              "memory_uid": "1f90941e-776f-5cba-9783-c392983dd72c"
+            }
+          ],
+          "reason": "Only the compared frame describes this response to improved evening conditions.",
+          "status": "RESOLVED",
+          "summary": "Shade and wind in the evening led the user to remain in the yard for another hour.",
+          "uid": "bae2ecfe-490e-5991-9afb-414c78459034"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "443ef1da-e313-4a4a-b0e6-159b152ea912",
+              "memory_uid": "63391d26-7417-5ea6-ac0a-460af7489963"
+            }
+          ],
+          "reason": "This family preference about heat and meal timing appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The father prefers moving an outdoor meal to the evening when midday temperatures are high.",
+          "uid": "314c8ac3-ca10-5fb0-8b81-285931b2ab60"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "443ef1da-e313-4a4a-b0e6-159b152ea912",
+              "memory_uid": "31502797-1379-5ec4-bd1b-a2e1515fa56e"
+            }
+          ],
+          "reason": "This information limit concerns present indoor heat and is independent of the reference frame’s prescription-status limitation.",
+          "status": "RESOLVED",
+          "summary": "Past heat responses can be compared, but current felt temperature cannot be known without an indoor temperature record.",
+          "uid": "d4f7bcdf-a3a2-532e-aa0e-1136f9c153dc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "443ef1da-e313-4a4a-b0e6-159b152ea912",
+              "memory_uid": "68f85c30-62c4-579d-97cd-9f401c686e63"
+            }
+          ],
+          "reason": "This environmental characteristic appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A west-facing window can cause rapid room warming in the late afternoon.",
+          "uid": "3ad98d2a-05c4-5c2c-a0ae-ea095c591850"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers indoor and outdoor heat responses, curtains and room warming, portable-fan charging, meal timing, and uncertainty about current indoor temperature.",
+        "differences": "",
+        "reference_only": "The reference covers medication timing and communication, fasting and appointment preparation, clinic seating, family transportation, and uncertainty about current prescriptions."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "2f824109-48c6-4b24-899a-1dfca86a2f47"
+    },
+    "analysis_digest": "093e1a4b46e7f6df14857b10c5e1b70498a01df391031a2b925d02a4ca374f9e",
+    "key": "38af3c2691d4877057478383dd2b57f249968d8a472df27cb1a074a725b1962b",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 43.0071285419981,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "38af3c2691d4877057478383dd2b57f249968d8a472df27cb1a074a725b1962b",
+  "created_at": "2026-08-13T18:37:43.469274Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/03",
+  "pair_key": "ef1f69115c72ca542583105cd28249ab672968a355c782de7146243b57452c65",
+  "provider_seconds": 43.0071285419981,
+  "right": "task-3/local/personal-memory/2025/06",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

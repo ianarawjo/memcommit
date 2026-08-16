@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from collections.abc import Callable, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from functools import partial
 from pathlib import Path
 
@@ -25,6 +25,7 @@ from memcommit.api.atomize import (
     AtomizeStructuralApplyResult,
 )
 from memcommit.api.compare import ComparisonResult
+from memcommit.api.dedup import DedupApplyResult, DedupPlanResult
 from memcommit.api.help import HelpCatalogResult, OperationHelpResult
 from memcommit.api.errors import (
     QueryConfigurationError,
@@ -322,6 +323,34 @@ class MemCommitClient:
             analysis,
             candidate_uid=candidate_uid,
         )
+
+    def plan_dedup(
+        self,
+        handoffs: Sequence[QualityFindingHandoff],
+        *,
+        expected_revision: str | None = None,
+    ) -> DedupPlanResult:
+        """Plan survivor choices from exact confirmed duplicate receipts."""
+
+        from memcommit.api._operations.dedup import plan_dedup
+
+        return plan_dedup(
+            self._runtime,
+            handoffs,
+            expected_revision=expected_revision,
+        )
+
+    def apply_dedup(
+        self,
+        plan: DedupPlanResult,
+        *,
+        survivors: Mapping[str, str],
+    ) -> DedupApplyResult:
+        """Apply one exact complete existing-survivor mapping."""
+
+        from memcommit.api._operations.dedup import apply_dedup
+
+        return apply_dedup(self._runtime, plan, survivors=survivors)
 
     def distill_context(
         self,

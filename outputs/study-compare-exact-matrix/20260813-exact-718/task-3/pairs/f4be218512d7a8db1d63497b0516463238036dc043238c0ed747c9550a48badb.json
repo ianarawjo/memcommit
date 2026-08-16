@@ -1,0 +1,379 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:46:25.004078+00:00",
+      "frames": [
+        {
+          "context_digest": "492e513a553a9191e2c646cca49364b336ae6d163de5688eeca8cc661bbbdb32",
+          "context_name": "task-3/local/personal-memory/2024/11",
+          "context_uid": "0d5e1eef-1669-5589-94ba-b46c9c2080dc",
+          "memories": [
+            {
+              "content": "The user changed their schedule once in November 2024 because of their mother's hospital visit.",
+              "content_digest": "f08f07dda1b468ab191a59d87e7ceb8068189964edee2010abdae6e525d6103f",
+              "position": 0,
+              "uid": "bb17c696-0c1c-516f-8ad9-68a4b159ce22"
+            },
+            {
+              "content": "After seeing the reason for the schedule change written in a calendar invitation, the user asked for it to be removed.",
+              "content_digest": "7bfc906526c255f90a85b6dcc4b28ea1b0a9389e9f17ba989a4ce098280578c8",
+              "position": 1,
+              "uid": "195ba5ab-3ee0-5594-a859-9f2b5eadf9ea"
+            },
+            {
+              "content": "The user was able to reschedule the appointment after providing only a new time, without a reason.",
+              "content_digest": "14f1bd0410c76aa3a0eb28a2212fd06558ab23b6dc012aa5529980a67efe3e2b",
+              "position": 2,
+              "uid": "4c8759cc-66aa-527c-a9d5-197d39b5d2b7"
+            },
+            {
+              "content": "On a day the user traveled in their father's car, they photographed the parking location.",
+              "content_digest": "111e71af27be5d109557440569352964544e9b702810741445172a6cf51f94f5",
+              "position": 3,
+              "uid": "d4b27ea7-d329-5dc7-b7ca-91d0cd50a958"
+            },
+            {
+              "content": "On the next visit, when the user did not take a photo, they walked one circuit of the parking garage while looking for the exit.",
+              "content_digest": "6d61d67e35552cb739d0220e480189706ec5bbac74f93b87149a6948d9ac2805",
+              "position": 4,
+              "uid": "32a19a57-9b04-5f86-92ba-202a9ac803e4"
+            },
+            {
+              "content": "After hearing preparation items from their mother by phone, the user omitted two items.",
+              "content_digest": "449dc73aad797f5acd3d898292cf9942f7d3b65b9faf52769ae5b3332285b4f3",
+              "position": 5,
+              "uid": "0eeffd8c-acd6-57bf-950d-20cfa1fe62b3"
+            },
+            {
+              "content": "After receiving the preparation items again by text, the user put all of them in their bag.",
+              "content_digest": "9539ab90f598a96d97a73b7954db8834d3106861ba6ecc814e579a348e0145d6",
+              "position": 6,
+              "uid": "07ea3801-8666-581d-b846-2f45bf99ca19"
+            },
+            {
+              "content": "The user's mother does not want the reason for her visit disclosed in the user's external schedule.",
+              "content_digest": "b1aff7bb5b5df1ec773fd8875205cd9fdfa2fd5b520cf91b7c84c9e3054b4feb",
+              "position": 7,
+              "uid": "9e70b92e-1d8d-51ef-962d-bd9b348a56d5"
+            },
+            {
+              "content": "Do not include the mother's reason for a visit when conveying the user's availability externally.",
+              "content_digest": "b9473919c63f233fc66c49bbf00b20a8ab9532bcb1b8ce3896c442afed4229d9",
+              "position": 8,
+              "uid": "d76686fd-9f1d-5d94-931b-4b49c86a8f4e"
+            },
+            {
+              "content": "Some daily-life services may operate for shorter hours during the year-end holiday period.",
+              "content_digest": "48d4487aba4c395527f9dfeac9488f45556d1bd89475f8620b0a64d84e4479fc",
+              "position": 9,
+              "uid": "820a5de9-9e08-52c7-8747-5155fe341bb4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "5da9854d-5f5c-4a5c-b4ac-2dda9383d6e0"
+        },
+        {
+          "context_digest": "ca8765e237d85d9bf3ecb78fe1d9a2487066ae14dae9509e40b324ac1277d75a",
+          "context_name": "task-3/local/personal-memory/2025/06",
+          "context_uid": "870f7336-726a-5d9c-bae4-12585311463e",
+          "memories": [
+            {
+              "content": "The user keeps a portable fan charger on a living-room shelf.",
+              "content_digest": "5ab7fad8ae1b3f56bdbc1c3ebf593a3d452590341b6de115f830fdf0d994c12e",
+              "position": 0,
+              "uid": "853a158c-edf9-578a-8e75-3d5daff6e4db"
+            },
+            {
+              "content": "On a hot day, the user worked with only the window open and lost focus in the afternoon.",
+              "content_digest": "3c4225f055db293c53a5a137d0c6353005bcb55b71dbc61bc69831aa5c3c08de",
+              "position": 1,
+              "uid": "f7d5ebdc-0cae-5e07-a060-e129b5a05570"
+            },
+            {
+              "content": "In the room where the user closed the curtains the next morning, the temperature rose less.",
+              "content_digest": "4cb4d1892db8769f4c066859dbb021c67d5015114f8522dfd904057061600ab5",
+              "position": 2,
+              "uid": "99e5c522-535b-5015-8617-06f645147f8b"
+            },
+            {
+              "content": "The user took the portable fan out without charging it, and it turned off after an hour.",
+              "content_digest": "0e1e0e9e985bea5be6976010a390f484b60a931ea7dfaf50a73c66616a73d5da",
+              "position": 3,
+              "uid": "7b3bf50c-63aa-5a1e-9a53-7befea25a468"
+            },
+            {
+              "content": "Before the next outing, the user charged it the night before and used the fan throughout the trip.",
+              "content_digest": "fd4282d169da18d902fc5f766d4e38131240bf3a51e6fa0c5bad69f80f1492af",
+              "position": 4,
+              "uid": "ca8de091-afb2-537f-a83a-09769056879d"
+            },
+            {
+              "content": "On a hot weekend, the user was eating lunch in their father's yard and moved indoors.",
+              "content_digest": "44e7d3bc5eaecec68ad6e7c0979572102f3c717b37712fcfada769959443ae8e",
+              "position": 5,
+              "uid": "4a0604fb-10b4-5132-a6de-ab6a229ff2be"
+            },
+            {
+              "content": "When the user returned to the yard in the evening, shade and wind led them to stay another hour.",
+              "content_digest": "7495f1d4ba2d1d732ab5c962f45b5b0c9c765ee21767373552247a823cf90984",
+              "position": 6,
+              "uid": "1f90941e-776f-5cba-9783-c392983dd72c"
+            },
+            {
+              "content": "The user's father prefers to move an outdoor meal to the evening rather than proceed at midday when the temperature is high.",
+              "content_digest": "5f9628a28b5c6f3b20a371d1c039f37f26c50832970936c8a243f161fd8288f4",
+              "position": 7,
+              "uid": "63391d26-7417-5ea6-ac0a-460af7489963"
+            },
+            {
+              "content": "The local agent can compare past responses to heat but cannot know the current felt temperature without an indoor temperature record.",
+              "content_digest": "815f4fb2c833d75e30cb0e323f5708e356bf38e0bbb573865092be48fbf2746a",
+              "position": 8,
+              "uid": "31502797-1379-5ec4-bd1b-a2e1515fa56e"
+            },
+            {
+              "content": "A room with a west-facing window can warm rapidly in the late afternoon.",
+              "content_digest": "448908f6242021de6d41ddee8121714a1388db6e4e3d067de27e6950ee712c23",
+              "position": 9,
+              "uid": "68f85c30-62c4-579d-97cd-9f401c686e63"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "0cec41f7-364a-4ed3-b11d-d776e9a83470"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate practical domains. The reference frame centers on schedule privacy, preparation, parking navigation, and holiday availability, while the compared frame records heat-management experiences, fan readiness, outdoor-meal timing, and temperature-assessment limits. Neither frame supplies a scope-aligned counterpart to the other.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5da9854d-5f5c-4a5c-b4ac-2dda9383d6e0",
+              "memory_uid": "bb17c696-0c1c-516f-8ad9-68a4b159ce22"
+            }
+          ],
+          "reason": "This is a one-sided historical scheduling fact with no operationally related claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A November 2024 schedule change occurred because of the user's mother's hospital visit.",
+          "uid": "f7bccd4b-84d2-5c62-9847-f795b14abdb4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5da9854d-5f5c-4a5c-b4ac-2dda9383d6e0",
+              "memory_uid": "195ba5ab-3ee0-5594-a859-9f2b5eadf9ea"
+            },
+            {
+              "frame_uid": "5da9854d-5f5c-4a5c-b4ac-2dda9383d6e0",
+              "memory_uid": "9e70b92e-1d8d-51ef-962d-bd9b348a56d5"
+            },
+            {
+              "frame_uid": "5da9854d-5f5c-4a5c-b4ac-2dda9383d6e0",
+              "memory_uid": "d76686fd-9f1d-5d94-931b-4b49c86a8f4e"
+            }
+          ],
+          "reason": "The request to remove the calendar detail, the mother's preference, and the disclosure instruction express one underlying privacy requirement absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The mother's visit reason should not appear when the user's schedule or availability is shared externally.",
+          "uid": "44ed04a4-7d32-5727-9bed-1f9644066727"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5da9854d-5f5c-4a5c-b4ac-2dda9383d6e0",
+              "memory_uid": "4c8759cc-66aa-527c-a9d5-197d39b5d2b7"
+            }
+          ],
+          "reason": "This independently useful fact about reason-free rescheduling has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user successfully rescheduled an appointment by supplying only a new time.",
+          "uid": "56f15944-7b47-562f-ab34-5bac4fb63a21"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5da9854d-5f5c-4a5c-b4ac-2dda9383d6e0",
+              "memory_uid": "d4b27ea7-d329-5dc7-b7ca-91d0cd50a958"
+            },
+            {
+              "frame_uid": "5da9854d-5f5c-4a5c-b4ac-2dda9383d6e0",
+              "memory_uid": "32a19a57-9b04-5f86-92ba-202a9ac803e4"
+            }
+          ],
+          "reason": "Both memories form one split account about recording and later locating a parking position, with no related compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "The paired parking experiences record photographing a location on one visit and searching the garage after no photograph was taken on the next.",
+          "uid": "1dc675df-6856-5f44-bfff-fa912e344e24"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5da9854d-5f5c-4a5c-b4ac-2dda9383d6e0",
+              "memory_uid": "0eeffd8c-acd6-57bf-950d-20cfa1fe62b3"
+            },
+            {
+              "frame_uid": "5da9854d-5f5c-4a5c-b4ac-2dda9383d6e0",
+              "memory_uid": "07ea3801-8666-581d-b846-2f45bf99ca19"
+            }
+          ],
+          "reason": "Both memories jointly express one modality-linked preparation outcome absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user omitted preparation items conveyed by phone but packed every item after receiving them by text.",
+          "uid": "5256225d-6e41-5fba-a739-9dd39b9d7e0a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5da9854d-5f5c-4a5c-b4ac-2dda9383d6e0",
+              "memory_uid": "820a5de9-9e08-52c7-8747-5155fe341bb4"
+            }
+          ],
+          "reason": "This standalone seasonal-hours caution has no operational counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Some daily-life services may have shorter operating hours during the year-end holiday period.",
+          "uid": "85659154-9a52-53d8-b22f-a6b73916cc03"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0cec41f7-364a-4ed3-b11d-d776e9a83470",
+              "memory_uid": "853a158c-edf9-578a-8e75-3d5daff6e4db"
+            }
+          ],
+          "reason": "This standalone storage-location fact has no operational counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user keeps a portable-fan charger on a living-room shelf.",
+          "uid": "40f123b7-51e2-5b36-a4e1-91f0a1cac118"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0cec41f7-364a-4ed3-b11d-d776e9a83470",
+              "memory_uid": "f7d5ebdc-0cae-5e07-a060-e129b5a05570"
+            },
+            {
+              "frame_uid": "0cec41f7-364a-4ed3-b11d-d776e9a83470",
+              "memory_uid": "99e5c522-535b-5015-8617-06f645147f8b"
+            }
+          ],
+          "reason": "Both memories form one comparative account of indoor heat responses and mitigation absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user's indoor heat experiences contrast afternoon focus loss with only an open window against reduced warming after curtains were closed.",
+          "uid": "35dc6677-0abd-5772-b5dd-c05905cb05d5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0cec41f7-364a-4ed3-b11d-d776e9a83470",
+              "memory_uid": "7b3bf50c-63aa-5a1e-9a53-7befea25a468"
+            },
+            {
+              "frame_uid": "0cec41f7-364a-4ed3-b11d-d776e9a83470",
+              "memory_uid": "ca8de091-afb2-537f-a83a-09769056879d"
+            }
+          ],
+          "reason": "Both memories form one paired account of charging readiness and fan endurance with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "An uncharged portable fan stopped after an hour, whereas charging it the night before supported use throughout the next trip.",
+          "uid": "c475aded-1b41-5428-9fad-73601f9dca1f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0cec41f7-364a-4ed3-b11d-d776e9a83470",
+              "memory_uid": "4a0604fb-10b4-5132-a6de-ab6a229ff2be"
+            },
+            {
+              "frame_uid": "0cec41f7-364a-4ed3-b11d-d776e9a83470",
+              "memory_uid": "1f90941e-776f-5cba-9783-c392983dd72c"
+            },
+            {
+              "frame_uid": "0cec41f7-364a-4ed3-b11d-d776e9a83470",
+              "memory_uid": "63391d26-7417-5ea6-ac0a-460af7489963"
+            }
+          ],
+          "reason": "All three memories express one underlying outdoor-meal timing pattern governed by heat conditions, absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "High midday heat prompted moving an outdoor meal indoors, while cooler evening conditions supported staying outside and align with the father's preference for evening meals.",
+          "uid": "a5ff69b9-94c4-5fec-8b00-ec11c72401df"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0cec41f7-364a-4ed3-b11d-d776e9a83470",
+              "memory_uid": "31502797-1379-5ec4-bd1b-a2e1515fa56e"
+            }
+          ],
+          "reason": "This standalone capability limitation has no operational counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The local agent cannot determine current felt temperature without an indoor temperature record, though it can compare past heat responses.",
+          "uid": "57649b4c-511c-587b-a973-609f2bde8629"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0cec41f7-364a-4ed3-b11d-d776e9a83470",
+              "memory_uid": "68f85c30-62c4-579d-97cd-9f401c686e63"
+            }
+          ],
+          "reason": "This standalone environmental observation has no operational counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A west-facing window can cause a room to warm rapidly in the late afternoon.",
+          "uid": "9916db96-f145-5204-9d21-3c7e9ca67cc9"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only material covers indoor and outdoor heat responses, portable-fan storage and charging, evening meal preferences, west-window warming, and limits on assessing current room temperature.",
+        "differences": "",
+        "reference_only": "Reference-only material covers private scheduling, reason-free rescheduling, parking-location recall, written preparation lists, and possible year-end service reductions."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "4d70aaa9-92ab-47d9-a97c-d3d70499ad74"
+    },
+    "analysis_digest": "20d3348e37d9e5bfe2bd43ded5dc09e420684e42114fb411037ebd94b12a30e1",
+    "key": "926e7efb8e5558461be1ab7caf0c026e90e49d0bd5c7360b177f58e3052e1f83",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 39.83420983399992,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "926e7efb8e5558461be1ab7caf0c026e90e49d0bd5c7360b177f58e3052e1f83",
+  "created_at": "2026-08-13T18:47:04.837849Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/11",
+  "pair_key": "f4be218512d7a8db1d63497b0516463238036dc043238c0ed747c9550a48badb",
+  "provider_seconds": 39.83420983399992,
+  "right": "task-3/local/personal-memory/2025/06",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

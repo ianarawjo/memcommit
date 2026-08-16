@@ -1,0 +1,388 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:37:17.283267+00:00",
+      "frames": [
+        {
+          "context_digest": "9fdb8cdfae14edf54f7410c0e8dd59527179de290b3d7c5f1b0f58494275b076",
+          "context_name": "task-3/local/personal-memory/2024/03",
+          "context_uid": "97c5905c-359b-5497-956f-b92db9ddbd2f",
+          "memories": [
+            {
+              "content": "The instructions for one medication the user takes say to take it after the evening meal.",
+              "content_digest": "32bba9f2936e560ddd5f4c5515895f2954b9c8722fcd501644569d1ff4f7b97c",
+              "position": 0,
+              "uid": "12ba4249-9450-5f2e-b648-5369a7997b26"
+            },
+            {
+              "content": "On a day with a morning appointment, the user miscalculated the fasting period and checked again at the reception desk.",
+              "content_digest": "532396ed2265321fbd4ca28ed1de2962211a357195bc9839503330c6cb0ab281",
+              "position": 1,
+              "uid": "051e79ff-5363-5160-9a13-46568fd13306"
+            },
+            {
+              "content": "For an afternoon visit, the user felt less rushed while preparing to travel than for a morning visit.",
+              "content_digest": "276fa255e4a4945f1475fa66129069ea33514bc24c98a246e9ab0d0000c156fa",
+              "position": 2,
+              "uid": "e7f1fcf7-ee2f-57d8-98cb-781e31e481e8"
+            },
+            {
+              "content": "On a day there was no waiting chair, the user stood for 20 minutes and their back became uncomfortable.",
+              "content_digest": "1c412785950057f01b1e7c10b716977cdb8bfb2b0605ef5bfdbdc6e349f6aaf8",
+              "position": 3,
+              "uid": "18d58666-2cfa-5959-8da9-2745bed56e11"
+            },
+            {
+              "content": "On a day medication instructions were explained all at once and at length, the user failed to write down an important time.",
+              "content_digest": "f3629bba06d053fa20712982f70b8dfd574b41a1b5ecd29d7c29f1b60742f647",
+              "position": 4,
+              "uid": "8fdede6e-64ed-5e4c-81f4-7a1075165568"
+            },
+            {
+              "content": "On a day medication times were confirmed one line at a time, the user copied them directly into their schedule after returning home.",
+              "content_digest": "acade505d6c0cdfddae0d169dea81c06a757aa7d7d2c760f6cdc253b06af5ded",
+              "position": 5,
+              "uid": "21f679f7-7d75-5c01-b6c3-b0d4bea5f2f0"
+            },
+            {
+              "content": "On a visit when their younger brother drove them, the user did not have to find a separate route home.",
+              "content_digest": "5e17c1227c7cbee7e995728edd17b4301903dfdc7a7bdc5f5ff3e06edfd357b3",
+              "position": 6,
+              "uid": "3ec03d39-3240-56d1-80da-313f79f2bf3a"
+            },
+            {
+              "content": "The user's younger brother prefers to receive a request for weekday-afternoon transportation two days beforehand rather than on the day itself.",
+              "content_digest": "7d1bf920ff730ddff86f328aaa3c3edf9d424170044bcd789a3ac55bffb5a839",
+              "position": 7,
+              "uid": "3069baac-fa68-5e94-8ba3-e888cf622f8c"
+            },
+            {
+              "content": "The local agent cannot determine the current prescription or whether use continues from medication notes alone.",
+              "content_digest": "89990815daa01f70a77b970b6a38cb9063f32fed898bd36e39a85551a1ad6200",
+              "position": 8,
+              "uid": "d7f215c6-57ea-561a-9627-3ce94203d507"
+            },
+            {
+              "content": "The waiting area at that clinic has too few chairs, so there may be periods when people must wait standing.",
+              "content_digest": "66c27ba4d6f3fb0d16b322a6de6d8afeb5c650fbe04162006a3288dd886ce1f0",
+              "position": 9,
+              "uid": "e6023aed-938d-5954-b8a7-8cb01340ee37"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "ea5720d2-9c43-44f1-aa11-07c3311c2a94"
+        },
+        {
+          "context_digest": "40dca3509f1e21c564970ebb7664df755d25c1c19c4e79b458c803662fb827ce",
+          "context_name": "task-3/local/personal-memory/2025/11",
+          "context_uid": "af363401-7cdc-5426-ad00-4f98635e2dab",
+          "memories": [
+            {
+              "content": "The user recorded a family dinner in the calendar for the final week of November.",
+              "content_digest": "59755036ea9e7d172a5e673253fc7f089e61efe043b2e660f429fe2fa9003d34",
+              "position": 0,
+              "uid": "3f6eaf6c-00e7-5bd7-9809-367f54a0f707"
+            },
+            {
+              "content": "In a crowded restaurant, the user had to ask several times for orders to be repeated, interrupting the flow of conversation.",
+              "content_digest": "2d79e2f4f88a70bc8fbf9efca1b1751fbf51d88667f304c8e8c965a0a536cee7",
+              "position": 1,
+              "uid": "9fd0b9b6-986d-54b0-965e-45feaf9cd482"
+            },
+            {
+              "content": "When the user held the next gathering at their father's home, they continued the conversation on the sofa after the meal.",
+              "content_digest": "4b22fa055bb342db0589b0c54e415f4fa2af02445d3c55b3f38510bd6ca62f38",
+              "position": 2,
+              "uid": "cbc477c4-83c4-506b-9da8-9252d14d7f6b"
+            },
+            {
+              "content": "At a gathering with loud music prepared by their older sister, the user developed a headache and went outside briefly.",
+              "content_digest": "c9b34c3e3211ca7f15eb9a6f8ba97941222bc35ec0253d3da3f383c7247c3e83",
+              "position": 3,
+              "uid": "bbfc537e-3fcc-5065-ab93-4777bcdfc10c"
+            },
+            {
+              "content": "On a day the user held a yard barbecue with their younger brother, the open space dispersed the sound and made conversation easier.",
+              "content_digest": "dd35056c7731d3249a3c2689ee9fb6bfe6974544e302630de6ea230378fea9eb",
+              "position": 4,
+              "uid": "b61367fa-dd17-5ff2-9d6b-f81f6123735a"
+            },
+            {
+              "content": "After seeing a message that their maternal aunt would arrive at 5 p.m., the user delayed meal preparation by an hour.",
+              "content_digest": "31992a8945bfacfc9422f3180b203865f951f200561cd23dad901ec795c5de10",
+              "position": 5,
+              "uid": "681cdbd5-595d-5211-914d-edfd9a6b130d"
+            },
+            {
+              "content": "On a day the user waited without knowing their maternal uncle's arrival time, they reheated the food twice.",
+              "content_digest": "fae7c462a85e844648cb99419e6fdb3a2cd8c7721209ea49a40b4df597635176",
+              "position": 6,
+              "uid": "81c0c4e9-5ae4-5e8a-b11c-7d33032fd8ec"
+            },
+            {
+              "content": "The user's maternal uncle considers it easier to time his departure when he knows the family meal's start time in advance.",
+              "content_digest": "793f47adaa4c5274d15377b0f4adbc2415c0bd5243baf7a1c77c0d92e987a7e8",
+              "position": 7,
+              "uid": "56078821-34d0-540f-ae66-03bdd7bd1df3"
+            },
+            {
+              "content": "Before scheduling a family meal, confirm the attendees' arrival times and the location with the user.",
+              "content_digest": "d057fab5cbe97472da2a796114018a7491d20db6a826cd56943268f73ffeb792",
+              "position": 8,
+              "uid": "19c8ae40-1f5b-5fec-9538-e7bc7cfb036a"
+            },
+            {
+              "content": "Available restaurant reservation times may diminish quickly during the year-end gathering season.",
+              "content_digest": "7bfc817a42ab2d2c67ad04eae58fb3c86bbede15b7cc4ef431a75528bb425e7e",
+              "position": 9,
+              "uid": "3ea9fa3b-4411-55d0-ac90-2ed5515e6ef7"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "f62ea82d-1874-402c-a32c-a48505897ca6"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate domains: the reference centers on clinic visits, medication communication, transportation, and waiting conditions, while the compared frame centers on family-meal scheduling, venue noise, comfort, and arrival coordination. No claims govern the same operational decision closely enough to form a cross-frame relation.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ea5720d2-9c43-44f1-aa11-07c3311c2a94",
+              "memory_uid": "12ba4249-9450-5f2e-b648-5369a7997b26"
+            }
+          ],
+          "reason": "This is independently useful medication-timing information found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "One medication is instructed to be taken after the evening meal.",
+          "uid": "1c2251a5-27ea-5d9d-a2b9-55259e65ee2e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ea5720d2-9c43-44f1-aa11-07c3311c2a94",
+              "memory_uid": "051e79ff-5363-5160-9a13-46568fd13306"
+            }
+          ],
+          "reason": "This is a reference-only account of appointment preparation and corrective verification.",
+          "status": "RESOLVED",
+          "summary": "A fasting-period miscalculation for a morning appointment led the user to verify the requirement at reception.",
+          "uid": "42de612f-d8e9-5c1e-86fd-f6a42ba0945f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ea5720d2-9c43-44f1-aa11-07c3311c2a94",
+              "memory_uid": "e7f1fcf7-ee2f-57d8-98cb-781e31e481e8"
+            }
+          ],
+          "reason": "This reference-only observation concerns appointment time and travel-preparation pressure.",
+          "status": "RESOLVED",
+          "summary": "The user felt less rushed preparing to travel for an afternoon visit than for a morning visit.",
+          "uid": "9438ea04-e1df-5ea3-b556-c26ad191e513"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ea5720d2-9c43-44f1-aa11-07c3311c2a94",
+              "memory_uid": "18d58666-2cfa-5959-8da9-2745bed56e11"
+            },
+            {
+              "frame_uid": "ea5720d2-9c43-44f1-aa11-07c3311c2a94",
+              "memory_uid": "e6023aed-938d-5954-b8a7-8cb01340ee37"
+            }
+          ],
+          "reason": "The reference memories describe the same underlying one-sided clinic-seating problem through a general condition and a specific consequence.",
+          "status": "RESOLVED",
+          "summary": "Insufficient clinic seating can require standing and has caused the user back discomfort during a wait.",
+          "uid": "78ea4917-5577-5691-af43-8c394a8d66c2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ea5720d2-9c43-44f1-aa11-07c3311c2a94",
+              "memory_uid": "8fdede6e-64ed-5e4c-81f4-7a1075165568"
+            },
+            {
+              "frame_uid": "ea5720d2-9c43-44f1-aa11-07c3311c2a94",
+              "memory_uid": "21f679f7-7d75-5c01-b6c3-b0d4bea5f2f0"
+            }
+          ],
+          "reason": "The reference memories provide complementary instances of the same one-sided communication claim: lengthy all-at-once delivery caused an omission, while line-by-line confirmation supported accurate recording.",
+          "status": "RESOLVED",
+          "summary": "How medication times are presented affects whether the user can accurately capture and transfer them into a schedule.",
+          "uid": "97694264-6455-562e-b0b1-2e157e1a1984"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ea5720d2-9c43-44f1-aa11-07c3311c2a94",
+              "memory_uid": "3ec03d39-3240-56d1-80da-313f79f2bf3a"
+            }
+          ],
+          "reason": "This is independently useful reference-only information about transportation continuity.",
+          "status": "RESOLVED",
+          "summary": "When the user's younger brother drove them, the user did not need to arrange a separate route home.",
+          "uid": "7b756a2e-0675-5148-be56-519c569a8929"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ea5720d2-9c43-44f1-aa11-07c3311c2a94",
+              "memory_uid": "3069baac-fa68-5e94-8ba3-e888cf622f8c"
+            }
+          ],
+          "reason": "This reference-only preference governs notice for a specific transportation request, not family-meal coordination.",
+          "status": "RESOLVED",
+          "summary": "The user's younger brother prefers weekday-afternoon transportation requests two days in advance.",
+          "uid": "b1bba379-cd4f-51fe-aeeb-1fa240041ed5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ea5720d2-9c43-44f1-aa11-07c3311c2a94",
+              "memory_uid": "d7f215c6-57ea-561a-9627-3ce94203d507"
+            }
+          ],
+          "reason": "This is a reference-only limitation on interpreting medication status.",
+          "status": "RESOLVED",
+          "summary": "Medication notes alone do not establish the current prescription or whether use continues.",
+          "uid": "5fbe0695-870d-56c6-9ccd-dfe296d76101"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f62ea82d-1874-402c-a32c-a48505897ca6",
+              "memory_uid": "3f6eaf6c-00e7-5bd7-9809-367f54a0f707"
+            }
+          ],
+          "reason": "This is independently useful scheduling information found only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user recorded a family dinner for the final week of November.",
+          "uid": "44048aaa-07de-56c6-947d-8a4afcdf7ca0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f62ea82d-1874-402c-a32c-a48505897ca6",
+              "memory_uid": "9fd0b9b6-986d-54b0-965e-45feaf9cd482"
+            },
+            {
+              "frame_uid": "f62ea82d-1874-402c-a32c-a48505897ca6",
+              "memory_uid": "bbfc537e-3fcc-5065-ab93-4777bcdfc10c"
+            },
+            {
+              "frame_uid": "f62ea82d-1874-402c-a32c-a48505897ca6",
+              "memory_uid": "b61367fa-dd17-5ff2-9d6b-f81f6123735a"
+            }
+          ],
+          "reason": "The compared memories are complementary instances of the same one-sided claim: restaurant noise impeded hearing, loud music caused a headache, and an open yard dispersed sound and eased conversation.",
+          "status": "RESOLVED",
+          "summary": "Gathering sound conditions materially affect the user's comfort and ability to converse.",
+          "uid": "32a5b9c3-d142-595d-8b55-bacab63afc0d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f62ea82d-1874-402c-a32c-a48505897ca6",
+              "memory_uid": "cbc477c4-83c4-506b-9da8-9252d14d7f6b"
+            }
+          ],
+          "reason": "This is a compared-only observation about how that venue supported post-meal conversation.",
+          "status": "RESOLVED",
+          "summary": "At a gathering held at the user's father's home, conversation continued on the sofa after the meal.",
+          "uid": "f6af11ba-e5aa-5112-bb4e-5b4770bfef7a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f62ea82d-1874-402c-a32c-a48505897ca6",
+              "memory_uid": "681cdbd5-595d-5211-914d-edfd9a6b130d"
+            },
+            {
+              "frame_uid": "f62ea82d-1874-402c-a32c-a48505897ca6",
+              "memory_uid": "81c0c4e9-5ae4-5e8a-b11c-7d33032fd8ec"
+            },
+            {
+              "frame_uid": "f62ea82d-1874-402c-a32c-a48505897ca6",
+              "memory_uid": "56078821-34d0-540f-ae66-03bdd7bd1df3"
+            },
+            {
+              "frame_uid": "f62ea82d-1874-402c-a32c-a48505897ca6",
+              "memory_uid": "19c8ae40-1f5b-5fec-9538-e7bc7cfb036a"
+            }
+          ],
+          "reason": "The compared memories split one operational planning claim across observed effects, a relative's timing preference, and an explicit confirmation policy.",
+          "status": "RESOLVED",
+          "summary": "Advance coordination of meal timing, attendee arrivals, and location supports preparation and participant travel planning.",
+          "uid": "01e09a14-316d-5804-9eb3-fcad3dfacd1f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f62ea82d-1874-402c-a32c-a48505897ca6",
+              "memory_uid": "3ea9fa3b-4411-55d0-ac90-2ed5515e6ef7"
+            }
+          ],
+          "reason": "This is independently useful compared-only information about seasonal booking constraints.",
+          "status": "RESOLVED",
+          "summary": "Restaurant reservation availability may decline quickly during the year-end gathering season.",
+          "uid": "3757fc85-d1f7-58dd-99c9-95adc2f55131"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame describes family-meal scheduling, arrival coordination, venue and noise effects on comfort and conversation, restaurant availability, and the value of confirming plans in advance.",
+        "differences": "",
+        "reference_only": "The reference describes medication timing and communication, appointment preparation, clinic seating limitations, travel support, advance ride requests, and uncertainty about current prescription status."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "d6313842-9c1f-4def-a53c-3577e1e74a3c"
+    },
+    "analysis_digest": "54a5b57099adafb6441538b5c355aa5ad3406075021f775d3fa56014d917be56",
+    "key": "002ea29b1b4e6066f5c0b61d7bb0d089e230cd6b4f14b9253030721b29b60b6f",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 34.49317383300149,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "002ea29b1b4e6066f5c0b61d7bb0d089e230cd6b4f14b9253030721b29b60b6f",
+  "created_at": "2026-08-13T18:37:51.776034Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/03",
+  "pair_key": "3d433a2dd6f65f4a359eaf97d50d6c4c31f6a2ad065c435144a5daa0985de4d5",
+  "provider_seconds": 34.49317383300149,
+  "right": "task-3/local/personal-memory/2025/11",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

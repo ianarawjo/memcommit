@@ -2,7 +2,7 @@ import sys
 
 import typer
 
-from memcommit.commands.context_picker import choose_context, context_memory_rows
+from memcommit.context_targeting.tui.picker import choose_context, context_memory_rows
 from memcommit.authority.access import (
     resolve_context_access,
 )

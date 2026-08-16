@@ -1,0 +1,320 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:17:46.772511+00:00",
+      "frames": [
+        {
+          "context_digest": "52dc61895a6d116135c474d4828efde944579b3a5949b6d64c07dd9853f60801",
+          "context_name": "task-2/advisor1/emphasis",
+          "context_uid": "6f253a9e-f504-53bf-a1d1-de2c4532171e",
+          "memories": [
+            {
+              "content": "Do not exceed two primary HCI contributions.",
+              "content_digest": "c605e418506d380237fb8ce4723bcc2fedebcd5da0d8dd78ef813e21aaf71a7a",
+              "position": 0,
+              "uid": "4a1de8df-6f03-5a3d-bbfa-7c1144d2ec5c"
+            },
+            {
+              "content": "Name each design or empirical contribution and present it in a single sentence.",
+              "content_digest": "286e33467b65e080f192172ae85d481a89c8e1b2d73e1089772eab30e0ae48fa",
+              "position": 1,
+              "uid": "b5b6a901-9047-5482-a0e1-d29e5f7171e8"
+            },
+            {
+              "content": "In studies recruiting community participants, emphasize the time burden associated with participation.",
+              "content_digest": "67a881933729e29cc0ce33f61f50af810f6f12ab5aa9598d453cf3a959a5977f",
+              "position": 2,
+              "uid": "e89de514-48a5-5e9b-96ca-f194c0ed79ab"
+            },
+            {
+              "content": "In studies recruiting community participants, emphasize the travel burden associated with participation.",
+              "content_digest": "3c4e20244bb88626ef1d2ebc89774e29ac85a9ce774a3faaa726131059b8ae33",
+              "position": 3,
+              "uid": "f7025cbb-4005-53c6-9031-e33f04a86b92"
+            },
+            {
+              "content": "HCI reviewers find it difficult to identify primary contributions when named design or empirical contributions exceed two.",
+              "content_digest": "70a2dccd85ce8ca18db239926980dfe13a20b90a9dffa6acae73e5034fce1fbc",
+              "position": 4,
+              "uid": "a42891a1-b674-5747-a77c-43699b0b9723"
+            },
+            {
+              "content": "Emphasize the core design decisions that formative evaluation will change rather than a polished product demonstration.",
+              "content_digest": "be5cad46c349a7c4b538f1a947d979ec25b0f6a34494e4d3a7bb9550508766d4",
+              "position": 5,
+              "uid": "9d7169d5-058f-5f7c-b1ac-30cabd8ba02e"
+            },
+            {
+              "content": "Emphasize design principles transferable to other similar interactions as the primary contribution, rather than the performance of a specific prototype.",
+              "content_digest": "a39c447e1b61b2204233800bafd380163fb5492ddd25cb730bbc6c6a95114e56",
+              "position": 6,
+              "uid": "f8931b4e-9656-548d-84a1-f2f2c3eb47b1"
+            },
+            {
+              "content": "Formative evaluation creates grounds for modification in subsequent iterations rather than definitively determining the superiority of design alternatives.",
+              "content_digest": "0cdd894b41de667b621d6c385d3373c799f4fea53898f65d324c26e86a1c8807",
+              "position": 7,
+              "uid": "9bf9e735-7598-5977-abe2-87b2c9c38a24"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "3d4cc42b-8931-40ec-85ab-eff454575756"
+        },
+        {
+          "context_digest": "4371a72e6fb939731cb550ca5363a3b5210680482f84c18b36ba933f4454ecc1",
+          "context_name": "task-2/advisor2/expression",
+          "context_uid": "cf8e8baf-292e-57c3-8e2c-3f9b3d52f3d3",
+          "memories": [
+            {
+              "content": "Use a sequence table rather than a flow diagram when the procedure is likely to change repeatedly during drafting.",
+              "content_digest": "575bb4530af1e93b215ea57f0fd63e1e09136554da98aecf87288cc39ea9697c",
+              "position": 0,
+              "uid": "4264c20d-3e44-578d-866e-7787cc7b59e2"
+            },
+            {
+              "content": "The visual fidelity of a prototype and its level of connection to actual data and services may differ.",
+              "content_digest": "9478cb005a07ca7edfa924579b3d5221b1fa1143b5d8327369e7ee799b76aa9f",
+              "position": 1,
+              "uid": "70a8c3f0-0f6a-5881-abd6-29f52833b7bd"
+            },
+            {
+              "content": "Service flow diagrams indicate human-system transitions that are not revealed by individual screens alone.",
+              "content_digest": "5e3e18a38b1e62724d2ae0445549e214a219d205a80735bc6b4c0e643a96b8b3",
+              "position": 2,
+              "uid": "b410aa8d-db87-586b-a1cd-4af5767a9f7a"
+            },
+            {
+              "content": "HCI reviewers often scan system structure and service flow diagrams before the main text.",
+              "content_digest": "22a46440a6aeda0cb7d39cc6fedf6bbff6cac91232ec0cb163bf1fc17ff257d4",
+              "position": 3,
+              "uid": "a385fbb1-85b4-5132-bbc7-8fd8daedb715"
+            },
+            {
+              "content": "Give each step, actor, condition, and outcome a stable row in the sequence table.",
+              "content_digest": "2a073bf2ec4c5592ddc405d83cb438a5ed880699d3c157f310fb3dbff7851622",
+              "position": 4,
+              "uid": "22254f16-4628-5fd9-b1af-6e66dc2572b3"
+            },
+            {
+              "content": "Updating one row in a sequence table is usually faster than redrawing a branching diagram after a procedural change.",
+              "content_digest": "cf97dbf66018a6be1ee42dfc79ff8de44e8742db2b42c9d1ef70b3f252805a39",
+              "position": 5,
+              "uid": "32028269-5d43-5a65-b22b-9e570ceabfde"
+            },
+            {
+              "content": "Readers can check sequence tables step by step but may find the overall branching shape less immediate.",
+              "content_digest": "18b5de0cdd22ef1774151332afdbc408f9f591cf889e51271f81a372f74ef86d",
+              "position": 6,
+              "uid": "939ee3d0-b611-574a-a25b-82708394bd5e"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "51f0f4d1-3a82-4bd7-a29a-a7f797a160bb"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate but complementary concerns without making shared operational claims. The reference focuses on contribution framing, community-participant burdens, and formative evaluation, while the compared frame addresses prototype dimensions and the drafting, construction, readability, and communicative value of procedural visuals.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3d4cc42b-8931-40ec-85ab-eff454575756",
+              "memory_uid": "4a1de8df-6f03-5a3d-bbfa-7c1144d2ec5c"
+            },
+            {
+              "frame_uid": "3d4cc42b-8931-40ec-85ab-eff454575756",
+              "memory_uid": "a42891a1-b674-5747-a77c-43699b0b9723"
+            }
+          ],
+          "reason": "The memories state the contribution cap and its reviewer-centered rationale, forming one one-sided policy claim.",
+          "status": "RESOLVED",
+          "summary": "Limit named primary design or empirical contributions to two so reviewers can identify them clearly.",
+          "uid": "a3917915-355b-5fcb-86b2-e5961d3f39a2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3d4cc42b-8931-40ec-85ab-eff454575756",
+              "memory_uid": "b5b6a901-9047-5482-a0e1-d29e5f7171e8"
+            }
+          ],
+          "reason": "This is an independently useful presentation rule found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Name each design or empirical contribution and state it in one sentence.",
+          "uid": "bd32468a-8368-55aa-899c-72d50b07d636"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3d4cc42b-8931-40ec-85ab-eff454575756",
+              "memory_uid": "e89de514-48a5-5e9b-96ca-f194c0ed79ab"
+            },
+            {
+              "frame_uid": "3d4cc42b-8931-40ec-85ab-eff454575756",
+              "memory_uid": "f7025cbb-4005-53c6-9031-e33f04a86b92"
+            }
+          ],
+          "reason": "The memories split one one-sided recruitment-framing claim into two specific burden dimensions under the same condition.",
+          "status": "RESOLVED",
+          "summary": "For community-participant studies, emphasize both the time and travel burdens of participation.",
+          "uid": "ca2babc4-be71-5a5f-8a64-0001bf09e30d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3d4cc42b-8931-40ec-85ab-eff454575756",
+              "memory_uid": "9d7169d5-058f-5f7c-b1ac-30cabd8ba02e"
+            },
+            {
+              "frame_uid": "3d4cc42b-8931-40ec-85ab-eff454575756",
+              "memory_uid": "9bf9e735-7598-5977-abe2-87b2c9c38a24"
+            }
+          ],
+          "reason": "Both memories characterize formative evaluation as supporting iterative modification rather than summative product or alternative validation.",
+          "status": "RESOLVED",
+          "summary": "Present formative evaluation as grounds for changing core design decisions in later iterations, not as a polished demonstration or definitive superiority test.",
+          "uid": "43ad767c-d7be-5efd-8ded-2f988aeedd5c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3d4cc42b-8931-40ec-85ab-eff454575756",
+              "memory_uid": "f8931b4e-9656-548d-84a1-f2f2c3eb47b1"
+            }
+          ],
+          "reason": "This contribution-framing principle appears only in the reference frame and is independent of the contribution-count policy.",
+          "status": "RESOLVED",
+          "summary": "Treat transferable design principles, rather than a specific prototype’s performance, as the primary contribution.",
+          "uid": "76df41b9-abb0-53e4-9329-382f7d5c5fd1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "51f0f4d1-3a82-4bd7-a29a-a7f797a160bb",
+              "memory_uid": "4264c20d-3e44-578d-866e-7787cc7b59e2"
+            },
+            {
+              "frame_uid": "51f0f4d1-3a82-4bd7-a29a-a7f797a160bb",
+              "memory_uid": "32028269-5d43-5a65-b22b-9e570ceabfde"
+            }
+          ],
+          "reason": "The memories state one drafting-choice policy and its maintainability rationale.",
+          "status": "RESOLVED",
+          "summary": "Prefer a sequence table for procedures expected to change repeatedly because row updates are faster than redrawing branching diagrams.",
+          "uid": "fddce6a3-4370-59ba-b03b-815bfcd17cbe"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "51f0f4d1-3a82-4bd7-a29a-a7f797a160bb",
+              "memory_uid": "70a8c3f0-0f6a-5881-abd6-29f52833b7bd"
+            }
+          ],
+          "reason": "This prototype-characterization claim appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Treat prototype visual fidelity and connection to real data and services as dimensions that may vary independently.",
+          "uid": "30f0873e-ba00-54b4-a791-d4415e0449fd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "51f0f4d1-3a82-4bd7-a29a-a7f797a160bb",
+              "memory_uid": "b410aa8d-db87-586b-a1cd-4af5767a9f7a"
+            }
+          ],
+          "reason": "This is a one-sided claim about the distinct informational value of service-flow diagrams.",
+          "status": "RESOLVED",
+          "summary": "Use service-flow diagrams to reveal human-system transitions that individual screens do not show.",
+          "uid": "7cd82ab4-fc73-5d1a-a157-9f2bf3b59f4e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "51f0f4d1-3a82-4bd7-a29a-a7f797a160bb",
+              "memory_uid": "a385fbb1-85b4-5132-bbc7-8fd8daedb715"
+            }
+          ],
+          "reason": "This independent observation about reviewer navigation appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "HCI reviewers often inspect system-structure and service-flow diagrams before reading the main text.",
+          "uid": "92296fc3-9a07-5d32-9902-9cb4956d38b4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "51f0f4d1-3a82-4bd7-a29a-a7f797a160bb",
+              "memory_uid": "22254f16-4628-5fd9-b1af-6e66dc2572b3"
+            }
+          ],
+          "reason": "This is an independently useful construction rule found only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Give every step, actor, condition, and outcome a stable row in a sequence table.",
+          "uid": "de48671d-a3ea-5079-9eec-32163843bbeb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "51f0f4d1-3a82-4bd7-a29a-a7f797a160bb",
+              "memory_uid": "939ee3d0-b611-574a-a25b-82708394bd5e"
+            }
+          ],
+          "reason": "This one-sided readability tradeoff is distinct from the policy for choosing or structuring the table.",
+          "status": "RESOLVED",
+          "summary": "Sequence tables support step-by-step checking but make the overall branching shape less immediate.",
+          "uid": "8e5c5d0c-e75f-5829-8b56-ea36d8275e8d"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame distinguishes prototype fidelity from integration and explains when to use sequence tables, how to structure them, their editing and readability tradeoffs, and the value and reviewer use of service-flow diagrams.",
+        "differences": "",
+        "reference_only": "The reference limits and formats primary HCI contributions, highlights time and travel burdens for community participants, and frames formative evaluation around transferable principles and iterative design change."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "779c8591-12aa-492b-a089-c86095a1ec10"
+    },
+    "analysis_digest": "418fe84e8545dbd58d9f90400a5a61ef14e96baa441337c5b18af72a75da3229",
+    "key": "8bc9989e79f8cf04580d211fc8c914cd2690c1747cde17451ef0c0d4fdcead71",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 37.98317766600303,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "8bc9989e79f8cf04580d211fc8c914cd2690c1747cde17451ef0c0d4fdcead71",
+  "created_at": "2026-08-13T18:18:24.755326Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/emphasis",
+  "pair_key": "93bae84b84978e13dff6acac02fb7a7a4494eaa5c3d6c1e616645998a8fe38b2",
+  "provider_seconds": 37.98317766600303,
+  "right": "task-2/advisor2/expression",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

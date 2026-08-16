@@ -1,0 +1,254 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:15:00.571026+00:00",
+      "frames": [
+        {
+          "context_digest": "30f0425cad991a5bb1b473f7e73c2c039db2d91dc0c95116413d0a8e7b6fed29",
+          "context_name": "task-2/advisor1/budget",
+          "context_uid": "d6d3ee9e-eb0f-5c28-9463-7a680d53b470",
+          "memories": [
+            {
+              "content": "Keep the total, major cost categories, and one-line estimate basis in the main text so the resource argument can be understood without leaving the proposal.",
+              "content_digest": "5dc9db0be6499fc408063be04c9e1cc344986512f4d24d5697f5c53a08529c9a",
+              "position": 0,
+              "uid": "05e0261e-5c52-5030-8176-0f02d4522931"
+            },
+            {
+              "content": "Place each major cost beside the activity or deliverable it enables in the main text.",
+              "content_digest": "b97219830051faf46cff7c9541c331012571866926740ed4d6a7925c12fb21a8",
+              "position": 1,
+              "uid": "1083e9b3-698a-57b1-91ab-ce04cec1e5e5"
+            },
+            {
+              "content": "State the quantity and unit-rate basis for each major cost in the same paragraph that requests it.",
+              "content_digest": "5ce37d95d9d037bbab71276fa8f0e8e383b472d0122817ab7b711c971b8cbf5d",
+              "position": 2,
+              "uid": "3652f268-d86f-55d6-935d-d3bdc487aae6"
+            },
+            {
+              "content": "Readers may question a proposed priority when its cost cannot be checked on the same page as the claimed benefit.",
+              "content_digest": "26fa14ff80ece7682cb51c7356a47a8e60e94edd4551f59ecd2fa3017bd9bffd",
+              "position": 3,
+              "uid": "4e1e1201-94b8-5a7a-8737-edc4c62881ff"
+            },
+            {
+              "content": "Update the cost sentence whenever the related activity changes so the narrative and requested amount cannot drift apart.",
+              "content_digest": "343c11198b38874476e0cda3707dd07436699852db0934e2e8f8c95a7ea3c3ea",
+              "position": 4,
+              "uid": "2f5f9039-e038-51c1-8af0-21a78772c512"
+            },
+            {
+              "content": "Accept a denser main-text paragraph when the estimate basis is essential to deciding whether the request is proportionate.",
+              "content_digest": "59ca1aafc11b37b097251b4b7c6b15e249262304f79b261bd4351d3ca89cb5fe",
+              "position": 5,
+              "uid": "f7a16d08-fbe2-5508-890d-cdbf70c1146e"
+            },
+            {
+              "content": "The user tends to revise the work plan but forget a detached budget table unless the key amount is repeated beside the activity.",
+              "content_digest": "393651043824d9e9c528e5de7618854b71970967d172ee1e9bc3c77aec3baab0",
+              "position": 6,
+              "uid": "2ca1d5a1-d78a-55b2-ab21-fd6ad73366b4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "64c8e1fb-68c4-400c-be65-bfb30c374585"
+        },
+        {
+          "context_digest": "3cadca09eeabe1389261c2e43133d8b304ed2cad66332f3444e686a824f10a21",
+          "context_name": "task-2/advisor2/scope",
+          "context_uid": "86efd53c-c08d-537c-983f-91a7b915640d",
+          "memories": [
+            {
+              "content": "Specify in one sentence the user population and actual usage environment to which the design knowledge applies.",
+              "content_digest": "3bb25f3252678a84fe361c9562692c27556d31b6fac53da87b763648e80ed6ac",
+              "position": 0,
+              "uid": "6cfd5026-0c04-5ed8-baac-a56e68723aa3"
+            },
+            {
+              "content": "Reviewers judge the generalization boundary of results through the specified target population and environment.",
+              "content_digest": "9119780de23a4734bc8e0ba3c39dce251611932fd86bec479b522adaf1882758",
+              "position": 1,
+              "uid": "5bc7cf05-8c47-57d4-a749-ec7d2ec45e3e"
+            },
+            {
+              "content": "Specify the workflow, technical infrastructure, and operational-authority conditions that must match before applying the design guidelines at another field site.",
+              "content_digest": "2970e43d1b52b63b6f76c3c55a5534d24508bcd32402e66098d75dbb52d8083b",
+              "position": 2,
+              "uid": "25731e2b-8535-5b37-a377-0a3a99dbe189"
+            },
+            {
+              "content": "The transferability of field design knowledge depends not only on user characteristics but also on workflow and technological–organizational infrastructure.",
+              "content_digest": "71b7cbcf151114f17886e57f026c2b2ebdd666c7aa88f95c85880a1bc96fdcd2",
+              "position": 3,
+              "uid": "d79ba448-76b6-592e-b4ba-8cfd98683755"
+            },
+            {
+              "content": "The user tends to apply results confirmed at one deployment site to all similar organizations.",
+              "content_digest": "810ee3a6b79606e7f199a30aa146f47e405ff71d1728a3bbfef16b601f5c0d5e",
+              "position": 4,
+              "uid": "cde0ee2b-af3c-5c0d-b23c-632778c93e20"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "77921907-7dee-407b-a173-79c43ce071dd"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate operational concerns: the reference frame governs how proposal costs remain visible, checkable, and synchronized with activities, while the compared frame defines and safeguards the transfer boundary for field-design knowledge. Neither frame contains a claim materially addressing the other’s decisions.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "64c8e1fb-68c4-400c-be65-bfb30c374585",
+              "memory_uid": "05e0261e-5c52-5030-8176-0f02d4522931"
+            },
+            {
+              "frame_uid": "64c8e1fb-68c4-400c-be65-bfb30c374585",
+              "memory_uid": "f7a16d08-fbe2-5508-890d-cdbf70c1146e"
+            }
+          ],
+          "reason": "These claims jointly establish that decision-essential totals, major categories, and concise estimation logic belong in the proposal narrative rather than being sacrificed for brevity.",
+          "status": "RESOLVED",
+          "summary": "The main text should retain an understandable overview of the requested resources, even when the necessary estimate basis makes it denser.",
+          "uid": "4983342a-9890-5a7f-ad59-fe660b7d2c2d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "64c8e1fb-68c4-400c-be65-bfb30c374585",
+              "memory_uid": "1083e9b3-698a-57b1-91ab-ce04cec1e5e5"
+            },
+            {
+              "frame_uid": "64c8e1fb-68c4-400c-be65-bfb30c374585",
+              "memory_uid": "4e1e1201-94b8-5a7a-8737-edc4c62881ff"
+            }
+          ],
+          "reason": "The placement rule and reviewer-risk observation express one underlying requirement for locally checkable cost-to-benefit linkage.",
+          "status": "RESOLVED",
+          "summary": "Major costs should appear beside the activities or deliverables they enable so readers can assess costs against claimed benefits on the same page.",
+          "uid": "17075478-c8ad-52c8-9ca5-4d8854692cf6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "64c8e1fb-68c4-400c-be65-bfb30c374585",
+              "memory_uid": "3652f268-d86f-55d6-935d-d3bdc487aae6"
+            }
+          ],
+          "reason": "This is a specific one-sided requirement for granular estimate verification that is not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Each major cost request should state its quantity and unit-rate basis in the same paragraph.",
+          "uid": "c8ac5e5c-cc32-5fc4-8fbe-25adce1ea285"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "64c8e1fb-68c4-400c-be65-bfb30c374585",
+              "memory_uid": "2f5f9039-e038-51c1-8af0-21a78772c512"
+            },
+            {
+              "frame_uid": "64c8e1fb-68c4-400c-be65-bfb30c374585",
+              "memory_uid": "2ca1d5a1-d78a-55b2-ab21-fd6ad73366b4"
+            }
+          ],
+          "reason": "The maintenance rule and observed tendency to overlook detached budget material describe the same drift-prevention concern.",
+          "status": "RESOLVED",
+          "summary": "Cost wording and key amounts should remain attached to revised activities so plan changes do not leave the budget narrative stale.",
+          "uid": "86f9c5ca-6c53-5a2d-ba5c-fad5e872ca12"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "77921907-7dee-407b-a173-79c43ce071dd",
+              "memory_uid": "6cfd5026-0c04-5ed8-baac-a56e68723aa3"
+            },
+            {
+              "frame_uid": "77921907-7dee-407b-a173-79c43ce071dd",
+              "memory_uid": "5bc7cf05-8c47-57d4-a749-ec7d2ec45e3e"
+            }
+          ],
+          "reason": "The specification requirement and reviewer rationale jointly concern how population and environment define the generalization boundary.",
+          "status": "RESOLVED",
+          "summary": "Design knowledge should state the user population and actual usage environment that bound its applicability.",
+          "uid": "bf486ae8-90d3-530e-a81f-546124d54fb4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "77921907-7dee-407b-a173-79c43ce071dd",
+              "memory_uid": "25731e2b-8535-5b37-a377-0a3a99dbe189"
+            },
+            {
+              "frame_uid": "77921907-7dee-407b-a173-79c43ce071dd",
+              "memory_uid": "d79ba448-76b6-592e-b4ba-8cfd98683755"
+            }
+          ],
+          "reason": "These claims jointly define transferability through operational and technological-organizational conditions beyond user characteristics.",
+          "status": "RESOLVED",
+          "summary": "Applying design guidelines at another field site requires matching relevant workflow, technical infrastructure, and organizational authority conditions.",
+          "uid": "1a1ced75-2a02-5b04-a095-a280ccfff871"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "77921907-7dee-407b-a173-79c43ce071dd",
+              "memory_uid": "cde0ee2b-af3c-5c0d-b23c-632778c93e20"
+            }
+          ],
+          "reason": "This is an independently useful one-sided behavioral observation about overgeneralization that neither duplicates the transfer criteria nor appears in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user tends to generalize results from one deployment site across similar organizations.",
+          "uid": "71befda8-e647-576a-af34-9ea6977fbe95"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Design knowledge should identify its population and environment, specify site-transfer conditions across workflow and infrastructure, and guard against unjustified generalization.",
+        "differences": "",
+        "reference_only": "Proposal costs should remain explicit beside their activities and benefits, include a checkable estimate basis, and be updated with work-plan changes despite added textual density."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "19a5d15d-9e35-472d-a799-5264ad644902"
+    },
+    "analysis_digest": "5f89d3dd63eae3ee10144881f877385a3302ff0bf43cb2ffbb9b598b1cba2d21",
+    "key": "19157660ae0d2d19886a8f53d93ca1f7d2a3e9af0a13ffd81d37ea44a342f13d",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 31.846978708999814,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "19157660ae0d2d19886a8f53d93ca1f7d2a3e9af0a13ffd81d37ea44a342f13d",
+  "created_at": "2026-08-13T18:15:32.417673Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/budget",
+  "pair_key": "9aeaff000c938c60b52a8c7d2a67db1b20deb4c35fe5376137979d90b3816550",
+  "provider_seconds": 31.846978708999814,
+  "right": "task-2/advisor2/scope",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

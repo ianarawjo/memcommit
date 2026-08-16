@@ -1,0 +1,415 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:38:51.729979+00:00",
+      "frames": [
+        {
+          "context_digest": "3f1b018c2a3a8594d00bffba053626a876fef4893e678dd9600986d9d41c0f31",
+          "context_name": "task-3/local/personal-memory/2024/05",
+          "context_uid": "683986e6-d517-5a53-9dc1-16b69cf0d12e",
+          "memories": [
+            {
+              "content": "The user keeps a small table fan beside the bedroom window.",
+              "content_digest": "b8a464f5e2a33edcef1259af4a412b047ba190bae9cfe42aaf1dbd722efc7f0c",
+              "position": 0,
+              "uid": "3088c235-435c-52ee-9ffc-26cf85ec196e"
+            },
+            {
+              "content": "On a day the user drank coffee late in the afternoon, they could not fall asleep until dawn.",
+              "content_digest": "ef4cf019ebc163fc24f03b8bd505599cd13fc83f33565d51ffb4379dc21d72b8",
+              "position": 1,
+              "uid": "7811ed66-2f22-54d8-a215-62a843264ba5"
+            },
+            {
+              "content": "On a day the user drank coffee before 2 p.m., they fell asleep at their usual time.",
+              "content_digest": "046ac3f8454da623f73d1293fb954b72a3ea056642fd9ee7948c35f110e77669",
+              "position": 2,
+              "uid": "d0f94a56-5cf8-5215-9cfa-5993b3b781be"
+            },
+            {
+              "content": "On a tired day, the user ate dinner out and postponed even washing the dishes after returning home.",
+              "content_digest": "ac36f6c1039dc74f764b4671f718f1e124823dc75fd45abda010285523280b71",
+              "position": 3,
+              "uid": "fc19394a-6634-5aae-bfa5-bba91e707954"
+            },
+            {
+              "content": "In the same week, on a day the user made simple noodles at home, they rested immediately after the meal.",
+              "content_digest": "45bb543f6c6ca213b856683b3c53448ac0d044bcf24f694eda292d6c4923ac5c",
+              "position": 4,
+              "uid": "be7aa7f3-1b67-5677-950d-9942ca337a99"
+            },
+            {
+              "content": "On a night the window was left open, street noise woke the user twice.",
+              "content_digest": "13f3dd86b869b25ee75e1b80d9cdb890b79434fa976fbd7246e89ba808f1a6c6",
+              "position": 5,
+              "uid": "47faaefd-2d60-5693-9847-2c1d5d2f9092"
+            },
+            {
+              "content": "On a night the table fan was running, the user was not too warm even with the window closed.",
+              "content_digest": "96ce23df1cf4f913e3b4c339cc3a857a6a8776e3f3f48e865eae65f02297bba8",
+              "position": 6,
+              "uid": "d6eea310-1313-5a51-b032-f3f518620610"
+            },
+            {
+              "content": "The user's father prefers to have coffee available after dinner and believes it will not cause a sleep problem.",
+              "content_digest": "197616278309e370f0d0e633700b1bde2c6e4395dbc8ed2b942e14fb6c1c9cc5",
+              "position": 7,
+              "uid": "056defa1-8256-561d-a2b4-a70df4058c33"
+            },
+            {
+              "content": "When making a sleep-related suggestion, do not treat one or two records as a general lifestyle habit.",
+              "content_digest": "963795e89a1e2365dd81abf463fb9a80c1c22b9c0e59b121681f89c09860e583",
+              "position": 8,
+              "uid": "7cecee60-fabd-55a3-998b-78810bd9eaf4"
+            },
+            {
+              "content": "The user tends to go to bed much later after drinking coffee late in the afternoon.",
+              "content_digest": "e54652939c104807d5c501753f85aee97883cc55e1d056787b86857cd5b8292d",
+              "position": 9,
+              "uid": "9ace13d3-d881-5720-bfd5-f7884db67756"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "91c292d7-9d24-4b1d-965f-1ffcf97e03b7"
+        },
+        {
+          "context_digest": "3e738289251b9bdf3deb1c7a7540e6ce811b09e26a020af3a76d47b4c85c7ab1",
+          "context_name": "task-3/local/personal-memory/2025/02",
+          "context_uid": "ce7367b8-8532-5f43-972a-1665ca8e3e80",
+          "memories": [
+            {
+              "content": "The user reviewed their emergency-contact list in February 2025.",
+              "content_digest": "b2f108376dbbf53e8885b9c61080d4c873209d8c6e399c37412fa507fec08b0b",
+              "position": 0,
+              "uid": "3ff046b1-5810-51ca-8d43-c99ef6a90b41"
+            },
+            {
+              "content": "When preparation instructions arrived as a long paragraph, the user missed two items.",
+              "content_digest": "43bde452a403f85bcffa6f7ba6b3142ed45604730083327c6f57092b98f397aa",
+              "position": 1,
+              "uid": "e2a304e5-6100-5a5f-b508-0a7f28f6bda7"
+            },
+            {
+              "content": "After changing the same content into a checklist, the user marked every item they had prepared.",
+              "content_digest": "0f8115061b489894115fd252f079ee673504ed09dea4d88d558e64ed6189f1be",
+              "position": 2,
+              "uid": "51d03bff-3e33-5f68-9df6-ed7efa8e3de9"
+            },
+            {
+              "content": "The user called their mother on a weekend evening, but they spoke only briefly because the mother was out.",
+              "content_digest": "a9a1e7d87532667781677f4760beeb086f1e423365a915a0ec0b494892cbb361",
+              "position": 3,
+              "uid": "0987293e-3e21-5cbc-bb46-59245a5fa041"
+            },
+            {
+              "content": "The user called again on Saturday morning the following week and spoke for 40 minutes.",
+              "content_digest": "f08c9f170345686b2091e3b0ecd49f049e245d584886da62d586185010f713bf",
+              "position": 4,
+              "uid": "dc3de6ad-56ea-528a-a9b7-349e79af2326"
+            },
+            {
+              "content": "The user sent a text to an old number for an emergency contact and saw that delivery failed.",
+              "content_digest": "692321e996b9ac8e3500a2da7765f77e0d14c6f040cf2c33944cbdcb39c706de",
+              "position": 5,
+              "uid": "6546d41b-3d5b-5802-a9e7-ac028405e3f2"
+            },
+            {
+              "content": "After confirming the new number with their older sister, the user updated the contact list.",
+              "content_digest": "8d2e954a978e35c1da92948ccc8e45f38fcc25ea3fafe7c389ef546f6eda1ae1",
+              "position": 6,
+              "uid": "ea6eb9d2-9b01-5330-a4d5-886d4bc6cd85"
+            },
+            {
+              "content": "For nonurgent contact, the user's older sister prefers to reply by text when available rather than take a call immediately.",
+              "content_digest": "86639aee50903bc3261e6f88ac7d649c8197927fe214d5d17e0e6f5b3d69a59d",
+              "position": 7,
+              "uid": "12fe7e64-192e-5359-8f96-d2875f7e5399"
+            },
+            {
+              "content": "Before using an emergency contact, reconfirm the number and relationship information with the user.",
+              "content_digest": "78e41f61ba99eaf8840d5d318d08327ca6bb087addd6e22269e8b63281bb67c7",
+              "position": 8,
+              "uid": "e6f89ded-5687-5c25-8df8-88f288d450c6"
+            },
+            {
+              "content": "The user feels that a reminder the day before an appointment gives them enough time to recheck preparation items.",
+              "content_digest": "1a9fcc01df362c76b6d9c8e4fa2d33229a2ae2762c0c6d25e0fc89312a6e0ed4",
+              "position": 9,
+              "uid": "f9197c33-ff93-5215-a3a5-e4087bea2a0d"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "dc4f9151-507c-4c64-93ac-7d540673b46f"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate domains with no shared operational claim: the reference focuses on sleep, coffee, meals, and bedroom conditions, while the compared frame concerns emergency contacts, communication timing, instruction format, and appointment preparation. All information is independently useful and one-sided.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "91c292d7-9d24-4b1d-965f-1ffcf97e03b7",
+              "memory_uid": "3088c235-435c-52ee-9ffc-26cf85ec196e"
+            }
+          ],
+          "reason": "This bedroom-equipment detail has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user keeps a small table fan beside the bedroom window.",
+          "uid": "a0024332-9943-5579-af8f-9f1f36da6297"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "91c292d7-9d24-4b1d-965f-1ffcf97e03b7",
+              "memory_uid": "7811ed66-2f22-54d8-a215-62a843264ba5"
+            },
+            {
+              "frame_uid": "91c292d7-9d24-4b1d-965f-1ffcf97e03b7",
+              "memory_uid": "9ace13d3-d881-5720-bfd5-f7884db67756"
+            }
+          ],
+          "reason": "The episode and stated tendency express one coffee-timing and delayed-sleep claim absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Late-afternoon coffee is associated with the user going to bed much later, including one episode of remaining awake until dawn.",
+          "uid": "1d3708cd-0376-5b2a-93e6-335a9b81979a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "91c292d7-9d24-4b1d-965f-1ffcf97e03b7",
+              "memory_uid": "d0f94a56-5cf8-5215-9cfa-5993b3b781be"
+            }
+          ],
+          "reason": "This timing-specific sleep observation has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "After drinking coffee before 2 p.m. on one day, the user fell asleep at their usual time.",
+          "uid": "e0fe91e0-2fec-5c82-bee7-4f140e54ffd6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "91c292d7-9d24-4b1d-965f-1ffcf97e03b7",
+              "memory_uid": "fc19394a-6634-5aae-bfa5-bba91e707954"
+            }
+          ],
+          "reason": "This observation about fatigue, dining, and deferred chores has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "On a tired day, the user ate out and postponed washing dishes after returning home.",
+          "uid": "b07d4ffb-c388-59d3-badf-724b0aab0e98"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "91c292d7-9d24-4b1d-965f-1ffcf97e03b7",
+              "memory_uid": "be7aa7f3-1b67-5677-950d-9942ca337a99"
+            }
+          ],
+          "reason": "This home-meal and rest observation has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "After making simple noodles at home on one day, the user rested immediately after eating.",
+          "uid": "b6204d01-362c-5439-a318-a32a7ddcaaf1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "91c292d7-9d24-4b1d-965f-1ffcf97e03b7",
+              "memory_uid": "47faaefd-2d60-5693-9847-2c1d5d2f9092"
+            }
+          ],
+          "reason": "This window-related sleep-disruption observation has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Street noise woke the user twice when the bedroom window was left open.",
+          "uid": "8c747833-b022-55fa-bb87-75a23677973f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "91c292d7-9d24-4b1d-965f-1ffcf97e03b7",
+              "memory_uid": "d6eea310-1313-5a51-b032-f3f518620610"
+            }
+          ],
+          "reason": "This fan-related temperature observation has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Running the table fan kept the user from becoming too warm while the window was closed.",
+          "uid": "955286dd-9bfd-5b94-84ed-827fe954516c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "91c292d7-9d24-4b1d-965f-1ffcf97e03b7",
+              "memory_uid": "056defa1-8256-561d-a2b4-a70df4058c33"
+            }
+          ],
+          "reason": "This family preference and belief has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user's father wants coffee available after dinner and believes it will not impair sleep.",
+          "uid": "c5368463-c08d-5565-bf70-fb0a20549154"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "91c292d7-9d24-4b1d-965f-1ffcf97e03b7",
+              "memory_uid": "7cecee60-fabd-55a3-998b-78810bd9eaf4"
+            }
+          ],
+          "reason": "This evidentiary caution for sleep suggestions has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Sleep-related suggestions should not treat one or two records as evidence of a general lifestyle habit.",
+          "uid": "c09bfec9-0b59-5a8e-adbb-e4433c756c74"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "dc4f9151-507c-4c64-93ac-7d540673b46f",
+              "memory_uid": "3ff046b1-5810-51ca-8d43-c99ef6a90b41"
+            }
+          ],
+          "reason": "This dated contact-review event has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user reviewed their emergency-contact list in February 2025.",
+          "uid": "69fa66b9-e3cf-5d49-b450-3c6842e6fc20"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "dc4f9151-507c-4c64-93ac-7d540673b46f",
+              "memory_uid": "e2a304e5-6100-5a5f-b508-0a7f28f6bda7"
+            },
+            {
+              "frame_uid": "dc4f9151-507c-4c64-93ac-7d540673b46f",
+              "memory_uid": "51d03bff-3e33-5f68-9df6-ed7efa8e3de9"
+            }
+          ],
+          "reason": "The two observations form one comparison about checklist effectiveness, with no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user missed preparation items in paragraph-form instructions but marked every prepared item after the same content became a checklist.",
+          "uid": "9819b942-1e93-51ee-8514-625ee4b3f85e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "dc4f9151-507c-4c64-93ac-7d540673b46f",
+              "memory_uid": "0987293e-3e21-5cbc-bb46-59245a5fa041"
+            },
+            {
+              "frame_uid": "dc4f9151-507c-4c64-93ac-7d540673b46f",
+              "memory_uid": "dc3de6ad-56ea-528a-a9b7-349e79af2326"
+            }
+          ],
+          "reason": "The two calls form one timing-and-availability comparison with no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A weekend-evening call with the user's mother was brief because she was out, while a Saturday-morning call the next week lasted 40 minutes.",
+          "uid": "73d8ef05-3545-5724-b3d4-b47435d8220d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "dc4f9151-507c-4c64-93ac-7d540673b46f",
+              "memory_uid": "6546d41b-3d5b-5802-a9e7-ac028405e3f2"
+            },
+            {
+              "frame_uid": "dc4f9151-507c-4c64-93ac-7d540673b46f",
+              "memory_uid": "ea6eb9d2-9b01-5330-a4d5-886d4bc6cd85"
+            }
+          ],
+          "reason": "The failed message and subsequent correction form one contact-maintenance episode absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A text to an old emergency-contact number failed, after which the user confirmed the new number with their older sister and updated the list.",
+          "uid": "477ee945-ed21-5f94-99b5-e00bef2d6edd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "dc4f9151-507c-4c64-93ac-7d540673b46f",
+              "memory_uid": "12fe7e64-192e-5359-8f96-d2875f7e5399"
+            }
+          ],
+          "reason": "This communication-channel preference has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "For nonurgent contact, the user's older sister prefers replying by text when available instead of taking an immediate call.",
+          "uid": "6ec38121-3348-53d1-8d6d-4c6c9c3b9fc2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "dc4f9151-507c-4c64-93ac-7d540673b46f",
+              "memory_uid": "e6f89ded-5687-5c25-8df8-88f288d450c6"
+            }
+          ],
+          "reason": "This emergency-contact verification policy has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Before an emergency contact is used, its number and relationship information should be reconfirmed with the user.",
+          "uid": "0397f52c-66ce-5097-92fe-8649c87bedfa"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "dc4f9151-507c-4c64-93ac-7d540673b46f",
+              "memory_uid": "f9197c33-ff93-5215-a3a5-e4087bea2a0d"
+            }
+          ],
+          "reason": "This appointment-reminder preference has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user considers a reminder one day before an appointment sufficient for rechecking preparation items.",
+          "uid": "9dee57d3-93e2-5994-be16-524e74cbef86"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers emergency-contact maintenance and verification, checklist effectiveness, family communication timing and preferences, and the adequacy of day-before appointment reminders.",
+        "differences": "",
+        "reference_only": "The reference describes coffee-related sleep patterns, bedroom cooling and noise, low-energy meal experiences, a family coffee preference, and caution against generalizing from sparse sleep records."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "2731461b-fd89-43bd-8b85-a41bba754e98"
+    },
+    "analysis_digest": "736b199f5ad59a920083276560f9eb3c5a838c26b1fa1f827c4269d33250ea86",
+    "key": "bae9b950f7034aef5dea0ac16f846261ce785d9894e7cf3e9a31cdffa7f9b1c2",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 43.96146445799968,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "bae9b950f7034aef5dea0ac16f846261ce785d9894e7cf3e9a31cdffa7f9b1c2",
+  "created_at": "2026-08-13T18:39:35.691009Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/05",
+  "pair_key": "b25287f347233a95d4b2a287579ff2f6e05e429bcc899e2bd7754bd7405ca51d",
+  "provider_seconds": 43.96146445799968,
+  "right": "task-3/local/personal-memory/2025/02",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

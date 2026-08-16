@@ -1,0 +1,397 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:54:05.360754+00:00",
+      "frames": [
+        {
+          "context_digest": "0af669f138c2617a4b35c0974627a23c7e5cb2405da5e306648b130efac7fbdf",
+          "context_name": "task-3/local/personal-memory/2025/12",
+          "context_uid": "c54e9dde-005a-5d20-b41b-1313b4713061",
+          "memories": [
+            {
+              "content": "The user stores wrapping paper and empty gift boxes on the upper shelf of the bedroom closet.",
+              "content_digest": "8f3b67dea69e1fa656f1e42e39700a71ebc250c4f6ec18dc4d4f88d467e86ad2",
+              "position": 0,
+              "uid": "bd69b616-6e7c-5440-8b29-586de68bcff6"
+            },
+            {
+              "content": "From photographs, the user discovered that they had given their mother the same type of kitchen item two years in a row.",
+              "content_digest": "6962b8dc03fd90e1c8badfda0d827008cc675b940e5975a5833ebe504af7d635",
+              "position": 1,
+              "uid": "90c60e57-d7db-5783-9ca8-2fd27b94d847"
+            },
+            {
+              "content": "This year, the user went to the market with their mother and let her choose a needed item directly.",
+              "content_digest": "9a27aa187ad2964f985ffcf376490f4b69d3c83f2034591187273bd89f61637a",
+              "position": 2,
+              "uid": "53bc23b2-8242-58b5-b496-a45c70bb8e41"
+            },
+            {
+              "content": "The user once ordered a gift late and had it delivered the day after the gathering.",
+              "content_digest": "245bb316eb5d0b0203c63eb9a2832c6cf73cb9e7e368bdb48a08bb6b702642d7",
+              "position": 3,
+              "uid": "3b097446-2c73-5414-8c06-6bacdf00a4c1"
+            },
+            {
+              "content": "The next year, the user checked the expected delivery date and ordered one week before the gathering.",
+              "content_digest": "97aed11c6b4f7d03bd6a55e27ef34ef539da85204787bb0468f1e2df51d958fc",
+              "position": 4,
+              "uid": "ce18c7a5-d1e9-5e5c-8739-b14fa7298feb"
+            },
+            {
+              "content": "The user did not put names on wrapped boxes and handed their older sister and younger brother each other's gifts.",
+              "content_digest": "48464eb29ee2d2e01cda00f0e3a13d116d4aa121d424aecc59644431e89f8957",
+              "position": 5,
+              "uid": "7657f424-cd24-54dd-8409-e04974dd1531"
+            },
+            {
+              "content": "The next time the user wrapped gifts, they wrote the recipient on the bottom of each box.",
+              "content_digest": "551e74aebf85d4ffee86b960c520b17f3f7e4d50428493934831a774d9e31db6",
+              "position": 6,
+              "uid": "d8e82ad3-902e-5f0c-aa8e-b23ce874982a"
+            },
+            {
+              "content": "The user's younger brother welcomes a snack the family can share immediately more than an item for his use alone.",
+              "content_digest": "ec32111520e2f12afc684c6441c075dcc0715fc450d0ce8f20408dfb955634a9",
+              "position": 7,
+              "uid": "8a941bf1-73bd-51d3-a069-62ecc9d56439"
+            },
+            {
+              "content": "The local agent can find past gift records and flag duplicates but cannot know what is needed this year.",
+              "content_digest": "f7574c7f91999992680a7e88e79270747fd744a46355800012c63319c286d731",
+              "position": 8,
+              "uid": "036edf8f-4680-5822-924e-0fdc691c8135"
+            },
+            {
+              "content": "Year-end deliveries may take longer than usual or have their expected dates changed.",
+              "content_digest": "cc0955e132cf6f4bec7f416e54ed2ffdbac22169adeeae7372a6ddc496da4b9e",
+              "position": 9,
+              "uid": "b9e9e222-a559-56e3-93b5-1f49a0e0d3ab"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "7ceebe3b-c8f6-4c51-94ee-965795d863b6"
+        },
+        {
+          "context_digest": "1d47d83944d91bc0316a61894412e9b4361758603b9532687cf68473f1d30198",
+          "context_name": "task-3/local/personal-memory/2026/01",
+          "context_uid": "e48e6eac-20f7-599d-9f76-4238bd9dd96d",
+          "memories": [
+            {
+              "content": "The user keeps gloves and scarves in a basket inside the entrance.",
+              "content_digest": "df54c52cb6bc89e2e66c747df9807c6892db272c2a23ac5ac91e3f64aaa2a5da",
+              "position": 0,
+              "uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409"
+            },
+            {
+              "content": "On a day the user could not find their gloves, they walked with their hands in their pockets and missed the bus.",
+              "content_digest": "d4205aee5fe3f2c18adc3622930cc7f74de231de9812ca594dbd95a0af7199ff",
+              "position": 1,
+              "uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5"
+            },
+            {
+              "content": "Before the next outing, the user put the gloves in the entrance basket the night before and left on time.",
+              "content_digest": "23a7026d7d1a7edd3278e7b8aa147ef0d315059663f78da5498ad6c1b4a5407c",
+              "position": 2,
+              "uid": "a11f0943-8ee1-5305-87fb-64982fb36f82"
+            },
+            {
+              "content": "On a snowy day, the user chose a shorter route but turned back at stairs that had not been cleared of snow.",
+              "content_digest": "e9e241d2bc4d7c2fa9a44471aa6d1c16d42d50fe2ed99ccfb50713107714be9b",
+              "position": 3,
+              "uid": "f623f245-cdd5-5080-8869-b52cf2914076"
+            },
+            {
+              "content": "The next day, the user took a cleared sidewalk along the main road and avoided slippery sections.",
+              "content_digest": "62c8ec8b38778e9922cf433af4ceb4d59f60bee52dc758e3b88bb1163637f108",
+              "position": 4,
+              "uid": "17ac56f1-1302-5350-99d5-b95ef7feb768"
+            },
+            {
+              "content": "The user fell asleep with the heat turned up, became too warm before dawn, and woke twice.",
+              "content_digest": "912dbbc88a0f4a174b714a794793781f4d2f6c889f73cd7f825338addcab5d6c",
+              "position": 5,
+              "uid": "96988fa9-44b1-511e-8c99-4372f902cfe3"
+            },
+            {
+              "content": "The next night, the user turned down the heat and used one additional thin blanket.",
+              "content_digest": "3d12a4609d4731ebe71bacc841c979ac3497553238c3b5c2191842bbf075ba89",
+              "position": 6,
+              "uid": "b628acaa-50da-552c-8665-244dc4ab8263"
+            },
+            {
+              "content": "On a morning with heavy snow, the user's father expects the user will worry about road conditions and sends a text before departure.",
+              "content_digest": "dcd6bcb23bee46e49813bb14dd8dcb91983d5830f0536d7f23fcdb3a8af0667c",
+              "position": 7,
+              "uid": "08dfb937-7b28-55b5-801c-c0da00cbd414"
+            },
+            {
+              "content": "Before proposing a winter travel route, check recent snow-clearing conditions and accessible entrances.",
+              "content_digest": "dcab87102a9979c51dd369d5ba5ed00b7445c8ccd14450edcb8bec7859689606",
+              "position": 8,
+              "uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d"
+            },
+            {
+              "content": "The local agent cannot know the actual condition of the sidewalk the user will take from a weather forecast alone.",
+              "content_digest": "6b4bcc2f2f508f130c047ff677cadae0eae5b4cc5e5dd6bb3a1fb3784d7793b1",
+              "position": 9,
+              "uid": "802c4031-57de-592a-9bc8-6ee3d54921c8"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "707b533b-9a80-480b-8bd0-cce4839a3777"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames contain separate, independently useful contexts: the reference concerns gift storage, selection, preparation, delivery, and recipient preferences, while the compared frame concerns winter clothing, travel, sleep comfort, family communication, and route-condition uncertainty. No scope-aligned operational claim appears in both.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7ceebe3b-c8f6-4c51-94ee-965795d863b6",
+              "memory_uid": "bd69b616-6e7c-5440-8b29-586de68bcff6"
+            }
+          ],
+          "reason": "This is independently useful reference-only information about the location of gift supplies, with no corresponding storage claim about those supplies in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Wrapping paper and empty gift boxes are stored on the bedroom closet’s upper shelf.",
+          "uid": "4af32141-e6ec-5eb8-a7b9-0b063e4323f3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7ceebe3b-c8f6-4c51-94ee-965795d863b6",
+              "memory_uid": "90c60e57-d7db-5783-9ca8-2fd27b94d847"
+            },
+            {
+              "frame_uid": "7ceebe3b-c8f6-4c51-94ee-965795d863b6",
+              "memory_uid": "53bc23b2-8242-58b5-b496-a45c70bb8e41"
+            }
+          ],
+          "reason": "These memories form one reference-only sequence about avoiding unsuitable or duplicate gifts through direct recipient choice; the compared frame contains no claim about gift selection.",
+          "status": "RESOLVED",
+          "summary": "After discovering repeated kitchen gifts, the user involved their mother directly in choosing a currently needed item.",
+          "uid": "00472d39-d2c9-57a3-84fb-f16a99ee9dc3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7ceebe3b-c8f6-4c51-94ee-965795d863b6",
+              "memory_uid": "3b097446-2c73-5414-8c06-6bacdf00a4c1"
+            },
+            {
+              "frame_uid": "7ceebe3b-c8f6-4c51-94ee-965795d863b6",
+              "memory_uid": "ce18c7a5-d1e9-5e5c-8739-b14fa7298feb"
+            }
+          ],
+          "reason": "These memories split one reference-only lesson about planning gift orders around delivery timing; no compared-side memory governs gift delivery.",
+          "status": "RESOLVED",
+          "summary": "After a late gift arrived following a gathering, the user later checked the delivery estimate and ordered a week ahead.",
+          "uid": "ef458988-8bcb-5e7e-a748-2fadbf8d2d6d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7ceebe3b-c8f6-4c51-94ee-965795d863b6",
+              "memory_uid": "7657f424-cd24-54dd-8409-e04974dd1531"
+            },
+            {
+              "frame_uid": "7ceebe3b-c8f6-4c51-94ee-965795d863b6",
+              "memory_uid": "d8e82ad3-902e-5f0c-aa8e-b23ce874982a"
+            }
+          ],
+          "reason": "These memories form one reference-only sequence about labeling wrapped gifts to prevent recipient mix-ups; the compared frame has no corresponding gift-handling claim.",
+          "status": "RESOLVED",
+          "summary": "After exchanging siblings’ unlabeled gifts by mistake, the user began writing each recipient’s name on the bottom of the box.",
+          "uid": "25d904b7-9505-5496-aca5-a97992aab8b1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7ceebe3b-c8f6-4c51-94ee-965795d863b6",
+              "memory_uid": "8a941bf1-73bd-51d3-a069-62ecc9d56439"
+            }
+          ],
+          "reason": "This is an independently useful reference-only recipient preference, with no corresponding preference claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The younger brother prefers an immediately shareable family snack over an item intended only for him.",
+          "uid": "3ce5f714-ac6b-58a0-beb4-e4ac948229dd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7ceebe3b-c8f6-4c51-94ee-965795d863b6",
+              "memory_uid": "036edf8f-4680-5822-924e-0fdc691c8135"
+            }
+          ],
+          "reason": "This is a reference-only capability boundary for gift selection; the compared-side limitation concerns sidewalk conditions and a different operational decision.",
+          "status": "RESOLVED",
+          "summary": "The local agent can detect duplicate past gifts but cannot determine what is needed this year.",
+          "uid": "2139303f-8d06-55c8-a431-b56e6ce97a9f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7ceebe3b-c8f6-4c51-94ee-965795d863b6",
+              "memory_uid": "b9e9e222-a559-56e3-93b5-1f49a0e0d3ab"
+            }
+          ],
+          "reason": "This is independently useful reference-only information about seasonal delivery uncertainty, absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Year-end deliveries can be slower than usual or receive revised expected dates.",
+          "uid": "e8e52981-655a-5557-ba34-a9e7021056d0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "707b533b-9a80-480b-8bd0-cce4839a3777",
+              "memory_uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409"
+            }
+          ],
+          "reason": "This is independently useful compared-only information about winter-item storage, not a corresponding claim about the gift supplies stored in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Gloves and scarves are kept in a basket inside the entrance.",
+          "uid": "d18e8951-806a-5dd0-a155-17ca96499352"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "707b533b-9a80-480b-8bd0-cce4839a3777",
+              "memory_uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5"
+            },
+            {
+              "frame_uid": "707b533b-9a80-480b-8bd0-cce4839a3777",
+              "memory_uid": "a11f0943-8ee1-5305-87fb-64982fb36f82"
+            }
+          ],
+          "reason": "These memories form one compared-only sequence about preparing winter clothing before departure; the reference frame contains no corresponding outing-preparation claim.",
+          "status": "RESOLVED",
+          "summary": "After missing a bus when gloves could not be found, the user prepared them in the entrance basket the night before and subsequently left on time.",
+          "uid": "04e3866d-4224-5a36-8cf8-0c3285592565"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "707b533b-9a80-480b-8bd0-cce4839a3777",
+              "memory_uid": "f623f245-cdd5-5080-8869-b52cf2914076"
+            },
+            {
+              "frame_uid": "707b533b-9a80-480b-8bd0-cce4839a3777",
+              "memory_uid": "17ac56f1-1302-5350-99d5-b95ef7feb768"
+            }
+          ],
+          "reason": "These memories form one compared-only sequence about selecting a passable winter route; the reference frame contains no route-selection claim.",
+          "status": "RESOLVED",
+          "summary": "After uncleared snowy stairs blocked a shorter route, the user used a cleared main-road sidewalk and avoided slippery sections.",
+          "uid": "ac0f3126-e449-5f19-bab3-b9024df622b4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "707b533b-9a80-480b-8bd0-cce4839a3777",
+              "memory_uid": "96988fa9-44b1-511e-8c99-4372f902cfe3"
+            },
+            {
+              "frame_uid": "707b533b-9a80-480b-8bd0-cce4839a3777",
+              "memory_uid": "b628acaa-50da-552c-8665-244dc4ab8263"
+            }
+          ],
+          "reason": "These memories form one compared-only sequence about adjusting nighttime warmth; the reference frame contains no sleep-comfort claim.",
+          "status": "RESOLVED",
+          "summary": "After excessive heat disrupted sleep, the user lowered the heat and added one thin blanket the next night.",
+          "uid": "921b47c5-bb71-5e17-a664-164d0b6b8c43"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "707b533b-9a80-480b-8bd0-cce4839a3777",
+              "memory_uid": "08dfb937-7b28-55b5-801c-c0da00cbd414"
+            }
+          ],
+          "reason": "This is independently useful compared-only information about family communication before winter travel, with no corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "During heavy snow, the user’s father anticipates concern about roads and texts before departure.",
+          "uid": "2b961fa2-ec16-50d8-bbac-e5af943ab2e0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "707b533b-9a80-480b-8bd0-cce4839a3777",
+              "memory_uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d"
+            }
+          ],
+          "reason": "This is an independently useful compared-only route-planning policy; the reference frame’s planning claims concern gifts and deliveries rather than winter access.",
+          "status": "RESOLVED",
+          "summary": "Recent snow-clearing conditions and accessible entrances should be checked before proposing a winter travel route.",
+          "uid": "34184d44-37e8-53a3-ae0b-3882b0c84435"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "707b533b-9a80-480b-8bd0-cce4839a3777",
+              "memory_uid": "802c4031-57de-592a-9bc8-6ee3d54921c8"
+            }
+          ],
+          "reason": "This is a compared-only capability boundary for route assessment; the reference-side limitation concerns current gift needs and a different operational decision.",
+          "status": "RESOLVED",
+          "summary": "A weather forecast alone cannot tell the local agent the actual condition of the user’s sidewalk.",
+          "uid": "7940d0ca-1ab2-581f-bb07-1629d02f9658"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame describes winter-item storage, preparation habits, safer snowy-route choices, temperature adjustment for sleep, a father’s proactive warning, and the need for current, entrance-specific route conditions.",
+        "differences": "",
+        "reference_only": "The reference describes gift supplies, lessons about choosing, ordering, and labeling gifts, a sibling’s sharing preference, delivery uncertainty, and limits on inferring current needs from gift history."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "a11a90f7-371d-4946-9094-4eaa242f2246"
+    },
+    "analysis_digest": "13275b7828e0b4e878690a4d4e35d95586eb6def76345827c9d57fb062d377a3",
+    "key": "b5506812c18b52fc569be19acd0141cca86d5592c7aff946ef1dc6ac5171bdd4",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 55.28124966699761,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "b5506812c18b52fc569be19acd0141cca86d5592c7aff946ef1dc6ac5171bdd4",
+  "created_at": "2026-08-13T18:55:00.641544Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/12",
+  "pair_key": "e394a8ef11f8d4b76108038e5ab92d4b6a84efbf76dd223bf1d0a8df267eb6da",
+  "provider_seconds": 55.28124966699761,
+  "right": "task-3/local/personal-memory/2026/01",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

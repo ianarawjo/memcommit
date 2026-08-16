@@ -1,0 +1,477 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:21:50.010613+00:00",
+      "frames": [
+        {
+          "context_digest": "4ae7659c0c6976de9bf2292f9e35962963b7931b470c2294d4f0e70b3500bff0",
+          "context_name": "task-2/advisor1/feasibility",
+          "context_uid": "52db6b06-e86a-556a-913e-30e45f7e9529",
+          "memories": [
+            {
+              "content": "Mark unverified schedule assumptions as such.",
+              "content_digest": "d4cdcdbcdb51d96f9a7435e72c2e4ef25a3e3822a765a88afafeca5194bda96e",
+              "position": 0,
+              "uid": "b150c774-27f6-5ec8-8cb9-9a00be19ce9b"
+            },
+            {
+              "content": "Mark unverified recruitment assumptions as such.",
+              "content_digest": "4cc28528fee1c7b09f709638e2b57d3bc9efe635d20500ee98567f8f59b8cf21",
+              "position": 1,
+              "uid": "6c7d14ed-67e5-56ff-befb-7648b95aa7a3"
+            },
+            {
+              "content": "Mark unverified technical assumptions as such.",
+              "content_digest": "8942e49cd46e3e9746330349df11e49d4a6c9250c7aa4c52c2d9ade1c97c735c",
+              "position": 2,
+              "uid": "00bf39b5-fe97-5fd0-b579-a5c13b5e6af7"
+            },
+            {
+              "content": "Clarify which stage of prototype fabrication or user study each requested resource is used for.",
+              "content_digest": "81ba64e23304f8fbbb3af4f2c30dfa3c517899c486e88ba211189a7911fcbd64",
+              "position": 3,
+              "uid": "3ae97c88-7537-5733-b48d-e02c9283f486"
+            },
+            {
+              "content": "Operations reviewers judge feasibility based on the personnel assigned to each procedure.",
+              "content_digest": "fe29bb7e592d116001a25ce11c603ae29f21d446925c28db692f14970d5b8134",
+              "position": 4,
+              "uid": "e2b5c1f0-97c2-5d46-af80-993d8d5606c9"
+            },
+            {
+              "content": "Operations reviewers judge feasibility based on the equipment assigned to each procedure.",
+              "content_digest": "859ab328c21506d11dd1f6d98e98d5a552446e774931a8bc13396750acf0793b",
+              "position": 5,
+              "uid": "f636b400-d3a2-5873-bf5b-c990b0f7ea42"
+            },
+            {
+              "content": "Operations reviewers judge feasibility based on the time allocated to each procedure.",
+              "content_digest": "08656886328ece4d813e36b1145805ffd3f3d4c6c855c20b1464143fb12868ab",
+              "position": 6,
+              "uid": "49385488-2315-51bc-bea0-749a1aea52f1"
+            },
+            {
+              "content": "Verify that the planned number of formative evaluation iterations is feasible within the time for prototype modification and recruitment resources.",
+              "content_digest": "9e181a14a97abd740a85679554395d7b315c07f0e4171ef276a2c31553b285c7",
+              "position": 7,
+              "uid": "f1c22a48-9d8d-5e82-9837-690d66e719db"
+            },
+            {
+              "content": "Include only the minimum functionality required to compare primary design assumptions in the scope of the formative evaluation prototype.",
+              "content_digest": "7769c2a4c03dc1c279bbf34bf0cefdcd076e3c1d8a1e56015bf20357ecfcf433",
+              "position": 8,
+              "uid": "4d69f030-0dc0-5df7-a153-0b595a3f68de"
+            },
+            {
+              "content": "The user's iterative design plan can be judged feasible only if time and personnel are allocated for modifying the prototype between iterations.",
+              "content_digest": "0339285cf9fd632814c5b5eb2b48fd46e3baf09ea95fb406f71b5d2cc804fa7e",
+              "position": 9,
+              "uid": "152f8621-f5fb-5c5e-a961-1fde77ed0bb3"
+            },
+            {
+              "content": "Delays in participant recruitment can compress the time available for prototype modification between formative evaluations.",
+              "content_digest": "9945f30dba63d2d070bad59cb2fb15b6a26d635f337949c3891b58d17c43973a",
+              "position": 10,
+              "uid": "1877a138-31f6-59a5-b666-ae57985f540d"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "7b42952a-d91e-4625-b658-97cb935f5916"
+        },
+        {
+          "context_digest": "19032e7fed99072de4fcaeff084874da452865e9958a1301ec01260d60e01867",
+          "context_name": "task-2/advisor2/structure",
+          "context_uid": "09c95ce6-baa2-5823-a035-e4b0d323200b",
+          "memories": [
+            {
+              "content": "Allow the problem framing to extend through a third sentence when a concrete person, setting, or use situation is needed to make the issue understandable.",
+              "content_digest": "c027c1b4290ff04fe84e475af5aae8fa9e90dd839903b9fe772892e8b6b80323",
+              "position": 0,
+              "uid": "e32f543b-1637-572a-ab96-319d74ee7e21"
+            },
+            {
+              "content": "Use the third sentence for the specific setting and consequence rather than compressing them into an abstract two-sentence summary.",
+              "content_digest": "f02d2bd7ea21e7ebbaff85d3e77c77689dadead77276a3d472d2ad59f94ec5ff",
+              "position": 1,
+              "uid": "6bbb0f69-ca99-539a-a810-a0fb34fe9cc3"
+            },
+            {
+              "content": "Explicitly specify the users, operational stakeholders, and actual usage environment in the primary HCI research question.",
+              "content_digest": "3ab83046fede9de55435f98324226f435bcc4932d2a7440ef61fc21c2e0d71f3",
+              "position": 2,
+              "uid": "48e887dc-7fc8-5a23-9999-890acb870251"
+            },
+            {
+              "content": "Provide one compact visual summary when proposing an unfamiliar interaction procedure.",
+              "content_digest": "1e4299abe1691fbbfc826fc59d4276831d9a49abd3588820ba2f50311fd56d2c",
+              "position": 3,
+              "uid": "e34bce0c-7d07-5fe6-b03f-39faa801640b"
+            },
+            {
+              "content": "Mark the conditions that move an unfamiliar interaction procedure from one step to the next in its visual summary.",
+              "content_digest": "9e7d7547cac76b4b6665ea585fedd7678682c7f9a4eadf129202ac2ea2c6b2b8",
+              "position": 4,
+              "uid": "68ad56f9-6ca2-587a-9182-fd98a79d3d5c"
+            },
+            {
+              "content": "Present the master’s research schedule as phase-specific milestones for field understanding, system implementation, user study, and analysis.",
+              "content_digest": "035713de4f5d6577859b2602ae32a7561594bcbeca023049d4b0e2d4c930d94a",
+              "position": 5,
+              "uid": "eca301ff-9feb-502d-b955-055c48342542"
+            },
+            {
+              "content": "Link deliverables that determine entry into the next phase to each milestone of the master’s research.",
+              "content_digest": "dff2c02b66c97696644d04ee7e685c706443257101e7ee34182dcc5021aa8525",
+              "position": 6,
+              "uid": "cbd977cd-1b78-5ca6-823a-7a5b4b92d77a"
+            },
+            {
+              "content": "Directly connect the gap in the actual usage context with the proposed design and operational contributions in a single flow.",
+              "content_digest": "8da57ff6f210ec4a38d82a2550f96a6b30ba59b7f63f3f3c08e9dcec10dce381",
+              "position": 7,
+              "uid": "9283aedb-6818-5c99-8fe0-502b488acb66"
+            },
+            {
+              "content": "Avoid extra subheadings in a two-page proposal; use paragraph transitions to preserve one continuous argument from problem to proposed response and next steps.",
+              "content_digest": "f6dabe3ee8aba7aa81d707519ffc7d3839f3a74ddcd97fa61d14396e1581f69c",
+              "position": 8,
+              "uid": "c5c04ab1-10e8-52a3-98a1-aa9cbede57c1"
+            },
+            {
+              "content": "Begin each paragraph by connecting it to the previous claim so the short proposal reads as an argument rather than a stack of labeled fragments.",
+              "content_digest": "37d855da87b3b3437e6cc7d865a02d1852b7f7a01c3d7855b0584e399d086619",
+              "position": 9,
+              "uid": "87203bcf-6724-543a-ad19-60a2becc4598"
+            },
+            {
+              "content": "Place preliminary results from field observations or technical validations near sentences supporting feasibility claims.",
+              "content_digest": "8cb8b48f7f57c3248d28f4b82181c9ddbac16acb7b67435abdfb761233b3aecb",
+              "position": 10,
+              "uid": "c9591180-6f3a-5909-8695-31704b9b6f01"
+            },
+            {
+              "content": "Readers may misinterpret a compressed opening when the person, setting, or consequence is only implied.",
+              "content_digest": "2eb34b31c7da38508d152ae4d47ddb8b08479a2e28fbdb4a50c72e7f1999bbf2",
+              "position": 11,
+              "uid": "0ac685f9-e338-5549-bf91-32078cf36f15"
+            },
+            {
+              "content": "A two-sentence opening can become so general that readers understand the topic but cannot picture the situation the proposal intends to change.",
+              "content_digest": "21625e7040d1007bf6931fc1e3551dbbd46739ad339773d51cd00d9f21abf96e",
+              "position": 12,
+              "uid": "5567fb3c-de90-5363-af1b-62fb5b8e0bb1"
+            },
+            {
+              "content": "Use paragraph transitions instead of extra headings when the repeated labels would consume space needed for the argument itself.",
+              "content_digest": "50620b1c5db672532aea9ce8c9bfc11688a5b83bf5436bfc9a308a08fc719286",
+              "position": 13,
+              "uid": "32cef408-4c66-5ef2-9a59-eea6fc67b16e"
+            },
+            {
+              "content": "End each paragraph with the question or consequence that the next paragraph answers.",
+              "content_digest": "3d3639057c446bbd3d2bef5393bce0219451ba3c718d655c62dc51b1ea2df86f",
+              "position": 14,
+              "uid": "3579fcc0-c74e-5006-901b-6406a3106fa1"
+            },
+            {
+              "content": "A continuous sequence of problem, consequence, response, and next step makes the relationship among claims audible without repeating section labels.",
+              "content_digest": "8e1d12ba37953236e2f51510ac3e0382b75b43ff911190216550f82c5679eadf",
+              "position": 15,
+              "uid": "2c2aa1af-c450-5c8d-a907-042c5757d3ee"
+            },
+            {
+              "content": "Readers may experience very short headed sections as an outline because each new label interrupts the connection to the previous paragraph.",
+              "content_digest": "c355e847db92d4c27343283e9415debff2fbdb4b2b2c505d4e442dc78251578d",
+              "position": 16,
+              "uid": "1fb62d5b-532b-5664-842c-57622e3c8b9d"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "7555033e-4349-4ff6-9b11-6cc2027331ae"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address complementary proposal concerns without making the same operational claims. The reference centers feasibility, assumptions, resources, prototype scope, and iteration risks; the compared frame centers contextual framing, visual explanation, milestone structure, evidence placement, and concise argumentative flow.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7b42952a-d91e-4625-b658-97cb935f5916",
+              "memory_uid": "b150c774-27f6-5ec8-8cb9-9a00be19ce9b"
+            },
+            {
+              "frame_uid": "7b42952a-d91e-4625-b658-97cb935f5916",
+              "memory_uid": "6c7d14ed-67e5-56ff-befb-7648b95aa7a3"
+            },
+            {
+              "frame_uid": "7b42952a-d91e-4625-b658-97cb935f5916",
+              "memory_uid": "00bf39b5-fe97-5fd0-b579-a5c13b5e6af7"
+            }
+          ],
+          "reason": "These memories split one reference-only disclosure rule across three assumption categories; the compared frame offers no corresponding claim.",
+          "status": "RESOLVED",
+          "summary": "Unverified schedule, recruitment, and technical assumptions should be explicitly identified as unverified.",
+          "uid": "c8a0a310-9200-525f-9363-8b154d753106"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7b42952a-d91e-4625-b658-97cb935f5916",
+              "memory_uid": "3ae97c88-7537-5733-b48d-e02c9283f486"
+            }
+          ],
+          "reason": "This is independently useful reference-only guidance about resource-to-stage traceability, not the same claim as milestone formatting or phase-entry deliverables.",
+          "status": "RESOLVED",
+          "summary": "Each requested resource should be tied to the fabrication or user-study stage where it is used.",
+          "uid": "4f060194-c50b-5193-9fc5-6f900fdad19f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7b42952a-d91e-4625-b658-97cb935f5916",
+              "memory_uid": "e2b5c1f0-97c2-5d46-af80-993d8d5606c9"
+            },
+            {
+              "frame_uid": "7b42952a-d91e-4625-b658-97cb935f5916",
+              "memory_uid": "f636b400-d3a2-5873-bf5b-c990b0f7ea42"
+            },
+            {
+              "frame_uid": "7b42952a-d91e-4625-b658-97cb935f5916",
+              "memory_uid": "49385488-2315-51bc-bea0-749a1aea52f1"
+            }
+          ],
+          "reason": "These memories split one reference-only feasibility criterion across its operational inputs; no compared memory states that criterion.",
+          "status": "RESOLVED",
+          "summary": "Procedure feasibility should be judged from its assigned personnel, equipment, and time.",
+          "uid": "1861d5ea-1cb0-5fb2-af7b-2905a48b6273"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7b42952a-d91e-4625-b658-97cb935f5916",
+              "memory_uid": "f1c22a48-9d8d-5e82-9837-690d66e719db"
+            }
+          ],
+          "reason": "This reference-only claim specifically requires validating iteration count against two constraining resources.",
+          "status": "RESOLVED",
+          "summary": "The planned number of formative iterations should be checked against modification time and recruitment resources.",
+          "uid": "dbffc4a7-ad2f-502b-8a06-bb6903d82196"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7b42952a-d91e-4625-b658-97cb935f5916",
+              "memory_uid": "4d69f030-0dc0-5df7-a153-0b595a3f68de"
+            }
+          ],
+          "reason": "This is an independent reference-only scope rule for prototype functionality.",
+          "status": "RESOLVED",
+          "summary": "A formative-evaluation prototype should contain only the functionality needed to compare primary design assumptions.",
+          "uid": "00a442db-b982-5a1e-9517-c30032bd8da2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7b42952a-d91e-4625-b658-97cb935f5916",
+              "memory_uid": "152f8621-f5fb-5c5e-a961-1fde77ed0bb3"
+            }
+          ],
+          "reason": "This reference-only claim establishes a specific feasibility condition for between-iteration modification work.",
+          "status": "RESOLVED",
+          "summary": "An iterative design plan is feasible only when prototype modification between iterations has allocated time and personnel.",
+          "uid": "e52b75af-ed5c-5565-8a3e-28d13b63f1aa"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7b42952a-d91e-4625-b658-97cb935f5916",
+              "memory_uid": "1877a138-31f6-59a5-b666-ae57985f540d"
+            }
+          ],
+          "reason": "This is an independent reference-only schedule-risk claim rather than a restatement of the required allocation or iteration-count check.",
+          "status": "RESOLVED",
+          "summary": "Participant-recruitment delays can reduce the time available for prototype modification between formative evaluations.",
+          "uid": "306a3313-d7bc-5046-851f-5b3690fdc9c4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7555033e-4349-4ff6-9b11-6cc2027331ae",
+              "memory_uid": "e32f543b-1637-572a-ab96-319d74ee7e21"
+            },
+            {
+              "frame_uid": "7555033e-4349-4ff6-9b11-6cc2027331ae",
+              "memory_uid": "6bbb0f69-ca99-539a-a810-a0fb34fe9cc3"
+            },
+            {
+              "frame_uid": "7555033e-4349-4ff6-9b11-6cc2027331ae",
+              "memory_uid": "0ac685f9-e338-5549-bf91-32078cf36f15"
+            },
+            {
+              "frame_uid": "7555033e-4349-4ff6-9b11-6cc2027331ae",
+              "memory_uid": "5567fb3c-de90-5363-af1b-62fb5b8e0bb1"
+            }
+          ],
+          "reason": "These compared-only memories express one opening-design claim through instructions and explanations of the reader misunderstanding caused by excessive compression.",
+          "status": "RESOLVED",
+          "summary": "When needed for comprehension, a proposal opening should use a third sentence to make the person, setting, and consequence concrete rather than leaving an abstract two-sentence framing.",
+          "uid": "ad0d5b5f-b0f5-5b09-b5ad-6c42e116aa17"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7555033e-4349-4ff6-9b11-6cc2027331ae",
+              "memory_uid": "48e887dc-7fc8-5a23-9999-890acb870251"
+            }
+          ],
+          "reason": "This is an independent compared-only requirement for research-question specificity.",
+          "status": "RESOLVED",
+          "summary": "The primary HCI research question should explicitly name users, operational stakeholders, and the actual usage environment.",
+          "uid": "4979215d-36ef-5ddd-a31b-4064c5fdcda9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7555033e-4349-4ff6-9b11-6cc2027331ae",
+              "memory_uid": "e34bce0c-7d07-5fe6-b03f-39faa801640b"
+            },
+            {
+              "frame_uid": "7555033e-4349-4ff6-9b11-6cc2027331ae",
+              "memory_uid": "68ad56f9-6ca2-587a-9182-fd98a79d3d5c"
+            }
+          ],
+          "reason": "These compared-only memories split one visualization requirement into the presence of the visual and the transition information it must contain.",
+          "status": "RESOLVED",
+          "summary": "An unfamiliar interaction procedure should receive one compact visual summary that marks the conditions governing transitions between steps.",
+          "uid": "a6d88c5f-e0fe-5e05-a03d-4c4294471d85"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7555033e-4349-4ff6-9b11-6cc2027331ae",
+              "memory_uid": "eca301ff-9feb-502d-b955-055c48342542"
+            },
+            {
+              "frame_uid": "7555033e-4349-4ff6-9b11-6cc2027331ae",
+              "memory_uid": "cbd977cd-1b78-5ca6-823a-7a5b4b92d77a"
+            }
+          ],
+          "reason": "These compared-only memories form one schedule-structure claim covering named research phases and their gating deliverables.",
+          "status": "RESOLVED",
+          "summary": "The master’s research schedule should use phase-specific milestones and associate each milestone with deliverables that control entry into the next phase.",
+          "uid": "e45942fe-304f-5a0f-9d91-d5e8261ced4b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7555033e-4349-4ff6-9b11-6cc2027331ae",
+              "memory_uid": "9283aedb-6818-5c99-8fe0-502b488acb66"
+            }
+          ],
+          "reason": "This is an independent compared-only claim about linking the problem gap to contributions.",
+          "status": "RESOLVED",
+          "summary": "The actual-use-context gap should connect directly to the proposed design and operational contributions in one flow.",
+          "uid": "4e13e354-a826-5010-ba11-1b78197c7af4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7555033e-4349-4ff6-9b11-6cc2027331ae",
+              "memory_uid": "c5c04ab1-10e8-52a3-98a1-aa9cbede57c1"
+            },
+            {
+              "frame_uid": "7555033e-4349-4ff6-9b11-6cc2027331ae",
+              "memory_uid": "87203bcf-6724-543a-ad19-60a2becc4598"
+            },
+            {
+              "frame_uid": "7555033e-4349-4ff6-9b11-6cc2027331ae",
+              "memory_uid": "32cef408-4c66-5ef2-9a59-eea6fc67b16e"
+            },
+            {
+              "frame_uid": "7555033e-4349-4ff6-9b11-6cc2027331ae",
+              "memory_uid": "3579fcc0-c74e-5006-901b-6406a3106fa1"
+            },
+            {
+              "frame_uid": "7555033e-4349-4ff6-9b11-6cc2027331ae",
+              "memory_uid": "2c2aa1af-c450-5c8d-a907-042c5757d3ee"
+            },
+            {
+              "frame_uid": "7555033e-4349-4ff6-9b11-6cc2027331ae",
+              "memory_uid": "1fb62d5b-532b-5664-842c-57622e3c8b9d"
+            }
+          ],
+          "reason": "These compared-only memories state and explain one continuity policy, including paragraph openings and endings, space costs, sequencing, and the disruptive effect of repeated labels.",
+          "status": "RESOLVED",
+          "summary": "A two-page proposal should favor connected paragraph transitions over extra subheadings, sustaining a problem-to-consequence-to-response-to-next-step argument.",
+          "uid": "287a330f-c733-5a8d-862b-bead2c92aee7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7555033e-4349-4ff6-9b11-6cc2027331ae",
+              "memory_uid": "c9591180-6f3a-5909-8695-31704b9b6f01"
+            }
+          ],
+          "reason": "This is an independent compared-only evidence-placement rule; it does not duplicate the reference frame’s feasibility criteria or assumption-labeling requirements.",
+          "status": "RESOLVED",
+          "summary": "Preliminary observational or technical results should appear near the sentences whose feasibility claims they support.",
+          "uid": "c6b61bd5-58a1-5c89-b2c3-a6a420ee5ff9"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only guidance covers concrete contextual framing, stakeholder-rich research questions, procedural visuals, milestone gates, contribution flow, localized feasibility evidence, and continuous paragraph-level argumentation in a short proposal.",
+        "differences": "",
+        "reference_only": "Reference-only guidance covers labeling unverified assumptions, tracing resources to stages, assessing procedural and iterative feasibility, limiting prototype functionality, and recognizing recruitment-related schedule pressure."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "d8c621be-1f57-442f-85d9-5fc95ab676d8"
+    },
+    "analysis_digest": "b9837f3821fe3ff8c2b6bf0829b91a49df69e41085a9021f57916c4e22bad008",
+    "key": "0af0df448f76fbbfc066bb733df8371d427f995357717874dba8d33863d5d29d",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 50.582247875001485,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "0af0df448f76fbbfc066bb733df8371d427f995357717874dba8d33863d5d29d",
+  "created_at": "2026-08-13T18:22:40.592401Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/feasibility",
+  "pair_key": "f1fd9a30eb35672d21d2fcfdb29aea2b0417efe8f1db55d77ef8453aa0315514",
+  "provider_seconds": 50.582247875001485,
+  "right": "task-2/advisor2/structure",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

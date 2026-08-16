@@ -1,0 +1,235 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:20:12.783141+00:00",
+      "frames": [
+        {
+          "context_digest": "42df7e2f7640040d1d6f6f6e566e80d178668a05ab6918b64eed91b91a41b7fb",
+          "context_name": "task-2/advisor1/evaluation",
+          "context_uid": "30568e2f-ce17-50ce-a25b-1cc4bdb94689",
+          "memories": [
+            {
+              "content": "Specify a single representative measure that serves as the criterion for retaining, modifying, or discarding compared design alternatives.",
+              "content_digest": "53aa7c1f81a4fac9e76985be094717aa122e7077a6fcfde46946babd5929d390",
+              "position": 0,
+              "uid": "a50f6ecb-de38-5769-8a6e-23b84a7eb35c"
+            },
+            {
+              "content": "HCI review panels verify whether clear criteria for judging design alternatives are established using the declared primary measure.",
+              "content_digest": "fabd83103e5c3474f56de113c477f7ced5e863a508ec39bd4ae23653d63ad354",
+              "position": 1,
+              "uid": "44c61beb-24a2-584a-ad96-e622690d8171"
+            },
+            {
+              "content": "Collect process measures to diagnose interaction steps where problems occurred, alongside the primary outcome measure.",
+              "content_digest": "6cc2fedef1b0af1c594e48610e08a169f3bca2405bf8773945eca33396aecb36",
+              "position": 2,
+              "uid": "23202824-b576-5d77-b591-8b4cc0757632"
+            },
+            {
+              "content": "Interpret evaluation results as differences between compared design alternatives rather than as success or failure of a single prototype.",
+              "content_digest": "5c578d52a7dbbf4e4b646e707bbee4ac37bcd23bceb0b4d5e09ef3c08df9c2f4",
+              "position": 3,
+              "uid": "65ae88bf-8002-5ada-8590-eaf345b38863"
+            },
+            {
+              "content": "Check boundary cases to verify whether the derived design principles retain explanatory power for adjacent situations not included in the comparison.",
+              "content_digest": "3edc3e181a8086233d889f35cb98c9448875fe3fee915467f712ca3eb2886de1",
+              "position": 4,
+              "uid": "79af5e5f-4868-5e76-bcd5-3f8e1d6a0bd1"
+            },
+            {
+              "content": "Controlled evaluation environments do not reproduce time pressure, peer intervention, or voluntary termination conditions found in daily use.",
+              "content_digest": "e58a1bc6a423874525aca9f864b9b0dbd1e3ef9961410608c5837c88f1153d9b",
+              "position": 5,
+              "uid": "3a65fc8b-a5b4-50fc-a60e-fc6f3fc44547"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "c1a51fba-ed7f-40a9-821f-1936d325f18d"
+        },
+        {
+          "context_digest": "3cadca09eeabe1389261c2e43133d8b304ed2cad66332f3444e686a824f10a21",
+          "context_name": "task-2/advisor2/scope",
+          "context_uid": "86efd53c-c08d-537c-983f-91a7b915640d",
+          "memories": [
+            {
+              "content": "Specify in one sentence the user population and actual usage environment to which the design knowledge applies.",
+              "content_digest": "3bb25f3252678a84fe361c9562692c27556d31b6fac53da87b763648e80ed6ac",
+              "position": 0,
+              "uid": "6cfd5026-0c04-5ed8-baac-a56e68723aa3"
+            },
+            {
+              "content": "Reviewers judge the generalization boundary of results through the specified target population and environment.",
+              "content_digest": "9119780de23a4734bc8e0ba3c39dce251611932fd86bec479b522adaf1882758",
+              "position": 1,
+              "uid": "5bc7cf05-8c47-57d4-a749-ec7d2ec45e3e"
+            },
+            {
+              "content": "Specify the workflow, technical infrastructure, and operational-authority conditions that must match before applying the design guidelines at another field site.",
+              "content_digest": "2970e43d1b52b63b6f76c3c55a5534d24508bcd32402e66098d75dbb52d8083b",
+              "position": 2,
+              "uid": "25731e2b-8535-5b37-a377-0a3a99dbe189"
+            },
+            {
+              "content": "The transferability of field design knowledge depends not only on user characteristics but also on workflow and technological–organizational infrastructure.",
+              "content_digest": "71b7cbcf151114f17886e57f026c2b2ebdd666c7aa88f95c85880a1bc96fdcd2",
+              "position": 3,
+              "uid": "d79ba448-76b6-592e-b4ba-8cfd98683755"
+            },
+            {
+              "content": "The user tends to apply results confirmed at one deployment site to all similar organizations.",
+              "content_digest": "810ee3a6b79606e7f199a30aa146f47e405ff71d1728a3bbfef16b601f5c0d5e",
+              "position": 4,
+              "uid": "cde0ee2b-af3c-5c0d-b23c-632778c93e20"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "5bd5e0f4-50eb-4313-bc32-7089286eec61"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames complement one another: the reference emphasizes disciplined comparison and evaluation, while the compared frame emphasizes bounded transfer to real settings. They converge on testing and declaring generalization limits, with no substantive contradiction or unresolved ambiguity.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c1a51fba-ed7f-40a9-821f-1936d325f18d",
+              "memory_uid": "a50f6ecb-de38-5769-8a6e-23b84a7eb35c"
+            },
+            {
+              "frame_uid": "c1a51fba-ed7f-40a9-821f-1936d325f18d",
+              "memory_uid": "44c61beb-24a2-584a-ad96-e622690d8171"
+            }
+          ],
+          "reason": "These reference-side claims split one underlying governance policy: establish the primary decision criterion and have review panels verify that it is used clearly.",
+          "status": "RESOLVED",
+          "summary": "A declared primary measure anchors explicit criteria for judging design alternatives and their review.",
+          "uid": "f15db708-4ccf-5cef-bb4c-3af849a4186a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c1a51fba-ed7f-40a9-821f-1936d325f18d",
+              "memory_uid": "23202824-b576-5d77-b591-8b4cc0757632"
+            }
+          ],
+          "reason": "This independently useful diagnostic measurement practice has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Process measures supplement the primary outcome measure by locating problematic interaction steps.",
+          "uid": "ed40bb34-14f1-5f46-b4bd-25cfd786f748"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c1a51fba-ed7f-40a9-821f-1936d325f18d",
+              "memory_uid": "65ae88bf-8002-5ada-8590-eaf345b38863"
+            }
+          ],
+          "reason": "This independently useful interpretation rule is present only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Evaluation results are interpreted as differences between alternatives, not as a verdict on one prototype.",
+          "uid": "cb116fa7-fea8-5ea0-af27-ae9fa02070f3"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "c1a51fba-ed7f-40a9-821f-1936d325f18d",
+              "memory_uid": "79af5e5f-4868-5e76-bcd5-3f8e1d6a0bd1"
+            },
+            {
+              "frame_uid": "5bd5e0f4-50eb-4313-bc32-7089286eec61",
+              "memory_uid": "6cfd5026-0c04-5ed8-baac-a56e68723aa3"
+            },
+            {
+              "frame_uid": "5bd5e0f4-50eb-4313-bc32-7089286eec61",
+              "memory_uid": "5bc7cf05-8c47-57d4-a749-ec7d2ec45e3e"
+            }
+          ],
+          "reason": "Boundary-case checking and specification or review of the target population and environment jointly govern whether findings extend beyond the original comparison; each claim adds a compatible part of that decision.",
+          "status": "RESOLVED",
+          "summary": "Generalization limits should be made explicit and examined against populations, environments, and adjacent situations.",
+          "uid": "84326c96-d895-5db7-b56f-89ecd11a067e"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "c1a51fba-ed7f-40a9-821f-1936d325f18d",
+              "memory_uid": "3a65fc8b-a5b4-50fc-a60e-fc6f3fc44547"
+            },
+            {
+              "frame_uid": "5bd5e0f4-50eb-4313-bc32-7089286eec61",
+              "memory_uid": "25731e2b-8535-5b37-a377-0a3a99dbe189"
+            },
+            {
+              "frame_uid": "5bd5e0f4-50eb-4313-bc32-7089286eec61",
+              "memory_uid": "d79ba448-76b6-592e-b4ba-8cfd98683755"
+            }
+          ],
+          "reason": "The controlled-environment limitation and the field-site matching requirements jointly warn that contextual conditions beyond user characteristics govern transferability.",
+          "status": "RESOLVED",
+          "summary": "Applying design knowledge across settings requires attention to real-use conditions, workflow, technology, and organizational authority.",
+          "uid": "dfa324b1-bda4-5ab4-9003-2516bab13afe"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5bd5e0f4-50eb-4313-bc32-7089286eec61",
+              "memory_uid": "cde0ee2b-af3c-5c0d-b23c-632778c93e20"
+            }
+          ],
+          "reason": "This behavioral tendency is independently useful compared-side information and is not asserted in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Users may generalize results from one deployment site across similar organizations.",
+          "uid": "4ac76cb8-3a7f-522c-869b-5c00190022b0"
+        }
+      ],
+      "reports": {
+        "both": "Both address whether design knowledge extends beyond its original evaluation, combining boundary checks with explicit population, environment, workflow, and infrastructure conditions.",
+        "compared_only": "The compared frame uniquely notes a tendency to overgeneralize findings from one deployment site.",
+        "differences": "",
+        "reference_only": "The reference uniquely defines primary and diagnostic measures, panel verification, and comparative interpretation of results."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "17cb1d74-4bd3-44d6-a121-76ad584cc71b"
+    },
+    "analysis_digest": "61895520eb9d4ec171c0bcc2d067db81fe191f067ea0c1c0132e7c29c8e5d3ae",
+    "key": "f768777d3980a1ce7f6db5acbf5bb1c2c2f0f508e09aff18e53f0e5a050fd3fa",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 34.78112408399829,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "f768777d3980a1ce7f6db5acbf5bb1c2c2f0f508e09aff18e53f0e5a050fd3fa",
+  "created_at": "2026-08-13T18:20:47.563899Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/evaluation",
+  "pair_key": "65668e4293b1a781000fd8d3c7da5b94b34d267c3df1bc72e3cd2ab0e6b14b21",
+  "provider_seconds": 34.78112408399829,
+  "right": "task-2/advisor2/scope",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

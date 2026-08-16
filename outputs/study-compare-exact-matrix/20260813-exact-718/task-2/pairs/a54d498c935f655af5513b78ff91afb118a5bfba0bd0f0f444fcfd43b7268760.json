@@ -1,0 +1,291 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:19:49.568359+00:00",
+      "frames": [
+        {
+          "context_digest": "42df7e2f7640040d1d6f6f6e566e80d178668a05ab6918b64eed91b91a41b7fb",
+          "context_name": "task-2/advisor1/evaluation",
+          "context_uid": "30568e2f-ce17-50ce-a25b-1cc4bdb94689",
+          "memories": [
+            {
+              "content": "Specify a single representative measure that serves as the criterion for retaining, modifying, or discarding compared design alternatives.",
+              "content_digest": "53aa7c1f81a4fac9e76985be094717aa122e7077a6fcfde46946babd5929d390",
+              "position": 0,
+              "uid": "a50f6ecb-de38-5769-8a6e-23b84a7eb35c"
+            },
+            {
+              "content": "HCI review panels verify whether clear criteria for judging design alternatives are established using the declared primary measure.",
+              "content_digest": "fabd83103e5c3474f56de113c477f7ced5e863a508ec39bd4ae23653d63ad354",
+              "position": 1,
+              "uid": "44c61beb-24a2-584a-ad96-e622690d8171"
+            },
+            {
+              "content": "Collect process measures to diagnose interaction steps where problems occurred, alongside the primary outcome measure.",
+              "content_digest": "6cc2fedef1b0af1c594e48610e08a169f3bca2405bf8773945eca33396aecb36",
+              "position": 2,
+              "uid": "23202824-b576-5d77-b591-8b4cc0757632"
+            },
+            {
+              "content": "Interpret evaluation results as differences between compared design alternatives rather than as success or failure of a single prototype.",
+              "content_digest": "5c578d52a7dbbf4e4b646e707bbee4ac37bcd23bceb0b4d5e09ef3c08df9c2f4",
+              "position": 3,
+              "uid": "65ae88bf-8002-5ada-8590-eaf345b38863"
+            },
+            {
+              "content": "Check boundary cases to verify whether the derived design principles retain explanatory power for adjacent situations not included in the comparison.",
+              "content_digest": "3edc3e181a8086233d889f35cb98c9448875fe3fee915467f712ca3eb2886de1",
+              "position": 4,
+              "uid": "79af5e5f-4868-5e76-bcd5-3f8e1d6a0bd1"
+            },
+            {
+              "content": "Controlled evaluation environments do not reproduce time pressure, peer intervention, or voluntary termination conditions found in daily use.",
+              "content_digest": "e58a1bc6a423874525aca9f864b9b0dbd1e3ef9961410608c5837c88f1153d9b",
+              "position": 5,
+              "uid": "3a65fc8b-a5b4-50fc-a60e-fc6f3fc44547"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "5a169da8-f171-4b51-9c01-7c29182981d5"
+        },
+        {
+          "context_digest": "673626cf0c3650052d63b04173d43516860e2035d7038878998898bc5bebb2e3",
+          "context_name": "task-2/advisor2/evaluation",
+          "context_uid": "6e9f8ad5-a43d-5dfd-99a3-604f2757da0d",
+          "memories": [
+            {
+              "content": "Specify a single representative measure that will drive operational decisions to maintain, modify, or discontinue the deployed design.",
+              "content_digest": "dd9abb7bbbdf6846921a984789426b27a45df60ce38408422b6b0774835b44f8",
+              "position": 0,
+              "uid": "f27576c7-6f53-5412-901c-19df7e1d5e2e"
+            },
+            {
+              "content": "The HCI review panel verifies whether operational decisions can be made based on the declared primary measure.",
+              "content_digest": "1d88ce414bdbfcf9565c712f8f0d72378569d723c0c5b5c6007dc18a96f6378f",
+              "position": 1,
+              "uid": "8608bdf3-49d7-54d0-a2fb-c883c24e40ef"
+            },
+            {
+              "content": "Establish decision thresholds indicating at what levels key metrics trigger maintaining, modifying, or discontinuing the design.",
+              "content_digest": "866bad632421bfd3487fba69b855ccb36aeb9e31c6208b339db22301bdd3fc28",
+              "position": 2,
+              "uid": "b06bb706-f911-5767-8e27-b64c74d0e592"
+            },
+            {
+              "content": "Evaluate whether reducing workload for one role creates new tasks for other roles through the proposed design changes.",
+              "content_digest": "6b38b84cdc2a78f61f3163cccd787dec39167596f4f720788ec4c930f698fa9f",
+              "position": 3,
+              "uid": "473ec6e8-29f0-5c83-b36d-b7d32eeb25a3"
+            },
+            {
+              "content": "Distinguish usability from organizational adoption intent as separate evaluation outcomes.",
+              "content_digest": "7328bf54063078377068871ee3970709d9a8763204c2c3a08321e025e028868c",
+              "position": 4,
+              "uid": "935cf79f-3e67-567d-ab55-35e8fad7eb37"
+            },
+            {
+              "content": "Implementation fidelity indicates whether planned features and operational procedures were delivered in the field according to intended specifications.",
+              "content_digest": "b04d0bc0590dd77d3bc0bde581481992d57ad48c14517a2a1d63f996e51290b2",
+              "position": 5,
+              "uid": "bea0e97f-1217-507b-87a7-09ce85bae9fe"
+            },
+            {
+              "content": "Initial evaluations and long-term operation do not share identical measurement conditions due to differences in system exposure duration and frequency of repeated use.",
+              "content_digest": "49e90b293b90d173b11d1bb89e85f688c55cb923c2a19eb2058a539388327715",
+              "position": 6,
+              "uid": "dbe435ff-fe32-54fe-a2e6-7b46694ce151"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "04724e26-194f-41d7-a9b5-21343164c7d3"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "Both frames center evaluation on a declared primary measure while applying it at different lifecycle scopes: choosing among alternatives versus governing a deployed design. They also share caution about changing measurement conditions, then contribute complementary guidance on diagnosis, interpretation, generalization, thresholds, organizational effects, adoption, and field fidelity.",
+      "relations": [
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "5a169da8-f171-4b51-9c01-7c29182981d5",
+              "memory_uid": "a50f6ecb-de38-5769-8a6e-23b84a7eb35c"
+            },
+            {
+              "frame_uid": "04724e26-194f-41d7-a9b5-21343164c7d3",
+              "memory_uid": "f27576c7-6f53-5412-901c-19df7e1d5e2e"
+            }
+          ],
+          "reason": "The operational structure is shared, but the explicit object and lifecycle stage differ and must be preserved.",
+          "status": "RESOLVED",
+          "summary": "A single representative measure governs retain-or-change decisions, scoped respectively to compared alternatives and to an already deployed design.",
+          "uid": "fec8c295-5d4c-5092-9d72-324002fc6ebc"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "5a169da8-f171-4b51-9c01-7c29182981d5",
+              "memory_uid": "44c61beb-24a2-584a-ad96-e622690d8171"
+            },
+            {
+              "frame_uid": "04724e26-194f-41d7-a9b5-21343164c7d3",
+              "memory_uid": "8608bdf3-49d7-54d0-a2fb-c883c24e40ef"
+            }
+          ],
+          "reason": "Both describe panel validation of measure-based decisionability, while their explicit lifecycle scopes explain the wording difference.",
+          "status": "RESOLVED",
+          "summary": "An HCI review panel checks whether the declared primary measure supports decisions, with one frame addressing criteria for alternative comparison and the other addressing deployed-design operations.",
+          "uid": "e0fef5cc-4766-5085-8875-73dde1fe5f9a"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "5a169da8-f171-4b51-9c01-7c29182981d5",
+              "memory_uid": "3a65fc8b-a5b4-50fc-a60e-fc6f3fc44547"
+            },
+            {
+              "frame_uid": "04724e26-194f-41d7-a9b5-21343164c7d3",
+              "memory_uid": "dbe435ff-fe32-54fe-a2e6-7b46694ce151"
+            }
+          ],
+          "reason": "The claims jointly caution against assuming stable measurement conditions, identifying complementary contextual and exposure-related causes without contradiction.",
+          "status": "RESOLVED",
+          "summary": "Evaluation measurements may not transfer unchanged across controlled, everyday, initial, and long-term conditions.",
+          "uid": "7b4cd6a5-9761-5ef8-aabc-3bf3858e35b8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5a169da8-f171-4b51-9c01-7c29182981d5",
+              "memory_uid": "23202824-b576-5d77-b591-8b4cc0757632"
+            }
+          ],
+          "reason": "This is an independently useful diagnostic requirement supplied only by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Process measures should accompany the primary outcome measure to locate problematic interaction steps.",
+          "uid": "26122cc2-7df6-5f2c-a159-f6f4eb55fa1e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5a169da8-f171-4b51-9c01-7c29182981d5",
+              "memory_uid": "65ae88bf-8002-5ada-8590-eaf345b38863"
+            }
+          ],
+          "reason": "This is an independently useful interpretation rule supplied only by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Results should be interpreted as differences among alternatives rather than as binary success or failure of one prototype.",
+          "uid": "b08dc62b-be28-5a8e-85b5-ece00bf05bcf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5a169da8-f171-4b51-9c01-7c29182981d5",
+              "memory_uid": "79af5e5f-4868-5e76-bcd5-3f8e1d6a0bd1"
+            }
+          ],
+          "reason": "This is an independently useful generalization check supplied only by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Derived design principles should be tested against adjacent, unexamined situations for retained explanatory power.",
+          "uid": "90ab98d0-8f7f-5788-b291-ba799d2e881e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "04724e26-194f-41d7-a9b5-21343164c7d3",
+              "memory_uid": "b06bb706-f911-5767-8e27-b64c74d0e592"
+            }
+          ],
+          "reason": "This independently specifies decision cutoffs and appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Key metrics need explicit thresholds that trigger maintaining, modifying, or discontinuing a design.",
+          "uid": "0181924d-4ad1-5ffe-9ecc-8e0d545262bc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "04724e26-194f-41d7-a9b5-21343164c7d3",
+              "memory_uid": "473ec6e8-29f0-5c83-b36d-b7d32eeb25a3"
+            }
+          ],
+          "reason": "This independently addresses redistribution of work and appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Evaluation should determine whether workload reductions for one role create tasks for other roles.",
+          "uid": "71660c9a-acff-5557-8114-c5cbbd434657"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "04724e26-194f-41d7-a9b5-21343164c7d3",
+              "memory_uid": "935cf79f-3e67-567d-ab55-35e8fad7eb37"
+            }
+          ],
+          "reason": "This independently distinguishes outcome dimensions and appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Usability and organizational adoption intent should be treated as separate evaluation outcomes.",
+          "uid": "684c4e60-2a2f-5b60-9ddc-0eba272df379"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "04724e26-194f-41d7-a9b5-21343164c7d3",
+              "memory_uid": "bea0e97f-1217-507b-87a7-09ce85bae9fe"
+            }
+          ],
+          "reason": "This independently defines implementation fidelity and appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Field evaluation should assess whether planned features and procedures were delivered according to intended specifications.",
+          "uid": "cc76d415-62db-5be6-b29d-8162fb2cb609"
+        }
+      ],
+      "reports": {
+        "both": "Both recognize that evaluation conditions can diverge from later or everyday use, requiring contextual care when interpreting measurements.",
+        "compared_only": "The compared frame adds metric thresholds, cross-role workload effects, separate usability and adoption outcomes, and implementation-fidelity assessment.",
+        "differences": "The shared primary-measure policy is scoped differently: the reference governs comparison among design alternatives, while the compared frame governs operational decisions about a deployed design; panel review follows the same lifecycle distinction.",
+        "reference_only": "The reference adds process diagnostics, comparative interpretation, boundary-case testing of design principles, and specific limits of controlled environments."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "b4cea1be-4fa6-4aff-8252-0ea66cee3326"
+    },
+    "analysis_digest": "1f68e7ec0580dc1d26428baea29ad063147ecabb65f228b347f0082991b6f518",
+    "key": "6377c7e09d7d1439473777df7dcf89d253c488523227964ab8d318e6e446a051",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 31.166439583001193,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "6377c7e09d7d1439473777df7dcf89d253c488523227964ab8d318e6e446a051",
+  "created_at": "2026-08-13T18:20:20.734465Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/evaluation",
+  "pair_key": "a54d498c935f655af5513b78ff91afb118a5bfba0bd0f0f444fcfd43b7268760",
+  "provider_seconds": 31.166439583001193,
+  "right": "task-2/advisor2/evaluation",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

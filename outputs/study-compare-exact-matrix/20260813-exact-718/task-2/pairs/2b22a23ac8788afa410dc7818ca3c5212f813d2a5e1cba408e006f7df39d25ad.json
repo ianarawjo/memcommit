@@ -1,0 +1,310 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:18:12.800561+00:00",
+      "frames": [
+        {
+          "context_digest": "52dc61895a6d116135c474d4828efde944579b3a5949b6d64c07dd9853f60801",
+          "context_name": "task-2/advisor1/emphasis",
+          "context_uid": "6f253a9e-f504-53bf-a1d1-de2c4532171e",
+          "memories": [
+            {
+              "content": "Do not exceed two primary HCI contributions.",
+              "content_digest": "c605e418506d380237fb8ce4723bcc2fedebcd5da0d8dd78ef813e21aaf71a7a",
+              "position": 0,
+              "uid": "4a1de8df-6f03-5a3d-bbfa-7c1144d2ec5c"
+            },
+            {
+              "content": "Name each design or empirical contribution and present it in a single sentence.",
+              "content_digest": "286e33467b65e080f192172ae85d481a89c8e1b2d73e1089772eab30e0ae48fa",
+              "position": 1,
+              "uid": "b5b6a901-9047-5482-a0e1-d29e5f7171e8"
+            },
+            {
+              "content": "In studies recruiting community participants, emphasize the time burden associated with participation.",
+              "content_digest": "67a881933729e29cc0ce33f61f50af810f6f12ab5aa9598d453cf3a959a5977f",
+              "position": 2,
+              "uid": "e89de514-48a5-5e9b-96ca-f194c0ed79ab"
+            },
+            {
+              "content": "In studies recruiting community participants, emphasize the travel burden associated with participation.",
+              "content_digest": "3c4e20244bb88626ef1d2ebc89774e29ac85a9ce774a3faaa726131059b8ae33",
+              "position": 3,
+              "uid": "f7025cbb-4005-53c6-9031-e33f04a86b92"
+            },
+            {
+              "content": "HCI reviewers find it difficult to identify primary contributions when named design or empirical contributions exceed two.",
+              "content_digest": "70a2dccd85ce8ca18db239926980dfe13a20b90a9dffa6acae73e5034fce1fbc",
+              "position": 4,
+              "uid": "a42891a1-b674-5747-a77c-43699b0b9723"
+            },
+            {
+              "content": "Emphasize the core design decisions that formative evaluation will change rather than a polished product demonstration.",
+              "content_digest": "be5cad46c349a7c4b538f1a947d979ec25b0f6a34494e4d3a7bb9550508766d4",
+              "position": 5,
+              "uid": "9d7169d5-058f-5f7c-b1ac-30cabd8ba02e"
+            },
+            {
+              "content": "Emphasize design principles transferable to other similar interactions as the primary contribution, rather than the performance of a specific prototype.",
+              "content_digest": "a39c447e1b61b2204233800bafd380163fb5492ddd25cb730bbc6c6a95114e56",
+              "position": 6,
+              "uid": "f8931b4e-9656-548d-84a1-f2f2c3eb47b1"
+            },
+            {
+              "content": "Formative evaluation creates grounds for modification in subsequent iterations rather than definitively determining the superiority of design alternatives.",
+              "content_digest": "0cdd894b41de667b621d6c385d3373c799f4fea53898f65d324c26e86a1c8807",
+              "position": 7,
+              "uid": "9bf9e735-7598-5977-abe2-87b2c9c38a24"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "9bd662e1-9c2c-4d67-a2d7-09c3ca48855a"
+        },
+        {
+          "context_digest": "b598a4ff3268ef8c6c0d7bc5ff34af370074bcdd30d61bd3623fcdfb167f37d6",
+          "context_name": "task-2/advisor2/safety",
+          "context_uid": "4283d797-6a33-5f39-b7f6-f4dbd3264389",
+          "memories": [
+            {
+              "content": "List whom to notify and in what order if serious discomfort is reported during the study.",
+              "content_digest": "3453feb8597fb15c827f22297d58dc804fdc1d8080b9e93ba35b85a4425092b6",
+              "position": 0,
+              "uid": "ceb095a9-3068-55ea-a06f-d954c121e007"
+            },
+            {
+              "content": "Field staff rely on the pre-defined contact sequence when serious discomfort is reported.",
+              "content_digest": "ba38f8a5c993c810e19b9120f4492c3accf962c8b8fd7642539ac24f363099e0",
+              "position": 1,
+              "uid": "962d7645-02b3-5611-8415-4370794c10d4"
+            },
+            {
+              "content": "Define the thresholds for participant harm, operational disruption, and data anomalies at which deployment and data collection must cease.",
+              "content_digest": "7f7f124d266efd8255c4615ebc7eb375447047ed5a2b96327f28f8f17d048813",
+              "position": 2,
+              "uid": "a3270872-1901-5d24-8ef1-374833599bf9"
+            },
+            {
+              "content": "Establish procedures to restore existing systems and workflow states after suspending field deployment.",
+              "content_digest": "1a5f7636ec45e60df11db8b0d3763345c0bfaf9a92c1e5d581e6b36452c31208",
+              "position": 3,
+              "uid": "f6dd1368-0d90-5f1a-97d0-56594ce8f4b3"
+            },
+            {
+              "content": "The user's stop plan can be judged feasible only when it identifies who has authority to order recovery and who is responsible for carrying it out.",
+              "content_digest": "3fa05bd19fdeeb320a37cfb89ad853a868b64055f7b21eb182798b0119f6620c",
+              "position": 4,
+              "uid": "342e4697-873f-56a8-b4a4-896efe910144"
+            },
+            {
+              "content": "In organizations where error reporting is linked to individual performance evaluations, safety signal records may be separated from research decision logs, potentially breaking the traceability path for the same incident.",
+              "content_digest": "2bf13ff8ab1a778e8a793ede627b28d40798ae40d25c7a6d25eb5e2e79dd8e97",
+              "position": 5,
+              "uid": "6c4e9175-4590-5689-ae2b-678f0eb930b9"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "49c1182e-ebdf-4fee-a50b-9b7299662563"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate operational areas. The reference frame focuses on presenting HCI contributions, participant burdens, and formative-evaluation claims; the compared frame focuses on field-study escalation, stopping, recovery, and incident traceability. Neither frame supplies a scope-aligned counterpart to the other’s claims.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9bd662e1-9c2c-4d67-a2d7-09c3ca48855a",
+              "memory_uid": "4a1de8df-6f03-5a3d-bbfa-7c1144d2ec5c"
+            },
+            {
+              "frame_uid": "9bd662e1-9c2c-4d67-a2d7-09c3ca48855a",
+              "memory_uid": "a42891a1-b674-5747-a77c-43699b0b9723"
+            }
+          ],
+          "reason": "The reference frame alone provides both the contribution limit and its reviewer-centered rationale.",
+          "status": "RESOLVED",
+          "summary": "Primary HCI contributions should not exceed two because larger sets are difficult for reviewers to identify.",
+          "uid": "9c4bed1b-d1bb-5866-a2ea-e35f78e64471"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9bd662e1-9c2c-4d67-a2d7-09c3ca48855a",
+              "memory_uid": "b5b6a901-9047-5482-a0e1-d29e5f7171e8"
+            }
+          ],
+          "reason": "This presentation requirement appears only in the reference frame and is independent of the numerical limit.",
+          "status": "RESOLVED",
+          "summary": "Each design or empirical contribution should be named and stated in one sentence.",
+          "uid": "6c7c150b-9d6a-5cd0-999d-f5b17f2f0e3c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9bd662e1-9c2c-4d67-a2d7-09c3ca48855a",
+              "memory_uid": "e89de514-48a5-5e9b-96ca-f194c0ed79ab"
+            },
+            {
+              "frame_uid": "9bd662e1-9c2c-4d67-a2d7-09c3ca48855a",
+              "memory_uid": "f7025cbb-4005-53c6-9031-e33f04a86b92"
+            }
+          ],
+          "reason": "The reference frame splits one participation-burden requirement into its time and travel components; the compared frame has no corresponding claim.",
+          "status": "RESOLVED",
+          "summary": "Community-participant studies should emphasize both the time and travel burdens of participation.",
+          "uid": "aecbb30a-1d93-53c4-8fcf-039a52661527"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9bd662e1-9c2c-4d67-a2d7-09c3ca48855a",
+              "memory_uid": "9d7169d5-058f-5f7c-b1ac-30cabd8ba02e"
+            }
+          ],
+          "reason": "This reference-only claim governs how formative work is presented.",
+          "status": "RESOLVED",
+          "summary": "Formative work should emphasize design decisions subject to change rather than present a polished product demonstration.",
+          "uid": "bf9d5ac8-6e98-59ae-86da-301ca40bf88f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9bd662e1-9c2c-4d67-a2d7-09c3ca48855a",
+              "memory_uid": "f8931b4e-9656-548d-84a1-f2f2c3eb47b1"
+            }
+          ],
+          "reason": "This reference-only claim independently defines the preferred level of contribution.",
+          "status": "RESOLVED",
+          "summary": "Transferable design principles should be foregrounded over the performance of a particular prototype.",
+          "uid": "0e6af2f4-ef73-5c73-8de8-22037b6c4fa7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9bd662e1-9c2c-4d67-a2d7-09c3ca48855a",
+              "memory_uid": "9bf9e735-7598-5977-abe2-87b2c9c38a24"
+            }
+          ],
+          "reason": "This reference-only claim limits the conclusions attributed to formative evaluation.",
+          "status": "RESOLVED",
+          "summary": "Formative evaluation supports subsequent modification rather than definitive claims that one design alternative is superior.",
+          "uid": "8733104b-2a0e-57ee-a992-1fba4fe14cb4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "49c1182e-ebdf-4fee-a50b-9b7299662563",
+              "memory_uid": "ceb095a9-3068-55ea-a06f-d954c121e007"
+            },
+            {
+              "frame_uid": "49c1182e-ebdf-4fee-a50b-9b7299662563",
+              "memory_uid": "962d7645-02b3-5611-8415-4370794c10d4"
+            }
+          ],
+          "reason": "The compared frame alone states the escalation-sequence requirement and explains its operational use by field staff.",
+          "status": "RESOLVED",
+          "summary": "A predefined sequence should identify whom field staff notify, and in what order, when serious discomfort is reported.",
+          "uid": "aeb0e7c2-0b4f-5dc2-8b69-783a37e44728"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "49c1182e-ebdf-4fee-a50b-9b7299662563",
+              "memory_uid": "a3270872-1901-5d24-8ef1-374833599bf9"
+            }
+          ],
+          "reason": "This stop-threshold policy appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Explicit harm, disruption, and data-anomaly thresholds should determine when deployment and data collection cease.",
+          "uid": "55ee3772-5bdf-58ce-8248-786b27c81a03"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "49c1182e-ebdf-4fee-a50b-9b7299662563",
+              "memory_uid": "f6dd1368-0d90-5f1a-97d0-56594ce8f4b3"
+            }
+          ],
+          "reason": "This compared-only claim specifies the recovery procedure’s operational objective.",
+          "status": "RESOLVED",
+          "summary": "Procedures should restore existing systems and workflow states after field deployment is suspended.",
+          "uid": "e52e4de9-9674-50cf-b8fa-41b53e583686"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "49c1182e-ebdf-4fee-a50b-9b7299662563",
+              "memory_uid": "342e4697-873f-56a8-b4a4-896efe910144"
+            }
+          ],
+          "reason": "This compared-only claim independently specifies authority and responsibility for recovery.",
+          "status": "RESOLVED",
+          "summary": "A feasible stop plan must identify both who can order recovery and who will execute it.",
+          "uid": "4d436421-54af-5198-a8bb-103b8e8cb5a9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "49c1182e-ebdf-4fee-a50b-9b7299662563",
+              "memory_uid": "6c4e9175-4590-5689-ae2b-678f0eb930b9"
+            }
+          ],
+          "reason": "This conditional organizational risk appears only in the compared frame and has no scope-aligned counterpart.",
+          "status": "RESOLVED",
+          "summary": "Linking error reports to individual evaluations can separate safety records from research logs and break incident traceability.",
+          "uid": "ad98f801-bd90-51cc-932e-27854c2c81aa"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only guidance specifies discomfort escalation, deployment-stop thresholds, system recovery, recovery authority and responsibility, and a traceability risk created when safety records and research logs are separated.",
+        "differences": "",
+        "reference_only": "Reference-only guidance limits and formats HCI contributions, highlights community participants’ time and travel burdens, and frames formative evaluation around revisable design decisions, transferable principles, and appropriately limited conclusions."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "0851cde8-2245-4f05-9ae0-0237531ae5b2"
+    },
+    "analysis_digest": "be3e3e99e1c69ae069c20a4a3969c928f9687f9ba09729e181f9b711926d5138",
+    "key": "1c45b8709b94d17ec7b4df8f2ea28e54f6293bfaac7e236cb617de49cafda372",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 34.39365949999774,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "1c45b8709b94d17ec7b4df8f2ea28e54f6293bfaac7e236cb617de49cafda372",
+  "created_at": "2026-08-13T18:18:47.193902Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/emphasis",
+  "pair_key": "2b22a23ac8788afa410dc7818ca3c5212f813d2a5e1cba408e006f7df39d25ad",
+  "provider_seconds": 34.39365949999774,
+  "right": "task-2/advisor2/safety",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

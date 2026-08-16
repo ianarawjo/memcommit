@@ -1,0 +1,281 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:24:50.019009+00:00",
+      "frames": [
+        {
+          "context_digest": "3dd1208c3f947a57bc5f1d490a28c999913d43cad775b2b01e50c6059d6b660e",
+          "context_name": "task-2/advisor1/safety",
+          "context_uid": "cd6c1fab-786a-52ea-9437-9a4d209ba419",
+          "memories": [
+            {
+              "content": "Specify the order and recipients for reporting serious discomfort during the study.",
+              "content_digest": "1de38a3ec5fc3267ebeb35482a458d4aaf50d2aea44c6dba334f184e50ddddd2",
+              "position": 0,
+              "uid": "9d6f5228-d182-571a-83d2-6a67becb7736"
+            },
+            {
+              "content": "Field staff rely on a pre-defined contact sequence when serious discomfort is reported.",
+              "content_digest": "ed3a3b19d92a50c7dd324981b702bac31e0130fda38fe37150e500481ed11d84",
+              "position": 1,
+              "uid": "00ed485d-66c2-59ad-9c5b-9ae445412690"
+            },
+            {
+              "content": "Establish criteria for halting the use of a design alternative if recurring severe errors appear during formative evaluation.",
+              "content_digest": "dcca56df756b89f89a0a9dbf2bf45aee6480392b368c9cf3402223d3084b801b",
+              "position": 2,
+              "uid": "9c6e1561-f671-52cb-aa67-245cc4987ad4"
+            },
+            {
+              "content": "Do not include a design alternative halted for safety reasons in subsequent evaluation iterations without modification.",
+              "content_digest": "01668098161666622f4d7ed8298e3e63a06fa9b10a4cfd53b200d820f96f5c50",
+              "position": 3,
+              "uid": "2381ecf7-2b11-583d-91d9-0a5cfc279ba1"
+            },
+            {
+              "content": "Even in controlled environments, delayed prototype recovery procedures increase session interruption time and alter data collection conditions for the same task.",
+              "content_digest": "fd0f364ef66cfa7be937779ed4ce3ffb1a406bc227d09c26b288a751c5e0d427",
+              "position": 4,
+              "uid": "c5ce1b00-36d9-5cdd-a318-93b88ca0e322"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "1a6b243b-34a8-44c0-bb24-bf3d627b0bd1"
+        },
+        {
+          "context_digest": "4efbf2f6c096022137cee2c075c75219bb4fd0f441579901b8445bb2d92101f5",
+          "context_name": "task-2/advisor2/budget",
+          "context_uid": "ae02c2b2-49d3-5c30-b686-81ea17a8a87e",
+          "memories": [
+            {
+              "content": "Keep the main text to the total and major categories, and place quantities, unit rates, and assumptions in one compact budget table or appendix.",
+              "content_digest": "2e0d76a9c09d14facdf93e8b82cb1c4f583b8a6063b74552f2c23b7d37224e9c",
+              "position": 0,
+              "uid": "d614b55d-d9f6-5347-8d02-2d219d621a09"
+            },
+            {
+              "content": "Give each cost category, quantity, unit rate, and subtotal a stable row in the separate budget table.",
+              "content_digest": "ecd8aa50fc469bb763f36784d140b871b82a283b39f30f46e9e166776321c602",
+              "position": 1,
+              "uid": "24500129-4b07-564f-ba67-39e40d7d7860"
+            },
+            {
+              "content": "Put the estimate basis in a dedicated table column so one assumption can be checked or revised without rewriting the narrative.",
+              "content_digest": "6ed604ab2ca300f215d13f18cb5344e9322635ad047ce36c08242765e7fb09f4",
+              "position": 2,
+              "uid": "07bad409-af9c-512a-b829-7ceb28273f91"
+            },
+            {
+              "content": "Readers can verify arithmetic and compare categories faster in a consistent table than in amounts distributed across prose.",
+              "content_digest": "1dc966a0ade3af3bc636cb99d456edbdb918c2a23efd4a5792db9f8ede061195",
+              "position": 3,
+              "uid": "abf6d361-c2eb-512f-87e0-f3af9c5eb677"
+            },
+            {
+              "content": "Revise one table row and its subtotal when an estimate changes instead of repeating the new amount across several prose paragraphs.",
+              "content_digest": "dcd7d010f7d2c1898fffe71ccc7a0067233dcbcf66fe4b429043b1900d097f84",
+              "position": 4,
+              "uid": "473cf3ca-9832-5d9c-97df-974f1d9b0d1b"
+            },
+            {
+              "content": "Keep detailed arithmetic out of the main argument when readers can reach the complete table from a clear reference.",
+              "content_digest": "940a8cdee63c326d9c9be89cc07e7f223f239e3537113d32c098f711bd816cf7",
+              "position": 5,
+              "uid": "675956de-2c61-53e1-bb89-9b49d92558ba"
+            },
+            {
+              "content": "The user tends to interrupt the argument with long cost enumerations when no separate budget table is available.",
+              "content_digest": "2c0715ec3cfa247a35c3acc854b0716dca764619050aa635c0c242a5b56aa2f1",
+              "position": 6,
+              "uid": "f4371f72-f222-5066-b2f4-0a6be5d6865e"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "f91f67e3-71c9-4d25-99ec-6600ae300159"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address unrelated operational domains. The reference covers safety escalation, evaluation stopping rules, and prototype-recovery effects, while the compared frame covers budget presentation, table structure, maintainability, verification, and the effects of lacking a separate table.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1a6b243b-34a8-44c0-bb24-bf3d627b0bd1",
+              "memory_uid": "9d6f5228-d182-571a-83d2-6a67becb7736"
+            },
+            {
+              "frame_uid": "1a6b243b-34a8-44c0-bb24-bf3d627b0bd1",
+              "memory_uid": "00ed485d-66c2-59ad-9c5b-9ae445412690"
+            }
+          ],
+          "reason": "Both reference memories express one one-sided operational claim about defining and using an escalation contact sequence; the compared frame contains no materially related policy.",
+          "status": "RESOLVED",
+          "summary": "Serious discomfort reports follow a predefined sequence of recipients that field staff need specified.",
+          "uid": "047a3cf6-6cc9-500b-b446-e3cdc208601f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1a6b243b-34a8-44c0-bb24-bf3d627b0bd1",
+              "memory_uid": "9c6e1561-f671-52cb-aa67-245cc4987ad4"
+            }
+          ],
+          "reason": "This is an independently useful one-sided stopping-rule requirement with no materially related claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Formative evaluation needs criteria for halting a design alternative when severe errors recur.",
+          "uid": "e56514e2-ac5e-5974-9060-dff932581a98"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1a6b243b-34a8-44c0-bb24-bf3d627b0bd1",
+              "memory_uid": "2381ecf7-2b11-583d-91d9-0a5cfc279ba1"
+            }
+          ],
+          "reason": "This independently governs reuse after a safety halt and has no materially related claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A design alternative halted for safety reasons must be modified before later evaluation.",
+          "uid": "1e6ba010-3ffd-5926-ad15-cd2879632863"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1a6b243b-34a8-44c0-bb24-bf3d627b0bd1",
+              "memory_uid": "c5ce1b00-36d9-5cdd-a318-93b88ca0e322"
+            }
+          ],
+          "reason": "This is an independently useful one-sided observation about session operations and measurement conditions, absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Delayed prototype recovery increases interruptions and changes data-collection conditions even in controlled environments.",
+          "uid": "0e5746f8-0e0a-54f7-a931-fc85c1fd9c16"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f91f67e3-71c9-4d25-99ec-6600ae300159",
+              "memory_uid": "d614b55d-d9f6-5347-8d02-2d219d621a09"
+            },
+            {
+              "frame_uid": "f91f67e3-71c9-4d25-99ec-6600ae300159",
+              "memory_uid": "675956de-2c61-53e1-bb89-9b49d92558ba"
+            }
+          ],
+          "reason": "Both compared memories express one presentation policy separating detailed calculations from the main argument while preserving access; the reference frame has no materially related claim.",
+          "status": "RESOLVED",
+          "summary": "Main prose should retain totals and major categories while detailed arithmetic remains in an accessible compact budget table or appendix.",
+          "uid": "389bda5b-04ed-598f-8e50-4492dac2df90"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f91f67e3-71c9-4d25-99ec-6600ae300159",
+              "memory_uid": "24500129-4b07-564f-ba67-39e40d7d7860"
+            }
+          ],
+          "reason": "This independently specifies the row structure of a one-sided budget-table design and has no materially related reference claim.",
+          "status": "RESOLVED",
+          "summary": "Each cost category, quantity, unit rate, and subtotal should occupy a stable row in the budget table.",
+          "uid": "e3864639-916e-56ac-897e-8c1021bd25b2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f91f67e3-71c9-4d25-99ec-6600ae300159",
+              "memory_uid": "07bad409-af9c-512a-b829-7ceb28273f91"
+            }
+          ],
+          "reason": "This independently specifies how estimate bases are represented and maintained, with no materially related reference claim.",
+          "status": "RESOLVED",
+          "summary": "Estimate assumptions should occupy a dedicated table column for isolated checking and revision.",
+          "uid": "a3b31c86-dcb6-5252-97dd-f6f1699e6c7d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f91f67e3-71c9-4d25-99ec-6600ae300159",
+              "memory_uid": "abf6d361-c2eb-512f-87e0-f3af9c5eb677"
+            }
+          ],
+          "reason": "This is a one-sided rationale for tabular presentation and has no materially related reference claim.",
+          "status": "RESOLVED",
+          "summary": "A consistent budget table lets readers verify arithmetic and compare categories faster than dispersed prose.",
+          "uid": "64f6cda1-d401-5fb5-9f5c-a2d9183c925f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f91f67e3-71c9-4d25-99ec-6600ae300159",
+              "memory_uid": "473cf3ca-9832-5d9c-97df-974f1d9b0d1b"
+            }
+          ],
+          "reason": "This independently defines an estimate-maintenance practice and has no materially related reference claim.",
+          "status": "RESOLVED",
+          "summary": "When an estimate changes, its table row and subtotal should be revised instead of repeating updates across prose.",
+          "uid": "23b64227-b5ff-533c-bf62-9d94dfab0d7e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f91f67e3-71c9-4d25-99ec-6600ae300159",
+              "memory_uid": "f4371f72-f222-5066-b2f4-0a6be5d6865e"
+            }
+          ],
+          "reason": "This is an independently useful one-sided behavioral observation about the consequence of missing table support, with no materially related reference claim.",
+          "status": "RESOLVED",
+          "summary": "Without a separate budget table, the user tends to interrupt the argument with lengthy cost enumerations.",
+          "uid": "016549cf-9ba0-5c06-9ee5-b5a6b348c349"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Budget content separates detail from the argument, structures estimates for checking and revision, explains table benefits, and notes that missing tables encourage disruptive cost enumerations.",
+        "differences": "",
+        "reference_only": "Safety content defines discomfort escalation, stopping and reuse controls for unsafe alternatives, and the data-collection impact of delayed prototype recovery."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "8993c0b5-9562-462a-9d43-cd70453cdfbf"
+    },
+    "analysis_digest": "3228ca2c4e6ac01e3674cb682425ea5215c3958a2489933fb1c544768fdf2cdd",
+    "key": "d901fa2724e96c48be1224559e8bea1eace8a0e2e12e3b036abd093d2117669b",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 26.65397029200176,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "d901fa2724e96c48be1224559e8bea1eace8a0e2e12e3b036abd093d2117669b",
+  "created_at": "2026-08-13T18:25:16.672235Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/safety",
+  "pair_key": "d950922d811591ea6545428e37bfa8a7bf6a505f140ab9719beaecdde136944c",
+  "provider_seconds": 26.65397029200176,
+  "right": "task-2/advisor2/budget",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

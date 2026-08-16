@@ -1,0 +1,379 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:42:13.223788+00:00",
+      "frames": [
+        {
+          "context_digest": "58f58090449931225a941a4219f3fce7ebcf23bbabc0e0aa93a8733d4ba32701",
+          "context_name": "task-3/local/personal-memory/2024/07",
+          "context_uid": "8747b4f6-d17c-5b02-83f4-fc3af73e2da0",
+          "memories": [
+            {
+              "content": "The user updated the utility account for their residence in July 2024.",
+              "content_digest": "89c6a8e8dd7ad799b9ef4cb2b10963ce0b9ad55e713716d9729f903e76c0f71a",
+              "position": 0,
+              "uid": "65a332a2-2707-55f8-b7a6-a7378e6fbb7a"
+            },
+            {
+              "content": "After putting a paper bill in a drawer, the user checked it one day after the payment date.",
+              "content_digest": "474d42322de3190caee3e4feeb831bcb6a7b57e58427667d74be084ee9c64257",
+              "position": 1,
+              "uid": "fb94e1fd-9b3d-567a-81d8-d7a0ee90e04e"
+            },
+            {
+              "content": "In the month after receiving an electronic billing alert, the user paid two days before the deadline.",
+              "content_digest": "c16cf32e0018eb1cdf94e3070036d7fb93b0ccc8adb633a057642ff41284eaa0",
+              "position": 2,
+              "uid": "7d8db31a-c330-5852-9d7c-c9da7f98d899"
+            },
+            {
+              "content": "The user saw a water-inspection notice late and started washing dishes during the scheduled shutoff.",
+              "content_digest": "d5bea20cc35a46502ba919c52bee7519453346789d4bb881c82a9c08e6840cb0",
+              "position": 3,
+              "uid": "008dd110-feb2-5b4b-b602-bb3e23475a95"
+            },
+            {
+              "content": "After transferring a management-office notice to their phone calendar, the user did not miss the inspection time.",
+              "content_digest": "ce2c06404fcb8988b61da98f2ddd58d3db6506ff74aa1c7dfd43f841fa6fb25d",
+              "position": 4,
+              "uid": "a03ed01a-3d15-5eaf-9415-529705fd1245"
+            },
+            {
+              "content": "During a boiler technician's visit, the user had not cleared boxes from the entrance in advance and had to rearrange the passage.",
+              "content_digest": "39f4ca86667c0622dce2b6fee2b04df73131bf9d98e81478f1fa818b5dfe70c2",
+              "position": 5,
+              "uid": "2fb4b0bd-1257-5e50-881a-7f312940e1c5"
+            },
+            {
+              "content": "The user cleared the entrance the day before the next visit so the inspection could begin immediately.",
+              "content_digest": "e99fb029e3ca864e4f293358a85f33d73f4d7d2b9fda7dcd437ffdf183350666",
+              "position": 6,
+              "uid": "d05286e8-f183-5f4a-99d8-3dcca1aeaa09"
+            },
+            {
+              "content": "The building manager expects that a one-day advance visit notice gives a resident enough time to prepare the work area.",
+              "content_digest": "f992e380bfa87fa04c9f7dde8eceee69eb6b0aa3ad79c180d9023dafd7dd2abd",
+              "position": 7,
+              "uid": "44d28aa3-1aa4-5276-b545-86ee2cb17078"
+            },
+            {
+              "content": "Confirm the user's available time before finalizing a service visit to the residence.",
+              "content_digest": "dee4efa145a0f8b25c47a1c6855c02feee2de292e78b2e3790763796981db1e5",
+              "position": 8,
+              "uid": "77f77450-ab10-5469-8e2f-5445060926bc"
+            },
+            {
+              "content": "The local agent can compare payment records with notice times but cannot verify whether a residential service problem was resolved.",
+              "content_digest": "09e052010507ce17344888df5171f58996245cceb9012e160d540f030e7ba98a",
+              "position": 9,
+              "uid": "fd7f98b4-d5b9-5196-ad5e-c4356681ecf4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "ae6928f3-d06d-4318-9aef-c1ba8c7e4814"
+        },
+        {
+          "context_digest": "d28031209c5edc768a592166e26351dd5bce0c7568d379fcaceab173450041c8",
+          "context_name": "task-3/local/personal-memory/2026/02",
+          "context_uid": "7ffcbc10-1703-54b0-9545-99742b51d333",
+          "memories": [
+            {
+              "content": "The user keeps basic repair tools in a box beneath the sink.",
+              "content_digest": "c2a23bace63735c502081b19682a8ceb3e37156b9aadd6f7739e2005c20469d6",
+              "position": 0,
+              "uid": "7d3daf76-a21e-5117-a534-6175ab2d2861"
+            },
+            {
+              "content": "On a day the faucet leaked, the user placed only a towel beneath it, and the floor became wet as well.",
+              "content_digest": "ad6baa7e1848e4e61bdaf22bc5c8665122330b5c70c8ae192216abbba17c6134",
+              "position": 1,
+              "uid": "70a6d9f5-180f-5174-b247-690e10baa23e"
+            },
+            {
+              "content": "After sending a photo to building management, the user finalized the time for a repair visit.",
+              "content_digest": "82b36c7a95e51a0dfa32768c2a437d509b75c0f93bc51a99a636f2c9739a20da",
+              "position": 2,
+              "uid": "9fcd922c-147c-517b-82b3-180fdfb13f33"
+            },
+            {
+              "content": "Before the technician's visit, the user emptied the area beneath the sink so work could begin immediately.",
+              "content_digest": "dbc3b48e5bc4b406dc17067dd93d92e845e3706f47c8706f9a5d5ef17bf64617",
+              "position": 3,
+              "uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5"
+            },
+            {
+              "content": "On a day the user wrote the visit time only in the calendar and turned off the reminder, they heard the doorbell late.",
+              "content_digest": "95fab6bcab815dd8bdd5fecb867f84c6d2f1a901771603b1dbf197cde3c1d19d",
+              "position": 4,
+              "uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65"
+            },
+            {
+              "content": "For the next visit, the user enabled a reminder 30 minutes beforehand and answered immediately at the entrance.",
+              "content_digest": "818783ff21b2d369935b9994c17b28f93f84ea7558dab9f2de20d0aad21f86a3",
+              "position": 5,
+              "uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a"
+            },
+            {
+              "content": "After the repair, the user called their maternal aunt to confirm that the spare key entrusted to her was still there.",
+              "content_digest": "ac01b9816dda2d6bf16f22b41157120b7ffdd75d19638f6313a88e1ce6e7a1f1",
+              "position": 6,
+              "uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441"
+            },
+            {
+              "content": "The user's maternal aunt considers it unsafe to hand the spare key to a repair technician without the user's explicit request.",
+              "content_digest": "f7c7c0306c81cc6de9f02aa1aed7d411db3f29757d024e7d5a1679b1ff308948",
+              "position": 7,
+              "uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd"
+            },
+            {
+              "content": "Obtain the user's reconfirmation before scheduling an external worker to enter the residential unit.",
+              "content_digest": "34382e40f4907bea82728787fdeb150e299d46a0079ae2847d4eda6d6d892d22",
+              "position": 8,
+              "uid": "4716a67b-8602-564c-9e89-85cd4ee158f9"
+            },
+            {
+              "content": "A multi-unit residential building's repair schedule may change because of emergency work or parts availability.",
+              "content_digest": "d701fdd1ffbf17ff0890c583b5bf39849e3c6e3cc296fde7e00d3d1ecc0ef196",
+              "position": 9,
+              "uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "9b374ccf-235c-4481-872c-da59f0a3a0c7"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "Both frames support confirming residential service access and preparing the relevant work area in advance. They also show condition-dependent outcomes from notices and reminders. Otherwise, the reference emphasizes billing, inspections, and agent limits, while the compared frame adds repair response, key custody, and schedule uncertainty.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ae6928f3-d06d-4318-9aef-c1ba8c7e4814",
+              "memory_uid": "65a332a2-2707-55f8-b7a6-a7378e6fbb7a"
+            }
+          ],
+          "reason": "This is independently useful reference-only account-history information with no operational counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The utility account was updated in July 2024.",
+          "uid": "1cb046ab-6e62-54d5-99b0-7e0e923b73d0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ae6928f3-d06d-4318-9aef-c1ba8c7e4814",
+              "memory_uid": "fb94e1fd-9b3d-567a-81d8-d7a0ee90e04e"
+            },
+            {
+              "frame_uid": "ae6928f3-d06d-4318-9aef-c1ba8c7e4814",
+              "memory_uid": "7d8db31a-c330-5852-9d7c-c9da7f98d899"
+            }
+          ],
+          "reason": "The reference memories jointly express one one-sided contrast between a paper bill checked after the payment date and an electronic alert followed by payment before the deadline.",
+          "status": "RESOLVED",
+          "summary": "Paper and electronic billing episodes produced different payment timing outcomes.",
+          "uid": "c97db66a-08a8-58cf-8a3c-d2e77e9cb28b"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "ae6928f3-d06d-4318-9aef-c1ba8c7e4814",
+              "memory_uid": "008dd110-feb2-5b4b-b602-bb3e23475a95"
+            },
+            {
+              "frame_uid": "ae6928f3-d06d-4318-9aef-c1ba8c7e4814",
+              "memory_uid": "a03ed01a-3d15-5eaf-9415-529705fd1245"
+            },
+            {
+              "frame_uid": "9b374ccf-235c-4481-872c-da59f0a3a0c7",
+              "memory_uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65"
+            },
+            {
+              "frame_uid": "9b374ccf-235c-4481-872c-da59f0a3a0c7",
+              "memory_uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a"
+            }
+          ],
+          "reason": "The explicit conditions must be preserved: a late-seen notice preceded a shutoff mistake, calendar transfer accompanied an on-time inspection, a disabled reminder accompanied a late response, and an enabled reminder accompanied an immediate response.",
+          "status": "RESOLVED",
+          "summary": "Responses to scheduled residential events varied with when notices were seen and how calendar reminders were configured.",
+          "uid": "329f918b-c5ca-5986-a433-20bd20ad9363"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "ae6928f3-d06d-4318-9aef-c1ba8c7e4814",
+              "memory_uid": "2fb4b0bd-1257-5e50-881a-7f312940e1c5"
+            },
+            {
+              "frame_uid": "ae6928f3-d06d-4318-9aef-c1ba8c7e4814",
+              "memory_uid": "d05286e8-f183-5f4a-99d8-3dcca1aeaa09"
+            },
+            {
+              "frame_uid": "9b374ccf-235c-4481-872c-da59f0a3a0c7",
+              "memory_uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5"
+            }
+          ],
+          "reason": "The entrance-clearing failure, later advance entrance clearing, and advance sink-area clearing consistently address the same preparation practice across service locations.",
+          "status": "RESOLVED",
+          "summary": "Preparing the relevant access or work area before a technician visit allows work to begin promptly.",
+          "uid": "0917f391-55b9-5a67-a214-898e3245a803"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ae6928f3-d06d-4318-9aef-c1ba8c7e4814",
+              "memory_uid": "44d28aa3-1aa4-5276-b545-86ee2cb17078"
+            }
+          ],
+          "reason": "This reference-only expectation about adequate notice lead time is independently useful and has no matching claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The building manager considers one day of advance notice sufficient for work-area preparation.",
+          "uid": "b846e55d-922d-5418-a50f-356aab9df459"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "ae6928f3-d06d-4318-9aef-c1ba8c7e4814",
+              "memory_uid": "77f77450-ab10-5469-8e2f-5445060926bc"
+            },
+            {
+              "frame_uid": "9b374ccf-235c-4481-872c-da59f0a3a0c7",
+              "memory_uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd"
+            },
+            {
+              "frame_uid": "9b374ccf-235c-4481-872c-da59f0a3a0c7",
+              "memory_uid": "4716a67b-8602-564c-9e89-85cd4ee158f9"
+            }
+          ],
+          "reason": "Availability confirmation, explicit permission before a technician receives a spare key, and reconfirmation before scheduling entry impose compatible user-confirmation safeguards on the same access decision.",
+          "status": "RESOLVED",
+          "summary": "User confirmation should precede finalizing a residential worker’s visit or access.",
+          "uid": "690b585f-c966-51ee-b6d3-390138a7705d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ae6928f3-d06d-4318-9aef-c1ba8c7e4814",
+              "memory_uid": "fd7f98b4-d5b9-5196-ad5e-c4356681ecf4"
+            }
+          ],
+          "reason": "This reference-only capability boundary is independently useful and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The local agent can compare payment and notice records but cannot verify service-problem resolution.",
+          "uid": "8e8f953c-f89c-530b-87f0-250ffb59b8ff"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9b374ccf-235c-4481-872c-da59f0a3a0c7",
+              "memory_uid": "7d3daf76-a21e-5117-a534-6175ab2d2861"
+            }
+          ],
+          "reason": "This compared-only fact concerns household tool availability and is independent of the other claims.",
+          "status": "RESOLVED",
+          "summary": "Basic repair tools are stored beneath the sink.",
+          "uid": "b04be1cd-02b2-5764-8ec8-762c30b0b106"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9b374ccf-235c-4481-872c-da59f0a3a0c7",
+              "memory_uid": "70a6d9f5-180f-5174-b247-690e10baa23e"
+            }
+          ],
+          "reason": "This compared-only incident provides independent information about inadequate leak containment.",
+          "status": "RESOLVED",
+          "summary": "Using only a towel beneath a leaking faucet did not prevent the floor from becoming wet.",
+          "uid": "513cf7bf-8933-56c1-acca-1dac4c23d526"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9b374ccf-235c-4481-872c-da59f0a3a0c7",
+              "memory_uid": "9fcd922c-147c-517b-82b3-180fdfb13f33"
+            }
+          ],
+          "reason": "This compared-only coordination sequence does not establish the confirmation safeguards described elsewhere and remains independently useful.",
+          "status": "RESOLVED",
+          "summary": "A repair-visit time was finalized after a photo was sent to building management.",
+          "uid": "2ba36c89-561b-53b7-8d09-27c55ff6f965"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9b374ccf-235c-4481-872c-da59f0a3a0c7",
+              "memory_uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441"
+            }
+          ],
+          "reason": "This compared-only post-repair custody check is distinct from the policy requiring permission before technician access.",
+          "status": "RESOLVED",
+          "summary": "After the repair, the user confirmed that the spare key remained with their maternal aunt.",
+          "uid": "5fb4e33c-a568-5940-8425-4142039f2162"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9b374ccf-235c-4481-872c-da59f0a3a0c7",
+              "memory_uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+            }
+          ],
+          "reason": "This compared-only scheduling uncertainty is independently useful and has no corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Emergency work or parts availability may change a multi-unit building’s repair schedule.",
+          "uid": "263a7ee0-65e3-530d-b984-a7e75e268684"
+        }
+      ],
+      "reports": {
+        "both": "Both support advance work-area preparation and direct user confirmation before finalizing a worker’s visit or access.",
+        "compared_only": "The compared frame uniquely covers repair tools, inadequate leak containment, photo-based coordination, spare-key checking, and repair-schedule variability.",
+        "differences": "Timely attention to notices, calendar transfer, and enabled reminders correspond with better readiness, while late notices or disabled reminders correspond with missed or delayed responses.",
+        "reference_only": "The reference uniquely covers utility-account changes, billing-channel payment timing, notice lead-time expectations, and limits on verifying service resolution."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "84336b3d-cec3-43c8-a78f-d9f3cfeef186"
+    },
+    "analysis_digest": "1157afe77a71c5e08e1b9d343d217168845c2561350d62311022cf9cb2d59bdb",
+    "key": "9f5b807720644f2ccf94f2b584f2d484f7cf11f791cfb88529d7ee6589877fcb",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 71.50276145899988,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "9f5b807720644f2ccf94f2b584f2d484f7cf11f791cfb88529d7ee6589877fcb",
+  "created_at": "2026-08-13T18:43:24.726419Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/07",
+  "pair_key": "5da24aa206db0720821b36b5bc8161e27025843f93226b06444d6e0a760b6c0b",
+  "provider_seconds": 71.50276145899988,
+  "right": "task-3/local/personal-memory/2026/02",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

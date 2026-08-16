@@ -1,0 +1,284 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:17:43.230523+00:00",
+      "frames": [
+        {
+          "context_digest": "52dc61895a6d116135c474d4828efde944579b3a5949b6d64c07dd9853f60801",
+          "context_name": "task-2/advisor1/emphasis",
+          "context_uid": "6f253a9e-f504-53bf-a1d1-de2c4532171e",
+          "memories": [
+            {
+              "content": "Do not exceed two primary HCI contributions.",
+              "content_digest": "c605e418506d380237fb8ce4723bcc2fedebcd5da0d8dd78ef813e21aaf71a7a",
+              "position": 0,
+              "uid": "4a1de8df-6f03-5a3d-bbfa-7c1144d2ec5c"
+            },
+            {
+              "content": "Name each design or empirical contribution and present it in a single sentence.",
+              "content_digest": "286e33467b65e080f192172ae85d481a89c8e1b2d73e1089772eab30e0ae48fa",
+              "position": 1,
+              "uid": "b5b6a901-9047-5482-a0e1-d29e5f7171e8"
+            },
+            {
+              "content": "In studies recruiting community participants, emphasize the time burden associated with participation.",
+              "content_digest": "67a881933729e29cc0ce33f61f50af810f6f12ab5aa9598d453cf3a959a5977f",
+              "position": 2,
+              "uid": "e89de514-48a5-5e9b-96ca-f194c0ed79ab"
+            },
+            {
+              "content": "In studies recruiting community participants, emphasize the travel burden associated with participation.",
+              "content_digest": "3c4e20244bb88626ef1d2ebc89774e29ac85a9ce774a3faaa726131059b8ae33",
+              "position": 3,
+              "uid": "f7025cbb-4005-53c6-9031-e33f04a86b92"
+            },
+            {
+              "content": "HCI reviewers find it difficult to identify primary contributions when named design or empirical contributions exceed two.",
+              "content_digest": "70a2dccd85ce8ca18db239926980dfe13a20b90a9dffa6acae73e5034fce1fbc",
+              "position": 4,
+              "uid": "a42891a1-b674-5747-a77c-43699b0b9723"
+            },
+            {
+              "content": "Emphasize the core design decisions that formative evaluation will change rather than a polished product demonstration.",
+              "content_digest": "be5cad46c349a7c4b538f1a947d979ec25b0f6a34494e4d3a7bb9550508766d4",
+              "position": 5,
+              "uid": "9d7169d5-058f-5f7c-b1ac-30cabd8ba02e"
+            },
+            {
+              "content": "Emphasize design principles transferable to other similar interactions as the primary contribution, rather than the performance of a specific prototype.",
+              "content_digest": "a39c447e1b61b2204233800bafd380163fb5492ddd25cb730bbc6c6a95114e56",
+              "position": 6,
+              "uid": "f8931b4e-9656-548d-84a1-f2f2c3eb47b1"
+            },
+            {
+              "content": "Formative evaluation creates grounds for modification in subsequent iterations rather than definitively determining the superiority of design alternatives.",
+              "content_digest": "0cdd894b41de667b621d6c385d3373c799f4fea53898f65d324c26e86a1c8807",
+              "position": 7,
+              "uid": "9bf9e735-7598-5977-abe2-87b2c9c38a24"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "85106ca2-46ba-4c7f-b999-8a5834b46a29"
+        },
+        {
+          "context_digest": "e70e4eaff26e4baf1b346a4ecd2b44ed9f9ccac9e205b7b82572dc8ef0e217c4",
+          "context_name": "task-2/advisor2/emphasis",
+          "context_uid": "398f9930-3a0f-5de0-a339-ceba7dd5d1c6",
+          "memories": [
+            {
+              "content": "Do not exceed two primary HCI contributions that readers must remember.",
+              "content_digest": "59786866cf953172c2697f09398356a861e8ea448093102c32c9149f16b2e5c5",
+              "position": 0,
+              "uid": "d59dc83b-ce6a-5ac7-ab64-e5436df1f945"
+            },
+            {
+              "content": "Present each design or operational contribution as a single named sentence.",
+              "content_digest": "e0de5a9f1c1ca585fe062d7e11f8d2536cbe5ec4eefc16da6f7a0b62c0247d45",
+              "position": 1,
+              "uid": "328de462-17a4-551f-9f74-cb3118519e45"
+            },
+            {
+              "content": "In studies recruiting organizational members, emphasize workflow constraints.",
+              "content_digest": "c46efadebd89f3d757993baea79a5ef1386bbf6b4769ae3704ae62102397fc3b",
+              "position": 2,
+              "uid": "eab1dac5-8b61-5793-a56f-c4e3e64af190"
+            },
+            {
+              "content": "In studies recruiting organizational members, emphasize manager approval constraints.",
+              "content_digest": "2387fb9f3ab907e671fc9dcc2e7f067a84bdf1f5713d8385a32e39eb1e14751d",
+              "position": 3,
+              "uid": "f90e616a-d5a4-5cc2-86e4-62534a1faf83"
+            },
+            {
+              "content": "HCI reviewers find it difficult to identify primary contributions when named design and operational contributions exceed two.",
+              "content_digest": "04e080bfdf7277d04f0efc1b1d6775d06cba88aab5ff78bfd430674b004722a5",
+              "position": 4,
+              "uid": "78a1c87a-6936-516c-b578-8e97dc2e91f4"
+            },
+            {
+              "content": "Highlight one primary field operational decision to be changed by evaluation results as the central claim.",
+              "content_digest": "9a6bda883e68a2553a1238114d5de2746dc220948aebc1c2965cbb435318fe9c",
+              "position": 5,
+              "uid": "7af2db41-9091-5452-9beb-8fd7b48b7872"
+            },
+            {
+              "content": "Specify prototype features unnecessary for reviewing the primary field problem as secondary scope.",
+              "content_digest": "419ed0b0bccf1af7b30e0351f5e87b9e37e469cfa567e684695ffe4b6d39178a",
+              "position": 6,
+              "uid": "2312f35d-c17d-5af3-b84f-d2e671d7663f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "a6e69365-a3ee-4e4e-957b-186cd82b8d54"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames align on limiting memorable HCI contributions and broadly favor problem-level framing over prototype detail. They differ systematically in contribution categories, participant settings, and whether evaluation centers design or field-operational decisions; only the reference adds a caution about formative conclusions.",
+      "relations": [
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            {
+              "frame_uid": "85106ca2-46ba-4c7f-b999-8a5834b46a29",
+              "memory_uid": "4a1de8df-6f03-5a3d-bbfa-7c1144d2ec5c"
+            },
+            {
+              "frame_uid": "a6e69365-a3ee-4e4e-957b-186cd82b8d54",
+              "memory_uid": "d59dc83b-ce6a-5ac7-ab64-e5436df1f945"
+            }
+          ],
+          "reason": "The added reader-memory phrasing does not alter the operational limit.",
+          "status": "RESOLVED",
+          "summary": "Both frames cap primary HCI contributions at two.",
+          "uid": "8c8d8a42-a33c-5af0-ab70-468554050024"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "85106ca2-46ba-4c7f-b999-8a5834b46a29",
+              "memory_uid": "b5b6a901-9047-5482-a0e1-d29e5f7171e8"
+            },
+            {
+              "frame_uid": "a6e69365-a3ee-4e4e-957b-186cd82b8d54",
+              "memory_uid": "328de462-17a4-551f-9f74-cb3118519e45"
+            }
+          ],
+          "reason": "The reference covers design or empirical contributions, while the compared frame covers design or operational contributions; that explicit category distinction must be preserved.",
+          "status": "RESOLVED",
+          "summary": "Both require each contribution to be named and expressed in one sentence, with different contribution categories.",
+          "uid": "e77d9c77-3802-510f-8800-6147a37e7310"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "85106ca2-46ba-4c7f-b999-8a5834b46a29",
+              "memory_uid": "e89de514-48a5-5e9b-96ca-f194c0ed79ab"
+            },
+            {
+              "frame_uid": "85106ca2-46ba-4c7f-b999-8a5834b46a29",
+              "memory_uid": "f7025cbb-4005-53c6-9031-e33f04a86b92"
+            },
+            {
+              "frame_uid": "a6e69365-a3ee-4e4e-957b-186cd82b8d54",
+              "memory_uid": "eab1dac5-8b61-5793-a56f-c4e3e64af190"
+            },
+            {
+              "frame_uid": "a6e69365-a3ee-4e4e-957b-186cd82b8d54",
+              "memory_uid": "f90e616a-d5a4-5cc2-86e4-62534a1faf83"
+            }
+          ],
+          "reason": "Community recruitment calls for attention to time and travel burdens, whereas organizational recruitment calls for attention to workflow and manager-approval constraints.",
+          "status": "RESOLVED",
+          "summary": "Both identify participation constraints that should be emphasized, conditioned on the recruited population.",
+          "uid": "88dd938c-a931-5337-a3a2-f9dab5bd8d77"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "85106ca2-46ba-4c7f-b999-8a5834b46a29",
+              "memory_uid": "a42891a1-b674-5747-a77c-43699b0b9723"
+            },
+            {
+              "frame_uid": "a6e69365-a3ee-4e4e-957b-186cd82b8d54",
+              "memory_uid": "78a1c87a-6936-516c-b578-8e97dc2e91f4"
+            }
+          ],
+          "reason": "The reference rationale concerns design or empirical contributions, while the compared rationale concerns design and operational contributions.",
+          "status": "RESOLVED",
+          "summary": "Both state that reviewers struggle to identify primary contributions when more than two named contributions are presented, with different contribution categories.",
+          "uid": "745094cb-66da-5976-b56d-3548999fb588"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "85106ca2-46ba-4c7f-b999-8a5834b46a29",
+              "memory_uid": "9d7169d5-058f-5f7c-b1ac-30cabd8ba02e"
+            },
+            {
+              "frame_uid": "a6e69365-a3ee-4e4e-957b-186cd82b8d54",
+              "memory_uid": "7af2db41-9091-5452-9beb-8fd7b48b7872"
+            }
+          ],
+          "reason": "The reference addresses core design decisions in formative evaluation, while the compared frame specifies one primary field-operational decision; the decision domain and emphasis must remain explicit.",
+          "status": "RESOLVED",
+          "summary": "Both center evaluation framing on decisions that its results may change rather than on product presentation.",
+          "uid": "047f5a60-c957-59b9-93f3-68db0931d4d0"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "85106ca2-46ba-4c7f-b999-8a5834b46a29",
+              "memory_uid": "f8931b4e-9656-548d-84a1-f2f2c3eb47b1"
+            },
+            {
+              "frame_uid": "a6e69365-a3ee-4e4e-957b-186cd82b8d54",
+              "memory_uid": "2312f35d-c17d-5af3-b84f-d2e671d7663f"
+            }
+          ],
+          "reason": "Transferable design principles can be foregrounded while prototype performance and features unnecessary to reviewing the primary field problem remain secondary.",
+          "status": "RESOLVED",
+          "summary": "Both subordinate prototype-specific material to a broader contribution or field problem.",
+          "uid": "6295bf99-2f4f-547b-a6f6-1b17d171032d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "85106ca2-46ba-4c7f-b999-8a5834b46a29",
+              "memory_uid": "9bf9e735-7598-5977-abe2-87b2c9c38a24"
+            }
+          ],
+          "reason": "This independently useful limitation on evaluation inference appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Formative evaluation supplies grounds for subsequent modification rather than definitively establishing the superiority of design alternatives.",
+          "uid": "40ffb5fa-5fbd-5bc4-86a8-3a64b3bca96f"
+        }
+      ],
+      "reports": {
+        "both": "Both limit primary HCI contributions and prioritize broader contribution or problem framing over prototype-specific detail.",
+        "compared_only": "",
+        "differences": "Contribution naming and reviewer rationale distinguish empirical from operational work; recruitment concerns vary between community and organizational participants, while evaluation targets design versus field-operational decisions.",
+        "reference_only": "The reference alone states that formative evaluation supports later modification rather than definitive superiority judgments."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "43288569-a2f5-45f3-b72d-f78b43b0fb35"
+    },
+    "analysis_digest": "04cde4388a6eaa108753d08ad4cc8952baf7f79f3348d80c815e6463860dcbab",
+    "key": "83664982567c093b98b89763d62a44f4be628b024b43a00201fbc147dc2c14c4",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 47.940328833999956,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "83664982567c093b98b89763d62a44f4be628b024b43a00201fbc147dc2c14c4",
+  "created_at": "2026-08-13T18:18:31.170381Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/emphasis",
+  "pair_key": "ad41091be1fe6d01e0d06e3398591f69655e7aa7e096676133e9a05b40f9995c",
+  "provider_seconds": 47.940328833999956,
+  "right": "task-2/advisor2/emphasis",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

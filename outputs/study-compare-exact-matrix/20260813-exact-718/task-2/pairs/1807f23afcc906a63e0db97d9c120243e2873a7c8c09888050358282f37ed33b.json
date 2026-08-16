@@ -1,0 +1,350 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:15:37.101453+00:00",
+      "frames": [
+        {
+          "context_digest": "dd57f5a09e0271c33b7dccbe4935bf1a8d5be14dc7c618906e8af51709bbea89",
+          "context_name": "task-2/advisor1/claim-evidence",
+          "context_uid": "b0c4b50c-f70b-5b0c-a1eb-0fd63e0531bf",
+          "memories": [
+            {
+              "content": "Attach adjacent evidence or citations to verifiable claims about user behavior or technology effects.",
+              "content_digest": "3a856fbbda53df425705aaaff741896f5f5460a8feeb8fb8a73c03e592a80c62",
+              "position": 0,
+              "uid": "06f6c673-ea0c-5657-89d2-3f8711097cd7"
+            },
+            {
+              "content": "Distinguish between results observed in the pilot and expectations to be confirmed in the main user study using different expressions.",
+              "content_digest": "9117c0fd3d9cb713f035f9ae95118ae785af5fcf8909485b097f128ef8e12586",
+              "position": 1,
+              "uid": "58991ce7-d394-5087-b14f-0b014b0ec6ad"
+            },
+            {
+              "content": "Do not use verbs that imply proving causation if the design does not support causal inference.",
+              "content_digest": "5ee12e489ec1fd1af46a49cb05cc9447ed3fbf33ad7b4d8ce52ea700926ea29c",
+              "position": 2,
+              "uid": "f5adf029-a750-5a3a-8eb8-d68e43bb5c13"
+            },
+            {
+              "content": "For topics with sufficient HCI research evidence, prioritize citing recent comprehensive studies over listing individual cases.",
+              "content_digest": "2519cd2fca364ac6eef8577892b03d0a83509f6032874e30c30f36fb1e3dde5a",
+              "position": 3,
+              "uid": "b2a7ff8a-dfca-5857-8733-fe03cbd943ec"
+            },
+            {
+              "content": "Explain how each design choice was derived to address specific user needs.",
+              "content_digest": "fee6e06dfe0489b55ae0d75fe4e7b62facf78052a3136b7120d065e100f3b567",
+              "position": 4,
+              "uid": "1f0c95f4-69bb-5764-a358-d428ff7019d2"
+            },
+            {
+              "content": "Support each core claim with evidence that directly examined it rather than with indirect summaries.",
+              "content_digest": "372e0abff6997b041103fd71719c55549c2e3e0a3a5cdf2d4a1a24ec6538cbff",
+              "position": 5,
+              "uid": "cd475113-5354-5f80-b063-7628e4359afc"
+            },
+            {
+              "content": "Reviewers first check the direct evidence placed closest to the core claim.",
+              "content_digest": "61baa516115e1a5bf4f377358ead7c45bab5e666208b9cd6cd87426007493a49",
+              "position": 6,
+              "uid": "86fe1306-7650-58cc-a3df-79870c61784d"
+            },
+            {
+              "content": "Connect the proposed conceptual design principle to at least one observable user behavior.",
+              "content_digest": "d6c6f9dddd0cd99694df2f232e8a71957d53f77e8d10faf324927af679312acc",
+              "position": 7,
+              "uid": "5d022e45-09c0-515e-98f1-68b2aec686bc"
+            },
+            {
+              "content": "Identify which design judgment—retain, modify, or discard—each piece of evidence from formative evaluation supports.",
+              "content_digest": "a507db0052a4d9196c774a5df74c60fe9225bef49c5d9aece328bfb8dca48035",
+              "position": 8,
+              "uid": "9939e9e8-d97d-57db-974a-750566ca9e2b"
+            },
+            {
+              "content": "Results from controlled formative studies do not directly prove effects in actual long-term use.",
+              "content_digest": "aeeca3701d4ba297e928efc2034c474a2ae78101e440d515a57901e6814321a0",
+              "position": 9,
+              "uid": "41060e8e-95ff-58c1-8b71-36a501a9bd23"
+            },
+            {
+              "content": "The user can have an explanation approved as a conceptual contribution only if it is falsifiable with observable data.",
+              "content_digest": "171f4eeae9df2a0a739f90ed451a34a092093b9f6b0db7c6af04012bea734c5f",
+              "position": 10,
+              "uid": "ec54ce10-07db-5ae3-94a5-8f3621fed4a9"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "97960968-8458-4127-89fc-2e4e0c945648"
+        },
+        {
+          "context_digest": "673626cf0c3650052d63b04173d43516860e2035d7038878998898bc5bebb2e3",
+          "context_name": "task-2/advisor2/evaluation",
+          "context_uid": "6e9f8ad5-a43d-5dfd-99a3-604f2757da0d",
+          "memories": [
+            {
+              "content": "Specify a single representative measure that will drive operational decisions to maintain, modify, or discontinue the deployed design.",
+              "content_digest": "dd9abb7bbbdf6846921a984789426b27a45df60ce38408422b6b0774835b44f8",
+              "position": 0,
+              "uid": "f27576c7-6f53-5412-901c-19df7e1d5e2e"
+            },
+            {
+              "content": "The HCI review panel verifies whether operational decisions can be made based on the declared primary measure.",
+              "content_digest": "1d88ce414bdbfcf9565c712f8f0d72378569d723c0c5b5c6007dc18a96f6378f",
+              "position": 1,
+              "uid": "8608bdf3-49d7-54d0-a2fb-c883c24e40ef"
+            },
+            {
+              "content": "Establish decision thresholds indicating at what levels key metrics trigger maintaining, modifying, or discontinuing the design.",
+              "content_digest": "866bad632421bfd3487fba69b855ccb36aeb9e31c6208b339db22301bdd3fc28",
+              "position": 2,
+              "uid": "b06bb706-f911-5767-8e27-b64c74d0e592"
+            },
+            {
+              "content": "Evaluate whether reducing workload for one role creates new tasks for other roles through the proposed design changes.",
+              "content_digest": "6b38b84cdc2a78f61f3163cccd787dec39167596f4f720788ec4c930f698fa9f",
+              "position": 3,
+              "uid": "473ec6e8-29f0-5c83-b36d-b7d32eeb25a3"
+            },
+            {
+              "content": "Distinguish usability from organizational adoption intent as separate evaluation outcomes.",
+              "content_digest": "7328bf54063078377068871ee3970709d9a8763204c2c3a08321e025e028868c",
+              "position": 4,
+              "uid": "935cf79f-3e67-567d-ab55-35e8fad7eb37"
+            },
+            {
+              "content": "Implementation fidelity indicates whether planned features and operational procedures were delivered in the field according to intended specifications.",
+              "content_digest": "b04d0bc0590dd77d3bc0bde581481992d57ad48c14517a2a1d63f996e51290b2",
+              "position": 5,
+              "uid": "bea0e97f-1217-507b-87a7-09ce85bae9fe"
+            },
+            {
+              "content": "Initial evaluations and long-term operation do not share identical measurement conditions due to differences in system exposure duration and frequency of repeated use.",
+              "content_digest": "49e90b293b90d173b11d1bb89e85f688c55cb923c2a19eb2058a539388327715",
+              "position": 6,
+              "uid": "dbe435ff-fe32-54fe-a2e6-7b46694ce151"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "d800f3b7-6cc9-4597-8cbd-e4753531193f"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address complementary evaluation concerns. Both distinguish early evidence from later operational use and connect evidence to design decisions, but at different stages. The reference emphasizes evidentiary rigor and conceptual traceability; the compared frame adds deployment measurement, organizational effects, outcome separation, and implementation fidelity.",
+      "relations": [
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "97960968-8458-4127-89fc-2e4e0c945648",
+              "memory_uid": "58991ce7-d394-5087-b14f-0b014b0ec6ad"
+            },
+            {
+              "frame_uid": "97960968-8458-4127-89fc-2e4e0c945648",
+              "memory_uid": "41060e8e-95ff-58c1-8b71-36a501a9bd23"
+            },
+            {
+              "frame_uid": "d800f3b7-6cc9-4597-8cbd-e4753531193f",
+              "memory_uid": "dbe435ff-fe32-54fe-a2e6-7b46694ce151"
+            }
+          ],
+          "reason": "Pilot or controlled formative evidence is explicitly limited to its observed setting and separated from later expectations; exposure duration and repeated-use frequency explain why long-term conditions require separate interpretation.",
+          "status": "RESOLVED",
+          "summary": "Both distinguish initial or formative evaluation from main-study or long-term operation, with the reference governing claims and language while the compared frame identifies differing field measurement conditions.",
+          "uid": "71ccb46f-c450-5373-98bf-7e2292cec8b5"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "97960968-8458-4127-89fc-2e4e0c945648",
+              "memory_uid": "9939e9e8-d97d-57db-974a-750566ca9e2b"
+            },
+            {
+              "frame_uid": "d800f3b7-6cc9-4597-8cbd-e4753531193f",
+              "memory_uid": "f27576c7-6f53-5412-901c-19df7e1d5e2e"
+            },
+            {
+              "frame_uid": "d800f3b7-6cc9-4597-8cbd-e4753531193f",
+              "memory_uid": "8608bdf3-49d7-54d0-a2fb-c883c24e40ef"
+            },
+            {
+              "frame_uid": "d800f3b7-6cc9-4597-8cbd-e4753531193f",
+              "memory_uid": "b06bb706-f911-5767-8e27-b64c74d0e592"
+            }
+          ],
+          "reason": "The decision categories materially align, but the explicit evaluation stages preserve distinct methods: evidence-to-judgment attribution during formative evaluation versus measure-driven operational decisions in deployment.",
+          "status": "RESOLVED",
+          "summary": "Both require evaluation inputs to support maintain, modify, or discontinue judgments, using formative evidence in the reference and a declared primary measure with reviewable thresholds after deployment in the compared frame.",
+          "uid": "cd62a368-3b1c-5ea6-9fff-c55ab773ef28"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "97960968-8458-4127-89fc-2e4e0c945648",
+              "memory_uid": "06f6c673-ea0c-5657-89d2-3f8711097cd7"
+            },
+            {
+              "frame_uid": "97960968-8458-4127-89fc-2e4e0c945648",
+              "memory_uid": "86fe1306-7650-58cc-a3df-79870c61784d"
+            }
+          ],
+          "reason": "These memories state the placement rule and its reviewer-centered rationale, an underlying one-sided claim not supplied by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The reference requires verifiable claims to carry nearby evidence or citations because reviewers inspect the direct support closest to the claim first.",
+          "uid": "b87d4286-241d-5a3b-be2c-f4e7c56a69b2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "97960968-8458-4127-89fc-2e4e0c945648",
+              "memory_uid": "cd475113-5354-5f80-b063-7628e4359afc"
+            }
+          ],
+          "reason": "This independent evidentiary-quality requirement has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The reference requires each core claim to be supported by evidence that examined it directly rather than by indirect summaries.",
+          "uid": "502ab90c-e631-528d-9831-a9312e4ce0c5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "97960968-8458-4127-89fc-2e4e0c945648",
+              "memory_uid": "f5adf029-a750-5a3a-8eb8-d68e43bb5c13"
+            }
+          ],
+          "reason": "This independent rule for calibrating causal wording appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The reference prohibits causal-proof language when the study design cannot support causal inference.",
+          "uid": "dd015c09-b3d0-5c13-8d3e-db029510cbff"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "97960968-8458-4127-89fc-2e4e0c945648",
+              "memory_uid": "b2a7ff8a-dfca-5857-8733-fe03cbd943ec"
+            }
+          ],
+          "reason": "This independent source-selection preference appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The reference prefers recent comprehensive HCI studies over lists of individual cases when the research base is sufficient.",
+          "uid": "88a8d7db-0475-5d48-bf97-67888eb2e37b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "97960968-8458-4127-89fc-2e4e0c945648",
+              "memory_uid": "1f0c95f4-69bb-5764-a358-d428ff7019d2"
+            }
+          ],
+          "reason": "This independent design-rationale requirement has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The reference requires each design choice to be traced to the specific user need it addresses.",
+          "uid": "36dbe78f-1d5a-541d-9c73-22e909400a8f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "97960968-8458-4127-89fc-2e4e0c945648",
+              "memory_uid": "5d022e45-09c0-515e-98f1-68b2aec686bc"
+            },
+            {
+              "frame_uid": "97960968-8458-4127-89fc-2e4e0c945648",
+              "memory_uid": "ec54ce10-07db-5ae3-94a5-8f3621fed4a9"
+            }
+          ],
+          "reason": "These memories split one underlying criterion for empirically testable conceptual contributions, which the compared frame does not address.",
+          "status": "RESOLVED",
+          "summary": "The reference grounds conceptual design contributions in observable user behavior and requires explanations to be falsifiable with observable data.",
+          "uid": "817c0aae-0858-5cfc-8084-34681d95b269"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d800f3b7-6cc9-4597-8cbd-e4753531193f",
+              "memory_uid": "473ec6e8-29f0-5c83-b36d-b7d32eeb25a3"
+            }
+          ],
+          "reason": "This independent distributional assessment of design effects appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The compared frame requires evaluation of whether workload reductions for one role create new tasks for other roles.",
+          "uid": "61573457-e7c4-5c52-bd6d-68784f24da17"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d800f3b7-6cc9-4597-8cbd-e4753531193f",
+              "memory_uid": "935cf79f-3e67-567d-ab55-35e8fad7eb37"
+            }
+          ],
+          "reason": "This independent outcome-classification requirement appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The compared frame treats usability and organizational adoption intent as separate evaluation outcomes.",
+          "uid": "5c831534-8043-564d-b461-542491c62cca"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d800f3b7-6cc9-4597-8cbd-e4753531193f",
+              "memory_uid": "bea0e97f-1217-507b-87a7-09ce85bae9fe"
+            }
+          ],
+          "reason": "This independent field-delivery construct appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The compared frame defines implementation fidelity as whether planned features and operational procedures were delivered in the field as intended.",
+          "uid": "43708619-43b6-500e-a447-518e90cf32a8"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame uniquely addresses cross-role workload, usability versus adoption, and field implementation fidelity.",
+        "differences": "Early-study findings are separated from long-term use, while formative evidence and deployed metrics support similar design judgments through stage-specific decision methods.",
+        "reference_only": "The reference uniquely governs citation proximity and quality, causal restraint, needs-to-design traceability, and observable, falsifiable conceptual contributions."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "64c83d1b-b4e7-443a-b9c1-ac48ae680547"
+    },
+    "analysis_digest": "48a4ad445458aa8823a1791d8474a772215bcc6ef333648089dbb31432b34f46",
+    "key": "117da16dd6df8c4091250275daf6d75a520108217386518b91bf88567144e4d9",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 54.00853333300256,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "117da16dd6df8c4091250275daf6d75a520108217386518b91bf88567144e4d9",
+  "created_at": "2026-08-13T18:16:31.109539Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/claim-evidence",
+  "pair_key": "1807f23afcc906a63e0db97d9c120243e2873a7c8c09888050358282f37ed33b",
+  "provider_seconds": 54.00853333300256,
+  "right": "task-2/advisor2/evaluation",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

@@ -1,0 +1,388 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:38:45.459114+00:00",
+      "frames": [
+        {
+          "context_digest": "db438345c3ec4b3f69562a274c9f81a93bd6e6df97bc89b60abcd193dc89b562",
+          "context_name": "task-3/local/personal-memory/2024/04",
+          "context_uid": "206e1cd3-93da-5341-bda3-95cde4814c20",
+          "memories": [
+            {
+              "content": "The user completed a routine dental checkup in April 2024.",
+              "content_digest": "bbaa093f8dee5b5ee42c4a180e683fce00bc9364f5a009b9fa1e7f2ac233bc01",
+              "position": 0,
+              "uid": "9cea83cd-e39f-53bd-9e79-d30aa465ad02"
+            },
+            {
+              "content": "When the user heard three checkup questions in succession, they asked for the first question again.",
+              "content_digest": "e1b76973991f009295489249af1a7cd0fa7957f24f330e39337e01e5b1acdcbb",
+              "position": 1,
+              "uid": "51f8326f-60d4-5ba3-ba32-a04331dcb930"
+            },
+            {
+              "content": "At the next visit, when questions were asked one at a time, the user answered each without omission.",
+              "content_digest": "30c943f2e043f485a7a7e1ac19343c753ed8f834d00716725322505e28e0b15a",
+              "position": 2,
+              "uid": "cd0bce79-71d5-5d46-9c68-8a1d096dd53a"
+            },
+            {
+              "content": "The user called to reschedule an appointment at lunchtime but did not reach anyone.",
+              "content_digest": "1d4bd2122c160d35080b232ebb8ae5080c2ce34124645b3ec8040d7d29af9752",
+              "position": 3,
+              "uid": "71e27b0c-5c10-5102-aeac-98b0841723f2"
+            },
+            {
+              "content": "After returning home, the user kept a photo of the paper instructions received at the clinic.",
+              "content_digest": "68cddec62167a3910122a129dcfdb3c5604a4fea996d01f870734739dd3b0221",
+              "position": 4,
+              "uid": "86ad5410-0cc7-5876-8e3a-a3f0dd1680c7"
+            },
+            {
+              "content": "On a day the user put only the visit address in the calendar, they had to search again for the floor.",
+              "content_digest": "0d6926aba2c90930bfa984d7af1b12c60f35e53ba9916dfbee2c2391961db1a9",
+              "position": 5,
+              "uid": "aab36950-7e2b-588f-bb7c-d3bd6e36c501"
+            },
+            {
+              "content": "On a day the user shared the checkup time with their older sister, the sister called to check in after the user returned home.",
+              "content_digest": "b7d0fea8e8f2fc13126453039dcedebcda3c67ce2ea96c4a2d5b60365448e0e3",
+              "position": 6,
+              "uid": "50ac9268-9259-56fd-8678-1dfc8f919efb"
+            },
+            {
+              "content": "The scheduling staff at that clinic expect requests to change appointments to arrive by telephone.",
+              "content_digest": "28eec4f0ef0b96764a3f7ea54ee3db9fd4d5f1b62a5a2fa29d0a6193f1d8a18c",
+              "position": 7,
+              "uid": "5141ca66-9860-5ec5-b028-ac8670f586ca"
+            },
+            {
+              "content": "Before adding a follow-up visit to the calendar, confirm the date, time, address, and floor with the user.",
+              "content_digest": "0555c837f721fccd5918b2275086bb39c75e016e27574027185cfbada1c766af",
+              "position": 8,
+              "uid": "e265e637-fa41-53d0-aa9b-0102e9962f9a"
+            },
+            {
+              "content": "The local agent can track completed checkups and scheduled appointments but cannot determine whether a follow-up visit is needed.",
+              "content_digest": "be24b47ccb071438fd01bb99b11af3c63f22e260312a26d901824e6bb0d4cd89",
+              "position": 9,
+              "uid": "7aece7ae-b327-537e-9cef-fe24ee8fc618"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "c7becce9-b4dc-45b4-a11a-1457cdf3c44e"
+        },
+        {
+          "context_digest": "5a45aaafce189f861f7195d3a753aa86812f64c689213961136327ca721c9d3e",
+          "context_name": "task-3/local/personal-memory/2026/06",
+          "context_uid": "f2e6c2e0-886a-52d8-98d4-03009ea37991",
+          "memories": [
+            {
+              "content": "The user keeps four folding chairs for family barbecues in storage.",
+              "content_digest": "7e2bb593a723adbac468184af4063e0ef74420baa03d6249ef77a84f2e6bc9df",
+              "position": 0,
+              "uid": "cce43b8e-c1c1-5208-8d9a-ee665b805d4c"
+            },
+            {
+              "content": "When six family members gathered in a noisy indoor restaurant, the user asked several times for the person across from them to repeat what was said.",
+              "content_digest": "d858d40478a37bed08580523df1915b85b4e2217b2fc506acedacaca55d2158d",
+              "position": 1,
+              "uid": "e682f0fd-e92f-566e-b1ec-1d5ebf091b60"
+            },
+            {
+              "content": "The user held the next gathering in their father's yard and moved between seats while speaking with everyone.",
+              "content_digest": "44843518c924955fa15e245dc41763a6fe21a95f6f590bd395f7b8a2d6357256",
+              "position": 2,
+              "uid": "c1f2b53e-6184-552b-a321-9796bb121055"
+            },
+            {
+              "content": "On a day the user started the barbecue at midday, sunlight led them to finish the meal quickly.",
+              "content_digest": "f275c2211b4bd69f40351800db57965b8ba44afbadb6e90a0291acae4e7a541b",
+              "position": 3,
+              "uid": "56d5befe-d5f4-59df-82e4-a66ba868dfc2"
+            },
+            {
+              "content": "The next time, the user started at 6 p.m. and remained outside until sunset.",
+              "content_digest": "13c413fbf16ea0704c10d09c5ee065a49ab789b0a3dadb1fc5068631dd95b292",
+              "position": 4,
+              "uid": "83d73ede-6f5a-550e-ba1c-c146b73a9917"
+            },
+            {
+              "content": "Because the side dishes brought by the user's mother and older sister had no labels, the user opened the same container twice.",
+              "content_digest": "5cc4205a743f5d8adca15876d7b0dd864089595ce729f4e3c1cc9a2272c6849b",
+              "position": 5,
+              "uid": "cf0947e8-c133-5259-bac2-e8ee6d74929e"
+            },
+            {
+              "content": "At the next gathering, the user wrote each food's name and who brought it on a small piece of paper.",
+              "content_digest": "6a93e0b5f7e3da8eff2e5c69a3f86c28dfc1a39c1ba7602a61cc1f6a96b837f9",
+              "position": 6,
+              "uid": "d42e48ca-39de-529f-bba2-332b779bd6c2"
+            },
+            {
+              "content": "After a barbecue, the user's younger brother prefers to divide leftover food into small containers to take home rather than discard it.",
+              "content_digest": "9febf1dab1f5000cddc636cd753d3c418b84810cbc6e394df7e8917d3fa29b72",
+              "position": 7,
+              "uid": "3958627e-a0fa-5e32-9e87-7ee874fc6fe7"
+            },
+            {
+              "content": "The local agent can summarize preparation and responses from prior family barbecues but cannot know the next attendees or weather.",
+              "content_digest": "6be2ed6916fc8a6200a4646b5db3b5ea0df7650e664bd098f973fb5229257cec",
+              "position": 8,
+              "uid": "1f24b5c2-554c-5356-b335-c6879e53ba7f"
+            },
+            {
+              "content": "The user's father's yard receives strong direct sunlight at midday; after 6 p.m., shade and wind lower the felt temperature.",
+              "content_digest": "a0bf855f5bb0422568bbed468e5299d111143362d7b9fe2dcf35dbaf8bcbf4c6",
+              "position": 9,
+              "uid": "d88b1b21-c58f-51d5-a60b-54bb11473d96"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "2a89324a-8c45-4f7c-9aab-3b7190116e5e"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames concern separate domains: dental-visit support and family-barbecue planning. Each contains useful observations, adaptations, preferences, and agent limits, but none governs the same operational decision closely enough to form a cross-frame semantic relation.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c7becce9-b4dc-45b4-a11a-1457cdf3c44e",
+              "memory_uid": "9cea83cd-e39f-53bd-9e79-d30aa465ad02"
+            }
+          ],
+          "reason": "This one-sided visit-history fact has no counterpart addressing the same event or decision in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user completed a routine dental checkup in April 2024.",
+          "uid": "c5d2e682-be15-5b21-af5c-8844925e3f99"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c7becce9-b4dc-45b4-a11a-1457cdf3c44e",
+              "memory_uid": "51f8326f-60d4-5ba3-ba32-a04331dcb930"
+            },
+            {
+              "frame_uid": "c7becce9-b4dc-45b4-a11a-1457cdf3c44e",
+              "memory_uid": "cd0bce79-71d5-5d46-9c68-8a1d096dd53a"
+            }
+          ],
+          "reason": "These memories jointly describe one dental-question pacing pattern, which the compared frame does not address.",
+          "status": "RESOLVED",
+          "summary": "Presenting checkup questions individually enabled complete answers after several successive questions prompted a request to repeat the first.",
+          "uid": "345fd383-3614-5dd9-a212-d2b9ed2db626"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c7becce9-b4dc-45b4-a11a-1457cdf3c44e",
+              "memory_uid": "71e27b0c-5c10-5102-aeac-98b0841723f2"
+            },
+            {
+              "frame_uid": "c7becce9-b4dc-45b4-a11a-1457cdf3c44e",
+              "memory_uid": "5141ca66-9860-5ec5-b028-ac8670f586ca"
+            }
+          ],
+          "reason": "These memories jointly describe the clinic's rescheduling channel and an access failure, with no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "Appointment-change requests are expected by telephone, and the user's lunchtime rescheduling call went unanswered.",
+          "uid": "9d74e412-1eec-584c-b25a-00c81f26cf9d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c7becce9-b4dc-45b4-a11a-1457cdf3c44e",
+              "memory_uid": "86ad5410-0cc7-5876-8e3a-a3f0dd1680c7"
+            }
+          ],
+          "reason": "This one-sided information-retention practice has no same-decision counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user retained a photograph of the clinic's paper instructions after returning home.",
+          "uid": "91e17903-eccb-5235-bbd7-7ce7b981a252"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c7becce9-b4dc-45b4-a11a-1457cdf3c44e",
+              "memory_uid": "aab36950-7e2b-588f-bb7c-d3bd6e36c501"
+            },
+            {
+              "frame_uid": "c7becce9-b4dc-45b4-a11a-1457cdf3c44e",
+              "memory_uid": "e265e637-fa41-53d0-aa9b-0102e9962f9a"
+            }
+          ],
+          "reason": "These memories jointly establish one visit-calendar completeness need absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Dental calendar entries should be confirmed with the date, time, address, and floor because recording only the address previously required another floor search.",
+          "uid": "8d8d2e32-48c2-5a12-a0a8-fce262c5d113"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c7becce9-b4dc-45b4-a11a-1457cdf3c44e",
+              "memory_uid": "50ac9268-9259-56fd-8678-1dfc8f919efb"
+            }
+          ],
+          "reason": "This dental-visit family-support fact is independently useful and has no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "After receiving the checkup time, the user's older sister called to check in following the visit.",
+          "uid": "9a112f28-f6f1-5ad3-8416-36ebe7cc705e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c7becce9-b4dc-45b4-a11a-1457cdf3c44e",
+              "memory_uid": "7aece7ae-b327-537e-9cef-fe24ee8fc618"
+            }
+          ],
+          "reason": "This dental-specific capability boundary does not govern the barbecue planning decisions described in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The local agent can track completed and scheduled dental visits but cannot determine whether follow-up care is needed.",
+          "uid": "e3edb76c-a8be-577b-a50f-6e7005e91cd9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2a89324a-8c45-4f7c-9aab-3b7190116e5e",
+              "memory_uid": "cce43b8e-c1c1-5208-8d9a-ee665b805d4c"
+            }
+          ],
+          "reason": "This one-sided barbecue equipment fact has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user stores four folding chairs for family barbecues.",
+          "uid": "1d14ba9d-76e4-5fb3-9383-abc353943576"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2a89324a-8c45-4f7c-9aab-3b7190116e5e",
+              "memory_uid": "e682f0fd-e92f-566e-b1ec-1d5ebf091b60"
+            },
+            {
+              "frame_uid": "2a89324a-8c45-4f7c-9aab-3b7190116e5e",
+              "memory_uid": "c1f2b53e-6184-552b-a321-9796bb121055"
+            }
+          ],
+          "reason": "These memories jointly describe one gathering-environment communication pattern, not the dental question-pacing decision in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "After difficulty hearing across a noisy restaurant table, the user held the next gathering outdoors and moved between seats to converse.",
+          "uid": "9b675462-b4f8-58cd-9285-60d59a489524"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2a89324a-8c45-4f7c-9aab-3b7190116e5e",
+              "memory_uid": "56d5befe-d5f4-59df-82e4-a66ba868dfc2"
+            },
+            {
+              "frame_uid": "2a89324a-8c45-4f7c-9aab-3b7190116e5e",
+              "memory_uid": "83d73ede-6f5a-550e-ba1c-c146b73a9917"
+            },
+            {
+              "frame_uid": "2a89324a-8c45-4f7c-9aab-3b7190116e5e",
+              "memory_uid": "d88b1b21-c58f-51d5-a60b-54bb11473d96"
+            }
+          ],
+          "reason": "These memories jointly establish the timing and outdoor-condition pattern for barbecues, which the reference frame does not address.",
+          "status": "RESOLVED",
+          "summary": "Strong midday sun shortened one barbecue, while a 6 p.m. start aligned with later shade, wind, and a stay lasting until sunset.",
+          "uid": "abb9eb68-c3cc-5e6c-90bd-c704b0a33bdf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2a89324a-8c45-4f7c-9aab-3b7190116e5e",
+              "memory_uid": "cf0947e8-c133-5259-bac2-e8ee6d74929e"
+            },
+            {
+              "frame_uid": "2a89324a-8c45-4f7c-9aab-3b7190116e5e",
+              "memory_uid": "d42e48ca-39de-529f-bba2-332b779bd6c2"
+            }
+          ],
+          "reason": "These memories jointly describe one food-identification problem and adaptation absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "After unlabeled side dishes caused the same container to be opened twice, the user labeled each food with its name and contributor.",
+          "uid": "5d2b6946-da61-5634-bc48-5c4238d11aa5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2a89324a-8c45-4f7c-9aab-3b7190116e5e",
+              "memory_uid": "3958627e-a0fa-5e32-9e87-7ee874fc6fe7"
+            }
+          ],
+          "reason": "This one-sided leftover-handling preference has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user's younger brother prefers taking leftovers home in small containers instead of discarding them.",
+          "uid": "05d3e4c6-14f3-5f72-ae31-70ca53bb6055"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2a89324a-8c45-4f7c-9aab-3b7190116e5e",
+              "memory_uid": "1f24b5c2-554c-5356-b335-c6879e53ba7f"
+            }
+          ],
+          "reason": "This barbecue-specific capability boundary does not govern the dental tracking and follow-up decision described in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The local agent can summarize prior barbecue preparation and responses but cannot know future attendees or weather.",
+          "uid": "a632ec96-002c-5ebe-86ec-fcc597989287"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Barbecue content covers stored seating, communication setting, timing around sun and weather, food labels, leftover preferences, and limits on predicting attendees or conditions.",
+        "differences": "",
+        "reference_only": "Dental content covers visit history, question pacing, telephone rescheduling, retained instructions, complete calendar details, family check-ins, and limits on determining follow-up need."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "3c7e1708-0d40-4b73-bded-74fdf1d0e66b"
+    },
+    "analysis_digest": "d75682ab026cc0984b7751e4bf2c90a1e7a1ebc2f17b8f42136c1d3c425dd16b",
+    "key": "7d3fccb8f9c0aaf69b0ad5ad6f6971ea0c567ea8c9ce3276f4683fc3cdafdb4c",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 41.96548400000029,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "7d3fccb8f9c0aaf69b0ad5ad6f6971ea0c567ea8c9ce3276f4683fc3cdafdb4c",
+  "created_at": "2026-08-13T18:39:27.424147Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/04",
+  "pair_key": "ec2137ff5c9c8dbbae3f9243e8add3222fed0c6ddd159a5f2116bd49dce333d7",
+  "provider_seconds": 41.96548400000029,
+  "right": "task-3/local/personal-memory/2026/06",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

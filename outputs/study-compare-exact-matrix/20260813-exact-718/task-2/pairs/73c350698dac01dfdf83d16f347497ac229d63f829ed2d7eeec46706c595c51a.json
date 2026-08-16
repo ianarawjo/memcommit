@@ -1,0 +1,377 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:13:59.815459+00:00",
+      "frames": [
+        {
+          "context_digest": "30f0425cad991a5bb1b473f7e73c2c039db2d91dc0c95116413d0a8e7b6fed29",
+          "context_name": "task-2/advisor1/budget",
+          "context_uid": "d6d3ee9e-eb0f-5c28-9463-7a680d53b470",
+          "memories": [
+            {
+              "content": "Keep the total, major cost categories, and one-line estimate basis in the main text so the resource argument can be understood without leaving the proposal.",
+              "content_digest": "5dc9db0be6499fc408063be04c9e1cc344986512f4d24d5697f5c53a08529c9a",
+              "position": 0,
+              "uid": "05e0261e-5c52-5030-8176-0f02d4522931"
+            },
+            {
+              "content": "Place each major cost beside the activity or deliverable it enables in the main text.",
+              "content_digest": "b97219830051faf46cff7c9541c331012571866926740ed4d6a7925c12fb21a8",
+              "position": 1,
+              "uid": "1083e9b3-698a-57b1-91ab-ce04cec1e5e5"
+            },
+            {
+              "content": "State the quantity and unit-rate basis for each major cost in the same paragraph that requests it.",
+              "content_digest": "5ce37d95d9d037bbab71276fa8f0e8e383b472d0122817ab7b711c971b8cbf5d",
+              "position": 2,
+              "uid": "3652f268-d86f-55d6-935d-d3bdc487aae6"
+            },
+            {
+              "content": "Readers may question a proposed priority when its cost cannot be checked on the same page as the claimed benefit.",
+              "content_digest": "26fa14ff80ece7682cb51c7356a47a8e60e94edd4551f59ecd2fa3017bd9bffd",
+              "position": 3,
+              "uid": "4e1e1201-94b8-5a7a-8737-edc4c62881ff"
+            },
+            {
+              "content": "Update the cost sentence whenever the related activity changes so the narrative and requested amount cannot drift apart.",
+              "content_digest": "343c11198b38874476e0cda3707dd07436699852db0934e2e8f8c95a7ea3c3ea",
+              "position": 4,
+              "uid": "2f5f9039-e038-51c1-8af0-21a78772c512"
+            },
+            {
+              "content": "Accept a denser main-text paragraph when the estimate basis is essential to deciding whether the request is proportionate.",
+              "content_digest": "59ca1aafc11b37b097251b4b7c6b15e249262304f79b261bd4351d3ca89cb5fe",
+              "position": 5,
+              "uid": "f7a16d08-fbe2-5508-890d-cdbf70c1146e"
+            },
+            {
+              "content": "The user tends to revise the work plan but forget a detached budget table unless the key amount is repeated beside the activity.",
+              "content_digest": "393651043824d9e9c528e5de7618854b71970967d172ee1e9bc3c77aec3baab0",
+              "position": 6,
+              "uid": "2ca1d5a1-d78a-55b2-ab21-fd6ad73366b4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "0b7d002c-3b7f-468b-9abc-6747b3828485"
+        },
+        {
+          "context_digest": "6cd44802c5b4878ee84adef31f52231d09d37ccc0ef9a7256d0421114835a6bd",
+          "context_name": "task-2/advisor2/claim-evidence",
+          "context_uid": "1ca4b72a-fcbb-5997-a1b5-f764662460a5",
+          "memories": [
+            {
+              "content": "Place observational evidence or sources adjacent to claims regarding user needs or field effects.",
+              "content_digest": "513b102a6ed66a1dd3fb3380065f34552036a6dffed20d7101487342096021e3",
+              "position": 0,
+              "uid": "b39cf79f-d174-5ecb-98c9-b3f62ce0696a"
+            },
+            {
+              "content": "Distinguish at the sentence level between facts already confirmed in the field and predictions to be examined in the user study.",
+              "content_digest": "63a7fdcf7da5c4fa36a2c7a6f8542837956fa0dcdedee781593f399516501067",
+              "position": 1,
+              "uid": "b95e0185-f933-508d-8da7-41c65e2cc340"
+            },
+            {
+              "content": "Do not use verbs implying proof of causality if the design does not support causal inference.",
+              "content_digest": "0db514f790eb85ba0800c1f8c659cd4236136b9e36c034899c36f6116c040f04",
+              "position": 2,
+              "uid": "f82f1e1f-3f27-5668-a5a4-e64b0f88b44a"
+            },
+            {
+              "content": "Prioritize citations of recent systems and field research in rapidly changing HCI topics.",
+              "content_digest": "e8cd0847480ba8d07f971f21978873d13b6bd34d4e4625dd3dde8039afd5b88c",
+              "position": 3,
+              "uid": "b5461283-9001-510c-9a30-bb367f247b25"
+            },
+            {
+              "content": "Explain the user or operational stakeholder needs that each design choice aims to address.",
+              "content_digest": "59df6b478a0e200ceaa520bb7c4535b2078a8354efae0eec77a06cb6843bfab6",
+              "position": 4,
+              "uid": "87340c01-2e0f-5b82-9410-2133648022da"
+            },
+            {
+              "content": "Support each important conclusion with the closest evidence that directly examined it.",
+              "content_digest": "6731286cd67ee18644df531752f10913f4df9e7c7acf936da99caafacd597c0a",
+              "position": 5,
+              "uid": "8b15a9ad-aa53-5a54-beb2-f1cc8d6da846"
+            },
+            {
+              "content": "Reviewers first check direct evidence placed closest to important conclusions.",
+              "content_digest": "940880f0ee481e00ff7f935c9b76af8137d0f8a8664a2c53fb3d044681980c8f",
+              "position": 6,
+              "uid": "565a2263-e3bc-5379-9a80-64665b491c88"
+            },
+            {
+              "content": "Use field cases in which people completed tasks by working around existing tools as evidence for the need for the design.",
+              "content_digest": "4c731184cb33bda8ab315870713872842339013be68cf5f79c43a8b9f4e297d4",
+              "position": 7,
+              "uid": "27b58ee9-5cad-5872-8eb7-a694728d8e79"
+            },
+            {
+              "content": "Distinguish between problems reported by operational stakeholders and those directly observed by the researcher as separate forms of evidence.",
+              "content_digest": "39586ea932c540d6c7a1b0faff870d7ef6433052792defdc110beb513276ffe6",
+              "position": 8,
+              "uid": "cf7e9410-2144-53c4-a236-a16a7b5be494"
+            },
+            {
+              "content": "Field breakdown logs can reveal both system failures and user adaptive behaviors, including their timing and conditions.",
+              "content_digest": "331910b18eef90e53453e700a55b43143b3e8d07d3bb2c88bade31fddb0e5965",
+              "position": 9,
+              "uid": "ad643b33-fba1-5643-b57f-3bb8c3829122"
+            },
+            {
+              "content": "In field sites introducing new systems, formal procedures often coexist with existing manual routines for a period, making it difficult to isolate the effects of single design changes.",
+              "content_digest": "7def8e340a5ae1ad7cce9228e3e4279f499f47f0d2576bbe23e59f3703f04084",
+              "position": 10,
+              "uid": "546548e3-c47a-5a74-a04a-0a328602ead4"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "6bdaf0a6-9857-4527-bfd0-cc5cfbf796e2"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address complementary but separate proposal concerns. The reference frame governs transparent, synchronized presentation of requested costs, while the compared frame governs evidence placement, evidentiary distinctions, causal restraint, field interpretation, and stakeholder justification. Neither supplies a scope-aligned counterpart to the other.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0b7d002c-3b7f-468b-9abc-6747b3828485",
+              "memory_uid": "05e0261e-5c52-5030-8176-0f02d4522931"
+            }
+          ],
+          "reason": "This is a one-sided requirement for a self-contained overview of the resource argument, with no compared-frame counterpart governing cost presentation.",
+          "status": "RESOLVED",
+          "summary": "Keep the total, major cost categories, and a concise estimation basis in the proposal’s main text.",
+          "uid": "d3fc6316-d468-526e-9f93-7e2d68a5f4f1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0b7d002c-3b7f-468b-9abc-6747b3828485",
+              "memory_uid": "1083e9b3-698a-57b1-91ab-ce04cec1e5e5"
+            },
+            {
+              "frame_uid": "0b7d002c-3b7f-468b-9abc-6747b3828485",
+              "memory_uid": "4e1e1201-94b8-5a7a-8737-edc4c62881ff"
+            }
+          ],
+          "reason": "The placement rule and its reviewer-risk rationale express one cost-to-benefit colocation principle absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Place major costs beside the activities, deliverables, or benefits they support so readers can evaluate them on the same page.",
+          "uid": "84fa9690-bd1e-57f5-9f13-a9c5532aebe1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0b7d002c-3b7f-468b-9abc-6747b3828485",
+              "memory_uid": "3652f268-d86f-55d6-935d-d3bdc487aae6"
+            }
+          ],
+          "reason": "This independently useful calculation-detail requirement has no scope-aligned counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "State quantities and unit rates in the paragraph requesting each major cost.",
+          "uid": "3a774785-ba2e-51be-af04-de64f9727e05"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0b7d002c-3b7f-468b-9abc-6747b3828485",
+              "memory_uid": "2f5f9039-e038-51c1-8af0-21a78772c512"
+            },
+            {
+              "frame_uid": "0b7d002c-3b7f-468b-9abc-6747b3828485",
+              "memory_uid": "2ca1d5a1-d78a-55b2-ab21-fd6ad73366b4"
+            }
+          ],
+          "reason": "The maintenance rule and observed revision behavior split one underlying requirement to keep activity and cost information synchronized; the compared frame does not address it.",
+          "status": "RESOLVED",
+          "summary": "Repeat and update key amounts beside their activities to prevent work-plan revisions from drifting away from the budget.",
+          "uid": "27463a28-12c8-5607-924c-76a5c33cacba"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0b7d002c-3b7f-468b-9abc-6747b3828485",
+              "memory_uid": "f7a16d08-fbe2-5508-890d-cdbf70c1146e"
+            }
+          ],
+          "reason": "This is a one-sided presentation tradeoff concerning essential budget detail.",
+          "status": "RESOLVED",
+          "summary": "Accept denser main text when estimation detail is necessary to judge whether a request is proportionate.",
+          "uid": "e8b45a7d-4f84-586d-9442-715d9ca184b0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6bdaf0a6-9857-4527-bfd0-cc5cfbf796e2",
+              "memory_uid": "b39cf79f-d174-5ecb-98c9-b3f62ce0696a"
+            },
+            {
+              "frame_uid": "6bdaf0a6-9857-4527-bfd0-cc5cfbf796e2",
+              "memory_uid": "8b15a9ad-aa53-5a54-beb2-f1cc8d6da846"
+            },
+            {
+              "frame_uid": "6bdaf0a6-9857-4527-bfd0-cc5cfbf796e2",
+              "memory_uid": "565a2263-e3bc-5379-9a80-64665b491c88"
+            }
+          ],
+          "reason": "The prescriptive statements and reviewer observation express one evidence-to-claim colocation principle, which does not govern the reference frame’s cost presentation.",
+          "status": "RESOLVED",
+          "summary": "Place the most direct supporting evidence or sources close to important claims and conclusions.",
+          "uid": "cecf9d93-fe57-5bf3-90d0-8ab0730b870d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6bdaf0a6-9857-4527-bfd0-cc5cfbf796e2",
+              "memory_uid": "b95e0185-f933-508d-8da7-41c65e2cc340"
+            }
+          ],
+          "reason": "This one-sided requirement separates established evidence from prospective study claims.",
+          "status": "RESOLVED",
+          "summary": "Distinguish confirmed field facts from predictions that a user study will examine.",
+          "uid": "7b0d2447-2d49-584b-ac47-b8742f17de15"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6bdaf0a6-9857-4527-bfd0-cc5cfbf796e2",
+              "memory_uid": "f82f1e1f-3f27-5668-a5a4-e64b0f88b44a"
+            }
+          ],
+          "reason": "This independently useful evidentiary-language constraint has no reference-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "Avoid language implying causal proof when the study design cannot support causal inference.",
+          "uid": "9b05efde-9f0c-5844-85cf-ad6e0bb73d89"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6bdaf0a6-9857-4527-bfd0-cc5cfbf796e2",
+              "memory_uid": "b5461283-9001-510c-9a30-bb367f247b25"
+            }
+          ],
+          "reason": "This one-sided source-selection policy is independent of the reference frame’s budgeting guidance.",
+          "status": "RESOLVED",
+          "summary": "Prioritize recent systems and field research when citing rapidly changing HCI topics.",
+          "uid": "9004e316-b6f7-53f3-9f47-af3809a78cc4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6bdaf0a6-9857-4527-bfd0-cc5cfbf796e2",
+              "memory_uid": "87340c01-2e0f-5b82-9410-2133648022da"
+            }
+          ],
+          "reason": "This is a distinct one-sided requirement for tracing design choices to stakeholder needs.",
+          "status": "RESOLVED",
+          "summary": "Explain which user or operational stakeholder need each design choice addresses.",
+          "uid": "329c1eac-3c4d-53cf-bc71-bdeef7565069"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6bdaf0a6-9857-4527-bfd0-cc5cfbf796e2",
+              "memory_uid": "27b58ee9-5cad-5872-8eb7-a694728d8e79"
+            }
+          ],
+          "reason": "This specifies an independently useful form of field evidence with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Use field cases of people working around existing tools as evidence that a design is needed.",
+          "uid": "fcf7860e-d7da-5676-827e-ef99bc73e8b0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6bdaf0a6-9857-4527-bfd0-cc5cfbf796e2",
+              "memory_uid": "cf7e9410-2144-53c4-a236-a16a7b5be494"
+            }
+          ],
+          "reason": "This is a one-sided distinction between evidence sources and should remain separate from other evidentiary classifications.",
+          "status": "RESOLVED",
+          "summary": "Separate stakeholder-reported problems from problems directly observed by researchers.",
+          "uid": "de31a7ee-a8fc-58f7-87a4-c2f212a3a36e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6bdaf0a6-9857-4527-bfd0-cc5cfbf796e2",
+              "memory_uid": "ad643b33-fba1-5643-b57f-3bb8c3829122"
+            }
+          ],
+          "reason": "This independently characterizes the evidentiary value of breakdown logs and has no reference-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "Use field breakdown logs to identify system failures and adaptive user behavior, including timing and conditions.",
+          "uid": "c7ea49e7-7e88-5752-83d7-3c8b60a41686"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6bdaf0a6-9857-4527-bfd0-cc5cfbf796e2",
+              "memory_uid": "546548e3-c47a-5a74-a04a-0a328602ead4"
+            }
+          ],
+          "reason": "This one-sided field-study limitation concerns confounding during system transitions.",
+          "status": "RESOLVED",
+          "summary": "Recognize that temporary coexistence of formal procedures and manual routines can obscure the effects of individual design changes.",
+          "uid": "12d8e182-1f51-53e4-a0af-76a74e6fae89"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame emphasizes nearby direct evidence, careful distinctions among evidence types and predictions, restrained causal language, current research, stakeholder-linked design choices, and field evidence that captures workarounds, breakdowns, adaptations, and confounding transitions.",
+        "differences": "",
+        "reference_only": "The reference frame keeps major costs, calculation bases, enabled activities, and updates together in the proposal, even at the cost of denser prose, to preserve proportionate and reviewable requests."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "9fc1ddef-0ea4-4f77-b132-2f1886ba9421"
+    },
+    "analysis_digest": "5400fdccb1ec821c1501389d03c8dfc8eeafaafa35ea599d4c2cf653487f7f81",
+    "key": "f8550ac861f72400a4c60808071f0214a6d4eea90599a8b4c44c6c70ac7fffbe",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 45.586654499998986,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "f8550ac861f72400a4c60808071f0214a6d4eea90599a8b4c44c6c70ac7fffbe",
+  "created_at": "2026-08-13T18:14:45.401717Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/budget",
+  "pair_key": "73c350698dac01dfdf83d16f347497ac229d63f829ed2d7eeec46706c595c51a",
+  "provider_seconds": 45.586654499998986,
+  "right": "task-2/advisor2/claim-evidence",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:39:27.463169+00:00",
+      "frames": [
+        {
+          "context_digest": "3f1b018c2a3a8594d00bffba053626a876fef4893e678dd9600986d9d41c0f31",
+          "context_name": "task-3/local/personal-memory/2024/05",
+          "context_uid": "683986e6-d517-5a53-9dc1-16b69cf0d12e",
+          "memories": [
+            {
+              "content": "The user keeps a small table fan beside the bedroom window.",
+              "content_digest": "b8a464f5e2a33edcef1259af4a412b047ba190bae9cfe42aaf1dbd722efc7f0c",
+              "position": 0,
+              "uid": "3088c235-435c-52ee-9ffc-26cf85ec196e"
+            },
+            {
+              "content": "On a day the user drank coffee late in the afternoon, they could not fall asleep until dawn.",
+              "content_digest": "ef4cf019ebc163fc24f03b8bd505599cd13fc83f33565d51ffb4379dc21d72b8",
+              "position": 1,
+              "uid": "7811ed66-2f22-54d8-a215-62a843264ba5"
+            },
+            {
+              "content": "On a day the user drank coffee before 2 p.m., they fell asleep at their usual time.",
+              "content_digest": "046ac3f8454da623f73d1293fb954b72a3ea056642fd9ee7948c35f110e77669",
+              "position": 2,
+              "uid": "d0f94a56-5cf8-5215-9cfa-5993b3b781be"
+            },
+            {
+              "content": "On a tired day, the user ate dinner out and postponed even washing the dishes after returning home.",
+              "content_digest": "ac36f6c1039dc74f764b4671f718f1e124823dc75fd45abda010285523280b71",
+              "position": 3,
+              "uid": "fc19394a-6634-5aae-bfa5-bba91e707954"
+            },
+            {
+              "content": "In the same week, on a day the user made simple noodles at home, they rested immediately after the meal.",
+              "content_digest": "45bb543f6c6ca213b856683b3c53448ac0d044bcf24f694eda292d6c4923ac5c",
+              "position": 4,
+              "uid": "be7aa7f3-1b67-5677-950d-9942ca337a99"
+            },
+            {
+              "content": "On a night the window was left open, street noise woke the user twice.",
+              "content_digest": "13f3dd86b869b25ee75e1b80d9cdb890b79434fa976fbd7246e89ba808f1a6c6",
+              "position": 5,
+              "uid": "47faaefd-2d60-5693-9847-2c1d5d2f9092"
+            },
+            {
+              "content": "On a night the table fan was running, the user was not too warm even with the window closed.",
+              "content_digest": "96ce23df1cf4f913e3b4c339cc3a857a6a8776e3f3f48e865eae65f02297bba8",
+              "position": 6,
+              "uid": "d6eea310-1313-5a51-b032-f3f518620610"
+            },
+            {
+              "content": "The user's father prefers to have coffee available after dinner and believes it will not cause a sleep problem.",
+              "content_digest": "197616278309e370f0d0e633700b1bde2c6e4395dbc8ed2b942e14fb6c1c9cc5",
+              "position": 7,
+              "uid": "056defa1-8256-561d-a2b4-a70df4058c33"
+            },
+            {
+              "content": "When making a sleep-related suggestion, do not treat one or two records as a general lifestyle habit.",
+              "content_digest": "963795e89a1e2365dd81abf463fb9a80c1c22b9c0e59b121681f89c09860e583",
+              "position": 8,
+              "uid": "7cecee60-fabd-55a3-998b-78810bd9eaf4"
+            },
+            {
+              "content": "The user tends to go to bed much later after drinking coffee late in the afternoon.",
+              "content_digest": "e54652939c104807d5c501753f85aee97883cc55e1d056787b86857cd5b8292d",
+              "position": 9,
+              "uid": "9ace13d3-d881-5720-bfd5-f7884db67756"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "cee06663-5f87-49b9-9fbc-0d1f060c9b5e"
+        },
+        {
+          "context_digest": "5e42fc3dcfbf5576148277f6841977ca8a5cabd4a3fc67a5581f6f6cc816c900",
+          "context_name": "task-3/local/personal-memory/2025/10",
+          "context_uid": "8130b676-dc51-5c31-b7dc-185afdf9cf07",
+          "memories": [
+            {
+              "content": "The user keeps waterproof shoes for rainy days to the left of the entrance.",
+              "content_digest": "5b9e5a20153c7865010318800d740a410faef0c13fe2278c20ce984a89b7dea5",
+              "position": 0,
+              "uid": "82c1e806-de3a-5633-8a08-175487e69fd6"
+            },
+            {
+              "content": "On a day the user walked in the rain wearing thin shoes, their socks became wet and they changed them after arrival.",
+              "content_digest": "fdbdab8c08a4b1d933ff8ac3ddedee8541ddf070e8c6e6020b6c1d14b992c621",
+              "position": 1,
+              "uid": "25df6384-836f-5f8e-bd97-73a1fb171c48"
+            },
+            {
+              "content": "On the next rainy day, the user wore waterproof shoes and their feet remained dry.",
+              "content_digest": "0e87d74fb93fe062cd12efe2f5a04fbae5ce13a60491fd9ad04c4e006acbd87f",
+              "position": 2,
+              "uid": "55abae4f-206a-586e-8b35-406d7525c0a1"
+            },
+            {
+              "content": "On a day the user walked for a long time in new shoes, their heel chafed and they shortened the route home.",
+              "content_digest": "aeb369b995cdf17ea73ae8546b454eab70f33bf6d3c67a09aee2805c1c598b6d",
+              "position": 3,
+              "uid": "c6d21ec4-6bdf-55df-b4d4-05cb531bf4bd"
+            },
+            {
+              "content": "The user wore the same shoes on two short outings before using them on a long walk.",
+              "content_digest": "0d7ed5656f35f4fe025c6ba80e4c829f5b9851c193f981de9a461f848317d60a",
+              "position": 4,
+              "uid": "a6424854-e51e-5afc-8b9f-9e2f0273f70e"
+            },
+            {
+              "content": "On a day the user dried an umbrella outside the entrance, they found it immediately before the next outing.",
+              "content_digest": "dbc2453ca5f895e2cfe7f58e5624cf4c5d6793468af3b25df7e9a4ddb7d50159",
+              "position": 5,
+              "uid": "1b436b46-3d1f-5aa2-99e3-94b7c2412bfd"
+            },
+            {
+              "content": "On a day the user put a folded wet umbrella in their bag, documents inside became wet.",
+              "content_digest": "1f63fbc8c6b491a734f0f7a4190e26aec22826c1ff839242e0ca71d933312c9c",
+              "position": 6,
+              "uid": "ccd1f422-6130-5f19-869e-681102a3a1fa"
+            },
+            {
+              "content": "When rain is forecast, the user's mother expects the user may forget an umbrella and sets out a spare at the entrance.",
+              "content_digest": "80bdfaefb6f781aa91ef7217331e75f09b4766650c2b078dfadf592b2eb27b08",
+              "position": 7,
+              "uid": "c69a8e87-2b6f-5514-ab0d-0037531592f8"
+            },
+            {
+              "content": "When proposing a long-distance walking plan, check both the weather that day and recent records of shoe discomfort.",
+              "content_digest": "f54a546d423099c3abbb65bb49e4ddf773a8191dcffbb8b3d5153dfd70553b73",
+              "position": 8,
+              "uid": "4567ea9f-1800-51ed-bfac-f4cdf674d4cf"
+            },
+            {
+              "content": "Even if the local agent knows a shoe's location, it cannot know its current condition or whether it is usable.",
+              "content_digest": "28202c222ca800a5e19dbaebea2b3c992748f530a695517cf123b10187a31bc8",
+              "position": 9,
+              "uid": "a4ff1b76-755d-530a-b24c-8655115e4fbe"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "46154b82-7afa-4a73-bf8f-851cd4adf969"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover independent domains: the reference frame records sleep, caffeine, cooling, noise, and low-effort meals, while the compared frame records rain preparation, footwear, umbrellas, and walking safeguards. Neither frame contains a claim materially addressing the same operational decision as the other.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cee06663-5f87-49b9-9fbc-0d1f060c9b5e",
+              "memory_uid": "3088c235-435c-52ee-9ffc-26cf85ec196e"
+            }
+          ],
+          "reason": "This is independently useful reference-only information about the location of bedroom cooling equipment; the compared frame has no claim addressing that subject or decision.",
+          "status": "RESOLVED",
+          "summary": "The user keeps a small table fan beside the bedroom window.",
+          "uid": "b6b8a36d-f11b-545f-bd0b-bdc4b93e4e94"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cee06663-5f87-49b9-9fbc-0d1f060c9b5e",
+              "memory_uid": "7811ed66-2f22-54d8-a215-62a843264ba5"
+            }
+          ],
+          "reason": "This is a specific reference-only observation linking late-afternoon coffee with severe sleep delay; the compared frame contains no corresponding sleep or caffeine claim.",
+          "status": "RESOLVED",
+          "summary": "After drinking coffee late one afternoon, the user could not fall asleep until dawn.",
+          "uid": "e801b925-75f8-533f-b854-818b005a5688"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cee06663-5f87-49b9-9fbc-0d1f060c9b5e",
+              "memory_uid": "d0f94a56-5cf8-5215-9cfa-5993b3b781be"
+            }
+          ],
+          "reason": "This is a specific reference-only observation about earlier coffee timing and normal sleep onset; the compared frame does not address caffeine timing or sleep.",
+          "status": "RESOLVED",
+          "summary": "After drinking coffee before 2 p.m., the user fell asleep at the usual time.",
+          "uid": "1847a924-c4f2-5a2c-a094-6fca9b4e907e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cee06663-5f87-49b9-9fbc-0d1f060c9b5e",
+              "memory_uid": "fc19394a-6634-5aae-bfa5-bba91e707954"
+            }
+          ],
+          "reason": "This is independently useful reference-only evidence about fatigue, eating out, and deferred chores; nothing in the compared frame addresses that behavior.",
+          "status": "RESOLVED",
+          "summary": "On a tired day, the user ate out and postponed washing dishes after returning home.",
+          "uid": "9c2467c5-389d-54cd-ace9-f2aa07cfeb66"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cee06663-5f87-49b9-9fbc-0d1f060c9b5e",
+              "memory_uid": "be7aa7f3-1b67-5677-950d-9942ca337a99"
+            }
+          ],
+          "reason": "This is independently useful reference-only evidence about a low-effort home meal and immediate rest; the compared frame has no related meal or fatigue claim.",
+          "status": "RESOLVED",
+          "summary": "On a day the user made simple noodles at home, they rested immediately after eating.",
+          "uid": "63d9539c-f9a4-585d-bde1-69565ca34220"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cee06663-5f87-49b9-9fbc-0d1f060c9b5e",
+              "memory_uid": "47faaefd-2d60-5693-9847-2c1d5d2f9092"
+            }
+          ],
+          "reason": "This is a reference-only observation about an open window causing sleep disruption through noise; the compared frame does not address bedroom noise or sleep.",
+          "status": "RESOLVED",
+          "summary": "Street noise woke the user twice on a night when the window was left open.",
+          "uid": "d02f3984-4bb0-57d5-9fcb-8cc30a6ce882"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cee06663-5f87-49b9-9fbc-0d1f060c9b5e",
+              "memory_uid": "d6eea310-1313-5a51-b032-f3f518620610"
+            }
+          ],
+          "reason": "This is reference-only evidence that the fan provided adequate cooling with the window closed; the compared frame has no materially related environmental-control claim.",
+          "status": "RESOLVED",
+          "summary": "With the table fan running, the user was not too warm despite keeping the window closed.",
+          "uid": "aa3e2193-91f9-5a49-90bd-902fbd978bfe"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cee06663-5f87-49b9-9fbc-0d1f060c9b5e",
+              "memory_uid": "056defa1-8256-561d-a2b4-a70df4058c33"
+            }
+          ],
+          "reason": "This is independently useful reference-only information about the father's preference and belief; the compared frame contains no corresponding family or caffeine policy.",
+          "status": "RESOLVED",
+          "summary": "The user's father prefers coffee to be available after dinner and believes it will not impair sleep.",
+          "uid": "707f69e1-0713-5cde-a4e7-556cd5ed3c7e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cee06663-5f87-49b9-9fbc-0d1f060c9b5e",
+              "memory_uid": "7cecee60-fabd-55a3-998b-78810bd9eaf4"
+            }
+          ],
+          "reason": "This is a reference-only constraint on interpreting sparse sleep evidence; the compared frame's walking guidance governs a different decision and therefore is not materially corresponding.",
+          "status": "RESOLVED",
+          "summary": "Sleep-related suggestions should not generalize one or two records into a lifestyle habit.",
+          "uid": "c7b6b2a7-4679-5b72-8630-8b1414d59f15"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cee06663-5f87-49b9-9fbc-0d1f060c9b5e",
+              "memory_uid": "9ace13d3-d881-5720-bfd5-f7884db67756"
+            }
+          ],
+          "reason": "This is a generalized reference-only tendency concerning caffeine timing and bedtime; the compared frame contains no claim about that operational subject.",
+          "status": "RESOLVED",
+          "summary": "The user tends to go to bed much later after late-afternoon coffee.",
+          "uid": "0e03f395-2ed6-571e-b1e0-66c55b43bb54"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "46154b82-7afa-4a73-bf8f-851cd4adf969",
+              "memory_uid": "82c1e806-de3a-5633-8a08-175487e69fd6"
+            }
+          ],
+          "reason": "This is independently useful compared-only location information for rain footwear; the reference frame has no claim addressing footwear or entrance storage.",
+          "status": "RESOLVED",
+          "summary": "The user keeps waterproof rainy-day shoes to the left of the entrance.",
+          "uid": "e7fc5613-81fa-504e-aa98-4125f5dfdca7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "46154b82-7afa-4a73-bf8f-851cd4adf969",
+              "memory_uid": "25df6384-836f-5f8e-bd97-73a1fb171c48"
+            }
+          ],
+          "reason": "This is a compared-only observation about unsuitable rain footwear and its consequence; the reference frame contains no related weather or footwear evidence.",
+          "status": "RESOLVED",
+          "summary": "Thin shoes led to wet socks during a rainy walk, requiring a change after arrival.",
+          "uid": "308be134-df21-5b6a-b05b-09acdff0b4d1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "46154b82-7afa-4a73-bf8f-851cd4adf969",
+              "memory_uid": "55abae4f-206a-586e-8b35-406d7525c0a1"
+            }
+          ],
+          "reason": "This is compared-only evidence about waterproof footwear effectiveness in rain; the reference frame does not address that decision or outcome.",
+          "status": "RESOLVED",
+          "summary": "Waterproof shoes kept the user's feet dry on the next rainy day.",
+          "uid": "d19b884d-f655-507f-896c-236c645ae059"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "46154b82-7afa-4a73-bf8f-851cd4adf969",
+              "memory_uid": "c6d21ec4-6bdf-55df-b4d4-05cb531bf4bd"
+            }
+          ],
+          "reason": "This is independently useful compared-only evidence about footwear discomfort during long walking; the reference frame has no corresponding mobility claim.",
+          "status": "RESOLVED",
+          "summary": "A long walk in new shoes caused heel chafing and prompted the user to shorten the route home.",
+          "uid": "446da790-32f0-5e4a-af8d-09028c41f3bb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "46154b82-7afa-4a73-bf8f-851cd4adf969",
+              "memory_uid": "a6424854-e51e-5afc-8b9f-9e2f0273f70e"
+            }
+          ],
+          "reason": "This is a separate compared-only observation about prior shoe use before a long walk; the reference frame does not address footwear preparation.",
+          "status": "RESOLVED",
+          "summary": "The user wore the same shoes on two short outings before taking them on a long walk.",
+          "uid": "64f44318-2337-5910-ba78-30cf2dbea0c2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "46154b82-7afa-4a73-bf8f-851cd4adf969",
+              "memory_uid": "1b436b46-3d1f-5aa2-99e3-94b7c2412bfd"
+            }
+          ],
+          "reason": "This is compared-only evidence about umbrella placement and later retrieval; the reference frame has no related umbrella or departure-preparation claim.",
+          "status": "RESOLVED",
+          "summary": "Drying an umbrella outside the entrance allowed the user to find it immediately before the next outing.",
+          "uid": "9a507ff5-0c1e-5fe9-adc9-bf943841601d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "46154b82-7afa-4a73-bf8f-851cd4adf969",
+              "memory_uid": "ccd1f422-6130-5f19-869e-681102a3a1fa"
+            }
+          ],
+          "reason": "This is independently useful compared-only evidence about damage from storing a wet umbrella with documents; the reference frame contains no corresponding claim.",
+          "status": "RESOLVED",
+          "summary": "Putting a folded wet umbrella in a bag caused documents inside to become wet.",
+          "uid": "cc0c4d87-a1e4-5393-add0-28ae00275c21"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "46154b82-7afa-4a73-bf8f-851cd4adf969",
+              "memory_uid": "c69a8e87-2b6f-5514-ab0d-0037531592f8"
+            }
+          ],
+          "reason": "This is compared-only information about the mother's rain-preparation practice; the reference frame has no materially related family or weather-preparation claim.",
+          "status": "RESOLVED",
+          "summary": "When rain is forecast, the user's mother anticipates a forgotten umbrella and leaves a spare at the entrance.",
+          "uid": "2af37f48-dbfe-5f7d-a289-ba70810d5453"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "46154b82-7afa-4a73-bf8f-851cd4adf969",
+              "memory_uid": "4567ea9f-1800-51ed-bfac-f4cdf674d4cf"
+            }
+          ],
+          "reason": "This is a compared-only planning policy for long walks; the reference frame's sleep guidance concerns a different operational decision and is not corresponding.",
+          "status": "RESOLVED",
+          "summary": "Long-distance walking plans should account for both that day's weather and recent shoe-discomfort records.",
+          "uid": "3a94c31a-3767-5d60-ba9f-419e8fc8c505"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "46154b82-7afa-4a73-bf8f-851cd4adf969",
+              "memory_uid": "a4ff1b76-755d-530a-b24c-8655115e4fbe"
+            }
+          ],
+          "reason": "This is a compared-only limitation on what location knowledge establishes about footwear; the reference frame contains no corresponding uncertainty claim.",
+          "status": "RESOLVED",
+          "summary": "Knowing where a shoe is does not establish its current condition or usability.",
+          "uid": "0d3cdddc-43df-5264-bc39-6d1a785e03e9"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only information concerns rain-ready footwear, wet-weather outcomes, shoe chafing, umbrella handling, family preparation, walking-plan checks, and uncertainty about footwear condition.",
+        "differences": "",
+        "reference_only": "Reference-only information concerns bedroom cooling and noise, caffeine-linked sleep timing, low-effort meals, a family preference, and caution against generalizing sparse sleep records."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "6fe01fe5-66ed-4c21-a3a3-dd0f23a3986d"
+    },
+    "analysis_digest": "3dcc9c4815d88877a84348ea884ea1e495e52791d415ae2a854866d57ada7596",
+    "key": "67f06e471aa9d059f98364ef7c8b8ea6215676b5e2bcf4c25b29eef4cd79bce3",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 46.59659491699858,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "67f06e471aa9d059f98364ef7c8b8ea6215676b5e2bcf4c25b29eef4cd79bce3",
+  "created_at": "2026-08-13T18:40:14.059291Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/05",
+  "pair_key": "2b36a5b58822620a750a22843250536a57a56a61b9d4ad29a16e78f37320e93c",
+  "provider_seconds": 46.59659491699858,
+  "right": "task-3/local/personal-memory/2025/10",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

@@ -1,0 +1,538 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:27:00.521283+00:00",
+      "frames": [
+        {
+          "context_digest": "130876ecc1e3921197d330f5ad8493b927360f3505da3eff8df01d4f595a4934",
+          "context_name": "task-2/advisor1/structure",
+          "context_uid": "0ff7abfd-58d3-58c2-b42a-31dca38cb7bd",
+          "memories": [
+            {
+              "content": "Complete the problem framing within the first two sentences so the reader reaches the proposal's central issue before any supporting background.",
+              "content_digest": "4096d07c1d883f8ba3973fd247207f8e86964ff2172e8580c81cb53e64772a6c",
+              "position": 0,
+              "uid": "44249c8a-e84f-5c20-a9cd-a55457e98511"
+            },
+            {
+              "content": "Use the first sentence for the concrete problem and the second for its consequence; reserve later sentences for the proposed response.",
+              "content_digest": "8d72b732a389d0c1bbb22112fa3ba6d8113c8b9d29d252d751c5a55cf7abc648",
+              "position": 1,
+              "uid": "21371c6c-c74f-5791-8f9b-6d099306bfb5"
+            },
+            {
+              "content": "Specify the user, context, and interaction to be explored in the primary HCI research question.",
+              "content_digest": "cc6e0085a02b6df0b572f7393a15292e7fd6c8204f78c66f50fd15190ef49dd0",
+              "position": 2,
+              "uid": "f69ea80c-0d56-5fe8-9d24-8793eefa6643"
+            },
+            {
+              "content": "Provide one compact visual summary when proposing an unfamiliar interaction procedure.",
+              "content_digest": "1e4299abe1691fbbfc826fc59d4276831d9a49abd3588820ba2f50311fd56d2c",
+              "position": 3,
+              "uid": "18ebdcbc-cf5a-5e6c-b2cd-b4cd07d7e59e"
+            },
+            {
+              "content": "Mark the conditions that move an unfamiliar interaction procedure from one step to the next in its visual summary.",
+              "content_digest": "9e7d7547cac76b4b6665ea585fedd7678682c7f9a4eadf129202ac2ea2c6b2b8",
+              "position": 4,
+              "uid": "5ab99a77-8836-50cf-8377-fdd23a208bc4"
+            },
+            {
+              "content": "Present the master’s research schedule as phased periods for exploration, design, prototyping, and user evaluation.",
+              "content_digest": "de00ac53757731455605eb2a3568fcbb4ea3660401a8e6aaf2cb9698795decec",
+              "position": 5,
+              "uid": "b9b7932b-85c1-5a14-80f7-0983dbf22380"
+            },
+            {
+              "content": "Link one reviewable deliverable to each phase of the master’s research.",
+              "content_digest": "cac76eb15b96d8fa32e3041fd5a067a3b5e2085fa832755b5740fe7cf2b57c17",
+              "position": 6,
+              "uid": "fc0a3a72-2da2-5843-be3a-a4ff2adf8fac"
+            },
+            {
+              "content": "Place the gap left by HCI-related research and the proposed design and empirical contributions in close proximity.",
+              "content_digest": "94c1e46dec54f1af7649582c49adbd9f998d3b82300cd234c58604e68619c6d9",
+              "position": 7,
+              "uid": "2f7092a7-2625-5d27-bd76-a13ee5809cc2"
+            },
+            {
+              "content": "Divide a two-page proposal with short descriptive subheadings so a reader can jump directly to the problem, proposed response, and next steps.",
+              "content_digest": "9a65c457d63f97379a188faea00bbc6dfc4ea30ad54aee1386f724a765e88e90",
+              "position": 8,
+              "uid": "a1857f07-36cd-5a6c-946d-a308e712e9eb"
+            },
+            {
+              "content": "Give the problem and proposed response their own descriptive subheadings instead of relying only on paragraph transitions.",
+              "content_digest": "3f5d0cf36befd2b1cb66ae8038719d3f8cd4472303e5173c48c1f96f67d9e969",
+              "position": 9,
+              "uid": "895b5ac9-1aa4-51d2-b89a-94e9fe5b869d"
+            },
+            {
+              "content": "Give the next steps and requested support their own descriptive subheading so they remain easy to find on a return visit.",
+              "content_digest": "008352fbd9cb0d40bd64afe1db74efb2a833adc4146924743b836dbd1941bd90",
+              "position": 10,
+              "uid": "3005f4c5-e17b-531b-b9bf-c9d69411c71f"
+            },
+            {
+              "content": "Place pilot observation or initial prototype results near sentences supporting feasibility claims.",
+              "content_digest": "60e9dcff7041a8df6d3471976e828c8a4713a24ec1b8fa6b6af77afd75b78cf8",
+              "position": 11,
+              "uid": "4913f63e-ceb9-587a-ade9-494fc8f28849"
+            },
+            {
+              "content": "Readers often decide what a proposal is about from its first two sentences before scanning the rest of the page.",
+              "content_digest": "0d8addaa334e762de0ef2ec08c78102bc005a6b81f0baf418c83be2a2981934b",
+              "position": 12,
+              "uid": "8ecaec22-7c25-5a39-a85b-56db9c3b607e"
+            },
+            {
+              "content": "When setup continues past the second sentence, readers who are skimming often retain the background topic but miss the exact problem being proposed.",
+              "content_digest": "5976e248ce36164afb87182216974b972f783352ae5b500398052387ee628710",
+              "position": 13,
+              "uid": "a4536b84-40f2-57db-84e4-024c97c9fecb"
+            },
+            {
+              "content": "Reuse the same short subheadings in discussion so a reader can return to a section without searching through the whole page.",
+              "content_digest": "276c3060f1479291f0d0dd7eba9899e91191555c65cfa60a48d28d1f5b877538",
+              "position": 14,
+              "uid": "2312cb6e-4f50-56f5-b725-ba5e45697a73"
+            },
+            {
+              "content": "Use visible subheadings as a completeness check: an empty or missing section makes an omitted part of the proposal immediately apparent.",
+              "content_digest": "2a68f989965d7f20482be421bc6145ea22d769c78e9c833a842694480dc097f5",
+              "position": 15,
+              "uid": "1d90043b-f010-5a14-9493-77f636c13975"
+            },
+            {
+              "content": "Readers often scan section labels before deciding which paragraph to read closely.",
+              "content_digest": "95e51e9236f82b7ace59c6a24359f398583142c762cc1dd607717a9f297e804a",
+              "position": 16,
+              "uid": "b77fe6ec-676b-5bb9-9119-45aefea2aa27"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "d58d91da-6029-4ad9-aada-36ba34b0beb7"
+        },
+        {
+          "context_digest": "19032e7fed99072de4fcaeff084874da452865e9958a1301ec01260d60e01867",
+          "context_name": "task-2/advisor2/structure",
+          "context_uid": "09c95ce6-baa2-5823-a035-e4b0d323200b",
+          "memories": [
+            {
+              "content": "Allow the problem framing to extend through a third sentence when a concrete person, setting, or use situation is needed to make the issue understandable.",
+              "content_digest": "c027c1b4290ff04fe84e475af5aae8fa9e90dd839903b9fe772892e8b6b80323",
+              "position": 0,
+              "uid": "e32f543b-1637-572a-ab96-319d74ee7e21"
+            },
+            {
+              "content": "Use the third sentence for the specific setting and consequence rather than compressing them into an abstract two-sentence summary.",
+              "content_digest": "f02d2bd7ea21e7ebbaff85d3e77c77689dadead77276a3d472d2ad59f94ec5ff",
+              "position": 1,
+              "uid": "6bbb0f69-ca99-539a-a810-a0fb34fe9cc3"
+            },
+            {
+              "content": "Explicitly specify the users, operational stakeholders, and actual usage environment in the primary HCI research question.",
+              "content_digest": "3ab83046fede9de55435f98324226f435bcc4932d2a7440ef61fc21c2e0d71f3",
+              "position": 2,
+              "uid": "48e887dc-7fc8-5a23-9999-890acb870251"
+            },
+            {
+              "content": "Provide one compact visual summary when proposing an unfamiliar interaction procedure.",
+              "content_digest": "1e4299abe1691fbbfc826fc59d4276831d9a49abd3588820ba2f50311fd56d2c",
+              "position": 3,
+              "uid": "e34bce0c-7d07-5fe6-b03f-39faa801640b"
+            },
+            {
+              "content": "Mark the conditions that move an unfamiliar interaction procedure from one step to the next in its visual summary.",
+              "content_digest": "9e7d7547cac76b4b6665ea585fedd7678682c7f9a4eadf129202ac2ea2c6b2b8",
+              "position": 4,
+              "uid": "68ad56f9-6ca2-587a-9182-fd98a79d3d5c"
+            },
+            {
+              "content": "Present the master’s research schedule as phase-specific milestones for field understanding, system implementation, user study, and analysis.",
+              "content_digest": "035713de4f5d6577859b2602ae32a7561594bcbeca023049d4b0e2d4c930d94a",
+              "position": 5,
+              "uid": "eca301ff-9feb-502d-b955-055c48342542"
+            },
+            {
+              "content": "Link deliverables that determine entry into the next phase to each milestone of the master’s research.",
+              "content_digest": "dff2c02b66c97696644d04ee7e685c706443257101e7ee34182dcc5021aa8525",
+              "position": 6,
+              "uid": "cbd977cd-1b78-5ca6-823a-7a5b4b92d77a"
+            },
+            {
+              "content": "Directly connect the gap in the actual usage context with the proposed design and operational contributions in a single flow.",
+              "content_digest": "8da57ff6f210ec4a38d82a2550f96a6b30ba59b7f63f3f3c08e9dcec10dce381",
+              "position": 7,
+              "uid": "9283aedb-6818-5c99-8fe0-502b488acb66"
+            },
+            {
+              "content": "Avoid extra subheadings in a two-page proposal; use paragraph transitions to preserve one continuous argument from problem to proposed response and next steps.",
+              "content_digest": "f6dabe3ee8aba7aa81d707519ffc7d3839f3a74ddcd97fa61d14396e1581f69c",
+              "position": 8,
+              "uid": "c5c04ab1-10e8-52a3-98a1-aa9cbede57c1"
+            },
+            {
+              "content": "Begin each paragraph by connecting it to the previous claim so the short proposal reads as an argument rather than a stack of labeled fragments.",
+              "content_digest": "37d855da87b3b3437e6cc7d865a02d1852b7f7a01c3d7855b0584e399d086619",
+              "position": 9,
+              "uid": "87203bcf-6724-543a-ad19-60a2becc4598"
+            },
+            {
+              "content": "Place preliminary results from field observations or technical validations near sentences supporting feasibility claims.",
+              "content_digest": "8cb8b48f7f57c3248d28f4b82181c9ddbac16acb7b67435abdfb761233b3aecb",
+              "position": 10,
+              "uid": "c9591180-6f3a-5909-8695-31704b9b6f01"
+            },
+            {
+              "content": "Readers may misinterpret a compressed opening when the person, setting, or consequence is only implied.",
+              "content_digest": "2eb34b31c7da38508d152ae4d47ddb8b08479a2e28fbdb4a50c72e7f1999bbf2",
+              "position": 11,
+              "uid": "0ac685f9-e338-5549-bf91-32078cf36f15"
+            },
+            {
+              "content": "A two-sentence opening can become so general that readers understand the topic but cannot picture the situation the proposal intends to change.",
+              "content_digest": "21625e7040d1007bf6931fc1e3551dbbd46739ad339773d51cd00d9f21abf96e",
+              "position": 12,
+              "uid": "5567fb3c-de90-5363-af1b-62fb5b8e0bb1"
+            },
+            {
+              "content": "Use paragraph transitions instead of extra headings when the repeated labels would consume space needed for the argument itself.",
+              "content_digest": "50620b1c5db672532aea9ce8c9bfc11688a5b83bf5436bfc9a308a08fc719286",
+              "position": 13,
+              "uid": "32cef408-4c66-5ef2-9a59-eea6fc67b16e"
+            },
+            {
+              "content": "End each paragraph with the question or consequence that the next paragraph answers.",
+              "content_digest": "3d3639057c446bbd3d2bef5393bce0219451ba3c718d655c62dc51b1ea2df86f",
+              "position": 14,
+              "uid": "3579fcc0-c74e-5006-901b-6406a3106fa1"
+            },
+            {
+              "content": "A continuous sequence of problem, consequence, response, and next step makes the relationship among claims audible without repeating section labels.",
+              "content_digest": "8e1d12ba37953236e2f51510ac3e0382b75b43ff911190216550f82c5679eadf",
+              "position": 15,
+              "uid": "2c2aa1af-c450-5c8d-a907-042c5757d3ee"
+            },
+            {
+              "content": "Readers may experience very short headed sections as an outline because each new label interrupts the connection to the previous paragraph.",
+              "content_digest": "c355e847db92d4c27343283e9415debff2fbdb4b2b2c505d4e442dc78251578d",
+              "position": 16,
+              "uid": "1fb62d5b-532b-5664-842c-57622e3c8b9d"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "097558db-815d-49ab-b1f0-e95bfdaca78d"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [
+        {
+          "options": [
+            {
+              "label": "Visible subheadings",
+              "text": "Use short descriptive labels for the problem, proposed response, and next steps.",
+              "uid": "91d68566-900d-5043-b9ff-317b889cc23e"
+            },
+            {
+              "label": "Continuous flow",
+              "text": "Avoid extra labels and connect the proposal through paragraph transitions.",
+              "uid": "0bbd8b1b-b016-5917-bfd4-a34d703c6da6"
+            },
+            {
+              "label": "Conditional rule",
+              "text": "Define a concrete condition, such as section length or navigation need, that determines which structure applies.",
+              "uid": "26d8319e-8726-59c9-935d-551dadd6d795"
+            }
+          ],
+          "priority": "REQUIRED",
+          "question": "For the same two-page proposal, should readers navigate through visible descriptive subheadings, through uninterrupted paragraph transitions, or through a condition-based rule that specifies when each structure applies?",
+          "relation_uids": [
+            "e6d60e39-b118-5ea5-8415-677373a80ed9"
+          ],
+          "title": "Choose the proposal’s navigation structure",
+          "uid": "4a928bf2-1e8d-53c8-8ccd-29a8b4da32d4",
+          "why_it_matters": "The choice controls space allocation, scanability, section completeness, and continuity of the argument, and the supplied frames give incompatible default instructions."
+        }
+      ],
+      "overview": "The frames broadly align on research-question specificity, visual explanation, phased planning, contribution framing, and nearby feasibility evidence. They preserve a conditional difference over opening length and an unresolved choice between visible subheadings and continuous paragraph flow; the compared frame also adds paragraph-linking techniques.",
+      "relations": [
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "d58d91da-6029-4ad9-aada-36ba34b0beb7",
+              "memory_uid": "44249c8a-e84f-5c20-a9cd-a55457e98511"
+            },
+            {
+              "frame_uid": "d58d91da-6029-4ad9-aada-36ba34b0beb7",
+              "memory_uid": "21371c6c-c74f-5791-8f9b-6d099306bfb5"
+            },
+            {
+              "frame_uid": "d58d91da-6029-4ad9-aada-36ba34b0beb7",
+              "memory_uid": "8ecaec22-7c25-5a39-a85b-56db9c3b607e"
+            },
+            {
+              "frame_uid": "d58d91da-6029-4ad9-aada-36ba34b0beb7",
+              "memory_uid": "a4536b84-40f2-57db-84e4-024c97c9fecb"
+            },
+            {
+              "frame_uid": "097558db-815d-49ab-b1f0-e95bfdaca78d",
+              "memory_uid": "e32f543b-1637-572a-ab96-319d74ee7e21"
+            },
+            {
+              "frame_uid": "097558db-815d-49ab-b1f0-e95bfdaca78d",
+              "memory_uid": "6bbb0f69-ca99-539a-a810-a0fb34fe9cc3"
+            },
+            {
+              "frame_uid": "097558db-815d-49ab-b1f0-e95bfdaca78d",
+              "memory_uid": "0ac685f9-e338-5549-bf91-32078cf36f15"
+            },
+            {
+              "frame_uid": "097558db-815d-49ab-b1f0-e95bfdaca78d",
+              "memory_uid": "5567fb3c-de90-5363-af1b-62fb5b8e0bb1"
+            }
+          ],
+          "reason": "The reference memories establish the two-sentence rule and the skimming risk behind it; the compared memories state an explicit situational exception and the risk of overcompression, so the condition must be preserved.",
+          "status": "RESOLVED",
+          "summary": "Problem framing normally reaches the concrete issue and consequence within two sentences, while a third sentence is permitted when a person, setting, or use situation is necessary for comprehension.",
+          "uid": "2836e167-557d-5133-a482-e2fb17e60dc2"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "d58d91da-6029-4ad9-aada-36ba34b0beb7",
+              "memory_uid": "f69ea80c-0d56-5fe8-9d24-8793eefa6643"
+            },
+            {
+              "frame_uid": "097558db-815d-49ab-b1f0-e95bfdaca78d",
+              "memory_uid": "48e887dc-7fc8-5a23-9999-890acb870251"
+            }
+          ],
+          "reason": "Both memories seek concrete specification of who is involved and where or how use occurs; the compared claim adds operational stakeholders without displacing the reference elements.",
+          "status": "RESOLVED",
+          "summary": "The primary HCI research question should identify the relevant users, context or environment, and interaction, including operational stakeholders where applicable.",
+          "uid": "e98b0f13-5127-50e5-841c-63f2646fe479"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            {
+              "frame_uid": "d58d91da-6029-4ad9-aada-36ba34b0beb7",
+              "memory_uid": "18ebdcbc-cf5a-5e6c-b2cd-b4cd07d7e59e"
+            },
+            {
+              "frame_uid": "097558db-815d-49ab-b1f0-e95bfdaca78d",
+              "memory_uid": "e34bce0c-7d07-5fe6-b03f-39faa801640b"
+            }
+          ],
+          "reason": "The memories state the same operational requirement under the same scope.",
+          "status": "RESOLVED",
+          "summary": "An unfamiliar interaction procedure should be accompanied by one compact visual summary.",
+          "uid": "e3a7b57d-5127-55b2-b3d5-78218c00c518"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            {
+              "frame_uid": "d58d91da-6029-4ad9-aada-36ba34b0beb7",
+              "memory_uid": "5ab99a77-8836-50cf-8377-fdd23a208bc4"
+            },
+            {
+              "frame_uid": "097558db-815d-49ab-b1f0-e95bfdaca78d",
+              "memory_uid": "68ad56f9-6ca2-587a-9182-fd98a79d3d5c"
+            }
+          ],
+          "reason": "The memories state the same operational requirement under the same scope.",
+          "status": "RESOLVED",
+          "summary": "The visual summary of an unfamiliar interaction procedure should mark the conditions governing movement between steps.",
+          "uid": "78acdd86-d0a8-5261-a88f-e59e2164f817"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "d58d91da-6029-4ad9-aada-36ba34b0beb7",
+              "memory_uid": "b9b7932b-85c1-5a14-80f7-0983dbf22380"
+            },
+            {
+              "frame_uid": "097558db-815d-49ab-b1f0-e95bfdaca78d",
+              "memory_uid": "eca301ff-9feb-502d-b955-055c48342542"
+            }
+          ],
+          "reason": "The phase labels differ in granularity, but both can govern one schedule and support the same decision to expose the progression of research work.",
+          "status": "RESOLVED",
+          "summary": "The master’s research schedule should be organized into explicit phases or milestones covering investigation, implementation or prototyping, user evaluation, and analysis.",
+          "uid": "c32ad2ce-72ad-52ad-99dd-8c2047cbdd8b"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "d58d91da-6029-4ad9-aada-36ba34b0beb7",
+              "memory_uid": "fc0a3a72-2da2-5843-be3a-a4ff2adf8fac"
+            },
+            {
+              "frame_uid": "097558db-815d-49ab-b1f0-e95bfdaca78d",
+              "memory_uid": "cbd977cd-1b78-5ca6-823a-7a5b4b92d77a"
+            }
+          ],
+          "reason": "A deliverable that determines phase entry is also reviewable, so the compared requirement strengthens the shared phase-output policy without contradicting it.",
+          "status": "RESOLVED",
+          "summary": "Each research phase or milestone should have a reviewable deliverable, with gate-setting deliverables identifying readiness to enter the next phase.",
+          "uid": "907cb458-5b23-5e32-a5ba-3b31e1d784b9"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "d58d91da-6029-4ad9-aada-36ba34b0beb7",
+              "memory_uid": "2f7092a7-2625-5d27-bd76-a13ee5809cc2"
+            },
+            {
+              "frame_uid": "097558db-815d-49ab-b1f0-e95bfdaca78d",
+              "memory_uid": "9283aedb-6818-5c99-8fe0-502b488acb66"
+            }
+          ],
+          "reason": "Both memories require close linkage between gap and contributions; their HCI, usage-context, empirical, and operational descriptions are compatible dimensions of that linkage.",
+          "status": "RESOLVED",
+          "summary": "The research gap should be placed in a direct narrative connection with the proposed design and empirical or operational contributions.",
+          "uid": "b8ba7ae4-a17b-5725-a562-6b5ec8168429"
+        },
+        {
+          "kind": "CONFLICT",
+          "members": [
+            {
+              "frame_uid": "d58d91da-6029-4ad9-aada-36ba34b0beb7",
+              "memory_uid": "a1857f07-36cd-5a6c-946d-a308e712e9eb"
+            },
+            {
+              "frame_uid": "d58d91da-6029-4ad9-aada-36ba34b0beb7",
+              "memory_uid": "895b5ac9-1aa4-51d2-b89a-94e9fe5b869d"
+            },
+            {
+              "frame_uid": "d58d91da-6029-4ad9-aada-36ba34b0beb7",
+              "memory_uid": "3005f4c5-e17b-531b-b9bf-c9d69411c71f"
+            },
+            {
+              "frame_uid": "d58d91da-6029-4ad9-aada-36ba34b0beb7",
+              "memory_uid": "2312cb6e-4f50-56f5-b725-ba5e45697a73"
+            },
+            {
+              "frame_uid": "d58d91da-6029-4ad9-aada-36ba34b0beb7",
+              "memory_uid": "1d90043b-f010-5a14-9493-77f636c13975"
+            },
+            {
+              "frame_uid": "d58d91da-6029-4ad9-aada-36ba34b0beb7",
+              "memory_uid": "b77fe6ec-676b-5bb9-9119-45aefea2aa27"
+            },
+            {
+              "frame_uid": "097558db-815d-49ab-b1f0-e95bfdaca78d",
+              "memory_uid": "c5c04ab1-10e8-52a3-98a1-aa9cbede57c1"
+            },
+            {
+              "frame_uid": "097558db-815d-49ab-b1f0-e95bfdaca78d",
+              "memory_uid": "32cef408-4c66-5ef2-9a59-eea6fc67b16e"
+            },
+            {
+              "frame_uid": "097558db-815d-49ab-b1f0-e95bfdaca78d",
+              "memory_uid": "2c2aa1af-c450-5c8d-a907-042c5757d3ee"
+            },
+            {
+              "frame_uid": "097558db-815d-49ab-b1f0-e95bfdaca78d",
+              "memory_uid": "1fb62d5b-532b-5664-842c-57622e3c8b9d"
+            }
+          ],
+          "reason": "For the same two-page proposal, one policy requires labeled sections for the problem, response, and next steps, while the other directs authors to rely on continuous paragraph flow because labels interrupt or consume space; no supplied condition selects between them.",
+          "status": "UNRESOLVED",
+          "summary": "The reference frame uses visible descriptive subheadings for navigation and completeness, whereas the compared frame avoids extra headings to preserve space and argumentative continuity.",
+          "uid": "e6d60e39-b118-5ea5-8415-677373a80ed9"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "d58d91da-6029-4ad9-aada-36ba34b0beb7",
+              "memory_uid": "4913f63e-ceb9-587a-ade9-494fc8f28849"
+            },
+            {
+              "frame_uid": "097558db-815d-49ab-b1f0-e95bfdaca78d",
+              "memory_uid": "c9591180-6f3a-5909-8695-31704b9b6f01"
+            }
+          ],
+          "reason": "Both memories prescribe local placement of early evidence beside feasibility claims, while offering compatible examples of qualifying evidence.",
+          "status": "RESOLVED",
+          "summary": "Preliminary observational or prototype and technical evidence should appear near the feasibility claims it supports.",
+          "uid": "7289ace8-02ae-5e7d-a114-09aba7b0dcdc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "097558db-815d-49ab-b1f0-e95bfdaca78d",
+              "memory_uid": "87203bcf-6724-543a-ad19-60a2becc4598"
+            }
+          ],
+          "reason": "This is an independently useful compared-only technique for argumentative continuity, and the reference frame supplies no corresponding paragraph-opening instruction.",
+          "status": "RESOLVED",
+          "summary": "Each paragraph should begin by connecting its claim to the preceding claim.",
+          "uid": "cd5a11df-fdba-56d6-9f8a-5d7a35231d50"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "097558db-815d-49ab-b1f0-e95bfdaca78d",
+              "memory_uid": "3579fcc0-c74e-5006-901b-6406a3106fa1"
+            }
+          ],
+          "reason": "This is an independently useful compared-only technique for forward narrative linkage, and the reference frame supplies no corresponding paragraph-ending instruction.",
+          "status": "RESOLVED",
+          "summary": "Each paragraph should end with a question or consequence that the following paragraph answers.",
+          "uid": "42a51b85-4b27-549a-ba78-3f50823c0bd5"
+        }
+      ],
+      "reports": {
+        "both": "Both favor concrete HCI questions, compact procedural visuals with transition conditions, phased schedules with reviewable outputs, closely connected gaps and contributions, and feasibility evidence placed beside its claims.",
+        "compared_only": "The compared frame additionally recommends opening paragraphs by linking backward and ending them with a question or consequence that leads forward.",
+        "differences": "A concrete situation may conditionally justify a third opening sentence. The frames directly disagree on whether a two-page proposal should use descriptive subheadings or preserve an uninterrupted argument through transitions.",
+        "reference_only": ""
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "23c9488b-177d-4685-8c75-affce52afca9"
+    },
+    "analysis_digest": "9b1f66ef0b6ee43fa93008a868df438b0a32fc2211501494c944ea55261341b4",
+    "key": "7c56bf02060f815d494ee8f8e9551a8a45fea1ba05259ab0bab3b1e415dbc554",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 59.687929750001786,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "7c56bf02060f815d494ee8f8e9551a8a45fea1ba05259ab0bab3b1e415dbc554",
+  "created_at": "2026-08-13T18:28:00.208738Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/structure",
+  "pair_key": "f5cc9a260e13bbee89100472b512d24590ece5f60fa3b59edf08633fd957f7e8",
+  "provider_seconds": 59.687929750001786,
+  "right": "task-2/advisor2/structure",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

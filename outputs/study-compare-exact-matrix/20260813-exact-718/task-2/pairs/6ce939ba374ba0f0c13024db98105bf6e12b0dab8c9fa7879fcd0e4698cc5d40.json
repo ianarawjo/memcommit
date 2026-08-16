@@ -1,0 +1,311 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:23:28.059116+00:00",
+      "frames": [
+        {
+          "context_digest": "9d55b4a5604285e426b317f7f4732b35ca1e9df044f7015b3ae6a6be0df5492b",
+          "context_name": "task-2/advisor1/reproducibility",
+          "context_uid": "7d293f75-52b6-5f27-99c4-54f2be3d8e59",
+          "memories": [
+            {
+              "content": "HCI reviewers find it difficult to assess the reproducibility of results if the prototype version used in the evaluation is not disclosed.",
+              "content_digest": "9b89217d4ef2c7524af665ea80d7d60e61f1663fd8ea4bdde533c8d3a0da2044",
+              "position": 0,
+              "uid": "fb400759-63ed-568a-b94e-5f0c2fe94b67"
+            },
+            {
+              "content": "Record the manipulated and fixed elements of compared design alternatives so that other researchers can reconstruct them.",
+              "content_digest": "26b84b5f0644980de51d764218ce90fb614eb02a2df38fb3632f44d360a93cd3",
+              "position": 1,
+              "uid": "e52e8470-6419-5306-9ddd-00a86003dcf3"
+            },
+            {
+              "content": "Records of formative evaluation decisions enable the reconstruction of connections between raw data, interpretation, and design modifications.",
+              "content_digest": "f213479e4bd1947d418083139346ed7f666bc597133962617d94bdd3a9af0083",
+              "position": 2,
+              "uid": "8f4edf8c-491d-56fe-bde4-d9ce25d6de50"
+            },
+            {
+              "content": "The user must make it possible to trace which observations each prototype version reflects so the process of deriving design knowledge can be reviewed.",
+              "content_digest": "1c9b8a6f650f2eb652b1e9cbb62ad9dcbb3ec13f2e160b52db83492640eb0ae9",
+              "position": 3,
+              "uid": "87662a7e-ffc7-521a-a06c-7db8184377e8"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "2e056ca5-7bc4-4e51-b384-063e64a4b000"
+        },
+        {
+          "context_digest": "b379636c1034c71339b717628e5e233c5f245d0452c487967c8e881d38e4b4a7",
+          "context_name": "task-2/advisor2/feasibility",
+          "context_uid": "2a4a102a-14f5-53bb-88ef-681448ebecff",
+          "memories": [
+            {
+              "content": "Mark unverified schedule assumptions as such.",
+              "content_digest": "d4cdcdbcdb51d96f9a7435e72c2e4ef25a3e3822a765a88afafeca5194bda96e",
+              "position": 0,
+              "uid": "5c9755f8-78bd-5654-a3c7-8be0864e4f12"
+            },
+            {
+              "content": "Mark unverified recruitment assumptions as such.",
+              "content_digest": "4cc28528fee1c7b09f709638e2b57d3bc9efe635d20500ee98567f8f59b8cf21",
+              "position": 1,
+              "uid": "75af48aa-b39e-5b55-95d9-f7f7d2becbad"
+            },
+            {
+              "content": "Mark unverified technical assumptions as such.",
+              "content_digest": "8942e49cd46e3e9746330349df11e49d4a6c9250c7aa4c52c2d9ade1c97c735c",
+              "position": 2,
+              "uid": "292e33b0-4bfd-5e3a-9379-0fbf3619c42d"
+            },
+            {
+              "content": "Trace back the resources required for each core prototype feature and field research procedure.",
+              "content_digest": "b1ac088b664c62c3c1cfb96f6bb31a3ab5fc0fd77d0d1fba58e1da621b5dd56a",
+              "position": 3,
+              "uid": "c0c1fd8d-1aae-51a3-a1d4-66c1481d7b48"
+            },
+            {
+              "content": "Operations reviewers judge feasibility by examining the personnel required for each procedure.",
+              "content_digest": "3199aba38f58f677147b94eca54221e4d0add145a2a58194c3851efcc22e8fab",
+              "position": 4,
+              "uid": "7be25c27-6d67-50fe-90b5-76fca32a93d8"
+            },
+            {
+              "content": "Operations reviewers judge feasibility by examining the equipment required for each procedure.",
+              "content_digest": "13f9b86391d66cf558fc6eead29969c80acdf78d2164c96aa99641bf6c2891fd",
+              "position": 5,
+              "uid": "1aae182f-4eb3-58b7-b8cd-5ce517ead36a"
+            },
+            {
+              "content": "Operations reviewers judge feasibility by examining the time required for each procedure.",
+              "content_digest": "29efef51e7b8e35c459099af93b8ea90d019d83de3cf894e04b184078619fff4",
+              "position": 6,
+              "uid": "84f6e5e3-96b4-538b-a633-1b656204a296"
+            },
+            {
+              "content": "Document separately the commitments and confirmation status of field partners required for recruitment, installation, and operational support.",
+              "content_digest": "ba0ceb0fa886251bfe2b5a83154500862f8c2d4a82ed74fc9ddb3600010cc0b3",
+              "position": 7,
+              "uid": "16a461c4-d90d-5d0f-bfd0-4c1a116ec2be"
+            },
+            {
+              "content": "Designate a responsible party for software updates, equipment inspections, and user support during the deployment period.",
+              "content_digest": "54caa62836c502faf35561d45fba1d02a059c8ed6436ce714114bd392cb3bc9d",
+              "position": 8,
+              "uid": "0ce26892-666f-5ebe-95b2-c6f48915f18b"
+            },
+            {
+              "content": "The user's deployment readiness can be assessed only when dependencies on external services and field personnel are visible.",
+              "content_digest": "931fa67dd8ea84954ce3f0b9631301c320fdcf1bf46fb7fda0214e77636c8c1c",
+              "position": 9,
+              "uid": "4f35fd0c-005a-56a7-b33a-d74bde2d65eb"
+            },
+            {
+              "content": "Field schedules and assigned personnel may change due to operational factors beyond the researcher’s control.",
+              "content_digest": "71739481ce3043f342d9c7c52297c7644931a0a096215fc15150915b74968d84",
+              "position": 10,
+              "uid": "3b96bf66-59e4-5dbf-98d3-937402abc67b"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "707a254b-fcf9-4d30-9e6b-1f6af84ae323"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The reference frame focuses on reproducible HCI evaluation and traceable design evolution, while the compared frame focuses on operational feasibility and deployment readiness. Their documentation requirements concern separate decisions, with no shared, scoped, ambiguous, or conflicting operational claim.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2e056ca5-7bc4-4e51-b384-063e64a4b000",
+              "memory_uid": "fb400759-63ed-568a-b94e-5f0c2fe94b67"
+            }
+          ],
+          "reason": "This is a one-sided requirement concerning identification of the evaluated artifact; the compared frame has no claim governing prototype-version disclosure.",
+          "status": "RESOLVED",
+          "summary": "Disclose the prototype version used in an evaluation so reviewers can assess reproducibility.",
+          "uid": "b3a80a84-095f-5216-9deb-80609a6413f3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2e056ca5-7bc4-4e51-b384-063e64a4b000",
+              "memory_uid": "e52e8470-6419-5306-9ddd-00a86003dcf3"
+            }
+          ],
+          "reason": "This independently addresses reconstruction of experimental design alternatives, which is not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Record fixed and manipulated elements so compared design alternatives can be reconstructed.",
+          "uid": "f6a964ae-c9cf-502a-aea4-340877bf74ee"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2e056ca5-7bc4-4e51-b384-063e64a4b000",
+              "memory_uid": "8f4edf8c-491d-56fe-bde4-d9ce25d6de50"
+            },
+            {
+              "frame_uid": "2e056ca5-7bc4-4e51-b384-063e64a4b000",
+              "memory_uid": "87662a7e-ffc7-521a-a06c-7db8184377e8"
+            }
+          ],
+          "reason": "Both reference memories express one provenance requirement for reviewing how formative evidence became design knowledge and prototype changes; the compared frame does not address that chain.",
+          "status": "RESOLVED",
+          "summary": "Preserve traceability from formative observations and interpretation to the prototype versions and design modifications they produced.",
+          "uid": "a4b23e2d-673c-5fd2-ac78-ac7cea70bfd6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "707a254b-fcf9-4d30-9e6b-1f6af84ae323",
+              "memory_uid": "5c9755f8-78bd-5654-a3c7-8be0864e4f12"
+            },
+            {
+              "frame_uid": "707a254b-fcf9-4d30-9e6b-1f6af84ae323",
+              "memory_uid": "75af48aa-b39e-5b55-95d9-f7f7d2becbad"
+            },
+            {
+              "frame_uid": "707a254b-fcf9-4d30-9e6b-1f6af84ae323",
+              "memory_uid": "292e33b0-4bfd-5e3a-9379-0fbf3619c42d"
+            }
+          ],
+          "reason": "These compared memories split one policy across assumption categories; the reference frame contains no corresponding assumption-status requirement.",
+          "status": "RESOLVED",
+          "summary": "Explicitly label unverified schedule, recruitment, and technical assumptions.",
+          "uid": "7d82b453-5f30-5ead-8065-ae540724b42e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "707a254b-fcf9-4d30-9e6b-1f6af84ae323",
+              "memory_uid": "c0c1fd8d-1aae-51a3-a1d4-66c1481d7b48"
+            }
+          ],
+          "reason": "This is a one-sided resource-attribution requirement for operational planning, distinct from the reference frame's design-evidence provenance.",
+          "status": "RESOLVED",
+          "summary": "Trace the resources required by each core prototype feature and field research procedure.",
+          "uid": "fd2103e4-9cae-52b2-b732-c9492090f807"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "707a254b-fcf9-4d30-9e6b-1f6af84ae323",
+              "memory_uid": "7be25c27-6d67-50fe-90b5-76fca32a93d8"
+            },
+            {
+              "frame_uid": "707a254b-fcf9-4d30-9e6b-1f6af84ae323",
+              "memory_uid": "1aae182f-4eb3-58b7-b8cd-5ce517ead36a"
+            },
+            {
+              "frame_uid": "707a254b-fcf9-4d30-9e6b-1f6af84ae323",
+              "memory_uid": "84f6e5e3-96b4-538b-a633-1b656204a296"
+            }
+          ],
+          "reason": "These compared memories divide one feasibility-assessment claim into its principal resource dimensions; the reference frame does not govern procedure feasibility.",
+          "status": "RESOLVED",
+          "summary": "Support feasibility review by documenting the personnel, equipment, and time required for each procedure.",
+          "uid": "93931de5-3fa7-5198-aae1-61639cbde7b0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "707a254b-fcf9-4d30-9e6b-1f6af84ae323",
+              "memory_uid": "16a461c4-d90d-5d0f-bfd0-4c1a116ec2be"
+            }
+          ],
+          "reason": "This independently governs partner commitments and their confirmation, with no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Separately document field-partner commitments and confirmation status for recruitment, installation, and operational support.",
+          "uid": "99a69ad3-b942-5c3e-9398-aed6c7f71d85"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "707a254b-fcf9-4d30-9e6b-1f6af84ae323",
+              "memory_uid": "0ce26892-666f-5ebe-95b2-c6f48915f18b"
+            }
+          ],
+          "reason": "This is a one-sided operational ownership requirement not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Assign responsibility for software updates, equipment inspections, and user support during deployment.",
+          "uid": "27eb7c0a-3c4a-591c-8da7-7c418d79c084"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "707a254b-fcf9-4d30-9e6b-1f6af84ae323",
+              "memory_uid": "4f35fd0c-005a-56a7-b33a-d74bde2d65eb"
+            }
+          ],
+          "reason": "This states a distinct readiness condition based on dependency visibility; the reference frame instead concerns reproducibility and design provenance.",
+          "status": "RESOLVED",
+          "summary": "Make external-service and field-personnel dependencies visible so deployment readiness can be assessed.",
+          "uid": "663de174-caac-5d2b-8015-0e058ccdb37a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "707a254b-fcf9-4d30-9e6b-1f6af84ae323",
+              "memory_uid": "3b96bf66-59e4-5dbf-98d3-937402abc67b"
+            }
+          ],
+          "reason": "This independently records operational volatility and external constraints, which the reference frame does not discuss.",
+          "status": "RESOLVED",
+          "summary": "Recognize that field schedules and assigned personnel can change because of operational factors outside researcher control.",
+          "uid": "b88ae2ff-24eb-525a-a967-d654f86f11e0"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers assumption labeling, resource and dependency visibility, feasibility inputs, partner commitments, deployment ownership, and operational volatility.",
+        "differences": "",
+        "reference_only": "The reference requires disclosure of evaluated prototype versions, reconstruction of design alternatives, and traceability from formative evidence to prototype changes."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "c93a0f82-1841-41ac-b7b8-d77527dd4a59"
+    },
+    "analysis_digest": "473ff60be1747d5bc68e1323adc7c62b5c8ccce96ea78896be6e56e15669cc40",
+    "key": "52103a2a7bdbd8db40d2e13974c9e1e0875e1dc253eff2149a881131e85dcca0",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 37.59239775000242,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "52103a2a7bdbd8db40d2e13974c9e1e0875e1dc253eff2149a881131e85dcca0",
+  "created_at": "2026-08-13T18:24:05.651204Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/reproducibility",
+  "pair_key": "6ce939ba374ba0f0c13024db98105bf6e12b0dab8c9fa7879fcd0e4698cc5d40",
+  "provider_seconds": 37.59239775000242,
+  "right": "task-2/advisor2/feasibility",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

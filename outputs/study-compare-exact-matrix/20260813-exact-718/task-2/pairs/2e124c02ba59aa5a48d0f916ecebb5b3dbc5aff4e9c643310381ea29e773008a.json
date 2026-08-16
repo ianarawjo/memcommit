@@ -1,0 +1,330 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:19:21.201603+00:00",
+      "frames": [
+        {
+          "context_digest": "89608fbad1167ce0da41a7a6312a1b4e92ee55ff6a7d97bb480a0c75d588a7f2",
+          "context_name": "task-2/advisor1/ethics",
+          "context_uid": "5cdea05f-b6ec-586d-a87f-5347d1d51f96",
+          "memories": [
+            {
+              "content": "Link expected participant burden in each user study task to its corresponding mitigation strategy.",
+              "content_digest": "3595c8f1662100b6c6345bb709c7b2eba285f1979f8d3a5b925c4f32ed9aa4dc",
+              "position": 0,
+              "uid": "e93ea2ee-a8b0-5f3d-b6fd-c76f385eef50"
+            },
+            {
+              "content": "Specify the accommodations necessary for participants to access the prototype and research tasks.",
+              "content_digest": "9879ddf2306813f412b89c1f67f4b1a4779ff9acf55b0b34942bc6f1f555f695",
+              "position": 1,
+              "uid": "6ecf6a7b-f4e9-5d96-a52c-520197d4a2a6"
+            },
+            {
+              "content": "Specify how accessibility accommodations will be provided during user study sessions.",
+              "content_digest": "cce1831f8b2bb3015bc4e69e64a2b1cd4ea6f7249daf28da6686eec262038dc5",
+              "position": 2,
+              "uid": "bc41fce0-dbfc-5d23-9d97-9f81531c098c"
+            },
+            {
+              "content": "Describe how personal identifiers will be separated from research data immediately after collection.",
+              "content_digest": "bd80d3a47e10f1c8a9aec0362cb51995bfe9ecd22f86be916cb0a9009b5f23bf",
+              "position": 3,
+              "uid": "9768e0d9-ef46-52a4-af04-8f6ca3c176c5"
+            },
+            {
+              "content": "Specify the equipment to be loaned to participants who lack necessary devices.",
+              "content_digest": "69991f284e369e31da55a2a23afef032bd50f43dfe66d417a816b242d10c9926",
+              "position": 4,
+              "uid": "e874407e-4d36-55a6-949e-44e5944f1bb4"
+            },
+            {
+              "content": "Describe the procedure for returning equipment loaned to participants.",
+              "content_digest": "100ffbad1288c3263bc4a1044b2d42da35c36a3f73786e58e4391fbac98c84f2",
+              "position": 5,
+              "uid": "df16dca6-0b48-5753-aa18-7e5524187a1e"
+            },
+            {
+              "content": "HCI ethics reviewers verify that expected burdens and mitigation strategies correspond to each user study task.",
+              "content_digest": "1ce06fdbd6b8c4542063ab2413ba80a40c86336dcc43ebb4e1590a246e76d968",
+              "position": 6,
+              "uid": "7d0b3072-7bac-5bc6-9c79-acc808c38f1f"
+            },
+            {
+              "content": "Inform participants that the formative evaluation prototype is not a finished service.",
+              "content_digest": "b02788b149a575392cc58dcba87c21026eec4d733f4e1ef0b3149fcc0e318e74",
+              "position": 7,
+              "uid": "407a4c1c-c333-5764-8d89-252bed150f99"
+            },
+            {
+              "content": "Set an upper limit on cumulative task burden when requesting repeated evaluations from the same participant.",
+              "content_digest": "9d8e4304568abc398445be0aeddc4d1c9945bf48e0295240d48c071dd979646e",
+              "position": 8,
+              "uid": "28646fd3-54af-51f9-97da-ad9489ecda79"
+            },
+            {
+              "content": "The author of this proposal tends to emphasize expected benefits of the prototype over participant burden.",
+              "content_digest": "ffb40ab90087893e20227797ee997e40803e3b812f8a1634e282ab9920cf28d4",
+              "position": 9,
+              "uid": "218aafb6-9332-5693-a2e7-c7777dc64de7"
+            },
+            {
+              "content": "In organizations where leaders or institutional staff handle recruitment, recruitment authority and academic or professional evaluation authority may be combined in the same role.",
+              "content_digest": "d7baf962a2cae0da6c9057f909918788101229b54d57340fb1d5aad459597c05",
+              "position": 10,
+              "uid": "1ecb7268-f77a-5643-a456-357df6cd8f6e"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "e0e5fdf2-8c4b-4441-a611-176a2eff3900"
+        },
+        {
+          "context_digest": "3cadca09eeabe1389261c2e43133d8b304ed2cad66332f3444e686a824f10a21",
+          "context_name": "task-2/advisor2/scope",
+          "context_uid": "86efd53c-c08d-537c-983f-91a7b915640d",
+          "memories": [
+            {
+              "content": "Specify in one sentence the user population and actual usage environment to which the design knowledge applies.",
+              "content_digest": "3bb25f3252678a84fe361c9562692c27556d31b6fac53da87b763648e80ed6ac",
+              "position": 0,
+              "uid": "6cfd5026-0c04-5ed8-baac-a56e68723aa3"
+            },
+            {
+              "content": "Reviewers judge the generalization boundary of results through the specified target population and environment.",
+              "content_digest": "9119780de23a4734bc8e0ba3c39dce251611932fd86bec479b522adaf1882758",
+              "position": 1,
+              "uid": "5bc7cf05-8c47-57d4-a749-ec7d2ec45e3e"
+            },
+            {
+              "content": "Specify the workflow, technical infrastructure, and operational-authority conditions that must match before applying the design guidelines at another field site.",
+              "content_digest": "2970e43d1b52b63b6f76c3c55a5534d24508bcd32402e66098d75dbb52d8083b",
+              "position": 2,
+              "uid": "25731e2b-8535-5b37-a377-0a3a99dbe189"
+            },
+            {
+              "content": "The transferability of field design knowledge depends not only on user characteristics but also on workflow and technological–organizational infrastructure.",
+              "content_digest": "71b7cbcf151114f17886e57f026c2b2ebdd666c7aa88f95c85880a1bc96fdcd2",
+              "position": 3,
+              "uid": "d79ba448-76b6-592e-b4ba-8cfd98683755"
+            },
+            {
+              "content": "The user tends to apply results confirmed at one deployment site to all similar organizations.",
+              "content_digest": "810ee3a6b79606e7f199a30aa146f47e405ff71d1728a3bbfef16b601f5c0d5e",
+              "position": 4,
+              "uid": "cde0ee2b-af3c-5c0d-b23c-632778c93e20"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "d506f2a9-b08a-4adc-b4cd-45fc9da3efd3"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address complementary but separate concerns. The reference frame concentrates on participant protections, study logistics, authority risks, and burden-aware review, while the compared frame concentrates on defining and reviewing the boundaries for transferring field-design knowledge across populations, environments, and organizations.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e0e5fdf2-8c4b-4441-a611-176a2eff3900",
+              "memory_uid": "e93ea2ee-a8b0-5f3d-b6fd-c76f385eef50"
+            },
+            {
+              "frame_uid": "e0e5fdf2-8c4b-4441-a611-176a2eff3900",
+              "memory_uid": "7d0b3072-7bac-5bc6-9c79-acc808c38f1f"
+            }
+          ],
+          "reason": "These reference-side memories express the authoring and review components of one task-level burden-control requirement, with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Expected participant burdens and mitigations should be linked to individual study tasks and checked by ethics reviewers.",
+          "uid": "093b1b95-c56a-5dcc-91a1-7928d3aaaf78"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e0e5fdf2-8c4b-4441-a611-176a2eff3900",
+              "memory_uid": "6ecf6a7b-f4e9-5d96-a52c-520197d4a2a6"
+            },
+            {
+              "frame_uid": "e0e5fdf2-8c4b-4441-a611-176a2eff3900",
+              "memory_uid": "bc41fce0-dbfc-5d23-9d97-9f81531c098c"
+            }
+          ],
+          "reason": "These reference-side memories split the necessary content and implementation of one accommodation plan, which the compared frame does not address.",
+          "status": "RESOLVED",
+          "summary": "A study plan should identify required accessibility accommodations and explain their delivery during sessions.",
+          "uid": "d6db5200-94a6-52c5-9988-71f0a6ab9e22"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e0e5fdf2-8c4b-4441-a611-176a2eff3900",
+              "memory_uid": "9768e0d9-ef46-52a4-af04-8f6ca3c176c5"
+            }
+          ],
+          "reason": "This is an independently useful reference-only data-protection procedure absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Personal identifiers should be separated from research data immediately after collection.",
+          "uid": "e91161e6-a0c7-5365-9acb-01179d0f1026"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e0e5fdf2-8c4b-4441-a611-176a2eff3900",
+              "memory_uid": "e874407e-4d36-55a6-949e-44e5944f1bb4"
+            },
+            {
+              "frame_uid": "e0e5fdf2-8c4b-4441-a611-176a2eff3900",
+              "memory_uid": "df16dca6-0b48-5753-aa18-7e5524187a1e"
+            }
+          ],
+          "reason": "These reference-side memories describe complementary parts of one equipment-loan protocol, with no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Participant equipment-loan arrangements should specify both the supplied devices and their return procedure.",
+          "uid": "8907a587-6252-511a-b626-e8a1ccb10553"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e0e5fdf2-8c4b-4441-a611-176a2eff3900",
+              "memory_uid": "407a4c1c-c333-5764-8d89-252bed150f99"
+            }
+          ],
+          "reason": "This reference-only disclosure obligation is independent of the transferability policies in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Participants should be told that the formative-evaluation prototype is not a finished service.",
+          "uid": "ea7b38ae-22b9-5cf2-aec4-a672840a62d1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e0e5fdf2-8c4b-4441-a611-176a2eff3900",
+              "memory_uid": "28646fd3-54af-51f9-97da-ad9489ecda79"
+            }
+          ],
+          "reason": "This is a distinct reference-only safeguard for repeated participation.",
+          "status": "RESOLVED",
+          "summary": "Repeated evaluations involving the same participant should have an upper limit on cumulative task burden.",
+          "uid": "1a3cdb63-25e7-5aca-87be-5e820028abaa"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e0e5fdf2-8c4b-4441-a611-176a2eff3900",
+              "memory_uid": "218aafb6-9332-5693-a2e7-c7777dc64de7"
+            }
+          ],
+          "reason": "This reference-only observation identifies a specific evaluative bias not addressed in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to emphasize expected prototype benefits over participant burden.",
+          "uid": "8b228fe4-dc97-58c4-9244-09730d57e1c0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e0e5fdf2-8c4b-4441-a611-176a2eff3900",
+              "memory_uid": "1ecb7268-f77a-5643-a456-357df6cd8f6e"
+            }
+          ],
+          "reason": "This reference-only observation identifies an organizational recruitment condition with potential ethical significance, separate from transferability criteria.",
+          "status": "RESOLVED",
+          "summary": "Institution-led recruitment can combine recruitment power with academic or professional evaluation authority in one role.",
+          "uid": "64728000-e935-52e9-98db-862cfc6d33b1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d506f2a9-b08a-4adc-b4cd-45fc9da3efd3",
+              "memory_uid": "6cfd5026-0c04-5ed8-baac-a56e68723aa3"
+            },
+            {
+              "frame_uid": "d506f2a9-b08a-4adc-b4cd-45fc9da3efd3",
+              "memory_uid": "5bc7cf05-8c47-57d4-a749-ec7d2ec45e3e"
+            }
+          ],
+          "reason": "These compared-side memories express the specification and review components of one generalization-boundary requirement, absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The applicable user population and actual usage environment should define the generalization boundary reviewed for study results.",
+          "uid": "8e33549b-6b21-5956-8aec-5705e928295c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d506f2a9-b08a-4adc-b4cd-45fc9da3efd3",
+              "memory_uid": "25731e2b-8535-5b37-a377-0a3a99dbe189"
+            },
+            {
+              "frame_uid": "d506f2a9-b08a-4adc-b4cd-45fc9da3efd3",
+              "memory_uid": "d79ba448-76b6-592e-b4ba-8cfd98683755"
+            }
+          ],
+          "reason": "These compared-side memories provide prescriptive and explanatory parts of one site-transfer criterion, with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Transfer to another field site depends on matching workflow, technical infrastructure, and organizational or operational-authority conditions, not merely user characteristics.",
+          "uid": "d2af7216-a1c8-5d5b-a6d0-0fae1becaac3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d506f2a9-b08a-4adc-b4cd-45fc9da3efd3",
+              "memory_uid": "cde0ee2b-af3c-5c0d-b23c-632778c93e20"
+            }
+          ],
+          "reason": "This compared-only observation identifies an overgeneralization tendency not covered by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user tends to generalize results from one deployment site to all similar organizations.",
+          "uid": "b4036ff2-4f0e-521d-99fb-96b1eb7dc74c"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame defines population, environment, workflow, infrastructure, and authority boundaries for transferability, alongside reviewer assessment and a tendency to overgeneralize from one site.",
+        "differences": "",
+        "reference_only": "The reference covers task-level and cumulative burden, accommodations, data separation, equipment loans, prototype disclosure, recruitment-authority risks, and possible benefit-over-burden bias."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "01710841-3ea2-4775-958f-2c6a4f817acf"
+    },
+    "analysis_digest": "e5df1ed20308ee603e42a6e34f15bfa94b6a22b487eeefdd59d42142e30bb178",
+    "key": "4358a8012abe79c2f3f0bf2289a580c69e644cd7145f98381338e3c3882ca841",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 28.683714959002828,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "4358a8012abe79c2f3f0bf2289a580c69e644cd7145f98381338e3c3882ca841",
+  "created_at": "2026-08-13T18:19:49.884904Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/ethics",
+  "pair_key": "2e124c02ba59aa5a48d0f916ecebb5b3dbc5aff4e9c643310381ea29e773008a",
+  "provider_seconds": 28.683714959002828,
+  "right": "task-2/advisor2/scope",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

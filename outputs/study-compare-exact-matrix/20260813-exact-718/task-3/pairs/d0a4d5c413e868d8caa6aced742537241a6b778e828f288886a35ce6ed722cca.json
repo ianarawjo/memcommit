@@ -1,0 +1,415 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:50:18.018837+00:00",
+      "frames": [
+        {
+          "context_digest": "14adbc31fc3a2dc50b7b980d1e24569b16fff058104a812c7f3b4e1542b7abf0",
+          "context_name": "task-3/local/personal-memory/2025/03",
+          "context_uid": "913e0bfd-f6d9-579e-9a37-ba5daa9d17f1",
+          "memories": [
+            {
+              "content": "The user stores prepared meals on the second shelf of the freezer.",
+              "content_digest": "cd837b62b643f752da54b21de2f4f7a3d963a7c658d5b83dff39d1d92e0fdbad",
+              "position": 0,
+              "uid": "5d989bab-c471-5de9-bb73-29cabc4753dd"
+            },
+            {
+              "content": "The user went to the market without a shopping list and bought onions that were already at home.",
+              "content_digest": "f667c860e046bb27662b26d7cc4ed083ee48d9d7915237dc4b92ec378481a093",
+              "position": 1,
+              "uid": "d1725ae4-3fd3-5250-92b3-73d84d9152a7"
+            },
+            {
+              "content": "On a day the user shopped after checking a refrigerator photo, they did not make a duplicate purchase.",
+              "content_digest": "7283d4afe58c0ab05d9cb426bb80bed0e26e0b1783ff7cdd00a5f6e89d21861b",
+              "position": 2,
+              "uid": "904ff225-26df-5424-8a82-23d733649106"
+            },
+            {
+              "content": "On a day the user made a spicy stew, they left part of one bowl uneaten.",
+              "content_digest": "2765ec701f8e058d35ddee4a485c40221523ee2d9b56301ec1658ec4e419cbc2",
+              "position": 3,
+              "uid": "67a003c7-648a-59dc-8e82-03f9e452ffce"
+            },
+            {
+              "content": "The next time the user cooked it, they used half as much chili powder and finished the meal.",
+              "content_digest": "bdd7df7c762bbce31a40a45c2124e49ae3a6439dfc2133c574443d7eb3a7b1bb",
+              "position": 4,
+              "uid": "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9"
+            },
+            {
+              "content": "When cooking with their younger brother, the user assigned the cooking sequence only verbally and they did the same task twice.",
+              "content_digest": "bd92611cfc05fd42bb5d25e8dd7838ca1b2f6d99869bf1f61921b46950a4b532",
+              "position": 5,
+              "uid": "64bf4401-e972-5d15-a526-21ca901a6a9f"
+            },
+            {
+              "content": "The next time, the user and their younger brother split ingredient preparation and heat control and finished the meal 20 minutes earlier.",
+              "content_digest": "c3a28e7256d781ecb2d8710145880ffe79495e32d47ae1949c4be54e52a44555",
+              "position": 6,
+              "uid": "57e09ea5-54ff-5fce-aada-68daffbacc8b"
+            },
+            {
+              "content": "When cooking together, the user's younger brother prefers to divide the cooking and dishwashing roles in advance.",
+              "content_digest": "3bbc428c4f3b4e28a8e2341206ac78b39240eea53a9862192528029b0a57d12b",
+              "position": 7,
+              "uid": "0a5d054f-94bd-5955-bdb7-9b5427e2260b"
+            },
+            {
+              "content": "The local agent can compare responses across several meals, but it cannot conclude from one unfinished food item that the user dislikes that ingredient.",
+              "content_digest": "5787c1636d9dd4a5cb5bd70533b7dd44b2d6cff1047f5c408f5bcaa1b6577fe1",
+              "position": 8,
+              "uid": "1f94b78b-1635-551c-b90c-bea2a67ca595"
+            },
+            {
+              "content": "The condition of frozen prepared food may vary with its packaging and storage duration.",
+              "content_digest": "84bdac276dce5b50b19bc0c7c471468a22cc9945b1da7357700a58c157cf4ca1",
+              "position": 9,
+              "uid": "f64ef6c4-7665-5574-9d58-fc124b0bfe3f"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "80249035-5aaf-48f1-a146-bad6fdc56287"
+        },
+        {
+          "context_digest": "d28031209c5edc768a592166e26351dd5bce0c7568d379fcaceab173450041c8",
+          "context_name": "task-3/local/personal-memory/2026/02",
+          "context_uid": "7ffcbc10-1703-54b0-9545-99742b51d333",
+          "memories": [
+            {
+              "content": "The user keeps basic repair tools in a box beneath the sink.",
+              "content_digest": "c2a23bace63735c502081b19682a8ceb3e37156b9aadd6f7739e2005c20469d6",
+              "position": 0,
+              "uid": "7d3daf76-a21e-5117-a534-6175ab2d2861"
+            },
+            {
+              "content": "On a day the faucet leaked, the user placed only a towel beneath it, and the floor became wet as well.",
+              "content_digest": "ad6baa7e1848e4e61bdaf22bc5c8665122330b5c70c8ae192216abbba17c6134",
+              "position": 1,
+              "uid": "70a6d9f5-180f-5174-b247-690e10baa23e"
+            },
+            {
+              "content": "After sending a photo to building management, the user finalized the time for a repair visit.",
+              "content_digest": "82b36c7a95e51a0dfa32768c2a437d509b75c0f93bc51a99a636f2c9739a20da",
+              "position": 2,
+              "uid": "9fcd922c-147c-517b-82b3-180fdfb13f33"
+            },
+            {
+              "content": "Before the technician's visit, the user emptied the area beneath the sink so work could begin immediately.",
+              "content_digest": "dbc3b48e5bc4b406dc17067dd93d92e845e3706f47c8706f9a5d5ef17bf64617",
+              "position": 3,
+              "uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5"
+            },
+            {
+              "content": "On a day the user wrote the visit time only in the calendar and turned off the reminder, they heard the doorbell late.",
+              "content_digest": "95fab6bcab815dd8bdd5fecb867f84c6d2f1a901771603b1dbf197cde3c1d19d",
+              "position": 4,
+              "uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65"
+            },
+            {
+              "content": "For the next visit, the user enabled a reminder 30 minutes beforehand and answered immediately at the entrance.",
+              "content_digest": "818783ff21b2d369935b9994c17b28f93f84ea7558dab9f2de20d0aad21f86a3",
+              "position": 5,
+              "uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a"
+            },
+            {
+              "content": "After the repair, the user called their maternal aunt to confirm that the spare key entrusted to her was still there.",
+              "content_digest": "ac01b9816dda2d6bf16f22b41157120b7ffdd75d19638f6313a88e1ce6e7a1f1",
+              "position": 6,
+              "uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441"
+            },
+            {
+              "content": "The user's maternal aunt considers it unsafe to hand the spare key to a repair technician without the user's explicit request.",
+              "content_digest": "f7c7c0306c81cc6de9f02aa1aed7d411db3f29757d024e7d5a1679b1ff308948",
+              "position": 7,
+              "uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd"
+            },
+            {
+              "content": "Obtain the user's reconfirmation before scheduling an external worker to enter the residential unit.",
+              "content_digest": "34382e40f4907bea82728787fdeb150e299d46a0079ae2847d4eda6d6d892d22",
+              "position": 8,
+              "uid": "4716a67b-8602-564c-9e89-85cd4ee158f9"
+            },
+            {
+              "content": "A multi-unit residential building's repair schedule may change because of emergency work or parts availability.",
+              "content_digest": "d701fdd1ffbf17ff0890c583b5bf39849e3c6e3cc296fde7e00d3d1ecc0ef196",
+              "position": 9,
+              "uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "f3ae78d5-6c1b-4f75-b0bc-8f3a95148262"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames contain independent household contexts: the reference covers food storage, shopping, cooking, and cautious preference inference, while the compared frame covers leak response, repair access, reminders, spare-key safety, and schedule uncertainty. No claim directly governs the same operational decision across frames.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "80249035-5aaf-48f1-a146-bad6fdc56287",
+              "memory_uid": "5d989bab-c471-5de9-bb73-29cabc4753dd"
+            }
+          ],
+          "reason": "This is independently useful food-storage information with no counterpart governing that decision in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Prepared meals are stored on the freezer’s second shelf.",
+          "uid": "3da230f2-f734-5823-80d6-6440ac16c7ac"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "80249035-5aaf-48f1-a146-bad6fdc56287",
+              "memory_uid": "d1725ae4-3fd3-5250-92b3-73d84d9152a7"
+            },
+            {
+              "frame_uid": "80249035-5aaf-48f1-a146-bad6fdc56287",
+              "memory_uid": "904ff225-26df-5424-8a82-23d733649106"
+            }
+          ],
+          "reason": "The two memories form one contrast about inventory awareness and duplicate grocery purchases, which the compared frame does not address.",
+          "status": "RESOLVED",
+          "summary": "Checking available food before shopping was associated with avoiding a duplicate purchase, unlike shopping without a list.",
+          "uid": "3cccf607-ccc7-5df9-8c04-c4453d617da2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "80249035-5aaf-48f1-a146-bad6fdc56287",
+              "memory_uid": "67a003c7-648a-59dc-8e82-03f9e452ffce"
+            },
+            {
+              "frame_uid": "80249035-5aaf-48f1-a146-bad6fdc56287",
+              "memory_uid": "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9"
+            }
+          ],
+          "reason": "These memories split one cooking-adjustment observation whose taste and consumption outcome has no compared-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "A spicy stew was left unfinished, while a later version made with half the chili powder was finished.",
+          "uid": "f1b7e747-862c-5574-b87e-7cb365bdf9ce"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "80249035-5aaf-48f1-a146-bad6fdc56287",
+              "memory_uid": "64bf4401-e972-5d15-a526-21ca901a6a9f"
+            },
+            {
+              "frame_uid": "80249035-5aaf-48f1-a146-bad6fdc56287",
+              "memory_uid": "57e09ea5-54ff-5fce-aada-68daffbacc8b"
+            }
+          ],
+          "reason": "The memories form a before-and-next-time contrast about coordinating shared cooking, an operational area absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Cooking sessions with the younger brother differed in task coordination, duplicated work, and completion time.",
+          "uid": "1eb3a20c-bf88-5461-925f-7d5503fcffd5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "80249035-5aaf-48f1-a146-bad6fdc56287",
+              "memory_uid": "0a5d054f-94bd-5955-bdb7-9b5427e2260b"
+            }
+          ],
+          "reason": "This is a distinct interpersonal preference about shared cooking roles and is not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The younger brother prefers assigning cooking and dishwashing roles in advance.",
+          "uid": "f15fa452-1fbd-55d0-bc17-4b6fa98fecba"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "80249035-5aaf-48f1-a146-bad6fdc56287",
+              "memory_uid": "1f94b78b-1635-551c-b90c-bea2a67ca595"
+            }
+          ],
+          "reason": "This defines an evidentiary limit for inferring food preferences, with no corresponding inference rule in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Meal responses may be compared across occasions, but one unfinished item does not establish ingredient dislike.",
+          "uid": "ee07eb48-299a-55a0-8c37-bf68bff46bed"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "80249035-5aaf-48f1-a146-bad6fdc56287",
+              "memory_uid": "f64ef6c4-7665-5574-9d58-fc124b0bfe3f"
+            }
+          ],
+          "reason": "This is contextual information about food preservation and does not govern the repair-scheduling uncertainty described on the other side.",
+          "status": "RESOLVED",
+          "summary": "Frozen prepared-food condition may depend on packaging and storage duration.",
+          "uid": "e1985f97-aee9-5167-b0bc-6dd4b52a4194"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f3ae78d5-6c1b-4f75-b0bc-8f3a95148262",
+              "memory_uid": "7d3daf76-a21e-5117-a534-6175ab2d2861"
+            }
+          ],
+          "reason": "This is independently useful repair-tool storage information with no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Basic repair tools are kept in a box beneath the sink.",
+          "uid": "702dfc02-e334-524e-84da-e84b86cf6311"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f3ae78d5-6c1b-4f75-b0bc-8f3a95148262",
+              "memory_uid": "70a6d9f5-180f-5174-b247-690e10baa23e"
+            }
+          ],
+          "reason": "This records a leak-containment outcome, an operational matter absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Using only a towel beneath a leaking faucet did not prevent the floor from becoming wet.",
+          "uid": "ba21bcc0-815a-50ac-a492-e27ad507b775"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f3ae78d5-6c1b-4f75-b0bc-8f3a95148262",
+              "memory_uid": "9fcd922c-147c-517b-82b3-180fdfb13f33"
+            }
+          ],
+          "reason": "This describes arranging a repair visit and has no reference-frame counterpart addressing that decision.",
+          "status": "RESOLVED",
+          "summary": "Sending building management a photo preceded finalizing a repair-visit time.",
+          "uid": "23c4948a-a8d2-54e3-9360-4ed4825ebdc8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f3ae78d5-6c1b-4f75-b0bc-8f3a95148262",
+              "memory_uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5"
+            }
+          ],
+          "reason": "This is a distinct preparation step for external repair work and is not addressed in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The area beneath the sink was emptied before the technician arrived so work could start immediately.",
+          "uid": "cfeee02d-4516-5fc5-bce8-a5eaeed9708a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f3ae78d5-6c1b-4f75-b0bc-8f3a95148262",
+              "memory_uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65"
+            },
+            {
+              "frame_uid": "f3ae78d5-6c1b-4f75-b0bc-8f3a95148262",
+              "memory_uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a"
+            }
+          ],
+          "reason": "The memories form one contrast about reminder use and timely response to a visitor, with no matching reference-frame claim.",
+          "status": "RESOLVED",
+          "summary": "Repair-visit response differed between relying on a calendar without a reminder and enabling a reminder 30 minutes beforehand.",
+          "uid": "26ca20c4-5599-50cd-8a60-daf7a9ebc728"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f3ae78d5-6c1b-4f75-b0bc-8f3a95148262",
+              "memory_uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441"
+            }
+          ],
+          "reason": "This records a specific post-repair key check not covered by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "After the repair, the user confirmed with their maternal aunt that the entrusted spare key remained with her.",
+          "uid": "b4440f3c-3380-591c-ad96-13352a59340c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f3ae78d5-6c1b-4f75-b0bc-8f3a95148262",
+              "memory_uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd"
+            }
+          ],
+          "reason": "This is a distinct safety judgment about delegated key access and has no reference-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "The maternal aunt considers giving a repair technician the spare key unsafe without the user’s explicit request.",
+          "uid": "601bed2b-2b42-5dd8-9f3e-142402893740"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f3ae78d5-6c1b-4f75-b0bc-8f3a95148262",
+              "memory_uid": "4716a67b-8602-564c-9e89-85cd4ee158f9"
+            }
+          ],
+          "reason": "This is an access-control requirement for residential entry, an operational policy absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user should be reconfirmed before an external worker is scheduled to enter the residence.",
+          "uid": "5a123d08-8ffb-56d3-a64a-18e85756b18e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f3ae78d5-6c1b-4f75-b0bc-8f3a95148262",
+              "memory_uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+            }
+          ],
+          "reason": "This is contextual information about repair scheduling and does not govern the frozen-food variability described on the other side.",
+          "status": "RESOLVED",
+          "summary": "Repair schedules in multi-unit buildings may change because of emergency work or parts availability.",
+          "uid": "ab32d7fc-54b9-5e01-8ca0-7948fac83aab"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame records repair-tool storage, leak handling, visit preparation and reminders, spare-key and entry safeguards, and repair-schedule variability.",
+        "differences": "",
+        "reference_only": "The reference records freezer organization, inventory-checking outcomes, cooking adjustments and coordination, limits on inferring food preferences, and frozen-food variability."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "246bb162-a870-4ae9-8c10-dfe87897441b"
+    },
+    "analysis_digest": "0bc12693f13e52217b87c6d0a55ce40abb24190d074bfa91a99b32034300fce2",
+    "key": "87a9a881c82f9e91c9e8b96d5e772a2e824f20d38d4fd597fb18207e745cb97e",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 64.95376983400274,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "87a9a881c82f9e91c9e8b96d5e772a2e824f20d38d4fd597fb18207e745cb97e",
+  "created_at": "2026-08-13T18:51:22.972245Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/03",
+  "pair_key": "d0a4d5c413e868d8caa6aced742537241a6b778e828f288886a35ce6ed722cca",
+  "provider_seconds": 64.95376983400274,
+  "right": "task-3/local/personal-memory/2026/02",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

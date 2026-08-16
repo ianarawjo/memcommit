@@ -1,0 +1,406 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:33:59.040847+00:00",
+      "frames": [
+        {
+          "context_digest": "2f00e067f4f35600b73e87b5555d405e2801a33ba18a54c91e63e23a79f27a4c",
+          "context_name": "task-3/local/personal-memory/2024/01",
+          "context_uid": "cbd2e4d6-2601-5d3f-8bf2-2f66b755b007",
+          "memories": [
+            {
+              "content": "The user's mother's birthday falls in the third week of January.",
+              "content_digest": "d635ded9b470acdd462156515700e66c23dcb513a7034bb365be0ac139ec0422",
+              "position": 0,
+              "uid": "2cd0229d-b7f1-581b-8019-25bdb485afd9"
+            },
+            {
+              "content": "At the user's last family meal out, noise from the next table made conversation nearly impossible.",
+              "content_digest": "dc337d32e4b09167289e19a6b1c8fe970e7eaa6fdd6868ed1c7c300e018fcd15",
+              "position": 1,
+              "uid": "c62f1669-11c9-5a81-b5f5-304acce69c23"
+            },
+            {
+              "content": "At a barbecue at home in the same month, the user was comfortable because no one had to raise their voice.",
+              "content_digest": "63763b293a491200bf1f7a251467c1fa8c2cb8d4d8450732c01666dcdea183e3",
+              "position": 2,
+              "uid": "674f4bdf-27c3-5870-a68e-91e4a093dd93"
+            },
+            {
+              "content": "During their mother's birthday meal, the user left a restaurant with loud music after 30 minutes.",
+              "content_digest": "560755c6f051ec6f85e32dc4ee9447dfc97418fca6f9f414f6910c518a52c2c0",
+              "position": 3,
+              "uid": "21509788-2e3d-548b-8303-f34cfea68c9b"
+            },
+            {
+              "content": "When discussing postponed matters with family, the user prefers a quiet, one-on-one dining environment.",
+              "content_digest": "f22bedcf60a64b3666a7e4363d6a55c48547535492010fcb205a182c1ee920a8",
+              "position": 4,
+              "uid": "74eaea9d-7640-51ba-aa77-9c050581dc46"
+            },
+            {
+              "content": "At a large banquet hall reserved by their older sister, the user remembered the surrounding noise more than the food.",
+              "content_digest": "566e443c69410f1672ab209ba2257604e373cd305ab27243a39574481407af71",
+              "position": 5,
+              "uid": "1384df1d-2173-5673-96f5-a4d86835d404"
+            },
+            {
+              "content": "On a day the user ate grilled food at home with their younger brother, conversation was easy to continue, so the user stayed another hour after the meal.",
+              "content_digest": "c93ccbe3524946f1def05a1b385fbe3387945f51164b00c56f1ff80b477d011f",
+              "position": 6,
+              "uid": "3cf68c8e-5da9-51d3-a402-c10f4137b1f4"
+            },
+            {
+              "content": "The user's mother considers having the whole family eat at the same time more important than receiving a birthday gift.",
+              "content_digest": "d302cf7db2b83b103ea11323ab1b9d36168d224b405d4d0dd51b46b494014291",
+              "position": 7,
+              "uid": "a1984768-d20d-59cd-84c9-cb08c6b7affb"
+            },
+            {
+              "content": "When proposing a birthday meal for the user's mother, check the schedule and attendees; if conversation is the purpose, first consider a low-noise location, then confirm the final choice with the user.",
+              "content_digest": "481169c62cf6fae6b4f29184ffacef9c3c9d825a34d1545ca592bc35537bc65c",
+              "position": 8,
+              "uid": "f52d11e2-2449-5c9d-887b-96c8b5cd0184"
+            },
+            {
+              "content": "The local agent can compare past dining environments and the user's responses, but those records alone cannot determine the location of the next gathering.",
+              "content_digest": "b05fef8420abe3c47c2cd9f2de9149c9c6bda7dca301f09ac7f94eac1a29d2fa",
+              "position": 9,
+              "uid": "c8fccfbe-7756-5d62-9cd7-403dd6741915"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "bb2a0b41-0ec0-4d73-806b-7875c14c90c2"
+        },
+        {
+          "context_digest": "43b741cd1df20a084f3517aec7f886d4e5022812f0536eb126a6caf2d5570489",
+          "context_name": "task-3/local/personal-memory/2025/05",
+          "context_uid": "1f913bb6-790c-5490-a20d-127c7aab5892",
+          "memories": [
+            {
+              "content": "The user keeps two potted herbs beside a south-facing window.",
+              "content_digest": "b79056c033f208bb02b99fef1c011e5537e2ea8c19c3894863c3a5ad56054e08",
+              "position": 0,
+              "uid": "cb09b8ab-c7c4-51bb-a227-039c7cdfae5d"
+            },
+            {
+              "content": "During a week when the user watered every day based only on the soil surface, the leaves of one plant turned yellow.",
+              "content_digest": "042f4be9fd5481a7252d1c0065e95085e11e81e475531afe45b9f1d268d4c5b4",
+              "position": 1,
+              "uid": "95978183-0070-5b12-b117-be39bb343a5e"
+            },
+            {
+              "content": "During a week when the user checked below the soil surface with a finger before watering, the plant grew new leaves.",
+              "content_digest": "06ca2ec53f03677fdfd78bb1d391f197d3f49b974f6e812f25ba49ce34f74249",
+              "position": 2,
+              "uid": "8c610ce5-1eb7-52e5-ad81-e8062d23cd19"
+            },
+            {
+              "content": "On a day the user left the window open for a long time, strong wind knocked over one pot.",
+              "content_digest": "914f67a75fdf73cee064a465a9f0e6ee9ba012f1a40c614e199a9354756203a8",
+              "position": 3,
+              "uid": "3f886c0c-071b-5f2d-adad-da01345d702f"
+            },
+            {
+              "content": "The next day, the user moved the pot inward from the windowsill so the same wind would not knock it over.",
+              "content_digest": "f190916b360b6543865ced49cf5d9a987e96c9147966181e5920342bb41ba50c",
+              "position": 4,
+              "uid": "afe855b8-f5ad-559c-a63f-6f655ba371a2"
+            },
+            {
+              "content": "The user put a plant-name label in a small pot received from their maternal aunt.",
+              "content_digest": "82284f0102305db41eaaecafe86bc05833090853320f2ebb8e5f44abb2d78a63",
+              "position": 5,
+              "uid": "384c4f5f-b15c-5742-ac79-20106d0dd30b"
+            },
+            {
+              "content": "The user confused the care instructions for an unlabeled pot with those for another plant.",
+              "content_digest": "824267db866253690527d5ab08166f4228401443ed903708d33ac22542811750",
+              "position": 6,
+              "uid": "48dc89af-ed9d-51a5-a4b1-b809fd818143"
+            },
+            {
+              "content": "The user's maternal aunt considers understanding the sunlight at a pot's location more important than watering frequency when caring for it.",
+              "content_digest": "8a24f6df4a58db3e538f77e572a3cf152b7a4aff3527ec3d8616e85a675bc7c0",
+              "position": 7,
+              "uid": "a2426820-65d6-5c78-ac50-0f32b366ae47"
+            },
+            {
+              "content": "Before creating a plant-care reminder, check each plant's name and most recent watering date.",
+              "content_digest": "ecd7ef911951f3c2383cd916a4efbd94bdf439f63de1687c2f637a161ac8a60d",
+              "position": 8,
+              "uid": "efd51196-ed48-5699-a0f4-c5b8e149d11c"
+            },
+            {
+              "content": "The soil in the user's potted herbs beside the south-facing window dries at different rates depending on the season and amount of sunlight.",
+              "content_digest": "f716b16e802d30d4c2d1ed4bff855812682e53a9fc4e29988e2662ae321d0a4f",
+              "position": 9,
+              "uid": "4c93eeff-566e-5a1a-afb9-035c97fb9c73"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "f43419d3-436d-46b4-aec2-669fcd2a5c25"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover unrelated domains: the reference records family birthday dining needs and noise-sensitive venue guidance, while the compared frame records potted-herb conditions, watering observations, wind precautions, identification problems, and reminder inputs. Neither frame supplies a scope-aligned counterpart to the other.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bb2a0b41-0ec0-4d73-806b-7875c14c90c2",
+              "memory_uid": "2cd0229d-b7f1-581b-8019-25bdb485afd9"
+            }
+          ],
+          "reason": "Only the reference frame supplies this independently useful scheduling fact.",
+          "status": "RESOLVED",
+          "summary": "The user’s mother’s birthday occurs in the third week of January.",
+          "uid": "10dbecc6-20d1-57fc-8a19-a3e741d3dd6c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bb2a0b41-0ec0-4d73-806b-7875c14c90c2",
+              "memory_uid": "c62f1669-11c9-5a81-b5f5-304acce69c23"
+            },
+            {
+              "frame_uid": "bb2a0b41-0ec0-4d73-806b-7875c14c90c2",
+              "memory_uid": "21509788-2e3d-548b-8303-f34cfea68c9b"
+            },
+            {
+              "frame_uid": "bb2a0b41-0ec0-4d73-806b-7875c14c90c2",
+              "memory_uid": "1384df1d-2173-5673-96f5-a4d86835d404"
+            }
+          ],
+          "reason": "These reference memories are separate examples supporting one underlying one-sided claim about the user’s adverse response to loud group-dining environments.",
+          "status": "RESOLVED",
+          "summary": "Several restaurant and banquet experiences show that substantial surrounding noise impaired conversation or dominated the user’s experience, sometimes prompting an early departure.",
+          "uid": "c8f1ad1c-1ed3-5ac8-94b8-c42ee1bab6a2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bb2a0b41-0ec0-4d73-806b-7875c14c90c2",
+              "memory_uid": "674f4bdf-27c3-5870-a68e-91e4a093dd93"
+            },
+            {
+              "frame_uid": "bb2a0b41-0ec0-4d73-806b-7875c14c90c2",
+              "memory_uid": "3cf68c8e-5da9-51d3-a402-c10f4137b1f4"
+            }
+          ],
+          "reason": "These reference memories split one underlying one-sided claim about the user’s positive response to low-noise home dining.",
+          "status": "RESOLVED",
+          "summary": "Quiet meals at home allowed comfortable, sustained family conversation.",
+          "uid": "c7140600-e910-5e3e-9e13-acea9596f11b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bb2a0b41-0ec0-4d73-806b-7875c14c90c2",
+              "memory_uid": "74eaea9d-7640-51ba-aa77-9c050581dc46"
+            }
+          ],
+          "reason": "Only the reference frame states this context-specific conversational preference.",
+          "status": "RESOLVED",
+          "summary": "For discussing postponed family matters, the user prefers quiet, one-on-one dining.",
+          "uid": "54ebc577-743a-5f25-8036-56e0ea398f52"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bb2a0b41-0ec0-4d73-806b-7875c14c90c2",
+              "memory_uid": "a1984768-d20d-59cd-84c9-cb08c6b7affb"
+            }
+          ],
+          "reason": "Only the reference frame provides this independently useful preference of the user’s mother.",
+          "status": "RESOLVED",
+          "summary": "The user’s mother values having the whole family eat together more than receiving a birthday gift.",
+          "uid": "252c0fb9-ef74-54c6-92d9-3d550afc3d91"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bb2a0b41-0ec0-4d73-806b-7875c14c90c2",
+              "memory_uid": "f52d11e2-2449-5c9d-887b-96c8b5cd0184"
+            }
+          ],
+          "reason": "Only the reference frame provides this multi-step decision guidance.",
+          "status": "RESOLVED",
+          "summary": "A proposed birthday meal should account for schedules and attendees, prioritize low noise when conversation is the purpose, and leave the final choice to the user.",
+          "uid": "b8a52a78-34b4-5215-8656-224890ce4b2d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bb2a0b41-0ec0-4d73-806b-7875c14c90c2",
+              "memory_uid": "c8fccfbe-7756-5d62-9cd7-403dd6741915"
+            }
+          ],
+          "reason": "Only the reference frame states this limitation on local inference.",
+          "status": "RESOLVED",
+          "summary": "Past dining environments and reactions can be compared, but they do not alone determine the next gathering’s location.",
+          "uid": "709a81ce-97b8-5531-8553-e4fcc9e2bf38"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f43419d3-436d-46b4-aec2-669fcd2a5c25",
+              "memory_uid": "cb09b8ab-c7c4-51bb-a227-039c7cdfae5d"
+            }
+          ],
+          "reason": "Only the compared frame supplies this plant inventory and placement fact.",
+          "status": "RESOLVED",
+          "summary": "The user keeps two potted herbs beside a south-facing window.",
+          "uid": "05d165b2-ba7f-5a73-a325-6181119d8693"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f43419d3-436d-46b4-aec2-669fcd2a5c25",
+              "memory_uid": "95978183-0070-5b12-b117-be39bb343a5e"
+            }
+          ],
+          "reason": "Only the compared frame records this watering method and adverse outcome.",
+          "status": "RESOLVED",
+          "summary": "When the user watered daily based only on the soil surface, one plant developed yellow leaves.",
+          "uid": "11c7a190-eb45-50ad-9bd4-4ca7ac4fe4c1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f43419d3-436d-46b4-aec2-669fcd2a5c25",
+              "memory_uid": "8c610ce5-1eb7-52e5-ad81-e8062d23cd19"
+            }
+          ],
+          "reason": "Only the compared frame records this watering method and favorable outcome.",
+          "status": "RESOLVED",
+          "summary": "When the user checked below the soil surface before watering, the plant produced new leaves.",
+          "uid": "29f3fcd4-a4a3-5b66-a8f8-704e5154fd19"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f43419d3-436d-46b4-aec2-669fcd2a5c25",
+              "memory_uid": "3f886c0c-071b-5f2d-adad-da01345d702f"
+            },
+            {
+              "frame_uid": "f43419d3-436d-46b4-aec2-669fcd2a5c25",
+              "memory_uid": "afe855b8-f5ad-559c-a63f-6f655ba371a2"
+            }
+          ],
+          "reason": "These compared memories form one incident-and-mitigation claim with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "After strong wind through an open window knocked over a pot, the user moved it inward to prevent recurrence.",
+          "uid": "905cc32b-327c-5ff7-aaff-bf395282bcee"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f43419d3-436d-46b4-aec2-669fcd2a5c25",
+              "memory_uid": "384c4f5f-b15c-5742-ac79-20106d0dd30b"
+            },
+            {
+              "frame_uid": "f43419d3-436d-46b4-aec2-669fcd2a5c25",
+              "memory_uid": "48dc89af-ed9d-51a5-a4b1-b809fd818143"
+            }
+          ],
+          "reason": "These compared memories jointly describe one underlying one-sided plant-identification concern.",
+          "status": "RESOLVED",
+          "summary": "Labeling is relevant because the user labeled a small pot from their maternal aunt and previously confused care instructions for an unlabeled pot.",
+          "uid": "be634ec6-f66c-5809-bd9f-c0661798b8c5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f43419d3-436d-46b4-aec2-669fcd2a5c25",
+              "memory_uid": "a2426820-65d6-5c78-ac50-0f32b366ae47"
+            }
+          ],
+          "reason": "Only the compared frame states this care priority.",
+          "status": "RESOLVED",
+          "summary": "The user’s maternal aunt considers understanding a pot location’s sunlight more important than watering frequency.",
+          "uid": "b7a5f66e-50dd-5b2f-9429-b6138c06b8e2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f43419d3-436d-46b4-aec2-669fcd2a5c25",
+              "memory_uid": "efd51196-ed48-5699-a0f4-c5b8e149d11c"
+            }
+          ],
+          "reason": "Only the compared frame provides this reminder-creation procedure.",
+          "status": "RESOLVED",
+          "summary": "Before creating a plant-care reminder, each plant’s name and latest watering date should be checked.",
+          "uid": "32df6cfd-5cd6-5bbc-ad9a-7d5b1247fc94"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f43419d3-436d-46b4-aec2-669fcd2a5c25",
+              "memory_uid": "4c93eeff-566e-5a1a-afb9-035c97fb9c73"
+            }
+          ],
+          "reason": "Only the compared frame supplies this environmental variability affecting care.",
+          "status": "RESOLVED",
+          "summary": "The herbs’ soil dries at different rates with season and sunlight.",
+          "uid": "47eee926-a0a6-51b0-ba63-561c2e15b5d3"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only content concerns herb placement, watering and seasonal soil behavior, wind protection, plant labeling, the aunt’s care priority, and reminder prerequisites.",
+        "differences": "",
+        "reference_only": "Reference-only content concerns the mother’s birthday timing and priorities, family dining experiences, preference for quiet conversation, venue-selection guidance, and limits on inferring the next location."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "1a4fd50b-d3fc-441b-bbc5-7337b8883384"
+    },
+    "analysis_digest": "61946d1553d1645f60f5267794e5f6ae2bc2071184f06aae6a981958e96c25d7",
+    "key": "722ceab75c48de8b5e56cbad11064c73ce3d1d8bd1e55043e6de4c803cff5a36",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 40.49974066700088,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "722ceab75c48de8b5e56cbad11064c73ce3d1d8bd1e55043e6de4c803cff5a36",
+  "created_at": "2026-08-13T18:34:39.540214Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/01",
+  "pair_key": "674d4e8527b3923bd0119e89327f50864c88694af9bc1b28486d76fb1883d2a1",
+  "provider_seconds": 40.49974066700088,
+  "right": "task-3/local/personal-memory/2025/05",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

@@ -1,0 +1,281 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:25:48.041824+00:00",
+      "frames": [
+        {
+          "context_digest": "d2c716d52357c4200adc8772d5823715ffd736eb766028c1c62bbb32852bc344",
+          "context_name": "task-2/advisor1/scope",
+          "context_uid": "6db29abe-5784-5eec-acaa-060bac0e11f1",
+          "memories": [
+            {
+              "content": "Define in one sentence the user groups and usage contexts to which the design knowledge does not apply.",
+              "content_digest": "3193ffe501a06d6148b39c333853b42bc0278b2ab3c3df88162b049548ff16bb",
+              "position": 0,
+              "uid": "e594a6ab-81e9-5e5f-8ef5-e6bb8f3760d7"
+            },
+            {
+              "content": "Reviewers judge the generalization boundary of results through explicitly excluded targets and situations.",
+              "content_digest": "a929649a7bd07f29f31a8cd1969a3c160ba5f61c0def76e204443c30234f84b0",
+              "position": 1,
+              "uid": "31cdacff-7c49-547d-9f97-598a07b67fb6"
+            },
+            {
+              "content": "Specify user goals, interaction conditions, and technological constraints under which the proposed design knowledge can be transferred.",
+              "content_digest": "6ae1bfaeadb1863db1997685527706d210a379a376a24d3de1168e952f847627",
+              "position": 2,
+              "uid": "1459d986-4dc9-51f3-bf13-dbb0b07045c8"
+            },
+            {
+              "content": "Small-scale formative studies can support analytic generalization distinct from statistical representativeness when results are expressed in terms of design conditions and mechanisms.",
+              "content_digest": "1963572a303acbf383890b7d97b52349f572df761e89ea3fd5116058cd2e1cea",
+              "position": 3,
+              "uid": "1db5fcd6-f93c-5630-9810-053c10b5ceba"
+            },
+            {
+              "content": "The author of this proposal tends to apply design knowledge derived from an accessible sample to a broader user population.",
+              "content_digest": "df2a7f1284c1994c6dec49eb7995acd1ed341a9e6b8f4b06c854d85fa9d77d6c",
+              "position": 4,
+              "uid": "fd29c315-521f-53c0-add5-c668ec318a43"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "32cfc3bc-db1e-4f39-99ab-8becef3b5a25"
+        },
+        {
+          "context_digest": "673626cf0c3650052d63b04173d43516860e2035d7038878998898bc5bebb2e3",
+          "context_name": "task-2/advisor2/evaluation",
+          "context_uid": "6e9f8ad5-a43d-5dfd-99a3-604f2757da0d",
+          "memories": [
+            {
+              "content": "Specify a single representative measure that will drive operational decisions to maintain, modify, or discontinue the deployed design.",
+              "content_digest": "dd9abb7bbbdf6846921a984789426b27a45df60ce38408422b6b0774835b44f8",
+              "position": 0,
+              "uid": "f27576c7-6f53-5412-901c-19df7e1d5e2e"
+            },
+            {
+              "content": "The HCI review panel verifies whether operational decisions can be made based on the declared primary measure.",
+              "content_digest": "1d88ce414bdbfcf9565c712f8f0d72378569d723c0c5b5c6007dc18a96f6378f",
+              "position": 1,
+              "uid": "8608bdf3-49d7-54d0-a2fb-c883c24e40ef"
+            },
+            {
+              "content": "Establish decision thresholds indicating at what levels key metrics trigger maintaining, modifying, or discontinuing the design.",
+              "content_digest": "866bad632421bfd3487fba69b855ccb36aeb9e31c6208b339db22301bdd3fc28",
+              "position": 2,
+              "uid": "b06bb706-f911-5767-8e27-b64c74d0e592"
+            },
+            {
+              "content": "Evaluate whether reducing workload for one role creates new tasks for other roles through the proposed design changes.",
+              "content_digest": "6b38b84cdc2a78f61f3163cccd787dec39167596f4f720788ec4c930f698fa9f",
+              "position": 3,
+              "uid": "473ec6e8-29f0-5c83-b36d-b7d32eeb25a3"
+            },
+            {
+              "content": "Distinguish usability from organizational adoption intent as separate evaluation outcomes.",
+              "content_digest": "7328bf54063078377068871ee3970709d9a8763204c2c3a08321e025e028868c",
+              "position": 4,
+              "uid": "935cf79f-3e67-567d-ab55-35e8fad7eb37"
+            },
+            {
+              "content": "Implementation fidelity indicates whether planned features and operational procedures were delivered in the field according to intended specifications.",
+              "content_digest": "b04d0bc0590dd77d3bc0bde581481992d57ad48c14517a2a1d63f996e51290b2",
+              "position": 5,
+              "uid": "bea0e97f-1217-507b-87a7-09ce85bae9fe"
+            },
+            {
+              "content": "Initial evaluations and long-term operation do not share identical measurement conditions due to differences in system exposure duration and frequency of repeated use.",
+              "content_digest": "49e90b293b90d173b11d1bb89e85f688c55cb923c2a19eb2058a539388327715",
+              "position": 6,
+              "uid": "dbe435ff-fe32-54fe-a2e6-7b46694ce151"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "da5545ed-6734-4012-b1d6-3584bc833337"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The reference frame addresses how design knowledge generalizes, including applicability boundaries, transfer conditions, evidentiary logic, and overextension risk. The compared frame independently addresses deployed-design evaluation through decision metrics, thresholds, role effects, outcome separation, implementation fidelity, and measurement changes over time.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "32cfc3bc-db1e-4f39-99ab-8becef3b5a25",
+              "memory_uid": "e594a6ab-81e9-5e5f-8ef5-e6bb8f3760d7"
+            },
+            {
+              "frame_uid": "32cfc3bc-db1e-4f39-99ab-8becef3b5a25",
+              "memory_uid": "31cdacff-7c49-547d-9f97-598a07b67fb6"
+            }
+          ],
+          "reason": "One statement requests excluded user groups and contexts, while the other explains that reviewers use such exclusions to judge the generalization boundary; together they split one one-sided claim.",
+          "status": "RESOLVED",
+          "summary": "Explicit exclusions define where design knowledge should not be generalized.",
+          "uid": "a27cb921-5af6-568d-83b9-0a2f85a3b02b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "32cfc3bc-db1e-4f39-99ab-8becef3b5a25",
+              "memory_uid": "1459d986-4dc9-51f3-bf13-dbb0b07045c8"
+            }
+          ],
+          "reason": "This independently specifies the positive conditions under which design knowledge may transfer.",
+          "status": "RESOLVED",
+          "summary": "Transferability should be bounded by user goals, interaction conditions, and technological constraints.",
+          "uid": "d4822b1f-570f-570f-b391-d5104e438a3e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "32cfc3bc-db1e-4f39-99ab-8becef3b5a25",
+              "memory_uid": "1db5fcd6-f93c-5630-9810-053c10b5ceba"
+            }
+          ],
+          "reason": "This provides an independent evidentiary basis for generalizing small-scale findings.",
+          "status": "RESOLVED",
+          "summary": "Formative studies may support analytic generalization through stated design conditions and mechanisms without claiming statistical representativeness.",
+          "uid": "bf31841d-63fa-5d06-99a7-8620e8a37f39"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "32cfc3bc-db1e-4f39-99ab-8becef3b5a25",
+              "memory_uid": "fd29c315-521f-53c0-add5-c668ec318a43"
+            }
+          ],
+          "reason": "This uniquely identifies a potential overgeneralization tendency rather than prescribing a boundary or evaluation method.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to extend knowledge from an accessible sample to a broader population.",
+          "uid": "4e1fdda0-8c86-5fce-9a55-193b87ae5592"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "da5545ed-6734-4012-b1d6-3584bc833337",
+              "memory_uid": "f27576c7-6f53-5412-901c-19df7e1d5e2e"
+            },
+            {
+              "frame_uid": "da5545ed-6734-4012-b1d6-3584bc833337",
+              "memory_uid": "8608bdf3-49d7-54d0-a2fb-c883c24e40ef"
+            }
+          ],
+          "reason": "One statement requires the measure, while the other describes panel verification of its decision utility; they split one one-sided governance claim.",
+          "status": "RESOLVED",
+          "summary": "A declared primary measure should support operational decisions about maintaining, modifying, or discontinuing a deployed design.",
+          "uid": "d94cbda3-0cc1-575c-8094-2afb18699d0a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "da5545ed-6734-4012-b1d6-3584bc833337",
+              "memory_uid": "b06bb706-f911-5767-8e27-b64c74d0e592"
+            }
+          ],
+          "reason": "This independently adds explicit trigger levels beyond selecting a primary measure.",
+          "status": "RESOLVED",
+          "summary": "Metric thresholds should determine when a design is maintained, modified, or discontinued.",
+          "uid": "a465ba6c-d741-57e0-8f20-d067ee792c09"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "da5545ed-6734-4012-b1d6-3584bc833337",
+              "memory_uid": "473ec6e8-29f0-5c83-b36d-b7d32eeb25a3"
+            }
+          ],
+          "reason": "This uniquely addresses redistribution of work across organizational roles.",
+          "status": "RESOLVED",
+          "summary": "Evaluation should test whether workload reductions for one role create tasks for other roles.",
+          "uid": "8300895c-0177-5d2c-a068-df6daebb4520"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "da5545ed-6734-4012-b1d6-3584bc833337",
+              "memory_uid": "935cf79f-3e67-567d-ab55-35e8fad7eb37"
+            }
+          ],
+          "reason": "This uniquely distinguishes two evaluation constructs that could otherwise be conflated.",
+          "status": "RESOLVED",
+          "summary": "Usability and organizational adoption intent should be evaluated as separate outcomes.",
+          "uid": "44558949-a717-52a1-99eb-7970f5500f6c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "da5545ed-6734-4012-b1d6-3584bc833337",
+              "memory_uid": "bea0e97f-1217-507b-87a7-09ce85bae9fe"
+            }
+          ],
+          "reason": "This uniquely defines a deployment-process evaluation dimension.",
+          "status": "RESOLVED",
+          "summary": "Implementation fidelity assesses whether intended features and procedures were delivered as specified in the field.",
+          "uid": "443329db-efb6-5a32-86dd-8b0a56dcada3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "da5545ed-6734-4012-b1d6-3584bc833337",
+              "memory_uid": "dbe435ff-fe32-54fe-a2e6-7b46694ce151"
+            }
+          ],
+          "reason": "This uniquely identifies temporal scope differences that affect operational measurement.",
+          "status": "RESOLVED",
+          "summary": "Initial and long-term evaluations have different measurement conditions because exposure duration and repeated-use frequency differ.",
+          "uid": "cb5eb7a2-ff7f-5458-9165-cacd70323dde"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame uniquely specifies operational measures and thresholds, distributed workload effects, distinct evaluation outcomes, implementation fidelity, and exposure-dependent measurement conditions.",
+        "differences": "",
+        "reference_only": "The reference uniquely defines exclusions and transfer conditions, supports analytic generalization from formative studies, and identifies a tendency to overextend findings from accessible samples."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "486515bf-ac73-4f0c-a98f-21a84ee12b14"
+    },
+    "analysis_digest": "f9a447c387c0c3eaad5723f280e8afbae8e10b31fc08f2e6425979f79fdfb16e",
+    "key": "b9f5c655bf3a9c6ec72546f1f71ed778b678c3f146d2e251ab046685b1f5ddcb",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 26.24355395800012,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "b9f5c655bf3a9c6ec72546f1f71ed778b678c3f146d2e251ab046685b1f5ddcb",
+  "created_at": "2026-08-13T18:26:14.285017Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/scope",
+  "pair_key": "0704293619a8af7b0b59a401d8809e426481517ced4dbf2a06f747e6d213100a",
+  "provider_seconds": 26.24355395800012,
+  "right": "task-2/advisor2/evaluation",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

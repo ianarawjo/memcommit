@@ -1,0 +1,75 @@
+{
+  "compact_prompt_version": 1,
+  "created_at": "2026-08-10T23:43:13.779898Z",
+  "cross_task_pairs": false,
+  "kind": "STUDY_COMPARE_GRAPH_PREWARM",
+  "model": "gpt-5.6-sol",
+  "participant_report_visible": false,
+  "profile_name": "study-20260810T180141Z-641b669e",
+  "profile_uid": "2608e3fc-0597-48e8-8a93-671752dca222",
+  "provider": "codex_chatgpt",
+  "reasoning": "medium",
+  "ruleset_version": "peer-relations-v3",
+  "schema_version": 1,
+  "scope": "INCLUDE_DESCENDANTS",
+  "tasks": [
+    {
+      "description_digest": "5fe9e2dcbf53886546aa294a60698676924bbb49337e5fdf37d33e2c5c40f159",
+      "description_name": "practice/description",
+      "pair_count": 3,
+      "task": "tutorial",
+      "view_count": 3,
+      "views": [
+        {
+          "context_digest": "fab3b101ec50aac92fc6abe441757148751250b545d85f02e9675a94e13ebb0d",
+          "context_uid": "824acb9d-695c-5d55-9997-64cc317a2203",
+          "include_descendants": true,
+          "memory_content_digests": [
+            "7b3e55217fb209d722a4bba3d6f01aff03be22e074acd49474f53d4288adac7d",
+            "4e6dd9f7ce3435088cdd37ff484ed1ecaf61b9dc9ddb4ff0e5b492665cc8e67b",
+            "0087a39548bc58194dd5a22d4135bd8d5911d7de93adb8b893f2644089edcc94",
+            "66d4f725c1ebded8a0deb90738d4d954cf30e3ae4032782540059240bcdf9ee5"
+          ],
+          "memory_count": 4,
+          "memory_uids": [
+            "89ff1887-d807-5a04-94d7-424fff9a93b9",
+            "1e046596-b6f1-5623-aebb-52c46b4a54be",
+            "5faaf0a4-d5b8-54d0-af25-c056e9058c98",
+            "ac614cce-7803-539d-b05f-44a802da25fa"
+          ],
+          "name": "practice"
+        },
+        {
+          "context_digest": "5fe9e2dcbf53886546aa294a60698676924bbb49337e5fdf37d33e2c5c40f159",
+          "context_uid": "d5d0a8b4-d425-5c9f-9325-56329df711ef",
+          "include_descendants": true,
+          "memory_content_digests": [
+            "dd32f6435031cd4b7d008c56f7d348a093770a95281b7931ba83fc69488a87a6",
+            "0b69bfb5e2767f2954247c818c645a94e5beea4a4b57417c4647a0c0fc912453",
+            "5e07526f04550144f7c2d680dd57949f77712a143bdbb0c9fc022a1dbf996f37"
+          ],
+          "memory_count": 3,
+          "memory_uids": [
+            "89ff1887-d807-5a04-94d7-424fff9a93b9",
+            "1e046596-b6f1-5623-aebb-52c46b4a54be",
+            "5faaf0a4-d5b8-54d0-af25-c056e9058c98"
+          ],
+          "name": "practice/description"
+        },
+        {
+          "context_digest": "f695e7516f6376fadb5a3c6887c345ef1f3f834fd60ce7e149a774321801dec0",
+          "context_uid": "7e48e68e-3c6f-541b-bfc1-e307abcc7a4f",
+          "include_descendants": true,
+          "memory_content_digests": [
+            "d0c4a72f859cfecb9807ec044bdfd3ab22780ad5fd04c7f56229048354e05769"
+          ],
+          "memory_count": 1,
+          "memory_uids": [
+            "ac614cce-7803-539d-b05f-44a802da25fa"
+          ],
+          "name": "practice/source"
+        }
+      ]
+    }
+  ]
+}

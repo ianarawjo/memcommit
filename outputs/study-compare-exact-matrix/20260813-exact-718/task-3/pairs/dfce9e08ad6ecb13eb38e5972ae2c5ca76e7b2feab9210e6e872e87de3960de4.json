@@ -1,0 +1,397 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:54:13.413588+00:00",
+      "frames": [
+        {
+          "context_digest": "0af669f138c2617a4b35c0974627a23c7e5cb2405da5e306648b130efac7fbdf",
+          "context_name": "task-3/local/personal-memory/2025/12",
+          "context_uid": "c54e9dde-005a-5d20-b41b-1313b4713061",
+          "memories": [
+            {
+              "content": "The user stores wrapping paper and empty gift boxes on the upper shelf of the bedroom closet.",
+              "content_digest": "8f3b67dea69e1fa656f1e42e39700a71ebc250c4f6ec18dc4d4f88d467e86ad2",
+              "position": 0,
+              "uid": "bd69b616-6e7c-5440-8b29-586de68bcff6"
+            },
+            {
+              "content": "From photographs, the user discovered that they had given their mother the same type of kitchen item two years in a row.",
+              "content_digest": "6962b8dc03fd90e1c8badfda0d827008cc675b940e5975a5833ebe504af7d635",
+              "position": 1,
+              "uid": "90c60e57-d7db-5783-9ca8-2fd27b94d847"
+            },
+            {
+              "content": "This year, the user went to the market with their mother and let her choose a needed item directly.",
+              "content_digest": "9a27aa187ad2964f985ffcf376490f4b69d3c83f2034591187273bd89f61637a",
+              "position": 2,
+              "uid": "53bc23b2-8242-58b5-b496-a45c70bb8e41"
+            },
+            {
+              "content": "The user once ordered a gift late and had it delivered the day after the gathering.",
+              "content_digest": "245bb316eb5d0b0203c63eb9a2832c6cf73cb9e7e368bdb48a08bb6b702642d7",
+              "position": 3,
+              "uid": "3b097446-2c73-5414-8c06-6bacdf00a4c1"
+            },
+            {
+              "content": "The next year, the user checked the expected delivery date and ordered one week before the gathering.",
+              "content_digest": "97aed11c6b4f7d03bd6a55e27ef34ef539da85204787bb0468f1e2df51d958fc",
+              "position": 4,
+              "uid": "ce18c7a5-d1e9-5e5c-8739-b14fa7298feb"
+            },
+            {
+              "content": "The user did not put names on wrapped boxes and handed their older sister and younger brother each other's gifts.",
+              "content_digest": "48464eb29ee2d2e01cda00f0e3a13d116d4aa121d424aecc59644431e89f8957",
+              "position": 5,
+              "uid": "7657f424-cd24-54dd-8409-e04974dd1531"
+            },
+            {
+              "content": "The next time the user wrapped gifts, they wrote the recipient on the bottom of each box.",
+              "content_digest": "551e74aebf85d4ffee86b960c520b17f3f7e4d50428493934831a774d9e31db6",
+              "position": 6,
+              "uid": "d8e82ad3-902e-5f0c-aa8e-b23ce874982a"
+            },
+            {
+              "content": "The user's younger brother welcomes a snack the family can share immediately more than an item for his use alone.",
+              "content_digest": "ec32111520e2f12afc684c6441c075dcc0715fc450d0ce8f20408dfb955634a9",
+              "position": 7,
+              "uid": "8a941bf1-73bd-51d3-a069-62ecc9d56439"
+            },
+            {
+              "content": "The local agent can find past gift records and flag duplicates but cannot know what is needed this year.",
+              "content_digest": "f7574c7f91999992680a7e88e79270747fd744a46355800012c63319c286d731",
+              "position": 8,
+              "uid": "036edf8f-4680-5822-924e-0fdc691c8135"
+            },
+            {
+              "content": "Year-end deliveries may take longer than usual or have their expected dates changed.",
+              "content_digest": "cc0955e132cf6f4bec7f416e54ed2ffdbac22169adeeae7372a6ddc496da4b9e",
+              "position": 9,
+              "uid": "b9e9e222-a559-56e3-93b5-1f49a0e0d3ab"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "f8a9a4bd-d319-4ab9-8f84-b7945be393d9"
+        },
+        {
+          "context_digest": "4b8dc68a205171fe661b04620d0fba2bbb386ff21d494699c34a74dc2ab86080",
+          "context_name": "task-3/local/personal-memory/2026/03",
+          "context_uid": "97d36150-4792-5a5c-9332-5eb1de8bcf04",
+          "memories": [
+            {
+              "content": "The user stores tax-related receipts in digital folders by year.",
+              "content_digest": "778f983547572b31798b7041899812a7b0b574d74b585baf6883e94919dee6ec",
+              "position": 0,
+              "uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393"
+            },
+            {
+              "content": "The user found three paper receipts late and recalculated the expense total already prepared.",
+              "content_digest": "542368a141ec82a1bd7da4b534d88ea62c487d16a37f454569bf6400cbc749e9",
+              "position": 1,
+              "uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878"
+            },
+            {
+              "content": "Starting the next month, the user photographed receipts on the day they were received and reduced omissions.",
+              "content_digest": "b95e0a1afa1196a9bff117bf12b1630edcc4eb65bfdfeb3128ae5937563a492e",
+              "position": 2,
+              "uid": "ff436ea5-1b3e-55df-8302-bd8a96740671"
+            },
+            {
+              "content": "The user named every file with only the photo date and spent a long time looking for a needed receipt.",
+              "content_digest": "c3aa33e0b7e007bdfc5c12dcda659e2a52938548fbf53d5a1ab034487a528857",
+              "position": 3,
+              "uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e"
+            },
+            {
+              "content": "The user later included the expense category in the filename and found the receipt immediately through search.",
+              "content_digest": "cdae97761f614b932d3b330723627bee8b0e3d033e2bf1061b721367237acee1",
+              "position": 4,
+              "uid": "89d6fa9a-b795-59df-be34-1c05a9861d35"
+            },
+            {
+              "content": "While reviewing documents just before submission, the user discovered one blank signature field.",
+              "content_digest": "a525c117b97eec82c678f276b319158703bf9cc558fb83cb81c0820d5c9e3174",
+              "position": 5,
+              "uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2"
+            },
+            {
+              "content": "Before submitting an administrative document, the user checks the signature field as the final item on the checklist.",
+              "content_digest": "542bec3cbc3fc8b22c95da274e479e96bfbf061a3b644d0d7f213de5a030dbd5",
+              "position": 6,
+              "uid": "5551622f-66cf-5542-8c47-1cddadab5c02"
+            },
+            {
+              "content": "Staff at a tax-support counter expect to receive an electronic copy in which every item is legible rather than a blurred or cropped photo.",
+              "content_digest": "d328ca248fdeecf0756e23b1202e7007bc8c3c25ae769439b0fd2efdbbe47580",
+              "position": 7,
+              "uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f"
+            },
+            {
+              "content": "The local agent can organize receipts by date and category but cannot determine whether an expense is deductible.",
+              "content_digest": "bcc769721a99b099ca20e5e527fa8904d54ecbaf9ae7d7616b95e1adaf1f89a9",
+              "position": 8,
+              "uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094"
+            },
+            {
+              "content": "The accepted scope and submission deadlines for administrative documents may vary under that year's guidance.",
+              "content_digest": "1ab61126b8efb0c2a9c6114c367018158f2e136bafa87e33f60aadb0686d0537",
+              "position": 9,
+              "uid": "de398064-3179-590b-8c62-effb17060115"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "3dd10f06-03fc-4aee-a2a0-ed9f46d22031"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate practical domains: gift preparation and family preferences on one side, and tax-receipt management and document submission on the other. Their lessons are independently useful, with no sufficiently shared operational claim, scope-based variation, or direct contradiction.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f8a9a4bd-d319-4ab9-8f84-b7945be393d9",
+              "memory_uid": "bd69b616-6e7c-5440-8b29-586de68bcff6"
+            }
+          ],
+          "reason": "This is a specific household-storage fact with no counterpart concerning the same items or location.",
+          "status": "RESOLVED",
+          "summary": "Wrapping materials and empty gift boxes are stored on the bedroom closet’s upper shelf.",
+          "uid": "eaab320e-cc74-5aa0-9b15-618a449081c8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f8a9a4bd-d319-4ab9-8f84-b7945be393d9",
+              "memory_uid": "90c60e57-d7db-5783-9ca8-2fd27b94d847"
+            },
+            {
+              "frame_uid": "f8a9a4bd-d319-4ab9-8f84-b7945be393d9",
+              "memory_uid": "53bc23b2-8242-58b5-b496-a45c70bb8e41"
+            }
+          ],
+          "reason": "The memories form one gift-selection lesson about preventing repetition and uncertainty; the other frame contains no claim governing gift choice.",
+          "status": "RESOLVED",
+          "summary": "After discovering repeated kitchen gifts to their mother, the user changed approach and let her select a currently needed item.",
+          "uid": "5bc4150b-31c3-5441-a5b5-10b09dc341c7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f8a9a4bd-d319-4ab9-8f84-b7945be393d9",
+              "memory_uid": "3b097446-2c73-5414-8c06-6bacdf00a4c1"
+            },
+            {
+              "frame_uid": "f8a9a4bd-d319-4ab9-8f84-b7945be393d9",
+              "memory_uid": "ce18c7a5-d1e9-5e5c-8739-b14fa7298feb"
+            }
+          ],
+          "reason": "These memories describe one gift-delivery planning lesson, unmatched by a claim about arranging deliveries for gatherings.",
+          "status": "RESOLVED",
+          "summary": "A gift arrived after a gathering when ordered late, leading the user to check delivery expectations and order a week ahead the following year.",
+          "uid": "2f927328-3ff0-57c3-aa7a-e808117a8f29"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f8a9a4bd-d319-4ab9-8f84-b7945be393d9",
+              "memory_uid": "7657f424-cd24-54dd-8409-e04974dd1531"
+            },
+            {
+              "frame_uid": "f8a9a4bd-d319-4ab9-8f84-b7945be393d9",
+              "memory_uid": "d8e82ad3-902e-5f0c-aa8e-b23ce874982a"
+            }
+          ],
+          "reason": "These memories split one corrective gift-labeling practice, with no counterpart about identifying gift recipients.",
+          "status": "RESOLVED",
+          "summary": "After swapping siblings’ unlabeled gifts, the user began marking each recipient on the bottom of the box.",
+          "uid": "1ae30f6d-5b1d-54a0-93f9-24dcbfad06e6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f8a9a4bd-d319-4ab9-8f84-b7945be393d9",
+              "memory_uid": "8a941bf1-73bd-51d3-a069-62ecc9d56439"
+            }
+          ],
+          "reason": "This recipient preference is independently useful and has no corresponding information in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s younger brother prefers an immediately shareable family snack over an item solely for himself.",
+          "uid": "29c4c018-5d61-5967-b062-83ffa8603563"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f8a9a4bd-d319-4ab9-8f84-b7945be393d9",
+              "memory_uid": "036edf8f-4680-5822-924e-0fdc691c8135"
+            }
+          ],
+          "reason": "This capability boundary specifically governs gift selection; receipt organization and tax deductibility concern a different operational decision and are not interchangeable.",
+          "status": "RESOLVED",
+          "summary": "The local agent can retrieve gift history and flag duplicates but cannot determine what is currently needed.",
+          "uid": "77f8e4e7-448f-5720-b873-5d982562fc1a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f8a9a4bd-d319-4ab9-8f84-b7945be393d9",
+              "memory_uid": "b9e9e222-a559-56e3-93b5-1f49a0e0d3ab"
+            }
+          ],
+          "reason": "This seasonal delivery risk has no counterpart governing shipment timing in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Year-end deliveries can be delayed or have their expected dates revised.",
+          "uid": "9d8221b6-a5e6-5a76-9a06-e2e9cec9bd83"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3dd10f06-03fc-4aee-a2a0-ed9f46d22031",
+              "memory_uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393"
+            }
+          ],
+          "reason": "This tax-record storage practice has no counterpart concerning the same records or organization scheme.",
+          "status": "RESOLVED",
+          "summary": "Tax-related receipts are stored in digital folders organized by year.",
+          "uid": "c16fd942-1eb1-572f-973b-0db34670162f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3dd10f06-03fc-4aee-a2a0-ed9f46d22031",
+              "memory_uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878"
+            },
+            {
+              "frame_uid": "3dd10f06-03fc-4aee-a2a0-ed9f46d22031",
+              "memory_uid": "ff436ea5-1b3e-55df-8302-bd8a96740671"
+            }
+          ],
+          "reason": "These memories form one corrective receipt-capture lesson, with no counterpart about capturing expense evidence.",
+          "status": "RESOLVED",
+          "summary": "After late paper receipts forced recalculation, the user began photographing receipts upon receipt and reduced omissions.",
+          "uid": "0da3eb2b-ad7d-57fd-bfa3-a3b8040cf3d0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3dd10f06-03fc-4aee-a2a0-ed9f46d22031",
+              "memory_uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e"
+            },
+            {
+              "frame_uid": "3dd10f06-03fc-4aee-a2a0-ed9f46d22031",
+              "memory_uid": "89d6fa9a-b795-59df-be34-1c05a9861d35"
+            }
+          ],
+          "reason": "These memories describe one corrective receipt-naming practice, unmatched by any claim about searchable receipt metadata.",
+          "status": "RESOLVED",
+          "summary": "Date-only receipt filenames hindered retrieval, while adding expense categories enabled immediate search.",
+          "uid": "aace9645-cd8b-560d-b802-256ba10fcb69"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3dd10f06-03fc-4aee-a2a0-ed9f46d22031",
+              "memory_uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2"
+            },
+            {
+              "frame_uid": "3dd10f06-03fc-4aee-a2a0-ed9f46d22031",
+              "memory_uid": "5551622f-66cf-5542-8c47-1cddadab5c02"
+            }
+          ],
+          "reason": "These memories split one corrective document-signature practice, with no counterpart concerning administrative signatures.",
+          "status": "RESOLVED",
+          "summary": "Finding a blank signature field before submission led the user to make the signature check the final checklist item.",
+          "uid": "241e09d2-f9ba-5d8e-8e4c-a41d0de408f8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3dd10f06-03fc-4aee-a2a0-ed9f46d22031",
+              "memory_uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f"
+            }
+          ],
+          "reason": "This submission-quality requirement is independently useful and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Tax-support staff expect complete, legible electronic copies rather than blurred or cropped photographs.",
+          "uid": "4b6519e3-7f50-5953-bfa9-c39c2146bb5e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3dd10f06-03fc-4aee-a2a0-ed9f46d22031",
+              "memory_uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094"
+            }
+          ],
+          "reason": "This capability boundary specifically governs tax records and deductibility; gift-history retrieval and current needs concern a different operational decision.",
+          "status": "RESOLVED",
+          "summary": "The local agent can organize receipts by date and category but cannot decide whether an expense is deductible.",
+          "uid": "7b9d2b84-81e2-59b2-8d80-7a421a020726"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3dd10f06-03fc-4aee-a2a0-ed9f46d22031",
+              "memory_uid": "de398064-3179-590b-8c62-effb17060115"
+            }
+          ],
+          "reason": "This annual compliance variability has no counterpart concerning administrative acceptance or filing deadlines.",
+          "status": "RESOLVED",
+          "summary": "Accepted document scope and administrative submission deadlines may vary with the year’s guidance.",
+          "uid": "b4b14e18-99ba-55f8-822a-a17dc5569562"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Administrative content covers receipt storage, capture and naming practices, signature checks, copy quality, agent limits, and annually variable filing requirements.",
+        "differences": "",
+        "reference_only": "Gift-related content covers storage, selection, delivery timing, recipient labeling, a sibling’s preference, agent limits, and seasonal delivery uncertainty."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "4cc181c8-0d76-4eaa-97b1-4efaca92d346"
+    },
+    "analysis_digest": "63c78ef37b5daa3b40d0bc120b1948ee0605f44581627db98650d4c36638a671",
+    "key": "be43fd4b936ac9830af221ae0d2b69f64ac90fdcb46b6a3c86cef2266f6d350c",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 41.74942295800065,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "be43fd4b936ac9830af221ae0d2b69f64ac90fdcb46b6a3c86cef2266f6d350c",
+  "created_at": "2026-08-13T18:54:55.162595Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/12",
+  "pair_key": "dfce9e08ad6ecb13eb38e5972ae2c5ca76e7b2feab9210e6e872e87de3960de4",
+  "provider_seconds": 41.74942295800065,
+  "right": "task-3/local/personal-memory/2026/03",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

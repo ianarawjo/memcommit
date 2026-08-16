@@ -1,0 +1,322 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:23:46.798890+00:00",
+      "frames": [
+        {
+          "context_digest": "9d55b4a5604285e426b317f7f4732b35ca1e9df044f7015b3ae6a6be0df5492b",
+          "context_name": "task-2/advisor1/reproducibility",
+          "context_uid": "7d293f75-52b6-5f27-99c4-54f2be3d8e59",
+          "memories": [
+            {
+              "content": "HCI reviewers find it difficult to assess the reproducibility of results if the prototype version used in the evaluation is not disclosed.",
+              "content_digest": "9b89217d4ef2c7524af665ea80d7d60e61f1663fd8ea4bdde533c8d3a0da2044",
+              "position": 0,
+              "uid": "fb400759-63ed-568a-b94e-5f0c2fe94b67"
+            },
+            {
+              "content": "Record the manipulated and fixed elements of compared design alternatives so that other researchers can reconstruct them.",
+              "content_digest": "26b84b5f0644980de51d764218ce90fb614eb02a2df38fb3632f44d360a93cd3",
+              "position": 1,
+              "uid": "e52e8470-6419-5306-9ddd-00a86003dcf3"
+            },
+            {
+              "content": "Records of formative evaluation decisions enable the reconstruction of connections between raw data, interpretation, and design modifications.",
+              "content_digest": "f213479e4bd1947d418083139346ed7f666bc597133962617d94bdd3a9af0083",
+              "position": 2,
+              "uid": "8f4edf8c-491d-56fe-bde4-d9ce25d6de50"
+            },
+            {
+              "content": "The user must make it possible to trace which observations each prototype version reflects so the process of deriving design knowledge can be reviewed.",
+              "content_digest": "1c9b8a6f650f2eb652b1e9cbb62ad9dcbb3ec13f2e160b52db83492640eb0ae9",
+              "position": 3,
+              "uid": "87662a7e-ffc7-521a-a06c-7db8184377e8"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "8c774ffa-0fb5-46bc-8efd-e9de2aa863d6"
+        },
+        {
+          "context_digest": "7842b257aa1d32e6e598b019791827a580a1864e19e05d9101413b11d5b0227d",
+          "context_name": "task-2/advisor2/style",
+          "context_uid": "f0ea0447-bfe6-503c-89da-e90f24af6e2d",
+          "memories": [
+            {
+              "content": "Use an em dash only for a deliberate interruption or sharp contrast; otherwise split the sentence or choose ordinary punctuation.",
+              "content_digest": "3c37a896774ebccbec1e4bb3ad4a4e61ece1bb4ae246226c93b1d78c651bee7b",
+              "position": 0,
+              "uid": "9bd2a9da-9720-5001-b958-f7a2a2658f87"
+            },
+            {
+              "content": "In procedural passages, begin each sentence with the action, condition, or output instead of repeating “we” so the steps remain easy to follow and reuse.",
+              "content_digest": "c61f6b8ae3612497403f306de2cbe4e6a25db285109e89f74d61439abf5fae30",
+              "position": 1,
+              "uid": "e3e20261-e03c-52fb-be9e-04f5f9b1294d"
+            },
+            {
+              "content": "Write system behaviors confirmed in the actual usage environment as observed states.",
+              "content_digest": "972e1f5ba9188f1a423c2b47782e1a3938749419e8c170fabc97e6dd4f86cab2",
+              "position": 2,
+              "uid": "8d8d0e8d-dad1-50b5-9438-049052748a6a"
+            },
+            {
+              "content": "Write system behaviors not yet confirmed in the field as conditional plans.",
+              "content_digest": "9b7f3fffb87af8004e9645b6494bd2b990a1f1bfb054ca0efecea2bfb74d850d",
+              "position": 3,
+              "uid": "8c74ba87-822b-5ce2-9a3a-3adc02ab9744"
+            },
+            {
+              "content": "Readers can reconstruct a sequence more accurately when each sentence begins with the action or condition rather than the author.",
+              "content_digest": "e6748d23d892cb074ac5259f3c733727746640973a5b62c0ed1b7c6a684e9db8",
+              "position": 4,
+              "uid": "1f29de31-5429-5dfc-ab27-01779fa16704"
+            },
+            {
+              "content": "Do not mechanically split connected thoughts into separate short sentences when doing so destroys the intended reading rhythm.",
+              "content_digest": "754be36b29f7b647390c9308fb7a1cfd9e3228ab0f875c8d53e01febbbb3fd8c",
+              "position": 5,
+              "uid": "1d181223-f750-57d2-97a5-b79f276a589f"
+            },
+            {
+              "content": "Preserve a longer sentence when its clauses form one continuous movement that is easier to follow together than apart.",
+              "content_digest": "074e374f77a4fa6f559e3d69746ab3c706d2b1f3d2e4b98a21e8d1e4d59ef087",
+              "position": 6,
+              "uid": "a5ce5f9f-8852-5080-ae35-21abcf4a0973"
+            },
+            {
+              "content": "The user understands that short sentences are easier to scan but feels that uniformly segmented prose loses its reading rhythm.",
+              "content_digest": "acf7ca20f09995c87c51434dc2ff489efc886ada5b2282dc4bc4014befd8fdc0",
+              "position": 7,
+              "uid": "888ce8af-a36e-5e74-9a0c-604aac48d3b7"
+            },
+            {
+              "content": "Write procedural sentences so their opening phrase can be reused as a checklist item without changing the step's meaning.",
+              "content_digest": "7fd5b55fc09e74df05628f1c61bd543b39b906847b86e7f09337a67b47553156",
+              "position": 8,
+              "uid": "ddf40413-3274-5662-ba5e-d6cae2a1e546"
+            },
+            {
+              "content": "The user should choose “I” as an individual author or “we” for a named team and should not mix them when describing the same responsible party.",
+              "content_digest": "951763104930e99be0182b59dbaa6d7d7a20fd23fe968e39a15bd0798a1bd1b7",
+              "position": 9,
+              "uid": "6b7aaddf-5bbd-5015-811d-9f4d7a4b4ad1"
+            },
+            {
+              "content": "Action-first procedural sentences can be reordered or copied into a checklist more easily because their subject is the step rather than the proposal author.",
+              "content_digest": "397e3c0b9262e13d94969669930081ac76d4967adec4c5fd1f681869b613bc36",
+              "position": 10,
+              "uid": "89c2ce30-d6aa-5762-bf17-c697caac68e4"
+            },
+            {
+              "content": "The user can explain whether an em dash marks an intentional interruption or contrast rather than using it decoratively.",
+              "content_digest": "ec27bb0d2ba0656602348660944cb483789dfaec189d6e32ad6145c8e17f81b2",
+              "position": 11,
+              "uid": "9f1b647a-bd2b-50df-8141-5b8c142c0fa5"
+            },
+            {
+              "content": "An em dash creates a stronger interruption than a comma and can make a deliberate contrast easier to hear in the sentence.",
+              "content_digest": "aa3c3cdb31d26aeeb33b047a22860bf1dbe0819e9cc93f03da112b04367b844e",
+              "position": 12,
+              "uid": "49a42872-adcc-5bf8-9029-1d134cac6267"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "49ed0876-f7b0-4e95-acdf-79f495f9e859"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate concerns. The reference frame specifies documentation needed to reconstruct prototype evolution and evaluations, while the compared frame provides prose rules for punctuation, procedural structure, evidential status, sentence rhythm, and authorial pronouns. Neither frame supplies a scope-aligned counterpart to the other.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8c774ffa-0fb5-46bc-8efd-e9de2aa863d6",
+              "memory_uid": "fb400759-63ed-568a-b94e-5f0c2fe94b67"
+            }
+          ],
+          "reason": "This is independently useful evaluation-reporting guidance with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Evaluations should disclose the prototype version used so reviewers can assess reproducibility.",
+          "uid": "81d0d014-c1ea-56b2-91c4-50e45dc846b8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8c774ffa-0fb5-46bc-8efd-e9de2aa863d6",
+              "memory_uid": "e52e8470-6419-5306-9ddd-00a86003dcf3"
+            }
+          ],
+          "reason": "This distinct documentation requirement supports reconstruction of comparisons and is not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Researchers should record which elements vary and remain fixed across design alternatives.",
+          "uid": "d256520d-f247-5c4d-86e4-9936715a4910"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8c774ffa-0fb5-46bc-8efd-e9de2aa863d6",
+              "memory_uid": "8f4edf8c-491d-56fe-bde4-d9ce25d6de50"
+            }
+          ],
+          "reason": "This provenance requirement is independently useful and has no scope-aligned counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Formative evaluation records should connect raw data, interpretation, and resulting design modifications.",
+          "uid": "692d189d-287b-57c1-8557-ef68de20a098"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8c774ffa-0fb5-46bc-8efd-e9de2aa863d6",
+              "memory_uid": "87662a7e-ffc7-521a-a06c-7db8184377e8"
+            }
+          ],
+          "reason": "This version-to-evidence traceability claim is distinct from the other documentation requirements and absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Prototype versions should be traceable to the observations they reflect so design-knowledge derivation can be reviewed.",
+          "uid": "11415f3a-798b-5954-b945-58da1b744fa9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "49ed0876-f7b0-4e95-acdf-79f495f9e859",
+              "memory_uid": "9bd2a9da-9720-5001-b958-f7a2a2658f87"
+            },
+            {
+              "frame_uid": "49ed0876-f7b0-4e95-acdf-79f495f9e859",
+              "memory_uid": "9f1b647a-bd2b-50df-8141-5b8c142c0fa5"
+            },
+            {
+              "frame_uid": "49ed0876-f7b0-4e95-acdf-79f495f9e859",
+              "memory_uid": "49a42872-adcc-5bf8-9029-1d134cac6267"
+            }
+          ],
+          "reason": "These memories split one punctuation policy into its rule, rationale, and author accountability; the reference frame has no counterpart.",
+          "status": "RESOLVED",
+          "summary": "Em dashes should mark intentional interruption or sharp contrast, with their stronger audible break understood and explainable.",
+          "uid": "a8fd53ac-7fce-5c85-841b-fd1e2cddf9ea"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "49ed0876-f7b0-4e95-acdf-79f495f9e859",
+              "memory_uid": "e3e20261-e03c-52fb-be9e-04f5f9b1294d"
+            },
+            {
+              "frame_uid": "49ed0876-f7b0-4e95-acdf-79f495f9e859",
+              "memory_uid": "1f29de31-5429-5dfc-ab27-01779fa16704"
+            },
+            {
+              "frame_uid": "49ed0876-f7b0-4e95-acdf-79f495f9e859",
+              "memory_uid": "ddf40413-3274-5662-ba5e-d6cae2a1e546"
+            },
+            {
+              "frame_uid": "49ed0876-f7b0-4e95-acdf-79f495f9e859",
+              "memory_uid": "89c2ce30-d6aa-5762-bf17-c697caac68e4"
+            }
+          ],
+          "reason": "These memories restate and elaborate one action-first procedural-writing policy, which the reference frame does not address.",
+          "status": "RESOLVED",
+          "summary": "Procedural sentences should begin with the action, condition, or output so sequences remain clear, reorderable, and reusable as checklist items.",
+          "uid": "3d191f0c-282a-53d5-8796-7f25b4a952cf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "49ed0876-f7b0-4e95-acdf-79f495f9e859",
+              "memory_uid": "8d8d0e8d-dad1-50b5-9438-049052748a6a"
+            },
+            {
+              "frame_uid": "49ed0876-f7b0-4e95-acdf-79f495f9e859",
+              "memory_uid": "8c74ba87-822b-5ce2-9a3a-3adc02ab9744"
+            }
+          ],
+          "reason": "The two memories divide one evidential-status writing rule by explicit confirmation condition; no reference-side counterpart exists.",
+          "status": "RESOLVED",
+          "summary": "System behavior should be written as an observed state when field-confirmed and as a conditional plan when not yet confirmed.",
+          "uid": "0505e0d8-11df-5a5f-9d0f-117295d70af4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "49ed0876-f7b0-4e95-acdf-79f495f9e859",
+              "memory_uid": "1d181223-f750-57d2-97a5-b79f276a589f"
+            },
+            {
+              "frame_uid": "49ed0876-f7b0-4e95-acdf-79f495f9e859",
+              "memory_uid": "a5ce5f9f-8852-5080-ae35-21abcf4a0973"
+            },
+            {
+              "frame_uid": "49ed0876-f7b0-4e95-acdf-79f495f9e859",
+              "memory_uid": "888ce8af-a36e-5e74-9a0c-604aac48d3b7"
+            }
+          ],
+          "reason": "These memories express the same preference through a rule, its positive formulation, and the user's rationale; it is absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Connected thoughts should remain in longer sentences when mechanical segmentation would damage clarity or reading rhythm.",
+          "uid": "b74464ae-62f6-5a10-8012-e6b025114d4d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "49ed0876-f7b0-4e95-acdf-79f495f9e859",
+              "memory_uid": "6b7aaddf-5bbd-5015-811d-9f4d7a4b4ad1"
+            }
+          ],
+          "reason": "This authorship-consistency policy is independently useful and has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Writers should use “I” for an individual or “we” for a named team without mixing them for the same responsible party.",
+          "uid": "4ff7b3ba-e16b-5aca-968a-655a9e332656"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers purposeful em dashes, action-first reusable procedures, field-confirmation wording, preservation of connected prose rhythm, and consistent first-person authorship.",
+        "differences": "",
+        "reference_only": "The reference frame covers disclosure of evaluated prototype versions, controlled design differences, formative decision records, and traceability from observations to prototype revisions."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "13bf4799-f2d2-474d-a397-a97653d0e153"
+    },
+    "analysis_digest": "f811bbd0e4af86e82dfdaeb5c6141fc7b253bed1c44bd4f02f83043a4430ca74",
+    "key": "989be90ad3971e2caa8d4a71d9cb75e9efa2542a2961bc4d1c8866a565e585b9",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 35.280258666996815,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "989be90ad3971e2caa8d4a71d9cb75e9efa2542a2961bc4d1c8866a565e585b9",
+  "created_at": "2026-08-13T18:24:22.078742Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/reproducibility",
+  "pair_key": "72b086bf80d735926a1d50f94ff5c07d8d34118a3101cfbf980b1938e1867386",
+  "provider_seconds": 35.280258666996815,
+  "right": "task-2/advisor2/style",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

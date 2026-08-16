@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:48:23.649924+00:00",
+      "frames": [
+        {
+          "context_digest": "0b8af0ea4e580cc332939d026149e543e9251c54de246e3eabb83c941e6c12f2",
+          "context_name": "task-3/local/personal-memory/2024/12",
+          "context_uid": "66c3e5de-61bb-5795-8e5a-4e28f64be857",
+          "memories": [
+            {
+              "content": "The user used an accessible entrance at a clinic in December 2024.",
+              "content_digest": "a940bc9fb7423a1bdb9dde547cd39eb8ad66d4fa3051649c62b042fc63935263",
+              "position": 0,
+              "uid": "a6923620-267d-5129-b8c4-cd9b1e1a1e7b"
+            },
+            {
+              "content": "On a day snow had accumulated and blocked the main-entrance ramp, the user went to a side entrance.",
+              "content_digest": "460c05d8e8b4b7443ff42cbeead66e07201846394bcbe5948f63e585a197006f",
+              "position": 1,
+              "uid": "fb0e1d1f-0ef5-5214-b6d7-f6ca5c68f582"
+            },
+            {
+              "content": "The user learned on site that the elevator was under inspection and delayed the appointment.",
+              "content_digest": "b5efa024c597b57651178431d22173d4ca1242c3a4c9607f8bd5a7ff681af6f4",
+              "position": 2,
+              "uid": "4cb45120-4376-5c7b-ae92-faa9e4b9330c"
+            },
+            {
+              "content": "The day before the next visit, the user called to check whether the elevator would be operating.",
+              "content_digest": "93c66066de480a4d2f30b7b7c4d955acfceb227ac898766b6375829804b580eb",
+              "position": 3,
+              "uid": "479f4434-879c-5335-b0c9-c0bfa19ecdcd"
+            },
+            {
+              "content": "The user waited for their turn in front of a ticket machine near the waiting chairs.",
+              "content_digest": "fada8c09d46af2e1bcbd2b1e97d9cb786ceca83fc13d1240627639dd6cb96e65",
+              "position": 4,
+              "uid": "0f2c78a7-8f92-573d-af8a-a360ceb77b24"
+            },
+            {
+              "content": "On a day the user waited in a corridor without chairs, they leaned against the wall and changed position several times.",
+              "content_digest": "0037afaeb85d94f985b1628b7b8f8194fb00d7d7e72e1746c6bae2c2ba66fe6f",
+              "position": 5,
+              "uid": "7b9197ac-4263-5169-8d3b-d34f5d893d36"
+            },
+            {
+              "content": "On a day their older sister accompanied them, the user found a place to sit immediately after reception.",
+              "content_digest": "1ae59de552a922fd3b4d39e7e5dc1ec65ff08ee68e3448f2152f27dfec710a5a",
+              "position": 6,
+              "uid": "7b0b7571-f29c-56e5-a27a-82d69a4a6982"
+            },
+            {
+              "content": "Reception staff expect that a first-time visitor may ask where the accessible entrance is.",
+              "content_digest": "7dc3300dc630b737c0f7b437eba30179aa6aaa03efd61c968604ee505a43aa73",
+              "position": 7,
+              "uid": "e9515d6b-10d9-579f-abf7-5030db64218a"
+            },
+            {
+              "content": "The local agent cannot infer the user's condition from a record of using an accessible route alone.",
+              "content_digest": "2d8a50f62f32c43ca62e1e23b75c34361ece43fd8367964174fdc73d66795df4",
+              "position": 8,
+              "uid": "8e57141d-c603-56cd-ab9e-c14b4e944b45"
+            },
+            {
+              "content": "Snow accumulation and snow-removal work can temporarily block an entrance route used under ordinary conditions.",
+              "content_digest": "4fb152c120860688789bdd4b825de45799e9fa00c0c18c334492dd4b274adde9",
+              "position": 9,
+              "uid": "a6076438-307c-56fe-9d2c-848181846ce5"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "6a78e4dc-19e6-477c-ac57-3c8a78156977"
+        },
+        {
+          "context_digest": "4eadf16a0c655a266bec3ebe56b056075c55e7f716f6879a0b6a905fe34136df",
+          "context_name": "task-3/local/personal-memory/2026/05",
+          "context_uid": "fd476504-4d4e-54d9-80b8-3dc2b18555d8",
+          "memories": [
+            {
+              "content": "The user keeps a picnic mat on the bottom shelf of the entrance storage cabinet.",
+              "content_digest": "c17479bd6a0f978f71b106b562507e702c3b84af5119be6bce48e4ee1664e728",
+              "position": 0,
+              "uid": "a9da4cfc-a6aa-51ae-9ec4-0de5c7a09227"
+            },
+            {
+              "content": "On a day the user went to the riverside, they sat in a place without shade and moved after an hour.",
+              "content_digest": "f9ab1da828ca5af06cb8bf54fe85136e316f503dab465fad514ab5a3f8243633",
+              "position": 1,
+              "uid": "fa2735e1-f4af-57d3-a18c-795715b6715b"
+            },
+            {
+              "content": "At the next outdoor meal, the user chose a place near a large tree and stayed for two hours.",
+              "content_digest": "189b7d85561df45986a6b7c9fe681b5ef53b22ca1f5e83fa8d64a7d93b35a577",
+              "position": 2,
+              "uid": "3bd8b8f2-c5b4-5004-8b9e-e388cc26ea7a"
+            },
+            {
+              "content": "On a hot day when the user brought only one bottle of water, they bought another drink partway through the outing.",
+              "content_digest": "92aa494a12664105a4bffc50a9026fadbec78332f750636093ea82ecc68e9597",
+              "position": 3,
+              "uid": "c7c4b494-39a6-5f5c-b37f-51c5061ac926"
+            },
+            {
+              "content": "On the next outing, the user brought two small bottles of water after freezing them.",
+              "content_digest": "69b3035b57b58b1aa778bd0da75dc806c1c449e7e35dc448aff92f7499c3148d",
+              "position": 4,
+              "uid": "dd9f5b3c-9c2e-5dbc-bf6e-eb7761eeb075"
+            },
+            {
+              "content": "When meeting their maternal uncle at a park, the user and the uncle waited at different entrances for 15 minutes.",
+              "content_digest": "9785e87b9fe79813762eb2e19e6d4f256a55f4799c92d095aaf695a8a1de5851",
+              "position": 5,
+              "uid": "2ed2a41c-f6ae-54d6-875c-a195d8fdacee"
+            },
+            {
+              "content": "For the next meeting, the user sent a photo of the entrance sign, and they met at the same place.",
+              "content_digest": "de40b6b7df84784639b97cf7ce153ad8af6e77320d75f3869979e5e3d39169e2",
+              "position": 6,
+              "uid": "23f3a4fc-d51e-5d0b-87f0-d5be407a57f3"
+            },
+            {
+              "content": "For a park meeting, the user's maternal uncle prefers an entrance that requires less walking from the parking area.",
+              "content_digest": "552a43b869c6f06cbf571f794106727406d87841d43addc92f31a3532f73d6f3",
+              "position": 7,
+              "uid": "e9f459f3-8ff0-5a0e-b78b-eda8d18b914e"
+            },
+            {
+              "content": "When making an outdoor plan, confirm the exact entrance and an alternative location in case of rain.",
+              "content_digest": "a265a6364c182de35363b58135b1da60d11595d1e3e0029f6851ac272261a959",
+              "position": 8,
+              "uid": "70277b86-d5db-5b58-8a94-e77372d15a4c"
+            },
+            {
+              "content": "Some park restrooms and drinking fountains may be closed seasonally.",
+              "content_digest": "8e5c4f5f85d4d27dc2211f46e3ab3bbed7f3d9687070b9028992b670986b09ca",
+              "position": 9,
+              "uid": "5a54437b-9b0e-5103-860d-d878be70b3ef"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "03ecd1de-b2d2-41ac-9752-297f946df047"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate domains: clinic accessibility and waiting experiences versus outdoor comfort, supplies, meeting coordination, and seasonal amenities. No claims govern the same operational decision closely enough for a cross-frame relation; each remains independently useful one-sided information.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6a78e4dc-19e6-477c-ac57-3c8a78156977",
+              "memory_uid": "a6923620-267d-5129-b8c4-cd9b1e1a1e7b"
+            }
+          ],
+          "reason": "This is a one-sided historical clinic-access event with no compared-frame claim about the same visit or access decision.",
+          "status": "RESOLVED",
+          "summary": "The user used a clinic’s accessible entrance in December 2024.",
+          "uid": "72d3f900-9cc1-53fc-8733-8fac9b3d8dcd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6a78e4dc-19e6-477c-ac57-3c8a78156977",
+              "memory_uid": "fb0e1d1f-0ef5-5214-b6d7-f6ca5c68f582"
+            }
+          ],
+          "reason": "This specific route substitution under snow conditions has no counterpart concerning the same setting or decision.",
+          "status": "RESOLVED",
+          "summary": "Snow blocking the clinic’s main-entrance ramp led the user to use a side entrance.",
+          "uid": "81f8b45e-88e2-5d78-b10f-410324f37529"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6a78e4dc-19e6-477c-ac57-3c8a78156977",
+              "memory_uid": "4cb45120-4376-5c7b-ae92-faa9e4b9330c"
+            }
+          ],
+          "reason": "The compared frame contains no claim about elevator availability or appointment delay.",
+          "status": "RESOLVED",
+          "summary": "An elevator inspection discovered on site delayed the user’s clinic appointment.",
+          "uid": "03be696d-7839-598f-9add-709bc5971651"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6a78e4dc-19e6-477c-ac57-3c8a78156977",
+              "memory_uid": "479f4434-879c-5335-b0c9-c0bfa19ecdcd"
+            }
+          ],
+          "reason": "This advance accessibility check addresses a clinic elevator and is independent of the compared frame’s outdoor-planning claims.",
+          "status": "RESOLVED",
+          "summary": "Before a later clinic visit, the user called to verify that the elevator would operate.",
+          "uid": "813741e0-1629-51f5-aaed-e90e708e473a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6a78e4dc-19e6-477c-ac57-3c8a78156977",
+              "memory_uid": "0f2c78a7-8f92-573d-af8a-a360ceb77b24"
+            }
+          ],
+          "reason": "The compared frame contains no corresponding queue or clinic waiting-area experience.",
+          "status": "RESOLVED",
+          "summary": "The user waited for their turn by a ticket machine near waiting chairs.",
+          "uid": "9487191e-9c0d-5474-b60f-34b3e8ae987f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6a78e4dc-19e6-477c-ac57-3c8a78156977",
+              "memory_uid": "7b9197ac-4263-5169-8d3b-d34f5d893d36"
+            }
+          ],
+          "reason": "This specific chairless clinic-waiting experience is not addressed by the outdoor seating accounts.",
+          "status": "RESOLVED",
+          "summary": "While waiting in a corridor without chairs, the user leaned against a wall and repeatedly changed position.",
+          "uid": "36df70d1-03c3-57a5-b654-88f3f4c8305b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6a78e4dc-19e6-477c-ac57-3c8a78156977",
+              "memory_uid": "7b0b7571-f29c-56e5-a27a-82d69a4a6982"
+            }
+          ],
+          "reason": "The compared frame has no claim about reception-area seating or accompaniment by the sister.",
+          "status": "RESOLVED",
+          "summary": "When accompanied by an older sister, the user found seating immediately after reception.",
+          "uid": "511429db-9969-545a-8534-c5f027b1ec08"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6a78e4dc-19e6-477c-ac57-3c8a78156977",
+              "memory_uid": "e9515d6b-10d9-579f-abf7-5030db64218a"
+            }
+          ],
+          "reason": "This clinic-service expectation is independent of the compared frame’s park meeting coordination.",
+          "status": "RESOLVED",
+          "summary": "Reception staff anticipate that first-time visitors may request directions to the accessible entrance.",
+          "uid": "e3208725-fb43-5649-a31a-5d46014152ed"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6a78e4dc-19e6-477c-ac57-3c8a78156977",
+              "memory_uid": "8e57141d-c603-56cd-ab9e-c14b4e944b45"
+            }
+          ],
+          "reason": "The compared frame contains no corresponding inference rule or claim about the user’s condition.",
+          "status": "RESOLVED",
+          "summary": "Using an accessible route alone does not justify inferring the user’s condition.",
+          "uid": "f1aa21e6-96f5-50a4-aa36-ccde3184147f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6a78e4dc-19e6-477c-ac57-3c8a78156977",
+              "memory_uid": "a6076438-307c-56fe-9d2c-848181846ce5"
+            }
+          ],
+          "reason": "This general route-availability qualification concerns snow and entrances, not the compared frame’s seasonal amenity closures.",
+          "status": "RESOLVED",
+          "summary": "Snow accumulation or removal work can temporarily block an ordinarily used entrance route.",
+          "uid": "1eff4de0-1f83-5d56-9b1d-07fe5079922d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "03ecd1de-b2d2-41ac-9752-297f946df047",
+              "memory_uid": "a9da4cfc-a6aa-51ae-9ec4-0de5c7a09227"
+            }
+          ],
+          "reason": "The reference frame contains no claim about picnic equipment or household storage.",
+          "status": "RESOLVED",
+          "summary": "The user stores a picnic mat on the bottom shelf of the entrance cabinet.",
+          "uid": "bca6f202-e65d-51cb-b148-e48d7e0096dd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "03ecd1de-b2d2-41ac-9752-297f946df047",
+              "memory_uid": "fa2735e1-f4af-57d3-a18c-795715b6715b"
+            }
+          ],
+          "reason": "This outdoor shade and duration experience is operationally separate from clinic waiting and seating.",
+          "status": "RESOLVED",
+          "summary": "At the riverside, the user sat without shade and moved after an hour.",
+          "uid": "4cdbc792-e829-5ff2-8753-e9cfabc43fac"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "03ecd1de-b2d2-41ac-9752-297f946df047",
+              "memory_uid": "3bd8b8f2-c5b4-5004-8b9e-e388cc26ea7a"
+            }
+          ],
+          "reason": "The reference frame contains no claim about selecting shaded outdoor seating or outing duration.",
+          "status": "RESOLVED",
+          "summary": "At a later outdoor meal, the user chose a place near a large tree and stayed for two hours.",
+          "uid": "170c9aaf-b01f-5600-a32b-d4581896c17a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "03ecd1de-b2d2-41ac-9752-297f946df047",
+              "memory_uid": "c7c4b494-39a6-5f5c-b37f-51c5061ac926"
+            }
+          ],
+          "reason": "The reference frame does not address outdoor hydration or purchasing additional drinks.",
+          "status": "RESOLVED",
+          "summary": "On a hot outing with one water bottle, the user bought another drink partway through.",
+          "uid": "c99823da-e83b-5732-893b-b69f09ef88aa"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "03ecd1de-b2d2-41ac-9752-297f946df047",
+              "memory_uid": "dd9f5b3c-9c2e-5dbc-bf6e-eb7761eeb075"
+            }
+          ],
+          "reason": "This hydration preparation has no counterpart in the clinic-focused reference frame.",
+          "status": "RESOLVED",
+          "summary": "For the next outing, the user brought two small frozen water bottles.",
+          "uid": "b928cba1-cbab-5185-9fbf-9a901d777492"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "03ecd1de-b2d2-41ac-9752-297f946df047",
+              "memory_uid": "2ed2a41c-f6ae-54d6-875c-a195d8fdacee"
+            }
+          ],
+          "reason": "This park-meeting coordination failure is not the same operational case as locating or using a clinic entrance.",
+          "status": "RESOLVED",
+          "summary": "The user and their maternal uncle waited at different park entrances for 15 minutes.",
+          "uid": "a6d99661-19d9-5cf0-8077-f54bb72617dc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "03ecd1de-b2d2-41ac-9752-297f946df047",
+              "memory_uid": "23f3a4fc-d51e-5d0b-87f0-d5be407a57f3"
+            }
+          ],
+          "reason": "The reference frame contains no matching claim about coordinating a meeting through an entrance photograph.",
+          "status": "RESOLVED",
+          "summary": "For a later meeting, the user sent a photo of the entrance sign and successfully met the uncle at the same place.",
+          "uid": "0b26697f-f447-54f3-b93a-30697633aeec"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "03ecd1de-b2d2-41ac-9752-297f946df047",
+              "memory_uid": "e9f459f3-8ff0-5a0e-b78b-eda8d18b914e"
+            }
+          ],
+          "reason": "This person-specific park entrance preference does not govern the clinic access decisions in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "For park meetings, the user’s maternal uncle prefers the entrance requiring less walking from parking.",
+          "uid": "d923686f-daac-5367-a350-707d0e71aacb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "03ecd1de-b2d2-41ac-9752-297f946df047",
+              "memory_uid": "70277b86-d5db-5b58-8a94-e77372d15a4c"
+            }
+          ],
+          "reason": "This park-planning policy combines meeting precision and weather contingency, neither of which is supplied for clinic visits.",
+          "status": "RESOLVED",
+          "summary": "Outdoor plans should confirm the exact entrance and an alternative location for rain.",
+          "uid": "e0108aea-88de-51a3-a666-7828a099c0b9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "03ecd1de-b2d2-41ac-9752-297f946df047",
+              "memory_uid": "5a54437b-9b0e-5103-860d-d878be70b3ef"
+            }
+          ],
+          "reason": "This amenity-availability warning is independent of the reference frame’s temporary snow blockage of an entrance route.",
+          "status": "RESOLVED",
+          "summary": "Park restrooms and drinking fountains may close seasonally.",
+          "uid": "402a4c31-d300-5253-8f87-1589dcdd7758"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame records outdoor seating and hydration adaptations, stored picnic equipment, park entrance coordination and walking preferences, rain contingencies, and possible seasonal amenity closures.",
+        "differences": "",
+        "reference_only": "The reference records clinic access routes, elevator disruption and advance checking, varied waiting and seating experiences, visitor guidance expectations, limits on inferring a condition, and temporary snow-related route blockage."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "634c438a-419a-4f11-abe6-cc90187a9c70"
+    },
+    "analysis_digest": "7fc4dd6ff92d3ccedbfc2c198a9140ad44b8b3d779bdcaa87ee2cd42b8948802",
+    "key": "841df95989e5d8079a9f62de0de0789b0254deed26eee4d2f9a3fd55e739f474",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 45.39687966699785,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "841df95989e5d8079a9f62de0de0789b0254deed26eee4d2f9a3fd55e739f474",
+  "created_at": "2026-08-13T18:49:09.046715Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/12",
+  "pair_key": "acf5889424db8bdb31dfe217c23885d6c54c8cb2591fa9b410194b54d5169db8",
+  "provider_seconds": 45.39687966699785,
+  "right": "task-3/local/personal-memory/2026/05",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

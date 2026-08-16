@@ -1,0 +1,262 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:23:17.682709+00:00",
+      "frames": [
+        {
+          "context_digest": "9d55b4a5604285e426b317f7f4732b35ca1e9df044f7015b3ae6a6be0df5492b",
+          "context_name": "task-2/advisor1/reproducibility",
+          "context_uid": "7d293f75-52b6-5f27-99c4-54f2be3d8e59",
+          "memories": [
+            {
+              "content": "HCI reviewers find it difficult to assess the reproducibility of results if the prototype version used in the evaluation is not disclosed.",
+              "content_digest": "9b89217d4ef2c7524af665ea80d7d60e61f1663fd8ea4bdde533c8d3a0da2044",
+              "position": 0,
+              "uid": "fb400759-63ed-568a-b94e-5f0c2fe94b67"
+            },
+            {
+              "content": "Record the manipulated and fixed elements of compared design alternatives so that other researchers can reconstruct them.",
+              "content_digest": "26b84b5f0644980de51d764218ce90fb614eb02a2df38fb3632f44d360a93cd3",
+              "position": 1,
+              "uid": "e52e8470-6419-5306-9ddd-00a86003dcf3"
+            },
+            {
+              "content": "Records of formative evaluation decisions enable the reconstruction of connections between raw data, interpretation, and design modifications.",
+              "content_digest": "f213479e4bd1947d418083139346ed7f666bc597133962617d94bdd3a9af0083",
+              "position": 2,
+              "uid": "8f4edf8c-491d-56fe-bde4-d9ce25d6de50"
+            },
+            {
+              "content": "The user must make it possible to trace which observations each prototype version reflects so the process of deriving design knowledge can be reviewed.",
+              "content_digest": "1c9b8a6f650f2eb652b1e9cbb62ad9dcbb3ec13f2e160b52db83492640eb0ae9",
+              "position": 3,
+              "uid": "87662a7e-ffc7-521a-a06c-7db8184377e8"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "e9d9248b-6bb6-4a8f-af4d-f45bf695e537"
+        },
+        {
+          "context_digest": "e70e4eaff26e4baf1b346a4ecd2b44ed9f9ccac9e205b7b82572dc8ef0e217c4",
+          "context_name": "task-2/advisor2/emphasis",
+          "context_uid": "398f9930-3a0f-5de0-a339-ceba7dd5d1c6",
+          "memories": [
+            {
+              "content": "Do not exceed two primary HCI contributions that readers must remember.",
+              "content_digest": "59786866cf953172c2697f09398356a861e8ea448093102c32c9149f16b2e5c5",
+              "position": 0,
+              "uid": "d59dc83b-ce6a-5ac7-ab64-e5436df1f945"
+            },
+            {
+              "content": "Present each design or operational contribution as a single named sentence.",
+              "content_digest": "e0de5a9f1c1ca585fe062d7e11f8d2536cbe5ec4eefc16da6f7a0b62c0247d45",
+              "position": 1,
+              "uid": "328de462-17a4-551f-9f74-cb3118519e45"
+            },
+            {
+              "content": "In studies recruiting organizational members, emphasize workflow constraints.",
+              "content_digest": "c46efadebd89f3d757993baea79a5ef1386bbf6b4769ae3704ae62102397fc3b",
+              "position": 2,
+              "uid": "eab1dac5-8b61-5793-a56f-c4e3e64af190"
+            },
+            {
+              "content": "In studies recruiting organizational members, emphasize manager approval constraints.",
+              "content_digest": "2387fb9f3ab907e671fc9dcc2e7f067a84bdf1f5713d8385a32e39eb1e14751d",
+              "position": 3,
+              "uid": "f90e616a-d5a4-5cc2-86e4-62534a1faf83"
+            },
+            {
+              "content": "HCI reviewers find it difficult to identify primary contributions when named design and operational contributions exceed two.",
+              "content_digest": "04e080bfdf7277d04f0efc1b1d6775d06cba88aab5ff78bfd430674b004722a5",
+              "position": 4,
+              "uid": "78a1c87a-6936-516c-b578-8e97dc2e91f4"
+            },
+            {
+              "content": "Highlight one primary field operational decision to be changed by evaluation results as the central claim.",
+              "content_digest": "9a6bda883e68a2553a1238114d5de2746dc220948aebc1c2965cbb435318fe9c",
+              "position": 5,
+              "uid": "7af2db41-9091-5452-9beb-8fd7b48b7872"
+            },
+            {
+              "content": "Specify prototype features unnecessary for reviewing the primary field problem as secondary scope.",
+              "content_digest": "419ed0b0bccf1af7b30e0351f5e87b9e37e469cfa567e684695ffe4b6d39178a",
+              "position": 6,
+              "uid": "2312f35d-c17d-5af3-b84f-d2e671d7663f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "4a1331c4-a5b3-4b0c-826e-a7bf571dd35a"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The reference frame focuses on reproducible prototype and formative-evaluation traceability, while the compared frame focuses on contribution discipline, organizational constraints, a central field decision, and secondary feature scope. These are independently useful policy areas without a sufficiently shared operational decision to support cross-frame relations.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e9d9248b-6bb6-4a8f-af4d-f45bf695e537",
+              "memory_uid": "fb400759-63ed-568a-b94e-5f0c2fe94b67"
+            }
+          ],
+          "reason": "Only the reference frame addresses identifying the particular prototype version used in an evaluation.",
+          "status": "RESOLVED",
+          "summary": "The evaluated prototype version should be disclosed so reviewers can assess reproducibility.",
+          "uid": "e49e0adb-21d5-5a11-8af8-d265e2bfb1b3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e9d9248b-6bb6-4a8f-af4d-f45bf695e537",
+              "memory_uid": "e52e8470-6419-5306-9ddd-00a86003dcf3"
+            }
+          ],
+          "reason": "Only the reference frame specifies documenting how compared alternatives were constructed.",
+          "status": "RESOLVED",
+          "summary": "Manipulated and fixed elements of compared design alternatives should be recorded for reconstruction.",
+          "uid": "a64158a0-c746-5c95-91b1-20ccc515b2e7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e9d9248b-6bb6-4a8f-af4d-f45bf695e537",
+              "memory_uid": "8f4edf8c-491d-56fe-bde4-d9ce25d6de50"
+            }
+          ],
+          "reason": "Only the reference frame requires records connecting formative evidence, interpretation, and resulting changes.",
+          "status": "RESOLVED",
+          "summary": "Formative evaluation decisions should preserve the chain from raw data through interpretation to design modifications.",
+          "uid": "c6c9cd5b-6c7a-5909-9580-da4ed7af0b17"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e9d9248b-6bb6-4a8f-af4d-f45bf695e537",
+              "memory_uid": "87662a7e-ffc7-521a-a06c-7db8184377e8"
+            }
+          ],
+          "reason": "Only the reference frame requires version-level provenance for reviewing how design knowledge was derived.",
+          "status": "RESOLVED",
+          "summary": "Each prototype version should be traceable to the observations it reflects.",
+          "uid": "494454d9-35b7-5786-9152-92af241f2749"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4a1331c4-a5b3-4b0c-826e-a7bf571dd35a",
+              "memory_uid": "d59dc83b-ce6a-5ac7-ab64-e5436df1f945"
+            },
+            {
+              "frame_uid": "4a1331c4-a5b3-4b0c-826e-a7bf571dd35a",
+              "memory_uid": "78a1c87a-6936-516c-b578-8e97dc2e91f4"
+            }
+          ],
+          "reason": "The compared-frame statements express the same one-sided contribution-count policy as a directive and its reviewer-facing rationale.",
+          "status": "RESOLVED",
+          "summary": "Readers should be asked to remember no more than two primary HCI contributions.",
+          "uid": "f6c975e3-7ae7-5393-9553-379a13bc511a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4a1331c4-a5b3-4b0c-826e-a7bf571dd35a",
+              "memory_uid": "328de462-17a4-551f-9f74-cb3118519e45"
+            }
+          ],
+          "reason": "Only the compared frame prescribes this presentation format for individual contributions.",
+          "status": "RESOLVED",
+          "summary": "Each design or operational contribution should be presented as one named sentence.",
+          "uid": "84a25bf0-3dd9-5f3f-8bcd-97d1c03f2068"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4a1331c4-a5b3-4b0c-826e-a7bf571dd35a",
+              "memory_uid": "eab1dac5-8b61-5793-a56f-c4e3e64af190"
+            },
+            {
+              "frame_uid": "4a1331c4-a5b3-4b0c-826e-a7bf571dd35a",
+              "memory_uid": "f90e616a-d5a4-5cc2-86e4-62534a1faf83"
+            }
+          ],
+          "reason": "The compared-frame statements split one one-sided policy into two organizational constraint dimensions that jointly apply to the same recruitment setting.",
+          "status": "RESOLVED",
+          "summary": "Studies recruiting organizational members should emphasize workflow and manager-approval constraints.",
+          "uid": "aa390ee2-2636-53cd-9690-f778cc77c8c2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4a1331c4-a5b3-4b0c-826e-a7bf571dd35a",
+              "memory_uid": "7af2db41-9091-5452-9beb-8fd7b48b7872"
+            }
+          ],
+          "reason": "Only the compared frame defines the central claim around a primary field decision.",
+          "status": "RESOLVED",
+          "summary": "One field operational decision intended to change in response to evaluation results should be highlighted as the central claim.",
+          "uid": "4b9a1b30-df5b-50df-8c0c-e6147c8c32af"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4a1331c4-a5b3-4b0c-826e-a7bf571dd35a",
+              "memory_uid": "2312f35d-c17d-5af3-b84f-d2e671d7663f"
+            }
+          ],
+          "reason": "Only the compared frame distinguishes nonessential prototype features as secondary scope.",
+          "status": "RESOLVED",
+          "summary": "Prototype features unnecessary for reviewing the primary field problem should be identified as secondary scope.",
+          "uid": "600959e0-3842-504e-b891-a474f86a9318"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame limits and names primary contributions, foregrounds organizational workflow and approval constraints, centers one field decision, and separates nonessential prototype features.",
+        "differences": "",
+        "reference_only": "The reference calls for disclosing evaluated prototype versions, documenting alternative construction, preserving formative decision chains, and tracing observations into prototype iterations."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "bbe54f24-630f-431e-9bc6-39053ff1d5d1"
+    },
+    "analysis_digest": "a5d9d5bfd4373f1c7dd28ddaac757709419a53d2d78dc5cb72023b8848ddb74f",
+    "key": "1e958bbe9527622b22135a1219bd260ff6fbe38c1bbc8697682f5548cf920d3b",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 27.796857291999913,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "1e958bbe9527622b22135a1219bd260ff6fbe38c1bbc8697682f5548cf920d3b",
+  "created_at": "2026-08-13T18:23:45.479044Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/reproducibility",
+  "pair_key": "d8e16b4f17dbf04ab00f2a66182a0715985810ab803b8f4f183c148419a7066b",
+  "provider_seconds": 27.796857291999913,
+  "right": "task-2/advisor2/emphasis",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

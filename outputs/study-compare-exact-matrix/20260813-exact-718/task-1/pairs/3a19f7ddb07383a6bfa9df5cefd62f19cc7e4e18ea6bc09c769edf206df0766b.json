@@ -1,0 +1,1268 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:02:03.591987+00:00",
+      "frames": [
+        {
+          "context_digest": "34f12f131ef3db59a42254878166d7a957c1feca2b3fe5fb8caee59b4d107a06",
+          "context_name": "task-1/campus-wiki/building-access",
+          "context_uid": "91ee5b65-ef1c-5414-961c-e9d17c6b16c0",
+          "memories": [
+            {
+              "content": "The Main Building third-floor rear entrance may be used for general passage during regular opening hours in both the academic term and recess.",
+              "content_digest": "952a844422378db49c6dc741d7e8d459fca48c8a121e3917edd7e2d0fb4e0a20",
+              "position": 0,
+              "uid": "1cb2aa88-4c31-5bbc-97be-ba2ebcef1388"
+            },
+            {
+              "content": "The Main Building main entrance is on the first floor.",
+              "content_digest": "fac9ae1515f4ef96829f8527cb38027570c9616cdb697e765a0d6cce31a9a1f5",
+              "position": 1,
+              "uid": "a8b11b27-70d5-5077-98fb-678635369dad"
+            },
+            {
+              "content": "The Main Building rear entrance on the opposite side of the sloping site is at the third-floor level.",
+              "content_digest": "730e9934d8e92759283097ccb6aa7ca429cfb62448b7d4ed62c2015b26080cbc",
+              "position": 2,
+              "uid": "62214c26-4b23-5c6b-ba8a-2fb585d39421"
+            },
+            {
+              "content": "The escalator inside the Main Building connects the first through third floors.",
+              "content_digest": "27f97d3fc8d886b5346f569a5e0782c76e363cd8e956ba2b71de4dfb974cc024",
+              "position": 3,
+              "uid": "4902feb8-567c-5eb9-a817-726975164f16"
+            },
+            {
+              "content": "The end of regular opening hours for the Main Building main entrance during the academic term is 10 p.m.",
+              "content_digest": "6a4ecbfa0be138f0ab13220ced8dac3a176cc3ccfc82164461a8d84f194f950f",
+              "position": 4,
+              "uid": "c6b97453-d8d8-5aa9-baff-e2981ec4e9e6"
+            },
+            {
+              "content": "The end of regular opening hours for the Main Building main entrance during recess is 10 p.m.",
+              "content_digest": "6c55ae79a8f7585bd94c11228df0a55917e0b72a10b8c12555c8c91e3793f07e",
+              "position": 5,
+              "uid": "614389e2-3b83-5fbb-bac1-07cb20f2e4fa"
+            },
+            {
+              "content": "Students familiar with the route to the Central Library expect the third-floor rear entrance to be a connection normally available for passage.",
+              "content_digest": "af480dfff7ea60bd75a24ceb976ce1b4451c9ca13a38b39e6cc7366a05db2568",
+              "position": 6,
+              "uid": "e3929a49-e9b9-566c-bdc2-296ad7ee086a"
+            },
+            {
+              "content": "The access information agent can explain the posted opening hours.",
+              "content_digest": "6776815934682ba40b0bb4599f00dc673aa63f83fdcb367da9a0a3185c0821f1",
+              "position": 7,
+              "uid": "4ed338df-7bd0-5801-bb3b-535886f6d007"
+            },
+            {
+              "content": "The access information agent can explain the posted access eligibility requirements.",
+              "content_digest": "8dba0284b95de24fb3d300630f5440208522384a201fba185a5cc2202f0ea555",
+              "position": 8,
+              "uid": "2af35f74-abb5-54ae-aca6-7d315270ae57"
+            },
+            {
+              "content": "The access information agent cannot issue access credentials.",
+              "content_digest": "299b2a65c686fba3cd37b58ccb64ae55e7e9415c9bc96ae9316de1f9116e046c",
+              "position": 9,
+              "uid": "c30faae3-e8de-530c-a279-cb7a33133bc8"
+            },
+            {
+              "content": "The access information agent cannot unlock locked doors.",
+              "content_digest": "9ad330c207afbb73140a98062f760651d5dbcfe2eae1e5772d0101b65fc511af",
+              "position": 10,
+              "uid": "5b1a6f72-c56d-515f-bb2d-9cd443275bff"
+            },
+            {
+              "content": "Instruct students eligible for access after regular opening hours to use a physical NFC student ID card or the registered app.",
+              "content_digest": "515b4c7ab6cada86ca8ce062bcd428ea70e4995d898cabab0dc7bb0bd3bb67aa",
+              "position": 11,
+              "uid": "b6987cd9-7198-56b5-bf6f-0162624db30f"
+            },
+            {
+              "content": "If access authentication fails, check the posted contact information for the responsible office before providing guidance.",
+              "content_digest": "7e0ccaa830ff048d11f0faa75d27ac451d820a17ec2a7292b38d3047553e00b1",
+              "position": 12,
+              "uid": "f80ad345-f0ce-54bc-bd8d-e2f0e1f1b1c0"
+            },
+            {
+              "content": "Do not guess an unverified contact number.",
+              "content_digest": "ef1ac9964cb593ca86eefb4c3bbc63047ea596f791f44606d74f138f934f5356",
+              "position": 13,
+              "uid": "732458c0-fedc-5bc7-965e-36f8d46c4d8a"
+            },
+            {
+              "content": "The staff-only entrance is a controlled entrance separate from the third-floor rear entrance.",
+              "content_digest": "6d1277148eca88abc6e63b5dcee822a88690cbbeb7d572bd9336986d4220cfa5",
+              "position": 14,
+              "uid": "cb1e0734-91ce-53f3-b00c-da4734df5cb5"
+            },
+            {
+              "content": "The accessible route beside the main entrance is an always-available route into the first-floor lobby without using stairs.",
+              "content_digest": "6f2153d0011c507dc8974707075ef48b7c6fec379f938e597832cafff9e40613",
+              "position": 15,
+              "uid": "36db4bf8-285c-573b-8127-0efa0c10f8bd"
+            },
+            {
+              "content": "Tour leaders for external groups tend to want to use the same route through the third-floor rear entrance on their next visit that they used on a previous visit.",
+              "content_digest": "6138ad4200681cedd068190803e6ba2b861705f8efe71e62b332934d3195d37a",
+              "position": 16,
+              "uid": "804bfc6b-188b-5579-bc83-10b04a28bd69"
+            },
+            {
+              "content": "The start of regular opening hours for the Main Building main entrance during the academic term is 7 a.m.",
+              "content_digest": "695d60df81c205e9d5dffbcda40851e56c31359e3aa2db1ec0c8f3da22738ae8",
+              "position": 17,
+              "uid": "cc2a0d18-0b49-5923-9b53-2e68140b13a0"
+            },
+            {
+              "content": "The start of regular opening hours for the Main Building main entrance during recess is 8 a.m.",
+              "content_digest": "98dc1d7b1a2551c7ef8ada8ea34aa97704719373cc39c8dff3d5d7f15fb5bf2a",
+              "position": 18,
+              "uid": "3ca6b6b2-c381-5247-83cc-cfad0ce862f7"
+            },
+            {
+              "content": "The Main Building's regular weekend opening hours are posted separately in the weekend operating schedule.",
+              "content_digest": "8c039f1427a4cd49071056603b75cb9aa3cf44287539ff6056bc8e2b1d68171c",
+              "position": 19,
+              "uid": "4a01fd2b-fb4d-5759-88c9-1b6de1a30331"
+            },
+            {
+              "content": "The Main Building's holiday access hours may differ from regular operating hours.",
+              "content_digest": "82b1d6e0e59caa2e80d733415c0fb02fc6200e7587e327528d7c48a0923a07ac",
+              "position": 20,
+              "uid": "78298531-74b8-591b-ae32-b6175f476ca7"
+            },
+            {
+              "content": "First-time visitors often expect the Main Building first-floor main entrance to be the default entrance for general visitors.",
+              "content_digest": "17e19e5985d86f5980ee732629ca506456049b56a843024bc8323471eab04017",
+              "position": 21,
+              "uid": "4189e656-a4ef-5fe0-af68-943d86e83a83"
+            },
+            {
+              "content": "Visitors who have difficulty using stairs expect a step-free access route to be near the main entrance.",
+              "content_digest": "fd2d294a9a3b1212a6e027522bf9d8cef1c1214db2f3e699baf70f89fb015faa",
+              "position": 22,
+              "uid": "aee44d0a-5c4c-59ec-b350-b229570fbd09"
+            },
+            {
+              "content": "Valid staff access eligibility is required to use the staff-only entrance.",
+              "content_digest": "00f54d61c1e76d980afb22174858dc19bd8819d971d1ffc45c5fe84798e4c394",
+              "position": 23,
+              "uid": "d2f32d9e-7b85-5720-ad36-80c6f5f1c071"
+            },
+            {
+              "content": "The Main Building service entrance is used for preregistered deliveries and facilities work.",
+              "content_digest": "452ca7c5fc00741000c72009f5e4504852d7fadec9d2eed39234d2dddafdbfc8",
+              "position": 24,
+              "uid": "2d97d6b9-4287-5f52-9801-26d2081b111f"
+            },
+            {
+              "content": "Visitors accompanied by children prefer the stroller-accessible main entrance and accessible route to be closely connected.",
+              "content_digest": "da4aa4ccddcf74fe141d3620d2aa80c0878adc7338aab649e64450d1b4fa842b",
+              "position": 25,
+              "uid": "fef275b1-b2c1-5cc5-8f75-a1d01782a1e0"
+            },
+            {
+              "content": "Taxi and ride-hailing drivers often expect the Main Building first-floor main entrance to be the default drop-off point unless the passenger specifies a different entrance.",
+              "content_digest": "779ab2b72dc610135f120d158578416e73857e0220761be5769d40871ece71dc",
+              "position": 26,
+              "uid": "41d5bf0b-9a62-5821-b3fd-60f58ce2d980"
+            },
+            {
+              "content": "The access information agent can explain the difference between the normal uses of the front and rear entrances.",
+              "content_digest": "5efab30d8d6b2e62ebae05aecb36141bd5cfd8410792540767494c78771714f5",
+              "position": 27,
+              "uid": "7da885c1-0515-516c-ad1f-2a445db9b324"
+            },
+            {
+              "content": "The access information agent cannot check the physical lock state in real time at the time of an inquiry.",
+              "content_digest": "a79d53e9d05e50972dfcb32083daff731457702ea7f706d9680973f139cb61ef",
+              "position": 28,
+              "uid": "27f6e089-b303-59da-ba5d-4a845961c466"
+            },
+            {
+              "content": "If the posted operating hours differ from the access signage on site, instruct people to follow the on-site signage.",
+              "content_digest": "6899410cdca851aa9dc9c33dc2c9032330d5a12dfcf2ec8d70241905699502fb",
+              "position": 29,
+              "uid": "5e9fc7b5-cfb8-5e3f-9a53-35568e0fd216"
+            },
+            {
+              "content": "Do not suggest that a person without access eligibility follow another authenticated user inside.",
+              "content_digest": "e96959aed30ed265b915cbd058562b7484a389917df942e5805f1c9d56733031",
+              "position": 30,
+              "uid": "bb601c38-6e41-5328-a7e0-117a8a101e49"
+            },
+            {
+              "content": "Emergency exits are doors for emergency evacuation and are not regular entrances for general access.",
+              "content_digest": "635a876f74b065e8545c160788701d50b986c23248d354a0993bf2c3e50ed038",
+              "position": 31,
+              "uid": "efffd1fe-923a-5f12-bd50-afd997a41209"
+            },
+            {
+              "content": "The automatic door at the Main Building main entrance operates during regular opening hours.",
+              "content_digest": "70a0973bc4bdb44168de3fc42833f04d422e01408e88e42b31ea76b0490e322a",
+              "position": 32,
+              "uid": "2b2642c9-32ff-51d5-8a3c-e48d64e191ea"
+            },
+            {
+              "content": "Service animals may use the Main Building's general entrances together with their users.",
+              "content_digest": "e5b46a02025a95ba3e7d61ba3eb130f69cf40ed9c0815e050d294e2aef8d374d",
+              "position": 33,
+              "uid": "e55771f0-7a62-5b9e-aa16-97beafed30fe"
+            },
+            {
+              "content": "Instruct people not to ride bicycles or personal mobility devices inside the Main Building.",
+              "content_digest": "8b59de7cf89589c44830791af24d091dcadc6368bbd54aaa8657a38127038905",
+              "position": 34,
+              "uid": "2ed45e16-4f36-5ecd-919e-65c622c1b493"
+            },
+            {
+              "content": "Visitors using strollers may use the accessible route beside the main entrance.",
+              "content_digest": "5408e84aebd348729447e14a091633ab9e8f127c11087518c42b3d26f707d75e",
+              "position": 35,
+              "uid": "9374def9-c634-5af1-96d8-4d7163608027"
+            },
+            {
+              "content": "Group-tour visitors often expect their tour leader to wait in the first-floor main entrance lobby.",
+              "content_digest": "1550d716c3cac7fbd6c0b181167195f228dc07c12a4ea2a47b802010a0f49475",
+              "position": 36,
+              "uid": "70fe5986-785a-51be-ad59-3e53aab0abb7"
+            },
+            {
+              "content": "External workers may confuse the separate check-in procedure at the service entrance with the general visitor procedure.",
+              "content_digest": "a00c72c5dd880af49a180354e40770d1abb0f2cb3da551977a23c7977efc40d6",
+              "position": 37,
+              "uid": "411fa9fb-6bf1-5514-8433-d6e1c186260c"
+            },
+            {
+              "content": "Borrowed visitor access passes must be returned to the information desk before leaving the Main Building.",
+              "content_digest": "96c85ac5cb26168237a1193cabc103cdc2ab76202e68e4a1d7e4dd990eaea1c0",
+              "position": 38,
+              "uid": "66b1d3f3-b59f-572a-a729-012a3101cb98"
+            },
+            {
+              "content": "Direct users who have lost their access credentials to the posted access support desk.",
+              "content_digest": "fac8a32cb366370a361f717bdb28da5f9d3dbbc06926799a44c05cfbbab3bb0f",
+              "position": 39,
+              "uid": "e99d3f15-48ee-5dc7-8eb2-52ea2d725a09"
+            },
+            {
+              "content": "The accessible entrance beside the main entrance has an automatic door.",
+              "content_digest": "e631e8e5bb19210ecbe6b1cba1170793e309141a14514e3cf47285716a6795af",
+              "position": 40,
+              "uid": "430563f2-c0f4-53ee-9846-2ecd3f57877c"
+            },
+            {
+              "content": "The vestibule inside the main entrance is between the outside and the lobby.",
+              "content_digest": "2570c625b7623202e56db87e7a6c0080e6ee91f80a301c097dedabf81ebfb746",
+              "position": 41,
+              "uid": "2052527b-612c-5af8-974a-ed21323a3b1a"
+            },
+            {
+              "content": "Nighttime access to the Main Building follows an eligibility policy separate from general opening.",
+              "content_digest": "0c26aa62752f0aa0472bac59c7eedd314da39a9485d48e36557e5cb9f7d2f499",
+              "position": 42,
+              "uid": "5bf2c18d-2844-5471-a790-fa6b4689fb37"
+            },
+            {
+              "content": "The validity of campus-issued access eligibility depends on the user's affiliation status.",
+              "content_digest": "d9c73521478ad566df14ac946d57e8562b6364ff3b970ec433e26c3a17457feb",
+              "position": 43,
+              "uid": "38a17415-7c46-562c-bb10-9fa23de62291"
+            },
+            {
+              "content": "Support for mobile access authentication may vary by campus building.",
+              "content_digest": "83251c731b56823f6f11f59d3fd652f7702044baad2caae0c71023adcd212e3e",
+              "position": 44,
+              "uid": "625a9fcb-4609-5a1d-b6af-437e5c722458"
+            },
+            {
+              "content": "Registered visitors to public events use the entrance designated in the event information.",
+              "content_digest": "2c5e3d8e268df4cc430e98d8ac780779e13f05827573c9b5f90310b69d76d425",
+              "position": 45,
+              "uid": "f3f4e4ff-720d-520f-ae1f-53823c277f1e"
+            },
+            {
+              "content": "The hours when an event-only entrance is available follow the schedule for that event.",
+              "content_digest": "2a601eef247f3833df8157ac46418a840da5df246be105c543afc2ba34f78f48",
+              "position": 46,
+              "uid": "e3435ec0-eae9-560c-a2ef-76a89761386a"
+            },
+            {
+              "content": "Student groups expect to be able to meet their party immediately in the main entrance lobby during large visits.",
+              "content_digest": "17c00c699429699764949062b351c3985f4ffb50f52e85b72cf844172b9acf41",
+              "position": 47,
+              "uid": "a24cd65b-b2c3-515e-997b-77a6e143c992"
+            },
+            {
+              "content": "If an item left at an entrance obstructs passage, report it through the facilities reporting agent.",
+              "content_digest": "b31ad637e1059cad4b801b2a49d31a6ce9f5bced7d74c9c2c1413cf16cb6ff7b",
+              "position": 48,
+              "uid": "22dcad33-41cd-5b46-9df6-a98d005f03f3"
+            },
+            {
+              "content": "Direct visitors who need on-site access support to the first-floor information desk.",
+              "content_digest": "96fc5e2c3c8bd1b71c6172da09b4ee7e724b99c5c5a5ce7b5653dcff91cce282",
+              "position": 49,
+              "uid": "da9f2a7d-5b3d-532d-928b-bab7c97f500b"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07"
+        },
+        {
+          "context_digest": "55a29d0b1b6f2f0ca728a22ba33d72aaa87f2b67d103b6e01de51c20fa721b51",
+          "context_name": "task-1/participant/construction-updates/shop-updates",
+          "context_uid": "94dbac4b-70b5-5c76-b53a-1ebc69248a41",
+          "memories": [
+            {
+              "content": "Add campus-wiki/shop-updates: The ATM on the first floor of the Main Building is closed during the construction period.",
+              "content_digest": "9c5aa27570e0e2700fda36f27a0dd97d27daa9d3096dc7d353440489fc6d17f4",
+              "position": 0,
+              "uid": "37113bd0-5194-521b-9d9e-48903d819520"
+            },
+            {
+              "content": "Add campus-wiki/shop-updates: The 24-hour unattended store on the first floor of the Main Building is closed during the construction period.",
+              "content_digest": "ef949eb8c4e67133d73e13aa012410352f95630ca5b37183f788190aa78c46ab",
+              "position": 1,
+              "uid": "741db845-9a4e-5281-825c-e046801b8be5"
+            },
+            {
+              "content": "Add campus-wiki/shop-updates: During the construction period, direct users of the Main Building ATM to the ATM on the first floor of the West Complex.",
+              "content_digest": "caf6d19fa67667fc574eef5da0d166d843c1263ad96effab38e3b3fc7e99e001",
+              "position": 2,
+              "uid": "b49d48fb-d2d9-55b8-bc87-b8e0066541f8"
+            },
+            {
+              "content": "Add campus-wiki/shop-updates: During the construction period, direct users of the Main Building's 24-hour store to the Campus Store in the Engineering Building between 7:00 a.m. and 11:00 p.m.",
+              "content_digest": "5ae53e1b59cd11ee8af5dd38fcabd080e2fcbc4b7188dff97eb66a9dcafc4a7d",
+              "position": 3,
+              "uid": "3094e271-3bb6-57cf-ae78-c67eeac30d94"
+            },
+            {
+              "content": "Add campus-wiki/shop-updates: Explain that after 11:00 p.m. there is no alternative on-campus store to replace the 24-hour unattended store in the Main Building.",
+              "content_digest": "f46e632f91ff8c7264b7a57fbff4036e79faec9bb1e39ae9812d246191f054e5",
+              "position": 4,
+              "uid": "c88880dc-ebfa-5847-89d2-692cd22406d5"
+            },
+            {
+              "content": "Modify campus-wiki/shop-updates: The Campus Store on the first floor of the Main Building is closed during the construction period.",
+              "content_digest": "9f70033352f539616b31ed2bc545fa63edc4ef065684623fb5fd6f0eed5eae9b",
+              "position": 5,
+              "uid": "9e0d0ca2-362c-5498-9560-a217d74eaaab"
+            },
+            {
+              "content": "Modify campus-wiki/shop-updates: During the construction period, the Campus Store in the Engineering Building operates from 7:00 a.m. to 11:00 p.m.",
+              "content_digest": "31fa2ee2fb31c9cdeccf16222a325738c869cc0b645c70fb78a5dc745261dba7",
+              "position": 6,
+              "uid": "9c623c17-1942-52a6-bf3d-ebc25d6ad078"
+            },
+            {
+              "content": "Add campus-wiki/shop-updates: The cafe on the first floor of the Main Building does not operate during the construction period.",
+              "content_digest": "a93f57dca84d8ad52e001965948d66941fbf101bf6602951d96586edd4dafb73",
+              "position": 7,
+              "uid": "048d155c-f81b-5293-b493-44fbce424662"
+            },
+            {
+              "content": "Add campus-wiki/shop-updates: During the cafe closure, instruct only staff to use the coffee machine inside the first-floor Innovation Hub.",
+              "content_digest": "ac8c6848d5f9eb080a13db9f3481b7185212798f7e4316ab1ce95078f4c572a9",
+              "position": 8,
+              "uid": "80d1e21d-3839-5515-b235-e1c1282599e5"
+            },
+            {
+              "content": "Modify campus-wiki/shop-updates: A student who used the Main Building ATM in the evening may expect to be able to withdraw cash at the same location during the construction period, come to the Main Building, and then have to find the West Complex ATM.",
+              "content_digest": "4003382735d7c160772cb6444912cd0a1b572dc89f6a8e94670fef3a2099d071",
+              "position": 9,
+              "uid": "0a73702a-306c-5b54-a2c3-d3e4a23d6a9f"
+            },
+            {
+              "content": "Modify campus-wiki/shop-updates: During the construction period, the amenities guidance agent may exclude the closed Main Building ATM, unattended store, Campus Store, and cafe from recommendations and provide guidance only to posted alternative facilities.",
+              "content_digest": "76c6fc5e99a27a79caa030aa9126d16e6c10eb95a86cc0496f47a954df9e3173",
+              "position": 10,
+              "uid": "e7b747cf-a1d2-571a-af5b-e1d3514434f1"
+            },
+            {
+              "content": "Add campus-wiki/shop-updates: During the construction period, the route for ATM use changes from the first floor of the Main Building to the first floor of the West Complex without passing through the Main Building construction zone.",
+              "content_digest": "e45fdbdf6776a010ad9692c7d780853d498973f66a3f8bcc4a3f746a1485270e",
+              "position": 11,
+              "uid": "b8300d7e-381c-5bce-81e7-fbb8a00eac9d"
+            },
+            {
+              "content": "Modify campus-wiki/shop-updates: The concessionaire operating the Campus Store in the Engineering Building may expect more alternative users because of the closure of Main Building facilities and seek to increase evening staffing and inventory above normal levels during the construction period.",
+              "content_digest": "5d3b92486b39f0220b05e3ee6896f3e55d2ebe1b5a582b5025fe7f8641af9ef5",
+              "position": 12,
+              "uid": "50be93d9-d0da-542c-beab-be56adde4ee2"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "c0246110-eae0-48e7-a3b5-ccd36072f339"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate operational domains within the Main Building. The reference covers entrances, hours, eligibility, accessibility, navigation, and access support, while the compared frame covers temporary construction-period amenity closures, alternatives, routing, guidance, and resulting demand expectations. No contradiction or materially shared policy is present.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "1cb2aa88-4c31-5bbc-97be-ba2ebcef1388"
+            }
+          ],
+          "reason": "Only the reference supplies this entrance-use policy; the compared amenity updates do not address it.",
+          "status": "RESOLVED",
+          "summary": "The third-floor rear entrance permits general passage during regular hours in term and recess.",
+          "uid": "d3da3417-8165-5a27-86a2-eb4fab13315e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "a8b11b27-70d5-5077-98fb-678635369dad"
+            }
+          ],
+          "reason": "Only the reference defines the main entrance's floor location.",
+          "status": "RESOLVED",
+          "summary": "The Main Building main entrance is located on the first floor.",
+          "uid": "721396a5-85be-5d7e-af8b-074bb8e47dee"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "62214c26-4b23-5c6b-ba8a-2fb585d39421"
+            }
+          ],
+          "reason": "Only the reference supplies this rear-entrance location.",
+          "status": "RESOLVED",
+          "summary": "The rear entrance across the sloping site is at third-floor level.",
+          "uid": "3c381bfa-fcbd-5b77-be19-70751054b4e4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "4902feb8-567c-5eb9-a817-726975164f16"
+            }
+          ],
+          "reason": "Only the reference describes this internal vertical connection.",
+          "status": "RESOLVED",
+          "summary": "The internal escalator connects the first through third floors.",
+          "uid": "9041055c-3b75-5fad-94c8-0fe4d1488b26"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "c6b97453-d8d8-5aa9-baff-e2981ec4e9e6"
+            }
+          ],
+          "reason": "Only the reference supplies this term-time access deadline.",
+          "status": "RESOLVED",
+          "summary": "The main entrance closes its regular academic-term hours at 10 p.m.",
+          "uid": "e4a4ffdd-744a-5e9c-94d3-94b623e4d774"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "614389e2-3b83-5fbb-bac1-07cb20f2e4fa"
+            }
+          ],
+          "reason": "Only the reference supplies this recess access deadline.",
+          "status": "RESOLVED",
+          "summary": "The main entrance closes its regular recess hours at 10 p.m.",
+          "uid": "03509d6e-1f09-5b8c-9f4c-5e23b45f1f22"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "e3929a49-e9b9-566c-bdc2-296ad7ee086a"
+            }
+          ],
+          "reason": "Only the reference records this student navigation expectation.",
+          "status": "RESOLVED",
+          "summary": "Route-familiar students expect normal passage through the third-floor rear entrance.",
+          "uid": "1d0c3ce6-4155-5460-b4e9-1f1c280a53c9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "4ed338df-7bd0-5801-bb3b-535886f6d007"
+            }
+          ],
+          "reason": "Only the reference defines this agent capability.",
+          "status": "RESOLVED",
+          "summary": "The access information agent can explain posted opening hours.",
+          "uid": "ef78cb2a-cbe4-5ae3-af73-1cfc4c169b08"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "2af35f74-abb5-54ae-aca6-7d315270ae57"
+            }
+          ],
+          "reason": "Only the reference defines this agent capability.",
+          "status": "RESOLVED",
+          "summary": "The access information agent can explain posted eligibility requirements.",
+          "uid": "072ebb8c-29de-51ec-a8c4-3ce941f49764"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "c30faae3-e8de-530c-a279-cb7a33133bc8"
+            }
+          ],
+          "reason": "Only the reference defines this limitation.",
+          "status": "RESOLVED",
+          "summary": "The access information agent cannot issue access credentials.",
+          "uid": "0d4890f8-a98e-5a6c-a4be-1f6998a05dee"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "5b1a6f72-c56d-515f-bb2d-9cd443275bff"
+            }
+          ],
+          "reason": "Only the reference defines this limitation.",
+          "status": "RESOLVED",
+          "summary": "The access information agent cannot unlock doors.",
+          "uid": "f37f7c79-8a11-5d42-8052-0745f5cfec5c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "b6987cd9-7198-56b5-bf6f-0162624db30f"
+            }
+          ],
+          "reason": "Only the reference supplies this authentication instruction.",
+          "status": "RESOLVED",
+          "summary": "Eligible students should use a physical NFC ID or registered app after regular hours.",
+          "uid": "28549002-9b7d-5dab-bec1-25db3a601efb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "f80ad345-f0ce-54bc-bd8d-e2f0e1f1b1c0"
+            }
+          ],
+          "reason": "Only the reference supplies this verification procedure.",
+          "status": "RESOLVED",
+          "summary": "Authentication-failure guidance requires checking the responsible office's posted contact information.",
+          "uid": "c6567ccc-e300-5b12-b679-281164203787"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "732458c0-fedc-5bc7-965e-36f8d46c4d8a"
+            }
+          ],
+          "reason": "Only the reference supplies this guidance constraint.",
+          "status": "RESOLVED",
+          "summary": "An unverified contact number must not be guessed.",
+          "uid": "27a26bfd-c338-5a59-9ba6-907d8093a4e6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "cb1e0734-91ce-53f3-b00c-da4734df5cb5"
+            }
+          ],
+          "reason": "Only the reference distinguishes these entrances.",
+          "status": "RESOLVED",
+          "summary": "The controlled staff-only entrance is separate from the third-floor rear entrance.",
+          "uid": "a1b98393-827c-59c1-88aa-c6429920d956"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "36db4bf8-285c-573b-8127-0efa0c10f8bd"
+            }
+          ],
+          "reason": "Only the reference defines this accessible route.",
+          "status": "RESOLVED",
+          "summary": "An always-available route beside the main entrance reaches the first-floor lobby without stairs.",
+          "uid": "44a5f503-f799-5d3e-b04d-1e3c3838db30"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "804bfc6b-188b-5579-bc83-10b04a28bd69"
+            }
+          ],
+          "reason": "Only the reference records this tour-leader expectation.",
+          "status": "RESOLVED",
+          "summary": "External-group tour leaders tend to expect reuse of a previously used rear-entrance route.",
+          "uid": "9293178c-c3cc-5cf9-9a64-7fbd4d868ea4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "cc2a0d18-0b49-5923-9b53-2e68140b13a0"
+            }
+          ],
+          "reason": "Only the reference supplies this term-time opening point.",
+          "status": "RESOLVED",
+          "summary": "The main entrance begins regular academic-term hours at 7 a.m.",
+          "uid": "382c27b5-cb47-5613-abe2-1e92e7591a43"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "3ca6b6b2-c381-5247-83cc-cfad0ce862f7"
+            }
+          ],
+          "reason": "Only the reference supplies this recess opening point.",
+          "status": "RESOLVED",
+          "summary": "The main entrance begins regular recess hours at 8 a.m.",
+          "uid": "4867adbc-bdd1-59bb-a3f1-3922589fad1f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "4a01fd2b-fb4d-5759-88c9-1b6de1a30331"
+            }
+          ],
+          "reason": "Only the reference explains where weekend hours are specified.",
+          "status": "RESOLVED",
+          "summary": "Regular weekend hours appear in a separate weekend operating schedule.",
+          "uid": "51212a9f-779a-5ece-ade6-b7abe40eaaaf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "78298531-74b8-591b-ae32-b6175f476ca7"
+            }
+          ],
+          "reason": "Only the reference supplies this holiday-hours qualification.",
+          "status": "RESOLVED",
+          "summary": "Holiday access hours may differ from regular operating hours.",
+          "uid": "7da1d102-d1cb-55ea-8b67-f18de892df34"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "4189e656-a4ef-5fe0-af68-943d86e83a83"
+            }
+          ],
+          "reason": "Only the reference records this visitor expectation.",
+          "status": "RESOLVED",
+          "summary": "First-time visitors often expect the first-floor main entrance to be the general default.",
+          "uid": "c3491f41-ee60-5bca-a784-20095c2986d1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "aee44d0a-5c4c-59ec-b350-b229570fbd09"
+            }
+          ],
+          "reason": "Only the reference records this accessibility expectation.",
+          "status": "RESOLVED",
+          "summary": "Visitors who have difficulty with stairs expect a step-free route near the main entrance.",
+          "uid": "74ad1448-02cf-5190-ad87-3ca5ef3d9e24"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "d2f32d9e-7b85-5720-ad36-80c6f5f1c071"
+            }
+          ],
+          "reason": "Only the reference supplies this controlled-access requirement.",
+          "status": "RESOLVED",
+          "summary": "Use of the staff-only entrance requires valid staff eligibility.",
+          "uid": "e6b97d01-6a9c-5660-83d6-4d6b2c897830"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "2d97d6b9-4287-5f52-9801-26d2081b111f"
+            }
+          ],
+          "reason": "Only the reference defines this entrance's normal use.",
+          "status": "RESOLVED",
+          "summary": "The service entrance serves preregistered deliveries and facilities work.",
+          "uid": "07cd1922-517c-5aa1-a797-fbf863736801"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "fef275b1-b2c1-5cc5-8f75-a1d01782a1e0"
+            }
+          ],
+          "reason": "Only the reference records this visitor preference.",
+          "status": "RESOLVED",
+          "summary": "Visitors with children prefer close connection between the stroller-accessible main entrance and accessible route.",
+          "uid": "e2f64745-c1a0-509d-b44d-1e95c09289bf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "41d5bf0b-9a62-5821-b3fd-60f58ce2d980"
+            }
+          ],
+          "reason": "Only the reference records this transportation expectation.",
+          "status": "RESOLVED",
+          "summary": "Drivers often treat the first-floor main entrance as the default drop-off unless told otherwise.",
+          "uid": "99c92be6-ebc4-567f-8a3a-f194b79401d1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "7da885c1-0515-516c-ad1f-2a445db9b324"
+            }
+          ],
+          "reason": "Only the reference defines this agent capability.",
+          "status": "RESOLVED",
+          "summary": "The access information agent can explain normal front- and rear-entrance uses.",
+          "uid": "35ce014f-98e8-5155-afd7-4d560b4fb6ca"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "27f6e089-b303-59da-ba5d-4a845961c466"
+            }
+          ],
+          "reason": "Only the reference defines this information limitation.",
+          "status": "RESOLVED",
+          "summary": "The access information agent cannot check a door's physical lock state in real time.",
+          "uid": "9bd37058-1fe8-55eb-a2eb-3a71b62699b4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "5e9fc7b5-cfb8-5e3f-9a53-35568e0fd216"
+            }
+          ],
+          "reason": "Only the reference supplies this precedence instruction.",
+          "status": "RESOLVED",
+          "summary": "On-site access signage governs when it differs from posted operating hours.",
+          "uid": "63109425-7c43-584b-aeb4-f872e125e225"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "bb601c38-6e41-5328-a7e0-117a8a101e49"
+            }
+          ],
+          "reason": "Only the reference supplies this access-security prohibition.",
+          "status": "RESOLVED",
+          "summary": "People without eligibility must not be advised to follow an authenticated user inside.",
+          "uid": "3851a9ee-ed08-586b-9281-23289eb0a8f1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "efffd1fe-923a-5f12-bd50-afd997a41209"
+            }
+          ],
+          "reason": "Only the reference distinguishes emergency exits from entrances.",
+          "status": "RESOLVED",
+          "summary": "Emergency exits serve evacuation and are not regular general-access entrances.",
+          "uid": "b10ba10a-40cb-567d-9c90-de02388e1841"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "2b2642c9-32ff-51d5-8a3c-e48d64e191ea"
+            }
+          ],
+          "reason": "Only the reference defines this door's operating scope.",
+          "status": "RESOLVED",
+          "summary": "The main entrance automatic door operates during regular opening hours.",
+          "uid": "ed7628ad-cc5f-57b3-bb9b-4968c020b219"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "e55771f0-7a62-5b9e-aa16-97beafed30fe"
+            }
+          ],
+          "reason": "Only the reference supplies this entrance-use permission.",
+          "status": "RESOLVED",
+          "summary": "Service animals may use general entrances with their users.",
+          "uid": "29276ede-f2a9-5286-895d-244931dd1468"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "2ed45e16-4f36-5ecd-919e-65c622c1b493"
+            }
+          ],
+          "reason": "Only the reference supplies this indoor conduct instruction.",
+          "status": "RESOLVED",
+          "summary": "Bicycles and personal mobility devices must not be ridden inside the building.",
+          "uid": "af41cd19-d479-51cc-858e-3ad868d956c2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "9374def9-c634-5af1-96d8-4d7163608027"
+            }
+          ],
+          "reason": "Only the reference supplies this route permission.",
+          "status": "RESOLVED",
+          "summary": "Visitors with strollers may use the accessible route beside the main entrance.",
+          "uid": "3a57635e-437c-5022-b857-d559d291c9f4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "70fe5986-785a-51be-ad59-3e53aab0abb7"
+            }
+          ],
+          "reason": "Only the reference records this meeting expectation.",
+          "status": "RESOLVED",
+          "summary": "Group-tour visitors often expect their leader in the first-floor main-entrance lobby.",
+          "uid": "f03ee88b-7ebe-5e3d-8494-1f3e1ec03d62"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "411fa9fb-6bf1-5514-8433-d6e1c186260c"
+            }
+          ],
+          "reason": "Only the reference identifies this procedural confusion risk.",
+          "status": "RESOLVED",
+          "summary": "External workers may confuse service-entrance check-in with the general visitor procedure.",
+          "uid": "0497ff17-410c-507d-b32e-e19027d63d73"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "66b1d3f3-b59f-572a-a729-012a3101cb98"
+            }
+          ],
+          "reason": "Only the reference supplies this pass-return requirement.",
+          "status": "RESOLVED",
+          "summary": "Borrowed visitor passes must be returned to the information desk before departure.",
+          "uid": "82c55be5-3dba-5202-8ea4-34e458a427de"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "e99d3f15-48ee-5dc7-8eb2-52ea2d725a09"
+            }
+          ],
+          "reason": "Only the reference supplies this support-routing instruction.",
+          "status": "RESOLVED",
+          "summary": "Users with lost credentials should be directed to the posted access support desk.",
+          "uid": "e4bdf21a-12d9-5b3e-91a5-b240e87991ae"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "430563f2-c0f4-53ee-9846-2ecd3f57877c"
+            }
+          ],
+          "reason": "Only the reference supplies this entrance feature.",
+          "status": "RESOLVED",
+          "summary": "The accessible entrance beside the main entrance has an automatic door.",
+          "uid": "bf85e02b-bdd5-5753-b058-465889e1794e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "2052527b-612c-5af8-974a-ed21323a3b1a"
+            }
+          ],
+          "reason": "Only the reference describes this spatial arrangement.",
+          "status": "RESOLVED",
+          "summary": "The main-entrance vestibule lies between the exterior and lobby.",
+          "uid": "823b626b-23d0-5e3a-928c-afadfe5a337c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "5bf2c18d-2844-5471-a790-fa6b4689fb37"
+            }
+          ],
+          "reason": "Only the reference distinguishes nighttime eligibility from general hours.",
+          "status": "RESOLVED",
+          "summary": "Nighttime access follows an eligibility policy separate from general opening.",
+          "uid": "0d50ac04-ab12-5c3c-885f-12ce48ef037b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "38a17415-7c46-562c-bb10-9fa23de62291"
+            }
+          ],
+          "reason": "Only the reference supplies this eligibility dependency.",
+          "status": "RESOLVED",
+          "summary": "Campus-issued access eligibility depends on affiliation status.",
+          "uid": "06a2f7f2-59ee-57c2-9971-e246e243267c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "625a9fcb-4609-5a1d-b6af-437e5c722458"
+            }
+          ],
+          "reason": "Only the reference supplies this cross-building qualification.",
+          "status": "RESOLVED",
+          "summary": "Mobile access-authentication support may vary by campus building.",
+          "uid": "43e452b9-d26b-51f7-b79f-97f54bff3ddd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "f3f4e4ff-720d-520f-ae1f-53823c277f1e"
+            }
+          ],
+          "reason": "Only the reference supplies this event-access rule.",
+          "status": "RESOLVED",
+          "summary": "Registered public-event visitors use the entrance designated by event information.",
+          "uid": "419358c6-a8d5-5f4b-a393-3323aedf26f7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "e3435ec0-eae9-560c-a2ef-76a89761386a"
+            }
+          ],
+          "reason": "Only the reference supplies this schedule dependency.",
+          "status": "RESOLVED",
+          "summary": "An event-only entrance is available according to that event's schedule.",
+          "uid": "9c10e7f1-900c-5f0f-861f-905a4956c6cb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "a24cd65b-b2c3-515e-997b-77a6e143c992"
+            }
+          ],
+          "reason": "Only the reference records this group-arrival expectation.",
+          "status": "RESOLVED",
+          "summary": "Student groups expect immediate party meeting in the main lobby during large visits.",
+          "uid": "78494d5d-0266-5c49-a634-5158b4df95fe"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "22dcad33-41cd-5b46-9df6-a98d005f03f3"
+            }
+          ],
+          "reason": "Only the reference supplies this reporting procedure.",
+          "status": "RESOLVED",
+          "summary": "Entrance obstructions from left items should be reported through the facilities reporting agent.",
+          "uid": "e822b00c-0244-5aa1-a4e0-7349152b6488"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7315183b-d1d1-49b0-b6ba-50e0eddc3e07",
+              "memory_uid": "da9f2a7d-5b3d-532d-928b-bab7c97f500b"
+            }
+          ],
+          "reason": "Only the reference supplies this support destination.",
+          "status": "RESOLVED",
+          "summary": "Visitors needing on-site access support should go to the first-floor information desk.",
+          "uid": "79486cfb-ec09-5daa-8014-2bd4c19b3134"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c0246110-eae0-48e7-a3b5-ccd36072f339",
+              "memory_uid": "37113bd0-5194-521b-9d9e-48903d819520"
+            }
+          ],
+          "reason": "Only the compared frame supplies this temporary amenity closure.",
+          "status": "RESOLVED",
+          "summary": "The Main Building first-floor ATM is closed during construction.",
+          "uid": "7ef9996f-3f03-5171-8c72-26248a7762fe"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c0246110-eae0-48e7-a3b5-ccd36072f339",
+              "memory_uid": "741db845-9a4e-5281-825c-e046801b8be5"
+            }
+          ],
+          "reason": "Only the compared frame supplies this temporary amenity closure.",
+          "status": "RESOLVED",
+          "summary": "The Main Building first-floor 24-hour unattended store is closed during construction.",
+          "uid": "0d95a071-de3a-5bad-a030-447081aaef67"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c0246110-eae0-48e7-a3b5-ccd36072f339",
+              "memory_uid": "b49d48fb-d2d9-55b8-bc87-b8e0066541f8"
+            }
+          ],
+          "reason": "Only the compared frame supplies this substitute-facility instruction.",
+          "status": "RESOLVED",
+          "summary": "During construction, Main Building ATM users should be directed to the West Complex first-floor ATM.",
+          "uid": "609897fc-c20a-5060-8532-30971f41cd18"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c0246110-eae0-48e7-a3b5-ccd36072f339",
+              "memory_uid": "3094e271-3bb6-57cf-ae78-c67eeac30d94"
+            }
+          ],
+          "reason": "Only the compared frame supplies this substitute-store instruction.",
+          "status": "RESOLVED",
+          "summary": "During construction, users of the closed 24-hour store should be directed to the Engineering Building Campus Store from 7 a.m. to 11 p.m.",
+          "uid": "3bf6fb7e-4683-5cf0-9b31-ba3a2d564792"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c0246110-eae0-48e7-a3b5-ccd36072f339",
+              "memory_uid": "c88880dc-ebfa-5847-89d2-692cd22406d5"
+            }
+          ],
+          "reason": "Only the compared frame supplies this late-night service limitation.",
+          "status": "RESOLVED",
+          "summary": "After 11 p.m., no on-campus store substitutes for the closed Main Building unattended store.",
+          "uid": "3716238a-3561-5459-a3dd-6204be2ceb27"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c0246110-eae0-48e7-a3b5-ccd36072f339",
+              "memory_uid": "9e0d0ca2-362c-5498-9560-a217d74eaaab"
+            }
+          ],
+          "reason": "Only the compared frame supplies this temporary retail closure.",
+          "status": "RESOLVED",
+          "summary": "The Main Building first-floor Campus Store is closed during construction.",
+          "uid": "ee297e34-e41f-5151-9d59-01d8bf57447a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c0246110-eae0-48e7-a3b5-ccd36072f339",
+              "memory_uid": "9c623c17-1942-52a6-bf3d-ebc25d6ad078"
+            }
+          ],
+          "reason": "Only the compared frame supplies these temporary alternative-store hours.",
+          "status": "RESOLVED",
+          "summary": "During construction, the Engineering Building Campus Store operates from 7 a.m. to 11 p.m.",
+          "uid": "5fe825f4-21ab-5c57-8040-172c2860ecc8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c0246110-eae0-48e7-a3b5-ccd36072f339",
+              "memory_uid": "048d155c-f81b-5293-b493-44fbce424662"
+            }
+          ],
+          "reason": "Only the compared frame supplies this temporary cafe closure.",
+          "status": "RESOLVED",
+          "summary": "The Main Building first-floor cafe does not operate during construction.",
+          "uid": "ece812b6-7477-5938-94b5-913c624950ae"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c0246110-eae0-48e7-a3b5-ccd36072f339",
+              "memory_uid": "80d1e21d-3839-5515-b235-e1c1282599e5"
+            }
+          ],
+          "reason": "Only the compared frame supplies this role-restricted alternative.",
+          "status": "RESOLVED",
+          "summary": "During the cafe closure, only staff should be directed to the Innovation Hub coffee machine.",
+          "uid": "eaf5c72a-553b-5bbc-bdf4-ee9785765202"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c0246110-eae0-48e7-a3b5-ccd36072f339",
+              "memory_uid": "0a73702a-306c-5b54-a2c3-d3e4a23d6a9f"
+            }
+          ],
+          "reason": "Only the compared frame records this construction-period user disruption.",
+          "status": "RESOLVED",
+          "summary": "An evening ATM user may expect the old location, arrive there, and then need to find the West Complex ATM.",
+          "uid": "52c88497-1d74-50d3-9033-83e92424a6cb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c0246110-eae0-48e7-a3b5-ccd36072f339",
+              "memory_uid": "e7b747cf-a1d2-571a-af5b-e1d3514434f1"
+            }
+          ],
+          "reason": "Only the compared frame supplies this temporary recommendation policy.",
+          "status": "RESOLVED",
+          "summary": "During construction, the amenities agent may omit closed Main Building facilities and recommend only posted alternatives.",
+          "uid": "79ea1686-5f0e-5ea1-9320-4ddd0221bbbd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c0246110-eae0-48e7-a3b5-ccd36072f339",
+              "memory_uid": "b8300d7e-381c-5bce-81e7-fbb8a00eac9d"
+            }
+          ],
+          "reason": "Only the compared frame supplies this temporary routing instruction.",
+          "status": "RESOLVED",
+          "summary": "Construction shifts the ATM route to the West Complex first floor without crossing the Main Building construction zone.",
+          "uid": "cf32505b-920b-5cfc-92d7-3e0f6de2b3fb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c0246110-eae0-48e7-a3b5-ccd36072f339",
+              "memory_uid": "50be93d9-d0da-542c-beab-be56adde4ee2"
+            }
+          ],
+          "reason": "Only the compared frame records this construction-driven operational expectation.",
+          "status": "RESOLVED",
+          "summary": "The Engineering Building store concessionaire may anticipate extra alternative users and increase evening staffing and inventory.",
+          "uid": "f0771aa3-10fb-569f-9afb-1a6ebf9504d3"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only material describes construction-period closures of banking, retail, and cafe amenities; substitute facilities and routes; recommendation limits; disrupted-user expectations; and anticipated demand at the Engineering Building store.",
+        "differences": "",
+        "reference_only": "Reference-only material defines entrance locations and uses, operating schedules, accessible and controlled access, authentication and safety rules, visitor expectations, and support procedures."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "9a21aacf-6da3-4f73-aab7-e8a9a2d40fbc"
+    },
+    "analysis_digest": "a2c040778d4aacf7f622ada35f37c2450fd6cc65c5acdf7b86ad38d2924877fa",
+    "key": "72d0eae249382b5d3c1496678ecfe81a3aff68c9fad985edefd899f8cc95bd2c",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 101.8147490420015,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-1",
+    "task_description": {
+      "context_digest": "17a794e48857a8178811052488c3bd4cc66e9029847f2ce038825e49ed5afcc8",
+      "context_uid": "e2c67cf1-c2a8-5aef-a2cb-583a9fd8d6c6",
+      "name": "task-1/description"
+    }
+  },
+  "artifact_key": "72d0eae249382b5d3c1496678ecfe81a3aff68c9fad985edefd899f8cc95bd2c",
+  "created_at": "2026-08-13T18:03:45.403410Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-1/campus-wiki/building-access",
+  "pair_key": "3a19f7ddb07383a6bfa9df5cefd62f19cc7e4e18ea6bc09c769edf206df0766b",
+  "provider_seconds": 101.8147490420015,
+  "right": "task-1/participant/construction-updates/shop-updates",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-1"
+}

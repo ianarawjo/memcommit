@@ -1,0 +1,320 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:28:19.695266+00:00",
+      "frames": [
+        {
+          "context_digest": "587a9d2fb6abf2b486ccfc50ff85ae7280d7d7bd4003d85ce5877a4edfc9293f",
+          "context_name": "task-2/advisor1/terminology",
+          "context_uid": "7699c7c5-e48b-5548-b0aa-256d793c6c06",
+          "memories": [
+            {
+              "content": "Use the same term throughout the proposal for the same interaction concept or interface element.",
+              "content_digest": "2f11d02134609c6397d8f60105cc452e34129bc1c427a512455247e54951f18a",
+              "position": 0,
+              "uid": "949a884d-b348-5fa0-b1dd-adbebafe10a9"
+            },
+            {
+              "content": "Use abbreviations only for recurring terms of three or more words.",
+              "content_digest": "dcceb4407d24df4034dceca613413471bb46898a487aed0cc0905e48ede482e7",
+              "position": 1,
+              "uid": "2f484151-b5fc-51a9-8a88-b30a403617b3"
+            },
+            {
+              "content": "Present the full name and abbreviation together when using an abbreviation for the first time.",
+              "content_digest": "02e1b2b4cbc8f9a61e299bf1500663ae8cd4036155b2a7dec8c2ce40087ac29b",
+              "position": 2,
+              "uid": "21131a6f-d35c-51e3-895f-46cd21a3b566"
+            },
+            {
+              "content": "Prioritize the research role over diagnostic labels or deficits when referring to participants.",
+              "content_digest": "7b99c6ec90abdbb68d4af8e95a03df3149b9d2d4d637fbd33a70a2acf7073a12",
+              "position": 3,
+              "uid": "e02c3110-05c4-58a4-8d76-c8fd2426a0d5"
+            },
+            {
+              "content": "Reviewers from different subfields struggle to infer undefined abbreviations from context alone.",
+              "content_digest": "13af5eb9fe88f3f2d73192adfb48f7a20de09e22e777a952daa83ca1c030f9ee",
+              "position": 4,
+              "uid": "af028910-e48b-5605-b92b-9378bdfa525c"
+            },
+            {
+              "content": "Use the term formative evaluation for studies seeking design modification evidence, and distinguish it from final efficacy judgments.",
+              "content_digest": "4ba9bca850286ff6286cf4b3bf44395d608ec700c46acd8cd26c54e26d43b378",
+              "position": 5,
+              "uid": "39792d18-2be0-5135-a063-c5213247d330"
+            },
+            {
+              "content": "The user can have contribution labels such as principles, models, or guidelines approved only if they align with the abstraction level of the actual deliverables.",
+              "content_digest": "efed93b748ce74e3e9ed96949bf539c809ea4c36ae77bbb54670285f691f74e9",
+              "position": 6,
+              "uid": "bcaa8c30-ca6e-5b9f-af93-88513a2f16b1"
+            },
+            {
+              "content": "Design principles describe the relationship between conditions and outcomes rather than serving as instructions that merely replicate a single screen layout.",
+              "content_digest": "22385c2bb345db07d19c442e5d99a5c527c2795848b9e29fe198d0ede6255d6f",
+              "position": 7,
+              "uid": "82ad9fe2-4063-5e89-9097-c975aa2920cb"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "ec78ba6b-b262-4516-babb-2928811561e4"
+        },
+        {
+          "context_digest": "e70e4eaff26e4baf1b346a4ecd2b44ed9f9ccac9e205b7b82572dc8ef0e217c4",
+          "context_name": "task-2/advisor2/emphasis",
+          "context_uid": "398f9930-3a0f-5de0-a339-ceba7dd5d1c6",
+          "memories": [
+            {
+              "content": "Do not exceed two primary HCI contributions that readers must remember.",
+              "content_digest": "59786866cf953172c2697f09398356a861e8ea448093102c32c9149f16b2e5c5",
+              "position": 0,
+              "uid": "d59dc83b-ce6a-5ac7-ab64-e5436df1f945"
+            },
+            {
+              "content": "Present each design or operational contribution as a single named sentence.",
+              "content_digest": "e0de5a9f1c1ca585fe062d7e11f8d2536cbe5ec4eefc16da6f7a0b62c0247d45",
+              "position": 1,
+              "uid": "328de462-17a4-551f-9f74-cb3118519e45"
+            },
+            {
+              "content": "In studies recruiting organizational members, emphasize workflow constraints.",
+              "content_digest": "c46efadebd89f3d757993baea79a5ef1386bbf6b4769ae3704ae62102397fc3b",
+              "position": 2,
+              "uid": "eab1dac5-8b61-5793-a56f-c4e3e64af190"
+            },
+            {
+              "content": "In studies recruiting organizational members, emphasize manager approval constraints.",
+              "content_digest": "2387fb9f3ab907e671fc9dcc2e7f067a84bdf1f5713d8385a32e39eb1e14751d",
+              "position": 3,
+              "uid": "f90e616a-d5a4-5cc2-86e4-62534a1faf83"
+            },
+            {
+              "content": "HCI reviewers find it difficult to identify primary contributions when named design and operational contributions exceed two.",
+              "content_digest": "04e080bfdf7277d04f0efc1b1d6775d06cba88aab5ff78bfd430674b004722a5",
+              "position": 4,
+              "uid": "78a1c87a-6936-516c-b578-8e97dc2e91f4"
+            },
+            {
+              "content": "Highlight one primary field operational decision to be changed by evaluation results as the central claim.",
+              "content_digest": "9a6bda883e68a2553a1238114d5de2746dc220948aebc1c2965cbb435318fe9c",
+              "position": 5,
+              "uid": "7af2db41-9091-5452-9beb-8fd7b48b7872"
+            },
+            {
+              "content": "Specify prototype features unnecessary for reviewing the primary field problem as secondary scope.",
+              "content_digest": "419ed0b0bccf1af7b30e0351f5e87b9e37e469cfa567e684695ffe4b6d39178a",
+              "position": 6,
+              "uid": "2312f35d-c17d-5af3-b84f-d2e671d7663f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "fae131a1-bc6a-4698-aec9-a2c2348e3abd"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address different but complementary aspects of proposal quality. The reference focuses on terminology, abbreviations, participant language, evaluation terminology, and contribution abstraction; the compared frame focuses on contribution prioritization, organizational constraints, field decisions, and prototype scope. No direct contradiction or scope-dependent mismatch appears.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ec78ba6b-b262-4516-babb-2928811561e4",
+              "memory_uid": "949a884d-b348-5fa0-b1dd-adbebafe10a9"
+            }
+          ],
+          "reason": "The compared frame contains no corresponding policy about maintaining one term for a recurring concept or element.",
+          "status": "RESOLVED",
+          "summary": "The reference alone requires consistent naming for the same interaction concept or interface element.",
+          "uid": "55557497-f0d3-55d9-8297-561cda17023d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ec78ba6b-b262-4516-babb-2928811561e4",
+              "memory_uid": "2f484151-b5fc-51a9-8a88-b30a403617b3"
+            }
+          ],
+          "reason": "This abbreviation-eligibility rule is independently useful and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The reference alone restricts abbreviations to recurring terms containing at least three words.",
+          "uid": "ba8563d1-ebda-5b67-a61c-85ad3c168493"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ec78ba6b-b262-4516-babb-2928811561e4",
+              "memory_uid": "21131a6f-d35c-51e3-895f-46cd21a3b566"
+            },
+            {
+              "frame_uid": "ec78ba6b-b262-4516-babb-2928811561e4",
+              "memory_uid": "af028910-e48b-5605-b92b-9378bdfa525c"
+            }
+          ],
+          "reason": "The instruction and its reviewer-centered rationale express one underlying first-use abbreviation policy absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The reference alone requires abbreviations to be introduced with their full names because reviewers cannot reliably infer undefined forms.",
+          "uid": "2b228959-428a-57fd-8d34-152fb54b6b20"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ec78ba6b-b262-4516-babb-2928811561e4",
+              "memory_uid": "e02c3110-05c4-58a4-8d76-c8fd2426a0d5"
+            }
+          ],
+          "reason": "The compared frame does not address how participants should be described.",
+          "status": "RESOLVED",
+          "summary": "The reference alone prioritizes participants’ research role over diagnostic or deficit-based labels.",
+          "uid": "06068b6a-1aaa-5fe4-a910-ca89c0f373ee"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ec78ba6b-b262-4516-babb-2928811561e4",
+              "memory_uid": "39792d18-2be0-5135-a063-c5213247d330"
+            }
+          ],
+          "reason": "The compared frame discusses evaluation-driven operational change but does not define evaluation terminology, so it does not make the same operational claim.",
+          "status": "RESOLVED",
+          "summary": "The reference alone reserves formative evaluation for evidence intended to modify a design and distinguishes it from final efficacy judgment.",
+          "uid": "f31c0f35-1231-5403-87ac-de0e0dfa9189"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ec78ba6b-b262-4516-babb-2928811561e4",
+              "memory_uid": "bcaa8c30-ca6e-5b9f-af93-88513a2f16b1"
+            },
+            {
+              "frame_uid": "ec78ba6b-b262-4516-babb-2928811561e4",
+              "memory_uid": "82ad9fe2-4063-5e89-9097-c975aa2920cb"
+            }
+          ],
+          "reason": "These statements jointly define abstraction-appropriate contribution naming and the specific meaning of design principles; the compared frame addresses contribution prominence and presentation instead.",
+          "status": "RESOLVED",
+          "summary": "The reference alone requires contribution labels, including design principles, to match deliverable abstraction and represent condition–outcome relationships rather than screen-replication instructions.",
+          "uid": "f4464171-48ce-57af-800a-d7ebb7acd16e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fae131a1-bc6a-4698-aec9-a2c2348e3abd",
+              "memory_uid": "d59dc83b-ce6a-5ac7-ab64-e5436df1f945"
+            },
+            {
+              "frame_uid": "fae131a1-bc6a-4698-aec9-a2c2348e3abd",
+              "memory_uid": "78a1c87a-6936-516c-b578-8e97dc2e91f4"
+            }
+          ],
+          "reason": "The policy and reviewer rationale form one contribution-count claim absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The compared frame alone limits memorable primary HCI contributions to two, reflecting reviewer difficulty when named design and operational contributions exceed that limit.",
+          "uid": "47685e68-6998-59df-96a4-f880ddf181c8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fae131a1-bc6a-4698-aec9-a2c2348e3abd",
+              "memory_uid": "328de462-17a4-551f-9f74-cb3118519e45"
+            }
+          ],
+          "reason": "The reference governs terminology and abstraction but does not prescribe this sentence-level presentation format.",
+          "status": "RESOLVED",
+          "summary": "The compared frame alone requires each design or operational contribution to appear as one named sentence.",
+          "uid": "72b56224-8efb-5244-a46d-a4b6ce2e1e19"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fae131a1-bc6a-4698-aec9-a2c2348e3abd",
+              "memory_uid": "eab1dac5-8b61-5793-a56f-c4e3e64af190"
+            },
+            {
+              "frame_uid": "fae131a1-bc6a-4698-aec9-a2c2348e3abd",
+              "memory_uid": "f90e616a-d5a4-5cc2-86e4-62534a1faf83"
+            }
+          ],
+          "reason": "The two statements split one condition-specific requirement into operational and authorization constraints, neither of which appears in the reference.",
+          "status": "RESOLVED",
+          "summary": "The compared frame alone requires studies recruiting organizational members to emphasize workflow and manager-approval constraints.",
+          "uid": "4325ba6f-6d78-59f2-82e6-a52b4d82e848"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fae131a1-bc6a-4698-aec9-a2c2348e3abd",
+              "memory_uid": "7af2db41-9091-5452-9beb-8fd7b48b7872"
+            }
+          ],
+          "reason": "The reference defines formative evaluation by its design-modification purpose but does not require a single field decision to anchor the proposal.",
+          "status": "RESOLVED",
+          "summary": "The compared frame alone makes one field operational decision that evaluation results should change the central claim.",
+          "uid": "dad6fc01-6395-54be-acde-4c17463b74b7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fae131a1-bc6a-4698-aec9-a2c2348e3abd",
+              "memory_uid": "2312f35d-c17d-5af3-b84f-d2e671d7663f"
+            }
+          ],
+          "reason": "The reference contains no corresponding rule for separating secondary prototype features from the primary field problem.",
+          "status": "RESOLVED",
+          "summary": "The compared frame alone classifies prototype features unnecessary to reviewing the primary field problem as secondary scope.",
+          "uid": "128c6c3f-d467-5963-b77f-83733c8e2483"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame uniquely limits and names primary contributions, foregrounds organizational workflow and approval constraints, centers evaluation on a field decision, and marks nonessential prototype features as secondary.",
+        "differences": "",
+        "reference_only": "The reference uniquely establishes terminology consistency, abbreviation rules, participant-first language, formative-evaluation usage, and abstraction-appropriate contribution labels and design principles."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "992bffa0-da49-4aea-8a48-1d3fb0f205b9"
+    },
+    "analysis_digest": "530830cb085ca5166236112e6cf5871267c8c314fabd172e30e77bab422f94d5",
+    "key": "c36bc83645903bf8bcc9c6a0fa0f7684be068a624ff4b6c74586012ffd0e0241",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 39.91919599999892,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "c36bc83645903bf8bcc9c6a0fa0f7684be068a624ff4b6c74586012ffd0e0241",
+  "created_at": "2026-08-13T18:28:59.614490Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/terminology",
+  "pair_key": "11ed8c75c7b85b67b3fc2f77888faa80388428f029cc97f6c03bfc829239b537",
+  "provider_seconds": 39.91919599999892,
+  "right": "task-2/advisor2/emphasis",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

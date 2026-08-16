@@ -1,0 +1,380 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:23:45.513970+00:00",
+      "frames": [
+        {
+          "context_digest": "9d55b4a5604285e426b317f7f4732b35ca1e9df044f7015b3ae6a6be0df5492b",
+          "context_name": "task-2/advisor1/reproducibility",
+          "context_uid": "7d293f75-52b6-5f27-99c4-54f2be3d8e59",
+          "memories": [
+            {
+              "content": "HCI reviewers find it difficult to assess the reproducibility of results if the prototype version used in the evaluation is not disclosed.",
+              "content_digest": "9b89217d4ef2c7524af665ea80d7d60e61f1663fd8ea4bdde533c8d3a0da2044",
+              "position": 0,
+              "uid": "fb400759-63ed-568a-b94e-5f0c2fe94b67"
+            },
+            {
+              "content": "Record the manipulated and fixed elements of compared design alternatives so that other researchers can reconstruct them.",
+              "content_digest": "26b84b5f0644980de51d764218ce90fb614eb02a2df38fb3632f44d360a93cd3",
+              "position": 1,
+              "uid": "e52e8470-6419-5306-9ddd-00a86003dcf3"
+            },
+            {
+              "content": "Records of formative evaluation decisions enable the reconstruction of connections between raw data, interpretation, and design modifications.",
+              "content_digest": "f213479e4bd1947d418083139346ed7f666bc597133962617d94bdd3a9af0083",
+              "position": 2,
+              "uid": "8f4edf8c-491d-56fe-bde4-d9ce25d6de50"
+            },
+            {
+              "content": "The user must make it possible to trace which observations each prototype version reflects so the process of deriving design knowledge can be reviewed.",
+              "content_digest": "1c9b8a6f650f2eb652b1e9cbb62ad9dcbb3ec13f2e160b52db83492640eb0ae9",
+              "position": 3,
+              "uid": "87662a7e-ffc7-521a-a06c-7db8184377e8"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "4316665e-d2d7-4be1-8cb7-0154bc7f3cfc"
+        },
+        {
+          "context_digest": "19032e7fed99072de4fcaeff084874da452865e9958a1301ec01260d60e01867",
+          "context_name": "task-2/advisor2/structure",
+          "context_uid": "09c95ce6-baa2-5823-a035-e4b0d323200b",
+          "memories": [
+            {
+              "content": "Allow the problem framing to extend through a third sentence when a concrete person, setting, or use situation is needed to make the issue understandable.",
+              "content_digest": "c027c1b4290ff04fe84e475af5aae8fa9e90dd839903b9fe772892e8b6b80323",
+              "position": 0,
+              "uid": "e32f543b-1637-572a-ab96-319d74ee7e21"
+            },
+            {
+              "content": "Use the third sentence for the specific setting and consequence rather than compressing them into an abstract two-sentence summary.",
+              "content_digest": "f02d2bd7ea21e7ebbaff85d3e77c77689dadead77276a3d472d2ad59f94ec5ff",
+              "position": 1,
+              "uid": "6bbb0f69-ca99-539a-a810-a0fb34fe9cc3"
+            },
+            {
+              "content": "Explicitly specify the users, operational stakeholders, and actual usage environment in the primary HCI research question.",
+              "content_digest": "3ab83046fede9de55435f98324226f435bcc4932d2a7440ef61fc21c2e0d71f3",
+              "position": 2,
+              "uid": "48e887dc-7fc8-5a23-9999-890acb870251"
+            },
+            {
+              "content": "Provide one compact visual summary when proposing an unfamiliar interaction procedure.",
+              "content_digest": "1e4299abe1691fbbfc826fc59d4276831d9a49abd3588820ba2f50311fd56d2c",
+              "position": 3,
+              "uid": "e34bce0c-7d07-5fe6-b03f-39faa801640b"
+            },
+            {
+              "content": "Mark the conditions that move an unfamiliar interaction procedure from one step to the next in its visual summary.",
+              "content_digest": "9e7d7547cac76b4b6665ea585fedd7678682c7f9a4eadf129202ac2ea2c6b2b8",
+              "position": 4,
+              "uid": "68ad56f9-6ca2-587a-9182-fd98a79d3d5c"
+            },
+            {
+              "content": "Present the master’s research schedule as phase-specific milestones for field understanding, system implementation, user study, and analysis.",
+              "content_digest": "035713de4f5d6577859b2602ae32a7561594bcbeca023049d4b0e2d4c930d94a",
+              "position": 5,
+              "uid": "eca301ff-9feb-502d-b955-055c48342542"
+            },
+            {
+              "content": "Link deliverables that determine entry into the next phase to each milestone of the master’s research.",
+              "content_digest": "dff2c02b66c97696644d04ee7e685c706443257101e7ee34182dcc5021aa8525",
+              "position": 6,
+              "uid": "cbd977cd-1b78-5ca6-823a-7a5b4b92d77a"
+            },
+            {
+              "content": "Directly connect the gap in the actual usage context with the proposed design and operational contributions in a single flow.",
+              "content_digest": "8da57ff6f210ec4a38d82a2550f96a6b30ba59b7f63f3f3c08e9dcec10dce381",
+              "position": 7,
+              "uid": "9283aedb-6818-5c99-8fe0-502b488acb66"
+            },
+            {
+              "content": "Avoid extra subheadings in a two-page proposal; use paragraph transitions to preserve one continuous argument from problem to proposed response and next steps.",
+              "content_digest": "f6dabe3ee8aba7aa81d707519ffc7d3839f3a74ddcd97fa61d14396e1581f69c",
+              "position": 8,
+              "uid": "c5c04ab1-10e8-52a3-98a1-aa9cbede57c1"
+            },
+            {
+              "content": "Begin each paragraph by connecting it to the previous claim so the short proposal reads as an argument rather than a stack of labeled fragments.",
+              "content_digest": "37d855da87b3b3437e6cc7d865a02d1852b7f7a01c3d7855b0584e399d086619",
+              "position": 9,
+              "uid": "87203bcf-6724-543a-ad19-60a2becc4598"
+            },
+            {
+              "content": "Place preliminary results from field observations or technical validations near sentences supporting feasibility claims.",
+              "content_digest": "8cb8b48f7f57c3248d28f4b82181c9ddbac16acb7b67435abdfb761233b3aecb",
+              "position": 10,
+              "uid": "c9591180-6f3a-5909-8695-31704b9b6f01"
+            },
+            {
+              "content": "Readers may misinterpret a compressed opening when the person, setting, or consequence is only implied.",
+              "content_digest": "2eb34b31c7da38508d152ae4d47ddb8b08479a2e28fbdb4a50c72e7f1999bbf2",
+              "position": 11,
+              "uid": "0ac685f9-e338-5549-bf91-32078cf36f15"
+            },
+            {
+              "content": "A two-sentence opening can become so general that readers understand the topic but cannot picture the situation the proposal intends to change.",
+              "content_digest": "21625e7040d1007bf6931fc1e3551dbbd46739ad339773d51cd00d9f21abf96e",
+              "position": 12,
+              "uid": "5567fb3c-de90-5363-af1b-62fb5b8e0bb1"
+            },
+            {
+              "content": "Use paragraph transitions instead of extra headings when the repeated labels would consume space needed for the argument itself.",
+              "content_digest": "50620b1c5db672532aea9ce8c9bfc11688a5b83bf5436bfc9a308a08fc719286",
+              "position": 13,
+              "uid": "32cef408-4c66-5ef2-9a59-eea6fc67b16e"
+            },
+            {
+              "content": "End each paragraph with the question or consequence that the next paragraph answers.",
+              "content_digest": "3d3639057c446bbd3d2bef5393bce0219451ba3c718d655c62dc51b1ea2df86f",
+              "position": 14,
+              "uid": "3579fcc0-c74e-5006-901b-6406a3106fa1"
+            },
+            {
+              "content": "A continuous sequence of problem, consequence, response, and next step makes the relationship among claims audible without repeating section labels.",
+              "content_digest": "8e1d12ba37953236e2f51510ac3e0382b75b43ff911190216550f82c5679eadf",
+              "position": 15,
+              "uid": "2c2aa1af-c450-5c8d-a907-042c5757d3ee"
+            },
+            {
+              "content": "Readers may experience very short headed sections as an outline because each new label interrupts the connection to the previous paragraph.",
+              "content_digest": "c355e847db92d4c27343283e9415debff2fbdb4b2b2c505d4e442dc78251578d",
+              "position": 16,
+              "uid": "1fb62d5b-532b-5664-842c-57622e3c8b9d"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "5c3304ea-227d-4151-93b2-ecbfff193260"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate aspects of HCI research practice. The reference focuses on reproducibility and traceability across prototypes, alternatives, evidence, and design changes, while the compared frame focuses on concise proposal framing, visual explanation, research planning, evidence placement, and argumentative flow.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4316665e-d2d7-4be1-8cb7-0154bc7f3cfc",
+              "memory_uid": "fb400759-63ed-568a-b94e-5f0c2fe94b67"
+            }
+          ],
+          "reason": "This is an independently useful reference-only requirement concerning identification of the evaluated artifact.",
+          "status": "RESOLVED",
+          "summary": "Evaluation reports should disclose the prototype version used so reviewers can assess reproducibility.",
+          "uid": "d8126eb9-e514-5ff9-9206-a8efab28af91"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4316665e-d2d7-4be1-8cb7-0154bc7f3cfc",
+              "memory_uid": "e52e8470-6419-5306-9ddd-00a86003dcf3"
+            }
+          ],
+          "reason": "This is an independently useful reference-only reconstruction requirement for experimental design alternatives.",
+          "status": "RESOLVED",
+          "summary": "Compared design alternatives should document which elements were manipulated and which remained fixed.",
+          "uid": "3a9eb90f-cef7-59e3-a8e7-092c24d675ce"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4316665e-d2d7-4be1-8cb7-0154bc7f3cfc",
+              "memory_uid": "8f4edf8c-491d-56fe-bde4-d9ce25d6de50"
+            }
+          ],
+          "reason": "This is an independently useful reference-only provenance requirement for reconstructing design decisions.",
+          "status": "RESOLVED",
+          "summary": "Formative evaluation decisions should preserve the chain from raw data through interpretation to design modifications.",
+          "uid": "5b84e08e-1e5b-553d-b72b-c9730dcb86e9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4316665e-d2d7-4be1-8cb7-0154bc7f3cfc",
+              "memory_uid": "87662a7e-ffc7-521a-a06c-7db8184377e8"
+            }
+          ],
+          "reason": "This is an independently useful reference-only requirement linking empirical observations to successive prototype versions.",
+          "status": "RESOLVED",
+          "summary": "Each prototype version should be traceable to the observations it reflects so derivation of design knowledge can be reviewed.",
+          "uid": "037d9508-d5c6-5822-8ecf-b321a2c73dd4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5c3304ea-227d-4151-93b2-ecbfff193260",
+              "memory_uid": "e32f543b-1637-572a-ab96-319d74ee7e21"
+            },
+            {
+              "frame_uid": "5c3304ea-227d-4151-93b2-ecbfff193260",
+              "memory_uid": "6bbb0f69-ca99-539a-a810-a0fb34fe9cc3"
+            },
+            {
+              "frame_uid": "5c3304ea-227d-4151-93b2-ecbfff193260",
+              "memory_uid": "0ac685f9-e338-5549-bf91-32078cf36f15"
+            },
+            {
+              "frame_uid": "5c3304ea-227d-4151-93b2-ecbfff193260",
+              "memory_uid": "5567fb3c-de90-5363-af1b-62fb5b8e0bb1"
+            }
+          ],
+          "reason": "These compared-only memories state the same underlying guidance and its rationale: preserve concrete situational understanding rather than forcing an overly general two-sentence opening.",
+          "status": "RESOLVED",
+          "summary": "A proposal opening may use a third sentence to state the concrete person, setting, use situation, or consequence when compression would make the problem abstract or ambiguous.",
+          "uid": "446b55b4-2ea8-5f11-82d8-beccaf7af760"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5c3304ea-227d-4151-93b2-ecbfff193260",
+              "memory_uid": "48e887dc-7fc8-5a23-9999-890acb870251"
+            }
+          ],
+          "reason": "This is an independently useful compared-only requirement about the scope and content of the research question.",
+          "status": "RESOLVED",
+          "summary": "The primary HCI research question should explicitly identify users, operational stakeholders, and the actual usage environment.",
+          "uid": "809882c9-1c63-5f20-a4da-0413246be23d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5c3304ea-227d-4151-93b2-ecbfff193260",
+              "memory_uid": "e34bce0c-7d07-5fe6-b03f-39faa801640b"
+            },
+            {
+              "frame_uid": "5c3304ea-227d-4151-93b2-ecbfff193260",
+              "memory_uid": "68ad56f9-6ca2-587a-9182-fd98a79d3d5c"
+            }
+          ],
+          "reason": "These compared-only memories split one visual-communication requirement into provision of the summary and specification of its transition conditions.",
+          "status": "RESOLVED",
+          "summary": "An unfamiliar interaction procedure should receive one compact visual summary that marks the conditions governing transitions between steps.",
+          "uid": "64409c20-ce18-5838-9ac5-21b801b7df32"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5c3304ea-227d-4151-93b2-ecbfff193260",
+              "memory_uid": "eca301ff-9feb-502d-b955-055c48342542"
+            },
+            {
+              "frame_uid": "5c3304ea-227d-4151-93b2-ecbfff193260",
+              "memory_uid": "cbd977cd-1b78-5ca6-823a-7a5b4b92d77a"
+            }
+          ],
+          "reason": "These compared-only memories jointly define one milestone-based planning approach covering phases and entry criteria.",
+          "status": "RESOLVED",
+          "summary": "A master’s research schedule should use phase-specific milestones and link each phase transition to its required deliverables.",
+          "uid": "d9a93176-0bef-5ae5-88e1-2d3d52b47d39"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5c3304ea-227d-4151-93b2-ecbfff193260",
+              "memory_uid": "9283aedb-6818-5c99-8fe0-502b488acb66"
+            }
+          ],
+          "reason": "This is an independently useful compared-only requirement for articulating the proposal’s contribution logic.",
+          "status": "RESOLVED",
+          "summary": "The gap in the actual usage context should connect directly to the proposed design and operational contributions in one flow.",
+          "uid": "7b7209e1-053a-53f4-9c76-b589e600f1b0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5c3304ea-227d-4151-93b2-ecbfff193260",
+              "memory_uid": "c5c04ab1-10e8-52a3-98a1-aa9cbede57c1"
+            },
+            {
+              "frame_uid": "5c3304ea-227d-4151-93b2-ecbfff193260",
+              "memory_uid": "87203bcf-6724-543a-ad19-60a2becc4598"
+            },
+            {
+              "frame_uid": "5c3304ea-227d-4151-93b2-ecbfff193260",
+              "memory_uid": "32cef408-4c66-5ef2-9a59-eea6fc67b16e"
+            },
+            {
+              "frame_uid": "5c3304ea-227d-4151-93b2-ecbfff193260",
+              "memory_uid": "3579fcc0-c74e-5006-901b-6406a3106fa1"
+            },
+            {
+              "frame_uid": "5c3304ea-227d-4151-93b2-ecbfff193260",
+              "memory_uid": "2c2aa1af-c450-5c8d-a907-042c5757d3ee"
+            },
+            {
+              "frame_uid": "5c3304ea-227d-4151-93b2-ecbfff193260",
+              "memory_uid": "1fb62d5b-532b-5664-842c-57622e3c8b9d"
+            }
+          ],
+          "reason": "These compared-only memories restate and elaborate one prose-organization policy, including paragraph openings, endings, overall sequence, and the disruption caused by repeated labels.",
+          "status": "RESOLVED",
+          "summary": "A short proposal should use connected paragraph transitions and question-to-answer handoffs instead of space-consuming headings, sustaining a continuous problem-to-consequence-to-response-to-next-step argument.",
+          "uid": "b24ec97c-f4ae-53e0-bfb8-d6abb8dbe13d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5c3304ea-227d-4151-93b2-ecbfff193260",
+              "memory_uid": "c9591180-6f3a-5909-8695-31704b9b6f01"
+            }
+          ],
+          "reason": "This is an independently useful compared-only requirement about local placement of supporting evidence.",
+          "status": "RESOLVED",
+          "summary": "Preliminary field or technical results should appear near the sentences whose feasibility claims they support.",
+          "uid": "b1c7d7ce-f314-5651-b25a-1ee17536a058"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame uniquely addresses contextualized problem framing and research questions, visual explanations of unfamiliar procedures, milestone-based planning, contribution flow, feasibility evidence placement, and continuous proposal prose.",
+        "differences": "",
+        "reference_only": "The reference uniquely requires disclosure and traceability sufficient to reconstruct prototype evaluations, compared alternatives, formative decisions, and links between observations and prototype versions."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "a162c5fe-b7e3-4cd1-aeab-d4033c823d8b"
+    },
+    "analysis_digest": "2711891a8488815964d57d79f31a7af2b91b838c7bea905a44a49a974d4754fa",
+    "key": "529db94695d466807b5cace51afacffbf81591bd5e1741c21e66c10061e109e7",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 32.481598917001975,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "529db94695d466807b5cace51afacffbf81591bd5e1741c21e66c10061e109e7",
+  "created_at": "2026-08-13T18:24:17.995077Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/reproducibility",
+  "pair_key": "7338cecaf9e824ccee2948befbfbc6ddd99e976ceba8cd80ac00f6aa65c8514b",
+  "provider_seconds": 32.481598917001975,
+  "right": "task-2/advisor2/structure",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

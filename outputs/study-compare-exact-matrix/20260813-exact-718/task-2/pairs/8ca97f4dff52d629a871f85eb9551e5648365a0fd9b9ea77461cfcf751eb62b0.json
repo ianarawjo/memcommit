@@ -1,0 +1,302 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:20:27.301722+00:00",
+      "frames": [
+        {
+          "context_digest": "c4484b7a8284d7e31066ad3f4c4edf8844a2e0ce8695a323093f753243b6b18f",
+          "context_name": "task-2/advisor1/expression",
+          "context_uid": "39a6f298-c511-5c21-a106-998c1df9d951",
+          "memories": [
+            {
+              "content": "Use a flow diagram rather than a sequence table when alternate procedural branches lead to different outcomes.",
+              "content_digest": "48075a546ef4f1c2735e202cf43df2c164e4382f323007f542915195d025bf58",
+              "position": 0,
+              "uid": "51fa3fcc-9d5f-52f0-809d-62d7cdd8a865"
+            },
+            {
+              "content": "Draw alternate branches and their resulting outcomes in the same flow diagram so readers can compare them at once.",
+              "content_digest": "85d1fdc887f442e05b4089e28a6dc671e757eb781eae9c39646673054306ec34",
+              "position": 1,
+              "uid": "e686bd4d-3ebd-5e55-ba39-f26971247965"
+            },
+            {
+              "content": "The visual fidelity of a prototype may differ from its functional fidelity.",
+              "content_digest": "bfc110d2df084fd4f8393284db693ead012f2bfd9a4e804fd89f9a4e45e16e8c",
+              "position": 2,
+              "uid": "019662a9-6f03-527f-9b6d-be5a2966d9e9"
+            },
+            {
+              "content": "A flow diagram can make alternate branches and their different outcomes visible in one view.",
+              "content_digest": "8f69a73784cb0c304671161a6c42c63480c0ce0cc4864e613d8dde466365d496",
+              "position": 3,
+              "uid": "a6dfe9a7-1df8-561f-8d3e-fc19518beca9"
+            },
+            {
+              "content": "HCI reviewers often skim prototype screens and interaction flow diagrams before reading the main text.",
+              "content_digest": "ee7009a111b29298f748336d571f4d0233e08ef0255f6cfe69cb4c26def96394",
+              "position": 4,
+              "uid": "7047a23d-45b3-5d5c-a00b-c12552e9680d"
+            },
+            {
+              "content": "Readers can understand the overall branching shape of a procedure more quickly from a flow diagram than from rows read one at a time.",
+              "content_digest": "beb9438eb216e54223266b4f592245450812228d69f7a38908e4c260a0aaca01",
+              "position": 5,
+              "uid": "50a71968-7e3f-5b99-b3fa-769af386d0c0"
+            },
+            {
+              "content": "Redrawing a branching flow diagram after a procedural change usually takes longer than updating one row in a table.",
+              "content_digest": "cb0e535e1e58a4dbf42c5f22a3eded19fa0c228c6531b70530b226eeb2dbf24c",
+              "position": 6,
+              "uid": "ae1610f6-a855-56c1-a0fb-fd3207dab615"
+            },
+            {
+              "content": "Reviewers often inspect the proposal’s main visual before reading the procedural explanation in full.",
+              "content_digest": "a609677d56e7297c736ee92c7a45eb4d83824985a780d8ca4df664f1494c5cb2",
+              "position": 7,
+              "uid": "d2825b84-b4a6-58c9-8f8e-9e19c6192a03"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "30b812b3-6e55-41fb-82ba-3c8565fe21ab"
+        },
+        {
+          "context_digest": "e70e4eaff26e4baf1b346a4ecd2b44ed9f9ccac9e205b7b82572dc8ef0e217c4",
+          "context_name": "task-2/advisor2/emphasis",
+          "context_uid": "398f9930-3a0f-5de0-a339-ceba7dd5d1c6",
+          "memories": [
+            {
+              "content": "Do not exceed two primary HCI contributions that readers must remember.",
+              "content_digest": "59786866cf953172c2697f09398356a861e8ea448093102c32c9149f16b2e5c5",
+              "position": 0,
+              "uid": "d59dc83b-ce6a-5ac7-ab64-e5436df1f945"
+            },
+            {
+              "content": "Present each design or operational contribution as a single named sentence.",
+              "content_digest": "e0de5a9f1c1ca585fe062d7e11f8d2536cbe5ec4eefc16da6f7a0b62c0247d45",
+              "position": 1,
+              "uid": "328de462-17a4-551f-9f74-cb3118519e45"
+            },
+            {
+              "content": "In studies recruiting organizational members, emphasize workflow constraints.",
+              "content_digest": "c46efadebd89f3d757993baea79a5ef1386bbf6b4769ae3704ae62102397fc3b",
+              "position": 2,
+              "uid": "eab1dac5-8b61-5793-a56f-c4e3e64af190"
+            },
+            {
+              "content": "In studies recruiting organizational members, emphasize manager approval constraints.",
+              "content_digest": "2387fb9f3ab907e671fc9dcc2e7f067a84bdf1f5713d8385a32e39eb1e14751d",
+              "position": 3,
+              "uid": "f90e616a-d5a4-5cc2-86e4-62534a1faf83"
+            },
+            {
+              "content": "HCI reviewers find it difficult to identify primary contributions when named design and operational contributions exceed two.",
+              "content_digest": "04e080bfdf7277d04f0efc1b1d6775d06cba88aab5ff78bfd430674b004722a5",
+              "position": 4,
+              "uid": "78a1c87a-6936-516c-b578-8e97dc2e91f4"
+            },
+            {
+              "content": "Highlight one primary field operational decision to be changed by evaluation results as the central claim.",
+              "content_digest": "9a6bda883e68a2553a1238114d5de2746dc220948aebc1c2965cbb435318fe9c",
+              "position": 5,
+              "uid": "7af2db41-9091-5452-9beb-8fd7b48b7872"
+            },
+            {
+              "content": "Specify prototype features unnecessary for reviewing the primary field problem as secondary scope.",
+              "content_digest": "419ed0b0bccf1af7b30e0351f5e87b9e37e469cfa567e684695ffe4b6d39178a",
+              "position": 6,
+              "uid": "2312f35d-c17d-5af3-b84f-d2e671d7663f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "e04e87e1-8498-4d45-a00b-db59392b46e7"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames provide complementary but operationally separate guidance. The reference focuses on procedural visualization, prototype fidelity, reviewer attention, and diagram maintenance, while the compared frame focuses on contribution discipline, organizational study constraints, evaluation claims, and prototype scope. No cross-frame claim governs the same decision closely enough to relate directly.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "30b812b3-6e55-41fb-82ba-3c8565fe21ab",
+              "memory_uid": "51fa3fcc-9d5f-52f0-809d-62d7cdd8a865"
+            },
+            {
+              "frame_uid": "30b812b3-6e55-41fb-82ba-3c8565fe21ab",
+              "memory_uid": "e686bd4d-3ebd-5e55-ba39-f26971247965"
+            },
+            {
+              "frame_uid": "30b812b3-6e55-41fb-82ba-3c8565fe21ab",
+              "memory_uid": "a6dfe9a7-1df8-561f-8d3e-fc19518beca9"
+            },
+            {
+              "frame_uid": "30b812b3-6e55-41fb-82ba-3c8565fe21ab",
+              "memory_uid": "50a71968-7e3f-5b99-b3fa-769af386d0c0"
+            }
+          ],
+          "reason": "These claims jointly express one-sided guidance and rationale for representing branching procedures in a unified flow diagram.",
+          "status": "RESOLVED",
+          "summary": "Flow diagrams should present alternative procedural branches and outcomes together, supporting simultaneous comparison and faster comprehension than sequential table rows.",
+          "uid": "d9fa6bc2-8226-536c-9d2c-19589e57b02b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "30b812b3-6e55-41fb-82ba-3c8565fe21ab",
+              "memory_uid": "019662a9-6f03-527f-9b6d-be5a2966d9e9"
+            }
+          ],
+          "reason": "This independently useful fidelity distinction has no counterpart governing the same question in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A prototype’s visual fidelity and functional fidelity may differ.",
+          "uid": "2749ed94-4e57-5861-8c80-b261b6f080e3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "30b812b3-6e55-41fb-82ba-3c8565fe21ab",
+              "memory_uid": "7047a23d-45b3-5d5c-a00b-c12552e9680d"
+            },
+            {
+              "frame_uid": "30b812b3-6e55-41fb-82ba-3c8565fe21ab",
+              "memory_uid": "d2825b84-b4a6-58c9-8f8e-9e19c6192a03"
+            }
+          ],
+          "reason": "The claims restate one reviewer-attention pattern that is not addressed by the compared frame’s contribution-framing guidance.",
+          "status": "RESOLVED",
+          "summary": "HCI reviewers often inspect a proposal’s primary screens or interaction-flow visual before reading its full procedural explanation.",
+          "uid": "d57683d3-9c65-50d9-aee0-69c06e010f5a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "30b812b3-6e55-41fb-82ba-3c8565fe21ab",
+              "memory_uid": "ae1610f6-a855-56c1-a0fb-fd3207dab615"
+            }
+          ],
+          "reason": "This maintenance tradeoff is independently useful and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Updating a branching flow diagram after procedural changes usually requires more effort than changing one table row.",
+          "uid": "533f9443-4bf4-55b2-9c56-82c7ee01dbc0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e04e87e1-8498-4d45-a00b-db59392b46e7",
+              "memory_uid": "d59dc83b-ce6a-5ac7-ab64-e5436df1f945"
+            },
+            {
+              "frame_uid": "e04e87e1-8498-4d45-a00b-db59392b46e7",
+              "memory_uid": "78a1c87a-6936-516c-b578-8e97dc2e91f4"
+            }
+          ],
+          "reason": "The claims state and justify one contribution-count policy absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Primary named HCI contributions should be limited to two because additional design or operational contributions become difficult for reviewers to identify.",
+          "uid": "560024fd-dee5-5920-b025-38561c7a6306"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e04e87e1-8498-4d45-a00b-db59392b46e7",
+              "memory_uid": "328de462-17a4-551f-9f74-cb3118519e45"
+            }
+          ],
+          "reason": "This contribution-formatting rule is independently useful and has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Each design or operational contribution should be expressed as one named sentence.",
+          "uid": "5e092122-3c9e-5e95-9a26-908650919c83"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e04e87e1-8498-4d45-a00b-db59392b46e7",
+              "memory_uid": "eab1dac5-8b61-5793-a56f-c4e3e64af190"
+            },
+            {
+              "frame_uid": "e04e87e1-8498-4d45-a00b-db59392b46e7",
+              "memory_uid": "f90e616a-d5a4-5cc2-86e4-62534a1faf83"
+            }
+          ],
+          "reason": "The claims split one contextual study-framing requirement into two complementary organizational constraints, neither addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Studies recruiting organizational members should emphasize both workflow constraints and manager-approval constraints.",
+          "uid": "56057b05-134f-517a-b5e1-89832c1d6c4f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e04e87e1-8498-4d45-a00b-db59392b46e7",
+              "memory_uid": "7af2db41-9091-5452-9beb-8fd7b48b7872"
+            }
+          ],
+          "reason": "This evaluation-centered claim-selection rule is independently useful and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The central claim should identify one primary field operational decision that evaluation results are intended to change.",
+          "uid": "d6979c94-b726-57d5-88eb-b583024bd555"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e04e87e1-8498-4d45-a00b-db59392b46e7",
+              "memory_uid": "2312f35d-c17d-5af3-b84f-d2e671d7663f"
+            }
+          ],
+          "reason": "This prototype-scoping rule addresses feature relevance rather than fidelity and has no matching claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Prototype features unnecessary for reviewing the primary field problem should be designated as secondary scope.",
+          "uid": "278028c3-73d7-5498-a8c1-d186bc7d2c2f"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame limits and standardizes primary contributions, foregrounds organizational workflow and approval constraints, centers evaluation on one field decision, and marks nonessential prototype features as secondary.",
+        "differences": "",
+        "reference_only": "The reference favors unified flow diagrams for branching procedures, distinguishes visual from functional prototype fidelity, notes reviewers’ early attention to visuals, and recognizes diagram-update costs."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "b08583ca-a4a5-4b86-a830-749bb5630a48"
+    },
+    "analysis_digest": "f424aa464b311b02180250833f29c4ca2419168a010c89da9e48bc8ac2a3e537",
+    "key": "d688c854e6fb1cd1b5e9fd856c114b669391d3501238d31b7c45fd3f6b44629b",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 35.998530000000756,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "d688c854e6fb1cd1b5e9fd856c114b669391d3501238d31b7c45fd3f6b44629b",
+  "created_at": "2026-08-13T18:21:03.299857Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/expression",
+  "pair_key": "8ca97f4dff52d629a871f85eb9551e5648365a0fd9b9ea77461cfcf751eb62b0",
+  "provider_seconds": 35.998530000000756,
+  "right": "task-2/advisor2/emphasis",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

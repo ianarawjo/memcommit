@@ -1,0 +1,406 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:41:35.114408+00:00",
+      "frames": [
+        {
+          "context_digest": "58f58090449931225a941a4219f3fce7ebcf23bbabc0e0aa93a8733d4ba32701",
+          "context_name": "task-3/local/personal-memory/2024/07",
+          "context_uid": "8747b4f6-d17c-5b02-83f4-fc3af73e2da0",
+          "memories": [
+            {
+              "content": "The user updated the utility account for their residence in July 2024.",
+              "content_digest": "89c6a8e8dd7ad799b9ef4cb2b10963ce0b9ad55e713716d9729f903e76c0f71a",
+              "position": 0,
+              "uid": "65a332a2-2707-55f8-b7a6-a7378e6fbb7a"
+            },
+            {
+              "content": "After putting a paper bill in a drawer, the user checked it one day after the payment date.",
+              "content_digest": "474d42322de3190caee3e4feeb831bcb6a7b57e58427667d74be084ee9c64257",
+              "position": 1,
+              "uid": "fb94e1fd-9b3d-567a-81d8-d7a0ee90e04e"
+            },
+            {
+              "content": "In the month after receiving an electronic billing alert, the user paid two days before the deadline.",
+              "content_digest": "c16cf32e0018eb1cdf94e3070036d7fb93b0ccc8adb633a057642ff41284eaa0",
+              "position": 2,
+              "uid": "7d8db31a-c330-5852-9d7c-c9da7f98d899"
+            },
+            {
+              "content": "The user saw a water-inspection notice late and started washing dishes during the scheduled shutoff.",
+              "content_digest": "d5bea20cc35a46502ba919c52bee7519453346789d4bb881c82a9c08e6840cb0",
+              "position": 3,
+              "uid": "008dd110-feb2-5b4b-b602-bb3e23475a95"
+            },
+            {
+              "content": "After transferring a management-office notice to their phone calendar, the user did not miss the inspection time.",
+              "content_digest": "ce2c06404fcb8988b61da98f2ddd58d3db6506ff74aa1c7dfd43f841fa6fb25d",
+              "position": 4,
+              "uid": "a03ed01a-3d15-5eaf-9415-529705fd1245"
+            },
+            {
+              "content": "During a boiler technician's visit, the user had not cleared boxes from the entrance in advance and had to rearrange the passage.",
+              "content_digest": "39f4ca86667c0622dce2b6fee2b04df73131bf9d98e81478f1fa818b5dfe70c2",
+              "position": 5,
+              "uid": "2fb4b0bd-1257-5e50-881a-7f312940e1c5"
+            },
+            {
+              "content": "The user cleared the entrance the day before the next visit so the inspection could begin immediately.",
+              "content_digest": "e99fb029e3ca864e4f293358a85f33d73f4d7d2b9fda7dcd437ffdf183350666",
+              "position": 6,
+              "uid": "d05286e8-f183-5f4a-99d8-3dcca1aeaa09"
+            },
+            {
+              "content": "The building manager expects that a one-day advance visit notice gives a resident enough time to prepare the work area.",
+              "content_digest": "f992e380bfa87fa04c9f7dde8eceee69eb6b0aa3ad79c180d9023dafd7dd2abd",
+              "position": 7,
+              "uid": "44d28aa3-1aa4-5276-b545-86ee2cb17078"
+            },
+            {
+              "content": "Confirm the user's available time before finalizing a service visit to the residence.",
+              "content_digest": "dee4efa145a0f8b25c47a1c6855c02feee2de292e78b2e3790763796981db1e5",
+              "position": 8,
+              "uid": "77f77450-ab10-5469-8e2f-5445060926bc"
+            },
+            {
+              "content": "The local agent can compare payment records with notice times but cannot verify whether a residential service problem was resolved.",
+              "content_digest": "09e052010507ce17344888df5171f58996245cceb9012e160d540f030e7ba98a",
+              "position": 9,
+              "uid": "fd7f98b4-d5b9-5196-ad5e-c4356681ecf4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "9060844d-a800-498f-bf19-77d56764b205"
+        },
+        {
+          "context_digest": "43b741cd1df20a084f3517aec7f886d4e5022812f0536eb126a6caf2d5570489",
+          "context_name": "task-3/local/personal-memory/2025/05",
+          "context_uid": "1f913bb6-790c-5490-a20d-127c7aab5892",
+          "memories": [
+            {
+              "content": "The user keeps two potted herbs beside a south-facing window.",
+              "content_digest": "b79056c033f208bb02b99fef1c011e5537e2ea8c19c3894863c3a5ad56054e08",
+              "position": 0,
+              "uid": "cb09b8ab-c7c4-51bb-a227-039c7cdfae5d"
+            },
+            {
+              "content": "During a week when the user watered every day based only on the soil surface, the leaves of one plant turned yellow.",
+              "content_digest": "042f4be9fd5481a7252d1c0065e95085e11e81e475531afe45b9f1d268d4c5b4",
+              "position": 1,
+              "uid": "95978183-0070-5b12-b117-be39bb343a5e"
+            },
+            {
+              "content": "During a week when the user checked below the soil surface with a finger before watering, the plant grew new leaves.",
+              "content_digest": "06ca2ec53f03677fdfd78bb1d391f197d3f49b974f6e812f25ba49ce34f74249",
+              "position": 2,
+              "uid": "8c610ce5-1eb7-52e5-ad81-e8062d23cd19"
+            },
+            {
+              "content": "On a day the user left the window open for a long time, strong wind knocked over one pot.",
+              "content_digest": "914f67a75fdf73cee064a465a9f0e6ee9ba012f1a40c614e199a9354756203a8",
+              "position": 3,
+              "uid": "3f886c0c-071b-5f2d-adad-da01345d702f"
+            },
+            {
+              "content": "The next day, the user moved the pot inward from the windowsill so the same wind would not knock it over.",
+              "content_digest": "f190916b360b6543865ced49cf5d9a987e96c9147966181e5920342bb41ba50c",
+              "position": 4,
+              "uid": "afe855b8-f5ad-559c-a63f-6f655ba371a2"
+            },
+            {
+              "content": "The user put a plant-name label in a small pot received from their maternal aunt.",
+              "content_digest": "82284f0102305db41eaaecafe86bc05833090853320f2ebb8e5f44abb2d78a63",
+              "position": 5,
+              "uid": "384c4f5f-b15c-5742-ac79-20106d0dd30b"
+            },
+            {
+              "content": "The user confused the care instructions for an unlabeled pot with those for another plant.",
+              "content_digest": "824267db866253690527d5ab08166f4228401443ed903708d33ac22542811750",
+              "position": 6,
+              "uid": "48dc89af-ed9d-51a5-a4b1-b809fd818143"
+            },
+            {
+              "content": "The user's maternal aunt considers understanding the sunlight at a pot's location more important than watering frequency when caring for it.",
+              "content_digest": "8a24f6df4a58db3e538f77e572a3cf152b7a4aff3527ec3d8616e85a675bc7c0",
+              "position": 7,
+              "uid": "a2426820-65d6-5c78-ac50-0f32b366ae47"
+            },
+            {
+              "content": "Before creating a plant-care reminder, check each plant's name and most recent watering date.",
+              "content_digest": "ecd7ef911951f3c2383cd916a4efbd94bdf439f63de1687c2f637a161ac8a60d",
+              "position": 8,
+              "uid": "efd51196-ed48-5699-a0f4-c5b8e149d11c"
+            },
+            {
+              "content": "The soil in the user's potted herbs beside the south-facing window dries at different rates depending on the season and amount of sunlight.",
+              "content_digest": "f716b16e802d30d4c2d1ed4bff855812682e53a9fc4e29988e2662ae321d0a4f",
+              "position": 9,
+              "uid": "4c93eeff-566e-5a1a-afb9-035c97fb9c73"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "12a6b599-6414-47d6-a0a1-54f479aa44b9"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate operational domains with no materially shared policy or decision. The reference centers on residential billing, notices, visit preparation, scheduling, and verification limits, while the compared frame centers on identifying, watering, positioning, and monitoring potted herbs.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9060844d-a800-498f-bf19-77d56764b205",
+              "memory_uid": "65a332a2-2707-55f8-b7a6-a7378e6fbb7a"
+            }
+          ],
+          "reason": "This is independently useful reference-side account history with no compared-side claim addressing residential utilities.",
+          "status": "RESOLVED",
+          "summary": "The residence’s utility account was updated in July 2024.",
+          "uid": "44f0b894-80d6-5d79-a637-f1ac241907fa"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9060844d-a800-498f-bf19-77d56764b205",
+              "memory_uid": "fb94e1fd-9b3d-567a-81d8-d7a0ee90e04e"
+            },
+            {
+              "frame_uid": "9060844d-a800-498f-bf19-77d56764b205",
+              "memory_uid": "7d8db31a-c330-5852-9d7c-c9da7f98d899"
+            }
+          ],
+          "reason": "These episodes jointly describe one reference-side billing-notice and payment-timing pattern, with no compared-side claim addressing that operational area.",
+          "status": "RESOLVED",
+          "summary": "Different handling of paper and electronic billing notices accompanied late versus early payment timing.",
+          "uid": "f8f98991-04a8-5dcf-8f4e-75c3d7f3fb9a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9060844d-a800-498f-bf19-77d56764b205",
+              "memory_uid": "008dd110-feb2-5b4b-b602-bb3e23475a95"
+            },
+            {
+              "frame_uid": "9060844d-a800-498f-bf19-77d56764b205",
+              "memory_uid": "a03ed01a-3d15-5eaf-9415-529705fd1245"
+            }
+          ],
+          "reason": "These episodes split one reference-side claim about inspection-notice handling and attendance, absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Late notice awareness disrupted a water inspection, while calendar transfer prevented missing a later inspection time.",
+          "uid": "2557c7ff-d2e5-5fc1-a69b-b65945357664"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9060844d-a800-498f-bf19-77d56764b205",
+              "memory_uid": "2fb4b0bd-1257-5e50-881a-7f312940e1c5"
+            },
+            {
+              "frame_uid": "9060844d-a800-498f-bf19-77d56764b205",
+              "memory_uid": "d05286e8-f183-5f4a-99d8-3dcca1aeaa09"
+            }
+          ],
+          "reason": "These episodes jointly describe one reference-side progression in preparing a residential work area, with no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Failure to clear an entrance delayed one technician visit, while advance clearing enabled the next inspection to begin immediately.",
+          "uid": "619640da-905f-5229-acbb-a50ad59aade3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9060844d-a800-498f-bf19-77d56764b205",
+              "memory_uid": "44d28aa3-1aa4-5276-b545-86ee2cb17078"
+            }
+          ],
+          "reason": "This is a standalone reference-side expectation about service-visit notice, not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The building manager considers one day’s notice sufficient for a resident to prepare a work area.",
+          "uid": "f5d5717e-ddae-5d37-86c0-4afda2dc622b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9060844d-a800-498f-bf19-77d56764b205",
+              "memory_uid": "77f77450-ab10-5469-8e2f-5445060926bc"
+            }
+          ],
+          "reason": "This is an independently useful reference-side scheduling policy with no compared-side claim about service appointments.",
+          "status": "RESOLVED",
+          "summary": "A resident’s availability should be confirmed before a service visit is finalized.",
+          "uid": "421c3a0c-ebe7-5199-903c-044842fbe65a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9060844d-a800-498f-bf19-77d56764b205",
+              "memory_uid": "fd7f98b4-d5b9-5196-ad5e-c4356681ecf4"
+            }
+          ],
+          "reason": "This is a reference-side capability boundary absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The local agent can compare payments and notice timing but cannot verify resolution of a residential service problem.",
+          "uid": "37634b04-acdd-5745-95f3-71da777c71c7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "12a6b599-6414-47d6-a0a1-54f479aa44b9",
+              "memory_uid": "cb09b8ab-c7c4-51bb-a227-039c7cdfae5d"
+            }
+          ],
+          "reason": "This is independently useful compared-side context about the plants and their location, with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user keeps two potted herbs beside a south-facing window.",
+          "uid": "721c3810-f6c9-5a37-9cc3-039bddcc88b2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "12a6b599-6414-47d6-a0a1-54f479aa44b9",
+              "memory_uid": "95978183-0070-5b12-b117-be39bb343a5e"
+            },
+            {
+              "frame_uid": "12a6b599-6414-47d6-a0a1-54f479aa44b9",
+              "memory_uid": "8c610ce5-1eb7-52e5-ad81-e8062d23cd19"
+            }
+          ],
+          "reason": "These observations jointly describe one compared-side watering-assessment pattern, while the reference frame contains no plant-care claim.",
+          "status": "RESOLVED",
+          "summary": "Surface-based daily watering accompanied yellowing, whereas checking subsurface moisture before watering accompanied new leaf growth.",
+          "uid": "c44beccd-9ba6-557a-8a27-3df8449a0648"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "12a6b599-6414-47d6-a0a1-54f479aa44b9",
+              "memory_uid": "3f886c0c-071b-5f2d-adad-da01345d702f"
+            },
+            {
+              "frame_uid": "12a6b599-6414-47d6-a0a1-54f479aa44b9",
+              "memory_uid": "afe855b8-f5ad-559c-a63f-6f655ba371a2"
+            }
+          ],
+          "reason": "The two memories form one compared-side hazard-and-mitigation episode with no reference-side plant-positioning counterpart.",
+          "status": "RESOLVED",
+          "summary": "Wind from an open window knocked over a pot, after which the pot was moved inward to prevent recurrence.",
+          "uid": "8ea626e7-b8c2-5a69-9f01-b0a5ee287cc5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "12a6b599-6414-47d6-a0a1-54f479aa44b9",
+              "memory_uid": "384c4f5f-b15c-5742-ac79-20106d0dd30b"
+            }
+          ],
+          "reason": "This compared-side fact combines provenance and labeling and is not restated or operationally addressed in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A small pot received from the user’s maternal aunt was given a plant-name label.",
+          "uid": "4a013651-f843-5b5f-9692-dd7fa48fe581"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "12a6b599-6414-47d6-a0a1-54f479aa44b9",
+              "memory_uid": "48dc89af-ed9d-51a5-a4b1-b809fd818143"
+            }
+          ],
+          "reason": "This is an independently useful compared-side identification failure with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "An unlabeled pot led the user to confuse its care instructions with another plant’s instructions.",
+          "uid": "adfeb26d-193f-5929-b796-8e77f6a8c15a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "12a6b599-6414-47d6-a0a1-54f479aa44b9",
+              "memory_uid": "a2426820-65d6-5c78-ac50-0f32b366ae47"
+            }
+          ],
+          "reason": "This is a standalone compared-side plant-care judgment absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s maternal aunt prioritizes understanding location-specific sunlight over watering frequency.",
+          "uid": "fc8e23d6-cbdc-54b2-a5fe-83e7c5e9262b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "12a6b599-6414-47d6-a0a1-54f479aa44b9",
+              "memory_uid": "efd51196-ed48-5699-a0f4-c5b8e149d11c"
+            }
+          ],
+          "reason": "This is an independently useful compared-side reminder policy with no reference-side claim governing plant care.",
+          "status": "RESOLVED",
+          "summary": "Each plant’s name and latest watering date should be checked before creating a care reminder.",
+          "uid": "4175201f-12d5-5593-83ca-23e2157d7c80"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "12a6b599-6414-47d6-a0a1-54f479aa44b9",
+              "memory_uid": "4c93eeff-566e-5a1a-afb9-035c97fb9c73"
+            }
+          ],
+          "reason": "This is a compared-side environmental care consideration not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Soil drying rates for the window-side herbs vary with season and sunlight.",
+          "uid": "411da80c-3a13-5dec-bbc3-edfef69b71ec"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only material covers herb placement, moisture-based watering, wind protection, plant identification, sunlight priorities, reminder inputs, and seasonal soil drying.",
+        "differences": "",
+        "reference_only": "Reference-only material covers utility administration, payment and inspection notice handling, service-area preparation, visit scheduling, and limits on resolution verification."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "5bf5972b-0cfe-449f-a428-ea2c8c7a966b"
+    },
+    "analysis_digest": "bd89b95b9b68bf5275f01b0681cc967f598a23ace29d198ac592a323996f554b",
+    "key": "07ed890d14c725c63a4cf2b6219403f2bc7c0e956d1acf0525196e96c1e5d99d",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 42.10570579100022,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "07ed890d14c725c63a4cf2b6219403f2bc7c0e956d1acf0525196e96c1e5d99d",
+  "created_at": "2026-08-13T18:42:17.219698Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/07",
+  "pair_key": "511936aaa0388c3f43081e40122fbced62c0360e2bd6632da6571282034382ee",
+  "provider_seconds": 42.10570579100022,
+  "right": "task-3/local/personal-memory/2025/05",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

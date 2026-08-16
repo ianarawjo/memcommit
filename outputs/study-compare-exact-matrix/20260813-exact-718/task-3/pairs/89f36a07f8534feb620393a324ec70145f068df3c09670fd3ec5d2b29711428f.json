@@ -1,0 +1,379 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:37:53.519716+00:00",
+      "frames": [
+        {
+          "context_digest": "db438345c3ec4b3f69562a274c9f81a93bd6e6df97bc89b60abcd193dc89b562",
+          "context_name": "task-3/local/personal-memory/2024/04",
+          "context_uid": "206e1cd3-93da-5341-bda3-95cde4814c20",
+          "memories": [
+            {
+              "content": "The user completed a routine dental checkup in April 2024.",
+              "content_digest": "bbaa093f8dee5b5ee42c4a180e683fce00bc9364f5a009b9fa1e7f2ac233bc01",
+              "position": 0,
+              "uid": "9cea83cd-e39f-53bd-9e79-d30aa465ad02"
+            },
+            {
+              "content": "When the user heard three checkup questions in succession, they asked for the first question again.",
+              "content_digest": "e1b76973991f009295489249af1a7cd0fa7957f24f330e39337e01e5b1acdcbb",
+              "position": 1,
+              "uid": "51f8326f-60d4-5ba3-ba32-a04331dcb930"
+            },
+            {
+              "content": "At the next visit, when questions were asked one at a time, the user answered each without omission.",
+              "content_digest": "30c943f2e043f485a7a7e1ac19343c753ed8f834d00716725322505e28e0b15a",
+              "position": 2,
+              "uid": "cd0bce79-71d5-5d46-9c68-8a1d096dd53a"
+            },
+            {
+              "content": "The user called to reschedule an appointment at lunchtime but did not reach anyone.",
+              "content_digest": "1d4bd2122c160d35080b232ebb8ae5080c2ce34124645b3ec8040d7d29af9752",
+              "position": 3,
+              "uid": "71e27b0c-5c10-5102-aeac-98b0841723f2"
+            },
+            {
+              "content": "After returning home, the user kept a photo of the paper instructions received at the clinic.",
+              "content_digest": "68cddec62167a3910122a129dcfdb3c5604a4fea996d01f870734739dd3b0221",
+              "position": 4,
+              "uid": "86ad5410-0cc7-5876-8e3a-a3f0dd1680c7"
+            },
+            {
+              "content": "On a day the user put only the visit address in the calendar, they had to search again for the floor.",
+              "content_digest": "0d6926aba2c90930bfa984d7af1b12c60f35e53ba9916dfbee2c2391961db1a9",
+              "position": 5,
+              "uid": "aab36950-7e2b-588f-bb7c-d3bd6e36c501"
+            },
+            {
+              "content": "On a day the user shared the checkup time with their older sister, the sister called to check in after the user returned home.",
+              "content_digest": "b7d0fea8e8f2fc13126453039dcedebcda3c67ce2ea96c4a2d5b60365448e0e3",
+              "position": 6,
+              "uid": "50ac9268-9259-56fd-8678-1dfc8f919efb"
+            },
+            {
+              "content": "The scheduling staff at that clinic expect requests to change appointments to arrive by telephone.",
+              "content_digest": "28eec4f0ef0b96764a3f7ea54ee3db9fd4d5f1b62a5a2fa29d0a6193f1d8a18c",
+              "position": 7,
+              "uid": "5141ca66-9860-5ec5-b028-ac8670f586ca"
+            },
+            {
+              "content": "Before adding a follow-up visit to the calendar, confirm the date, time, address, and floor with the user.",
+              "content_digest": "0555c837f721fccd5918b2275086bb39c75e016e27574027185cfbada1c766af",
+              "position": 8,
+              "uid": "e265e637-fa41-53d0-aa9b-0102e9962f9a"
+            },
+            {
+              "content": "The local agent can track completed checkups and scheduled appointments but cannot determine whether a follow-up visit is needed.",
+              "content_digest": "be24b47ccb071438fd01bb99b11af3c63f22e260312a26d901824e6bb0d4cd89",
+              "position": 9,
+              "uid": "7aece7ae-b327-537e-9cef-fe24ee8fc618"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "d31e8eb4-665a-4779-b86c-7278753f9235"
+        },
+        {
+          "context_digest": "3e738289251b9bdf3deb1c7a7540e6ce811b09e26a020af3a76d47b4c85c7ab1",
+          "context_name": "task-3/local/personal-memory/2025/02",
+          "context_uid": "ce7367b8-8532-5f43-972a-1665ca8e3e80",
+          "memories": [
+            {
+              "content": "The user reviewed their emergency-contact list in February 2025.",
+              "content_digest": "b2f108376dbbf53e8885b9c61080d4c873209d8c6e399c37412fa507fec08b0b",
+              "position": 0,
+              "uid": "3ff046b1-5810-51ca-8d43-c99ef6a90b41"
+            },
+            {
+              "content": "When preparation instructions arrived as a long paragraph, the user missed two items.",
+              "content_digest": "43bde452a403f85bcffa6f7ba6b3142ed45604730083327c6f57092b98f397aa",
+              "position": 1,
+              "uid": "e2a304e5-6100-5a5f-b508-0a7f28f6bda7"
+            },
+            {
+              "content": "After changing the same content into a checklist, the user marked every item they had prepared.",
+              "content_digest": "0f8115061b489894115fd252f079ee673504ed09dea4d88d558e64ed6189f1be",
+              "position": 2,
+              "uid": "51d03bff-3e33-5f68-9df6-ed7efa8e3de9"
+            },
+            {
+              "content": "The user called their mother on a weekend evening, but they spoke only briefly because the mother was out.",
+              "content_digest": "a9a1e7d87532667781677f4760beeb086f1e423365a915a0ec0b494892cbb361",
+              "position": 3,
+              "uid": "0987293e-3e21-5cbc-bb46-59245a5fa041"
+            },
+            {
+              "content": "The user called again on Saturday morning the following week and spoke for 40 minutes.",
+              "content_digest": "f08c9f170345686b2091e3b0ecd49f049e245d584886da62d586185010f713bf",
+              "position": 4,
+              "uid": "dc3de6ad-56ea-528a-a9b7-349e79af2326"
+            },
+            {
+              "content": "The user sent a text to an old number for an emergency contact and saw that delivery failed.",
+              "content_digest": "692321e996b9ac8e3500a2da7765f77e0d14c6f040cf2c33944cbdcb39c706de",
+              "position": 5,
+              "uid": "6546d41b-3d5b-5802-a9e7-ac028405e3f2"
+            },
+            {
+              "content": "After confirming the new number with their older sister, the user updated the contact list.",
+              "content_digest": "8d2e954a978e35c1da92948ccc8e45f38fcc25ea3fafe7c389ef546f6eda1ae1",
+              "position": 6,
+              "uid": "ea6eb9d2-9b01-5330-a4d5-886d4bc6cd85"
+            },
+            {
+              "content": "For nonurgent contact, the user's older sister prefers to reply by text when available rather than take a call immediately.",
+              "content_digest": "86639aee50903bc3261e6f88ac7d649c8197927fe214d5d17e0e6f5b3d69a59d",
+              "position": 7,
+              "uid": "12fe7e64-192e-5359-8f96-d2875f7e5399"
+            },
+            {
+              "content": "Before using an emergency contact, reconfirm the number and relationship information with the user.",
+              "content_digest": "78e41f61ba99eaf8840d5d318d08327ca6bb087addd6e22269e8b63281bb67c7",
+              "position": 8,
+              "uid": "e6f89ded-5687-5c25-8df8-88f288d450c6"
+            },
+            {
+              "content": "The user feels that a reminder the day before an appointment gives them enough time to recheck preparation items.",
+              "content_digest": "1a9fcc01df362c76b6d9c8e4fa2d33229a2ae2762c0c6d25e0fc89312a6e0ed4",
+              "position": 9,
+              "uid": "f9197c33-ff93-5215-a3a5-e4087bea2a0d"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "4d5713f8-caf5-4e35-92eb-70632cafd745"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "Both frames support structuring clinic information to reduce omissions. Otherwise, they contribute separate dental-visit, scheduling, instruction-retention, calendar, support-contact, emergency-contact, communication-preference, reminder, and agent-capability information, without a scope-aligned conflict or uncertain claim.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "d31e8eb4-665a-4779-b86c-7278753f9235",
+              "memory_uid": "51f8326f-60d4-5ba3-ba32-a04331dcb930"
+            },
+            {
+              "frame_uid": "d31e8eb4-665a-4779-b86c-7278753f9235",
+              "memory_uid": "cd0bce79-71d5-5d46-9c68-8a1d096dd53a"
+            },
+            {
+              "frame_uid": "4d5713f8-caf5-4e35-92eb-70632cafd745",
+              "memory_uid": "e2a304e5-6100-5a5f-b508-0a7f28f6bda7"
+            },
+            {
+              "frame_uid": "4d5713f8-caf5-4e35-92eb-70632cafd745",
+              "memory_uid": "51d03bff-3e33-5f68-9df6-ed7efa8e3de9"
+            }
+          ],
+          "reason": "The observations concern different clinic tasks but materially support the same operational choice to present actionable information in structured, manageable units.",
+          "status": "RESOLVED",
+          "summary": "Breaking clinic information into discrete questions or checklist items helped the user avoid omissions.",
+          "uid": "34b6ef3d-c9b1-5f69-a662-214ef4f0f253"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d31e8eb4-665a-4779-b86c-7278753f9235",
+              "memory_uid": "9cea83cd-e39f-53bd-9e79-d30aa465ad02"
+            }
+          ],
+          "reason": "This is an independently useful dental-history event with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user completed a routine dental checkup in April 2024.",
+          "uid": "244c3856-403d-5f1a-8ddd-775a9bfd5698"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d31e8eb4-665a-4779-b86c-7278753f9235",
+              "memory_uid": "71e27b0c-5c10-5102-aeac-98b0841723f2"
+            },
+            {
+              "frame_uid": "d31e8eb4-665a-4779-b86c-7278753f9235",
+              "memory_uid": "5141ca66-9860-5ec5-b028-ac8670f586ca"
+            }
+          ],
+          "reason": "These memories jointly describe the clinic’s rescheduling channel and a failed use of that channel, with no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "Appointment changes at the clinic rely on telephone contact, and the user’s lunchtime attempt did not reach staff.",
+          "uid": "2aaba547-d454-518b-bea5-2afddcf4bdcc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d31e8eb4-665a-4779-b86c-7278753f9235",
+              "memory_uid": "86ad5410-0cc7-5876-8e3a-a3f0dd1680c7"
+            }
+          ],
+          "reason": "This is independently useful information about preserving instructions, distinct from how preparation content was formatted.",
+          "status": "RESOLVED",
+          "summary": "The user retained a photo of the clinic’s paper instructions after returning home.",
+          "uid": "34b6450d-4e86-5a30-80d6-127445763e3c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d31e8eb4-665a-4779-b86c-7278753f9235",
+              "memory_uid": "aab36950-7e2b-588f-bb7c-d3bd6e36c501"
+            },
+            {
+              "frame_uid": "d31e8eb4-665a-4779-b86c-7278753f9235",
+              "memory_uid": "e265e637-fa41-53d0-aa9b-0102e9962f9a"
+            }
+          ],
+          "reason": "These memories jointly establish a one-sided calendar-detail practice and the observed consequence of incomplete location information.",
+          "status": "RESOLVED",
+          "summary": "Visit calendar entries should include user-confirmed logistical details, including the floor, whose omission previously required another search.",
+          "uid": "e924497b-8e86-5cd0-af6a-96891947d68d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d31e8eb4-665a-4779-b86c-7278753f9235",
+              "memory_uid": "50ac9268-9259-56fd-8678-1dfc8f919efb"
+            }
+          ],
+          "reason": "This describes appointment sharing and post-visit support, not the separate preference governing nonurgent contact with the sister.",
+          "status": "RESOLVED",
+          "summary": "After receiving the checkup time, the user’s older sister called to check in after the visit.",
+          "uid": "ead51e22-a3ab-56c7-9df1-3f431b475102"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d31e8eb4-665a-4779-b86c-7278753f9235",
+              "memory_uid": "7aece7ae-b327-537e-9cef-fe24ee8fc618"
+            }
+          ],
+          "reason": "This capability boundary has no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The local agent can track checkups and appointments but cannot determine whether follow-up is needed.",
+          "uid": "a105d3a8-c008-5a5d-a187-c7366d51f662"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4d5713f8-caf5-4e35-92eb-70632cafd745",
+              "memory_uid": "3ff046b1-5810-51ca-8d43-c99ef6a90b41"
+            }
+          ],
+          "reason": "This dated review event is independently useful and is not stated in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user reviewed their emergency-contact list in February 2025.",
+          "uid": "c22b7499-3aee-543e-9596-5f3a5c0e64c5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4d5713f8-caf5-4e35-92eb-70632cafd745",
+              "memory_uid": "0987293e-3e21-5cbc-bb46-59245a5fa041"
+            },
+            {
+              "frame_uid": "4d5713f8-caf5-4e35-92eb-70632cafd745",
+              "memory_uid": "dc3de6ad-56ea-528a-a9b7-349e79af2326"
+            }
+          ],
+          "reason": "These memories form one sequence showing differing availability by call timing, with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "A brief weekend-evening call with the user’s mother was followed by a forty-minute Saturday-morning call the next week.",
+          "uid": "236458bb-bb97-5a89-a87d-7d3e15dcfed6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4d5713f8-caf5-4e35-92eb-70632cafd745",
+              "memory_uid": "6546d41b-3d5b-5802-a9e7-ac028405e3f2"
+            },
+            {
+              "frame_uid": "4d5713f8-caf5-4e35-92eb-70632cafd745",
+              "memory_uid": "ea6eb9d2-9b01-5330-a4d5-886d4bc6cd85"
+            },
+            {
+              "frame_uid": "4d5713f8-caf5-4e35-92eb-70632cafd745",
+              "memory_uid": "e6f89ded-5687-5c25-8df8-88f288d450c6"
+            }
+          ],
+          "reason": "These memories jointly describe detection, correction, and prospective verification of contact-record accuracy, absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A failed text exposed outdated emergency-contact information, which was updated after confirmation; emergency-contact details should be reconfirmed before use.",
+          "uid": "bd63aa46-2259-5f57-aa82-f48eac7553d4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4d5713f8-caf5-4e35-92eb-70632cafd745",
+              "memory_uid": "12fe7e64-192e-5359-8f96-d2875f7e5399"
+            }
+          ],
+          "reason": "This is a distinct conditional communication preference not supplied by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "For nonurgent contact, the user’s older sister prefers replying by text when available instead of taking an immediate call.",
+          "uid": "08b45182-6ce7-5599-9f00-1a3f4938d7fd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4d5713f8-caf5-4e35-92eb-70632cafd745",
+              "memory_uid": "f9197c33-ff93-5215-a3a5-e4087bea2a0d"
+            }
+          ],
+          "reason": "This reminder-timing preference has no corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "The user considers a reminder one day before an appointment sufficient for rechecking preparation items.",
+          "uid": "d70911f4-6f27-5255-bd8d-68aa5638a562"
+        }
+      ],
+      "reports": {
+        "both": "Questions and preparation instructions were handled more completely when presented in discrete, structured units rather than dense or successive batches.",
+        "compared_only": "The compared frame covers contact-list review and correction, timing of calls with the user’s mother, the sister’s texting preference, emergency-contact verification, and a day-before preparation reminder.",
+        "differences": "",
+        "reference_only": "The reference covers a completed checkup, telephone rescheduling, retained paper instructions, complete calendar details, a sister’s post-visit check-in, and limits on determining follow-up need."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "ad02dc05-ae83-4711-aeab-c56268c19b78"
+    },
+    "analysis_digest": "8d0758079078e1e3ed4e2e2346e48abc3eddab4b33b9686b219399ff0c132ed1",
+    "key": "092b78f0ef668669a10c8d315664d9f95ca617f64579947e604a5cad0f182721",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 51.89084441600062,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "092b78f0ef668669a10c8d315664d9f95ca617f64579947e604a5cad0f182721",
+  "created_at": "2026-08-13T18:38:45.409515Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/04",
+  "pair_key": "89f36a07f8534feb620393a324ec70145f068df3c09670fd3ec5d2b29711428f",
+  "provider_seconds": 51.89084441600062,
+  "right": "task-3/local/personal-memory/2025/02",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

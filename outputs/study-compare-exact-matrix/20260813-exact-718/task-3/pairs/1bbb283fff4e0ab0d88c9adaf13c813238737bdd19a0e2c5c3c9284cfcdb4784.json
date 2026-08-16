@@ -1,0 +1,406 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:43:26.645002+00:00",
+      "frames": [
+        {
+          "context_digest": "4f6b609414f921ca470614699bdac42e9f2932482375026def79956485b0569e",
+          "context_name": "task-3/local/personal-memory/2024/08",
+          "context_uid": "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+          "memories": [
+            {
+              "content": "The user has set a monthly limit in their budget record for spending other than living expenses.",
+              "content_digest": "5c0df9500947f7e044a8755d66d58adccca01db3aed42b43ab9748b8c4f431e9",
+              "position": 0,
+              "uid": "5f80c7ec-e294-5905-abab-91027c9d827b"
+            },
+            {
+              "content": "In a week when the user went grocery shopping and visited the bank separately, they made the same round trip twice.",
+              "content_digest": "4e814adad1a4c201f6348f1c14b14950b5c549bba64bf70cfccd08ca9efc5bd3",
+              "position": 1,
+              "uid": "2428ab2c-37ce-5de1-84dc-abcdfc8ce062"
+            },
+            {
+              "content": "The following week, the user completed both errands in one outing and reduced travel time.",
+              "content_digest": "ad5555ca7daa9d977cfcf5eb4f476eb5730cead6d307c986497716d69f1145b0",
+              "position": 2,
+              "uid": "bf30d1ef-d7cd-5aa3-b65b-ff04aae647e7"
+            },
+            {
+              "content": "When a bill alert arrived on the due date, the user postponed payment until after a meeting.",
+              "content_digest": "c62dda61c680da9ac1fd5ab9124fa05635d20ad9e4bbb7aef36723d289c05102",
+              "position": 3,
+              "uid": "442672e1-2188-5aa3-ad38-5e9c16f25bd5"
+            },
+            {
+              "content": "In a month when the user received an alert three days before the deadline, they finished payment before dinner.",
+              "content_digest": "939ac83da176d5bb1b7e2196402b9faacb962d947b85b9a61c31854867c1e62e",
+              "position": 4,
+              "uid": "c7385cce-ec43-5902-973c-5b8af54c3557"
+            },
+            {
+              "content": "The user collected cash receipts in their wallet and entered all the amounts at once at the end of the month.",
+              "content_digest": "3171a8128ed3855ac9a4c2b542516333fc3728ed1d7260974888b94d0b32c3e6",
+              "position": 5,
+              "uid": "d926c45c-ea49-589c-a7e4-491c9a1514f8"
+            },
+            {
+              "content": "After recording one large expense, the user ate out two fewer times that week.",
+              "content_digest": "af55fd94b01e0ece728347e9349f96b5733c57dae752f9559dc4e08bef7a3320",
+              "position": 6,
+              "uid": "9433523f-8c4e-5424-b370-d325ba5154d1"
+            },
+            {
+              "content": "The user's older sister prefers to settle the jointly paid cost of a meal by electronic transfer rather than cash.",
+              "content_digest": "d84d2ea68add4202e8c421e9c1702c29ca88bd6ae838588bd415fdbd1980cb2b",
+              "position": 7,
+              "uid": "d9531336-ac5f-5ba0-bf26-9c69c854578f"
+            },
+            {
+              "content": "Confirm the amount and account with the user before creating an automatic payment schedule.",
+              "content_digest": "b1d0c16fd880f4ae2657415ddc8fe0f223ccdd931248bb4412a6c95754d4cce1",
+              "position": 8,
+              "uid": "9941d390-8b40-5fee-8bcf-df6f36befcb0"
+            },
+            {
+              "content": "The timing of payment processing and late-payment recording may differ by billing institution.",
+              "content_digest": "203e65e4eb8451ec7551fb166357f107d17b8c89a2341b32fc25a3fb67ec7f98",
+              "position": 9,
+              "uid": "79aea8fd-5d48-50f7-adf6-b7ebe33bfb08"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "488457d9-98f9-4d04-952e-66104cc214cf"
+        },
+        {
+          "context_digest": "df0924e320cd14a29eaed60f78e82fd509c4062949b35706b2a7cb94571fb599",
+          "context_name": "task-3/local/personal-memory/2026/04",
+          "context_uid": "16e860a8-7a90-5b7a-adc3-1c487ef97e03",
+          "memories": [
+            {
+              "content": "The user collects clothes for donation in a large bag beside the entrance.",
+              "content_digest": "39f2f01c59b7fa4ca7529d510e1b0a6ffab6706861042f771cfe97f6f806efac",
+              "position": 0,
+              "uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            },
+            {
+              "content": "After emptying an entire drawer at once, the user could not find a charger they needed.",
+              "content_digest": "674c33ba6475f42b29b03e6f8711e0216f983f3d37fee3dacf9336e3bb4596bf",
+              "position": 1,
+              "uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            },
+            {
+              "content": "During the next organizing session, the user sorted items by type and put only items to be discarded in the bag.",
+              "content_digest": "63104b5a7fd380f818c8758c51f9550c7a7fa41ff91f1dd314225d1824b69643",
+              "position": 2,
+              "uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            },
+            {
+              "content": "Even after photographing unworn clothes, the user did not take them out again for one month.",
+              "content_digest": "519f131096440719dcd3412f4439c5cfe44b7f402684170209708040692dc5fd",
+              "position": 3,
+              "uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            },
+            {
+              "content": "After moving those clothes to the donation bag, the user cleared one closet compartment.",
+              "content_digest": "45db58ae108a299344d982d8606fff26f733252da691cf01417e760909ff6057",
+              "position": 4,
+              "uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            },
+            {
+              "content": "The user nearly discarded an important paper with advertising and checked the recycling box again.",
+              "content_digest": "6bf928f67944656e5f3c68d8869c0cefd039a588f0ba735f94520231ef58017c",
+              "position": 5,
+              "uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            },
+            {
+              "content": "During the next organizing session, the user kept a separate document box and did not mix the papers.",
+              "content_digest": "adac8d4266c6b11e15d29c484665bc5dcc915f9aa319198b6a69d0e7b0131bb3",
+              "position": 6,
+              "uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            },
+            {
+              "content": "The user's mother asks the user to check whether she needs kitchen items in good condition before discarding them.",
+              "content_digest": "0752bc2ac00c0b1301c45ab4c2e73f63c57e6ebc4255dcc1c13330ffda906612",
+              "position": 7,
+              "uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            },
+            {
+              "content": "Confirm with the user before marking a personal document or another person's property as a disposal candidate.",
+              "content_digest": "17062e2cd4738619e81e211cb2f53d14e78c5f4eab9ae49053ce7e06935a7db5",
+              "position": 8,
+              "uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            },
+            {
+              "content": "The local agent cannot determine an object's emotional meaning from frequency of use alone.",
+              "content_digest": "9c86bcfe2b209bf7957dced0eab000b42f97b6a435d705ccaccb15e49be3691d",
+              "position": 9,
+              "uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "64229515-d0ca-4adb-9dbb-01ff882dc428"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate domains: the reference describes budgeting, payments, expense tracking, and travel-efficient errands, while the compared frame describes decluttering, donation handling, document protection, and disposal safeguards. No claims govern the same operational decision, and no conflict or ambiguity is present.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "488457d9-98f9-4d04-952e-66104cc214cf",
+              "memory_uid": "5f80c7ec-e294-5905-abab-91027c9d827b"
+            }
+          ],
+          "reason": "This is independently useful budgeting information with no counterpart governing the same decision in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user has a monthly limit for spending outside living expenses.",
+          "uid": "7f493dae-0924-57fa-af64-2e84887b74a8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "488457d9-98f9-4d04-952e-66104cc214cf",
+              "memory_uid": "2428ab2c-37ce-5de1-84dc-abcdfc8ce062"
+            },
+            {
+              "frame_uid": "488457d9-98f9-4d04-952e-66104cc214cf",
+              "memory_uid": "bf30d1ef-d7cd-5aa3-b65b-ff04aae647e7"
+            }
+          ],
+          "reason": "These observations jointly express one travel-efficiency lesson that has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Combining grocery and banking errands into one outing reduced travel compared with making the same round trip separately.",
+          "uid": "48f1296c-96d0-5476-ae0c-578b0c2c752d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "488457d9-98f9-4d04-952e-66104cc214cf",
+              "memory_uid": "442672e1-2188-5aa3-ad38-5e9c16f25bd5"
+            },
+            {
+              "frame_uid": "488457d9-98f9-4d04-952e-66104cc214cf",
+              "memory_uid": "c7385cce-ec43-5902-973c-5b8af54c3557"
+            }
+          ],
+          "reason": "These examples jointly describe how alert lead time affected payment behavior, a claim absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "An earlier bill alert was associated with prompt payment, whereas a due-date alert was followed by postponement.",
+          "uid": "3c609d4c-a2c8-5f6e-968d-04d6151c8ff1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "488457d9-98f9-4d04-952e-66104cc214cf",
+              "memory_uid": "d926c45c-ea49-589c-a7e4-491c9a1514f8"
+            }
+          ],
+          "reason": "This expense-recording practice has no operational counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user stores cash receipts and enters their amounts together at month end.",
+          "uid": "d02622e4-7380-54fa-8770-f5d8dae896fe"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "488457d9-98f9-4d04-952e-66104cc214cf",
+              "memory_uid": "9433523f-8c4e-5424-b370-d325ba5154d1"
+            }
+          ],
+          "reason": "This spending-feedback observation is independently useful and unmatched in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Recording a large expense was followed by eating out less that week.",
+          "uid": "18d385d5-b37d-538a-befd-4e31e463b3ef"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "488457d9-98f9-4d04-952e-66104cc214cf",
+              "memory_uid": "d9531336-ac5f-5ba0-bf26-9c69c854578f"
+            }
+          ],
+          "reason": "This reimbursement preference has no counterpart concerning the same payment decision in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s older sister prefers electronic transfer over cash when settling a jointly paid meal.",
+          "uid": "d6b384d9-9fdf-5369-a2f2-8cf71ec4e2b8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "488457d9-98f9-4d04-952e-66104cc214cf",
+              "memory_uid": "9941d390-8b40-5fee-8bcf-df6f36befcb0"
+            }
+          ],
+          "reason": "This authorization safeguard concerns automatic payments, not the compared frame’s distinct disposal decisions.",
+          "status": "RESOLVED",
+          "summary": "The amount and account should be confirmed with the user before an automatic payment schedule is created.",
+          "uid": "2a1da562-0084-560c-9141-374d758a94d8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "488457d9-98f9-4d04-952e-66104cc214cf",
+              "memory_uid": "79aea8fd-5d48-50f7-adf6-b7ebe33bfb08"
+            }
+          ],
+          "reason": "This billing caveat is independently useful and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Payment-processing and late-recording timing may vary across billing institutions.",
+          "uid": "25e7f3da-a4de-5479-8197-1b77bfa178bf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "64229515-d0ca-4adb-9dbb-01ff882dc428",
+              "memory_uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            }
+          ],
+          "reason": "This donation-storage habit has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user collects donation clothes in a large bag beside the entrance.",
+          "uid": "3829c230-30f1-57ce-b89c-d89e23ecefaf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "64229515-d0ca-4adb-9dbb-01ff882dc428",
+              "memory_uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            },
+            {
+              "frame_uid": "64229515-d0ca-4adb-9dbb-01ff882dc428",
+              "memory_uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            }
+          ],
+          "reason": "These observations jointly describe a safer organizing method prompted by an earlier retrieval problem, with no reference-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "After losing track of a needed charger during wholesale drawer emptying, the user adopted type-based sorting and bagged only discard items.",
+          "uid": "e93f1493-fbb8-562f-9b0a-a194826de595"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "64229515-d0ca-4adb-9dbb-01ff882dc428",
+              "memory_uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            },
+            {
+              "frame_uid": "64229515-d0ca-4adb-9dbb-01ff882dc428",
+              "memory_uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            }
+          ],
+          "reason": "These observations jointly contrast passive documentation with physical removal in a decluttering workflow absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Photographing unworn clothes did not prompt action for a month, but moving them into the donation bag cleared closet space.",
+          "uid": "e907d8bd-f857-5202-9d8e-f720c18833bf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "64229515-d0ca-4adb-9dbb-01ff882dc428",
+              "memory_uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            },
+            {
+              "frame_uid": "64229515-d0ca-4adb-9dbb-01ff882dc428",
+              "memory_uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            }
+          ],
+          "reason": "These observations jointly express a document-protection practice prompted by a near mistake, with no reference-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "After nearly recycling an important paper with advertising, the user kept documents in a separate box during the next organizing session.",
+          "uid": "46f5f50d-6737-549a-80c1-490c31f246d1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "64229515-d0ca-4adb-9dbb-01ff882dc428",
+              "memory_uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            }
+          ],
+          "reason": "This family-specific preference concerning usable goods has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s mother wants to be asked whether she needs usable kitchen items before they are discarded.",
+          "uid": "b07aab2d-9680-578a-9529-f3fef50dc6ab"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "64229515-d0ca-4adb-9dbb-01ff882dc428",
+              "memory_uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            }
+          ],
+          "reason": "This authorization safeguard concerns sensitive disposal choices, not the reference frame’s distinct automatic-payment decision.",
+          "status": "RESOLVED",
+          "summary": "The user should confirm before a personal document or another person’s property is marked for disposal.",
+          "uid": "9cb947dc-5c26-5461-9b93-6251b872008c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "64229515-d0ca-4adb-9dbb-01ff882dc428",
+              "memory_uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "reason": "This limitation on interpreting possessions is independently useful and unmatched in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Frequency of use alone does not let the local agent determine an object’s emotional meaning.",
+          "uid": "e6d7c3cb-6c0e-5c1a-899b-dddb23bcfa93"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers donation storage, safer staged sorting, moving unused clothes, protecting documents, checking family interest in usable items, confirming sensitive disposal choices, and limits on inferring emotional value.",
+        "differences": "",
+        "reference_only": "The reference covers a discretionary-spending limit, consolidated errands, bill-alert timing, receipt entry, spending feedback, a relative’s reimbursement preference, automatic-payment confirmation, and institution-dependent payment timing."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "d092210d-77f1-4b59-a55c-159da1e02a3b"
+    },
+    "analysis_digest": "3b9e7c3006b0013e541ee55e363f0bd9c0f498ecc439d24d88b9c4a17024fbac",
+    "key": "454d199b59c6f5f283380964e46213bc7f8080b9658ae5eb21c268251abed705",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 50.728921750000154,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "454d199b59c6f5f283380964e46213bc7f8080b9658ae5eb21c268251abed705",
+  "created_at": "2026-08-13T18:44:17.373396Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/08",
+  "pair_key": "1bbb283fff4e0ab0d88c9adaf13c813238737bdd19a0e2c5c3c9284cfcdb4784",
+  "provider_seconds": 50.728921750000154,
+  "right": "task-3/local/personal-memory/2026/04",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

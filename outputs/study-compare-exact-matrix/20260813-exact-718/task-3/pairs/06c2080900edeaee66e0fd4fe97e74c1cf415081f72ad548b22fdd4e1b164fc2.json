@@ -1,0 +1,379 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:39:24.968090+00:00",
+      "frames": [
+        {
+          "context_digest": "3f1b018c2a3a8594d00bffba053626a876fef4893e678dd9600986d9d41c0f31",
+          "context_name": "task-3/local/personal-memory/2024/05",
+          "context_uid": "683986e6-d517-5a53-9dc1-16b69cf0d12e",
+          "memories": [
+            {
+              "content": "The user keeps a small table fan beside the bedroom window.",
+              "content_digest": "b8a464f5e2a33edcef1259af4a412b047ba190bae9cfe42aaf1dbd722efc7f0c",
+              "position": 0,
+              "uid": "3088c235-435c-52ee-9ffc-26cf85ec196e"
+            },
+            {
+              "content": "On a day the user drank coffee late in the afternoon, they could not fall asleep until dawn.",
+              "content_digest": "ef4cf019ebc163fc24f03b8bd505599cd13fc83f33565d51ffb4379dc21d72b8",
+              "position": 1,
+              "uid": "7811ed66-2f22-54d8-a215-62a843264ba5"
+            },
+            {
+              "content": "On a day the user drank coffee before 2 p.m., they fell asleep at their usual time.",
+              "content_digest": "046ac3f8454da623f73d1293fb954b72a3ea056642fd9ee7948c35f110e77669",
+              "position": 2,
+              "uid": "d0f94a56-5cf8-5215-9cfa-5993b3b781be"
+            },
+            {
+              "content": "On a tired day, the user ate dinner out and postponed even washing the dishes after returning home.",
+              "content_digest": "ac36f6c1039dc74f764b4671f718f1e124823dc75fd45abda010285523280b71",
+              "position": 3,
+              "uid": "fc19394a-6634-5aae-bfa5-bba91e707954"
+            },
+            {
+              "content": "In the same week, on a day the user made simple noodles at home, they rested immediately after the meal.",
+              "content_digest": "45bb543f6c6ca213b856683b3c53448ac0d044bcf24f694eda292d6c4923ac5c",
+              "position": 4,
+              "uid": "be7aa7f3-1b67-5677-950d-9942ca337a99"
+            },
+            {
+              "content": "On a night the window was left open, street noise woke the user twice.",
+              "content_digest": "13f3dd86b869b25ee75e1b80d9cdb890b79434fa976fbd7246e89ba808f1a6c6",
+              "position": 5,
+              "uid": "47faaefd-2d60-5693-9847-2c1d5d2f9092"
+            },
+            {
+              "content": "On a night the table fan was running, the user was not too warm even with the window closed.",
+              "content_digest": "96ce23df1cf4f913e3b4c339cc3a857a6a8776e3f3f48e865eae65f02297bba8",
+              "position": 6,
+              "uid": "d6eea310-1313-5a51-b032-f3f518620610"
+            },
+            {
+              "content": "The user's father prefers to have coffee available after dinner and believes it will not cause a sleep problem.",
+              "content_digest": "197616278309e370f0d0e633700b1bde2c6e4395dbc8ed2b942e14fb6c1c9cc5",
+              "position": 7,
+              "uid": "056defa1-8256-561d-a2b4-a70df4058c33"
+            },
+            {
+              "content": "When making a sleep-related suggestion, do not treat one or two records as a general lifestyle habit.",
+              "content_digest": "963795e89a1e2365dd81abf463fb9a80c1c22b9c0e59b121681f89c09860e583",
+              "position": 8,
+              "uid": "7cecee60-fabd-55a3-998b-78810bd9eaf4"
+            },
+            {
+              "content": "The user tends to go to bed much later after drinking coffee late in the afternoon.",
+              "content_digest": "e54652939c104807d5c501753f85aee97883cc55e1d056787b86857cd5b8292d",
+              "position": 9,
+              "uid": "9ace13d3-d881-5720-bfd5-f7884db67756"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "9345e226-4992-4326-a4f0-fc8a912e06f1"
+        },
+        {
+          "context_digest": "07c43eb0b8ecd9107f1d879a409b45289e236f48f620ff85f1d30ce594809149",
+          "context_name": "task-3/local/personal-memory/2025/09",
+          "context_uid": "5cd8ed5f-2f1f-5deb-8347-fc3bfa484d99",
+          "memories": [
+            {
+              "content": "The user keeps the book they are reading and a note-taking notebook on a small living-room desk.",
+              "content_digest": "d2c70cf4c27fe62f5915f2f5c669484c4a875e4ee21f8d7d89a5ff6746f14cf1",
+              "position": 0,
+              "uid": "3d3f7960-daf5-5a51-98b3-14261c5aa66c"
+            },
+            {
+              "content": "While reading in the living room with the television on, the user read the same paragraph three times.",
+              "content_digest": "00e41e6d5fe1dcfe961fa0f739860823ecf338dc55d5b9beea265ca823974582",
+              "position": 1,
+              "uid": "28714a4e-bc14-5703-b594-126471ae0585"
+            },
+            {
+              "content": "The next day, after turning off the television, the user read 40 pages without interruption.",
+              "content_digest": "c28ba9c872757b6683ab03d73e6ad61f71484d55986aae4c0976862a85e3a8b1",
+              "position": 2,
+              "uid": "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df"
+            },
+            {
+              "content": "On a day the phone was on the desk, the user stopped taking notes each time they checked a notification.",
+              "content_digest": "f95cb8b1b8abe89d7bf597ca5fb78f0862fe97a7cf0d8bc5a46c04026ebd6889",
+              "position": 3,
+              "uid": "1b1c9f90-2561-53d5-88fe-d54618450143"
+            },
+            {
+              "content": "During the next reading period, the user left the phone in another room and did not check it for an hour.",
+              "content_digest": "89dc50732e19b88a77657b285ce71c399d229b510265cc9adfbdf6ad706680cd",
+              "position": 4,
+              "uid": "076a7caa-5dcf-5f9d-8bee-efc952652efa"
+            },
+            {
+              "content": "A note attached to a paper book fell out, and the user had to find their place again.",
+              "content_digest": "723e48ceeba6c94e627c79af0518c811cfc8337f9eeae3a80ae388ec98786994",
+              "position": 5,
+              "uid": "1dad71ec-6a5d-550e-89d2-a86dc3dacb11"
+            },
+            {
+              "content": "With the next book, the user recorded the page number in the notebook and resumed reading immediately.",
+              "content_digest": "c74c2f80bf403da64f0a6de97ff04bc1f41cf68d0d33829fa926cc2549e8ea75",
+              "position": 6,
+              "uid": "58494743-fc7f-59e9-8e17-80b8a644470a"
+            },
+            {
+              "content": "The user's father expects that lowering the television volume while the user reads will make it easier for the user to concentrate.",
+              "content_digest": "281b1f8f55f8d22fbebdb2220405dc3e2300e29e0a568c1fac36d4bb1c39c186",
+              "position": 7,
+              "uid": "cce66589-892c-5d73-bdbc-2c6e94e0992e"
+            },
+            {
+              "content": "The local agent can summarize past reading environments and interruption records but cannot predict the next reading time.",
+              "content_digest": "50e5376e22f503048a7f1bf4055bfb31cb4aa3c75b1c816f2febce913716eb58",
+              "position": 8,
+              "uid": "20b2a27f-908f-5ed7-a288-f7c1030674fc"
+            },
+            {
+              "content": "The user feels that repeated notifications interrupt their flow of concentration.",
+              "content_digest": "d777b2a01cfac23e6ef7701c04c33592f8382fa78f8e307bae9ddbffc9a8e2ef",
+              "position": 9,
+              "uid": "310f4cfc-b117-5511-8e13-2bd2ebec9fe5"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "e0407143-68c5-4963-8292-afca6efe76df"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate practical areas: the reference describes sleep, caffeine, evening effort, and bedroom conditions, while the compared frame describes reading concentration, interruptions, place-keeping, and agent limits. Neither frame supplies a scope-aligned claim that substantively overlaps or contradicts the other.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9345e226-4992-4326-a4f0-fc8a912e06f1",
+              "memory_uid": "3088c235-435c-52ee-9ffc-26cf85ec196e"
+            },
+            {
+              "frame_uid": "9345e226-4992-4326-a4f0-fc8a912e06f1",
+              "memory_uid": "47faaefd-2d60-5693-9847-2c1d5d2f9092"
+            },
+            {
+              "frame_uid": "9345e226-4992-4326-a4f0-fc8a912e06f1",
+              "memory_uid": "d6eea310-1313-5a51-b032-f3f518620610"
+            }
+          ],
+          "reason": "These reference-side details jointly describe one bedroom cooling-and-noise tradeoff and have no substantive counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The bedroom window and table fan define a cooling arrangement in which an open window admitted disruptive street noise, while the fan maintained comfort with the window closed.",
+          "uid": "74d84bc8-d7bd-56b1-9bad-9aee7df49088"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9345e226-4992-4326-a4f0-fc8a912e06f1",
+              "memory_uid": "7811ed66-2f22-54d8-a215-62a843264ba5"
+            },
+            {
+              "frame_uid": "9345e226-4992-4326-a4f0-fc8a912e06f1",
+              "memory_uid": "9ace13d3-d881-5720-bfd5-f7884db67756"
+            }
+          ],
+          "reason": "The reference memories provide an episode and a broader tendency expressing the same one-sided caffeine-timing claim; the compared frame does not address it.",
+          "status": "RESOLVED",
+          "summary": "Late-afternoon coffee is associated with substantially delayed sleep for the user.",
+          "uid": "cc4d8db4-2417-5665-889d-9f09cee6720d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9345e226-4992-4326-a4f0-fc8a912e06f1",
+              "memory_uid": "d0f94a56-5cf8-5215-9cfa-5993b3b781be"
+            }
+          ],
+          "reason": "This explicitly conditioned observation is independently useful and has no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Coffee consumed before 2 p.m. was followed by sleep at the user's usual time on the recorded day.",
+          "uid": "d0cb1e5e-8eaf-5c46-8c4b-f148ab68266c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9345e226-4992-4326-a4f0-fc8a912e06f1",
+              "memory_uid": "fc19394a-6634-5aae-bfa5-bba91e707954"
+            }
+          ],
+          "reason": "This is a one-sided observation about fatigue and postponed chores, not a claim addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "After eating dinner out on a tired day, the user deferred even washing dishes upon returning home.",
+          "uid": "33cb215d-aea8-56b7-bf8d-ad96cbf9a13d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9345e226-4992-4326-a4f0-fc8a912e06f1",
+              "memory_uid": "be7aa7f3-1b67-5677-950d-9942ca337a99"
+            }
+          ],
+          "reason": "This is an independent one-sided observation about a simple home meal and immediate rest, with no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "After making simple noodles at home, the user rested immediately after eating.",
+          "uid": "643484d7-916a-5f81-bd19-991deeb50bb7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9345e226-4992-4326-a4f0-fc8a912e06f1",
+              "memory_uid": "056defa1-8256-561d-a2b4-a70df4058c33"
+            }
+          ],
+          "reason": "This family preference and belief is supplied only by the reference frame and concerns a distinct caffeine decision.",
+          "status": "RESOLVED",
+          "summary": "The user's father wants coffee available after dinner and believes it will not impair sleep.",
+          "uid": "06f34468-a22f-5c49-88fa-00f0ea737c51"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9345e226-4992-4326-a4f0-fc8a912e06f1",
+              "memory_uid": "7cecee60-fabd-55a3-998b-78810bd9eaf4"
+            }
+          ],
+          "reason": "This reference-only evidentiary constraint governs inference from sparse sleep records and is not matched by the compared frame's different capability statement.",
+          "status": "RESOLVED",
+          "summary": "Sleep-related suggestions should not convert one or two observations into a general lifestyle habit.",
+          "uid": "7e2ffca4-a9ee-5265-ad4b-c289419381bb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e0407143-68c5-4963-8292-afca6efe76df",
+              "memory_uid": "3d3f7960-daf5-5a51-98b3-14261c5aa66c"
+            }
+          ],
+          "reason": "This reading-workspace arrangement appears only in the compared frame and does not overlap the bedroom setup.",
+          "status": "RESOLVED",
+          "summary": "The user keeps their current book and a note-taking notebook on a small living-room desk.",
+          "uid": "ef91f89d-f407-519d-b0d6-1ee4759cb06d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e0407143-68c5-4963-8292-afca6efe76df",
+              "memory_uid": "28714a4e-bc14-5703-b594-126471ae0585"
+            },
+            {
+              "frame_uid": "e0407143-68c5-4963-8292-afca6efe76df",
+              "memory_uid": "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df"
+            },
+            {
+              "frame_uid": "e0407143-68c5-4963-8292-afca6efe76df",
+              "memory_uid": "cce66589-892c-5d73-bdbc-2c6e94e0992e"
+            }
+          ],
+          "reason": "The compared memories split one underlying television-and-reading claim across observed outcomes and the father's consistent expectation; the reference frame does not address reading distractions.",
+          "status": "RESOLVED",
+          "summary": "Television sound is associated with poorer reading concentration, while removing or reducing it is associated with easier, more sustained reading.",
+          "uid": "835a7b4b-a126-52de-9e7a-830142b1b6c1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e0407143-68c5-4963-8292-afca6efe76df",
+              "memory_uid": "1b1c9f90-2561-53d5-88fe-d54618450143"
+            },
+            {
+              "frame_uid": "e0407143-68c5-4963-8292-afca6efe76df",
+              "memory_uid": "076a7caa-5dcf-5f9d-8bee-efc952652efa"
+            },
+            {
+              "frame_uid": "e0407143-68c5-4963-8292-afca6efe76df",
+              "memory_uid": "310f4cfc-b117-5511-8e13-2bd2ebec9fe5"
+            }
+          ],
+          "reason": "These compared-side observations and the user's stated experience express one underlying notification-distraction claim with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Phone notifications interrupt the user's concentration and note-taking, while leaving the phone elsewhere supports an uninterrupted reading period.",
+          "uid": "97d627b6-e675-5419-af7e-a7d68d72b918"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e0407143-68c5-4963-8292-afca6efe76df",
+              "memory_uid": "1dad71ec-6a5d-550e-89d2-a86dc3dacb11"
+            },
+            {
+              "frame_uid": "e0407143-68c5-4963-8292-afca6efe76df",
+              "memory_uid": "58494743-fc7f-59e9-8e17-80b8a644470a"
+            }
+          ],
+          "reason": "The two compared memories form one contrast about reliable reading place-keeping, a subject absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A loose paper note failed as a place marker, whereas recording the page number in a notebook enabled immediate resumption.",
+          "uid": "2b58f763-bfba-56df-bdc7-5d957e1e1de2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e0407143-68c5-4963-8292-afca6efe76df",
+              "memory_uid": "20b2a27f-908f-5ed7-a288-f7c1030674fc"
+            }
+          ],
+          "reason": "This is a compared-only capability boundary concerning reading records, distinct from the reference frame's policy against generalizing sparse sleep observations.",
+          "status": "RESOLVED",
+          "summary": "The local agent can summarize recorded reading environments and interruptions but cannot predict the next reading time.",
+          "uid": "5574e863-b23b-5a0d-8074-cf5ec5e6b3c2"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only content covers the reading setup, television and notification distractions, reliable place-keeping, a family belief about television volume, and limits on summarizing versus predicting reading activity.",
+        "differences": "",
+        "reference_only": "Reference-only content covers bedroom cooling and noise, coffee timing and sleep, post-dinner effort, a family coffee belief, and caution against generalizing from sparse sleep records."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "1739cbda-9347-4fd5-80e2-e3b108498208"
+    },
+    "analysis_digest": "5580535eb2dc7d527195976913d9a920fbb4070f1bea106d7bc61e3e93a72e5a",
+    "key": "16150b3aeb2ccf2391b69fa2011265ed0f8fffadafe6b4a3f452f96d47ea8072",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 49.39999645900025,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "16150b3aeb2ccf2391b69fa2011265ed0f8fffadafe6b4a3f452f96d47ea8072",
+  "created_at": "2026-08-13T18:40:14.367558Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/05",
+  "pair_key": "06c2080900edeaee66e0fd4fe97e74c1cf415081f72ad548b22fdd4e1b164fc2",
+  "provider_seconds": 49.39999645900025,
+  "right": "task-3/local/personal-memory/2025/09",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

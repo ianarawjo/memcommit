@@ -1,0 +1,397 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:34:26.624630+00:00",
+      "frames": [
+        {
+          "context_digest": "2f00e067f4f35600b73e87b5555d405e2801a33ba18a54c91e63e23a79f27a4c",
+          "context_name": "task-3/local/personal-memory/2024/01",
+          "context_uid": "cbd2e4d6-2601-5d3f-8bf2-2f66b755b007",
+          "memories": [
+            {
+              "content": "The user's mother's birthday falls in the third week of January.",
+              "content_digest": "d635ded9b470acdd462156515700e66c23dcb513a7034bb365be0ac139ec0422",
+              "position": 0,
+              "uid": "2cd0229d-b7f1-581b-8019-25bdb485afd9"
+            },
+            {
+              "content": "At the user's last family meal out, noise from the next table made conversation nearly impossible.",
+              "content_digest": "dc337d32e4b09167289e19a6b1c8fe970e7eaa6fdd6868ed1c7c300e018fcd15",
+              "position": 1,
+              "uid": "c62f1669-11c9-5a81-b5f5-304acce69c23"
+            },
+            {
+              "content": "At a barbecue at home in the same month, the user was comfortable because no one had to raise their voice.",
+              "content_digest": "63763b293a491200bf1f7a251467c1fa8c2cb8d4d8450732c01666dcdea183e3",
+              "position": 2,
+              "uid": "674f4bdf-27c3-5870-a68e-91e4a093dd93"
+            },
+            {
+              "content": "During their mother's birthday meal, the user left a restaurant with loud music after 30 minutes.",
+              "content_digest": "560755c6f051ec6f85e32dc4ee9447dfc97418fca6f9f414f6910c518a52c2c0",
+              "position": 3,
+              "uid": "21509788-2e3d-548b-8303-f34cfea68c9b"
+            },
+            {
+              "content": "When discussing postponed matters with family, the user prefers a quiet, one-on-one dining environment.",
+              "content_digest": "f22bedcf60a64b3666a7e4363d6a55c48547535492010fcb205a182c1ee920a8",
+              "position": 4,
+              "uid": "74eaea9d-7640-51ba-aa77-9c050581dc46"
+            },
+            {
+              "content": "At a large banquet hall reserved by their older sister, the user remembered the surrounding noise more than the food.",
+              "content_digest": "566e443c69410f1672ab209ba2257604e373cd305ab27243a39574481407af71",
+              "position": 5,
+              "uid": "1384df1d-2173-5673-96f5-a4d86835d404"
+            },
+            {
+              "content": "On a day the user ate grilled food at home with their younger brother, conversation was easy to continue, so the user stayed another hour after the meal.",
+              "content_digest": "c93ccbe3524946f1def05a1b385fbe3387945f51164b00c56f1ff80b477d011f",
+              "position": 6,
+              "uid": "3cf68c8e-5da9-51d3-a402-c10f4137b1f4"
+            },
+            {
+              "content": "The user's mother considers having the whole family eat at the same time more important than receiving a birthday gift.",
+              "content_digest": "d302cf7db2b83b103ea11323ab1b9d36168d224b405d4d0dd51b46b494014291",
+              "position": 7,
+              "uid": "a1984768-d20d-59cd-84c9-cb08c6b7affb"
+            },
+            {
+              "content": "When proposing a birthday meal for the user's mother, check the schedule and attendees; if conversation is the purpose, first consider a low-noise location, then confirm the final choice with the user.",
+              "content_digest": "481169c62cf6fae6b4f29184ffacef9c3c9d825a34d1545ca592bc35537bc65c",
+              "position": 8,
+              "uid": "f52d11e2-2449-5c9d-887b-96c8b5cd0184"
+            },
+            {
+              "content": "The local agent can compare past dining environments and the user's responses, but those records alone cannot determine the location of the next gathering.",
+              "content_digest": "b05fef8420abe3c47c2cd9f2de9149c9c6bda7dca301f09ac7f94eac1a29d2fa",
+              "position": 9,
+              "uid": "c8fccfbe-7756-5d62-9cd7-403dd6741915"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "677db778-2c3d-495a-8c4f-ed78631ad496"
+        },
+        {
+          "context_digest": "a2ea3c6aa8c1680fcf9a7dd71d0dbff822c6af5493b34b79022f5e740bb35259",
+          "context_name": "task-3/local/personal-memory/2025/07",
+          "context_uid": "5c264a7f-0300-587c-ad1c-0439cedc7737",
+          "memories": [
+            {
+              "content": "The user keeps a travel power bank in the first drawer beneath the desk.",
+              "content_digest": "deb13f4eae5e32bc035da0558fa1b290f4bac0dfa5ca350d5abd0456af07ab7f",
+              "position": 0,
+              "uid": "447bfd8d-1490-5404-a2b4-13b4587e6aba"
+            },
+            {
+              "content": "The user packed three pairs of shoes for a two-night trip but wore only one pair.",
+              "content_digest": "097601b179049e1c4dd6b20a2fe2703ffb0d4a89d5ae15a763d339b989da50d8",
+              "position": 1,
+              "uid": "3ab0326a-a006-51ea-9348-7ada19a23bce"
+            },
+            {
+              "content": "For the next two-night trip, the user packed only one pair of walking shoes and reduced the bag's weight.",
+              "content_digest": "afd02b05250a60ad461e01132a94f0105d419521803082d1057205a2bc9a92ad",
+              "position": 2,
+              "uid": "ef467ab6-8ba6-5f81-8f12-578ec1824e09"
+            },
+            {
+              "content": "On a trip when the user forgot a charging cable, they bought a new one after arrival.",
+              "content_digest": "bbe1ac80a2311e0e631446b811d799494dc5ca4db408fc63d1cb09a01e2cd105",
+              "position": 3,
+              "uid": "aa4defc3-2b65-5688-accb-aaa49f2430b6"
+            },
+            {
+              "content": "Before the next trip, the user checked charging items against a photo and packed all of them.",
+              "content_digest": "cc2663db793bec80657023ccd545add403ec7dcc6dc39da4d03a95b5a9f65ff9",
+              "position": 4,
+              "uid": "2d937b4b-d73d-5382-abbe-3cd4e596b3a5"
+            },
+            {
+              "content": "The user packed toiletries on the departure day and arrived 15 minutes late at the meeting place.",
+              "content_digest": "1f5f7eb4cf651ee44244315e52de31cbd7bffe70489315bda287d1ca3cb9a8d4",
+              "position": 5,
+              "uid": "0be8b327-0a06-5241-b98d-daa6b0a4aa50"
+            },
+            {
+              "content": "The next time, the user closed the bag the night before and departed on time.",
+              "content_digest": "61f6c02e4637501f5ad9b1a9f668e298e566558a3d9e611a8b521c17256513b7",
+              "position": 6,
+              "uid": "90059fcc-436d-5453-98f0-a9b23a08faf1"
+            },
+            {
+              "content": "The user's older sister considers it safer to pack an extra cable even for a short trip to avoid charging problems.",
+              "content_digest": "f06b38b34e0f27bc01d8a79733173673d37a209e8619ad3df816a73718ffd89f",
+              "position": 7,
+              "uid": "12ef03f9-8cda-5ed7-be83-891b4702f872"
+            },
+            {
+              "content": "When creating a travel preparation list, confirm the trip length and actual activities with the user.",
+              "content_digest": "f34a0a341cd8ce9c641c16b780c4e53ccae4b6dca2c8f176be7579f5b0115654",
+              "position": 8,
+              "uid": "54136935-a460-573d-ac40-f5edb0ca7e6c"
+            },
+            {
+              "content": "The local agent cannot establish what the next trip requires from the luggage used on the previous trip alone.",
+              "content_digest": "4accbe60aa4e53ff75a18cc0291a870f106ac69a10a2cff96147c2dbd74892e3",
+              "position": 9,
+              "uid": "029c0777-bdbb-5d48-9309-1b1e6c7d88f4"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "04415d9d-a7d8-4a9b-8070-aa0a06dfdb63"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate practical domains: the reference concerns the mother’s birthday and conversation-friendly family dining, while the compared frame concerns travel packing and punctual preparation. Each contributes independently useful information, with no shared operational decision, scope-qualified difference, ambiguity, or conflict.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "677db778-2c3d-495a-8c4f-ed78631ad496",
+              "memory_uid": "2cd0229d-b7f1-581b-8019-25bdb485afd9"
+            }
+          ],
+          "reason": "This is independently useful calendar context with no counterpart concerning the mother’s birthday in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s mother’s birthday occurs in the third week of January.",
+          "uid": "6c79ab26-c4d1-5211-b777-ab41adb0873a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "677db778-2c3d-495a-8c4f-ed78631ad496",
+              "memory_uid": "c62f1669-11c9-5a81-b5f5-304acce69c23"
+            },
+            {
+              "frame_uid": "677db778-2c3d-495a-8c4f-ed78631ad496",
+              "memory_uid": "21509788-2e3d-548b-8303-f34cfea68c9b"
+            },
+            {
+              "frame_uid": "677db778-2c3d-495a-8c4f-ed78631ad496",
+              "memory_uid": "1384df1d-2173-5673-96f5-a4d86835d404"
+            }
+          ],
+          "reason": "Each memory supplies an instance of disruptive dining noise, while the compared frame contains no dining-environment claim.",
+          "status": "RESOLVED",
+          "summary": "Noise in restaurant and banquet settings significantly impaired the user’s conversation or overall experience.",
+          "uid": "a03dde13-270a-5d9e-9bfe-b55d3a838433"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "677db778-2c3d-495a-8c4f-ed78631ad496",
+              "memory_uid": "674f4bdf-27c3-5870-a68e-91e4a093dd93"
+            },
+            {
+              "frame_uid": "677db778-2c3d-495a-8c4f-ed78631ad496",
+              "memory_uid": "3cf68c8e-5da9-51d3-a402-c10f4137b1f4"
+            }
+          ],
+          "reason": "Both memories provide positive evidence about low-noise home dining, a subject absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Quiet grilled meals at home supported comfortable, extended conversation for the user.",
+          "uid": "b9069b71-242f-5c34-9c06-29585b0d4fc5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "677db778-2c3d-495a-8c4f-ed78631ad496",
+              "memory_uid": "74eaea9d-7640-51ba-aa77-9c050581dc46"
+            }
+          ],
+          "reason": "This is a specific family-conversation preference with no corresponding travel-preparation claim.",
+          "status": "RESOLVED",
+          "summary": "For postponed family discussions, the user prefers quiet, one-on-one dining.",
+          "uid": "aed16012-a576-5d49-b694-ec48c359af1d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "677db778-2c3d-495a-8c4f-ed78631ad496",
+              "memory_uid": "a1984768-d20d-59cd-84c9-cb08c6b7affb"
+            }
+          ],
+          "reason": "This family birthday priority is independently useful and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s mother values having the whole family eat together over receiving a birthday gift.",
+          "uid": "a7ac3ee9-4fb0-58e8-b37d-dd0eea9198d2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "677db778-2c3d-495a-8c4f-ed78631ad496",
+              "memory_uid": "f52d11e2-2449-5c9d-887b-96c8b5cd0184"
+            }
+          ],
+          "reason": "This governs selection of a family gathering location, not the travel-list decision addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Birthday-meal proposals should account for schedules and attendees, prioritize low noise when conversation matters, and be confirmed with the user.",
+          "uid": "2d9b5295-134f-5306-879b-155c07d2cb46"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "677db778-2c3d-495a-8c4f-ed78631ad496",
+              "memory_uid": "c8fccfbe-7756-5d62-9cd7-403dd6741915"
+            }
+          ],
+          "reason": "This epistemic limit is specifically about choosing a gathering location and does not govern the compared frame’s travel requirements.",
+          "status": "RESOLVED",
+          "summary": "Past dining responses can inform comparison but cannot alone determine the next gathering location.",
+          "uid": "6b410779-7b87-560e-98f0-d4b24d1b7a19"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "04415d9d-a7d8-4a9b-8070-aa0a06dfdb63",
+              "memory_uid": "447bfd8d-1490-5404-a2b4-13b4587e6aba"
+            }
+          ],
+          "reason": "This storage-location fact has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user stores a travel power bank in the first drawer beneath the desk.",
+          "uid": "946342ff-c18c-5688-a34d-bf064c3d6c6c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "04415d9d-a7d8-4a9b-8070-aa0a06dfdb63",
+              "memory_uid": "3ab0326a-a006-51ea-9348-7ada19a23bce"
+            },
+            {
+              "frame_uid": "04415d9d-a7d8-4a9b-8070-aa0a06dfdb63",
+              "memory_uid": "ef467ab6-8ba6-5f81-8f12-578ec1824e09"
+            }
+          ],
+          "reason": "The memories jointly describe a footwear-packing adjustment, while the reference frame contains no travel-packing claim.",
+          "status": "RESOLVED",
+          "summary": "After overpacking shoes for a short trip, the user used one walking pair on the next such trip and reduced bag weight.",
+          "uid": "c6680999-6b5b-5d48-a97d-c4ba71305311"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "04415d9d-a7d8-4a9b-8070-aa0a06dfdb63",
+              "memory_uid": "aa4defc3-2b65-5688-accb-aaa49f2430b6"
+            },
+            {
+              "frame_uid": "04415d9d-a7d8-4a9b-8070-aa0a06dfdb63",
+              "memory_uid": "2d937b4b-d73d-5382-abbe-3cd4e596b3a5"
+            }
+          ],
+          "reason": "The memories jointly describe a corrective charging-item routine absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "After forgetting a charging cable, the user used a photo-based check and successfully packed all charging items for the next trip.",
+          "uid": "4407e9af-50c4-508d-81f3-02a4cff0dae2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "04415d9d-a7d8-4a9b-8070-aa0a06dfdb63",
+              "memory_uid": "0be8b327-0a06-5241-b98d-daa6b0a4aa50"
+            },
+            {
+              "frame_uid": "04415d9d-a7d8-4a9b-8070-aa0a06dfdb63",
+              "memory_uid": "90059fcc-436d-5453-98f0-a9b23a08faf1"
+            }
+          ],
+          "reason": "The memories jointly describe an advance-packing and punctuality pattern with no dining-related counterpart.",
+          "status": "RESOLVED",
+          "summary": "Packing on departure day was associated with lateness, while closing the bag the night before was associated with an on-time departure.",
+          "uid": "5eb9a945-4508-5bba-aec7-aa33e1366c88"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "04415d9d-a7d8-4a9b-8070-aa0a06dfdb63",
+              "memory_uid": "12ef03f9-8cda-5ed7-be83-891b4702f872"
+            }
+          ],
+          "reason": "This travel backup preference is independently useful and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s older sister recommends an extra cable even for short trips to reduce charging risk.",
+          "uid": "fdb285f8-639c-594f-8510-182b22d21c45"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "04415d9d-a7d8-4a9b-8070-aa0a06dfdb63",
+              "memory_uid": "54136935-a460-573d-ac40-f5edb0ca7e6c"
+            }
+          ],
+          "reason": "This governs travel-list preparation rather than the reference frame’s family-meal planning.",
+          "status": "RESOLVED",
+          "summary": "A travel preparation list should be based on confirmed trip length and actual activities.",
+          "uid": "6c684d3c-6dfb-53a7-8822-0d34674f3854"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "04415d9d-a7d8-4a9b-8070-aa0a06dfdb63",
+              "memory_uid": "029c0777-bdbb-5d48-9309-1b1e6c7d88f4"
+            }
+          ],
+          "reason": "This epistemic limit concerns future travel requirements and has no counterpart addressing that operational decision in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Previous luggage alone cannot establish the requirements of the next trip.",
+          "uid": "53086016-cd5f-5b14-a3f2-3488760d5c9e"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame describes travel-item storage, leaner footwear packing, charging checks, advance preparation, backup-cable advice, activity-based list planning, and limits on inferring future needs.",
+        "differences": "",
+        "reference_only": "The reference describes birthday timing and family priorities, contrasting dining experiences, a preference for quiet conversation, and safeguards for choosing a gathering location."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "d4f615ae-5588-4294-9e94-5ec47f74f4a7"
+    },
+    "analysis_digest": "23c28ad8a39c7d6db47dea21b78817d5e4a0dcf535633a31ab168e38d22734d9",
+    "key": "619145f7b10c748e797f3c9cd494559c38f1dbb55c040d151a2a399d2f86be6f",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 46.21400008300043,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "619145f7b10c748e797f3c9cd494559c38f1dbb55c040d151a2a399d2f86be6f",
+  "created_at": "2026-08-13T18:35:12.838308Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/01",
+  "pair_key": "ddc2cb42f45f694b45f710fab71fbb0d726bf970fc399c1661921bb4c9112a26",
+  "provider_seconds": 46.21400008300043,
+  "right": "task-3/local/personal-memory/2025/07",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

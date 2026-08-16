@@ -1,0 +1,253 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:23:01.413457+00:00",
+      "frames": [
+        {
+          "context_digest": "9d55b4a5604285e426b317f7f4732b35ca1e9df044f7015b3ae6a6be0df5492b",
+          "context_name": "task-2/advisor1/reproducibility",
+          "context_uid": "7d293f75-52b6-5f27-99c4-54f2be3d8e59",
+          "memories": [
+            {
+              "content": "HCI reviewers find it difficult to assess the reproducibility of results if the prototype version used in the evaluation is not disclosed.",
+              "content_digest": "9b89217d4ef2c7524af665ea80d7d60e61f1663fd8ea4bdde533c8d3a0da2044",
+              "position": 0,
+              "uid": "fb400759-63ed-568a-b94e-5f0c2fe94b67"
+            },
+            {
+              "content": "Record the manipulated and fixed elements of compared design alternatives so that other researchers can reconstruct them.",
+              "content_digest": "26b84b5f0644980de51d764218ce90fb614eb02a2df38fb3632f44d360a93cd3",
+              "position": 1,
+              "uid": "e52e8470-6419-5306-9ddd-00a86003dcf3"
+            },
+            {
+              "content": "Records of formative evaluation decisions enable the reconstruction of connections between raw data, interpretation, and design modifications.",
+              "content_digest": "f213479e4bd1947d418083139346ed7f666bc597133962617d94bdd3a9af0083",
+              "position": 2,
+              "uid": "8f4edf8c-491d-56fe-bde4-d9ce25d6de50"
+            },
+            {
+              "content": "The user must make it possible to trace which observations each prototype version reflects so the process of deriving design knowledge can be reviewed.",
+              "content_digest": "1c9b8a6f650f2eb652b1e9cbb62ad9dcbb3ec13f2e160b52db83492640eb0ae9",
+              "position": 3,
+              "uid": "87662a7e-ffc7-521a-a06c-7db8184377e8"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "31559aa8-c371-4e0c-bfa6-bc751a8d5d8e"
+        },
+        {
+          "context_digest": "4efbf2f6c096022137cee2c075c75219bb4fd0f441579901b8445bb2d92101f5",
+          "context_name": "task-2/advisor2/budget",
+          "context_uid": "ae02c2b2-49d3-5c30-b686-81ea17a8a87e",
+          "memories": [
+            {
+              "content": "Keep the main text to the total and major categories, and place quantities, unit rates, and assumptions in one compact budget table or appendix.",
+              "content_digest": "2e0d76a9c09d14facdf93e8b82cb1c4f583b8a6063b74552f2c23b7d37224e9c",
+              "position": 0,
+              "uid": "d614b55d-d9f6-5347-8d02-2d219d621a09"
+            },
+            {
+              "content": "Give each cost category, quantity, unit rate, and subtotal a stable row in the separate budget table.",
+              "content_digest": "ecd8aa50fc469bb763f36784d140b871b82a283b39f30f46e9e166776321c602",
+              "position": 1,
+              "uid": "24500129-4b07-564f-ba67-39e40d7d7860"
+            },
+            {
+              "content": "Put the estimate basis in a dedicated table column so one assumption can be checked or revised without rewriting the narrative.",
+              "content_digest": "6ed604ab2ca300f215d13f18cb5344e9322635ad047ce36c08242765e7fb09f4",
+              "position": 2,
+              "uid": "07bad409-af9c-512a-b829-7ceb28273f91"
+            },
+            {
+              "content": "Readers can verify arithmetic and compare categories faster in a consistent table than in amounts distributed across prose.",
+              "content_digest": "1dc966a0ade3af3bc636cb99d456edbdb918c2a23efd4a5792db9f8ede061195",
+              "position": 3,
+              "uid": "abf6d361-c2eb-512f-87e0-f3af9c5eb677"
+            },
+            {
+              "content": "Revise one table row and its subtotal when an estimate changes instead of repeating the new amount across several prose paragraphs.",
+              "content_digest": "dcd7d010f7d2c1898fffe71ccc7a0067233dcbcf66fe4b429043b1900d097f84",
+              "position": 4,
+              "uid": "473cf3ca-9832-5d9c-97df-974f1d9b0d1b"
+            },
+            {
+              "content": "Keep detailed arithmetic out of the main argument when readers can reach the complete table from a clear reference.",
+              "content_digest": "940a8cdee63c326d9c9be89cc07e7f223f239e3537113d32c098f711bd816cf7",
+              "position": 5,
+              "uid": "675956de-2c61-53e1-bb89-9b49d92558ba"
+            },
+            {
+              "content": "The user tends to interrupt the argument with long cost enumerations when no separate budget table is available.",
+              "content_digest": "2c0715ec3cfa247a35c3acc854b0716dca764619050aa635c0c242a5b56aa2f1",
+              "position": 6,
+              "uid": "f4371f72-f222-5066-b2f4-0a6be5d6865e"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "a8e99c53-099f-4cf1-ad29-7a9d1cb31d3b"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate documentation concerns: the reference frame focuses on reconstructing prototype evolution and evaluation evidence, while the compared frame focuses on structuring budget details for verification, revision, and narrative clarity. Neither frame supplies a scope-aligned counterpart to the other.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "31559aa8-c371-4e0c-bfa6-bc751a8d5d8e",
+              "memory_uid": "fb400759-63ed-568a-b94e-5f0c2fe94b67"
+            }
+          ],
+          "reason": "Only the reference frame states the reproducibility consequence of omitting the evaluated prototype version.",
+          "status": "RESOLVED",
+          "summary": "Evaluation reports should disclose the prototype version used so reviewers can assess reproducibility.",
+          "uid": "9dda8966-e77d-5844-ad2b-df86d8b88b55"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "31559aa8-c371-4e0c-bfa6-bc751a8d5d8e",
+              "memory_uid": "e52e8470-6419-5306-9ddd-00a86003dcf3"
+            }
+          ],
+          "reason": "Only the reference frame specifies recording experimental variation and controls to permit reconstruction.",
+          "status": "RESOLVED",
+          "summary": "Compared design alternatives should document which elements were manipulated and which remained fixed.",
+          "uid": "bc861a74-f49d-5df8-ae53-cbd585970da9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "31559aa8-c371-4e0c-bfa6-bc751a8d5d8e",
+              "memory_uid": "8f4edf8c-491d-56fe-bde4-d9ce25d6de50"
+            },
+            {
+              "frame_uid": "31559aa8-c371-4e0c-bfa6-bc751a8d5d8e",
+              "memory_uid": "87662a7e-ffc7-521a-a06c-7db8184377e8"
+            }
+          ],
+          "reason": "The reference memories jointly describe complementary parts of one traceability chain for reviewing how design knowledge was derived; the compared frame has no counterpart.",
+          "status": "RESOLVED",
+          "summary": "Formative evaluation records should trace evidence and observations through interpretation to prototype versions and design modifications.",
+          "uid": "31317d45-1655-5b8d-8e8b-32df556c957f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a8e99c53-099f-4cf1-ad29-7a9d1cb31d3b",
+              "memory_uid": "d614b55d-d9f6-5347-8d02-2d219d621a09"
+            },
+            {
+              "frame_uid": "a8e99c53-099f-4cf1-ad29-7a9d1cb31d3b",
+              "memory_uid": "675956de-2c61-53e1-bb89-9b49d92558ba"
+            }
+          ],
+          "reason": "The compared memories restate one presentation policy separating detailed calculations from the main argument; the reference frame does not address budget placement.",
+          "status": "RESOLVED",
+          "summary": "Detailed budget arithmetic should be kept in an accessible table or appendix while the main text presents totals and major categories.",
+          "uid": "df60cf8c-c520-5808-95ab-07af0494e4ba"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a8e99c53-099f-4cf1-ad29-7a9d1cb31d3b",
+              "memory_uid": "24500129-4b07-564f-ba67-39e40d7d7860"
+            },
+            {
+              "frame_uid": "a8e99c53-099f-4cf1-ad29-7a9d1cb31d3b",
+              "memory_uid": "473cf3ca-9832-5d9c-97df-974f1d9b0d1b"
+            }
+          ],
+          "reason": "The compared memories split one row-based maintenance practice into table structure and update behavior; the reference frame has no budget-maintenance counterpart.",
+          "status": "RESOLVED",
+          "summary": "Budget categories and calculations should occupy stable rows so changed estimates and subtotals can be revised locally.",
+          "uid": "177a900c-b82f-5ef3-a954-b43b0a1583cc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a8e99c53-099f-4cf1-ad29-7a9d1cb31d3b",
+              "memory_uid": "07bad409-af9c-512a-b829-7ceb28273f91"
+            }
+          ],
+          "reason": "Only the compared frame specifies a separate structural location for estimate assumptions and their isolated revision.",
+          "status": "RESOLVED",
+          "summary": "Each estimate basis should appear in a dedicated table column so assumptions can be checked or revised independently.",
+          "uid": "f1f28254-1be8-5fcf-b570-484367efc2cb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a8e99c53-099f-4cf1-ad29-7a9d1cb31d3b",
+              "memory_uid": "abf6d361-c2eb-512f-87e0-f3af9c5eb677"
+            }
+          ],
+          "reason": "Only the compared frame states this reader-facing verification and comparison benefit.",
+          "status": "RESOLVED",
+          "summary": "A consistent budget table helps readers verify arithmetic and compare cost categories efficiently.",
+          "uid": "0da31992-a6dc-566e-8b8f-5f87e03691f2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a8e99c53-099f-4cf1-ad29-7a9d1cb31d3b",
+              "memory_uid": "f4371f72-f222-5066-b2f4-0a6be5d6865e"
+            }
+          ],
+          "reason": "Only the compared frame identifies this recurring narrative problem caused by the absence of a separate table.",
+          "status": "RESOLVED",
+          "summary": "Without a separate budget table, long cost enumerations tend to interrupt the main argument.",
+          "uid": "9836e8f8-5009-5873-abf7-8a826588f331"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame uniquely advocates a separate, consistently structured budget table that supports arithmetic checks, localized estimate revisions, and a concise main argument while addressing the disruption caused by prose-based cost enumeration.",
+        "differences": "",
+        "reference_only": "The reference frame uniquely covers prototype-version disclosure, controlled design comparisons, and traceability from observations and raw evaluation data through interpretation to design changes."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "8d9b4e14-3755-48da-8e2a-ffd29660d714"
+    },
+    "analysis_digest": "900ddfbf7dcdc517dc20b65a4ee0af38199f11875728342c5ece1a592ab8aba9",
+    "key": "cfa078a86298a0c29869f24b9fcaa06c531039a6b1901cd84480ec0fafa12a84",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 26.61658908299796,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "cfa078a86298a0c29869f24b9fcaa06c531039a6b1901cd84480ec0fafa12a84",
+  "created_at": "2026-08-13T18:23:28.029569Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/reproducibility",
+  "pair_key": "e6c4f65f9b17316459868020e5316dcd170c00aa8784bd3cbed097fbb88fdbb5",
+  "provider_seconds": 26.61658908299796,
+  "right": "task-2/advisor2/budget",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

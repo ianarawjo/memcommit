@@ -1317,6 +1317,117 @@ def test_named_ground_runs_fit_from_cases_without_shelling_out(monkeypatch) -> N
     assert "c1  ✓  The rear entrance closes" in panes["MEMORIES"].text_area.text
 
 
+def test_named_ground_auto_fit_runs_once_on_entry_when_receipt_needs_refresh() -> None:
+    session = replace(
+        session_with_rule_and_case(),
+        schema_version=GROUND_SCHEMA_VERSION,
+    )
+    receipt = fit_receipt_for(session)
+    latest = {"value": None}
+    completed = threading.Event()
+    calls: list[int] = []
+
+    def run_fit(active):
+        calls.append(active.revision)
+        latest["value"] = receipt
+        completed.set()
+        return receipt.report
+
+    with create_pipe_input() as pipe_input:
+        def drive() -> None:
+            assert completed.wait(timeout=2)
+            time.sleep(0.05)
+            pipe_input.send_text("\x03")
+
+        feeder = threading.Thread(target=drive)
+        feeder.start()
+        result = run_named_ground_shell(
+            session,
+            interpret=lambda *_args: pytest.fail("must not interpret"),
+            apply=lambda *_args: pytest.fail("must not apply"),
+            run_fit=run_fit,
+            lookup_fit=lambda _active: latest["value"],
+            auto_fit=True,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+        feeder.join(timeout=2)
+
+    assert result.status == "CLOSED"
+    assert calls == [session.revision]
+
+
+def test_named_ground_auto_fit_refits_after_one_durable_revision() -> None:
+    session = replace(
+        session_with_rule_and_case(),
+        schema_version=GROUND_SCHEMA_VERSION,
+    )
+    calls: list[int] = []
+    latest = {"value": None}
+    completed = threading.Condition()
+
+    def run_fit(active):
+        calls.append(active.revision)
+        latest["value"] = fit_receipt_for(active)
+        with completed:
+            completed.notify_all()
+        return latest["value"].report
+
+    def lookup(active):
+        receipt = latest["value"]
+        if receipt is None:
+            return None
+        return GroundFitReceipt(
+            receipt.report,
+            current=receipt.report.ground_revision == active.revision,
+        )
+
+    def prepare(current, _target, _selector, edited, _comment):
+        return proposal(current, edited, kind="REVISE_GOAL")
+
+    def apply(current, _frozen):
+        return (
+            replace(
+                current,
+                goal="Build one verified fixture. Revised.",
+                revision=current.revision + 1,
+            ),
+            "revised",
+        )
+
+    with create_pipe_input() as pipe_input:
+        def drive() -> None:
+            with completed:
+                assert completed.wait_for(lambda: len(calls) == 1, timeout=2)
+            time.sleep(0.05)
+            pipe_input.send_text("\te Revised.\ra")
+            with completed:
+                assert completed.wait_for(lambda: len(calls) == 2, timeout=2)
+            time.sleep(0.05)
+            pipe_input.send_text("\x03")
+
+        feeder = threading.Thread(target=drive)
+        feeder.start()
+        result = run_named_ground_shell(
+            session,
+            interpret=lambda *_args: pytest.fail("must not interpret"),
+            prepare_direct_edit=prepare,
+            apply=apply,
+            run_fit=run_fit,
+            lookup_fit=lookup,
+            auto_fit=True,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+        feeder.join(timeout=2)
+
+    assert result.status == "CLOSED"
+    assert result.session.revision == session.revision + 1
+    assert calls == [session.revision, session.revision + 1]
+
+
 def test_named_ground_fit_ignores_duplicate_run_while_receipt_is_pending() -> None:
     session = session_with_rule_and_case()
     receipt = fit_receipt_for(session)

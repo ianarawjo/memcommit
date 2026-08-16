@@ -1,0 +1,369 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:17:55.696466+00:00",
+      "frames": [
+        {
+          "context_digest": "52dc61895a6d116135c474d4828efde944579b3a5949b6d64c07dd9853f60801",
+          "context_name": "task-2/advisor1/emphasis",
+          "context_uid": "6f253a9e-f504-53bf-a1d1-de2c4532171e",
+          "memories": [
+            {
+              "content": "Do not exceed two primary HCI contributions.",
+              "content_digest": "c605e418506d380237fb8ce4723bcc2fedebcd5da0d8dd78ef813e21aaf71a7a",
+              "position": 0,
+              "uid": "4a1de8df-6f03-5a3d-bbfa-7c1144d2ec5c"
+            },
+            {
+              "content": "Name each design or empirical contribution and present it in a single sentence.",
+              "content_digest": "286e33467b65e080f192172ae85d481a89c8e1b2d73e1089772eab30e0ae48fa",
+              "position": 1,
+              "uid": "b5b6a901-9047-5482-a0e1-d29e5f7171e8"
+            },
+            {
+              "content": "In studies recruiting community participants, emphasize the time burden associated with participation.",
+              "content_digest": "67a881933729e29cc0ce33f61f50af810f6f12ab5aa9598d453cf3a959a5977f",
+              "position": 2,
+              "uid": "e89de514-48a5-5e9b-96ca-f194c0ed79ab"
+            },
+            {
+              "content": "In studies recruiting community participants, emphasize the travel burden associated with participation.",
+              "content_digest": "3c4e20244bb88626ef1d2ebc89774e29ac85a9ce774a3faaa726131059b8ae33",
+              "position": 3,
+              "uid": "f7025cbb-4005-53c6-9031-e33f04a86b92"
+            },
+            {
+              "content": "HCI reviewers find it difficult to identify primary contributions when named design or empirical contributions exceed two.",
+              "content_digest": "70a2dccd85ce8ca18db239926980dfe13a20b90a9dffa6acae73e5034fce1fbc",
+              "position": 4,
+              "uid": "a42891a1-b674-5747-a77c-43699b0b9723"
+            },
+            {
+              "content": "Emphasize the core design decisions that formative evaluation will change rather than a polished product demonstration.",
+              "content_digest": "be5cad46c349a7c4b538f1a947d979ec25b0f6a34494e4d3a7bb9550508766d4",
+              "position": 5,
+              "uid": "9d7169d5-058f-5f7c-b1ac-30cabd8ba02e"
+            },
+            {
+              "content": "Emphasize design principles transferable to other similar interactions as the primary contribution, rather than the performance of a specific prototype.",
+              "content_digest": "a39c447e1b61b2204233800bafd380163fb5492ddd25cb730bbc6c6a95114e56",
+              "position": 6,
+              "uid": "f8931b4e-9656-548d-84a1-f2f2c3eb47b1"
+            },
+            {
+              "content": "Formative evaluation creates grounds for modification in subsequent iterations rather than definitively determining the superiority of design alternatives.",
+              "content_digest": "0cdd894b41de667b621d6c385d3373c799f4fea53898f65d324c26e86a1c8807",
+              "position": 7,
+              "uid": "9bf9e735-7598-5977-abe2-87b2c9c38a24"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "f5601b41-ee9a-4cd9-893a-36f8eab39dc2"
+        },
+        {
+          "context_digest": "b379636c1034c71339b717628e5e233c5f245d0452c487967c8e881d38e4b4a7",
+          "context_name": "task-2/advisor2/feasibility",
+          "context_uid": "2a4a102a-14f5-53bb-88ef-681448ebecff",
+          "memories": [
+            {
+              "content": "Mark unverified schedule assumptions as such.",
+              "content_digest": "d4cdcdbcdb51d96f9a7435e72c2e4ef25a3e3822a765a88afafeca5194bda96e",
+              "position": 0,
+              "uid": "5c9755f8-78bd-5654-a3c7-8be0864e4f12"
+            },
+            {
+              "content": "Mark unverified recruitment assumptions as such.",
+              "content_digest": "4cc28528fee1c7b09f709638e2b57d3bc9efe635d20500ee98567f8f59b8cf21",
+              "position": 1,
+              "uid": "75af48aa-b39e-5b55-95d9-f7f7d2becbad"
+            },
+            {
+              "content": "Mark unverified technical assumptions as such.",
+              "content_digest": "8942e49cd46e3e9746330349df11e49d4a6c9250c7aa4c52c2d9ade1c97c735c",
+              "position": 2,
+              "uid": "292e33b0-4bfd-5e3a-9379-0fbf3619c42d"
+            },
+            {
+              "content": "Trace back the resources required for each core prototype feature and field research procedure.",
+              "content_digest": "b1ac088b664c62c3c1cfb96f6bb31a3ab5fc0fd77d0d1fba58e1da621b5dd56a",
+              "position": 3,
+              "uid": "c0c1fd8d-1aae-51a3-a1d4-66c1481d7b48"
+            },
+            {
+              "content": "Operations reviewers judge feasibility by examining the personnel required for each procedure.",
+              "content_digest": "3199aba38f58f677147b94eca54221e4d0add145a2a58194c3851efcc22e8fab",
+              "position": 4,
+              "uid": "7be25c27-6d67-50fe-90b5-76fca32a93d8"
+            },
+            {
+              "content": "Operations reviewers judge feasibility by examining the equipment required for each procedure.",
+              "content_digest": "13f9b86391d66cf558fc6eead29969c80acdf78d2164c96aa99641bf6c2891fd",
+              "position": 5,
+              "uid": "1aae182f-4eb3-58b7-b8cd-5ce517ead36a"
+            },
+            {
+              "content": "Operations reviewers judge feasibility by examining the time required for each procedure.",
+              "content_digest": "29efef51e7b8e35c459099af93b8ea90d019d83de3cf894e04b184078619fff4",
+              "position": 6,
+              "uid": "84f6e5e3-96b4-538b-a633-1b656204a296"
+            },
+            {
+              "content": "Document separately the commitments and confirmation status of field partners required for recruitment, installation, and operational support.",
+              "content_digest": "ba0ceb0fa886251bfe2b5a83154500862f8c2d4a82ed74fc9ddb3600010cc0b3",
+              "position": 7,
+              "uid": "16a461c4-d90d-5d0f-bfd0-4c1a116ec2be"
+            },
+            {
+              "content": "Designate a responsible party for software updates, equipment inspections, and user support during the deployment period.",
+              "content_digest": "54caa62836c502faf35561d45fba1d02a059c8ed6436ce714114bd392cb3bc9d",
+              "position": 8,
+              "uid": "0ce26892-666f-5ebe-95b2-c6f48915f18b"
+            },
+            {
+              "content": "The user's deployment readiness can be assessed only when dependencies on external services and field personnel are visible.",
+              "content_digest": "931fa67dd8ea84954ce3f0b9631301c320fdcf1bf46fb7fda0214e77636c8c1c",
+              "position": 9,
+              "uid": "4f35fd0c-005a-56a7-b33a-d74bde2d65eb"
+            },
+            {
+              "content": "Field schedules and assigned personnel may change due to operational factors beyond the researcher’s control.",
+              "content_digest": "71739481ce3043f342d9c7c52297c7644931a0a096215fc15150915b74968d84",
+              "position": 10,
+              "uid": "3b96bf66-59e4-5dbf-98d3-937402abc67b"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "7a433e24-a593-46ad-a16b-8d18be454913"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate review layers: one shapes HCI contribution framing, participant burden, and formative evaluation claims; the other documents operational assumptions, resources, partners, ownership, dependencies, and volatility. No shared operational claim or scope-aligned contradiction is supplied.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f5601b41-ee9a-4cd9-893a-36f8eab39dc2",
+              "memory_uid": "4a1de8df-6f03-5a3d-bbfa-7c1144d2ec5c"
+            },
+            {
+              "frame_uid": "f5601b41-ee9a-4cd9-893a-36f8eab39dc2",
+              "memory_uid": "a42891a1-b674-5747-a77c-43699b0b9723"
+            }
+          ],
+          "reason": "These memories state and justify one reference-only limit on the number of named primary contributions.",
+          "status": "RESOLVED",
+          "summary": "Primary HCI contributions should be limited to two so reviewers can identify them clearly.",
+          "uid": "0eb76318-1e27-534d-9689-238ab2a902f7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f5601b41-ee9a-4cd9-893a-36f8eab39dc2",
+              "memory_uid": "b5b6a901-9047-5482-a0e1-d29e5f7171e8"
+            }
+          ],
+          "reason": "This is an independently useful reference-only presentation requirement with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Each design or empirical contribution should be named and expressed in one sentence.",
+          "uid": "fe9af071-40e5-5d54-acf6-e9307a8f0374"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f5601b41-ee9a-4cd9-893a-36f8eab39dc2",
+              "memory_uid": "e89de514-48a5-5e9b-96ca-f194c0ed79ab"
+            },
+            {
+              "frame_uid": "f5601b41-ee9a-4cd9-893a-36f8eab39dc2",
+              "memory_uid": "f7025cbb-4005-53c6-9031-e33f04a86b92"
+            }
+          ],
+          "reason": "The memories split one reference-only policy across two participant-burden dimensions.",
+          "status": "RESOLVED",
+          "summary": "Community-participant studies should emphasize both the time and travel burdens of participation.",
+          "uid": "4dbfe754-bc44-595b-888e-4548001ae65c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f5601b41-ee9a-4cd9-893a-36f8eab39dc2",
+              "memory_uid": "9d7169d5-058f-5f7c-b1ac-30cabd8ba02e"
+            },
+            {
+              "frame_uid": "f5601b41-ee9a-4cd9-893a-36f8eab39dc2",
+              "memory_uid": "9bf9e735-7598-5977-abe2-87b2c9c38a24"
+            }
+          ],
+          "reason": "The memories jointly describe the reference-only purpose and evidentiary limits of formative evaluation.",
+          "status": "RESOLVED",
+          "summary": "Formative evaluation should foreground design decisions open to iteration rather than polished demonstration or definitive superiority claims.",
+          "uid": "ea1a4a3e-32cf-5bf0-b54d-9bf2297ba997"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f5601b41-ee9a-4cd9-893a-36f8eab39dc2",
+              "memory_uid": "f8931b4e-9656-548d-84a1-f2f2c3eb47b1"
+            }
+          ],
+          "reason": "This reference-only contribution-framing claim is independent of the formative-evaluation and contribution-count policies.",
+          "status": "RESOLVED",
+          "summary": "Transferable design principles should be presented as the primary contribution instead of a particular prototype's performance.",
+          "uid": "12e3a811-a36a-5d7b-b02a-d9996424c836"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7a433e24-a593-46ad-a16b-8d18be454913",
+              "memory_uid": "5c9755f8-78bd-5654-a3c7-8be0864e4f12"
+            },
+            {
+              "frame_uid": "7a433e24-a593-46ad-a16b-8d18be454913",
+              "memory_uid": "75af48aa-b39e-5b55-95d9-f7f7d2becbad"
+            },
+            {
+              "frame_uid": "7a433e24-a593-46ad-a16b-8d18be454913",
+              "memory_uid": "292e33b0-4bfd-5e3a-9379-0fbf3619c42d"
+            }
+          ],
+          "reason": "The memories split one compared-only assumption-labeling policy across three assumption types.",
+          "status": "RESOLVED",
+          "summary": "Unverified schedule, recruitment, and technical assumptions should be explicitly labeled.",
+          "uid": "7a1c5739-54a6-5c42-aba6-5908cb10907c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7a433e24-a593-46ad-a16b-8d18be454913",
+              "memory_uid": "c0c1fd8d-1aae-51a3-a1d4-66c1481d7b48"
+            }
+          ],
+          "reason": "This compared-only traceability requirement covers both prototype features and research procedures and has no reference counterpart.",
+          "status": "RESOLVED",
+          "summary": "Required resources should be traced for every core prototype feature and field-research procedure.",
+          "uid": "5d53fad7-d4fd-5b62-9ebb-926248c09d28"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7a433e24-a593-46ad-a16b-8d18be454913",
+              "memory_uid": "7be25c27-6d67-50fe-90b5-76fca32a93d8"
+            },
+            {
+              "frame_uid": "7a433e24-a593-46ad-a16b-8d18be454913",
+              "memory_uid": "1aae182f-4eb3-58b7-b8cd-5ce517ead36a"
+            },
+            {
+              "frame_uid": "7a433e24-a593-46ad-a16b-8d18be454913",
+              "memory_uid": "84f6e5e3-96b4-538b-a633-1b656204a296"
+            }
+          ],
+          "reason": "The memories split one compared-only feasibility criterion across three resource categories.",
+          "status": "RESOLVED",
+          "summary": "Operational feasibility review should examine the personnel, equipment, and time required for each procedure.",
+          "uid": "02f28c42-fd47-5542-8186-3c30e7c86093"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7a433e24-a593-46ad-a16b-8d18be454913",
+              "memory_uid": "16a461c4-d90d-5d0f-bfd0-4c1a116ec2be"
+            }
+          ],
+          "reason": "This is a compared-only requirement for recording partner commitments across deployment functions.",
+          "status": "RESOLVED",
+          "summary": "Field-partner commitments and confirmation status should be documented separately for recruitment, installation, and operational support.",
+          "uid": "a914b887-b4fe-5ddc-ae86-a3bdaffe883d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7a433e24-a593-46ad-a16b-8d18be454913",
+              "memory_uid": "0ce26892-666f-5ebe-95b2-c6f48915f18b"
+            }
+          ],
+          "reason": "This compared-only ownership requirement is independently useful and has no reference counterpart.",
+          "status": "RESOLVED",
+          "summary": "A responsible party should be designated for updates, inspections, and user support throughout deployment.",
+          "uid": "0e9bce22-ced5-519f-9d9b-530a4c6c91ed"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7a433e24-a593-46ad-a16b-8d18be454913",
+              "memory_uid": "4f35fd0c-005a-56a7-b33a-d74bde2d65eb"
+            }
+          ],
+          "reason": "This compared-only readiness condition concerns dependency visibility rather than partner confirmation or task ownership.",
+          "status": "RESOLVED",
+          "summary": "Deployment readiness assessment requires visible dependencies on external services and field personnel.",
+          "uid": "b5f2589e-83f4-5b90-8657-a6f8e7c82bc4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7a433e24-a593-46ad-a16b-8d18be454913",
+              "memory_uid": "3b96bf66-59e4-5dbf-98d3-937402abc67b"
+            }
+          ],
+          "reason": "This compared-only risk statement identifies operational volatility independently of the policies for labeling assumptions or documenting commitments.",
+          "status": "RESOLVED",
+          "summary": "Operational factors outside researcher control may change field schedules and assigned personnel.",
+          "uid": "f154c8c4-3e84-5059-af21-5f72fee14dc9"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared uniquely addresses assumption labeling, resource-based feasibility, partner commitments, deployment ownership and dependencies, and operational changes to schedules and staffing.",
+        "differences": "",
+        "reference_only": "Reference uniquely limits and formats HCI contributions, foregrounds participant time and travel burdens, and frames formative work around transferable principles and iterative design modification."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "f5c28e3a-497f-4eeb-9b06-32d3f29891f2"
+    },
+    "analysis_digest": "b80d3202a8af0289d7d13e05117490286b5a496a3cebbee205a7d7cb34afeec8",
+    "key": "4df721df1768a1201a1061c336cec071d09ebb0288372cb9471bbc5ed0dff5d7",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 44.00293975000022,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "4df721df1768a1201a1061c336cec071d09ebb0288372cb9471bbc5ed0dff5d7",
+  "created_at": "2026-08-13T18:18:39.698963Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/emphasis",
+  "pair_key": "7f915364a9fb7d945fcf5b9413254c5c7616bc81b2f203959e6a04d061552bd6",
+  "provider_seconds": 44.00293975000022,
+  "right": "task-2/advisor2/feasibility",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

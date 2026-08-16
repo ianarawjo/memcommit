@@ -1,0 +1,406 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:35:14.652357+00:00",
+      "frames": [
+        {
+          "context_digest": "4c7d7890b4c8dbd807acc103affd0572c325fd2e0f58346a97c3ed49e48ba34e",
+          "context_name": "task-3/local/personal-memory/2024/02",
+          "context_uid": "7bedad96-d78b-5977-a4c9-71049dcfcec8",
+          "memories": [
+            {
+              "content": "The user's maternal aunt keeps one spare key to the user's home.",
+              "content_digest": "2e45c292a3cbc26a1c9928c4546c6029c7dcd2aa6aa0a45a7cfb4be7888dd5c6",
+              "position": 0,
+              "uid": "1c627e4c-c393-5bd3-a5ae-b3318821be73"
+            },
+            {
+              "content": "If the door is locked, the user is accustomed to contacting their maternal aunt, who has the spare key, before contacting building management.",
+              "content_digest": "709cc4a1ae26126bd3238ea8c0e343415d95d084ddaf022590ff4197003c7b81",
+              "position": 1,
+              "uid": "e80936de-87af-5dbb-ab94-d456bbfaab0a"
+            },
+            {
+              "content": "When going to collect the spare key from their maternal aunt, the user wants to give an arrival time first so neither person has to wait.",
+              "content_digest": "5dab57d537091a28848dfa3592d16e038d6e78eeb8159489c17475befeb62a53",
+              "position": 2,
+              "uid": "7c26cf33-0630-5138-910a-6d37d6ed2b63"
+            },
+            {
+              "content": "The user feels at ease only after returning a borrowed spare key in person on the same day.",
+              "content_digest": "d3b9e78e166fb3af3dc248bcddbf1c1df15d3eed57655991a52c23b4ebb6ba14",
+              "position": 3,
+              "uid": "c3f0f26c-8d89-55e3-8bf3-398271e417e7"
+            },
+            {
+              "content": "The user feels uneasy about writing down a new entrance passcode on paper.",
+              "content_digest": "fe40a50fb7f0b0e1514a2f7e6ea3748e73cbd76fa45b862b4880c9eba68a2312",
+              "position": 4,
+              "uid": "7d7d00a3-c5af-5441-bb50-9631fbfd7979"
+            },
+            {
+              "content": "The user found it difficult when a family member arrived without notice during a meeting and the user could not respond immediately.",
+              "content_digest": "30d2126eb016f1fab8b8bd670bc00ee6ac5182f28b0afe696b2c30f4d7bc128f",
+              "position": 5,
+              "uid": "2e0df581-bd54-54f5-94ef-b719427fc88c"
+            },
+            {
+              "content": "On a day their younger brother received a package for them, the user felt reassured after checking the delivery photo.",
+              "content_digest": "54eacbc39b057a6a18f8ddd8e1db587dbef231ecb10ed8cd84a46b3575ac470c",
+              "position": 6,
+              "uid": "9278b64e-7550-5eb6-bbfd-544a2ae4ec3d"
+            },
+            {
+              "content": "The user's maternal aunt wants confirmation that the user is coming in person before handing over the spare key.",
+              "content_digest": "5d780f2fb96eac2d3c65e7417ee00e64e29c2f8873c432b291e62773723182c9",
+              "position": 7,
+              "uid": "76fb9115-a3f2-5ce3-a445-c3d1e38e4253"
+            },
+            {
+              "content": "Confirm with the user before sharing the spare key's storage location or the maternal aunt's contact information.",
+              "content_digest": "ac00da1acd77d05fd277a0a92d2ab62cbefb3c334e6e7c2cb3b046fbea217a6c",
+              "position": 8,
+              "uid": "6fa50e1d-8bd1-557a-9b03-1e4a4dc664bd"
+            },
+            {
+              "content": "The management office of a multi-unit residential building does not hold a unit key without verifying identity.",
+              "content_digest": "841f44fddced7681d5c9b47aaa2536f14536f1309b1f73104df7cb44738efbd1",
+              "position": 9,
+              "uid": "b18ff5b4-4f0d-5b93-8c41-439e5b15c710"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "9340ca97-8ebf-4c85-8129-c6c02436e25e"
+        },
+        {
+          "context_digest": "e56d4062f59b72f23e5414f759cd9f2b09c659d820a29a979fe2edb8bfc3e7a4",
+          "context_name": "task-3/local/personal-memory/2025/01",
+          "context_uid": "2ce7ce06-145c-50c7-bfb4-cb175b9a5255",
+          "memories": [
+            {
+              "content": "One of the user's identity documents needs renewal in the second half of 2025.",
+              "content_digest": "0ade63adc8aedc4dbc0003f2cbc2759010c8bf2645a95fedd3db28b7cfbe0daa",
+              "position": 0,
+              "uid": "50911f7e-75a1-5099-99f1-e471bb8e6cb6"
+            },
+            {
+              "content": "The user postponed an application until the next day after spending time looking for document photos in scattered folders.",
+              "content_digest": "fa1703848374c3364cf49be01e115e08897e16a4ccda3c9edef1212189159ce6",
+              "position": 1,
+              "uid": "d5bd9f79-7295-5014-9668-83b7cffc78e2"
+            },
+            {
+              "content": "After gathering the necessary copies in one folder, the user completed the renewal form in one sitting.",
+              "content_digest": "133721b244e02fce2fe24312b703e59225c023d65bea31bf65decb36a18b4ba5",
+              "position": 2,
+              "uid": "5f92f6a3-1739-580c-bd63-1a936098ccd0"
+            },
+            {
+              "content": "The user entered an abbreviated name on an official form and then discovered that it differed from the supporting document.",
+              "content_digest": "d32485dcfd1311d0739bf9887a330f25bf9b3f47f077c56ec7cdb667bde20a55",
+              "position": 3,
+              "uid": "929107ac-c62d-5920-9f71-12d4c9a102e9"
+            },
+            {
+              "content": "On the next application, after comparing the name with the source document, the user did not receive a correction request.",
+              "content_digest": "e6aa9e63c72f762c00824787c3b971f2cdf76a343c336f329e5b28b0f164d02d",
+              "position": 4,
+              "uid": "df8b90c2-4310-5e89-b979-508309bf6b04"
+            },
+            {
+              "content": "The user put only the submission deadline in the calendar and missed the application deadline by one day because they did not check the issuance period.",
+              "content_digest": "995703686975cdd718d999557d4b5ca13a95c3c1eabfbb73808bb5150eda824b",
+              "position": 5,
+              "uid": "306b9df1-d713-5413-b448-e2b42376d827"
+            },
+            {
+              "content": "On the next application, the user recorded the expected issuance date separately in the calendar.",
+              "content_digest": "b83c9061bf30d64e48b74959513fd37e7ab043446dae7e4fd284102a249a1240",
+              "position": 6,
+              "uid": "870b57b5-4cdb-54fc-b17f-8ffb86dad802"
+            },
+            {
+              "content": "Staff at a public-service counter expect a person requesting identity verification to bring an original as well as a copy.",
+              "content_digest": "eae3721b7f1d905172c169c5a483d2af74aa40bced23d1bbcb8d571ab27df706",
+              "position": 7,
+              "uid": "a0fe456c-0794-5bce-8ef9-9558e9833471"
+            },
+            {
+              "content": "When planning an official application, put both the submission deadline and expected issuance date in the calendar and verify them.",
+              "content_digest": "c5b37d86ef85d5023b60578e7f5f6af1bc49711e32ecc0255bc826a743dce0e1",
+              "position": 8,
+              "uid": "111972b9-e05f-5e1b-b121-ef9e51572d1d"
+            },
+            {
+              "content": "The local agent cannot determine the current validity of an identity document without its expiration date.",
+              "content_digest": "ebc9f4fe21d4ad7e53681d32ded2c049c7d4bf57e24ef71213a5ebdbaaaee521",
+              "position": 9,
+              "uid": "c9872898-ec4f-576e-b154-ff6fda581a1a"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "bfc3e5d9-bbe3-4cda-9c08-befcf3b070b8"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate operational domains: home-access coordination and privacy on one side, and identity-document applications on the other. No claims govern the same decision closely enough to establish equivalence, compatibility, scope variation, or conflict.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9340ca97-8ebf-4c85-8129-c6c02436e25e",
+              "memory_uid": "1c627e4c-c393-5bd3-a5ae-b3318821be73"
+            }
+          ],
+          "reason": "This is independently useful home-access custody information with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The maternal aunt keeps a spare key to the user's home.",
+          "uid": "2e2fdc34-9bba-5047-84a2-937163a7e490"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9340ca97-8ebf-4c85-8129-c6c02436e25e",
+              "memory_uid": "e80936de-87af-5dbb-ab94-d456bbfaab0a"
+            }
+          ],
+          "reason": "This establishes a one-sided lockout escalation preference not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "For a locked door, the user normally contacts the key-holding maternal aunt before building management.",
+          "uid": "5ecfdec3-cdfc-5730-96ac-d9b592d960a7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9340ca97-8ebf-4c85-8129-c6c02436e25e",
+              "memory_uid": "7c26cf33-0630-5138-910a-6d37d6ed2b63"
+            },
+            {
+              "frame_uid": "9340ca97-8ebf-4c85-8129-c6c02436e25e",
+              "memory_uid": "76fb9115-a3f2-5ce3-a445-c3d1e38e4253"
+            }
+          ],
+          "reason": "These details split the same one-sided coordination practice for avoiding an uncertain or mistimed handover.",
+          "status": "RESOLVED",
+          "summary": "An in-person spare-key handover is coordinated in advance by confirming the visit and communicating an arrival time.",
+          "uid": "a2e05233-de44-55ae-bd67-58fc0cf910e4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9340ca97-8ebf-4c85-8129-c6c02436e25e",
+              "memory_uid": "c3f0f26c-8d89-55e3-8bf3-398271e417e7"
+            }
+          ],
+          "reason": "This is a distinct preference about completing a key loan and has no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user feels comfortable after returning a borrowed spare key in person on the same day.",
+          "uid": "e5f22418-0993-5aa0-b00c-072fc5ecc205"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9340ca97-8ebf-4c85-8129-c6c02436e25e",
+              "memory_uid": "7d7d00a3-c5af-5441-bb50-9631fbfd7979"
+            }
+          ],
+          "reason": "This is independently useful security-preference information absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user is uneasy about recording a new entrance passcode on paper.",
+          "uid": "33e2decc-2d38-52d0-b0f3-ed323b626096"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9340ca97-8ebf-4c85-8129-c6c02436e25e",
+              "memory_uid": "2e0df581-bd54-54f5-94ef-b719427fc88c"
+            }
+          ],
+          "reason": "This records a distinct experience concerning advance notice and availability, with no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "An unannounced family visit during a meeting was difficult because the user could not respond immediately.",
+          "uid": "7840ba04-7ea6-5294-8e49-ce35b5e37474"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9340ca97-8ebf-4c85-8129-c6c02436e25e",
+              "memory_uid": "9278b64e-7550-5eb6-bbfd-544a2ae4ec3d"
+            }
+          ],
+          "reason": "This is a separate one-sided observation about package verification.",
+          "status": "RESOLVED",
+          "summary": "The user felt reassured by checking a delivery photo after a younger brother received a package for them.",
+          "uid": "b2667a84-115f-5f77-8fc0-f60816c15911"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9340ca97-8ebf-4c85-8129-c6c02436e25e",
+              "memory_uid": "6fa50e1d-8bd1-557a-9b03-1e4a4dc664bd"
+            }
+          ],
+          "reason": "This is an independent privacy rule not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user should be consulted before disclosing the spare key's location or the maternal aunt's contact information.",
+          "uid": "8d3eee1e-0dac-58cb-bec7-242a4fd5bf3c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9340ca97-8ebf-4c85-8129-c6c02436e25e",
+              "memory_uid": "b18ff5b4-4f0d-5b93-8c41-439e5b15c710"
+            }
+          ],
+          "reason": "This building-access verification rule does not govern the same operational case as the compared frame's public-service document requirement.",
+          "status": "RESOLVED",
+          "summary": "A multi-unit building's management office verifies identity before providing access to a unit key it holds.",
+          "uid": "3388887a-5f96-5cb2-b976-5eb06f1dee74"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bfc3e5d9-bbe3-4cda-9c08-befcf3b070b8",
+              "memory_uid": "50911f7e-75a1-5099-99f1-e471bb8e6cb6"
+            }
+          ],
+          "reason": "This is one-sided renewal timing information with no reference-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "One identity document required renewal in the second half of 2025.",
+          "uid": "17e47540-0fbc-571f-84c0-b941928837f0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bfc3e5d9-bbe3-4cda-9c08-befcf3b070b8",
+              "memory_uid": "d5bd9f79-7295-5014-9668-83b7cffc78e2"
+            },
+            {
+              "frame_uid": "bfc3e5d9-bbe3-4cda-9c08-befcf3b070b8",
+              "memory_uid": "5f92f6a3-1739-580c-bd63-1a936098ccd0"
+            }
+          ],
+          "reason": "The memories describe opposing outcomes that together support one one-sided claim about organizing application materials.",
+          "status": "RESOLVED",
+          "summary": "Scattered document photos delayed an application, while gathering the necessary copies in one folder enabled completion in one sitting.",
+          "uid": "3572c5b9-76c4-59d0-a505-05f4e7d7c306"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bfc3e5d9-bbe3-4cda-9c08-befcf3b070b8",
+              "memory_uid": "929107ac-c62d-5920-9f71-12d4c9a102e9"
+            },
+            {
+              "frame_uid": "bfc3e5d9-bbe3-4cda-9c08-befcf3b070b8",
+              "memory_uid": "df8b90c2-4310-5e89-b979-508309bf6b04"
+            }
+          ],
+          "reason": "The memories split one application-accuracy lesson into the mismatch experience and the later successful check.",
+          "status": "RESOLVED",
+          "summary": "Checking the official-form name against the supporting document avoids mismatches and subsequent correction requests.",
+          "uid": "60a68524-074d-5e5c-9d92-bbb776b06593"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bfc3e5d9-bbe3-4cda-9c08-befcf3b070b8",
+              "memory_uid": "306b9df1-d713-5413-b448-e2b42376d827"
+            },
+            {
+              "frame_uid": "bfc3e5d9-bbe3-4cda-9c08-befcf3b070b8",
+              "memory_uid": "870b57b5-4cdb-54fc-b17f-8ffb86dad802"
+            },
+            {
+              "frame_uid": "bfc3e5d9-bbe3-4cda-9c08-befcf3b070b8",
+              "memory_uid": "111972b9-e05f-5e1b-b121-ef9e51572d1d"
+            }
+          ],
+          "reason": "The missed deadline, later calendar practice, and explicit guidance are parts of the same one-sided scheduling claim.",
+          "status": "RESOLVED",
+          "summary": "Official applications should track and verify both the submission deadline and expected issuance date separately.",
+          "uid": "0ecd7cae-f7df-5671-aa58-f454326198fb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bfc3e5d9-bbe3-4cda-9c08-befcf3b070b8",
+              "memory_uid": "a0fe456c-0794-5bce-8ef9-9558e9833471"
+            }
+          ],
+          "reason": "This is a distinct application-document requirement absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A public-service counter expects identity-verification requests to include both an original document and a copy.",
+          "uid": "9f187b21-a2e1-5d2f-adef-a71faf7b5db1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bfc3e5d9-bbe3-4cda-9c08-befcf3b070b8",
+              "memory_uid": "c9872898-ec4f-576e-b154-ff6fda581a1a"
+            }
+          ],
+          "reason": "This is independently useful one-sided information about the limits of validity assessment.",
+          "status": "RESOLVED",
+          "summary": "A local agent cannot determine an identity document's current validity without its expiration date.",
+          "uid": "63aa8d5e-4633-588e-9bee-f8724a12b703"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Identity-document information covers renewal timing, file organization, exact-name checks, deadline and issuance planning, counter-document requirements, and uncertainty when an expiration date is unavailable.",
+        "differences": "",
+        "reference_only": "Home-access information covers spare-key custody, lockout escalation, handover and return practices, disclosure consent, building verification, passcode discomfort, unannounced visits, and delivery-photo reassurance."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "e24f1e29-e3db-4a7e-a55c-c97f9a35fa31"
+    },
+    "analysis_digest": "68ce648dab44dbb0623202708fe4ba0d8f36f0451941f6ef1897303413be644f",
+    "key": "86844ebd77988aa190064e9d6b135033fd6e7a3f9139f23b4b90b2d158eb06d1",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 37.66178966699954,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "86844ebd77988aa190064e9d6b135033fd6e7a3f9139f23b4b90b2d158eb06d1",
+  "created_at": "2026-08-13T18:35:52.313930Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/02",
+  "pair_key": "137b3c7b5a77e4c0d5bf0d870633e078f8c60d766c92f20b698c3fd8a8753f03",
+  "provider_seconds": 37.66178966699954,
+  "right": "task-3/local/personal-memory/2025/01",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

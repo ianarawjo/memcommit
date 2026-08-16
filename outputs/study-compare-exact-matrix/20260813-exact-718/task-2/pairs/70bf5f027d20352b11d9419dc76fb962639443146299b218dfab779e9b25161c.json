@@ -1,0 +1,378 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:20:22.826988+00:00",
+      "frames": [
+        {
+          "context_digest": "c4484b7a8284d7e31066ad3f4c4edf8844a2e0ce8695a323093f753243b6b18f",
+          "context_name": "task-2/advisor1/expression",
+          "context_uid": "39a6f298-c511-5c21-a106-998c1df9d951",
+          "memories": [
+            {
+              "content": "Use a flow diagram rather than a sequence table when alternate procedural branches lead to different outcomes.",
+              "content_digest": "48075a546ef4f1c2735e202cf43df2c164e4382f323007f542915195d025bf58",
+              "position": 0,
+              "uid": "51fa3fcc-9d5f-52f0-809d-62d7cdd8a865"
+            },
+            {
+              "content": "Draw alternate branches and their resulting outcomes in the same flow diagram so readers can compare them at once.",
+              "content_digest": "85d1fdc887f442e05b4089e28a6dc671e757eb781eae9c39646673054306ec34",
+              "position": 1,
+              "uid": "e686bd4d-3ebd-5e55-ba39-f26971247965"
+            },
+            {
+              "content": "The visual fidelity of a prototype may differ from its functional fidelity.",
+              "content_digest": "bfc110d2df084fd4f8393284db693ead012f2bfd9a4e804fd89f9a4e45e16e8c",
+              "position": 2,
+              "uid": "019662a9-6f03-527f-9b6d-be5a2966d9e9"
+            },
+            {
+              "content": "A flow diagram can make alternate branches and their different outcomes visible in one view.",
+              "content_digest": "8f69a73784cb0c304671161a6c42c63480c0ce0cc4864e613d8dde466365d496",
+              "position": 3,
+              "uid": "a6dfe9a7-1df8-561f-8d3e-fc19518beca9"
+            },
+            {
+              "content": "HCI reviewers often skim prototype screens and interaction flow diagrams before reading the main text.",
+              "content_digest": "ee7009a111b29298f748336d571f4d0233e08ef0255f6cfe69cb4c26def96394",
+              "position": 4,
+              "uid": "7047a23d-45b3-5d5c-a00b-c12552e9680d"
+            },
+            {
+              "content": "Readers can understand the overall branching shape of a procedure more quickly from a flow diagram than from rows read one at a time.",
+              "content_digest": "beb9438eb216e54223266b4f592245450812228d69f7a38908e4c260a0aaca01",
+              "position": 5,
+              "uid": "50a71968-7e3f-5b99-b3fa-769af386d0c0"
+            },
+            {
+              "content": "Redrawing a branching flow diagram after a procedural change usually takes longer than updating one row in a table.",
+              "content_digest": "cb0e535e1e58a4dbf42c5f22a3eded19fa0c228c6531b70530b226eeb2dbf24c",
+              "position": 6,
+              "uid": "ae1610f6-a855-56c1-a0fb-fd3207dab615"
+            },
+            {
+              "content": "Reviewers often inspect the proposal’s main visual before reading the procedural explanation in full.",
+              "content_digest": "a609677d56e7297c736ee92c7a45eb4d83824985a780d8ca4df664f1494c5cb2",
+              "position": 7,
+              "uid": "d2825b84-b4a6-58c9-8f8e-9e19c6192a03"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "3fd1d214-b3c8-4742-90ae-6fbc9851d87f"
+        },
+        {
+          "context_digest": "6cd44802c5b4878ee84adef31f52231d09d37ccc0ef9a7256d0421114835a6bd",
+          "context_name": "task-2/advisor2/claim-evidence",
+          "context_uid": "1ca4b72a-fcbb-5997-a1b5-f764662460a5",
+          "memories": [
+            {
+              "content": "Place observational evidence or sources adjacent to claims regarding user needs or field effects.",
+              "content_digest": "513b102a6ed66a1dd3fb3380065f34552036a6dffed20d7101487342096021e3",
+              "position": 0,
+              "uid": "b39cf79f-d174-5ecb-98c9-b3f62ce0696a"
+            },
+            {
+              "content": "Distinguish at the sentence level between facts already confirmed in the field and predictions to be examined in the user study.",
+              "content_digest": "63a7fdcf7da5c4fa36a2c7a6f8542837956fa0dcdedee781593f399516501067",
+              "position": 1,
+              "uid": "b95e0185-f933-508d-8da7-41c65e2cc340"
+            },
+            {
+              "content": "Do not use verbs implying proof of causality if the design does not support causal inference.",
+              "content_digest": "0db514f790eb85ba0800c1f8c659cd4236136b9e36c034899c36f6116c040f04",
+              "position": 2,
+              "uid": "f82f1e1f-3f27-5668-a5a4-e64b0f88b44a"
+            },
+            {
+              "content": "Prioritize citations of recent systems and field research in rapidly changing HCI topics.",
+              "content_digest": "e8cd0847480ba8d07f971f21978873d13b6bd34d4e4625dd3dde8039afd5b88c",
+              "position": 3,
+              "uid": "b5461283-9001-510c-9a30-bb367f247b25"
+            },
+            {
+              "content": "Explain the user or operational stakeholder needs that each design choice aims to address.",
+              "content_digest": "59df6b478a0e200ceaa520bb7c4535b2078a8354efae0eec77a06cb6843bfab6",
+              "position": 4,
+              "uid": "87340c01-2e0f-5b82-9410-2133648022da"
+            },
+            {
+              "content": "Support each important conclusion with the closest evidence that directly examined it.",
+              "content_digest": "6731286cd67ee18644df531752f10913f4df9e7c7acf936da99caafacd597c0a",
+              "position": 5,
+              "uid": "8b15a9ad-aa53-5a54-beb2-f1cc8d6da846"
+            },
+            {
+              "content": "Reviewers first check direct evidence placed closest to important conclusions.",
+              "content_digest": "940880f0ee481e00ff7f935c9b76af8137d0f8a8664a2c53fb3d044681980c8f",
+              "position": 6,
+              "uid": "565a2263-e3bc-5379-9a80-64665b491c88"
+            },
+            {
+              "content": "Use field cases in which people completed tasks by working around existing tools as evidence for the need for the design.",
+              "content_digest": "4c731184cb33bda8ab315870713872842339013be68cf5f79c43a8b9f4e297d4",
+              "position": 7,
+              "uid": "27b58ee9-5cad-5872-8eb7-a694728d8e79"
+            },
+            {
+              "content": "Distinguish between problems reported by operational stakeholders and those directly observed by the researcher as separate forms of evidence.",
+              "content_digest": "39586ea932c540d6c7a1b0faff870d7ef6433052792defdc110beb513276ffe6",
+              "position": 8,
+              "uid": "cf7e9410-2144-53c4-a236-a16a7b5be494"
+            },
+            {
+              "content": "Field breakdown logs can reveal both system failures and user adaptive behaviors, including their timing and conditions.",
+              "content_digest": "331910b18eef90e53453e700a55b43143b3e8d07d3bb2c88bade31fddb0e5965",
+              "position": 9,
+              "uid": "ad643b33-fba1-5643-b57f-3bb8c3829122"
+            },
+            {
+              "content": "In field sites introducing new systems, formal procedures often coexist with existing manual routines for a period, making it difficult to isolate the effects of single design changes.",
+              "content_digest": "7def8e340a5ae1ad7cce9228e3e4279f499f47f0d2576bbe23e59f3703f04084",
+              "position": 10,
+              "uid": "546548e3-c47a-5a74-a04a-0a328602ead4"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "0c49f669-0e94-44db-a058-6d85cae19fbc"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address complementary aspects of HCI proposals without making the same operational claims. One concentrates on selecting, presenting, and maintaining branching visuals and on visual-first review; the other concentrates on evidence placement, epistemic precision, stakeholder justification, field evidence, and causal limitations.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3fd1d214-b3c8-4742-90ae-6fbc9851d87f",
+              "memory_uid": "51fa3fcc-9d5f-52f0-809d-62d7cdd8a865"
+            },
+            {
+              "frame_uid": "3fd1d214-b3c8-4742-90ae-6fbc9851d87f",
+              "memory_uid": "e686bd4d-3ebd-5e55-ba39-f26971247965"
+            },
+            {
+              "frame_uid": "3fd1d214-b3c8-4742-90ae-6fbc9851d87f",
+              "memory_uid": "a6dfe9a7-1df8-561f-8d3e-fc19518beca9"
+            },
+            {
+              "frame_uid": "3fd1d214-b3c8-4742-90ae-6fbc9851d87f",
+              "memory_uid": "50a71968-7e3f-5b99-b3fa-769af386d0c0"
+            }
+          ],
+          "reason": "These statements split one visual-design claim: a flow diagram exposes branches and outcomes in one view and communicates their overall shape more quickly than row-wise presentation.",
+          "status": "RESOLVED",
+          "summary": "Present alternate procedural branches and outcomes together in a flow diagram when readers need to grasp and compare the branching structure.",
+          "uid": "384f4643-0290-5ce3-a8a0-84e6bdde7918"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3fd1d214-b3c8-4742-90ae-6fbc9851d87f",
+              "memory_uid": "019662a9-6f03-527f-9b6d-be5a2966d9e9"
+            }
+          ],
+          "reason": "This independently useful prototype-assessment distinction appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Treat a prototype’s visual fidelity and functional fidelity as potentially different dimensions.",
+          "uid": "302957ba-44ce-5176-b7b4-8cb3e7b31236"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3fd1d214-b3c8-4742-90ae-6fbc9851d87f",
+              "memory_uid": "7047a23d-45b3-5d5c-a00b-c12552e9680d"
+            },
+            {
+              "frame_uid": "3fd1d214-b3c8-4742-90ae-6fbc9851d87f",
+              "memory_uid": "d2825b84-b4a6-58c9-8f8e-9e19c6192a03"
+            }
+          ],
+          "reason": "Both statements describe the same visual-first review pattern, which is not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Expect reviewers to inspect prominent prototype visuals and interaction-flow diagrams before reading the full explanation.",
+          "uid": "40b584cb-b6dc-5e31-a56e-407305a2cb86"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3fd1d214-b3c8-4742-90ae-6fbc9851d87f",
+              "memory_uid": "ae1610f6-a855-56c1-a0fb-fd3207dab615"
+            }
+          ],
+          "reason": "This is an independent maintenance-cost consideration found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Recognize that revising a branching flow diagram after a procedural change can take longer than changing a table row.",
+          "uid": "fddc8a04-c125-51d6-a1b4-c121326b9cdb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0c49f669-0e94-44db-a058-6d85cae19fbc",
+              "memory_uid": "b39cf79f-d174-5ecb-98c9-b3f62ce0696a"
+            },
+            {
+              "frame_uid": "0c49f669-0e94-44db-a058-6d85cae19fbc",
+              "memory_uid": "8b15a9ad-aa53-5a54-beb2-f1cc8d6da846"
+            },
+            {
+              "frame_uid": "0c49f669-0e94-44db-a058-6d85cae19fbc",
+              "memory_uid": "565a2263-e3bc-5379-9a80-64665b491c88"
+            }
+          ],
+          "reason": "These statements split one evidence-traceability policy and its reviewer-centered rationale; the reference frame contains no corresponding evidence-placement claim.",
+          "status": "RESOLVED",
+          "summary": "Place the most direct supporting evidence close to important claims and conclusions, especially claims about user needs or field effects.",
+          "uid": "585ca979-bc81-5933-8b5e-537ee9687897"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0c49f669-0e94-44db-a058-6d85cae19fbc",
+              "memory_uid": "b95e0185-f933-508d-8da7-41c65e2cc340"
+            }
+          ],
+          "reason": "This sentence-level epistemic distinction is independently useful and appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Distinguish confirmed field facts from predictions that a user study will examine.",
+          "uid": "6e792701-2435-5b20-97b0-f287372399bb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0c49f669-0e94-44db-a058-6d85cae19fbc",
+              "memory_uid": "f82f1e1f-3f27-5668-a5a4-e64b0f88b44a"
+            }
+          ],
+          "reason": "This claim independently governs causal wording and appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Avoid language implying proven causality when the study design cannot support causal inference.",
+          "uid": "c25a88cf-060e-5741-bc6d-a25e3a461ad1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0c49f669-0e94-44db-a058-6d85cae19fbc",
+              "memory_uid": "b5461283-9001-510c-9a30-bb367f247b25"
+            }
+          ],
+          "reason": "This source-recency policy is independently useful and has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Prioritize recent systems and field research when citing rapidly changing HCI topics.",
+          "uid": "44c15f8b-3fef-5e6b-bf49-dd388d4e531c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0c49f669-0e94-44db-a058-6d85cae19fbc",
+              "memory_uid": "87340c01-2e0f-5b82-9410-2133648022da"
+            }
+          ],
+          "reason": "This design-rationale requirement appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Explain which user or operational stakeholder needs each design choice is intended to address.",
+          "uid": "963ccf97-e95f-5734-9c32-b7f018c5dfe3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0c49f669-0e94-44db-a058-6d85cae19fbc",
+              "memory_uid": "27b58ee9-5cad-5872-8eb7-a694728d8e79"
+            }
+          ],
+          "reason": "This specifies an independently useful form and use of field evidence absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Use field cases where people work around existing tools as evidence of design need.",
+          "uid": "f713f582-50e1-51d9-b9f0-f7384458ddc8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0c49f669-0e94-44db-a058-6d85cae19fbc",
+              "memory_uid": "cf7e9410-2144-53c4-a236-a16a7b5be494"
+            }
+          ],
+          "reason": "This evidence-provenance distinction appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Keep stakeholder-reported problems distinct from problems directly observed by researchers.",
+          "uid": "20aebf18-e20e-535f-b626-c83408aaa69a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0c49f669-0e94-44db-a058-6d85cae19fbc",
+              "memory_uid": "ad643b33-fba1-5643-b57f-3bb8c3829122"
+            }
+          ],
+          "reason": "This describes a distinct evidentiary value of breakdown logs not covered by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Use field breakdown logs to identify system failures and user adaptations together with their timing and conditions.",
+          "uid": "ba61c0a4-b4b6-5316-b22a-d46280688bf9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0c49f669-0e94-44db-a058-6d85cae19fbc",
+              "memory_uid": "546548e3-c47a-5a74-a04a-0a328602ead4"
+            }
+          ],
+          "reason": "This field-study limitation is an independent contextual claim found only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Account for the difficulty of isolating individual design effects when new systems temporarily coexist with established manual routines.",
+          "uid": "2d285c21-f44b-5ec9-a553-9657683a5284"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame emphasizes traceable evidence, careful causal and epistemic language, stakeholder-linked design rationale, differentiated field observations, and limits on attributing effects during system transitions.",
+        "differences": "",
+        "reference_only": "The reference frame favors unified flow diagrams for branching procedures, while noting prototype fidelity, reviewer attention, and diagram-maintenance costs."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "13b90a6d-dcdd-4ead-85cb-3dda3b2ab632"
+    },
+    "analysis_digest": "ce3ac75b7c1559ee4d4d2b3378526d627138126c42a5fce0ffff7f37b638cc09",
+    "key": "359b0d9cf513a449c383ad5e08f1bc358fa86430248c0bf41e7f9b8c2ca9f16e",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 40.490463665999414,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "359b0d9cf513a449c383ad5e08f1bc358fa86430248c0bf41e7f9b8c2ca9f16e",
+  "created_at": "2026-08-13T18:21:03.317011Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/expression",
+  "pair_key": "70bf5f027d20352b11d9419dc76fb962639443146299b218dfab779e9b25161c",
+  "provider_seconds": 40.490463665999414,
+  "right": "task-2/advisor2/claim-evidence",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

@@ -194,11 +194,11 @@ _OPERATIONS = (
     ),
     _operation(
         "fit",
-        "Judge whether two or more propositions can jointly hold under ordinary readings.",
-        "Propositions + optional background -> YES / MAY / NO",
+        "Judge proposition compatibility, or detect coherence issues across one saved Ground graph.",
+        "Propositions + optional background -> YES / MAY / NO; Ground + bound Contexts -> complete Fit receipt",
         ExecutionKind.SEMANTIC,
         "Read-only; changes no Context, Ground, Rule, Goal, or Memory",
-        "One complete frozen proposition set; Ground is an explicit adapter",
+        "One complete frozen frame; Ground checks Context, vertical, peer, and Rule–Example relations",
     ),
     _operation(
         "resolve",
@@ -207,6 +207,14 @@ _OPERATIONS = (
         ExecutionKind.SEMANTIC,
         "Read-only until one exact candidate is explicitly applied; Apply creates one checkpoint",
         "One exact direct Context; explicit Memory UID prefixes may narrow mutation targets",
+    ),
+    _operation(
+        "dedup",
+        "Keep one unchanged existing Memory per confirmed duplicate component.",
+        "Confirmed duplicate handoffs -> reviewed survivors -> exact Apply",
+        ExecutionKind.DETERMINISTIC,
+        "Read-only until exact Apply; Apply deletes absorbed UIDs in one checkpoint",
+        "One exact direct Context; inbound references block version 1 Apply",
     ),
     _operation(
         "find-ambiguities",

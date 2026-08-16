@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:50:15.960605+00:00",
+      "frames": [
+        {
+          "context_digest": "14adbc31fc3a2dc50b7b980d1e24569b16fff058104a812c7f3b4e1542b7abf0",
+          "context_name": "task-3/local/personal-memory/2025/03",
+          "context_uid": "913e0bfd-f6d9-579e-9a37-ba5daa9d17f1",
+          "memories": [
+            {
+              "content": "The user stores prepared meals on the second shelf of the freezer.",
+              "content_digest": "cd837b62b643f752da54b21de2f4f7a3d963a7c658d5b83dff39d1d92e0fdbad",
+              "position": 0,
+              "uid": "5d989bab-c471-5de9-bb73-29cabc4753dd"
+            },
+            {
+              "content": "The user went to the market without a shopping list and bought onions that were already at home.",
+              "content_digest": "f667c860e046bb27662b26d7cc4ed083ee48d9d7915237dc4b92ec378481a093",
+              "position": 1,
+              "uid": "d1725ae4-3fd3-5250-92b3-73d84d9152a7"
+            },
+            {
+              "content": "On a day the user shopped after checking a refrigerator photo, they did not make a duplicate purchase.",
+              "content_digest": "7283d4afe58c0ab05d9cb426bb80bed0e26e0b1783ff7cdd00a5f6e89d21861b",
+              "position": 2,
+              "uid": "904ff225-26df-5424-8a82-23d733649106"
+            },
+            {
+              "content": "On a day the user made a spicy stew, they left part of one bowl uneaten.",
+              "content_digest": "2765ec701f8e058d35ddee4a485c40221523ee2d9b56301ec1658ec4e419cbc2",
+              "position": 3,
+              "uid": "67a003c7-648a-59dc-8e82-03f9e452ffce"
+            },
+            {
+              "content": "The next time the user cooked it, they used half as much chili powder and finished the meal.",
+              "content_digest": "bdd7df7c762bbce31a40a45c2124e49ae3a6439dfc2133c574443d7eb3a7b1bb",
+              "position": 4,
+              "uid": "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9"
+            },
+            {
+              "content": "When cooking with their younger brother, the user assigned the cooking sequence only verbally and they did the same task twice.",
+              "content_digest": "bd92611cfc05fd42bb5d25e8dd7838ca1b2f6d99869bf1f61921b46950a4b532",
+              "position": 5,
+              "uid": "64bf4401-e972-5d15-a526-21ca901a6a9f"
+            },
+            {
+              "content": "The next time, the user and their younger brother split ingredient preparation and heat control and finished the meal 20 minutes earlier.",
+              "content_digest": "c3a28e7256d781ecb2d8710145880ffe79495e32d47ae1949c4be54e52a44555",
+              "position": 6,
+              "uid": "57e09ea5-54ff-5fce-aada-68daffbacc8b"
+            },
+            {
+              "content": "When cooking together, the user's younger brother prefers to divide the cooking and dishwashing roles in advance.",
+              "content_digest": "3bbc428c4f3b4e28a8e2341206ac78b39240eea53a9862192528029b0a57d12b",
+              "position": 7,
+              "uid": "0a5d054f-94bd-5955-bdb7-9b5427e2260b"
+            },
+            {
+              "content": "The local agent can compare responses across several meals, but it cannot conclude from one unfinished food item that the user dislikes that ingredient.",
+              "content_digest": "5787c1636d9dd4a5cb5bd70533b7dd44b2d6cff1047f5c408f5bcaa1b6577fe1",
+              "position": 8,
+              "uid": "1f94b78b-1635-551c-b90c-bea2a67ca595"
+            },
+            {
+              "content": "The condition of frozen prepared food may vary with its packaging and storage duration.",
+              "content_digest": "84bdac276dce5b50b19bc0c7c471468a22cc9945b1da7357700a58c157cf4ca1",
+              "position": 9,
+              "uid": "f64ef6c4-7665-5574-9d58-fc124b0bfe3f"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "7031ee36-d2da-4015-98a3-dc7d06144e88"
+        },
+        {
+          "context_digest": "1d47d83944d91bc0316a61894412e9b4361758603b9532687cf68473f1d30198",
+          "context_name": "task-3/local/personal-memory/2026/01",
+          "context_uid": "e48e6eac-20f7-599d-9f76-4238bd9dd96d",
+          "memories": [
+            {
+              "content": "The user keeps gloves and scarves in a basket inside the entrance.",
+              "content_digest": "df54c52cb6bc89e2e66c747df9807c6892db272c2a23ac5ac91e3f64aaa2a5da",
+              "position": 0,
+              "uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409"
+            },
+            {
+              "content": "On a day the user could not find their gloves, they walked with their hands in their pockets and missed the bus.",
+              "content_digest": "d4205aee5fe3f2c18adc3622930cc7f74de231de9812ca594dbd95a0af7199ff",
+              "position": 1,
+              "uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5"
+            },
+            {
+              "content": "Before the next outing, the user put the gloves in the entrance basket the night before and left on time.",
+              "content_digest": "23a7026d7d1a7edd3278e7b8aa147ef0d315059663f78da5498ad6c1b4a5407c",
+              "position": 2,
+              "uid": "a11f0943-8ee1-5305-87fb-64982fb36f82"
+            },
+            {
+              "content": "On a snowy day, the user chose a shorter route but turned back at stairs that had not been cleared of snow.",
+              "content_digest": "e9e241d2bc4d7c2fa9a44471aa6d1c16d42d50fe2ed99ccfb50713107714be9b",
+              "position": 3,
+              "uid": "f623f245-cdd5-5080-8869-b52cf2914076"
+            },
+            {
+              "content": "The next day, the user took a cleared sidewalk along the main road and avoided slippery sections.",
+              "content_digest": "62c8ec8b38778e9922cf433af4ceb4d59f60bee52dc758e3b88bb1163637f108",
+              "position": 4,
+              "uid": "17ac56f1-1302-5350-99d5-b95ef7feb768"
+            },
+            {
+              "content": "The user fell asleep with the heat turned up, became too warm before dawn, and woke twice.",
+              "content_digest": "912dbbc88a0f4a174b714a794793781f4d2f6c889f73cd7f825338addcab5d6c",
+              "position": 5,
+              "uid": "96988fa9-44b1-511e-8c99-4372f902cfe3"
+            },
+            {
+              "content": "The next night, the user turned down the heat and used one additional thin blanket.",
+              "content_digest": "3d12a4609d4731ebe71bacc841c979ac3497553238c3b5c2191842bbf075ba89",
+              "position": 6,
+              "uid": "b628acaa-50da-552c-8665-244dc4ab8263"
+            },
+            {
+              "content": "On a morning with heavy snow, the user's father expects the user will worry about road conditions and sends a text before departure.",
+              "content_digest": "dcd6bcb23bee46e49813bb14dd8dcb91983d5830f0536d7f23fcdb3a8af0667c",
+              "position": 7,
+              "uid": "08dfb937-7b28-55b5-801c-c0da00cbd414"
+            },
+            {
+              "content": "Before proposing a winter travel route, check recent snow-clearing conditions and accessible entrances.",
+              "content_digest": "dcab87102a9979c51dd369d5ba5ed00b7445c8ccd14450edcb8bec7859689606",
+              "position": 8,
+              "uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d"
+            },
+            {
+              "content": "The local agent cannot know the actual condition of the sidewalk the user will take from a weather forecast alone.",
+              "content_digest": "6b4bcc2f2f508f130c047ff677cadae0eae5b4cc5e5dd6bb3a1fb3784d7793b1",
+              "position": 9,
+              "uid": "802c4031-57de-592a-9bc8-6ee3d54921c8"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "ed2d00c5-f3a3-4e39-be88-c9492b1a411b"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate domains: the reference describes food storage, shopping, cooking adjustments, collaboration, and inference limits, while the compared frame describes winter-item organization, travel, heating, family expectations, and route-condition uncertainty. No operational claim materially overlaps across sides.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7031ee36-d2da-4015-98a3-dc7d06144e88",
+              "memory_uid": "5d989bab-c471-5de9-bb73-29cabc4753dd"
+            }
+          ],
+          "reason": "This one-sided storage-location fact has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Prepared meals are stored on the freezer’s second shelf.",
+          "uid": "9eaf213f-5c93-5a0e-9fc2-cab9572f0cff"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7031ee36-d2da-4015-98a3-dc7d06144e88",
+              "memory_uid": "d1725ae4-3fd3-5250-92b3-73d84d9152a7"
+            }
+          ],
+          "reason": "This one-sided duplicate-purchase episode has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Shopping without a list resulted in buying onions already present at home.",
+          "uid": "69dfd0f0-c0a8-5e8e-b9a6-cb8d4181ac5c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7031ee36-d2da-4015-98a3-dc7d06144e88",
+              "memory_uid": "904ff225-26df-5424-8a82-23d733649106"
+            }
+          ],
+          "reason": "This one-sided shopping-preparation outcome has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Checking a refrigerator photo before shopping coincided with avoiding a duplicate purchase.",
+          "uid": "396639fe-f238-5cf3-94e3-0f089a5df09a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7031ee36-d2da-4015-98a3-dc7d06144e88",
+              "memory_uid": "67a003c7-648a-59dc-8e82-03f9e452ffce"
+            }
+          ],
+          "reason": "This one-sided meal-response observation has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Part of a spicy stew serving was left uneaten.",
+          "uid": "ae1b8d53-5ba4-5ee3-b16f-cc1310d7abe1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7031ee36-d2da-4015-98a3-dc7d06144e88",
+              "memory_uid": "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9"
+            }
+          ],
+          "reason": "This one-sided cooking-adjustment outcome has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Using half as much chili powder on the next occasion coincided with finishing the meal.",
+          "uid": "bc29eeec-1252-5aef-a5ac-96b2edf2aa91"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7031ee36-d2da-4015-98a3-dc7d06144e88",
+              "memory_uid": "64bf4401-e972-5d15-a526-21ca901a6a9f"
+            }
+          ],
+          "reason": "This one-sided collaboration episode has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Verbally assigning a cooking sequence with the younger brother led to duplicated work.",
+          "uid": "5d40d7db-7c82-54aa-91b3-26fce67878e7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7031ee36-d2da-4015-98a3-dc7d06144e88",
+              "memory_uid": "57e09ea5-54ff-5fce-aada-68daffbacc8b"
+            }
+          ],
+          "reason": "This one-sided cooking-role outcome has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Splitting ingredient preparation and heat control with the younger brother shortened completion time by 20 minutes.",
+          "uid": "e3fa9d7b-7ae3-5895-bfce-fc1191840f8c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7031ee36-d2da-4015-98a3-dc7d06144e88",
+              "memory_uid": "0a5d054f-94bd-5955-bdb7-9b5427e2260b"
+            }
+          ],
+          "reason": "This one-sided interpersonal preference has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The younger brother prefers assigning cooking and dishwashing roles in advance.",
+          "uid": "a46c424e-590f-54a7-bde2-10a9660fb7f2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7031ee36-d2da-4015-98a3-dc7d06144e88",
+              "memory_uid": "1f94b78b-1635-551c-b90c-bea2a67ca595"
+            }
+          ],
+          "reason": "This one-sided inference constraint concerns food preference and has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Meal responses can be compared across occasions, but one unfinished item cannot establish ingredient dislike.",
+          "uid": "6686ba95-1a91-5adc-887d-7c3e412d5abb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7031ee36-d2da-4015-98a3-dc7d06144e88",
+              "memory_uid": "f64ef6c4-7665-5574-9d58-fc124b0bfe3f"
+            }
+          ],
+          "reason": "This one-sided food-storage qualification has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Frozen prepared-food condition may depend on packaging and storage duration.",
+          "uid": "4f1ae4c2-13b5-547b-b13a-c9270ab9fadd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ed2d00c5-f3a3-4e39-be88-c9492b1a411b",
+              "memory_uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409"
+            }
+          ],
+          "reason": "This one-sided winter-item storage fact has no materially corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Gloves and scarves are kept in an entrance basket.",
+          "uid": "a4e3a8fc-293b-5e9b-93f2-f06a45b9807d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ed2d00c5-f3a3-4e39-be88-c9492b1a411b",
+              "memory_uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5"
+            }
+          ],
+          "reason": "This one-sided outing episode has no materially corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Unable to find gloves, the user walked with hands in pockets and missed the bus.",
+          "uid": "57fc970f-8f25-5f25-be19-441de8f4ba5b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ed2d00c5-f3a3-4e39-be88-c9492b1a411b",
+              "memory_uid": "a11f0943-8ee1-5305-87fb-64982fb36f82"
+            }
+          ],
+          "reason": "This one-sided departure-preparation outcome has no materially corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Placing gloves in the entrance basket the night before preceded leaving on time.",
+          "uid": "7b5a9b3c-7d10-5604-b552-d1f2df67fa0c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ed2d00c5-f3a3-4e39-be88-c9492b1a411b",
+              "memory_uid": "f623f245-cdd5-5080-8869-b52cf2914076"
+            }
+          ],
+          "reason": "This one-sided winter-route episode has no materially corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A shorter snowy route was abandoned because its stairs were uncleared.",
+          "uid": "8b956a6b-cbd2-595d-ad74-3f361ab96730"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ed2d00c5-f3a3-4e39-be88-c9492b1a411b",
+              "memory_uid": "17ac56f1-1302-5350-99d5-b95ef7feb768"
+            }
+          ],
+          "reason": "This one-sided route-choice outcome has no materially corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Using a cleared main-road sidewalk avoided slippery sections.",
+          "uid": "a4f70a3b-a0c7-5b37-9c60-3dba3d6de1fa"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ed2d00c5-f3a3-4e39-be88-c9492b1a411b",
+              "memory_uid": "96988fa9-44b1-511e-8c99-4372f902cfe3"
+            }
+          ],
+          "reason": "This one-sided sleep-and-heating observation has no materially corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Sleeping with increased heat caused excessive warmth and two awakenings.",
+          "uid": "5faa2819-95a9-52af-8368-66a5c20e53f4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ed2d00c5-f3a3-4e39-be88-c9492b1a411b",
+              "memory_uid": "b628acaa-50da-552c-8665-244dc4ab8263"
+            }
+          ],
+          "reason": "This one-sided nighttime temperature adjustment has no materially corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The next night combined lower heat with one additional thin blanket.",
+          "uid": "80f16057-b063-5549-a5e8-878b99285433"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ed2d00c5-f3a3-4e39-be88-c9492b1a411b",
+              "memory_uid": "08dfb937-7b28-55b5-801c-c0da00cbd414"
+            }
+          ],
+          "reason": "This one-sided family expectation and behavior has no materially corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "During heavy snow, the user’s father anticipates road-condition worry and texts before departure.",
+          "uid": "8b8c5238-e210-5376-8c92-9afd6c4a4f6c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ed2d00c5-f3a3-4e39-be88-c9492b1a411b",
+              "memory_uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d"
+            }
+          ],
+          "reason": "This one-sided route-planning policy has no materially corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Winter route proposals should follow checks of recent snow clearing and accessible entrances.",
+          "uid": "baae9f5d-1c50-5bf0-bef9-ddf4ebdc5447"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ed2d00c5-f3a3-4e39-be88-c9492b1a411b",
+              "memory_uid": "802c4031-57de-592a-9bc8-6ee3d54921c8"
+            }
+          ],
+          "reason": "This one-sided inference constraint concerns winter travel conditions and has no materially corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A weather forecast alone cannot establish the actual condition of the user’s sidewalk.",
+          "uid": "33e115ba-a153-5f57-8d33-978934c1e9c1"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers entrance storage, preparing gloves, snow-route choices and verification, adjusting nighttime warmth, a father’s travel concern, and limits on predicting sidewalk conditions.",
+        "differences": "",
+        "reference_only": "The reference covers freezer storage and food condition, duplicate-shopping prevention, adapting spice levels, coordinating shared cooking, a sibling’s role preference, and limits on inferring ingredient dislike."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "b55419ae-8a89-46f7-a21b-7b73e0c1f7af"
+    },
+    "analysis_digest": "db81491b646eb7e71d20e6d8374f0911a3a1916fc0705d7d0fae796c35a9568f",
+    "key": "c67159f343358f98df548509c6ba3ccb4e57aa6ede7d8fa26e6f8741d877184f",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 42.570140541,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "c67159f343358f98df548509c6ba3ccb4e57aa6ede7d8fa26e6f8741d877184f",
+  "created_at": "2026-08-13T18:50:58.530353Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/03",
+  "pair_key": "6129c3ee9d1485d281327dc91ac8bb80983dcdf472e437facd8fde5ccd306631",
+  "provider_seconds": 42.570140541,
+  "right": "task-3/local/personal-memory/2026/01",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

@@ -42,7 +42,7 @@ from memcommit.commands.exact_command_review import (
     render_exact_command_review,
 )
 from memcommit.commands.session_help import bind_session_help
-from memcommit.commands.context_picker import choose_context
+from memcommit.context_targeting.tui.picker import choose_context
 from memcommit.interfaces.tui.components.in_frame_input import (
     InFrameInputManager,
     InFrameInputSection,
@@ -2745,7 +2745,11 @@ def run_ground_shell(
                     app_input=app_input,
                     app_output=app_output,
                     require_tty=require_tty,
-                )
+                ),
+                # The nested picker owns a synchronous prompt-toolkit
+                # Application. Run it off the outer Ground event loop so its
+                # internal asyncio.run() remains valid.
+                in_executor=True,
             )
             if result is None:
                 status_message["value"] = "Direct Context selection cancelled."

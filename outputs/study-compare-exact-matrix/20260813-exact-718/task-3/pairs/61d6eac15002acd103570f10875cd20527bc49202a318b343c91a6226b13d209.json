@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:36:23.189428+00:00",
+      "frames": [
+        {
+          "context_digest": "4c7d7890b4c8dbd807acc103affd0572c325fd2e0f58346a97c3ed49e48ba34e",
+          "context_name": "task-3/local/personal-memory/2024/02",
+          "context_uid": "7bedad96-d78b-5977-a4c9-71049dcfcec8",
+          "memories": [
+            {
+              "content": "The user's maternal aunt keeps one spare key to the user's home.",
+              "content_digest": "2e45c292a3cbc26a1c9928c4546c6029c7dcd2aa6aa0a45a7cfb4be7888dd5c6",
+              "position": 0,
+              "uid": "1c627e4c-c393-5bd3-a5ae-b3318821be73"
+            },
+            {
+              "content": "If the door is locked, the user is accustomed to contacting their maternal aunt, who has the spare key, before contacting building management.",
+              "content_digest": "709cc4a1ae26126bd3238ea8c0e343415d95d084ddaf022590ff4197003c7b81",
+              "position": 1,
+              "uid": "e80936de-87af-5dbb-ab94-d456bbfaab0a"
+            },
+            {
+              "content": "When going to collect the spare key from their maternal aunt, the user wants to give an arrival time first so neither person has to wait.",
+              "content_digest": "5dab57d537091a28848dfa3592d16e038d6e78eeb8159489c17475befeb62a53",
+              "position": 2,
+              "uid": "7c26cf33-0630-5138-910a-6d37d6ed2b63"
+            },
+            {
+              "content": "The user feels at ease only after returning a borrowed spare key in person on the same day.",
+              "content_digest": "d3b9e78e166fb3af3dc248bcddbf1c1df15d3eed57655991a52c23b4ebb6ba14",
+              "position": 3,
+              "uid": "c3f0f26c-8d89-55e3-8bf3-398271e417e7"
+            },
+            {
+              "content": "The user feels uneasy about writing down a new entrance passcode on paper.",
+              "content_digest": "fe40a50fb7f0b0e1514a2f7e6ea3748e73cbd76fa45b862b4880c9eba68a2312",
+              "position": 4,
+              "uid": "7d7d00a3-c5af-5441-bb50-9631fbfd7979"
+            },
+            {
+              "content": "The user found it difficult when a family member arrived without notice during a meeting and the user could not respond immediately.",
+              "content_digest": "30d2126eb016f1fab8b8bd670bc00ee6ac5182f28b0afe696b2c30f4d7bc128f",
+              "position": 5,
+              "uid": "2e0df581-bd54-54f5-94ef-b719427fc88c"
+            },
+            {
+              "content": "On a day their younger brother received a package for them, the user felt reassured after checking the delivery photo.",
+              "content_digest": "54eacbc39b057a6a18f8ddd8e1db587dbef231ecb10ed8cd84a46b3575ac470c",
+              "position": 6,
+              "uid": "9278b64e-7550-5eb6-bbfd-544a2ae4ec3d"
+            },
+            {
+              "content": "The user's maternal aunt wants confirmation that the user is coming in person before handing over the spare key.",
+              "content_digest": "5d780f2fb96eac2d3c65e7417ee00e64e29c2f8873c432b291e62773723182c9",
+              "position": 7,
+              "uid": "76fb9115-a3f2-5ce3-a445-c3d1e38e4253"
+            },
+            {
+              "content": "Confirm with the user before sharing the spare key's storage location or the maternal aunt's contact information.",
+              "content_digest": "ac00da1acd77d05fd277a0a92d2ab62cbefb3c334e6e7c2cb3b046fbea217a6c",
+              "position": 8,
+              "uid": "6fa50e1d-8bd1-557a-9b03-1e4a4dc664bd"
+            },
+            {
+              "content": "The management office of a multi-unit residential building does not hold a unit key without verifying identity.",
+              "content_digest": "841f44fddced7681d5c9b47aaa2536f14536f1309b1f73104df7cb44738efbd1",
+              "position": 9,
+              "uid": "b18ff5b4-4f0d-5b93-8c41-439e5b15c710"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "1a134f8c-9362-4eb0-888c-f91341061172"
+        },
+        {
+          "context_digest": "4b8dc68a205171fe661b04620d0fba2bbb386ff21d494699c34a74dc2ab86080",
+          "context_name": "task-3/local/personal-memory/2026/03",
+          "context_uid": "97d36150-4792-5a5c-9332-5eb1de8bcf04",
+          "memories": [
+            {
+              "content": "The user stores tax-related receipts in digital folders by year.",
+              "content_digest": "778f983547572b31798b7041899812a7b0b574d74b585baf6883e94919dee6ec",
+              "position": 0,
+              "uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393"
+            },
+            {
+              "content": "The user found three paper receipts late and recalculated the expense total already prepared.",
+              "content_digest": "542368a141ec82a1bd7da4b534d88ea62c487d16a37f454569bf6400cbc749e9",
+              "position": 1,
+              "uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878"
+            },
+            {
+              "content": "Starting the next month, the user photographed receipts on the day they were received and reduced omissions.",
+              "content_digest": "b95e0a1afa1196a9bff117bf12b1630edcc4eb65bfdfeb3128ae5937563a492e",
+              "position": 2,
+              "uid": "ff436ea5-1b3e-55df-8302-bd8a96740671"
+            },
+            {
+              "content": "The user named every file with only the photo date and spent a long time looking for a needed receipt.",
+              "content_digest": "c3aa33e0b7e007bdfc5c12dcda659e2a52938548fbf53d5a1ab034487a528857",
+              "position": 3,
+              "uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e"
+            },
+            {
+              "content": "The user later included the expense category in the filename and found the receipt immediately through search.",
+              "content_digest": "cdae97761f614b932d3b330723627bee8b0e3d033e2bf1061b721367237acee1",
+              "position": 4,
+              "uid": "89d6fa9a-b795-59df-be34-1c05a9861d35"
+            },
+            {
+              "content": "While reviewing documents just before submission, the user discovered one blank signature field.",
+              "content_digest": "a525c117b97eec82c678f276b319158703bf9cc558fb83cb81c0820d5c9e3174",
+              "position": 5,
+              "uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2"
+            },
+            {
+              "content": "Before submitting an administrative document, the user checks the signature field as the final item on the checklist.",
+              "content_digest": "542bec3cbc3fc8b22c95da274e479e96bfbf061a3b644d0d7f213de5a030dbd5",
+              "position": 6,
+              "uid": "5551622f-66cf-5542-8c47-1cddadab5c02"
+            },
+            {
+              "content": "Staff at a tax-support counter expect to receive an electronic copy in which every item is legible rather than a blurred or cropped photo.",
+              "content_digest": "d328ca248fdeecf0756e23b1202e7007bc8c3c25ae769439b0fd2efdbbe47580",
+              "position": 7,
+              "uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f"
+            },
+            {
+              "content": "The local agent can organize receipts by date and category but cannot determine whether an expense is deductible.",
+              "content_digest": "bcc769721a99b099ca20e5e527fa8904d54ecbaf9ae7d7616b95e1adaf1f89a9",
+              "position": 8,
+              "uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094"
+            },
+            {
+              "content": "The accepted scope and submission deadlines for administrative documents may vary under that year's guidance.",
+              "content_digest": "1ab61126b8efb0c2a9c6114c367018158f2e136bafa87e33f60aadb0686d0537",
+              "position": 9,
+              "uid": "de398064-3179-590b-8c62-effb17060115"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "e113a965-fc02-4dbc-81eb-2b917cb120a7"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover wholly separate domains. The reference frame concerns home access, key-handling privacy, family coordination, deliveries, passcodes, and building-management verification; the compared frame concerns receipt digitization, document checks, submission quality, tax-support limits, and changing administrative guidance. No cross-frame operational claim materially overlaps.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1a134f8c-9362-4eb0-888c-f91341061172",
+              "memory_uid": "1c627e4c-c393-5bd3-a5ae-b3318821be73"
+            }
+          ],
+          "reason": "Only the reference frame identifies who holds the user's spare home key; the compared frame concerns administrative records and supplies no materially related access claim.",
+          "status": "RESOLVED",
+          "summary": "The maternal aunt keeps a spare key to the user's home.",
+          "uid": "220ac3d7-ee85-51f9-b4bd-91a6e939b634"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1a134f8c-9362-4eb0-888c-f91341061172",
+              "memory_uid": "e80936de-87af-5dbb-ab94-d456bbfaab0a"
+            }
+          ],
+          "reason": "Only the reference frame states the user's escalation order for regaining home access; no compared-frame claim addresses that decision.",
+          "status": "RESOLVED",
+          "summary": "For a locked door, the user normally contacts the maternal aunt before building management.",
+          "uid": "2dcaf919-9171-5c67-b98f-13cecb6e0f8f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1a134f8c-9362-4eb0-888c-f91341061172",
+              "memory_uid": "7c26cf33-0630-5138-910a-6d37d6ed2b63"
+            }
+          ],
+          "reason": "Only the reference frame gives this coordination preference for avoiding waits during key collection.",
+          "status": "RESOLVED",
+          "summary": "The user wants to provide an arrival time before collecting the spare key.",
+          "uid": "e5ba9455-8299-5385-8004-cceeafab043a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1a134f8c-9362-4eb0-888c-f91341061172",
+              "memory_uid": "c3f0f26c-8d89-55e3-8bf3-398271e417e7"
+            }
+          ],
+          "reason": "Only the reference frame states this preference and emotional condition concerning prompt in-person key return.",
+          "status": "RESOLVED",
+          "summary": "The user feels at ease after returning a borrowed spare key in person on the same day.",
+          "uid": "c3fa4d72-58ec-5d9c-b880-0ac9d39c2a7e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1a134f8c-9362-4eb0-888c-f91341061172",
+              "memory_uid": "7d7d00a3-c5af-5441-bb50-9631fbfd7979"
+            }
+          ],
+          "reason": "Only the reference frame describes the user's discomfort with a paper record of an entrance credential.",
+          "status": "RESOLVED",
+          "summary": "The user feels uneasy about recording a new entrance passcode on paper.",
+          "uid": "deaa6f02-0cb1-5f48-91f0-bf50cfc02ebd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1a134f8c-9362-4eb0-888c-f91341061172",
+              "memory_uid": "2e0df581-bd54-54f5-94ef-b719427fc88c"
+            }
+          ],
+          "reason": "Only the reference frame records this experience involving notice, availability, and a family visit.",
+          "status": "RESOLVED",
+          "summary": "An unannounced family arrival during a meeting was difficult because the user could not respond immediately.",
+          "uid": "d9fe1e35-210f-5620-a7e4-f1352be92b4c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1a134f8c-9362-4eb0-888c-f91341061172",
+              "memory_uid": "9278b64e-7550-5eb6-bbfd-544a2ae4ec3d"
+            }
+          ],
+          "reason": "Only the reference frame describes this package-receipt event and the reassurance provided by photographic confirmation.",
+          "status": "RESOLVED",
+          "summary": "A delivery photo reassured the user after their younger brother received a package for them.",
+          "uid": "526c1fac-a3f3-5393-987c-73116f61ee54"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1a134f8c-9362-4eb0-888c-f91341061172",
+              "memory_uid": "76fb9115-a3f2-5ce3-a445-c3d1e38e4253"
+            }
+          ],
+          "reason": "Only the reference frame states the aunt's handover condition; it is independently useful from merely knowing that she holds the key.",
+          "status": "RESOLVED",
+          "summary": "The maternal aunt wants confirmation of an in-person visit before handing over the spare key.",
+          "uid": "59aaf57b-9ea0-5985-ad5e-5694010db593"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1a134f8c-9362-4eb0-888c-f91341061172",
+              "memory_uid": "6fa50e1d-8bd1-557a-9b03-1e4a4dc664bd"
+            }
+          ],
+          "reason": "Only the reference frame supplies this privacy rule governing disclosure of access and contact information.",
+          "status": "RESOLVED",
+          "summary": "User confirmation is required before sharing the spare key's location or the maternal aunt's contact information.",
+          "uid": "c38f734b-e3a5-5a88-907a-23e84512876a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1a134f8c-9362-4eb0-888c-f91341061172",
+              "memory_uid": "b18ff5b4-4f0d-5b93-8c41-439e5b15c710"
+            }
+          ],
+          "reason": "Only the reference frame states this building-management identity-verification policy.",
+          "status": "RESOLVED",
+          "summary": "A multi-unit building's management office verifies identity before providing access to a unit key it holds.",
+          "uid": "b6cccb70-3e43-5771-b5f5-952bfb4be41f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e113a965-fc02-4dbc-81eb-2b917cb120a7",
+              "memory_uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393"
+            }
+          ],
+          "reason": "Only the compared frame describes this receipt-storage structure; the reference frame contains no materially related records-management claim.",
+          "status": "RESOLVED",
+          "summary": "The user organizes tax-related receipts in yearly digital folders.",
+          "uid": "7dad8684-98d6-5921-97a8-a7d1a00e7abe"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e113a965-fc02-4dbc-81eb-2b917cb120a7",
+              "memory_uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878"
+            }
+          ],
+          "reason": "Only the compared frame records this omission and resulting recalculation.",
+          "status": "RESOLVED",
+          "summary": "Late discovery of three paper receipts caused the user to recalculate a prepared expense total.",
+          "uid": "b1503ef0-0e37-51df-a3ca-3ea1c4652711"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e113a965-fc02-4dbc-81eb-2b917cb120a7",
+              "memory_uid": "ff436ea5-1b3e-55df-8302-bd8a96740671"
+            }
+          ],
+          "reason": "Only the compared frame describes this receipt-capture practice and its observed benefit.",
+          "status": "RESOLVED",
+          "summary": "Photographing receipts on the day received reduced omissions starting the following month.",
+          "uid": "82461f1d-5b12-5592-b91f-54d51d02329d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e113a965-fc02-4dbc-81eb-2b917cb120a7",
+              "memory_uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e"
+            }
+          ],
+          "reason": "Only the compared frame describes this retrieval problem caused by insufficient filename detail.",
+          "status": "RESOLVED",
+          "summary": "Date-only filenames made a needed receipt time-consuming to locate.",
+          "uid": "37b2259b-15a1-5cfb-910c-afdf0e4caca5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e113a965-fc02-4dbc-81eb-2b917cb120a7",
+              "memory_uid": "89d6fa9a-b795-59df-be34-1c05a9861d35"
+            }
+          ],
+          "reason": "Only the compared frame describes this improved naming practice and search outcome.",
+          "status": "RESOLVED",
+          "summary": "Adding the expense category to filenames enabled immediate receipt retrieval through search.",
+          "uid": "2663fcf5-7262-5f32-a8c7-bdcbf8a1c977"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e113a965-fc02-4dbc-81eb-2b917cb120a7",
+              "memory_uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2"
+            }
+          ],
+          "reason": "Only the compared frame records this document-completion incident.",
+          "status": "RESOLVED",
+          "summary": "A blank signature field was discovered during a pre-submission document review.",
+          "uid": "1c5541d6-4e07-5bba-935d-1767e58a34f3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e113a965-fc02-4dbc-81eb-2b917cb120a7",
+              "memory_uid": "5551622f-66cf-5542-8c47-1cddadab5c02"
+            }
+          ],
+          "reason": "Only the compared frame states this recurring final-check procedure.",
+          "status": "RESOLVED",
+          "summary": "The user checks the signature field last before submitting an administrative document.",
+          "uid": "0724264a-9678-5a48-bab1-9b23f191011a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e113a965-fc02-4dbc-81eb-2b917cb120a7",
+              "memory_uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f"
+            }
+          ],
+          "reason": "Only the compared frame states this submission-quality expectation.",
+          "status": "RESOLVED",
+          "summary": "Tax-support staff expect an electronic copy whose contents are fully legible rather than blurred or cropped.",
+          "uid": "d586beb0-8e62-5e7e-b3c8-4eed1ef38197"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e113a965-fc02-4dbc-81eb-2b917cb120a7",
+              "memory_uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094"
+            }
+          ],
+          "reason": "Only the compared frame defines this capability boundary between clerical organization and tax judgment.",
+          "status": "RESOLVED",
+          "summary": "The local agent can organize receipts by date and category but cannot decide expense deductibility.",
+          "uid": "68466c14-ad02-5fc4-90bc-6764d846f986"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e113a965-fc02-4dbc-81eb-2b917cb120a7",
+              "memory_uid": "de398064-3179-590b-8c62-effb17060115"
+            }
+          ],
+          "reason": "Only the compared frame identifies this year-dependent variability in submission requirements.",
+          "status": "RESOLVED",
+          "summary": "Administrative-document scope and deadlines may vary with the applicable year's guidance.",
+          "uid": "7543ec00-e3b8-5304-9730-8332845c0513"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame uniquely describes receipt capture, filing and search practices, missed-receipt recalculation, signature checks, legible electronic submissions, limits on deductibility advice, and year-specific administrative scope and deadlines.",
+        "differences": "",
+        "reference_only": "The reference uniquely describes spare-key custody and retrieval, same-day return preferences, access-information privacy, unannounced family visits, delivery reassurance, passcode discomfort, and identity verification by building management."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "b578acf8-65f9-4ab8-b8cf-3050e6bb6196"
+    },
+    "analysis_digest": "80f730924cdaa51e2c172db5bb1813391681fbc065887b5548003c914b3a6887",
+    "key": "834a939f58515db65ff9af82a2936458b275512281fba2b5959c86159bc7d20e",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 47.55992137499925,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "834a939f58515db65ff9af82a2936458b275512281fba2b5959c86159bc7d20e",
+  "created_at": "2026-08-13T18:37:10.748651Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/02",
+  "pair_key": "61d6eac15002acd103570f10875cd20527bc49202a318b343c91a6226b13d209",
+  "provider_seconds": 47.55992137499925,
+  "right": "task-3/local/personal-memory/2026/03",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

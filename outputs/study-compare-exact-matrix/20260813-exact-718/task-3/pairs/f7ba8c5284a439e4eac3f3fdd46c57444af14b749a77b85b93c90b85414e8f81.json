@@ -1,0 +1,424 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:40:14.408009+00:00",
+      "frames": [
+        {
+          "context_digest": "6cb54691fcd12037c24daa71882bad82cd67c16ea72979f2a41e1e1b8eae22a8",
+          "context_name": "task-3/local/personal-memory/2024/06",
+          "context_uid": "8c641e5b-01d9-560c-a8c0-b52cee7402c8",
+          "memories": [
+            {
+              "content": "The user stores copies of identity documents in an encrypted folder.",
+              "content_digest": "83efe427335c1415d4a8d601d6e1c5d7a129c6962b74468d313b123e045b052f",
+              "position": 0,
+              "uid": "79576c1e-fa88-5d6e-b5e2-3d4ec11c3e06"
+            },
+            {
+              "content": "On a day the user transferred between buses twice, they rested for an hour after the trip.",
+              "content_digest": "907b9cc4c16b4b3fe53c2323d31afc83347ddc63775bd865bc42b62ca539f5bb",
+              "position": 1,
+              "uid": "28a1ff0b-e2d4-5cb6-9c26-949d86f76bac"
+            },
+            {
+              "content": "On a day the user took a direct route with a similar travel time, they remained seated to the destination.",
+              "content_digest": "0c0d1b12aa0ad393ac43982fe7d36d08f75d9e634c933593ef6a0a96614bb9ea",
+              "position": 2,
+              "uid": "0ad4a1f9-e3e9-517e-8cfc-f8e6307f1d3e"
+            },
+            {
+              "content": "After arriving at an entrance with stairs only, the user went around to an entrance on the other side of the building.",
+              "content_digest": "775d4c0a211f4509a0488cb3b2a790ae22c1b2ba2e96ed6b9100ae3cfb454315",
+              "position": 3,
+              "uid": "f772b0c7-502f-55b7-b431-ee6b20518d38"
+            },
+            {
+              "content": "On a day the user checked the accessible entrance location in advance, they arrived before the agreed time.",
+              "content_digest": "4e087a4e0ca48a3414580ce0d974da4b2221b304302de01cf305945866320a6a",
+              "position": 4,
+              "uid": "0b2d800b-a4ab-5422-bf06-56d17b98f604"
+            },
+            {
+              "content": "On a rainy day, the user's clothes became wet while crossing an uncovered section at a transfer stop.",
+              "content_digest": "dad5c9f35f0469edc528091e47f22365c1cb5de1b32e70335826d67a576fb47d",
+              "position": 5,
+              "uid": "b233f332-4927-549b-8dab-b554977fe363"
+            },
+            {
+              "content": "On a day the user traveled with their maternal uncle, they agreed to meet at an entrance near the elevator.",
+              "content_digest": "c81b012ae6686f47d54809c50ab559077b0e170d54792d34038f0f8fc32c6a96",
+              "position": 6,
+              "uid": "b38d0d63-c4b0-5955-857d-03cbcfd27f5b"
+            },
+            {
+              "content": "The user's maternal uncle prefers an aisle seat from which it is easy to stand during long-distance travel.",
+              "content_digest": "3ea31753296866c1bf438b51eba4110b0c6ed2e907e86dc21796166ed19d82df",
+              "position": 7,
+              "uid": "4668d326-b11c-5467-bca4-e8d5e242e375"
+            },
+            {
+              "content": "The local agent cannot know whether an accessible entrance is operating that day from past route records alone.",
+              "content_digest": "00fc09badcb1d569e3cb1e392ad18406a032d17749f71b44ed7bc121d5d72b4c",
+              "position": 8,
+              "uid": "a77c985c-3986-5141-9805-e3321b3cfa2c"
+            },
+            {
+              "content": "The transfer route the user takes has more boarding and alighting events and walking segments than the direct route.",
+              "content_digest": "f9320e36494ea5beb854d6bbe38a817ae73cd9fe68b75977438d35e44fb38fe6",
+              "position": 9,
+              "uid": "988926a1-3e28-5b3e-a41c-d9338971643e"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "692fa5dd-9c2d-41c0-9908-6aaeb536a70d"
+        },
+        {
+          "context_digest": "3e738289251b9bdf3deb1c7a7540e6ce811b09e26a020af3a76d47b4c85c7ab1",
+          "context_name": "task-3/local/personal-memory/2025/02",
+          "context_uid": "ce7367b8-8532-5f43-972a-1665ca8e3e80",
+          "memories": [
+            {
+              "content": "The user reviewed their emergency-contact list in February 2025.",
+              "content_digest": "b2f108376dbbf53e8885b9c61080d4c873209d8c6e399c37412fa507fec08b0b",
+              "position": 0,
+              "uid": "3ff046b1-5810-51ca-8d43-c99ef6a90b41"
+            },
+            {
+              "content": "When preparation instructions arrived as a long paragraph, the user missed two items.",
+              "content_digest": "43bde452a403f85bcffa6f7ba6b3142ed45604730083327c6f57092b98f397aa",
+              "position": 1,
+              "uid": "e2a304e5-6100-5a5f-b508-0a7f28f6bda7"
+            },
+            {
+              "content": "After changing the same content into a checklist, the user marked every item they had prepared.",
+              "content_digest": "0f8115061b489894115fd252f079ee673504ed09dea4d88d558e64ed6189f1be",
+              "position": 2,
+              "uid": "51d03bff-3e33-5f68-9df6-ed7efa8e3de9"
+            },
+            {
+              "content": "The user called their mother on a weekend evening, but they spoke only briefly because the mother was out.",
+              "content_digest": "a9a1e7d87532667781677f4760beeb086f1e423365a915a0ec0b494892cbb361",
+              "position": 3,
+              "uid": "0987293e-3e21-5cbc-bb46-59245a5fa041"
+            },
+            {
+              "content": "The user called again on Saturday morning the following week and spoke for 40 minutes.",
+              "content_digest": "f08c9f170345686b2091e3b0ecd49f049e245d584886da62d586185010f713bf",
+              "position": 4,
+              "uid": "dc3de6ad-56ea-528a-a9b7-349e79af2326"
+            },
+            {
+              "content": "The user sent a text to an old number for an emergency contact and saw that delivery failed.",
+              "content_digest": "692321e996b9ac8e3500a2da7765f77e0d14c6f040cf2c33944cbdcb39c706de",
+              "position": 5,
+              "uid": "6546d41b-3d5b-5802-a9e7-ac028405e3f2"
+            },
+            {
+              "content": "After confirming the new number with their older sister, the user updated the contact list.",
+              "content_digest": "8d2e954a978e35c1da92948ccc8e45f38fcc25ea3fafe7c389ef546f6eda1ae1",
+              "position": 6,
+              "uid": "ea6eb9d2-9b01-5330-a4d5-886d4bc6cd85"
+            },
+            {
+              "content": "For nonurgent contact, the user's older sister prefers to reply by text when available rather than take a call immediately.",
+              "content_digest": "86639aee50903bc3261e6f88ac7d649c8197927fe214d5d17e0e6f5b3d69a59d",
+              "position": 7,
+              "uid": "12fe7e64-192e-5359-8f96-d2875f7e5399"
+            },
+            {
+              "content": "Before using an emergency contact, reconfirm the number and relationship information with the user.",
+              "content_digest": "78e41f61ba99eaf8840d5d318d08327ca6bb087addd6e22269e8b63281bb67c7",
+              "position": 8,
+              "uid": "e6f89ded-5687-5c25-8df8-88f288d450c6"
+            },
+            {
+              "content": "The user feels that a reminder the day before an appointment gives them enough time to recheck preparation items.",
+              "content_digest": "1a9fcc01df362c76b6d9c8e4fa2d33229a2ae2762c0c6d25e0fc89312a6e0ed4",
+              "position": 9,
+              "uid": "f9197c33-ff93-5215-a3a5-e4087bea2a0d"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "bd31501e-8386-48ca-82d8-d08426c10cd1"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames contain separate, independently useful information. The reference frame concerns document security, travel demands, accessibility, weather exposure, and an uncle’s travel preferences; the compared frame concerns preparation aids, family communication, emergency-contact maintenance, and reminders. No shared policy or operational claim supports a cross-frame relation.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "692fa5dd-9c2d-41c0-9908-6aaeb536a70d",
+              "memory_uid": "79576c1e-fa88-5d6e-b5e2-3d4ec11c3e06"
+            }
+          ],
+          "reason": "This is independently useful security information with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Identity-document copies are stored in an encrypted folder.",
+          "uid": "565abf96-098a-5516-9194-326ff5f9dd40"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "692fa5dd-9c2d-41c0-9908-6aaeb536a70d",
+              "memory_uid": "28a1ff0b-e2d4-5cb6-9c26-949d86f76bac"
+            }
+          ],
+          "reason": "This records a travel-demand outcome not addressed in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "After a trip involving two bus transfers, the user rested for an hour.",
+          "uid": "4b935f5e-1e1b-5714-8c21-54831ab08e71"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "692fa5dd-9c2d-41c0-9908-6aaeb536a70d",
+              "memory_uid": "0ad4a1f9-e3e9-517e-8cfc-f8e6307f1d3e"
+            }
+          ],
+          "reason": "This is a route-specific travel observation without a corresponding compared-frame claim.",
+          "status": "RESOLVED",
+          "summary": "On a similarly timed direct trip, the user remained seated through arrival.",
+          "uid": "de0a492e-9427-5bc9-b524-a2d79b34e5ae"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "692fa5dd-9c2d-41c0-9908-6aaeb536a70d",
+              "memory_uid": "f772b0c7-502f-55b7-b431-ee6b20518d38"
+            }
+          ],
+          "reason": "This records an accessibility-related detour absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A stairs-only entrance required the user to reach another entrance on the building’s opposite side.",
+          "uid": "cd691342-47f8-5d08-b6a4-ad7f7340ac43"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "692fa5dd-9c2d-41c0-9908-6aaeb536a70d",
+              "memory_uid": "0b2d800b-a4ab-5422-bf06-56d17b98f604"
+            }
+          ],
+          "reason": "This is a specific accessibility-planning observation not covered by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Checking the accessible entrance location in advance coincided with arriving before the agreed time.",
+          "uid": "66d0677f-49b6-5f5c-824d-a9bce10396a5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "692fa5dd-9c2d-41c0-9908-6aaeb536a70d",
+              "memory_uid": "b233f332-4927-549b-8dab-b554977fe363"
+            }
+          ],
+          "reason": "This is an independently useful environmental travel constraint absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s clothes became wet while crossing an uncovered transfer-stop section in rain.",
+          "uid": "9b10020e-4a48-5da5-afd0-777f69477d69"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "692fa5dd-9c2d-41c0-9908-6aaeb536a70d",
+              "memory_uid": "b38d0d63-c4b0-5955-857d-03cbcfd27f5b"
+            }
+          ],
+          "reason": "This meeting and accessibility arrangement has no corresponding compared-frame claim.",
+          "status": "RESOLVED",
+          "summary": "When traveling with their maternal uncle, the user arranged to meet near an elevator entrance.",
+          "uid": "7c94fa06-201a-5cff-bdc4-81b94a3b3897"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "692fa5dd-9c2d-41c0-9908-6aaeb536a70d",
+              "memory_uid": "4668d326-b11c-5467-bca4-e8d5e242e375"
+            }
+          ],
+          "reason": "This is a distinct companion travel preference not addressed in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s maternal uncle prefers an aisle seat that makes standing easier on long trips.",
+          "uid": "fa880d66-1edb-5b00-bfcb-cda664801129"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "692fa5dd-9c2d-41c0-9908-6aaeb536a70d",
+              "memory_uid": "a77c985c-3986-5141-9805-e3321b3cfa2c"
+            }
+          ],
+          "reason": "This is a limitation on route-record inference with no corresponding compared-frame policy.",
+          "status": "RESOLVED",
+          "summary": "Past route records alone cannot establish whether an accessible entrance is operating on a given day.",
+          "uid": "93f887aa-a441-5b74-acf3-901f46de5e83"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "692fa5dd-9c2d-41c0-9908-6aaeb536a70d",
+              "memory_uid": "988926a1-3e28-5b3e-a41c-d9338971643e"
+            }
+          ],
+          "reason": "This comparative route characteristic is independently useful and absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s transfer route involves more boarding, alighting, and walking than the direct route.",
+          "uid": "0bde3f10-09ed-57cf-99b6-64b560f01f7e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bd31501e-8386-48ca-82d8-d08426c10cd1",
+              "memory_uid": "3ff046b1-5810-51ca-8d43-c99ef6a90b41"
+            }
+          ],
+          "reason": "This dated maintenance event has no corresponding reference-frame claim.",
+          "status": "RESOLVED",
+          "summary": "The user reviewed their emergency-contact list in February 2025.",
+          "uid": "76d03a9a-7dd2-54de-bfea-084a703c382a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bd31501e-8386-48ca-82d8-d08426c10cd1",
+              "memory_uid": "e2a304e5-6100-5a5f-b508-0a7f28f6bda7"
+            },
+            {
+              "frame_uid": "bd31501e-8386-48ca-82d8-d08426c10cd1",
+              "memory_uid": "51d03bff-3e33-5f68-9df6-ed7efa8e3de9"
+            }
+          ],
+          "reason": "The two observations jointly describe one format-dependent preparation outcome absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Preparation tracking was incomplete with paragraph instructions but complete after the same content became a checklist.",
+          "uid": "9f9dc36c-0b98-5870-a72a-2b0f72903e3d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bd31501e-8386-48ca-82d8-d08426c10cd1",
+              "memory_uid": "0987293e-3e21-5cbc-bb46-59245a5fa041"
+            },
+            {
+              "frame_uid": "bd31501e-8386-48ca-82d8-d08426c10cd1",
+              "memory_uid": "dc3de6ad-56ea-528a-a9b7-349e79af2326"
+            }
+          ],
+          "reason": "The two call observations form one timing-and-availability episode not addressed in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Calls to the user’s mother differed in duration across a weekend evening and the following Saturday morning because her availability differed.",
+          "uid": "5cf1f7c7-8bd0-5b4f-8415-7b68a0faa3c7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bd31501e-8386-48ca-82d8-d08426c10cd1",
+              "memory_uid": "6546d41b-3d5b-5802-a9e7-ac028405e3f2"
+            },
+            {
+              "frame_uid": "bd31501e-8386-48ca-82d8-d08426c10cd1",
+              "memory_uid": "ea6eb9d2-9b01-5330-a4d5-886d4bc6cd85"
+            }
+          ],
+          "reason": "The two events form one emergency-contact correction sequence absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "After a text to an old emergency-contact number failed, the user confirmed the new number with their older sister and updated the list.",
+          "uid": "a8d41777-cca5-5a5a-ac97-0dda839944ef"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bd31501e-8386-48ca-82d8-d08426c10cd1",
+              "memory_uid": "12fe7e64-192e-5359-8f96-d2875f7e5399"
+            }
+          ],
+          "reason": "This scoped communication preference has no corresponding reference-frame claim.",
+          "status": "RESOLVED",
+          "summary": "For nonurgent contact, the user’s older sister prefers replying by text when available over taking an immediate call.",
+          "uid": "8109187b-602d-5ab3-a83b-0b8cf3f3c730"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bd31501e-8386-48ca-82d8-d08426c10cd1",
+              "memory_uid": "e6f89ded-5687-5c25-8df8-88f288d450c6"
+            }
+          ],
+          "reason": "This operational verification policy is independently useful and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Before an emergency contact is used, its number and relationship information should be reconfirmed with the user.",
+          "uid": "1745d9b7-8d92-5411-99ad-9d68cc8c0832"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bd31501e-8386-48ca-82d8-d08426c10cd1",
+              "memory_uid": "f9197c33-ff93-5215-a3a5-e4087bea2a0d"
+            }
+          ],
+          "reason": "This reminder-timing preference has no corresponding reference-frame claim.",
+          "status": "RESOLVED",
+          "summary": "The user considers a reminder one day before an appointment sufficient for rechecking preparation items.",
+          "uid": "1acb565b-bb6b-57e4-848c-973baebb82ae"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers checklist-based preparation, appointment reminders, family calling patterns, emergency-contact review and correction, contact verification, and an older sister’s preference for nonurgent texts.",
+        "differences": "",
+        "reference_only": "The reference describes encrypted identity-document storage, route effort and recovery, entrance accessibility and uncertainty, rain exposure, meeting arrangements, and an uncle’s seating preference."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "4ba7b225-51d7-43a6-80db-7378d1ab309a"
+    },
+    "analysis_digest": "24e47cc161990433a45b7657baf566c91f73f1b49b45b92c500a6502163d55bf",
+    "key": "032211916b49aea5fa88bae0becbc0ee877f18fc67a8a4ea28804e8b1c272eb0",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 39.192076291001285,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "032211916b49aea5fa88bae0becbc0ee877f18fc67a8a4ea28804e8b1c272eb0",
+  "created_at": "2026-08-13T18:40:53.599246Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/06",
+  "pair_key": "f7ba8c5284a439e4eac3f3fdd46c57444af14b749a77b85b93c90b85414e8f81",
+  "provider_seconds": 39.192076291001285,
+  "right": "task-3/local/personal-memory/2025/02",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

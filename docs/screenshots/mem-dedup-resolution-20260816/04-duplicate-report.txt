@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ MEM FIND DUPLICATES                                                                                                                                                             ^┃
+┃ CONTEXT LOCATIONS                                                                                                                                                                ┃
+┃   SOURCE · dedup/capture                                                                                                                                                         ┃
+┃ PROCESS LOCAL · 0/1 ANSWERED · 1 CONTEXTS · 3 SOURCE MEMORIES · 1 FINDINGS · 0 ANSWERED                                                                                          ┃
+┃                                                                                                                                                                                  ┃
+┃ WHAT MEM UNDERSTOOD                                                                                                                                                              ┃
+┃ SCOPE                                                                                                                                                                            ┃
+┃ Inspected 3 direct Memories across 1 frozen readable Context as one analysis frame. MULTIPLE TARGET SELECTION · THIS CONTEXT ONLY. Embedded Context edges were not followed.     ┃
+┃                                                                                                                                                                                  ┃
+┃ FINDINGS                                                                                                                                                                         ┃
+┃ Reported 1 actionable duplicate finding.                                                                                                                                         ┃
+┃                                                                                                                                                                                  ┃
+┃ BOUNDARY                                                                                                                                                                         ┃
+┃ Responses are process-local review notes. No Context or Memory changes have been applied.                                                                                        ┃
+┃                                                                                                                                                                                  ┃
+┃ ACTIONABLE FINDINGS · 1                                                                                                                                                          ┃
+┃ DUPLICATE 1 · The office opens at eight on weekdays. ↔ The weekday office opening time is 08:00.                                                                                 ┃
+┃ [SEMANTIC_EQUIVALENT] Both Memories state the same weekday opening time without adding a distinct condition.                                                                     ┃
+┃ QUESTION · Should this emitted duplicate evidence link be retained?                                                                                                              ┃
+┃                                                                                                                                                                                  ┃
+┃ RESOLVE ALL · WHOLE-SET STRATEGY                                                                                                                                                 ┃
+┃ Choose a strategy below. It requests a revised proposal and never applies the target.                                                                                            ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│› REPORT         Complete Find Duplicates report                                                                                                                                 ^│
+│  DUPLICATE      The office opens at eight on weekdays. ↔ The weekday office opening time is 08:00.                                                                               │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ COMPLETE ]  Required review is complete · 1 optional review remains open. No whole-set action is required; close or revisit an item.                                            │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter open  Esc/Backspace/Q close H Help  y/Y copy  Q close

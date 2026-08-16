@@ -1,0 +1,358 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:19:45.252936+00:00",
+      "frames": [
+        {
+          "context_digest": "42df7e2f7640040d1d6f6f6e566e80d178668a05ab6918b64eed91b91a41b7fb",
+          "context_name": "task-2/advisor1/evaluation",
+          "context_uid": "30568e2f-ce17-50ce-a25b-1cc4bdb94689",
+          "memories": [
+            {
+              "content": "Specify a single representative measure that serves as the criterion for retaining, modifying, or discarding compared design alternatives.",
+              "content_digest": "53aa7c1f81a4fac9e76985be094717aa122e7077a6fcfde46946babd5929d390",
+              "position": 0,
+              "uid": "a50f6ecb-de38-5769-8a6e-23b84a7eb35c"
+            },
+            {
+              "content": "HCI review panels verify whether clear criteria for judging design alternatives are established using the declared primary measure.",
+              "content_digest": "fabd83103e5c3474f56de113c477f7ced5e863a508ec39bd4ae23653d63ad354",
+              "position": 1,
+              "uid": "44c61beb-24a2-584a-ad96-e622690d8171"
+            },
+            {
+              "content": "Collect process measures to diagnose interaction steps where problems occurred, alongside the primary outcome measure.",
+              "content_digest": "6cc2fedef1b0af1c594e48610e08a169f3bca2405bf8773945eca33396aecb36",
+              "position": 2,
+              "uid": "23202824-b576-5d77-b591-8b4cc0757632"
+            },
+            {
+              "content": "Interpret evaluation results as differences between compared design alternatives rather than as success or failure of a single prototype.",
+              "content_digest": "5c578d52a7dbbf4e4b646e707bbee4ac37bcd23bceb0b4d5e09ef3c08df9c2f4",
+              "position": 3,
+              "uid": "65ae88bf-8002-5ada-8590-eaf345b38863"
+            },
+            {
+              "content": "Check boundary cases to verify whether the derived design principles retain explanatory power for adjacent situations not included in the comparison.",
+              "content_digest": "3edc3e181a8086233d889f35cb98c9448875fe3fee915467f712ca3eb2886de1",
+              "position": 4,
+              "uid": "79af5e5f-4868-5e76-bcd5-3f8e1d6a0bd1"
+            },
+            {
+              "content": "Controlled evaluation environments do not reproduce time pressure, peer intervention, or voluntary termination conditions found in daily use.",
+              "content_digest": "e58a1bc6a423874525aca9f864b9b0dbd1e3ef9961410608c5837c88f1153d9b",
+              "position": 5,
+              "uid": "3a65fc8b-a5b4-50fc-a60e-fc6f3fc44547"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "afd7d443-19e9-4ea6-b646-470ad3951fbf"
+        },
+        {
+          "context_digest": "0c296942d89f44af52c83dcba02568af2b56ed1016260f3d3b9c95e919a51339",
+          "context_name": "task-2/advisor2/ethics",
+          "context_uid": "fa36b485-422d-54c3-a145-0f60a077757c",
+          "memories": [
+            {
+              "content": "Link anticipated participant burden with its mitigation strategies for each field user study task.",
+              "content_digest": "120fdee3ad17815fe2e9aa806aab19843cf6597753cf0d35aa0618a3116a1bd2",
+              "position": 0,
+              "uid": "bc8c1327-993c-51ce-8f53-919dc253e0f8"
+            },
+            {
+              "content": "Specify the accommodations necessary for participants to access the field system and research tasks.",
+              "content_digest": "e09cce7cc60d904d618dffa5619cac9c44e4dbcc4f2a0d8547b9ede06586a82b",
+              "position": 1,
+              "uid": "578f6fdf-6bbc-5d1b-8f03-c7460a5cdc7b"
+            },
+            {
+              "content": "Specify how accessibility accommodations will be provided in the field user study.",
+              "content_digest": "98a13f5b544276eaafd5d0b1aea63b2e313ce327f5881f0e4bbcff19724e8c6e",
+              "position": 2,
+              "uid": "6804d5db-c872-5ded-bf68-14fd30e1b645"
+            },
+            {
+              "content": "Describe how personal identifiers will be separated from research data immediately upon collection.",
+              "content_digest": "0bf884cd31610ba663854e8c273ec6769666b38ee72714ba63f0b390d69b8ba3",
+              "position": 3,
+              "uid": "448f23d0-9607-5977-9d13-a99af48a6fc1"
+            },
+            {
+              "content": "List equipment to be loaned when participants lack necessary gear.",
+              "content_digest": "665d4e26cc8390ca2334d4740650e77977b60fd0e3eed2464ade0ca55a806eb2",
+              "position": 4,
+              "uid": "b97f3e2f-e132-5f6f-a748-f406a89a1bc5"
+            },
+            {
+              "content": "Describe the procedure for returning equipment loaned to participants.",
+              "content_digest": "100ffbad1288c3263bc4a1044b2d42da35c36a3f73786e58e4391fbac98c84f2",
+              "position": 5,
+              "uid": "d05964ea-0423-5642-86e1-9e9c19edffbe"
+            },
+            {
+              "content": "The HCI ethics reviewer verifies that anticipated burden and mitigation strategies correspond for each field user study task.",
+              "content_digest": "067bbafce95c77b4a9acc5ba9652db92dba6dc96e14588841db158919bf044b2",
+              "position": 6,
+              "uid": "26407eb8-5c02-551f-a960-1652eb080f90"
+            },
+            {
+              "content": "Ensure that participants can safely return to existing work procedures if they discontinue research participation.",
+              "content_digest": "213cff51d754811573c78ba0ca92f37e614e9fa4ae1080aa7fcfb550c85437fb",
+              "position": 7,
+              "uid": "7e0ba411-3fd9-53ec-8a3f-4499316c06bb"
+            },
+            {
+              "content": "Specify that organizational members who decline research participation will not face disadvantages in task assignment or performance evaluation.",
+              "content_digest": "46b2b0857255b48ed6001191b089c1d6ecba859690818cbff8fe7676fa1f860a",
+              "position": 8,
+              "uid": "a6fbea37-335c-544b-8bac-01f759bc3855"
+            },
+            {
+              "content": "The user's withdrawal risk can be adequately assessed only when a safe alternative procedure exists for field tasks.",
+              "content_digest": "604a38c44856b4407cf2b1d83df216510e77f84ce76ef4dbc7f9be21cd32393b",
+              "position": 9,
+              "uid": "885d1cf3-8bcd-513c-9591-a548fcbd3992"
+            },
+            {
+              "content": "The user tends to assume that a short session also entails little burden from work interruption and exposure to a manager.",
+              "content_digest": "0c48fd9dd3b393f73a8005db56bf2c11320d82b84040af105ca65c3ff9ce6f17",
+              "position": 10,
+              "uid": "520b4c9f-306e-5749-83b5-2218c97f89e6"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "0df6339a-3240-4aa1-ac63-74986ad0dd64"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate but complementary HCI concerns: the reference frame governs comparative evaluation design and interpretation, while the compared frame governs ethical and operational protections for field-study participation. Neither frame supplies a scope-aligned counterpart to the other’s claims.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "afd7d443-19e9-4ea6-b646-470ad3951fbf",
+              "memory_uid": "a50f6ecb-de38-5769-8a6e-23b84a7eb35c"
+            },
+            {
+              "frame_uid": "afd7d443-19e9-4ea6-b646-470ad3951fbf",
+              "memory_uid": "44c61beb-24a2-584a-ad96-e622690d8171"
+            }
+          ],
+          "reason": "Both memories split one reference-only requirement into specification of the decision criterion and review of whether that criterion is clearly established.",
+          "status": "RESOLVED",
+          "summary": "A declared primary measure establishes the criterion for judging design alternatives and is subject to panel verification.",
+          "uid": "46f36cd6-f767-55cf-aa7c-47cd2a7af784"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "afd7d443-19e9-4ea6-b646-470ad3951fbf",
+              "memory_uid": "23202824-b576-5d77-b591-8b4cc0757632"
+            }
+          ],
+          "reason": "This diagnostic-measure requirement appears only in the reference frame and has no operational counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Process measures should accompany the primary outcome measure to locate problematic interaction steps.",
+          "uid": "37a6d710-fbff-5b95-8380-dfbfba107c6e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "afd7d443-19e9-4ea6-b646-470ad3951fbf",
+              "memory_uid": "65ae88bf-8002-5ada-8590-eaf345b38863"
+            }
+          ],
+          "reason": "This interpretation rule is independently useful reference-only information.",
+          "status": "RESOLVED",
+          "summary": "Evaluation results should be interpreted as differences among design alternatives, not as a single prototype’s success or failure.",
+          "uid": "f8af3fd8-76b4-5f13-8ad2-f9628fd56c10"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "afd7d443-19e9-4ea6-b646-470ad3951fbf",
+              "memory_uid": "79af5e5f-4868-5e76-bcd5-3f8e1d6a0bd1"
+            }
+          ],
+          "reason": "This external-explanatory-power check appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Adjacent boundary cases should test whether derived design principles retain explanatory power beyond the original comparison.",
+          "uid": "66c3e386-d4d5-5d8c-9a4a-b6160c977669"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "afd7d443-19e9-4ea6-b646-470ad3951fbf",
+              "memory_uid": "3a65fc8b-a5b4-50fc-a60e-fc6f3fc44547"
+            }
+          ],
+          "reason": "This limitation of evaluation ecology is a reference-only claim, distinct from the compared frame’s field-study safeguards.",
+          "status": "RESOLVED",
+          "summary": "Controlled evaluations omit daily-use conditions such as time pressure, peer intervention, and voluntary termination.",
+          "uid": "7290d28c-4800-59b0-b7eb-61c847240372"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0df6339a-3240-4aa1-ac63-74986ad0dd64",
+              "memory_uid": "bc8c1327-993c-51ce-8f53-919dc253e0f8"
+            },
+            {
+              "frame_uid": "0df6339a-3240-4aa1-ac63-74986ad0dd64",
+              "memory_uid": "26407eb8-5c02-551f-a960-1652eb080f90"
+            }
+          ],
+          "reason": "Both memories split one compared-only burden-control requirement into its specification and reviewer verification.",
+          "status": "RESOLVED",
+          "summary": "Anticipated burden and mitigation strategies should correspond for every field-study task and be verified by an ethics reviewer.",
+          "uid": "036745cf-ee25-57ac-bc7e-11ad74f3fe78"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0df6339a-3240-4aa1-ac63-74986ad0dd64",
+              "memory_uid": "578f6fdf-6bbc-5d1b-8f03-c7460a5cdc7b"
+            },
+            {
+              "frame_uid": "0df6339a-3240-4aa1-ac63-74986ad0dd64",
+              "memory_uid": "6804d5db-c872-5ded-bf68-14fd30e1b645"
+            }
+          ],
+          "reason": "Both memories restate and elaborate one compared-only accommodation requirement.",
+          "status": "RESOLVED",
+          "summary": "Necessary accessibility accommodations and their method of provision should be specified for the field system and research tasks.",
+          "uid": "bc3908e6-ba3c-5701-82db-b9a15ca4b120"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0df6339a-3240-4aa1-ac63-74986ad0dd64",
+              "memory_uid": "448f23d0-9607-5977-9d13-a99af48a6fc1"
+            }
+          ],
+          "reason": "This data-protection procedure appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Personal identifiers should be separated from research data immediately upon collection.",
+          "uid": "e8866c41-cc78-57be-aa57-b37e17f73931"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0df6339a-3240-4aa1-ac63-74986ad0dd64",
+              "memory_uid": "b97f3e2f-e132-5f6f-a748-f406a89a1bc5"
+            }
+          ],
+          "reason": "This equipment-provision requirement is independently useful compared-only information.",
+          "status": "RESOLVED",
+          "summary": "Equipment to be loaned when participants lack required gear should be listed.",
+          "uid": "8dceb989-9d1d-59d8-849d-868d8bbcdb8c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0df6339a-3240-4aa1-ac63-74986ad0dd64",
+              "memory_uid": "d05964ea-0423-5642-86e1-9e9c19edffbe"
+            }
+          ],
+          "reason": "This equipment-return requirement is independently useful compared-only information.",
+          "status": "RESOLVED",
+          "summary": "A procedure should govern the return of equipment loaned to participants.",
+          "uid": "b3a83867-4f81-5ec4-a393-b43091923486"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0df6339a-3240-4aa1-ac63-74986ad0dd64",
+              "memory_uid": "7e0ba411-3fd9-53ec-8a3f-4499316c06bb"
+            },
+            {
+              "frame_uid": "0df6339a-3240-4aa1-ac63-74986ad0dd64",
+              "memory_uid": "885d1cf3-8bcd-513c-9591-a548fcbd3992"
+            }
+          ],
+          "reason": "Both memories express linked parts of one compared-only safeguard: availability of a safe alternative and its necessity for assessing withdrawal.",
+          "status": "RESOLVED",
+          "summary": "Field participation requires a safe fallback to existing procedures, enabling meaningful assessment of withdrawal risk.",
+          "uid": "9a23e558-1adf-555f-ab6f-a271d75c941b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0df6339a-3240-4aa1-ac63-74986ad0dd64",
+              "memory_uid": "a6fbea37-335c-544b-8bac-01f759bc3855"
+            }
+          ],
+          "reason": "This protection against participation-related coercion appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Organizational members who decline participation should face no disadvantage in task assignment or performance evaluation.",
+          "uid": "cbd11a38-e94e-56f8-b32c-111543823bf9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0df6339a-3240-4aa1-ac63-74986ad0dd64",
+              "memory_uid": "520b4c9f-306e-5749-83b5-2218c97f89e6"
+            }
+          ],
+          "reason": "This behavioral assumption about field-study burden is independently useful compared-only information.",
+          "status": "RESOLVED",
+          "summary": "Users may wrongly infer that short sessions impose little burden from work interruption or managerial exposure.",
+          "uid": "96038762-d110-571a-9dce-f1dfa596efb9"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame addresses burden mitigation, accessibility, data separation, equipment logistics, withdrawal safeguards, nonparticipant protections, and misconceptions about workplace burden.",
+        "differences": "",
+        "reference_only": "The reference frame addresses primary and diagnostic measures, comparative interpretation, boundary-case testing, and limits of controlled environments."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "c5146306-4730-4192-9349-b0a50944bbe4"
+    },
+    "analysis_digest": "6afa23f1a78134dfe82dfef47b79e97a6fc3d1c95e50c46bd82e7f9a67b03d91",
+    "key": "959db25cf6312580552661030a7b2695f89f15fee6a24c431e6d07e0820bed01",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 33.24763249999887,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "959db25cf6312580552661030a7b2695f89f15fee6a24c431e6d07e0820bed01",
+  "created_at": "2026-08-13T18:20:18.500182Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/evaluation",
+  "pair_key": "172d67b60b9e5da913532d429cf7ac29a59c145c5a06e66dab191da69bfe907e",
+  "provider_seconds": 33.24763249999887,
+  "right": "task-2/advisor2/ethics",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

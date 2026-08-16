@@ -1,0 +1,369 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:24:05.692464+00:00",
+      "frames": [
+        {
+          "context_digest": "adcb1ff51b2facc8282e8a56d8fec5150dd8e7376b7889d21013f71fee66b9b8",
+          "context_name": "task-2/advisor1/review",
+          "context_uid": "57ec8c37-1a0a-5f3b-82e9-51adad82677c",
+          "memories": [
+            {
+              "content": "Conduct one review prior to submission focusing solely on the validity of user problems, design interventions, and evaluation logic.",
+              "content_digest": "3dd669e72e74416ccd0b8eaf32f6b24dc7400ceb50c133a18f3ff33f89075334",
+              "position": 0,
+              "uid": "0dda8eb3-3287-5bb6-9b26-b1c00cc038d9"
+            },
+            {
+              "content": "Cross-check whether research questions align with the core functions of the prototype.",
+              "content_digest": "b3fbab30f9c640c7b3f6424f2cbc7d66bfa1f455f937f7fb28a6cc8b3763597d",
+              "position": 1,
+              "uid": "c8e0c9dd-dc4a-5a7d-9a82-e7ee449a4b25"
+            },
+            {
+              "content": "Cross-check whether evaluation tasks align with representative measures.",
+              "content_digest": "1e49d1844cb2a0a66a3dec114e44713885299f7a80763ae4e9a416eba505d61f",
+              "position": 2,
+              "uid": "f93c5baa-3c2b-5e37-b07b-0b00e8b22ab9"
+            },
+            {
+              "content": "Cross-check whether collected evidence aligns with design and operational decisions to be changed.",
+              "content_digest": "bc977c73db48b06ad23b68fa58f2fa5f64b19d09856b0e80c8ddac0b039568f8",
+              "position": 3,
+              "uid": "8dae0ad6-2a6d-5d99-98db-b0d48a1140e5"
+            },
+            {
+              "content": "Verify at the end that user problems, design interventions, user studies, and expected contributions form a coherent logical flow.",
+              "content_digest": "8b8d84adb9296241a03a4e6b91acee829ff1eaea443f9dd0b132d7b64a53dcff",
+              "position": 4,
+              "uid": "0f89ab25-d9ee-5669-aa99-a0fe07803915"
+            },
+            {
+              "content": "HCI reviewers view the validity of design interventions as low if research questions are not linked to prototype functions.",
+              "content_digest": "e7e5bb6d9618adc9d4903a4d4cbbf53007381999a95e4ed2137e3705a988fa13",
+              "position": 5,
+              "uid": "3e4a9a3b-abc2-54ed-9b87-f81abf61b541"
+            },
+            {
+              "content": "HCI reviewers view the validity of evaluation plans as low if evaluation tasks do not produce representative measures.",
+              "content_digest": "b23af1197034e73ce7b5bf0c6870ee410e44a07810ebaae12259087f2c12f8f1",
+              "position": 6,
+              "uid": "fb785649-1947-5e7d-aafb-308f14fb21b4"
+            },
+            {
+              "content": "HCI reviewers view the practicality of contributions as low if collected evidence cannot change design or operational decisions.",
+              "content_digest": "3720d356aa625bea8226fb668004f599e61140f1ad1543b643eb72b7a39ec43d",
+              "position": 7,
+              "uid": "02f8ddd8-32b0-5e3b-b358-5e0472a6e0d2"
+            },
+            {
+              "content": "Cross-check at the end whether each research question, formative evaluation data, and design modification judgment are seamlessly connected.",
+              "content_digest": "f3b3d431c05e942ff3cea0ac2d239eeee33e224047a452debe0246c57472f74d",
+              "position": 8,
+              "uid": "d17ba26c-187e-57bc-8468-c9c053fc303d"
+            },
+            {
+              "content": "Review whether the application conditions of proposed design principles and boundary cases of failure are presented together.",
+              "content_digest": "28ab914aa4a03e8f1908176b235017a80838ed660d996773a44b3963b927bcb3",
+              "position": 9,
+              "uid": "48a91d19-cc68-5400-8971-8125236f3fbf"
+            },
+            {
+              "content": "The user can have contributions reviewed only if prototype outcomes and the transferable design knowledge derived from them are separated.",
+              "content_digest": "2deadd2cfeed19a3e544c81a345a40f2f3b4561a8d28b073b70400a5e82ae0cb",
+              "position": 10,
+              "uid": "774341c9-b92d-53a5-a24c-59c75e39756b"
+            },
+            {
+              "content": "The scope of observation in controlled formative evaluations does not include long-term adaptation and operational changes in real-world usage contexts.",
+              "content_digest": "76a1a3c03c7d93acc8a6aca832fd24ab9624ea9e53c8207876160ed1055682e2",
+              "position": 11,
+              "uid": "877015ae-ab0b-561c-9fe3-3abb2d0aaa4e"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "344474c5-47f7-44c5-b440-01efc3c885df"
+        },
+        {
+          "context_digest": "e70e4eaff26e4baf1b346a4ecd2b44ed9f9ccac9e205b7b82572dc8ef0e217c4",
+          "context_name": "task-2/advisor2/emphasis",
+          "context_uid": "398f9930-3a0f-5de0-a339-ceba7dd5d1c6",
+          "memories": [
+            {
+              "content": "Do not exceed two primary HCI contributions that readers must remember.",
+              "content_digest": "59786866cf953172c2697f09398356a861e8ea448093102c32c9149f16b2e5c5",
+              "position": 0,
+              "uid": "d59dc83b-ce6a-5ac7-ab64-e5436df1f945"
+            },
+            {
+              "content": "Present each design or operational contribution as a single named sentence.",
+              "content_digest": "e0de5a9f1c1ca585fe062d7e11f8d2536cbe5ec4eefc16da6f7a0b62c0247d45",
+              "position": 1,
+              "uid": "328de462-17a4-551f-9f74-cb3118519e45"
+            },
+            {
+              "content": "In studies recruiting organizational members, emphasize workflow constraints.",
+              "content_digest": "c46efadebd89f3d757993baea79a5ef1386bbf6b4769ae3704ae62102397fc3b",
+              "position": 2,
+              "uid": "eab1dac5-8b61-5793-a56f-c4e3e64af190"
+            },
+            {
+              "content": "In studies recruiting organizational members, emphasize manager approval constraints.",
+              "content_digest": "2387fb9f3ab907e671fc9dcc2e7f067a84bdf1f5713d8385a32e39eb1e14751d",
+              "position": 3,
+              "uid": "f90e616a-d5a4-5cc2-86e4-62534a1faf83"
+            },
+            {
+              "content": "HCI reviewers find it difficult to identify primary contributions when named design and operational contributions exceed two.",
+              "content_digest": "04e080bfdf7277d04f0efc1b1d6775d06cba88aab5ff78bfd430674b004722a5",
+              "position": 4,
+              "uid": "78a1c87a-6936-516c-b578-8e97dc2e91f4"
+            },
+            {
+              "content": "Highlight one primary field operational decision to be changed by evaluation results as the central claim.",
+              "content_digest": "9a6bda883e68a2553a1238114d5de2746dc220948aebc1c2965cbb435318fe9c",
+              "position": 5,
+              "uid": "7af2db41-9091-5452-9beb-8fd7b48b7872"
+            },
+            {
+              "content": "Specify prototype features unnecessary for reviewing the primary field problem as secondary scope.",
+              "content_digest": "419ed0b0bccf1af7b30e0351f5e87b9e37e469cfa567e684695ffe4b6d39178a",
+              "position": 6,
+              "uid": "2312f35d-c17d-5af3-b84f-d2e671d7663f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "24ea68a5-0095-47e6-bb7a-29c7811dc239"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "Both frames connect evaluation evidence to actionable decisions. Otherwise, the reference emphasizes validity, coherence, contribution boundaries, and evaluation limits, while the compared frame emphasizes contribution focus, presentation, organizational constraints, and prototype scoping; no incompatible guidance appears.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "344474c5-47f7-44c5-b440-01efc3c885df",
+              "memory_uid": "8dae0ad6-2a6d-5d99-98db-b0d48a1140e5"
+            },
+            {
+              "frame_uid": "344474c5-47f7-44c5-b440-01efc3c885df",
+              "memory_uid": "02f8ddd8-32b0-5e3b-b358-5e0472a6e0d2"
+            },
+            {
+              "frame_uid": "24ea68a5-0095-47e6-bb7a-29c7811dc239",
+              "memory_uid": "7af2db41-9091-5452-9beb-8fd7b48b7872"
+            }
+          ],
+          "reason": "The reference requires actionable alignment and explains its practical importance; the compared frame adds a compatible prioritization rule for the same evidence-to-decision linkage.",
+          "status": "RESOLVED",
+          "summary": "Evaluation evidence should be tied to operational or design decisions it can change, while the primary field decision is made central.",
+          "uid": "c306e04f-37c8-5d2b-985d-56bf6bec6c28"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "344474c5-47f7-44c5-b440-01efc3c885df",
+              "memory_uid": "0dda8eb3-3287-5bb6-9b26-b1c00cc038d9"
+            }
+          ],
+          "reason": "Only the reference specifies this review procedure and its limited focus.",
+          "status": "RESOLVED",
+          "summary": "Conduct a single pre-submission review focused on the validity of user problems, interventions, and evaluation logic.",
+          "uid": "1f58f566-f641-5a34-826d-46223e1c378d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "344474c5-47f7-44c5-b440-01efc3c885df",
+              "memory_uid": "c8e0c9dd-dc4a-5a7d-9a82-e7ee449a4b25"
+            },
+            {
+              "frame_uid": "344474c5-47f7-44c5-b440-01efc3c885df",
+              "memory_uid": "3e4a9a3b-abc2-54ed-9b87-f81abf61b541"
+            }
+          ],
+          "reason": "The reference supplies both the alignment check and its reviewer-facing rationale; the compared frame does not make this claim.",
+          "status": "RESOLVED",
+          "summary": "Research questions should align with core prototype functions to sustain the validity of design interventions.",
+          "uid": "c7440ad9-e2ad-5b44-94b4-133f258e17fb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "344474c5-47f7-44c5-b440-01efc3c885df",
+              "memory_uid": "f93c5baa-3c2b-5e37-b07b-0b00e8b22ab9"
+            },
+            {
+              "frame_uid": "344474c5-47f7-44c5-b440-01efc3c885df",
+              "memory_uid": "fb785649-1947-5e7d-aafb-308f14fb21b4"
+            }
+          ],
+          "reason": "The reference supplies both the alignment check and its reviewer-facing rationale; the compared frame does not address task–measure validity.",
+          "status": "RESOLVED",
+          "summary": "Evaluation tasks should produce representative measures to sustain the validity of the evaluation plan.",
+          "uid": "723c572d-16ac-572d-a3a4-e1ad0ef8d4f9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "344474c5-47f7-44c5-b440-01efc3c885df",
+              "memory_uid": "0f89ab25-d9ee-5669-aa99-a0fe07803915"
+            },
+            {
+              "frame_uid": "344474c5-47f7-44c5-b440-01efc3c885df",
+              "memory_uid": "d17ba26c-187e-57bc-8468-c9c053fc303d"
+            }
+          ],
+          "reason": "The reference presents complementary formulations of one end-to-end coherence check; the compared frame does not specify it.",
+          "status": "RESOLVED",
+          "summary": "The final review should verify a coherent chain from problems and research questions through studies and formative evidence to design judgments and contributions.",
+          "uid": "5da57781-0aa4-5e0e-830e-eec8c50b6e2b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "344474c5-47f7-44c5-b440-01efc3c885df",
+              "memory_uid": "48a91d19-cc68-5400-8971-8125236f3fbf"
+            }
+          ],
+          "reason": "Only the reference requires explicit boundaries for proposed design principles.",
+          "status": "RESOLVED",
+          "summary": "Present design principles together with their application conditions and failure boundary cases.",
+          "uid": "1216bb04-3644-5ea3-9b58-89f0ce6f1f42"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "344474c5-47f7-44c5-b440-01efc3c885df",
+              "memory_uid": "774341c9-b92d-53a5-a24c-59c75e39756b"
+            }
+          ],
+          "reason": "Only the reference states this prerequisite for reviewing contributions.",
+          "status": "RESOLVED",
+          "summary": "Separate prototype outcomes from the transferable design knowledge derived from them when presenting contributions for review.",
+          "uid": "2eadaa42-7eb5-59a6-8707-0dcb6ee91693"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "344474c5-47f7-44c5-b440-01efc3c885df",
+              "memory_uid": "877015ae-ab0b-561c-9fe3-3abb2d0aaa4e"
+            }
+          ],
+          "reason": "Only the reference defines this limitation on observational scope.",
+          "status": "RESOLVED",
+          "summary": "Controlled formative evaluations do not observe long-term adaptation or operational change in real-world use.",
+          "uid": "0c8c50f3-5f8f-55bf-8673-e108798f16ed"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "24ea68a5-0095-47e6-bb7a-29c7811dc239",
+              "memory_uid": "d59dc83b-ce6a-5ac7-ab64-e5436df1f945"
+            },
+            {
+              "frame_uid": "24ea68a5-0095-47e6-bb7a-29c7811dc239",
+              "memory_uid": "78a1c87a-6936-516c-b578-8e97dc2e91f4"
+            }
+          ],
+          "reason": "The compared frame supplies both the ceiling and its reviewer-facing rationale; the reference does not impose a contribution count.",
+          "status": "RESOLVED",
+          "summary": "Limit memorable primary HCI contributions to two because a larger named set obscures which contributions are primary.",
+          "uid": "80040e4d-4f5b-5955-b5c1-098af79f04a5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "24ea68a5-0095-47e6-bb7a-29c7811dc239",
+              "memory_uid": "328de462-17a4-551f-9f74-cb3118519e45"
+            }
+          ],
+          "reason": "Only the compared frame specifies this presentation format.",
+          "status": "RESOLVED",
+          "summary": "State each design or operational contribution as one named sentence.",
+          "uid": "e2a17cf0-f639-5675-bc55-7a97cd983866"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "24ea68a5-0095-47e6-bb7a-29c7811dc239",
+              "memory_uid": "eab1dac5-8b61-5793-a56f-c4e3e64af190"
+            },
+            {
+              "frame_uid": "24ea68a5-0095-47e6-bb7a-29c7811dc239",
+              "memory_uid": "f90e616a-d5a4-5cc2-86e4-62534a1faf83"
+            }
+          ],
+          "reason": "The compared frame splits one organizational-study requirement into two relevant constraint types; the reference does not address recruitment-specific constraints.",
+          "status": "RESOLVED",
+          "summary": "Studies recruiting organizational members should emphasize workflow and manager-approval constraints.",
+          "uid": "87b0cd17-09d2-5636-947c-1d1e801e3d85"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "24ea68a5-0095-47e6-bb7a-29c7811dc239",
+              "memory_uid": "2312f35d-c17d-5af3-b84f-d2e671d7663f"
+            }
+          ],
+          "reason": "Only the compared frame specifies how to demote prototype features outside the primary review focus.",
+          "status": "RESOLVED",
+          "summary": "Treat prototype features unnecessary for reviewing the primary field problem as secondary scope.",
+          "uid": "4213d40d-9461-5991-bb35-5e9eb1d8a8ab"
+        }
+      ],
+      "reports": {
+        "both": "Evaluation evidence should support decisions that can change, with one primary field decision emphasized as the central claim.",
+        "compared_only": "The compared frame adds a two-contribution ceiling, concise naming, organizational workflow and approval constraints, and secondary treatment of prototype features irrelevant to the primary field problem.",
+        "differences": "",
+        "reference_only": "The reference adds review discipline, question–prototype and task–measure validity, end-to-end coherence, design-principle boundaries, contribution separation, and limits of controlled formative evaluation."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "e7dfff1b-759d-4a52-abc5-a9c89e04b166"
+    },
+    "analysis_digest": "657fb274fea59f3b03df04ed847842abe5755f03de36b76f7b3007b67c40280f",
+    "key": "8bf13f95b97df9309beaf6ce4c52c101880721c3382c37fa33d347fe0f2b1b21",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 44.04550595800174,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "8bf13f95b97df9309beaf6ce4c52c101880721c3382c37fa33d347fe0f2b1b21",
+  "created_at": "2026-08-13T18:24:49.737296Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/review",
+  "pair_key": "2c1eb42b39a9438ca6815275f1d95c261f7499e3c8718b8de302185f5725aeb0",
+  "provider_seconds": 44.04550595800174,
+  "right": "task-2/advisor2/emphasis",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

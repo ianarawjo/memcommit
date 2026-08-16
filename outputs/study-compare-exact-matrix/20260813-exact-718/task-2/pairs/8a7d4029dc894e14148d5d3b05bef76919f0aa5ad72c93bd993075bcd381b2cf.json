@@ -1,0 +1,292 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:21:40.669907+00:00",
+      "frames": [
+        {
+          "context_digest": "4ae7659c0c6976de9bf2292f9e35962963b7931b470c2294d4f0e70b3500bff0",
+          "context_name": "task-2/advisor1/feasibility",
+          "context_uid": "52db6b06-e86a-556a-913e-30e45f7e9529",
+          "memories": [
+            {
+              "content": "Mark unverified schedule assumptions as such.",
+              "content_digest": "d4cdcdbcdb51d96f9a7435e72c2e4ef25a3e3822a765a88afafeca5194bda96e",
+              "position": 0,
+              "uid": "b150c774-27f6-5ec8-8cb9-9a00be19ce9b"
+            },
+            {
+              "content": "Mark unverified recruitment assumptions as such.",
+              "content_digest": "4cc28528fee1c7b09f709638e2b57d3bc9efe635d20500ee98567f8f59b8cf21",
+              "position": 1,
+              "uid": "6c7d14ed-67e5-56ff-befb-7648b95aa7a3"
+            },
+            {
+              "content": "Mark unverified technical assumptions as such.",
+              "content_digest": "8942e49cd46e3e9746330349df11e49d4a6c9250c7aa4c52c2d9ade1c97c735c",
+              "position": 2,
+              "uid": "00bf39b5-fe97-5fd0-b579-a5c13b5e6af7"
+            },
+            {
+              "content": "Clarify which stage of prototype fabrication or user study each requested resource is used for.",
+              "content_digest": "81ba64e23304f8fbbb3af4f2c30dfa3c517899c486e88ba211189a7911fcbd64",
+              "position": 3,
+              "uid": "3ae97c88-7537-5733-b48d-e02c9283f486"
+            },
+            {
+              "content": "Operations reviewers judge feasibility based on the personnel assigned to each procedure.",
+              "content_digest": "fe29bb7e592d116001a25ce11c603ae29f21d446925c28db692f14970d5b8134",
+              "position": 4,
+              "uid": "e2b5c1f0-97c2-5d46-af80-993d8d5606c9"
+            },
+            {
+              "content": "Operations reviewers judge feasibility based on the equipment assigned to each procedure.",
+              "content_digest": "859ab328c21506d11dd1f6d98e98d5a552446e774931a8bc13396750acf0793b",
+              "position": 5,
+              "uid": "f636b400-d3a2-5873-bf5b-c990b0f7ea42"
+            },
+            {
+              "content": "Operations reviewers judge feasibility based on the time allocated to each procedure.",
+              "content_digest": "08656886328ece4d813e36b1145805ffd3f3d4c6c855c20b1464143fb12868ab",
+              "position": 6,
+              "uid": "49385488-2315-51bc-bea0-749a1aea52f1"
+            },
+            {
+              "content": "Verify that the planned number of formative evaluation iterations is feasible within the time for prototype modification and recruitment resources.",
+              "content_digest": "9e181a14a97abd740a85679554395d7b315c07f0e4171ef276a2c31553b285c7",
+              "position": 7,
+              "uid": "f1c22a48-9d8d-5e82-9837-690d66e719db"
+            },
+            {
+              "content": "Include only the minimum functionality required to compare primary design assumptions in the scope of the formative evaluation prototype.",
+              "content_digest": "7769c2a4c03dc1c279bbf34bf0cefdcd076e3c1d8a1e56015bf20357ecfcf433",
+              "position": 8,
+              "uid": "4d69f030-0dc0-5df7-a153-0b595a3f68de"
+            },
+            {
+              "content": "The user's iterative design plan can be judged feasible only if time and personnel are allocated for modifying the prototype between iterations.",
+              "content_digest": "0339285cf9fd632814c5b5eb2b48fd46e3baf09ea95fb406f71b5d2cc804fa7e",
+              "position": 9,
+              "uid": "152f8621-f5fb-5c5e-a961-1fde77ed0bb3"
+            },
+            {
+              "content": "Delays in participant recruitment can compress the time available for prototype modification between formative evaluations.",
+              "content_digest": "9945f30dba63d2d070bad59cb2fb15b6a26d635f337949c3891b58d17c43973a",
+              "position": 10,
+              "uid": "1877a138-31f6-59a5-b666-ae57985f540d"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "b35a9fa9-3267-4d7d-901d-a80878e98f92"
+        },
+        {
+          "context_digest": "bb54539faeedf2db9ada09643c11270aabf235d8e3e6df98500f90f9b82aed49",
+          "context_name": "task-2/advisor2/reproducibility",
+          "context_uid": "5f2f3c0f-4cb1-5151-b381-847df75b6457",
+          "memories": [
+            {
+              "content": "HCI reviewers find it difficult to assess result reproducibility if the system version used in the field deployment is not disclosed.",
+              "content_digest": "83ac18cb56f74dbeb7834909b999669bb9a46d320b288bf38fb7b6c9bd0812f2",
+              "position": 0,
+              "uid": "40f11374-d91b-546a-9e93-fcf98a0fde98"
+            },
+            {
+              "content": "Record changes in system configurations, field procedures, and data collection tools during deployment, along with their timestamps and rationales.",
+              "content_digest": "ac399146f49e6ae5d21272de0cd13db6346d4cd67b096ecfa9bd314b026f403e",
+              "position": 1,
+              "uid": "cc72ad54-4cf3-56cd-9119-46776f5b2184"
+            },
+            {
+              "content": "The history of deployment versions and configuration changes provides necessary evidence for interpreting results from different field sites.",
+              "content_digest": "39ae70de900b646362a96cfa7d734a6404604b468398b09da9fb05783b389d25",
+              "position": 2,
+              "uid": "75f22b45-fb1b-568c-bb05-080fdacdcab2"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "30455df5-34b3-4455-82af-1db2a057665b"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The reference frame focuses on feasibility, assumption labeling, resource staging, prototype scope, and iteration risks. The compared frame independently addresses deployment traceability and reproducibility. The frames contain no substantively shared or scope-dependent operational claims.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b35a9fa9-3267-4d7d-901d-a80878e98f92",
+              "memory_uid": "b150c774-27f6-5ec8-8cb9-9a00be19ce9b"
+            },
+            {
+              "frame_uid": "b35a9fa9-3267-4d7d-901d-a80878e98f92",
+              "memory_uid": "6c7d14ed-67e5-56ff-befb-7648b95aa7a3"
+            },
+            {
+              "frame_uid": "b35a9fa9-3267-4d7d-901d-a80878e98f92",
+              "memory_uid": "00bf39b5-fe97-5fd0-b579-a5c13b5e6af7"
+            }
+          ],
+          "reason": "These reference-side statements split one labeling policy across three assumption categories, with no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "Unverified schedule, recruitment, and technical assumptions should be explicitly marked.",
+          "uid": "84c547cd-d707-5193-a1c8-b438ff6b6be0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b35a9fa9-3267-4d7d-901d-a80878e98f92",
+              "memory_uid": "3ae97c88-7537-5733-b48d-e02c9283f486"
+            }
+          ],
+          "reason": "This reference-side resource-staging requirement has no substantive counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Requested resources should be mapped to the prototype-fabrication or user-study stage where they are used.",
+          "uid": "2e6bb1bd-81f3-5ed5-ac82-8a2fa5b08553"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b35a9fa9-3267-4d7d-901d-a80878e98f92",
+              "memory_uid": "e2b5c1f0-97c2-5d46-af80-993d8d5606c9"
+            },
+            {
+              "frame_uid": "b35a9fa9-3267-4d7d-901d-a80878e98f92",
+              "memory_uid": "f636b400-d3a2-5873-bf5b-c990b0f7ea42"
+            },
+            {
+              "frame_uid": "b35a9fa9-3267-4d7d-901d-a80878e98f92",
+              "memory_uid": "49385488-2315-51bc-bea0-749a1aea52f1"
+            }
+          ],
+          "reason": "These reference-side statements split one feasibility criterion across three operational inputs, with no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "Procedure feasibility is judged from its assigned personnel, equipment, and time.",
+          "uid": "031d04fb-c3aa-5f0a-9bbc-aaba1288026e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b35a9fa9-3267-4d7d-901d-a80878e98f92",
+              "memory_uid": "f1c22a48-9d8d-5e82-9837-690d66e719db"
+            },
+            {
+              "frame_uid": "b35a9fa9-3267-4d7d-901d-a80878e98f92",
+              "memory_uid": "152f8621-f5fb-5c5e-a961-1fde77ed0bb3"
+            }
+          ],
+          "reason": "These reference-side statements jointly specify the resources needed to make repeated formative evaluation feasible, without a compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "A formative iterative design plan requires feasible iteration counts and adequate time and personnel for prototype modification and recruitment.",
+          "uid": "cec2e217-1376-59e2-acbc-95895235bc72"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b35a9fa9-3267-4d7d-901d-a80878e98f92",
+              "memory_uid": "4d69f030-0dc0-5df7-a153-0b595a3f68de"
+            }
+          ],
+          "reason": "This reference-side prototype-scoping policy has no substantive counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A formative evaluation prototype should include only the minimum functionality needed to compare primary design assumptions.",
+          "uid": "92e8c384-f367-5cb3-9afd-a8a397fddda5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b35a9fa9-3267-4d7d-901d-a80878e98f92",
+              "memory_uid": "1877a138-31f6-59a5-b666-ae57985f540d"
+            }
+          ],
+          "reason": "This reference-side causal scheduling risk is independently useful and absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Participant-recruitment delays can reduce prototype-modification time between formative evaluations.",
+          "uid": "53dc0392-ec35-596e-8ed7-b4d6bc1bb9be"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "30455df5-34b3-4455-82af-1db2a057665b",
+              "memory_uid": "40f11374-d91b-546a-9e93-fcf98a0fde98"
+            }
+          ],
+          "reason": "This compared-side disclosure requirement has no substantive counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The system version used in field deployment should be disclosed so reviewers can assess reproducibility.",
+          "uid": "e97a4566-d961-5336-93b7-a63b0c0309ce"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "30455df5-34b3-4455-82af-1db2a057665b",
+              "memory_uid": "cc72ad54-4cf3-56cd-9119-46776f5b2184"
+            }
+          ],
+          "reason": "This compared-side change-recording policy is independently useful and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Changes to system configurations, field procedures, and data-collection tools should be recorded with timestamps and rationales.",
+          "uid": "0ebcbf2c-7467-5ccc-a82f-974d8160af62"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "30455df5-34b3-4455-82af-1db2a057665b",
+              "memory_uid": "75f22b45-fb1b-568c-bb05-080fdacdcab2"
+            }
+          ],
+          "reason": "This compared-side evidentiary claim concerns cross-site interpretation and has no substantive counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Deployment version and configuration histories provide evidence for interpreting results across field sites.",
+          "uid": "2589868f-4ae7-54d4-adfa-e8d1e1145bbf"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only guidance covers disclosing deployed system versions, recording deployment changes with timing and rationale, and using version histories to interpret and reproduce field results.",
+        "differences": "",
+        "reference_only": "Reference-only guidance covers labeling unverified assumptions, tying resources to stages and procedures, constraining prototype functionality, and assessing iterative evaluation feasibility and recruitment-related timing risks."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "040b9582-243a-4d6e-98d5-c0fcda985957"
+    },
+    "analysis_digest": "4dd6862c5dd99af924d8c5ddbf6e53f70609c449c29391b68c38cef4d6683e49",
+    "key": "9f5764d59507a895426d25d478a83e34dcabb784a8cca571100577dd2c8d92f5",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 36.77822445899801,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "9f5764d59507a895426d25d478a83e34dcabb784a8cca571100577dd2c8d92f5",
+  "created_at": "2026-08-13T18:22:17.447681Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/feasibility",
+  "pair_key": "8a7d4029dc894e14148d5d3b05bef76919f0aa5ad72c93bd993075bcd381b2cf",
+  "provider_seconds": 36.77822445899801,
+  "right": "task-2/advisor2/reproducibility",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

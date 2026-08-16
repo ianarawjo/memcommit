@@ -1,0 +1,406 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:38:33.656073+00:00",
+      "frames": [
+        {
+          "context_digest": "db438345c3ec4b3f69562a274c9f81a93bd6e6df97bc89b60abcd193dc89b562",
+          "context_name": "task-3/local/personal-memory/2024/04",
+          "context_uid": "206e1cd3-93da-5341-bda3-95cde4814c20",
+          "memories": [
+            {
+              "content": "The user completed a routine dental checkup in April 2024.",
+              "content_digest": "bbaa093f8dee5b5ee42c4a180e683fce00bc9364f5a009b9fa1e7f2ac233bc01",
+              "position": 0,
+              "uid": "9cea83cd-e39f-53bd-9e79-d30aa465ad02"
+            },
+            {
+              "content": "When the user heard three checkup questions in succession, they asked for the first question again.",
+              "content_digest": "e1b76973991f009295489249af1a7cd0fa7957f24f330e39337e01e5b1acdcbb",
+              "position": 1,
+              "uid": "51f8326f-60d4-5ba3-ba32-a04331dcb930"
+            },
+            {
+              "content": "At the next visit, when questions were asked one at a time, the user answered each without omission.",
+              "content_digest": "30c943f2e043f485a7a7e1ac19343c753ed8f834d00716725322505e28e0b15a",
+              "position": 2,
+              "uid": "cd0bce79-71d5-5d46-9c68-8a1d096dd53a"
+            },
+            {
+              "content": "The user called to reschedule an appointment at lunchtime but did not reach anyone.",
+              "content_digest": "1d4bd2122c160d35080b232ebb8ae5080c2ce34124645b3ec8040d7d29af9752",
+              "position": 3,
+              "uid": "71e27b0c-5c10-5102-aeac-98b0841723f2"
+            },
+            {
+              "content": "After returning home, the user kept a photo of the paper instructions received at the clinic.",
+              "content_digest": "68cddec62167a3910122a129dcfdb3c5604a4fea996d01f870734739dd3b0221",
+              "position": 4,
+              "uid": "86ad5410-0cc7-5876-8e3a-a3f0dd1680c7"
+            },
+            {
+              "content": "On a day the user put only the visit address in the calendar, they had to search again for the floor.",
+              "content_digest": "0d6926aba2c90930bfa984d7af1b12c60f35e53ba9916dfbee2c2391961db1a9",
+              "position": 5,
+              "uid": "aab36950-7e2b-588f-bb7c-d3bd6e36c501"
+            },
+            {
+              "content": "On a day the user shared the checkup time with their older sister, the sister called to check in after the user returned home.",
+              "content_digest": "b7d0fea8e8f2fc13126453039dcedebcda3c67ce2ea96c4a2d5b60365448e0e3",
+              "position": 6,
+              "uid": "50ac9268-9259-56fd-8678-1dfc8f919efb"
+            },
+            {
+              "content": "The scheduling staff at that clinic expect requests to change appointments to arrive by telephone.",
+              "content_digest": "28eec4f0ef0b96764a3f7ea54ee3db9fd4d5f1b62a5a2fa29d0a6193f1d8a18c",
+              "position": 7,
+              "uid": "5141ca66-9860-5ec5-b028-ac8670f586ca"
+            },
+            {
+              "content": "Before adding a follow-up visit to the calendar, confirm the date, time, address, and floor with the user.",
+              "content_digest": "0555c837f721fccd5918b2275086bb39c75e016e27574027185cfbada1c766af",
+              "position": 8,
+              "uid": "e265e637-fa41-53d0-aa9b-0102e9962f9a"
+            },
+            {
+              "content": "The local agent can track completed checkups and scheduled appointments but cannot determine whether a follow-up visit is needed.",
+              "content_digest": "be24b47ccb071438fd01bb99b11af3c63f22e260312a26d901824e6bb0d4cd89",
+              "position": 9,
+              "uid": "7aece7ae-b327-537e-9cef-fe24ee8fc618"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "7bc469a5-8ffa-442a-be77-e1d65f4a24c4"
+        },
+        {
+          "context_digest": "0af669f138c2617a4b35c0974627a23c7e5cb2405da5e306648b130efac7fbdf",
+          "context_name": "task-3/local/personal-memory/2025/12",
+          "context_uid": "c54e9dde-005a-5d20-b41b-1313b4713061",
+          "memories": [
+            {
+              "content": "The user stores wrapping paper and empty gift boxes on the upper shelf of the bedroom closet.",
+              "content_digest": "8f3b67dea69e1fa656f1e42e39700a71ebc250c4f6ec18dc4d4f88d467e86ad2",
+              "position": 0,
+              "uid": "bd69b616-6e7c-5440-8b29-586de68bcff6"
+            },
+            {
+              "content": "From photographs, the user discovered that they had given their mother the same type of kitchen item two years in a row.",
+              "content_digest": "6962b8dc03fd90e1c8badfda0d827008cc675b940e5975a5833ebe504af7d635",
+              "position": 1,
+              "uid": "90c60e57-d7db-5783-9ca8-2fd27b94d847"
+            },
+            {
+              "content": "This year, the user went to the market with their mother and let her choose a needed item directly.",
+              "content_digest": "9a27aa187ad2964f985ffcf376490f4b69d3c83f2034591187273bd89f61637a",
+              "position": 2,
+              "uid": "53bc23b2-8242-58b5-b496-a45c70bb8e41"
+            },
+            {
+              "content": "The user once ordered a gift late and had it delivered the day after the gathering.",
+              "content_digest": "245bb316eb5d0b0203c63eb9a2832c6cf73cb9e7e368bdb48a08bb6b702642d7",
+              "position": 3,
+              "uid": "3b097446-2c73-5414-8c06-6bacdf00a4c1"
+            },
+            {
+              "content": "The next year, the user checked the expected delivery date and ordered one week before the gathering.",
+              "content_digest": "97aed11c6b4f7d03bd6a55e27ef34ef539da85204787bb0468f1e2df51d958fc",
+              "position": 4,
+              "uid": "ce18c7a5-d1e9-5e5c-8739-b14fa7298feb"
+            },
+            {
+              "content": "The user did not put names on wrapped boxes and handed their older sister and younger brother each other's gifts.",
+              "content_digest": "48464eb29ee2d2e01cda00f0e3a13d116d4aa121d424aecc59644431e89f8957",
+              "position": 5,
+              "uid": "7657f424-cd24-54dd-8409-e04974dd1531"
+            },
+            {
+              "content": "The next time the user wrapped gifts, they wrote the recipient on the bottom of each box.",
+              "content_digest": "551e74aebf85d4ffee86b960c520b17f3f7e4d50428493934831a774d9e31db6",
+              "position": 6,
+              "uid": "d8e82ad3-902e-5f0c-aa8e-b23ce874982a"
+            },
+            {
+              "content": "The user's younger brother welcomes a snack the family can share immediately more than an item for his use alone.",
+              "content_digest": "ec32111520e2f12afc684c6441c075dcc0715fc450d0ce8f20408dfb955634a9",
+              "position": 7,
+              "uid": "8a941bf1-73bd-51d3-a069-62ecc9d56439"
+            },
+            {
+              "content": "The local agent can find past gift records and flag duplicates but cannot know what is needed this year.",
+              "content_digest": "f7574c7f91999992680a7e88e79270747fd744a46355800012c63319c286d731",
+              "position": 8,
+              "uid": "036edf8f-4680-5822-924e-0fdc691c8135"
+            },
+            {
+              "content": "Year-end deliveries may take longer than usual or have their expected dates changed.",
+              "content_digest": "cc0955e132cf6f4bec7f416e54ed2ffdbac22169adeeae7372a6ddc496da4b9e",
+              "position": 9,
+              "uid": "b9e9e222-a559-56e3-93b5-1f49a0e0d3ab"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "900d3e8b-07c4-4c6d-be82-1a8042f8a472"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate operational domains: dental-visit support and gift planning. Each contributes independently useful observations, preferences, procedures, and agent limits; no supplied claims govern the same decision closely enough to support a cross-frame relation or conflict.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7bc469a5-8ffa-442a-be77-e1d65f4a24c4",
+              "memory_uid": "9cea83cd-e39f-53bd-9e79-d30aa465ad02"
+            }
+          ],
+          "reason": "This is independently useful dental-history information with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user completed a routine dental checkup in April 2024.",
+          "uid": "88e5b0fa-db91-514c-a5ad-232c25738d17"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7bc469a5-8ffa-442a-be77-e1d65f4a24c4",
+              "memory_uid": "51f8326f-60d4-5ba3-ba32-a04331dcb930"
+            },
+            {
+              "frame_uid": "7bc469a5-8ffa-442a-be77-e1d65f4a24c4",
+              "memory_uid": "cd0bce79-71d5-5d46-9c68-8a1d096dd53a"
+            }
+          ],
+          "reason": "These memories jointly express one communication-pacing observation specific to dental visits, with no compared-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user needed repetition when several checkup questions were asked together but answered fully when later questions were presented one at a time.",
+          "uid": "17edff29-f8b1-58ed-8557-6af3a8f49aa8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7bc469a5-8ffa-442a-be77-e1d65f4a24c4",
+              "memory_uid": "71e27b0c-5c10-5102-aeac-98b0841723f2"
+            }
+          ],
+          "reason": "This is a specific rescheduling-access event not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A lunchtime telephone attempt to reschedule an appointment did not reach clinic staff.",
+          "uid": "40d2a32f-4b40-5098-94d2-7e0c3953a34b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7bc469a5-8ffa-442a-be77-e1d65f4a24c4",
+              "memory_uid": "86ad5410-0cc7-5876-8e3a-a3f0dd1680c7"
+            }
+          ],
+          "reason": "This is independently useful information about preserving clinic instructions and has no compared-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user retained a photograph of paper instructions received at the clinic.",
+          "uid": "465d3ca3-36e0-5bf4-ab2e-17732f3fc159"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7bc469a5-8ffa-442a-be77-e1d65f4a24c4",
+              "memory_uid": "aab36950-7e2b-588f-bb7c-d3bd6e36c501"
+            },
+            {
+              "frame_uid": "7bc469a5-8ffa-442a-be77-e1d65f4a24c4",
+              "memory_uid": "e265e637-fa41-53d0-aa9b-0102e9962f9a"
+            }
+          ],
+          "reason": "These memories split one underlying claim about preserving complete dental-visit location and scheduling details, absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Follow-up calendar entries should be confirmed with the user for date, time, address, and floor because omitting the floor previously required another search.",
+          "uid": "dbbbc66b-5d32-5885-871b-e3bdf42e4cbc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7bc469a5-8ffa-442a-be77-e1d65f4a24c4",
+              "memory_uid": "50ac9268-9259-56fd-8678-1dfc8f919efb"
+            }
+          ],
+          "reason": "This is a dental-related family-support event with no substantively corresponding compared-frame claim.",
+          "status": "RESOLVED",
+          "summary": "After being told the checkup time, the user’s older sister called to check in once the user returned home.",
+          "uid": "0d12ab93-c023-5838-b200-a2c6e93e11fe"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7bc469a5-8ffa-442a-be77-e1d65f4a24c4",
+              "memory_uid": "5141ca66-9860-5ec5-b028-ac8670f586ca"
+            }
+          ],
+          "reason": "This clinic-specific communication policy is independently useful and is not addressed in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The clinic’s scheduling staff expect appointment-change requests by telephone.",
+          "uid": "590691f1-5a67-5e10-95eb-670532aa8c1c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7bc469a5-8ffa-442a-be77-e1d65f4a24c4",
+              "memory_uid": "7aece7ae-b327-537e-9cef-fe24ee8fc618"
+            }
+          ],
+          "reason": "This defines a dental-support capability boundary governing a different decision from the gift-planning limitation in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The local agent can track completed checkups and scheduled appointments but cannot determine whether follow-up care is needed.",
+          "uid": "7279e399-40ad-5414-a709-9a454f467e87"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "900d3e8b-07c4-4c6d-be82-1a8042f8a472",
+              "memory_uid": "bd69b616-6e7c-5440-8b29-586de68bcff6"
+            }
+          ],
+          "reason": "This is independently useful gift-supply location information with no reference-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user stores wrapping paper and empty gift boxes on the upper bedroom-closet shelf.",
+          "uid": "69117642-07f7-5383-b684-0a1ce79b3996"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "900d3e8b-07c4-4c6d-be82-1a8042f8a472",
+              "memory_uid": "90c60e57-d7db-5783-9ca8-2fd27b94d847"
+            },
+            {
+              "frame_uid": "900d3e8b-07c4-4c6d-be82-1a8042f8a472",
+              "memory_uid": "53bc23b2-8242-58b5-b496-a45c70bb8e41"
+            }
+          ],
+          "reason": "These memories jointly describe one change in gift-selection practice, which the reference frame does not address.",
+          "status": "RESOLVED",
+          "summary": "After photographs revealed repeated gifts for the user’s mother, the user later let her directly choose an item she needed.",
+          "uid": "7472d757-b8ad-5854-914c-2056f537f5aa"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "900d3e8b-07c4-4c6d-be82-1a8042f8a472",
+              "memory_uid": "3b097446-2c73-5414-8c06-6bacdf00a4c1"
+            },
+            {
+              "frame_uid": "900d3e8b-07c4-4c6d-be82-1a8042f8a472",
+              "memory_uid": "ce18c7a5-d1e9-5e5c-8739-b14fa7298feb"
+            }
+          ],
+          "reason": "These memories jointly describe one improvement in gift-delivery planning, absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "After a late gift arrived after a gathering, the user later checked the expected delivery date and ordered one week ahead.",
+          "uid": "508a0242-e9bb-5635-b841-ecc823799061"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "900d3e8b-07c4-4c6d-be82-1a8042f8a472",
+              "memory_uid": "7657f424-cd24-54dd-8409-e04974dd1531"
+            },
+            {
+              "frame_uid": "900d3e8b-07c4-4c6d-be82-1a8042f8a472",
+              "memory_uid": "d8e82ad3-902e-5f0c-aa8e-b23ce874982a"
+            }
+          ],
+          "reason": "These memories jointly describe one improvement in identifying wrapped gifts, with no reference-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "After unmarked packages caused siblings’ gifts to be exchanged, the user labeled each recipient on the bottom of later boxes.",
+          "uid": "284dd3c0-aa5e-5557-8dca-60d44e0044bc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "900d3e8b-07c4-4c6d-be82-1a8042f8a472",
+              "memory_uid": "8a941bf1-73bd-51d3-a069-62ecc9d56439"
+            }
+          ],
+          "reason": "This recipient-specific gift preference is independently useful and not addressed in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s younger brother prefers a snack the family can share immediately over an item solely for his own use.",
+          "uid": "dffe76d2-d09b-5031-8265-8e785f60096f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "900d3e8b-07c4-4c6d-be82-1a8042f8a472",
+              "memory_uid": "036edf8f-4680-5822-924e-0fdc691c8135"
+            }
+          ],
+          "reason": "This defines a gift-planning capability boundary governing a different decision from the dental follow-up limitation in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The local agent can retrieve past gift records and flag duplicates but cannot identify what is needed this year.",
+          "uid": "850c5567-339f-55cd-a9f9-bac9fb0437d5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "900d3e8b-07c4-4c6d-be82-1a8042f8a472",
+              "memory_uid": "b9e9e222-a559-56e3-93b5-1f49a0e0d3ab"
+            }
+          ],
+          "reason": "This seasonal delivery-risk information is independently useful and has no reference-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "Year-end deliveries may be delayed or have their expected dates changed.",
+          "uid": "d9b82002-a798-5ad4-96d3-7d62211e6e7e"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame describes gift storage, recipient selection, delivery timing, package labeling, a sibling’s preference, seasonal shipping uncertainty, and limits on identifying current needs.",
+        "differences": "",
+        "reference_only": "The reference describes dental history, communication pacing, rescheduling, retained instructions, complete calendar details, family check-ins, clinic telephone expectations, and limits on determining follow-up need."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "f27a1316-f6b9-434b-a0c1-ac76a4140eec"
+    },
+    "analysis_digest": "dea9c984a49ce18145bec1a6bc3268f4cf3889e8cb7543b351b7bda78c9d55cd",
+    "key": "bfe0e2da12fb0e0c414adb22ed97072d488170bbb43e95afae1b5318d7db3aa6",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 51.267905875,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "bfe0e2da12fb0e0c414adb22ed97072d488170bbb43e95afae1b5318d7db3aa6",
+  "created_at": "2026-08-13T18:39:24.923909Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/04",
+  "pair_key": "309dc84a898455b2954848e2e6140d7656cb1a4d88cc612aba85030ceaa7d51c",
+  "provider_seconds": 51.267905875,
+  "right": "task-3/local/personal-memory/2025/12",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

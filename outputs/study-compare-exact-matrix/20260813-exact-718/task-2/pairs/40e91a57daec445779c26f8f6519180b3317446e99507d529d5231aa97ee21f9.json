@@ -1,0 +1,263 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:25:51.088432+00:00",
+      "frames": [
+        {
+          "context_digest": "d2c716d52357c4200adc8772d5823715ffd736eb766028c1c62bbb32852bc344",
+          "context_name": "task-2/advisor1/scope",
+          "context_uid": "6db29abe-5784-5eec-acaa-060bac0e11f1",
+          "memories": [
+            {
+              "content": "Define in one sentence the user groups and usage contexts to which the design knowledge does not apply.",
+              "content_digest": "3193ffe501a06d6148b39c333853b42bc0278b2ab3c3df88162b049548ff16bb",
+              "position": 0,
+              "uid": "e594a6ab-81e9-5e5f-8ef5-e6bb8f3760d7"
+            },
+            {
+              "content": "Reviewers judge the generalization boundary of results through explicitly excluded targets and situations.",
+              "content_digest": "a929649a7bd07f29f31a8cd1969a3c160ba5f61c0def76e204443c30234f84b0",
+              "position": 1,
+              "uid": "31cdacff-7c49-547d-9f97-598a07b67fb6"
+            },
+            {
+              "content": "Specify user goals, interaction conditions, and technological constraints under which the proposed design knowledge can be transferred.",
+              "content_digest": "6ae1bfaeadb1863db1997685527706d210a379a376a24d3de1168e952f847627",
+              "position": 2,
+              "uid": "1459d986-4dc9-51f3-bf13-dbb0b07045c8"
+            },
+            {
+              "content": "Small-scale formative studies can support analytic generalization distinct from statistical representativeness when results are expressed in terms of design conditions and mechanisms.",
+              "content_digest": "1963572a303acbf383890b7d97b52349f572df761e89ea3fd5116058cd2e1cea",
+              "position": 3,
+              "uid": "1db5fcd6-f93c-5630-9810-053c10b5ceba"
+            },
+            {
+              "content": "The author of this proposal tends to apply design knowledge derived from an accessible sample to a broader user population.",
+              "content_digest": "df2a7f1284c1994c6dec49eb7995acd1ed341a9e6b8f4b06c854d85fa9d77d6c",
+              "position": 4,
+              "uid": "fd29c315-521f-53c0-add5-c668ec318a43"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "40a27c09-e204-44ba-89a2-0008e6213d1f"
+        },
+        {
+          "context_digest": "4371a72e6fb939731cb550ca5363a3b5210680482f84c18b36ba933f4454ecc1",
+          "context_name": "task-2/advisor2/expression",
+          "context_uid": "cf8e8baf-292e-57c3-8e2c-3f9b3d52f3d3",
+          "memories": [
+            {
+              "content": "Use a sequence table rather than a flow diagram when the procedure is likely to change repeatedly during drafting.",
+              "content_digest": "575bb4530af1e93b215ea57f0fd63e1e09136554da98aecf87288cc39ea9697c",
+              "position": 0,
+              "uid": "4264c20d-3e44-578d-866e-7787cc7b59e2"
+            },
+            {
+              "content": "The visual fidelity of a prototype and its level of connection to actual data and services may differ.",
+              "content_digest": "9478cb005a07ca7edfa924579b3d5221b1fa1143b5d8327369e7ee799b76aa9f",
+              "position": 1,
+              "uid": "70a8c3f0-0f6a-5881-abd6-29f52833b7bd"
+            },
+            {
+              "content": "Service flow diagrams indicate human-system transitions that are not revealed by individual screens alone.",
+              "content_digest": "5e3e18a38b1e62724d2ae0445549e214a219d205a80735bc6b4c0e643a96b8b3",
+              "position": 2,
+              "uid": "b410aa8d-db87-586b-a1cd-4af5767a9f7a"
+            },
+            {
+              "content": "HCI reviewers often scan system structure and service flow diagrams before the main text.",
+              "content_digest": "22a46440a6aeda0cb7d39cc6fedf6bbff6cac91232ec0cb163bf1fc17ff257d4",
+              "position": 3,
+              "uid": "a385fbb1-85b4-5132-bbc7-8fd8daedb715"
+            },
+            {
+              "content": "Give each step, actor, condition, and outcome a stable row in the sequence table.",
+              "content_digest": "2a073bf2ec4c5592ddc405d83cb438a5ed880699d3c157f310fb3dbff7851622",
+              "position": 4,
+              "uid": "22254f16-4628-5fd9-b1af-6e66dc2572b3"
+            },
+            {
+              "content": "Updating one row in a sequence table is usually faster than redrawing a branching diagram after a procedural change.",
+              "content_digest": "cf97dbf66018a6be1ee42dfc79ff8de44e8742db2b42c9d1ef70b3f252805a39",
+              "position": 5,
+              "uid": "32028269-5d43-5a65-b22b-9e570ceabfde"
+            },
+            {
+              "content": "Readers can check sequence tables step by step but may find the overall branching shape less immediate.",
+              "content_digest": "18b5de0cdd22ef1774151332afdbc408f9f591cf889e51271f81a372f74ef86d",
+              "position": 6,
+              "uid": "939ee3d0-b611-574a-a25b-82708394bd5e"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "bdd58656-93fe-478d-a20f-30777b470f24"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate concerns: the reference defines boundaries and evidence for transferring design knowledge, while the compared frame covers prototype representation, service-flow diagrams, and sequence-table practices. Neither frame supplies a claim that substantively overlaps or conflicts with the other.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "40a27c09-e204-44ba-89a2-0008e6213d1f",
+              "memory_uid": "e594a6ab-81e9-5e5f-8ef5-e6bb8f3760d7"
+            },
+            {
+              "frame_uid": "40a27c09-e204-44ba-89a2-0008e6213d1f",
+              "memory_uid": "31cdacff-7c49-547d-9f97-598a07b67fb6"
+            }
+          ],
+          "reason": "These reference-side statements jointly define excluded cases as necessary evidence for judging the boundary of generalization, with no substantive counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Design-knowledge applicability should state explicitly which user groups, targets, contexts, and situations are excluded.",
+          "uid": "487fd927-faef-574e-9d8f-6b8ee07b15aa"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "40a27c09-e204-44ba-89a2-0008e6213d1f",
+              "memory_uid": "1459d986-4dc9-51f3-bf13-dbb0b07045c8"
+            }
+          ],
+          "reason": "This is an independently useful reference-side requirement for specifying positive transfer conditions, absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Transferability of proposed design knowledge should be bounded by user goals, interaction conditions, and technological constraints.",
+          "uid": "db0de007-d089-5514-abef-a82e2aadf086"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "40a27c09-e204-44ba-89a2-0008e6213d1f",
+              "memory_uid": "1db5fcd6-f93c-5630-9810-053c10b5ceba"
+            }
+          ],
+          "reason": "This reference-side claim distinguishes forms of generalization and states the basis for analytic transfer, a topic not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Small formative studies may support analytic rather than statistical generalization when findings identify design conditions and mechanisms.",
+          "uid": "04ba56c1-55c2-52ba-9197-b128c333b7a9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "40a27c09-e204-44ba-89a2-0008e6213d1f",
+              "memory_uid": "fd29c315-521f-53c0-add5-c668ec318a43"
+            }
+          ],
+          "reason": "This reference-side observation identifies a specific overgeneralization tendency and has no substantive counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to extend design knowledge from an accessible sample to a broader population.",
+          "uid": "5e969b7a-2eee-506b-a4b7-a5224cbd32c9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bdd58656-93fe-478d-a20f-30777b470f24",
+              "memory_uid": "4264c20d-3e44-578d-866e-7787cc7b59e2"
+            },
+            {
+              "frame_uid": "bdd58656-93fe-478d-a20f-30777b470f24",
+              "memory_uid": "22254f16-4628-5fd9-b1af-6e66dc2572b3"
+            },
+            {
+              "frame_uid": "bdd58656-93fe-478d-a20f-30777b470f24",
+              "memory_uid": "32028269-5d43-5a65-b22b-9e570ceabfde"
+            },
+            {
+              "frame_uid": "bdd58656-93fe-478d-a20f-30777b470f24",
+              "memory_uid": "939ee3d0-b611-574a-a25b-82708394bd5e"
+            }
+          ],
+          "reason": "These compared-side statements collectively describe one representation policy, its stable row structure, editing rationale, and principal readability tradeoff; the reference frame does not address procedural representation.",
+          "status": "RESOLVED",
+          "summary": "During repeatedly changing drafts, sequence tables offer readily editable, stepwise records, though they make overall branching structure less immediate than diagrams.",
+          "uid": "bc7a1ad6-4c58-5f82-9c7e-c1ffd70e9739"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bdd58656-93fe-478d-a20f-30777b470f24",
+              "memory_uid": "70a8c3f0-0f6a-5881-abd6-29f52833b7bd"
+            }
+          ],
+          "reason": "This independently useful compared-side distinction about prototype properties is absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Prototype visual fidelity and connection to actual data and services are separable dimensions.",
+          "uid": "7ad9b4ec-615e-5565-af6c-a0364e46e9a9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bdd58656-93fe-478d-a20f-30777b470f24",
+              "memory_uid": "b410aa8d-db87-586b-a1cd-4af5767a9f7a"
+            }
+          ],
+          "reason": "This compared-side claim identifies a distinct informational function of service-flow diagrams, with no substantive reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Service-flow diagrams reveal human-system transitions that individual screens do not show.",
+          "uid": "5a22e119-eb88-5bda-9fe5-b5120944ab26"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bdd58656-93fe-478d-a20f-30777b470f24",
+              "memory_uid": "a385fbb1-85b4-5132-bbc7-8fd8daedb715"
+            }
+          ],
+          "reason": "This compared-side observation concerns reviewer navigation behavior rather than diagram content itself and is not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "HCI reviewers often inspect system-structure and service-flow diagrams before reading the main text.",
+          "uid": "11b55a7e-0c33-5ae7-be54-8ed50cb357b7"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame addresses iterative sequence-table use, prototype fidelity versus integration, and the informational and review roles of service-flow diagrams.",
+        "differences": "",
+        "reference_only": "The reference addresses exclusions, transfer conditions, analytic generalization, and the risk of extending accessible-sample findings too broadly."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "ac09e7e2-bea5-478b-ae7f-06a0a1a5e072"
+    },
+    "analysis_digest": "7de3404fa2cd9d64d6105e9524aa70f31719e496d926395b72aa87ae5e0be9be",
+    "key": "b4b8320caee95ab7a248d31ffe540a45d7ff02505e21dfb30ee41230548ec48d",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 23.39461854199908,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "b4b8320caee95ab7a248d31ffe540a45d7ff02505e21dfb30ee41230548ec48d",
+  "created_at": "2026-08-13T18:26:14.482391Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/scope",
+  "pair_key": "40e91a57daec445779c26f8f6519180b3317446e99507d529d5231aa97ee21f9",
+  "provider_seconds": 23.39461854199908,
+  "right": "task-2/advisor2/expression",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

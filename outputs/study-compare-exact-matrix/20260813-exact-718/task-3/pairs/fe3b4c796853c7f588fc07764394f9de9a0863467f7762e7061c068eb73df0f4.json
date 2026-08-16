@@ -1,0 +1,397 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:38:02.363470+00:00",
+      "frames": [
+        {
+          "context_digest": "db438345c3ec4b3f69562a274c9f81a93bd6e6df97bc89b60abcd193dc89b562",
+          "context_name": "task-3/local/personal-memory/2024/04",
+          "context_uid": "206e1cd3-93da-5341-bda3-95cde4814c20",
+          "memories": [
+            {
+              "content": "The user completed a routine dental checkup in April 2024.",
+              "content_digest": "bbaa093f8dee5b5ee42c4a180e683fce00bc9364f5a009b9fa1e7f2ac233bc01",
+              "position": 0,
+              "uid": "9cea83cd-e39f-53bd-9e79-d30aa465ad02"
+            },
+            {
+              "content": "When the user heard three checkup questions in succession, they asked for the first question again.",
+              "content_digest": "e1b76973991f009295489249af1a7cd0fa7957f24f330e39337e01e5b1acdcbb",
+              "position": 1,
+              "uid": "51f8326f-60d4-5ba3-ba32-a04331dcb930"
+            },
+            {
+              "content": "At the next visit, when questions were asked one at a time, the user answered each without omission.",
+              "content_digest": "30c943f2e043f485a7a7e1ac19343c753ed8f834d00716725322505e28e0b15a",
+              "position": 2,
+              "uid": "cd0bce79-71d5-5d46-9c68-8a1d096dd53a"
+            },
+            {
+              "content": "The user called to reschedule an appointment at lunchtime but did not reach anyone.",
+              "content_digest": "1d4bd2122c160d35080b232ebb8ae5080c2ce34124645b3ec8040d7d29af9752",
+              "position": 3,
+              "uid": "71e27b0c-5c10-5102-aeac-98b0841723f2"
+            },
+            {
+              "content": "After returning home, the user kept a photo of the paper instructions received at the clinic.",
+              "content_digest": "68cddec62167a3910122a129dcfdb3c5604a4fea996d01f870734739dd3b0221",
+              "position": 4,
+              "uid": "86ad5410-0cc7-5876-8e3a-a3f0dd1680c7"
+            },
+            {
+              "content": "On a day the user put only the visit address in the calendar, they had to search again for the floor.",
+              "content_digest": "0d6926aba2c90930bfa984d7af1b12c60f35e53ba9916dfbee2c2391961db1a9",
+              "position": 5,
+              "uid": "aab36950-7e2b-588f-bb7c-d3bd6e36c501"
+            },
+            {
+              "content": "On a day the user shared the checkup time with their older sister, the sister called to check in after the user returned home.",
+              "content_digest": "b7d0fea8e8f2fc13126453039dcedebcda3c67ce2ea96c4a2d5b60365448e0e3",
+              "position": 6,
+              "uid": "50ac9268-9259-56fd-8678-1dfc8f919efb"
+            },
+            {
+              "content": "The scheduling staff at that clinic expect requests to change appointments to arrive by telephone.",
+              "content_digest": "28eec4f0ef0b96764a3f7ea54ee3db9fd4d5f1b62a5a2fa29d0a6193f1d8a18c",
+              "position": 7,
+              "uid": "5141ca66-9860-5ec5-b028-ac8670f586ca"
+            },
+            {
+              "content": "Before adding a follow-up visit to the calendar, confirm the date, time, address, and floor with the user.",
+              "content_digest": "0555c837f721fccd5918b2275086bb39c75e016e27574027185cfbada1c766af",
+              "position": 8,
+              "uid": "e265e637-fa41-53d0-aa9b-0102e9962f9a"
+            },
+            {
+              "content": "The local agent can track completed checkups and scheduled appointments but cannot determine whether a follow-up visit is needed.",
+              "content_digest": "be24b47ccb071438fd01bb99b11af3c63f22e260312a26d901824e6bb0d4cd89",
+              "position": 9,
+              "uid": "7aece7ae-b327-537e-9cef-fe24ee8fc618"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "4f1e10b9-b0ee-480f-bd84-571db2210f7d"
+        },
+        {
+          "context_digest": "a2ea3c6aa8c1680fcf9a7dd71d0dbff822c6af5493b34b79022f5e740bb35259",
+          "context_name": "task-3/local/personal-memory/2025/07",
+          "context_uid": "5c264a7f-0300-587c-ad1c-0439cedc7737",
+          "memories": [
+            {
+              "content": "The user keeps a travel power bank in the first drawer beneath the desk.",
+              "content_digest": "deb13f4eae5e32bc035da0558fa1b290f4bac0dfa5ca350d5abd0456af07ab7f",
+              "position": 0,
+              "uid": "447bfd8d-1490-5404-a2b4-13b4587e6aba"
+            },
+            {
+              "content": "The user packed three pairs of shoes for a two-night trip but wore only one pair.",
+              "content_digest": "097601b179049e1c4dd6b20a2fe2703ffb0d4a89d5ae15a763d339b989da50d8",
+              "position": 1,
+              "uid": "3ab0326a-a006-51ea-9348-7ada19a23bce"
+            },
+            {
+              "content": "For the next two-night trip, the user packed only one pair of walking shoes and reduced the bag's weight.",
+              "content_digest": "afd02b05250a60ad461e01132a94f0105d419521803082d1057205a2bc9a92ad",
+              "position": 2,
+              "uid": "ef467ab6-8ba6-5f81-8f12-578ec1824e09"
+            },
+            {
+              "content": "On a trip when the user forgot a charging cable, they bought a new one after arrival.",
+              "content_digest": "bbe1ac80a2311e0e631446b811d799494dc5ca4db408fc63d1cb09a01e2cd105",
+              "position": 3,
+              "uid": "aa4defc3-2b65-5688-accb-aaa49f2430b6"
+            },
+            {
+              "content": "Before the next trip, the user checked charging items against a photo and packed all of them.",
+              "content_digest": "cc2663db793bec80657023ccd545add403ec7dcc6dc39da4d03a95b5a9f65ff9",
+              "position": 4,
+              "uid": "2d937b4b-d73d-5382-abbe-3cd4e596b3a5"
+            },
+            {
+              "content": "The user packed toiletries on the departure day and arrived 15 minutes late at the meeting place.",
+              "content_digest": "1f5f7eb4cf651ee44244315e52de31cbd7bffe70489315bda287d1ca3cb9a8d4",
+              "position": 5,
+              "uid": "0be8b327-0a06-5241-b98d-daa6b0a4aa50"
+            },
+            {
+              "content": "The next time, the user closed the bag the night before and departed on time.",
+              "content_digest": "61f6c02e4637501f5ad9b1a9f668e298e566558a3d9e611a8b521c17256513b7",
+              "position": 6,
+              "uid": "90059fcc-436d-5453-98f0-a9b23a08faf1"
+            },
+            {
+              "content": "The user's older sister considers it safer to pack an extra cable even for a short trip to avoid charging problems.",
+              "content_digest": "f06b38b34e0f27bc01d8a79733173673d37a209e8619ad3df816a73718ffd89f",
+              "position": 7,
+              "uid": "12ef03f9-8cda-5ed7-be83-891b4702f872"
+            },
+            {
+              "content": "When creating a travel preparation list, confirm the trip length and actual activities with the user.",
+              "content_digest": "f34a0a341cd8ce9c641c16b780c4e53ccae4b6dca2c8f176be7579f5b0115654",
+              "position": 8,
+              "uid": "54136935-a460-573d-ac40-f5edb0ca7e6c"
+            },
+            {
+              "content": "The local agent cannot establish what the next trip requires from the luggage used on the previous trip alone.",
+              "content_digest": "4accbe60aa4e53ff75a18cc0291a870f106ac69a10a2cff96147c2dbd74892e3",
+              "position": 9,
+              "uid": "029c0777-bdbb-5d48-9309-1b1e6c7d88f4"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "43e47bd4-9e8c-479a-a447-55904074b5a3"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate practical domains: dental-visit management and short-trip preparation. Each contributes independent observations, preferences, procedures, and agent limitations; no supplied claims govern the same operational decision closely enough to support a cross-frame relation.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4f1e10b9-b0ee-480f-bd84-571db2210f7d",
+              "memory_uid": "9cea83cd-e39f-53bd-9e79-d30aa465ad02"
+            }
+          ],
+          "reason": "This is an independently useful dental-attendance fact with no compared-side claim about the same event or decision.",
+          "status": "RESOLVED",
+          "summary": "The user completed a routine dental checkup in April 2024.",
+          "uid": "5c9a71ea-b299-5295-9ac7-90f2f4d61382"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4f1e10b9-b0ee-480f-bd84-571db2210f7d",
+              "memory_uid": "51f8326f-60d4-5ba3-ba32-a04331dcb930"
+            },
+            {
+              "frame_uid": "4f1e10b9-b0ee-480f-bd84-571db2210f7d",
+              "memory_uid": "cd0bce79-71d5-5d46-9c68-8a1d096dd53a"
+            }
+          ],
+          "reason": "These memories jointly express one dental-visit communication pattern, which has no counterpart governing question presentation in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Presenting checkup questions individually was associated with complete answers, unlike presenting three in succession.",
+          "uid": "97ae149f-a1a4-5731-b8a1-10b86bc158de"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4f1e10b9-b0ee-480f-bd84-571db2210f7d",
+              "memory_uid": "71e27b0c-5c10-5102-aeac-98b0841723f2"
+            },
+            {
+              "frame_uid": "4f1e10b9-b0ee-480f-bd84-571db2210f7d",
+              "memory_uid": "5141ca66-9860-5ec5-b028-ac8670f586ca"
+            }
+          ],
+          "reason": "The memories split one clinic rescheduling-channel claim into its stated practice and an observed availability limitation; travel preparation does not address that pathway.",
+          "status": "RESOLVED",
+          "summary": "The clinic expects appointment-change requests by telephone, although the user did not reach staff during a lunchtime attempt.",
+          "uid": "9ec6a33a-3c68-5df5-97d2-bb02a03a9734"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4f1e10b9-b0ee-480f-bd84-571db2210f7d",
+              "memory_uid": "86ad5410-0cc7-5876-8e3a-a3f0dd1680c7"
+            }
+          ],
+          "reason": "This is a one-sided record-retention fact, not the same operational claim as using a photo to check travel items.",
+          "status": "RESOLVED",
+          "summary": "The user retained a photo of paper instructions received at the clinic.",
+          "uid": "53ac466e-11e8-5fed-b0f2-0a41f7721706"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4f1e10b9-b0ee-480f-bd84-571db2210f7d",
+              "memory_uid": "aab36950-7e2b-588f-bb7c-d3bd6e36c501"
+            },
+            {
+              "frame_uid": "4f1e10b9-b0ee-480f-bd84-571db2210f7d",
+              "memory_uid": "e265e637-fa41-53d0-aa9b-0102e9962f9a"
+            }
+          ],
+          "reason": "The memories provide an observed consequence and the corresponding dental-calendar procedure; the compared frame concerns preparation-list inputs rather than visit navigation.",
+          "status": "RESOLVED",
+          "summary": "Follow-up calendar entries should be confirmed with the user and include the date, time, address, and floor, avoiding later searches for omitted location details.",
+          "uid": "8b4b2b46-69e2-5b7d-9a0a-8ab5a85b732b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4f1e10b9-b0ee-480f-bd84-571db2210f7d",
+              "memory_uid": "50ac9268-9259-56fd-8678-1dfc8f919efb"
+            }
+          ],
+          "reason": "This is an independently useful family check-in event, distinct from the sister's travel-packing preference.",
+          "status": "RESOLVED",
+          "summary": "After receiving the checkup time, the user's older sister called after the user returned home.",
+          "uid": "88d925e1-98a4-5452-b05d-861104327378"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4f1e10b9-b0ee-480f-bd84-571db2210f7d",
+              "memory_uid": "7aece7ae-b327-537e-9cef-fe24ee8fc618"
+            }
+          ],
+          "reason": "This limitation specifically concerns clinical follow-up need and does not govern the compared frame's luggage-requirement decision.",
+          "status": "RESOLVED",
+          "summary": "The local agent can track dental checkups and appointments but cannot determine whether follow-up care is needed.",
+          "uid": "be0f6434-c838-5b4e-a463-9c1315908f72"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "43e47bd4-9e8c-479a-a447-55904074b5a3",
+              "memory_uid": "447bfd8d-1490-5404-a2b4-13b4587e6aba"
+            }
+          ],
+          "reason": "This is an independently useful travel-item location absent from the dental frame.",
+          "status": "RESOLVED",
+          "summary": "The user stores a travel power bank in the first drawer beneath the desk.",
+          "uid": "b72b2b62-0444-51de-a7df-e40745dceb70"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "43e47bd4-9e8c-479a-a447-55904074b5a3",
+              "memory_uid": "3ab0326a-a006-51ea-9348-7ada19a23bce"
+            },
+            {
+              "frame_uid": "43e47bd4-9e8c-479a-a447-55904074b5a3",
+              "memory_uid": "ef467ab6-8ba6-5f81-8f12-578ec1824e09"
+            }
+          ],
+          "reason": "The memories jointly express one learned short-trip shoe-packing adjustment with no dental-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "For a two-night trip, reducing packed shoes from three pairs to one walking pair reduced bag weight without losing a used option.",
+          "uid": "d1ed9f7a-9242-545d-bae7-55f424de8dcf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "43e47bd4-9e8c-479a-a447-55904074b5a3",
+              "memory_uid": "aa4defc3-2b65-5688-accb-aaa49f2430b6"
+            },
+            {
+              "frame_uid": "43e47bd4-9e8c-479a-a447-55904074b5a3",
+              "memory_uid": "2d937b4b-d73d-5382-abbe-3cd4e596b3a5"
+            }
+          ],
+          "reason": "The memories jointly describe one travel-charging checklist improvement; retaining clinic instructions as a photo serves a different operational purpose.",
+          "status": "RESOLVED",
+          "summary": "After once forgetting a charging cable, the user checked charging items against a photo before the next trip and packed them all.",
+          "uid": "1f2c6d29-8894-53d7-acf8-3cbd753d9c5c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "43e47bd4-9e8c-479a-a447-55904074b5a3",
+              "memory_uid": "0be8b327-0a06-5241-b98d-daa6b0a4aa50"
+            },
+            {
+              "frame_uid": "43e47bd4-9e8c-479a-a447-55904074b5a3",
+              "memory_uid": "90059fcc-436d-5453-98f0-a9b23a08faf1"
+            }
+          ],
+          "reason": "The memories jointly express one preparation-timing pattern with no reference-side claim about travel punctuality.",
+          "status": "RESOLVED",
+          "summary": "Closing the bag the night before was associated with on-time departure, unlike packing toiletries on departure day.",
+          "uid": "d688302c-7191-56c4-9b60-04cb136d0cd9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "43e47bd4-9e8c-479a-a447-55904074b5a3",
+              "memory_uid": "12ef03f9-8cda-5ed7-be83-891b4702f872"
+            }
+          ],
+          "reason": "This is a travel-specific family preference, not the same claim as the sister's post-checkup call.",
+          "status": "RESOLVED",
+          "summary": "The user's older sister favors packing an extra cable even for short trips to reduce charging risk.",
+          "uid": "50aeabd6-e90d-57d5-aaf8-66573babed24"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "43e47bd4-9e8c-479a-a447-55904074b5a3",
+              "memory_uid": "54136935-a460-573d-ac40-f5edb0ca7e6c"
+            }
+          ],
+          "reason": "This procedure governs travel-list tailoring, independently of confirming fixed dental appointment and location details.",
+          "status": "RESOLVED",
+          "summary": "A travel preparation list should be based on trip length and actual activities confirmed with the user.",
+          "uid": "934e34d3-84f5-54bd-af38-026cf3d60006"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "43e47bd4-9e8c-479a-a447-55904074b5a3",
+              "memory_uid": "029c0777-bdbb-5d48-9309-1b1e6c7d88f4"
+            }
+          ],
+          "reason": "This limitation specifically concerns future travel requirements and does not govern whether dental follow-up care is needed.",
+          "status": "RESOLVED",
+          "summary": "The local agent cannot infer the next trip's requirements from previously used luggage alone.",
+          "uid": "c6e9e8b9-8fe1-564e-8166-07f2936b311e"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers travel-item locations, lighter shoe packing, charging safeguards, advance packing for punctuality, a family cable preference, tailored preparation lists, and limits on inferring future luggage needs.",
+        "differences": "",
+        "reference_only": "The reference covers dental attendance, question pacing, telephone rescheduling, retained instructions, complete calendar details, family check-ins, and limits on inferring follow-up need."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "555f0671-ae0a-48c9-8ccd-9b501ce50c57"
+    },
+    "analysis_digest": "73f25774b6418ac44760dbffae0aba1dc4ed7d85cdaea02a2bad27abcb9a1ed3",
+    "key": "992a68f0ee4c0a363c6d30b52bf389f73039ed9ac3b788e5892c8f7cf9f8c514",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 49.33297754100204,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "992a68f0ee4c0a363c6d30b52bf389f73039ed9ac3b788e5892c8f7cf9f8c514",
+  "created_at": "2026-08-13T18:38:51.695732Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/04",
+  "pair_key": "fe3b4c796853c7f588fc07764394f9de9a0863467f7762e7061c068eb73df0f4",
+  "provider_seconds": 49.33297754100204,
+  "right": "task-3/local/personal-memory/2025/07",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

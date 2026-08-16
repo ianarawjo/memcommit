@@ -1,0 +1,415 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:45:29.444730+00:00",
+      "frames": [
+        {
+          "context_digest": "17b940da39446a9f934dff43ea7db561d14060561065852a34658fe4aaa1702f",
+          "context_name": "task-3/local/personal-memory/2024/10",
+          "context_uid": "7c55b789-a7d0-5070-9cf8-6f5e205415dc",
+          "memories": [
+            {
+              "content": "The user renewed their local library membership in October 2024.",
+              "content_digest": "eb9209032856bdbc69fbfa67e053bf8cd2bc23f8e8e25c0be9a5aa3f7e05f4e9",
+              "position": 0,
+              "uid": "04711182-acef-52a9-bd58-7fe98a54854a"
+            },
+            {
+              "content": "On an evening walk, the user saw an unlit street and took a detour along a main road.",
+              "content_digest": "62d001de1c6c4599e51c4e0713f577a2838e95e03f26064778e64542f390a599",
+              "position": 1,
+              "uid": "0229d0b1-750c-521b-a126-22c9d9d001c4"
+            },
+            {
+              "content": "On a day the user chose a well-lit pedestrian route, the walk took 12 minutes longer than usual.",
+              "content_digest": "ad3770626bef71bc9a29ec7772aeebeb70231e89b417b05b4da9c62a65b89afe",
+              "position": 2,
+              "uid": "e310fe87-8cde-5399-be00-9f8d7ec44e94"
+            },
+            {
+              "content": "On a day the user sat by the library window, they heard vehicle noise with every page they read.",
+              "content_digest": "090a190c68a5166d84cde1eed20f9a03c2b99722ed383eb3b5703489c01d85e0",
+              "position": 3,
+              "uid": "4f37306b-08cd-512a-b92e-ca6761da1a5b"
+            },
+            {
+              "content": "On the next visit, the user sat farther inside and did not move for an hour.",
+              "content_digest": "a071b4c7699fe17f63f0ab6263da1259aea00ad635169a313d4821f57071a86a",
+              "position": 4,
+              "uid": "5897ffa4-cfc6-5012-8931-15420ec5cf7c"
+            },
+            {
+              "content": "The user wrote the due date of a borrowed book on paper and then lost the paper.",
+              "content_digest": "43ef22512c79634cb9e3dc59006c7d06c3513a9d5d1f89eedbb392964cc34f02",
+              "position": 5,
+              "uid": "ce38bd13-3d51-5bff-9eba-ed70a8217356"
+            },
+            {
+              "content": "After entering the due date on their phone, the user saw a reminder the day before and put the book in their bag.",
+              "content_digest": "38782cba2f3bf260d62cf8e80c4a7e4a3a196d4d29ced3c4fe19d050e12c1e0a",
+              "position": 6,
+              "uid": "a304315b-bc0a-591b-b8c2-7eea5145819d"
+            },
+            {
+              "content": "Library staff expect a person requesting a replacement membership card to bring identity-verification material.",
+              "content_digest": "1ac59309aedbfa946661bf5bbc4d5141c420df059937893caba88725dfe77d24",
+              "position": 7,
+              "uid": "ef060b89-6c54-5c20-86be-c07766a35daa"
+            },
+            {
+              "content": "Check recent lighting and pedestrian conditions before proposing an evening walking route.",
+              "content_digest": "1b247adfb3723d14979b2cc7ecf6786c457d60e521b8708a6d08d38d3d1af437",
+              "position": 8,
+              "uid": "7669e5eb-c0fd-5182-ae9a-5f9ae95ddf2f"
+            },
+            {
+              "content": "The local agent can compare past reasons for detours but cannot directly observe current lighting and pedestrian conditions.",
+              "content_digest": "8a5f0e4cbb2fa6c19f2cb5d4e500ed460189b515604c87c6c2a4c8348c4efc44",
+              "position": 9,
+              "uid": "e96f7007-5814-5986-b121-4ce3b22506e1"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "6137ff77-c85a-401f-a7ed-5c7b8433d24b"
+        },
+        {
+          "context_digest": "0af669f138c2617a4b35c0974627a23c7e5cb2405da5e306648b130efac7fbdf",
+          "context_name": "task-3/local/personal-memory/2025/12",
+          "context_uid": "c54e9dde-005a-5d20-b41b-1313b4713061",
+          "memories": [
+            {
+              "content": "The user stores wrapping paper and empty gift boxes on the upper shelf of the bedroom closet.",
+              "content_digest": "8f3b67dea69e1fa656f1e42e39700a71ebc250c4f6ec18dc4d4f88d467e86ad2",
+              "position": 0,
+              "uid": "bd69b616-6e7c-5440-8b29-586de68bcff6"
+            },
+            {
+              "content": "From photographs, the user discovered that they had given their mother the same type of kitchen item two years in a row.",
+              "content_digest": "6962b8dc03fd90e1c8badfda0d827008cc675b940e5975a5833ebe504af7d635",
+              "position": 1,
+              "uid": "90c60e57-d7db-5783-9ca8-2fd27b94d847"
+            },
+            {
+              "content": "This year, the user went to the market with their mother and let her choose a needed item directly.",
+              "content_digest": "9a27aa187ad2964f985ffcf376490f4b69d3c83f2034591187273bd89f61637a",
+              "position": 2,
+              "uid": "53bc23b2-8242-58b5-b496-a45c70bb8e41"
+            },
+            {
+              "content": "The user once ordered a gift late and had it delivered the day after the gathering.",
+              "content_digest": "245bb316eb5d0b0203c63eb9a2832c6cf73cb9e7e368bdb48a08bb6b702642d7",
+              "position": 3,
+              "uid": "3b097446-2c73-5414-8c06-6bacdf00a4c1"
+            },
+            {
+              "content": "The next year, the user checked the expected delivery date and ordered one week before the gathering.",
+              "content_digest": "97aed11c6b4f7d03bd6a55e27ef34ef539da85204787bb0468f1e2df51d958fc",
+              "position": 4,
+              "uid": "ce18c7a5-d1e9-5e5c-8739-b14fa7298feb"
+            },
+            {
+              "content": "The user did not put names on wrapped boxes and handed their older sister and younger brother each other's gifts.",
+              "content_digest": "48464eb29ee2d2e01cda00f0e3a13d116d4aa121d424aecc59644431e89f8957",
+              "position": 5,
+              "uid": "7657f424-cd24-54dd-8409-e04974dd1531"
+            },
+            {
+              "content": "The next time the user wrapped gifts, they wrote the recipient on the bottom of each box.",
+              "content_digest": "551e74aebf85d4ffee86b960c520b17f3f7e4d50428493934831a774d9e31db6",
+              "position": 6,
+              "uid": "d8e82ad3-902e-5f0c-aa8e-b23ce874982a"
+            },
+            {
+              "content": "The user's younger brother welcomes a snack the family can share immediately more than an item for his use alone.",
+              "content_digest": "ec32111520e2f12afc684c6441c075dcc0715fc450d0ce8f20408dfb955634a9",
+              "position": 7,
+              "uid": "8a941bf1-73bd-51d3-a069-62ecc9d56439"
+            },
+            {
+              "content": "The local agent can find past gift records and flag duplicates but cannot know what is needed this year.",
+              "content_digest": "f7574c7f91999992680a7e88e79270747fd744a46355800012c63319c286d731",
+              "position": 8,
+              "uid": "036edf8f-4680-5822-924e-0fdc691c8135"
+            },
+            {
+              "content": "Year-end deliveries may take longer than usual or have their expected dates changed.",
+              "content_digest": "cc0955e132cf6f4bec7f416e54ed2ffdbac22169adeeae7372a6ddc496da4b9e",
+              "position": 9,
+              "uid": "b9e9e222-a559-56e3-93b5-1f49a0e0d3ab"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "535d2c73-2e81-450b-915b-656a49004bd3"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate domains: library use and evening-route safety on one side, and gift selection, preparation, and delivery on the other. Each contributes independently useful information, with no same-decision overlap, scope-qualified difference, contradiction, or interpretive uncertainty.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6137ff77-c85a-401f-a7ed-5c7b8433d24b",
+              "memory_uid": "04711182-acef-52a9-bd58-7fe98a54854a"
+            }
+          ],
+          "reason": "This is independently useful membership history with no counterpart concerning the same matter in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user renewed a local library membership in October 2024.",
+          "uid": "99c75a75-2160-5f4b-8825-50d07ce7ca7d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6137ff77-c85a-401f-a7ed-5c7b8433d24b",
+              "memory_uid": "0229d0b1-750c-521b-a126-22c9d9d001c4"
+            }
+          ],
+          "reason": "This records a specific route-safety response absent from the gift-focused compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user detoured to a main road after encountering an unlit street during an evening walk.",
+          "uid": "d6b5be36-0a91-5c9a-8689-c7c97ae3a46d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6137ff77-c85a-401f-a7ed-5c7b8433d24b",
+              "memory_uid": "e310fe87-8cde-5399-be00-9f8d7ec44e94"
+            }
+          ],
+          "reason": "This is a distinct observation about the travel-time cost of a safer route choice.",
+          "status": "RESOLVED",
+          "summary": "Choosing a well-lit pedestrian route once added 12 minutes to the user’s usual walk.",
+          "uid": "eca2c7f6-8ee1-53a7-9b60-22098a73589a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6137ff77-c85a-401f-a7ed-5c7b8433d24b",
+              "memory_uid": "4f37306b-08cd-512a-b92e-ca6761da1a5b"
+            }
+          ],
+          "reason": "This is independently useful information about a particular reading location and distraction.",
+          "status": "RESOLVED",
+          "summary": "Vehicle noise repeatedly disrupted a library reading session by the window.",
+          "uid": "f7773368-3ef6-5580-8bf2-4781146e0782"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6137ff77-c85a-401f-a7ed-5c7b8433d24b",
+              "memory_uid": "5897ffa4-cfc6-5012-8931-15420ec5cf7c"
+            }
+          ],
+          "reason": "This separately records the user’s later seating choice and sustained stay without asserting an unsupported causal outcome.",
+          "status": "RESOLVED",
+          "summary": "On a later library visit, the user sat farther inside and remained there for an hour.",
+          "uid": "4f7a4d51-1559-5db7-977b-5cae45d0e91e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6137ff77-c85a-401f-a7ed-5c7b8433d24b",
+              "memory_uid": "ce38bd13-3d51-5bff-9eba-ed70a8217356"
+            },
+            {
+              "frame_uid": "6137ff77-c85a-401f-a7ed-5c7b8433d24b",
+              "memory_uid": "a304315b-bc0a-591b-b8c2-7eea5145819d"
+            }
+          ],
+          "reason": "Both memories form one before-and-after account of the user’s method for retaining and acting on a borrowed-book due date.",
+          "status": "RESOLVED",
+          "summary": "A lost paper due-date note was followed by successful use of a phone reminder that prompted the user to pack the borrowed book.",
+          "uid": "e14a5489-f5be-53c5-9e46-192e95811a31"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6137ff77-c85a-401f-a7ed-5c7b8433d24b",
+              "memory_uid": "ef060b89-6c54-5c20-86be-c07766a35daa"
+            }
+          ],
+          "reason": "This is a one-sided procedural requirement with no compared-frame claim about the same service.",
+          "status": "RESOLVED",
+          "summary": "Library staff expect identity-verification material when someone requests a replacement membership card.",
+          "uid": "c2c72e7f-953d-5de6-aa96-3979ae03c120"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6137ff77-c85a-401f-a7ed-5c7b8433d24b",
+              "memory_uid": "7669e5eb-c0fd-5182-ae9a-5f9ae95ddf2f"
+            },
+            {
+              "frame_uid": "6137ff77-c85a-401f-a7ed-5c7b8433d24b",
+              "memory_uid": "e96f7007-5814-5986-b121-4ce3b22506e1"
+            }
+          ],
+          "reason": "The memories jointly state one route-planning safeguard and the agent limitation that makes an external current-condition check necessary.",
+          "status": "RESOLVED",
+          "summary": "Evening-route proposals require a recent check of lighting and pedestrian conditions because the local agent can compare past detours but cannot directly observe current conditions.",
+          "uid": "ab42d1b9-b68e-5038-9703-dc40cbcfd26c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "535d2c73-2e81-450b-915b-656a49004bd3",
+              "memory_uid": "bd69b616-6e7c-5440-8b29-586de68bcff6"
+            }
+          ],
+          "reason": "This is independently useful household storage information absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user stores wrapping paper and empty gift boxes on the upper bedroom-closet shelf.",
+          "uid": "4ff08b0d-2c9d-5e75-bb92-82e1d2e175c4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "535d2c73-2e81-450b-915b-656a49004bd3",
+              "memory_uid": "90c60e57-d7db-5783-9ca8-2fd27b94d847"
+            }
+          ],
+          "reason": "This records a specific duplicate-gift discovery with no same-decision counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Photographs showed that the user had given their mother the same type of kitchen item in two consecutive years.",
+          "uid": "2155c71f-d537-5977-a2a6-b118eae14f18"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "535d2c73-2e81-450b-915b-656a49004bd3",
+              "memory_uid": "53bc23b2-8242-58b5-b496-a45c70bb8e41"
+            }
+          ],
+          "reason": "This independently records the current gift-selection method without assuming why it was chosen.",
+          "status": "RESOLVED",
+          "summary": "This year, the user let their mother directly choose a needed market item.",
+          "uid": "d7f6ad61-fadd-5a7c-9f7a-fab90ad776c1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "535d2c73-2e81-450b-915b-656a49004bd3",
+              "memory_uid": "3b097446-2c73-5414-8c06-6bacdf00a4c1"
+            },
+            {
+              "frame_uid": "535d2c73-2e81-450b-915b-656a49004bd3",
+              "memory_uid": "ce18c7a5-d1e9-5e5c-8739-b14fa7298feb"
+            }
+          ],
+          "reason": "Both memories form one before-and-after account of changed gift-order timing.",
+          "status": "RESOLVED",
+          "summary": "After one gift arrived a day after a gathering, the user later checked the expected delivery date and ordered a week in advance.",
+          "uid": "6cf5eaa8-ea26-5991-bf43-18ec85e92dbf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "535d2c73-2e81-450b-915b-656a49004bd3",
+              "memory_uid": "7657f424-cd24-54dd-8409-e04974dd1531"
+            },
+            {
+              "frame_uid": "535d2c73-2e81-450b-915b-656a49004bd3",
+              "memory_uid": "d8e82ad3-902e-5f0c-aa8e-b23ce874982a"
+            }
+          ],
+          "reason": "Both memories form one before-and-after account of adopting recipient labels to distinguish wrapped gifts.",
+          "status": "RESOLVED",
+          "summary": "After unlabeled boxes caused sibling gifts to be exchanged, the user later wrote each recipient’s name on the bottom of the box.",
+          "uid": "b20e448d-7997-5d15-a07b-92aff80c0f43"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "535d2c73-2e81-450b-915b-656a49004bd3",
+              "memory_uid": "8a941bf1-73bd-51d3-a069-62ecc9d56439"
+            }
+          ],
+          "reason": "This is a specific recipient preference not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s younger brother prefers an immediately shareable family snack over an item solely for himself.",
+          "uid": "78e7c643-6d32-561e-a595-8509c46c0b69"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "535d2c73-2e81-450b-915b-656a49004bd3",
+              "memory_uid": "036edf8f-4680-5822-924e-0fdc691c8135"
+            }
+          ],
+          "reason": "This is a gift-selection capability boundary addressing a different operational decision from current route-condition checks.",
+          "status": "RESOLVED",
+          "summary": "The local agent can retrieve past gift records and flag duplicates but cannot determine what is needed this year.",
+          "uid": "283b5025-b195-5481-b03b-d9b6180750dc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "535d2c73-2e81-450b-915b-656a49004bd3",
+              "memory_uid": "b9e9e222-a559-56e3-93b5-1f49a0e0d3ab"
+            }
+          ],
+          "reason": "This is independently useful seasonal delivery-risk information absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Year-end deliveries may be slower than usual or have changing expected dates.",
+          "uid": "47913b28-d650-5621-a5ef-966d111b1d93"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame describes gift storage, selection lessons, delivery planning, recipient labeling, a sibling’s preference, and limits on predicting current needs and year-end delivery timing.",
+        "differences": "",
+        "reference_only": "The reference describes library membership and visits, due-date reminders, replacement-card requirements, and evening-route choices constrained by current lighting information."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "6034112b-1cf3-4f9f-8873-288e5e8c7a54"
+    },
+    "analysis_digest": "028279eaec00ed87f3bde1db7b81219afad47597071ad97d5ea7b8f0abdd014a",
+    "key": "ab6cfc3fa2c792b537811ac3564f18e963159450c85740f907597e1e3f8feefe",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 46.0035525409985,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "ab6cfc3fa2c792b537811ac3564f18e963159450c85740f907597e1e3f8feefe",
+  "created_at": "2026-08-13T18:46:15.447902Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/10",
+  "pair_key": "a94a7b5e78239a6232182f87f168f092a972848fde779fb0197593bc95fa196a",
+  "provider_seconds": 46.0035525409985,
+  "right": "task-3/local/personal-memory/2025/12",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

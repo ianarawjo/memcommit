@@ -1,0 +1,406 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:51:37.823559+00:00",
+      "frames": [
+        {
+          "context_digest": "ca8765e237d85d9bf3ecb78fe1d9a2487066ae14dae9509e40b324ac1277d75a",
+          "context_name": "task-3/local/personal-memory/2025/06",
+          "context_uid": "870f7336-726a-5d9c-bae4-12585311463e",
+          "memories": [
+            {
+              "content": "The user keeps a portable fan charger on a living-room shelf.",
+              "content_digest": "5ab7fad8ae1b3f56bdbc1c3ebf593a3d452590341b6de115f830fdf0d994c12e",
+              "position": 0,
+              "uid": "853a158c-edf9-578a-8e75-3d5daff6e4db"
+            },
+            {
+              "content": "On a hot day, the user worked with only the window open and lost focus in the afternoon.",
+              "content_digest": "3c4225f055db293c53a5a137d0c6353005bcb55b71dbc61bc69831aa5c3c08de",
+              "position": 1,
+              "uid": "f7d5ebdc-0cae-5e07-a060-e129b5a05570"
+            },
+            {
+              "content": "In the room where the user closed the curtains the next morning, the temperature rose less.",
+              "content_digest": "4cb4d1892db8769f4c066859dbb021c67d5015114f8522dfd904057061600ab5",
+              "position": 2,
+              "uid": "99e5c522-535b-5015-8617-06f645147f8b"
+            },
+            {
+              "content": "The user took the portable fan out without charging it, and it turned off after an hour.",
+              "content_digest": "0e1e0e9e985bea5be6976010a390f484b60a931ea7dfaf50a73c66616a73d5da",
+              "position": 3,
+              "uid": "7b3bf50c-63aa-5a1e-9a53-7befea25a468"
+            },
+            {
+              "content": "Before the next outing, the user charged it the night before and used the fan throughout the trip.",
+              "content_digest": "fd4282d169da18d902fc5f766d4e38131240bf3a51e6fa0c5bad69f80f1492af",
+              "position": 4,
+              "uid": "ca8de091-afb2-537f-a83a-09769056879d"
+            },
+            {
+              "content": "On a hot weekend, the user was eating lunch in their father's yard and moved indoors.",
+              "content_digest": "44e7d3bc5eaecec68ad6e7c0979572102f3c717b37712fcfada769959443ae8e",
+              "position": 5,
+              "uid": "4a0604fb-10b4-5132-a6de-ab6a229ff2be"
+            },
+            {
+              "content": "When the user returned to the yard in the evening, shade and wind led them to stay another hour.",
+              "content_digest": "7495f1d4ba2d1d732ab5c962f45b5b0c9c765ee21767373552247a823cf90984",
+              "position": 6,
+              "uid": "1f90941e-776f-5cba-9783-c392983dd72c"
+            },
+            {
+              "content": "The user's father prefers to move an outdoor meal to the evening rather than proceed at midday when the temperature is high.",
+              "content_digest": "5f9628a28b5c6f3b20a371d1c039f37f26c50832970936c8a243f161fd8288f4",
+              "position": 7,
+              "uid": "63391d26-7417-5ea6-ac0a-460af7489963"
+            },
+            {
+              "content": "The local agent can compare past responses to heat but cannot know the current felt temperature without an indoor temperature record.",
+              "content_digest": "815f4fb2c833d75e30cb0e323f5708e356bf38e0bbb573865092be48fbf2746a",
+              "position": 8,
+              "uid": "31502797-1379-5ec4-bd1b-a2e1515fa56e"
+            },
+            {
+              "content": "A room with a west-facing window can warm rapidly in the late afternoon.",
+              "content_digest": "448908f6242021de6d41ddee8121714a1388db6e4e3d067de27e6950ee712c23",
+              "position": 9,
+              "uid": "68f85c30-62c4-579d-97cd-9f401c686e63"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "36cdc90e-4995-4b40-896a-b39d39ab8d98"
+        },
+        {
+          "context_digest": "4b8dc68a205171fe661b04620d0fba2bbb386ff21d494699c34a74dc2ab86080",
+          "context_name": "task-3/local/personal-memory/2026/03",
+          "context_uid": "97d36150-4792-5a5c-9332-5eb1de8bcf04",
+          "memories": [
+            {
+              "content": "The user stores tax-related receipts in digital folders by year.",
+              "content_digest": "778f983547572b31798b7041899812a7b0b574d74b585baf6883e94919dee6ec",
+              "position": 0,
+              "uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393"
+            },
+            {
+              "content": "The user found three paper receipts late and recalculated the expense total already prepared.",
+              "content_digest": "542368a141ec82a1bd7da4b534d88ea62c487d16a37f454569bf6400cbc749e9",
+              "position": 1,
+              "uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878"
+            },
+            {
+              "content": "Starting the next month, the user photographed receipts on the day they were received and reduced omissions.",
+              "content_digest": "b95e0a1afa1196a9bff117bf12b1630edcc4eb65bfdfeb3128ae5937563a492e",
+              "position": 2,
+              "uid": "ff436ea5-1b3e-55df-8302-bd8a96740671"
+            },
+            {
+              "content": "The user named every file with only the photo date and spent a long time looking for a needed receipt.",
+              "content_digest": "c3aa33e0b7e007bdfc5c12dcda659e2a52938548fbf53d5a1ab034487a528857",
+              "position": 3,
+              "uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e"
+            },
+            {
+              "content": "The user later included the expense category in the filename and found the receipt immediately through search.",
+              "content_digest": "cdae97761f614b932d3b330723627bee8b0e3d033e2bf1061b721367237acee1",
+              "position": 4,
+              "uid": "89d6fa9a-b795-59df-be34-1c05a9861d35"
+            },
+            {
+              "content": "While reviewing documents just before submission, the user discovered one blank signature field.",
+              "content_digest": "a525c117b97eec82c678f276b319158703bf9cc558fb83cb81c0820d5c9e3174",
+              "position": 5,
+              "uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2"
+            },
+            {
+              "content": "Before submitting an administrative document, the user checks the signature field as the final item on the checklist.",
+              "content_digest": "542bec3cbc3fc8b22c95da274e479e96bfbf061a3b644d0d7f213de5a030dbd5",
+              "position": 6,
+              "uid": "5551622f-66cf-5542-8c47-1cddadab5c02"
+            },
+            {
+              "content": "Staff at a tax-support counter expect to receive an electronic copy in which every item is legible rather than a blurred or cropped photo.",
+              "content_digest": "d328ca248fdeecf0756e23b1202e7007bc8c3c25ae769439b0fd2efdbbe47580",
+              "position": 7,
+              "uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f"
+            },
+            {
+              "content": "The local agent can organize receipts by date and category but cannot determine whether an expense is deductible.",
+              "content_digest": "bcc769721a99b099ca20e5e527fa8904d54ecbaf9ae7d7616b95e1adaf1f89a9",
+              "position": 8,
+              "uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094"
+            },
+            {
+              "content": "The accepted scope and submission deadlines for administrative documents may vary under that year's guidance.",
+              "content_digest": "1ab61126b8efb0c2a9c6114c367018158f2e136bafa87e33f60aadb0686d0537",
+              "position": 9,
+              "uid": "de398064-3179-590b-8c62-effb17060115"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "4c909466-6353-4035-925a-9ffa2447525f"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate practical domains rather than shared policies: the reference concerns heat management and portable-fan use, while the compared frame concerns receipt organization and document submission. No claims conflict or require scope reconciliation, and each side contributes independently useful information.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "36cdc90e-4995-4b40-896a-b39d39ab8d98",
+              "memory_uid": "853a158c-edf9-578a-8e75-3d5daff6e4db"
+            }
+          ],
+          "reason": "Only the reference frame supplies the storage location of the fan charger.",
+          "status": "RESOLVED",
+          "summary": "The user keeps a portable fan charger on a living-room shelf.",
+          "uid": "c71ce431-b295-5dcb-b2f0-1a3ae62b2ed9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "36cdc90e-4995-4b40-896a-b39d39ab8d98",
+              "memory_uid": "f7d5ebdc-0cae-5e07-a060-e129b5a05570"
+            }
+          ],
+          "reason": "Only the reference frame records this heat-related work experience.",
+          "status": "RESOLVED",
+          "summary": "Working on a hot day with only an open window was followed by reduced afternoon focus.",
+          "uid": "510f73a2-4b9d-5173-a754-dba09ed9458f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "36cdc90e-4995-4b40-896a-b39d39ab8d98",
+              "memory_uid": "99e5c522-535b-5015-8617-06f645147f8b"
+            }
+          ],
+          "reason": "Only the reference frame records this observed indoor heat-management effect.",
+          "status": "RESOLVED",
+          "summary": "Closing curtains was associated with a smaller temperature rise the following morning.",
+          "uid": "a7f29419-30fd-5f8f-acd0-d6d48d0d2b93"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "36cdc90e-4995-4b40-896a-b39d39ab8d98",
+              "memory_uid": "7b3bf50c-63aa-5a1e-9a53-7befea25a468"
+            },
+            {
+              "frame_uid": "36cdc90e-4995-4b40-896a-b39d39ab8d98",
+              "memory_uid": "ca8de091-afb2-537f-a83a-09769056879d"
+            }
+          ],
+          "reason": "The paired reference memories describe failure without prior charging and successful sustained use after charging; the compared frame contains no corresponding fan-use claim.",
+          "status": "RESOLVED",
+          "summary": "Charging the portable fan before an outing avoided the earlier loss of power and supported use throughout the trip.",
+          "uid": "4c776d5e-c6da-5f61-a021-76af3d269b97"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "36cdc90e-4995-4b40-896a-b39d39ab8d98",
+              "memory_uid": "4a0604fb-10b4-5132-a6de-ab6a229ff2be"
+            },
+            {
+              "frame_uid": "36cdc90e-4995-4b40-896a-b39d39ab8d98",
+              "memory_uid": "1f90941e-776f-5cba-9783-c392983dd72c"
+            }
+          ],
+          "reason": "The paired reference memories contrast the user's outdoor comfort and behavior under midday and evening conditions; the compared frame has no corresponding claim.",
+          "status": "RESOLVED",
+          "summary": "Midday heat prompted the user to leave an outdoor lunch, while evening shade and wind supported a longer stay.",
+          "uid": "923fef19-fdb4-54c2-a59e-847fc9422743"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "36cdc90e-4995-4b40-896a-b39d39ab8d98",
+              "memory_uid": "63391d26-7417-5ea6-ac0a-460af7489963"
+            }
+          ],
+          "reason": "Only the reference frame states the father's scheduling preference for hot-weather meals.",
+          "status": "RESOLVED",
+          "summary": "The user's father prefers moving an outdoor meal to the evening when midday temperatures are high.",
+          "uid": "e2760712-cd77-52d0-9c50-5f699508345a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "36cdc90e-4995-4b40-896a-b39d39ab8d98",
+              "memory_uid": "31502797-1379-5ec4-bd1b-a2e1515fa56e"
+            }
+          ],
+          "reason": "Only the reference frame defines this heat-assessment capability boundary.",
+          "status": "RESOLVED",
+          "summary": "The local agent can compare prior heat responses but needs an indoor temperature record to know the current felt temperature.",
+          "uid": "4d0ff755-fa6c-5a10-86b2-898393e3e164"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "36cdc90e-4995-4b40-896a-b39d39ab8d98",
+              "memory_uid": "68f85c30-62c4-579d-97cd-9f401c686e63"
+            }
+          ],
+          "reason": "Only the reference frame supplies this contextual claim about window exposure and heat.",
+          "status": "RESOLVED",
+          "summary": "A west-facing window can cause rapid late-afternoon room warming.",
+          "uid": "bdbe0a10-15b0-5501-8034-513265646130"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4c909466-6353-4035-925a-9ffa2447525f",
+              "memory_uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393"
+            }
+          ],
+          "reason": "Only the compared frame states this receipt-storage structure.",
+          "status": "RESOLVED",
+          "summary": "The user stores tax-related receipts in digital folders organized by year.",
+          "uid": "3d8c33a4-f75e-56e6-9fb0-54b4c1998823"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4c909466-6353-4035-925a-9ffa2447525f",
+              "memory_uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878"
+            },
+            {
+              "frame_uid": "4c909466-6353-4035-925a-9ffa2447525f",
+              "memory_uid": "ff436ea5-1b3e-55df-8302-bd8a96740671"
+            }
+          ],
+          "reason": "The paired compared memories describe the omission problem and the subsequent prompt-capture practice; the reference frame contains no corresponding receipt workflow.",
+          "status": "RESOLVED",
+          "summary": "Photographing receipts when received reduced omissions that had previously required expense-total recalculation.",
+          "uid": "bcaa0a26-49e8-5274-b106-08b53e9204b9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4c909466-6353-4035-925a-9ffa2447525f",
+              "memory_uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e"
+            },
+            {
+              "frame_uid": "4c909466-6353-4035-925a-9ffa2447525f",
+              "memory_uid": "89d6fa9a-b795-59df-be34-1c05a9861d35"
+            }
+          ],
+          "reason": "The paired compared memories describe the ineffective and improved filename schemes; the reference frame contains no corresponding file-search claim.",
+          "status": "RESOLVED",
+          "summary": "Adding an expense category to receipt filenames improved retrieval compared with using only the photo date.",
+          "uid": "bd8893fe-6366-534d-92a1-4c6e17465f43"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4c909466-6353-4035-925a-9ffa2447525f",
+              "memory_uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2"
+            },
+            {
+              "frame_uid": "4c909466-6353-4035-925a-9ffa2447525f",
+              "memory_uid": "5551622f-66cf-5542-8c47-1cddadab5c02"
+            }
+          ],
+          "reason": "The paired compared memories describe the discovered omission and the resulting document-check practice; the reference frame has no corresponding submission check.",
+          "status": "RESOLVED",
+          "summary": "A missed signature field led the user to make signature verification the final pre-submission checklist item.",
+          "uid": "34ff404b-fc6a-5520-ac47-138bedcfe954"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4c909466-6353-4035-925a-9ffa2447525f",
+              "memory_uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f"
+            }
+          ],
+          "reason": "Only the compared frame states this document-quality expectation.",
+          "status": "RESOLVED",
+          "summary": "Tax-support staff expect electronic copies whose contents are fully legible rather than blurred or cropped.",
+          "uid": "5c17d6f2-a059-5a30-b60c-f12023ef0a68"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4c909466-6353-4035-925a-9ffa2447525f",
+              "memory_uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094"
+            }
+          ],
+          "reason": "Only the compared frame defines this receipt-organization and tax-judgment boundary.",
+          "status": "RESOLVED",
+          "summary": "The local agent can organize receipts by date and category but cannot decide whether an expense is deductible.",
+          "uid": "853f3ae8-2976-5637-8548-0fe67ef12edd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4c909466-6353-4035-925a-9ffa2447525f",
+              "memory_uid": "de398064-3179-590b-8c62-effb17060115"
+            }
+          ],
+          "reason": "Only the compared frame identifies this year-dependent administrative constraint.",
+          "status": "RESOLVED",
+          "summary": "Accepted document scope and submission deadlines may vary with the applicable year's guidance.",
+          "uid": "fb505bfc-979f-572a-aac2-2a1aecf5501b"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame describes receipt capture, filing and search practices, signature and legibility checks, changing submission rules, and limits on determining tax deductibility.",
+        "differences": "",
+        "reference_only": "The reference describes charging a portable fan, managing indoor and outdoor heat through curtains and timing, heat-related focus and comfort, window exposure, and limits on assessing current indoor conditions."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "54cb40bb-1fa0-466f-b632-7dc944ea604c"
+    },
+    "analysis_digest": "d706e5adf37cc341b00311549ca5e1257edeb4b2f06b3fd8f8fbd47a7379035b",
+    "key": "669cd57c47f901d38788fd0e802f092a6cdf44b7f3621319f28f1aa379eeec3a",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 40.577978041997994,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "669cd57c47f901d38788fd0e802f092a6cdf44b7f3621319f28f1aa379eeec3a",
+  "created_at": "2026-08-13T18:52:18.401058Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/06",
+  "pair_key": "78b2f1d63b9f5e91403e70d7be594bad001facf68f23b157dbf1d9edf8a63052",
+  "provider_seconds": 40.577978041997994,
+  "right": "task-3/local/personal-memory/2026/03",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

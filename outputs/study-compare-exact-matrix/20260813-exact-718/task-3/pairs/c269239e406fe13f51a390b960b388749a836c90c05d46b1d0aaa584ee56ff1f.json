@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:42:08.917096+00:00",
+      "frames": [
+        {
+          "context_digest": "58f58090449931225a941a4219f3fce7ebcf23bbabc0e0aa93a8733d4ba32701",
+          "context_name": "task-3/local/personal-memory/2024/07",
+          "context_uid": "8747b4f6-d17c-5b02-83f4-fc3af73e2da0",
+          "memories": [
+            {
+              "content": "The user updated the utility account for their residence in July 2024.",
+              "content_digest": "89c6a8e8dd7ad799b9ef4cb2b10963ce0b9ad55e713716d9729f903e76c0f71a",
+              "position": 0,
+              "uid": "65a332a2-2707-55f8-b7a6-a7378e6fbb7a"
+            },
+            {
+              "content": "After putting a paper bill in a drawer, the user checked it one day after the payment date.",
+              "content_digest": "474d42322de3190caee3e4feeb831bcb6a7b57e58427667d74be084ee9c64257",
+              "position": 1,
+              "uid": "fb94e1fd-9b3d-567a-81d8-d7a0ee90e04e"
+            },
+            {
+              "content": "In the month after receiving an electronic billing alert, the user paid two days before the deadline.",
+              "content_digest": "c16cf32e0018eb1cdf94e3070036d7fb93b0ccc8adb633a057642ff41284eaa0",
+              "position": 2,
+              "uid": "7d8db31a-c330-5852-9d7c-c9da7f98d899"
+            },
+            {
+              "content": "The user saw a water-inspection notice late and started washing dishes during the scheduled shutoff.",
+              "content_digest": "d5bea20cc35a46502ba919c52bee7519453346789d4bb881c82a9c08e6840cb0",
+              "position": 3,
+              "uid": "008dd110-feb2-5b4b-b602-bb3e23475a95"
+            },
+            {
+              "content": "After transferring a management-office notice to their phone calendar, the user did not miss the inspection time.",
+              "content_digest": "ce2c06404fcb8988b61da98f2ddd58d3db6506ff74aa1c7dfd43f841fa6fb25d",
+              "position": 4,
+              "uid": "a03ed01a-3d15-5eaf-9415-529705fd1245"
+            },
+            {
+              "content": "During a boiler technician's visit, the user had not cleared boxes from the entrance in advance and had to rearrange the passage.",
+              "content_digest": "39f4ca86667c0622dce2b6fee2b04df73131bf9d98e81478f1fa818b5dfe70c2",
+              "position": 5,
+              "uid": "2fb4b0bd-1257-5e50-881a-7f312940e1c5"
+            },
+            {
+              "content": "The user cleared the entrance the day before the next visit so the inspection could begin immediately.",
+              "content_digest": "e99fb029e3ca864e4f293358a85f33d73f4d7d2b9fda7dcd437ffdf183350666",
+              "position": 6,
+              "uid": "d05286e8-f183-5f4a-99d8-3dcca1aeaa09"
+            },
+            {
+              "content": "The building manager expects that a one-day advance visit notice gives a resident enough time to prepare the work area.",
+              "content_digest": "f992e380bfa87fa04c9f7dde8eceee69eb6b0aa3ad79c180d9023dafd7dd2abd",
+              "position": 7,
+              "uid": "44d28aa3-1aa4-5276-b545-86ee2cb17078"
+            },
+            {
+              "content": "Confirm the user's available time before finalizing a service visit to the residence.",
+              "content_digest": "dee4efa145a0f8b25c47a1c6855c02feee2de292e78b2e3790763796981db1e5",
+              "position": 8,
+              "uid": "77f77450-ab10-5469-8e2f-5445060926bc"
+            },
+            {
+              "content": "The local agent can compare payment records with notice times but cannot verify whether a residential service problem was resolved.",
+              "content_digest": "09e052010507ce17344888df5171f58996245cceb9012e160d540f030e7ba98a",
+              "position": 9,
+              "uid": "fd7f98b4-d5b9-5196-ad5e-c4356681ecf4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "b1c827a1-b45d-41bf-8fe0-caa194e0cace"
+        },
+        {
+          "context_digest": "0af669f138c2617a4b35c0974627a23c7e5cb2405da5e306648b130efac7fbdf",
+          "context_name": "task-3/local/personal-memory/2025/12",
+          "context_uid": "c54e9dde-005a-5d20-b41b-1313b4713061",
+          "memories": [
+            {
+              "content": "The user stores wrapping paper and empty gift boxes on the upper shelf of the bedroom closet.",
+              "content_digest": "8f3b67dea69e1fa656f1e42e39700a71ebc250c4f6ec18dc4d4f88d467e86ad2",
+              "position": 0,
+              "uid": "bd69b616-6e7c-5440-8b29-586de68bcff6"
+            },
+            {
+              "content": "From photographs, the user discovered that they had given their mother the same type of kitchen item two years in a row.",
+              "content_digest": "6962b8dc03fd90e1c8badfda0d827008cc675b940e5975a5833ebe504af7d635",
+              "position": 1,
+              "uid": "90c60e57-d7db-5783-9ca8-2fd27b94d847"
+            },
+            {
+              "content": "This year, the user went to the market with their mother and let her choose a needed item directly.",
+              "content_digest": "9a27aa187ad2964f985ffcf376490f4b69d3c83f2034591187273bd89f61637a",
+              "position": 2,
+              "uid": "53bc23b2-8242-58b5-b496-a45c70bb8e41"
+            },
+            {
+              "content": "The user once ordered a gift late and had it delivered the day after the gathering.",
+              "content_digest": "245bb316eb5d0b0203c63eb9a2832c6cf73cb9e7e368bdb48a08bb6b702642d7",
+              "position": 3,
+              "uid": "3b097446-2c73-5414-8c06-6bacdf00a4c1"
+            },
+            {
+              "content": "The next year, the user checked the expected delivery date and ordered one week before the gathering.",
+              "content_digest": "97aed11c6b4f7d03bd6a55e27ef34ef539da85204787bb0468f1e2df51d958fc",
+              "position": 4,
+              "uid": "ce18c7a5-d1e9-5e5c-8739-b14fa7298feb"
+            },
+            {
+              "content": "The user did not put names on wrapped boxes and handed their older sister and younger brother each other's gifts.",
+              "content_digest": "48464eb29ee2d2e01cda00f0e3a13d116d4aa121d424aecc59644431e89f8957",
+              "position": 5,
+              "uid": "7657f424-cd24-54dd-8409-e04974dd1531"
+            },
+            {
+              "content": "The next time the user wrapped gifts, they wrote the recipient on the bottom of each box.",
+              "content_digest": "551e74aebf85d4ffee86b960c520b17f3f7e4d50428493934831a774d9e31db6",
+              "position": 6,
+              "uid": "d8e82ad3-902e-5f0c-aa8e-b23ce874982a"
+            },
+            {
+              "content": "The user's younger brother welcomes a snack the family can share immediately more than an item for his use alone.",
+              "content_digest": "ec32111520e2f12afc684c6441c075dcc0715fc450d0ce8f20408dfb955634a9",
+              "position": 7,
+              "uid": "8a941bf1-73bd-51d3-a069-62ecc9d56439"
+            },
+            {
+              "content": "The local agent can find past gift records and flag duplicates but cannot know what is needed this year.",
+              "content_digest": "f7574c7f91999992680a7e88e79270747fd744a46355800012c63319c286d731",
+              "position": 8,
+              "uid": "036edf8f-4680-5822-924e-0fdc691c8135"
+            },
+            {
+              "content": "Year-end deliveries may take longer than usual or have their expected dates changed.",
+              "content_digest": "cc0955e132cf6f4bec7f416e54ed2ffdbac22169adeeae7372a6ddc496da4b9e",
+              "position": 9,
+              "uid": "b9e9e222-a559-56e3-93b5-1f49a0e0d3ab"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "821fcf91-b037-414b-881e-9d620fcf563e"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate practical domains: residential utilities and service visits versus gift selection, preparation, and delivery. Neither side supplies a scope-aligned counterpart to the other, so all information remains independently useful and no contradiction or ambiguity arises.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b1c827a1-b45d-41bf-8fe0-caa194e0cace",
+              "memory_uid": "65a332a2-2707-55f8-b7a6-a7378e6fbb7a"
+            }
+          ],
+          "reason": "The compared frame has no information about residential utility-account administration.",
+          "status": "RESOLVED",
+          "summary": "The utility account for the user’s residence was updated in July 2024.",
+          "uid": "45a3babf-5102-59c4-ac07-4decbcef55a0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b1c827a1-b45d-41bf-8fe0-caa194e0cace",
+              "memory_uid": "fb94e1fd-9b3d-567a-81d8-d7a0ee90e04e"
+            }
+          ],
+          "reason": "The compared frame has no counterpart concerning paper-bill handling or payment timing.",
+          "status": "RESOLVED",
+          "summary": "A paper bill stored in a drawer was checked one day after its payment date.",
+          "uid": "7635ac2c-1dfc-5ebc-91ee-31588bcacbad"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b1c827a1-b45d-41bf-8fe0-caa194e0cace",
+              "memory_uid": "7d8db31a-c330-5852-9d7c-c9da7f98d899"
+            }
+          ],
+          "reason": "The compared frame has no counterpart concerning electronic billing alerts or early payment.",
+          "status": "RESOLVED",
+          "summary": "After an electronic billing alert, the user paid two days before the following month’s deadline.",
+          "uid": "dbbdffcc-96de-556d-afbf-f12f73d4ce71"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b1c827a1-b45d-41bf-8fe0-caa194e0cace",
+              "memory_uid": "008dd110-feb2-5b4b-b602-bb3e23475a95"
+            }
+          ],
+          "reason": "The compared frame has no information about inspection notices or utility shutoffs.",
+          "status": "RESOLVED",
+          "summary": "Seeing a water-inspection notice late led the user to begin washing dishes during the scheduled shutoff.",
+          "uid": "5f1818a0-d590-5e02-8f53-4d7c6603cb35"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b1c827a1-b45d-41bf-8fe0-caa194e0cace",
+              "memory_uid": "a03ed01a-3d15-5eaf-9415-529705fd1245"
+            }
+          ],
+          "reason": "The compared frame has no counterpart about calendar-based handling of residential inspection notices.",
+          "status": "RESOLVED",
+          "summary": "Transferring a management-office notice to the phone calendar helped the user attend the inspection on time.",
+          "uid": "56152128-b036-5196-a921-3b05a30cd2d2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b1c827a1-b45d-41bf-8fe0-caa194e0cace",
+              "memory_uid": "2fb4b0bd-1257-5e50-881a-7f312940e1c5"
+            }
+          ],
+          "reason": "The compared frame has no information about preparing access for residential service personnel.",
+          "status": "RESOLVED",
+          "summary": "Uncleared boxes at the entrance forced the user to rearrange the passage during a boiler technician’s visit.",
+          "uid": "e8465036-8cf4-5712-9d02-9b0ea464ef17"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b1c827a1-b45d-41bf-8fe0-caa194e0cace",
+              "memory_uid": "d05286e8-f183-5f4a-99d8-3dcca1aeaa09"
+            }
+          ],
+          "reason": "The compared frame has no counterpart about advance work-area preparation for an inspection.",
+          "status": "RESOLVED",
+          "summary": "Before the next visit, the user cleared the entrance a day early so the inspection could start immediately.",
+          "uid": "d886cae6-a7ea-5933-81bf-105a0ebaa706"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b1c827a1-b45d-41bf-8fe0-caa194e0cace",
+              "memory_uid": "44d28aa3-1aa4-5276-b545-86ee2cb17078"
+            }
+          ],
+          "reason": "The compared frame states no policy or expectation about residential visit notice periods.",
+          "status": "RESOLVED",
+          "summary": "The building manager considers one day’s advance notice sufficient for a resident to prepare a work area.",
+          "uid": "97df059c-8812-5c8e-aedf-df778e2689b8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b1c827a1-b45d-41bf-8fe0-caa194e0cace",
+              "memory_uid": "77f77450-ab10-5469-8e2f-5445060926bc"
+            }
+          ],
+          "reason": "The compared frame contains no scheduling policy for service visits to the residence.",
+          "status": "RESOLVED",
+          "summary": "The user’s availability should be confirmed before a residential service visit is finalized.",
+          "uid": "82e6528b-fd16-5c69-8820-433410242aee"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b1c827a1-b45d-41bf-8fe0-caa194e0cace",
+              "memory_uid": "fd7f98b4-d5b9-5196-ad5e-c4356681ecf4"
+            }
+          ],
+          "reason": "The compared agent-capability statement concerns gift records and current needs, a different operational task and limitation.",
+          "status": "RESOLVED",
+          "summary": "The local agent can compare payment records with notice times but cannot verify resolution of a residential service problem.",
+          "uid": "bd8c5944-dac2-5748-b7ec-495f23356bed"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "821fcf91-b037-414b-881e-9d620fcf563e",
+              "memory_uid": "bd69b616-6e7c-5440-8b29-586de68bcff6"
+            }
+          ],
+          "reason": "The reference frame has no information about gift supplies or their storage location.",
+          "status": "RESOLVED",
+          "summary": "Wrapping paper and empty gift boxes are stored on the bedroom closet’s upper shelf.",
+          "uid": "5f2e21ca-dd36-5fc8-9f8a-215ef970857f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "821fcf91-b037-414b-881e-9d620fcf563e",
+              "memory_uid": "90c60e57-d7db-5783-9ca8-2fd27b94d847"
+            }
+          ],
+          "reason": "The reference frame has no counterpart concerning gift-history duplication.",
+          "status": "RESOLVED",
+          "summary": "Photographs revealed that the user gave their mother the same type of kitchen item in consecutive years.",
+          "uid": "6c7fc25b-a007-59b5-9c9a-fc5303042baa"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "821fcf91-b037-414b-881e-9d620fcf563e",
+              "memory_uid": "53bc23b2-8242-58b5-b496-a45c70bb8e41"
+            }
+          ],
+          "reason": "The reference frame contains no information about selecting gifts through recipient participation.",
+          "status": "RESOLVED",
+          "summary": "The user shopped with their mother and let her directly choose an item she needed.",
+          "uid": "7ae2d582-5f64-5575-ad55-983da71461e5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "821fcf91-b037-414b-881e-9d620fcf563e",
+              "memory_uid": "3b097446-2c73-5414-8c06-6bacdf00a4c1"
+            }
+          ],
+          "reason": "The reference frame has no counterpart concerning gift-order or gathering delivery timing.",
+          "status": "RESOLVED",
+          "summary": "A gift ordered late arrived the day after the gathering.",
+          "uid": "a74805c4-f852-5b75-a7a7-ee23e4e459d0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "821fcf91-b037-414b-881e-9d620fcf563e",
+              "memory_uid": "ce18c7a5-d1e9-5e5c-8739-b14fa7298feb"
+            }
+          ],
+          "reason": "The reference frame has no information about planning gift orders around expected delivery dates.",
+          "status": "RESOLVED",
+          "summary": "The following year, the user checked the delivery estimate and ordered one week before the gathering.",
+          "uid": "d18843ea-82f3-56ed-a400-63c84d9615fd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "821fcf91-b037-414b-881e-9d620fcf563e",
+              "memory_uid": "7657f424-cd24-54dd-8409-e04974dd1531"
+            }
+          ],
+          "reason": "The reference frame has no counterpart concerning gift labeling or recipient mix-ups.",
+          "status": "RESOLVED",
+          "summary": "Failing to label wrapped boxes caused the user to exchange the intended gifts for their sister and brother.",
+          "uid": "51786156-0468-59d5-a626-36cd3208f562"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "821fcf91-b037-414b-881e-9d620fcf563e",
+              "memory_uid": "d8e82ad3-902e-5f0c-aa8e-b23ce874982a"
+            }
+          ],
+          "reason": "The reference frame contains no information about labeling gifts for recipients.",
+          "status": "RESOLVED",
+          "summary": "On the next occasion, the user wrote each recipient’s name on the bottom of the wrapped box.",
+          "uid": "53528309-734e-50d3-b0ed-c669e7c91393"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "821fcf91-b037-414b-881e-9d620fcf563e",
+              "memory_uid": "8a941bf1-73bd-51d3-a069-62ecc9d56439"
+            }
+          ],
+          "reason": "The reference frame has no information about recipient gift preferences.",
+          "status": "RESOLVED",
+          "summary": "The younger brother prefers an immediately shareable family snack over an item solely for himself.",
+          "uid": "51aab88c-8039-5054-a5ab-eb0647a29283"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "821fcf91-b037-414b-881e-9d620fcf563e",
+              "memory_uid": "036edf8f-4680-5822-924e-0fdc691c8135"
+            }
+          ],
+          "reason": "The reference agent-capability statement concerns residential payments and service resolution, a different operational task and limitation.",
+          "status": "RESOLVED",
+          "summary": "The local agent can retrieve prior gift records and flag duplicates but cannot determine what is needed this year.",
+          "uid": "dc9701d6-3d4a-577c-b51c-2194bd67404a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "821fcf91-b037-414b-881e-9d620fcf563e",
+              "memory_uid": "b9e9e222-a559-56e3-93b5-1f49a0e0d3ab"
+            }
+          ],
+          "reason": "The reference frame contains no information about seasonal delivery uncertainty.",
+          "status": "RESOLVED",
+          "summary": "Year-end deliveries may be unusually slow or have changing expected dates.",
+          "uid": "9d82e2fb-3c41-5ac5-be22-c6618abf5781"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame describes gift storage, selection, delivery planning, labeling, a recipient preference, holiday shipping risk, and limits on inferring current needs.",
+        "differences": "",
+        "reference_only": "The reference describes billing timeliness, notice handling, visit preparation and scheduling, a manager’s notice expectation, and limits on verifying service resolution."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "d2d8c5ab-bd28-4f72-8f8b-ddedb33764e7"
+    },
+    "analysis_digest": "4597a7dc968b6e7240449495ca2c1fdb492c19ec9c9151d6ced8fe9820d8ec9f",
+    "key": "83be618d863eb05e3f4f491e71be31fdd1d64523645d837c10cbbe769ae254b9",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 45.73769574999824,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "83be618d863eb05e3f4f491e71be31fdd1d64523645d837c10cbbe769ae254b9",
+  "created_at": "2026-08-13T18:42:54.654678Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/07",
+  "pair_key": "c269239e406fe13f51a390b960b388749a836c90c05d46b1d0aaa584ee56ff1f",
+  "provider_seconds": 45.73769574999824,
+  "right": "task-3/local/personal-memory/2025/12",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

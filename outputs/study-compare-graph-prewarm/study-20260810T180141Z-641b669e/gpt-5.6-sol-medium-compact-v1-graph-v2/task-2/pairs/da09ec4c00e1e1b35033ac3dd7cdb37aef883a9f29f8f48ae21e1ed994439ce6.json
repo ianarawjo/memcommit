@@ -1,0 +1,2451 @@
+{
+  "coverage": {
+    "expected": 300,
+    "observed": 300
+  },
+  "created_at": "2026-08-11T00:12:52.254347Z",
+  "description_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+  "issues": [
+    {
+      "options": [
+        {
+          "label": "Two sentences",
+          "text": "Require the concrete problem and consequence to be complete within the first two sentences.",
+          "uid": "0fc25f5f-9994-556a-806c-e8477b125f9c"
+        },
+        {
+          "label": "Conditional third",
+          "text": "Allow a third sentence when it is needed to state the person, setting, or consequence concretely.",
+          "uid": "db8f5e00-7ed6-59b1-9bcb-ba5c5f5a6088"
+        }
+      ],
+      "priority": "REQUIRED",
+      "question": "When concrete context is needed, must the complete problem framing still fit within two sentences, or may it extend through a third sentence?",
+      "relation_keys": [
+        "r000001"
+      ],
+      "title": "Opening length rule",
+      "why_it_matters": "The choice directly determines the proposal opening’s allowable structure and level of contextual detail."
+    },
+    {
+      "options": [
+        {
+          "label": "Use subheadings",
+          "text": "Create visible sections for the problem, response, and next steps.",
+          "uid": "63e3e36e-6db4-51b5-83de-beebd503b5ca"
+        },
+        {
+          "label": "Use transitions",
+          "text": "Avoid extra headings and connect the proposal through paragraph openings and endings.",
+          "uid": "674cc85f-235d-5f3c-be67-cf16a317fc3e"
+        }
+      ],
+      "priority": "REQUIRED",
+      "question": "Should the two-page proposal use descriptive subheadings or rely on paragraph transitions to connect the argument?",
+      "relation_keys": [
+        "r000008"
+      ],
+      "title": "Section navigation",
+      "why_it_matters": "The approaches prescribe incompatible page structures and different mechanisms for navigation and continuity."
+    },
+    {
+      "options": [
+        {
+          "label": "Exact target",
+          "text": "Commit to one quantity and revise the plan explicitly if recruitment falls short.",
+          "uid": "038bd4a0-15eb-5c72-a025-58aa32296ff4"
+        },
+        {
+          "label": "Bounded range",
+          "text": "Define meaningful minimum and maximum cases with corresponding workload, budget, and deliverable consequences.",
+          "uid": "9890dc96-77bf-5b16-9280-e119e9ea9bbc"
+        }
+      ],
+      "priority": "REQUIRED",
+      "question": "Should planning use one exact participant target or a justified minimum-to-maximum range?",
+      "relation_keys": [
+        "r000061"
+      ],
+      "title": "Participant target",
+      "why_it_matters": "The decision changes how schedules, facilitator workload, payments, shortfalls, and deliverables must be calculated."
+    },
+    {
+      "options": [
+        {
+          "label": "Main text",
+          "text": "Place major costs and their estimate bases beside the activities or deliverables they enable.",
+          "uid": "bcc3b93a-9c64-582d-8ff5-a56475b2d9bd"
+        },
+        {
+          "label": "Separate table",
+          "text": "Keep only totals and major categories in the narrative and place detailed arithmetic in a referenced table or appendix.",
+          "uid": "b54eb2bd-7895-5ed2-b396-8efce74ac4bc"
+        }
+      ],
+      "priority": "REQUIRED",
+      "question": "Where must quantities, unit rates, estimate assumptions, and activity-level costs appear?",
+      "relation_keys": [
+        "r000115"
+      ],
+      "title": "Budget placement",
+      "why_it_matters": "The choice determines whether the resource case is verified within the narrative or through a separately maintained table."
+    }
+  ],
+  "kind": "STUDY_COMPARE_GRAPH_PAIR",
+  "left": {
+    "context_digest": "2556a96d4bda4852f4209077e6c423e62f31bb63bf1eb9afadfa89c7e0659b13",
+    "context_uid": "fdc991fe-01c0-5949-85b3-1937c4ea1fbe",
+    "memory_count": 150,
+    "name": "task-2/advisor1"
+  },
+  "method": "COMPACT_DECISION_VECTOR_V1",
+  "operation": "COMPARE",
+  "pair_key": "da09ec4c00e1e1b35033ac3dd7cdb37aef883a9f29f8f48ae21e1ed994439ce6",
+  "provider": {
+    "condition": "COMPACT_DECISION_VECTOR",
+    "contract_valid": true,
+    "elapsed_seconds": 196.4030892909941,
+    "error_type": null,
+    "failure_category": null,
+    "operation": "compare_contexts_compact_ab_v1",
+    "prompt_chars": 86872,
+    "provider_calls": 1,
+    "provider_run": {
+      "completion_tokens": null,
+      "identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "operation": "compare_contexts_compact_ab_v1",
+      "prompt_tokens": null,
+      "upstream_model": "gpt-5.6-sol",
+      "upstream_provider": "openai-codex"
+    },
+    "provider_seconds": 196.39036450001004,
+    "response_bytes": 10971,
+    "response_chars": 10969,
+    "schema_chars": 1389,
+    "validation_error": null,
+    "validation_seconds": 0.012705833010841161
+  },
+  "relations": [
+    {
+      "comment": "One frame requires complete problem framing within two sentences, while the other permits and recommends a third sentence when concrete context is needed.",
+      "kind": "CONFLICT",
+      "members": [
+        {
+          "memory_uid": "44249c8a-e84f-5c20-a9cd-a55457e98511",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "21371c6c-c74f-5791-8f9b-6d099306bfb5",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "8ecaec22-7c25-5a39-a85b-56db9c3b607e",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "a4536b84-40f2-57db-84e4-024c97c9fecb",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "e32f543b-1637-572a-ab96-319d74ee7e21",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "6bbb0f69-ca99-539a-a810-a0fb34fe9cc3",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "0ac685f9-e338-5549-bf91-32078cf36f15",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "5567fb3c-de90-5363-af1b-62fb5b8e0bb1",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000001",
+      "status": "UNRESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "f69ea80c-0d56-5fe8-9d24-8793eefa6643",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "48e887dc-7fc8-5a23-9999-890acb870251",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000002",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "EQUIVALENT",
+      "members": [
+        {
+          "memory_uid": "18ebdcbc-cf5a-5e6c-b2cd-b4cd07d7e59e",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "e34bce0c-7d07-5fe6-b03f-39faa801640b",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000003",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "EQUIVALENT",
+      "members": [
+        {
+          "memory_uid": "5ab99a77-8836-50cf-8377-fdd23a208bc4",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "68ad56f9-6ca2-587a-9182-fd98a79d3d5c",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000004",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "b9b7932b-85c1-5a14-80f7-0983dbf22380",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "eca301ff-9feb-502d-b955-055c48342542",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000005",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "fc0a3a72-2da2-5843-be3a-a4ff2adf8fac",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "cbd977cd-1b78-5ca6-823a-7a5b4b92d77a",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000006",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "2f7092a7-2625-5d27-bd76-a13ee5809cc2",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "9283aedb-6818-5c99-8fe0-502b488acb66",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000007",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "One frame requires descriptive subheadings for navigability and completeness, while the other advises avoiding extra headings in favor of continuous paragraph transitions.",
+      "kind": "CONFLICT",
+      "members": [
+        {
+          "memory_uid": "a1857f07-36cd-5a6c-946d-a308e712e9eb",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "895b5ac9-1aa4-51d2-b89a-94e9fe5b869d",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "3005f4c5-e17b-531b-b9bf-c9d69411c71f",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "2312cb6e-4f50-56f5-b725-ba5e45697a73",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "1d90043b-f010-5a14-9493-77f636c13975",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "b77fe6ec-676b-5bb9-9119-45aefea2aa27",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "c5c04ab1-10e8-52a3-98a1-aa9cbede57c1",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "87203bcf-6724-543a-ad19-60a2becc4598",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "32cef408-4c66-5ef2-9a59-eea6fc67b16e",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "3579fcc0-c74e-5006-901b-6406a3106fa1",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "2c2aa1af-c450-5c8d-a907-042c5757d3ee",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "1fb62d5b-532b-5664-842c-57622e3c8b9d",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000008",
+      "status": "UNRESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "4913f63e-ceb9-587a-ade9-494fc8f28849",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "c9591180-6f3a-5909-8695-31704b9b6f01",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000009",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "EQUIVALENT",
+      "members": [
+        {
+          "memory_uid": "4a1de8df-6f03-5a3d-bbfa-7c1144d2ec5c",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "d59dc83b-ce6a-5ac7-ab64-e5436df1f945",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000010",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "b5b6a901-9047-5482-a0e1-d29e5f7171e8",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "328de462-17a4-551f-9f74-cb3118519e45",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000011",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "e89de514-48a5-5e9b-96ca-f194c0ed79ab",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000012",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "f7025cbb-4005-53c6-9031-e33f04a86b92",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000013",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "eab1dac5-8b61-5793-a56f-c4e3e64af190",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000014",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "f90e616a-d5a4-5cc2-86e4-62534a1faf83",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000015",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "a42891a1-b674-5747-a77c-43699b0b9723",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "78a1c87a-6936-516c-b578-8e97dc2e91f4",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000016",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "9d7169d5-058f-5f7c-b1ac-30cabd8ba02e",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000017",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "f8931b4e-9656-548d-84a1-f2f2c3eb47b1",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000018",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "9bf9e735-7598-5977-abe2-87b2c9c38a24",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000019",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "7af2db41-9091-5452-9beb-8fd7b48b7872",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000020",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "4d69f030-0dc0-5df7-a153-0b595a3f68de",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "2312f35d-c17d-5af3-b84f-d2e671d7663f",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000021",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Em dashes are prohibited generally in one frame but permitted by the other only for deliberate interruption or sharp contrast.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "33503d41-7b99-5526-a028-0a1a20652c0d",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "13dc50e1-ecaa-504e-a602-7a10a09d5484",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "358230d3-9ff0-51b9-9bf6-0752a2d9845a",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "9bd2a9da-9720-5001-b958-f7a2a2658f87",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "9f1b647a-bd2b-50df-8141-5b8c142c0fa5",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "49a42872-adcc-5bf8-9029-1d134cac6267",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000022",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "79437c17-1f08-5188-8177-c622429dc4f9",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000023",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Author-owned choices and commitments use first-person voice, whereas reusable procedural steps may use action-first phrasing.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "807a906c-d519-59b1-8406-43c8015ef068",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "ff8f0b12-9df4-5968-90b2-cd8d971dcc1b",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "6c282ef7-4326-5d69-a7c4-d3f4f3a3a508",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "bec16e02-b267-50b8-9c0e-964184f2a6b4",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "e3e20261-e03c-52fb-be9e-04f5f9b1294d",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "1f29de31-5429-5dfc-ab27-01779fa16704",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "ddf40413-3274-5662-ba5e-d6cae2a1e546",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "89c2ce30-d6aa-5762-bf17-c697caac68e4",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000024",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Observed-state wording applies after implementation and verification in one frame and after confirmation in the actual usage environment in the other.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "e463a3b5-263f-58da-9895-242965892e60",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "8d8d0e8d-dad1-50b5-9438-049052748a6a",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000025",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Unverified prototype operations are framed as plans or expectations, while field-unconfirmed system behavior is framed as conditional plans.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "fef78af8-1774-5da0-8345-571eb8c9cc3c",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "8c74ba87-822b-5ce2-9a3a-3adc02ab9744",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000026",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "EQUIVALENT",
+      "members": [
+        {
+          "memory_uid": "58565355-bec5-5b2b-89ed-f0b8cab0351a",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "6b7aaddf-5bbd-5015-811d-9f4d7a4b4ad1",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000027",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Independent reviewable claims should be split, but clauses forming one continuous and clearer movement may remain together.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "cc860653-ad91-52f8-91db-5b26371dca0a",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "af0d191d-d23e-562b-997b-b1024dacefda",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "1d181223-f750-57d2-97a5-b79f276a589f",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "a5ce5f9f-8852-5080-ae35-21abcf4a0973",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "888ce8af-a36e-5e74-9a0c-604aac48d3b7",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000028",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "EQUIVALENT",
+      "members": [
+        {
+          "memory_uid": "06f6c673-ea0c-5657-89d2-3f8711097cd7",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "b39cf79f-d174-5ecb-98c9-b3f62ce0696a",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000029",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Both separate established evidence from predictions, with one distinction centered on pilot versus main-study results and the other on field-confirmed facts versus study predictions.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "58991ce7-d394-5087-b14f-0b014b0ec6ad",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "b95e0185-f933-508d-8da7-41c65e2cc340",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000030",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "EQUIVALENT",
+      "members": [
+        {
+          "memory_uid": "f5adf029-a750-5a3a-8eb8-d68e43bb5c13",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "f82f1e1f-3f27-5668-a5a4-e64b0f88b44a",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000031",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Comprehensive recent studies are prioritized where evidence is mature, while recent systems and field research are prioritized for rapidly changing topics.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "b2a7ff8a-dfca-5857-8733-fe03cbd943ec",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "b5461283-9001-510c-9a30-bb367f247b25",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000032",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "1f0c95f4-69bb-5764-a358-d428ff7019d2",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "87340c01-2e0f-5b82-9410-2133648022da",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000033",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "EQUIVALENT",
+      "members": [
+        {
+          "memory_uid": "cd475113-5354-5f80-b063-7628e4359afc",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "8b15a9ad-aa53-5a54-beb2-f1cc8d6da846",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000034",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "EQUIVALENT",
+      "members": [
+        {
+          "memory_uid": "86fe1306-7650-58cc-a3df-79870c61784d",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "565a2263-e3bc-5379-9a80-64665b491c88",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000035",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "5d022e45-09c0-515e-98f1-68b2aec686bc",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000036",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "9939e9e8-d97d-57db-974a-750566ca9e2b",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000037",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "ec54ce10-07db-5ae3-94a5-8f3621fed4a9",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000038",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "27b58ee9-5cad-5872-8eb7-a694728d8e79",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000039",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "cf7e9410-2144-53c4-a236-a16a7b5be494",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000040",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "ad643b33-fba1-5643-b57f-3bb8c3829122",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000041",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "546548e3-c47a-5a74-a04a-0a328602ead4",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000042",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "A flow diagram is preferred for visible branching, while a sequence table is preferred when repeated procedural revisions make row-level maintenance important.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "51fa3fcc-9d5f-52f0-809d-62d7cdd8a865",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "e686bd4d-3ebd-5e55-ba39-f26971247965",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "a6dfe9a7-1df8-561f-8d3e-fc19518beca9",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "50a71968-7e3f-5b99-b3fa-769af386d0c0",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "ae1610f6-a855-56c1-a0fb-fd3207dab615",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "4264c20d-3e44-578d-866e-7787cc7b59e2",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "22254f16-4628-5fd9-b1af-6e66dc2572b3",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "32028269-5d43-5a65-b22b-9e570ceabfde",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "939ee3d0-b611-574a-a25b-82708394bd5e",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000043",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "019662a9-6f03-527f-9b6d-be5a2966d9e9",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "70a8c3f0-0f6a-5881-abd6-29f52833b7bd",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000044",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "7047a23d-45b3-5d5c-a00b-c12552e9680d",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "d2825b84-b4a6-58c9-8f8e-9e19c6192a03",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "a385fbb1-85b4-5132-bbc7-8fd8daedb715",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000045",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "b410aa8d-db87-586b-a1cd-4af5767a9f7a",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000046",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "EQUIVALENT",
+      "members": [
+        {
+          "memory_uid": "949a884d-b348-5fa0-b1dd-adbebafe10a9",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "e2ae95ed-9033-5625-9179-33f4cf4a95c1",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000047",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "2f484151-b5fc-51a9-8a88-b30a403617b3",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "4be60357-09fa-523d-8c8d-8e03ace8fde9",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000048",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "EQUIVALENT",
+      "members": [
+        {
+          "memory_uid": "21131a6f-d35c-51e3-895f-46cd21a3b566",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "0dd5d707-7d13-5be0-8377-421507650cba",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000049",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "e02c3110-05c4-58a4-8d76-c8fd2426a0d5",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "9b3f0cde-7c3e-5b6a-9500-855f31d65ef2",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000050",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "EQUIVALENT",
+      "members": [
+        {
+          "memory_uid": "af028910-e48b-5605-b92b-9378bdfa525c",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "8c896114-85e6-5c3c-ae3f-6e8e6b59f2fe",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000051",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "dc9e3f25-7aac-500b-b431-f6d810dd09bb",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000052",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "04956cab-eb3a-5b71-be45-b1edd6c4a216",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000053",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "fc8613e8-86ca-5322-bb5d-03dfbca71c46",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000054",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "39792d18-2be0-5135-a063-c5213247d330",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000055",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "bcaa8c30-ca6e-5b9f-af93-88513a2f16b1",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000056",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "82ad9fe2-4063-5e89-9097-c975aa2920cb",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000057",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "c8bcefee-c64a-5a1f-911c-502cc4522701",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "881bc037-c099-50e4-b7e0-d38fba5146c9",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "90be328f-1c05-5574-9657-1b0cc04a10b8",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "4fc24f87-e7b5-5d34-b850-f90cdc9b1ea2",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000058",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "EQUIVALENT",
+      "members": [
+        {
+          "memory_uid": "8747b27e-6c2b-5498-9eac-c403e26101a6",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "452ab231-3131-5697-a728-475289deafd0",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000059",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "EQUIVALENT",
+      "members": [
+        {
+          "memory_uid": "c3ad4ad8-4c5c-54c5-8d65-2dae15fa69a0",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "9c979f39-9660-5392-a1cd-0d1317af0e0f",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000060",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "One frame requires one exact participant target and rejects ranges, while the other requires a justified bounded range tied to minimum and maximum workload and budget cases.",
+      "kind": "CONFLICT",
+      "members": [
+        {
+          "memory_uid": "df53a41c-2fbf-532a-a5b0-560a196bf5cb",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "91db3bd1-4417-5db6-b7a6-3e79c87ebe88",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "0ecc319a-ae60-5510-883d-52e613138164",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "c4dfdb65-e673-52c0-a40c-e909d6014e00",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "a7c3a123-3f05-52e0-b33e-c450d1a070ac",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "8a49f598-804e-5a81-8e88-add7b665633a",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "251a4b3c-58fd-5d66-b5bc-74dcbeaa7a0d",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "40f23f85-561e-55b3-825b-5000f9638f8a",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "9527ccb8-6662-58e3-8edd-daf7c0a713af",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "3ff9ec36-b70d-5dbd-9692-27fdf734fd20",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "9e1c3629-641f-5c09-915d-8a2ad1c8013a",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "7ba672db-131e-5795-89c9-46f56344e7ed",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000061",
+      "status": "UNRESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "24d49198-fd7b-5810-bc56-1910a796f76e",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "629cb159-6f6c-5476-870d-716ab573aef8",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000062",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Collection timing is specified relative to an interaction in one frame and relative to a deployment in the other.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "2f367cf3-50c5-59bc-972e-6173e56343ac",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "b565c5c9-a0f7-5aff-a3b1-19696c4d3b39",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000063",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Prototype implementation instability and field network or service instability are setting-specific independent causes of task failure.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "49746579-92d7-51ea-b158-7d770443d101",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "f150891e-7635-5c35-b986-d369bc630ef4",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000064",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Institutional safety procedures take precedence in both frames, respectively during formative evaluation and field-system operation.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "20d116ab-f9cc-5f61-808b-8555da09d707",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "7860d9d6-5c2e-5969-b956-f71398218d02",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000065",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "EQUIVALENT",
+      "members": [
+        {
+          "memory_uid": "9a969676-6093-5fac-bda8-92ebdac70c37",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "2db331a6-28d7-5c32-8372-7d3f8bc5b04a",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000066",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "The primary measure governs comparison among design alternatives in one frame and operational maintenance decisions for a deployed design in the other.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "a50f6ecb-de38-5769-8a6e-23b84a7eb35c",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "44c61beb-24a2-584a-ad96-e622690d8171",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "f27576c7-6f53-5412-901c-19df7e1d5e2e",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "8608bdf3-49d7-54d0-a2fb-c883c24e40ef",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000067",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "23202824-b576-5d77-b591-8b4cc0757632",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000068",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "65ae88bf-8002-5ada-8590-eaf345b38863",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000069",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "79af5e5f-4868-5e76-bcd5-3f8e1d6a0bd1",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000070",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "41060e8e-95ff-58c1-8b71-36a501a9bd23",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "3a65fc8b-a5b4-50fc-a60e-fc6f3fc44547",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "877015ae-ab0b-561c-9fe3-3abb2d0aaa4e",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "dbe435ff-fe32-54fe-a2e6-7b46694ce151",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000071",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "b06bb706-f911-5767-8e27-b64c74d0e592",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000072",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "473ec6e8-29f0-5c83-b36d-b7d32eeb25a3",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000073",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "935cf79f-3e67-567d-ab55-35e8fad7eb37",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000074",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "bea0e97f-1217-507b-87a7-09ce85bae9fe",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000075",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "EQUIVALENT",
+      "members": [
+        {
+          "memory_uid": "e93ea2ee-a8b0-5f3d-b6fd-c76f385eef50",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "7d0b3072-7bac-5bc6-9c79-acc808c38f1f",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "bc8c1327-993c-51ce-8f53-919dc253e0f8",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "26407eb8-5c02-551f-a960-1652eb080f90",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000076",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "6ecf6a7b-f4e9-5d96-a52c-520197d4a2a6",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "578f6fdf-6bbc-5d1b-8f03-c7460a5cdc7b",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000077",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Accommodation delivery is specified for user-study sessions in one frame and for field user studies in the other.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "bc41fce0-dbfc-5d23-9d97-9f81531c098c",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "6804d5db-c872-5ded-bf68-14fd30e1b645",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000078",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "EQUIVALENT",
+      "members": [
+        {
+          "memory_uid": "9768e0d9-ef46-52a4-af04-8f6ca3c176c5",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "448f23d0-9607-5977-9d13-a99af48a6fc1",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000079",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "EQUIVALENT",
+      "members": [
+        {
+          "memory_uid": "e874407e-4d36-55a6-949e-44e5944f1bb4",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "b97f3e2f-e132-5f6f-a748-f406a89a1bc5",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000080",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "EQUIVALENT",
+      "members": [
+        {
+          "memory_uid": "df16dca6-0b48-5753-aa18-7e5524187a1e",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "d05964ea-0423-5642-86e1-9e9c19edffbe",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000081",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "407a4c1c-c333-5764-8d89-252bed150f99",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000082",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "28646fd3-54af-51f9-97da-ad9489ecda79",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000083",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "218aafb6-9332-5693-a2e7-c7777dc64de7",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000084",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "1ecb7268-f77a-5643-a456-357df6cd8f6e",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000085",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "7e0ba411-3fd9-53ec-8a3f-4499316c06bb",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000086",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "a6fbea37-335c-544b-8bac-01f759bc3855",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000087",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "885d1cf3-8bcd-513c-9591-a548fcbd3992",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000088",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "520b4c9f-306e-5749-83b5-2218c97f89e6",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000089",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "e594a6ab-81e9-5e5f-8ef5-e6bb8f3760d7",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "31cdacff-7c49-547d-9f97-598a07b67fb6",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "6cfd5026-0c04-5ed8-baac-a56e68723aa3",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "5bc7cf05-8c47-57d4-a749-ec7d2ec45e3e",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000090",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "1459d986-4dc9-51f3-bf13-dbb0b07045c8",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "25731e2b-8535-5b37-a377-0a3a99dbe189",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "d79ba448-76b6-592e-b4ba-8cfd98683755",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000091",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "1db5fcd6-f93c-5630-9810-053c10b5ceba",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000092",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "fd29c315-521f-53c0-add5-c668ec318a43",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "cde0ee2b-af3c-5c0d-b23c-632778c93e20",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000093",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "EQUIVALENT",
+      "members": [
+        {
+          "memory_uid": "9d6f5228-d182-571a-83d2-6a67becb7736",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "ceb095a9-3068-55ea-a06f-d954c121e007",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000094",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "EQUIVALENT",
+      "members": [
+        {
+          "memory_uid": "00ed485d-66c2-59ad-9c5b-9ae445412690",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "962d7645-02b3-5611-8415-4370794c10d4",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000095",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Formative evaluation halts an unsafe design alternative, while field deployment uses broader cessation thresholds covering harm, disruption, and data anomalies.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "9c6e1561-f671-52cb-aa67-245cc4987ad4",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "2381ecf7-2b11-583d-91d9-0a5cfc279ba1",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "a3270872-1901-5d24-8ef1-374833599bf9",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000096",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Controlled-prototype recovery emphasizes timely restoration, while field recovery additionally identifies restoration procedures, authority, and responsibility.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "c5ce1b00-36d9-5cdd-a318-93b88ca0e322",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "f6dd1368-0d90-5f1a-97d0-56594ce8f4b3",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "342e4697-873f-56a8-b4a4-896efe910144",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000097",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "6c4e9175-4590-5689-ae2b-678f0eb930b9",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000098",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "EQUIVALENT",
+      "members": [
+        {
+          "memory_uid": "b150c774-27f6-5ec8-8cb9-9a00be19ce9b",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "5c9755f8-78bd-5654-a3c7-8be0864e4f12",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000099",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "EQUIVALENT",
+      "members": [
+        {
+          "memory_uid": "6c7d14ed-67e5-56ff-befb-7648b95aa7a3",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "75af48aa-b39e-5b55-95d9-f7f7d2becbad",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000100",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "EQUIVALENT",
+      "members": [
+        {
+          "memory_uid": "00bf39b5-fe97-5fd0-b579-a5c13b5e6af7",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "292e33b0-4bfd-5e3a-9379-0fbf3619c42d",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000101",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "3ae97c88-7537-5733-b48d-e02c9283f486",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "c0c1fd8d-1aae-51a3-a1d4-66c1481d7b48",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000102",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "EQUIVALENT",
+      "members": [
+        {
+          "memory_uid": "e2b5c1f0-97c2-5d46-af80-993d8d5606c9",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "7be25c27-6d67-50fe-90b5-76fca32a93d8",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000103",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "EQUIVALENT",
+      "members": [
+        {
+          "memory_uid": "f636b400-d3a2-5873-bf5b-c990b0f7ea42",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "1aae182f-4eb3-58b7-b8cd-5ce517ead36a",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000104",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "EQUIVALENT",
+      "members": [
+        {
+          "memory_uid": "49385488-2315-51bc-bea0-749a1aea52f1",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "84f6e5e3-96b4-538b-a633-1b656204a296",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000105",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "f1c22a48-9d8d-5e82-9837-690d66e719db",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000106",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "152f8621-f5fb-5c5e-a961-1fde77ed0bb3",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000107",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "1877a138-31f6-59a5-b666-ae57985f540d",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000108",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "16a461c4-d90d-5d0f-bfd0-4c1a116ec2be",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "4f35fd0c-005a-56a7-b33a-d74bde2d65eb",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "f5ad6933-3e22-5c47-bdaf-bacc9c9a5b3c",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000109",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "0ce26892-666f-5ebe-95b2-c6f48915f18b",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000110",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "3b96bf66-59e4-5dbf-98d3-937402abc67b",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000111",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "EQUIVALENT",
+      "members": [
+        {
+          "memory_uid": "fb400759-63ed-568a-b94e-5f0c2fe94b67",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "40f11374-d91b-546a-9e93-fcf98a0fde98",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000112",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Reconstruction records focus on fixed and manipulated alternatives in one frame and timestamped field configuration and procedure changes in the other.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "e52e8470-6419-5306-9ddd-00a86003dcf3",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "cc72ad54-4cf3-56cd-9119-46776f5b2184",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000113",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "8f4edf8c-491d-56fe-bde4-d9ce25d6de50",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "87662a7e-ffc7-521a-a06c-7db8184377e8",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "75f22b45-fb1b-568c-bb05-080fdacdcab2",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000114",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "One frame keeps estimate bases and major costs beside activities in the main text, while the other moves quantities, rates, assumptions, and arithmetic to a separate table or appendix.",
+      "kind": "CONFLICT",
+      "members": [
+        {
+          "memory_uid": "05e0261e-5c52-5030-8176-0f02d4522931",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "1083e9b3-698a-57b1-91ab-ce04cec1e5e5",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "3652f268-d86f-55d6-935d-d3bdc487aae6",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "4e1e1201-94b8-5a7a-8737-edc4c62881ff",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "2f5f9039-e038-51c1-8af0-21a78772c512",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "f7a16d08-fbe2-5508-890d-cdbf70c1146e",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "2ca1d5a1-d78a-55b2-ab21-fd6ad73366b4",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "d614b55d-d9f6-5347-8d02-2d219d621a09",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "24500129-4b07-564f-ba67-39e40d7d7860",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "07bad409-af9c-512a-b829-7ceb28273f91",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "abf6d361-c2eb-512f-87e0-f3af9c5eb677",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "473cf3ca-9832-5d9c-97df-974f1d9b0d1b",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "675956de-2c61-53e1-bb89-9b49d92558ba",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "f4371f72-f222-5066-b2f4-0a6be5d6865e",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000115",
+      "status": "UNRESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "0ae46268-cca7-57d5-a0ee-6eb3b85cda84",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "bdda6e22-ea06-5a13-8854-67f7521724db",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "874de649-9c04-5960-b3a9-e68356ef666c",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "be9e402b-8d3b-58da-9766-2cf2ec25b9ae",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "2a252668-f3f2-5582-b248-43ad81c54a48",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000116",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "EQUIVALENT",
+      "members": [
+        {
+          "memory_uid": "f49b1d0a-7a1a-53b5-b7fc-815cc2cc134a",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "8abeab95-3e41-5378-8409-08200aee9d58",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000117",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "1f4d05e4-2a79-572c-8050-beb1464fb781",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000118",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "9b59c6ed-5dbe-5ccc-87b5-6be31f414e68",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000119",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "abcba764-6f35-5dae-bb3d-7860fb72ccf2",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "5c6c461d-05e5-5b0c-b801-245de2f9c8d7",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000120",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Equal burden supports the same base hourly rate across modalities, while differing travel or preparation burdens support different total compensation.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "c6a28f37-1a7c-5dbd-b75c-c829f0461504",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "44abc098-8c9f-5abb-bc49-9deb25066d93",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000121",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "529559f5-850d-5920-8e27-0b1e7138dc36",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000122",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "c8be56ee-860a-5f6c-abbf-02c8dbc59eb5",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "85157c57-410f-5c7d-8183-b37d61eebf8a",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000123",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "7e647a83-81b0-52d6-9362-e513dc2a5032",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000124",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "d77affab-60c8-5403-b189-17022b484640",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000125",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "bdac8cf8-dd11-5794-b4b2-9774ff344436",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "0c470c6b-26a6-5501-93ac-c51fecd708ae",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000126",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "The pre-submission validity review covers prototype-centered design evaluation in one frame and system-centered field evaluation in the other.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "0dda8eb3-3287-5bb6-9b26-b1c00cc038d9",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "6d203c86-b6e0-586a-b896-b654fa319ed1",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000127",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "c8e0c9dd-dc4a-5a7d-9a82-e7ee449a4b25",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "6b75bfb1-67f5-50bb-9e0c-04026062de96",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000128",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "Representative measures are aligned with evaluation tasks in one frame and field tasks in the other.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "f93c5baa-3c2b-5e37-b07b-0b00e8b22ab9",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "3abfda89-82ab-5cc5-bdcd-5e2f274fd727",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000129",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "8dae0ad6-2a6d-5d99-98db-b0d48a1140e5",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "f14f1974-9035-5a2c-931a-89a5004a2567",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000130",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "0f89ab25-d9ee-5669-aa99-a0fe07803915",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "6ba1d344-5d98-5c25-ba1e-b28c08d39747",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000131",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "3e4a9a3b-abc2-54ed-9b87-f81abf61b541",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "4a85ebbd-a4ee-5c88-9e93-5fc545f41c64",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000132",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "fb785649-1947-5e7d-aafb-308f14fb21b4",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "75c4c71d-28e3-559c-99d1-f0dccc31a9e2",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000133",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "02f8ddd8-32b0-5e3b-b358-5e0472a6e0d2",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "577e5506-78e8-5768-b288-7a5986347cce",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "f8253f92-c60c-57e1-a630-6b31abe080ae",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000134",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "d17ba26c-187e-57bc-8468-c9c053fc303d",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000135",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "48a91d19-cc68-5400-8971-8125236f3fbf",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000136",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "774341c9-b92d-53a5-a24c-59c75e39756b",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000137",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "9ce34a9a-4ba2-5b32-a1de-b0469ddc3f95",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000138",
+      "status": "RESOLVED"
+    }
+  ],
+  "right": {
+    "context_digest": "6a5acf3c3c5051c72522891e33e6d88c3ef7dc45302a84c6336a299ae41e6aed",
+    "context_uid": "13a0a0d6-bbde-51c7-a745-1f7ffafb8098",
+    "memory_count": 150,
+    "name": "task-2/advisor2"
+  },
+  "schema_version": 1,
+  "semantic_content_in_participant_report": false,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

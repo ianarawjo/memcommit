@@ -1,0 +1,52 @@
+ MEM DEDUP · RESOLUTION SESSION                                                                                                                                                     
+ DETERMINISTIC · EXISTING UID SURVIVOR · EXACT WHOLE-SET APPLY                                                                                                                      
+┌───────────────────────────────────────────────────────────────────────────| VIEWER · COMPLETE REPORT |───────────────────────────────────────────────────────────────────────────┐
+│DEDUP · CONFIRMED DUPLICATE COMPONENTS                                                                                                                                           ^│
+│CONTEXT · dedup/capture                                                                                                                                                           │
+│REVISION · a2b87e8629f4d890a4efdc4e43160967e389bee66305d865b61313a5c2d12615                                                                                                       │
+│COMPONENTS · 1                                                                                                                                                                    │
+│                                                                                                                                                                                  │
+│DETERMINISTIC BOUNDARY                                                                                                                                                            │
+│Only EXACT, SURFACE_EQUIVALENT, and SEMANTIC_EQUIVALENT finder links are present. Dedup does not rewrite or integrate content.                                                    │
+│                                                                                                                                                                                  │
+│COMPONENT 1 · 2 MEMBERS                                                                                                                                                           │
+│RECOMMENDED SURVIVOR · [20000000-0000-4000-8000-000000000100]                                                                                                                     │
+│CONFIRMED LINKS · 1                                                                                                                                                               │
+│                                                                                                                                                                                  │
+│APPLY · one checkpoint · inbound references to absorbed UIDs block the complete operation.                                                                                        │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────| ITEMS · REQUIRED DUPLICATE COMPONENTS |─────────────────────────────────────────────────────────────────────┐
+│REQUIRED 1 · ANSWERED 1 · REMAINING 0                                                                                                                                             │
+│✓ 1. DUPLICATE COMPONENT · Choose one unchanged survivor from 2 members.                                                                                                          │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ TO DO · ONE NEXT ACTION ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃STATUS · SUCCESS                                                                                                                                                                  ┃
+┃CONTEXT · dedup/capture                                                                                                                                                           ┃
+┃COMPONENTS · 1                                                                                                                                                                    ┃
+┃SURVIVORS · 1                                                                                                                                                                     ┃
+┃ABSORBED · 1                                                                                                                                                                      ┃
+┃CHECKPOINT · 58059ab2-a607-45d0-814f-cb32364f8f28                                                                                                                                 ┃
+┃RECOVERY · mem undo                                                                                                                                                               ┃
+┃                                                                                                                                                                                  ┃
+┃[ PRESS ENTER TO CLOSE ]                                                                                                                                                          ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ Enter/Esc/Q close · durable receipt shown

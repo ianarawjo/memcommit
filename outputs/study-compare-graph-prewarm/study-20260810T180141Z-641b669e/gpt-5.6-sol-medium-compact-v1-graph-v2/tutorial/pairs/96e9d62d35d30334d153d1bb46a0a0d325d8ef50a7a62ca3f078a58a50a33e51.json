@@ -1,0 +1,95 @@
+{
+  "coverage": {
+    "expected": 7,
+    "observed": 7
+  },
+  "created_at": "2026-08-10T23:54:48.266793Z",
+  "description_digest": "5fe9e2dcbf53886546aa294a60698676924bbb49337e5fdf37d33e2c5c40f159",
+  "issues": [],
+  "kind": "STUDY_COMPARE_GRAPH_PAIR",
+  "left": {
+    "context_digest": "fab3b101ec50aac92fc6abe441757148751250b545d85f02e9675a94e13ebb0d",
+    "context_uid": "824acb9d-695c-5d55-9997-64cc317a2203",
+    "memory_count": 4,
+    "name": "practice"
+  },
+  "method": "DETERMINISTIC_IDENTITY_CONTAINMENT",
+  "operation": "COMPARE",
+  "pair_key": "96e9d62d35d30334d153d1bb46a0a0d325d8ef50a7a62ca3f078a58a50a33e51",
+  "provider": {
+    "provider_calls": 0,
+    "provider_seconds": 0.0
+  },
+  "relations": [
+    {
+      "comment": "",
+      "kind": "EQUIVALENT",
+      "members": [
+        {
+          "memory_uid": "89ff1887-d807-5a04-94d7-424fff9a93b9",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "89ff1887-d807-5a04-94d7-424fff9a93b9",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000001",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "EQUIVALENT",
+      "members": [
+        {
+          "memory_uid": "1e046596-b6f1-5623-aebb-52c46b4a54be",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "1e046596-b6f1-5623-aebb-52c46b4a54be",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000002",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "EQUIVALENT",
+      "members": [
+        {
+          "memory_uid": "5faaf0a4-d5b8-54d0-af25-c056e9058c98",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "5faaf0a4-d5b8-54d0-af25-c056e9058c98",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000003",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "ac614cce-7803-539d-b05f-44a802da25fa",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000004",
+      "status": "RESOLVED"
+    }
+  ],
+  "right": {
+    "context_digest": "5fe9e2dcbf53886546aa294a60698676924bbb49337e5fdf37d33e2c5c40f159",
+    "context_uid": "d5d0a8b4-d425-5c9f-9325-56329df711ef",
+    "memory_count": 3,
+    "name": "practice/description"
+  },
+  "schema_version": 1,
+  "semantic_content_in_participant_report": false,
+  "state": "EXACT_PREWARM",
+  "task": "tutorial"
+}

@@ -1,0 +1,406 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:39:06.143773+00:00",
+      "frames": [
+        {
+          "context_digest": "3f1b018c2a3a8594d00bffba053626a876fef4893e678dd9600986d9d41c0f31",
+          "context_name": "task-3/local/personal-memory/2024/05",
+          "context_uid": "683986e6-d517-5a53-9dc1-16b69cf0d12e",
+          "memories": [
+            {
+              "content": "The user keeps a small table fan beside the bedroom window.",
+              "content_digest": "b8a464f5e2a33edcef1259af4a412b047ba190bae9cfe42aaf1dbd722efc7f0c",
+              "position": 0,
+              "uid": "3088c235-435c-52ee-9ffc-26cf85ec196e"
+            },
+            {
+              "content": "On a day the user drank coffee late in the afternoon, they could not fall asleep until dawn.",
+              "content_digest": "ef4cf019ebc163fc24f03b8bd505599cd13fc83f33565d51ffb4379dc21d72b8",
+              "position": 1,
+              "uid": "7811ed66-2f22-54d8-a215-62a843264ba5"
+            },
+            {
+              "content": "On a day the user drank coffee before 2 p.m., they fell asleep at their usual time.",
+              "content_digest": "046ac3f8454da623f73d1293fb954b72a3ea056642fd9ee7948c35f110e77669",
+              "position": 2,
+              "uid": "d0f94a56-5cf8-5215-9cfa-5993b3b781be"
+            },
+            {
+              "content": "On a tired day, the user ate dinner out and postponed even washing the dishes after returning home.",
+              "content_digest": "ac36f6c1039dc74f764b4671f718f1e124823dc75fd45abda010285523280b71",
+              "position": 3,
+              "uid": "fc19394a-6634-5aae-bfa5-bba91e707954"
+            },
+            {
+              "content": "In the same week, on a day the user made simple noodles at home, they rested immediately after the meal.",
+              "content_digest": "45bb543f6c6ca213b856683b3c53448ac0d044bcf24f694eda292d6c4923ac5c",
+              "position": 4,
+              "uid": "be7aa7f3-1b67-5677-950d-9942ca337a99"
+            },
+            {
+              "content": "On a night the window was left open, street noise woke the user twice.",
+              "content_digest": "13f3dd86b869b25ee75e1b80d9cdb890b79434fa976fbd7246e89ba808f1a6c6",
+              "position": 5,
+              "uid": "47faaefd-2d60-5693-9847-2c1d5d2f9092"
+            },
+            {
+              "content": "On a night the table fan was running, the user was not too warm even with the window closed.",
+              "content_digest": "96ce23df1cf4f913e3b4c339cc3a857a6a8776e3f3f48e865eae65f02297bba8",
+              "position": 6,
+              "uid": "d6eea310-1313-5a51-b032-f3f518620610"
+            },
+            {
+              "content": "The user's father prefers to have coffee available after dinner and believes it will not cause a sleep problem.",
+              "content_digest": "197616278309e370f0d0e633700b1bde2c6e4395dbc8ed2b942e14fb6c1c9cc5",
+              "position": 7,
+              "uid": "056defa1-8256-561d-a2b4-a70df4058c33"
+            },
+            {
+              "content": "When making a sleep-related suggestion, do not treat one or two records as a general lifestyle habit.",
+              "content_digest": "963795e89a1e2365dd81abf463fb9a80c1c22b9c0e59b121681f89c09860e583",
+              "position": 8,
+              "uid": "7cecee60-fabd-55a3-998b-78810bd9eaf4"
+            },
+            {
+              "content": "The user tends to go to bed much later after drinking coffee late in the afternoon.",
+              "content_digest": "e54652939c104807d5c501753f85aee97883cc55e1d056787b86857cd5b8292d",
+              "position": 9,
+              "uid": "9ace13d3-d881-5720-bfd5-f7884db67756"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "a1210203-c864-4eb4-a4fa-8e723abee33f"
+        },
+        {
+          "context_digest": "43b741cd1df20a084f3517aec7f886d4e5022812f0536eb126a6caf2d5570489",
+          "context_name": "task-3/local/personal-memory/2025/05",
+          "context_uid": "1f913bb6-790c-5490-a20d-127c7aab5892",
+          "memories": [
+            {
+              "content": "The user keeps two potted herbs beside a south-facing window.",
+              "content_digest": "b79056c033f208bb02b99fef1c011e5537e2ea8c19c3894863c3a5ad56054e08",
+              "position": 0,
+              "uid": "cb09b8ab-c7c4-51bb-a227-039c7cdfae5d"
+            },
+            {
+              "content": "During a week when the user watered every day based only on the soil surface, the leaves of one plant turned yellow.",
+              "content_digest": "042f4be9fd5481a7252d1c0065e95085e11e81e475531afe45b9f1d268d4c5b4",
+              "position": 1,
+              "uid": "95978183-0070-5b12-b117-be39bb343a5e"
+            },
+            {
+              "content": "During a week when the user checked below the soil surface with a finger before watering, the plant grew new leaves.",
+              "content_digest": "06ca2ec53f03677fdfd78bb1d391f197d3f49b974f6e812f25ba49ce34f74249",
+              "position": 2,
+              "uid": "8c610ce5-1eb7-52e5-ad81-e8062d23cd19"
+            },
+            {
+              "content": "On a day the user left the window open for a long time, strong wind knocked over one pot.",
+              "content_digest": "914f67a75fdf73cee064a465a9f0e6ee9ba012f1a40c614e199a9354756203a8",
+              "position": 3,
+              "uid": "3f886c0c-071b-5f2d-adad-da01345d702f"
+            },
+            {
+              "content": "The next day, the user moved the pot inward from the windowsill so the same wind would not knock it over.",
+              "content_digest": "f190916b360b6543865ced49cf5d9a987e96c9147966181e5920342bb41ba50c",
+              "position": 4,
+              "uid": "afe855b8-f5ad-559c-a63f-6f655ba371a2"
+            },
+            {
+              "content": "The user put a plant-name label in a small pot received from their maternal aunt.",
+              "content_digest": "82284f0102305db41eaaecafe86bc05833090853320f2ebb8e5f44abb2d78a63",
+              "position": 5,
+              "uid": "384c4f5f-b15c-5742-ac79-20106d0dd30b"
+            },
+            {
+              "content": "The user confused the care instructions for an unlabeled pot with those for another plant.",
+              "content_digest": "824267db866253690527d5ab08166f4228401443ed903708d33ac22542811750",
+              "position": 6,
+              "uid": "48dc89af-ed9d-51a5-a4b1-b809fd818143"
+            },
+            {
+              "content": "The user's maternal aunt considers understanding the sunlight at a pot's location more important than watering frequency when caring for it.",
+              "content_digest": "8a24f6df4a58db3e538f77e572a3cf152b7a4aff3527ec3d8616e85a675bc7c0",
+              "position": 7,
+              "uid": "a2426820-65d6-5c78-ac50-0f32b366ae47"
+            },
+            {
+              "content": "Before creating a plant-care reminder, check each plant's name and most recent watering date.",
+              "content_digest": "ecd7ef911951f3c2383cd916a4efbd94bdf439f63de1687c2f637a161ac8a60d",
+              "position": 8,
+              "uid": "efd51196-ed48-5699-a0f4-c5b8e149d11c"
+            },
+            {
+              "content": "The soil in the user's potted herbs beside the south-facing window dries at different rates depending on the season and amount of sunlight.",
+              "content_digest": "f716b16e802d30d4c2d1ed4bff855812682e53a9fc4e29988e2662ae321d0a4f",
+              "position": 9,
+              "uid": "4c93eeff-566e-5a1a-afb9-035c97fb9c73"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "e9c289ed-751b-45f3-af8b-34b5b19f126a"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames mostly contain independent sleep, meal, and plant-care observations. They intersect only around practical risks from an open window, where nighttime noise and wind exposure support complementary precautions without contradicting each other.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "a1210203-c864-4eb4-a4fa-8e723abee33f",
+              "memory_uid": "47faaefd-2d60-5693-9847-2c1d5d2f9092"
+            },
+            {
+              "frame_uid": "e9c289ed-751b-45f3-af8b-34b5b19f126a",
+              "memory_uid": "3f886c0c-071b-5f2d-adad-da01345d702f"
+            },
+            {
+              "frame_uid": "e9c289ed-751b-45f3-af8b-34b5b19f126a",
+              "memory_uid": "afe855b8-f5ad-559c-a63f-6f655ba371a2"
+            }
+          ],
+          "reason": "The memories materially inform management of an open window and its immediate surroundings; their different adverse effects and the pot mitigation can all remain jointly applicable.",
+          "status": "RESOLVED",
+          "summary": "Open-window exposure created practical risks to nearby activities or objects, including disturbed sleep and a wind-toppled pot followed by protective relocation.",
+          "uid": "f7a1009f-f7dd-5362-a446-8c0937401518"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a1210203-c864-4eb4-a4fa-8e723abee33f",
+              "memory_uid": "3088c235-435c-52ee-9ffc-26cf85ec196e"
+            }
+          ],
+          "reason": "This is independently useful reference-side information about the fan's location, with no compared-side claim addressing that placement.",
+          "status": "RESOLVED",
+          "summary": "A small table fan is kept beside the bedroom window.",
+          "uid": "4e3451ab-fee8-5e82-a052-2b56d5db54e4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a1210203-c864-4eb4-a4fa-8e723abee33f",
+              "memory_uid": "7811ed66-2f22-54d8-a215-62a843264ba5"
+            },
+            {
+              "frame_uid": "a1210203-c864-4eb4-a4fa-8e723abee33f",
+              "memory_uid": "d0f94a56-5cf8-5215-9cfa-5993b3b781be"
+            },
+            {
+              "frame_uid": "a1210203-c864-4eb4-a4fa-8e723abee33f",
+              "memory_uid": "9ace13d3-d881-5720-bfd5-f7884db67756"
+            }
+          ],
+          "reason": "These reference-side memories restate and split one underlying observation about coffee timing and sleep, without a corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "The user's sleep timing varies with coffee timing: late-afternoon coffee is associated with much later sleep, while coffee before 2 p.m. was followed by usual-time sleep.",
+          "uid": "b5e8275f-bcdf-54fe-a76f-1e85f3ef145a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a1210203-c864-4eb4-a4fa-8e723abee33f",
+              "memory_uid": "fc19394a-6634-5aae-bfa5-bba91e707954"
+            }
+          ],
+          "reason": "This is an independent reference-side observation about fatigue and delayed cleanup, absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "On a tired day, eating dinner out was followed by postponing dishwashing after returning home.",
+          "uid": "c536266e-9ac0-556e-9d1e-52f1993bb3f4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a1210203-c864-4eb4-a4fa-8e723abee33f",
+              "memory_uid": "be7aa7f3-1b67-5677-950d-9942ca337a99"
+            }
+          ],
+          "reason": "This is an independent reference-side observation about a home meal and immediate rest, with no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "After making simple noodles at home during the same week, the user rested immediately after eating.",
+          "uid": "bc813d3b-ad65-5000-92cd-f879ca51ba3d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a1210203-c864-4eb4-a4fa-8e723abee33f",
+              "memory_uid": "d6eea310-1313-5a51-b032-f3f518620610"
+            }
+          ],
+          "reason": "This independently records a reference-side thermal outcome from fan use and has no compared-side equivalent.",
+          "status": "RESOLVED",
+          "summary": "Running the table fan kept the user from becoming too warm while the window was closed.",
+          "uid": "5e994850-9059-574a-aae6-e8e4d81f71b6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a1210203-c864-4eb4-a4fa-8e723abee33f",
+              "memory_uid": "056defa1-8256-561d-a2b4-a70df4058c33"
+            }
+          ],
+          "reason": "This is a one-sided family preference and belief not addressed in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user's father wants coffee available after dinner and believes it will not impair sleep.",
+          "uid": "4d9d57f2-01e7-5df9-b984-a436e5d6c920"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a1210203-c864-4eb4-a4fa-8e723abee33f",
+              "memory_uid": "7cecee60-fabd-55a3-998b-78810bd9eaf4"
+            }
+          ],
+          "reason": "This reference-side evidentiary guardrail is independently useful and has no plant-care counterpart governing the same suggestion.",
+          "status": "RESOLVED",
+          "summary": "Sleep-related suggestions should not turn one or two records into a general lifestyle habit.",
+          "uid": "164e4801-de5a-503f-85b5-bbf011bf43b3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e9c289ed-751b-45f3-af8b-34b5b19f126a",
+              "memory_uid": "cb09b8ab-c7c4-51bb-a227-039c7cdfae5d"
+            }
+          ],
+          "reason": "This is independently useful compared-side placement information, not a claim about the reference-side bedroom fan.",
+          "status": "RESOLVED",
+          "summary": "Two potted herbs are kept beside a south-facing window.",
+          "uid": "71aac096-dfd1-535e-94ec-74d3884e1fb4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e9c289ed-751b-45f3-af8b-34b5b19f126a",
+              "memory_uid": "95978183-0070-5b12-b117-be39bb343a5e"
+            },
+            {
+              "frame_uid": "e9c289ed-751b-45f3-af8b-34b5b19f126a",
+              "memory_uid": "8c610ce5-1eb7-52e5-ad81-e8062d23cd19"
+            }
+          ],
+          "reason": "These compared-side memories split one underlying observation about watering cues and plant outcomes, with no reference-side plant-care claim.",
+          "status": "RESOLVED",
+          "summary": "Plant outcomes differed with watering assessment: daily watering from surface appearance accompanied yellowing, while checking below the surface preceded new leaves.",
+          "uid": "e12a9e9d-9964-5402-8530-874afea6841b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e9c289ed-751b-45f3-af8b-34b5b19f126a",
+              "memory_uid": "384c4f5f-b15c-5742-ac79-20106d0dd30b"
+            }
+          ],
+          "reason": "This is an independent compared-side fact about labeling a gifted pot, absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user added a plant-name label to a small pot received from their maternal aunt.",
+          "uid": "07405708-7650-50a1-b4b6-37bb1d3d93ea"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e9c289ed-751b-45f3-af8b-34b5b19f126a",
+              "memory_uid": "48dc89af-ed9d-51a5-a4b1-b809fd818143"
+            }
+          ],
+          "reason": "This independently records a compared-side consequence of missing identification and has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "An unlabeled pot led the user to confuse its care instructions with another plant's instructions.",
+          "uid": "cdd3fa0a-4c4b-506a-835f-85e5bb3d9466"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e9c289ed-751b-45f3-af8b-34b5b19f126a",
+              "memory_uid": "a2426820-65d6-5c78-ac50-0f32b366ae47"
+            }
+          ],
+          "reason": "This is a one-sided family care principle not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user's maternal aunt considers understanding location-specific sunlight more important than watering frequency for pot care.",
+          "uid": "7c93a815-a5b9-5043-b822-b40533bf71ca"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e9c289ed-751b-45f3-af8b-34b5b19f126a",
+              "memory_uid": "efd51196-ed48-5699-a0f4-c5b8e149d11c"
+            }
+          ],
+          "reason": "This compared-side reminder prerequisite governs plant identification and watering history, independently of the reference-side sleep guardrail.",
+          "status": "RESOLVED",
+          "summary": "A plant-care reminder should be preceded by checking each plant's name and latest watering date.",
+          "uid": "163a2182-521d-535d-a28a-1d365c1443e9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e9c289ed-751b-45f3-af8b-34b5b19f126a",
+              "memory_uid": "4c93eeff-566e-5a1a-afb9-035c97fb9c73"
+            }
+          ],
+          "reason": "This is independently useful compared-side information about variable soil drying, with no corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "The herbs' soil dries at different rates according to season and sunlight amount.",
+          "uid": "4dd8b311-7e8a-5dad-be14-bc660d701caf"
+        }
+      ],
+      "reports": {
+        "both": "Open-window use carries complementary environmental risks: sleep disruption from noise and wind danger to nearby pots.",
+        "compared_only": "Compared-only material covers herb placement, watering cues and outcomes, pot labeling, sunlight and seasonal drying, family care advice, and reminder prerequisites.",
+        "differences": "",
+        "reference_only": "Reference-only material covers fan use, coffee timing and sleep, fatigue-related meal behavior, a family coffee preference, and caution against generalizing from sparse records."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "102743bd-3459-4123-a649-0bf3a8f86c7d"
+    },
+    "analysis_digest": "dfe05ccb1795853fd5a87f979ba026bb319627e84ed3b6c924699e60fe3fb37b",
+    "key": "b212044d7ed4955af29dcc74193b2e99885cee4a1c73a7f53a82febe334ab06d",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 74.22619895900061,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "b212044d7ed4955af29dcc74193b2e99885cee4a1c73a7f53a82febe334ab06d",
+  "created_at": "2026-08-13T18:40:20.369485Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/05",
+  "pair_key": "17a9b696484776546ec5322107eed56c5fca630076befb323b1476a9310fb1ee",
+  "provider_seconds": 74.22619895900061,
+  "right": "task-3/local/personal-memory/2025/05",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

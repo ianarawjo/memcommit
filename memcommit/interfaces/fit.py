@@ -76,14 +76,55 @@ def fit_mark(result: FitResult, *, status: FitStatus | None = None) -> str:
 
 
 def fit_fraction(result: FitResult) -> str:
-    """Return the fitted Example count without exposing report machinery."""
+    """Return the passing count across the receipt's complete public frame."""
 
     if not isinstance(result, FitResult):
         raise TypeError("Fit fractions require a typed Fit result.")
-    fitted = sum(
+    fitted_examples = sum(
         judgment.status == "FIT" for judgment in result.report.judgments
     )
-    return f"{fitted}/{len(result.report.judgments)}"
+    coherence = result.report.coherence
+    if coherence is None:
+        return f"{fitted_examples}/{len(result.report.judgments)}"
+    fitted = fitted_examples + sum(
+        finding.status == "FIT" for finding in coherence.findings
+    )
+    total = len(result.report.judgments) + len(coherence.findings)
+    return f"{fitted}/{total} checks"
+
+
+def fit_axis_issue_counts(result: FitResult) -> tuple[tuple[str, int], ...]:
+    """Count unified Context, vertical, and peer issues for presentation."""
+
+    if not isinstance(result, FitResult):
+        raise TypeError("Fit axis counts require a typed Fit result.")
+    coherence = result.report.coherence
+    if coherence is None:
+        return ()
+    return (
+        (
+            "CONTEXT",
+            sum(
+                item.axis == "CONTEXT" and item.status != "FIT"
+                for item in coherence.findings
+            ),
+        ),
+        (
+            "VERTICAL",
+            sum(item.status != "FIT" for item in result.report.judgments)
+            + sum(
+                item.axis == "VERTICAL" and item.status != "FIT"
+                for item in coherence.findings
+            ),
+        ),
+        (
+            "PEER",
+            sum(
+                item.axis == "PEER" and item.status != "FIT"
+                for item in coherence.findings
+            ),
+        ),
+    )
 
 
 def fit_summary_line(result: FitResult) -> str:
@@ -91,11 +132,17 @@ def fit_summary_line(result: FitResult) -> str:
 
     if not isinstance(result, FitResult):
         raise TypeError("Fit summaries require a typed Fit result.")
-    return (
+    summary = (
         f"{fit_mark(result)} "
         f"{safe_terminal_text(result.report.ground_name)} · "
         f"{fit_fraction(result)}"
     )
+    axis_counts = fit_axis_issue_counts(result)
+    if axis_counts:
+        summary += " · " + " · ".join(
+            f"{axis} {count}" for axis, count in axis_counts
+        )
+    return summary
 
 
 def fit_result_lines(result: FitResult) -> tuple[str, ...]:

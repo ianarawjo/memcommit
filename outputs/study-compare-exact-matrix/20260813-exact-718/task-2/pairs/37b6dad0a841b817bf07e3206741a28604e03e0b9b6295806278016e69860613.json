@@ -1,0 +1,397 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:22:43.866360+00:00",
+      "frames": [
+        {
+          "context_digest": "d216a114524e2b755fff42b8577d5027d3e528aed50c5f588cebf57767bb7fc8",
+          "context_name": "task-2/advisor1/methods",
+          "context_uid": "d2f78b99-5dcf-5876-89a9-1058bceca333",
+          "memories": [
+            {
+              "content": "Link each HCI research question directly to corresponding user data and analysis procedures.",
+              "content_digest": "21e2d5e7eb4ec06057a8405359656cd03a98f4ae67956016d98582af44bfb402",
+              "position": 0,
+              "uid": "c8bcefee-c64a-5a1f-911c-502cc4522701"
+            },
+            {
+              "content": "In preregistered studies, specify the conditions under which deviations from the plan are permissible.",
+              "content_digest": "0ecac6de4eb5e3eec39477c5a6324acb8a1bd6cefb17eacc2c73cdd53160b85f",
+              "position": 1,
+              "uid": "8747b27e-6c2b-5498-9eac-c403e26101a6"
+            },
+            {
+              "content": "In preregistered studies, specify how to record content that deviates from the plan.",
+              "content_digest": "821b3ad70335f24d96aeffd2260e3bc27bb6efd1108a68b00ecc5cb7e7adb242",
+              "position": 2,
+              "uid": "c3ad4ad8-4c5c-54c5-8d65-2dae15fa69a0"
+            },
+            {
+              "content": "Commit to one exact target number of participants so the schedule, workload, and budget can be checked against the same quantity.",
+              "content_digest": "7ff7f3d29fc21399565b4047d3f78e6415e1b51a9247139fc156ea7d4f6d2f13",
+              "position": 3,
+              "uid": "df53a41c-2fbf-532a-a5b0-560a196bf5cb"
+            },
+            {
+              "content": "Specify the interview protocols, recording devices, or log tools used to collect each type of user data.",
+              "content_digest": "0396cbcbfd6e96ef9fd2af507855c4b71eb3003a15fc79d240cd0b751b6b5788",
+              "position": 4,
+              "uid": "24d49198-fd7b-5810-bc56-1910a796f76e"
+            },
+            {
+              "content": "Specify whether each type of user data is collected before, during, or after the interaction.",
+              "content_digest": "80a3ff6e82631a044e8859709930b675163439d11564d1b59601bca0ee030fba",
+              "position": 5,
+              "uid": "2f367cf3-50c5-59bc-972e-6173e56343ac"
+            },
+            {
+              "content": "Readers cannot tell whether the schedule and budget agree when different sections imply different target counts.",
+              "content_digest": "9b5de55faa7e64cf1149ef1bb60cf990815e789e7d1c4a3c0e6297fbbd300aae",
+              "position": 6,
+              "uid": "91db3bd1-4417-5db6-b7a6-3e79c87ebe88"
+            },
+            {
+              "content": "In formative evaluation prototypes, implementation instability exists as an independent cause of task failure alongside design choices.",
+              "content_digest": "dab5f616c4354c0e9f381b0e860e5ec5ff1afc249a4ad427f194c559781b83a8",
+              "position": 7,
+              "uid": "49746579-92d7-51ea-b158-7d770443d101"
+            },
+            {
+              "content": "If a prototype safety signal occurs during formative evaluation, existing institutional safety procedures take precedence over planned data collection.",
+              "content_digest": "2f2768eb4fbce9367786ab13ca8a608e82104cee45200f4aa59854efcf2edc3e",
+              "position": 8,
+              "uid": "20d116ab-f9cc-5f61-808b-8555da09d707"
+            },
+            {
+              "content": "Reviewers judge answerability by tracing the path from each research question to the data and analysis.",
+              "content_digest": "0fac56a79481bdcd7b169c7e3d9ab8fbd0b4f76d33dfe9f4a2f703f80e84aea9",
+              "position": 9,
+              "uid": "881bc037-c099-50e4-b7e0-d38fba5146c9"
+            },
+            {
+              "content": "The author of this proposal tends to present implemented feature lists directly as design contributions.",
+              "content_digest": "6cf2a1292756154c2a0a045f1e4bd4889994faaa838f93e8a2b9c949957ed920",
+              "position": 10,
+              "uid": "9a969676-6093-5fac-bda8-92ebdac70c37"
+            },
+            {
+              "content": "Calculate the required sessions, facilitator hours, and participant payments from the same exact target rather than from separate rough estimates.",
+              "content_digest": "ea6c96c9e5e7d5db7bd2210fd484e715e35727bd1e6f7c2ea2a2c4c12e488f2a",
+              "position": 11,
+              "uid": "0ecc319a-ae60-5510-883d-52e613138164"
+            },
+            {
+              "content": "If recruitment falls below the exact target, state the shortfall explicitly and revise the affected schedule or deliverable.",
+              "content_digest": "bdf962f17a92886e7a5ec0003460dce9ed9c02d02473f66c6f6b4e97c0c304b9",
+              "position": 12,
+              "uid": "c4dfdb65-e673-52c0-a40c-e909d6014e00"
+            },
+            {
+              "content": "Do not use a wide range merely to postpone choosing the quantity that the rest of the proposal must support.",
+              "content_digest": "332385b05f91f97c398bc954b6fc9e62da182f7e42de6dd5691435df6922fd43",
+              "position": 13,
+              "uid": "a7c3a123-3f05-52e0-b33e-c450d1a070ac"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "13053474-3836-491b-9d3d-c3abbd035164"
+        },
+        {
+          "context_digest": "b598a4ff3268ef8c6c0d7bc5ff34af370074bcdd30d61bd3623fcdfb167f37d6",
+          "context_name": "task-2/advisor2/safety",
+          "context_uid": "4283d797-6a33-5f39-b7f6-f4dbd3264389",
+          "memories": [
+            {
+              "content": "List whom to notify and in what order if serious discomfort is reported during the study.",
+              "content_digest": "3453feb8597fb15c827f22297d58dc804fdc1d8080b9e93ba35b85a4425092b6",
+              "position": 0,
+              "uid": "ceb095a9-3068-55ea-a06f-d954c121e007"
+            },
+            {
+              "content": "Field staff rely on the pre-defined contact sequence when serious discomfort is reported.",
+              "content_digest": "ba38f8a5c993c810e19b9120f4492c3accf962c8b8fd7642539ac24f363099e0",
+              "position": 1,
+              "uid": "962d7645-02b3-5611-8415-4370794c10d4"
+            },
+            {
+              "content": "Define the thresholds for participant harm, operational disruption, and data anomalies at which deployment and data collection must cease.",
+              "content_digest": "7f7f124d266efd8255c4615ebc7eb375447047ed5a2b96327f28f8f17d048813",
+              "position": 2,
+              "uid": "a3270872-1901-5d24-8ef1-374833599bf9"
+            },
+            {
+              "content": "Establish procedures to restore existing systems and workflow states after suspending field deployment.",
+              "content_digest": "1a5f7636ec45e60df11db8b0d3763345c0bfaf9a92c1e5d581e6b36452c31208",
+              "position": 3,
+              "uid": "f6dd1368-0d90-5f1a-97d0-56594ce8f4b3"
+            },
+            {
+              "content": "The user's stop plan can be judged feasible only when it identifies who has authority to order recovery and who is responsible for carrying it out.",
+              "content_digest": "3fa05bd19fdeeb320a37cfb89ad853a868b64055f7b21eb182798b0119f6620c",
+              "position": 4,
+              "uid": "342e4697-873f-56a8-b4a4-896efe910144"
+            },
+            {
+              "content": "In organizations where error reporting is linked to individual performance evaluations, safety signal records may be separated from research decision logs, potentially breaking the traceability path for the same incident.",
+              "content_digest": "2bf13ff8ab1a778e8a793ede627b28d40798ae40d25c7a6d25eb5e2e79dd8e97",
+              "position": 5,
+              "uid": "6c4e9175-4590-5689-ae2b-678f0eb930b9"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "c12f9cbb-eb2a-4c9f-9eca-58b796024574"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames overlap only on interruption of data collection, under different explicit study contexts and trigger rules. The reference otherwise emphasizes methodological traceability, preregistration, sampling coherence, collection design, and proposal critique; the compared frame adds escalation, shutdown, recovery, responsibility, and safety-record governance.",
+      "relations": [
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "13053474-3836-491b-9d3d-c3abbd035164",
+              "memory_uid": "20d116ab-f9cc-5f61-808b-8555da09d707"
+            },
+            {
+              "frame_uid": "c12f9cbb-eb2a-4c9f-9eca-58b796024574",
+              "memory_uid": "a3270872-1901-5d24-8ef1-374833599bf9"
+            }
+          ],
+          "reason": "Both claims govern interruption of data collection in response to risk, but their explicit contexts and trigger formulations differ and must remain attached to their respective policies.",
+          "status": "RESOLVED",
+          "summary": "Data collection yields to safety controls during formative prototype evaluation, while field deployment requires defined harm, disruption, and anomaly thresholds for mandatory cessation.",
+          "uid": "bc2f961c-6057-5643-90bf-59b822eb30f8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "13053474-3836-491b-9d3d-c3abbd035164",
+              "memory_uid": "c8bcefee-c64a-5a1f-911c-502cc4522701"
+            },
+            {
+              "frame_uid": "13053474-3836-491b-9d3d-c3abbd035164",
+              "memory_uid": "881bc037-c099-50e4-b7e0-d38fba5146c9"
+            }
+          ],
+          "reason": "The reference memories state the same one-sided methodological traceability requirement from authoring and reviewer perspectives.",
+          "status": "RESOLVED",
+          "summary": "Each research question should be traceable to the user data and analysis procedures that make it answerable.",
+          "uid": "b5fcea7d-2722-510d-9dd4-5a845ab4c477"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "13053474-3836-491b-9d3d-c3abbd035164",
+              "memory_uid": "8747b27e-6c2b-5498-9eac-c403e26101a6"
+            }
+          ],
+          "reason": "This is an independently useful reference-only rule about authorization conditions for deviations.",
+          "status": "RESOLVED",
+          "summary": "Preregistered studies should define when deviations from the plan are permissible.",
+          "uid": "f1384bb3-6715-56b5-950c-495adc89f7e4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "13053474-3836-491b-9d3d-c3abbd035164",
+              "memory_uid": "c3ad4ad8-4c5c-54c5-8d65-2dae15fa69a0"
+            }
+          ],
+          "reason": "This is an independently useful reference-only documentation rule distinct from deciding whether a deviation is permitted.",
+          "status": "RESOLVED",
+          "summary": "Preregistered studies should define how plan-deviating content is recorded.",
+          "uid": "f141962a-93b8-5850-8a57-898d6a971891"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "13053474-3836-491b-9d3d-c3abbd035164",
+              "memory_uid": "df53a41c-2fbf-532a-a5b0-560a196bf5cb"
+            },
+            {
+              "frame_uid": "13053474-3836-491b-9d3d-c3abbd035164",
+              "memory_uid": "91db3bd1-4417-5db6-b7a6-3e79c87ebe88"
+            },
+            {
+              "frame_uid": "13053474-3836-491b-9d3d-c3abbd035164",
+              "memory_uid": "0ecc319a-ae60-5510-883d-52e613138164"
+            },
+            {
+              "frame_uid": "13053474-3836-491b-9d3d-c3abbd035164",
+              "memory_uid": "a7c3a123-3f05-52e0-b33e-c450d1a070ac"
+            }
+          ],
+          "reason": "These reference memories develop one underlying planning claim: all resource calculations and proposal sections must use the same committed participant quantity.",
+          "status": "RESOLVED",
+          "summary": "A single exact participant target should consistently determine the proposal’s schedule, workload, budget, sessions, staffing, and payments rather than being deferred through ranges or conflicting estimates.",
+          "uid": "e56fa0eb-54be-54f7-a1f7-e357d8cb3ce6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "13053474-3836-491b-9d3d-c3abbd035164",
+              "memory_uid": "24d49198-fd7b-5810-bc56-1910a796f76e"
+            }
+          ],
+          "reason": "This is independent reference-only information about the means of data collection.",
+          "status": "RESOLVED",
+          "summary": "The collection instrument or protocol should be specified for every type of user data.",
+          "uid": "dd5da639-9575-5582-b9ba-59732cc83bd5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "13053474-3836-491b-9d3d-c3abbd035164",
+              "memory_uid": "2f367cf3-50c5-59bc-972e-6173e56343ac"
+            }
+          ],
+          "reason": "This is independent reference-only information about when data are collected.",
+          "status": "RESOLVED",
+          "summary": "The interaction-relative timing of collection should be specified for every type of user data.",
+          "uid": "88c497b3-b0a6-5bac-9a08-48ac8ee5a215"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "13053474-3836-491b-9d3d-c3abbd035164",
+              "memory_uid": "49746579-92d7-51ea-b158-7d770443d101"
+            }
+          ],
+          "reason": "This reference-only causal consideration is not addressed by the compared frame’s operational stop and recovery policies.",
+          "status": "RESOLVED",
+          "summary": "Implementation instability is an independent possible cause of task failure in formative prototype evaluation.",
+          "uid": "22e82d27-bc16-590a-9b3f-934fe275f86c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "13053474-3836-491b-9d3d-c3abbd035164",
+              "memory_uid": "9a969676-6093-5fac-bda8-92ebdac70c37"
+            }
+          ],
+          "reason": "This is a one-sided observation about proposal-writing behavior, independent of the other claims.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to present implemented feature lists directly as design contributions.",
+          "uid": "49860094-894d-515c-9992-fa0499032517"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "13053474-3836-491b-9d3d-c3abbd035164",
+              "memory_uid": "c4dfdb65-e673-52c0-a40c-e909d6014e00"
+            }
+          ],
+          "reason": "This is an independent reference-only contingency policy for failure to reach the planned participant target.",
+          "status": "RESOLVED",
+          "summary": "A recruitment shortfall against the exact target should be disclosed and reflected in the affected schedule or deliverable.",
+          "uid": "bab7d664-74b7-5216-8bcb-76e1617749a6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c12f9cbb-eb2a-4c9f-9eca-58b796024574",
+              "memory_uid": "ceb095a9-3068-55ea-a06f-d954c121e007"
+            },
+            {
+              "frame_uid": "c12f9cbb-eb2a-4c9f-9eca-58b796024574",
+              "memory_uid": "962d7645-02b3-5611-8415-4370794c10d4"
+            }
+          ],
+          "reason": "The compared memories express the same one-sided escalation mechanism as a required plan and as the sequence staff rely upon.",
+          "status": "RESOLVED",
+          "summary": "A predefined sequence should identify whom field staff notify, and in what order, when serious discomfort is reported.",
+          "uid": "637071f6-d1eb-5c4b-bc70-e02858aec9df"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c12f9cbb-eb2a-4c9f-9eca-58b796024574",
+              "memory_uid": "f6dd1368-0d90-5f1a-97d0-56594ce8f4b3"
+            }
+          ],
+          "reason": "This is independent compared-only information about operational recovery procedures.",
+          "status": "RESOLVED",
+          "summary": "Field-deployment suspension should be followed by procedures restoring existing systems and workflow states.",
+          "uid": "915b273b-ae50-5d89-a6ed-8dced483b1de"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c12f9cbb-eb2a-4c9f-9eca-58b796024574",
+              "memory_uid": "342e4697-873f-56a8-b4a4-896efe910144"
+            }
+          ],
+          "reason": "This is independent compared-only governance information about recovery decision rights and responsibility.",
+          "status": "RESOLVED",
+          "summary": "A feasible stop plan should identify both the authority that orders recovery and the party responsible for executing it.",
+          "uid": "562f6419-67cf-5b47-928e-8058116537d7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c12f9cbb-eb2a-4c9f-9eca-58b796024574",
+              "memory_uid": "6c4e9175-4590-5689-ae2b-678f0eb930b9"
+            }
+          ],
+          "reason": "This compared-only claim identifies a conditional organizational risk to record linkage that neither duplicates nor modifies the reference’s preregistration documentation rules.",
+          "status": "RESOLVED",
+          "summary": "Linking error reports to individual performance evaluations may cause safety records to be separated from research decision logs, breaking incident traceability.",
+          "uid": "89ea4a5d-eb95-5a00-bffe-b47db7e56300"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers discomfort escalation, system restoration, recovery authority and execution, and organizational separation of safety records from research logs.",
+        "differences": "Safety interruption is framed differently for formative prototype signals and field-deployment thresholds, so both contexts and their distinct trigger rules must be preserved.",
+        "reference_only": "The reference covers research-question traceability, preregistration deviations, exact participant planning, collection methods and timing, prototype instability, recruitment shortfalls, and a proposal-authoring tendency."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "bf091ee8-09cc-46fa-9080-65bfbade343e"
+    },
+    "analysis_digest": "f1dcbffde4f173ff4d7b66624750b99432bf62dc8490be41c0dce31dede6c6b3",
+    "key": "45b399cc6a9b55a487917e5d7679120e28a17d12f0c3d9ba45283e4bfd57dac0",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 60.29205379199993,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "45b399cc6a9b55a487917e5d7679120e28a17d12f0c3d9ba45283e4bfd57dac0",
+  "created_at": "2026-08-13T18:23:44.157763Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/methods",
+  "pair_key": "37b6dad0a841b817bf07e3206741a28604e03e0b9b6295806278016e69860613",
+  "provider_seconds": 60.29205379199993,
+  "right": "task-2/advisor2/safety",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

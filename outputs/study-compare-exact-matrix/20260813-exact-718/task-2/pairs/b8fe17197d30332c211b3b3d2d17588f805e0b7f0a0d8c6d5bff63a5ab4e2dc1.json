@@ -1,0 +1,376 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:16:50.501352+00:00",
+      "frames": [
+        {
+          "context_digest": "e76b6eea5af0e4d970d4db385b4100a788a8b1ed5ef6e68709bd92c943ab3b6b",
+          "context_name": "task-2/advisor1/compensation",
+          "context_uid": "7ba75d6b-cef6-5c8b-9b17-d3901e168d24",
+          "memories": [
+            {
+              "content": "Calculate user study compensation budgets based on estimated participation burden, combining session time and preparation effort.",
+              "content_digest": "2dc18d8ddeb900741b2a8f936a59d5fc72423e2d3144e8b2232a6435dc9a68f1",
+              "position": 0,
+              "uid": "0ae46268-cca7-57d5-a0ee-6eb3b85cda84"
+            },
+            {
+              "content": "Compensate for required travel time in face-to-face user studies as well.",
+              "content_digest": "688ba9df95e18254a5a33ab6c0e59066cf0674137b6802178e3fb8eae4ba38e5",
+              "position": 1,
+              "uid": "bdda6e22-ea06-5a13-8854-67f7521724db"
+            },
+            {
+              "content": "Compensate for the actual time participants spent in sessions, regardless of research modality.",
+              "content_digest": "8673c2b5b5913f0e8bcf0035eea4bc87430bb1fcf8ffb27b354bde0ca3a7ae4e",
+              "position": 2,
+              "uid": "f49b1d0a-7a1a-53b5-b7fc-815cc2cc134a"
+            },
+            {
+              "content": "Leave cash payment as an available compensation method for face-to-face studies.",
+              "content_digest": "72f9e1b33de0c05bb711c2d8162ab62f382a75871a710db37b858125eae6fcde",
+              "position": 3,
+              "uid": "1f4d05e4-2a79-572c-8050-beb1464fb781"
+            },
+            {
+              "content": "If compensation equity is explained, do not require finalizing the payment method at the proposal stage.",
+              "content_digest": "6945260e986651e7992034801b6151a3f93184013fea77d17b630f55fcdc943b",
+              "position": 4,
+              "uid": "abcba764-6f35-5dae-bb3d-7860fb72ccf2"
+            },
+            {
+              "content": "Apply the same base hourly rate to face-to-face and remote studies if task burden is equal.",
+              "content_digest": "144477b358e6e8931042d1793a5ffd10f56d69aa90523d69d20a622528a9dad0",
+              "position": 5,
+              "uid": "c6a28f37-1a7c-5dbd-b75c-c829f0461504"
+            },
+            {
+              "content": "Participants judge compensation fairness based on the total burden, combining session time with required travel and preparation time.",
+              "content_digest": "54e8900c7049e048484db8b523a41e98cbb911b45be2adbd103fd2f1635bf026",
+              "position": 6,
+              "uid": "874de649-9c04-5960-b3a9-e68356ef666c"
+            },
+            {
+              "content": "Account in compensation for the burden of rescheduling iterations and returning for multiple formative evaluation sessions.",
+              "content_digest": "f09be004defb4019ba7476919b6780cc2b6bbac088f79dbd0ec66bf2753af27d",
+              "position": 7,
+              "uid": "529559f5-850d-5920-8e27-0b1e7138dc36"
+            },
+            {
+              "content": "Compensate participants for time already invested even if a session is terminated early due to prototype errors.",
+              "content_digest": "64b65cc0b307b48d64641d126594a5b8a9258518c3aa27d7846be2306c25a9f4",
+              "position": 8,
+              "uid": "c8be56ee-860a-5f6c-abbf-02c8dbc59eb5"
+            },
+            {
+              "content": "The author of this proposal tends to exclude preparation burden between sessions when calculating compensation for iterative studies.",
+              "content_digest": "177f041fcb9fe768dcc1c476b592e99c8609d06ebf727aeca1379d21256b43d8",
+              "position": 9,
+              "uid": "bdac8cf8-dd11-5794-b4b2-9774ff344436"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "36d1781d-177c-4334-9a06-e784e5aaa68c"
+        },
+        {
+          "context_digest": "4371a72e6fb939731cb550ca5363a3b5210680482f84c18b36ba933f4454ecc1",
+          "context_name": "task-2/advisor2/expression",
+          "context_uid": "cf8e8baf-292e-57c3-8e2c-3f9b3d52f3d3",
+          "memories": [
+            {
+              "content": "Use a sequence table rather than a flow diagram when the procedure is likely to change repeatedly during drafting.",
+              "content_digest": "575bb4530af1e93b215ea57f0fd63e1e09136554da98aecf87288cc39ea9697c",
+              "position": 0,
+              "uid": "4264c20d-3e44-578d-866e-7787cc7b59e2"
+            },
+            {
+              "content": "The visual fidelity of a prototype and its level of connection to actual data and services may differ.",
+              "content_digest": "9478cb005a07ca7edfa924579b3d5221b1fa1143b5d8327369e7ee799b76aa9f",
+              "position": 1,
+              "uid": "70a8c3f0-0f6a-5881-abd6-29f52833b7bd"
+            },
+            {
+              "content": "Service flow diagrams indicate human-system transitions that are not revealed by individual screens alone.",
+              "content_digest": "5e3e18a38b1e62724d2ae0445549e214a219d205a80735bc6b4c0e643a96b8b3",
+              "position": 2,
+              "uid": "b410aa8d-db87-586b-a1cd-4af5767a9f7a"
+            },
+            {
+              "content": "HCI reviewers often scan system structure and service flow diagrams before the main text.",
+              "content_digest": "22a46440a6aeda0cb7d39cc6fedf6bbff6cac91232ec0cb163bf1fc17ff257d4",
+              "position": 3,
+              "uid": "a385fbb1-85b4-5132-bbc7-8fd8daedb715"
+            },
+            {
+              "content": "Give each step, actor, condition, and outcome a stable row in the sequence table.",
+              "content_digest": "2a073bf2ec4c5592ddc405d83cb438a5ed880699d3c157f310fb3dbff7851622",
+              "position": 4,
+              "uid": "22254f16-4628-5fd9-b1af-6e66dc2572b3"
+            },
+            {
+              "content": "Updating one row in a sequence table is usually faster than redrawing a branching diagram after a procedural change.",
+              "content_digest": "cf97dbf66018a6be1ee42dfc79ff8de44e8742db2b42c9d1ef70b3f252805a39",
+              "position": 5,
+              "uid": "32028269-5d43-5a65-b22b-9e570ceabfde"
+            },
+            {
+              "content": "Readers can check sequence tables step by step but may find the overall branching shape less immediate.",
+              "content_digest": "18b5de0cdd22ef1774151332afdbc408f9f591cf889e51271f81a372f74ef86d",
+              "position": 6,
+              "uid": "939ee3d0-b611-574a-a25b-82708394bd5e"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "22663594-cab2-4372-837c-36ccf8d84869"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate operational domains. The reference focuses on equitable participant compensation across burden, modality, iteration, and payment arrangements, while the compared frame focuses on representing evolving procedures, prototype characteristics, service flows, and reviewer navigation.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "36d1781d-177c-4334-9a06-e784e5aaa68c",
+              "memory_uid": "0ae46268-cca7-57d5-a0ee-6eb3b85cda84"
+            }
+          ],
+          "reason": "This is an independently useful compensation-calculation policy with no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Compensation budgets should reflect estimated session and preparation burden.",
+          "uid": "16be532a-6a1b-5a29-b195-1db15387e5ff"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "36d1781d-177c-4334-9a06-e784e5aaa68c",
+              "memory_uid": "bdda6e22-ea06-5a13-8854-67f7521724db"
+            }
+          ],
+          "reason": "This travel-specific compensation policy has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Required travel time should be compensated in face-to-face studies.",
+          "uid": "ec292077-455a-5918-b9ee-152cc0e38213"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "36d1781d-177c-4334-9a06-e784e5aaa68c",
+              "memory_uid": "f49b1d0a-7a1a-53b5-b7fc-815cc2cc134a"
+            }
+          ],
+          "reason": "This modality-wide session-time policy has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Participants should be compensated for actual session time regardless of modality.",
+          "uid": "899fc403-3460-531c-9cb3-e5b7b77d2f30"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "36d1781d-177c-4334-9a06-e784e5aaa68c",
+              "memory_uid": "1f4d05e4-2a79-572c-8050-beb1464fb781"
+            }
+          ],
+          "reason": "This payment-method option has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Cash should remain an available payment method for face-to-face studies.",
+          "uid": "20e56ade-f77b-5316-ad01-4cc023de332a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "36d1781d-177c-4334-9a06-e784e5aaa68c",
+              "memory_uid": "abcba764-6f35-5dae-bb3d-7860fb72ccf2"
+            }
+          ],
+          "reason": "This proposal-stage flexibility policy has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The payment method need not be finalized at proposal time when compensation equity is explained.",
+          "uid": "811ec4e4-ff19-528e-a40f-ec2ce5617640"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "36d1781d-177c-4334-9a06-e784e5aaa68c",
+              "memory_uid": "c6a28f37-1a7c-5dbd-b75c-c829f0461504"
+            }
+          ],
+          "reason": "This modality-equity policy has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Equal task burden should receive the same base hourly rate across face-to-face and remote studies.",
+          "uid": "5cf8a1d3-2ab7-572c-a79e-59b5d817f12b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "36d1781d-177c-4334-9a06-e784e5aaa68c",
+              "memory_uid": "874de649-9c04-5960-b3a9-e68356ef666c"
+            }
+          ],
+          "reason": "This claim about perceived fairness has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Participants assess compensation fairness from total session, travel, and preparation burden.",
+          "uid": "10dfaea1-3757-548c-a329-f8c27429c96e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "36d1781d-177c-4334-9a06-e784e5aaa68c",
+              "memory_uid": "529559f5-850d-5920-8e27-0b1e7138dc36"
+            }
+          ],
+          "reason": "This iterative-study burden policy has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Compensation should account for rescheduling and repeated formative-evaluation participation.",
+          "uid": "ace9a67d-7572-53d2-adeb-909babd8de7f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "36d1781d-177c-4334-9a06-e784e5aaa68c",
+              "memory_uid": "c8be56ee-860a-5f6c-abbf-02c8dbc59eb5"
+            }
+          ],
+          "reason": "This early-termination compensation policy has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Time already invested should be compensated when prototype errors terminate a session early.",
+          "uid": "08d9b520-efe2-50d5-bc43-a75c1635d132"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "36d1781d-177c-4334-9a06-e784e5aaa68c",
+              "memory_uid": "bdac8cf8-dd11-5794-b4b2-9774ff344436"
+            }
+          ],
+          "reason": "This independently useful observation about calculation practice has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to omit between-session preparation burden from iterative-study compensation.",
+          "uid": "de7fc502-4e6c-534d-a42c-cf74fdd81b95"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "22663594-cab2-4372-837c-36ccf8d84869",
+              "memory_uid": "4264c20d-3e44-578d-866e-7787cc7b59e2"
+            },
+            {
+              "frame_uid": "22663594-cab2-4372-837c-36ccf8d84869",
+              "memory_uid": "22254f16-4628-5fd9-b1af-6e66dc2572b3"
+            },
+            {
+              "frame_uid": "22663594-cab2-4372-837c-36ccf8d84869",
+              "memory_uid": "32028269-5d43-5a65-b22b-9e570ceabfde"
+            }
+          ],
+          "reason": "These memories split one underlying recommendation and its maintainability rationale, with no materially corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Frequently changing procedures are efficiently represented as sequence tables with stable rows for their constituent elements.",
+          "uid": "f705fbdb-473e-57f1-b9de-460c947ded77"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "22663594-cab2-4372-837c-36ccf8d84869",
+              "memory_uid": "70a8c3f0-0f6a-5881-abd6-29f52833b7bd"
+            }
+          ],
+          "reason": "This distinction between prototype dimensions has no materially corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Prototype visual fidelity can vary independently from connection to real data and services.",
+          "uid": "63fa5fd8-125d-533a-a0cc-a572fa2e4467"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "22663594-cab2-4372-837c-36ccf8d84869",
+              "memory_uid": "b410aa8d-db87-586b-a1cd-4af5767a9f7a"
+            }
+          ],
+          "reason": "This claim about diagrammatic information has no materially corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Service-flow diagrams reveal human-system transitions that individual screens do not show.",
+          "uid": "2f8168ff-f619-5f60-8955-f8bf0528a952"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "22663594-cab2-4372-837c-36ccf8d84869",
+              "memory_uid": "a385fbb1-85b4-5132-bbc7-8fd8daedb715"
+            }
+          ],
+          "reason": "This observation about reviewer navigation has no materially corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "HCI reviewers often inspect system-structure and service-flow diagrams before reading the main text.",
+          "uid": "f275ef4f-d4f4-558c-ab5b-52944f4a591a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "22663594-cab2-4372-837c-36ccf8d84869",
+              "memory_uid": "939ee3d0-b611-574a-a25b-82708394bd5e"
+            }
+          ],
+          "reason": "This representation tradeoff has no materially corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Sequence tables support stepwise checking but make the overall branching shape less immediate.",
+          "uid": "00f5605a-abf7-57b2-bf36-1a74fbad0b4e"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Documentation guidance favors row-based sequence tables for changing procedures while acknowledging weaker visibility of branching structure. It also distinguishes prototype appearance from integration, explains service-flow diagrams, and notes reviewer scanning behavior.",
+        "differences": "",
+        "reference_only": "Compensation guidance covers session, preparation, travel, repeated participation, rescheduling, and early termination, alongside modality-equitable rates, cash availability, proposal-stage payment flexibility, and a noted tendency to omit between-session preparation."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "bad8491f-4618-4568-b5cd-96f1c939bc9f"
+    },
+    "analysis_digest": "245570a68727496dd02927cc67dd24dbb71546571ffce22cf18163203e26a2b6",
+    "key": "ca6b8902d014978ca89f22f0bb33e4a66b5b02adf7e1598bb9d0fdac3e2f4e5e",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 49.68589179199989,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "ca6b8902d014978ca89f22f0bb33e4a66b5b02adf7e1598bb9d0fdac3e2f4e5e",
+  "created_at": "2026-08-13T18:17:40.186804Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/compensation",
+  "pair_key": "b8fe17197d30332c211b3b3d2d17588f805e0b7f0a0d8c6d5bff63a5ab4e2dc1",
+  "provider_seconds": 49.68589179199989,
+  "right": "task-2/advisor2/expression",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

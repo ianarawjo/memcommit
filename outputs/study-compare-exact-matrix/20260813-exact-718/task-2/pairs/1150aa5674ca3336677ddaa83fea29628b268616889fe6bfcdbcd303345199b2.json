@@ -1,0 +1,349 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:16:00.771894+00:00",
+      "frames": [
+        {
+          "context_digest": "dd57f5a09e0271c33b7dccbe4935bf1a8d5be14dc7c618906e8af51709bbea89",
+          "context_name": "task-2/advisor1/claim-evidence",
+          "context_uid": "b0c4b50c-f70b-5b0c-a1eb-0fd63e0531bf",
+          "memories": [
+            {
+              "content": "Attach adjacent evidence or citations to verifiable claims about user behavior or technology effects.",
+              "content_digest": "3a856fbbda53df425705aaaff741896f5f5460a8feeb8fb8a73c03e592a80c62",
+              "position": 0,
+              "uid": "06f6c673-ea0c-5657-89d2-3f8711097cd7"
+            },
+            {
+              "content": "Distinguish between results observed in the pilot and expectations to be confirmed in the main user study using different expressions.",
+              "content_digest": "9117c0fd3d9cb713f035f9ae95118ae785af5fcf8909485b097f128ef8e12586",
+              "position": 1,
+              "uid": "58991ce7-d394-5087-b14f-0b014b0ec6ad"
+            },
+            {
+              "content": "Do not use verbs that imply proving causation if the design does not support causal inference.",
+              "content_digest": "5ee12e489ec1fd1af46a49cb05cc9447ed3fbf33ad7b4d8ce52ea700926ea29c",
+              "position": 2,
+              "uid": "f5adf029-a750-5a3a-8eb8-d68e43bb5c13"
+            },
+            {
+              "content": "For topics with sufficient HCI research evidence, prioritize citing recent comprehensive studies over listing individual cases.",
+              "content_digest": "2519cd2fca364ac6eef8577892b03d0a83509f6032874e30c30f36fb1e3dde5a",
+              "position": 3,
+              "uid": "b2a7ff8a-dfca-5857-8733-fe03cbd943ec"
+            },
+            {
+              "content": "Explain how each design choice was derived to address specific user needs.",
+              "content_digest": "fee6e06dfe0489b55ae0d75fe4e7b62facf78052a3136b7120d065e100f3b567",
+              "position": 4,
+              "uid": "1f0c95f4-69bb-5764-a358-d428ff7019d2"
+            },
+            {
+              "content": "Support each core claim with evidence that directly examined it rather than with indirect summaries.",
+              "content_digest": "372e0abff6997b041103fd71719c55549c2e3e0a3a5cdf2d4a1a24ec6538cbff",
+              "position": 5,
+              "uid": "cd475113-5354-5f80-b063-7628e4359afc"
+            },
+            {
+              "content": "Reviewers first check the direct evidence placed closest to the core claim.",
+              "content_digest": "61baa516115e1a5bf4f377358ead7c45bab5e666208b9cd6cd87426007493a49",
+              "position": 6,
+              "uid": "86fe1306-7650-58cc-a3df-79870c61784d"
+            },
+            {
+              "content": "Connect the proposed conceptual design principle to at least one observable user behavior.",
+              "content_digest": "d6c6f9dddd0cd99694df2f232e8a71957d53f77e8d10faf324927af679312acc",
+              "position": 7,
+              "uid": "5d022e45-09c0-515e-98f1-68b2aec686bc"
+            },
+            {
+              "content": "Identify which design judgment—retain, modify, or discard—each piece of evidence from formative evaluation supports.",
+              "content_digest": "a507db0052a4d9196c774a5df74c60fe9225bef49c5d9aece328bfb8dca48035",
+              "position": 8,
+              "uid": "9939e9e8-d97d-57db-974a-750566ca9e2b"
+            },
+            {
+              "content": "Results from controlled formative studies do not directly prove effects in actual long-term use.",
+              "content_digest": "aeeca3701d4ba297e928efc2034c474a2ae78101e440d515a57901e6814321a0",
+              "position": 9,
+              "uid": "41060e8e-95ff-58c1-8b71-36a501a9bd23"
+            },
+            {
+              "content": "The user can have an explanation approved as a conceptual contribution only if it is falsifiable with observable data.",
+              "content_digest": "171f4eeae9df2a0a739f90ed451a34a092093b9f6b0db7c6af04012bea734c5f",
+              "position": 10,
+              "uid": "ec54ce10-07db-5ae3-94a5-8f3621fed4a9"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "eab9fa42-4e2d-4779-b6ab-6e53b65fdb7b"
+        },
+        {
+          "context_digest": "b598a4ff3268ef8c6c0d7bc5ff34af370074bcdd30d61bd3623fcdfb167f37d6",
+          "context_name": "task-2/advisor2/safety",
+          "context_uid": "4283d797-6a33-5f39-b7f6-f4dbd3264389",
+          "memories": [
+            {
+              "content": "List whom to notify and in what order if serious discomfort is reported during the study.",
+              "content_digest": "3453feb8597fb15c827f22297d58dc804fdc1d8080b9e93ba35b85a4425092b6",
+              "position": 0,
+              "uid": "ceb095a9-3068-55ea-a06f-d954c121e007"
+            },
+            {
+              "content": "Field staff rely on the pre-defined contact sequence when serious discomfort is reported.",
+              "content_digest": "ba38f8a5c993c810e19b9120f4492c3accf962c8b8fd7642539ac24f363099e0",
+              "position": 1,
+              "uid": "962d7645-02b3-5611-8415-4370794c10d4"
+            },
+            {
+              "content": "Define the thresholds for participant harm, operational disruption, and data anomalies at which deployment and data collection must cease.",
+              "content_digest": "7f7f124d266efd8255c4615ebc7eb375447047ed5a2b96327f28f8f17d048813",
+              "position": 2,
+              "uid": "a3270872-1901-5d24-8ef1-374833599bf9"
+            },
+            {
+              "content": "Establish procedures to restore existing systems and workflow states after suspending field deployment.",
+              "content_digest": "1a5f7636ec45e60df11db8b0d3763345c0bfaf9a92c1e5d581e6b36452c31208",
+              "position": 3,
+              "uid": "f6dd1368-0d90-5f1a-97d0-56594ce8f4b3"
+            },
+            {
+              "content": "The user's stop plan can be judged feasible only when it identifies who has authority to order recovery and who is responsible for carrying it out.",
+              "content_digest": "3fa05bd19fdeeb320a37cfb89ad853a868b64055f7b21eb182798b0119f6620c",
+              "position": 4,
+              "uid": "342e4697-873f-56a8-b4a4-896efe910144"
+            },
+            {
+              "content": "In organizations where error reporting is linked to individual performance evaluations, safety signal records may be separated from research decision logs, potentially breaking the traceability path for the same incident.",
+              "content_digest": "2bf13ff8ab1a778e8a793ede627b28d40798ae40d25c7a6d25eb5e2e79dd8e97",
+              "position": 5,
+              "uid": "6c4e9175-4590-5689-ae2b-678f0eb930b9"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "2ac206a4-55c9-41b0-8911-e5e452061ec4"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The reference frame governs evidence, inference, and design-claim traceability, while the compared frame governs field-study stopping, escalation, recovery, and incident-record risks. These are independently useful policy areas, with no scope-aligned operational claim shared or contradicted across the frames.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eab9fa42-4e2d-4779-b6ab-6e53b65fdb7b",
+              "memory_uid": "06f6c673-ea0c-5657-89d2-3f8711097cd7"
+            },
+            {
+              "frame_uid": "eab9fa42-4e2d-4779-b6ab-6e53b65fdb7b",
+              "memory_uid": "86fe1306-7650-58cc-a3df-79870c61784d"
+            }
+          ],
+          "reason": "These reference-side statements express a single evidence-placement policy and its reviewer-centered rationale; the compared frame contains no corresponding claim-review policy.",
+          "status": "RESOLVED",
+          "summary": "Verifiable claims should have adjacent evidence because reviewers inspect the closest direct support first.",
+          "uid": "161767fc-5c10-51c3-afab-2b3a1199b4f0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eab9fa42-4e2d-4779-b6ab-6e53b65fdb7b",
+              "memory_uid": "58991ce7-d394-5087-b14f-0b014b0ec6ad"
+            }
+          ],
+          "reason": "This reference-side reporting distinction is independently useful and has no counterpart concerning study-result characterization in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Observed pilot results and expectations awaiting confirmation in the main study should use distinct language.",
+          "uid": "0d741668-e644-5eb0-aea0-bc56a152afed"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eab9fa42-4e2d-4779-b6ab-6e53b65fdb7b",
+              "memory_uid": "f5adf029-a750-5a3a-8eb8-d68e43bb5c13"
+            },
+            {
+              "frame_uid": "eab9fa42-4e2d-4779-b6ab-6e53b65fdb7b",
+              "memory_uid": "41060e8e-95ff-58c1-8b71-36a501a9bd23"
+            }
+          ],
+          "reason": "The reference-side statements give a general causal-language constraint and a specific application of the same underlying inference limit; the compared frame does not address causal interpretation.",
+          "status": "RESOLVED",
+          "summary": "Claims must not imply unsupported causation, including treating controlled formative findings as proof of effects in long-term real-world use.",
+          "uid": "02675f05-5529-5e0d-b868-f50cd7fbde66"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eab9fa42-4e2d-4779-b6ab-6e53b65fdb7b",
+              "memory_uid": "b2a7ff8a-dfca-5857-8733-fe03cbd943ec"
+            }
+          ],
+          "reason": "This reference-side citation-selection policy is independently useful and is not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Where HCI evidence is sufficient, recent comprehensive studies should be preferred to lists of individual cases.",
+          "uid": "5a6b7d10-df01-5174-a74d-9baaa06bc8f0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eab9fa42-4e2d-4779-b6ab-6e53b65fdb7b",
+              "memory_uid": "1f0c95f4-69bb-5764-a358-d428ff7019d2"
+            }
+          ],
+          "reason": "This reference-side design-rationale requirement has no corresponding operational decision in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Each design choice should be explained as a response to specific user needs.",
+          "uid": "ff54ea4e-36bc-5544-8a48-1420098517c3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eab9fa42-4e2d-4779-b6ab-6e53b65fdb7b",
+              "memory_uid": "cd475113-5354-5f80-b063-7628e4359afc"
+            }
+          ],
+          "reason": "This reference-side evidentiary-fit requirement is distinct from evidence placement and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Each core claim should rely on evidence that examined it directly rather than on indirect summaries.",
+          "uid": "417037be-38d0-5659-a350-00e9dd331e6e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eab9fa42-4e2d-4779-b6ab-6e53b65fdb7b",
+              "memory_uid": "5d022e45-09c0-515e-98f1-68b2aec686bc"
+            },
+            {
+              "frame_uid": "eab9fa42-4e2d-4779-b6ab-6e53b65fdb7b",
+              "memory_uid": "ec54ce10-07db-5ae3-94a5-8f3621fed4a9"
+            }
+          ],
+          "reason": "The reference-side statements split one underlying criterion that conceptual contributions be empirically testable; the compared frame does not address conceptual validation.",
+          "status": "RESOLVED",
+          "summary": "Conceptual design contributions should connect to observable behavior and be falsifiable with observable data.",
+          "uid": "bc18fd80-b530-51fa-a3f6-0a2955db823b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eab9fa42-4e2d-4779-b6ab-6e53b65fdb7b",
+              "memory_uid": "9939e9e8-d97d-57db-974a-750566ca9e2b"
+            }
+          ],
+          "reason": "This reference-side decision-traceability requirement is independently useful and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Formative evaluation evidence should be linked to the design judgment it supports: retaining, modifying, or discarding a design.",
+          "uid": "10f0eeab-0a8a-5c1c-8410-a32cf67bbee5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2ac206a4-55c9-41b0-8911-e5e452061ec4",
+              "memory_uid": "ceb095a9-3068-55ea-a06f-d954c121e007"
+            },
+            {
+              "frame_uid": "2ac206a4-55c9-41b0-8911-e5e452061ec4",
+              "memory_uid": "962d7645-02b3-5611-8415-4370794c10d4"
+            }
+          ],
+          "reason": "The compared-side statements express the same incident-escalation procedure as a specification and its operational use; the reference frame contains no participant-discomfort response policy.",
+          "status": "RESOLVED",
+          "summary": "A predefined notification sequence should identify whom field staff contact, and in what order, after serious discomfort is reported.",
+          "uid": "674a319d-8e2d-590d-a27f-811bf703db87"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2ac206a4-55c9-41b0-8911-e5e452061ec4",
+              "memory_uid": "a3270872-1901-5d24-8ef1-374833599bf9"
+            }
+          ],
+          "reason": "This compared-side stopping policy is independently useful and has no corresponding safety-threshold rule in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Explicit thresholds for participant harm, operational disruption, and data anomalies should trigger cessation of deployment and data collection.",
+          "uid": "f1c6cda9-d745-5df5-a894-01bf900426af"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2ac206a4-55c9-41b0-8911-e5e452061ec4",
+              "memory_uid": "f6dd1368-0d90-5f1a-97d0-56594ce8f4b3"
+            },
+            {
+              "frame_uid": "2ac206a4-55c9-41b0-8911-e5e452061ec4",
+              "memory_uid": "342e4697-873f-56a8-b4a4-896efe910144"
+            }
+          ],
+          "reason": "The compared-side statements split one underlying recovery-plan requirement across procedure and accountable roles; the reference frame does not address operational restoration.",
+          "status": "RESOLVED",
+          "summary": "A feasible post-suspension recovery plan should define restoration procedures and identify both the authority ordering recovery and the personnel carrying it out.",
+          "uid": "f667bfc5-2f74-59db-84fe-ab3a8dcb4a10"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2ac206a4-55c9-41b0-8911-e5e452061ec4",
+              "memory_uid": "6c4e9175-4590-5689-ae2b-678f0eb930b9"
+            }
+          ],
+          "reason": "This compared-side organizational-risk observation is independently useful and has no corresponding incident-record governance claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Linking error reports to individual performance evaluations may separate safety records from research decision logs and break incident traceability.",
+          "uid": "60edd7fa-30a3-59d7-8579-19c9ed1fb305"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers discomfort escalation, mandatory stop thresholds, recovery procedures and ownership, and organizational conditions that may break incident traceability.",
+        "differences": "",
+        "reference_only": "The reference covers evidence proximity and directness, pilot-versus-main-study language, causal limits, research synthesis, user-need traceability, formative design judgments, and observable, falsifiable conceptual contributions."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "bbdf5739-e687-49e8-ac7c-4692f3c566f2"
+    },
+    "analysis_digest": "7f03e3429bad6a400e3880dec78684f5f91c2688d27f2cac7c873683ddbb2b8c",
+    "key": "c203575f08296809ce6d0c85b8a4eea475d9fa0b7402693d0a39be48de481b61",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 57.245816875001765,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "c203575f08296809ce6d0c85b8a4eea475d9fa0b7402693d0a39be48de481b61",
+  "created_at": "2026-08-13T18:16:58.017205Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/claim-evidence",
+  "pair_key": "1150aa5674ca3336677ddaa83fea29628b268616889fe6bfcdbcd303345199b2",
+  "provider_seconds": 57.245816875001765,
+  "right": "task-2/advisor2/safety",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

@@ -1,0 +1,262 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:23:19.946345+00:00",
+      "frames": [
+        {
+          "context_digest": "9d55b4a5604285e426b317f7f4732b35ca1e9df044f7015b3ae6a6be0df5492b",
+          "context_name": "task-2/advisor1/reproducibility",
+          "context_uid": "7d293f75-52b6-5f27-99c4-54f2be3d8e59",
+          "memories": [
+            {
+              "content": "HCI reviewers find it difficult to assess the reproducibility of results if the prototype version used in the evaluation is not disclosed.",
+              "content_digest": "9b89217d4ef2c7524af665ea80d7d60e61f1663fd8ea4bdde533c8d3a0da2044",
+              "position": 0,
+              "uid": "fb400759-63ed-568a-b94e-5f0c2fe94b67"
+            },
+            {
+              "content": "Record the manipulated and fixed elements of compared design alternatives so that other researchers can reconstruct them.",
+              "content_digest": "26b84b5f0644980de51d764218ce90fb614eb02a2df38fb3632f44d360a93cd3",
+              "position": 1,
+              "uid": "e52e8470-6419-5306-9ddd-00a86003dcf3"
+            },
+            {
+              "content": "Records of formative evaluation decisions enable the reconstruction of connections between raw data, interpretation, and design modifications.",
+              "content_digest": "f213479e4bd1947d418083139346ed7f666bc597133962617d94bdd3a9af0083",
+              "position": 2,
+              "uid": "8f4edf8c-491d-56fe-bde4-d9ce25d6de50"
+            },
+            {
+              "content": "The user must make it possible to trace which observations each prototype version reflects so the process of deriving design knowledge can be reviewed.",
+              "content_digest": "1c9b8a6f650f2eb652b1e9cbb62ad9dcbb3ec13f2e160b52db83492640eb0ae9",
+              "position": 3,
+              "uid": "87662a7e-ffc7-521a-a06c-7db8184377e8"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "73e53d36-4328-4023-a2d2-b0951a1921a0"
+        },
+        {
+          "context_digest": "673626cf0c3650052d63b04173d43516860e2035d7038878998898bc5bebb2e3",
+          "context_name": "task-2/advisor2/evaluation",
+          "context_uid": "6e9f8ad5-a43d-5dfd-99a3-604f2757da0d",
+          "memories": [
+            {
+              "content": "Specify a single representative measure that will drive operational decisions to maintain, modify, or discontinue the deployed design.",
+              "content_digest": "dd9abb7bbbdf6846921a984789426b27a45df60ce38408422b6b0774835b44f8",
+              "position": 0,
+              "uid": "f27576c7-6f53-5412-901c-19df7e1d5e2e"
+            },
+            {
+              "content": "The HCI review panel verifies whether operational decisions can be made based on the declared primary measure.",
+              "content_digest": "1d88ce414bdbfcf9565c712f8f0d72378569d723c0c5b5c6007dc18a96f6378f",
+              "position": 1,
+              "uid": "8608bdf3-49d7-54d0-a2fb-c883c24e40ef"
+            },
+            {
+              "content": "Establish decision thresholds indicating at what levels key metrics trigger maintaining, modifying, or discontinuing the design.",
+              "content_digest": "866bad632421bfd3487fba69b855ccb36aeb9e31c6208b339db22301bdd3fc28",
+              "position": 2,
+              "uid": "b06bb706-f911-5767-8e27-b64c74d0e592"
+            },
+            {
+              "content": "Evaluate whether reducing workload for one role creates new tasks for other roles through the proposed design changes.",
+              "content_digest": "6b38b84cdc2a78f61f3163cccd787dec39167596f4f720788ec4c930f698fa9f",
+              "position": 3,
+              "uid": "473ec6e8-29f0-5c83-b36d-b7d32eeb25a3"
+            },
+            {
+              "content": "Distinguish usability from organizational adoption intent as separate evaluation outcomes.",
+              "content_digest": "7328bf54063078377068871ee3970709d9a8763204c2c3a08321e025e028868c",
+              "position": 4,
+              "uid": "935cf79f-3e67-567d-ab55-35e8fad7eb37"
+            },
+            {
+              "content": "Implementation fidelity indicates whether planned features and operational procedures were delivered in the field according to intended specifications.",
+              "content_digest": "b04d0bc0590dd77d3bc0bde581481992d57ad48c14517a2a1d63f996e51290b2",
+              "position": 5,
+              "uid": "bea0e97f-1217-507b-87a7-09ce85bae9fe"
+            },
+            {
+              "content": "Initial evaluations and long-term operation do not share identical measurement conditions due to differences in system exposure duration and frequency of repeated use.",
+              "content_digest": "49e90b293b90d173b11d1bb89e85f688c55cb923c2a19eb2058a539388327715",
+              "position": 6,
+              "uid": "dbe435ff-fe32-54fe-a2e6-7b46694ce151"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "a00a0f33-4e5e-4eb9-9407-9dbd6d00f751"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The reference frame focuses on reproducible reconstruction of prototypes and formative design reasoning, while the compared frame independently addresses field-operation measurement, decision rules, organizational effects, implementation fidelity, and longitudinal evaluation conditions. No claims govern the same operational policy closely enough to form a cross-frame relation.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "73e53d36-4328-4023-a2d2-b0951a1921a0",
+              "memory_uid": "fb400759-63ed-568a-b94e-5f0c2fe94b67"
+            }
+          ],
+          "reason": "This is an independently useful reference-only reporting requirement; the compared frame does not address identification of the evaluated prototype version.",
+          "status": "RESOLVED",
+          "summary": "Disclosure of the evaluated prototype version supports reproducibility assessment.",
+          "uid": "eb35a50f-96fd-5ff7-bdd8-0bc8f38c008b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "73e53d36-4328-4023-a2d2-b0951a1921a0",
+              "memory_uid": "e52e8470-6419-5306-9ddd-00a86003dcf3"
+            }
+          ],
+          "reason": "This reference-only claim concerns controlled specification of design alternatives, which is not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Documenting manipulated and fixed elements enables reconstruction of compared design alternatives.",
+          "uid": "698f2983-9904-5032-a108-e6ef8f59ebf7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "73e53d36-4328-4023-a2d2-b0951a1921a0",
+              "memory_uid": "8f4edf8c-491d-56fe-bde4-d9ce25d6de50"
+            },
+            {
+              "frame_uid": "73e53d36-4328-4023-a2d2-b0951a1921a0",
+              "memory_uid": "87662a7e-ffc7-521a-a06c-7db8184377e8"
+            }
+          ],
+          "reason": "The reference memories express complementary parts of one provenance chain from observations and raw data through interpretation to modifications and versions; the compared frame contains no corresponding formative traceability policy.",
+          "status": "RESOLVED",
+          "summary": "Formative records should trace evidence and interpretation to design modifications and the prototype versions that embody them.",
+          "uid": "bd74d11d-c085-5662-ae10-2656fab2b9e6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a00a0f33-4e5e-4eb9-9407-9dbd6d00f751",
+              "memory_uid": "f27576c7-6f53-5412-901c-19df7e1d5e2e"
+            },
+            {
+              "frame_uid": "a00a0f33-4e5e-4eb9-9407-9dbd6d00f751",
+              "memory_uid": "8608bdf3-49d7-54d0-a2fb-c883c24e40ef"
+            }
+          ],
+          "reason": "The compared memories state the practitioner and review-panel sides of one primary-measure policy; the reference frame does not address operational decision measures.",
+          "status": "RESOLVED",
+          "summary": "A declared primary measure should support operational decisions and permit review of whether those decisions are adequately grounded.",
+          "uid": "d1be2f92-b38d-593a-ab0f-1696740f2211"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a00a0f33-4e5e-4eb9-9407-9dbd6d00f751",
+              "memory_uid": "b06bb706-f911-5767-8e27-b64c74d0e592"
+            }
+          ],
+          "reason": "This is a distinct compared-only decision-rule requirement, not a claim about reconstructing prototypes or design provenance.",
+          "status": "RESOLVED",
+          "summary": "Metric thresholds should specify when to maintain, modify, or discontinue a design.",
+          "uid": "95c2eb45-3852-5706-ace8-c1efd25d555b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a00a0f33-4e5e-4eb9-9407-9dbd6d00f751",
+              "memory_uid": "473ec6e8-29f0-5c83-b36d-b7d32eeb25a3"
+            }
+          ],
+          "reason": "This compared-only claim addresses redistribution of work across roles, an organizational effect absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Evaluation should test whether workload reductions for one role create tasks for other roles.",
+          "uid": "6865ef4d-e024-575e-b618-806e68f56c1c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a00a0f33-4e5e-4eb9-9407-9dbd6d00f751",
+              "memory_uid": "935cf79f-3e67-567d-ab55-35e8fad7eb37"
+            }
+          ],
+          "reason": "This compared-only claim distinguishes evaluation constructs; the reference frame does not discuss outcome taxonomy.",
+          "status": "RESOLVED",
+          "summary": "Usability and organizational adoption intent should be evaluated as separate outcomes.",
+          "uid": "40627d07-471e-548f-bcff-37c4acd6dc4d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a00a0f33-4e5e-4eb9-9407-9dbd6d00f751",
+              "memory_uid": "bea0e97f-1217-507b-87a7-09ce85bae9fe"
+            }
+          ],
+          "reason": "This compared-only claim concerns delivery against plans rather than disclosure or reconstruction of the particular prototype used in an evaluation.",
+          "status": "RESOLVED",
+          "summary": "Implementation fidelity assesses whether fielded features and procedures match intended specifications.",
+          "uid": "a2476e33-8018-5403-8bc7-fb31af5cb37f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a00a0f33-4e5e-4eb9-9407-9dbd6d00f751",
+              "memory_uid": "dbe435ff-fe32-54fe-a2e6-7b46694ce151"
+            }
+          ],
+          "reason": "This compared-only claim concerns temporal measurement comparability, which the reference frame does not address.",
+          "status": "RESOLVED",
+          "summary": "Initial and long-term evaluations have different measurement conditions because exposure duration and repeated-use frequency differ.",
+          "uid": "7544b1f9-53d4-5da4-82c9-5eb7f4af6253"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame uniquely covers decision-driving measures and thresholds, cross-role workload effects, usability versus adoption, implementation fidelity, and measurement differences between initial and long-term use.",
+        "differences": "",
+        "reference_only": "The reference uniquely covers prototype-version disclosure, controlled descriptions of design alternatives, and traceability from observations and raw data through interpretation to design changes."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "991b0f2e-475c-448a-b0e6-1c8cc0141188"
+    },
+    "analysis_digest": "a3279679b17b57d6d4ea57951ab0f935b9b642ee294079beed713d59b7b74a9d",
+    "key": "1ae80a1809ec27ae1a78b7f392851b7b6d1f8e9229364cb8ba8879c111a226b9",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 30.176991667001857,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "1ae80a1809ec27ae1a78b7f392851b7b6d1f8e9229364cb8ba8879c111a226b9",
+  "created_at": "2026-08-13T18:23:50.122910Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/reproducibility",
+  "pair_key": "8276c429ca882d8cc0bb29b84c7c6acd165796d1a17c2aec26f36857bb998190",
+  "provider_seconds": 30.176991667001857,
+  "right": "task-2/advisor2/evaluation",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

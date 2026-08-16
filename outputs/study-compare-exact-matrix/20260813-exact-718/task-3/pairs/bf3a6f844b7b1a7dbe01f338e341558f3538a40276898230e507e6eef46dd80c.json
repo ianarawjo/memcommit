@@ -1,0 +1,388 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:49:33.882737+00:00",
+      "frames": [
+        {
+          "context_digest": "3e738289251b9bdf3deb1c7a7540e6ce811b09e26a020af3a76d47b4c85c7ab1",
+          "context_name": "task-3/local/personal-memory/2025/02",
+          "context_uid": "ce7367b8-8532-5f43-972a-1665ca8e3e80",
+          "memories": [
+            {
+              "content": "The user reviewed their emergency-contact list in February 2025.",
+              "content_digest": "b2f108376dbbf53e8885b9c61080d4c873209d8c6e399c37412fa507fec08b0b",
+              "position": 0,
+              "uid": "3ff046b1-5810-51ca-8d43-c99ef6a90b41"
+            },
+            {
+              "content": "When preparation instructions arrived as a long paragraph, the user missed two items.",
+              "content_digest": "43bde452a403f85bcffa6f7ba6b3142ed45604730083327c6f57092b98f397aa",
+              "position": 1,
+              "uid": "e2a304e5-6100-5a5f-b508-0a7f28f6bda7"
+            },
+            {
+              "content": "After changing the same content into a checklist, the user marked every item they had prepared.",
+              "content_digest": "0f8115061b489894115fd252f079ee673504ed09dea4d88d558e64ed6189f1be",
+              "position": 2,
+              "uid": "51d03bff-3e33-5f68-9df6-ed7efa8e3de9"
+            },
+            {
+              "content": "The user called their mother on a weekend evening, but they spoke only briefly because the mother was out.",
+              "content_digest": "a9a1e7d87532667781677f4760beeb086f1e423365a915a0ec0b494892cbb361",
+              "position": 3,
+              "uid": "0987293e-3e21-5cbc-bb46-59245a5fa041"
+            },
+            {
+              "content": "The user called again on Saturday morning the following week and spoke for 40 minutes.",
+              "content_digest": "f08c9f170345686b2091e3b0ecd49f049e245d584886da62d586185010f713bf",
+              "position": 4,
+              "uid": "dc3de6ad-56ea-528a-a9b7-349e79af2326"
+            },
+            {
+              "content": "The user sent a text to an old number for an emergency contact and saw that delivery failed.",
+              "content_digest": "692321e996b9ac8e3500a2da7765f77e0d14c6f040cf2c33944cbdcb39c706de",
+              "position": 5,
+              "uid": "6546d41b-3d5b-5802-a9e7-ac028405e3f2"
+            },
+            {
+              "content": "After confirming the new number with their older sister, the user updated the contact list.",
+              "content_digest": "8d2e954a978e35c1da92948ccc8e45f38fcc25ea3fafe7c389ef546f6eda1ae1",
+              "position": 6,
+              "uid": "ea6eb9d2-9b01-5330-a4d5-886d4bc6cd85"
+            },
+            {
+              "content": "For nonurgent contact, the user's older sister prefers to reply by text when available rather than take a call immediately.",
+              "content_digest": "86639aee50903bc3261e6f88ac7d649c8197927fe214d5d17e0e6f5b3d69a59d",
+              "position": 7,
+              "uid": "12fe7e64-192e-5359-8f96-d2875f7e5399"
+            },
+            {
+              "content": "Before using an emergency contact, reconfirm the number and relationship information with the user.",
+              "content_digest": "78e41f61ba99eaf8840d5d318d08327ca6bb087addd6e22269e8b63281bb67c7",
+              "position": 8,
+              "uid": "e6f89ded-5687-5c25-8df8-88f288d450c6"
+            },
+            {
+              "content": "The user feels that a reminder the day before an appointment gives them enough time to recheck preparation items.",
+              "content_digest": "1a9fcc01df362c76b6d9c8e4fa2d33229a2ae2762c0c6d25e0fc89312a6e0ed4",
+              "position": 9,
+              "uid": "f9197c33-ff93-5215-a3a5-e4087bea2a0d"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "7f310444-5521-4c0e-a0e6-aff92d8df622"
+        },
+        {
+          "context_digest": "1d47d83944d91bc0316a61894412e9b4361758603b9532687cf68473f1d30198",
+          "context_name": "task-3/local/personal-memory/2026/01",
+          "context_uid": "e48e6eac-20f7-599d-9f76-4238bd9dd96d",
+          "memories": [
+            {
+              "content": "The user keeps gloves and scarves in a basket inside the entrance.",
+              "content_digest": "df54c52cb6bc89e2e66c747df9807c6892db272c2a23ac5ac91e3f64aaa2a5da",
+              "position": 0,
+              "uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409"
+            },
+            {
+              "content": "On a day the user could not find their gloves, they walked with their hands in their pockets and missed the bus.",
+              "content_digest": "d4205aee5fe3f2c18adc3622930cc7f74de231de9812ca594dbd95a0af7199ff",
+              "position": 1,
+              "uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5"
+            },
+            {
+              "content": "Before the next outing, the user put the gloves in the entrance basket the night before and left on time.",
+              "content_digest": "23a7026d7d1a7edd3278e7b8aa147ef0d315059663f78da5498ad6c1b4a5407c",
+              "position": 2,
+              "uid": "a11f0943-8ee1-5305-87fb-64982fb36f82"
+            },
+            {
+              "content": "On a snowy day, the user chose a shorter route but turned back at stairs that had not been cleared of snow.",
+              "content_digest": "e9e241d2bc4d7c2fa9a44471aa6d1c16d42d50fe2ed99ccfb50713107714be9b",
+              "position": 3,
+              "uid": "f623f245-cdd5-5080-8869-b52cf2914076"
+            },
+            {
+              "content": "The next day, the user took a cleared sidewalk along the main road and avoided slippery sections.",
+              "content_digest": "62c8ec8b38778e9922cf433af4ceb4d59f60bee52dc758e3b88bb1163637f108",
+              "position": 4,
+              "uid": "17ac56f1-1302-5350-99d5-b95ef7feb768"
+            },
+            {
+              "content": "The user fell asleep with the heat turned up, became too warm before dawn, and woke twice.",
+              "content_digest": "912dbbc88a0f4a174b714a794793781f4d2f6c889f73cd7f825338addcab5d6c",
+              "position": 5,
+              "uid": "96988fa9-44b1-511e-8c99-4372f902cfe3"
+            },
+            {
+              "content": "The next night, the user turned down the heat and used one additional thin blanket.",
+              "content_digest": "3d12a4609d4731ebe71bacc841c979ac3497553238c3b5c2191842bbf075ba89",
+              "position": 6,
+              "uid": "b628acaa-50da-552c-8665-244dc4ab8263"
+            },
+            {
+              "content": "On a morning with heavy snow, the user's father expects the user will worry about road conditions and sends a text before departure.",
+              "content_digest": "dcd6bcb23bee46e49813bb14dd8dcb91983d5830f0536d7f23fcdb3a8af0667c",
+              "position": 7,
+              "uid": "08dfb937-7b28-55b5-801c-c0da00cbd414"
+            },
+            {
+              "content": "Before proposing a winter travel route, check recent snow-clearing conditions and accessible entrances.",
+              "content_digest": "dcab87102a9979c51dd369d5ba5ed00b7445c8ccd14450edcb8bec7859689606",
+              "position": 8,
+              "uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d"
+            },
+            {
+              "content": "The local agent cannot know the actual condition of the sidewalk the user will take from a weather forecast alone.",
+              "content_digest": "6b4bcc2f2f508f130c047ff677cadae0eae5b4cc5e5dd6bb3a1fb3784d7793b1",
+              "position": 9,
+              "uid": "802c4031-57de-592a-9bc8-6ee3d54921c8"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "da39ee32-ae82-476c-9582-e8bbc57529db"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames contain independently useful information in separate domains. The reference focuses on appointment preparation, family communication, and emergency-contact accuracy, while the compared frame covers winter clothing, travel safety, sleep comfort, and weather-related support. No scope-aligned shared claim or contradiction is present.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7f310444-5521-4c0e-a0e6-aff92d8df622",
+              "memory_uid": "3ff046b1-5810-51ca-8d43-c99ef6a90b41"
+            }
+          ],
+          "reason": "This dated review is independently useful contact-maintenance history found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user reviewed their emergency-contact list in February 2025.",
+          "uid": "8c5813cd-f8bd-5d0a-a533-f3261a704a49"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7f310444-5521-4c0e-a0e6-aff92d8df622",
+              "memory_uid": "e2a304e5-6100-5a5f-b508-0a7f28f6bda7"
+            },
+            {
+              "frame_uid": "7f310444-5521-4c0e-a0e6-aff92d8df622",
+              "memory_uid": "51d03bff-3e33-5f68-9df6-ed7efa8e3de9"
+            }
+          ],
+          "reason": "These observations jointly express one reference-only claim about how instruction format affected preparation completion.",
+          "status": "RESOLVED",
+          "summary": "Checklist formatting helped the user account for all preparation items after paragraph formatting led to omissions.",
+          "uid": "6ceeb7a0-20ef-5c6f-9b77-bc5af62cece8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7f310444-5521-4c0e-a0e6-aff92d8df622",
+              "memory_uid": "0987293e-3e21-5cbc-bb46-59245a5fa041"
+            },
+            {
+              "frame_uid": "7f310444-5521-4c0e-a0e6-aff92d8df622",
+              "memory_uid": "dc3de6ad-56ea-528a-a9b7-349e79af2326"
+            }
+          ],
+          "reason": "These events form one reference-only sequence about call timing and the resulting opportunity for conversation.",
+          "status": "RESOLVED",
+          "summary": "Two calls with the user's mother show that her availability affected conversation length, with a later Saturday-morning call lasting 40 minutes.",
+          "uid": "40e02619-3dc0-5bac-aa78-bcaea9e77d09"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7f310444-5521-4c0e-a0e6-aff92d8df622",
+              "memory_uid": "6546d41b-3d5b-5802-a9e7-ac028405e3f2"
+            },
+            {
+              "frame_uid": "7f310444-5521-4c0e-a0e6-aff92d8df622",
+              "memory_uid": "ea6eb9d2-9b01-5330-a4d5-886d4bc6cd85"
+            }
+          ],
+          "reason": "These events form one reference-only correction episode concerning inaccurate emergency-contact information.",
+          "status": "RESOLVED",
+          "summary": "An emergency contact's obsolete number caused a failed text, after which the user confirmed the replacement with their older sister and updated the list.",
+          "uid": "daffec37-ec1d-5114-bbd1-feeca01fa498"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7f310444-5521-4c0e-a0e6-aff92d8df622",
+              "memory_uid": "12fe7e64-192e-5359-8f96-d2875f7e5399"
+            }
+          ],
+          "reason": "This reference-only communication preference is independently useful and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "For nonurgent contact, the user's older sister prefers replying by text when available instead of immediately taking a call.",
+          "uid": "4e9823fc-8ae3-594f-9ad3-4ec97b1a8999"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7f310444-5521-4c0e-a0e6-aff92d8df622",
+              "memory_uid": "e6f89ded-5687-5c25-8df8-88f288d450c6"
+            }
+          ],
+          "reason": "This reference-only verification policy is distinct from the historical review and correction events.",
+          "status": "RESOLVED",
+          "summary": "Before an emergency contact is used, its number and relationship information should be reconfirmed with the user.",
+          "uid": "5b9c68ff-4f9b-586e-a650-a20e5ea81637"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7f310444-5521-4c0e-a0e6-aff92d8df622",
+              "memory_uid": "f9197c33-ff93-5215-a3a5-e4087bea2a0d"
+            }
+          ],
+          "reason": "This reference-only reminder-timing preference has no scope-aligned counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A reminder one day before an appointment gives the user enough time to recheck preparation items.",
+          "uid": "eda466eb-c084-508f-b413-c2a611ebc0db"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "da39ee32-ae82-476c-9582-e8bbc57529db",
+              "memory_uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409"
+            },
+            {
+              "frame_uid": "da39ee32-ae82-476c-9582-e8bbc57529db",
+              "memory_uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5"
+            },
+            {
+              "frame_uid": "da39ee32-ae82-476c-9582-e8bbc57529db",
+              "memory_uid": "a11f0943-8ee1-5305-87fb-64982fb36f82"
+            }
+          ],
+          "reason": "The storage practice and contrasting outings jointly express one compared-only claim about reliable winter departure preparation.",
+          "status": "RESOLVED",
+          "summary": "Keeping gloves in the entrance basket and staging them there the night before supports finding them and leaving on time.",
+          "uid": "07b8abf7-4d8a-5403-b8af-efabdb6478df"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "da39ee32-ae82-476c-9582-e8bbc57529db",
+              "memory_uid": "f623f245-cdd5-5080-8869-b52cf2914076"
+            },
+            {
+              "frame_uid": "da39ee32-ae82-476c-9582-e8bbc57529db",
+              "memory_uid": "17ac56f1-1302-5350-99d5-b95ef7feb768"
+            }
+          ],
+          "reason": "These contrasting outings form one compared-only claim about adapting winter routes to actual clearance.",
+          "status": "RESOLVED",
+          "summary": "Using a cleared main-road sidewalk avoided the snowy stairs and slippery sections that obstructed a shorter route.",
+          "uid": "9fc686c9-5bb2-58db-8453-f98e548aea60"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "da39ee32-ae82-476c-9582-e8bbc57529db",
+              "memory_uid": "96988fa9-44b1-511e-8c99-4372f902cfe3"
+            },
+            {
+              "frame_uid": "da39ee32-ae82-476c-9582-e8bbc57529db",
+              "memory_uid": "b628acaa-50da-552c-8665-244dc4ab8263"
+            }
+          ],
+          "reason": "These consecutive nights form one compared-only claim about adjusting overnight warmth for sleep comfort.",
+          "status": "RESOLVED",
+          "summary": "Turning down the heat and adding a thin blanket followed a night when excessive heat caused the user to wake twice.",
+          "uid": "24bbece9-3e53-5915-bbc0-197b20857851"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "da39ee32-ae82-476c-9582-e8bbc57529db",
+              "memory_uid": "08dfb937-7b28-55b5-801c-c0da00cbd414"
+            }
+          ],
+          "reason": "This compared-only family-support pattern is independently useful and has no reference-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "During heavy snow, the user's father anticipates concern about road conditions and texts before departure.",
+          "uid": "59e3a4b7-8ed6-55bc-88fe-5292fced9aee"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "da39ee32-ae82-476c-9582-e8bbc57529db",
+              "memory_uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d"
+            }
+          ],
+          "reason": "This compared-only route-planning policy is independently useful and more operationally specific than the travel observations.",
+          "status": "RESOLVED",
+          "summary": "Before proposing a winter route, recent snow clearance and accessible entrances should be checked.",
+          "uid": "f644fb2b-0eb3-538f-9e2f-a6f5e9b9f0a6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "da39ee32-ae82-476c-9582-e8bbc57529db",
+              "memory_uid": "802c4031-57de-592a-9bc8-6ee3d54921c8"
+            }
+          ],
+          "reason": "This compared-only epistemic limitation is independently useful and distinct from the instruction to check route conditions.",
+          "status": "RESOLVED",
+          "summary": "A weather forecast alone cannot establish the actual condition of the sidewalk the user will take.",
+          "uid": "bdbdf984-e48b-54bb-ac03-8893d5aa3ba2"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame describes staging winter clothing, adapting routes to snow conditions, managing overnight warmth, receiving pre-departure reassurance, and verifying current route accessibility beyond forecasts.",
+        "differences": "",
+        "reference_only": "The reference describes checklist-based preparation, appointment-reminder timing, family calling and texting preferences, and review, correction, and verification of emergency-contact details."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "c810ba4c-b614-42cd-b67f-8a15339cf3b5"
+    },
+    "analysis_digest": "c703c0e72a6b8f55475bb4115c1951c9c552c0ace57b2c0c9e9b5be5764a94ef",
+    "key": "fee16ce44bb32aef8427fa0dc0174bfc29153c9ccfa385661b1425633e14654a",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 44.44656454199867,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "fee16ce44bb32aef8427fa0dc0174bfc29153c9ccfa385661b1425633e14654a",
+  "created_at": "2026-08-13T18:50:18.329022Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/02",
+  "pair_key": "bf3a6f844b7b1a7dbe01f338e341558f3538a40276898230e507e6eef46dd80c",
+  "provider_seconds": 44.44656454199867,
+  "right": "task-3/local/personal-memory/2026/01",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

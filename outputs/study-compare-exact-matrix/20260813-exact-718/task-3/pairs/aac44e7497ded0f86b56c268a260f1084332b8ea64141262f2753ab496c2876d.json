@@ -1,0 +1,397 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:44:38.108836+00:00",
+      "frames": [
+        {
+          "context_digest": "e13d5ca14260d4cdee2047de1529bdadfb8f6c3ea1abf7b2fbc1cc2a4a3fa401",
+          "context_name": "task-3/local/personal-memory/2024/09",
+          "context_uid": "497036ef-19ef-5611-bf5a-a9eeaf1569a0",
+          "memories": [
+            {
+              "content": "The user's available days and times vary by week, making it difficult to apply last month's free time directly to the next appointment.",
+              "content_digest": "9883c185fcf05c7f7f2b427012701a926576130739a6a43f6cd4e94f26f7e87d",
+              "position": 0,
+              "uid": "84b4519d-ef17-5403-a866-4eb705951a09"
+            },
+            {
+              "content": "The user once canceled an appointment booked for the same weekday as in the previous month.",
+              "content_digest": "9d38149632b950760dbbfdf98630e74e48c0a2130b1293142adef0f9948485bb",
+              "position": 1,
+              "uid": "25994612-bebc-5643-8642-19b825f00f00"
+            },
+            {
+              "content": "When asked again about availability just before booking, the user provided three free times for that week.",
+              "content_digest": "6d7bf61d037b8f702b87eb75ca99670e46f8ed37eb3cd0588f232a63cbe7d97c",
+              "position": 2,
+              "uid": "9b667d0d-d97b-5dfa-af66-295b9c40403d"
+            },
+            {
+              "content": "On a day with two consecutive morning appointments, the user ate lunch at 3 p.m.",
+              "content_digest": "6cf4e59cc0449ecab23ac3e5b69e3993146fb9e31de4ddf7ddab1c81a47c2b8a",
+              "position": 3,
+              "uid": "54d29daf-7bd7-5221-ae65-8b46f7f4869b"
+            },
+            {
+              "content": "On a day the user left an hour between appointments, they ate while traveling.",
+              "content_digest": "f669cb3d5198e5eed84c2578c8810a8105d03b2d68064bd323dd6573339e2a3b",
+              "position": 4,
+              "uid": "375957b9-e051-5a94-bde1-d157f44cc343"
+            },
+            {
+              "content": "After seeing a private reason written directly in a calendar title, the user removed the wording.",
+              "content_digest": "6f32d03fd9854adaf5773fab91d96d94b8d50557dd7d3bf090caaf37488ad121",
+              "position": 5,
+              "uid": "d189ddb4-7014-5d19-b779-5f36c6bb4160"
+            },
+            {
+              "content": "The user checked that a calendar-sharing screen showed only the time and hid the details.",
+              "content_digest": "e182d94b728aa0057bf201f1caf924e715d12de484495d6bd653cd658c6fc091",
+              "position": 6,
+              "uid": "61ee4989-7372-5845-b14f-d8a6eb1e5300"
+            },
+            {
+              "content": "When evening plans on the same day must change, the user's mother wants advance notice on the weekend morning.",
+              "content_digest": "24ef090a587ad5f54aec84d231bed02577bfebc8ed2a487f0aea9eb3a6644f24",
+              "position": 7,
+              "uid": "f2b9f9b0-3d15-5411-9c40-ddce42288ed3"
+            },
+            {
+              "content": "The local agent cannot know the private reason for unavailability from the unavailable time alone.",
+              "content_digest": "a5ae072d060bfbae6e2d06ecaec6dad87039a14c3bee62dc0e3abd2a9096f5e2",
+              "position": 8,
+              "uid": "947e37c1-1235-54e1-8ddd-dcad7d725ede"
+            },
+            {
+              "content": "The user's shared calendar does not automatically reserve travel time between events.",
+              "content_digest": "44b0830b7ef31860d3bd70e859c449a2f8e5cecd94b4b571bf08e09da3f648eb",
+              "position": 9,
+              "uid": "1b2e9508-d9ce-5b27-bf66-ec7691061e13"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "a407f564-e1a6-49fa-8b28-696ba00c676e"
+        },
+        {
+          "context_digest": "4eadf16a0c655a266bec3ebe56b056075c55e7f716f6879a0b6a905fe34136df",
+          "context_name": "task-3/local/personal-memory/2026/05",
+          "context_uid": "fd476504-4d4e-54d9-80b8-3dc2b18555d8",
+          "memories": [
+            {
+              "content": "The user keeps a picnic mat on the bottom shelf of the entrance storage cabinet.",
+              "content_digest": "c17479bd6a0f978f71b106b562507e702c3b84af5119be6bce48e4ee1664e728",
+              "position": 0,
+              "uid": "a9da4cfc-a6aa-51ae-9ec4-0de5c7a09227"
+            },
+            {
+              "content": "On a day the user went to the riverside, they sat in a place without shade and moved after an hour.",
+              "content_digest": "f9ab1da828ca5af06cb8bf54fe85136e316f503dab465fad514ab5a3f8243633",
+              "position": 1,
+              "uid": "fa2735e1-f4af-57d3-a18c-795715b6715b"
+            },
+            {
+              "content": "At the next outdoor meal, the user chose a place near a large tree and stayed for two hours.",
+              "content_digest": "189b7d85561df45986a6b7c9fe681b5ef53b22ca1f5e83fa8d64a7d93b35a577",
+              "position": 2,
+              "uid": "3bd8b8f2-c5b4-5004-8b9e-e388cc26ea7a"
+            },
+            {
+              "content": "On a hot day when the user brought only one bottle of water, they bought another drink partway through the outing.",
+              "content_digest": "92aa494a12664105a4bffc50a9026fadbec78332f750636093ea82ecc68e9597",
+              "position": 3,
+              "uid": "c7c4b494-39a6-5f5c-b37f-51c5061ac926"
+            },
+            {
+              "content": "On the next outing, the user brought two small bottles of water after freezing them.",
+              "content_digest": "69b3035b57b58b1aa778bd0da75dc806c1c449e7e35dc448aff92f7499c3148d",
+              "position": 4,
+              "uid": "dd9f5b3c-9c2e-5dbc-bf6e-eb7761eeb075"
+            },
+            {
+              "content": "When meeting their maternal uncle at a park, the user and the uncle waited at different entrances for 15 minutes.",
+              "content_digest": "9785e87b9fe79813762eb2e19e6d4f256a55f4799c92d095aaf695a8a1de5851",
+              "position": 5,
+              "uid": "2ed2a41c-f6ae-54d6-875c-a195d8fdacee"
+            },
+            {
+              "content": "For the next meeting, the user sent a photo of the entrance sign, and they met at the same place.",
+              "content_digest": "de40b6b7df84784639b97cf7ce153ad8af6e77320d75f3869979e5e3d39169e2",
+              "position": 6,
+              "uid": "23f3a4fc-d51e-5d0b-87f0-d5be407a57f3"
+            },
+            {
+              "content": "For a park meeting, the user's maternal uncle prefers an entrance that requires less walking from the parking area.",
+              "content_digest": "552a43b869c6f06cbf571f794106727406d87841d43addc92f31a3532f73d6f3",
+              "position": 7,
+              "uid": "e9f459f3-8ff0-5a0e-b78b-eda8d18b914e"
+            },
+            {
+              "content": "When making an outdoor plan, confirm the exact entrance and an alternative location in case of rain.",
+              "content_digest": "a265a6364c182de35363b58135b1da60d11595d1e3e0029f6851ac272261a959",
+              "position": 8,
+              "uid": "70277b86-d5db-5b58-8a94-e77372d15a4c"
+            },
+            {
+              "content": "Some park restrooms and drinking fountains may be closed seasonally.",
+              "content_digest": "8e5c4f5f85d4d27dc2211f46e3ab3bbed7f3d9687070b9028992b670986b09ca",
+              "position": 9,
+              "uid": "5a54437b-9b0e-5103-860d-d878be70b3ef"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "695588ed-9c16-47ab-9f3d-30aea764c804"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate operational domains without a sufficiently specific shared policy or decision. The reference frame concerns variable appointment availability, scheduling effects, calendar privacy, family notice, and travel buffers; the compared frame concerns outdoor supplies, comfort, hydration, meeting coordination, accessibility, weather contingencies, and seasonal facilities.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a407f564-e1a6-49fa-8b28-696ba00c676e",
+              "memory_uid": "84b4519d-ef17-5403-a866-4eb705951a09"
+            },
+            {
+              "frame_uid": "a407f564-e1a6-49fa-8b28-696ba00c676e",
+              "memory_uid": "25994612-bebc-5643-8642-19b825f00f00"
+            },
+            {
+              "frame_uid": "a407f564-e1a6-49fa-8b28-696ba00c676e",
+              "memory_uid": "9b667d0d-d97b-5dfa-af66-295b9c40403d"
+            }
+          ],
+          "reason": "The memories jointly describe variable weekly availability, a failed same-weekday recurrence, and successful collection of current-week options; the compared frame contains no corresponding appointment-availability claim.",
+          "status": "RESOLVED",
+          "summary": "Appointment availability is week-specific and should be obtained for the relevant booking period rather than inferred from a prior month.",
+          "uid": "70eb072a-f875-52b5-8c48-527dad967d5d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a407f564-e1a6-49fa-8b28-696ba00c676e",
+              "memory_uid": "54d29daf-7bd7-5221-ae65-8b46f7f4869b"
+            },
+            {
+              "frame_uid": "a407f564-e1a6-49fa-8b28-696ba00c676e",
+              "memory_uid": "375957b9-e051-5a94-bde1-d157f44cc343"
+            }
+          ],
+          "reason": "Both examples connect appointment spacing with an undesirable meal outcome, while the compared frame contains no scheduling-and-meals claim.",
+          "status": "RESOLVED",
+          "summary": "Dense or narrowly spaced appointments can materially compromise the timing or setting of the user's meals.",
+          "uid": "84cbfff7-d10d-53f0-bb9b-81dad98cb661"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a407f564-e1a6-49fa-8b28-696ba00c676e",
+              "memory_uid": "d189ddb4-7014-5d19-b779-5f36c6bb4160"
+            }
+          ],
+          "reason": "This is a specific calendar-title privacy behavior with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user removes private reasons when they are exposed directly in calendar titles.",
+          "uid": "21519a2e-070a-5e07-8280-ebc41928988a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a407f564-e1a6-49fa-8b28-696ba00c676e",
+              "memory_uid": "61ee4989-7372-5845-b14f-d8a6eb1e5300"
+            }
+          ],
+          "reason": "This describes a specific sharing configuration and verification practice absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user verifies that shared calendar views reveal time while hiding event details.",
+          "uid": "e374253f-1c6e-5c68-b3c6-2f3f024297c9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a407f564-e1a6-49fa-8b28-696ba00c676e",
+              "memory_uid": "f2b9f9b0-3d15-5411-9c40-ddce42288ed3"
+            }
+          ],
+          "reason": "This family-notification timing preference has no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user's mother wants weekend-morning advance notice when same-day evening plans must change.",
+          "uid": "f5ddb875-3ef1-554e-9605-a12375f18fc1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a407f564-e1a6-49fa-8b28-696ba00c676e",
+              "memory_uid": "947e37c1-1235-54e1-8ddd-dcad7d725ede"
+            }
+          ],
+          "reason": "This is an epistemic limitation concerning private calendar information, not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "An unavailable calendar time alone does not reveal its private reason to the local agent.",
+          "uid": "4b03cd9d-e7cd-5575-ab85-0730ce435113"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a407f564-e1a6-49fa-8b28-696ba00c676e",
+              "memory_uid": "1b2e9508-d9ce-5b27-bf66-ec7691061e13"
+            }
+          ],
+          "reason": "This calendar capability limitation has no counterpart among the compared frame's outdoor-planning information.",
+          "status": "RESOLVED",
+          "summary": "The shared calendar does not automatically reserve travel time between events.",
+          "uid": "8e286ff4-26f7-5554-8228-d15dca548a8c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "695588ed-9c16-47ab-9f3d-30aea764c804",
+              "memory_uid": "a9da4cfc-a6aa-51ae-9ec4-0de5c7a09227"
+            }
+          ],
+          "reason": "This equipment-location fact appears only in the compared frame and is operationally independent of its other outdoor-planning claims.",
+          "status": "RESOLVED",
+          "summary": "The picnic mat is stored on the bottom shelf of the entrance storage cabinet.",
+          "uid": "9f28645d-5b6a-5fae-b59c-b15c3271b08c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "695588ed-9c16-47ab-9f3d-30aea764c804",
+              "memory_uid": "fa2735e1-f4af-57d3-a18c-795715b6715b"
+            },
+            {
+              "frame_uid": "695588ed-9c16-47ab-9f3d-30aea764c804",
+              "memory_uid": "3bd8b8f2-c5b4-5004-8b9e-e388cc26ea7a"
+            }
+          ],
+          "reason": "The memories form one experience-and-adaptation claim about outdoor shade selection, with no corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Prior discomfort in an unshaded spot was followed by choosing shade near a large tree for a longer outdoor meal.",
+          "uid": "c79c26e9-bbb2-56b2-9e2f-9d144f32c408"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "695588ed-9c16-47ab-9f3d-30aea764c804",
+              "memory_uid": "c7c4b494-39a6-5f5c-b37f-51c5061ac926"
+            },
+            {
+              "frame_uid": "695588ed-9c16-47ab-9f3d-30aea764c804",
+              "memory_uid": "dd9f5b3c-9c2e-5dbc-bf6e-eb7761eeb075"
+            }
+          ],
+          "reason": "The memories form one experience-and-adaptation claim about outdoor hydration preparation, absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "After one bottle proved insufficient on a hot outing, the user brought two frozen small bottles on the next outing.",
+          "uid": "cc41f5c6-2a84-56b7-81d2-844c11780570"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "695588ed-9c16-47ab-9f3d-30aea764c804",
+              "memory_uid": "2ed2a41c-f6ae-54d6-875c-a195d8fdacee"
+            },
+            {
+              "frame_uid": "695588ed-9c16-47ab-9f3d-30aea764c804",
+              "memory_uid": "23f3a4fc-d51e-5d0b-87f0-d5be407a57f3"
+            }
+          ],
+          "reason": "The memories form one coordination problem-and-response claim about identifying an exact entrance, with no reference-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "After waiting at different park entrances, the user used a photo of the entrance sign to establish the same meeting place.",
+          "uid": "b83164d4-b4d4-53eb-9c97-b0e2c66a2071"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "695588ed-9c16-47ab-9f3d-30aea764c804",
+              "memory_uid": "e9f459f3-8ff0-5a0e-b78b-eda8d18b914e"
+            }
+          ],
+          "reason": "This participant-specific accessibility preference is independently useful and appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "For park meetings, the user's maternal uncle prefers an entrance requiring less walking from the parking area.",
+          "uid": "935f0f17-17ab-5c65-9812-4ea6cbf3863f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "695588ed-9c16-47ab-9f3d-30aea764c804",
+              "memory_uid": "70277b86-d5db-5b58-8a94-e77372d15a4c"
+            }
+          ],
+          "reason": "This prospective coordination and weather-contingency instruction appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Outdoor plans should confirm the exact entrance and an alternative location for rain.",
+          "uid": "f0060af7-938a-5a30-ae01-3bcd177d8f76"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "695588ed-9c16-47ab-9f3d-30aea764c804",
+              "memory_uid": "5a54437b-9b0e-5103-860d-d878be70b3ef"
+            }
+          ],
+          "reason": "This seasonal facility-availability caveat has no corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Park restrooms and drinking fountains may be unavailable because of seasonal closures.",
+          "uid": "f83d3935-2a88-5f4c-bd55-b0e114eb335a"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only information covers picnic equipment, shade and water adaptations, precise park entrances, an uncle’s walking preference, rain contingencies, and seasonal facility closures.",
+        "differences": "",
+        "reference_only": "Reference-only information addresses week-specific appointment availability, meal and travel impacts, privacy handling, advance family notice, hidden unavailability reasons, and absent automatic travel buffers."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "1848ae67-dfd9-4ad3-a345-a76282c448a2"
+    },
+    "analysis_digest": "8f38cd47cba4bb9dcbd43d7dbf2205fcb87e3b36b25dc51f483550060532cecd",
+    "key": "7870acd9cd0263248df34bd14c80330c0c9413b8b3adbcba59ec5479f8db0571",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 48.50699858400185,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "7870acd9cd0263248df34bd14c80330c0c9413b8b3adbcba59ec5479f8db0571",
+  "created_at": "2026-08-13T18:45:26.615366Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/09",
+  "pair_key": "aac44e7497ded0f86b56c268a260f1084332b8ea64141262f2753ab496c2876d",
+  "provider_seconds": 48.50699858400185,
+  "right": "task-3/local/personal-memory/2026/05",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

@@ -1,0 +1,408 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:15:32.447141+00:00",
+      "frames": [
+        {
+          "context_digest": "dd57f5a09e0271c33b7dccbe4935bf1a8d5be14dc7c618906e8af51709bbea89",
+          "context_name": "task-2/advisor1/claim-evidence",
+          "context_uid": "b0c4b50c-f70b-5b0c-a1eb-0fd63e0531bf",
+          "memories": [
+            {
+              "content": "Attach adjacent evidence or citations to verifiable claims about user behavior or technology effects.",
+              "content_digest": "3a856fbbda53df425705aaaff741896f5f5460a8feeb8fb8a73c03e592a80c62",
+              "position": 0,
+              "uid": "06f6c673-ea0c-5657-89d2-3f8711097cd7"
+            },
+            {
+              "content": "Distinguish between results observed in the pilot and expectations to be confirmed in the main user study using different expressions.",
+              "content_digest": "9117c0fd3d9cb713f035f9ae95118ae785af5fcf8909485b097f128ef8e12586",
+              "position": 1,
+              "uid": "58991ce7-d394-5087-b14f-0b014b0ec6ad"
+            },
+            {
+              "content": "Do not use verbs that imply proving causation if the design does not support causal inference.",
+              "content_digest": "5ee12e489ec1fd1af46a49cb05cc9447ed3fbf33ad7b4d8ce52ea700926ea29c",
+              "position": 2,
+              "uid": "f5adf029-a750-5a3a-8eb8-d68e43bb5c13"
+            },
+            {
+              "content": "For topics with sufficient HCI research evidence, prioritize citing recent comprehensive studies over listing individual cases.",
+              "content_digest": "2519cd2fca364ac6eef8577892b03d0a83509f6032874e30c30f36fb1e3dde5a",
+              "position": 3,
+              "uid": "b2a7ff8a-dfca-5857-8733-fe03cbd943ec"
+            },
+            {
+              "content": "Explain how each design choice was derived to address specific user needs.",
+              "content_digest": "fee6e06dfe0489b55ae0d75fe4e7b62facf78052a3136b7120d065e100f3b567",
+              "position": 4,
+              "uid": "1f0c95f4-69bb-5764-a358-d428ff7019d2"
+            },
+            {
+              "content": "Support each core claim with evidence that directly examined it rather than with indirect summaries.",
+              "content_digest": "372e0abff6997b041103fd71719c55549c2e3e0a3a5cdf2d4a1a24ec6538cbff",
+              "position": 5,
+              "uid": "cd475113-5354-5f80-b063-7628e4359afc"
+            },
+            {
+              "content": "Reviewers first check the direct evidence placed closest to the core claim.",
+              "content_digest": "61baa516115e1a5bf4f377358ead7c45bab5e666208b9cd6cd87426007493a49",
+              "position": 6,
+              "uid": "86fe1306-7650-58cc-a3df-79870c61784d"
+            },
+            {
+              "content": "Connect the proposed conceptual design principle to at least one observable user behavior.",
+              "content_digest": "d6c6f9dddd0cd99694df2f232e8a71957d53f77e8d10faf324927af679312acc",
+              "position": 7,
+              "uid": "5d022e45-09c0-515e-98f1-68b2aec686bc"
+            },
+            {
+              "content": "Identify which design judgment—retain, modify, or discard—each piece of evidence from formative evaluation supports.",
+              "content_digest": "a507db0052a4d9196c774a5df74c60fe9225bef49c5d9aece328bfb8dca48035",
+              "position": 8,
+              "uid": "9939e9e8-d97d-57db-974a-750566ca9e2b"
+            },
+            {
+              "content": "Results from controlled formative studies do not directly prove effects in actual long-term use.",
+              "content_digest": "aeeca3701d4ba297e928efc2034c474a2ae78101e440d515a57901e6814321a0",
+              "position": 9,
+              "uid": "41060e8e-95ff-58c1-8b71-36a501a9bd23"
+            },
+            {
+              "content": "The user can have an explanation approved as a conceptual contribution only if it is falsifiable with observable data.",
+              "content_digest": "171f4eeae9df2a0a739f90ed451a34a092093b9f6b0db7c6af04012bea734c5f",
+              "position": 10,
+              "uid": "ec54ce10-07db-5ae3-94a5-8f3621fed4a9"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "0878fa51-869c-47e7-a398-2773212b2da9"
+        },
+        {
+          "context_digest": "6cd44802c5b4878ee84adef31f52231d09d37ccc0ef9a7256d0421114835a6bd",
+          "context_name": "task-2/advisor2/claim-evidence",
+          "context_uid": "1ca4b72a-fcbb-5997-a1b5-f764662460a5",
+          "memories": [
+            {
+              "content": "Place observational evidence or sources adjacent to claims regarding user needs or field effects.",
+              "content_digest": "513b102a6ed66a1dd3fb3380065f34552036a6dffed20d7101487342096021e3",
+              "position": 0,
+              "uid": "b39cf79f-d174-5ecb-98c9-b3f62ce0696a"
+            },
+            {
+              "content": "Distinguish at the sentence level between facts already confirmed in the field and predictions to be examined in the user study.",
+              "content_digest": "63a7fdcf7da5c4fa36a2c7a6f8542837956fa0dcdedee781593f399516501067",
+              "position": 1,
+              "uid": "b95e0185-f933-508d-8da7-41c65e2cc340"
+            },
+            {
+              "content": "Do not use verbs implying proof of causality if the design does not support causal inference.",
+              "content_digest": "0db514f790eb85ba0800c1f8c659cd4236136b9e36c034899c36f6116c040f04",
+              "position": 2,
+              "uid": "f82f1e1f-3f27-5668-a5a4-e64b0f88b44a"
+            },
+            {
+              "content": "Prioritize citations of recent systems and field research in rapidly changing HCI topics.",
+              "content_digest": "e8cd0847480ba8d07f971f21978873d13b6bd34d4e4625dd3dde8039afd5b88c",
+              "position": 3,
+              "uid": "b5461283-9001-510c-9a30-bb367f247b25"
+            },
+            {
+              "content": "Explain the user or operational stakeholder needs that each design choice aims to address.",
+              "content_digest": "59df6b478a0e200ceaa520bb7c4535b2078a8354efae0eec77a06cb6843bfab6",
+              "position": 4,
+              "uid": "87340c01-2e0f-5b82-9410-2133648022da"
+            },
+            {
+              "content": "Support each important conclusion with the closest evidence that directly examined it.",
+              "content_digest": "6731286cd67ee18644df531752f10913f4df9e7c7acf936da99caafacd597c0a",
+              "position": 5,
+              "uid": "8b15a9ad-aa53-5a54-beb2-f1cc8d6da846"
+            },
+            {
+              "content": "Reviewers first check direct evidence placed closest to important conclusions.",
+              "content_digest": "940880f0ee481e00ff7f935c9b76af8137d0f8a8664a2c53fb3d044681980c8f",
+              "position": 6,
+              "uid": "565a2263-e3bc-5379-9a80-64665b491c88"
+            },
+            {
+              "content": "Use field cases in which people completed tasks by working around existing tools as evidence for the need for the design.",
+              "content_digest": "4c731184cb33bda8ab315870713872842339013be68cf5f79c43a8b9f4e297d4",
+              "position": 7,
+              "uid": "27b58ee9-5cad-5872-8eb7-a694728d8e79"
+            },
+            {
+              "content": "Distinguish between problems reported by operational stakeholders and those directly observed by the researcher as separate forms of evidence.",
+              "content_digest": "39586ea932c540d6c7a1b0faff870d7ef6433052792defdc110beb513276ffe6",
+              "position": 8,
+              "uid": "cf7e9410-2144-53c4-a236-a16a7b5be494"
+            },
+            {
+              "content": "Field breakdown logs can reveal both system failures and user adaptive behaviors, including their timing and conditions.",
+              "content_digest": "331910b18eef90e53453e700a55b43143b3e8d07d3bb2c88bade31fddb0e5965",
+              "position": 9,
+              "uid": "ad643b33-fba1-5643-b57f-3bb8c3829122"
+            },
+            {
+              "content": "In field sites introducing new systems, formal procedures often coexist with existing manual routines for a period, making it difficult to isolate the effects of single design changes.",
+              "content_digest": "7def8e340a5ae1ad7cce9228e3e4279f499f47f0d2576bbe23e59f3703f04084",
+              "position": 10,
+              "uid": "546548e3-c47a-5a74-a04a-0a328602ead4"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "e7361a05-42a5-4325-bc16-cb98652f3c85"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames strongly align on evidence placement, direct support, cautious causal language, and design rationale. Their material distinctions concern study-stage wording, citation strategy, behavioral grounding, and inference limits, while each adds independent guidance for evaluating or classifying evidence.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "0878fa51-869c-47e7-a398-2773212b2da9",
+              "memory_uid": "06f6c673-ea0c-5657-89d2-3f8711097cd7"
+            },
+            {
+              "frame_uid": "e7361a05-42a5-4325-bc16-cb98652f3c85",
+              "memory_uid": "b39cf79f-d174-5ecb-98c9-b3f62ce0696a"
+            }
+          ],
+          "reason": "Both govern evidence proximity for empirically checkable claims; their examples cover compatible user- and field-oriented claim categories.",
+          "status": "RESOLVED",
+          "summary": "Place evidence or citations adjacent to verifiable claims about users or technology in use.",
+          "uid": "02c8dd7d-f6d7-5a0b-93b8-6c004035febe"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "0878fa51-869c-47e7-a398-2773212b2da9",
+              "memory_uid": "58991ce7-d394-5087-b14f-0b014b0ec6ad"
+            },
+            {
+              "frame_uid": "e7361a05-42a5-4325-bc16-cb98652f3c85",
+              "memory_uid": "b95e0185-f933-508d-8da7-41c65e2cc340"
+            }
+          ],
+          "reason": "The shared reporting distinction applies in explicitly different settings: pilot observations versus a main study, and field-confirmed facts versus study predictions.",
+          "status": "RESOLVED",
+          "summary": "Use distinct language for already observed findings and outcomes awaiting confirmation.",
+          "uid": "3b733ec4-ec3d-56f2-9e65-3e64329d81b2"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            {
+              "frame_uid": "0878fa51-869c-47e7-a398-2773212b2da9",
+              "memory_uid": "f5adf029-a750-5a3a-8eb8-d68e43bb5c13"
+            },
+            {
+              "frame_uid": "e7361a05-42a5-4325-bc16-cb98652f3c85",
+              "memory_uid": "f82f1e1f-3f27-5668-a5a4-e64b0f88b44a"
+            }
+          ],
+          "reason": "Both state the same operational restriction under the same methodological condition.",
+          "status": "RESOLVED",
+          "summary": "Avoid verbs implying proven causality when the study design cannot support causal inference.",
+          "uid": "69de7b56-1312-56bc-a112-9403d4c4d826"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "0878fa51-869c-47e7-a398-2773212b2da9",
+              "memory_uid": "b2a7ff8a-dfca-5857-8733-fe03cbd943ec"
+            },
+            {
+              "frame_uid": "e7361a05-42a5-4325-bc16-cb98652f3c85",
+              "memory_uid": "b5461283-9001-510c-9a30-bb367f247b25"
+            }
+          ],
+          "reason": "One prioritizes comprehensive studies where research is sufficient, while the other prioritizes systems and field research for rapidly changing topics; those explicit conditions require different source-selection rules.",
+          "status": "RESOLVED",
+          "summary": "Select recent HCI citations according to the evidence conditions of the topic.",
+          "uid": "5d1b1419-d1e9-5c34-9aa3-b84306294b07"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "0878fa51-869c-47e7-a398-2773212b2da9",
+              "memory_uid": "1f0c95f4-69bb-5764-a358-d428ff7019d2"
+            },
+            {
+              "frame_uid": "e7361a05-42a5-4325-bc16-cb98652f3c85",
+              "memory_uid": "87340c01-2e0f-5b82-9410-2133648022da"
+            }
+          ],
+          "reason": "Both require need-based justification for individual choices, with the compared frame additionally recognizing operational stakeholders.",
+          "status": "RESOLVED",
+          "summary": "Explain the needs addressed by each design choice.",
+          "uid": "16b28ce5-f437-57cc-987f-56469595500f"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            {
+              "frame_uid": "0878fa51-869c-47e7-a398-2773212b2da9",
+              "memory_uid": "cd475113-5354-5f80-b063-7628e4359afc"
+            },
+            {
+              "frame_uid": "e7361a05-42a5-4325-bc16-cb98652f3c85",
+              "memory_uid": "8b15a9ad-aa53-5a54-beb2-f1cc8d6da846"
+            }
+          ],
+          "reason": "Core claims and important conclusions express the same operative evidentiary standard, including preference for the closest direct evidence over indirect summaries.",
+          "status": "RESOLVED",
+          "summary": "Support important claims or conclusions with evidence that directly examined them.",
+          "uid": "cb587b14-92b7-5281-9d5b-d35616a6f7bc"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            {
+              "frame_uid": "0878fa51-869c-47e7-a398-2773212b2da9",
+              "memory_uid": "86fe1306-7650-58cc-a3df-79870c61784d"
+            },
+            {
+              "frame_uid": "e7361a05-42a5-4325-bc16-cb98652f3c85",
+              "memory_uid": "565a2263-e3bc-5379-9a80-64665b491c88"
+            }
+          ],
+          "reason": "Both describe the same reviewer behavior under the same evidence-placement context.",
+          "status": "RESOLVED",
+          "summary": "Reviewers first inspect direct evidence nearest the central claim or conclusion.",
+          "uid": "4ff4f661-ccb9-5ef9-97ff-235e85eed387"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "0878fa51-869c-47e7-a398-2773212b2da9",
+              "memory_uid": "5d022e45-09c0-515e-98f1-68b2aec686bc"
+            },
+            {
+              "frame_uid": "e7361a05-42a5-4325-bc16-cb98652f3c85",
+              "memory_uid": "27b58ee9-5cad-5872-8eb7-a694728d8e79"
+            }
+          ],
+          "reason": "One gives the general requirement for a conceptual design principle, while the other specifies field cases involving task-completing workarounds as the behavioral evidence.",
+          "status": "RESOLVED",
+          "summary": "Ground the need for a proposed design in observable user behavior.",
+          "uid": "1359b80c-9e94-55a4-9f96-fb55b12ef40c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0878fa51-869c-47e7-a398-2773212b2da9",
+              "memory_uid": "9939e9e8-d97d-57db-974a-750566ca9e2b"
+            }
+          ],
+          "reason": "Only the reference frame requires evidence to be mapped to an explicit design judgment.",
+          "status": "RESOLVED",
+          "summary": "State whether each piece of formative evidence supports retaining, modifying, or discarding a design.",
+          "uid": "d62057da-db52-5498-bf9e-979ba67255c0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e7361a05-42a5-4325-bc16-cb98652f3c85",
+              "memory_uid": "cf7e9410-2144-53c4-a236-a16a7b5be494"
+            }
+          ],
+          "reason": "Only the compared frame requires this provenance distinction.",
+          "status": "RESOLVED",
+          "summary": "Separate stakeholder-reported problems from researcher-observed problems as different evidence forms.",
+          "uid": "0bf9c85b-acde-53e2-aeb9-aaab57312a5c"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "0878fa51-869c-47e7-a398-2773212b2da9",
+              "memory_uid": "41060e8e-95ff-58c1-8b71-36a501a9bd23"
+            },
+            {
+              "frame_uid": "e7361a05-42a5-4325-bc16-cb98652f3c85",
+              "memory_uid": "546548e3-c47a-5a74-a04a-0a328602ead4"
+            }
+          ],
+          "reason": "Controlled formative studies limit inference to actual long-term use, whereas field introductions with overlapping formal and manual routines impede isolation of a single design change.",
+          "status": "RESOLVED",
+          "summary": "Preserve setting-specific limits when drawing conclusions about design effects.",
+          "uid": "b1d0ba13-75a5-5835-b223-5e7ff27217f0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0878fa51-869c-47e7-a398-2773212b2da9",
+              "memory_uid": "ec54ce10-07db-5ae3-94a5-8f3621fed4a9"
+            }
+          ],
+          "reason": "Only the reference frame states this approval criterion.",
+          "status": "RESOLVED",
+          "summary": "Treat observable-data falsifiability as necessary for approving an explanation as a conceptual contribution.",
+          "uid": "124f4c1e-84b0-5f66-8324-e09a41036318"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e7361a05-42a5-4325-bc16-cb98652f3c85",
+              "memory_uid": "ad643b33-fba1-5643-b57f-3bb8c3829122"
+            }
+          ],
+          "reason": "Only the compared frame describes this specific evidentiary value of breakdown logs.",
+          "status": "RESOLVED",
+          "summary": "Use field breakdown logs to identify failures and adaptive behavior together with their timing and conditions.",
+          "uid": "5230bb5c-d19a-5cfb-adbe-55469bd34429"
+        }
+      ],
+      "reports": {
+        "both": "Both require adjacent, directly relevant evidence, cautious causal wording, explicit links from design choices to needs, and support positioned where reviewers will inspect it first.",
+        "compared_only": "The compared frame alone separates reported from directly observed problems and explains the evidentiary value of field breakdown logs.",
+        "differences": "They distinguish evidence status in different study contexts, prioritize different literature under explicit research conditions, ground design need through differently scoped behaviors, and identify complementary limits on effect inference.",
+        "reference_only": "The reference alone links formative evidence to retain-modify-discard judgments and requires conceptual explanations to be falsifiable through observable data."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "734cf570-a47e-481c-869f-f36211375316"
+    },
+    "analysis_digest": "58bb50101b80b4f1dfcf3e2a8cceb0a304db11be3109734196f1eafd3e9d2f26",
+    "key": "402eb739b6e913fbbe357309f443542d7f90225815167263cad2aadc8a864e11",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 59.33442304199707,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "402eb739b6e913fbbe357309f443542d7f90225815167263cad2aadc8a864e11",
+  "created_at": "2026-08-13T18:16:31.780942Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/claim-evidence",
+  "pair_key": "67d646e1a8bd1eef7b32fe6ffef7d9d6a16850ccaa03c540c91029ccfe3d2af7",
+  "provider_seconds": 59.33442304199707,
+  "right": "task-2/advisor2/claim-evidence",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

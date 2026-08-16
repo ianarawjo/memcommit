@@ -1,0 +1,397 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:54:00.415137+00:00",
+      "frames": [
+        {
+          "context_digest": "40dca3509f1e21c564970ebb7664df755d25c1c19c4e79b458c803662fb827ce",
+          "context_name": "task-3/local/personal-memory/2025/11",
+          "context_uid": "af363401-7cdc-5426-ad00-4f98635e2dab",
+          "memories": [
+            {
+              "content": "The user recorded a family dinner in the calendar for the final week of November.",
+              "content_digest": "59755036ea9e7d172a5e673253fc7f089e61efe043b2e660f429fe2fa9003d34",
+              "position": 0,
+              "uid": "3f6eaf6c-00e7-5bd7-9809-367f54a0f707"
+            },
+            {
+              "content": "In a crowded restaurant, the user had to ask several times for orders to be repeated, interrupting the flow of conversation.",
+              "content_digest": "2d79e2f4f88a70bc8fbf9efca1b1751fbf51d88667f304c8e8c965a0a536cee7",
+              "position": 1,
+              "uid": "9fd0b9b6-986d-54b0-965e-45feaf9cd482"
+            },
+            {
+              "content": "When the user held the next gathering at their father's home, they continued the conversation on the sofa after the meal.",
+              "content_digest": "4b22fa055bb342db0589b0c54e415f4fa2af02445d3c55b3f38510bd6ca62f38",
+              "position": 2,
+              "uid": "cbc477c4-83c4-506b-9da8-9252d14d7f6b"
+            },
+            {
+              "content": "At a gathering with loud music prepared by their older sister, the user developed a headache and went outside briefly.",
+              "content_digest": "c9b34c3e3211ca7f15eb9a6f8ba97941222bc35ec0253d3da3f383c7247c3e83",
+              "position": 3,
+              "uid": "bbfc537e-3fcc-5065-ab93-4777bcdfc10c"
+            },
+            {
+              "content": "On a day the user held a yard barbecue with their younger brother, the open space dispersed the sound and made conversation easier.",
+              "content_digest": "dd35056c7731d3249a3c2689ee9fb6bfe6974544e302630de6ea230378fea9eb",
+              "position": 4,
+              "uid": "b61367fa-dd17-5ff2-9d6b-f81f6123735a"
+            },
+            {
+              "content": "After seeing a message that their maternal aunt would arrive at 5 p.m., the user delayed meal preparation by an hour.",
+              "content_digest": "31992a8945bfacfc9422f3180b203865f951f200561cd23dad901ec795c5de10",
+              "position": 5,
+              "uid": "681cdbd5-595d-5211-914d-edfd9a6b130d"
+            },
+            {
+              "content": "On a day the user waited without knowing their maternal uncle's arrival time, they reheated the food twice.",
+              "content_digest": "fae7c462a85e844648cb99419e6fdb3a2cd8c7721209ea49a40b4df597635176",
+              "position": 6,
+              "uid": "81c0c4e9-5ae4-5e8a-b11c-7d33032fd8ec"
+            },
+            {
+              "content": "The user's maternal uncle considers it easier to time his departure when he knows the family meal's start time in advance.",
+              "content_digest": "793f47adaa4c5274d15377b0f4adbc2415c0bd5243baf7a1c77c0d92e987a7e8",
+              "position": 7,
+              "uid": "56078821-34d0-540f-ae66-03bdd7bd1df3"
+            },
+            {
+              "content": "Before scheduling a family meal, confirm the attendees' arrival times and the location with the user.",
+              "content_digest": "d057fab5cbe97472da2a796114018a7491d20db6a826cd56943268f73ffeb792",
+              "position": 8,
+              "uid": "19c8ae40-1f5b-5fec-9538-e7bc7cfb036a"
+            },
+            {
+              "content": "Available restaurant reservation times may diminish quickly during the year-end gathering season.",
+              "content_digest": "7bfc817a42ab2d2c67ad04eae58fb3c86bbede15b7cc4ef431a75528bb425e7e",
+              "position": 9,
+              "uid": "3ea9fa3b-4411-55d0-ac90-2ed5515e6ef7"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "9af6085d-82ce-416c-9f97-c104d7c60e0a"
+        },
+        {
+          "context_digest": "5a45aaafce189f861f7195d3a753aa86812f64c689213961136327ca721c9d3e",
+          "context_name": "task-3/local/personal-memory/2026/06",
+          "context_uid": "f2e6c2e0-886a-52d8-98d4-03009ea37991",
+          "memories": [
+            {
+              "content": "The user keeps four folding chairs for family barbecues in storage.",
+              "content_digest": "7e2bb593a723adbac468184af4063e0ef74420baa03d6249ef77a84f2e6bc9df",
+              "position": 0,
+              "uid": "cce43b8e-c1c1-5208-8d9a-ee665b805d4c"
+            },
+            {
+              "content": "When six family members gathered in a noisy indoor restaurant, the user asked several times for the person across from them to repeat what was said.",
+              "content_digest": "d858d40478a37bed08580523df1915b85b4e2217b2fc506acedacaca55d2158d",
+              "position": 1,
+              "uid": "e682f0fd-e92f-566e-b1ec-1d5ebf091b60"
+            },
+            {
+              "content": "The user held the next gathering in their father's yard and moved between seats while speaking with everyone.",
+              "content_digest": "44843518c924955fa15e245dc41763a6fe21a95f6f590bd395f7b8a2d6357256",
+              "position": 2,
+              "uid": "c1f2b53e-6184-552b-a321-9796bb121055"
+            },
+            {
+              "content": "On a day the user started the barbecue at midday, sunlight led them to finish the meal quickly.",
+              "content_digest": "f275c2211b4bd69f40351800db57965b8ba44afbadb6e90a0291acae4e7a541b",
+              "position": 3,
+              "uid": "56d5befe-d5f4-59df-82e4-a66ba868dfc2"
+            },
+            {
+              "content": "The next time, the user started at 6 p.m. and remained outside until sunset.",
+              "content_digest": "13c413fbf16ea0704c10d09c5ee065a49ab789b0a3dadb1fc5068631dd95b292",
+              "position": 4,
+              "uid": "83d73ede-6f5a-550e-ba1c-c146b73a9917"
+            },
+            {
+              "content": "Because the side dishes brought by the user's mother and older sister had no labels, the user opened the same container twice.",
+              "content_digest": "5cc4205a743f5d8adca15876d7b0dd864089595ce729f4e3c1cc9a2272c6849b",
+              "position": 5,
+              "uid": "cf0947e8-c133-5259-bac2-e8ee6d74929e"
+            },
+            {
+              "content": "At the next gathering, the user wrote each food's name and who brought it on a small piece of paper.",
+              "content_digest": "6a93e0b5f7e3da8eff2e5c69a3f86c28dfc1a39c1ba7602a61cc1f6a96b837f9",
+              "position": 6,
+              "uid": "d42e48ca-39de-529f-bba2-332b779bd6c2"
+            },
+            {
+              "content": "After a barbecue, the user's younger brother prefers to divide leftover food into small containers to take home rather than discard it.",
+              "content_digest": "9febf1dab1f5000cddc636cd753d3c418b84810cbc6e394df7e8917d3fa29b72",
+              "position": 7,
+              "uid": "3958627e-a0fa-5e32-9e87-7ee874fc6fe7"
+            },
+            {
+              "content": "The local agent can summarize preparation and responses from prior family barbecues but cannot know the next attendees or weather.",
+              "content_digest": "6be2ed6916fc8a6200a4646b5db3b5ea0df7650e664bd098f973fb5229257cec",
+              "position": 8,
+              "uid": "1f24b5c2-554c-5356-b335-c6879e53ba7f"
+            },
+            {
+              "content": "The user's father's yard receives strong direct sunlight at midday; after 6 p.m., shade and wind lower the felt temperature.",
+              "content_digest": "a0bf855f5bb0422568bbed468e5299d111143362d7b9fe2dcf35dbaf8bcbf4c6",
+              "position": 9,
+              "uid": "d88b1b21-c58f-51d5-a60b-54bb11473d96"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "1e01a93c-d59a-4e6d-96db-470ab7908ff2"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "Both frames describe conversation difficulties in noisy restaurants and a later gathering at the father’s property. The reference emphasizes scheduling, arrival coordination, acoustics, and reservation pressure, while the compared frame adds barbecue logistics, food handling, outdoor timing, and limits on predicting future conditions.",
+      "relations": [
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            {
+              "frame_uid": "9af6085d-82ce-416c-9f97-c104d7c60e0a",
+              "memory_uid": "9fd0b9b6-986d-54b0-965e-45feaf9cd482"
+            },
+            {
+              "frame_uid": "1e01a93c-d59a-4e6d-96db-470ab7908ff2",
+              "memory_uid": "e682f0fd-e92f-566e-b1ec-1d5ebf091b60"
+            }
+          ],
+          "reason": "Both accounts make the same operational claim that restaurant noise forced the user to request repetition, with the compared account adding attendance and seating detail without changing the claim.",
+          "status": "RESOLVED",
+          "summary": "A noisy indoor restaurant repeatedly prevented the user from hearing family conversation clearly.",
+          "uid": "664c2489-ebba-56c6-8e7c-8d2f627cb63f"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "9af6085d-82ce-416c-9f97-c104d7c60e0a",
+              "memory_uid": "cbc477c4-83c4-506b-9da8-9252d14d7f6b"
+            },
+            {
+              "frame_uid": "1e01a93c-d59a-4e6d-96db-470ab7908ff2",
+              "memory_uid": "c1f2b53e-6184-552b-a321-9796bb121055"
+            }
+          ],
+          "reason": "A gathering in the father’s yard can coexist with continuing conversation on a sofa after the meal; the accounts provide complementary venue-phase and movement details for the same social-setting decision.",
+          "status": "RESOLVED",
+          "summary": "At the following gathering on the father’s property, the user used different seating areas to keep conversations going.",
+          "uid": "5ee153a6-dd50-5ee6-a22c-9138acfe40c6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9af6085d-82ce-416c-9f97-c104d7c60e0a",
+              "memory_uid": "3f6eaf6c-00e7-5bd7-9809-367f54a0f707"
+            }
+          ],
+          "reason": "Only the reference supplies this specific calendar fact, and no compared memory restates or qualifies it.",
+          "status": "RESOLVED",
+          "summary": "A family dinner was recorded for the final week of November.",
+          "uid": "082d56b6-5734-5410-9bdc-881c45a2eb6b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9af6085d-82ce-416c-9f97-c104d7c60e0a",
+              "memory_uid": "bbfc537e-3fcc-5065-ab93-4777bcdfc10c"
+            }
+          ],
+          "reason": "Only the reference describes this sensory response and coping action.",
+          "status": "RESOLVED",
+          "summary": "Loud music at a family gathering caused the user a headache and prompted a brief retreat outdoors.",
+          "uid": "5d491917-05d6-5aa9-8cb9-03f58f314d98"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9af6085d-82ce-416c-9f97-c104d7c60e0a",
+              "memory_uid": "b61367fa-dd17-5ff2-9d6b-f81f6123735a"
+            }
+          ],
+          "reason": "Only the reference attributes improved conversation specifically to outdoor sound dispersion.",
+          "status": "RESOLVED",
+          "summary": "An open yard dispersed sound and made conversation easier during a barbecue.",
+          "uid": "e6a96b41-6ba6-5868-8529-21e2e50402e2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9af6085d-82ce-416c-9f97-c104d7c60e0a",
+              "memory_uid": "681cdbd5-595d-5211-914d-edfd9a6b130d"
+            },
+            {
+              "frame_uid": "9af6085d-82ce-416c-9f97-c104d7c60e0a",
+              "memory_uid": "81c0c4e9-5ae4-5e8a-b11c-7d33032fd8ec"
+            }
+          ],
+          "reason": "The two reference observations jointly express one one-sided claim: arrival-time information materially affects when food is prepared and how often it must be reheated.",
+          "status": "RESOLVED",
+          "summary": "Knowing or lacking relatives’ arrival times changed meal preparation timing and reheating effort.",
+          "uid": "46cb88d2-e86b-569b-be63-e5fe4eb61405"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9af6085d-82ce-416c-9f97-c104d7c60e0a",
+              "memory_uid": "56078821-34d0-540f-ae66-03bdd7bd1df3"
+            }
+          ],
+          "reason": "Only the reference records this relative’s scheduling preference.",
+          "status": "RESOLVED",
+          "summary": "The maternal uncle finds departure planning easier when given the meal’s start time in advance.",
+          "uid": "5dd0a997-8921-5b35-8010-5c0c81654540"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9af6085d-82ce-416c-9f97-c104d7c60e0a",
+              "memory_uid": "19c8ae40-1f5b-5fec-9538-e7bc7cfb036a"
+            }
+          ],
+          "reason": "Only the reference contains this prospective scheduling instruction.",
+          "status": "RESOLVED",
+          "summary": "Before scheduling a family meal, the user should be consulted about attendees’ arrival times and the location.",
+          "uid": "82ccc3ef-27e1-50e3-ac96-3e4e9db9a1a9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9af6085d-82ce-416c-9f97-c104d7c60e0a",
+              "memory_uid": "3ea9fa3b-4411-55d0-ac90-2ed5515e6ef7"
+            }
+          ],
+          "reason": "Only the reference supplies this seasonal planning constraint.",
+          "status": "RESOLVED",
+          "summary": "Restaurant reservation availability may decline quickly during the year-end gathering season.",
+          "uid": "853a3ad0-cc29-52cc-8965-b262250dad00"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1e01a93c-d59a-4e6d-96db-470ab7908ff2",
+              "memory_uid": "cce43b8e-c1c1-5208-8d9a-ee665b805d4c"
+            }
+          ],
+          "reason": "Only the compared frame records this seating inventory.",
+          "status": "RESOLVED",
+          "summary": "The user keeps four folding chairs in storage for family barbecues.",
+          "uid": "f80d58e4-d493-516b-b800-17470c27c4e9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1e01a93c-d59a-4e6d-96db-470ab7908ff2",
+              "memory_uid": "56d5befe-d5f4-59df-82e4-a66ba868dfc2"
+            },
+            {
+              "frame_uid": "1e01a93c-d59a-4e6d-96db-470ab7908ff2",
+              "memory_uid": "83d73ede-6f5a-550e-ba1c-c146b73a9917"
+            },
+            {
+              "frame_uid": "1e01a93c-d59a-4e6d-96db-470ab7908ff2",
+              "memory_uid": "d88b1b21-c58f-51d5-a60b-54bb11473d96"
+            }
+          ],
+          "reason": "These compared observations split one underlying one-sided claim that time-dependent sunlight, shade, and wind affect barbecue comfort and duration.",
+          "status": "RESOLVED",
+          "summary": "Conditions in the father’s yard vary by time: midday sun shortened one barbecue, whereas a 6 p.m. start allowed outdoor use until sunset as shade and wind lowered the felt temperature.",
+          "uid": "2540b5a9-492a-5669-81d1-c528a3a8e97d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1e01a93c-d59a-4e6d-96db-470ab7908ff2",
+              "memory_uid": "cf0947e8-c133-5259-bac2-e8ee6d74929e"
+            },
+            {
+              "frame_uid": "1e01a93c-d59a-4e6d-96db-470ab7908ff2",
+              "memory_uid": "d42e48ca-39de-529f-bba2-332b779bd6c2"
+            }
+          ],
+          "reason": "The compared memories form a single problem-and-response claim about identifying shared dishes.",
+          "status": "RESOLVED",
+          "summary": "Unlabeled side dishes caused duplicate container opening, after which the user labeled foods and their contributors.",
+          "uid": "f29c1775-43ac-5e76-a3a1-4db891776384"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1e01a93c-d59a-4e6d-96db-470ab7908ff2",
+              "memory_uid": "3958627e-a0fa-5e32-9e87-7ee874fc6fe7"
+            }
+          ],
+          "reason": "Only the compared frame records this post-barbecue preference.",
+          "status": "RESOLVED",
+          "summary": "The younger brother prefers taking leftovers home in small containers instead of discarding them.",
+          "uid": "86c418ab-0c42-515f-b3c5-b987b045b6f3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1e01a93c-d59a-4e6d-96db-470ab7908ff2",
+              "memory_uid": "1f24b5c2-554c-5356-b335-c6879e53ba7f"
+            }
+          ],
+          "reason": "Only the compared frame states this capability and forecasting limitation.",
+          "status": "RESOLVED",
+          "summary": "The local agent can summarize prior barbecue preparation and responses but cannot know future attendees or weather.",
+          "uid": "29f3f6fa-836b-52a3-a32f-f27ae27af109"
+        }
+      ],
+      "reports": {
+        "both": "Noisy indoor dining required repeated speech, while the father’s property supported more flexible post-meal conversation and seating.",
+        "compared_only": "The compared frame covers chairs, sunlight and evening weather, food labels, leftover packing, and the agent’s limited knowledge of future barbecue conditions.",
+        "differences": "",
+        "reference_only": "The reference covers calendar timing, noise-related discomfort, outdoor acoustics, arrival coordination, meal scheduling, and seasonal reservation scarcity."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "d1a98052-3f62-42ea-9dd0-f36a90b88fb4"
+    },
+    "analysis_digest": "3384cb1d5205f4e0d5252efb4251f1414b4b55fe85f9b5dca305443140923d50",
+    "key": "50032559fb1bfc5155800897f940d620ce3915da29992ff8d5d77a257b76d804",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 71.57436629100266,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "50032559fb1bfc5155800897f940d620ce3915da29992ff8d5d77a257b76d804",
+  "created_at": "2026-08-13T18:55:11.988901Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/11",
+  "pair_key": "2d0fe607b6b6b66fbdf6ebfd705b7152e19ac1cbe9e318f9f419cd3d41581d4e",
+  "provider_seconds": 71.57436629100266,
+  "right": "task-3/local/personal-memory/2026/06",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

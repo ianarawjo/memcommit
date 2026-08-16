@@ -1,0 +1,446 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:26:34.033239+00:00",
+      "frames": [
+        {
+          "context_digest": "130876ecc1e3921197d330f5ad8493b927360f3505da3eff8df01d4f595a4934",
+          "context_name": "task-2/advisor1/structure",
+          "context_uid": "0ff7abfd-58d3-58c2-b42a-31dca38cb7bd",
+          "memories": [
+            {
+              "content": "Complete the problem framing within the first two sentences so the reader reaches the proposal's central issue before any supporting background.",
+              "content_digest": "4096d07c1d883f8ba3973fd247207f8e86964ff2172e8580c81cb53e64772a6c",
+              "position": 0,
+              "uid": "44249c8a-e84f-5c20-a9cd-a55457e98511"
+            },
+            {
+              "content": "Use the first sentence for the concrete problem and the second for its consequence; reserve later sentences for the proposed response.",
+              "content_digest": "8d72b732a389d0c1bbb22112fa3ba6d8113c8b9d29d252d751c5a55cf7abc648",
+              "position": 1,
+              "uid": "21371c6c-c74f-5791-8f9b-6d099306bfb5"
+            },
+            {
+              "content": "Specify the user, context, and interaction to be explored in the primary HCI research question.",
+              "content_digest": "cc6e0085a02b6df0b572f7393a15292e7fd6c8204f78c66f50fd15190ef49dd0",
+              "position": 2,
+              "uid": "f69ea80c-0d56-5fe8-9d24-8793eefa6643"
+            },
+            {
+              "content": "Provide one compact visual summary when proposing an unfamiliar interaction procedure.",
+              "content_digest": "1e4299abe1691fbbfc826fc59d4276831d9a49abd3588820ba2f50311fd56d2c",
+              "position": 3,
+              "uid": "18ebdcbc-cf5a-5e6c-b2cd-b4cd07d7e59e"
+            },
+            {
+              "content": "Mark the conditions that move an unfamiliar interaction procedure from one step to the next in its visual summary.",
+              "content_digest": "9e7d7547cac76b4b6665ea585fedd7678682c7f9a4eadf129202ac2ea2c6b2b8",
+              "position": 4,
+              "uid": "5ab99a77-8836-50cf-8377-fdd23a208bc4"
+            },
+            {
+              "content": "Present the master’s research schedule as phased periods for exploration, design, prototyping, and user evaluation.",
+              "content_digest": "de00ac53757731455605eb2a3568fcbb4ea3660401a8e6aaf2cb9698795decec",
+              "position": 5,
+              "uid": "b9b7932b-85c1-5a14-80f7-0983dbf22380"
+            },
+            {
+              "content": "Link one reviewable deliverable to each phase of the master’s research.",
+              "content_digest": "cac76eb15b96d8fa32e3041fd5a067a3b5e2085fa832755b5740fe7cf2b57c17",
+              "position": 6,
+              "uid": "fc0a3a72-2da2-5843-be3a-a4ff2adf8fac"
+            },
+            {
+              "content": "Place the gap left by HCI-related research and the proposed design and empirical contributions in close proximity.",
+              "content_digest": "94c1e46dec54f1af7649582c49adbd9f998d3b82300cd234c58604e68619c6d9",
+              "position": 7,
+              "uid": "2f7092a7-2625-5d27-bd76-a13ee5809cc2"
+            },
+            {
+              "content": "Divide a two-page proposal with short descriptive subheadings so a reader can jump directly to the problem, proposed response, and next steps.",
+              "content_digest": "9a65c457d63f97379a188faea00bbc6dfc4ea30ad54aee1386f724a765e88e90",
+              "position": 8,
+              "uid": "a1857f07-36cd-5a6c-946d-a308e712e9eb"
+            },
+            {
+              "content": "Give the problem and proposed response their own descriptive subheadings instead of relying only on paragraph transitions.",
+              "content_digest": "3f5d0cf36befd2b1cb66ae8038719d3f8cd4472303e5173c48c1f96f67d9e969",
+              "position": 9,
+              "uid": "895b5ac9-1aa4-51d2-b89a-94e9fe5b869d"
+            },
+            {
+              "content": "Give the next steps and requested support their own descriptive subheading so they remain easy to find on a return visit.",
+              "content_digest": "008352fbd9cb0d40bd64afe1db74efb2a833adc4146924743b836dbd1941bd90",
+              "position": 10,
+              "uid": "3005f4c5-e17b-531b-b9bf-c9d69411c71f"
+            },
+            {
+              "content": "Place pilot observation or initial prototype results near sentences supporting feasibility claims.",
+              "content_digest": "60e9dcff7041a8df6d3471976e828c8a4713a24ec1b8fa6b6af77afd75b78cf8",
+              "position": 11,
+              "uid": "4913f63e-ceb9-587a-ade9-494fc8f28849"
+            },
+            {
+              "content": "Readers often decide what a proposal is about from its first two sentences before scanning the rest of the page.",
+              "content_digest": "0d8addaa334e762de0ef2ec08c78102bc005a6b81f0baf418c83be2a2981934b",
+              "position": 12,
+              "uid": "8ecaec22-7c25-5a39-a85b-56db9c3b607e"
+            },
+            {
+              "content": "When setup continues past the second sentence, readers who are skimming often retain the background topic but miss the exact problem being proposed.",
+              "content_digest": "5976e248ce36164afb87182216974b972f783352ae5b500398052387ee628710",
+              "position": 13,
+              "uid": "a4536b84-40f2-57db-84e4-024c97c9fecb"
+            },
+            {
+              "content": "Reuse the same short subheadings in discussion so a reader can return to a section without searching through the whole page.",
+              "content_digest": "276c3060f1479291f0d0dd7eba9899e91191555c65cfa60a48d28d1f5b877538",
+              "position": 14,
+              "uid": "2312cb6e-4f50-56f5-b725-ba5e45697a73"
+            },
+            {
+              "content": "Use visible subheadings as a completeness check: an empty or missing section makes an omitted part of the proposal immediately apparent.",
+              "content_digest": "2a68f989965d7f20482be421bc6145ea22d769c78e9c833a842694480dc097f5",
+              "position": 15,
+              "uid": "1d90043b-f010-5a14-9493-77f636c13975"
+            },
+            {
+              "content": "Readers often scan section labels before deciding which paragraph to read closely.",
+              "content_digest": "95e51e9236f82b7ace59c6a24359f398583142c762cc1dd607717a9f297e804a",
+              "position": 16,
+              "uid": "b77fe6ec-676b-5bb9-9119-45aefea2aa27"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "d0db4e38-dbc1-4c40-9cbc-476e93d2e59c"
+        },
+        {
+          "context_digest": "673626cf0c3650052d63b04173d43516860e2035d7038878998898bc5bebb2e3",
+          "context_name": "task-2/advisor2/evaluation",
+          "context_uid": "6e9f8ad5-a43d-5dfd-99a3-604f2757da0d",
+          "memories": [
+            {
+              "content": "Specify a single representative measure that will drive operational decisions to maintain, modify, or discontinue the deployed design.",
+              "content_digest": "dd9abb7bbbdf6846921a984789426b27a45df60ce38408422b6b0774835b44f8",
+              "position": 0,
+              "uid": "f27576c7-6f53-5412-901c-19df7e1d5e2e"
+            },
+            {
+              "content": "The HCI review panel verifies whether operational decisions can be made based on the declared primary measure.",
+              "content_digest": "1d88ce414bdbfcf9565c712f8f0d72378569d723c0c5b5c6007dc18a96f6378f",
+              "position": 1,
+              "uid": "8608bdf3-49d7-54d0-a2fb-c883c24e40ef"
+            },
+            {
+              "content": "Establish decision thresholds indicating at what levels key metrics trigger maintaining, modifying, or discontinuing the design.",
+              "content_digest": "866bad632421bfd3487fba69b855ccb36aeb9e31c6208b339db22301bdd3fc28",
+              "position": 2,
+              "uid": "b06bb706-f911-5767-8e27-b64c74d0e592"
+            },
+            {
+              "content": "Evaluate whether reducing workload for one role creates new tasks for other roles through the proposed design changes.",
+              "content_digest": "6b38b84cdc2a78f61f3163cccd787dec39167596f4f720788ec4c930f698fa9f",
+              "position": 3,
+              "uid": "473ec6e8-29f0-5c83-b36d-b7d32eeb25a3"
+            },
+            {
+              "content": "Distinguish usability from organizational adoption intent as separate evaluation outcomes.",
+              "content_digest": "7328bf54063078377068871ee3970709d9a8763204c2c3a08321e025e028868c",
+              "position": 4,
+              "uid": "935cf79f-3e67-567d-ab55-35e8fad7eb37"
+            },
+            {
+              "content": "Implementation fidelity indicates whether planned features and operational procedures were delivered in the field according to intended specifications.",
+              "content_digest": "b04d0bc0590dd77d3bc0bde581481992d57ad48c14517a2a1d63f996e51290b2",
+              "position": 5,
+              "uid": "bea0e97f-1217-507b-87a7-09ce85bae9fe"
+            },
+            {
+              "content": "Initial evaluations and long-term operation do not share identical measurement conditions due to differences in system exposure duration and frequency of repeated use.",
+              "content_digest": "49e90b293b90d173b11d1bb89e85f688c55cb923c2a19eb2058a539388327715",
+              "position": 6,
+              "uid": "dbe435ff-fe32-54fe-a2e6-7b46694ce151"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "c19a954c-4040-4773-9754-5726486f2873"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The reference frame concentrates on proposal structure, navigation, research framing, visuals, scheduling, and evidence placement. The compared frame independently concentrates on post-deployment evaluation and operational decision criteria. The frames contain no scope-aligned shared claim or contradiction; each contributes separate, useful guidance.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d0db4e38-dbc1-4c40-9cbc-476e93d2e59c",
+              "memory_uid": "44249c8a-e84f-5c20-a9cd-a55457e98511"
+            },
+            {
+              "frame_uid": "d0db4e38-dbc1-4c40-9cbc-476e93d2e59c",
+              "memory_uid": "21371c6c-c74f-5791-8f9b-6d099306bfb5"
+            },
+            {
+              "frame_uid": "d0db4e38-dbc1-4c40-9cbc-476e93d2e59c",
+              "memory_uid": "8ecaec22-7c25-5a39-a85b-56db9c3b607e"
+            },
+            {
+              "frame_uid": "d0db4e38-dbc1-4c40-9cbc-476e93d2e59c",
+              "memory_uid": "a4536b84-40f2-57db-84e4-024c97c9fecb"
+            }
+          ],
+          "reason": "These reference memories state and motivate one opening-structure policy; the compared frame contains no corresponding guidance about proposal openings.",
+          "status": "RESOLVED",
+          "summary": "The proposal should establish its concrete problem and consequence within the first two sentences because readers use that opening to identify the central issue.",
+          "uid": "e8d5548a-54f8-5abd-b335-ac2465db6c7b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d0db4e38-dbc1-4c40-9cbc-476e93d2e59c",
+              "memory_uid": "f69ea80c-0d56-5fe8-9d24-8793eefa6643"
+            }
+          ],
+          "reason": "This is independently useful reference-only guidance about research-question formulation, with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The primary HCI research question should identify the user, context, and interaction under study.",
+          "uid": "fc0517cd-037e-58f5-8fef-f1fe1063f6d1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d0db4e38-dbc1-4c40-9cbc-476e93d2e59c",
+              "memory_uid": "18ebdcbc-cf5a-5e6c-b2cd-b4cd07d7e59e"
+            },
+            {
+              "frame_uid": "d0db4e38-dbc1-4c40-9cbc-476e93d2e59c",
+              "memory_uid": "5ab99a77-8836-50cf-8377-fdd23a208bc4"
+            }
+          ],
+          "reason": "The reference memories split one visual-explanation requirement into the summary itself and its transition conditions; the compared frame does not address procedure visualization.",
+          "status": "RESOLVED",
+          "summary": "An unfamiliar interaction procedure should receive a compact visual summary that marks the conditions governing movement between steps.",
+          "uid": "e1903a2e-fd80-5d1e-8ca8-5157320aa618"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d0db4e38-dbc1-4c40-9cbc-476e93d2e59c",
+              "memory_uid": "b9b7932b-85c1-5a14-80f7-0983dbf22380"
+            },
+            {
+              "frame_uid": "d0db4e38-dbc1-4c40-9cbc-476e93d2e59c",
+              "memory_uid": "fc0a3a72-2da2-5843-be3a-a4ff2adf8fac"
+            }
+          ],
+          "reason": "These reference memories jointly define one phased planning structure; the compared frame contains no corresponding schedule guidance.",
+          "status": "RESOLVED",
+          "summary": "The master’s research schedule should present exploration, design, prototyping, and evaluation as phases, each linked to a reviewable deliverable.",
+          "uid": "20a80c59-5cc5-514b-a06d-2bce82166af7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d0db4e38-dbc1-4c40-9cbc-476e93d2e59c",
+              "memory_uid": "2f7092a7-2625-5d27-bd76-a13ee5809cc2"
+            }
+          ],
+          "reason": "This reference-only claim governs the placement of the proposal’s gap and contributions and has no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The HCI research gap should appear near the proposed design and empirical contributions.",
+          "uid": "7133332d-2c06-59fe-b5b3-24257e2f7962"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d0db4e38-dbc1-4c40-9cbc-476e93d2e59c",
+              "memory_uid": "a1857f07-36cd-5a6c-946d-a308e712e9eb"
+            },
+            {
+              "frame_uid": "d0db4e38-dbc1-4c40-9cbc-476e93d2e59c",
+              "memory_uid": "895b5ac9-1aa4-51d2-b89a-94e9fe5b869d"
+            },
+            {
+              "frame_uid": "d0db4e38-dbc1-4c40-9cbc-476e93d2e59c",
+              "memory_uid": "3005f4c5-e17b-531b-b9bf-c9d69411c71f"
+            },
+            {
+              "frame_uid": "d0db4e38-dbc1-4c40-9cbc-476e93d2e59c",
+              "memory_uid": "b77fe6ec-676b-5bb9-9119-45aefea2aa27"
+            }
+          ],
+          "reason": "The reference memories state a general navigation policy, divide it across principal proposal sections, and supply the associated scanning rationale; the compared frame does not address section navigation.",
+          "status": "RESOLVED",
+          "summary": "A short proposal should use visible descriptive subheadings for the problem, proposed response, and next steps so scanning readers can navigate directly to those sections.",
+          "uid": "abfcfa13-5891-5cab-9487-889d304d0fe7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d0db4e38-dbc1-4c40-9cbc-476e93d2e59c",
+              "memory_uid": "4913f63e-ceb9-587a-ade9-494fc8f28849"
+            }
+          ],
+          "reason": "This is independent reference-only guidance about connecting feasibility assertions with nearby evidence.",
+          "status": "RESOLVED",
+          "summary": "Pilot observations or initial prototype results should be placed near the feasibility claims they support.",
+          "uid": "833d4d05-45ee-5887-92a6-0618e05c845c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d0db4e38-dbc1-4c40-9cbc-476e93d2e59c",
+              "memory_uid": "2312cb6e-4f50-56f5-b725-ba5e45697a73"
+            }
+          ],
+          "reason": "This reference-only claim concerns persistent navigation during discussion, a purpose not supplied by the other heading claims or the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The same short subheadings should be reused in discussion to make later return to a section easier.",
+          "uid": "7f56de35-96bf-51f6-8c03-cfe0c6f44e9f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d0db4e38-dbc1-4c40-9cbc-476e93d2e59c",
+              "memory_uid": "1d90043b-f010-5a14-9493-77f636c13975"
+            }
+          ],
+          "reason": "This reference-only claim gives headings an independent diagnostic purpose beyond navigation and has no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Visible subheadings should serve as a completeness check by exposing missing or empty proposal sections.",
+          "uid": "93e6095a-8222-5415-b309-7b2d45d2a201"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c19a954c-4040-4773-9754-5726486f2873",
+              "memory_uid": "f27576c7-6f53-5412-901c-19df7e1d5e2e"
+            },
+            {
+              "frame_uid": "c19a954c-4040-4773-9754-5726486f2873",
+              "memory_uid": "8608bdf3-49d7-54d0-a2fb-c883c24e40ef"
+            }
+          ],
+          "reason": "The compared memories state one decision-measure requirement and its panel-review function; the reference frame does not address deployment decision measures.",
+          "status": "RESOLVED",
+          "summary": "A declared representative primary measure should support maintain, modify, or discontinue decisions and permit an HCI review panel to verify that those decisions are operationally possible.",
+          "uid": "e40e0574-b948-5825-851b-dc3354712bac"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c19a954c-4040-4773-9754-5726486f2873",
+              "memory_uid": "b06bb706-f911-5767-8e27-b64c74d0e592"
+            }
+          ],
+          "reason": "This is independently useful compared-only guidance about operational trigger levels, distinct from merely selecting a primary measure.",
+          "status": "RESOLVED",
+          "summary": "Key metrics should have explicit thresholds that trigger maintaining, modifying, or discontinuing the design.",
+          "uid": "196b6862-be16-5b91-bf9e-45999b78f156"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c19a954c-4040-4773-9754-5726486f2873",
+              "memory_uid": "473ec6e8-29f0-5c83-b36d-b7d32eeb25a3"
+            }
+          ],
+          "reason": "This compared-only claim addresses redistribution of work across roles, which the reference frame does not discuss.",
+          "status": "RESOLVED",
+          "summary": "Evaluation should test whether workload reductions for one role create new tasks for other roles.",
+          "uid": "9eda0fc2-70e2-5482-8776-3356b87aaeb3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c19a954c-4040-4773-9754-5726486f2873",
+              "memory_uid": "935cf79f-3e67-567d-ab55-35e8fad7eb37"
+            }
+          ],
+          "reason": "This compared-only claim distinguishes two evaluation constructs and has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Usability and organizational adoption intent should be treated as separate evaluation outcomes.",
+          "uid": "f74971fa-7363-52c4-9790-c3adf60b5d82"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c19a954c-4040-4773-9754-5726486f2873",
+              "memory_uid": "bea0e97f-1217-507b-87a7-09ce85bae9fe"
+            }
+          ],
+          "reason": "This compared-only claim defines a field-delivery evaluation concept absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Implementation fidelity indicates whether planned features and operational procedures were delivered in the field as intended.",
+          "uid": "4a65edd3-01fe-529f-8d36-65403d3ceeb7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c19a954c-4040-4773-9754-5726486f2873",
+              "memory_uid": "dbe435ff-fe32-54fe-a2e6-7b46694ce151"
+            }
+          ],
+          "reason": "This compared-only claim identifies a temporal evaluation distinction that the reference frame does not address.",
+          "status": "RESOLVED",
+          "summary": "Initial evaluation and long-term operation have different measurement conditions because exposure duration and repeated-use frequency differ.",
+          "uid": "ab04d016-def0-5d81-a145-753351165f14"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only guidance covers decision-driving measures and thresholds, cross-role workload effects, separate usability and adoption outcomes, implementation fidelity, and measurement differences between initial and long-term evaluation.",
+        "differences": "",
+        "reference_only": "Reference-only guidance covers rapid problem framing, research-question specificity, procedure visuals, phased planning, contribution placement, navigable subheadings, and locally supported feasibility claims."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "ac066962-1379-4cd3-a7ef-9d6a49543755"
+    },
+    "analysis_digest": "0df91c52626bd0a20db35a3a427b9e7b245825099a075e7ea1cd8b5a4485f2a1",
+    "key": "b55ed7f07497c0b34bc85d1595cd85dda28f5226d84eed4e20a7588b01200ce0",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 44.92618329199831,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "b55ed7f07497c0b34bc85d1595cd85dda28f5226d84eed4e20a7588b01200ce0",
+  "created_at": "2026-08-13T18:27:18.958558Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/structure",
+  "pair_key": "1f93f2baf7728cd1ae9f6ab3183b0f40b40dd3613673be2604768dade380a7ba",
+  "provider_seconds": 44.92618329199831,
+  "right": "task-2/advisor2/evaluation",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

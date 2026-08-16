@@ -1,0 +1,332 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:21:20.643591+00:00",
+      "frames": [
+        {
+          "context_digest": "4ae7659c0c6976de9bf2292f9e35962963b7931b470c2294d4f0e70b3500bff0",
+          "context_name": "task-2/advisor1/feasibility",
+          "context_uid": "52db6b06-e86a-556a-913e-30e45f7e9529",
+          "memories": [
+            {
+              "content": "Mark unverified schedule assumptions as such.",
+              "content_digest": "d4cdcdbcdb51d96f9a7435e72c2e4ef25a3e3822a765a88afafeca5194bda96e",
+              "position": 0,
+              "uid": "b150c774-27f6-5ec8-8cb9-9a00be19ce9b"
+            },
+            {
+              "content": "Mark unverified recruitment assumptions as such.",
+              "content_digest": "4cc28528fee1c7b09f709638e2b57d3bc9efe635d20500ee98567f8f59b8cf21",
+              "position": 1,
+              "uid": "6c7d14ed-67e5-56ff-befb-7648b95aa7a3"
+            },
+            {
+              "content": "Mark unverified technical assumptions as such.",
+              "content_digest": "8942e49cd46e3e9746330349df11e49d4a6c9250c7aa4c52c2d9ade1c97c735c",
+              "position": 2,
+              "uid": "00bf39b5-fe97-5fd0-b579-a5c13b5e6af7"
+            },
+            {
+              "content": "Clarify which stage of prototype fabrication or user study each requested resource is used for.",
+              "content_digest": "81ba64e23304f8fbbb3af4f2c30dfa3c517899c486e88ba211189a7911fcbd64",
+              "position": 3,
+              "uid": "3ae97c88-7537-5733-b48d-e02c9283f486"
+            },
+            {
+              "content": "Operations reviewers judge feasibility based on the personnel assigned to each procedure.",
+              "content_digest": "fe29bb7e592d116001a25ce11c603ae29f21d446925c28db692f14970d5b8134",
+              "position": 4,
+              "uid": "e2b5c1f0-97c2-5d46-af80-993d8d5606c9"
+            },
+            {
+              "content": "Operations reviewers judge feasibility based on the equipment assigned to each procedure.",
+              "content_digest": "859ab328c21506d11dd1f6d98e98d5a552446e774931a8bc13396750acf0793b",
+              "position": 5,
+              "uid": "f636b400-d3a2-5873-bf5b-c990b0f7ea42"
+            },
+            {
+              "content": "Operations reviewers judge feasibility based on the time allocated to each procedure.",
+              "content_digest": "08656886328ece4d813e36b1145805ffd3f3d4c6c855c20b1464143fb12868ab",
+              "position": 6,
+              "uid": "49385488-2315-51bc-bea0-749a1aea52f1"
+            },
+            {
+              "content": "Verify that the planned number of formative evaluation iterations is feasible within the time for prototype modification and recruitment resources.",
+              "content_digest": "9e181a14a97abd740a85679554395d7b315c07f0e4171ef276a2c31553b285c7",
+              "position": 7,
+              "uid": "f1c22a48-9d8d-5e82-9837-690d66e719db"
+            },
+            {
+              "content": "Include only the minimum functionality required to compare primary design assumptions in the scope of the formative evaluation prototype.",
+              "content_digest": "7769c2a4c03dc1c279bbf34bf0cefdcd076e3c1d8a1e56015bf20357ecfcf433",
+              "position": 8,
+              "uid": "4d69f030-0dc0-5df7-a153-0b595a3f68de"
+            },
+            {
+              "content": "The user's iterative design plan can be judged feasible only if time and personnel are allocated for modifying the prototype between iterations.",
+              "content_digest": "0339285cf9fd632814c5b5eb2b48fd46e3baf09ea95fb406f71b5d2cc804fa7e",
+              "position": 9,
+              "uid": "152f8621-f5fb-5c5e-a961-1fde77ed0bb3"
+            },
+            {
+              "content": "Delays in participant recruitment can compress the time available for prototype modification between formative evaluations.",
+              "content_digest": "9945f30dba63d2d070bad59cb2fb15b6a26d635f337949c3891b58d17c43973a",
+              "position": 10,
+              "uid": "1877a138-31f6-59a5-b666-ae57985f540d"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "5cf979c7-e140-4341-9577-87ff5e47d62b"
+        },
+        {
+          "context_digest": "e70e4eaff26e4baf1b346a4ecd2b44ed9f9ccac9e205b7b82572dc8ef0e217c4",
+          "context_name": "task-2/advisor2/emphasis",
+          "context_uid": "398f9930-3a0f-5de0-a339-ceba7dd5d1c6",
+          "memories": [
+            {
+              "content": "Do not exceed two primary HCI contributions that readers must remember.",
+              "content_digest": "59786866cf953172c2697f09398356a861e8ea448093102c32c9149f16b2e5c5",
+              "position": 0,
+              "uid": "d59dc83b-ce6a-5ac7-ab64-e5436df1f945"
+            },
+            {
+              "content": "Present each design or operational contribution as a single named sentence.",
+              "content_digest": "e0de5a9f1c1ca585fe062d7e11f8d2536cbe5ec4eefc16da6f7a0b62c0247d45",
+              "position": 1,
+              "uid": "328de462-17a4-551f-9f74-cb3118519e45"
+            },
+            {
+              "content": "In studies recruiting organizational members, emphasize workflow constraints.",
+              "content_digest": "c46efadebd89f3d757993baea79a5ef1386bbf6b4769ae3704ae62102397fc3b",
+              "position": 2,
+              "uid": "eab1dac5-8b61-5793-a56f-c4e3e64af190"
+            },
+            {
+              "content": "In studies recruiting organizational members, emphasize manager approval constraints.",
+              "content_digest": "2387fb9f3ab907e671fc9dcc2e7f067a84bdf1f5713d8385a32e39eb1e14751d",
+              "position": 3,
+              "uid": "f90e616a-d5a4-5cc2-86e4-62534a1faf83"
+            },
+            {
+              "content": "HCI reviewers find it difficult to identify primary contributions when named design and operational contributions exceed two.",
+              "content_digest": "04e080bfdf7277d04f0efc1b1d6775d06cba88aab5ff78bfd430674b004722a5",
+              "position": 4,
+              "uid": "78a1c87a-6936-516c-b578-8e97dc2e91f4"
+            },
+            {
+              "content": "Highlight one primary field operational decision to be changed by evaluation results as the central claim.",
+              "content_digest": "9a6bda883e68a2553a1238114d5de2746dc220948aebc1c2965cbb435318fe9c",
+              "position": 5,
+              "uid": "7af2db41-9091-5452-9beb-8fd7b48b7872"
+            },
+            {
+              "content": "Specify prototype features unnecessary for reviewing the primary field problem as secondary scope.",
+              "content_digest": "419ed0b0bccf1af7b30e0351f5e87b9e37e469cfa567e684695ffe4b6d39178a",
+              "position": 6,
+              "uid": "2312f35d-c17d-5af3-b84f-d2e671d7663f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "1b702711-4ba1-4911-989f-17cd892074cc"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames converge on keeping formative prototypes focused on the primary evaluation question. Otherwise, the reference concentrates on operational feasibility, resource traceability, and assumption transparency, while the compared frame concentrates on contribution clarity, field-study constraints, and a central operational claim.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "5cf979c7-e140-4341-9577-87ff5e47d62b",
+              "memory_uid": "4d69f030-0dc0-5df7-a153-0b595a3f68de"
+            },
+            {
+              "frame_uid": "1b702711-4ba1-4911-989f-17cd892074cc",
+              "memory_uid": "2312f35d-c17d-5af3-b84f-d2e671d7663f"
+            }
+          ],
+          "reason": "One claim limits included functionality to the minimum needed for comparison, while the other calls for explicitly identifying features unnecessary to the primary problem as secondary scope; these jointly govern prototype prioritization without contradiction.",
+          "status": "RESOLVED",
+          "summary": "Formative prototype scope should prioritize functionality needed to examine the primary design or field problem, with unnecessary features treated as secondary.",
+          "uid": "2d2170b6-e907-58ad-bedc-61baf001c722"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5cf979c7-e140-4341-9577-87ff5e47d62b",
+              "memory_uid": "b150c774-27f6-5ec8-8cb9-9a00be19ce9b"
+            },
+            {
+              "frame_uid": "5cf979c7-e140-4341-9577-87ff5e47d62b",
+              "memory_uid": "6c7d14ed-67e5-56ff-befb-7648b95aa7a3"
+            },
+            {
+              "frame_uid": "5cf979c7-e140-4341-9577-87ff5e47d62b",
+              "memory_uid": "00bf39b5-fe97-5fd0-b579-a5c13b5e6af7"
+            }
+          ],
+          "reason": "These reference-side statements split one transparency policy across three assumption categories, with no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "Unverified schedule, recruitment, and technical assumptions should be explicitly marked as unverified.",
+          "uid": "33eefde6-e065-5dd4-bf09-21523fb5d9e1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5cf979c7-e140-4341-9577-87ff5e47d62b",
+              "memory_uid": "3ae97c88-7537-5733-b48d-e02c9283f486"
+            }
+          ],
+          "reason": "This is an independently useful reference-side requirement for resource traceability that has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Each requested resource should be tied to the prototype-fabrication or user-study stage where it is used.",
+          "uid": "cb41593e-bdfa-5f24-b01f-356ff6fb56f9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5cf979c7-e140-4341-9577-87ff5e47d62b",
+              "memory_uid": "e2b5c1f0-97c2-5d46-af80-993d8d5606c9"
+            },
+            {
+              "frame_uid": "5cf979c7-e140-4341-9577-87ff5e47d62b",
+              "memory_uid": "f636b400-d3a2-5873-bf5b-c990b0f7ea42"
+            },
+            {
+              "frame_uid": "5cf979c7-e140-4341-9577-87ff5e47d62b",
+              "memory_uid": "49385488-2315-51bc-bea0-749a1aea52f1"
+            }
+          ],
+          "reason": "These reference-side statements divide one procedure-level feasibility standard into its personnel, equipment, and time inputs, with no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "Operations feasibility is judged from the personnel, equipment, and time assigned to each procedure.",
+          "uid": "f84c509c-4d9d-5713-bc2e-4b6dc8e961a7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5cf979c7-e140-4341-9577-87ff5e47d62b",
+              "memory_uid": "f1c22a48-9d8d-5e82-9837-690d66e719db"
+            },
+            {
+              "frame_uid": "5cf979c7-e140-4341-9577-87ff5e47d62b",
+              "memory_uid": "152f8621-f5fb-5c5e-a961-1fde77ed0bb3"
+            },
+            {
+              "frame_uid": "5cf979c7-e140-4341-9577-87ff5e47d62b",
+              "memory_uid": "1877a138-31f6-59a5-b666-ae57985f540d"
+            }
+          ],
+          "reason": "These reference-side claims jointly describe one operational feasibility dependency linking iteration count, prototype modification capacity, recruitment resources, and schedule compression.",
+          "status": "RESOLVED",
+          "summary": "The planned formative-evaluation iterations must fit available modification time and personnel or recruitment resources, accounting for recruitment delays that can compress time between iterations.",
+          "uid": "bda6c38e-9e32-58c5-a132-f55d832db471"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1b702711-4ba1-4911-989f-17cd892074cc",
+              "memory_uid": "d59dc83b-ce6a-5ac7-ab64-e5436df1f945"
+            },
+            {
+              "frame_uid": "1b702711-4ba1-4911-989f-17cd892074cc",
+              "memory_uid": "78a1c87a-6936-516c-b578-8e97dc2e91f4"
+            }
+          ],
+          "reason": "The compared-side statements express one contribution-count policy together with its reviewer-comprehension rationale, without a reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Primary HCI contributions should not exceed two because additional named contributions become difficult for reviewers to identify and remember.",
+          "uid": "4c868c64-f773-519b-9a6d-78972e8a73aa"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1b702711-4ba1-4911-989f-17cd892074cc",
+              "memory_uid": "328de462-17a4-551f-9f74-cb3118519e45"
+            }
+          ],
+          "reason": "This is an independently useful compared-side presentation rule with no corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "Each design or operational contribution should be presented as one named sentence.",
+          "uid": "5d4dbe78-2f72-5c0f-90c0-87849ab76d41"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1b702711-4ba1-4911-989f-17cd892074cc",
+              "memory_uid": "eab1dac5-8b61-5793-a56f-c4e3e64af190"
+            },
+            {
+              "frame_uid": "1b702711-4ba1-4911-989f-17cd892074cc",
+              "memory_uid": "f90e616a-d5a4-5cc2-86e4-62534a1faf83"
+            }
+          ],
+          "reason": "These compared-side statements split one organizational recruitment concern into two operational constraints, with no corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "Studies recruiting organizational members should emphasize workflow and manager-approval constraints.",
+          "uid": "51a00d48-5b4e-548a-b2bd-7f6aa7d8e5ee"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1b702711-4ba1-4911-989f-17cd892074cc",
+              "memory_uid": "7af2db41-9091-5452-9beb-8fd7b48b7872"
+            }
+          ],
+          "reason": "This is an independently useful compared-side claim-framing requirement with no corresponding reference-side statement.",
+          "status": "RESOLVED",
+          "summary": "The central claim should identify one primary field operational decision that evaluation results are intended to change.",
+          "uid": "55342496-67ab-5a63-9a4b-c7e11cee1fa6"
+        }
+      ],
+      "reports": {
+        "both": "Both constrain prototype scope around what is necessary to examine the primary question, treating unnecessary features as secondary.",
+        "compared_only": "The compared frame limits and names contributions, foregrounds organizational workflow and approval constraints, and centers evaluation on one field operational decision.",
+        "differences": "",
+        "reference_only": "The reference covers labeling unverified assumptions, mapping resources to stages, procedure-level feasibility, and protecting iterative evaluation from modification and recruitment constraints."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "f192bff0-5dbd-461b-8828-6354040edfaf"
+    },
+    "analysis_digest": "470a8261e9925207d8a28da3f51603ab2e2d0e2d1fa96c77842fa494944c8ebc",
+    "key": "58bde22bbb90be66bf9379b122baee1cbef45b1ea10da73bccdd932a689099fc",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 72.83240191699952,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "58bde22bbb90be66bf9379b122baee1cbef45b1ea10da73bccdd932a689099fc",
+  "created_at": "2026-08-13T18:22:33.475485Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/feasibility",
+  "pair_key": "1e5fbcc1e354a5528027aaa5d42ab9607d3bd4779234ca5c75bf51cb0fd0dcee",
+  "provider_seconds": 72.83240191699952,
+  "right": "task-2/advisor2/emphasis",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

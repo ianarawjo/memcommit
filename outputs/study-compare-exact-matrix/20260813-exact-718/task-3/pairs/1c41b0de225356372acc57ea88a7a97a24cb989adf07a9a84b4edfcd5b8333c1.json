@@ -1,0 +1,370 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:37:57.067324+00:00",
+      "frames": [
+        {
+          "context_digest": "db438345c3ec4b3f69562a274c9f81a93bd6e6df97bc89b60abcd193dc89b562",
+          "context_name": "task-3/local/personal-memory/2024/04",
+          "context_uid": "206e1cd3-93da-5341-bda3-95cde4814c20",
+          "memories": [
+            {
+              "content": "The user completed a routine dental checkup in April 2024.",
+              "content_digest": "bbaa093f8dee5b5ee42c4a180e683fce00bc9364f5a009b9fa1e7f2ac233bc01",
+              "position": 0,
+              "uid": "9cea83cd-e39f-53bd-9e79-d30aa465ad02"
+            },
+            {
+              "content": "When the user heard three checkup questions in succession, they asked for the first question again.",
+              "content_digest": "e1b76973991f009295489249af1a7cd0fa7957f24f330e39337e01e5b1acdcbb",
+              "position": 1,
+              "uid": "51f8326f-60d4-5ba3-ba32-a04331dcb930"
+            },
+            {
+              "content": "At the next visit, when questions were asked one at a time, the user answered each without omission.",
+              "content_digest": "30c943f2e043f485a7a7e1ac19343c753ed8f834d00716725322505e28e0b15a",
+              "position": 2,
+              "uid": "cd0bce79-71d5-5d46-9c68-8a1d096dd53a"
+            },
+            {
+              "content": "The user called to reschedule an appointment at lunchtime but did not reach anyone.",
+              "content_digest": "1d4bd2122c160d35080b232ebb8ae5080c2ce34124645b3ec8040d7d29af9752",
+              "position": 3,
+              "uid": "71e27b0c-5c10-5102-aeac-98b0841723f2"
+            },
+            {
+              "content": "After returning home, the user kept a photo of the paper instructions received at the clinic.",
+              "content_digest": "68cddec62167a3910122a129dcfdb3c5604a4fea996d01f870734739dd3b0221",
+              "position": 4,
+              "uid": "86ad5410-0cc7-5876-8e3a-a3f0dd1680c7"
+            },
+            {
+              "content": "On a day the user put only the visit address in the calendar, they had to search again for the floor.",
+              "content_digest": "0d6926aba2c90930bfa984d7af1b12c60f35e53ba9916dfbee2c2391961db1a9",
+              "position": 5,
+              "uid": "aab36950-7e2b-588f-bb7c-d3bd6e36c501"
+            },
+            {
+              "content": "On a day the user shared the checkup time with their older sister, the sister called to check in after the user returned home.",
+              "content_digest": "b7d0fea8e8f2fc13126453039dcedebcda3c67ce2ea96c4a2d5b60365448e0e3",
+              "position": 6,
+              "uid": "50ac9268-9259-56fd-8678-1dfc8f919efb"
+            },
+            {
+              "content": "The scheduling staff at that clinic expect requests to change appointments to arrive by telephone.",
+              "content_digest": "28eec4f0ef0b96764a3f7ea54ee3db9fd4d5f1b62a5a2fa29d0a6193f1d8a18c",
+              "position": 7,
+              "uid": "5141ca66-9860-5ec5-b028-ac8670f586ca"
+            },
+            {
+              "content": "Before adding a follow-up visit to the calendar, confirm the date, time, address, and floor with the user.",
+              "content_digest": "0555c837f721fccd5918b2275086bb39c75e016e27574027185cfbada1c766af",
+              "position": 8,
+              "uid": "e265e637-fa41-53d0-aa9b-0102e9962f9a"
+            },
+            {
+              "content": "The local agent can track completed checkups and scheduled appointments but cannot determine whether a follow-up visit is needed.",
+              "content_digest": "be24b47ccb071438fd01bb99b11af3c63f22e260312a26d901824e6bb0d4cd89",
+              "position": 9,
+              "uid": "7aece7ae-b327-537e-9cef-fe24ee8fc618"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "d6586e92-8f9c-4c03-b28a-b340922ccf9a"
+        },
+        {
+          "context_digest": "b727ef7cf1cb7ca0f00ea3598d36577397e092dcb632f55c3eafb942850922d7",
+          "context_name": "task-3/local/personal-memory/2025/04",
+          "context_uid": "720d2021-1ec5-52ab-ace4-a93e02b05ad9",
+          "memories": [
+            {
+              "content": "The user keeps the shared laundry-room access card in an entrance drawer.",
+              "content_digest": "3c98e367c99e0867f1217c891dc5d982c115fd9d1b4bc3957cca6dbb6338203b",
+              "position": 0,
+              "uid": "a1c67646-6a75-504a-9508-d69e1d04b3e5"
+            },
+            {
+              "content": "The user went downstairs 25 minutes after the laundry finished and received a note from another household.",
+              "content_digest": "44968f6f10c0ae2d1dd775eb066564dada6346c6f59bdacf90d687c57e6c1e0f",
+              "position": 1,
+              "uid": "9479e799-95d7-50d2-af62-d1e0914a389b"
+            },
+            {
+              "content": "For the next load, the user set a reminder five minutes before the end and removed the laundry immediately.",
+              "content_digest": "bc77b81f6126e44bbffeb4ae2dfbb641d31a9742b7a196a106ac385321b48958",
+              "position": 2,
+              "uid": "528cb5ea-8c36-5206-beaa-19432250ec4d"
+            },
+            {
+              "content": "The user washed light-colored clothes with new jeans, and color transferred onto white socks.",
+              "content_digest": "ed0f36cf5ebe8f9542ad39ba45fc109634d72f1cb2b266c15dfe6655e3df3add",
+              "position": 3,
+              "uid": "85fb1639-2176-5329-b490-3325ff030db4"
+            },
+            {
+              "content": "The user later washed the new jeans separately, and the color of the other clothes did not change.",
+              "content_digest": "6e47fe1a02ac39064ea9db2d06d8a1f01f80302825bbe412df745401612e4a84",
+              "position": 4,
+              "uid": "431d170a-863f-596d-97c0-0c9634524ee5"
+            },
+            {
+              "content": "On a day the user did not check the dryer filter, the clothes needed another drying cycle.",
+              "content_digest": "8127e9f3ea34724673517f1e260a73acfb70e287a7e7de84e196ad1cb815f5a7",
+              "position": 5,
+              "uid": "4df33adc-cfba-50f2-b141-e2ebed38b81c"
+            },
+            {
+              "content": "On the next use, after emptying the filter, the user finished drying in one cycle.",
+              "content_digest": "932cfb8fc93277783d8990dad62cfd3e1c9a86e39ad1bd019ce00dac632c53d5",
+              "position": 6,
+              "uid": "ba7daae9-938d-55a1-af20-21cd10d395d8"
+            },
+            {
+              "content": "The building manager judges that not leaving finished laundry for a long time is fair to other households.",
+              "content_digest": "5eabe2d3dff252bb250abcde8fe2d528362afb0e73e7628e839715c3e8a3cd56",
+              "position": 7,
+              "uid": "abbf8742-38e3-5810-b222-fe91e3340962"
+            },
+            {
+              "content": "When creating a shared laundry-room reminder, base it on the end time of the machine the user started.",
+              "content_digest": "e00bc6fe09fea6fde6a27817bd6824a141c1ac4a656b9659067b7e1af9881b1f",
+              "position": 8,
+              "uid": "06273d22-0b42-5c55-9d70-eda14084219a"
+            },
+            {
+              "content": "Even if the local agent knows where the card is kept, it cannot know which machines in the shared laundry room are currently available.",
+              "content_digest": "d03f5583c9e4c686307af90ff00ff54e5ac0990e34296b3d241e4f299d15f4b7",
+              "position": 9,
+              "uid": "03ac930e-d745-5c29-8c24-5ced669817f9"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "f80d347e-ff5a-4b7f-8133-773550aff060"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate practical domains: dental-visit support and shared-laundry routines. Neither contains a scope-aligned counterpart to the other, so the ledger preserves each independently useful claim without treating thematic patterns or mere coexistence as semantic relations.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6586e92-8f9c-4c03-b28a-b340922ccf9a",
+              "memory_uid": "9cea83cd-e39f-53bd-9e79-d30aa465ad02"
+            }
+          ],
+          "reason": "This dental-history fact has no operationally corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user completed a routine dental checkup in April 2024.",
+          "uid": "295dffa8-aab0-5132-9d88-be8e797e517a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6586e92-8f9c-4c03-b28a-b340922ccf9a",
+              "memory_uid": "51f8326f-60d4-5ba3-ba32-a04331dcb930"
+            },
+            {
+              "frame_uid": "d6586e92-8f9c-4c03-b28a-b340922ccf9a",
+              "memory_uid": "cd0bce79-71d5-5d46-9c68-8a1d096dd53a"
+            }
+          ],
+          "reason": "Both observations support one dental-communication pacing claim, which has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user had difficulty with three successive checkup questions but answered fully when questions were presented individually.",
+          "uid": "1f7f2d01-b30d-5230-b422-907b52ca1845"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6586e92-8f9c-4c03-b28a-b340922ccf9a",
+              "memory_uid": "71e27b0c-5c10-5102-aeac-98b0841723f2"
+            },
+            {
+              "frame_uid": "d6586e92-8f9c-4c03-b28a-b340922ccf9a",
+              "memory_uid": "5141ca66-9860-5ec5-b028-ac8670f586ca"
+            }
+          ],
+          "reason": "Both memories concern the clinic's telephone rescheduling process, which is absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The clinic expects appointment-change requests by telephone, and the user's lunchtime rescheduling call went unanswered.",
+          "uid": "6775f885-4541-510d-88ae-d475b866ac73"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6586e92-8f9c-4c03-b28a-b340922ccf9a",
+              "memory_uid": "86ad5410-0cc7-5876-8e3a-a3f0dd1680c7"
+            }
+          ],
+          "reason": "This instruction-retention fact has no operationally corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user retained a photo of the clinic's paper instructions after returning home.",
+          "uid": "ffaed06e-96c2-58ee-af03-bc846267d3e1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6586e92-8f9c-4c03-b28a-b340922ccf9a",
+              "memory_uid": "aab36950-7e2b-588f-bb7c-d3bd6e36c501"
+            },
+            {
+              "frame_uid": "d6586e92-8f9c-4c03-b28a-b340922ccf9a",
+              "memory_uid": "e265e637-fa41-53d0-aa9b-0102e9962f9a"
+            }
+          ],
+          "reason": "Both memories support one dental-visit calendar-detail safeguard, which has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Follow-up calendar entries should be confirmed with the date, time, address, and floor because recording only the address previously required another floor search.",
+          "uid": "a2a2f70f-a1e3-5a2e-a5f8-f6077646929e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6586e92-8f9c-4c03-b28a-b340922ccf9a",
+              "memory_uid": "50ac9268-9259-56fd-8678-1dfc8f919efb"
+            }
+          ],
+          "reason": "This family check-in fact has no operationally corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "After receiving the checkup time, the user's older sister checked in once the user had returned home.",
+          "uid": "54c5a43c-a74c-58eb-90db-ada5ea0d2e22"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6586e92-8f9c-4c03-b28a-b340922ccf9a",
+              "memory_uid": "7aece7ae-b327-537e-9cef-fe24ee8fc618"
+            }
+          ],
+          "reason": "This dental follow-up capability boundary has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The local agent can track completed checkups and scheduled appointments but cannot determine whether a follow-up visit is needed.",
+          "uid": "c90ab6bd-a5fc-5487-b864-b75b5834337c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f80d347e-ff5a-4b7f-8133-773550aff060",
+              "memory_uid": "a1c67646-6a75-504a-9508-d69e1d04b3e5"
+            },
+            {
+              "frame_uid": "f80d347e-ff5a-4b7f-8133-773550aff060",
+              "memory_uid": "03ac930e-d745-5c29-8c24-5ced669817f9"
+            }
+          ],
+          "reason": "Both memories define available and unavailable laundry-access context, with no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The agent may know that the laundry-room access card is kept in an entrance drawer, but it cannot know which shared-room machines are currently available.",
+          "uid": "5ec35d9b-fbec-55f1-9927-4a527fb03057"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f80d347e-ff5a-4b7f-8133-773550aff060",
+              "memory_uid": "9479e799-95d7-50d2-af62-d1e0914a389b"
+            },
+            {
+              "frame_uid": "f80d347e-ff5a-4b7f-8133-773550aff060",
+              "memory_uid": "528cb5ea-8c36-5206-beaa-19432250ec4d"
+            },
+            {
+              "frame_uid": "f80d347e-ff5a-4b7f-8133-773550aff060",
+              "memory_uid": "abbf8742-38e3-5810-b222-fe91e3340962"
+            },
+            {
+              "frame_uid": "f80d347e-ff5a-4b7f-8133-773550aff060",
+              "memory_uid": "06273d22-0b42-5c55-9d70-eda14084219a"
+            }
+          ],
+          "reason": "These memories jointly describe delayed retrieval, an effective reminder response, the governing fairness expectation, and the reminder basis; the reference frame has no corresponding laundry policy.",
+          "status": "RESOLVED",
+          "summary": "End-time-based reminders support prompt laundry retrieval, avoiding prolonged occupancy that inconveniences other households and conflicts with the manager's fairness expectation.",
+          "uid": "fc261d68-8ffe-5c84-b248-ec8b5d6e245d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f80d347e-ff5a-4b7f-8133-773550aff060",
+              "memory_uid": "85fb1639-2176-5329-b490-3325ff030db4"
+            },
+            {
+              "frame_uid": "f80d347e-ff5a-4b7f-8133-773550aff060",
+              "memory_uid": "431d170a-863f-596d-97c0-0c9634524ee5"
+            }
+          ],
+          "reason": "Both observations support one laundry-sorting claim, which has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "New jeans transferred color when washed with light clothes, while washing them separately later avoided changing other clothes' color.",
+          "uid": "24841799-27fc-55dc-9263-4a7b9f297963"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f80d347e-ff5a-4b7f-8133-773550aff060",
+              "memory_uid": "4df33adc-cfba-50f2-b141-e2ebed38b81c"
+            },
+            {
+              "frame_uid": "f80d347e-ff5a-4b7f-8133-773550aff060",
+              "memory_uid": "ba7daae9-938d-55a1-af20-21cd10d395d8"
+            }
+          ],
+          "reason": "Both observations support one dryer-filter effectiveness claim, which has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Skipping the dryer-filter check required another cycle, whereas emptying the filter before the next use enabled drying in one cycle.",
+          "uid": "0fd5bef1-ef6a-5de0-913a-48db7be0bf48"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame records laundry access, prompt retrieval and reminders, color-transfer prevention, dryer-filter effects, fairness expectations, and limits on knowing machine availability.",
+        "differences": "",
+        "reference_only": "The reference records dental history, communication pacing, appointment logistics, retained instructions, family check-ins, calendar-detail safeguards, and limits on determining follow-up need."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "e5d26f10-fede-4e63-a83d-54fede18bf79"
+    },
+    "analysis_digest": "6f638394a9fb4daefb35c45a4689a895e1d9caf6f3be75a58fba61085e63dece",
+    "key": "c28c7df1b868ad154ad064c53dff1de11975f197fe31553d9ab9e45ab7dc5a08",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 36.529918542000814,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "c28c7df1b868ad154ad064c53dff1de11975f197fe31553d9ab9e45ab7dc5a08",
+  "created_at": "2026-08-13T18:38:33.596772Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/04",
+  "pair_key": "1c41b0de225356372acc57ea88a7a97a24cb989adf07a9a84b4edfcd5b8333c1",
+  "provider_seconds": 36.529918542000814,
+  "right": "task-3/local/personal-memory/2025/04",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

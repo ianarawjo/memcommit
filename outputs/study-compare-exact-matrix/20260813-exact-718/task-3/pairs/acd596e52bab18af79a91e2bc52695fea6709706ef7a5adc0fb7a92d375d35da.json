@@ -1,0 +1,406 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:51:01.023726+00:00",
+      "frames": [
+        {
+          "context_digest": "b727ef7cf1cb7ca0f00ea3598d36577397e092dcb632f55c3eafb942850922d7",
+          "context_name": "task-3/local/personal-memory/2025/04",
+          "context_uid": "720d2021-1ec5-52ab-ace4-a93e02b05ad9",
+          "memories": [
+            {
+              "content": "The user keeps the shared laundry-room access card in an entrance drawer.",
+              "content_digest": "3c98e367c99e0867f1217c891dc5d982c115fd9d1b4bc3957cca6dbb6338203b",
+              "position": 0,
+              "uid": "a1c67646-6a75-504a-9508-d69e1d04b3e5"
+            },
+            {
+              "content": "The user went downstairs 25 minutes after the laundry finished and received a note from another household.",
+              "content_digest": "44968f6f10c0ae2d1dd775eb066564dada6346c6f59bdacf90d687c57e6c1e0f",
+              "position": 1,
+              "uid": "9479e799-95d7-50d2-af62-d1e0914a389b"
+            },
+            {
+              "content": "For the next load, the user set a reminder five minutes before the end and removed the laundry immediately.",
+              "content_digest": "bc77b81f6126e44bbffeb4ae2dfbb641d31a9742b7a196a106ac385321b48958",
+              "position": 2,
+              "uid": "528cb5ea-8c36-5206-beaa-19432250ec4d"
+            },
+            {
+              "content": "The user washed light-colored clothes with new jeans, and color transferred onto white socks.",
+              "content_digest": "ed0f36cf5ebe8f9542ad39ba45fc109634d72f1cb2b266c15dfe6655e3df3add",
+              "position": 3,
+              "uid": "85fb1639-2176-5329-b490-3325ff030db4"
+            },
+            {
+              "content": "The user later washed the new jeans separately, and the color of the other clothes did not change.",
+              "content_digest": "6e47fe1a02ac39064ea9db2d06d8a1f01f80302825bbe412df745401612e4a84",
+              "position": 4,
+              "uid": "431d170a-863f-596d-97c0-0c9634524ee5"
+            },
+            {
+              "content": "On a day the user did not check the dryer filter, the clothes needed another drying cycle.",
+              "content_digest": "8127e9f3ea34724673517f1e260a73acfb70e287a7e7de84e196ad1cb815f5a7",
+              "position": 5,
+              "uid": "4df33adc-cfba-50f2-b141-e2ebed38b81c"
+            },
+            {
+              "content": "On the next use, after emptying the filter, the user finished drying in one cycle.",
+              "content_digest": "932cfb8fc93277783d8990dad62cfd3e1c9a86e39ad1bd019ce00dac632c53d5",
+              "position": 6,
+              "uid": "ba7daae9-938d-55a1-af20-21cd10d395d8"
+            },
+            {
+              "content": "The building manager judges that not leaving finished laundry for a long time is fair to other households.",
+              "content_digest": "5eabe2d3dff252bb250abcde8fe2d528362afb0e73e7628e839715c3e8a3cd56",
+              "position": 7,
+              "uid": "abbf8742-38e3-5810-b222-fe91e3340962"
+            },
+            {
+              "content": "When creating a shared laundry-room reminder, base it on the end time of the machine the user started.",
+              "content_digest": "e00bc6fe09fea6fde6a27817bd6824a141c1ac4a656b9659067b7e1af9881b1f",
+              "position": 8,
+              "uid": "06273d22-0b42-5c55-9d70-eda14084219a"
+            },
+            {
+              "content": "Even if the local agent knows where the card is kept, it cannot know which machines in the shared laundry room are currently available.",
+              "content_digest": "d03f5583c9e4c686307af90ff00ff54e5ac0990e34296b3d241e4f299d15f4b7",
+              "position": 9,
+              "uid": "03ac930e-d745-5c29-8c24-5ced669817f9"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "458c457d-0af7-4e23-b08b-9bdd4be5d137"
+        },
+        {
+          "context_digest": "4eadf16a0c655a266bec3ebe56b056075c55e7f716f6879a0b6a905fe34136df",
+          "context_name": "task-3/local/personal-memory/2026/05",
+          "context_uid": "fd476504-4d4e-54d9-80b8-3dc2b18555d8",
+          "memories": [
+            {
+              "content": "The user keeps a picnic mat on the bottom shelf of the entrance storage cabinet.",
+              "content_digest": "c17479bd6a0f978f71b106b562507e702c3b84af5119be6bce48e4ee1664e728",
+              "position": 0,
+              "uid": "a9da4cfc-a6aa-51ae-9ec4-0de5c7a09227"
+            },
+            {
+              "content": "On a day the user went to the riverside, they sat in a place without shade and moved after an hour.",
+              "content_digest": "f9ab1da828ca5af06cb8bf54fe85136e316f503dab465fad514ab5a3f8243633",
+              "position": 1,
+              "uid": "fa2735e1-f4af-57d3-a18c-795715b6715b"
+            },
+            {
+              "content": "At the next outdoor meal, the user chose a place near a large tree and stayed for two hours.",
+              "content_digest": "189b7d85561df45986a6b7c9fe681b5ef53b22ca1f5e83fa8d64a7d93b35a577",
+              "position": 2,
+              "uid": "3bd8b8f2-c5b4-5004-8b9e-e388cc26ea7a"
+            },
+            {
+              "content": "On a hot day when the user brought only one bottle of water, they bought another drink partway through the outing.",
+              "content_digest": "92aa494a12664105a4bffc50a9026fadbec78332f750636093ea82ecc68e9597",
+              "position": 3,
+              "uid": "c7c4b494-39a6-5f5c-b37f-51c5061ac926"
+            },
+            {
+              "content": "On the next outing, the user brought two small bottles of water after freezing them.",
+              "content_digest": "69b3035b57b58b1aa778bd0da75dc806c1c449e7e35dc448aff92f7499c3148d",
+              "position": 4,
+              "uid": "dd9f5b3c-9c2e-5dbc-bf6e-eb7761eeb075"
+            },
+            {
+              "content": "When meeting their maternal uncle at a park, the user and the uncle waited at different entrances for 15 minutes.",
+              "content_digest": "9785e87b9fe79813762eb2e19e6d4f256a55f4799c92d095aaf695a8a1de5851",
+              "position": 5,
+              "uid": "2ed2a41c-f6ae-54d6-875c-a195d8fdacee"
+            },
+            {
+              "content": "For the next meeting, the user sent a photo of the entrance sign, and they met at the same place.",
+              "content_digest": "de40b6b7df84784639b97cf7ce153ad8af6e77320d75f3869979e5e3d39169e2",
+              "position": 6,
+              "uid": "23f3a4fc-d51e-5d0b-87f0-d5be407a57f3"
+            },
+            {
+              "content": "For a park meeting, the user's maternal uncle prefers an entrance that requires less walking from the parking area.",
+              "content_digest": "552a43b869c6f06cbf571f794106727406d87841d43addc92f31a3532f73d6f3",
+              "position": 7,
+              "uid": "e9f459f3-8ff0-5a0e-b78b-eda8d18b914e"
+            },
+            {
+              "content": "When making an outdoor plan, confirm the exact entrance and an alternative location in case of rain.",
+              "content_digest": "a265a6364c182de35363b58135b1da60d11595d1e3e0029f6851ac272261a959",
+              "position": 8,
+              "uid": "70277b86-d5db-5b58-8a94-e77372d15a4c"
+            },
+            {
+              "content": "Some park restrooms and drinking fountains may be closed seasonally.",
+              "content_digest": "8e5c4f5f85d4d27dc2211f46e3ab3bbed7f3d9687070b9028992b670986b09ca",
+              "position": 9,
+              "uid": "5a54437b-9b0e-5103-860d-d878be70b3ef"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "eb887277-b105-4c76-98a9-aff4b975cff5"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate practical domains: shared-laundry routines and constraints versus outdoor-meal and park-meeting preparation. Neither contains a claim that materially governs the same operational decision as a claim in the other, so all information remains independently useful and one-sided.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "458c457d-0af7-4e23-b08b-9bdd4be5d137",
+              "memory_uid": "a1c67646-6a75-504a-9508-d69e1d04b3e5"
+            }
+          ],
+          "reason": "Only the reference frame provides this laundry-access location, and the compared frame's picnic-mat storage serves a different operational purpose.",
+          "status": "RESOLVED",
+          "summary": "The shared laundry-room access card is stored in an entrance drawer.",
+          "uid": "353d99ff-2b2c-580c-9bb8-79f6c09c0a35"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "458c457d-0af7-4e23-b08b-9bdd4be5d137",
+              "memory_uid": "9479e799-95d7-50d2-af62-d1e0914a389b"
+            }
+          ],
+          "reason": "This is a one-sided observation about the social consequence of delayed laundry removal.",
+          "status": "RESOLVED",
+          "summary": "Collecting finished laundry after a substantial delay resulted in a note from another household.",
+          "uid": "48b0f66f-4db6-5a5e-a310-9992c8c74523"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "458c457d-0af7-4e23-b08b-9bdd4be5d137",
+              "memory_uid": "528cb5ea-8c36-5206-beaa-19432250ec4d"
+            }
+          ],
+          "reason": "This is a one-sided observation about using advance timing to collect laundry promptly.",
+          "status": "RESOLVED",
+          "summary": "A reminder shortly before a load ended enabled immediate laundry removal.",
+          "uid": "82a0437c-8512-55ce-ba2f-42ccb468fbd2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "458c457d-0af7-4e23-b08b-9bdd4be5d137",
+              "memory_uid": "85fb1639-2176-5329-b490-3325ff030db4"
+            },
+            {
+              "frame_uid": "458c457d-0af7-4e23-b08b-9bdd4be5d137",
+              "memory_uid": "431d170a-863f-596d-97c0-0c9634524ee5"
+            }
+          ],
+          "reason": "These reference memories are complementary observations supporting one one-sided laundry-sorting claim about isolating new jeans.",
+          "status": "RESOLVED",
+          "summary": "New jeans transferred color when washed with light clothes, while washing them separately avoided changes to other clothes.",
+          "uid": "235db95c-b69c-5eae-910d-2cbc3dc5dc6a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "458c457d-0af7-4e23-b08b-9bdd4be5d137",
+              "memory_uid": "4df33adc-cfba-50f2-b141-e2ebed38b81c"
+            },
+            {
+              "frame_uid": "458c457d-0af7-4e23-b08b-9bdd4be5d137",
+              "memory_uid": "ba7daae9-938d-55a1-af20-21cd10d395d8"
+            }
+          ],
+          "reason": "These reference memories split one one-sided claim connecting dryer-filter maintenance with drying efficiency.",
+          "status": "RESOLVED",
+          "summary": "Skipping the dryer-filter check required another cycle, whereas emptying the filter preceded completion in one cycle.",
+          "uid": "f756c5a9-35d2-5a5f-8668-4d5a0145433c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "458c457d-0af7-4e23-b08b-9bdd4be5d137",
+              "memory_uid": "abbf8742-38e3-5810-b222-fe91e3340962"
+            }
+          ],
+          "reason": "Only the reference frame states this shared-laundry fairness judgment.",
+          "status": "RESOLVED",
+          "summary": "The building manager considers avoiding long occupation by finished laundry fair to other households.",
+          "uid": "75c99d9a-557d-5f9f-8f76-9d36ec2be961"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "458c457d-0af7-4e23-b08b-9bdd4be5d137",
+              "memory_uid": "06273d22-0b42-5c55-9d70-eda14084219a"
+            }
+          ],
+          "reason": "Only the reference frame supplies this operational reminder rule.",
+          "status": "RESOLVED",
+          "summary": "Shared laundry-room reminders should be based on the end time of the machine the user started.",
+          "uid": "2e74c1d8-5b67-5956-b0f7-afea25ec3608"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "458c457d-0af7-4e23-b08b-9bdd4be5d137",
+              "memory_uid": "03ac930e-d745-5c29-8c24-5ced669817f9"
+            }
+          ],
+          "reason": "Only the reference frame states this boundary on locally available knowledge.",
+          "status": "RESOLVED",
+          "summary": "Knowing the access-card location does not provide current shared-laundry machine availability.",
+          "uid": "0598bbe8-476a-5b0d-a81f-69f03f857096"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eb887277-b105-4c76-98a9-aff4b975cff5",
+              "memory_uid": "a9da4cfc-a6aa-51ae-9ec4-0de5c7a09227"
+            }
+          ],
+          "reason": "Only the compared frame provides this picnic-equipment location, which is operationally separate from laundry-card storage.",
+          "status": "RESOLVED",
+          "summary": "The picnic mat is stored on the bottom shelf of the entrance storage cabinet.",
+          "uid": "422f8fe6-8c52-56e9-9163-323b6eb25ba6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eb887277-b105-4c76-98a9-aff4b975cff5",
+              "memory_uid": "fa2735e1-f4af-57d3-a18c-795715b6715b"
+            },
+            {
+              "frame_uid": "eb887277-b105-4c76-98a9-aff4b975cff5",
+              "memory_uid": "3bd8b8f2-c5b4-5004-8b9e-e388cc26ea7a"
+            }
+          ],
+          "reason": "These compared memories are complementary observations supporting one one-sided claim about shade selection for outdoor meals.",
+          "status": "RESOLVED",
+          "summary": "An unshaded riverside place was abandoned after an hour, while a later place near a large tree supported a two-hour stay.",
+          "uid": "1f3b896a-d9be-5bdc-bb18-08b1d9d01856"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eb887277-b105-4c76-98a9-aff4b975cff5",
+              "memory_uid": "c7c4b494-39a6-5f5c-b37f-51c5061ac926"
+            },
+            {
+              "frame_uid": "eb887277-b105-4c76-98a9-aff4b975cff5",
+              "memory_uid": "dd9f5b3c-9c2e-5dbc-bf6e-eb7761eeb075"
+            }
+          ],
+          "reason": "These compared memories split one one-sided claim about improving water preparation for outings.",
+          "status": "RESOLVED",
+          "summary": "One bottle proved insufficient on a hot outing, while the next outing included two small frozen bottles.",
+          "uid": "4abae7cb-8160-57b3-b2cf-b396c7caa360"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eb887277-b105-4c76-98a9-aff4b975cff5",
+              "memory_uid": "2ed2a41c-f6ae-54d6-875c-a195d8fdacee"
+            },
+            {
+              "frame_uid": "eb887277-b105-4c76-98a9-aff4b975cff5",
+              "memory_uid": "23f3a4fc-d51e-5d0b-87f0-d5be407a57f3"
+            }
+          ],
+          "reason": "These compared memories are complementary observations supporting one one-sided claim about precise park-entrance coordination.",
+          "status": "RESOLVED",
+          "summary": "Ambiguous park entrances caused a fifteen-minute separation, while sending an entrance-sign photo enabled meeting at the same place.",
+          "uid": "86b87f93-b911-59c0-a22a-a6d07652b22d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eb887277-b105-4c76-98a9-aff4b975cff5",
+              "memory_uid": "e9f459f3-8ff0-5a0e-b78b-eda8d18b914e"
+            }
+          ],
+          "reason": "Only the compared frame records this participant-specific entrance preference.",
+          "status": "RESOLVED",
+          "summary": "The user's maternal uncle prefers a park entrance requiring less walking from the parking area.",
+          "uid": "619e0562-6293-5e75-81cd-c65c6efbac7d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eb887277-b105-4c76-98a9-aff4b975cff5",
+              "memory_uid": "70277b86-d5db-5b58-8a94-e77372d15a4c"
+            }
+          ],
+          "reason": "Only the compared frame supplies this planning policy combining meeting-point precision with weather contingency.",
+          "status": "RESOLVED",
+          "summary": "Outdoor plans should confirm the exact entrance and an alternative location for rain.",
+          "uid": "54aa3cd9-630f-56fa-bff9-35a5670c8b92"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eb887277-b105-4c76-98a9-aff4b975cff5",
+              "memory_uid": "5a54437b-9b0e-5103-860d-d878be70b3ef"
+            }
+          ],
+          "reason": "Only the compared frame states this seasonal facility-availability constraint.",
+          "status": "RESOLVED",
+          "summary": "Park restrooms and drinking fountains may be seasonally closed.",
+          "uid": "aca6dc2c-dcef-5c8d-a57a-bab93671b499"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers picnic storage, shade and water preparation, park entrance coordination and accessibility, rain contingencies, and seasonal facility closures.",
+        "differences": "",
+        "reference_only": "The reference covers laundry access, prompt collection, color separation, dryer-filter use, shared-room fairness, reminder timing, and unavailable live machine-status knowledge."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "c6cb7b35-1e47-4b8d-ac3d-f5f93719d9b4"
+    },
+    "analysis_digest": "ab70d9dabda254c53c406f523702b22355637d7b0890cb35834ac00b9a0bbef6",
+    "key": "9f90bef19970791dee72c3267472dac715177d2061e88df456a3aa620f4b619b",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 39.196903457999724,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "9f90bef19970791dee72c3267472dac715177d2061e88df456a3aa620f4b619b",
+  "created_at": "2026-08-13T18:51:40.220227Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/04",
+  "pair_key": "acd596e52bab18af79a91e2bc52695fea6709706ef7a5adc0fb7a92d375d35da",
+  "provider_seconds": 39.196903457999724,
+  "right": "task-3/local/personal-memory/2026/05",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

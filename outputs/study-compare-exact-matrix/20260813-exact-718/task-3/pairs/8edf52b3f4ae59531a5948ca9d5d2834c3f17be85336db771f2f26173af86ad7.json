@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:34:39.569441+00:00",
+      "frames": [
+        {
+          "context_digest": "2f00e067f4f35600b73e87b5555d405e2801a33ba18a54c91e63e23a79f27a4c",
+          "context_name": "task-3/local/personal-memory/2024/01",
+          "context_uid": "cbd2e4d6-2601-5d3f-8bf2-2f66b755b007",
+          "memories": [
+            {
+              "content": "The user's mother's birthday falls in the third week of January.",
+              "content_digest": "d635ded9b470acdd462156515700e66c23dcb513a7034bb365be0ac139ec0422",
+              "position": 0,
+              "uid": "2cd0229d-b7f1-581b-8019-25bdb485afd9"
+            },
+            {
+              "content": "At the user's last family meal out, noise from the next table made conversation nearly impossible.",
+              "content_digest": "dc337d32e4b09167289e19a6b1c8fe970e7eaa6fdd6868ed1c7c300e018fcd15",
+              "position": 1,
+              "uid": "c62f1669-11c9-5a81-b5f5-304acce69c23"
+            },
+            {
+              "content": "At a barbecue at home in the same month, the user was comfortable because no one had to raise their voice.",
+              "content_digest": "63763b293a491200bf1f7a251467c1fa8c2cb8d4d8450732c01666dcdea183e3",
+              "position": 2,
+              "uid": "674f4bdf-27c3-5870-a68e-91e4a093dd93"
+            },
+            {
+              "content": "During their mother's birthday meal, the user left a restaurant with loud music after 30 minutes.",
+              "content_digest": "560755c6f051ec6f85e32dc4ee9447dfc97418fca6f9f414f6910c518a52c2c0",
+              "position": 3,
+              "uid": "21509788-2e3d-548b-8303-f34cfea68c9b"
+            },
+            {
+              "content": "When discussing postponed matters with family, the user prefers a quiet, one-on-one dining environment.",
+              "content_digest": "f22bedcf60a64b3666a7e4363d6a55c48547535492010fcb205a182c1ee920a8",
+              "position": 4,
+              "uid": "74eaea9d-7640-51ba-aa77-9c050581dc46"
+            },
+            {
+              "content": "At a large banquet hall reserved by their older sister, the user remembered the surrounding noise more than the food.",
+              "content_digest": "566e443c69410f1672ab209ba2257604e373cd305ab27243a39574481407af71",
+              "position": 5,
+              "uid": "1384df1d-2173-5673-96f5-a4d86835d404"
+            },
+            {
+              "content": "On a day the user ate grilled food at home with their younger brother, conversation was easy to continue, so the user stayed another hour after the meal.",
+              "content_digest": "c93ccbe3524946f1def05a1b385fbe3387945f51164b00c56f1ff80b477d011f",
+              "position": 6,
+              "uid": "3cf68c8e-5da9-51d3-a402-c10f4137b1f4"
+            },
+            {
+              "content": "The user's mother considers having the whole family eat at the same time more important than receiving a birthday gift.",
+              "content_digest": "d302cf7db2b83b103ea11323ab1b9d36168d224b405d4d0dd51b46b494014291",
+              "position": 7,
+              "uid": "a1984768-d20d-59cd-84c9-cb08c6b7affb"
+            },
+            {
+              "content": "When proposing a birthday meal for the user's mother, check the schedule and attendees; if conversation is the purpose, first consider a low-noise location, then confirm the final choice with the user.",
+              "content_digest": "481169c62cf6fae6b4f29184ffacef9c3c9d825a34d1545ca592bc35537bc65c",
+              "position": 8,
+              "uid": "f52d11e2-2449-5c9d-887b-96c8b5cd0184"
+            },
+            {
+              "content": "The local agent can compare past dining environments and the user's responses, but those records alone cannot determine the location of the next gathering.",
+              "content_digest": "b05fef8420abe3c47c2cd9f2de9149c9c6bda7dca301f09ac7f94eac1a29d2fa",
+              "position": 9,
+              "uid": "c8fccfbe-7756-5d62-9cd7-403dd6741915"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "1f03b3bb-ad74-4989-b222-54ff5a592cf5"
+        },
+        {
+          "context_digest": "0af669f138c2617a4b35c0974627a23c7e5cb2405da5e306648b130efac7fbdf",
+          "context_name": "task-3/local/personal-memory/2025/12",
+          "context_uid": "c54e9dde-005a-5d20-b41b-1313b4713061",
+          "memories": [
+            {
+              "content": "The user stores wrapping paper and empty gift boxes on the upper shelf of the bedroom closet.",
+              "content_digest": "8f3b67dea69e1fa656f1e42e39700a71ebc250c4f6ec18dc4d4f88d467e86ad2",
+              "position": 0,
+              "uid": "bd69b616-6e7c-5440-8b29-586de68bcff6"
+            },
+            {
+              "content": "From photographs, the user discovered that they had given their mother the same type of kitchen item two years in a row.",
+              "content_digest": "6962b8dc03fd90e1c8badfda0d827008cc675b940e5975a5833ebe504af7d635",
+              "position": 1,
+              "uid": "90c60e57-d7db-5783-9ca8-2fd27b94d847"
+            },
+            {
+              "content": "This year, the user went to the market with their mother and let her choose a needed item directly.",
+              "content_digest": "9a27aa187ad2964f985ffcf376490f4b69d3c83f2034591187273bd89f61637a",
+              "position": 2,
+              "uid": "53bc23b2-8242-58b5-b496-a45c70bb8e41"
+            },
+            {
+              "content": "The user once ordered a gift late and had it delivered the day after the gathering.",
+              "content_digest": "245bb316eb5d0b0203c63eb9a2832c6cf73cb9e7e368bdb48a08bb6b702642d7",
+              "position": 3,
+              "uid": "3b097446-2c73-5414-8c06-6bacdf00a4c1"
+            },
+            {
+              "content": "The next year, the user checked the expected delivery date and ordered one week before the gathering.",
+              "content_digest": "97aed11c6b4f7d03bd6a55e27ef34ef539da85204787bb0468f1e2df51d958fc",
+              "position": 4,
+              "uid": "ce18c7a5-d1e9-5e5c-8739-b14fa7298feb"
+            },
+            {
+              "content": "The user did not put names on wrapped boxes and handed their older sister and younger brother each other's gifts.",
+              "content_digest": "48464eb29ee2d2e01cda00f0e3a13d116d4aa121d424aecc59644431e89f8957",
+              "position": 5,
+              "uid": "7657f424-cd24-54dd-8409-e04974dd1531"
+            },
+            {
+              "content": "The next time the user wrapped gifts, they wrote the recipient on the bottom of each box.",
+              "content_digest": "551e74aebf85d4ffee86b960c520b17f3f7e4d50428493934831a774d9e31db6",
+              "position": 6,
+              "uid": "d8e82ad3-902e-5f0c-aa8e-b23ce874982a"
+            },
+            {
+              "content": "The user's younger brother welcomes a snack the family can share immediately more than an item for his use alone.",
+              "content_digest": "ec32111520e2f12afc684c6441c075dcc0715fc450d0ce8f20408dfb955634a9",
+              "position": 7,
+              "uid": "8a941bf1-73bd-51d3-a069-62ecc9d56439"
+            },
+            {
+              "content": "The local agent can find past gift records and flag duplicates but cannot know what is needed this year.",
+              "content_digest": "f7574c7f91999992680a7e88e79270747fd744a46355800012c63319c286d731",
+              "position": 8,
+              "uid": "036edf8f-4680-5822-924e-0fdc691c8135"
+            },
+            {
+              "content": "Year-end deliveries may take longer than usual or have their expected dates changed.",
+              "content_digest": "cc0955e132cf6f4bec7f416e54ed2ffdbac22169adeeae7372a6ddc496da4b9e",
+              "position": 9,
+              "uid": "b9e9e222-a559-56e3-93b5-1f49a0e0d3ab"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "34477846-5b3c-4e4d-ab5d-4e8ee157dbfa"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate family-planning domains. The reference frame concerns birthday timing, dining acoustics, attendance, and location choice; the compared frame concerns gift selection, wrapping, delivery, and recipient preferences. No claims govern the same operational decision closely enough to relate across frames.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1f03b3bb-ad74-4989-b222-54ff5a592cf5",
+              "memory_uid": "2cd0229d-b7f1-581b-8019-25bdb485afd9"
+            }
+          ],
+          "reason": "Only the reference frame supplies birthday-calendar information.",
+          "status": "RESOLVED",
+          "summary": "The mother’s birthday occurs during the third week of January.",
+          "uid": "c77eddc6-c718-56fe-b19b-862a144b4953"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1f03b3bb-ad74-4989-b222-54ff5a592cf5",
+              "memory_uid": "c62f1669-11c9-5a81-b5f5-304acce69c23"
+            }
+          ],
+          "reason": "This is one-sided evidence about how restaurant noise affected family conversation.",
+          "status": "RESOLVED",
+          "summary": "Noise from a neighboring table made conversation at the last family restaurant meal nearly impossible.",
+          "uid": "1269137d-7ba2-5f95-b160-949d6c14a064"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1f03b3bb-ad74-4989-b222-54ff5a592cf5",
+              "memory_uid": "674f4bdf-27c3-5870-a68e-91e4a093dd93"
+            }
+          ],
+          "reason": "This is one-sided evidence about the user’s response to a quiet home meal.",
+          "status": "RESOLVED",
+          "summary": "A home barbecue was comfortable because conversation required no raised voices.",
+          "uid": "f7a59a01-e227-5d4e-a95f-0c6b3273c42f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1f03b3bb-ad74-4989-b222-54ff5a592cf5",
+              "memory_uid": "21509788-2e3d-548b-8303-f34cfea68c9b"
+            }
+          ],
+          "reason": "Only the reference frame records this response to a loud birthday venue.",
+          "status": "RESOLVED",
+          "summary": "The user left their mother’s birthday restaurant meal after 30 minutes because of loud music.",
+          "uid": "bb60155c-4f98-5e2a-a0ff-57197dc464cb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1f03b3bb-ad74-4989-b222-54ff5a592cf5",
+              "memory_uid": "74eaea9d-7640-51ba-aa77-9c050581dc46"
+            }
+          ],
+          "reason": "Only the reference frame states this conditional dining preference.",
+          "status": "RESOLVED",
+          "summary": "The user prefers quiet, one-on-one dining when discussing postponed family matters.",
+          "uid": "2acb25d8-5474-5a3d-a90a-ad433c1eb000"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1f03b3bb-ad74-4989-b222-54ff5a592cf5",
+              "memory_uid": "1384df1d-2173-5673-96f5-a4d86835d404"
+            }
+          ],
+          "reason": "This is one-sided evidence about the salience of noise at a large family venue.",
+          "status": "RESOLVED",
+          "summary": "At a banquet hall reserved by the older sister, surrounding noise overshadowed the food in the user’s memory.",
+          "uid": "e440ead1-9b1d-5731-8bee-bf9703aa390d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1f03b3bb-ad74-4989-b222-54ff5a592cf5",
+              "memory_uid": "3cf68c8e-5da9-51d3-a402-c10f4137b1f4"
+            }
+          ],
+          "reason": "Only the reference frame links an easy home conversation to the user extending the visit.",
+          "status": "RESOLVED",
+          "summary": "Easy conversation during a home grilled-food meal with the younger brother led the user to stay an extra hour.",
+          "uid": "52987907-2365-5d6e-b307-b85b6b895b23"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1f03b3bb-ad74-4989-b222-54ff5a592cf5",
+              "memory_uid": "a1984768-d20d-59cd-84c9-cb08c6b7affb"
+            }
+          ],
+          "reason": "Only the reference frame states the mother’s relative priority between a shared meal and a gift.",
+          "status": "RESOLVED",
+          "summary": "The mother values having the whole family eat together more than receiving a birthday gift.",
+          "uid": "3c7cf9f1-e3e8-52da-ade8-532672d4f6b2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1f03b3bb-ad74-4989-b222-54ff5a592cf5",
+              "memory_uid": "f52d11e2-2449-5c9d-887b-96c8b5cd0184"
+            }
+          ],
+          "reason": "Only the reference frame provides this venue-planning procedure.",
+          "status": "RESOLVED",
+          "summary": "Planning the mother’s birthday meal should account for schedules and attendees, prioritize low noise when conversation matters, and leave the final choice to the user.",
+          "uid": "57eabaaf-e9d8-5536-8c90-749fd8529e01"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1f03b3bb-ad74-4989-b222-54ff5a592cf5",
+              "memory_uid": "c8fccfbe-7756-5d62-9cd7-403dd6741915"
+            }
+          ],
+          "reason": "Only the reference frame defines this evidentiary limit for venue selection.",
+          "status": "RESOLVED",
+          "summary": "Past dining environments and reactions can be compared but cannot alone determine the next gathering’s location.",
+          "uid": "bb5f008c-237f-537b-be0d-d3eba2ea8ef2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "34477846-5b3c-4e4d-ab5d-4e8ee157dbfa",
+              "memory_uid": "bd69b616-6e7c-5440-8b29-586de68bcff6"
+            }
+          ],
+          "reason": "Only the compared frame supplies this household storage detail.",
+          "status": "RESOLVED",
+          "summary": "Wrapping paper and empty gift boxes are stored on the upper shelf of the bedroom closet.",
+          "uid": "df032f7b-cbbd-5e39-be23-41685547b2ea"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "34477846-5b3c-4e4d-ab5d-4e8ee157dbfa",
+              "memory_uid": "90c60e57-d7db-5783-9ca8-2fd27b94d847"
+            }
+          ],
+          "reason": "Only the compared frame records this duplicate-gift discovery.",
+          "status": "RESOLVED",
+          "summary": "Photographs revealed that the user gave their mother the same type of kitchen item in two consecutive years.",
+          "uid": "e8481443-cddc-59f6-9da9-6ca187a75005"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "34477846-5b3c-4e4d-ab5d-4e8ee157dbfa",
+              "memory_uid": "53bc23b2-8242-58b5-b496-a45c70bb8e41"
+            }
+          ],
+          "reason": "Only the compared frame describes this recipient-led gift selection.",
+          "status": "RESOLVED",
+          "summary": "This year, the mother directly selected a needed item while visiting the market with the user.",
+          "uid": "93aab46e-ed71-54e1-b470-949d5e50b61f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "34477846-5b3c-4e4d-ab5d-4e8ee157dbfa",
+              "memory_uid": "3b097446-2c73-5414-8c06-6bacdf00a4c1"
+            }
+          ],
+          "reason": "Only the compared frame records this delivery failure.",
+          "status": "RESOLVED",
+          "summary": "A gift ordered late once arrived the day after the gathering.",
+          "uid": "8a768d69-d97f-51db-b42e-b584993c8def"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "34477846-5b3c-4e4d-ab5d-4e8ee157dbfa",
+              "memory_uid": "ce18c7a5-d1e9-5e5c-8739-b14fa7298feb"
+            }
+          ],
+          "reason": "Only the compared frame records this later delivery-planning practice.",
+          "status": "RESOLVED",
+          "summary": "The following year, the user checked the expected delivery date and ordered one week before the gathering.",
+          "uid": "f9283e8a-9aaa-534d-a2e1-0d2c212533c0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "34477846-5b3c-4e4d-ab5d-4e8ee157dbfa",
+              "memory_uid": "7657f424-cd24-54dd-8409-e04974dd1531"
+            }
+          ],
+          "reason": "Only the compared frame describes this packaging mix-up.",
+          "status": "RESOLVED",
+          "summary": "Failing to label wrapped boxes caused the older sister and younger brother to receive each other’s gifts.",
+          "uid": "593a9c6e-b698-5d9a-8221-d614d240009d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "34477846-5b3c-4e4d-ab5d-4e8ee157dbfa",
+              "memory_uid": "d8e82ad3-902e-5f0c-aa8e-b23ce874982a"
+            }
+          ],
+          "reason": "Only the compared frame records this later labeling practice.",
+          "status": "RESOLVED",
+          "summary": "On the next wrapping occasion, the user wrote each recipient’s name on the bottom of the box.",
+          "uid": "a0c2564f-cbe5-53f7-b4dc-434661a8901a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "34477846-5b3c-4e4d-ab5d-4e8ee157dbfa",
+              "memory_uid": "8a941bf1-73bd-51d3-a069-62ecc9d56439"
+            }
+          ],
+          "reason": "Only the compared frame states this recipient preference.",
+          "status": "RESOLVED",
+          "summary": "The younger brother prefers an immediately shareable family snack over an item intended only for him.",
+          "uid": "38b0d03d-37a8-5e1e-9d5a-b0fc97e9b7d0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "34477846-5b3c-4e4d-ab5d-4e8ee157dbfa",
+              "memory_uid": "036edf8f-4680-5822-924e-0fdc691c8135"
+            }
+          ],
+          "reason": "Only the compared frame defines this evidentiary limit for gift selection.",
+          "status": "RESOLVED",
+          "summary": "Past gift records can reveal duplicates but cannot establish what is needed this year.",
+          "uid": "f25e78ee-3629-54ee-9549-a0715b7aa874"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "34477846-5b3c-4e4d-ab5d-4e8ee157dbfa",
+              "memory_uid": "b9e9e222-a559-56e3-93b5-1f49a0e0d3ab"
+            }
+          ],
+          "reason": "Only the compared frame supplies this seasonal delivery uncertainty.",
+          "status": "RESOLVED",
+          "summary": "Year-end deliveries may be delayed or have their expected dates revised.",
+          "uid": "52bbb484-3413-597c-8331-61db72e2009d"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers gift storage, selection lessons, duplicate avoidance, delivery timing, package labeling, the brother’s preference for shareable snacks, and limits and uncertainties affecting gift planning.",
+        "differences": "",
+        "reference_only": "The reference describes the mother’s birthday timing and priorities, the user’s strong preference for quiet family dining, supporting experiences, a meal-planning procedure, and limits on inferring a future venue."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "e7541865-8ab2-4a17-ada4-0a1bcbfd3cd1"
+    },
+    "analysis_digest": "764f89bcbc9c6992c9f55919223d9d524810ab52975a04110b2d0c1ec0c0f100",
+    "key": "ab25dacbaba34e8de2bc64bc1b9b48616a56dbd420bb3841dd9205ac48dba147",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 44.287173749999056,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "ab25dacbaba34e8de2bc64bc1b9b48616a56dbd420bb3841dd9205ac48dba147",
+  "created_at": "2026-08-13T18:35:23.856252Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/01",
+  "pair_key": "8edf52b3f4ae59531a5948ca9d5d2834c3f17be85336db771f2f26173af86ad7",
+  "provider_seconds": 44.287173749999056,
+  "right": "task-3/local/personal-memory/2025/12",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

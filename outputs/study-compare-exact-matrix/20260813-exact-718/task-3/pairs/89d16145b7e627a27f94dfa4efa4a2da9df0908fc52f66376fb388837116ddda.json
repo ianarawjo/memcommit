@@ -1,0 +1,379 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:38:09.898475+00:00",
+      "frames": [
+        {
+          "context_digest": "db438345c3ec4b3f69562a274c9f81a93bd6e6df97bc89b60abcd193dc89b562",
+          "context_name": "task-3/local/personal-memory/2024/04",
+          "context_uid": "206e1cd3-93da-5341-bda3-95cde4814c20",
+          "memories": [
+            {
+              "content": "The user completed a routine dental checkup in April 2024.",
+              "content_digest": "bbaa093f8dee5b5ee42c4a180e683fce00bc9364f5a009b9fa1e7f2ac233bc01",
+              "position": 0,
+              "uid": "9cea83cd-e39f-53bd-9e79-d30aa465ad02"
+            },
+            {
+              "content": "When the user heard three checkup questions in succession, they asked for the first question again.",
+              "content_digest": "e1b76973991f009295489249af1a7cd0fa7957f24f330e39337e01e5b1acdcbb",
+              "position": 1,
+              "uid": "51f8326f-60d4-5ba3-ba32-a04331dcb930"
+            },
+            {
+              "content": "At the next visit, when questions were asked one at a time, the user answered each without omission.",
+              "content_digest": "30c943f2e043f485a7a7e1ac19343c753ed8f834d00716725322505e28e0b15a",
+              "position": 2,
+              "uid": "cd0bce79-71d5-5d46-9c68-8a1d096dd53a"
+            },
+            {
+              "content": "The user called to reschedule an appointment at lunchtime but did not reach anyone.",
+              "content_digest": "1d4bd2122c160d35080b232ebb8ae5080c2ce34124645b3ec8040d7d29af9752",
+              "position": 3,
+              "uid": "71e27b0c-5c10-5102-aeac-98b0841723f2"
+            },
+            {
+              "content": "After returning home, the user kept a photo of the paper instructions received at the clinic.",
+              "content_digest": "68cddec62167a3910122a129dcfdb3c5604a4fea996d01f870734739dd3b0221",
+              "position": 4,
+              "uid": "86ad5410-0cc7-5876-8e3a-a3f0dd1680c7"
+            },
+            {
+              "content": "On a day the user put only the visit address in the calendar, they had to search again for the floor.",
+              "content_digest": "0d6926aba2c90930bfa984d7af1b12c60f35e53ba9916dfbee2c2391961db1a9",
+              "position": 5,
+              "uid": "aab36950-7e2b-588f-bb7c-d3bd6e36c501"
+            },
+            {
+              "content": "On a day the user shared the checkup time with their older sister, the sister called to check in after the user returned home.",
+              "content_digest": "b7d0fea8e8f2fc13126453039dcedebcda3c67ce2ea96c4a2d5b60365448e0e3",
+              "position": 6,
+              "uid": "50ac9268-9259-56fd-8678-1dfc8f919efb"
+            },
+            {
+              "content": "The scheduling staff at that clinic expect requests to change appointments to arrive by telephone.",
+              "content_digest": "28eec4f0ef0b96764a3f7ea54ee3db9fd4d5f1b62a5a2fa29d0a6193f1d8a18c",
+              "position": 7,
+              "uid": "5141ca66-9860-5ec5-b028-ac8670f586ca"
+            },
+            {
+              "content": "Before adding a follow-up visit to the calendar, confirm the date, time, address, and floor with the user.",
+              "content_digest": "0555c837f721fccd5918b2275086bb39c75e016e27574027185cfbada1c766af",
+              "position": 8,
+              "uid": "e265e637-fa41-53d0-aa9b-0102e9962f9a"
+            },
+            {
+              "content": "The local agent can track completed checkups and scheduled appointments but cannot determine whether a follow-up visit is needed.",
+              "content_digest": "be24b47ccb071438fd01bb99b11af3c63f22e260312a26d901824e6bb0d4cd89",
+              "position": 9,
+              "uid": "7aece7ae-b327-537e-9cef-fe24ee8fc618"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "208dd606-fdc7-468a-b3da-aa5322229581"
+        },
+        {
+          "context_digest": "40dca3509f1e21c564970ebb7664df755d25c1c19c4e79b458c803662fb827ce",
+          "context_name": "task-3/local/personal-memory/2025/11",
+          "context_uid": "af363401-7cdc-5426-ad00-4f98635e2dab",
+          "memories": [
+            {
+              "content": "The user recorded a family dinner in the calendar for the final week of November.",
+              "content_digest": "59755036ea9e7d172a5e673253fc7f089e61efe043b2e660f429fe2fa9003d34",
+              "position": 0,
+              "uid": "3f6eaf6c-00e7-5bd7-9809-367f54a0f707"
+            },
+            {
+              "content": "In a crowded restaurant, the user had to ask several times for orders to be repeated, interrupting the flow of conversation.",
+              "content_digest": "2d79e2f4f88a70bc8fbf9efca1b1751fbf51d88667f304c8e8c965a0a536cee7",
+              "position": 1,
+              "uid": "9fd0b9b6-986d-54b0-965e-45feaf9cd482"
+            },
+            {
+              "content": "When the user held the next gathering at their father's home, they continued the conversation on the sofa after the meal.",
+              "content_digest": "4b22fa055bb342db0589b0c54e415f4fa2af02445d3c55b3f38510bd6ca62f38",
+              "position": 2,
+              "uid": "cbc477c4-83c4-506b-9da8-9252d14d7f6b"
+            },
+            {
+              "content": "At a gathering with loud music prepared by their older sister, the user developed a headache and went outside briefly.",
+              "content_digest": "c9b34c3e3211ca7f15eb9a6f8ba97941222bc35ec0253d3da3f383c7247c3e83",
+              "position": 3,
+              "uid": "bbfc537e-3fcc-5065-ab93-4777bcdfc10c"
+            },
+            {
+              "content": "On a day the user held a yard barbecue with their younger brother, the open space dispersed the sound and made conversation easier.",
+              "content_digest": "dd35056c7731d3249a3c2689ee9fb6bfe6974544e302630de6ea230378fea9eb",
+              "position": 4,
+              "uid": "b61367fa-dd17-5ff2-9d6b-f81f6123735a"
+            },
+            {
+              "content": "After seeing a message that their maternal aunt would arrive at 5 p.m., the user delayed meal preparation by an hour.",
+              "content_digest": "31992a8945bfacfc9422f3180b203865f951f200561cd23dad901ec795c5de10",
+              "position": 5,
+              "uid": "681cdbd5-595d-5211-914d-edfd9a6b130d"
+            },
+            {
+              "content": "On a day the user waited without knowing their maternal uncle's arrival time, they reheated the food twice.",
+              "content_digest": "fae7c462a85e844648cb99419e6fdb3a2cd8c7721209ea49a40b4df597635176",
+              "position": 6,
+              "uid": "81c0c4e9-5ae4-5e8a-b11c-7d33032fd8ec"
+            },
+            {
+              "content": "The user's maternal uncle considers it easier to time his departure when he knows the family meal's start time in advance.",
+              "content_digest": "793f47adaa4c5274d15377b0f4adbc2415c0bd5243baf7a1c77c0d92e987a7e8",
+              "position": 7,
+              "uid": "56078821-34d0-540f-ae66-03bdd7bd1df3"
+            },
+            {
+              "content": "Before scheduling a family meal, confirm the attendees' arrival times and the location with the user.",
+              "content_digest": "d057fab5cbe97472da2a796114018a7491d20db6a826cd56943268f73ffeb792",
+              "position": 8,
+              "uid": "19c8ae40-1f5b-5fec-9538-e7bc7cfb036a"
+            },
+            {
+              "content": "Available restaurant reservation times may diminish quickly during the year-end gathering season.",
+              "content_digest": "7bfc817a42ab2d2c67ad04eae58fb3c86bbede15b7cc4ef431a75528bb425e7e",
+              "position": 9,
+              "uid": "3ea9fa3b-4411-55d0-ac90-2ed5515e6ef7"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "3b517717-0b0f-4703-b4f1-a553b7dab28b"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames overlap only in a context-dependent preference for confirming scheduling logistics. Otherwise, the reference focuses on dental visits, communication pacing, clinic contact, records, support, and agent limits, while the compared frame covers family-meal planning, gathering environments, timing coordination, and restaurant availability.",
+      "relations": [
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "208dd606-fdc7-468a-b3da-aa5322229581",
+              "memory_uid": "aab36950-7e2b-588f-bb7c-d3bd6e36c501"
+            },
+            {
+              "frame_uid": "208dd606-fdc7-468a-b3da-aa5322229581",
+              "memory_uid": "e265e637-fa41-53d0-aa9b-0102e9962f9a"
+            },
+            {
+              "frame_uid": "3b517717-0b0f-4703-b4f1-a553b7dab28b",
+              "memory_uid": "681cdbd5-595d-5211-914d-edfd9a6b130d"
+            },
+            {
+              "frame_uid": "3b517717-0b0f-4703-b4f1-a553b7dab28b",
+              "memory_uid": "81c0c4e9-5ae4-5e8a-b11c-7d33032fd8ec"
+            },
+            {
+              "frame_uid": "3b517717-0b0f-4703-b4f1-a553b7dab28b",
+              "memory_uid": "56078821-34d0-540f-ae66-03bdd7bd1df3"
+            },
+            {
+              "frame_uid": "3b517717-0b0f-4703-b4f1-a553b7dab28b",
+              "memory_uid": "19c8ae40-1f5b-5fec-9538-e7bc7cfb036a"
+            }
+          ],
+          "reason": "Dental follow-ups specifically require date, time, address, and floor, whereas family meals specifically require attendee arrival times and location; the supporting experiences explain why each context needs its own details.",
+          "status": "RESOLVED",
+          "summary": "Confirm scheduling details with the user, using the logistics relevant to the event type.",
+          "uid": "19a71602-8ede-5c48-a676-2d4f3ebb2510"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "208dd606-fdc7-468a-b3da-aa5322229581",
+              "memory_uid": "9cea83cd-e39f-53bd-9e79-d30aa465ad02"
+            }
+          ],
+          "reason": "This is independently useful dental-history information with no corresponding family-event claim.",
+          "status": "RESOLVED",
+          "summary": "The user completed a routine dental checkup in April 2024.",
+          "uid": "bc769c71-f9b3-5698-9e48-f1267d9dc890"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "208dd606-fdc7-468a-b3da-aa5322229581",
+              "memory_uid": "51f8326f-60d4-5ba3-ba32-a04331dcb930"
+            },
+            {
+              "frame_uid": "208dd606-fdc7-468a-b3da-aa5322229581",
+              "memory_uid": "cd0bce79-71d5-5d46-9c68-8a1d096dd53a"
+            }
+          ],
+          "reason": "The paired experiences contrast successive questions with individually presented questions and jointly support one communication-pacing claim absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Presenting checkup questions one at a time helped the user answer without omission.",
+          "uid": "5139774a-cc16-5fe3-8995-eb586ebd3b1d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "208dd606-fdc7-468a-b3da-aa5322229581",
+              "memory_uid": "71e27b0c-5c10-5102-aeac-98b0841723f2"
+            },
+            {
+              "frame_uid": "208dd606-fdc7-468a-b3da-aa5322229581",
+              "memory_uid": "5141ca66-9860-5ec5-b028-ac8670f586ca"
+            }
+          ],
+          "reason": "The clinic’s contact policy and the failed call jointly describe one rescheduling-channel claim absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Appointment-change requests at the clinic are expected by telephone, though a lunchtime call went unanswered.",
+          "uid": "cdbf51d4-fe5b-594d-aef0-511038fd9e5d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "208dd606-fdc7-468a-b3da-aa5322229581",
+              "memory_uid": "86ad5410-0cc7-5876-8e3a-a3f0dd1680c7"
+            }
+          ],
+          "reason": "This is independently useful information about preserving visit instructions and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user retained a photograph of the clinic’s paper instructions after returning home.",
+          "uid": "a7990373-c071-53df-ad48-839b793593fb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "208dd606-fdc7-468a-b3da-aa5322229581",
+              "memory_uid": "50ac9268-9259-56fd-8678-1dfc8f919efb"
+            }
+          ],
+          "reason": "This describes a specific post-visit family-support pattern not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "After being told the checkup time, the user’s older sister checked in following the visit.",
+          "uid": "1799cfff-4860-5bcb-bb1a-f96e02397c37"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "208dd606-fdc7-468a-b3da-aa5322229581",
+              "memory_uid": "7aece7ae-b327-537e-9cef-fe24ee8fc618"
+            }
+          ],
+          "reason": "This operational capability boundary is independently useful and has no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The local agent can track checkups and appointments but cannot determine whether follow-up care is needed.",
+          "uid": "b0c75c93-6cdd-5a20-8d69-4d05e5a225a2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3b517717-0b0f-4703-b4f1-a553b7dab28b",
+              "memory_uid": "3f6eaf6c-00e7-5bd7-9809-367f54a0f707"
+            }
+          ],
+          "reason": "This is a specific family-event calendar record with no corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user recorded a family dinner for the final week of November in the calendar.",
+          "uid": "cdcff0f5-8d58-5860-a869-b9b782a096e2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3b517717-0b0f-4703-b4f1-a553b7dab28b",
+              "memory_uid": "9fd0b9b6-986d-54b0-965e-45feaf9cd482"
+            },
+            {
+              "frame_uid": "3b517717-0b0f-4703-b4f1-a553b7dab28b",
+              "memory_uid": "b61367fa-dd17-5ff2-9d6b-f81f6123735a"
+            }
+          ],
+          "reason": "The contrasting settings jointly support one acoustic-access claim not addressed by the reference frame’s question-sequencing experiences.",
+          "status": "RESOLVED",
+          "summary": "Gathering acoustics affected conversational ease, with a crowded restaurant causing repeated requests and an open yard making conversation easier.",
+          "uid": "3c6bdfb3-3f84-5d97-adb9-4e89c9ec868e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3b517717-0b0f-4703-b4f1-a553b7dab28b",
+              "memory_uid": "cbc477c4-83c4-506b-9da8-9252d14d7f6b"
+            }
+          ],
+          "reason": "This is a distinct observation about the gathering’s social continuation, without a corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "At the father’s home, conversation continued on the sofa after the meal.",
+          "uid": "0777b994-427f-5e12-b3db-51c7995ef344"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3b517717-0b0f-4703-b4f1-a553b7dab28b",
+              "memory_uid": "bbfc537e-3fcc-5065-ab93-4777bcdfc10c"
+            }
+          ],
+          "reason": "This specific sensory-discomfort response is independently useful and is not stated in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Loud music at a gathering caused the user a headache and prompted a brief move outside.",
+          "uid": "e7f9e00f-b23d-5104-9bde-8b1c71c01ae0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3b517717-0b0f-4703-b4f1-a553b7dab28b",
+              "memory_uid": "3ea9fa3b-4411-55d0-ac90-2ed5515e6ef7"
+            }
+          ],
+          "reason": "This planning constraint is independently useful and has no corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "Restaurant reservation availability may shrink quickly during the year-end gathering season.",
+          "uid": "99e78a26-c953-5688-a893-fe3cb1d96df0"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only material covers a calendared dinner, acoustic and social gathering conditions, loud-music discomfort, and seasonal restaurant scarcity.",
+        "differences": "Scheduling guidance is context-specific: dental follow-ups require date, time, address, and floor, while family meals require attendees’ arrival times and location.",
+        "reference_only": "Reference-only material covers dental history, paced questioning, telephone rescheduling, retained instructions, sibling check-ins, and limits on determining follow-up need."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "d79b3234-5432-43e2-a71c-ac4e1e773e4b"
+    },
+    "analysis_digest": "6d96740ad9c575bf13488e1b0f6aa50cde2d41c0a0b71c0ba107f73700b386ab",
+    "key": "1b47f69c222eee02cdafbd1c936dbe804babb0e8def85fbb92a71b40582b728d",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 62.61969116599721,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "1b47f69c222eee02cdafbd1c936dbe804babb0e8def85fbb92a71b40582b728d",
+  "created_at": "2026-08-13T18:39:12.518408Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/04",
+  "pair_key": "89d16145b7e627a27f94dfa4efa4a2da9df0908fc52f66376fb388837116ddda",
+  "provider_seconds": 62.61969116599721,
+  "right": "task-3/local/personal-memory/2025/11",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

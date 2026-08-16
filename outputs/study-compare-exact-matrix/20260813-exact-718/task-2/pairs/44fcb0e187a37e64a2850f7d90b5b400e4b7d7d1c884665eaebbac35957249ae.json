@@ -1,0 +1,338 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:17:09.153668+00:00",
+      "frames": [
+        {
+          "context_digest": "e76b6eea5af0e4d970d4db385b4100a788a8b1ed5ef6e68709bd92c943ab3b6b",
+          "context_name": "task-2/advisor1/compensation",
+          "context_uid": "7ba75d6b-cef6-5c8b-9b17-d3901e168d24",
+          "memories": [
+            {
+              "content": "Calculate user study compensation budgets based on estimated participation burden, combining session time and preparation effort.",
+              "content_digest": "2dc18d8ddeb900741b2a8f936a59d5fc72423e2d3144e8b2232a6435dc9a68f1",
+              "position": 0,
+              "uid": "0ae46268-cca7-57d5-a0ee-6eb3b85cda84"
+            },
+            {
+              "content": "Compensate for required travel time in face-to-face user studies as well.",
+              "content_digest": "688ba9df95e18254a5a33ab6c0e59066cf0674137b6802178e3fb8eae4ba38e5",
+              "position": 1,
+              "uid": "bdda6e22-ea06-5a13-8854-67f7521724db"
+            },
+            {
+              "content": "Compensate for the actual time participants spent in sessions, regardless of research modality.",
+              "content_digest": "8673c2b5b5913f0e8bcf0035eea4bc87430bb1fcf8ffb27b354bde0ca3a7ae4e",
+              "position": 2,
+              "uid": "f49b1d0a-7a1a-53b5-b7fc-815cc2cc134a"
+            },
+            {
+              "content": "Leave cash payment as an available compensation method for face-to-face studies.",
+              "content_digest": "72f9e1b33de0c05bb711c2d8162ab62f382a75871a710db37b858125eae6fcde",
+              "position": 3,
+              "uid": "1f4d05e4-2a79-572c-8050-beb1464fb781"
+            },
+            {
+              "content": "If compensation equity is explained, do not require finalizing the payment method at the proposal stage.",
+              "content_digest": "6945260e986651e7992034801b6151a3f93184013fea77d17b630f55fcdc943b",
+              "position": 4,
+              "uid": "abcba764-6f35-5dae-bb3d-7860fb72ccf2"
+            },
+            {
+              "content": "Apply the same base hourly rate to face-to-face and remote studies if task burden is equal.",
+              "content_digest": "144477b358e6e8931042d1793a5ffd10f56d69aa90523d69d20a622528a9dad0",
+              "position": 5,
+              "uid": "c6a28f37-1a7c-5dbd-b75c-c829f0461504"
+            },
+            {
+              "content": "Participants judge compensation fairness based on the total burden, combining session time with required travel and preparation time.",
+              "content_digest": "54e8900c7049e048484db8b523a41e98cbb911b45be2adbd103fd2f1635bf026",
+              "position": 6,
+              "uid": "874de649-9c04-5960-b3a9-e68356ef666c"
+            },
+            {
+              "content": "Account in compensation for the burden of rescheduling iterations and returning for multiple formative evaluation sessions.",
+              "content_digest": "f09be004defb4019ba7476919b6780cc2b6bbac088f79dbd0ec66bf2753af27d",
+              "position": 7,
+              "uid": "529559f5-850d-5920-8e27-0b1e7138dc36"
+            },
+            {
+              "content": "Compensate participants for time already invested even if a session is terminated early due to prototype errors.",
+              "content_digest": "64b65cc0b307b48d64641d126594a5b8a9258518c3aa27d7846be2306c25a9f4",
+              "position": 8,
+              "uid": "c8be56ee-860a-5f6c-abbf-02c8dbc59eb5"
+            },
+            {
+              "content": "The author of this proposal tends to exclude preparation burden between sessions when calculating compensation for iterative studies.",
+              "content_digest": "177f041fcb9fe768dcc1c476b592e99c8609d06ebf727aeca1379d21256b43d8",
+              "position": 9,
+              "uid": "bdac8cf8-dd11-5794-b4b2-9774ff344436"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "02688d77-99a2-4bc9-9327-e69678bb1734"
+        },
+        {
+          "context_digest": "3cadca09eeabe1389261c2e43133d8b304ed2cad66332f3444e686a824f10a21",
+          "context_name": "task-2/advisor2/scope",
+          "context_uid": "86efd53c-c08d-537c-983f-91a7b915640d",
+          "memories": [
+            {
+              "content": "Specify in one sentence the user population and actual usage environment to which the design knowledge applies.",
+              "content_digest": "3bb25f3252678a84fe361c9562692c27556d31b6fac53da87b763648e80ed6ac",
+              "position": 0,
+              "uid": "6cfd5026-0c04-5ed8-baac-a56e68723aa3"
+            },
+            {
+              "content": "Reviewers judge the generalization boundary of results through the specified target population and environment.",
+              "content_digest": "9119780de23a4734bc8e0ba3c39dce251611932fd86bec479b522adaf1882758",
+              "position": 1,
+              "uid": "5bc7cf05-8c47-57d4-a749-ec7d2ec45e3e"
+            },
+            {
+              "content": "Specify the workflow, technical infrastructure, and operational-authority conditions that must match before applying the design guidelines at another field site.",
+              "content_digest": "2970e43d1b52b63b6f76c3c55a5534d24508bcd32402e66098d75dbb52d8083b",
+              "position": 2,
+              "uid": "25731e2b-8535-5b37-a377-0a3a99dbe189"
+            },
+            {
+              "content": "The transferability of field design knowledge depends not only on user characteristics but also on workflow and technological–organizational infrastructure.",
+              "content_digest": "71b7cbcf151114f17886e57f026c2b2ebdd666c7aa88f95c85880a1bc96fdcd2",
+              "position": 3,
+              "uid": "d79ba448-76b6-592e-b4ba-8cfd98683755"
+            },
+            {
+              "content": "The user tends to apply results confirmed at one deployment site to all similar organizations.",
+              "content_digest": "810ee3a6b79606e7f199a30aa146f47e405ff71d1728a3bbfef16b601f5c0d5e",
+              "position": 4,
+              "uid": "cde0ee2b-af3c-5c0d-b23c-632778c93e20"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "c6e54d21-8cde-44ea-ae34-5c93ed817210"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate policy domains: the reference frame addresses participant-compensation fairness, calculation, and methods, while the compared frame addresses the stated boundaries and transferability of field-design knowledge. Neither frame contains a substantively matching claim from the other.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "02688d77-99a2-4bc9-9327-e69678bb1734",
+              "memory_uid": "0ae46268-cca7-57d5-a0ee-6eb3b85cda84"
+            }
+          ],
+          "reason": "Only the reference frame provides this budgeting rule; the compared frame addresses the applicability of design knowledge.",
+          "status": "RESOLVED",
+          "summary": "Compensation budgets should reflect estimated session and preparation burden.",
+          "uid": "d29f4504-32a0-5955-90dc-9adfc030f66d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "02688d77-99a2-4bc9-9327-e69678bb1734",
+              "memory_uid": "bdda6e22-ea06-5a13-8854-67f7521724db"
+            }
+          ],
+          "reason": "Only the reference frame establishes compensation for required study travel.",
+          "status": "RESOLVED",
+          "summary": "Required travel time for face-to-face studies should be compensated.",
+          "uid": "09ffa458-517b-5b6a-a9ae-c7aaa30bae52"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "02688d77-99a2-4bc9-9327-e69678bb1734",
+              "memory_uid": "f49b1d0a-7a1a-53b5-b7fc-815cc2cc134a"
+            }
+          ],
+          "reason": "Only the reference frame establishes modality-independent payment for time spent in sessions.",
+          "status": "RESOLVED",
+          "summary": "Actual session time should be compensated regardless of research modality.",
+          "uid": "dea5007a-ce69-50ac-9ec3-42c61a03d862"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "02688d77-99a2-4bc9-9327-e69678bb1734",
+              "memory_uid": "1f4d05e4-2a79-572c-8050-beb1464fb781"
+            }
+          ],
+          "reason": "Only the reference frame addresses permissible payment methods.",
+          "status": "RESOLVED",
+          "summary": "Cash should remain an available compensation method for face-to-face studies.",
+          "uid": "5fdf8d24-c3e0-5f97-bb3e-56e59c749d33"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "02688d77-99a2-4bc9-9327-e69678bb1734",
+              "memory_uid": "abcba764-6f35-5dae-bb3d-7860fb72ccf2"
+            }
+          ],
+          "reason": "Only the reference frame addresses when a compensation method must be finalized.",
+          "status": "RESOLVED",
+          "summary": "A proposal need not finalize the payment method when compensation equity is explained.",
+          "uid": "fe71b51d-cfa3-5eaa-bbca-ca9b90472993"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "02688d77-99a2-4bc9-9327-e69678bb1734",
+              "memory_uid": "c6a28f37-1a7c-5dbd-b75c-c829f0461504"
+            }
+          ],
+          "reason": "Only the reference frame defines rate parity across research modalities.",
+          "status": "RESOLVED",
+          "summary": "Face-to-face and remote studies should use the same base hourly rate when task burden is equal.",
+          "uid": "260c9925-01e3-5606-838f-47eb08c6efa3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "02688d77-99a2-4bc9-9327-e69678bb1734",
+              "memory_uid": "874de649-9c04-5960-b3a9-e68356ef666c"
+            }
+          ],
+          "reason": "Only the reference frame states how participants judge compensation fairness.",
+          "status": "RESOLVED",
+          "summary": "Participants assess compensation fairness from total session, travel, and preparation burden.",
+          "uid": "b25a8cd7-2b73-56a8-b770-b18ebab5fad9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "02688d77-99a2-4bc9-9327-e69678bb1734",
+              "memory_uid": "529559f5-850d-5920-8e27-0b1e7138dc36"
+            }
+          ],
+          "reason": "Only the reference frame addresses the added burden of iterative participation and returning for multiple sessions.",
+          "status": "RESOLVED",
+          "summary": "Compensation should account for rescheduling iterations and repeated formative-session attendance.",
+          "uid": "8003367f-ddbb-5555-997c-8276f4e5bba2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "02688d77-99a2-4bc9-9327-e69678bb1734",
+              "memory_uid": "c8be56ee-860a-5f6c-abbf-02c8dbc59eb5"
+            }
+          ],
+          "reason": "Only the reference frame establishes compensation for time spent before an error-driven early termination.",
+          "status": "RESOLVED",
+          "summary": "Participants should be compensated for invested time when prototype errors terminate a session early.",
+          "uid": "ff7da453-5206-515b-b71f-65646b9643ba"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "02688d77-99a2-4bc9-9327-e69678bb1734",
+              "memory_uid": "bdac8cf8-dd11-5794-b4b2-9774ff344436"
+            }
+          ],
+          "reason": "Only the reference frame records this calculation tendency.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to omit between-session preparation burden from iterative-study compensation calculations.",
+          "uid": "3f984db1-094a-58ac-82cd-cc3b144b2fff"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c6e54d21-8cde-44ea-ae34-5c93ed817210",
+              "memory_uid": "6cfd5026-0c04-5ed8-baac-a56e68723aa3"
+            },
+            {
+              "frame_uid": "c6e54d21-8cde-44ea-ae34-5c93ed817210",
+              "memory_uid": "5bc7cf05-8c47-57d4-a749-ec7d2ec45e3e"
+            }
+          ],
+          "reason": "Only the compared frame links concise population and environment specification to reviewers' assessment of applicability.",
+          "status": "RESOLVED",
+          "summary": "Design knowledge should state its target population and usage environment because these define the results' generalization boundary.",
+          "uid": "df26d80c-1e03-54da-b4f4-35aa908e1e12"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c6e54d21-8cde-44ea-ae34-5c93ed817210",
+              "memory_uid": "25731e2b-8535-5b37-a377-0a3a99dbe189"
+            },
+            {
+              "frame_uid": "c6e54d21-8cde-44ea-ae34-5c93ed817210",
+              "memory_uid": "d79ba448-76b6-592e-b4ba-8cfd98683755"
+            }
+          ],
+          "reason": "Only the compared frame identifies and explains these operational conditions for applying guidance at another site.",
+          "status": "RESOLVED",
+          "summary": "Transferring field-design guidance requires matching workflow, technical infrastructure, and organizational or authority conditions, not merely user characteristics.",
+          "uid": "99da0b0c-7e6f-5a90-8f21-822c1cd9f5cb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c6e54d21-8cde-44ea-ae34-5c93ed817210",
+              "memory_uid": "cde0ee2b-af3c-5c0d-b23c-632778c93e20"
+            }
+          ],
+          "reason": "Only the compared frame records this overgeneralization tendency.",
+          "status": "RESOLVED",
+          "summary": "The user tends to extend findings from one deployment site to all similar organizations.",
+          "uid": "712f0e02-93bf-54d2-820e-d855242b8275"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame defines applicability through population, environment, workflow, infrastructure, and authority conditions, and notes a tendency to overgeneralize findings across organizations.",
+        "differences": "",
+        "reference_only": "The reference frame covers compensation based on session, preparation, travel, iteration, and interrupted-session burdens, alongside modality-neutral rates, cash availability, proposal-stage flexibility, fairness perceptions, and an observed omission tendency."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "142835e5-7dbb-43e3-8b2d-a6e123e56dae"
+    },
+    "analysis_digest": "181d1dfa3ccb2301edf161bb14714e929753f9ff33184c097b317f150037ebac",
+    "key": "65b92e3d23990da98917fea9668061ec40b62cf46d566ae7a5f8c6939ea1bc36",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 34.04800979200081,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "65b92e3d23990da98917fea9668061ec40b62cf46d566ae7a5f8c6939ea1bc36",
+  "created_at": "2026-08-13T18:17:43.201276Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/compensation",
+  "pair_key": "44fcb0e187a37e64a2850f7d90b5b400e4b7d7d1c884665eaebbac35957249ae",
+  "provider_seconds": 34.04800979200081,
+  "right": "task-2/advisor2/scope",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

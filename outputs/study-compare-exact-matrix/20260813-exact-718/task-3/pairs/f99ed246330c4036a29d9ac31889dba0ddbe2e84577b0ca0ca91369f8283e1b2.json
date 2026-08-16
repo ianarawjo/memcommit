@@ -1,0 +1,370 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:45:16.387016+00:00",
+      "frames": [
+        {
+          "context_digest": "17b940da39446a9f934dff43ea7db561d14060561065852a34658fe4aaa1702f",
+          "context_name": "task-3/local/personal-memory/2024/10",
+          "context_uid": "7c55b789-a7d0-5070-9cf8-6f5e205415dc",
+          "memories": [
+            {
+              "content": "The user renewed their local library membership in October 2024.",
+              "content_digest": "eb9209032856bdbc69fbfa67e053bf8cd2bc23f8e8e25c0be9a5aa3f7e05f4e9",
+              "position": 0,
+              "uid": "04711182-acef-52a9-bd58-7fe98a54854a"
+            },
+            {
+              "content": "On an evening walk, the user saw an unlit street and took a detour along a main road.",
+              "content_digest": "62d001de1c6c4599e51c4e0713f577a2838e95e03f26064778e64542f390a599",
+              "position": 1,
+              "uid": "0229d0b1-750c-521b-a126-22c9d9d001c4"
+            },
+            {
+              "content": "On a day the user chose a well-lit pedestrian route, the walk took 12 minutes longer than usual.",
+              "content_digest": "ad3770626bef71bc9a29ec7772aeebeb70231e89b417b05b4da9c62a65b89afe",
+              "position": 2,
+              "uid": "e310fe87-8cde-5399-be00-9f8d7ec44e94"
+            },
+            {
+              "content": "On a day the user sat by the library window, they heard vehicle noise with every page they read.",
+              "content_digest": "090a190c68a5166d84cde1eed20f9a03c2b99722ed383eb3b5703489c01d85e0",
+              "position": 3,
+              "uid": "4f37306b-08cd-512a-b92e-ca6761da1a5b"
+            },
+            {
+              "content": "On the next visit, the user sat farther inside and did not move for an hour.",
+              "content_digest": "a071b4c7699fe17f63f0ab6263da1259aea00ad635169a313d4821f57071a86a",
+              "position": 4,
+              "uid": "5897ffa4-cfc6-5012-8931-15420ec5cf7c"
+            },
+            {
+              "content": "The user wrote the due date of a borrowed book on paper and then lost the paper.",
+              "content_digest": "43ef22512c79634cb9e3dc59006c7d06c3513a9d5d1f89eedbb392964cc34f02",
+              "position": 5,
+              "uid": "ce38bd13-3d51-5bff-9eba-ed70a8217356"
+            },
+            {
+              "content": "After entering the due date on their phone, the user saw a reminder the day before and put the book in their bag.",
+              "content_digest": "38782cba2f3bf260d62cf8e80c4a7e4a3a196d4d29ced3c4fe19d050e12c1e0a",
+              "position": 6,
+              "uid": "a304315b-bc0a-591b-b8c2-7eea5145819d"
+            },
+            {
+              "content": "Library staff expect a person requesting a replacement membership card to bring identity-verification material.",
+              "content_digest": "1ac59309aedbfa946661bf5bbc4d5141c420df059937893caba88725dfe77d24",
+              "position": 7,
+              "uid": "ef060b89-6c54-5c20-86be-c07766a35daa"
+            },
+            {
+              "content": "Check recent lighting and pedestrian conditions before proposing an evening walking route.",
+              "content_digest": "1b247adfb3723d14979b2cc7ecf6786c457d60e521b8708a6d08d38d3d1af437",
+              "position": 8,
+              "uid": "7669e5eb-c0fd-5182-ae9a-5f9ae95ddf2f"
+            },
+            {
+              "content": "The local agent can compare past reasons for detours but cannot directly observe current lighting and pedestrian conditions.",
+              "content_digest": "8a5f0e4cbb2fa6c19f2cb5d4e500ed460189b515604c87c6c2a4c8348c4efc44",
+              "position": 9,
+              "uid": "e96f7007-5814-5986-b121-4ce3b22506e1"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "4801981b-2651-4889-b341-c8d53eec02ad"
+        },
+        {
+          "context_digest": "07c43eb0b8ecd9107f1d879a409b45289e236f48f620ff85f1d30ce594809149",
+          "context_name": "task-3/local/personal-memory/2025/09",
+          "context_uid": "5cd8ed5f-2f1f-5deb-8347-fc3bfa484d99",
+          "memories": [
+            {
+              "content": "The user keeps the book they are reading and a note-taking notebook on a small living-room desk.",
+              "content_digest": "d2c70cf4c27fe62f5915f2f5c669484c4a875e4ee21f8d7d89a5ff6746f14cf1",
+              "position": 0,
+              "uid": "3d3f7960-daf5-5a51-98b3-14261c5aa66c"
+            },
+            {
+              "content": "While reading in the living room with the television on, the user read the same paragraph three times.",
+              "content_digest": "00e41e6d5fe1dcfe961fa0f739860823ecf338dc55d5b9beea265ca823974582",
+              "position": 1,
+              "uid": "28714a4e-bc14-5703-b594-126471ae0585"
+            },
+            {
+              "content": "The next day, after turning off the television, the user read 40 pages without interruption.",
+              "content_digest": "c28ba9c872757b6683ab03d73e6ad61f71484d55986aae4c0976862a85e3a8b1",
+              "position": 2,
+              "uid": "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df"
+            },
+            {
+              "content": "On a day the phone was on the desk, the user stopped taking notes each time they checked a notification.",
+              "content_digest": "f95cb8b1b8abe89d7bf597ca5fb78f0862fe97a7cf0d8bc5a46c04026ebd6889",
+              "position": 3,
+              "uid": "1b1c9f90-2561-53d5-88fe-d54618450143"
+            },
+            {
+              "content": "During the next reading period, the user left the phone in another room and did not check it for an hour.",
+              "content_digest": "89dc50732e19b88a77657b285ce71c399d229b510265cc9adfbdf6ad706680cd",
+              "position": 4,
+              "uid": "076a7caa-5dcf-5f9d-8bee-efc952652efa"
+            },
+            {
+              "content": "A note attached to a paper book fell out, and the user had to find their place again.",
+              "content_digest": "723e48ceeba6c94e627c79af0518c811cfc8337f9eeae3a80ae388ec98786994",
+              "position": 5,
+              "uid": "1dad71ec-6a5d-550e-89d2-a86dc3dacb11"
+            },
+            {
+              "content": "With the next book, the user recorded the page number in the notebook and resumed reading immediately.",
+              "content_digest": "c74c2f80bf403da64f0a6de97ff04bc1f41cf68d0d33829fa926cc2549e8ea75",
+              "position": 6,
+              "uid": "58494743-fc7f-59e9-8e17-80b8a644470a"
+            },
+            {
+              "content": "The user's father expects that lowering the television volume while the user reads will make it easier for the user to concentrate.",
+              "content_digest": "281b1f8f55f8d22fbebdb2220405dc3e2300e29e0a568c1fac36d4bb1c39c186",
+              "position": 7,
+              "uid": "cce66589-892c-5d73-bdbc-2c6e94e0992e"
+            },
+            {
+              "content": "The local agent can summarize past reading environments and interruption records but cannot predict the next reading time.",
+              "content_digest": "50e5376e22f503048a7f1bf4055bfb31cb4aa3c75b1c816f2febce913716eb58",
+              "position": 8,
+              "uid": "20b2a27f-908f-5ed7-a288-f7c1030674fc"
+            },
+            {
+              "content": "The user feels that repeated notifications interrupt their flow of concentration.",
+              "content_digest": "d777b2a01cfac23e6ef7701c04c33592f8382fa78f8e307bae9ddbffc9a8e2ef",
+              "position": 9,
+              "uid": "310f4cfc-b117-5511-8e13-2bd2ebec9fe5"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "ab374a1a-3f54-45fb-ac50-b8a2819afb0b"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames overlap on how environmental noise affects reading and distinguish helpful phone reminders from disruptive phone presence during reading. Otherwise, the reference emphasizes library administration and evening-route safety, while the compared frame adds reading organization, place tracking, and forecasting limits.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "4801981b-2651-4889-b341-c8d53eec02ad",
+              "memory_uid": "4f37306b-08cd-512a-b92e-ca6761da1a5b"
+            },
+            {
+              "frame_uid": "4801981b-2651-4889-b341-c8d53eec02ad",
+              "memory_uid": "5897ffa4-cfc6-5012-8931-15420ec5cf7c"
+            },
+            {
+              "frame_uid": "ab374a1a-3f54-45fb-ac50-b8a2819afb0b",
+              "memory_uid": "28714a4e-bc14-5703-b594-126471ae0585"
+            },
+            {
+              "frame_uid": "ab374a1a-3f54-45fb-ac50-b8a2819afb0b",
+              "memory_uid": "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df"
+            },
+            {
+              "frame_uid": "ab374a1a-3f54-45fb-ac50-b8a2819afb0b",
+              "memory_uid": "cce66589-892c-5d73-bdbc-2c6e94e0992e"
+            }
+          ],
+          "reason": "Library vehicle noise and living-room television noise each impaired reading, while moving inward or turning the television off supported an uninterrupted period; the expectation about lowering television volume reinforces the same operational choice.",
+          "status": "RESOLVED",
+          "summary": "Reduced environmental noise is associated with more sustained, less interrupted reading.",
+          "uid": "d3e1ce9a-7899-5548-ab16-e0850bd70d00"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "4801981b-2651-4889-b341-c8d53eec02ad",
+              "memory_uid": "a304315b-bc0a-591b-b8c2-7eea5145819d"
+            },
+            {
+              "frame_uid": "ab374a1a-3f54-45fb-ac50-b8a2819afb0b",
+              "memory_uid": "1b1c9f90-2561-53d5-88fe-d54618450143"
+            },
+            {
+              "frame_uid": "ab374a1a-3f54-45fb-ac50-b8a2819afb0b",
+              "memory_uid": "076a7caa-5dcf-5f9d-8bee-efc952652efa"
+            },
+            {
+              "frame_uid": "ab374a1a-3f54-45fb-ac50-b8a2819afb0b",
+              "memory_uid": "310f4cfc-b117-5511-8e13-2bd2ebec9fe5"
+            }
+          ],
+          "reason": "The differing outcomes are explained by explicit activity context: a reminder before a due date prompted preparation, while checking notifications during reading broke concentration and leaving the phone elsewhere prevented checks.",
+          "status": "RESOLVED",
+          "summary": "Phone use is helpful for advance due-date reminders but disruptive when notifications remain accessible during active reading or note-taking.",
+          "uid": "76aaf116-13c2-5b79-9ba9-504c67f0cf3e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4801981b-2651-4889-b341-c8d53eec02ad",
+              "memory_uid": "04711182-acef-52a9-bd58-7fe98a54854a"
+            }
+          ],
+          "reason": "This is an independently useful library-account event with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user renewed their local library membership in October 2024.",
+          "uid": "affe9b32-6746-570e-844d-82dda39a90ef"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4801981b-2651-4889-b341-c8d53eec02ad",
+              "memory_uid": "0229d0b1-750c-521b-a126-22c9d9d001c4"
+            }
+          ],
+          "reason": "This records a specific safety-motivated route change absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user detoured to a main road after encountering an unlit street during an evening walk.",
+          "uid": "25f66330-43e6-546d-ba82-2762b69e218f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4801981b-2651-4889-b341-c8d53eec02ad",
+              "memory_uid": "e310fe87-8cde-5399-be00-9f8d7ec44e94"
+            }
+          ],
+          "reason": "This is a specific travel-time tradeoff not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Choosing a well-lit pedestrian route added twelve minutes to one walk.",
+          "uid": "1a58c9f6-d85b-53ec-915f-de4b1eb2b3ca"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4801981b-2651-4889-b341-c8d53eec02ad",
+              "memory_uid": "ce38bd13-3d51-5bff-9eba-ed70a8217356"
+            }
+          ],
+          "reason": "This is a one-sided failure of a due-date recording method, distinct from the compared frame's page-place tracking claim.",
+          "status": "RESOLVED",
+          "summary": "A due date recorded on loose paper was lost with the paper.",
+          "uid": "a69b1f35-69ac-5573-8f1c-751b25d851d9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4801981b-2651-4889-b341-c8d53eec02ad",
+              "memory_uid": "ef060b89-6c54-5c20-86be-c07766a35daa"
+            }
+          ],
+          "reason": "This administrative requirement has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Library staff expect identity-verification material for a replacement membership-card request.",
+          "uid": "ec50f6bc-7565-5646-af78-62f26efdbb54"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4801981b-2651-4889-b341-c8d53eec02ad",
+              "memory_uid": "7669e5eb-c0fd-5182-ae9a-5f9ae95ddf2f"
+            },
+            {
+              "frame_uid": "4801981b-2651-4889-b341-c8d53eec02ad",
+              "memory_uid": "e96f7007-5814-5986-b121-4ce3b22506e1"
+            }
+          ],
+          "reason": "The requirement to check current conditions and the stated observation limitation split one underlying one-sided constraint on route recommendations.",
+          "status": "RESOLVED",
+          "summary": "Evening-route proposals require recent lighting and pedestrian information that the local agent cannot directly observe.",
+          "uid": "536f61ce-7607-5582-b642-19c6d3e8b895"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ab374a1a-3f54-45fb-ac50-b8a2819afb0b",
+              "memory_uid": "3d3f7960-daf5-5a51-98b3-14261c5aa66c"
+            }
+          ],
+          "reason": "This describes a reading-space arrangement not represented in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user keeps their current book and note-taking notebook on a small living-room desk.",
+          "uid": "f1d4fd23-7f2c-581e-93de-f14ab8d1750e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ab374a1a-3f54-45fb-ac50-b8a2819afb0b",
+              "memory_uid": "1dad71ec-6a5d-550e-89d2-a86dc3dacb11"
+            },
+            {
+              "frame_uid": "ab374a1a-3f54-45fb-ac50-b8a2819afb0b",
+              "memory_uid": "58494743-fc7f-59e9-8e17-80b8a644470a"
+            }
+          ],
+          "reason": "The two compared-side observations form one before-and-after claim about reliable page-place tracking, which the reference frame does not address.",
+          "status": "RESOLVED",
+          "summary": "A loose paper note failed to preserve the user's reading place, while recording the page number in a notebook enabled immediate resumption.",
+          "uid": "74740f61-a98a-5fb1-89f3-75a64616c13a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ab374a1a-3f54-45fb-ac50-b8a2819afb0b",
+              "memory_uid": "20b2a27f-908f-5ed7-a288-f7c1030674fc"
+            }
+          ],
+          "reason": "This is an independently useful capability boundary absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The local agent can summarize past reading environments and interruptions but cannot predict the next reading time.",
+          "uid": "a79d13e0-172f-5a76-8510-aa5f99af45a6"
+        }
+      ],
+      "reports": {
+        "both": "Both describe quieter reading environments as supporting sustained concentration and fewer interruptions.",
+        "compared_only": "The compared frame adds desk organization, reliable page-place tracking, and limits on predicting future reading times.",
+        "differences": "Phone reminders aid advance due-date preparation, whereas an accessible, notifying phone disrupts active reading and note-taking.",
+        "reference_only": "The reference adds library membership and replacement-card facts, due-date paper loss, and safety constraints and tradeoffs for evening walking routes."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "57990919-6fc8-48c2-bcad-a791302220fa"
+    },
+    "analysis_digest": "bea8efb96c7c1eb48f11426f0b955b3e31795515ae45c6d3e2fc50e9e2ac4574",
+    "key": "a22d8bb81a343ad47bf45e4180a235c0a250dd188a52d56d42fc588fff54b85c",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 46.721947750000254,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "a22d8bb81a343ad47bf45e4180a235c0a250dd188a52d56d42fc588fff54b85c",
+  "created_at": "2026-08-13T18:46:03.108505Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/10",
+  "pair_key": "f99ed246330c4036a29d9ac31889dba0ddbe2e84577b0ca0ca91369f8283e1b2",
+  "provider_seconds": 46.721947750000254,
+  "right": "task-3/local/personal-memory/2025/09",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

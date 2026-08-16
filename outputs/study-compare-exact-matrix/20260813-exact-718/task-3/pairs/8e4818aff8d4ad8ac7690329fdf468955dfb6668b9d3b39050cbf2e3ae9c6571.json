@@ -1,0 +1,424 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:38:06.324420+00:00",
+      "frames": [
+        {
+          "context_digest": "db438345c3ec4b3f69562a274c9f81a93bd6e6df97bc89b60abcd193dc89b562",
+          "context_name": "task-3/local/personal-memory/2024/04",
+          "context_uid": "206e1cd3-93da-5341-bda3-95cde4814c20",
+          "memories": [
+            {
+              "content": "The user completed a routine dental checkup in April 2024.",
+              "content_digest": "bbaa093f8dee5b5ee42c4a180e683fce00bc9364f5a009b9fa1e7f2ac233bc01",
+              "position": 0,
+              "uid": "9cea83cd-e39f-53bd-9e79-d30aa465ad02"
+            },
+            {
+              "content": "When the user heard three checkup questions in succession, they asked for the first question again.",
+              "content_digest": "e1b76973991f009295489249af1a7cd0fa7957f24f330e39337e01e5b1acdcbb",
+              "position": 1,
+              "uid": "51f8326f-60d4-5ba3-ba32-a04331dcb930"
+            },
+            {
+              "content": "At the next visit, when questions were asked one at a time, the user answered each without omission.",
+              "content_digest": "30c943f2e043f485a7a7e1ac19343c753ed8f834d00716725322505e28e0b15a",
+              "position": 2,
+              "uid": "cd0bce79-71d5-5d46-9c68-8a1d096dd53a"
+            },
+            {
+              "content": "The user called to reschedule an appointment at lunchtime but did not reach anyone.",
+              "content_digest": "1d4bd2122c160d35080b232ebb8ae5080c2ce34124645b3ec8040d7d29af9752",
+              "position": 3,
+              "uid": "71e27b0c-5c10-5102-aeac-98b0841723f2"
+            },
+            {
+              "content": "After returning home, the user kept a photo of the paper instructions received at the clinic.",
+              "content_digest": "68cddec62167a3910122a129dcfdb3c5604a4fea996d01f870734739dd3b0221",
+              "position": 4,
+              "uid": "86ad5410-0cc7-5876-8e3a-a3f0dd1680c7"
+            },
+            {
+              "content": "On a day the user put only the visit address in the calendar, they had to search again for the floor.",
+              "content_digest": "0d6926aba2c90930bfa984d7af1b12c60f35e53ba9916dfbee2c2391961db1a9",
+              "position": 5,
+              "uid": "aab36950-7e2b-588f-bb7c-d3bd6e36c501"
+            },
+            {
+              "content": "On a day the user shared the checkup time with their older sister, the sister called to check in after the user returned home.",
+              "content_digest": "b7d0fea8e8f2fc13126453039dcedebcda3c67ce2ea96c4a2d5b60365448e0e3",
+              "position": 6,
+              "uid": "50ac9268-9259-56fd-8678-1dfc8f919efb"
+            },
+            {
+              "content": "The scheduling staff at that clinic expect requests to change appointments to arrive by telephone.",
+              "content_digest": "28eec4f0ef0b96764a3f7ea54ee3db9fd4d5f1b62a5a2fa29d0a6193f1d8a18c",
+              "position": 7,
+              "uid": "5141ca66-9860-5ec5-b028-ac8670f586ca"
+            },
+            {
+              "content": "Before adding a follow-up visit to the calendar, confirm the date, time, address, and floor with the user.",
+              "content_digest": "0555c837f721fccd5918b2275086bb39c75e016e27574027185cfbada1c766af",
+              "position": 8,
+              "uid": "e265e637-fa41-53d0-aa9b-0102e9962f9a"
+            },
+            {
+              "content": "The local agent can track completed checkups and scheduled appointments but cannot determine whether a follow-up visit is needed.",
+              "content_digest": "be24b47ccb071438fd01bb99b11af3c63f22e260312a26d901824e6bb0d4cd89",
+              "position": 9,
+              "uid": "7aece7ae-b327-537e-9cef-fe24ee8fc618"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "406f5944-b62d-4a69-9948-52035dcacdd1"
+        },
+        {
+          "context_digest": "5e42fc3dcfbf5576148277f6841977ca8a5cabd4a3fc67a5581f6f6cc816c900",
+          "context_name": "task-3/local/personal-memory/2025/10",
+          "context_uid": "8130b676-dc51-5c31-b7dc-185afdf9cf07",
+          "memories": [
+            {
+              "content": "The user keeps waterproof shoes for rainy days to the left of the entrance.",
+              "content_digest": "5b9e5a20153c7865010318800d740a410faef0c13fe2278c20ce984a89b7dea5",
+              "position": 0,
+              "uid": "82c1e806-de3a-5633-8a08-175487e69fd6"
+            },
+            {
+              "content": "On a day the user walked in the rain wearing thin shoes, their socks became wet and they changed them after arrival.",
+              "content_digest": "fdbdab8c08a4b1d933ff8ac3ddedee8541ddf070e8c6e6020b6c1d14b992c621",
+              "position": 1,
+              "uid": "25df6384-836f-5f8e-bd97-73a1fb171c48"
+            },
+            {
+              "content": "On the next rainy day, the user wore waterproof shoes and their feet remained dry.",
+              "content_digest": "0e87d74fb93fe062cd12efe2f5a04fbae5ce13a60491fd9ad04c4e006acbd87f",
+              "position": 2,
+              "uid": "55abae4f-206a-586e-8b35-406d7525c0a1"
+            },
+            {
+              "content": "On a day the user walked for a long time in new shoes, their heel chafed and they shortened the route home.",
+              "content_digest": "aeb369b995cdf17ea73ae8546b454eab70f33bf6d3c67a09aee2805c1c598b6d",
+              "position": 3,
+              "uid": "c6d21ec4-6bdf-55df-b4d4-05cb531bf4bd"
+            },
+            {
+              "content": "The user wore the same shoes on two short outings before using them on a long walk.",
+              "content_digest": "0d7ed5656f35f4fe025c6ba80e4c829f5b9851c193f981de9a461f848317d60a",
+              "position": 4,
+              "uid": "a6424854-e51e-5afc-8b9f-9e2f0273f70e"
+            },
+            {
+              "content": "On a day the user dried an umbrella outside the entrance, they found it immediately before the next outing.",
+              "content_digest": "dbc2453ca5f895e2cfe7f58e5624cf4c5d6793468af3b25df7e9a4ddb7d50159",
+              "position": 5,
+              "uid": "1b436b46-3d1f-5aa2-99e3-94b7c2412bfd"
+            },
+            {
+              "content": "On a day the user put a folded wet umbrella in their bag, documents inside became wet.",
+              "content_digest": "1f63fbc8c6b491a734f0f7a4190e26aec22826c1ff839242e0ca71d933312c9c",
+              "position": 6,
+              "uid": "ccd1f422-6130-5f19-869e-681102a3a1fa"
+            },
+            {
+              "content": "When rain is forecast, the user's mother expects the user may forget an umbrella and sets out a spare at the entrance.",
+              "content_digest": "80bdfaefb6f781aa91ef7217331e75f09b4766650c2b078dfadf592b2eb27b08",
+              "position": 7,
+              "uid": "c69a8e87-2b6f-5514-ab0d-0037531592f8"
+            },
+            {
+              "content": "When proposing a long-distance walking plan, check both the weather that day and recent records of shoe discomfort.",
+              "content_digest": "f54a546d423099c3abbb65bb49e4ddf773a8191dcffbb8b3d5153dfd70553b73",
+              "position": 8,
+              "uid": "4567ea9f-1800-51ed-bfac-f4cdf674d4cf"
+            },
+            {
+              "content": "Even if the local agent knows a shoe's location, it cannot know its current condition or whether it is usable.",
+              "content_digest": "28202c222ca800a5e19dbaebea2b3c992748f530a695517cf123b10187a31bc8",
+              "position": 9,
+              "uid": "a4ff1b76-755d-530a-b24c-8655115e4fbe"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "614caec2-552a-4df2-819e-969cd6184ad9"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate operational domains: dental-visit coordination and rainy-day walking logistics. Each contributes independently useful observations, procedures, support patterns, and agent limitations; no supplied claims govern the same decision closely enough to establish equivalence, compatibility, scope variation, or conflict.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "406f5944-b62d-4a69-9948-52035dcacdd1",
+              "memory_uid": "9cea83cd-e39f-53bd-9e79-d30aa465ad02"
+            }
+          ],
+          "reason": "This is an independently useful dental-attendance fact with no counterpart governing the same matter in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user completed a routine dental checkup in April 2024.",
+          "uid": "af4042be-6ece-5510-ab6e-7eb0e29e3635"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "406f5944-b62d-4a69-9948-52035dcacdd1",
+              "memory_uid": "51f8326f-60d4-5ba3-ba32-a04331dcb930"
+            },
+            {
+              "frame_uid": "406f5944-b62d-4a69-9948-52035dcacdd1",
+              "memory_uid": "cd0bce79-71d5-5d46-9c68-8a1d096dd53a"
+            }
+          ],
+          "reason": "These observations jointly express one dental-visit communication claim about question pacing, which the compared frame does not address.",
+          "status": "RESOLVED",
+          "summary": "The user's response completeness differed with question pacing: successive questions prompted a repetition request, whereas one-at-a-time questions were all answered.",
+          "uid": "aeb6fd6a-7bdf-55f5-b57b-9c2f3a1313b6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "406f5944-b62d-4a69-9948-52035dcacdd1",
+              "memory_uid": "71e27b0c-5c10-5102-aeac-98b0841723f2"
+            }
+          ],
+          "reason": "This is a one-sided observation about an unsuccessful appointment-change attempt.",
+          "status": "RESOLVED",
+          "summary": "A lunchtime call to reschedule an appointment did not reach clinic staff.",
+          "uid": "2dde3ad9-df4c-5ead-8a73-bed7710e9a30"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "406f5944-b62d-4a69-9948-52035dcacdd1",
+              "memory_uid": "86ad5410-0cc7-5876-8e3a-a3f0dd1680c7"
+            }
+          ],
+          "reason": "This is a one-sided fact about preserving visit instructions.",
+          "status": "RESOLVED",
+          "summary": "The user retained a photograph of the clinic's paper instructions after returning home.",
+          "uid": "ca6ebab9-2591-512b-a731-5bcba5900528"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "406f5944-b62d-4a69-9948-52035dcacdd1",
+              "memory_uid": "aab36950-7e2b-588f-bb7c-d3bd6e36c501"
+            }
+          ],
+          "reason": "This independently documents the consequence of incomplete appointment-location details.",
+          "status": "RESOLVED",
+          "summary": "Recording only the visit address left the user needing to search again for the floor.",
+          "uid": "da099d06-e40b-5e25-9cba-5124a241cddc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "406f5944-b62d-4a69-9948-52035dcacdd1",
+              "memory_uid": "50ac9268-9259-56fd-8678-1dfc8f919efb"
+            }
+          ],
+          "reason": "This is a one-sided support pattern tied to sharing dental-visit timing.",
+          "status": "RESOLVED",
+          "summary": "After receiving the checkup time, the user's older sister checked in following the user's return home.",
+          "uid": "0e95f032-7b46-5072-9b4f-4c47f9f5bb34"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "406f5944-b62d-4a69-9948-52035dcacdd1",
+              "memory_uid": "5141ca66-9860-5ec5-b028-ac8670f586ca"
+            }
+          ],
+          "reason": "This is an independently useful clinic communication-channel expectation.",
+          "status": "RESOLVED",
+          "summary": "The clinic's scheduling staff expect appointment-change requests by telephone.",
+          "uid": "f604a50f-3321-5cc9-85f7-b0330723e3a6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "406f5944-b62d-4a69-9948-52035dcacdd1",
+              "memory_uid": "e265e637-fa41-53d0-aa9b-0102e9962f9a"
+            }
+          ],
+          "reason": "This is a one-sided appointment-entry procedure addressing information completeness.",
+          "status": "RESOLVED",
+          "summary": "Before adding a follow-up visit to the calendar, confirm its date, time, address, and floor with the user.",
+          "uid": "e5b883b4-5291-530e-8cd2-20d556b15ac1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "406f5944-b62d-4a69-9948-52035dcacdd1",
+              "memory_uid": "7aece7ae-b327-537e-9cef-fe24ee8fc618"
+            }
+          ],
+          "reason": "This is a domain-specific capability boundary about clinical follow-up inference, not the same operational decision as assessing footwear.",
+          "status": "RESOLVED",
+          "summary": "The local agent may track completed checkups and scheduled appointments but cannot determine whether follow-up care is needed.",
+          "uid": "8fbbf07a-59cd-5517-ac44-684507bc484a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "614caec2-552a-4df2-819e-969cd6184ad9",
+              "memory_uid": "82c1e806-de3a-5633-8a08-175487e69fd6"
+            }
+          ],
+          "reason": "This is a one-sided location fact for rain-ready footwear.",
+          "status": "RESOLVED",
+          "summary": "The user's rainy-day waterproof shoes are kept to the left of the entrance.",
+          "uid": "68c28651-27bc-5fdb-82ed-b4aae88bb451"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "614caec2-552a-4df2-819e-969cd6184ad9",
+              "memory_uid": "25df6384-836f-5f8e-bd97-73a1fb171c48"
+            },
+            {
+              "frame_uid": "614caec2-552a-4df2-819e-969cd6184ad9",
+              "memory_uid": "55abae4f-206a-586e-8b35-406d7525c0a1"
+            }
+          ],
+          "reason": "These observations jointly express one claim about footwear choice affecting dryness in rain, absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Thin shoes led to wet socks in rain, while waterproof shoes kept the user's feet dry on the next rainy day.",
+          "uid": "f121638c-2fb9-568a-9efa-edb769ad249e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "614caec2-552a-4df2-819e-969cd6184ad9",
+              "memory_uid": "c6d21ec4-6bdf-55df-b4d4-05cb531bf4bd"
+            },
+            {
+              "frame_uid": "614caec2-552a-4df2-819e-969cd6184ad9",
+              "memory_uid": "a6424854-e51e-5afc-8b9f-9e2f0273f70e"
+            }
+          ],
+          "reason": "These observations jointly document that short trials did not establish comfort for long-distance use.",
+          "status": "RESOLVED",
+          "summary": "Shoes tolerated on two short outings still chafed the user's heel during a long walk, causing the route home to be shortened.",
+          "uid": "6c3deb8a-5cd4-57f6-b44f-fbfbdd2f6912"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "614caec2-552a-4df2-819e-969cd6184ad9",
+              "memory_uid": "1b436b46-3d1f-5aa2-99e3-94b7c2412bfd"
+            }
+          ],
+          "reason": "This is a one-sided observation about umbrella placement supporting later retrieval.",
+          "status": "RESOLVED",
+          "summary": "An umbrella dried outside the entrance was found immediately before the next outing.",
+          "uid": "e4059935-cdad-58cb-a996-edb289bbce80"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "614caec2-552a-4df2-819e-969cd6184ad9",
+              "memory_uid": "ccd1f422-6130-5f19-869e-681102a3a1fa"
+            }
+          ],
+          "reason": "This independently documents damage caused by storing a wet umbrella with documents.",
+          "status": "RESOLVED",
+          "summary": "Placing a folded wet umbrella in a bag caused documents inside to become wet.",
+          "uid": "7a3bd119-498b-5032-829e-449e94d66aaa"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "614caec2-552a-4df2-819e-969cd6184ad9",
+              "memory_uid": "c69a8e87-2b6f-5514-ab0d-0037531592f8"
+            }
+          ],
+          "reason": "This is a one-sided rainy-day support pattern.",
+          "status": "RESOLVED",
+          "summary": "When rain is forecast, the user's mother anticipates a forgotten umbrella and places a spare at the entrance.",
+          "uid": "41200889-9556-5fe8-b047-16a141cb658a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "614caec2-552a-4df2-819e-969cd6184ad9",
+              "memory_uid": "4567ea9f-1800-51ed-bfac-f4cdf674d4cf"
+            }
+          ],
+          "reason": "This is an independently useful planning procedure specific to walking conditions and footwear history.",
+          "status": "RESOLVED",
+          "summary": "A proposed long-distance walking plan should be checked against that day's weather and recent shoe-discomfort records.",
+          "uid": "34ce8bbd-960f-5803-817d-f29c8097336d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "614caec2-552a-4df2-819e-969cd6184ad9",
+              "memory_uid": "a4ff1b76-755d-530a-b24c-8655115e4fbe"
+            }
+          ],
+          "reason": "This is a domain-specific capability boundary about footwear assessment, not the same operational decision as determining dental follow-up need.",
+          "status": "RESOLVED",
+          "summary": "Knowing where a shoe is does not allow the local agent to know its present condition or usability.",
+          "uid": "1f70e90b-093f-5872-b5ad-38ec36988982"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers rain footwear, long-walk shoe discomfort, umbrella placement and damage, maternal reminders, weather-aware walking plans, and limits on assessing shoe condition or usability.",
+        "differences": "",
+        "reference_only": "The reference covers dental attendance, question pacing, rescheduling, retained instructions, complete calendar details, family check-ins, clinic telephone expectations, appointment confirmation, and limits on inferring follow-up need."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "1ec46c6c-fd08-430a-90c7-01307a675346"
+    },
+    "analysis_digest": "89907979692b805c5e52c73460f6e397ea0ec9b6ea4a865ed9974b3a80d2c53b",
+    "key": "624c0c5c8169866e53f340533fa5b1b89a4907755692dae950fee50ae6364dd8",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 43.84325275000083,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "624c0c5c8169866e53f340533fa5b1b89a4907755692dae950fee50ae6364dd8",
+  "created_at": "2026-08-13T18:38:50.167184Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/04",
+  "pair_key": "8e4818aff8d4ad8ac7690329fdf468955dfb6668b9d3b39050cbf2e3ae9c6571",
+  "provider_seconds": 43.84325275000083,
+  "right": "task-3/local/personal-memory/2025/10",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

@@ -1,0 +1,379 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:51:49.790337+00:00",
+      "frames": [
+        {
+          "context_digest": "ca8765e237d85d9bf3ecb78fe1d9a2487066ae14dae9509e40b324ac1277d75a",
+          "context_name": "task-3/local/personal-memory/2025/06",
+          "context_uid": "870f7336-726a-5d9c-bae4-12585311463e",
+          "memories": [
+            {
+              "content": "The user keeps a portable fan charger on a living-room shelf.",
+              "content_digest": "5ab7fad8ae1b3f56bdbc1c3ebf593a3d452590341b6de115f830fdf0d994c12e",
+              "position": 0,
+              "uid": "853a158c-edf9-578a-8e75-3d5daff6e4db"
+            },
+            {
+              "content": "On a hot day, the user worked with only the window open and lost focus in the afternoon.",
+              "content_digest": "3c4225f055db293c53a5a137d0c6353005bcb55b71dbc61bc69831aa5c3c08de",
+              "position": 1,
+              "uid": "f7d5ebdc-0cae-5e07-a060-e129b5a05570"
+            },
+            {
+              "content": "In the room where the user closed the curtains the next morning, the temperature rose less.",
+              "content_digest": "4cb4d1892db8769f4c066859dbb021c67d5015114f8522dfd904057061600ab5",
+              "position": 2,
+              "uid": "99e5c522-535b-5015-8617-06f645147f8b"
+            },
+            {
+              "content": "The user took the portable fan out without charging it, and it turned off after an hour.",
+              "content_digest": "0e1e0e9e985bea5be6976010a390f484b60a931ea7dfaf50a73c66616a73d5da",
+              "position": 3,
+              "uid": "7b3bf50c-63aa-5a1e-9a53-7befea25a468"
+            },
+            {
+              "content": "Before the next outing, the user charged it the night before and used the fan throughout the trip.",
+              "content_digest": "fd4282d169da18d902fc5f766d4e38131240bf3a51e6fa0c5bad69f80f1492af",
+              "position": 4,
+              "uid": "ca8de091-afb2-537f-a83a-09769056879d"
+            },
+            {
+              "content": "On a hot weekend, the user was eating lunch in their father's yard and moved indoors.",
+              "content_digest": "44e7d3bc5eaecec68ad6e7c0979572102f3c717b37712fcfada769959443ae8e",
+              "position": 5,
+              "uid": "4a0604fb-10b4-5132-a6de-ab6a229ff2be"
+            },
+            {
+              "content": "When the user returned to the yard in the evening, shade and wind led them to stay another hour.",
+              "content_digest": "7495f1d4ba2d1d732ab5c962f45b5b0c9c765ee21767373552247a823cf90984",
+              "position": 6,
+              "uid": "1f90941e-776f-5cba-9783-c392983dd72c"
+            },
+            {
+              "content": "The user's father prefers to move an outdoor meal to the evening rather than proceed at midday when the temperature is high.",
+              "content_digest": "5f9628a28b5c6f3b20a371d1c039f37f26c50832970936c8a243f161fd8288f4",
+              "position": 7,
+              "uid": "63391d26-7417-5ea6-ac0a-460af7489963"
+            },
+            {
+              "content": "The local agent can compare past responses to heat but cannot know the current felt temperature without an indoor temperature record.",
+              "content_digest": "815f4fb2c833d75e30cb0e323f5708e356bf38e0bbb573865092be48fbf2746a",
+              "position": 8,
+              "uid": "31502797-1379-5ec4-bd1b-a2e1515fa56e"
+            },
+            {
+              "content": "A room with a west-facing window can warm rapidly in the late afternoon.",
+              "content_digest": "448908f6242021de6d41ddee8121714a1388db6e4e3d067de27e6950ee712c23",
+              "position": 9,
+              "uid": "68f85c30-62c4-579d-97cd-9f401c686e63"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "c2b1116f-057c-44c8-bb0c-b0c728398dbc"
+        },
+        {
+          "context_digest": "5a45aaafce189f861f7195d3a753aa86812f64c689213961136327ca721c9d3e",
+          "context_name": "task-3/local/personal-memory/2026/06",
+          "context_uid": "f2e6c2e0-886a-52d8-98d4-03009ea37991",
+          "memories": [
+            {
+              "content": "The user keeps four folding chairs for family barbecues in storage.",
+              "content_digest": "7e2bb593a723adbac468184af4063e0ef74420baa03d6249ef77a84f2e6bc9df",
+              "position": 0,
+              "uid": "cce43b8e-c1c1-5208-8d9a-ee665b805d4c"
+            },
+            {
+              "content": "When six family members gathered in a noisy indoor restaurant, the user asked several times for the person across from them to repeat what was said.",
+              "content_digest": "d858d40478a37bed08580523df1915b85b4e2217b2fc506acedacaca55d2158d",
+              "position": 1,
+              "uid": "e682f0fd-e92f-566e-b1ec-1d5ebf091b60"
+            },
+            {
+              "content": "The user held the next gathering in their father's yard and moved between seats while speaking with everyone.",
+              "content_digest": "44843518c924955fa15e245dc41763a6fe21a95f6f590bd395f7b8a2d6357256",
+              "position": 2,
+              "uid": "c1f2b53e-6184-552b-a321-9796bb121055"
+            },
+            {
+              "content": "On a day the user started the barbecue at midday, sunlight led them to finish the meal quickly.",
+              "content_digest": "f275c2211b4bd69f40351800db57965b8ba44afbadb6e90a0291acae4e7a541b",
+              "position": 3,
+              "uid": "56d5befe-d5f4-59df-82e4-a66ba868dfc2"
+            },
+            {
+              "content": "The next time, the user started at 6 p.m. and remained outside until sunset.",
+              "content_digest": "13c413fbf16ea0704c10d09c5ee065a49ab789b0a3dadb1fc5068631dd95b292",
+              "position": 4,
+              "uid": "83d73ede-6f5a-550e-ba1c-c146b73a9917"
+            },
+            {
+              "content": "Because the side dishes brought by the user's mother and older sister had no labels, the user opened the same container twice.",
+              "content_digest": "5cc4205a743f5d8adca15876d7b0dd864089595ce729f4e3c1cc9a2272c6849b",
+              "position": 5,
+              "uid": "cf0947e8-c133-5259-bac2-e8ee6d74929e"
+            },
+            {
+              "content": "At the next gathering, the user wrote each food's name and who brought it on a small piece of paper.",
+              "content_digest": "6a93e0b5f7e3da8eff2e5c69a3f86c28dfc1a39c1ba7602a61cc1f6a96b837f9",
+              "position": 6,
+              "uid": "d42e48ca-39de-529f-bba2-332b779bd6c2"
+            },
+            {
+              "content": "After a barbecue, the user's younger brother prefers to divide leftover food into small containers to take home rather than discard it.",
+              "content_digest": "9febf1dab1f5000cddc636cd753d3c418b84810cbc6e394df7e8917d3fa29b72",
+              "position": 7,
+              "uid": "3958627e-a0fa-5e32-9e87-7ee874fc6fe7"
+            },
+            {
+              "content": "The local agent can summarize preparation and responses from prior family barbecues but cannot know the next attendees or weather.",
+              "content_digest": "6be2ed6916fc8a6200a4646b5db3b5ea0df7650e664bd098f973fb5229257cec",
+              "position": 8,
+              "uid": "1f24b5c2-554c-5356-b335-c6879e53ba7f"
+            },
+            {
+              "content": "The user's father's yard receives strong direct sunlight at midday; after 6 p.m., shade and wind lower the felt temperature.",
+              "content_digest": "a0bf855f5bb0422568bbed468e5299d111143362d7b9fe2dcf35dbaf8bcbf4c6",
+              "position": 9,
+              "uid": "d88b1b21-c58f-51d5-a60b-54bb11473d96"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "40294c85-5398-4563-bef3-45e28777b280"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames converge on shifting outdoor meals from harsh midday conditions to more comfortable evenings. They differ only in the situations defining the local agent’s knowledge limits. The remaining material independently covers heat and fan management, gathering logistics, communication, food organization, and leftovers.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "c2b1116f-057c-44c8-bb0c-b0c728398dbc",
+              "memory_uid": "4a0604fb-10b4-5132-a6de-ab6a229ff2be"
+            },
+            {
+              "frame_uid": "c2b1116f-057c-44c8-bb0c-b0c728398dbc",
+              "memory_uid": "1f90941e-776f-5cba-9783-c392983dd72c"
+            },
+            {
+              "frame_uid": "c2b1116f-057c-44c8-bb0c-b0c728398dbc",
+              "memory_uid": "63391d26-7417-5ea6-ac0a-460af7489963"
+            },
+            {
+              "frame_uid": "40294c85-5398-4563-bef3-45e28777b280",
+              "memory_uid": "56d5befe-d5f4-59df-82e4-a66ba868dfc2"
+            },
+            {
+              "frame_uid": "40294c85-5398-4563-bef3-45e28777b280",
+              "memory_uid": "83d73ede-6f5a-550e-ba1c-c146b73a9917"
+            },
+            {
+              "frame_uid": "40294c85-5398-4563-bef3-45e28777b280",
+              "memory_uid": "d88b1b21-c58f-51d5-a60b-54bb11473d96"
+            }
+          ],
+          "reason": "The experiences, environmental observation, and stated preference materially support the same outdoor-meal timing policy without contradiction or a missing scope distinction.",
+          "status": "RESOLVED",
+          "summary": "Midday heat or direct sun shortens outdoor meals, while evening shade and wind support longer stays and a preference for later scheduling.",
+          "uid": "e2a49c9a-3fc3-5a33-ab78-91a761c52553"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "c2b1116f-057c-44c8-bb0c-b0c728398dbc",
+              "memory_uid": "31502797-1379-5ec4-bd1b-a2e1515fa56e"
+            },
+            {
+              "frame_uid": "40294c85-5398-4563-bef3-45e28777b280",
+              "memory_uid": "1f24b5c2-554c-5356-b335-c6879e53ba7f"
+            }
+          ],
+          "reason": "For indoor heat, current felt temperature depends on an indoor record; for a future barbecue, attendees and weather are unknown. These explicit contexts must remain distinct.",
+          "status": "RESOLVED",
+          "summary": "The local agent can use past observations but lacks different live or future facts depending on the planning context.",
+          "uid": "c1e6bf22-34d3-5af3-9811-b5ab59824dac"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c2b1116f-057c-44c8-bb0c-b0c728398dbc",
+              "memory_uid": "853a158c-edf9-578a-8e75-3d5daff6e4db"
+            }
+          ],
+          "reason": "This is independently useful storage-location information found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The portable fan charger is kept on a living-room shelf.",
+          "uid": "a114325f-9fb7-5fbf-b408-c7d2ada2cf87"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c2b1116f-057c-44c8-bb0c-b0c728398dbc",
+              "memory_uid": "f7d5ebdc-0cae-5e07-a060-e129b5a05570"
+            }
+          ],
+          "reason": "This is a one-sided observation about an indoor cooling arrangement and concentration.",
+          "status": "RESOLVED",
+          "summary": "Working on a hot day with only the window open was followed by lost afternoon focus.",
+          "uid": "0ecc8fa0-72ee-59ea-ab88-e63065014fe5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c2b1116f-057c-44c8-bb0c-b0c728398dbc",
+              "memory_uid": "99e5c522-535b-5015-8617-06f645147f8b"
+            }
+          ],
+          "reason": "This is a one-sided observation about curtain use and room warming.",
+          "status": "RESOLVED",
+          "summary": "Closing the curtains was associated with a smaller temperature rise the next morning.",
+          "uid": "4be22d49-beaa-556f-bd97-1a4880a7389d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c2b1116f-057c-44c8-bb0c-b0c728398dbc",
+              "memory_uid": "7b3bf50c-63aa-5a1e-9a53-7befea25a468"
+            },
+            {
+              "frame_uid": "c2b1116f-057c-44c8-bb0c-b0c728398dbc",
+              "memory_uid": "ca8de091-afb2-537f-a83a-09769056879d"
+            }
+          ],
+          "reason": "The paired episodes form one reference-only before-and-after claim about the operational benefit of precharging the fan.",
+          "status": "RESOLVED",
+          "summary": "An uncharged portable fan stopped after an hour, whereas charging it the night before supported use throughout the next trip.",
+          "uid": "a4ec4101-3d3b-5971-abd7-35116871b200"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c2b1116f-057c-44c8-bb0c-b0c728398dbc",
+              "memory_uid": "68f85c30-62c4-579d-97cd-9f401c686e63"
+            }
+          ],
+          "reason": "This is independently useful one-sided information about window orientation and heating.",
+          "status": "RESOLVED",
+          "summary": "A room with a west-facing window can warm rapidly in late afternoon.",
+          "uid": "1ebb634b-cbb6-58b4-8d10-5e089ac75c63"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "40294c85-5398-4563-bef3-45e28777b280",
+              "memory_uid": "cce43b8e-c1c1-5208-8d9a-ee665b805d4c"
+            }
+          ],
+          "reason": "This is independently useful gathering-equipment information found only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Four folding chairs are stored for family barbecues.",
+          "uid": "8de0607c-1356-5d0b-aa21-cff67dc7ac5a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "40294c85-5398-4563-bef3-45e28777b280",
+              "memory_uid": "e682f0fd-e92f-566e-b1ec-1d5ebf091b60"
+            }
+          ],
+          "reason": "This is a one-sided observation about communication difficulty in a noisy indoor setting.",
+          "status": "RESOLVED",
+          "summary": "At a noisy indoor restaurant gathering, the user repeatedly needed speech from across the table to be repeated.",
+          "uid": "493cea93-4680-5a14-a97b-d55518533517"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "40294c85-5398-4563-bef3-45e28777b280",
+              "memory_uid": "c1f2b53e-6184-552b-a321-9796bb121055"
+            }
+          ],
+          "reason": "This is a separate one-sided observation about movement and conversation during an outdoor gathering.",
+          "status": "RESOLVED",
+          "summary": "At a later gathering in the father’s yard, the user moved between seats while speaking with everyone.",
+          "uid": "1b1cc0a5-299c-5dd6-be88-7a9bc9f1d91e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "40294c85-5398-4563-bef3-45e28777b280",
+              "memory_uid": "cf0947e8-c133-5259-bac2-e8ee6d74929e"
+            },
+            {
+              "frame_uid": "40294c85-5398-4563-bef3-45e28777b280",
+              "memory_uid": "d42e48ca-39de-529f-bba2-332b779bd6c2"
+            }
+          ],
+          "reason": "The two memories form one compared-only problem-and-response claim about labeling shared food.",
+          "status": "RESOLVED",
+          "summary": "Unlabeled side dishes led to reopening a container, and the next gathering used labels naming each food and its contributor.",
+          "uid": "60c3de08-5f77-58af-8239-3c385441b831"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "40294c85-5398-4563-bef3-45e28777b280",
+              "memory_uid": "3958627e-a0fa-5e32-9e87-7ee874fc6fe7"
+            }
+          ],
+          "reason": "This is independently useful one-sided information about leftover handling.",
+          "status": "RESOLVED",
+          "summary": "The younger brother prefers dividing barbecue leftovers into small take-home containers instead of discarding them.",
+          "uid": "bb28337b-11e3-5001-bfb7-e99e8a4745bf"
+        }
+      ],
+      "reports": {
+        "both": "Both describe midday sun curtailing yard meals and evening shade and wind supporting longer stays, consistent with preferring later outdoor meals.",
+        "compared_only": "The compared frame adds chairs, restaurant hearing difficulty, mobile yard seating, food labels, and a preference to portion leftovers for family.",
+        "differences": "The agent’s uncertainty is scoped differently: current indoor heat requires a temperature record, while future barbecue attendance and weather remain unknown.",
+        "reference_only": "The reference adds portable-fan storage and charging lessons, indoor heat and focus observations, curtain use, and west-window warming."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "e20d279c-3bba-4150-8735-078acaaf9e4b"
+    },
+    "analysis_digest": "bb1f83ed1728952372e3697e10c63a9f61759899ea0cb0fc123751e2a55b7d8b",
+    "key": "798279e54400d7d251391fbafe9702a60b4e9b1bf35874cc03a85d4d9b22bb06",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 54.28826770800151,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "798279e54400d7d251391fbafe9702a60b4e9b1bf35874cc03a85d4d9b22bb06",
+  "created_at": "2026-08-13T18:52:44.078334Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/06",
+  "pair_key": "3640faa9c3ce53892a89235986bab0623395ac904d9cb9331c0cdb4aea2099df",
+  "provider_seconds": 54.28826770800151,
+  "right": "task-3/local/personal-memory/2026/06",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

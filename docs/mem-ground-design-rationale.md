@@ -468,7 +468,9 @@ question may therefore ask only about the Goal and portable Ground name, not
 treat any selected or planned Context name as part of creation approval.
 
 The Context pane now places `DIRECT SELECT · P` below provider-ranked
-suggestions. `P` opens the same namespace tree as `mem switch`; its direct
+suggestions. `P` opens the same neutral
+`context_targeting.tui.picker` namespace tree as `mem switch`; it does not
+invoke the Switch command or application. Its direct
 choice is process-local and still `NOT BOUND`. In the continuing named-Ground
 view, the Contexts, Rules, and Memories panes each expose `P · placement`.
 The picker is limited to frozen bound publication/placement targets after
@@ -476,6 +478,12 @@ binding, while an unbound Ground uses the name-only ordinary catalog. A local
 choice rewrites only the placement operand of the next matching exact BIND,
 Rule, or Ground Memory proposal. It never applies a command or changes a
 Context by itself.
+
+The shared boundary begins only after names are frozen. Blank-Ground automatic
+recommendation continues to use the separate locator-only scanner above; it
+must not use Switch's ordinary record-validating catalog. A focused regression
+test drives `P`, returns a direct name, and verifies that `state.json` remains
+absent or byte-identical.
 
 The binding action still asks the person to distinguish operational roles
 rather than treating one starting name as every frame:
@@ -1233,7 +1241,7 @@ hierarchy is:
 | Concept | Responsibility |
 | --- | --- |
 | `ground` | Persist and validate Goal–Rules–Memories judgments through deterministic actions used by the conversational orchestrator. |
-| `fit` | Judge how the current generalized Rule propositions relate to the concrete Example propositions: fit, contradiction, non-applicability, or underdetermination. |
+| `fit` | Detect whether bound Context, Goal, Rules, and Examples form a coherent graph, while retaining exact Rule–Example judgments. |
 | coverage check | Derive whether the reviewed Example set adequately covers the Ground's target requirements; this remains distinct from semantic fit. |
 | `induct` | Propose a reusable Rule, exception, narrowing, or broadening from reviewed Ground Memories. |
 | Memory curation | Find, enter, or retain fit, boundary, and contrast Ground Memories. It is initially an internal grounding action rather than a public command. |
@@ -1245,12 +1253,17 @@ hierarchy is:
 The earlier `fit` notes used `YES / MAY / NO` for whether Memories coexist
 inside an ordinary Context, so this document originally rejected a public
 Ground `fit` and called Rule-to-Memory coverage a coverage check. The
-proposition model changes the boundary: `fit` now names a read-only relation
-judgment between generalized Rule propositions and concrete Example
-propositions, while coverage remains a separate completeness measure. The
-operation-independent Fit core now implements that exhaustive read-only
-judgment. The existing `--fit-rule` option still only attaches a proposed
-Ground Memory to an existing Rule; it does not calculate semantic fit.
+proposition model changes the boundary: general `fit` names a read-only
+compatibility judgment, while the Ground adapter composes two deliberately
+different detectors. The historical detector judges each generalized Rule set
+against its concrete Example. The coherence detector separately checks each
+Goal/Rule/Example against the complete frozen bound Context, Goal–Rules and
+Goal–Examples vertically, and Rule/Rule plus Example/Example peer sets.
+Coverage remains a separate completeness measure. This separation matters
+because general proposition Fit intentionally does not claim relevance,
+support, or objective truth. The existing `--fit-rule` option still only
+attaches a proposed Ground Memory to an existing Rule; it does not calculate
+semantic fit.
 
 The adapter preserves version-2 Ground records by projecting their
 `content` plus singleton `expected` fields as one visible proposition while
@@ -1282,33 +1295,50 @@ treat `AI` as one meaningful component, so `Axiom AI Technologies -> AAT` is
 determined by those Rules; clarifying that wording improves readability but is
 not a repair for a failed Example.
 
-Every report freezes the Ground UID, name, semantic revision, record digest,
-Rules, and Examples and requires exactly one judgment per Example. The core is
-whole-frame-only because neighboring Rules may jointly determine a result and
-a counterexample may change the interpretation of an otherwise plausible
-generalization.
+Every current report freezes the Ground UID, name, semantic revision, record
+digest, every bound Context UID/digest and complete direct ordinary-Memory
+frame, Goal, active Rules, and included Examples. It requires exactly one
+judgment per Example and exactly one finding per planned graph check. The two
+detectors are whole-frame-only because neighboring Rules may jointly determine
+a result, peers may conflict, and a counterexample may change the
+interpretation of an otherwise plausible generalization. Provider knowledge is
+not factual verification: when the stated scope requires real, verified, or
+source-grounded material, an unsupported concrete claim is
+`UNDERDETERMINED`.
 
-`mem fit --ground GROUND` now executes this compatibility adapter and publishes a create-only report
-under the Profile's private `ground-fit-receipts` directory. Publication takes
-the same per-Ground lock as Ground mutation and revalidates the frozen UID,
-revision, and digest before writing, so a result cannot be attached to a
-different concurrent revision. A later Ground change does not mutate or erase
-the old receipt. Lookup instead projects it as `STALE`; an exact receipt UID
-can still be reopened read-only for audit. Only a report whose Ground identity,
-revision, and digest all match is `CURRENT`. The receipt changes no Context,
-Ground, checkpoint, or current-Context pointer.
+`mem fit --ground GROUND` now executes this graph adapter and publishes a
+create-only report under the Profile's private `ground-fit-receipts` directory.
+Version 2 takes the Store's graph, exact bound-Context, Ground, and profile locks
+in canonical order and revalidates every frozen input before writing, so a
+result cannot be attached to a different concurrent Ground or Context revision.
+A later Ground or bound-Context change does not mutate or erase the old receipt.
+Lookup instead projects it as `STALE`; an exact receipt UID can still be reopened
+read-only for audit. Version-1 Rule–Example receipts remain readable but do not
+claim the new graph checks. The receipt changes no Context, Ground, checkpoint,
+or current-Context pointer.
 
 The Cases-pane projection consumes the same receipt store and freshness
 predicate rather than copying Fit status into the Ground item schema.
+
+This freshness transition is synchronous and deterministic: accepting,
+revising, adding, or changing the use of a Rule or Example advances the Ground
+revision, and changing a bound Context changes one of the receipt inputs, so the
+prior Fit receipt is immediately `STALE` before any new provider work. The
+actual named-Ground TUI enables process-local `AUTO-FIT`: on entry and after a
+durable reviewed revision, it starts only when the Ground is bound and has an
+active Rule and included Example. An in-flight older turn reaches its receipt
+boundary first, then the latest revision is fitted once. Cancellation or
+provider failure leaves the prior receipt stale; it is never retried in a loop.
 
 That adapter is implemented in the bound named-Ground workbench. The existing
 `MEMORIES` pane title remains a serialized/UI compatibility label for this
 step, while its footer and interaction vocabulary say Cases. Version-3 cards
 show the proposition as their one-line primary content; optional source,
-target, exact projection, and Rule scope remain in detail. `F` on that
-pane calls the Fit application service directly in a background worker; it
-does not invoke `mem fit` as a subprocess. The mounted TUI visibly reports
-`FIT RUNNING`, then reloads the immutable receipt through `FitStore`.
+target, exact projection, and Rule scope remain in detail. `F` on Goal,
+Contexts, Rules, or Memories explicitly reruns the same Fit application service
+in a background worker; AUTO-FIT uses that same boundary and does not invoke
+`mem fit` as a subprocess. The mounted TUI visibly reports `AUTO-FIT RUNNING`
+or `FIT RUNNING`, then reloads the immutable receipt through `FitStore`.
 
 Each fitted card and table row projects the receipt status. The selected card
 also shows whether the receipt is `CURRENT` or `STALE`, the exact receipt
@@ -1320,8 +1350,12 @@ never copied into `GroundItem` or counted as Ground agreement.
 
 Fit does not add a fifth peer layer to the Ground workbench. The established
 `GOAL / CONTEXTS / RULES / CASES` structure remains intact (the version-2 UI
-still labels the final pane `MEMORIES`). A Fit run freezes one Ground revision
-and projects its latest judgment onto each Case row, for example:
+still labels the final pane `MEMORIES`). A Fit run freezes one complete graph
+and projects the combined findings onto the existing layer panes. Set-level
+findings are shown only beside aliases the detector marks material, so a peer
+check does not create an O(n²) relation UI. The standalone Viewer exposes
+Summary, Context, Goal, Rule, and Example sections. Example sections also retain
+their exact Rule–Example judgment, for example:
 
 ```text
 c1 · SUPPORTS · Apple Inc. -> AAPL or APLE
@@ -1329,14 +1363,14 @@ c2 · CONTRADICTS r2 · Axiom AI Technologies -> AAT
 c3 · UNDERDETERMINED · On 2026-08-16 the observed sky was yellow
 ```
 
-Opening the Case shows the cited Rules, reason, evidence, and revision-bearing
-Fit receipt. A compact aggregate may appear in the Cases heading or status,
-but no independent Fit pane should duplicate the Case list. `RUN FIT` belongs
-in the operation-owned next action for Cases and calls the shared application
-service directly; the TUI must not shell out to the CLI adapter. Fit is
-read-only. Refining a Rule, revising or rejecting a Case, adding evidence, or
-deferring a relation remains a separately reviewed Ground command, after which
-the new Ground revision requires a new Fit run.
+Opening the Case shows the cited Rules, reason, evidence, coherence issues, and
+revision-bearing Fit receipt. Goal, Context, and Rule panes show their own marks
+and compact issue reasons. No independent Fit pane duplicates those lists. Fit
+is read-only and stops at detection. Refining a Goal or Rule, revising or
+rejecting an Example, adding evidence, or explicitly deferring an issue remains
+a separately reviewed Ground command. The exact user-decision grammar for those
+detected issues is intentionally deferred until the detector's output has been
+observed in realistic Grounds.
 
 ## Why the name is `ground`
 
@@ -1534,6 +1568,23 @@ Version 2 is introduced only by explicit frame binding. It additionally saves:
 - a rule provenance of `USER_STATED`, `DISTILLED_FROM_GOAL`,
   `INDUCED_FROM_CASES`, or `JOINTLY_REVISED`; and
 - one durable candidate cursor.
+
+Frame binding must not manufacture a domain policy merely because every target
+slot has a requirement record. When the binding command receives no explicit
+requirement description, it saves the description as empty and presents it as
+`(not specified)`. In particular, the generic command does not insert the
+original campus-study wording or a generic placement obligation. The target
+identity and minimum remain structural coverage inputs; giving the requirement
+semantic content is a later, explicit reviewed revision.
+
+A Rule typed directly through the exact CLI may omit `--rationale`. With no
+explicit provenance, that narrow form is recorded as `USER_STATED`, because the
+Rule text itself is the person's statement rather than a derived inference.
+Supplying a rationale without provenance preserves the existing `DISTILLED`
+default. Explicitly derived Rules still require a nonempty rationale, and the
+provider-backed dialogue decoder continues to require one for model-proposed
+Rules. This keeps rationale optional as user-facing explanatory metadata
+without allowing model derivation to lose its trace.
 
 Version 1 remains fail-closed and is never silently reinterpreted as version
 2. A saved Rule/Memory proposal and a review decision each advance the

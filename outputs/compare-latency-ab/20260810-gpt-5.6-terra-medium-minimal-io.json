@@ -1,0 +1,1414 @@
+{
+  "call": {
+    "condition": "MINIMAL_IO_DECISION_ONLY",
+    "contract_valid": true,
+    "elapsed_seconds": 131.51602674998867,
+    "error_type": null,
+    "failure_category": null,
+    "normalized_analysis": {
+      "analysis_digest": "dbbb605d84c84d1c5a91a4f36cb918094216d06d0d7cbedbae3c5aab527af2ca",
+      "issue_count": 29,
+      "kind_counts": {
+        "COMPATIBLE": 34,
+        "CONFLICT": 29,
+        "DISTINCT": 37,
+        "EQUIVALENT": 57,
+        "SCOPED": 4
+      },
+      "relation_count": 161,
+      "relations": [
+        {
+          "kind": "CONFLICT",
+          "members": [
+            "m1_000001",
+            "m2_000001"
+          ],
+          "status": "UNRESOLVED"
+        },
+        {
+          "kind": "CONFLICT",
+          "members": [
+            "m1_000002",
+            "m2_000002"
+          ],
+          "status": "UNRESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000003",
+            "m2_000003"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000004",
+            "m2_000004"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000005",
+            "m2_000005"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            "m1_000006",
+            "m2_000006"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            "m1_000007",
+            "m2_000007"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            "m1_000008",
+            "m2_000008"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "CONFLICT",
+          "members": [
+            "m1_000009",
+            "m2_000009"
+          ],
+          "status": "UNRESOLVED"
+        },
+        {
+          "kind": "CONFLICT",
+          "members": [
+            "m1_000010",
+            "m2_000010"
+          ],
+          "status": "UNRESOLVED"
+        },
+        {
+          "kind": "CONFLICT",
+          "members": [
+            "m1_000011",
+            "m2_000093"
+          ],
+          "status": "UNRESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000012",
+            "m2_000011"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            "m1_000013",
+            "m2_000012"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            "m1_000014",
+            "m2_000013"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "CONFLICT",
+          "members": [
+            "m1_000015",
+            "m2_000094"
+          ],
+          "status": "UNRESOLVED"
+        },
+        {
+          "kind": "CONFLICT",
+          "members": [
+            "m1_000016",
+            "m2_000096"
+          ],
+          "status": "UNRESOLVED"
+        },
+        {
+          "kind": "CONFLICT",
+          "members": [
+            "m1_000017",
+            "m2_000095"
+          ],
+          "status": "UNRESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000018",
+            "m2_000014"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            "m1_000019",
+            "m2_000015"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            "m1_000020",
+            "m2_000016"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            "m1_000021",
+            "m2_000017"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "CONFLICT",
+          "members": [
+            "m1_000022",
+            "m2_000018"
+          ],
+          "status": "UNRESOLVED"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            "m1_000023",
+            "m2_000019"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            "m1_000024",
+            "m2_000097"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000025"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000026"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "CONFLICT",
+          "members": [
+            "m1_000027",
+            "m2_000041"
+          ],
+          "status": "UNRESOLVED"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            "m1_000028",
+            "m2_000020"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000029",
+            "m2_000021"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "CONFLICT",
+          "members": [
+            "m1_000030",
+            "m2_000022"
+          ],
+          "status": "UNRESOLVED"
+        },
+        {
+          "kind": "CONFLICT",
+          "members": [
+            "m1_000031",
+            "m2_000110"
+          ],
+          "status": "UNRESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000032",
+            "m2_000023"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            "m1_000033",
+            "m2_000024"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            "m1_000034",
+            "m2_000025"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000035",
+            "m2_000026"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000036",
+            "m2_000027"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000037"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            "m1_000038",
+            "m2_000120"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000039"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000040"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "CONFLICT",
+          "members": [
+            "m1_000041",
+            "m2_000028"
+          ],
+          "status": "UNRESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000042",
+            "m2_000029"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000043",
+            "m2_000030"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000044"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000045",
+            "m2_000105"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000046"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000047"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000048",
+            "m2_000032"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000049",
+            "m2_000033"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000050",
+            "m2_000034"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000051",
+            "m2_000035"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000052",
+            "m2_000036"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000053"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000054"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000055"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            "m1_000056",
+            "m2_000037"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            "m1_000057",
+            "m2_000038"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            "m1_000058",
+            "m2_000039"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "CONFLICT",
+          "members": [
+            "m1_000059",
+            "m2_000112"
+          ],
+          "status": "UNRESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000060",
+            "m2_000111"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000061"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000062",
+            "m2_000040"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "CONFLICT",
+          "members": [
+            "m1_000063",
+            "m2_000042"
+          ],
+          "status": "UNRESOLVED"
+        },
+        {
+          "kind": "CONFLICT",
+          "members": [
+            "m1_000064",
+            "m2_000099"
+          ],
+          "status": "UNRESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000065",
+            "m2_000043"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000066",
+            "m2_000044"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "CONFLICT",
+          "members": [
+            "m1_000067",
+            "m2_000045"
+          ],
+          "status": "UNRESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000068",
+            "m2_000046"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000069",
+            "m2_000047"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            "m1_000070",
+            "m2_000048"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            "m1_000071",
+            "m2_000049"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            "m1_000072",
+            "m2_000050"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000073",
+            "m2_000051"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000074",
+            "m2_000052"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "CONFLICT",
+          "members": [
+            "m1_000075",
+            "m2_000113"
+          ],
+          "status": "UNRESOLVED"
+        },
+        {
+          "kind": "CONFLICT",
+          "members": [
+            "m1_000076",
+            "m2_000114"
+          ],
+          "status": "UNRESOLVED"
+        },
+        {
+          "kind": "CONFLICT",
+          "members": [
+            "m1_000077",
+            "m2_000117"
+          ],
+          "status": "UNRESOLVED"
+        },
+        {
+          "kind": "CONFLICT",
+          "members": [
+            "m1_000078",
+            "m2_000118"
+          ],
+          "status": "UNRESOLVED"
+        },
+        {
+          "kind": "CONFLICT",
+          "members": [
+            "m1_000079",
+            "m2_000119"
+          ],
+          "status": "UNRESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000080",
+            "m2_000053"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000081",
+            "m2_000054"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000082"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000083"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            "m1_000084",
+            "m2_000129"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000085"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000086",
+            "m2_000055"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            "m1_000087",
+            "m2_000056"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000088",
+            "m2_000057"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000089",
+            "m2_000058"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000090",
+            "m2_000059"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000091",
+            "m2_000060"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000092",
+            "m2_000061"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000093"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000094"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            "m1_000095",
+            "m2_000128"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            "m1_000096",
+            "m2_000135"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            "m1_000097",
+            "m2_000062"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000098",
+            "m2_000063"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            "m1_000099",
+            "m2_000130"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000100"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000101",
+            "m2_000131"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000102",
+            "m2_000064"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000103",
+            "m2_000065"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            "m1_000104",
+            "m2_000132"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            "m1_000105",
+            "m2_000133"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000106"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000107",
+            "m2_000066"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000108",
+            "m2_000067"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000109",
+            "m2_000068"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            "m1_000110",
+            "m2_000069"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000111",
+            "m2_000070"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000112",
+            "m2_000071"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000113",
+            "m2_000072"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000114"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            "m1_000115",
+            "m2_000098"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000116"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            "m1_000117",
+            "m2_000139"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000118",
+            "m2_000073"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            "m1_000119",
+            "m2_000140"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            "m1_000120",
+            "m2_000141"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000121"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "CONFLICT",
+          "members": [
+            "m1_000122",
+            "m2_000074"
+          ],
+          "status": "UNRESOLVED"
+        },
+        {
+          "kind": "CONFLICT",
+          "members": [
+            "m1_000123",
+            "m2_000075"
+          ],
+          "status": "UNRESOLVED"
+        },
+        {
+          "kind": "CONFLICT",
+          "members": [
+            "m1_000124",
+            "m2_000076"
+          ],
+          "status": "UNRESOLVED"
+        },
+        {
+          "kind": "CONFLICT",
+          "members": [
+            "m1_000125",
+            "m2_000077"
+          ],
+          "status": "UNRESOLVED"
+        },
+        {
+          "kind": "CONFLICT",
+          "members": [
+            "m1_000126",
+            "m2_000142"
+          ],
+          "status": "UNRESOLVED"
+        },
+        {
+          "kind": "CONFLICT",
+          "members": [
+            "m1_000127",
+            "m2_000143"
+          ],
+          "status": "UNRESOLVED"
+        },
+        {
+          "kind": "CONFLICT",
+          "members": [
+            "m1_000128",
+            "m2_000144"
+          ],
+          "status": "UNRESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000129",
+            "m2_000078"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000130"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000131",
+            "m2_000080"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000132"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000133",
+            "m2_000082"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            "m1_000134",
+            "m2_000083"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000135",
+            "m2_000084"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            "m1_000136",
+            "m2_000145"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000137",
+            "m2_000079"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000138",
+            "m2_000147"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000139",
+            "m2_000085"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000140",
+            "m2_000086"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000141",
+            "m2_000087"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000142",
+            "m2_000088"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000143",
+            "m2_000089"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000144",
+            "m2_000090"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            "m1_000145",
+            "m2_000091"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            "m1_000146",
+            "m2_000092"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            "m1_000147",
+            "m2_000149"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000148"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m1_000149"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            "m1_000150",
+            "m2_000124"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000031",
+            "m2_000104",
+            "m2_000106"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000081"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000100",
+            "m2_000101",
+            "m2_000102",
+            "m2_000103"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000107",
+            "m2_000108",
+            "m2_000109"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000115",
+            "m2_000116"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000121",
+            "m2_000122",
+            "m2_000123"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000125",
+            "m2_000126",
+            "m2_000127"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000134"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000136",
+            "m2_000137",
+            "m2_000138",
+            "m2_000150"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000146"
+          ],
+          "status": "RESOLVED"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            "m2_000148"
+          ],
+          "status": "RESOLVED"
+        }
+      ],
+      "required_issue_count": 29
+    },
+    "operation": "compare_contexts_minimal_io_v1",
+    "prompt_chars": 36482,
+    "prompt_digest": "4bf7938087a37d6e29d3ca141b95d5bf55d1f456ca48b34e360ccbceb05d19d2",
+    "provider_run": {
+      "completion_tokens": null,
+      "identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-terra",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "operation": "compare_contexts_minimal_io_v1",
+      "prompt_tokens": null,
+      "upstream_model": "gpt-5.6-terra",
+      "upstream_provider": "openai-codex"
+    },
+    "provider_seconds": 131.50309308301075,
+    "raw_response": "{\"a\":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150],\"b\":[1,2,3,4,5,6,7,8,9,10,12,13,14,18,19,20,21,22,23,28,29,30,32,33,34,35,36,41,42,43,151,48,49,50,51,52,56,57,58,62,27,63,65,66,67,68,69,70,71,72,73,74,80,81,86,87,88,89,90,91,92,97,98,102,103,107,108,109,110,111,112,113,118,122,123,124,125,129,137,131,152,133,134,135,139,140,141,142,143,144,145,146,11,15,17,16,24,115,64,153,153,153,153,151,45,151,154,154,154,31,60,59,75,76,155,155,77,78,79,38,156,156,156,150,157,157,157,95,84,99,101,104,105,158,96,159,159,159,117,119,120,126,127,128,136,160,138,161,147,159],\"k\":[\"C\",\"C\",\"E\",\"E\",\"E\",\"P\",\"P\",\"P\",\"C\",\"C\",\"C\",\"E\",\"P\",\"P\",\"C\",\"C\",\"C\",\"E\",\"P\",\"S\",\"S\",\"C\",\"P\",\"P\",\"D\",\"D\",\"C\",\"P\",\"E\",\"C\",\"C\",\"E\",\"P\",\"P\",\"E\",\"E\",\"D\",\"P\",\"D\",\"D\",\"C\",\"E\",\"E\",\"D\",\"E\",\"D\",\"D\",\"E\",\"E\",\"E\",\"E\",\"E\",\"D\",\"D\",\"D\",\"P\",\"P\",\"P\",\"C\",\"E\",\"D\",\"E\",\"C\",\"C\",\"E\",\"E\",\"C\",\"E\",\"E\",\"P\",\"S\",\"P\",\"E\",\"E\",\"C\",\"C\",\"C\",\"C\",\"C\",\"E\",\"E\",\"D\",\"D\",\"P\",\"D\",\"E\",\"P\",\"E\",\"E\",\"E\",\"E\",\"E\",\"D\",\"D\",\"P\",\"P\",\"P\",\"E\",\"P\",\"D\",\"E\",\"E\",\"E\",\"P\",\"P\",\"D\",\"E\",\"E\",\"E\",\"P\",\"E\",\"E\",\"E\",\"D\",\"P\",\"D\",\"P\",\"E\",\"P\",\"P\",\"D\",\"C\",\"C\",\"C\",\"C\",\"C\",\"C\",\"C\",\"E\",\"D\",\"E\",\"D\",\"E\",\"S\",\"E\",\"P\",\"E\",\"E\",\"E\",\"E\",\"E\",\"E\",\"E\",\"E\",\"E\",\"P\",\"P\",\"D\",\"D\",\"P\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\"]}",
+    "response_bytes": 1664,
+    "response_chars": 1664,
+    "response_digest": "b3b4a6f8e6b8a9bb405728e1ffe92e7360c7906cdc5d206145a4d605dfcaa120",
+    "schema_chars": 350,
+    "schema_digest": "b6902ca01ebb36cfb41961fab6d64c9369e5959c5a1ef9260462d0eabb77576b",
+    "validation_error": null,
+    "validation_seconds": 0.01287150000280235
+  },
+  "comparisons": {
+    "BASELINE_EXHAUSTIVE": {
+      "candidate_relation_count": 161,
+      "exact_relation_signature_overlap": 28,
+      "pairwise_same_group": {
+        "f1": 0.3089820359281437,
+        "false_negative": 557,
+        "false_positive": 20,
+        "precision": 0.8657718120805369,
+        "recall": 0.1880466472303207,
+        "true_positive": 129
+      },
+      "provider_speedup_ratio": 2.600284459279975,
+      "reference_is_not_ground_truth": true,
+      "reference_relation_count": 101,
+      "response_char_reduction": 0.9699595609474292,
+      "source_count": 300,
+      "source_exact_group_and_kind_agreement": 0.15333333333333332,
+      "source_kind_agreement": 0.5166666666666667
+    },
+    "COMPACT_DECISION_VECTOR": {
+      "candidate_relation_count": 161,
+      "exact_relation_signature_overlap": 33,
+      "pairwise_same_group": {
+        "f1": 0.33647375504710636,
+        "false_negative": 469,
+        "false_positive": 24,
+        "precision": 0.8389261744966443,
+        "recall": 0.21043771043771045,
+        "true_positive": 125
+      },
+      "provider_speedup_ratio": 1.2930919228846522,
+      "reference_is_not_ground_truth": true,
+      "reference_relation_count": 105,
+      "response_char_reduction": 0.85254762959681,
+      "source_count": 300,
+      "source_exact_group_and_kind_agreement": 0.18333333333333332,
+      "source_kind_agreement": 0.5
+    }
+  },
+  "corpus": {
+    "all_content_preserved_in_order": true,
+    "compared_count": 150,
+    "content_sequence_digest": "2d1ec84afa2f73069cdeaf7cd08fc872d7fca2c1d0239d087ae809ee2074515a",
+    "fixture": "task2-advisor1-vs-task2-advisor2",
+    "language": "en",
+    "minimal_payload_chars": 35005,
+    "minimal_payload_digest": "701e90b395303c69d4f55be4f76afe98ea24ab13e93878f5f1b1949d6405d340",
+    "reference_count": 150,
+    "source_count": 300
+  },
+  "experiment": {
+    "calls": 1,
+    "changed_from_compact_ab": [
+      "CONTENT_ONLY_POSITIONAL_INPUT",
+      "ONE_LETTER_KIND_VECTOR",
+      "NO_PROVIDER_NOTES",
+      "NO_PROVIDER_ISSUES"
+    ],
+    "condition": "MINIMAL_IO_DECISION_ONLY",
+    "host_generated_projection": [
+      "status",
+      "relation_uid",
+      "members",
+      "summary",
+      "reason",
+      "overview",
+      "category_reports",
+      "unresolved_review_marker"
+    ],
+    "production_behavior_changed": false,
+    "prompt_version": 1
+  },
+  "kind": "memcommit.semantic-eval.compare-minimal-io-v1",
+  "provider": {
+    "endpoint": null,
+    "model": "gpt-5.6-terra",
+    "model_digest": null,
+    "provider": "codex_chatgpt",
+    "reasoning_effort": "medium",
+    "runtime": "codex-cli"
+  },
+  "reference_ledger": {
+    "digest": "db71b006236dd9c15f2c1aa02626e8dd190a54364c6033c59c78f32dc6feaa8e",
+    "kind": "memcommit.semantic-eval.compare-latency-ab-v1",
+    "run_id": "20260810T195758565018Z-2ce209de"
+  },
+  "run_id": "20260811T002523088260Z-67aed4a7",
+  "schema_version": 1,
+  "started_at": "2026-08-11T00:25:23.088260Z",
+  "status": "VALID",
+  "timing": {
+    "campaign_seconds": 131.51602674998867,
+    "provider_connection_seconds": 0.02883445798943285,
+    "provider_seconds": 131.50309308301075,
+    "total_seconds": 131.5448612079781
+  }
+}

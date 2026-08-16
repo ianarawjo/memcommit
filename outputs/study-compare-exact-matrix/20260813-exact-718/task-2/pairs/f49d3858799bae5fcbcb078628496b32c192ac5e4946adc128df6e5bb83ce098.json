@@ -1,0 +1,312 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:16:10.046134+00:00",
+      "frames": [
+        {
+          "context_digest": "dd57f5a09e0271c33b7dccbe4935bf1a8d5be14dc7c618906e8af51709bbea89",
+          "context_name": "task-2/advisor1/claim-evidence",
+          "context_uid": "b0c4b50c-f70b-5b0c-a1eb-0fd63e0531bf",
+          "memories": [
+            {
+              "content": "Attach adjacent evidence or citations to verifiable claims about user behavior or technology effects.",
+              "content_digest": "3a856fbbda53df425705aaaff741896f5f5460a8feeb8fb8a73c03e592a80c62",
+              "position": 0,
+              "uid": "06f6c673-ea0c-5657-89d2-3f8711097cd7"
+            },
+            {
+              "content": "Distinguish between results observed in the pilot and expectations to be confirmed in the main user study using different expressions.",
+              "content_digest": "9117c0fd3d9cb713f035f9ae95118ae785af5fcf8909485b097f128ef8e12586",
+              "position": 1,
+              "uid": "58991ce7-d394-5087-b14f-0b014b0ec6ad"
+            },
+            {
+              "content": "Do not use verbs that imply proving causation if the design does not support causal inference.",
+              "content_digest": "5ee12e489ec1fd1af46a49cb05cc9447ed3fbf33ad7b4d8ce52ea700926ea29c",
+              "position": 2,
+              "uid": "f5adf029-a750-5a3a-8eb8-d68e43bb5c13"
+            },
+            {
+              "content": "For topics with sufficient HCI research evidence, prioritize citing recent comprehensive studies over listing individual cases.",
+              "content_digest": "2519cd2fca364ac6eef8577892b03d0a83509f6032874e30c30f36fb1e3dde5a",
+              "position": 3,
+              "uid": "b2a7ff8a-dfca-5857-8733-fe03cbd943ec"
+            },
+            {
+              "content": "Explain how each design choice was derived to address specific user needs.",
+              "content_digest": "fee6e06dfe0489b55ae0d75fe4e7b62facf78052a3136b7120d065e100f3b567",
+              "position": 4,
+              "uid": "1f0c95f4-69bb-5764-a358-d428ff7019d2"
+            },
+            {
+              "content": "Support each core claim with evidence that directly examined it rather than with indirect summaries.",
+              "content_digest": "372e0abff6997b041103fd71719c55549c2e3e0a3a5cdf2d4a1a24ec6538cbff",
+              "position": 5,
+              "uid": "cd475113-5354-5f80-b063-7628e4359afc"
+            },
+            {
+              "content": "Reviewers first check the direct evidence placed closest to the core claim.",
+              "content_digest": "61baa516115e1a5bf4f377358ead7c45bab5e666208b9cd6cd87426007493a49",
+              "position": 6,
+              "uid": "86fe1306-7650-58cc-a3df-79870c61784d"
+            },
+            {
+              "content": "Connect the proposed conceptual design principle to at least one observable user behavior.",
+              "content_digest": "d6c6f9dddd0cd99694df2f232e8a71957d53f77e8d10faf324927af679312acc",
+              "position": 7,
+              "uid": "5d022e45-09c0-515e-98f1-68b2aec686bc"
+            },
+            {
+              "content": "Identify which design judgment—retain, modify, or discard—each piece of evidence from formative evaluation supports.",
+              "content_digest": "a507db0052a4d9196c774a5df74c60fe9225bef49c5d9aece328bfb8dca48035",
+              "position": 8,
+              "uid": "9939e9e8-d97d-57db-974a-750566ca9e2b"
+            },
+            {
+              "content": "Results from controlled formative studies do not directly prove effects in actual long-term use.",
+              "content_digest": "aeeca3701d4ba297e928efc2034c474a2ae78101e440d515a57901e6814321a0",
+              "position": 9,
+              "uid": "41060e8e-95ff-58c1-8b71-36a501a9bd23"
+            },
+            {
+              "content": "The user can have an explanation approved as a conceptual contribution only if it is falsifiable with observable data.",
+              "content_digest": "171f4eeae9df2a0a739f90ed451a34a092093b9f6b0db7c6af04012bea734c5f",
+              "position": 10,
+              "uid": "ec54ce10-07db-5ae3-94a5-8f3621fed4a9"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "e5d3de43-5f80-419b-ab20-e3b0de2d2721"
+        },
+        {
+          "context_digest": "3cadca09eeabe1389261c2e43133d8b304ed2cad66332f3444e686a824f10a21",
+          "context_name": "task-2/advisor2/scope",
+          "context_uid": "86efd53c-c08d-537c-983f-91a7b915640d",
+          "memories": [
+            {
+              "content": "Specify in one sentence the user population and actual usage environment to which the design knowledge applies.",
+              "content_digest": "3bb25f3252678a84fe361c9562692c27556d31b6fac53da87b763648e80ed6ac",
+              "position": 0,
+              "uid": "6cfd5026-0c04-5ed8-baac-a56e68723aa3"
+            },
+            {
+              "content": "Reviewers judge the generalization boundary of results through the specified target population and environment.",
+              "content_digest": "9119780de23a4734bc8e0ba3c39dce251611932fd86bec479b522adaf1882758",
+              "position": 1,
+              "uid": "5bc7cf05-8c47-57d4-a749-ec7d2ec45e3e"
+            },
+            {
+              "content": "Specify the workflow, technical infrastructure, and operational-authority conditions that must match before applying the design guidelines at another field site.",
+              "content_digest": "2970e43d1b52b63b6f76c3c55a5534d24508bcd32402e66098d75dbb52d8083b",
+              "position": 2,
+              "uid": "25731e2b-8535-5b37-a377-0a3a99dbe189"
+            },
+            {
+              "content": "The transferability of field design knowledge depends not only on user characteristics but also on workflow and technological–organizational infrastructure.",
+              "content_digest": "71b7cbcf151114f17886e57f026c2b2ebdd666c7aa88f95c85880a1bc96fdcd2",
+              "position": 3,
+              "uid": "d79ba448-76b6-592e-b4ba-8cfd98683755"
+            },
+            {
+              "content": "The user tends to apply results confirmed at one deployment site to all similar organizations.",
+              "content_digest": "810ee3a6b79606e7f199a30aa146f47e405ff71d1728a3bbfef16b601f5c0d5e",
+              "position": 4,
+              "uid": "cde0ee2b-af3c-5c0d-b23c-632778c93e20"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "95909a67-0a3e-4aa2-9100-2a93fd232991"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames complement one another but emphasize different rigor concerns. Both constrain overgeneralization under different explicit contexts: study-stage and long-term-use boundaries versus population, environment, and site-transfer conditions. The reference otherwise focuses on evidence, inference, and design rationale, while the compared frame adds an observed overgeneralization tendency.",
+      "relations": [
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "e5d3de43-5f80-419b-ab20-e3b0de2d2721",
+              "memory_uid": "58991ce7-d394-5087-b14f-0b014b0ec6ad"
+            },
+            {
+              "frame_uid": "e5d3de43-5f80-419b-ab20-e3b0de2d2721",
+              "memory_uid": "41060e8e-95ff-58c1-8b71-36a501a9bd23"
+            },
+            {
+              "frame_uid": "95909a67-0a3e-4aa2-9100-2a93fd232991",
+              "memory_uid": "6cfd5026-0c04-5ed8-baac-a56e68723aa3"
+            },
+            {
+              "frame_uid": "95909a67-0a3e-4aa2-9100-2a93fd232991",
+              "memory_uid": "5bc7cf05-8c47-57d4-a749-ec7d2ec45e3e"
+            },
+            {
+              "frame_uid": "95909a67-0a3e-4aa2-9100-2a93fd232991",
+              "memory_uid": "25731e2b-8535-5b37-a377-0a3a99dbe189"
+            },
+            {
+              "frame_uid": "95909a67-0a3e-4aa2-9100-2a93fd232991",
+              "memory_uid": "d79ba448-76b6-592e-b4ba-8cfd98683755"
+            }
+          ],
+          "reason": "These are complementary, explicitly conditioned generalization boundaries whose distinct study-stage, temporal, population, environmental, technical, organizational, and site-transfer scopes must be preserved.",
+          "status": "RESOLVED",
+          "summary": "Both frames limit generalization, but the reference distinguishes pilot or controlled formative evidence from main-study and long-term-use claims, whereas the compared frame defines population, environment, workflow, infrastructure, and authority conditions for field transfer.",
+          "uid": "c8f22ed5-f38c-56fd-b876-d808324cf476"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e5d3de43-5f80-419b-ab20-e3b0de2d2721",
+              "memory_uid": "06f6c673-ea0c-5657-89d2-3f8711097cd7"
+            },
+            {
+              "frame_uid": "e5d3de43-5f80-419b-ab20-e3b0de2d2721",
+              "memory_uid": "86fe1306-7650-58cc-a3df-79870c61784d"
+            }
+          ],
+          "reason": "The reference supplies a placement policy and the corresponding reviewer behavior, together expressing one one-sided claim about nearby evidence assessment.",
+          "status": "RESOLVED",
+          "summary": "Assessment of verifiable claims centers on direct evidence or citations placed adjacent to the claim.",
+          "uid": "8e3c7b17-d426-5886-a6dc-7fe8c2c59ed2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e5d3de43-5f80-419b-ab20-e3b0de2d2721",
+              "memory_uid": "f5adf029-a750-5a3a-8eb8-d68e43bb5c13"
+            }
+          ],
+          "reason": "Only the reference provides this independently useful restriction on causal wording.",
+          "status": "RESOLVED",
+          "summary": "Causal verbs should not be used when the study design cannot support causal inference.",
+          "uid": "bd8e5041-d143-588e-bc8c-1c76621cc958"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e5d3de43-5f80-419b-ab20-e3b0de2d2721",
+              "memory_uid": "b2a7ff8a-dfca-5857-8733-fe03cbd943ec"
+            }
+          ],
+          "reason": "Only the reference supplies this independently useful source-selection preference.",
+          "status": "RESOLVED",
+          "summary": "Where HCI evidence is sufficient, recent comprehensive studies should be prioritized over lists of individual cases.",
+          "uid": "d6cc5996-70b6-5ec0-a7c3-87a8170d6184"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e5d3de43-5f80-419b-ab20-e3b0de2d2721",
+              "memory_uid": "1f0c95f4-69bb-5764-a358-d428ff7019d2"
+            }
+          ],
+          "reason": "Only the reference requires traceability from user needs to design choices.",
+          "status": "RESOLVED",
+          "summary": "Each design choice should be explained as a response to specific user needs.",
+          "uid": "246a8d27-bdb0-5e2d-86ab-6495cfc040a6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e5d3de43-5f80-419b-ab20-e3b0de2d2721",
+              "memory_uid": "cd475113-5354-5f80-b063-7628e4359afc"
+            }
+          ],
+          "reason": "Only the reference establishes this independently useful directness requirement for claim support.",
+          "status": "RESOLVED",
+          "summary": "Core claims should be supported by evidence that directly examined them rather than indirect summaries.",
+          "uid": "e84d429d-c24a-5487-acee-7bc94bb73db1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e5d3de43-5f80-419b-ab20-e3b0de2d2721",
+              "memory_uid": "5d022e45-09c0-515e-98f1-68b2aec686bc"
+            },
+            {
+              "frame_uid": "e5d3de43-5f80-419b-ab20-e3b0de2d2721",
+              "memory_uid": "ec54ce10-07db-5ae3-94a5-8f3621fed4a9"
+            }
+          ],
+          "reason": "The reference statements jointly express one one-sided operational standard for empirically assessable conceptual contributions.",
+          "status": "RESOLVED",
+          "summary": "A proposed conceptual design principle should connect to observable user behavior and be falsifiable with observable data.",
+          "uid": "4819c346-ed3d-5f60-838a-aa12f31e42d2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e5d3de43-5f80-419b-ab20-e3b0de2d2721",
+              "memory_uid": "9939e9e8-d97d-57db-974a-750566ca9e2b"
+            }
+          ],
+          "reason": "Only the reference maps formative evidence to explicit design judgments.",
+          "status": "RESOLVED",
+          "summary": "Each piece of formative-evaluation evidence should identify whether it supports retaining, modifying, or discarding a design element.",
+          "uid": "90263cee-ee61-54ae-9846-f74959c45ecd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "95909a67-0a3e-4aa2-9100-2a93fd232991",
+              "memory_uid": "cde0ee2b-af3c-5c0d-b23c-632778c93e20"
+            }
+          ],
+          "reason": "Only the compared frame states this independently useful behavioral tendency.",
+          "status": "RESOLVED",
+          "summary": "Users tend to apply results confirmed at one deployment site across all similar organizations.",
+          "uid": "a2853b0c-fa7e-59ba-857d-924f844d2fec"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame uniquely states that users tend to overgeneralize findings from one deployment site to similar organizations.",
+        "differences": "Generalization is bounded differently: pilot or controlled formative findings are separated from main-study and long-term-use claims, while field transfer depends on population, environment, workflow, infrastructure, and authority conditions.",
+        "reference_only": "The reference uniquely governs evidence proximity, directness, and selection; causal wording; traceability from needs and formative evidence to design judgments; and observable, falsifiable conceptual contributions."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "94517eb1-8797-43e3-8b70-a0a7c53ce114"
+    },
+    "analysis_digest": "c665db1f02321e8ca224440c0650503038fd9bac17e2bd86cc6ba5f1657ef02a",
+    "key": "03e1e1005db2677bfac9808a0fa9d6f734aba097cc7b3feb2f8878bb7439fbd4",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 49.414079875001335,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "03e1e1005db2677bfac9808a0fa9d6f734aba097cc7b3feb2f8878bb7439fbd4",
+  "created_at": "2026-08-13T18:16:59.459778Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/claim-evidence",
+  "pair_key": "f49d3858799bae5fcbcb078628496b32c192ac5e4946adc128df6e5bb83ce098",
+  "provider_seconds": 49.414079875001335,
+  "right": "task-2/advisor2/scope",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

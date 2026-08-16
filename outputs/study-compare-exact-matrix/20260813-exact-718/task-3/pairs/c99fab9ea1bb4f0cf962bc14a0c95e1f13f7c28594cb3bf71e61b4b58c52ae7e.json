@@ -1,0 +1,370 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:53:00.656979+00:00",
+      "frames": [
+        {
+          "context_digest": "07c43eb0b8ecd9107f1d879a409b45289e236f48f620ff85f1d30ce594809149",
+          "context_name": "task-3/local/personal-memory/2025/09",
+          "context_uid": "5cd8ed5f-2f1f-5deb-8347-fc3bfa484d99",
+          "memories": [
+            {
+              "content": "The user keeps the book they are reading and a note-taking notebook on a small living-room desk.",
+              "content_digest": "d2c70cf4c27fe62f5915f2f5c669484c4a875e4ee21f8d7d89a5ff6746f14cf1",
+              "position": 0,
+              "uid": "3d3f7960-daf5-5a51-98b3-14261c5aa66c"
+            },
+            {
+              "content": "While reading in the living room with the television on, the user read the same paragraph three times.",
+              "content_digest": "00e41e6d5fe1dcfe961fa0f739860823ecf338dc55d5b9beea265ca823974582",
+              "position": 1,
+              "uid": "28714a4e-bc14-5703-b594-126471ae0585"
+            },
+            {
+              "content": "The next day, after turning off the television, the user read 40 pages without interruption.",
+              "content_digest": "c28ba9c872757b6683ab03d73e6ad61f71484d55986aae4c0976862a85e3a8b1",
+              "position": 2,
+              "uid": "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df"
+            },
+            {
+              "content": "On a day the phone was on the desk, the user stopped taking notes each time they checked a notification.",
+              "content_digest": "f95cb8b1b8abe89d7bf597ca5fb78f0862fe97a7cf0d8bc5a46c04026ebd6889",
+              "position": 3,
+              "uid": "1b1c9f90-2561-53d5-88fe-d54618450143"
+            },
+            {
+              "content": "During the next reading period, the user left the phone in another room and did not check it for an hour.",
+              "content_digest": "89dc50732e19b88a77657b285ce71c399d229b510265cc9adfbdf6ad706680cd",
+              "position": 4,
+              "uid": "076a7caa-5dcf-5f9d-8bee-efc952652efa"
+            },
+            {
+              "content": "A note attached to a paper book fell out, and the user had to find their place again.",
+              "content_digest": "723e48ceeba6c94e627c79af0518c811cfc8337f9eeae3a80ae388ec98786994",
+              "position": 5,
+              "uid": "1dad71ec-6a5d-550e-89d2-a86dc3dacb11"
+            },
+            {
+              "content": "With the next book, the user recorded the page number in the notebook and resumed reading immediately.",
+              "content_digest": "c74c2f80bf403da64f0a6de97ff04bc1f41cf68d0d33829fa926cc2549e8ea75",
+              "position": 6,
+              "uid": "58494743-fc7f-59e9-8e17-80b8a644470a"
+            },
+            {
+              "content": "The user's father expects that lowering the television volume while the user reads will make it easier for the user to concentrate.",
+              "content_digest": "281b1f8f55f8d22fbebdb2220405dc3e2300e29e0a568c1fac36d4bb1c39c186",
+              "position": 7,
+              "uid": "cce66589-892c-5d73-bdbc-2c6e94e0992e"
+            },
+            {
+              "content": "The local agent can summarize past reading environments and interruption records but cannot predict the next reading time.",
+              "content_digest": "50e5376e22f503048a7f1bf4055bfb31cb4aa3c75b1c816f2febce913716eb58",
+              "position": 8,
+              "uid": "20b2a27f-908f-5ed7-a288-f7c1030674fc"
+            },
+            {
+              "content": "The user feels that repeated notifications interrupt their flow of concentration.",
+              "content_digest": "d777b2a01cfac23e6ef7701c04c33592f8382fa78f8e307bae9ddbffc9a8e2ef",
+              "position": 9,
+              "uid": "310f4cfc-b117-5511-8e13-2bd2ebec9fe5"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "a27b9e5f-3ab7-43ee-917f-32c9418461d0"
+        },
+        {
+          "context_digest": "df0924e320cd14a29eaed60f78e82fd509c4062949b35706b2a7cb94571fb599",
+          "context_name": "task-3/local/personal-memory/2026/04",
+          "context_uid": "16e860a8-7a90-5b7a-adc3-1c487ef97e03",
+          "memories": [
+            {
+              "content": "The user collects clothes for donation in a large bag beside the entrance.",
+              "content_digest": "39f2f01c59b7fa4ca7529d510e1b0a6ffab6706861042f771cfe97f6f806efac",
+              "position": 0,
+              "uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            },
+            {
+              "content": "After emptying an entire drawer at once, the user could not find a charger they needed.",
+              "content_digest": "674c33ba6475f42b29b03e6f8711e0216f983f3d37fee3dacf9336e3bb4596bf",
+              "position": 1,
+              "uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            },
+            {
+              "content": "During the next organizing session, the user sorted items by type and put only items to be discarded in the bag.",
+              "content_digest": "63104b5a7fd380f818c8758c51f9550c7a7fa41ff91f1dd314225d1824b69643",
+              "position": 2,
+              "uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            },
+            {
+              "content": "Even after photographing unworn clothes, the user did not take them out again for one month.",
+              "content_digest": "519f131096440719dcd3412f4439c5cfe44b7f402684170209708040692dc5fd",
+              "position": 3,
+              "uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            },
+            {
+              "content": "After moving those clothes to the donation bag, the user cleared one closet compartment.",
+              "content_digest": "45db58ae108a299344d982d8606fff26f733252da691cf01417e760909ff6057",
+              "position": 4,
+              "uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            },
+            {
+              "content": "The user nearly discarded an important paper with advertising and checked the recycling box again.",
+              "content_digest": "6bf928f67944656e5f3c68d8869c0cefd039a588f0ba735f94520231ef58017c",
+              "position": 5,
+              "uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            },
+            {
+              "content": "During the next organizing session, the user kept a separate document box and did not mix the papers.",
+              "content_digest": "adac8d4266c6b11e15d29c484665bc5dcc915f9aa319198b6a69d0e7b0131bb3",
+              "position": 6,
+              "uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            },
+            {
+              "content": "The user's mother asks the user to check whether she needs kitchen items in good condition before discarding them.",
+              "content_digest": "0752bc2ac00c0b1301c45ab4c2e73f63c57e6ebc4255dcc1c13330ffda906612",
+              "position": 7,
+              "uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            },
+            {
+              "content": "Confirm with the user before marking a personal document or another person's property as a disposal candidate.",
+              "content_digest": "17062e2cd4738619e81e211cb2f53d14e78c5f4eab9ae49053ce7e06935a7db5",
+              "position": 8,
+              "uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            },
+            {
+              "content": "The local agent cannot determine an object's emotional meaning from frequency of use alone.",
+              "content_digest": "9c86bcfe2b209bf7957dced0eab000b42f97b6a435d705ccaccb15e49be3691d",
+              "position": 9,
+              "uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "3b5e1d4e-8d4f-4eb9-a246-89d25d5540ec"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate practical domains: the reference describes reading concentration, continuity, and agent limits, while the compared frame describes household decluttering, disposal safeguards, and uncertainty about sentimental value. Neither supplies a scope-aligned counterpart or contradiction for the other.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a27b9e5f-3ab7-43ee-917f-32c9418461d0",
+              "memory_uid": "3d3f7960-daf5-5a51-98b3-14261c5aa66c"
+            }
+          ],
+          "reason": "This is independently useful reference-side context about the reading setup, with no compared-side claim addressing that setup.",
+          "status": "RESOLVED",
+          "summary": "The user's current reading materials are kept together on a small living-room desk.",
+          "uid": "a8cab38e-3ac6-544a-9a3c-80f81cd735b2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a27b9e5f-3ab7-43ee-917f-32c9418461d0",
+              "memory_uid": "28714a4e-bc14-5703-b594-126471ae0585"
+            },
+            {
+              "frame_uid": "a27b9e5f-3ab7-43ee-917f-32c9418461d0",
+              "memory_uid": "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df"
+            },
+            {
+              "frame_uid": "a27b9e5f-3ab7-43ee-917f-32c9418461d0",
+              "memory_uid": "cce66589-892c-5d73-bdbc-2c6e94e0992e"
+            }
+          ],
+          "reason": "These observations and the father's expectation jointly describe one reference-side claim about television conditions affecting concentration; the compared frame has no corresponding policy or evidence.",
+          "status": "RESOLVED",
+          "summary": "Television conditions are associated with reading concentration: active television coincided with rereading, its absence with uninterrupted progress, and lower volume is expected to help.",
+          "uid": "592f9e22-220b-5c6b-8fe4-df58fc058e02"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a27b9e5f-3ab7-43ee-917f-32c9418461d0",
+              "memory_uid": "1b1c9f90-2561-53d5-88fe-d54618450143"
+            },
+            {
+              "frame_uid": "a27b9e5f-3ab7-43ee-917f-32c9418461d0",
+              "memory_uid": "076a7caa-5dcf-5f9d-8bee-efc952652efa"
+            },
+            {
+              "frame_uid": "a27b9e5f-3ab7-43ee-917f-32c9418461d0",
+              "memory_uid": "310f4cfc-b117-5511-8e13-2bd2ebec9fe5"
+            }
+          ],
+          "reason": "The observation, subsequent condition, and user's assessment split one reference-side claim about notification-driven interruption, absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Phone notifications interrupt the user's reading and note-taking flow, while leaving the phone elsewhere supported an hour without checking it.",
+          "uid": "8aa7b361-63cf-58e7-8e94-37cd1b41e8a0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a27b9e5f-3ab7-43ee-917f-32c9418461d0",
+              "memory_uid": "1dad71ec-6a5d-550e-89d2-a86dc3dacb11"
+            },
+            {
+              "frame_uid": "a27b9e5f-3ab7-43ee-917f-32c9418461d0",
+              "memory_uid": "58494743-fc7f-59e9-8e17-80b8a644470a"
+            }
+          ],
+          "reason": "The failed loose-note episode and successful notebook practice form one reference-side claim about preserving a reading place, with no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Recording page numbers in the notebook provided a more reliable way to resume reading than attaching a loose note to the book.",
+          "uid": "6039f384-055a-550c-9fc1-4f0128ecb3c1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a27b9e5f-3ab7-43ee-917f-32c9418461d0",
+              "memory_uid": "20b2a27f-908f-5ed7-a288-f7c1030674fc"
+            }
+          ],
+          "reason": "This is a distinct reference-side capability boundary unrelated to any compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "The local agent can summarize prior reading conditions and interruptions but cannot predict the next reading time.",
+          "uid": "41de3cbd-a4e0-5fd4-9ea1-c851f6aa8bee"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3b5e1d4e-8d4f-4eb9-a246-89d25d5540ec",
+              "memory_uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            }
+          ],
+          "reason": "This is independently useful compared-side context about donation storage, with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user stages clothes for donation in a large bag beside the entrance.",
+          "uid": "ff10ec80-bd97-5a38-b562-4d7e1cb5aa4d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3b5e1d4e-8d4f-4eb9-a246-89d25d5540ec",
+              "memory_uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            },
+            {
+              "frame_uid": "3b5e1d4e-8d4f-4eb9-a246-89d25d5540ec",
+              "memory_uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            }
+          ],
+          "reason": "The failed drawer-emptying episode and later sorting practice split one compared-side claim about controlled organizing, absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Sorting items by type and bagging only discard candidates avoided the loss of access caused by emptying an entire drawer at once.",
+          "uid": "1018b521-05c0-5539-9093-b4218e4cdd54"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3b5e1d4e-8d4f-4eb9-a246-89d25d5540ec",
+              "memory_uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            },
+            {
+              "frame_uid": "3b5e1d4e-8d4f-4eb9-a246-89d25d5540ec",
+              "memory_uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            }
+          ],
+          "reason": "These episodes form one compared-side claim contrasting passive documentation with physical donation staging, without a reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Photographing unworn clothes did not prompt action, whereas moving them into the donation bag cleared closet space.",
+          "uid": "6a54ee13-24cc-55fc-b015-1cd5e26e803b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3b5e1d4e-8d4f-4eb9-a246-89d25d5540ec",
+              "memory_uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            },
+            {
+              "frame_uid": "3b5e1d4e-8d4f-4eb9-a246-89d25d5540ec",
+              "memory_uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            }
+          ],
+          "reason": "The near-discard and later use of a document box split one compared-side claim about paper-separation safeguards, absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Keeping documents separate during organizing protects important papers from being mixed with advertising and discarded.",
+          "uid": "18ee0542-5f67-5812-adcf-20ed98deeb19"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3b5e1d4e-8d4f-4eb9-a246-89d25d5540ec",
+              "memory_uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            },
+            {
+              "frame_uid": "3b5e1d4e-8d4f-4eb9-a246-89d25d5540ec",
+              "memory_uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            }
+          ],
+          "reason": "The specific family request and general confirmation rule express one compared-side disposal safeguard with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Potential disposal involving personal documents or another person's interests calls for confirmation, including checking whether the user's mother wants usable kitchen items.",
+          "uid": "516c3820-54ef-5408-b754-895f8b81aef2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3b5e1d4e-8d4f-4eb9-a246-89d25d5540ec",
+              "memory_uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "reason": "This is a distinct compared-side interpretive limitation not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The local agent cannot infer an object's emotional meaning solely from how often it is used.",
+          "uid": "e7009689-63b5-5a4f-bcfb-be2d83995268"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Organizing records cover donation staging, incremental sorting, space recovery, document and property safeguards, and limits on inferring emotional value.",
+        "differences": "",
+        "reference_only": "Reading records cover workspace setup, television and notification distractions, place-keeping practices, and limits on forecasting reading time."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "5e170c35-2c0a-42a8-815e-efcf3890dbc2"
+    },
+    "analysis_digest": "174437b4347af561ee9b978519521b74831f73970e1e9edef7b31b89baa70763",
+    "key": "c374205731141a21939c9b889d14a0f06b776aa89e9bcf17512c62de0669c980",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 40.794409416001145,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "c374205731141a21939c9b889d14a0f06b776aa89e9bcf17512c62de0669c980",
+  "created_at": "2026-08-13T18:53:41.450592Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/09",
+  "pair_key": "c99fab9ea1bb4f0cf962bc14a0c95e1f13f7c28594cb3bf71e61b4b58c52ae7e",
+  "provider_seconds": 40.794409416001145,
+  "right": "task-3/local/personal-memory/2026/04",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

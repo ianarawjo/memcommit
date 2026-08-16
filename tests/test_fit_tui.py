@@ -2,10 +2,26 @@
 
 from __future__ import annotations
 
+from dataclasses import replace
+
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
-from memcommit.fit import FitExample, FitJudgment, FitReport, FitRule
+from memcommit.fit import (
+    FIT_RULESET_VERSION,
+    FIT_SCHEMA_VERSION,
+    FitExample,
+    FitJudgment,
+    FitReport,
+    FitRule,
+)
+from memcommit.fit_coherence import (
+    FitCoherenceFinding,
+    FitCoherenceReport,
+    FitCoherenceSubject,
+    FitContextFrame,
+    plan_coherence_checks,
+)
 from memcommit.fit_application import FitPropositionsResult, FitResult
 from memcommit.fit_judgment import (
     FitAnalysis,
@@ -71,6 +87,108 @@ def _result(*, current: bool = True) -> FitResult:
         ),
         overview="One Example fits and one needs a more specific Rule.",
         created_at="2026-08-15T12:00:00Z",
+    )
+    return FitResult(report, current)
+
+
+def _coherent_result(*, current: bool = True) -> FitResult:
+    legacy = _result(current=current).report
+    contexts = (
+        FitContextFrame(
+            "00000000-0000-0000-0000-000000000020",
+            "k1",
+            "ticker/raw",
+            "RAW_EVIDENCE",
+            "b" * 64,
+            (),
+        ),
+        FitContextFrame(
+            "00000000-0000-0000-0000-000000000021",
+            "k2",
+            "ticker/examples",
+            "WORKING_CANDIDATES",
+            "c" * 64,
+            (),
+        ),
+        FitContextFrame(
+            "00000000-0000-0000-0000-000000000022",
+            "k3",
+            "ticker/output",
+            "PUBLICATION_TARGET",
+            "d" * 64,
+            (),
+        ),
+    )
+    subjects = (
+        FitCoherenceSubject(
+            legacy.ground_uid,
+            "g1",
+            "GOAL",
+            "Learn Rules for real United States company tickers.",
+            ("k1", "k2", "k3"),
+        ),
+        FitCoherenceSubject(
+            RULE_UID,
+            "r1",
+            "RULE",
+            legacy.rules[0].statement,
+            ("k3",),
+        ),
+        FitCoherenceSubject(
+            FIT_EXAMPLE_UID,
+            "e1",
+            "EXAMPLE",
+            legacy.examples[0].statement,
+            ("k1", "k2", "k3"),
+        ),
+        FitCoherenceSubject(
+            ISSUE_EXAMPLE_UID,
+            "e2",
+            "EXAMPLE",
+            legacy.examples[1].statement,
+            ("k1", "k2", "k3"),
+        ),
+    )
+    checks = plan_coherence_checks(subjects, contexts)
+    findings = []
+    for check in checks:
+        status = "FIT"
+        material = ()
+        reason = "The frozen relation stays coherent."
+        if check.check_id == "context:e2":
+            status = "UNDERDETERMINED"
+            material = ("e2", "k2")
+            reason = "The Example has no source-grounded real-company evidence."
+        elif check.check_id == "vertical:goal-examples":
+            status = "CONTRADICTS"
+            material = ("g1", "e2")
+            reason = "The unverified Example does not exercise the real-company Goal."
+        findings.append(
+            FitCoherenceFinding(
+                check.check_id,
+                check.axis,
+                check.relation,
+                status,
+                check.subject_aliases,
+                check.context_aliases,
+                material,
+                reason,
+            )
+        )
+    coherence = FitCoherenceReport(
+        brief="Refine ticker Rules against real sourced company Examples.",
+        requirements=("ticker/output · publish reviewed Rules · minimum 1",),
+        contexts=contexts,
+        subjects=subjects,
+        findings=tuple(findings),
+        overview="One Example needs contextual and vertical review.",
+        created_at="2026-08-16T12:00:00Z",
+    )
+    report = replace(
+        legacy,
+        coherence=coherence,
+        schema_version=FIT_SCHEMA_VERSION,
+        ruleset_version=FIT_RULESET_VERSION,
     )
     return FitResult(report, current)
 
@@ -187,6 +305,30 @@ def test_fit_stale_state_replaces_prior_judgment_marks() -> None:
     assert "UNDERDETERMINED" not in rendered
     assert focused.text.startswith("◷ e2")
     assert "UNDERDETERMINED" not in focused.text
+
+
+def test_unified_fit_projects_context_goal_rule_and_example_detection() -> None:
+    result = _coherent_result()
+    document = project_fit_result(result)
+    rendered = "".join(
+        text for _style, text in document.render(focused_uid="FIT:SUMMARY")
+    )
+    complete = project_fit_clipboard(result, whole_document=True)
+
+    assert [section.kind for section in document.sections] == [
+        "SUMMARY",
+        "CONTEXT K",
+        "GOAL",
+        "RULE",
+        "EXAMPLE",
+        "EXAMPLE",
+    ]
+    assert "! ticker · 6/9 checks · CONTEXT 1 · VERTICAL 2 · PEER 0" in rendered
+    assert "k1 · RAW_EVIDENCE · ticker/raw" in complete.text
+    assert "! g1 · Learn Rules for real" in complete.text
+    assert "! e2 · Axiom AI Technologies" in complete.text
+    assert "CONTEXT · UNDERDETERMINED" in complete.text
+    assert "VERTICAL · CONTRADICTS" in complete.text
 
 
 def test_general_fit_projects_complete_inputs_and_may_readings() -> None:

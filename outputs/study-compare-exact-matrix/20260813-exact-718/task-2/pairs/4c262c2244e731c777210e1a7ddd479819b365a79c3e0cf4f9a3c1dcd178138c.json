@@ -1,0 +1,417 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:23:59.098246+00:00",
+      "frames": [
+        {
+          "context_digest": "adcb1ff51b2facc8282e8a56d8fec5150dd8e7376b7889d21013f71fee66b9b8",
+          "context_name": "task-2/advisor1/review",
+          "context_uid": "57ec8c37-1a0a-5f3b-82e9-51adad82677c",
+          "memories": [
+            {
+              "content": "Conduct one review prior to submission focusing solely on the validity of user problems, design interventions, and evaluation logic.",
+              "content_digest": "3dd669e72e74416ccd0b8eaf32f6b24dc7400ceb50c133a18f3ff33f89075334",
+              "position": 0,
+              "uid": "0dda8eb3-3287-5bb6-9b26-b1c00cc038d9"
+            },
+            {
+              "content": "Cross-check whether research questions align with the core functions of the prototype.",
+              "content_digest": "b3fbab30f9c640c7b3f6424f2cbc7d66bfa1f455f937f7fb28a6cc8b3763597d",
+              "position": 1,
+              "uid": "c8e0c9dd-dc4a-5a7d-9a82-e7ee449a4b25"
+            },
+            {
+              "content": "Cross-check whether evaluation tasks align with representative measures.",
+              "content_digest": "1e49d1844cb2a0a66a3dec114e44713885299f7a80763ae4e9a416eba505d61f",
+              "position": 2,
+              "uid": "f93c5baa-3c2b-5e37-b07b-0b00e8b22ab9"
+            },
+            {
+              "content": "Cross-check whether collected evidence aligns with design and operational decisions to be changed.",
+              "content_digest": "bc977c73db48b06ad23b68fa58f2fa5f64b19d09856b0e80c8ddac0b039568f8",
+              "position": 3,
+              "uid": "8dae0ad6-2a6d-5d99-98db-b0d48a1140e5"
+            },
+            {
+              "content": "Verify at the end that user problems, design interventions, user studies, and expected contributions form a coherent logical flow.",
+              "content_digest": "8b8d84adb9296241a03a4e6b91acee829ff1eaea443f9dd0b132d7b64a53dcff",
+              "position": 4,
+              "uid": "0f89ab25-d9ee-5669-aa99-a0fe07803915"
+            },
+            {
+              "content": "HCI reviewers view the validity of design interventions as low if research questions are not linked to prototype functions.",
+              "content_digest": "e7e5bb6d9618adc9d4903a4d4cbbf53007381999a95e4ed2137e3705a988fa13",
+              "position": 5,
+              "uid": "3e4a9a3b-abc2-54ed-9b87-f81abf61b541"
+            },
+            {
+              "content": "HCI reviewers view the validity of evaluation plans as low if evaluation tasks do not produce representative measures.",
+              "content_digest": "b23af1197034e73ce7b5bf0c6870ee410e44a07810ebaae12259087f2c12f8f1",
+              "position": 6,
+              "uid": "fb785649-1947-5e7d-aafb-308f14fb21b4"
+            },
+            {
+              "content": "HCI reviewers view the practicality of contributions as low if collected evidence cannot change design or operational decisions.",
+              "content_digest": "3720d356aa625bea8226fb668004f599e61140f1ad1543b643eb72b7a39ec43d",
+              "position": 7,
+              "uid": "02f8ddd8-32b0-5e3b-b358-5e0472a6e0d2"
+            },
+            {
+              "content": "Cross-check at the end whether each research question, formative evaluation data, and design modification judgment are seamlessly connected.",
+              "content_digest": "f3b3d431c05e942ff3cea0ac2d239eeee33e224047a452debe0246c57472f74d",
+              "position": 8,
+              "uid": "d17ba26c-187e-57bc-8468-c9c053fc303d"
+            },
+            {
+              "content": "Review whether the application conditions of proposed design principles and boundary cases of failure are presented together.",
+              "content_digest": "28ab914aa4a03e8f1908176b235017a80838ed660d996773a44b3963b927bcb3",
+              "position": 9,
+              "uid": "48a91d19-cc68-5400-8971-8125236f3fbf"
+            },
+            {
+              "content": "The user can have contributions reviewed only if prototype outcomes and the transferable design knowledge derived from them are separated.",
+              "content_digest": "2deadd2cfeed19a3e544c81a345a40f2f3b4561a8d28b073b70400a5e82ae0cb",
+              "position": 10,
+              "uid": "774341c9-b92d-53a5-a24c-59c75e39756b"
+            },
+            {
+              "content": "The scope of observation in controlled formative evaluations does not include long-term adaptation and operational changes in real-world usage contexts.",
+              "content_digest": "76a1a3c03c7d93acc8a6aca832fd24ab9624ea9e53c8207876160ed1055682e2",
+              "position": 11,
+              "uid": "877015ae-ab0b-561c-9fe3-3abb2d0aaa4e"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "5aabf14e-fcc6-4d4e-8781-a1cd97ae43a3"
+        },
+        {
+          "context_digest": "74ec0b91876efe6caed2938aaf4a0b06272de678fbf74dc9da1c217aa0bd042f",
+          "context_name": "task-2/advisor2/compensation",
+          "context_uid": "4ffbd453-7d61-56f7-90ad-34d77b485ef8",
+          "memories": [
+            {
+              "content": "Calculate user research compensation budgets based on the estimated participation burden, combining session time with required technical and travel preparation.",
+              "content_digest": "ba439fe3920339f56e377d8f82a64ab3ad27fb25e0eec3c65b610c81af53d175",
+              "position": 0,
+              "uid": "be9e402b-8d3b-58da-9766-2cf2ec25b9ae"
+            },
+            {
+              "content": "Compensate participants who withdraw from the study midway for their actual participation time.",
+              "content_digest": "599f542ec6f4a5a1a61f5c1a31547088e015439978a64b268879b5a2b65c9be4",
+              "position": 1,
+              "uid": "85157c57-410f-5c7d-8183-b37d61eebf8a"
+            },
+            {
+              "content": "Compensate for the time actually spent in sessions, regardless of the research modality.",
+              "content_digest": "b19b9dbece5d564de69e703491018fbd78ab834149eed0590a552773526b6e29",
+              "position": 2,
+              "uid": "8abeab95-3e41-5378-8409-08200aee9d58"
+            },
+            {
+              "content": "Allow the issuance of gift cards of equivalent value to participants in remote studies who cannot use electronic transfers.",
+              "content_digest": "8ac881488d0064f4b4c6143e2d8c69ab9806b419044adef266c50738c7afb291",
+              "position": 3,
+              "uid": "9b59c6ed-5dbe-5ccc-87b5-6be31f414e68"
+            },
+            {
+              "content": "Do not treat an unresolved payment method as a deficiency at the proposal stage.",
+              "content_digest": "80109274870eb1023e4cbcc6861a906a4d94db5dab2b2659bcebccde125c9ac3",
+              "position": 4,
+              "uid": "5c6c461d-05e5-5b0c-b801-245de2f9c8d7"
+            },
+            {
+              "content": "Allow differential compensation amounts for on-site and remote studies when participation burden varies due to travel or technical preparation.",
+              "content_digest": "556c5e49f7996a651a64825df2389f070629b9bc664c758d934f308c7fd6eea2",
+              "position": 5,
+              "uid": "44abc098-8c9f-5abb-bc49-9deb25066d93"
+            },
+            {
+              "content": "Participants judge the fairness of compensation based on the combined burden of session time and required technical and travel preparation.",
+              "content_digest": "80dd84e8b183e02f1fd772890b48712bb04a04852055eece98957a0c9028288c",
+              "position": 6,
+              "uid": "2a252668-f3f2-5582-b248-43ad81c54a48"
+            },
+            {
+              "content": "In longitudinal studies requiring diary entries and repeated reporting, include out-of-session recording time in compensation calculations.",
+              "content_digest": "7d103d93741e40d54c8df8347f2ce648a1cd96e19589663fa515bfb24b5bd844",
+              "position": 7,
+              "uid": "7e647a83-81b0-52d6-9362-e513dc2a5032"
+            },
+            {
+              "content": "Distinguish between participant research compensation and labor costs for field staff performing installation and operational support as part of their duties.",
+              "content_digest": "b1566527e9c1d7d3f93631d1503b08ddb4a6818daa570c118f265b47603592f0",
+              "position": 8,
+              "uid": "d77affab-60c8-5403-b189-17022b484640"
+            },
+            {
+              "content": "The user tends to count session time but omit participants’ advance setup and follow-up reporting time.",
+              "content_digest": "98911b7db2d8c3962d7ef48919265f40cdb61a711062e5459a4f6d43f71d6fd9",
+              "position": 9,
+              "uid": "0c470c6b-26a6-5501-93ac-c51fecd708ae"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "1249a5cc-c3a2-4f6a-a5ac-5b55561e0ba1"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate operational domains: the reference frame governs HCI submission validity and contribution framing, while the compared frame governs participant compensation. No shared policy decision, scope-based variation, or conflict is supported by the supplied content.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5aabf14e-fcc6-4d4e-8781-a1cd97ae43a3",
+              "memory_uid": "0dda8eb3-3287-5bb6-9b26-b1c00cc038d9"
+            }
+          ],
+          "reason": "This is an independently useful review requirement with no compensation-policy counterpart.",
+          "status": "RESOLVED",
+          "summary": "Conduct a focused pre-submission review of user-problem validity, design interventions, and evaluation logic.",
+          "uid": "e5041e60-341c-5dec-aba1-338bc7889026"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5aabf14e-fcc6-4d4e-8781-a1cd97ae43a3",
+              "memory_uid": "c8e0c9dd-dc4a-5a7d-9a82-e7ee449a4b25"
+            },
+            {
+              "frame_uid": "5aabf14e-fcc6-4d4e-8781-a1cd97ae43a3",
+              "memory_uid": "3e4a9a3b-abc2-54ed-9b87-f81abf61b541"
+            }
+          ],
+          "reason": "These memories split one underlying research-question-to-prototype validity claim, absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Research questions should align with prototype functions because missing links weaken the perceived validity of design interventions.",
+          "uid": "f02b6e44-ff25-5f59-a0a9-399d04a63a8c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5aabf14e-fcc6-4d4e-8781-a1cd97ae43a3",
+              "memory_uid": "f93c5baa-3c2b-5e37-b07b-0b00e8b22ab9"
+            },
+            {
+              "frame_uid": "5aabf14e-fcc6-4d4e-8781-a1cd97ae43a3",
+              "memory_uid": "fb785649-1947-5e7d-aafb-308f14fb21b4"
+            }
+          ],
+          "reason": "These memories state the operational check and its rationale as one evaluation-validity claim, with no counterpart.",
+          "status": "RESOLVED",
+          "summary": "Evaluation tasks should yield representative measures because otherwise the evaluation plan appears invalid.",
+          "uid": "08fdf57b-c101-58f9-9e9d-17adf983e0ea"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5aabf14e-fcc6-4d4e-8781-a1cd97ae43a3",
+              "memory_uid": "8dae0ad6-2a6d-5d99-98db-b0d48a1140e5"
+            },
+            {
+              "frame_uid": "5aabf14e-fcc6-4d4e-8781-a1cd97ae43a3",
+              "memory_uid": "02f8ddd8-32b0-5e3b-b358-5e0472a6e0d2"
+            }
+          ],
+          "reason": "These memories express one evidence-to-decision usefulness claim not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Collected evidence should support changes to design or operational decisions because unusable evidence weakens contribution practicality.",
+          "uid": "5dedd7f8-84a7-5f27-8d93-9303d6fb85aa"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5aabf14e-fcc6-4d4e-8781-a1cd97ae43a3",
+              "memory_uid": "0f89ab25-d9ee-5669-aa99-a0fe07803915"
+            }
+          ],
+          "reason": "This broad end-stage coherence check is independently useful and one-sided.",
+          "status": "RESOLVED",
+          "summary": "Verify that user problems, interventions, studies, and expected contributions form a coherent logical flow.",
+          "uid": "75d540a5-a63d-5d78-8ccd-412a4c157970"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5aabf14e-fcc6-4d4e-8781-a1cd97ae43a3",
+              "memory_uid": "d17ba26c-187e-57bc-8468-c9c053fc303d"
+            }
+          ],
+          "reason": "This specific formative-design reasoning chain is independently useful and has no compensation counterpart.",
+          "status": "RESOLVED",
+          "summary": "Verify continuity among research questions, formative evidence, and design-modification judgments.",
+          "uid": "8a0644e2-1c2f-5e2e-964f-1f42c154982e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5aabf14e-fcc6-4d4e-8781-a1cd97ae43a3",
+              "memory_uid": "48a91d19-cc68-5400-8971-8125236f3fbf"
+            }
+          ],
+          "reason": "This governs the qualified presentation of design knowledge and appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Present design-principle application conditions together with failure boundary cases.",
+          "uid": "52118b3e-3495-572d-8ec6-cabe3665e9f1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5aabf14e-fcc6-4d4e-8781-a1cd97ae43a3",
+              "memory_uid": "774341c9-b92d-53a5-a24c-59c75e39756b"
+            }
+          ],
+          "reason": "This is a distinct contribution-framing condition absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Separate prototype outcomes from the transferable design knowledge derived from them when presenting contributions for review.",
+          "uid": "10128d3a-8093-55be-971f-5b5eb3fca8af"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5aabf14e-fcc6-4d4e-8781-a1cd97ae43a3",
+              "memory_uid": "877015ae-ab0b-561c-9fe3-3abb2d0aaa4e"
+            }
+          ],
+          "reason": "This defines a distinct evaluation-scope limitation with no counterpart.",
+          "status": "RESOLVED",
+          "summary": "Controlled formative evaluations do not observe long-term adaptation or operational change in real-world use.",
+          "uid": "e3767265-c32a-5694-8201-02092d5dc9d8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1249a5cc-c3a2-4f6a-a5ac-5b55561e0ba1",
+              "memory_uid": "be9e402b-8d3b-58da-9766-2cf2ec25b9ae"
+            },
+            {
+              "frame_uid": "1249a5cc-c3a2-4f6a-a5ac-5b55561e0ba1",
+              "memory_uid": "44abc098-8c9f-5abb-bc49-9deb25066d93"
+            },
+            {
+              "frame_uid": "1249a5cc-c3a2-4f6a-a5ac-5b55561e0ba1",
+              "memory_uid": "2a252668-f3f2-5582-b248-43ad81c54a48"
+            },
+            {
+              "frame_uid": "1249a5cc-c3a2-4f6a-a5ac-5b55561e0ba1",
+              "memory_uid": "7e647a83-81b0-52d6-9362-e513dc2a5032"
+            },
+            {
+              "frame_uid": "1249a5cc-c3a2-4f6a-a5ac-5b55561e0ba1",
+              "memory_uid": "0c470c6b-26a6-5501-93ac-c51fecd708ae"
+            }
+          ],
+          "reason": "These memories state, justify, specialize, or identify omission of one burden-based compensation principle found only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Base compensation on complete participation burden, including preparation, travel, diary work, and follow-up reporting rather than session time alone.",
+          "uid": "9349fc8f-82d7-5620-b967-aa28c2bdcd19"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1249a5cc-c3a2-4f6a-a5ac-5b55561e0ba1",
+              "memory_uid": "85157c57-410f-5c7d-8183-b37d61eebf8a"
+            },
+            {
+              "frame_uid": "1249a5cc-c3a2-4f6a-a5ac-5b55561e0ba1",
+              "memory_uid": "8abeab95-3e41-5378-8409-08200aee9d58"
+            }
+          ],
+          "reason": "These memories split one actual-participation payment rule and its withdrawal application, absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Pay for actual session participation regardless of modality, including when a participant withdraws midway.",
+          "uid": "f6d8992b-b80a-5c31-8f10-3b112de2de98"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1249a5cc-c3a2-4f6a-a5ac-5b55561e0ba1",
+              "memory_uid": "9b59c6ed-5dbe-5ccc-87b5-6be31f414e68"
+            }
+          ],
+          "reason": "This is a distinct payment-method accommodation addressed only by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Permit equivalent-value gift cards for remote participants unable to use electronic transfers.",
+          "uid": "53f2c75a-b768-5fd8-b913-33461320bf00"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1249a5cc-c3a2-4f6a-a5ac-5b55561e0ba1",
+              "memory_uid": "5c6c461d-05e5-5b0c-b801-245de2f9c8d7"
+            }
+          ],
+          "reason": "This is an independent proposal-review rule with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Do not treat an unresolved payment method as a proposal-stage deficiency.",
+          "uid": "9c6c68b3-ba82-5243-9b35-acbc4b987c40"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1249a5cc-c3a2-4f6a-a5ac-5b55561e0ba1",
+              "memory_uid": "d77affab-60c8-5403-b189-17022b484640"
+            }
+          ],
+          "reason": "This independently classifies two kinds of study-related cost and appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Distinguish participant compensation from labor costs for field staff performing installation and operational support duties.",
+          "uid": "db3a3adc-af51-5cf1-822a-00f541c658ab"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame addresses burden-based compensation, payment for actual participation, remote payment alternatives, proposal-stage flexibility, longitudinal reporting time, and separation of participant compensation from staff labor costs.",
+        "differences": "",
+        "reference_only": "The reference frame addresses final validity checks, research-to-prototype and evaluation alignment, evidence-backed decisions, contribution framing, design-principle boundaries, and limits of controlled formative evaluation."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "52029204-d4f4-4fb3-af84-7a9cf6ace245"
+    },
+    "analysis_digest": "6e37609d502059b9aaa65032856153e6dc55017bbba9f4d7d98745a85f0b5b8d",
+    "key": "a434c1d3b3550108d411b247edc18bfe919af9392ae09dfcbbf81966c01bb4c3",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 42.372836209000525,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "a434c1d3b3550108d411b247edc18bfe919af9392ae09dfcbbf81966c01bb4c3",
+  "created_at": "2026-08-13T18:24:41.470516Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/review",
+  "pair_key": "4c262c2244e731c777210e1a7ddd479819b365a79c3e0cf4f9a3c1dcd178138c",
+  "provider_seconds": 42.372836209000525,
+  "right": "task-2/advisor2/compensation",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

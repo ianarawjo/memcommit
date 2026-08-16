@@ -1,0 +1,3297 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:02:03.562178+00:00",
+      "frames": [
+        {
+          "context_digest": "ef4fda9c2e859fa635c7e952a931d60a4f435e46d351cc7a65b343af6396d32a",
+          "context_name": "task-1/campus-wiki",
+          "context_uid": "a63350c9-cff1-5f32-a091-57e3cef17a77",
+          "memories": [
+            {
+              "content": "[task-1/campus-wiki/building-access] The Main Building third-floor rear entrance may be used for general passage during regular opening hours in both the academic term and recess.",
+              "content_digest": "3a2105f716581fd192b301e0e0b095260db09027b4a963c25396b7314afc4006",
+              "position": 0,
+              "uid": "1cb2aa88-4c31-5bbc-97be-ba2ebcef1388"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] The Main Building main entrance is on the first floor.",
+              "content_digest": "8688bad584ccad69a4d1ed42550f508e4aa58d1a6e2b211f0a7b3f4052ea5438",
+              "position": 1,
+              "uid": "a8b11b27-70d5-5077-98fb-678635369dad"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] The Main Building rear entrance on the opposite side of the sloping site is at the third-floor level.",
+              "content_digest": "d11cca6e944d91eefc03cede70a53d4b4316cdae870534f955b0c8b466918cc8",
+              "position": 2,
+              "uid": "62214c26-4b23-5c6b-ba8a-2fb585d39421"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] The escalator inside the Main Building connects the first through third floors.",
+              "content_digest": "268e96917bec0c97fa176fbce2565a6e265c654288755218a0ab3387793daad5",
+              "position": 3,
+              "uid": "4902feb8-567c-5eb9-a817-726975164f16"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] The end of regular opening hours for the Main Building main entrance during the academic term is 10 p.m.",
+              "content_digest": "875b59fe073230da4462e852565bb9c9f05d0eb921ef08d624f630fdb11d7fe3",
+              "position": 4,
+              "uid": "c6b97453-d8d8-5aa9-baff-e2981ec4e9e6"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] The end of regular opening hours for the Main Building main entrance during recess is 10 p.m.",
+              "content_digest": "674cdee87d648722e4286940733248ef5414c301baaa9da096aa5fce2f7467fa",
+              "position": 5,
+              "uid": "614389e2-3b83-5fbb-bac1-07cb20f2e4fa"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] Students familiar with the route to the Central Library expect the third-floor rear entrance to be a connection normally available for passage.",
+              "content_digest": "eea764a8caa24864a906e1c186647288673491e5fe7b81fcce70e70171909b0a",
+              "position": 6,
+              "uid": "e3929a49-e9b9-566c-bdc2-296ad7ee086a"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] The access information agent can explain the posted opening hours.",
+              "content_digest": "fcbf40865811634c6db9428945649d4a71cf5a360af10a805f06c0dc3feb2968",
+              "position": 7,
+              "uid": "4ed338df-7bd0-5801-bb3b-535886f6d007"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] The access information agent can explain the posted access eligibility requirements.",
+              "content_digest": "92e90cf4ac5cad702ba02ec5f643ba342ca20e2c51ff8fd6452d0395d256b55d",
+              "position": 8,
+              "uid": "2af35f74-abb5-54ae-aca6-7d315270ae57"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] The access information agent cannot issue access credentials.",
+              "content_digest": "34066095e44818c8e57e48307043eebc058be9bce1f472375582e6edc1446d09",
+              "position": 9,
+              "uid": "c30faae3-e8de-530c-a279-cb7a33133bc8"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] The access information agent cannot unlock locked doors.",
+              "content_digest": "e55df73a2ee04e75c5ee1729301cae5d8fafaf685590fa6ac0a6864e88b24533",
+              "position": 10,
+              "uid": "5b1a6f72-c56d-515f-bb2d-9cd443275bff"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] Instruct students eligible for access after regular opening hours to use a physical NFC student ID card or the registered app.",
+              "content_digest": "0da983815bf10681d55375a13bb80053ac5ce5d2e39ae22387a5b74028fbc374",
+              "position": 11,
+              "uid": "b6987cd9-7198-56b5-bf6f-0162624db30f"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] If access authentication fails, check the posted contact information for the responsible office before providing guidance.",
+              "content_digest": "7682fac59ea493f4bd447dc4f885c5bb396410ad73365695412b527c5eff3ce0",
+              "position": 12,
+              "uid": "f80ad345-f0ce-54bc-bd8d-e2f0e1f1b1c0"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] Do not guess an unverified contact number.",
+              "content_digest": "a29ec70d7dec4de917c0230d310b77df6925270ac098c4e784d4c040d638b137",
+              "position": 13,
+              "uid": "732458c0-fedc-5bc7-965e-36f8d46c4d8a"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] The staff-only entrance is a controlled entrance separate from the third-floor rear entrance.",
+              "content_digest": "3e4ee137b76a750bd891f81ff72f302a09806ac695217243f2eb34a987db9ef4",
+              "position": 14,
+              "uid": "cb1e0734-91ce-53f3-b00c-da4734df5cb5"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] The accessible route beside the main entrance is an always-available route into the first-floor lobby without using stairs.",
+              "content_digest": "67adf8c87f738bbea7fc943eccfe878198aecb26702717cfd5671e586074717f",
+              "position": 15,
+              "uid": "36db4bf8-285c-573b-8127-0efa0c10f8bd"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] Tour leaders for external groups tend to want to use the same route through the third-floor rear entrance on their next visit that they used on a previous visit.",
+              "content_digest": "a86ba1a8f8feaee9fd83c69011a473a2abc451c309dbf2ea9bce813280712ce4",
+              "position": 16,
+              "uid": "804bfc6b-188b-5579-bc83-10b04a28bd69"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] The start of regular opening hours for the Main Building main entrance during the academic term is 7 a.m.",
+              "content_digest": "45b97bb13f395e3a0280493ea39a44e82c7195fd5c6539cbe5aa3b353778d3bf",
+              "position": 17,
+              "uid": "cc2a0d18-0b49-5923-9b53-2e68140b13a0"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] The start of regular opening hours for the Main Building main entrance during recess is 8 a.m.",
+              "content_digest": "86496c09a9ee457feaa3e2a5333937412790ac14aaa5308ee476631c63777f64",
+              "position": 18,
+              "uid": "3ca6b6b2-c381-5247-83cc-cfad0ce862f7"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] The Main Building's regular weekend opening hours are posted separately in the weekend operating schedule.",
+              "content_digest": "7bb1c068878cd5f0ef85d35b5a679d888799c3e9ad5850df44f6985fdf1ff398",
+              "position": 19,
+              "uid": "4a01fd2b-fb4d-5759-88c9-1b6de1a30331"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] The Main Building's holiday access hours may differ from regular operating hours.",
+              "content_digest": "d099c3398eeaa9e5c1e72680824c24c6503980cbb446f235db2fec69ab371465",
+              "position": 20,
+              "uid": "78298531-74b8-591b-ae32-b6175f476ca7"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] First-time visitors often expect the Main Building first-floor main entrance to be the default entrance for general visitors.",
+              "content_digest": "4fe4ac728947d95e1d3f9c10dcf9aa0d409674f47f61a304108b226313f634be",
+              "position": 21,
+              "uid": "4189e656-a4ef-5fe0-af68-943d86e83a83"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] Visitors who have difficulty using stairs expect a step-free access route to be near the main entrance.",
+              "content_digest": "caf60928309897734ff2ae2b3afc1a517148e0ec09db9b75d44e2984ac641fc4",
+              "position": 22,
+              "uid": "aee44d0a-5c4c-59ec-b350-b229570fbd09"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] Valid staff access eligibility is required to use the staff-only entrance.",
+              "content_digest": "8f0da114aaa1b3b95e29702ccb0e91bb1c5e0caba0da672f3fc1930063d06895",
+              "position": 23,
+              "uid": "d2f32d9e-7b85-5720-ad36-80c6f5f1c071"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] The Main Building service entrance is used for preregistered deliveries and facilities work.",
+              "content_digest": "66d7fff1247900a78eafc19f5b74a7b30abaa0a90da24a7d20b3ea8bc4fa3386",
+              "position": 24,
+              "uid": "2d97d6b9-4287-5f52-9801-26d2081b111f"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] Visitors accompanied by children prefer the stroller-accessible main entrance and accessible route to be closely connected.",
+              "content_digest": "ec4e1fda793b559eca4654ef693fce46c8d5e57f37e5fa61ccf3c32fe96aa57e",
+              "position": 25,
+              "uid": "fef275b1-b2c1-5cc5-8f75-a1d01782a1e0"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] Taxi and ride-hailing drivers often expect the Main Building first-floor main entrance to be the default drop-off point unless the passenger specifies a different entrance.",
+              "content_digest": "de533469c0c9e7fc80ef652e68fb41829cc5f5132bc14d6d5a7d1cb001c86485",
+              "position": 26,
+              "uid": "41d5bf0b-9a62-5821-b3fd-60f58ce2d980"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] The access information agent can explain the difference between the normal uses of the front and rear entrances.",
+              "content_digest": "d35562bbf938a48e5c19988abe907c930e160e9686ab60aeeb53ecb45ea1f399",
+              "position": 27,
+              "uid": "7da885c1-0515-516c-ad1f-2a445db9b324"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] The access information agent cannot check the physical lock state in real time at the time of an inquiry.",
+              "content_digest": "79e9f678c2da2475b0514bc84df842dd7cd693283256b22c1356e0b0540d5db8",
+              "position": 28,
+              "uid": "27f6e089-b303-59da-ba5d-4a845961c466"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] If the posted operating hours differ from the access signage on site, instruct people to follow the on-site signage.",
+              "content_digest": "41686f9df7241b04b3892eac539d827265eeeb78d5eb934d4ae91168e253c204",
+              "position": 29,
+              "uid": "5e9fc7b5-cfb8-5e3f-9a53-35568e0fd216"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] Do not suggest that a person without access eligibility follow another authenticated user inside.",
+              "content_digest": "fa1f4f060f5d03a836efb9f923e6fc35baec11ff2ddf74f38479273286801138",
+              "position": 30,
+              "uid": "bb601c38-6e41-5328-a7e0-117a8a101e49"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] Emergency exits are doors for emergency evacuation and are not regular entrances for general access.",
+              "content_digest": "17b4cc547aa1483779bfa989b368df7023e14474b3800f35e06f1a3f64c7a5e3",
+              "position": 31,
+              "uid": "efffd1fe-923a-5f12-bd50-afd997a41209"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] The automatic door at the Main Building main entrance operates during regular opening hours.",
+              "content_digest": "8dcffb7b1b3b49002ce567dac2f126ce56921e2b7669fa346630cfbd2c4b268b",
+              "position": 32,
+              "uid": "2b2642c9-32ff-51d5-8a3c-e48d64e191ea"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] Service animals may use the Main Building's general entrances together with their users.",
+              "content_digest": "16a42b58757327e095c4f0f96803f1d26137ab95fc2f420942b2bd85522deda7",
+              "position": 33,
+              "uid": "e55771f0-7a62-5b9e-aa16-97beafed30fe"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] Instruct people not to ride bicycles or personal mobility devices inside the Main Building.",
+              "content_digest": "91e66c2454c1be6158fda19205d1f075389ac07ba04fb3d0ebd878f97a9d22d9",
+              "position": 34,
+              "uid": "2ed45e16-4f36-5ecd-919e-65c622c1b493"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] Visitors using strollers may use the accessible route beside the main entrance.",
+              "content_digest": "43f7f36ea1aa97b58ddcabcfec8e26fb7125469a26c5a6b6c221dac446846c79",
+              "position": 35,
+              "uid": "9374def9-c634-5af1-96d8-4d7163608027"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] Group-tour visitors often expect their tour leader to wait in the first-floor main entrance lobby.",
+              "content_digest": "71b0ae1086d6194905d97688b83d69b1c37cfecf0d514c73ac23dab23ead193b",
+              "position": 36,
+              "uid": "70fe5986-785a-51be-ad59-3e53aab0abb7"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] External workers may confuse the separate check-in procedure at the service entrance with the general visitor procedure.",
+              "content_digest": "0fb308bd4d9b12d54006959fc895a033f77663b9d16278d52a1a32b370dec444",
+              "position": 37,
+              "uid": "411fa9fb-6bf1-5514-8433-d6e1c186260c"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] Borrowed visitor access passes must be returned to the information desk before leaving the Main Building.",
+              "content_digest": "569c13012cd70325dc02c16568470dcc7ff2d8fa9c837acdc9b8bb5b9feca8c1",
+              "position": 38,
+              "uid": "66b1d3f3-b59f-572a-a729-012a3101cb98"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] Direct users who have lost their access credentials to the posted access support desk.",
+              "content_digest": "848958e26a29a92dda1e5433e380383502698c0f5ffe4a397109a50696609501",
+              "position": 39,
+              "uid": "e99d3f15-48ee-5dc7-8eb2-52ea2d725a09"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] The accessible entrance beside the main entrance has an automatic door.",
+              "content_digest": "5cf4986763903585bd3cf0d24fc4e87e02165b85d8548ddb719d629b977a06bb",
+              "position": 40,
+              "uid": "430563f2-c0f4-53ee-9846-2ecd3f57877c"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] The vestibule inside the main entrance is between the outside and the lobby.",
+              "content_digest": "6bc6a5a537a7a3c8c6e7c54802d6f40316718b05d39885ad7c7524fe214cc826",
+              "position": 41,
+              "uid": "2052527b-612c-5af8-974a-ed21323a3b1a"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] Nighttime access to the Main Building follows an eligibility policy separate from general opening.",
+              "content_digest": "80a3ea8df22166ca7a7e83f8a06e45db462df57d7c75b2e738a2d5aa99c6a559",
+              "position": 42,
+              "uid": "5bf2c18d-2844-5471-a790-fa6b4689fb37"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] The validity of campus-issued access eligibility depends on the user's affiliation status.",
+              "content_digest": "71aaed9beeae009ae5754c8cd3027b3f590202eeb69da4ae6c6f5c54e5b72a59",
+              "position": 43,
+              "uid": "38a17415-7c46-562c-bb10-9fa23de62291"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] Support for mobile access authentication may vary by campus building.",
+              "content_digest": "aad20d00692df5bdb4550dcbf0c1cd15babbc39ec284a9eafea7450224712ae7",
+              "position": 44,
+              "uid": "625a9fcb-4609-5a1d-b6af-437e5c722458"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] Registered visitors to public events use the entrance designated in the event information.",
+              "content_digest": "53c1325b72c57769c4d79d532e395fc14b5e9ee9cda5ef2ac4ddab6722652e58",
+              "position": 45,
+              "uid": "f3f4e4ff-720d-520f-ae1f-53823c277f1e"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] The hours when an event-only entrance is available follow the schedule for that event.",
+              "content_digest": "e62f6aa5335224edcd203a7d60e271a4da8e5daf5bde538eb0f8e6f11169fdd2",
+              "position": 46,
+              "uid": "e3435ec0-eae9-560c-a2ef-76a89761386a"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] Student groups expect to be able to meet their party immediately in the main entrance lobby during large visits.",
+              "content_digest": "688bb47402810c20d9e8d2a06a6f9a86bcceed5566c78a3010d94848136926d9",
+              "position": 47,
+              "uid": "a24cd65b-b2c3-515e-997b-77a6e143c992"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] If an item left at an entrance obstructs passage, report it through the facilities reporting agent.",
+              "content_digest": "434c11dfd50d55529fd610832716f67f5f133cd31bc2eefa2591745eddb98c74",
+              "position": 48,
+              "uid": "22dcad33-41cd-5b46-9df6-a98d005f03f3"
+            },
+            {
+              "content": "[task-1/campus-wiki/building-access] Direct visitors who need on-site access support to the first-floor information desk.",
+              "content_digest": "3616d5d05d5442880f9da8caeb4aa720ad8aef1010e3f10fda895ac2470a77a1",
+              "position": 49,
+              "uid": "da9f2a7d-5b3d-532d-928b-bab7c97f500b"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] The meeting space on the first floor of the Main Building can be reserved for external events.",
+              "content_digest": "56e3eba2eff7bf3c3a7b3231cebda787b868427f0c5ae74abe7b82b088f3c675",
+              "position": 50,
+              "uid": "a0700edb-d51a-54f3-88e9-6096cec36b1e"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] The meeting space on the first floor of the Main Building can be reserved for campus meetings.",
+              "content_digest": "9ddd0240f4c21f3a8c413c0175440bb1cc511e06f8f2daabc9e2ee23d525c11a",
+              "position": 51,
+              "uid": "63986020-57b0-574d-aa13-277405aed516"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] The exhibition and event hall on the tenth floor of the Main Building remains open for exhibition viewing during recess.",
+              "content_digest": "ab26742233e211629f8112c454a8558a57612c5357441dedafa31362de001b58",
+              "position": 52,
+              "uid": "a2ec4e87-1f0c-5c29-af2c-5bb560286a2e"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] The exhibition and event hall on the tenth floor of the Main Building continues to host reserved events during recess.",
+              "content_digest": "ab7b2b3312aa73ae042bae806a91d5e61d6f00d789c60bcc3f26a3dc0adada20",
+              "position": 53,
+              "uid": "11e4782c-aad4-580a-9620-beab3072266d"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] The auditorium in the separate building east of the Main Building does not share equipment with the Main Building's event facilities.",
+              "content_digest": "c6ed1d1db65d98f95eac3229fe41eb69d545669ce6c92fe92059d8992523cfa2",
+              "position": 54,
+              "uid": "ec3a4511-80d6-5881-9623-25a75c6a0899"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] The auditorium in the separate building east of the Main Building does not share an entrance with the Main Building's event facilities.",
+              "content_digest": "9a009acf72747546f0eba1d51f06e175cf657a4faa9b0a5da095f33776c13c4e",
+              "position": 55,
+              "uid": "a224b6db-0154-5174-86ff-9c1dfa558762"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] Present only spaces confirmed to be operating as alternative event venues.",
+              "content_digest": "659c881aebe42a20bf942556308878fa90ade824771c387f18ffd5588c270514",
+              "position": 56,
+              "uid": "50369ec7-7a24-55e3-898c-d9dc9a4c86ed"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] Do not present a space whose available schedule has not been checked as though it were a confirmed reservation.",
+              "content_digest": "b22e147cc1a71c06e6fcb5b157464d2509d029c84cf1e979a0483fb0e5874df4",
+              "position": 57,
+              "uid": "a3c819d4-5ec6-5622-a27f-ce8b6e18b2d0"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] External visitors who have previously been to an event venue in the Main Building tend to look for the same entrance and floor they used on their previous visit when they visit again.",
+              "content_digest": "e0577953bc0154f231f83cc1327434fc55bc7afd706b4343c34ff23c6fe27fd3",
+              "position": 58,
+              "uid": "2a0f0a0e-1930-5983-9074-de449f8669d5"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] The event information agent can compare published event spaces.",
+              "content_digest": "69eb6dc0411af9e967b0fbc0e7d64328a139625d18fac84ab8ca82da975f40f1",
+              "position": 59,
+              "uid": "ed4e7c60-edeb-59e3-a590-f6e359069f77"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] The event information agent can compare published operating hours.",
+              "content_digest": "7449adea45bcf164a0d25ce99ac36e2b81c693583f548f6d3f3a5d1fb35c5e64",
+              "position": 60,
+              "uid": "0170aa1a-9723-5f87-9aa3-37150022f6ac"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] The event information agent cannot create reservations.",
+              "content_digest": "6827639183659eefca0b7ec8f90127a3f7a2c36f7b59b6cb74e8b90b24f5d226",
+              "position": 61,
+              "uid": "1929991c-36ee-5897-9409-d83400120362"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] The event information agent cannot guarantee remaining seat availability.",
+              "content_digest": "47c284da136f8c4846dc2fa4a77e66ef864d01f16a3c4bd56cf846d73b5ef140",
+              "position": 62,
+              "uid": "c7b42a0e-e4c9-53d2-b2b5-87307bb4957f"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] Some seminar rooms on the fifth floor of the Main Building are also used for regularly scheduled classes.",
+              "content_digest": "b03545827027d7fe42187dba24c43feab29bade098ee7fe596ca53748e08dd8e",
+              "position": 63,
+              "uid": "a1b88b90-3b59-5f36-8ac4-e45f1962ae64"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] Some seminar rooms on the sixth floor of the Main Building are also used for regularly scheduled classes.",
+              "content_digest": "8a7a510ff7053a30c8758213f5a9292b5d6677bc53dd9b90144c06992db0eb6a",
+              "position": 64,
+              "uid": "c4fe128d-067a-528d-8ef8-b2810e56884c"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] Check class schedules before presenting any seminar rooms on the fifth and sixth floors of the Main Building as alternative event rooms.",
+              "content_digest": "de6a8947b3dafec84aa73dec625291aec47a414e7cb88c092890287ca2f0eeaf",
+              "position": 65,
+              "uid": "b79a722a-c043-5e7f-8469-1c761d85219a"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] External event operators expect the loading entrance and route to the stage to be clearly confirmed by the day before the event.",
+              "content_digest": "f36b18b65507fa1ae7b277f166d1ef3f8ed76b9c8b9d45c086843879f1ba3e2d",
+              "position": 66,
+              "uid": "4bc2268d-5966-53bd-9501-e8fb0861ddd0"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] The names and capacities of reservable campus spaces are published in the public space directory.",
+              "content_digest": "fa55d1593f610e56f508c2a13320763835b688b685b8e6b0ae4d79f1c0ea068e",
+              "position": 67,
+              "uid": "d8cc31a3-a547-5691-92a9-efcb1c96367d"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] Submit event space reservation requests through the campus space reservation portal.",
+              "content_digest": "0efc4aab171cee831377ef4a4d713469f7e2b44c2be23ea2234ef8130d412adf",
+              "position": 68,
+              "uid": "087bb085-9bc8-57f3-83ee-7e90895904ef"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] Event organizers must confirm that the capacity is appropriate for the expected number of attendees.",
+              "content_digest": "320317d756b5cd5193c74430e3409a976fef4eb38cc04561018b9a4dca0cc673",
+              "position": 69,
+              "uid": "bf506b28-8854-567c-80de-477512ae1f11"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] Events that require accessible seating can indicate that need in the reservation request.",
+              "content_digest": "8f7d5b223097a9fb120450e862d4db151c9ac614ff94cf17ec31097ec0787dfb",
+              "position": 70,
+              "uid": "5015ee36-4f8c-54c7-ae80-caa21c1c837f"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] Campus event reservations by external organizations require a campus sponsoring department.",
+              "content_digest": "e9fea0dcb331388a5e077918f0feefad39ee2bead7c8698acbc7a08b5a1f9934",
+              "position": 71,
+              "uid": "bc10fe3c-0618-5c74-91c9-e50ef58d287e"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] Student organization event reservations must be requested through a registered organization account.",
+              "content_digest": "3c6cd6b8736b66656a38d92b08e69ff30aa26e01fb469ac1ee5d9e3c41cae929",
+              "position": 72,
+              "uid": "a2b87746-8b25-5f2e-b5f9-78b2d8f8281d"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] A space reservation is confirmed after an approval confirmation is issued.",
+              "content_digest": "c5f9317eb94f9cbfcd0f69a5bb60df68c6fcd7ca7a775246069bcc67653c2bc9",
+              "position": 73,
+              "uid": "f995af31-6820-58b1-a805-3d2d03c75014"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] Space use for recurring events must be approved again each semester.",
+              "content_digest": "6b5245e5d20b3b1d88bdd1e95cf76661c4900aa2d76784d3c11e73c60d8e6884",
+              "position": 74,
+              "uid": "cc720c59-0014-5460-9ccc-94316c641a3c"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] The reservation time includes the time needed for event setup and teardown.",
+              "content_digest": "8bd4f0ced2e77eadf61096c111e85dba54a65d48335719c99260f58cc3759292",
+              "position": 75,
+              "uid": "a72cb1ad-ea1d-5e17-a5cd-06b082340d0d"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] After the event ends, return moved furniture to the space's default arrangement.",
+              "content_digest": "2aec0728f1c3ad4003b530b2efa77eee496157b6cb133bbcd6518d3cb75e1b5c",
+              "position": 76,
+              "uid": "c70f4d03-7cc1-528b-a5f8-5944c2012b10"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] Check the usage rules for each space to determine whether food may be brought in.",
+              "content_digest": "8ac9993b6b830a6f53fcf772a66f0d4a8534de995b929a728b555b83cde9c573",
+              "position": 77,
+              "uid": "55540a25-fbd0-5cc8-b2db-b83ac4042735"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] Request event audio and video support separately from the space reservation.",
+              "content_digest": "fa389eca0511f81ae1de0a222f439bbeb1aea38f8e811bf9b419feeb8b0231a4",
+              "position": 78,
+              "uid": "9e496450-0188-5f64-84b2-295cd1e9c5da"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] Install temporary event signs so they do not obstruct passageways or emergency exits.",
+              "content_digest": "812a536349ad1584155fe52a38398fb84017ed3b7b252e8b4e9458c36dfe16f9",
+              "position": 79,
+              "uid": "819beea8-c827-53e1-9a95-cb22de35f9ee"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] The event information agent can compare the capacities of spaces in the public directory.",
+              "content_digest": "cf051cc32060d1b565bb906cac0bee28a077500b0111cb07478871f1fa3ebcb3",
+              "position": 80,
+              "uid": "a4c8e1a2-81e8-52a5-92cd-c79a382cb671"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] The event information agent cannot access private participant lists.",
+              "content_digest": "e8632f3c7848de91fb5762b1179746c465447779bedc17d9e756adbef16f493b",
+              "position": 81,
+              "uid": "7795aa61-2921-549b-996c-64240f8e9b2a"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] The event information agent cannot guarantee when a reservation under review will be approved.",
+              "content_digest": "63773947e45ec55bb1158b67bc6fa539ca872ebbd4d8ca3268bc6b6f00a7a080",
+              "position": 82,
+              "uid": "fdae8ad0-8b99-543b-8c09-f0af60653036"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] Check both the official event schedule and facilities notices to confirm whether a space is operating that day.",
+              "content_digest": "706fc45052efa4df6271b8ee3269818ad41587233f1f1ca220f7a2f4d4f8d314",
+              "position": 83,
+              "uid": "232cd8db-6319-5bd0-a4b9-5861838268e3"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] Do not present a temporarily held space as a confirmed reserved space.",
+              "content_digest": "8eb2ecc3b7e1a98e116dc93aabbd51ac56c913606aa0375690dc07527cbd0a99",
+              "position": 84,
+              "uid": "3329f2cc-afc5-559f-bc3b-ea82df8881d1"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] Visitors attending external events often expect that they can enter the building any time before the event begins.",
+              "content_digest": "7fcd6342e2a73f6683e24b0cb0cef721e666ee95822715e22779f166c237d49f",
+              "position": 85,
+              "uid": "f986e70e-4775-5ab3-9d8e-3ea9fc3df540"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] Event operators bringing equipment expect the loading entrance and route to the stage to be clearly stated in the reservation confirmation.",
+              "content_digest": "865e72d9b3ae88798ce79bd41fea5ae861e4f87d5ff978027fb72b7109dc139f",
+              "position": 86,
+              "uid": "13211336-6483-5331-96e5-24490ce7da63"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] Attendees who need event accessibility support may easily miss the advance contact requirement because they expect the necessary support to be prepared without a separate request.",
+              "content_digest": "4b9b749e001c4d4148f5447d56408f3fecb3919dfb1c80156dde5bbe3967bee7",
+              "position": 87,
+              "uid": "22f9c5bf-d01c-59e0-90e3-0cf93bdae8b6"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] The small seminar rooms in the Main Building have lower capacities than the auditorium in the separate building.",
+              "content_digest": "28814ed91cd70f51b25c81393a8734a88f72120abf1cdb9c371bca3942b468d3",
+              "position": 88,
+              "uid": "e9c632bf-da2a-5b8a-86c0-87da4a8f3ffc"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] Exhibition viewing hours on the tenth floor of the Main Building are published separately from the usage hours for reserved events.",
+              "content_digest": "778f6861982dc26a191d28bd5fdd4772c9e810d9f1126067f01c52667fd4712b",
+              "position": 89,
+              "uid": "8ec61da7-e53e-5ef4-b7e6-edafc872ffd8"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] The meeting space on the first floor of the Main Building has a flexible area without fixed seating.",
+              "content_digest": "191688aed607bb9123d737b6b41d55b842462ee003be3be057de9c409fa233d3",
+              "position": 90,
+              "uid": "5fa014b2-5fca-581b-b07a-7990cea080af"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] The auditorium in the separate building has an event information desk separate from the Main Building.",
+              "content_digest": "254c892d8614eacd49ba376426c7e8a1b91955b2d60f5d5d06f1e15aad047974",
+              "position": 91,
+              "uid": "bb2aa827-e021-5b02-b7ed-e005ca2c291b"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] External event vendors expect the campus sponsoring department to confirm the loading time and route.",
+              "content_digest": "890a6ae8821aa3d200d0bd27410ea79d8997282b300161501f26aa07cb84bc2a",
+              "position": 92,
+              "uid": "cc2a4dc4-bf8a-5902-8ee1-c3c334549ef2"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] Canceled public events are marked as canceled on the official event schedule.",
+              "content_digest": "34d58ff409a7b5c0778eb363df017391369bbcd32396dd1806cccfcfade98888",
+              "position": 93,
+              "uid": "5bc6cebc-fff5-59e7-bec6-b6d8d83feb35"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] Spaces that can be reserved on weekdays may not operate on public holidays.",
+              "content_digest": "aad8c0208555f87f57f838c0dee3805b7b8baf23cac812224c3662a4dec20408",
+              "position": 94,
+              "uid": "a32a3a9f-4d3e-5727-a91a-ce827831d7d2"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] Emergency safety measures take priority over approved space reservations.",
+              "content_digest": "e03cb3f3fe81fca95a32097f97a2d0cf48977d503cab2387b0cd661c0e5a60b0",
+              "position": 95,
+              "uid": "ff9fa75e-f040-54a7-b4b6-30153da4eebd"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] If space names appear identical, check the building name and floor together.",
+              "content_digest": "4b28820085a933acf83eca441980485c48fcdd96a9863f6b2e9464619bb1c61f",
+              "position": 96,
+              "uid": "83b95f40-46ad-54f6-b535-85e99a83ee99"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] Turn in items found at an event venue to the information desk in that building.",
+              "content_digest": "c6ab7d97c7e3e073cb9582e7a1c1abc5914490956c326ef0264bedfb8a039250",
+              "position": 97,
+              "uid": "d68f7446-40e6-54bf-b812-313b2595c2c8"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] Event organizers expect the permitted scope of photography to be clearly communicated to attendees in advance.",
+              "content_digest": "1e3fa981097788c785aed48b399cd24252c3a62224d00d287f8fe1439bdd83de",
+              "position": 98,
+              "uid": "4510b985-b70a-5606-8bbe-98bf494ab656"
+            },
+            {
+              "content": "[task-1/campus-wiki/event-relocations] Distinguish between public event information and private participant information when providing guidance.",
+              "content_digest": "5c062503824fc10501f027e88e0b125b17c25ed1debfee901b4156103f54207a",
+              "position": 99,
+              "uid": "2fa16a36-c2d4-5fcd-ad8f-29780fc0bf06"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] Outdoor Parking Lot A to the left of the Main Building is connected to the Main Building underground parking garage by an inclined access road.",
+              "content_digest": "80e800cc427fadef0e43183c445b7fc03e5bbd478139b79df78c489f7a369aa4",
+              "position": 100,
+              "uid": "5d690022-0ab6-52ed-b6a1-77d719c8c6ce"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] General vehicles may enter and park in the Main Building underground parking garage during operating hours.",
+              "content_digest": "bb888b5178ab30d46755253ea79422fcbc7aa4fefc02d3d4f3436bd250d2f415",
+              "position": 101,
+              "uid": "6960c0ca-295d-5449-91dc-d9293a6bb79d"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] The pedestrian entrance to the underground parking garage is open to general pedestrians during operating hours.",
+              "content_digest": "c7ddd52d8623a35885debe3efe2ab16a8b030e63832650960928916eecdb4937",
+              "position": 102,
+              "uid": "67d07765-ac5f-58f6-b7a5-f733cc4228d2"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] The interior stairs leading down from the Main Building lobby to the underground parking garage are available during operating hours.",
+              "content_digest": "3da11f553999fa7c77684c5e482a9589156da273b012463a842d51757b0c89e1",
+              "position": 103,
+              "uid": "489960d6-711f-55d0-a410-16bcd6e9acf8"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] Outdoor Parking Lot C uses an access road separate from the Main Building underground parking garage.",
+              "content_digest": "4d1a2bd6414b7225194019794e7c677d1124e1a32dded84ced9b296784b085a6",
+              "position": 104,
+              "uid": "df455ec8-c30d-5607-a9b8-8f84d93f0617"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] Outdoor Parking Lot C is outside the Main Building construction zone.",
+              "content_digest": "ac14766c531a612edc23a13036bf851f43b9f56f81565c63e75438ea4d048cad",
+              "position": 105,
+              "uid": "6a37c02f-4843-579f-b5b1-f90d6dbd0e5a"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] The Outdoor Parking Lot A–Main Building–Central Library route is normally one of the shortest routes to the library after parking.",
+              "content_digest": "6ea96a5969f2e6e2c495bba7940cb12d809c01fb70ef98d70602806850ddf374",
+              "position": 106,
+              "uid": "a81363fe-3ae5-5213-a555-e447515a1a73"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] Do not generalize the closure of one parking area into a campus-wide parking ban.",
+              "content_digest": "66db4815eb6b842a0f95a05d3bc8a6e0e4215f731959904eb23faa7c250fe07d",
+              "position": 107,
+              "uid": "ccf54508-b01d-5fe5-bad3-083e3ce211cd"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] Check separately for available alternative parking areas.",
+              "content_digest": "cc18b7d1bd0ccc3ad8d244103df3325b7f548c63c8559c88c5412535af95534d",
+              "position": 108,
+              "uid": "1a4e603c-7f69-5bfc-b974-281dc8618326"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] First-time visiting drivers often expect there to be general parking spaces in the parking lot closest to the Main Building.",
+              "content_digest": "81ee9f2dcda38286b11a5b245595a855635a0cf9f159131bd258020a914bcaa4",
+              "position": 109,
+              "uid": "3bd9a7e3-af83-5d3d-9cca-0a3926c446e1"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] Visitors who need mobility assistance expect a safe pickup and drop-off point near the accessible entrance.",
+              "content_digest": "35c9e6b74651a20feac0ebe589968d49b0110bc04b5fd2de2649aac03b9bd181",
+              "position": 110,
+              "uid": "879b70b3-1404-559c-9cdb-9fdca1289e44"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] Visitors with luggage expect to be able to load and unload briefly near the Main Building entrance.",
+              "content_digest": "1fbcbbcdde09a136ee22b5d0eae4027facf8c4624296fe7f0f2ead9cdb83d4c3",
+              "position": 111,
+              "uid": "c89147c1-1b06-5e93-97a1-85d59fd33e57"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] Staff often expect that their access authorization also allows them to use the parking lot adjacent to the Main Building.",
+              "content_digest": "45fda6118d0719c4a99d89515f6398dc25e2abb32143f72db50a8552f7a0a248",
+              "position": 112,
+              "uid": "c9b6827a-36c3-5895-916c-a7066f398f5b"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] Staff who need mobility assistance give priority to pickup and drop-off points near an accessible entrance.",
+              "content_digest": "55df05fa57a877b0c9ac31700ae02acd1c3f8b8f7ca060bd249524f31aeafb3d",
+              "position": 113,
+              "uid": "07101ab9-cebf-5fd6-8967-2ea16a80d03d"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] Staff transporting equipment prefer a loading and unloading point close to the destination space.",
+              "content_digest": "bdb2fd4a5d4d5dffe05607207471b2bcb035a3ac7a3ce693be7c0386d961c557",
+              "position": 114,
+              "uid": "39b76444-a4f8-53c2-ae7d-9ee71de43eea"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] The parking information agent can explain posted open statuses.",
+              "content_digest": "81bfa7e4f8bd0a3abcb0b6c3a0b0390aa1d06b07d3efd4c5ac129f2bfb5a97f7",
+              "position": 115,
+              "uid": "9514e9f2-d556-50dc-8739-01c37b3322fc"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] The parking information agent can explain posted connecting routes.",
+              "content_digest": "baf61e5d7f79f1ef07afe7e505980ce0b0661019bcd740273e9aff12a74e83a9",
+              "position": 116,
+              "uid": "9acc9ad2-3a59-5b37-9f08-010fe8731a79"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] The parking information agent cannot check real-time space availability.",
+              "content_digest": "fe4940853f181c2dd48a3df6fe88836bec85c5f60aa7f4b6aff92e643f32a3cc",
+              "position": 117,
+              "uid": "6a38e1b0-b9bb-5941-aa03-3f29b492feaa"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] The parking information agent cannot guarantee when on-site controls will be lifted.",
+              "content_digest": "6e11ef737165a87ad6524cfc021504e6bc679cbcb56e535fdc1d9f2ba879a141",
+              "position": 118,
+              "uid": "7063d138-91cf-5dbf-b7af-bb0451dd342d"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] Delivery drivers and external maintenance providers sometimes expect to be able to load and unload briefly at the edge of Outdoor Parking Lot A.",
+              "content_digest": "51dba49e05170ae203f301c5496e86dd1acf07cb187b9d8398dbe40e9ebf7e77",
+              "position": 119,
+              "uid": "efbe330f-eb79-5a05-8ef8-0664355d320c"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] Outdoor Parking Lot C accepts visitor vehicles during posted operating hours.",
+              "content_digest": "0d2ac23dfffa6dfb171a085507fbfd6fc3d606d618ddbcbab21a8050494a38d4",
+              "position": 120,
+              "uid": "c0ac84d9-367b-5809-856e-9f0d6c471b2b"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] Instructions for registering visitor vehicles are posted on the sign at the parking area entrance.",
+              "content_digest": "1eff0a9aa6845d58fe2bf89fb20b6894240757ecb5491b719be82abc90d7932a",
+              "position": 121,
+              "uid": "96092024-bab8-5c6e-b100-ff87e06cb760"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] A valid parking permit is required to use accessible parking areas.",
+              "content_digest": "8153d08647e14b2405bf829de0b00b58865bfc9de045d0fc66a9fdca6de1d5fb",
+              "position": 122,
+              "uid": "7b323c8d-eddd-5041-aee1-bbd8dbc06918"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] The accessible parking area in Outdoor Parking Lot C is near the walkway toward the Student Centre.",
+              "content_digest": "0cf6166c915d5a4ff30748fedb95f01ec0aaf4adc338517994aae2de6e85bfcb",
+              "position": 123,
+              "uid": "8180f5e5-fd9f-51a7-b239-c75a86c20da6"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] The pickup and drop-off zone in front of the Main Building's main entrance is not a long-term parking space.",
+              "content_digest": "94de0c5bf4eeb4d950f3b068400e81dfe54bdeb24a0bf06ae710f4f126be5254",
+              "position": 124,
+              "uid": "b7f4ae20-3bbf-51dd-b230-81c5e5107e48"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] The maximum use time for short-term loading and unloading spaces is indicated on on-site signs.",
+              "content_digest": "05cc415b00775cfad223c4c7076cecaa13163c446a1ec36a77bb38187f1df415",
+              "position": 125,
+              "uid": "27246135-eca5-56ed-81c3-bb75584703d6"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] Motorcycles park in the motorcycle areas marked on the campus map.",
+              "content_digest": "f67c3b25f99f00ce304aec2ad511d1a4821420c69ed6ae1bcbc8c9e117ce99d0",
+              "position": 126,
+              "uid": "dc40ae37-6f8d-5864-aab1-59462c325af3"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] Bicycles are parked at designated bicycle racks, not in vehicle parking spaces.",
+              "content_digest": "e03178cabf0113e85aeb2065ab783f96ad71909ecd550a533cca8f0e2b92f251",
+              "position": 127,
+              "uid": "077234a0-bc91-589a-8d91-2cdd1180e9a1"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] Outdoor Parking Lot C has electric vehicle charging spaces.",
+              "content_digest": "fc81d7008039484e7fc608d9486b46b9df604e4c652e58c39fd3ce1e0e15a121",
+              "position": 128,
+              "uid": "c578f6a4-6065-5752-950b-e79ff7228ce7"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] Electric vehicle charging spaces are for vehicles that are charging.",
+              "content_digest": "cf5662fac4f2263bab757abda5fec59a0decf5196e0d2e3c28459882c1cb54ac",
+              "position": 129,
+              "uid": "38ce79ed-cae6-5a9e-bdba-eb92559ebaa8"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] Visitor parking fees are displayed on the parking registration screen.",
+              "content_digest": "dd36fa1e3ee202c754c14f8e9da786782425fdc4d6950beb48d37206ddca0c95",
+              "position": 130,
+              "uid": "7471f5bc-555a-5db4-838e-74723bbd55fe"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] The parking information agent cannot infer unposted discounted fees.",
+              "content_digest": "d08c16458f3c18c8a482b4a5e719cc29b17c1bf8111f4c7540c43d30960fee19",
+              "position": 131,
+              "uid": "340389ed-6852-509c-a278-78bbbad4beb8"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] Parking operating hours on public holidays may differ from weekday operating hours.",
+              "content_digest": "84565f0e6af50e0646d72203c41372e3f038c1a78ca6ec673cb78c1ab634cebf",
+              "position": 132,
+              "uid": "f617356c-98ff-5d40-a41b-dd4be0c8c311"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] Parts of outdoor parking lots may be temporarily restricted during heavy snow or icy conditions.",
+              "content_digest": "81a197d3dc17ce3a754cbe85f630f80a289b1905881ad2c909df8ffe7c7bfa97",
+              "position": 133,
+              "uid": "35576f85-e20a-5bed-a9fd-f47e867c1fce"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] On days with large public events, parking demand near the event venue increases.",
+              "content_digest": "0fea3e6c0b87d81c9568fba25dd40df29e78c429ba8e76e03371146ffe50e8c6",
+              "position": 134,
+              "uid": "3fc6abeb-db56-5a34-ae34-b4cd394723c4"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] Drivers who need mobility assistance expect a step-free accessible route from the parking space to the destination.",
+              "content_digest": "c7f2a70088df0d6af407fe7d57a1170aa24644ace531eb614954df8843debd3d",
+              "position": 135,
+              "uid": "308c9814-4989-563e-b9dd-306be896940e"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] First-time visiting drivers sometimes confuse Outdoor Parking Lot A with Outdoor Parking Lot C.",
+              "content_digest": "cddbc9eb819f425d1997b915b4dd140bb9328590df25ab51f084665accf1cf45",
+              "position": 136,
+              "uid": "8061fc97-13ee-587e-ba5d-09ca5fb72171"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] The parking information agent cannot check in real time whether on-site control signs have been installed and determines availability using only posted parking-space statuses.",
+              "content_digest": "82bb7f5d3612148159f238b2f9fbd3eeb84fc0627282b5f119fa500b4b3804de",
+              "position": 137,
+              "uid": "7d5bdc29-c284-5027-bc5e-6589b53ab5e9"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] The West Gate stop is on the walkway outside Outdoor Parking Lot C.",
+              "content_digest": "f7b63c260834913481c864137b47b562f9f5f238fc361a543435e912e5581180",
+              "position": 138,
+              "uid": "a77dadf9-5d20-57aa-bb81-b35058832bc6"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] The campus shuttle stops at the shuttle stop in front of the Student Centre.",
+              "content_digest": "abb6a0c5f91b8f1301afe2dfbe111ac0107a17f750f8c4e05f48ce1ebbbb7e84",
+              "position": 139,
+              "uid": "012add6d-ba82-5674-a432-0c092d575d21"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] Campus shuttle operating hours vary between academic terms and recess periods.",
+              "content_digest": "6a4b9f4e03c864fd7c48cf800c8734b6031ae2d99325bbabafb9699a8a541f5f",
+              "position": 140,
+              "uid": "6ca42597-3142-5f24-9f29-14c694bc83e2"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] The parking information agent can explain parking lot access roads shown on the public map.",
+              "content_digest": "28ad5e2c04a3ef9744726041e388d40301ea44b3503820952594be91fb9e8ad1",
+              "position": 141,
+              "uid": "f1283ab9-f63b-5249-ac89-2dcc6f3dbee4"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] The parking information agent cannot register a visitor vehicle on the visitor's behalf.",
+              "content_digest": "0b814f356cf2a10969837cd04e58d423bdaae631d0d1966f1a32fd31fd97a23f",
+              "position": 142,
+              "uid": "db986c20-8190-5a89-87db-4c56c5d6c82d"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] The parking information agent cannot waive parking fees.",
+              "content_digest": "0c3e3541d8dbf926e6c808f41074797293bf76b813f61e439f9af0ab8728474c",
+              "position": 143,
+              "uid": "1a0b250f-c4f1-5a9f-a114-5420a859dd32"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] Check official parking notices for weather-related parking restrictions.",
+              "content_digest": "0bb93e159722adc357b61ea72210b64adfa26aa40a5760f349eaf7c4375c734e",
+              "position": 144,
+              "uid": "f201604e-92ae-5315-8359-5e68dd9eeecb"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] Do not generalize the full status of one parking lot to another parking lot.",
+              "content_digest": "c9763866b466008e7bbd3d7ae990d3b8de5f2cb60a3b7e5b5518ca2179c07e51",
+              "position": 145,
+              "uid": "b5466afb-8d3b-51b0-8e44-9fd47165fe17"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] Valid parking authorization does not guarantee the availability of a specific parking space.",
+              "content_digest": "7f78b8a060e01518b7f894f087479e8a5c0c4e7711283850e09642a5a04c3079",
+              "position": 146,
+              "uid": "38b6565e-25a0-5b7c-ba03-747c1901af7e"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] An accessible pickup and drop-off zone is marked in front of the Main Building's main entrance.",
+              "content_digest": "cab8adcee19389457afa0173ec8602cf18ae16bf54428573ac466ddea3307dbc",
+              "position": 147,
+              "uid": "11d0062b-7941-5512-b5dc-f2d1379741e6"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] The dedicated car-sharing spaces in Outdoor Parking Lot C are identified by signs.",
+              "content_digest": "ba697f89f684f8f4de1d07197fa344ac12ebc19fb647e67d1c9883e1c57e6110",
+              "position": 148,
+              "uid": "a299c675-7179-5cb1-b5e4-552198bdc91f"
+            },
+            {
+              "content": "[task-1/campus-wiki/temporary-parking] Report vehicles blocking passageways or accessible parking areas to the parking management office.",
+              "content_digest": "8713c86e33c34a051ffdf069c98f2db4b78b39949f8547764dd5a3f29a987a26",
+              "position": 149,
+              "uid": "a671229f-9c73-5183-bec3-8d23d0dd8d53"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] The Campus Store on the first floor of the Main Building operates from 7:00 a.m. to 11:00 p.m. even during recess.",
+              "content_digest": "e2fdfe25ee18f0bc1d444753743409ad3c7c1d4c3bd09637c01e9ebcd2db39aa",
+              "position": 150,
+              "uid": "9e6dcc99-d2d7-54bd-adbf-ca20ebf22f83"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] The Engineering Building Campus Store's usual operating hours during recess are from 9:00 a.m. to 6:00 p.m.",
+              "content_digest": "24ba7d48cf3aaba92e42a5898747e48b3e16a1b1dd2c0c75c4ef20b9fb9cd17b",
+              "position": 151,
+              "uid": "3ecf1523-62fe-5bb1-be29-2b4a9b3384df"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] The cafe on the first floor of the Main Building operates during summer break as well.",
+              "content_digest": "c602b4292a84e2a8d8b44494826d1a989a9e3494f48699d714048dd657f62358",
+              "position": 152,
+              "uid": "2e45bd48-390e-5b77-9082-fec388b4bd9f"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] The dining area on the first floor of the Main Building operates during summer break as well.",
+              "content_digest": "f615b84c2e052a757403fd512ee621ea2dda0aca4447f02b2f3cfd2c28bf410e",
+              "position": 153,
+              "uid": "5f686fb7-fc7a-5698-8cc5-d5ccff25dfe1"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] There is a coffee machine inside the Innovation Hub on the first floor of the Main Building.",
+              "content_digest": "a9a742c2234ded36fb52d7d6410910ec633eeab40d699436fb1b7502c9ba2f6d",
+              "position": 154,
+              "uid": "df0dbcfb-86c8-52a0-b303-71a6e2dfa4c6"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] Only staff may use the coffee machine inside the Innovation Hub on the first floor of the Main Building.",
+              "content_digest": "b255b677b6ab66347f81f29838015a04eefb9bc7c76d03dffb8453b4fdb35fbd",
+              "position": 155,
+              "uid": "65a4b93f-f1da-52c0-b013-34c876391794"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] The ATM in the West Complex is separate from the ATM inside the Main Building.",
+              "content_digest": "2dbf19907f02ee276fef6bccdf26e14d7fa427e6732d0cb6b9814681df88ab2a",
+              "position": 156,
+              "uid": "ed7db155-c6c8-5a91-a574-fc44b081a92a"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] The ATM in the West Complex is in the building next to Outdoor Parking Lot A.",
+              "content_digest": "bf26d0f44d7cf71df2f6371e228bb58879872a6279c4bd9080e37c623cc8ea8b",
+              "position": 157,
+              "uid": "ce4dd3c2-790f-5ef7-b851-e693f750c1ef"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] Students who need cash in the evening often expect that they can use the Main Building ATM at any time.",
+              "content_digest": "29b5b68856b593ce2bda7050912d11e61958b77c00c198ce93add8599217b016",
+              "position": 158,
+              "uid": "46192dec-18a4-5404-b3fe-5c0c42be97da"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] Students who need basic items late at night expect the 24-hour store in the Main Building to be open.",
+              "content_digest": "9ec8a3910b4efc1ffa8d957c30febff23a1add083b060f565280fd1e2fa4afbc",
+              "position": 159,
+              "uid": "644d9c0b-c300-51e4-b680-4318328aa4b9"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] Identify and provide guidance to an alternative location of the same type as the closed facility.",
+              "content_digest": "e0ad40027cd2c5b8655e3381cfd374ad5947b1aa46e2c1267be7664be11d4a66",
+              "position": 160,
+              "uid": "b03652e7-6a61-5dd6-8484-f19f93536d59"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] Do not treat the facilities in the West Complex and the facilities in the Main Building as the same place.",
+              "content_digest": "755a08d8b10aa594cf1dae9a9de0ef83d61f2a44c80dad4e75910edea2ec5b96",
+              "position": 161,
+              "uid": "5f43f896-6a76-51f2-b034-221955b4165f"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] The amenities information agent can answer with posted locations.",
+              "content_digest": "d84eae9fd2113a7ececc7608839f96de2f8b37d07365d6cf8a071c1e6dc125cb",
+              "position": 162,
+              "uid": "b0fa660c-d579-5c27-bf74-c9b3839fd36d"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] The amenities information agent can answer with posted operating hours.",
+              "content_digest": "3fa22ddf1ba77ac775ce8e6d685bfb6a570f29ac1cfc66953c2c334bed019cf2",
+              "position": 163,
+              "uid": "16efed59-7583-5467-828e-b856ccf7c5e1"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] The amenities information agent cannot check product inventory.",
+              "content_digest": "9f0a5a9c837946ecff2a99c1ea7a4ebe8b973a57621250a8da893d92059752cf",
+              "position": 164,
+              "uid": "150a226f-2cfb-523a-ae59-a37becaa4310"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] The amenities information agent cannot check whether payment is available.",
+              "content_digest": "b8aeab0268c47758b4796674b3755b11d2cddfbe29268687a735b7ae87a9770f",
+              "position": 165,
+              "uid": "0147df04-89c5-56a0-b119-5b6baf57bb29"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] The amenities information agent cannot check unexpected closures on the day.",
+              "content_digest": "39aba26fbfc9e2a3e10d21ce6f11808a875a8af4707ede5604313e62f7fcfe30",
+              "position": 166,
+              "uid": "91791ba2-e7cc-5437-9855-e10726378d20"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] The Campus Store contractor incorporates students' tendency to use the Main Building ATM and the 24-hour store together in the evening into demand planning.",
+              "content_digest": "052a82d19b15c71b9533fe370e6ce3829951ad69a43b2bc2b31e986e0d5b8653",
+              "position": 167,
+              "uid": "39b4d014-8b9d-55ac-a5c2-ccc3e948a721"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] The Engineering Building Campus Store sells school supplies and basic household goods.",
+              "content_digest": "a43b6dd4a88beb2d135c78a13d926ecc412a0fe1b48ec11ffe5f7888cff697c7",
+              "position": 168,
+              "uid": "6248ac88-de59-5039-b01e-328669694909"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] The return conditions for the Main Building Campus Store are posted in the store's receipt guidance.",
+              "content_digest": "d13986dc2c4766b27fe77b855aa08b11f20d567d88174e172542d0b50c61e2cc",
+              "position": 169,
+              "uid": "a64be11d-06da-56b0-9dcb-9c26b75a1cbb"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] Each store determines the prices of products sold at the Campus Store.",
+              "content_digest": "9c130587013b046a7c4b9f4dada6127de733420b3ff6d60e9d19d3cc502d3a73",
+              "position": 170,
+              "uid": "cf273ead-e557-5449-bc44-28b3fa5c1dc3"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] The Main Building dining area's menu for the day is posted on the menu board at the entrance.",
+              "content_digest": "be6f49eaf62ac0467de8ebea7b64db773b5c3248d96b2e8fd52c3b6f08130167",
+              "position": 171,
+              "uid": "124a8981-a1c3-518a-a2cf-8c128b2e0c73"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] Labels for major allergens in the dining menu can be found on the menu board.",
+              "content_digest": "ecb1ca1a5e508df0999aa816d3a737d8e9c635680fa5e5eb2ee413d4ffed5ed4",
+              "position": 172,
+              "uid": "451e08d8-5b71-5655-af71-94e99eb46cb2"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] The food and beverage information agent cannot guarantee that there is no cross-contact in the food preparation area.",
+              "content_digest": "568737ddcbf518783f9b0c29b416a36740cdc0e8b5addd9d5193bb11a18998aa",
+              "position": 173,
+              "uid": "ad2ae9ae-4630-5d1d-8930-ff5e61469bed"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] Vegetarian options are indicated by dietary symbols on the menu board for the day.",
+              "content_digest": "fa8f1742878ee5e0fa64453e38413eef8a3ae9e650cdc53c5dfb20f757defec2",
+              "position": 174,
+              "uid": "5b24402f-f130-5110-aa9b-3d7d781d43f9"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] There is a water fountain for filling personal water bottles on the first floor of the Main Building.",
+              "content_digest": "f6583dc7acd9679af07d0839c697a1bb1f428bc0a41f3944d074799381ec7535",
+              "position": 175,
+              "uid": "4b9bdbce-dc56-5ed3-b79c-a5dfc5bf586e"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] General seating at the Main Building cafe cannot be reserved individually.",
+              "content_digest": "f122a93a18d8a553073ea298ab3d9fc3ec40aafbbbd0690d9e84276e67126d2d",
+              "position": 176,
+              "uid": "d0fb793a-0864-5db7-a568-3fc424ae126a"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] The common lounge in the Student Centre has a microwave that users can use.",
+              "content_digest": "92f215643d764c65a64fc71ad896cadf10fa58427e86feb4d5f758d67cdae228",
+              "position": 177,
+              "uid": "3b64fba2-0530-5ec2-87f0-858e0b15445a"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] There is a beverage vending machine on the second floor of the Main Building.",
+              "content_digest": "2ebf1a6988ced85194cd302d39fdc5e35ed9e57ce15a4d2df49c68bcc11b0632",
+              "position": 178,
+              "uid": "7930a9bc-37f3-5344-8aef-9111f1007813"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] There is a snack vending machine on the fifth floor of the Main Building.",
+              "content_digest": "e9396cc7eb17c723400813623df7bb28e795c933d438dda0da0c6605f9d60584",
+              "position": 179,
+              "uid": "3e06443d-ca8e-5f52-8500-e4c961bd45b7"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] The ATMs in the Main Building and the West Complex are managed by different operators.",
+              "content_digest": "263c4735b1f94a10f28b71a830723d9c35891819a07d4801f7962cd7fbc53d05",
+              "position": 180,
+              "uid": "815ce86f-370a-51d0-8cb9-82aed0352946"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] The amenities information agent cannot access ATM transaction history or determine the cause of transaction errors.",
+              "content_digest": "8c1df4490a20ec2faf15fb284266295fd90011e18e11e606ec6e79751a6ea0d8",
+              "position": 181,
+              "uid": "07312b3b-fe85-51cf-8f96-b11cb830a5dd"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] Contact the operator of the relevant ATM regarding a retained ATM card or transaction error.",
+              "content_digest": "9648c16326f3966ab5e419b7615446d0f8a0b20860bc33a4058f21d3ead52aae",
+              "position": 182,
+              "uid": "56b07b71-d6b0-5cde-b3ca-e165ea0275f5"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] The operating hours of the visitor services desk are posted on the Main Building information page.",
+              "content_digest": "0f5b95f6798ac3942085f21c734bc13e8231d98f036d41161897325388856841",
+              "position": 183,
+              "uid": "dc4bb95b-4196-552e-91c0-1f788dc081f7"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] The visitor services desk provides campus maps and public facility information.",
+              "content_digest": "975d502360a7688c9f1c61d431378475b2f934e90103469f840ad74a02be8286",
+              "position": 184,
+              "uid": "eb08465c-7591-57d2-a932-ae4db8b73ef2"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] General facility inquiries can be submitted through the public online inquiry form.",
+              "content_digest": "c04afddd591052572174f081f93adf548b496dde4860ba1b5d80e071846d795d",
+              "position": 185,
+              "uid": "8a8f4943-ef7d-54d2-b797-25037a7b9ad7"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] Student support services that handle personal records require identity verification.",
+              "content_digest": "2df7f015e187c89daf6d062e5942e5e21ef589832326005018e929c39cdf1632",
+              "position": 186,
+              "uid": "53aa3f6e-1be2-5ccc-80c7-003286636621"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] Visitors can use the campus's public guest network.",
+              "content_digest": "5c74f9d84fce955f14bfce123dcf4e2fcceeb5a87948751c8d8b0e527873da8a",
+              "position": 187,
+              "uid": "3b187e27-31b2-543f-8c62-6b43135e7b40"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] Instructions for connecting to the guest network are posted in the visitor services information.",
+              "content_digest": "cff12c479521a6af91fe6fde595cd6f91964c6f4524061a2d20ae201f4f9ed6f",
+              "position": 188,
+              "uid": "fdbea8e9-d79b-5b0e-9742-406883f5aef6"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] The Engineering Building Campus Store is in a separate building from the Main Building and can be reached by a public pedestrian route that does not pass through the Main Building.",
+              "content_digest": "f09561f45693ba36760c388798418f2734dfe14d66ff4cde890acc87d7aa18e3",
+              "position": 189,
+              "uid": "209ddf18-2029-5fd1-82bf-e382dda2cf01"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] The amenities information agent cannot access a user's purchase history.",
+              "content_digest": "a1f01130ec9f3db1b517327266f8c054169cd5c3e08638cea39fd61777b82be4",
+              "position": 190,
+              "uid": "8d71aef9-b9e7-5ee5-914a-95a943c18090"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] The food and beverage information agent must not infer ingredient composition that is not listed on the menu.",
+              "content_digest": "a4d7450c825ded708d77251b5170ef44528b8dbf43d29307efc94019734161c5",
+              "position": 191,
+              "uid": "fa47663f-27a3-5962-ac4d-b2f7a905ec6d"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] The operating hours of each campus shop and food and beverage facility may vary on public holidays.",
+              "content_digest": "6ccf325b4b750746ee58c95afb9b853dc48e981b747fae977f4dfd8d8b05bf78",
+              "position": 192,
+              "uid": "cf4cd9ec-c404-5fd8-bf58-2a68bd406fd0"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] Check the relevant store's official notice for extended operating hours during exam periods.",
+              "content_digest": "94fa240941fccfd75f8e26f49973ebc4697e48b61d37276bbaa7ec22dd3ffc36",
+              "position": 193,
+              "uid": "1ff36f44-d288-52db-9f58-aa17a80a6259"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] The store operator determines product inventory and availability for sale.",
+              "content_digest": "e521ca3998319c16837acc7c983983cf9af3cf747854d2a7dfdb441ff9ed6947",
+              "position": 194,
+              "uid": "3534e0d3-d005-50cc-bafa-887b1e0918fc"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] Students with long intervals between classes prefer the dining area on the first floor of the Main Building as a comfortable place to wait.",
+              "content_digest": "823c5058aaa085a53322c5b1a304b546679c93b1bc029d4304a3c7f847acd75d",
+              "position": 195,
+              "uid": "027bc3db-3b45-5d27-829d-678ecb2fed9e"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] External visitors often expect to be able to use a cafe in the same building as a public event.",
+              "content_digest": "67c839bbd2e87004a4a4ac2d355a7e6174607ff39feeb37aa473e11e9bfb53fd",
+              "position": 196,
+              "uid": "45b26dcc-e2bc-554a-aeae-91aac780b121"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] The reusable container return bin is next to the exit of the dining area on the first floor of the Main Building.",
+              "content_digest": "694c4cc8e4e121f446f2f65f1da8d405d3f1c01176b81445623e47c6521e553a",
+              "position": 197,
+              "uid": "c66e27a1-f73d-5da2-abfb-c14b76e2bd2d"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] The Main Building dining area has wheelchair-accessible seating.",
+              "content_digest": "1d2966d8c570ce98b6deb4e75b740f3f1b42fea84d4ce6b1b71dae3fb55e5b57",
+              "position": 198,
+              "uid": "0dfe62b6-7d78-5dc4-8ef0-e1fa8227dee5"
+            },
+            {
+              "content": "[task-1/campus-wiki/shop-updates] Direct users to report service issues to the relevant facility's posted contact point.",
+              "content_digest": "166103c779471d6e79af7abe21bad32f970e956786d3e4e503384aa84d379916",
+              "position": 199,
+              "uid": "5ea2bbd5-fc53-5bae-aaac-30aaa3e785da"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] First-time visitors expect to be able to receive immediate directions to their destination at the visitor services desk on the first floor.",
+              "content_digest": "f1932fc34ed322bb4353e1225f632a9da05656d108fea2d3d08cdbf93e27cc1f",
+              "position": 200,
+              "uid": "d79aa629-3e49-5c45-993e-c80efc278889"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] The student support administration office is on the second floor of the Main Building.",
+              "content_digest": "bcdd278d89a0ca33d1d02f219068565a07b3e7888a75c912ce0302dbf005942a",
+              "position": 201,
+              "uid": "50135594-9d2a-554a-9552-c74d35b60b4f"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] A shared consultation room is on the second floor of the Main Building.",
+              "content_digest": "de464ea86b3537856ff6e158a5c3c9041aabd22d289ea4c387fd37d7dce2f181",
+              "position": 202,
+              "uid": "0a35d46b-a369-560e-8363-0844ad4f9ea2"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] A general restroom is on the second floor of the Main Building.",
+              "content_digest": "b57313c24416a70e244a006ec66345137a3a146163e7ccc14dd7cdea0c6b85f9",
+              "position": 203,
+              "uid": "b117c1ba-c88e-52ca-8dde-ccb21661e910"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] An accessible restroom is on the second floor of the Main Building.",
+              "content_digest": "60bb71c61763e3fe540e967d8117570f75777f4d91898c47f42b79d6141a979a",
+              "position": 204,
+              "uid": "2a06fd43-23f0-5d12-8d7e-d8e1df97176c"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] The rear entrance is on the third floor of the Main Building.",
+              "content_digest": "81e4441831bb7c3a4263b65fa587a595de1870ab26f8820905ebc491b20f3722",
+              "position": 205,
+              "uid": "6620e427-90a1-5f6c-9e99-12bd39277c3a"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] A connecting corridor toward the Central Library is on the third floor of the Main Building.",
+              "content_digest": "8dd2bef37f4b5ca2f309e53d236aa5cfac92842ae244afab5e9232f19c191c91",
+              "position": 206,
+              "uid": "a1f3fd8f-3c17-5020-a6b0-e50bde147841"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] A seminar room is on the third floor of the Main Building.",
+              "content_digest": "c2cfc44e4df5c297ebe7df97b46507704a811f05895719f9732cb5d57fb56664",
+              "position": 207,
+              "uid": "d307ffc0-44d6-52d8-9ad6-f76651f2603a"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] A general restroom is on the third floor of the Main Building.",
+              "content_digest": "2cf35c10aa4e1bcd8ab04eb23c1f0b230996b5e27f46a5267b17c95b078d0f8b",
+              "position": 208,
+              "uid": "df86c8e5-275e-51d8-8e51-b4827e71d226"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] An accessible restroom is on the third floor of the Main Building.",
+              "content_digest": "7810f4d92a69dd3f86bab1584a0daa9664418b7f875ecf99f24874eec11d972f",
+              "position": 209,
+              "uid": "7f6b1eaa-72a9-509e-85e2-a3abdccbe8ac"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] Department offices are on the fourth floor of the Main Building.",
+              "content_digest": "5072df3e19b2bcd64dc79a8723c071110a3324992bfe625f85459e3e12af429c",
+              "position": 210,
+              "uid": "69e3647a-9987-5052-8d81-a231f73aeec7"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] A shared meeting room is on the fourth floor of the Main Building.",
+              "content_digest": "e0a8d0a17860cf2c4a055aae0292aecb2c9d203ed9a725a52705a2a5a5f55f73",
+              "position": 211,
+              "uid": "250dc7c8-024c-5d51-9bd7-e2eefbded504"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] Research labs are on the fifth floor of the Main Building.",
+              "content_digest": "0acce8cc013c9cc99be52782fa8d0d9e43c559a56e03193ea501bbe920f3901e",
+              "position": 212,
+              "uid": "d05a9731-1c25-5d54-b8a1-65195ca18327"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] A seminar room is on the fifth floor of the Main Building.",
+              "content_digest": "1bd80c75fbd031259e105666a0269b052cbdefed2d6b7410e54befe1fe24ce94",
+              "position": 213,
+              "uid": "fa07f2f5-bb84-56c0-9b9e-85e32b47453d"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] Some seminar rooms on the fifth floor of the Main Building are also used for classes.",
+              "content_digest": "9bcba30a3d621ff151539671e69e41bcd6935bb6c8bff9a7b0a3ba15b66b7da2",
+              "position": 214,
+              "uid": "7aced411-0d52-54ba-96cf-6b7fefcf1ea9"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] A collaborative research lab is on the sixth floor of the Main Building.",
+              "content_digest": "bb66e8cbd735dbe0d82d4ccce068fef7ff8b38fe6bd386c3da86eb9084e4e606",
+              "position": 215,
+              "uid": "2df2602b-fa8c-5715-a7c7-1606037e3b6d"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] A seminar room is on the sixth floor of the Main Building.",
+              "content_digest": "4e611e19e82366972aa34731f2f24f3f89f6f1764a0c918ecaacbec202cb0d30",
+              "position": 216,
+              "uid": "24ad69ce-b1f5-5bde-ad59-d637f261cb99"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] Some seminar rooms on the sixth floor of the Main Building are also used for classes.",
+              "content_digest": "d680c6c4669672e1591f5e85bee4b27a11c88115b80be66c983016f6cf73c219",
+              "position": 217,
+              "uid": "11f4d4a4-85d0-5780-90f6-8d6e7edc10c6"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] The research support office is on the seventh floor of the Main Building.",
+              "content_digest": "2e7b2c9b4e4beabc538cf9a12a1e47e2f6c4f592c5703f8d313ae671d3a73be5",
+              "position": 218,
+              "uid": "411a27b6-e540-530b-a5b5-764e26855173"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] A shared workspace for researchers is on the seventh floor of the Main Building.",
+              "content_digest": "72aead68c00512d061c7ad3c368dafa77075fb51cf902e30e0263fa5b7326961",
+              "position": 219,
+              "uid": "bd016a0a-0be5-52e9-a549-102ea5fe0148"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] Staff offices are on the eighth floor of the Main Building.",
+              "content_digest": "4be18c61e45f77e38e824005b23e39763cad98612d00f1a8f70acb1f98ce94c9",
+              "position": 220,
+              "uid": "1582377c-501e-57cc-9cd0-f3281289a2fa"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] A small meeting room is on the eighth floor of the Main Building.",
+              "content_digest": "4a1f65f7ef884818b9d7d77c48949048efd45ffaffbeff7297e9134bf0e0be6a",
+              "position": 221,
+              "uid": "16f54319-1da3-5a17-830b-6524fa183511"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] Administrative offices are on the ninth floor of the Main Building.",
+              "content_digest": "0bc477a3357d1b4971f06ddd5f1a4e17b5aa22c116280678eb39e8485fd1ec11",
+              "position": 222,
+              "uid": "e06a605d-d4d2-5308-9cc5-b1cae7469f36"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] A support room for tenth-floor events is on the ninth floor of the Main Building.",
+              "content_digest": "d4f4934487fc2e24b1b19e6445973d102fd1d96f545770619c3526f23f40942f",
+              "position": 223,
+              "uid": "9da215bb-7f87-583d-9bc2-23e08305d4f1"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] An exhibition and event hall is on the tenth floor of the Main Building.",
+              "content_digest": "ea08b8604225141be19d87b2b9ec594a047dc0838b14951cdbbff2f3381ba9a1",
+              "position": 224,
+              "uid": "710369be-287c-5c29-9da2-9631d099500e"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] An event preparation room is on the tenth floor of the Main Building.",
+              "content_digest": "492835ce42fc126979a0ffe3a621bd15db7242f12ac99b90a90172bff3d799a0",
+              "position": 225,
+              "uid": "e9107328-9e4b-5dcf-a74d-22c90a23b5e0"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] Provide guidance after checking both the published floor-by-floor facilities and temporary operation notices.",
+              "content_digest": "e4db3d97ca0bb122b7dff444b0febae6edf7cadec5c0017f78eb61d090d50f05",
+              "position": 226,
+              "uid": "076ffc9d-2681-59f2-8f8f-1435c49c3f17"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] Do not infer the scope of nonpublic construction.",
+              "content_digest": "bb52ba1f89aa5578257cbe7878017b0dde88c9f248ed9088ac6d96d7d4865be1",
+              "position": 227,
+              "uid": "ba35ad87-8285-5130-add8-fc694deeb8f7"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] Do not infer the results of on-site inspections.",
+              "content_digest": "e38b94f174ab5cd5e0f61dc000bac085923423da21916322d915c4c8f0062a97",
+              "position": 228,
+              "uid": "e59de198-f9a2-5f3f-be66-43eb9deab632"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] Cleaning and security contractor staff prefer service routes separated from general users during shift changes.",
+              "content_digest": "9bbc19a853719c81fcbb34942989598e079f37797325375e498808f20e2acd85",
+              "position": 229,
+              "uid": "a3f16328-2a27-5b18-b802-11036a6d2be6"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] The main entrance lobby is on the first floor of the Main Building.",
+              "content_digest": "9a882e700712fd837bebd702e317b158e81d87b3b82170530937b9e92e35df7f",
+              "position": 230,
+              "uid": "c6894aba-7d8e-5448-b775-e0303efb15d1"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] The visitor services desk is on the first floor of the Main Building.",
+              "content_digest": "6831e41fac0f510997ea9131d523af266f3f5e91d7ebc98ea26cb83c3bfb055f",
+              "position": 231,
+              "uid": "666e872c-e71a-5c64-a5cc-b12d2aac9916"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] The Innovation Hub is on the first floor of the Main Building.",
+              "content_digest": "7f9ddf7da57ed746176e0de8c987c9ac32e28359718060fba693748298b5ef4d",
+              "position": 232,
+              "uid": "b3bd402a-5af7-58df-bbcc-2857c956fa74"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] A general restroom is on the first floor of the Main Building.",
+              "content_digest": "d866a179cc45eabe3320e0409ef8210fc4e45df1c3645e0e4673ebeb6ccf3e63",
+              "position": 233,
+              "uid": "b33a6790-d94b-51d7-a737-92b9793a466c"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] An accessible restroom is on the first floor of the Main Building.",
+              "content_digest": "f25e8a68ae6b77b4db7295503acfc9b7bdb515a1cfe6b89f382025f8bd202c5d",
+              "position": 234,
+              "uid": "70b6e9b8-4a12-5e39-a564-9de4e3882337"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] The elevator lobby on the second floor of the Main Building is near the student support administration office.",
+              "content_digest": "c67cdeaa51e8e26fbdba37a2ef4732ffbaaf30417b190e04e3450cc95b2c7bbb",
+              "position": 235,
+              "uid": "6132cf14-ab1b-54a6-aa32-c1039c8ab0e7"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] The elevator lobby on the third floor of the Main Building is near the corridor toward the Central Library.",
+              "content_digest": "28f22cd3b5efbf57bd0e2b858286e0ab3fb2ec2d5317be74108bb2afbcd161c6",
+              "position": 236,
+              "uid": "10e2336f-921e-54c3-872e-218a6e745277"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] The names of the department offices on the fourth floor of the Main Building are displayed on the floor directory.",
+              "content_digest": "05984f1af02460521743a1b4351739a4fff21a7540fb91d0cd4817f80fed7970",
+              "position": 237,
+              "uid": "0ce575cf-f16d-5434-9ac5-00d454d90a09"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] A shared printing station available to students is on the fourth floor of the Main Building.",
+              "content_digest": "d72a23dfaa9ba583683adb7933acf3289f55b60550839809a9944cab5c21605c",
+              "position": 238,
+              "uid": "0fa245a2-0f0c-5ef4-9c6e-04faa98c9f5f"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] The research labs on the fifth floor of the Main Building are not spaces open to the general public.",
+              "content_digest": "6c825a2ce5101892b00cccc2a5f349edcb9770522cd3d515d4f000812b7acd29",
+              "position": 239,
+              "uid": "7b821e8c-2e26-52d0-b34e-314a614eeb26"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] The collaborative research lab on the sixth floor of the Main Building is used by authorized research members.",
+              "content_digest": "a05504337f27076e60581b58d7ba9367011dbdb499119d8b28bbccac9a3e9869",
+              "position": 240,
+              "uid": "9ab67289-f3b1-5918-9965-ecb4ab743400"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] Consultations with the research support office on the seventh floor of the Main Building follow the posted appointment process.",
+              "content_digest": "6cac3116e06b261428f54e78ddb1e7c5e4a8f0ebc15a3978879b14f6fcb826da",
+              "position": 241,
+              "uid": "e7272a72-48a5-544b-8771-9c9872ae34f2"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] Visitors to staff offices on the eighth floor of the Main Building expect the staff member with whom they have an appointment to be in the office at the scheduled time.",
+              "content_digest": "14d59d8611b7aab6e24b10e13d0bb6205671500840bdcedc0bbe3bf834ec2b05",
+              "position": 242,
+              "uid": "f7817017-85a2-582d-bb63-2b77cd2e9311"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] Public administrative services on the ninth floor of the Main Building are provided during each department's operating hours.",
+              "content_digest": "67fc5f790560fd5672a216ba1f68e0bd92b5b9a40e11dd99baeef21004655560",
+              "position": 243,
+              "uid": "a2c599c9-1218-5d37-a866-66222eb5e226"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] The elevators in the Main Building connect the underground parking level through the tenth floor.",
+              "content_digest": "c9ce6d3b4d9d0685716591879f22bd4c5ebe58dd3dd54e621d1bf5f4e06707df",
+              "position": 244,
+              "uid": "fdf4ee37-1183-5923-bccb-2c2b2d55cbb3"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] The floor directory agent can describe the floors and space names of published facilities.",
+              "content_digest": "cc3d4e40f44e2e4cedc6eca1a3d223bbcdcbeb1d59263c07a74d1624ef937fff",
+              "position": 245,
+              "uid": "cc098a87-de11-594f-b59c-126a2cec29bd"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] The floor directory agent cannot check the current occupancy status of meeting rooms.",
+              "content_digest": "684bd139f631d2b318c0d16172779b6a223ab30d62412b47b8e95f466aca291d",
+              "position": 246,
+              "uid": "b1e19dc4-db1f-5328-8448-aac4d37451d7"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] First-time visitors are more familiar with department names than floor numbers and can more easily understand directions centered on department names.",
+              "content_digest": "9461ca3fe8b364ea93714c4fe95b4f8535dd24ce88f60bde0c43c758cf18dd70",
+              "position": 247,
+              "uid": "d842f429-c182-5fd0-baf8-8f023b85632f"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] On public holidays, some administrative offices may not operate even when the Main Building is open.",
+              "content_digest": "623ecf794896ee858ac2a7495eb8c64ac39d0df8ba97cd4e9ffe0de83c78c185",
+              "position": 248,
+              "uid": "90c6d663-e63e-591c-99c3-a300a7e7e253"
+            },
+            {
+              "content": "[task-1/campus-wiki/facility-updates] The floor directory agent cannot verify in real time, at the time of an inquiry, whether published floor-by-floor information matches the actual layout.",
+              "content_digest": "d97e3acad2a3626ce6fbf8d155436f989691fb26ada7191bfe6fc9088f36fc79",
+              "position": 249,
+              "uid": "38daa1a2-70e9-5815-957a-41c95ed6119e"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] The rear entrance on the third floor of the Main Building connects directly to the pedestrian route leading to the Central Library.",
+              "content_digest": "23c9563de5b750e6defb55cb06d8cacb6afac0ce8ed0af90a4b4e11609c277d8",
+              "position": 250,
+              "uid": "ee271f65-7387-52f2-8e6e-23ad7f224f03"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] With your back to the main entrance, Outdoor Parking Lot A is on the left.",
+              "content_digest": "9f7033c4517848b7418e9b437d34bf9f2efa783145a5e550eff6713f94f35f6b",
+              "position": 251,
+              "uid": "8a953afd-7a48-52e8-b48a-38d8c49b55c5"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] With your back to the main entrance, the West Complex is on the left.",
+              "content_digest": "cae30eb671e72d6415a89ecf37e87e5f012af615254121acf3a768d5256c1abf",
+              "position": 252,
+              "uid": "b54ac954-0a84-502c-a096-a4f85a0d317a"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] With your back to the main entrance, the Humanities Building is on the right.",
+              "content_digest": "8aceefa5a76d519d3fd1c2958506da85c2f10637e02db17711a9c9590d156bc2",
+              "position": 253,
+              "uid": "5e23ba3e-d573-54c3-99b0-fea607a63e46"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] The Student Centre is behind the Central Library.",
+              "content_digest": "dc7fd636da0f319c9c4ec3b358bca7833dd56b839890d3f8cc22ea6ecc8827b4",
+              "position": 254,
+              "uid": "9f4c539b-1205-5ed7-a441-d9a46615ea01"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] The Outdoor Parking Lot A–Main Building–Central Library route is usually short.",
+              "content_digest": "cfacc959fd6b4820c643a383ee82ff6c9800612d6908abb4883808b718f3aa31",
+              "position": 255,
+              "uid": "8f2f2422-0ac3-5dc2-8a17-871c0deedcf3"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] The Outdoor Parking Lot A–Main Building–Central Library route has a long indoor section.",
+              "content_digest": "004b62602798869e0a0e9d9b2c2bcea249a2bd40e3bf36503cc326ee6b852c36",
+              "position": 256,
+              "uid": "6ded9e53-4073-5911-82c6-b3981c2daf98"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] The route from Outdoor Parking Lot C through the Student Centre accessible entrance to the west entrance of the Central Library does not pass through the Main Building.",
+              "content_digest": "0b56e55042afc56847e8a37d22ca00d1546b4d890a0929845cd0f96cead95f82",
+              "position": 257,
+              "uid": "494bc428-f0be-5a21-9475-14fc405c9fda"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] In summer, students prefer the air-conditioned indoor route from the first to the third floor of the Main Building over the outdoor route.",
+              "content_digest": "cbb789690f7407e77694c9c8aadb4858599baf679510b1e6fdbe7dc9f00ed7bc",
+              "position": 258,
+              "uid": "4369c450-1ca1-58e7-b98f-c087552a0a5a"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] Recommend only routes that are currently confirmed to be open.",
+              "content_digest": "0eea443436a71886d1d29ed36da27dcbd07a882e3a7773387022a6516f150b54",
+              "position": 259,
+              "uid": "02df0e1e-fc32-5136-a0c2-5af11f99293e"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] Explain the distinction between the standard shortest route and the accessible route.",
+              "content_digest": "200bd59324f01b79c7ed65b8b1d14296859ae7d4174b469c7b671b15896cc122",
+              "position": 260,
+              "uid": "759a38f7-7b7f-5eae-bbec-f00df27c9f4b"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] The route guidance agent can compare routes using stored geographic information.",
+              "content_digest": "a5eebb3695244172f6f0963274d3a5f29f9c7504d6048d5de591bfc57efa46e6",
+              "position": 261,
+              "uid": "78ebae58-9630-5674-90e7-a35951661d19"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] The route guidance agent cannot check congestion in real time.",
+              "content_digest": "3c08af75825f8623c179199e7dab5130c5ca0089ba60a6fd469759e9251d7215",
+              "position": 262,
+              "uid": "f0864b5f-4148-5c8c-a778-de0a028146d7"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] The route guidance agent cannot check for movable obstacles.",
+              "content_digest": "9afd94449e608fc5a3e8190fdcfdc5ea64ae6db9293487d7034660588caeb950",
+              "position": 263,
+              "uid": "056cce65-dd73-50e6-8745-27d4d71effb1"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] The route guidance agent cannot check in real time for newly installed temporary signs or movable control barriers at the time of inquiry.",
+              "content_digest": "4e0fdcd99d83cdf6d62d005a51e9b1947c5bd5a9707daa05e4a6a6f8cfe2b1f4",
+              "position": 264,
+              "uid": "084210ca-d235-52d4-9801-3e78c7d53454"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] There is no continuous accessible route that a wheelchair can use in the direction of the stairs on the right side of the Main Building.",
+              "content_digest": "9cad9b988a212eddc9aa68e093eb19aa8337d1eedfb2b76584c1964382379b7e",
+              "position": 265,
+              "uid": "1fa0cf4f-6bc2-50f6-90a7-871b286b00bf"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] The detour from the stairs on the right side of the Main Building to the Student Centre is long.",
+              "content_digest": "108d9e78ca1b97579d356b6692810163468aed4fd76427715c9006911fdf0e31",
+              "position": 266,
+              "uid": "c33f2c68-d304-51e0-8489-7e8876775cfd"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] Mobility support companions prefer the indoor route through the Main Building to the Central Library because it is less affected by weather.",
+              "content_digest": "774f985549b95035be47a6d25b2f86e4ddf470f86c8f59855d5b26b9e85f6749",
+              "position": 267,
+              "uid": "f9832b10-f7cf-5ac0-a7bc-9e9da6ca3646"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] The public campus map shows building entrances and pedestrian paths between buildings.",
+              "content_digest": "a1838ff653270d77bcc4eb80c7cfe7d6e7d3210cdc6fc67e95646343f9d52457",
+              "position": 268,
+              "uid": "fd111f85-255e-5c35-acfb-b860f35cc4a8"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] The public campus map separately marks step-free accessible routes.",
+              "content_digest": "2fae833fe57b6817ddf8f76ac853412fa6ec1d503f0de3b31573d78ad22ee9e4",
+              "position": 269,
+              "uid": "4bad21e5-cc32-5995-93fd-d0938a41d427"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] The pedestrian path in front of the Main Building's main entrance has a sign indicating the direction of the accessible route.",
+              "content_digest": "ea968bf4822def1085580c06acc5a7e15451c968ba421b0ba823a06cca404287",
+              "position": 270,
+              "uid": "d1aaec66-fff8-5270-b939-cd8877f75339"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] A step-free pedestrian path runs from Outdoor Parking Lot C to the Student Centre accessible entrance.",
+              "content_digest": "4fa3bb8c7bfa9ef9cf72255f877e91104dde7905263e514b28a5f4c882d90e47",
+              "position": 271,
+              "uid": "b7802de6-8e3c-5e90-8e2e-b7d949009352"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] An accessible route runs from the Student Centre to the west entrance of the Central Library.",
+              "content_digest": "0308bf404052328ba95db1d4d751167367405b200b00da835c0dd44cdcde28d4",
+              "position": 272,
+              "uid": "065b33d3-3aae-5aa2-b9f0-f779f612e0ea"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] There is an above-ground pedestrian path from the West Complex to the Main Building's main entrance.",
+              "content_digest": "59f1793b15b17fcd692229e2476b7f6e4992af3fbcf4a6895721934e8180cdec",
+              "position": 273,
+              "uid": "79728c8e-66d0-574d-aeee-2e6e4a928db3"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] The pedestrian path from the Humanities Building to the Main Building's main entrance passes in front of the stairs on the right side of the Main Building.",
+              "content_digest": "0dcd489d6ae119782a2585c384a40ed643c7ef842171328648c755ad02701db1",
+              "position": 274,
+              "uid": "41f16b3e-4ab3-5f38-9942-7e8896fec3b6"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] Using the elevator from the first-floor lobby of the Main Building provides step-free access to the level of the third-floor rear entrance.",
+              "content_digest": "027230e9c5db2575ce7134368c66edc9d579a270c7932b040cd2ddc97961fa52",
+              "position": 275,
+              "uid": "2af1d276-7a46-514d-b8c8-cd9f1e2a9ef2"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] The escalator route in the Main Building includes a section where stairs cannot be avoided.",
+              "content_digest": "630c884bdca2f193dedb18e9e708f1549c27fc342a53468fe5088193b45ca506",
+              "position": 276,
+              "uid": "cae9af0e-9225-5193-b581-5b2d8096fc14"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] When step-free travel is required, direct people to the elevator route rather than the escalator route.",
+              "content_digest": "2ca9ddae91d3e247539eb7af06f2c5ca0199271b50ab5841480adca5d33d586c",
+              "position": 277,
+              "uid": "a1617fa2-fa36-5af1-91c9-a8924ae1f5a9"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] The elevator closest to the Main Building's main entrance is inside the first-floor lobby.",
+              "content_digest": "41501f50fb6986e36304a36d8459a7665dd019ef7fa6039edbd1f058145a99ef",
+              "position": 278,
+              "uid": "03c25e0f-3cd1-5a27-a806-0d09664a3fc3"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] The above-ground route between the Main Building and the Central Library has a rest bench midway.",
+              "content_digest": "20900fdb01363c664713d19cfccb07acd8c25e425156c529772b20734a5bfb88",
+              "position": 279,
+              "uid": "6fad00c2-1f97-5377-8a3a-b36d19705d4b"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] Solbit Plaza is between the Main Building's main entrance and the West Complex.",
+              "content_digest": "79a540ee09f7a897d5c40e9e912c22156007eed73c2ce1b0560e4a9075ccefac",
+              "position": 280,
+              "uid": "c3558237-458f-5487-8718-0c48b9bdf568"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] When it rains or snows, travel time on sloped outdoor pedestrian paths may be longer than usual.",
+              "content_digest": "ab35d6229d27d776876975f740e3ceec9a77a37d8ee029033e410378243294b0",
+              "position": 281,
+              "uid": "09862f9d-91cd-5e36-b6b9-b042b5d84d5b"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] Snow removal personnel judge that when it snows, major accessible routes must be cleared before other pedestrian paths.",
+              "content_digest": "3f1d784508735bd866ca914d02530193001ac60e88d56e8d501ed06f6c72c7be",
+              "position": 282,
+              "uid": "034676e0-f7b6-52ea-90a3-e6d3f656bc2f"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] Students going to the library after parking prefer the familiar, short Outdoor Parking Lot A–Main Building–Central Library route.",
+              "content_digest": "7b1a4c7712f7ce35d8f780d3ae77a12229b9e6064e9d491712d5a893029ae307",
+              "position": 283,
+              "uid": "6c4eeef5-0905-5923-b201-666b504b95f1"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] During class change times, pedestrian traffic increases between the third floor of the Main Building and the Central Library.",
+              "content_digest": "f86ace7e4f01bcee7aaa09149452c5ac96ee5065cb239db29d2621e83338a004",
+              "position": 284,
+              "uid": "4dcddb86-e56c-552a-810d-c04a1934b475"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] First-time visitors find directions based on visible facilities easier to understand than directions based on building numbers.",
+              "content_digest": "5f3b83d34bfb9286473e583327744628f20a19dbe93b654e3be0c2538f2386ec",
+              "position": 285,
+              "uid": "ddcc1848-f9df-5772-9e9a-0c6ed42e557a"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] Because of the sloped terrain, first-time visitors sometimes confuse the levels of the Main Building's first-floor main entrance and third-floor rear entrance.",
+              "content_digest": "b749a46be41c13546a593d42a5ae974509a843d4da78f1db61b2bdbe91f255ad",
+              "position": 286,
+              "uid": "0a78908e-a479-5e5a-b54e-b09f2cb1f7bc"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] Delivery drivers consider designated service routes that do not mix with pedestrians more predictable and safer.",
+              "content_digest": "0e20f944363ed9bcbd8cb59373652b699581a07a71251d7d8396677441695dcb",
+              "position": 287,
+              "uid": "80355a5f-5170-59b1-82b1-517c5c20a1bb"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] The route guidance agent cannot check on-site congestion in real time and can compare posted detours to identify routes with fewer branches.",
+              "content_digest": "004b3e489b162d15cc63550bd6d7a4b6bf654db8dd09c3d74022b117d1420725",
+              "position": 288,
+              "uid": "27e0d8cf-02ac-5b42-8970-da451a27e055"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] The route guidance agent can distinguish stair routes from elevator routes on the public map.",
+              "content_digest": "0d7c554b11f9674d9667e37deac9c82502a0a58d81ce7b3816d6943a190eab5d",
+              "position": 289,
+              "uid": "08d5128e-e371-5251-a3e8-acf488ccbc59"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] The route guidance agent cannot measure on-site pedestrian traffic at the time of inquiry.",
+              "content_digest": "d4aeaa2150f29b87874679460fd113999c61194c30f91e2ec59a164d038b150e",
+              "position": 290,
+              "uid": "d7a22205-1d0a-5106-a764-fc2e97769bc8"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] The route guidance agent cannot guarantee an individual user's travel time.",
+              "content_digest": "436f10da4a908bf5ad7b45590e78bedd6ab27fae7b6bbe9c2ee32480c9d953b1",
+              "position": 291,
+              "uid": "2db61a85-42af-5b31-b070-5ba2ef965cc7"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] Check the current notice for the destination entrance before giving directions.",
+              "content_digest": "286827ed3bb63f8a5b89e5ae8f4ec40c5b60ae669a83844dd0f5410cbc28198a",
+              "position": 292,
+              "uid": "5a6b05a2-e14b-5b88-a9b7-58db2e3b2845"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] Do not recommend staff-only passages as detours to general users.",
+              "content_digest": "dfa3db662fea6b93f0d74aeecc3f597771ca4cc5df749112f9f1925d3b31c1f8",
+              "position": 293,
+              "uid": "49a1ffe4-b705-5503-9853-e755bef73239"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] If the shortest route has stairs, also present an available accessible route.",
+              "content_digest": "78e4d6dd74c4686bffe362b593cf4e449de09200911a5c86606b337f85f28ed8",
+              "position": 294,
+              "uid": "2742f895-9179-5e72-bef7-2ab08c68db2c"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] In an emergency, instruct people to follow on-site evacuation signs and safety personnel's directions rather than general wayfinding guidance.",
+              "content_digest": "8bc07bc4063dbf45c3010bc5b9781a235b0df829a2f97219c58f3d75df55ac58",
+              "position": 295,
+              "uid": "3b535b19-637b-5f2a-8441-8c509e7a1bfa"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] A pedestrian path from the West Gate stop to the Main Building's main entrance runs through Solbit Plaza.",
+              "content_digest": "1e4172024c076feb48416ca59c20ce5ab73ef715908c43c427cb4a8776ca5e36",
+              "position": 296,
+              "uid": "2f6bcece-e018-5b44-8936-430839892e49"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] There is a step-free route from the shuttle stop in front of the Student Centre to the west entrance of the Central Library.",
+              "content_digest": "1e551e02f290e4514301165354e5675270d7f595bd13945705eaca857773aad0",
+              "position": 297,
+              "uid": "675f922d-084f-54bd-bc38-f7aae69a370b"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] Bicycle users dismount at the designated rack on the edge of Solbit Plaza and proceed on foot.",
+              "content_digest": "1336dfb77b3178d8e537e3453b38433aedff253cbb914150e778aaab8c6c4c95",
+              "position": 298,
+              "uid": "30e5c146-ea97-5317-bf6f-dedbffaeaafa"
+            },
+            {
+              "content": "[task-1/campus-wiki/route-changes] Do not suggest informal shortcuts that are not on the public map as default routes.",
+              "content_digest": "a5543bec86b7fa7383a2162f696e72a050a81c62653d5c1eb2fac8029739f4f1",
+              "position": 299,
+              "uid": "da43a5f5-41af-5a8a-b867-b854fe4c4ae5"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "a2851762-b607-4755-8eb4-7c3a63ac5419"
+        },
+        {
+          "context_digest": "90e9186168d82f1c12a8449f89a05bdf96e07d8a7245946b2b59034034d2a6bc",
+          "context_name": "task-1/participant/construction-updates/event-relocations",
+          "context_uid": "f95f7748-b112-5084-ad52-6848cdf1280b",
+          "memories": [
+            {
+              "content": "Modify campus-wiki/event-relocations: Viewing in the tenth-floor exhibition and event hall is suspended during the construction period.",
+              "content_digest": "b80ec25ae7bca925c4f932d166aba9b2d44885b0075d0831238ec64f858100ae",
+              "position": 0,
+              "uid": "3fcfa405-cf3d-500e-810b-28ddc81fefca"
+            },
+            {
+              "content": "Modify campus-wiki/event-relocations: Do not accept new reservations for Main Building event venues during the construction period.",
+              "content_digest": "46fbeb99262be763068bc9975e3f3351b5d95c8e690ad7ff2ed6f7626ebba3a6",
+              "position": 1,
+              "uid": "1754ab18-13ca-5e07-a40c-eb12e45dcd1e"
+            },
+            {
+              "content": "Add campus-wiki/event-relocations: During the construction period, direct users to the auditorium in the detached east building as an alternative to Main Building event venues.",
+              "content_digest": "953c4a18509e933a9f8f0e0cfa8381091f8dc6fffc222f408a4c2bbbd18ca032",
+              "position": 2,
+              "uid": "686d630d-defe-5aa1-a28d-470b3ebb9059"
+            },
+            {
+              "content": "Add campus-wiki/event-relocations: During the construction period, direct users to the third-floor multipurpose room in the Engineering Building as an alternative to Main Building event venues.",
+              "content_digest": "35257852b8b548b7d740e012ddce83cda6f164cee08936fa6b2ccadfadc974de",
+              "position": 3,
+              "uid": "967fc4ad-d6e6-5f2c-b3e0-973f163f9a9a"
+            },
+            {
+              "content": "Add campus-wiki/event-relocations: During the construction period, the auditorium in the detached east building is converted into an alternative event space for Main Building events.",
+              "content_digest": "d88c16355aff6552882324b9106411802c86681e57e81ca800897ba7b5de2c96",
+              "position": 4,
+              "uid": "9d4a1560-5a6d-5c3f-8414-a56f1acc7f18"
+            },
+            {
+              "content": "Modify campus-wiki/event-relocations: During the construction period, the event guidance agent may exclude closed Main Building event venues from comparison candidates and compare only designated alternative spaces.",
+              "content_digest": "fdd8418aa429f806014c9ffc7ffa1446070168cb8164b4bd74eea53de674c8c3",
+              "position": 5,
+              "uid": "2587dbb3-dc02-5e13-b1de-9d704c7a706a"
+            },
+            {
+              "content": "Modify campus-wiki/event-relocations: During the construction period, the event guidance agent cannot create or restore reservations for Main Building event venues and may provide only the reservation channel for each alternative space.",
+              "content_digest": "90c1c299ea8b57301a774e0cc8db14e88ff3c8c6e5d21b094a6376f4b39097a2",
+              "position": 6,
+              "uid": "eee1213e-3582-5c9a-bde8-78af7b216df0"
+            },
+            {
+              "content": "Modify campus-wiki/event-relocations: An external visitor who has previously visited a Main Building event venue may expect the entrance and floor from the previous visit to remain unchanged and miss guidance about the alternative venue during the construction period.",
+              "content_digest": "520cf9fc5e9e2a87228e91cad907808c1e310bab7455899e5caa748bbac9b1ac",
+              "position": 7,
+              "uid": "b867c632-6a7e-55c8-8371-91b3f0e1bb89"
+            },
+            {
+              "content": "Add campus-wiki/event-relocations: During the construction period, the separate loading entrance of the auditorium in the detached east building is converted into the loading point for event equipment relocated from the Main Building.",
+              "content_digest": "2a3e1038b70860b99314cd84bdc1afa1ba52c9380362974f26b1c2c586ce2a91",
+              "position": 8,
+              "uid": "9ab36f33-97ce-5790-8b2e-d0ab195039ef"
+            },
+            {
+              "content": "Modify campus-wiki/event-relocations: An external event operator may assume that the existing Main Building loading procedure remains valid during the construction period, send equipment to the existing loading entrance, or check the access rules for the alternative venue too late.",
+              "content_digest": "cd0d698ae8b361f1d1ff5d3ca233cbaccef21d42f3fd6e6843a9a1e25ea8786b",
+              "position": 9,
+              "uid": "8bf7a20c-ced2-51ad-8847-1fbb946ea3a5"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "c0d470fb-136c-43fd-b705-95ba6005706d"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames share no unchanged operational claim. Construction conditions narrow Main Building event access, reservations, comparisons, venue guidance, and loading procedures; the compared frame also introduces an Engineering Building alternative, while the reference independently covers extensive standing campus operations and navigation.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "1cb2aa88-4c31-5bbc-97be-ba2ebcef1388"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "a8b11b27-70d5-5077-98fb-678635369dad"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "62214c26-4b23-5c6b-ba8a-2fb585d39421"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "4902feb8-567c-5eb9-a817-726975164f16"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "c6b97453-d8d8-5aa9-baff-e2981ec4e9e6"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "614389e2-3b83-5fbb-bac1-07cb20f2e4fa"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "e3929a49-e9b9-566c-bdc2-296ad7ee086a"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "4ed338df-7bd0-5801-bb3b-535886f6d007"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "2af35f74-abb5-54ae-aca6-7d315270ae57"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "c30faae3-e8de-530c-a279-cb7a33133bc8"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "5b1a6f72-c56d-515f-bb2d-9cd443275bff"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "b6987cd9-7198-56b5-bf6f-0162624db30f"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "f80ad345-f0ce-54bc-bd8d-e2f0e1f1b1c0"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "732458c0-fedc-5bc7-965e-36f8d46c4d8a"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "cb1e0734-91ce-53f3-b00c-da4734df5cb5"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "36db4bf8-285c-573b-8127-0efa0c10f8bd"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "804bfc6b-188b-5579-bc83-10b04a28bd69"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "cc2a0d18-0b49-5923-9b53-2e68140b13a0"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "3ca6b6b2-c381-5247-83cc-cfad0ce862f7"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "4a01fd2b-fb4d-5759-88c9-1b6de1a30331"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "78298531-74b8-591b-ae32-b6175f476ca7"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "4189e656-a4ef-5fe0-af68-943d86e83a83"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "aee44d0a-5c4c-59ec-b350-b229570fbd09"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "d2f32d9e-7b85-5720-ad36-80c6f5f1c071"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "2d97d6b9-4287-5f52-9801-26d2081b111f"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "fef275b1-b2c1-5cc5-8f75-a1d01782a1e0"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "41d5bf0b-9a62-5821-b3fd-60f58ce2d980"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "7da885c1-0515-516c-ad1f-2a445db9b324"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "27f6e089-b303-59da-ba5d-4a845961c466"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "5e9fc7b5-cfb8-5e3f-9a53-35568e0fd216"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "bb601c38-6e41-5328-a7e0-117a8a101e49"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "efffd1fe-923a-5f12-bd50-afd997a41209"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "2b2642c9-32ff-51d5-8a3c-e48d64e191ea"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "e55771f0-7a62-5b9e-aa16-97beafed30fe"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "2ed45e16-4f36-5ecd-919e-65c622c1b493"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "9374def9-c634-5af1-96d8-4d7163608027"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "70fe5986-785a-51be-ad59-3e53aab0abb7"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "411fa9fb-6bf1-5514-8433-d6e1c186260c"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "66b1d3f3-b59f-572a-a729-012a3101cb98"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "e99d3f15-48ee-5dc7-8eb2-52ea2d725a09"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "430563f2-c0f4-53ee-9846-2ecd3f57877c"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "2052527b-612c-5af8-974a-ed21323a3b1a"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "5bf2c18d-2844-5471-a790-fa6b4689fb37"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "38a17415-7c46-562c-bb10-9fa23de62291"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "625a9fcb-4609-5a1d-b6af-437e5c722458"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "f3f4e4ff-720d-520f-ae1f-53823c277f1e"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "e3435ec0-eae9-560c-a2ef-76a89761386a"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "a24cd65b-b2c3-515e-997b-77a6e143c992"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "22dcad33-41cd-5b46-9df6-a98d005f03f3"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "da9f2a7d-5b3d-532d-928b-bab7c97f500b"
+            }
+          ],
+          "reason": "These mutually supporting details form the reference’s one-sided building-access guidance and have no compared-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "The reference alone supplies standing Main Building entrance, access, eligibility, safety, support, and visitor-guidance information.",
+          "uid": "e5e3e0f7-12c7-56d2-8138-650b97331fbe"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "a2ec4e87-1f0c-5c29-af2c-5bb560286a2e"
+            },
+            {
+              "frame_uid": "c0d470fb-136c-43fd-b705-95ba6005706d",
+              "memory_uid": "3fcfa405-cf3d-500e-810b-28ddc81fefca"
+            }
+          ],
+          "reason": "The explicit construction condition preserves the ordinary recess statement while governing a narrower case.",
+          "status": "RESOLVED",
+          "summary": "Tenth-floor exhibition viewing operates during recess generally but is suspended when the construction-period condition applies.",
+          "uid": "e42d2704-6f5c-5907-b5aa-5e64dced4512"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "a0700edb-d51a-54f3-88e9-6096cec36b1e"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "63986020-57b0-574d-aa13-277405aed516"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "11e4782c-aad4-580a-9620-beab3072266d"
+            },
+            {
+              "frame_uid": "c0d470fb-136c-43fd-b705-95ba6005706d",
+              "memory_uid": "1754ab18-13ca-5e07-a40c-eb12e45dcd1e"
+            }
+          ],
+          "reason": "Construction explicitly narrows the general reservability and recess-operation claims.",
+          "status": "RESOLVED",
+          "summary": "Main Building spaces are ordinarily reservable and may host recess events, whereas new reservations are not accepted during construction.",
+          "uid": "111e6908-5b3c-5681-932a-62321957c6c2"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "ec3a4511-80d6-5881-9623-25a75c6a0899"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "a224b6db-0154-5174-86ff-9c1dfa558762"
+            },
+            {
+              "frame_uid": "c0d470fb-136c-43fd-b705-95ba6005706d",
+              "memory_uid": "686d630d-defe-5aa1-a28d-470b3ebb9059"
+            },
+            {
+              "frame_uid": "c0d470fb-136c-43fd-b705-95ba6005706d",
+              "memory_uid": "9d4a1560-5a6d-5c3f-8414-a56f1acc7f18"
+            }
+          ],
+          "reason": "The compared frame adds a construction-specific use without erasing the reference’s standing separation facts.",
+          "status": "RESOLVED",
+          "summary": "The detached east auditorium remains a separate facility and becomes the designated alternative for Main Building events during construction.",
+          "uid": "79e36ead-efeb-5ffe-98fd-f4e6bdecb4a9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c0d470fb-136c-43fd-b705-95ba6005706d",
+              "memory_uid": "967fc4ad-d6e6-5f2c-b3e0-973f163f9a9a"
+            }
+          ],
+          "reason": "Only the compared frame identifies this alternative.",
+          "status": "RESOLVED",
+          "summary": "The Engineering Building’s third-floor multipurpose room is a construction-period alternative to Main Building event venues.",
+          "uid": "516c2212-2c36-57c4-a645-ce66f9a17a2f"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "50369ec7-7a24-55e3-898c-d9dc9a4c86ed"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "ed4e7c60-edeb-59e3-a590-f6e359069f77"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "0170aa1a-9723-5f87-9aa3-37150022f6ac"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "232cd8db-6319-5bd0-a4b9-5861838268e3"
+            },
+            {
+              "frame_uid": "c0d470fb-136c-43fd-b705-95ba6005706d",
+              "memory_uid": "2587dbb3-dc02-5e13-b1de-9d704c7a706a"
+            }
+          ],
+          "reason": "The construction condition explicitly narrows the standing comparison policy.",
+          "status": "RESOLVED",
+          "summary": "Event-space comparisons ordinarily use confirmed published operating information, but during construction exclude closed Main Building venues and consider designated alternatives only.",
+          "uid": "1efde209-c68f-50ce-b37e-c6588f340b46"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "1929991c-36ee-5897-9409-d83400120362"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "087bb085-9bc8-57f3-83ee-7e90895904ef"
+            },
+            {
+              "frame_uid": "c0d470fb-136c-43fd-b705-95ba6005706d",
+              "memory_uid": "eee1213e-3582-5c9a-bde8-78af7b216df0"
+            }
+          ],
+          "reason": "The compared claim adds construction-specific limits and routing to the standing agent boundary.",
+          "status": "RESOLVED",
+          "summary": "The event agent cannot create reservations and ordinarily directs requests to reservation channels; during construction it also cannot restore Main Building reservations and provides channels only for alternatives.",
+          "uid": "5b1ba832-1009-5b26-a869-822e4656d58e"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "2a0f0a0e-1930-5983-9074-de449f8669d5"
+            },
+            {
+              "frame_uid": "c0d470fb-136c-43fd-b705-95ba6005706d",
+              "memory_uid": "b867c632-6a7e-55c8-8371-91b3f0e1bb89"
+            }
+          ],
+          "reason": "The construction condition specializes the same visitor-expectation claim.",
+          "status": "RESOLVED",
+          "summary": "Repeat visitors may seek the previously used Main Building entrance and floor, with construction creating a specific risk that they miss alternative-venue guidance.",
+          "uid": "9896347a-cbc7-5e3e-b2c0-8812826275a8"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "4bc2268d-5966-53bd-9501-e8fb0861ddd0"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "13211336-6483-5331-96e5-24490ce7da63"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "cc2a4dc4-bf8a-5902-8ee1-c3c334549ef2"
+            },
+            {
+              "frame_uid": "c0d470fb-136c-43fd-b705-95ba6005706d",
+              "memory_uid": "9ab36f33-97ce-5790-8b2e-d0ab195039ef"
+            },
+            {
+              "frame_uid": "c0d470fb-136c-43fd-b705-95ba6005706d",
+              "memory_uid": "8bf7a20c-ced2-51ad-8847-1fbb946ea3a5"
+            }
+          ],
+          "reason": "The explicit construction condition changes the venue-specific loading procedure while preserving the general confirmation policy.",
+          "status": "RESOLVED",
+          "summary": "Loading routes ordinarily require advance confirmation, while construction relocates Main Building equipment handling to the east auditorium’s separate loading entrance and makes the old procedure unreliable.",
+          "uid": "ea464595-bb5f-5b0b-9f84-6532abdd7983"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "a3c819d4-5ec6-5622-a27f-ce8b6e18b2d0"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "c7b42a0e-e4c9-53d2-b2b5-87307bb4957f"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "a1b88b90-3b59-5f36-8ac4-e45f1962ae64"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "c4fe128d-067a-528d-8ef8-b2810e56884c"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "b79a722a-c043-5e7f-8469-1c761d85219a"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "d8cc31a3-a547-5691-92a9-efcb1c96367d"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "bf506b28-8854-567c-80de-477512ae1f11"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "5015ee36-4f8c-54c7-ae80-caa21c1c837f"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "bc10fe3c-0618-5c74-91c9-e50ef58d287e"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "a2b87746-8b25-5f2e-b5f9-78b2d8f8281d"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "f995af31-6820-58b1-a805-3d2d03c75014"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "cc720c59-0014-5460-9ccc-94316c641a3c"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "a72cb1ad-ea1d-5e17-a5cd-06b082340d0d"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "c70f4d03-7cc1-528b-a5f8-5944c2012b10"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "55540a25-fbd0-5cc8-b2db-b83ac4042735"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "9e496450-0188-5f64-84b2-295cd1e9c5da"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "819beea8-c827-53e1-9a95-cb22de35f9ee"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "a4c8e1a2-81e8-52a5-92cd-c79a382cb671"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "7795aa61-2921-549b-996c-64240f8e9b2a"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "fdae8ad0-8b99-543b-8c09-f0af60653036"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "3329f2cc-afc5-559f-bc3b-ea82df8881d1"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "f986e70e-4775-5ab3-9d8e-3ea9fc3df540"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "22f9c5bf-d01c-59e0-90e3-0cf93bdae8b6"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "e9c632bf-da2a-5b8a-86c0-87da4a8f3ffc"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "8ec61da7-e53e-5ef4-b7e6-edafc872ffd8"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "5fa014b2-5fca-581b-b07a-7990cea080af"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "bb2aa827-e021-5b02-b7ed-e005ca2c291b"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "5bc6cebc-fff5-59e7-bec6-b6d8d83feb35"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "a32a3a9f-4d3e-5727-a91a-ce827831d7d2"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "ff9fa75e-f040-54a7-b4b6-30153da4eebd"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "83b95f40-46ad-54f6-b535-85e99a83ee99"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "d68f7446-40e6-54bf-b812-313b2595c2c8"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "4510b985-b70a-5606-8bbe-98bf494ab656"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "2fa16a36-c2d4-5fcd-ad8f-29780fc0bf06"
+            }
+          ],
+          "reason": "These supporting event-relocation details have no compared-frame counterpart beyond the separately related construction changes.",
+          "status": "RESOLVED",
+          "summary": "The reference alone supplies remaining standing event-space properties, reservation rules, operating checks, accessibility, safety, support, privacy, and attendee expectations.",
+          "uid": "9320db08-44e2-56fb-9500-6e3a9e37e967"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "5d690022-0ab6-52ed-b6a1-77d719c8c6ce"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "6960c0ca-295d-5449-91dc-d9293a6bb79d"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "67d07765-ac5f-58f6-b7a5-f733cc4228d2"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "489960d6-711f-55d0-a410-16bcd6e9acf8"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "df455ec8-c30d-5607-a9b8-8f84d93f0617"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "6a37c02f-4843-579f-b5b1-f90d6dbd0e5a"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "a81363fe-3ae5-5213-a555-e447515a1a73"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "ccf54508-b01d-5fe5-bad3-083e3ce211cd"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "1a4e603c-7f69-5bfc-b974-281dc8618326"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "3bd9a7e3-af83-5d3d-9cca-0a3926c446e1"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "879b70b3-1404-559c-9cdb-9fdca1289e44"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "c89147c1-1b06-5e93-97a1-85d59fd33e57"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "c9b6827a-36c3-5895-916c-a7066f398f5b"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "07101ab9-cebf-5fd6-8967-2ea16a80d03d"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "39b76444-a4f8-53c2-ae7d-9ee71de43eea"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "9514e9f2-d556-50dc-8739-01c37b3322fc"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "9acc9ad2-3a59-5b37-9f08-010fe8731a79"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "6a38e1b0-b9bb-5941-aa03-3f29b492feaa"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "7063d138-91cf-5dbf-b7af-bb0451dd342d"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "efbe330f-eb79-5a05-8ef8-0664355d320c"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "c0ac84d9-367b-5809-856e-9f0d6c471b2b"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "96092024-bab8-5c6e-b100-ff87e06cb760"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "7b323c8d-eddd-5041-aee1-bbd8dbc06918"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "8180f5e5-fd9f-51a7-b239-c75a86c20da6"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "b7f4ae20-3bbf-51dd-b230-81c5e5107e48"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "27246135-eca5-56ed-81c3-bb75584703d6"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "dc40ae37-6f8d-5864-aab1-59462c325af3"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "077234a0-bc91-589a-8d91-2cdd1180e9a1"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "c578f6a4-6065-5752-950b-e79ff7228ce7"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "38ce79ed-cae6-5a9e-bdba-eb92559ebaa8"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "7471f5bc-555a-5db4-838e-74723bbd55fe"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "340389ed-6852-509c-a278-78bbbad4beb8"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "f617356c-98ff-5d40-a41b-dd4be0c8c311"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "35576f85-e20a-5bed-a9fd-f47e867c1fce"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "3fc6abeb-db56-5a34-ae34-b4cd394723c4"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "308c9814-4989-563e-b9dd-306be896940e"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "8061fc97-13ee-587e-ba5d-09ca5fb72171"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "7d5bdc29-c284-5027-bc5e-6589b53ab5e9"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "a77dadf9-5d20-57aa-bb81-b35058832bc6"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "012add6d-ba82-5674-a432-0c092d575d21"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "6ca42597-3142-5f24-9f29-14c694bc83e2"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "f1283ab9-f63b-5249-ac89-2dcc6f3dbee4"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "db986c20-8190-5a89-87db-4c56c5d6c82d"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "1a0b250f-c4f1-5a9f-a114-5420a859dd32"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "f201604e-92ae-5315-8359-5e68dd9eeecb"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "b5466afb-8d3b-51b0-8e44-9fd47165fe17"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "38b6565e-25a0-5b7c-ba03-747c1901af7e"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "11d0062b-7941-5512-b5dc-f2d1379741e6"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "a299c675-7179-5cb1-b5e4-552198bdc91f"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "a671229f-9c73-5183-bec3-8d23d0dd8d53"
+            }
+          ],
+          "reason": "The compared frame contains no parking claim.",
+          "status": "RESOLVED",
+          "summary": "The reference alone supplies parking locations, routes, permissions, restrictions, registration, accessibility, fees, transport links, agent limits, and driver expectations.",
+          "uid": "e2d503e1-327a-5fab-aca0-37b108d8ea08"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "9e6dcc99-d2d7-54bd-adbf-ca20ebf22f83"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "3ecf1523-62fe-5bb1-be29-2b4a9b3384df"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "2e45bd48-390e-5b77-9082-fec388b4bd9f"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "5f686fb7-fc7a-5698-8cc5-d5ccff25dfe1"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "df0dbcfb-86c8-52a0-b303-71a6e2dfa4c6"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "65a4b93f-f1da-52c0-b013-34c876391794"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "ed7db155-c6c8-5a91-a574-fc44b081a92a"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "ce4dd3c2-790f-5ef7-b851-e693f750c1ef"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "46192dec-18a4-5404-b3fe-5c0c42be97da"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "644d9c0b-c300-51e4-b680-4318328aa4b9"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "b03652e7-6a61-5dd6-8484-f19f93536d59"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "5f43f896-6a76-51f2-b034-221955b4165f"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "b0fa660c-d579-5c27-bf74-c9b3839fd36d"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "16efed59-7583-5467-828e-b856ccf7c5e1"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "150a226f-2cfb-523a-ae59-a37becaa4310"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "0147df04-89c5-56a0-b119-5b6baf57bb29"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "91791ba2-e7cc-5437-9855-e10726378d20"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "39b4d014-8b9d-55ac-a5c2-ccc3e948a721"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "6248ac88-de59-5039-b01e-328669694909"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "a64be11d-06da-56b0-9dcb-9c26b75a1cbb"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "cf273ead-e557-5449-bc44-28b3fa5c1dc3"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "124a8981-a1c3-518a-a2cf-8c128b2e0c73"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "451e08d8-5b71-5655-af71-94e99eb46cb2"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "ad2ae9ae-4630-5d1d-8930-ff5e61469bed"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "5b24402f-f130-5110-aa9b-3d7d781d43f9"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "4b9bdbce-dc56-5ed3-b79c-a5dfc5bf586e"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "d0fb793a-0864-5db7-a568-3fc424ae126a"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "3b64fba2-0530-5ec2-87f0-858e0b15445a"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "7930a9bc-37f3-5344-8aef-9111f1007813"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "3e06443d-ca8e-5f52-8500-e4c961bd45b7"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "815ce86f-370a-51d0-8cb9-82aed0352946"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "07312b3b-fe85-51cf-8f96-b11cb830a5dd"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "56b07b71-d6b0-5cde-b3ca-e165ea0275f5"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "dc4bb95b-4196-552e-91c0-1f788dc081f7"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "eb08465c-7591-57d2-a932-ae4db8b73ef2"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "8a8f4943-ef7d-54d2-b797-25037a7b9ad7"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "53aa3f6e-1be2-5ccc-80c7-003286636621"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "3b187e27-31b2-543f-8c62-6b43135e7b40"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "fdbea8e9-d79b-5b0e-9742-406883f5aef6"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "209ddf18-2029-5fd1-82bf-e382dda2cf01"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "8d71aef9-b9e7-5ee5-914a-95a943c18090"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "fa47663f-27a3-5962-ac4d-b2f7a905ec6d"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "cf4cd9ec-c404-5fd8-bf58-2a68bd406fd0"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "1ff36f44-d288-52db-9f58-aa17a80a6259"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "3534e0d3-d005-50cc-bafa-887b1e0918fc"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "027bc3db-3b45-5d27-829d-678ecb2fed9e"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "45b26dcc-e2bc-554a-aeae-91aac780b121"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "c66e27a1-f73d-5da2-abfb-c14b76e2bd2d"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "0dfe62b6-7d78-5dc4-8ef0-e1fa8227dee5"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "5ea2bbd5-fc53-5bae-aaac-30aaa3e785da"
+            }
+          ],
+          "reason": "The compared frame contains no shop or amenity claim.",
+          "status": "RESOLVED",
+          "summary": "The reference alone supplies campus shop, dining, ATM, visitor-service, network, amenity, schedule, accessibility, and information-agent guidance.",
+          "uid": "816728d5-7ca2-586e-aba1-5bcb3ddaaae9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "d79aa629-3e49-5c45-993e-c80efc278889"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "50135594-9d2a-554a-9552-c74d35b60b4f"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "0a35d46b-a369-560e-8363-0844ad4f9ea2"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "b117c1ba-c88e-52ca-8dde-ccb21661e910"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "2a06fd43-23f0-5d12-8d7e-d8e1df97176c"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "6620e427-90a1-5f6c-9e99-12bd39277c3a"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "a1f3fd8f-3c17-5020-a6b0-e50bde147841"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "d307ffc0-44d6-52d8-9ad6-f76651f2603a"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "df86c8e5-275e-51d8-8e51-b4827e71d226"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "7f6b1eaa-72a9-509e-85e2-a3abdccbe8ac"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "69e3647a-9987-5052-8d81-a231f73aeec7"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "250dc7c8-024c-5d51-9bd7-e2eefbded504"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "d05a9731-1c25-5d54-b8a1-65195ca18327"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "fa07f2f5-bb84-56c0-9b9e-85e32b47453d"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "7aced411-0d52-54ba-96cf-6b7fefcf1ea9"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "2df2602b-fa8c-5715-a7c7-1606037e3b6d"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "24ad69ce-b1f5-5bde-ad59-d637f261cb99"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "11f4d4a4-85d0-5780-90f6-8d6e7edc10c6"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "411a27b6-e540-530b-a5b5-764e26855173"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "bd016a0a-0be5-52e9-a549-102ea5fe0148"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "1582377c-501e-57cc-9cd0-f3281289a2fa"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "16f54319-1da3-5a17-830b-6524fa183511"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "e06a605d-d4d2-5308-9cc5-b1cae7469f36"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "9da215bb-7f87-583d-9bc2-23e08305d4f1"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "710369be-287c-5c29-9da2-9631d099500e"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "e9107328-9e4b-5dcf-a74d-22c90a23b5e0"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "076ffc9d-2681-59f2-8f8f-1435c49c3f17"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "ba35ad87-8285-5130-add8-fc694deeb8f7"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "e59de198-f9a2-5f3f-be66-43eb9deab632"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "a3f16328-2a27-5b18-b802-11036a6d2be6"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "c6894aba-7d8e-5448-b775-e0303efb15d1"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "666e872c-e71a-5c64-a5cc-b12d2aac9916"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "b3bd402a-5af7-58df-bbcc-2857c956fa74"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "b33a6790-d94b-51d7-a737-92b9793a466c"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "70b6e9b8-4a12-5e39-a564-9de4e3882337"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "6132cf14-ab1b-54a6-aa32-c1039c8ab0e7"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "10e2336f-921e-54c3-872e-218a6e745277"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "0ce575cf-f16d-5434-9ac5-00d454d90a09"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "0fa245a2-0f0c-5ef4-9c6e-04faa98c9f5f"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "7b821e8c-2e26-52d0-b34e-314a614eeb26"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "9ab67289-f3b1-5918-9965-ecb4ab743400"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "e7272a72-48a5-544b-8771-9c9872ae34f2"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "f7817017-85a2-582d-bb63-2b77cd2e9311"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "a2c599c9-1218-5d37-a866-66222eb5e226"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "fdf4ee37-1183-5923-bccb-2c2b2d55cbb3"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "cc098a87-de11-594f-b59c-126a2cec29bd"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "b1e19dc4-db1f-5328-8448-aac4d37451d7"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "d842f429-c182-5fd0-baf8-8f023b85632f"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "90c6d663-e63e-591c-99c3-a300a7e7e253"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "38daa1a2-70e9-5815-957a-41c95ed6119e"
+            }
+          ],
+          "reason": "The compared frame contains no corresponding facility-directory claim.",
+          "status": "RESOLVED",
+          "summary": "The reference alone supplies the Main Building’s floor-by-floor facility directory, access qualifications, operating caveats, and directory-agent limits.",
+          "uid": "6d916f13-8439-5686-ae24-cdc2520f539f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "ee271f65-7387-52f2-8e6e-23ad7f224f03"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "8a953afd-7a48-52e8-b48a-38d8c49b55c5"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "b54ac954-0a84-502c-a096-a4f85a0d317a"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "5e23ba3e-d573-54c3-99b0-fea607a63e46"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "9f4c539b-1205-5ed7-a441-d9a46615ea01"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "8f2f2422-0ac3-5dc2-8a17-871c0deedcf3"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "6ded9e53-4073-5911-82c6-b3981c2daf98"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "494bc428-f0be-5a21-9475-14fc405c9fda"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "4369c450-1ca1-58e7-b98f-c087552a0a5a"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "02df0e1e-fc32-5136-a0c2-5af11f99293e"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "759a38f7-7b7f-5eae-bbec-f00df27c9f4b"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "78ebae58-9630-5674-90e7-a35951661d19"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "f0864b5f-4148-5c8c-a778-de0a028146d7"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "056cce65-dd73-50e6-8745-27d4d71effb1"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "084210ca-d235-52d4-9801-3e78c7d53454"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "1fa0cf4f-6bc2-50f6-90a7-871b286b00bf"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "c33f2c68-d304-51e0-8489-7e8876775cfd"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "f9832b10-f7cf-5ac0-a7bc-9e9da6ca3646"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "fd111f85-255e-5c35-acfb-b860f35cc4a8"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "4bad21e5-cc32-5995-93fd-d0938a41d427"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "d1aaec66-fff8-5270-b939-cd8877f75339"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "b7802de6-8e3c-5e90-8e2e-b7d949009352"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "065b33d3-3aae-5aa2-b9f0-f779f612e0ea"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "79728c8e-66d0-574d-aeee-2e6e4a928db3"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "41f16b3e-4ab3-5f38-9942-7e8896fec3b6"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "2af1d276-7a46-514d-b8c8-cd9f1e2a9ef2"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "cae9af0e-9225-5193-b581-5b2d8096fc14"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "a1617fa2-fa36-5af1-91c9-a8924ae1f5a9"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "03c25e0f-3cd1-5a27-a806-0d09664a3fc3"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "6fad00c2-1f97-5377-8a3a-b36d19705d4b"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "c3558237-458f-5487-8718-0c48b9bdf568"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "09862f9d-91cd-5e36-b6b9-b042b5d84d5b"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "034676e0-f7b6-52ea-90a3-e6d3f656bc2f"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "6c4eeef5-0905-5923-b201-666b504b95f1"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "4dcddb86-e56c-552a-810d-c04a1934b475"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "ddcc1848-f9df-5772-9e9a-0c6ed42e557a"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "0a78908e-a479-5e5a-b54e-b09f2cb1f7bc"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "80355a5f-5170-59b1-82b1-517c5c20a1bb"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "27e0d8cf-02ac-5b42-8970-da451a27e055"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "08d5128e-e371-5251-a3e8-acf488ccbc59"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "d7a22205-1d0a-5106-a764-fc2e97769bc8"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "2db61a85-42af-5b31-b070-5ba2ef965cc7"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "5a6b05a2-e14b-5b88-a9b7-58db2e3b2845"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "49a1ffe4-b705-5503-9853-e755bef73239"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "2742f895-9179-5e72-bef7-2ab08c68db2c"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "3b535b19-637b-5f2a-8441-8c509e7a1bfa"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "2f6bcece-e018-5b44-8936-430839892e49"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "675f922d-084f-54bd-bc38-f7aae69a370b"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "30e5c146-ea97-5317-bf6f-dedbffaeaafa"
+            },
+            {
+              "frame_uid": "a2851762-b607-4755-8eb4-7c3a63ac5419",
+              "memory_uid": "da43a5f5-41af-5a8a-b867-b854fe4c4ae5"
+            }
+          ],
+          "reason": "The compared frame contains no corresponding route-guidance claim.",
+          "status": "RESOLVED",
+          "summary": "The reference alone supplies campus geography, standard and accessible routes, transport connections, weather and traffic considerations, safety rules, and route-agent limits.",
+          "uid": "1ccce08a-67bd-5b45-8676-e5bc236ae314"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame additionally designates the Engineering Building’s third-floor multipurpose room as a construction-period alternative venue.",
+        "differences": "During construction, exhibition viewing and new Main Building event reservations stop, designated alternatives replace closed venues, comparison and reservation guidance narrows, and visitors and operators need changed venue and loading directions.",
+        "reference_only": "The reference provides standing policies, locations, schedules, accessibility, parking, amenities, facility directories, routes, agent limits, and user expectations across campus."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "b586a07a-b5e4-4c05-b5fa-40ad184bedb0"
+    },
+    "analysis_digest": "4a35492f27305d86d76395376ddc42f787dedaf6e14616cff0922c1d0687997e",
+    "key": "778fca33097f24ce48237cbc651270f916191ed74efcefcccc15babbbef2dc91",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 167.08858520800277,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-1",
+    "task_description": {
+      "context_digest": "17a794e48857a8178811052488c3bd4cc66e9029847f2ce038825e49ed5afcc8",
+      "context_uid": "e2c67cf1-c2a8-5aef-a2cb-583a9fd8d6c6",
+      "name": "task-1/description"
+    }
+  },
+  "artifact_key": "778fca33097f24ce48237cbc651270f916191ed74efcefcccc15babbbef2dc91",
+  "created_at": "2026-08-13T18:04:50.605772Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-1/campus-wiki",
+  "pair_key": "3aa3ccffe4caa3da95cd3cdd9e80f546b79510c5dd2331b60c151892dfb52f42",
+  "provider_seconds": 167.08858520800277,
+  "right": "task-1/participant/construction-updates/event-relocations",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-1"
+}

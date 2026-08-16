@@ -1,0 +1,281 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:25:08.523370+00:00",
+      "frames": [
+        {
+          "context_digest": "3dd1208c3f947a57bc5f1d490a28c999913d43cad775b2b01e50c6059d6b660e",
+          "context_name": "task-2/advisor1/safety",
+          "context_uid": "cd6c1fab-786a-52ea-9437-9a4d209ba419",
+          "memories": [
+            {
+              "content": "Specify the order and recipients for reporting serious discomfort during the study.",
+              "content_digest": "1de38a3ec5fc3267ebeb35482a458d4aaf50d2aea44c6dba334f184e50ddddd2",
+              "position": 0,
+              "uid": "9d6f5228-d182-571a-83d2-6a67becb7736"
+            },
+            {
+              "content": "Field staff rely on a pre-defined contact sequence when serious discomfort is reported.",
+              "content_digest": "ed3a3b19d92a50c7dd324981b702bac31e0130fda38fe37150e500481ed11d84",
+              "position": 1,
+              "uid": "00ed485d-66c2-59ad-9c5b-9ae445412690"
+            },
+            {
+              "content": "Establish criteria for halting the use of a design alternative if recurring severe errors appear during formative evaluation.",
+              "content_digest": "dcca56df756b89f89a0a9dbf2bf45aee6480392b368c9cf3402223d3084b801b",
+              "position": 2,
+              "uid": "9c6e1561-f671-52cb-aa67-245cc4987ad4"
+            },
+            {
+              "content": "Do not include a design alternative halted for safety reasons in subsequent evaluation iterations without modification.",
+              "content_digest": "01668098161666622f4d7ed8298e3e63a06fa9b10a4cfd53b200d820f96f5c50",
+              "position": 3,
+              "uid": "2381ecf7-2b11-583d-91d9-0a5cfc279ba1"
+            },
+            {
+              "content": "Even in controlled environments, delayed prototype recovery procedures increase session interruption time and alter data collection conditions for the same task.",
+              "content_digest": "fd0f364ef66cfa7be937779ed4ce3ffb1a406bc227d09c26b288a751c5e0d427",
+              "position": 4,
+              "uid": "c5ce1b00-36d9-5cdd-a318-93b88ca0e322"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "c9fad18a-4616-489b-80cc-dc6d2810054f"
+        },
+        {
+          "context_digest": "4371a72e6fb939731cb550ca5363a3b5210680482f84c18b36ba933f4454ecc1",
+          "context_name": "task-2/advisor2/expression",
+          "context_uid": "cf8e8baf-292e-57c3-8e2c-3f9b3d52f3d3",
+          "memories": [
+            {
+              "content": "Use a sequence table rather than a flow diagram when the procedure is likely to change repeatedly during drafting.",
+              "content_digest": "575bb4530af1e93b215ea57f0fd63e1e09136554da98aecf87288cc39ea9697c",
+              "position": 0,
+              "uid": "4264c20d-3e44-578d-866e-7787cc7b59e2"
+            },
+            {
+              "content": "The visual fidelity of a prototype and its level of connection to actual data and services may differ.",
+              "content_digest": "9478cb005a07ca7edfa924579b3d5221b1fa1143b5d8327369e7ee799b76aa9f",
+              "position": 1,
+              "uid": "70a8c3f0-0f6a-5881-abd6-29f52833b7bd"
+            },
+            {
+              "content": "Service flow diagrams indicate human-system transitions that are not revealed by individual screens alone.",
+              "content_digest": "5e3e18a38b1e62724d2ae0445549e214a219d205a80735bc6b4c0e643a96b8b3",
+              "position": 2,
+              "uid": "b410aa8d-db87-586b-a1cd-4af5767a9f7a"
+            },
+            {
+              "content": "HCI reviewers often scan system structure and service flow diagrams before the main text.",
+              "content_digest": "22a46440a6aeda0cb7d39cc6fedf6bbff6cac91232ec0cb163bf1fc17ff257d4",
+              "position": 3,
+              "uid": "a385fbb1-85b4-5132-bbc7-8fd8daedb715"
+            },
+            {
+              "content": "Give each step, actor, condition, and outcome a stable row in the sequence table.",
+              "content_digest": "2a073bf2ec4c5592ddc405d83cb438a5ed880699d3c157f310fb3dbff7851622",
+              "position": 4,
+              "uid": "22254f16-4628-5fd9-b1af-6e66dc2572b3"
+            },
+            {
+              "content": "Updating one row in a sequence table is usually faster than redrawing a branching diagram after a procedural change.",
+              "content_digest": "cf97dbf66018a6be1ee42dfc79ff8de44e8742db2b42c9d1ef70b3f252805a39",
+              "position": 5,
+              "uid": "32028269-5d43-5a65-b22b-9e570ceabfde"
+            },
+            {
+              "content": "Readers can check sequence tables step by step but may find the overall branching shape less immediate.",
+              "content_digest": "18b5de0cdd22ef1774151332afdbc408f9f591cf889e51271f81a372f74ef86d",
+              "position": 6,
+              "uid": "939ee3d0-b611-574a-a25b-82708394bd5e"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "22118936-3da9-4ba7-9cf1-755a453aa94f"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate operational concerns. The reference addresses discomfort escalation, safety-driven evaluation controls, and prototype recovery effects; the compared frame addresses documentation formats, prototype fidelity versus integration, and the informational and review roles of service-flow representations.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c9fad18a-4616-489b-80cc-dc6d2810054f",
+              "memory_uid": "9d6f5228-d182-571a-83d2-6a67becb7736"
+            },
+            {
+              "frame_uid": "c9fad18a-4616-489b-80cc-dc6d2810054f",
+              "memory_uid": "00ed485d-66c2-59ad-9c5b-9ae445412690"
+            }
+          ],
+          "reason": "Both reference memories express the same one-sided operational requirement: define the contact sequence that field staff follow when serious discomfort is reported.",
+          "status": "RESOLVED",
+          "summary": "Serious discomfort reporting uses a predefined sequence identifying the order and recipients for escalation.",
+          "uid": "0545c6b4-cff5-5ed7-85de-2f36d6508d61"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c9fad18a-4616-489b-80cc-dc6d2810054f",
+              "memory_uid": "9c6e1561-f671-52cb-aa67-245cc4987ad4"
+            }
+          ],
+          "reason": "This is an independently useful reference-only rule about the threshold for stopping use of an alternative.",
+          "status": "RESOLVED",
+          "summary": "Formative evaluation requires criteria for halting a design alternative when severe errors recur.",
+          "uid": "f18134d4-6c0e-52e2-8df6-7f1658bb5a2d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c9fad18a-4616-489b-80cc-dc6d2810054f",
+              "memory_uid": "2381ecf7-2b11-583d-91d9-0a5cfc279ba1"
+            }
+          ],
+          "reason": "This is an independently useful reference-only restriction governing reuse after a safety halt.",
+          "status": "RESOLVED",
+          "summary": "A design alternative halted for safety reasons must be modified before later evaluation iterations.",
+          "uid": "76174951-746d-556d-86f8-2260a8fef78f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c9fad18a-4616-489b-80cc-dc6d2810054f",
+              "memory_uid": "c5ce1b00-36d9-5cdd-a318-93b88ca0e322"
+            }
+          ],
+          "reason": "This reference-only observation independently describes the operational consequences of recovery delays.",
+          "status": "RESOLVED",
+          "summary": "Delayed prototype recovery increases interruption time and changes data-collection conditions even in controlled environments.",
+          "uid": "d118dd6c-9397-5274-93cd-f7be9f9e78c5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "22118936-3da9-4ba7-9cf1-755a453aa94f",
+              "memory_uid": "4264c20d-3e44-578d-866e-7787cc7b59e2"
+            },
+            {
+              "frame_uid": "22118936-3da9-4ba7-9cf1-755a453aa94f",
+              "memory_uid": "32028269-5d43-5a65-b22b-9e570ceabfde"
+            }
+          ],
+          "reason": "Both compared memories support the same one-sided format-selection claim by linking repeated procedural change to lower update effort.",
+          "status": "RESOLVED",
+          "summary": "Frequently changing draft procedures favor sequence tables because individual rows are faster to update than branching diagrams are to redraw.",
+          "uid": "6bfe5cde-4468-55a3-9828-ff73f67d55c1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "22118936-3da9-4ba7-9cf1-755a453aa94f",
+              "memory_uid": "70a8c3f0-0f6a-5881-abd6-29f52833b7bd"
+            }
+          ],
+          "reason": "This is an independently useful compared-only distinction about prototype characteristics.",
+          "status": "RESOLVED",
+          "summary": "Prototype visual fidelity and connection to real data and services are separate dimensions that may differ.",
+          "uid": "ea67c1d6-d69e-5d5d-b593-ab6e5be69b17"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "22118936-3da9-4ba7-9cf1-755a453aa94f",
+              "memory_uid": "b410aa8d-db87-586b-a1cd-4af5767a9f7a"
+            }
+          ],
+          "reason": "This compared-only claim independently identifies information contributed by service-flow diagrams.",
+          "status": "RESOLVED",
+          "summary": "Service-flow diagrams reveal human-system transitions that individual screens do not show.",
+          "uid": "92fb88bb-f65d-5563-a163-c6ae2337996d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "22118936-3da9-4ba7-9cf1-755a453aa94f",
+              "memory_uid": "a385fbb1-85b4-5132-bbc7-8fd8daedb715"
+            }
+          ],
+          "reason": "This compared-only observation independently describes reviewers' typical navigation behavior.",
+          "status": "RESOLVED",
+          "summary": "HCI reviewers often inspect system-structure and service-flow diagrams before reading the main text.",
+          "uid": "6f944c53-0c2c-5bd2-bde8-f33e1809ed3c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "22118936-3da9-4ba7-9cf1-755a453aa94f",
+              "memory_uid": "22254f16-4628-5fd9-b1af-6e66dc2572b3"
+            }
+          ],
+          "reason": "This is an independently useful compared-only construction rule for sequence tables.",
+          "status": "RESOLVED",
+          "summary": "Sequence tables should assign stable rows to each step, actor, condition, and outcome.",
+          "uid": "53e9976d-b028-541b-a4ad-c277b7a8cf34"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "22118936-3da9-4ba7-9cf1-755a453aa94f",
+              "memory_uid": "939ee3d0-b611-574a-a25b-82708394bd5e"
+            }
+          ],
+          "reason": "This compared-only claim independently states a readability tradeoff of the tabular format.",
+          "status": "RESOLVED",
+          "summary": "Sequence tables support stepwise checking but make the overall branching shape less immediate.",
+          "uid": "11860cc2-1306-5151-9f2a-8fa29a3c6515"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers sequence-table selection, maintenance, structure, and readability tradeoffs; distinguishes prototype fidelity from service integration; and explains the informational and review value of service-flow diagrams.",
+        "differences": "",
+        "reference_only": "The reference specifies serious-discomfort escalation, safety criteria and restrictions for design alternatives, and the effects of delayed prototype recovery on sessions and data collection."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "4c74e44a-ea31-4cf5-843c-eaa4e84db7e4"
+    },
+    "analysis_digest": "2dc6e570e45336233982e45809d892cb4662ca2ef2404d893b5a371af2b50982",
+    "key": "810862f28e8ff4a61f00972b48c8e92894789f0411bbcc2484099c8698333076",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 30.580305082999985,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "810862f28e8ff4a61f00972b48c8e92894789f0411bbcc2484099c8698333076",
+  "created_at": "2026-08-13T18:25:39.103330Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/safety",
+  "pair_key": "72693ded88f94f9cdc988d8e74e31a6b70eadf1acb238889932e66c495d2f629",
+  "provider_seconds": 30.580305082999985,
+  "right": "task-2/advisor2/expression",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

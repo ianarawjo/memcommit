@@ -1,0 +1,388 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:46:15.477495+00:00",
+      "frames": [
+        {
+          "context_digest": "492e513a553a9191e2c646cca49364b336ae6d163de5688eeca8cc661bbbdb32",
+          "context_name": "task-3/local/personal-memory/2024/11",
+          "context_uid": "0d5e1eef-1669-5589-94ba-b46c9c2080dc",
+          "memories": [
+            {
+              "content": "The user changed their schedule once in November 2024 because of their mother's hospital visit.",
+              "content_digest": "f08f07dda1b468ab191a59d87e7ceb8068189964edee2010abdae6e525d6103f",
+              "position": 0,
+              "uid": "bb17c696-0c1c-516f-8ad9-68a4b159ce22"
+            },
+            {
+              "content": "After seeing the reason for the schedule change written in a calendar invitation, the user asked for it to be removed.",
+              "content_digest": "7bfc906526c255f90a85b6dcc4b28ea1b0a9389e9f17ba989a4ce098280578c8",
+              "position": 1,
+              "uid": "195ba5ab-3ee0-5594-a859-9f2b5eadf9ea"
+            },
+            {
+              "content": "The user was able to reschedule the appointment after providing only a new time, without a reason.",
+              "content_digest": "14f1bd0410c76aa3a0eb28a2212fd06558ab23b6dc012aa5529980a67efe3e2b",
+              "position": 2,
+              "uid": "4c8759cc-66aa-527c-a9d5-197d39b5d2b7"
+            },
+            {
+              "content": "On a day the user traveled in their father's car, they photographed the parking location.",
+              "content_digest": "111e71af27be5d109557440569352964544e9b702810741445172a6cf51f94f5",
+              "position": 3,
+              "uid": "d4b27ea7-d329-5dc7-b7ca-91d0cd50a958"
+            },
+            {
+              "content": "On the next visit, when the user did not take a photo, they walked one circuit of the parking garage while looking for the exit.",
+              "content_digest": "6d61d67e35552cb739d0220e480189706ec5bbac74f93b87149a6948d9ac2805",
+              "position": 4,
+              "uid": "32a19a57-9b04-5f86-92ba-202a9ac803e4"
+            },
+            {
+              "content": "After hearing preparation items from their mother by phone, the user omitted two items.",
+              "content_digest": "449dc73aad797f5acd3d898292cf9942f7d3b65b9faf52769ae5b3332285b4f3",
+              "position": 5,
+              "uid": "0eeffd8c-acd6-57bf-950d-20cfa1fe62b3"
+            },
+            {
+              "content": "After receiving the preparation items again by text, the user put all of them in their bag.",
+              "content_digest": "9539ab90f598a96d97a73b7954db8834d3106861ba6ecc814e579a348e0145d6",
+              "position": 6,
+              "uid": "07ea3801-8666-581d-b846-2f45bf99ca19"
+            },
+            {
+              "content": "The user's mother does not want the reason for her visit disclosed in the user's external schedule.",
+              "content_digest": "b1aff7bb5b5df1ec773fd8875205cd9fdfa2fd5b520cf91b7c84c9e3054b4feb",
+              "position": 7,
+              "uid": "9e70b92e-1d8d-51ef-962d-bd9b348a56d5"
+            },
+            {
+              "content": "Do not include the mother's reason for a visit when conveying the user's availability externally.",
+              "content_digest": "b9473919c63f233fc66c49bbf00b20a8ab9532bcb1b8ce3896c442afed4229d9",
+              "position": 8,
+              "uid": "d76686fd-9f1d-5d94-931b-4b49c86a8f4e"
+            },
+            {
+              "content": "Some daily-life services may operate for shorter hours during the year-end holiday period.",
+              "content_digest": "48d4487aba4c395527f9dfeac9488f45556d1bd89475f8620b0a64d84e4479fc",
+              "position": 9,
+              "uid": "820a5de9-9e08-52c7-8747-5155fe341bb4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "58344f9e-7779-41f3-8c53-f3bad36a3183"
+        },
+        {
+          "context_digest": "43b741cd1df20a084f3517aec7f886d4e5022812f0536eb126a6caf2d5570489",
+          "context_name": "task-3/local/personal-memory/2025/05",
+          "context_uid": "1f913bb6-790c-5490-a20d-127c7aab5892",
+          "memories": [
+            {
+              "content": "The user keeps two potted herbs beside a south-facing window.",
+              "content_digest": "b79056c033f208bb02b99fef1c011e5537e2ea8c19c3894863c3a5ad56054e08",
+              "position": 0,
+              "uid": "cb09b8ab-c7c4-51bb-a227-039c7cdfae5d"
+            },
+            {
+              "content": "During a week when the user watered every day based only on the soil surface, the leaves of one plant turned yellow.",
+              "content_digest": "042f4be9fd5481a7252d1c0065e95085e11e81e475531afe45b9f1d268d4c5b4",
+              "position": 1,
+              "uid": "95978183-0070-5b12-b117-be39bb343a5e"
+            },
+            {
+              "content": "During a week when the user checked below the soil surface with a finger before watering, the plant grew new leaves.",
+              "content_digest": "06ca2ec53f03677fdfd78bb1d391f197d3f49b974f6e812f25ba49ce34f74249",
+              "position": 2,
+              "uid": "8c610ce5-1eb7-52e5-ad81-e8062d23cd19"
+            },
+            {
+              "content": "On a day the user left the window open for a long time, strong wind knocked over one pot.",
+              "content_digest": "914f67a75fdf73cee064a465a9f0e6ee9ba012f1a40c614e199a9354756203a8",
+              "position": 3,
+              "uid": "3f886c0c-071b-5f2d-adad-da01345d702f"
+            },
+            {
+              "content": "The next day, the user moved the pot inward from the windowsill so the same wind would not knock it over.",
+              "content_digest": "f190916b360b6543865ced49cf5d9a987e96c9147966181e5920342bb41ba50c",
+              "position": 4,
+              "uid": "afe855b8-f5ad-559c-a63f-6f655ba371a2"
+            },
+            {
+              "content": "The user put a plant-name label in a small pot received from their maternal aunt.",
+              "content_digest": "82284f0102305db41eaaecafe86bc05833090853320f2ebb8e5f44abb2d78a63",
+              "position": 5,
+              "uid": "384c4f5f-b15c-5742-ac79-20106d0dd30b"
+            },
+            {
+              "content": "The user confused the care instructions for an unlabeled pot with those for another plant.",
+              "content_digest": "824267db866253690527d5ab08166f4228401443ed903708d33ac22542811750",
+              "position": 6,
+              "uid": "48dc89af-ed9d-51a5-a4b1-b809fd818143"
+            },
+            {
+              "content": "The user's maternal aunt considers understanding the sunlight at a pot's location more important than watering frequency when caring for it.",
+              "content_digest": "8a24f6df4a58db3e538f77e572a3cf152b7a4aff3527ec3d8616e85a675bc7c0",
+              "position": 7,
+              "uid": "a2426820-65d6-5c78-ac50-0f32b366ae47"
+            },
+            {
+              "content": "Before creating a plant-care reminder, check each plant's name and most recent watering date.",
+              "content_digest": "ecd7ef911951f3c2383cd916a4efbd94bdf439f63de1687c2f637a161ac8a60d",
+              "position": 8,
+              "uid": "efd51196-ed48-5699-a0f4-c5b8e149d11c"
+            },
+            {
+              "content": "The soil in the user's potted herbs beside the south-facing window dries at different rates depending on the season and amount of sunlight.",
+              "content_digest": "f716b16e802d30d4c2d1ed4bff855812682e53a9fc4e29988e2662ae321d0a4f",
+              "position": 9,
+              "uid": "4c93eeff-566e-5a1a-afb9-035c97fb9c73"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "ac333ea5-00fe-4154-8100-75b33ca1a8bb"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover unrelated domains: the reference frame records scheduling privacy, navigation, packing, and holiday-service context, while the compared frame records plant placement, watering, labeling, wind protection, and reminder guidance. Neither frame supplies a claim that semantically overlaps or contradicts the other.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "58344f9e-7779-41f3-8c53-f3bad36a3183",
+              "memory_uid": "bb17c696-0c1c-516f-8ad9-68a4b159ce22"
+            }
+          ],
+          "reason": "This is independently useful historical scheduling context with no corresponding plant-care claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The reference alone records a November 2024 schedule change prompted by the user's mother's hospital visit.",
+          "uid": "57dd41e9-973a-5ead-a298-b54a7bd3cfaa"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "58344f9e-7779-41f3-8c53-f3bad36a3183",
+              "memory_uid": "195ba5ab-3ee0-5594-a859-9f2b5eadf9ea"
+            },
+            {
+              "frame_uid": "58344f9e-7779-41f3-8c53-f3bad36a3183",
+              "memory_uid": "4c8759cc-66aa-527c-a9d5-197d39b5d2b7"
+            }
+          ],
+          "reason": "These memories split one underlying claim that the schedule change could proceed without disclosing its reason; the compared frame has no counterpart.",
+          "status": "RESOLVED",
+          "summary": "The reference alone records that the user wanted a stated schedule-change reason removed and successfully rescheduled by supplying only a new time.",
+          "uid": "69715df2-4bb4-5c5e-bd6a-29082d38fa74"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "58344f9e-7779-41f3-8c53-f3bad36a3183",
+              "memory_uid": "d4b27ea7-d329-5dc7-b7ca-91d0cd50a958"
+            },
+            {
+              "frame_uid": "58344f9e-7779-41f3-8c53-f3bad36a3183",
+              "memory_uid": "32a19a57-9b04-5f86-92ba-202a9ac803e4"
+            }
+          ],
+          "reason": "The linked episodes form one observation about parking-location documentation and subsequent navigation, absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The reference alone contrasts photographing a parking location with later omitting the photo and circling the garage while seeking the exit.",
+          "uid": "f2e0cfcb-95bf-5f11-a131-b305f1dfc760"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "58344f9e-7779-41f3-8c53-f3bad36a3183",
+              "memory_uid": "0eeffd8c-acd6-57bf-950d-20cfa1fe62b3"
+            },
+            {
+              "frame_uid": "58344f9e-7779-41f3-8c53-f3bad36a3183",
+              "memory_uid": "07ea3801-8666-581d-b846-2f45bf99ca19"
+            }
+          ],
+          "reason": "The paired episodes express one observation about instruction format and preparation completeness, with no compared-frame analogue.",
+          "status": "RESOLVED",
+          "summary": "The reference alone contrasts omissions after spoken preparation instructions with complete packing after the instructions were sent by text.",
+          "uid": "329989d7-dfcb-5954-a04a-db3073df4ed2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "58344f9e-7779-41f3-8c53-f3bad36a3183",
+              "memory_uid": "9e70b92e-1d8d-51ef-962d-bd9b348a56d5"
+            },
+            {
+              "frame_uid": "58344f9e-7779-41f3-8c53-f3bad36a3183",
+              "memory_uid": "d76686fd-9f1d-5d94-931b-4b49c86a8f4e"
+            }
+          ],
+          "reason": "The preference and directive restate one external-schedule privacy rule not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The reference alone states that the mother's visit reason should not be disclosed when communicating the user's schedule or availability externally.",
+          "uid": "b553df33-bc05-5b90-8ec7-32284c625213"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "58344f9e-7779-41f3-8c53-f3bad36a3183",
+              "memory_uid": "820a5de9-9e08-52c7-8747-5155fe341bb4"
+            }
+          ],
+          "reason": "This standalone service-availability context has no semantic counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The reference alone notes that some daily-life services may have shorter hours during the year-end holiday period.",
+          "uid": "134e4114-64c5-55d1-bebc-2782021d563c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ac333ea5-00fe-4154-8100-75b33ca1a8bb",
+              "memory_uid": "cb09b8ab-c7c4-51bb-a227-039c7cdfae5d"
+            }
+          ],
+          "reason": "This independently useful plant-setting fact is absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The compared frame alone records that the user keeps two potted herbs beside a south-facing window.",
+          "uid": "9ef4831b-5cab-5916-9637-b49622c0da32"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ac333ea5-00fe-4154-8100-75b33ca1a8bb",
+              "memory_uid": "95978183-0070-5b12-b117-be39bb343a5e"
+            },
+            {
+              "frame_uid": "ac333ea5-00fe-4154-8100-75b33ca1a8bb",
+              "memory_uid": "8c610ce5-1eb7-52e5-ad81-e8062d23cd19"
+            }
+          ],
+          "reason": "The paired observations form one claim about watering method and plant response, with no reference-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "The compared frame alone contrasts yellowing under daily surface-based watering with new growth when subsurface moisture was checked first.",
+          "uid": "7369b4ff-cc15-5a80-a9a9-2737ff879b6d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ac333ea5-00fe-4154-8100-75b33ca1a8bb",
+              "memory_uid": "3f886c0c-071b-5f2d-adad-da01345d702f"
+            },
+            {
+              "frame_uid": "ac333ea5-00fe-4154-8100-75b33ca1a8bb",
+              "memory_uid": "afe855b8-f5ad-559c-a63f-6f655ba371a2"
+            }
+          ],
+          "reason": "The incident and mitigation form one wind-safety claim not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The compared frame alone records a wind-toppled pot and the subsequent decision to move it inward to prevent recurrence.",
+          "uid": "065d89e6-4034-5345-a07a-ce6cba170e50"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ac333ea5-00fe-4154-8100-75b33ca1a8bb",
+              "memory_uid": "384c4f5f-b15c-5742-ac79-20106d0dd30b"
+            },
+            {
+              "frame_uid": "ac333ea5-00fe-4154-8100-75b33ca1a8bb",
+              "memory_uid": "48dc89af-ed9d-51a5-a4b1-b809fd818143"
+            }
+          ],
+          "reason": "These memories jointly describe the operational relevance of pot identification, a topic absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The compared frame alone records use of a plant-name label and confusion between care instructions when a pot lacked a label.",
+          "uid": "603ee0d3-4988-54f8-b905-a424f34c2e7b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ac333ea5-00fe-4154-8100-75b33ca1a8bb",
+              "memory_uid": "a2426820-65d6-5c78-ac50-0f32b366ae47"
+            }
+          ],
+          "reason": "This independently useful care-priority belief has no reference-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "The compared frame alone records the maternal aunt's view that understanding location-specific sunlight matters more than watering frequency.",
+          "uid": "adcf1109-79f9-5f8c-8196-87cc8108ec91"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ac333ea5-00fe-4154-8100-75b33ca1a8bb",
+              "memory_uid": "efd51196-ed48-5699-a0f4-c5b8e149d11c"
+            }
+          ],
+          "reason": "This standalone reminder-creation prerequisite is not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The compared frame alone directs checking each plant's name and latest watering date before creating a care reminder.",
+          "uid": "63563baf-5c86-52f5-9f6a-ddfdc878e729"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ac333ea5-00fe-4154-8100-75b33ca1a8bb",
+              "memory_uid": "4c93eeff-566e-5a1a-afb9-035c97fb9c73"
+            }
+          ],
+          "reason": "This independently useful environmental watering context has no semantic counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The compared frame alone states that the herbs' soil dries at different rates with season and sunlight.",
+          "uid": "cb76726d-5cbe-5323-a59d-b300a35a15c6"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only material covers potted-herb context, soil-sensitive watering, wind-safe placement, plant labeling, sunlight priorities, reminder prerequisites, and seasonal drying differences.",
+        "differences": "",
+        "reference_only": "Reference-only material covers reason-free schedule changes and privacy, parking-location photos, written preparation lists, and potentially reduced year-end service hours."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "f8b809d9-cfb4-4072-9e05-721dead7d619"
+    },
+    "analysis_digest": "80c4315e79d19bd8e37a957211bd913515571dafb1ff35aacc8d17ba6fc33061",
+    "key": "0ba4c4884c89b6db13918d6a0e233c218396768d1edc4fb383f1ca2b142c7285",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 45.584827667000354,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "0ba4c4884c89b6db13918d6a0e233c218396768d1edc4fb383f1ca2b142c7285",
+  "created_at": "2026-08-13T18:47:01.061606Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/11",
+  "pair_key": "aa2ad58c02a77c4f6e3a505557f0e61e1f34a6143f9c68c86d3d2db43844444f",
+  "provider_seconds": 45.584827667000354,
+  "right": "task-3/local/personal-memory/2025/05",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

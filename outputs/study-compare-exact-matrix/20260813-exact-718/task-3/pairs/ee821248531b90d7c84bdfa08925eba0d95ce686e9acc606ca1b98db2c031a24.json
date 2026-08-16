@@ -1,0 +1,415 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:38:00.424325+00:00",
+      "frames": [
+        {
+          "context_digest": "db438345c3ec4b3f69562a274c9f81a93bd6e6df97bc89b60abcd193dc89b562",
+          "context_name": "task-3/local/personal-memory/2024/04",
+          "context_uid": "206e1cd3-93da-5341-bda3-95cde4814c20",
+          "memories": [
+            {
+              "content": "The user completed a routine dental checkup in April 2024.",
+              "content_digest": "bbaa093f8dee5b5ee42c4a180e683fce00bc9364f5a009b9fa1e7f2ac233bc01",
+              "position": 0,
+              "uid": "9cea83cd-e39f-53bd-9e79-d30aa465ad02"
+            },
+            {
+              "content": "When the user heard three checkup questions in succession, they asked for the first question again.",
+              "content_digest": "e1b76973991f009295489249af1a7cd0fa7957f24f330e39337e01e5b1acdcbb",
+              "position": 1,
+              "uid": "51f8326f-60d4-5ba3-ba32-a04331dcb930"
+            },
+            {
+              "content": "At the next visit, when questions were asked one at a time, the user answered each without omission.",
+              "content_digest": "30c943f2e043f485a7a7e1ac19343c753ed8f834d00716725322505e28e0b15a",
+              "position": 2,
+              "uid": "cd0bce79-71d5-5d46-9c68-8a1d096dd53a"
+            },
+            {
+              "content": "The user called to reschedule an appointment at lunchtime but did not reach anyone.",
+              "content_digest": "1d4bd2122c160d35080b232ebb8ae5080c2ce34124645b3ec8040d7d29af9752",
+              "position": 3,
+              "uid": "71e27b0c-5c10-5102-aeac-98b0841723f2"
+            },
+            {
+              "content": "After returning home, the user kept a photo of the paper instructions received at the clinic.",
+              "content_digest": "68cddec62167a3910122a129dcfdb3c5604a4fea996d01f870734739dd3b0221",
+              "position": 4,
+              "uid": "86ad5410-0cc7-5876-8e3a-a3f0dd1680c7"
+            },
+            {
+              "content": "On a day the user put only the visit address in the calendar, they had to search again for the floor.",
+              "content_digest": "0d6926aba2c90930bfa984d7af1b12c60f35e53ba9916dfbee2c2391961db1a9",
+              "position": 5,
+              "uid": "aab36950-7e2b-588f-bb7c-d3bd6e36c501"
+            },
+            {
+              "content": "On a day the user shared the checkup time with their older sister, the sister called to check in after the user returned home.",
+              "content_digest": "b7d0fea8e8f2fc13126453039dcedebcda3c67ce2ea96c4a2d5b60365448e0e3",
+              "position": 6,
+              "uid": "50ac9268-9259-56fd-8678-1dfc8f919efb"
+            },
+            {
+              "content": "The scheduling staff at that clinic expect requests to change appointments to arrive by telephone.",
+              "content_digest": "28eec4f0ef0b96764a3f7ea54ee3db9fd4d5f1b62a5a2fa29d0a6193f1d8a18c",
+              "position": 7,
+              "uid": "5141ca66-9860-5ec5-b028-ac8670f586ca"
+            },
+            {
+              "content": "Before adding a follow-up visit to the calendar, confirm the date, time, address, and floor with the user.",
+              "content_digest": "0555c837f721fccd5918b2275086bb39c75e016e27574027185cfbada1c766af",
+              "position": 8,
+              "uid": "e265e637-fa41-53d0-aa9b-0102e9962f9a"
+            },
+            {
+              "content": "The local agent can track completed checkups and scheduled appointments but cannot determine whether a follow-up visit is needed.",
+              "content_digest": "be24b47ccb071438fd01bb99b11af3c63f22e260312a26d901824e6bb0d4cd89",
+              "position": 9,
+              "uid": "7aece7ae-b327-537e-9cef-fe24ee8fc618"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "7d1ad176-aeac-4c99-ba38-073c1bd6a5ff"
+        },
+        {
+          "context_digest": "ca8765e237d85d9bf3ecb78fe1d9a2487066ae14dae9509e40b324ac1277d75a",
+          "context_name": "task-3/local/personal-memory/2025/06",
+          "context_uid": "870f7336-726a-5d9c-bae4-12585311463e",
+          "memories": [
+            {
+              "content": "The user keeps a portable fan charger on a living-room shelf.",
+              "content_digest": "5ab7fad8ae1b3f56bdbc1c3ebf593a3d452590341b6de115f830fdf0d994c12e",
+              "position": 0,
+              "uid": "853a158c-edf9-578a-8e75-3d5daff6e4db"
+            },
+            {
+              "content": "On a hot day, the user worked with only the window open and lost focus in the afternoon.",
+              "content_digest": "3c4225f055db293c53a5a137d0c6353005bcb55b71dbc61bc69831aa5c3c08de",
+              "position": 1,
+              "uid": "f7d5ebdc-0cae-5e07-a060-e129b5a05570"
+            },
+            {
+              "content": "In the room where the user closed the curtains the next morning, the temperature rose less.",
+              "content_digest": "4cb4d1892db8769f4c066859dbb021c67d5015114f8522dfd904057061600ab5",
+              "position": 2,
+              "uid": "99e5c522-535b-5015-8617-06f645147f8b"
+            },
+            {
+              "content": "The user took the portable fan out without charging it, and it turned off after an hour.",
+              "content_digest": "0e1e0e9e985bea5be6976010a390f484b60a931ea7dfaf50a73c66616a73d5da",
+              "position": 3,
+              "uid": "7b3bf50c-63aa-5a1e-9a53-7befea25a468"
+            },
+            {
+              "content": "Before the next outing, the user charged it the night before and used the fan throughout the trip.",
+              "content_digest": "fd4282d169da18d902fc5f766d4e38131240bf3a51e6fa0c5bad69f80f1492af",
+              "position": 4,
+              "uid": "ca8de091-afb2-537f-a83a-09769056879d"
+            },
+            {
+              "content": "On a hot weekend, the user was eating lunch in their father's yard and moved indoors.",
+              "content_digest": "44e7d3bc5eaecec68ad6e7c0979572102f3c717b37712fcfada769959443ae8e",
+              "position": 5,
+              "uid": "4a0604fb-10b4-5132-a6de-ab6a229ff2be"
+            },
+            {
+              "content": "When the user returned to the yard in the evening, shade and wind led them to stay another hour.",
+              "content_digest": "7495f1d4ba2d1d732ab5c962f45b5b0c9c765ee21767373552247a823cf90984",
+              "position": 6,
+              "uid": "1f90941e-776f-5cba-9783-c392983dd72c"
+            },
+            {
+              "content": "The user's father prefers to move an outdoor meal to the evening rather than proceed at midday when the temperature is high.",
+              "content_digest": "5f9628a28b5c6f3b20a371d1c039f37f26c50832970936c8a243f161fd8288f4",
+              "position": 7,
+              "uid": "63391d26-7417-5ea6-ac0a-460af7489963"
+            },
+            {
+              "content": "The local agent can compare past responses to heat but cannot know the current felt temperature without an indoor temperature record.",
+              "content_digest": "815f4fb2c833d75e30cb0e323f5708e356bf38e0bbb573865092be48fbf2746a",
+              "position": 8,
+              "uid": "31502797-1379-5ec4-bd1b-a2e1515fa56e"
+            },
+            {
+              "content": "A room with a west-facing window can warm rapidly in the late afternoon.",
+              "content_digest": "448908f6242021de6d41ddee8121714a1388db6e4e3d067de27e6950ee712c23",
+              "position": 9,
+              "uid": "68f85c30-62c4-579d-97cd-9f401c686e63"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "263e9818-d847-4240-9c78-3e6d2c2264fe"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover unrelated domains: dental-visit coordination and heat management. Neither supplies a shared operational claim or a scope-aligned disagreement; each contributes independent observations, preferences, procedures, and agent limitations within its own domain.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d1ad176-aeac-4c99-ba38-073c1bd6a5ff",
+              "memory_uid": "9cea83cd-e39f-53bd-9e79-d30aa465ad02"
+            }
+          ],
+          "reason": "This is independently useful dental-history information with no counterpart in the heat-management frame.",
+          "status": "RESOLVED",
+          "summary": "The user completed a routine dental checkup in April 2024.",
+          "uid": "46b527e1-f54f-5259-af16-a409e7e341b6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d1ad176-aeac-4c99-ba38-073c1bd6a5ff",
+              "memory_uid": "51f8326f-60d4-5ba3-ba32-a04331dcb930"
+            },
+            {
+              "frame_uid": "7d1ad176-aeac-4c99-ba38-073c1bd6a5ff",
+              "memory_uid": "cd0bce79-71d5-5d46-9c68-8a1d096dd53a"
+            }
+          ],
+          "reason": "These observations split one one-sided claim about effective question pacing, which the compared frame does not address.",
+          "status": "RESOLVED",
+          "summary": "The user handled checkup questions completely when they were presented one at a time, whereas three successive questions prompted a request to repeat the first.",
+          "uid": "6cbbd53e-5ffa-5a3b-ae95-a73822690ff5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d1ad176-aeac-4c99-ba38-073c1bd6a5ff",
+              "memory_uid": "71e27b0c-5c10-5102-aeac-98b0841723f2"
+            }
+          ],
+          "reason": "This is a specific scheduling-access observation absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A lunchtime telephone attempt to reschedule an appointment did not reach clinic staff.",
+          "uid": "2032a8de-c721-5379-bbce-9ebcc5f88b9e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d1ad176-aeac-4c99-ba38-073c1bd6a5ff",
+              "memory_uid": "86ad5410-0cc7-5876-8e3a-a3f0dd1680c7"
+            }
+          ],
+          "reason": "This is an independently useful record-keeping observation with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user retained a photograph of paper instructions received at the clinic.",
+          "uid": "fcdb5deb-f1f2-53e2-a7ac-08627ea8c154"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d1ad176-aeac-4c99-ba38-073c1bd6a5ff",
+              "memory_uid": "aab36950-7e2b-588f-bb7c-d3bd6e36c501"
+            }
+          ],
+          "reason": "This is a specific navigation and calendar-detail observation not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Recording only the visit address left the user needing to search again for the floor.",
+          "uid": "ff8f444e-2884-52e7-a4b3-913bf9bc2caa"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d1ad176-aeac-4c99-ba38-073c1bd6a5ff",
+              "memory_uid": "50ac9268-9259-56fd-8678-1dfc8f919efb"
+            }
+          ],
+          "reason": "This is independently useful information about family support around appointments, absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "After receiving the checkup time, the user's older sister called to check in following the visit.",
+          "uid": "eb86a1d7-26ae-5835-bd77-2c8bfd24ad22"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d1ad176-aeac-4c99-ba38-073c1bd6a5ff",
+              "memory_uid": "5141ca66-9860-5ec5-b028-ac8670f586ca"
+            }
+          ],
+          "reason": "This is a clinic-specific communication policy with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The clinic's scheduling staff expect appointment-change requests by telephone.",
+          "uid": "890e04bf-fc82-5ec4-8fdb-3159d187c401"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d1ad176-aeac-4c99-ba38-073c1bd6a5ff",
+              "memory_uid": "e265e637-fa41-53d0-aa9b-0102e9962f9a"
+            }
+          ],
+          "reason": "This is a one-sided operational instruction for appointment handling that the compared frame does not address.",
+          "status": "RESOLVED",
+          "summary": "Before calendar entry, a follow-up visit's date, time, address, and floor should be confirmed with the user.",
+          "uid": "20bf9236-321e-5f5c-b0f1-523a4191e6e9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d1ad176-aeac-4c99-ba38-073c1bd6a5ff",
+              "memory_uid": "7aece7ae-b327-537e-9cef-fe24ee8fc618"
+            }
+          ],
+          "reason": "This is a domain-specific capability boundary with no corresponding dental-care claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The local agent can track checkups and appointments but cannot determine whether follow-up care is needed.",
+          "uid": "ae2d34c9-d6fd-58e8-b65b-99ed8980634a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "263e9818-d847-4240-9c78-3e6d2c2264fe",
+              "memory_uid": "853a158c-edf9-578a-8e75-3d5daff6e4db"
+            }
+          ],
+          "reason": "This is independently useful storage-location information absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user keeps a portable-fan charger on a living-room shelf.",
+          "uid": "7453b830-4e42-5406-849f-2404e1c5265d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "263e9818-d847-4240-9c78-3e6d2c2264fe",
+              "memory_uid": "f7d5ebdc-0cae-5e07-a060-e129b5a05570"
+            }
+          ],
+          "reason": "This is a one-sided observation about heat and concentration with no dental-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "With only an open window on a hot day, the user lost focus during the afternoon.",
+          "uid": "d2717131-f50d-5e8c-bc10-b1a723a2f38f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "263e9818-d847-4240-9c78-3e6d2c2264fe",
+              "memory_uid": "99e5c522-535b-5015-8617-06f645147f8b"
+            }
+          ],
+          "reason": "This is an independently useful room-cooling observation not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Closing the curtains was associated with less temperature rise the next morning.",
+          "uid": "3b00fa81-586e-5722-ae50-af66981dce58"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "263e9818-d847-4240-9c78-3e6d2c2264fe",
+              "memory_uid": "7b3bf50c-63aa-5a1e-9a53-7befea25a468"
+            },
+            {
+              "frame_uid": "263e9818-d847-4240-9c78-3e6d2c2264fe",
+              "memory_uid": "ca8de091-afb2-537f-a83a-09769056879d"
+            }
+          ],
+          "reason": "These events split one one-sided claim about charging the fan before outings, with no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The portable fan stopped after an hour when taken out uncharged, while charging it the night before supported use throughout the next trip.",
+          "uid": "6ccb6d58-f5d3-50f7-b2f8-86d6d637e8fb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "263e9818-d847-4240-9c78-3e6d2c2264fe",
+              "memory_uid": "4a0604fb-10b4-5132-a6de-ab6a229ff2be"
+            },
+            {
+              "frame_uid": "263e9818-d847-4240-9c78-3e6d2c2264fe",
+              "memory_uid": "1f90941e-776f-5cba-9783-c392983dd72c"
+            },
+            {
+              "frame_uid": "263e9818-d847-4240-9c78-3e6d2c2264fe",
+              "memory_uid": "63391d26-7417-5ea6-ac0a-460af7489963"
+            }
+          ],
+          "reason": "The observations and the father's preference split one underlying one-sided claim about timing outdoor meals in heat.",
+          "status": "RESOLVED",
+          "summary": "Hot midday conditions favored moving an outdoor meal indoors or to the evening, when shade and wind made the yard more tolerable.",
+          "uid": "33111e28-40aa-5609-9635-f3898a97e8d8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "263e9818-d847-4240-9c78-3e6d2c2264fe",
+              "memory_uid": "31502797-1379-5ec4-bd1b-a2e1515fa56e"
+            }
+          ],
+          "reason": "This is a heat-specific capability and evidence boundary with no corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The local agent can compare past heat responses but cannot know current felt temperature without an indoor temperature record.",
+          "uid": "8553bbc4-456d-5e7a-bd29-1c91828c03b0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "263e9818-d847-4240-9c78-3e6d2c2264fe",
+              "memory_uid": "68f85c30-62c4-579d-97cd-9f401c686e63"
+            }
+          ],
+          "reason": "This is independently useful environmental information absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A room with a west-facing window can warm rapidly in late afternoon.",
+          "uid": "002d8c42-432f-543c-8189-f6f28498d172"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers heat-related focus and room warming, curtains, portable-fan storage and charging, timing outdoor meals for cooler conditions, west-facing-window risk, and limits on assessing current felt temperature.",
+        "differences": "",
+        "reference_only": "The reference covers dental history, effective question pacing, unsuccessful rescheduling, retained instructions, complete calendar details, family check-ins, telephone scheduling policy, and limits on determining follow-up need."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "e3016a1a-a573-42bd-8aa7-68bc4df80176"
+    },
+    "analysis_digest": "7d91e953d026adfca5d9738b95ae0318da301a80e09fe0e8f9236c442a10bfa3",
+    "key": "352c1b27e927b0614e0b1d68278d85dcd64217a8400abb03ae4072a3a6a5808a",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 47.0916571250018,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "352c1b27e927b0614e0b1d68278d85dcd64217a8400abb03ae4072a3a6a5808a",
+  "created_at": "2026-08-13T18:38:47.515616Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/04",
+  "pair_key": "ee821248531b90d7c84bdfa08925eba0d95ce686e9acc606ca1b98db2c031a24",
+  "provider_seconds": 47.0916571250018,
+  "right": "task-3/local/personal-memory/2025/06",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

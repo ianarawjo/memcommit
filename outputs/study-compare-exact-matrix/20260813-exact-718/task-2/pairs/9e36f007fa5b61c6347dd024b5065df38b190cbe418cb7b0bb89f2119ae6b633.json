@@ -1,0 +1,320 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:20:36.595503+00:00",
+      "frames": [
+        {
+          "context_digest": "c4484b7a8284d7e31066ad3f4c4edf8844a2e0ce8695a323093f753243b6b18f",
+          "context_name": "task-2/advisor1/expression",
+          "context_uid": "39a6f298-c511-5c21-a106-998c1df9d951",
+          "memories": [
+            {
+              "content": "Use a flow diagram rather than a sequence table when alternate procedural branches lead to different outcomes.",
+              "content_digest": "48075a546ef4f1c2735e202cf43df2c164e4382f323007f542915195d025bf58",
+              "position": 0,
+              "uid": "51fa3fcc-9d5f-52f0-809d-62d7cdd8a865"
+            },
+            {
+              "content": "Draw alternate branches and their resulting outcomes in the same flow diagram so readers can compare them at once.",
+              "content_digest": "85d1fdc887f442e05b4089e28a6dc671e757eb781eae9c39646673054306ec34",
+              "position": 1,
+              "uid": "e686bd4d-3ebd-5e55-ba39-f26971247965"
+            },
+            {
+              "content": "The visual fidelity of a prototype may differ from its functional fidelity.",
+              "content_digest": "bfc110d2df084fd4f8393284db693ead012f2bfd9a4e804fd89f9a4e45e16e8c",
+              "position": 2,
+              "uid": "019662a9-6f03-527f-9b6d-be5a2966d9e9"
+            },
+            {
+              "content": "A flow diagram can make alternate branches and their different outcomes visible in one view.",
+              "content_digest": "8f69a73784cb0c304671161a6c42c63480c0ce0cc4864e613d8dde466365d496",
+              "position": 3,
+              "uid": "a6dfe9a7-1df8-561f-8d3e-fc19518beca9"
+            },
+            {
+              "content": "HCI reviewers often skim prototype screens and interaction flow diagrams before reading the main text.",
+              "content_digest": "ee7009a111b29298f748336d571f4d0233e08ef0255f6cfe69cb4c26def96394",
+              "position": 4,
+              "uid": "7047a23d-45b3-5d5c-a00b-c12552e9680d"
+            },
+            {
+              "content": "Readers can understand the overall branching shape of a procedure more quickly from a flow diagram than from rows read one at a time.",
+              "content_digest": "beb9438eb216e54223266b4f592245450812228d69f7a38908e4c260a0aaca01",
+              "position": 5,
+              "uid": "50a71968-7e3f-5b99-b3fa-769af386d0c0"
+            },
+            {
+              "content": "Redrawing a branching flow diagram after a procedural change usually takes longer than updating one row in a table.",
+              "content_digest": "cb0e535e1e58a4dbf42c5f22a3eded19fa0c228c6531b70530b226eeb2dbf24c",
+              "position": 6,
+              "uid": "ae1610f6-a855-56c1-a0fb-fd3207dab615"
+            },
+            {
+              "content": "Reviewers often inspect the proposal’s main visual before reading the procedural explanation in full.",
+              "content_digest": "a609677d56e7297c736ee92c7a45eb4d83824985a780d8ca4df664f1494c5cb2",
+              "position": 7,
+              "uid": "d2825b84-b4a6-58c9-8f8e-9e19c6192a03"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "0780a530-e397-4e9b-ab60-43f8ca2cd9a8"
+        },
+        {
+          "context_digest": "673626cf0c3650052d63b04173d43516860e2035d7038878998898bc5bebb2e3",
+          "context_name": "task-2/advisor2/evaluation",
+          "context_uid": "6e9f8ad5-a43d-5dfd-99a3-604f2757da0d",
+          "memories": [
+            {
+              "content": "Specify a single representative measure that will drive operational decisions to maintain, modify, or discontinue the deployed design.",
+              "content_digest": "dd9abb7bbbdf6846921a984789426b27a45df60ce38408422b6b0774835b44f8",
+              "position": 0,
+              "uid": "f27576c7-6f53-5412-901c-19df7e1d5e2e"
+            },
+            {
+              "content": "The HCI review panel verifies whether operational decisions can be made based on the declared primary measure.",
+              "content_digest": "1d88ce414bdbfcf9565c712f8f0d72378569d723c0c5b5c6007dc18a96f6378f",
+              "position": 1,
+              "uid": "8608bdf3-49d7-54d0-a2fb-c883c24e40ef"
+            },
+            {
+              "content": "Establish decision thresholds indicating at what levels key metrics trigger maintaining, modifying, or discontinuing the design.",
+              "content_digest": "866bad632421bfd3487fba69b855ccb36aeb9e31c6208b339db22301bdd3fc28",
+              "position": 2,
+              "uid": "b06bb706-f911-5767-8e27-b64c74d0e592"
+            },
+            {
+              "content": "Evaluate whether reducing workload for one role creates new tasks for other roles through the proposed design changes.",
+              "content_digest": "6b38b84cdc2a78f61f3163cccd787dec39167596f4f720788ec4c930f698fa9f",
+              "position": 3,
+              "uid": "473ec6e8-29f0-5c83-b36d-b7d32eeb25a3"
+            },
+            {
+              "content": "Distinguish usability from organizational adoption intent as separate evaluation outcomes.",
+              "content_digest": "7328bf54063078377068871ee3970709d9a8763204c2c3a08321e025e028868c",
+              "position": 4,
+              "uid": "935cf79f-3e67-567d-ab55-35e8fad7eb37"
+            },
+            {
+              "content": "Implementation fidelity indicates whether planned features and operational procedures were delivered in the field according to intended specifications.",
+              "content_digest": "b04d0bc0590dd77d3bc0bde581481992d57ad48c14517a2a1d63f996e51290b2",
+              "position": 5,
+              "uid": "bea0e97f-1217-507b-87a7-09ce85bae9fe"
+            },
+            {
+              "content": "Initial evaluations and long-term operation do not share identical measurement conditions due to differences in system exposure duration and frequency of repeated use.",
+              "content_digest": "49e90b293b90d173b11d1bb89e85f688c55cb923c2a19eb2058a539388327715",
+              "position": 6,
+              "uid": "dbe435ff-fe32-54fe-a2e6-7b46694ce151"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "eebc90c7-e9dc-45e3-af32-fb4c5a26531b"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate concerns without contradiction: the reference focuses on communicating branching procedures, prototype fidelity, review behavior, and diagram maintenance, while the compared frame focuses on field-evaluation measures, decision rules, workload redistribution, adoption, implementation fidelity, and changing measurement conditions.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0780a530-e397-4e9b-ab60-43f8ca2cd9a8",
+              "memory_uid": "51fa3fcc-9d5f-52f0-809d-62d7cdd8a865"
+            },
+            {
+              "frame_uid": "0780a530-e397-4e9b-ab60-43f8ca2cd9a8",
+              "memory_uid": "e686bd4d-3ebd-5e55-ba39-f26971247965"
+            },
+            {
+              "frame_uid": "0780a530-e397-4e9b-ab60-43f8ca2cd9a8",
+              "memory_uid": "a6dfe9a7-1df8-561f-8d3e-fc19518beca9"
+            },
+            {
+              "frame_uid": "0780a530-e397-4e9b-ab60-43f8ca2cd9a8",
+              "memory_uid": "50a71968-7e3f-5b99-b3fa-769af386d0c0"
+            }
+          ],
+          "reason": "These statements collectively express the reference-only rationale and presentation policy for using flow diagrams when procedural branches produce different outcomes.",
+          "status": "RESOLVED",
+          "summary": "Branching procedures are best communicated in a single flow diagram that exposes alternate paths and outcomes together and supports faster structural understanding than row-by-row reading.",
+          "uid": "828cf4bc-ec7d-5ed5-8ec7-8f0d0633aca3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0780a530-e397-4e9b-ab60-43f8ca2cd9a8",
+              "memory_uid": "019662a9-6f03-527f-9b6d-be5a2966d9e9"
+            }
+          ],
+          "reason": "This is an independent reference-only distinction between two dimensions of prototype fidelity.",
+          "status": "RESOLVED",
+          "summary": "A prototype’s visual fidelity and functional fidelity may differ.",
+          "uid": "44b1cc1b-f2f2-5cc0-a1bd-68d384f31df0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0780a530-e397-4e9b-ab60-43f8ca2cd9a8",
+              "memory_uid": "7047a23d-45b3-5d5c-a00b-c12552e9680d"
+            },
+            {
+              "frame_uid": "0780a530-e397-4e9b-ab60-43f8ca2cd9a8",
+              "memory_uid": "d2825b84-b4a6-58c9-8f8e-9e19c6192a03"
+            }
+          ],
+          "reason": "These statements restate a reference-only observation about reviewers prioritizing key visuals during initial inspection.",
+          "status": "RESOLVED",
+          "summary": "Reviewers often inspect prominent prototype or proposal visuals and interaction-flow materials before reading the full explanatory text.",
+          "uid": "7479c88c-c9fa-52be-a140-29c8eb08d1b2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0780a530-e397-4e9b-ab60-43f8ca2cd9a8",
+              "memory_uid": "ae1610f6-a855-56c1-a0fb-fd3207dab615"
+            }
+          ],
+          "reason": "This is an independent reference-only maintenance tradeoff associated with flow diagrams.",
+          "status": "RESOLVED",
+          "summary": "Updating a branching flow diagram after a procedural change generally takes longer than changing a single table row.",
+          "uid": "0194eaca-37f6-5976-b393-58c263fd003e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eebc90c7-e9dc-45e3-af32-fb4c5a26531b",
+              "memory_uid": "f27576c7-6f53-5412-901c-19df7e1d5e2e"
+            }
+          ],
+          "reason": "This is an independent compared-only policy for selecting the primary operational decision measure.",
+          "status": "RESOLVED",
+          "summary": "A single representative measure should drive decisions to maintain, modify, or discontinue a deployed design.",
+          "uid": "92ca5291-1590-514c-803e-7d524f9bd5f9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eebc90c7-e9dc-45e3-af32-fb4c5a26531b",
+              "memory_uid": "8608bdf3-49d7-54d0-a2fb-c883c24e40ef"
+            }
+          ],
+          "reason": "This is an independent compared-only review responsibility concerning the decision usefulness of the primary measure.",
+          "status": "RESOLVED",
+          "summary": "The HCI review panel checks whether the declared primary measure can support operational decisions.",
+          "uid": "a8f8a97b-2f16-5b5b-8018-b60f61b84c84"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eebc90c7-e9dc-45e3-af32-fb4c5a26531b",
+              "memory_uid": "b06bb706-f911-5767-8e27-b64c74d0e592"
+            }
+          ],
+          "reason": "This is an independent compared-only requirement for explicit operational decision thresholds.",
+          "status": "RESOLVED",
+          "summary": "Key metrics should have thresholds that trigger maintaining, modifying, or discontinuing the design.",
+          "uid": "6786235d-aa19-5379-8f17-e0077a8a94ca"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eebc90c7-e9dc-45e3-af32-fb4c5a26531b",
+              "memory_uid": "473ec6e8-29f0-5c83-b36d-b7d32eeb25a3"
+            }
+          ],
+          "reason": "This is an independent compared-only evaluation criterion concerning redistribution of work across roles.",
+          "status": "RESOLVED",
+          "summary": "Evaluation should determine whether workload reductions for one role create new tasks for other roles.",
+          "uid": "05ab3756-2363-574f-a0f2-25649b409020"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eebc90c7-e9dc-45e3-af32-fb4c5a26531b",
+              "memory_uid": "935cf79f-3e67-567d-ab55-35e8fad7eb37"
+            }
+          ],
+          "reason": "This is an independent compared-only distinction between evaluation outcomes.",
+          "status": "RESOLVED",
+          "summary": "Usability and organizational adoption intent should be evaluated as separate outcomes.",
+          "uid": "c99294d8-31ab-57f6-b9b8-195664e3e40d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eebc90c7-e9dc-45e3-af32-fb4c5a26531b",
+              "memory_uid": "bea0e97f-1217-507b-87a7-09ce85bae9fe"
+            }
+          ],
+          "reason": "This is an independent compared-only definition of field implementation fidelity, distinct from prototype visual and functional fidelity.",
+          "status": "RESOLVED",
+          "summary": "Implementation fidelity concerns whether planned features and operational procedures were delivered in the field as intended.",
+          "uid": "13d9bb36-36da-516e-924f-a43e48f44074"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eebc90c7-e9dc-45e3-af32-fb4c5a26531b",
+              "memory_uid": "dbe435ff-fe32-54fe-a2e6-7b46694ce151"
+            }
+          ],
+          "reason": "This is an independent compared-only qualification about how evaluation conditions change over time.",
+          "status": "RESOLVED",
+          "summary": "Initial evaluation and long-term operation have different measurement conditions because exposure duration and repeated-use frequency differ.",
+          "uid": "7a645c82-9ab0-5743-9769-21489451c1e2"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame defines operational evaluation governance, including primary measures, thresholds, reviewability, cross-role workload effects, separate adoption outcomes, implementation fidelity, and evaluation conditions that change over time.",
+        "differences": "",
+        "reference_only": "The reference emphasizes flow diagrams for rapidly comparing procedural branches and outcomes, while noting reviewer attention patterns, distinct prototype fidelity dimensions, and diagram-update costs."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "fa83e279-62e9-4d8f-adc9-9579b3e9247f"
+    },
+    "analysis_digest": "dd045d16802abc4aaf9fc49759af24fff8b728017571682327e02d4050d25633",
+    "key": "298fa622571a63dce7c2525435ee7c3ed701d842a46ad9a209c1febab64ec9bd",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 37.46633504199781,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "298fa622571a63dce7c2525435ee7c3ed701d842a46ad9a209c1febab64ec9bd",
+  "created_at": "2026-08-13T18:21:14.061439Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/expression",
+  "pair_key": "9e36f007fa5b61c6347dd024b5065df38b190cbe418cb7b0bb89f2119ae6b633",
+  "provider_seconds": 37.46633504199781,
+  "right": "task-2/advisor2/evaluation",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

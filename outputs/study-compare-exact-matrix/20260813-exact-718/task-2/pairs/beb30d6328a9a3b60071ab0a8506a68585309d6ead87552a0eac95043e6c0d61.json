@@ -1,0 +1,359 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:14:20.999972+00:00",
+      "frames": [
+        {
+          "context_digest": "30f0425cad991a5bb1b473f7e73c2c039db2d91dc0c95116413d0a8e7b6fed29",
+          "context_name": "task-2/advisor1/budget",
+          "context_uid": "d6d3ee9e-eb0f-5c28-9463-7a680d53b470",
+          "memories": [
+            {
+              "content": "Keep the total, major cost categories, and one-line estimate basis in the main text so the resource argument can be understood without leaving the proposal.",
+              "content_digest": "5dc9db0be6499fc408063be04c9e1cc344986512f4d24d5697f5c53a08529c9a",
+              "position": 0,
+              "uid": "05e0261e-5c52-5030-8176-0f02d4522931"
+            },
+            {
+              "content": "Place each major cost beside the activity or deliverable it enables in the main text.",
+              "content_digest": "b97219830051faf46cff7c9541c331012571866926740ed4d6a7925c12fb21a8",
+              "position": 1,
+              "uid": "1083e9b3-698a-57b1-91ab-ce04cec1e5e5"
+            },
+            {
+              "content": "State the quantity and unit-rate basis for each major cost in the same paragraph that requests it.",
+              "content_digest": "5ce37d95d9d037bbab71276fa8f0e8e383b472d0122817ab7b711c971b8cbf5d",
+              "position": 2,
+              "uid": "3652f268-d86f-55d6-935d-d3bdc487aae6"
+            },
+            {
+              "content": "Readers may question a proposed priority when its cost cannot be checked on the same page as the claimed benefit.",
+              "content_digest": "26fa14ff80ece7682cb51c7356a47a8e60e94edd4551f59ecd2fa3017bd9bffd",
+              "position": 3,
+              "uid": "4e1e1201-94b8-5a7a-8737-edc4c62881ff"
+            },
+            {
+              "content": "Update the cost sentence whenever the related activity changes so the narrative and requested amount cannot drift apart.",
+              "content_digest": "343c11198b38874476e0cda3707dd07436699852db0934e2e8f8c95a7ea3c3ea",
+              "position": 4,
+              "uid": "2f5f9039-e038-51c1-8af0-21a78772c512"
+            },
+            {
+              "content": "Accept a denser main-text paragraph when the estimate basis is essential to deciding whether the request is proportionate.",
+              "content_digest": "59ca1aafc11b37b097251b4b7c6b15e249262304f79b261bd4351d3ca89cb5fe",
+              "position": 5,
+              "uid": "f7a16d08-fbe2-5508-890d-cdbf70c1146e"
+            },
+            {
+              "content": "The user tends to revise the work plan but forget a detached budget table unless the key amount is repeated beside the activity.",
+              "content_digest": "393651043824d9e9c528e5de7618854b71970967d172ee1e9bc3c77aec3baab0",
+              "position": 6,
+              "uid": "2ca1d5a1-d78a-55b2-ab21-fd6ad73366b4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "6a8b3585-596e-4110-b9d6-098a57e8de37"
+        },
+        {
+          "context_digest": "0c296942d89f44af52c83dcba02568af2b56ed1016260f3d3b9c95e919a51339",
+          "context_name": "task-2/advisor2/ethics",
+          "context_uid": "fa36b485-422d-54c3-a145-0f60a077757c",
+          "memories": [
+            {
+              "content": "Link anticipated participant burden with its mitigation strategies for each field user study task.",
+              "content_digest": "120fdee3ad17815fe2e9aa806aab19843cf6597753cf0d35aa0618a3116a1bd2",
+              "position": 0,
+              "uid": "bc8c1327-993c-51ce-8f53-919dc253e0f8"
+            },
+            {
+              "content": "Specify the accommodations necessary for participants to access the field system and research tasks.",
+              "content_digest": "e09cce7cc60d904d618dffa5619cac9c44e4dbcc4f2a0d8547b9ede06586a82b",
+              "position": 1,
+              "uid": "578f6fdf-6bbc-5d1b-8f03-c7460a5cdc7b"
+            },
+            {
+              "content": "Specify how accessibility accommodations will be provided in the field user study.",
+              "content_digest": "98a13f5b544276eaafd5d0b1aea63b2e313ce327f5881f0e4bbcff19724e8c6e",
+              "position": 2,
+              "uid": "6804d5db-c872-5ded-bf68-14fd30e1b645"
+            },
+            {
+              "content": "Describe how personal identifiers will be separated from research data immediately upon collection.",
+              "content_digest": "0bf884cd31610ba663854e8c273ec6769666b38ee72714ba63f0b390d69b8ba3",
+              "position": 3,
+              "uid": "448f23d0-9607-5977-9d13-a99af48a6fc1"
+            },
+            {
+              "content": "List equipment to be loaned when participants lack necessary gear.",
+              "content_digest": "665d4e26cc8390ca2334d4740650e77977b60fd0e3eed2464ade0ca55a806eb2",
+              "position": 4,
+              "uid": "b97f3e2f-e132-5f6f-a748-f406a89a1bc5"
+            },
+            {
+              "content": "Describe the procedure for returning equipment loaned to participants.",
+              "content_digest": "100ffbad1288c3263bc4a1044b2d42da35c36a3f73786e58e4391fbac98c84f2",
+              "position": 5,
+              "uid": "d05964ea-0423-5642-86e1-9e9c19edffbe"
+            },
+            {
+              "content": "The HCI ethics reviewer verifies that anticipated burden and mitigation strategies correspond for each field user study task.",
+              "content_digest": "067bbafce95c77b4a9acc5ba9652db92dba6dc96e14588841db158919bf044b2",
+              "position": 6,
+              "uid": "26407eb8-5c02-551f-a960-1652eb080f90"
+            },
+            {
+              "content": "Ensure that participants can safely return to existing work procedures if they discontinue research participation.",
+              "content_digest": "213cff51d754811573c78ba0ca92f37e614e9fa4ae1080aa7fcfb550c85437fb",
+              "position": 7,
+              "uid": "7e0ba411-3fd9-53ec-8a3f-4499316c06bb"
+            },
+            {
+              "content": "Specify that organizational members who decline research participation will not face disadvantages in task assignment or performance evaluation.",
+              "content_digest": "46b2b0857255b48ed6001191b089c1d6ecba859690818cbff8fe7676fa1f860a",
+              "position": 8,
+              "uid": "a6fbea37-335c-544b-8bac-01f759bc3855"
+            },
+            {
+              "content": "The user's withdrawal risk can be adequately assessed only when a safe alternative procedure exists for field tasks.",
+              "content_digest": "604a38c44856b4407cf2b1d83df216510e77f84ce76ef4dbc7f9be21cd32393b",
+              "position": 9,
+              "uid": "885d1cf3-8bcd-513c-9591-a548fcbd3992"
+            },
+            {
+              "content": "The user tends to assume that a short session also entails little burden from work interruption and exposure to a manager.",
+              "content_digest": "0c48fd9dd3b393f73a8005db56bf2c11320d82b84040af105ca65c3ff9ce6f17",
+              "position": 10,
+              "uid": "520b4c9f-306e-5749-83b5-2218c97f89e6"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "7d58b909-b5a0-46c7-9273-67b8254ade67"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate proposal concerns: the reference frame focuses on making costs visible, checkable, and synchronized with activities, while the compared frame sets participant-protection requirements for field user studies. Neither frame supplies a scope-aligned counterpart to the other’s claims.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6a8b3585-596e-4110-b9d6-098a57e8de37",
+              "memory_uid": "05e0261e-5c52-5030-8176-0f02d4522931"
+            },
+            {
+              "frame_uid": "6a8b3585-596e-4110-b9d6-098a57e8de37",
+              "memory_uid": "3652f268-d86f-55d6-935d-d3bdc487aae6"
+            }
+          ],
+          "reason": "This is a one-sided cost-transparency requirement with no operational counterpart in the participant-protection frame.",
+          "status": "RESOLVED",
+          "summary": "Major cost information and its quantity-and-rate estimate basis should appear in the proposal’s main text where the request is made.",
+          "uid": "df721717-70bb-50d6-915f-7fc9c0f1d34e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6a8b3585-596e-4110-b9d6-098a57e8de37",
+              "memory_uid": "1083e9b3-698a-57b1-91ab-ce04cec1e5e5"
+            },
+            {
+              "frame_uid": "6a8b3585-596e-4110-b9d6-098a57e8de37",
+              "memory_uid": "4e1e1201-94b8-5a7a-8737-edc4c62881ff"
+            }
+          ],
+          "reason": "The memories express the same underlying requirement to connect costs visibly to their justification; the compared frame does not address proposal cost placement.",
+          "status": "RESOLVED",
+          "summary": "Major costs should be presented beside the activities or benefits they enable so readers can check the resource argument on the same page.",
+          "uid": "f5c7967d-c43e-5c83-9c5d-259afae2602a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6a8b3585-596e-4110-b9d6-098a57e8de37",
+              "memory_uid": "2f5f9039-e038-51c1-8af0-21a78772c512"
+            },
+            {
+              "frame_uid": "6a8b3585-596e-4110-b9d6-098a57e8de37",
+              "memory_uid": "2ca1d5a1-d78a-55b2-ab21-fd6ad73366b4"
+            }
+          ],
+          "reason": "The prescriptive update rule and observed revision failure describe one underlying drift-prevention need absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Key amounts should remain beside and synchronized with their activities when the work plan changes.",
+          "uid": "f3dcafe7-6635-54e1-83ce-cc503f20d1ee"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6a8b3585-596e-4110-b9d6-098a57e8de37",
+              "memory_uid": "f7a16d08-fbe2-5508-890d-cdbf70c1146e"
+            }
+          ],
+          "reason": "This is an independent presentation tradeoff found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A denser main-text paragraph is acceptable when estimate detail is necessary to judge whether a request is proportionate.",
+          "uid": "41dd0c8b-3d79-5ac6-84d6-df3d600e4415"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d58b909-b5a0-46c7-9273-67b8254ade67",
+              "memory_uid": "bc8c1327-993c-51ce-8f53-919dc253e0f8"
+            },
+            {
+              "frame_uid": "7d58b909-b5a0-46c7-9273-67b8254ade67",
+              "memory_uid": "26407eb8-5c02-551f-a960-1652eb080f90"
+            }
+          ],
+          "reason": "The operational requirement and reviewer check restate one task-level ethics criterion with no cost-presentation counterpart.",
+          "status": "RESOLVED",
+          "summary": "Anticipated participant burden and mitigation strategies should correspond for every field user study task.",
+          "uid": "b96f6b84-408c-55cd-a6a5-d1d7d5005817"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d58b909-b5a0-46c7-9273-67b8254ade67",
+              "memory_uid": "578f6fdf-6bbc-5d1b-8f03-c7460a5cdc7b"
+            },
+            {
+              "frame_uid": "7d58b909-b5a0-46c7-9273-67b8254ade67",
+              "memory_uid": "6804d5db-c872-5ded-bf68-14fd30e1b645"
+            }
+          ],
+          "reason": "These memories split the necessary content and delivery aspects of one accessibility plan, which appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A field user study should specify both the accommodations participants need and how those accommodations will be provided.",
+          "uid": "244d0e7b-dd69-58c3-9b82-8093264fcc8b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d58b909-b5a0-46c7-9273-67b8254ade67",
+              "memory_uid": "448f23d0-9607-5977-9d13-a99af48a6fc1"
+            }
+          ],
+          "reason": "This independent data-protection requirement has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Personal identifiers should be separated from research data immediately upon collection using a described procedure.",
+          "uid": "2a534010-7224-50e3-a9d9-dce69162cbc5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d58b909-b5a0-46c7-9273-67b8254ade67",
+              "memory_uid": "b97f3e2f-e132-5f6f-a748-f406a89a1bc5"
+            }
+          ],
+          "reason": "This is an independently useful equipment-access requirement present only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Equipment available for loan to participants who lack required gear should be listed.",
+          "uid": "34114a49-b9ff-5354-be01-71735517cf6b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d58b909-b5a0-46c7-9273-67b8254ade67",
+              "memory_uid": "d05964ea-0423-5642-86e1-9e9c19edffbe"
+            }
+          ],
+          "reason": "This distinct equipment-return requirement is not stated in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The procedure for participants to return loaned equipment should be described.",
+          "uid": "ac166d45-cf12-50ca-a515-1b32e1a8a5bb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d58b909-b5a0-46c7-9273-67b8254ade67",
+              "memory_uid": "7e0ba411-3fd9-53ec-8a3f-4499316c06bb"
+            },
+            {
+              "frame_uid": "7d58b909-b5a0-46c7-9273-67b8254ade67",
+              "memory_uid": "885d1cf3-8bcd-513c-9591-a548fcbd3992"
+            }
+          ],
+          "reason": "The operational safeguard and its withdrawal-risk rationale express one underlying requirement absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Field tasks should have a safe existing-work alternative that participants can resume if they withdraw from research.",
+          "uid": "c6a67918-190a-5284-88a8-20833e885be1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d58b909-b5a0-46c7-9273-67b8254ade67",
+              "memory_uid": "a6fbea37-335c-544b-8bac-01f759bc3855"
+            }
+          ],
+          "reason": "This independent non-retaliation protection appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Organizational members who decline research participation should face no disadvantage in task assignment or performance evaluation.",
+          "uid": "df38745a-8d4e-59dc-b072-095a25d227fc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d58b909-b5a0-46c7-9273-67b8254ade67",
+              "memory_uid": "520b4c9f-306e-5749-83b5-2218c97f89e6"
+            }
+          ],
+          "reason": "This is a distinct observed assessment risk with no corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Burden assessment should not infer low burden from a short session while overlooking work interruption and exposure to a manager.",
+          "uid": "f96f1cb0-049b-5894-9c5b-a7158da76abc"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers task-specific burden mitigation, accessibility, data separation, equipment logistics, safe withdrawal, non-retaliation, and risks of underestimating workplace disruption or managerial exposure.",
+        "differences": "",
+        "reference_only": "The reference frame requires decision-relevant costs and estimate bases in the main narrative, linked to activities and kept synchronized despite revisions, even when this increases textual density."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "eda58bc5-2f1f-4605-8bb4-420abdf18a15"
+    },
+    "analysis_digest": "557764b1de1a4ebd19fcedeb94bbc4faad202791fdfd1e740edc6d32739cb6a8",
+    "key": "95201edf65f062c5b02d59c7f13876513f1afb9e85bf0b04153420111d4a09ff",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 45.11945187499805,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "95201edf65f062c5b02d59c7f13876513f1afb9e85bf0b04153420111d4a09ff",
+  "created_at": "2026-08-13T18:15:06.119066Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/budget",
+  "pair_key": "beb30d6328a9a3b60071ab0a8506a68585309d6ead87552a0eac95043e6c0d61",
+  "provider_seconds": 45.11945187499805,
+  "right": "task-2/advisor2/ethics",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

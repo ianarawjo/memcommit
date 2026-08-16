@@ -1,0 +1,226 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:17:59.825331+00:00",
+      "frames": [
+        {
+          "context_digest": "52dc61895a6d116135c474d4828efde944579b3a5949b6d64c07dd9853f60801",
+          "context_name": "task-2/advisor1/emphasis",
+          "context_uid": "6f253a9e-f504-53bf-a1d1-de2c4532171e",
+          "memories": [
+            {
+              "content": "Do not exceed two primary HCI contributions.",
+              "content_digest": "c605e418506d380237fb8ce4723bcc2fedebcd5da0d8dd78ef813e21aaf71a7a",
+              "position": 0,
+              "uid": "4a1de8df-6f03-5a3d-bbfa-7c1144d2ec5c"
+            },
+            {
+              "content": "Name each design or empirical contribution and present it in a single sentence.",
+              "content_digest": "286e33467b65e080f192172ae85d481a89c8e1b2d73e1089772eab30e0ae48fa",
+              "position": 1,
+              "uid": "b5b6a901-9047-5482-a0e1-d29e5f7171e8"
+            },
+            {
+              "content": "In studies recruiting community participants, emphasize the time burden associated with participation.",
+              "content_digest": "67a881933729e29cc0ce33f61f50af810f6f12ab5aa9598d453cf3a959a5977f",
+              "position": 2,
+              "uid": "e89de514-48a5-5e9b-96ca-f194c0ed79ab"
+            },
+            {
+              "content": "In studies recruiting community participants, emphasize the travel burden associated with participation.",
+              "content_digest": "3c4e20244bb88626ef1d2ebc89774e29ac85a9ce774a3faaa726131059b8ae33",
+              "position": 3,
+              "uid": "f7025cbb-4005-53c6-9031-e33f04a86b92"
+            },
+            {
+              "content": "HCI reviewers find it difficult to identify primary contributions when named design or empirical contributions exceed two.",
+              "content_digest": "70a2dccd85ce8ca18db239926980dfe13a20b90a9dffa6acae73e5034fce1fbc",
+              "position": 4,
+              "uid": "a42891a1-b674-5747-a77c-43699b0b9723"
+            },
+            {
+              "content": "Emphasize the core design decisions that formative evaluation will change rather than a polished product demonstration.",
+              "content_digest": "be5cad46c349a7c4b538f1a947d979ec25b0f6a34494e4d3a7bb9550508766d4",
+              "position": 5,
+              "uid": "9d7169d5-058f-5f7c-b1ac-30cabd8ba02e"
+            },
+            {
+              "content": "Emphasize design principles transferable to other similar interactions as the primary contribution, rather than the performance of a specific prototype.",
+              "content_digest": "a39c447e1b61b2204233800bafd380163fb5492ddd25cb730bbc6c6a95114e56",
+              "position": 6,
+              "uid": "f8931b4e-9656-548d-84a1-f2f2c3eb47b1"
+            },
+            {
+              "content": "Formative evaluation creates grounds for modification in subsequent iterations rather than definitively determining the superiority of design alternatives.",
+              "content_digest": "0cdd894b41de667b621d6c385d3373c799f4fea53898f65d324c26e86a1c8807",
+              "position": 7,
+              "uid": "9bf9e735-7598-5977-abe2-87b2c9c38a24"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "c6813a39-702c-48a3-b172-20b11c7b3706"
+        },
+        {
+          "context_digest": "bb54539faeedf2db9ada09643c11270aabf235d8e3e6df98500f90f9b82aed49",
+          "context_name": "task-2/advisor2/reproducibility",
+          "context_uid": "5f2f3c0f-4cb1-5151-b381-847df75b6457",
+          "memories": [
+            {
+              "content": "HCI reviewers find it difficult to assess result reproducibility if the system version used in the field deployment is not disclosed.",
+              "content_digest": "83ac18cb56f74dbeb7834909b999669bb9a46d320b288bf38fb7b6c9bd0812f2",
+              "position": 0,
+              "uid": "40f11374-d91b-546a-9e93-fcf98a0fde98"
+            },
+            {
+              "content": "Record changes in system configurations, field procedures, and data collection tools during deployment, along with their timestamps and rationales.",
+              "content_digest": "ac399146f49e6ae5d21272de0cd13db6346d4cd67b096ecfa9bd314b026f403e",
+              "position": 1,
+              "uid": "cc72ad54-4cf3-56cd-9119-46776f5b2184"
+            },
+            {
+              "content": "The history of deployment versions and configuration changes provides necessary evidence for interpreting results from different field sites.",
+              "content_digest": "39ae70de900b646362a96cfa7d734a6404604b468398b09da9fb05783b389d25",
+              "position": 2,
+              "uid": "75f22b45-fb1b-568c-bb05-080fdacdcab2"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "97380490-d697-449b-a22a-37a2e0b69fd8"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The reference frame guides contribution framing, community-participant burden, and formative evaluation. The compared frame independently addresses deployment provenance and change documentation for reproducibility and cross-site interpretation. The frames contain no materially shared or competing operational policy.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c6813a39-702c-48a3-b172-20b11c7b3706",
+              "memory_uid": "4a1de8df-6f03-5a3d-bbfa-7c1144d2ec5c"
+            },
+            {
+              "frame_uid": "c6813a39-702c-48a3-b172-20b11c7b3706",
+              "memory_uid": "b5b6a901-9047-5482-a0e1-d29e5f7171e8"
+            },
+            {
+              "frame_uid": "c6813a39-702c-48a3-b172-20b11c7b3706",
+              "memory_uid": "a42891a1-b674-5747-a77c-43699b0b9723"
+            }
+          ],
+          "reason": "These reference-side memories jointly express a one-sided contribution-presentation policy and its reviewer-centered rationale; the compared frame contains no corresponding claim.",
+          "status": "RESOLVED",
+          "summary": "Primary HCI contributions should be limited, explicitly named, and stated concisely so reviewers can identify them.",
+          "uid": "9a1d771f-19c7-550a-8761-f6d2f5cd51da"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c6813a39-702c-48a3-b172-20b11c7b3706",
+              "memory_uid": "e89de514-48a5-5e9b-96ca-f194c0ed79ab"
+            },
+            {
+              "frame_uid": "c6813a39-702c-48a3-b172-20b11c7b3706",
+              "memory_uid": "f7025cbb-4005-53c6-9031-e33f04a86b92"
+            }
+          ],
+          "reason": "The two reference-side memories split the same one-sided burden-reporting claim into its time and travel dimensions; the compared frame does not address participant burden.",
+          "status": "RESOLVED",
+          "summary": "Community-participant studies should emphasize participation burdens involving both time and travel.",
+          "uid": "a7defbd0-2579-5a91-94ed-0a379a605b4f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c6813a39-702c-48a3-b172-20b11c7b3706",
+              "memory_uid": "9d7169d5-058f-5f7c-b1ac-30cabd8ba02e"
+            },
+            {
+              "frame_uid": "c6813a39-702c-48a3-b172-20b11c7b3706",
+              "memory_uid": "9bf9e735-7598-5977-abe2-87b2c9c38a24"
+            }
+          ],
+          "reason": "These reference-side memories jointly characterize the iterative purpose and appropriate presentation of formative evaluation, a subject absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Formative evaluation should foreground design decisions open to revision and support subsequent modification rather than claim polished or definitive superiority.",
+          "uid": "29e11212-4b82-5738-807f-63e4d2734613"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c6813a39-702c-48a3-b172-20b11c7b3706",
+              "memory_uid": "f8931b4e-9656-548d-84a1-f2f2c3eb47b1"
+            }
+          ],
+          "reason": "This is an independently useful reference-only claim about contribution emphasis, with no operational counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Transferable design principles, rather than a particular prototype's performance, should be presented as the primary contribution.",
+          "uid": "3a34ed44-5800-5d9a-b214-9c8ac82de03f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "97380490-d697-449b-a22a-37a2e0b69fd8",
+              "memory_uid": "40f11374-d91b-546a-9e93-fcf98a0fde98"
+            },
+            {
+              "frame_uid": "97380490-d697-449b-a22a-37a2e0b69fd8",
+              "memory_uid": "cc72ad54-4cf3-56cd-9119-46776f5b2184"
+            },
+            {
+              "frame_uid": "97380490-d697-449b-a22a-37a2e0b69fd8",
+              "memory_uid": "75f22b45-fb1b-568c-bb05-080fdacdcab2"
+            }
+          ],
+          "reason": "The compared-side memories form one deployment-documentation policy covering what provenance to preserve and why it matters; the reference frame contains no corresponding claim.",
+          "status": "RESOLVED",
+          "summary": "Deployment provenance should disclose system versions and record timestamped configuration, procedure, and data-tool changes with rationales to support reproducibility and cross-site interpretation.",
+          "uid": "a6135e95-1c55-589c-87eb-9ae709bb0bcf"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only guidance calls for disclosing deployed system versions and timestamping configuration, procedure, and data-tool changes with rationales so field results remain reproducible and interpretable across sites.",
+        "differences": "",
+        "reference_only": "Reference-only guidance limits and clearly names primary contributions, highlights participant time and travel burdens, and frames formative work around transferable principles and iterative design change."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "1e5387d0-bc68-4179-97af-fb9545f7c5b5"
+    },
+    "analysis_digest": "3da57b0bb9376ac85f17f61468b048fe901fb42ba70e829c1cd5aa9510f0d607",
+    "key": "0bb8868d95ce4dd0e30124146bd9951fee3011f25baad41404321a29d4ef3610",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 22.61051249999946,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "0bb8868d95ce4dd0e30124146bd9951fee3011f25baad41404321a29d4ef3610",
+  "created_at": "2026-08-13T18:18:22.435496Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/emphasis",
+  "pair_key": "4e71de7c19b20a6709094eac53c3a86fbefc0941fabb4b8468901e25804c6b76",
+  "provider_seconds": 22.61051249999946,
+  "right": "task-2/advisor2/reproducibility",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

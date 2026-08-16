@@ -1,0 +1,388 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:46:37.792970+00:00",
+      "frames": [
+        {
+          "context_digest": "492e513a553a9191e2c646cca49364b336ae6d163de5688eeca8cc661bbbdb32",
+          "context_name": "task-3/local/personal-memory/2024/11",
+          "context_uid": "0d5e1eef-1669-5589-94ba-b46c9c2080dc",
+          "memories": [
+            {
+              "content": "The user changed their schedule once in November 2024 because of their mother's hospital visit.",
+              "content_digest": "f08f07dda1b468ab191a59d87e7ceb8068189964edee2010abdae6e525d6103f",
+              "position": 0,
+              "uid": "bb17c696-0c1c-516f-8ad9-68a4b159ce22"
+            },
+            {
+              "content": "After seeing the reason for the schedule change written in a calendar invitation, the user asked for it to be removed.",
+              "content_digest": "7bfc906526c255f90a85b6dcc4b28ea1b0a9389e9f17ba989a4ce098280578c8",
+              "position": 1,
+              "uid": "195ba5ab-3ee0-5594-a859-9f2b5eadf9ea"
+            },
+            {
+              "content": "The user was able to reschedule the appointment after providing only a new time, without a reason.",
+              "content_digest": "14f1bd0410c76aa3a0eb28a2212fd06558ab23b6dc012aa5529980a67efe3e2b",
+              "position": 2,
+              "uid": "4c8759cc-66aa-527c-a9d5-197d39b5d2b7"
+            },
+            {
+              "content": "On a day the user traveled in their father's car, they photographed the parking location.",
+              "content_digest": "111e71af27be5d109557440569352964544e9b702810741445172a6cf51f94f5",
+              "position": 3,
+              "uid": "d4b27ea7-d329-5dc7-b7ca-91d0cd50a958"
+            },
+            {
+              "content": "On the next visit, when the user did not take a photo, they walked one circuit of the parking garage while looking for the exit.",
+              "content_digest": "6d61d67e35552cb739d0220e480189706ec5bbac74f93b87149a6948d9ac2805",
+              "position": 4,
+              "uid": "32a19a57-9b04-5f86-92ba-202a9ac803e4"
+            },
+            {
+              "content": "After hearing preparation items from their mother by phone, the user omitted two items.",
+              "content_digest": "449dc73aad797f5acd3d898292cf9942f7d3b65b9faf52769ae5b3332285b4f3",
+              "position": 5,
+              "uid": "0eeffd8c-acd6-57bf-950d-20cfa1fe62b3"
+            },
+            {
+              "content": "After receiving the preparation items again by text, the user put all of them in their bag.",
+              "content_digest": "9539ab90f598a96d97a73b7954db8834d3106861ba6ecc814e579a348e0145d6",
+              "position": 6,
+              "uid": "07ea3801-8666-581d-b846-2f45bf99ca19"
+            },
+            {
+              "content": "The user's mother does not want the reason for her visit disclosed in the user's external schedule.",
+              "content_digest": "b1aff7bb5b5df1ec773fd8875205cd9fdfa2fd5b520cf91b7c84c9e3054b4feb",
+              "position": 7,
+              "uid": "9e70b92e-1d8d-51ef-962d-bd9b348a56d5"
+            },
+            {
+              "content": "Do not include the mother's reason for a visit when conveying the user's availability externally.",
+              "content_digest": "b9473919c63f233fc66c49bbf00b20a8ab9532bcb1b8ce3896c442afed4229d9",
+              "position": 8,
+              "uid": "d76686fd-9f1d-5d94-931b-4b49c86a8f4e"
+            },
+            {
+              "content": "Some daily-life services may operate for shorter hours during the year-end holiday period.",
+              "content_digest": "48d4487aba4c395527f9dfeac9488f45556d1bd89475f8620b0a64d84e4479fc",
+              "position": 9,
+              "uid": "820a5de9-9e08-52c7-8747-5155fe341bb4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "1cb65255-ca7d-432a-97c4-062f5451fbd9"
+        },
+        {
+          "context_digest": "5e42fc3dcfbf5576148277f6841977ca8a5cabd4a3fc67a5581f6f6cc816c900",
+          "context_name": "task-3/local/personal-memory/2025/10",
+          "context_uid": "8130b676-dc51-5c31-b7dc-185afdf9cf07",
+          "memories": [
+            {
+              "content": "The user keeps waterproof shoes for rainy days to the left of the entrance.",
+              "content_digest": "5b9e5a20153c7865010318800d740a410faef0c13fe2278c20ce984a89b7dea5",
+              "position": 0,
+              "uid": "82c1e806-de3a-5633-8a08-175487e69fd6"
+            },
+            {
+              "content": "On a day the user walked in the rain wearing thin shoes, their socks became wet and they changed them after arrival.",
+              "content_digest": "fdbdab8c08a4b1d933ff8ac3ddedee8541ddf070e8c6e6020b6c1d14b992c621",
+              "position": 1,
+              "uid": "25df6384-836f-5f8e-bd97-73a1fb171c48"
+            },
+            {
+              "content": "On the next rainy day, the user wore waterproof shoes and their feet remained dry.",
+              "content_digest": "0e87d74fb93fe062cd12efe2f5a04fbae5ce13a60491fd9ad04c4e006acbd87f",
+              "position": 2,
+              "uid": "55abae4f-206a-586e-8b35-406d7525c0a1"
+            },
+            {
+              "content": "On a day the user walked for a long time in new shoes, their heel chafed and they shortened the route home.",
+              "content_digest": "aeb369b995cdf17ea73ae8546b454eab70f33bf6d3c67a09aee2805c1c598b6d",
+              "position": 3,
+              "uid": "c6d21ec4-6bdf-55df-b4d4-05cb531bf4bd"
+            },
+            {
+              "content": "The user wore the same shoes on two short outings before using them on a long walk.",
+              "content_digest": "0d7ed5656f35f4fe025c6ba80e4c829f5b9851c193f981de9a461f848317d60a",
+              "position": 4,
+              "uid": "a6424854-e51e-5afc-8b9f-9e2f0273f70e"
+            },
+            {
+              "content": "On a day the user dried an umbrella outside the entrance, they found it immediately before the next outing.",
+              "content_digest": "dbc2453ca5f895e2cfe7f58e5624cf4c5d6793468af3b25df7e9a4ddb7d50159",
+              "position": 5,
+              "uid": "1b436b46-3d1f-5aa2-99e3-94b7c2412bfd"
+            },
+            {
+              "content": "On a day the user put a folded wet umbrella in their bag, documents inside became wet.",
+              "content_digest": "1f63fbc8c6b491a734f0f7a4190e26aec22826c1ff839242e0ca71d933312c9c",
+              "position": 6,
+              "uid": "ccd1f422-6130-5f19-869e-681102a3a1fa"
+            },
+            {
+              "content": "When rain is forecast, the user's mother expects the user may forget an umbrella and sets out a spare at the entrance.",
+              "content_digest": "80bdfaefb6f781aa91ef7217331e75f09b4766650c2b078dfadf592b2eb27b08",
+              "position": 7,
+              "uid": "c69a8e87-2b6f-5514-ab0d-0037531592f8"
+            },
+            {
+              "content": "When proposing a long-distance walking plan, check both the weather that day and recent records of shoe discomfort.",
+              "content_digest": "f54a546d423099c3abbb65bb49e4ddf773a8191dcffbb8b3d5153dfd70553b73",
+              "position": 8,
+              "uid": "4567ea9f-1800-51ed-bfac-f4cdf674d4cf"
+            },
+            {
+              "content": "Even if the local agent knows a shoe's location, it cannot know its current condition or whether it is usable.",
+              "content_digest": "28202c222ca800a5e19dbaebea2b3c992748f530a695517cf123b10187a31bc8",
+              "position": 9,
+              "uid": "a4ff1b76-755d-530a-b24c-8655115e4fbe"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "ce5a00d4-9f97-48e3-b4b8-2d634e5bf623"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate areas of daily-life support: the reference centers on schedule privacy, remembering preparations, parking navigation, and holiday hours, while the compared frame centers on rain gear, footwear comfort, umbrella handling, and walking-plan checks. No cross-frame operational claims materially overlap.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1cb65255-ca7d-432a-97c4-062f5451fbd9",
+              "memory_uid": "bb17c696-0c1c-516f-8ad9-68a4b159ce22"
+            }
+          ],
+          "reason": "This is a one-sided historical scheduling fact with no compared-frame claim addressing the same event or decision.",
+          "status": "RESOLVED",
+          "summary": "The user once changed a November 2024 schedule because of their mother's hospital visit.",
+          "uid": "fd95d335-1592-56c1-b6c7-5f9fa5e9ff38"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1cb65255-ca7d-432a-97c4-062f5451fbd9",
+              "memory_uid": "195ba5ab-3ee0-5594-a859-9f2b5eadf9ea"
+            },
+            {
+              "frame_uid": "1cb65255-ca7d-432a-97c4-062f5451fbd9",
+              "memory_uid": "4c8759cc-66aa-527c-a9d5-197d39b5d2b7"
+            }
+          ],
+          "reason": "These memories split one scheduling episode showing removal of sensitive rationale and successful reason-free rescheduling; the compared frame has no matching scheduling claim.",
+          "status": "RESOLVED",
+          "summary": "After objecting to a visit reason appearing in a calendar invitation, the user successfully rescheduled by supplying only a new time.",
+          "uid": "ee8e2722-08aa-5067-8fef-a0c3d5002a34"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1cb65255-ca7d-432a-97c4-062f5451fbd9",
+              "memory_uid": "d4b27ea7-d329-5dc7-b7ca-91d0cd50a958"
+            },
+            {
+              "frame_uid": "1cb65255-ca7d-432a-97c4-062f5451fbd9",
+              "memory_uid": "32a19a57-9b04-5f86-92ba-202a9ac803e4"
+            }
+          ],
+          "reason": "These memories form one parking-navigation sequence contrasting the presence and absence of a location record, with no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user photographed a parking location on one visit and, without a photo on the next visit, circled the garage while seeking the exit.",
+          "uid": "4a88aef0-fdb9-5dca-9b21-bfe39d1b99ee"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1cb65255-ca7d-432a-97c4-062f5451fbd9",
+              "memory_uid": "0eeffd8c-acd6-57bf-950d-20cfa1fe62b3"
+            },
+            {
+              "frame_uid": "1cb65255-ca7d-432a-97c4-062f5451fbd9",
+              "memory_uid": "07ea3801-8666-581d-b846-2f45bf99ca19"
+            }
+          ],
+          "reason": "These memories split one preparation-reminder sequence contrasting spoken and written delivery, with no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user omitted items conveyed by phone but packed every item after receiving the preparation list by text.",
+          "uid": "f40a4e62-4395-573d-a8b4-512ab77990a2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1cb65255-ca7d-432a-97c4-062f5451fbd9",
+              "memory_uid": "9e70b92e-1d8d-51ef-962d-bd9b348a56d5"
+            },
+            {
+              "frame_uid": "1cb65255-ca7d-432a-97c4-062f5451fbd9",
+              "memory_uid": "d76686fd-9f1d-5d94-931b-4b49c86a8f4e"
+            }
+          ],
+          "reason": "The memories state the same one-sided privacy preference and its operational instruction; the compared frame contains no external-schedule policy.",
+          "status": "RESOLVED",
+          "summary": "The mother's visit reason should not be disclosed when the user's availability is communicated externally.",
+          "uid": "2694fd52-7d04-57d8-905b-4b415b4cf27e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1cb65255-ca7d-432a-97c4-062f5451fbd9",
+              "memory_uid": "820a5de9-9e08-52c7-8747-5155fe341bb4"
+            }
+          ],
+          "reason": "This is an independently useful one-sided service-availability caution absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Daily-life services may have shorter operating hours during the year-end holiday period.",
+          "uid": "5c0b9b37-47de-564a-b66a-50d63caeacb5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ce5a00d4-9f97-48e3-b4b8-2d634e5bf623",
+              "memory_uid": "82c1e806-de3a-5633-8a08-175487e69fd6"
+            }
+          ],
+          "reason": "This is a one-sided location fact with no reference-frame claim about footwear storage.",
+          "status": "RESOLVED",
+          "summary": "The user keeps waterproof rainy-day shoes to the left of the entrance.",
+          "uid": "4a83ac52-5b55-579a-83fe-41f76e27f2e8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ce5a00d4-9f97-48e3-b4b8-2d634e5bf623",
+              "memory_uid": "25df6384-836f-5f8e-bd97-73a1fb171c48"
+            },
+            {
+              "frame_uid": "ce5a00d4-9f97-48e3-b4b8-2d634e5bf623",
+              "memory_uid": "55abae4f-206a-586e-8b35-406d7525c0a1"
+            }
+          ],
+          "reason": "These memories form one footwear-choice sequence contrasting rainy-day outcomes, with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Thin shoes led to wet socks during rain, whereas waterproof shoes kept the user's feet dry on the next rainy day.",
+          "uid": "d9bc8296-f56b-56d9-b78c-7ae90b2abb0e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ce5a00d4-9f97-48e3-b4b8-2d634e5bf623",
+              "memory_uid": "c6d21ec4-6bdf-55df-b4d4-05cb531bf4bd"
+            },
+            {
+              "frame_uid": "ce5a00d4-9f97-48e3-b4b8-2d634e5bf623",
+              "memory_uid": "a6424854-e51e-5afc-8b9f-9e2f0273f70e"
+            }
+          ],
+          "reason": "These memories split one shoe-break-in and long-walk discomfort episode, with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Despite two short trial outings, the same new shoes chafed the user's heel on a long walk and caused a shorter route home.",
+          "uid": "6fcdf406-cdfd-566d-b2c1-fbc043de584b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ce5a00d4-9f97-48e3-b4b8-2d634e5bf623",
+              "memory_uid": "1b436b46-3d1f-5aa2-99e3-94b7c2412bfd"
+            },
+            {
+              "frame_uid": "ce5a00d4-9f97-48e3-b4b8-2d634e5bf623",
+              "memory_uid": "ccd1f422-6130-5f19-869e-681102a3a1fa"
+            }
+          ],
+          "reason": "These memories jointly describe practical consequences of two umbrella-handling choices, with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Drying an umbrella outside the entrance made it easy to find, while putting it wet in a bag damaged documents.",
+          "uid": "2ce5f1bd-800e-573d-a89a-315ee789c828"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ce5a00d4-9f97-48e3-b4b8-2d634e5bf623",
+              "memory_uid": "c69a8e87-2b6f-5514-ab0d-0037531592f8"
+            }
+          ],
+          "reason": "This is an independently useful one-sided family reminder practice absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "When rain is forecast, the user's mother anticipates possible forgetfulness and places a spare umbrella at the entrance.",
+          "uid": "876f20e1-4e5e-5db3-8d01-6638df79cedc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ce5a00d4-9f97-48e3-b4b8-2d634e5bf623",
+              "memory_uid": "4567ea9f-1800-51ed-bfac-f4cdf674d4cf"
+            }
+          ],
+          "reason": "This is a one-sided planning instruction with no reference-frame policy addressing long walks.",
+          "status": "RESOLVED",
+          "summary": "Long-distance walking proposals should consider both that day's weather and recent shoe-discomfort records.",
+          "uid": "0885b9a0-f105-55b9-8930-cb4436636c41"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ce5a00d4-9f97-48e3-b4b8-2d634e5bf623",
+              "memory_uid": "a4ff1b76-755d-530a-b24c-8655115e4fbe"
+            }
+          ],
+          "reason": "This is an independently useful one-sided limitation on local knowledge, not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Knowing where shoes are stored does not establish their current condition or usability.",
+          "uid": "d0ca5442-6242-561b-8b88-4befaa004218"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only information covers waterproof footwear, shoe discomfort on long walks, umbrella placement and moisture risks, a family reminder practice, walking-plan checks, and limits on knowing gear condition.",
+        "differences": "",
+        "reference_only": "Reference-only information covers reason-free rescheduling and family privacy, written preparation reminders, photographed parking locations, and possible year-end service-hour reductions."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "117c470a-8c56-4066-8bb5-01b87f17a813"
+    },
+    "analysis_digest": "958c01f4b917967e27f117a695d0f5d938ceb480f64850d2111a8e94d225dfba",
+    "key": "6c6571980ad28d4dc34c307c02e328fda4317933d7d6c41a580b4760225b93f1",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 49.40404412499993,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "6c6571980ad28d4dc34c307c02e328fda4317933d7d6c41a580b4760225b93f1",
+  "created_at": "2026-08-13T18:47:27.196588Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/11",
+  "pair_key": "0f50813da0ad41a34c34a8f7c2dca6bdb6955004e6f787199111907261d3a86e",
+  "provider_seconds": 49.40404412499993,
+  "right": "task-3/local/personal-memory/2025/10",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

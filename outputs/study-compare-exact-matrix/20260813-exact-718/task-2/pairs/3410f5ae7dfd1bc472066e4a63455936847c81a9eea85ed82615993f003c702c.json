@@ -1,0 +1,349 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:16:49.859858+00:00",
+      "frames": [
+        {
+          "context_digest": "e76b6eea5af0e4d970d4db385b4100a788a8b1ed5ef6e68709bd92c943ab3b6b",
+          "context_name": "task-2/advisor1/compensation",
+          "context_uid": "7ba75d6b-cef6-5c8b-9b17-d3901e168d24",
+          "memories": [
+            {
+              "content": "Calculate user study compensation budgets based on estimated participation burden, combining session time and preparation effort.",
+              "content_digest": "2dc18d8ddeb900741b2a8f936a59d5fc72423e2d3144e8b2232a6435dc9a68f1",
+              "position": 0,
+              "uid": "0ae46268-cca7-57d5-a0ee-6eb3b85cda84"
+            },
+            {
+              "content": "Compensate for required travel time in face-to-face user studies as well.",
+              "content_digest": "688ba9df95e18254a5a33ab6c0e59066cf0674137b6802178e3fb8eae4ba38e5",
+              "position": 1,
+              "uid": "bdda6e22-ea06-5a13-8854-67f7521724db"
+            },
+            {
+              "content": "Compensate for the actual time participants spent in sessions, regardless of research modality.",
+              "content_digest": "8673c2b5b5913f0e8bcf0035eea4bc87430bb1fcf8ffb27b354bde0ca3a7ae4e",
+              "position": 2,
+              "uid": "f49b1d0a-7a1a-53b5-b7fc-815cc2cc134a"
+            },
+            {
+              "content": "Leave cash payment as an available compensation method for face-to-face studies.",
+              "content_digest": "72f9e1b33de0c05bb711c2d8162ab62f382a75871a710db37b858125eae6fcde",
+              "position": 3,
+              "uid": "1f4d05e4-2a79-572c-8050-beb1464fb781"
+            },
+            {
+              "content": "If compensation equity is explained, do not require finalizing the payment method at the proposal stage.",
+              "content_digest": "6945260e986651e7992034801b6151a3f93184013fea77d17b630f55fcdc943b",
+              "position": 4,
+              "uid": "abcba764-6f35-5dae-bb3d-7860fb72ccf2"
+            },
+            {
+              "content": "Apply the same base hourly rate to face-to-face and remote studies if task burden is equal.",
+              "content_digest": "144477b358e6e8931042d1793a5ffd10f56d69aa90523d69d20a622528a9dad0",
+              "position": 5,
+              "uid": "c6a28f37-1a7c-5dbd-b75c-c829f0461504"
+            },
+            {
+              "content": "Participants judge compensation fairness based on the total burden, combining session time with required travel and preparation time.",
+              "content_digest": "54e8900c7049e048484db8b523a41e98cbb911b45be2adbd103fd2f1635bf026",
+              "position": 6,
+              "uid": "874de649-9c04-5960-b3a9-e68356ef666c"
+            },
+            {
+              "content": "Account in compensation for the burden of rescheduling iterations and returning for multiple formative evaluation sessions.",
+              "content_digest": "f09be004defb4019ba7476919b6780cc2b6bbac088f79dbd0ec66bf2753af27d",
+              "position": 7,
+              "uid": "529559f5-850d-5920-8e27-0b1e7138dc36"
+            },
+            {
+              "content": "Compensate participants for time already invested even if a session is terminated early due to prototype errors.",
+              "content_digest": "64b65cc0b307b48d64641d126594a5b8a9258518c3aa27d7846be2306c25a9f4",
+              "position": 8,
+              "uid": "c8be56ee-860a-5f6c-abbf-02c8dbc59eb5"
+            },
+            {
+              "content": "The author of this proposal tends to exclude preparation burden between sessions when calculating compensation for iterative studies.",
+              "content_digest": "177f041fcb9fe768dcc1c476b592e99c8609d06ebf727aeca1379d21256b43d8",
+              "position": 9,
+              "uid": "bdac8cf8-dd11-5794-b4b2-9774ff344436"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "6577cc9e-7f28-4958-8309-d2c4cc5610e8"
+        },
+        {
+          "context_digest": "673626cf0c3650052d63b04173d43516860e2035d7038878998898bc5bebb2e3",
+          "context_name": "task-2/advisor2/evaluation",
+          "context_uid": "6e9f8ad5-a43d-5dfd-99a3-604f2757da0d",
+          "memories": [
+            {
+              "content": "Specify a single representative measure that will drive operational decisions to maintain, modify, or discontinue the deployed design.",
+              "content_digest": "dd9abb7bbbdf6846921a984789426b27a45df60ce38408422b6b0774835b44f8",
+              "position": 0,
+              "uid": "f27576c7-6f53-5412-901c-19df7e1d5e2e"
+            },
+            {
+              "content": "The HCI review panel verifies whether operational decisions can be made based on the declared primary measure.",
+              "content_digest": "1d88ce414bdbfcf9565c712f8f0d72378569d723c0c5b5c6007dc18a96f6378f",
+              "position": 1,
+              "uid": "8608bdf3-49d7-54d0-a2fb-c883c24e40ef"
+            },
+            {
+              "content": "Establish decision thresholds indicating at what levels key metrics trigger maintaining, modifying, or discontinuing the design.",
+              "content_digest": "866bad632421bfd3487fba69b855ccb36aeb9e31c6208b339db22301bdd3fc28",
+              "position": 2,
+              "uid": "b06bb706-f911-5767-8e27-b64c74d0e592"
+            },
+            {
+              "content": "Evaluate whether reducing workload for one role creates new tasks for other roles through the proposed design changes.",
+              "content_digest": "6b38b84cdc2a78f61f3163cccd787dec39167596f4f720788ec4c930f698fa9f",
+              "position": 3,
+              "uid": "473ec6e8-29f0-5c83-b36d-b7d32eeb25a3"
+            },
+            {
+              "content": "Distinguish usability from organizational adoption intent as separate evaluation outcomes.",
+              "content_digest": "7328bf54063078377068871ee3970709d9a8763204c2c3a08321e025e028868c",
+              "position": 4,
+              "uid": "935cf79f-3e67-567d-ab55-35e8fad7eb37"
+            },
+            {
+              "content": "Implementation fidelity indicates whether planned features and operational procedures were delivered in the field according to intended specifications.",
+              "content_digest": "b04d0bc0590dd77d3bc0bde581481992d57ad48c14517a2a1d63f996e51290b2",
+              "position": 5,
+              "uid": "bea0e97f-1217-507b-87a7-09ce85bae9fe"
+            },
+            {
+              "content": "Initial evaluations and long-term operation do not share identical measurement conditions due to differences in system exposure duration and frequency of repeated use.",
+              "content_digest": "49e90b293b90d173b11d1bb89e85f688c55cb923c2a19eb2058a539388327715",
+              "position": 6,
+              "uid": "dbe435ff-fe32-54fe-a2e6-7b46694ce151"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "d9d3b649-010d-41eb-bd9a-28e07b0a5517"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate operational domains. The reference centers on equitable participant compensation across burden, modality, disruptions, and payment arrangements, while the compared frame defines evaluation measures, decision criteria, workload effects, adoption outcomes, implementation fidelity, and longitudinal measurement conditions.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6577cc9e-7f28-4958-8309-d2c4cc5610e8",
+              "memory_uid": "0ae46268-cca7-57d5-a0ee-6eb3b85cda84"
+            },
+            {
+              "frame_uid": "6577cc9e-7f28-4958-8309-d2c4cc5610e8",
+              "memory_uid": "bdda6e22-ea06-5a13-8854-67f7521724db"
+            },
+            {
+              "frame_uid": "6577cc9e-7f28-4958-8309-d2c4cc5610e8",
+              "memory_uid": "f49b1d0a-7a1a-53b5-b7fc-815cc2cc134a"
+            },
+            {
+              "frame_uid": "6577cc9e-7f28-4958-8309-d2c4cc5610e8",
+              "memory_uid": "874de649-9c04-5960-b3a9-e68356ef666c"
+            }
+          ],
+          "reason": "These memories collectively state or explain the time components underlying burden-based participant compensation, with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Compensation should reflect time-related participation burden, including applicable session, preparation, and in-person travel time.",
+          "uid": "4aad30b7-00db-5f61-8e10-d0f52227ddab"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6577cc9e-7f28-4958-8309-d2c4cc5610e8",
+              "memory_uid": "1f4d05e4-2a79-572c-8050-beb1464fb781"
+            }
+          ],
+          "reason": "This is a one-sided policy about an allowed payment method, not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Cash should remain an available compensation method for face-to-face studies.",
+          "uid": "59484664-8414-52e4-b462-61244f1fbf66"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6577cc9e-7f28-4958-8309-d2c4cc5610e8",
+              "memory_uid": "abcba764-6f35-5dae-bb3d-7860fb72ccf2"
+            }
+          ],
+          "reason": "This independently governs when payment-method selection must occur and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The payment method need not be finalized at proposal time when compensation equity is explained.",
+          "uid": "cb380742-a047-55c3-9719-a3d59f3c168c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6577cc9e-7f28-4958-8309-d2c4cc5610e8",
+              "memory_uid": "c6a28f37-1a7c-5dbd-b75c-c829f0461504"
+            }
+          ],
+          "reason": "This is a one-sided modality-equity rule for compensation rates.",
+          "status": "RESOLVED",
+          "summary": "Face-to-face and remote studies should use the same base hourly rate when task burden is equal.",
+          "uid": "dfdd6a6e-6f65-5641-9c3e-0529c2e0b9dc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6577cc9e-7f28-4958-8309-d2c4cc5610e8",
+              "memory_uid": "529559f5-850d-5920-8e27-0b1e7138dc36"
+            }
+          ],
+          "reason": "This independently addresses participation burden created by study iteration and has no compared-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "Compensation should account for rescheduling and repeated attendance required by iterative formative evaluations.",
+          "uid": "8747c9e9-3c29-5550-9c0b-71fe9d28d80c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6577cc9e-7f28-4958-8309-d2c4cc5610e8",
+              "memory_uid": "c8be56ee-860a-5f6c-abbf-02c8dbc59eb5"
+            }
+          ],
+          "reason": "This is a one-sided rule for disrupted sessions, absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Participants should be compensated for time already invested when prototype errors terminate a session early.",
+          "uid": "455af3a5-8103-5ce9-ae4b-c670908fd7e7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6577cc9e-7f28-4958-8309-d2c4cc5610e8",
+              "memory_uid": "bdac8cf8-dd11-5794-b4b2-9774ff344436"
+            }
+          ],
+          "reason": "This is an independently useful observation about current calculation behavior, with no corresponding compared-frame claim.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to omit preparation burden between iterative sessions from compensation calculations.",
+          "uid": "4dcee7cc-b925-5c73-b182-bbbbddfbc7e2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d9d3b649-010d-41eb-bd9a-28e07b0a5517",
+              "memory_uid": "f27576c7-6f53-5412-901c-19df7e1d5e2e"
+            },
+            {
+              "frame_uid": "d9d3b649-010d-41eb-bd9a-28e07b0a5517",
+              "memory_uid": "8608bdf3-49d7-54d0-a2fb-c883c24e40ef"
+            },
+            {
+              "frame_uid": "d9d3b649-010d-41eb-bd9a-28e07b0a5517",
+              "memory_uid": "b06bb706-f911-5767-8e27-b64c74d0e592"
+            }
+          ],
+          "reason": "These memories split one decision-governance claim across a representative measure, review of its decision usefulness, and triggering thresholds; the reference frame does not address it.",
+          "status": "RESOLVED",
+          "summary": "Operational evaluation should make maintain, modify, or discontinue decisions actionable through declared measurement criteria.",
+          "uid": "2a7356b4-7880-5a10-a96c-12a638139e78"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d9d3b649-010d-41eb-bd9a-28e07b0a5517",
+              "memory_uid": "473ec6e8-29f0-5c83-b36d-b7d32eeb25a3"
+            }
+          ],
+          "reason": "This is a one-sided requirement to assess redistributed work.",
+          "status": "RESOLVED",
+          "summary": "Design evaluation should test whether workload reductions for one role create tasks for other roles.",
+          "uid": "c0d5e1d1-2bfe-5e3b-b074-da50972e914d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d9d3b649-010d-41eb-bd9a-28e07b0a5517",
+              "memory_uid": "935cf79f-3e67-567d-ab55-35e8fad7eb37"
+            }
+          ],
+          "reason": "This independently distinguishes two outcome constructs not discussed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Usability and organizational adoption intent should be treated as separate evaluation outcomes.",
+          "uid": "ddfa856d-bc08-53d6-911e-eb1d9a26d0bf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d9d3b649-010d-41eb-bd9a-28e07b0a5517",
+              "memory_uid": "bea0e97f-1217-507b-87a7-09ce85bae9fe"
+            }
+          ],
+          "reason": "This is a one-sided evaluation concept defining delivery against plan.",
+          "status": "RESOLVED",
+          "summary": "Implementation fidelity concerns whether fielded features and procedures match intended specifications.",
+          "uid": "f6a56e26-8961-5849-80a0-6f367beb5131"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d9d3b649-010d-41eb-bd9a-28e07b0a5517",
+              "memory_uid": "dbe435ff-fe32-54fe-a2e6-7b46694ce151"
+            }
+          ],
+          "reason": "This independently qualifies comparisons across evaluation time horizons and has no reference-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "Initial and long-term evaluations operate under different measurement conditions because exposure duration and repeated-use frequency differ.",
+          "uid": "7bcf48f3-bbe6-548d-9807-f1498ea86ac3"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers measurement-driven deployment decisions, workload redistribution, distinct usability and adoption outcomes, implementation fidelity, and changing measurement conditions over time.",
+        "differences": "",
+        "reference_only": "The reference covers burden-based compensation, modality equity, payment-method flexibility, iterative participation, disrupted sessions, and a noted tendency to omit between-session preparation."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "401f5fb0-98e6-42c1-ad88-0a1044f9adee"
+    },
+    "analysis_digest": "52253cd1efc23bd948415fa4cd0b4de673e284bb040fac8bf477050019737410",
+    "key": "0e7a8b61a76d9cabf21a919b9b9f870450edaebff328fc0b092f124ecf9aeaef",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 51.60247654200066,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "0e7a8b61a76d9cabf21a919b9b9f870450edaebff328fc0b092f124ecf9aeaef",
+  "created_at": "2026-08-13T18:17:41.461849Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/compensation",
+  "pair_key": "3410f5ae7dfd1bc472066e4a63455936847c81a9eea85ed82615993f003c702c",
+  "provider_seconds": 51.60247654200066,
+  "right": "task-2/advisor2/evaluation",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

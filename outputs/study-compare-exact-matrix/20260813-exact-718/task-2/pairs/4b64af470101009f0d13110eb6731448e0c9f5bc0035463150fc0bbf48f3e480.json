@@ -1,0 +1,323 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:14:59.368026+00:00",
+      "frames": [
+        {
+          "context_digest": "30f0425cad991a5bb1b473f7e73c2c039db2d91dc0c95116413d0a8e7b6fed29",
+          "context_name": "task-2/advisor1/budget",
+          "context_uid": "d6d3ee9e-eb0f-5c28-9463-7a680d53b470",
+          "memories": [
+            {
+              "content": "Keep the total, major cost categories, and one-line estimate basis in the main text so the resource argument can be understood without leaving the proposal.",
+              "content_digest": "5dc9db0be6499fc408063be04c9e1cc344986512f4d24d5697f5c53a08529c9a",
+              "position": 0,
+              "uid": "05e0261e-5c52-5030-8176-0f02d4522931"
+            },
+            {
+              "content": "Place each major cost beside the activity or deliverable it enables in the main text.",
+              "content_digest": "b97219830051faf46cff7c9541c331012571866926740ed4d6a7925c12fb21a8",
+              "position": 1,
+              "uid": "1083e9b3-698a-57b1-91ab-ce04cec1e5e5"
+            },
+            {
+              "content": "State the quantity and unit-rate basis for each major cost in the same paragraph that requests it.",
+              "content_digest": "5ce37d95d9d037bbab71276fa8f0e8e383b472d0122817ab7b711c971b8cbf5d",
+              "position": 2,
+              "uid": "3652f268-d86f-55d6-935d-d3bdc487aae6"
+            },
+            {
+              "content": "Readers may question a proposed priority when its cost cannot be checked on the same page as the claimed benefit.",
+              "content_digest": "26fa14ff80ece7682cb51c7356a47a8e60e94edd4551f59ecd2fa3017bd9bffd",
+              "position": 3,
+              "uid": "4e1e1201-94b8-5a7a-8737-edc4c62881ff"
+            },
+            {
+              "content": "Update the cost sentence whenever the related activity changes so the narrative and requested amount cannot drift apart.",
+              "content_digest": "343c11198b38874476e0cda3707dd07436699852db0934e2e8f8c95a7ea3c3ea",
+              "position": 4,
+              "uid": "2f5f9039-e038-51c1-8af0-21a78772c512"
+            },
+            {
+              "content": "Accept a denser main-text paragraph when the estimate basis is essential to deciding whether the request is proportionate.",
+              "content_digest": "59ca1aafc11b37b097251b4b7c6b15e249262304f79b261bd4351d3ca89cb5fe",
+              "position": 5,
+              "uid": "f7a16d08-fbe2-5508-890d-cdbf70c1146e"
+            },
+            {
+              "content": "The user tends to revise the work plan but forget a detached budget table unless the key amount is repeated beside the activity.",
+              "content_digest": "393651043824d9e9c528e5de7618854b71970967d172ee1e9bc3c77aec3baab0",
+              "position": 6,
+              "uid": "2ca1d5a1-d78a-55b2-ab21-fd6ad73366b4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "e2ca1865-cbb7-45d3-b82f-edd13825d1c9"
+        },
+        {
+          "context_digest": "bf5136a518ce85246184349a0194e446748710ed6da95e5c97d4a31d74ddc1b9",
+          "context_name": "task-2/advisor2/review",
+          "context_uid": "3398ba87-f01e-56bd-9da2-0ed0894524fa",
+          "memories": [
+            {
+              "content": "Conduct one review prior to submission focusing solely on the validity of user problems, system interventions, and field evaluation logic.",
+              "content_digest": "9b0b5596ec5924a6141926bfc337ec6e23d77dfb7b65facb26b42109f05f1fe4",
+              "position": 0,
+              "uid": "6d203c86-b6e0-586a-b896-b654fa319ed1"
+            },
+            {
+              "content": "Cross-check whether research questions align with the core functions of the system.",
+              "content_digest": "f7f9f49efe539881dae49a96adce0ec349435e4cc7f55229c88097e54fe03f93",
+              "position": 1,
+              "uid": "6b75bfb1-67f5-50bb-9e0c-04026062de96"
+            },
+            {
+              "content": "Cross-check whether field tasks align with representative measures.",
+              "content_digest": "3e993f6c978e14b5b0f6e8ada40d8a0067981e943c67636e9599fb652dca44a4",
+              "position": 2,
+              "uid": "3abfda89-82ab-5cc5-bdcd-5e2f274fd727"
+            },
+            {
+              "content": "Cross-check whether the evidence to be collected aligns with the design and operational decisions to be changed.",
+              "content_digest": "a4761a8dac6c60a2132619c8c8e963aca0d61216d689786b18574f5e30f1f3aa",
+              "position": 3,
+              "uid": "f14f1974-9035-5a2c-931a-89a5004a2567"
+            },
+            {
+              "content": "Finally verify that the user problem, system intervention, field evaluation, and expected contribution form one coherent logical flow.",
+              "content_digest": "47198a770770dc805e0f40a5f9b9c34ae1999f39ec2f9fa1c34b3280f21f5477",
+              "position": 4,
+              "uid": "6ba1d344-5d98-5c25-ba1e-b28c08d39747"
+            },
+            {
+              "content": "HCI reviewers view the validity of design interventions as low if research questions do not connect to system functions.",
+              "content_digest": "ffa754352dfecc597f84cff7cbf8607a12bbfd99ac22250cc84392bd85e37e73",
+              "position": 5,
+              "uid": "4a85ebbd-a4ee-5c88-9e93-5fc545f41c64"
+            },
+            {
+              "content": "HCI reviewers view the validity of evaluation plans as low if field tasks fail to generate representative measures.",
+              "content_digest": "f29eb5429d767b0fa171b7e9862b3d8d06dfd388739e95acd67b2321aaf1a91e",
+              "position": 6,
+              "uid": "75c4c71d-28e3-559c-99d1-f0dccc31a9e2"
+            },
+            {
+              "content": "HCI reviewers view the practical utility of contributions as low if collected evidence cannot change design or operational decisions.",
+              "content_digest": "6b9ae0bc59cda995d674479dfe95f43359ff04e68cb07633957885ee5cf1336c",
+              "position": 7,
+              "uid": "577e5506-78e8-5768-b288-7a5986347cce"
+            },
+            {
+              "content": "Before submission, conduct a sequential walkthrough with field liaisons of installation failures, operational interruptions, and recovery scenarios.",
+              "content_digest": "115fa1f22eb7f55918620418f89def51ba84bd36e102875a5f5e560de5305dda",
+              "position": 8,
+              "uid": "9ce34a9a-4ba2-5b32-a1de-b0469ddc3f95"
+            },
+            {
+              "content": "Verify in one sentence how each proposed contribution could actually alter specific design or operational decisions.",
+              "content_digest": "1c6ef38e42f40e9cd6ab5323deaa825efb1136b926b66af9337ea6debaf8600e",
+              "position": 9,
+              "uid": "f8253f92-c60c-57e1-a630-6b31abe080ae"
+            },
+            {
+              "content": "The user must distinguish unconfirmed field partners and equipment from finalized ones so remaining execution risks can be assessed.",
+              "content_digest": "c2eb0936c09d8796092950aba699664f79f2222f27523e37a1af5feabe2b8058",
+              "position": 10,
+              "uid": "f5ad6933-3e22-5c47-bdaf-bacc9c9a5b3c"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "3f212c42-98c2-48a2-a167-45cdaeea444a"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate proposal-quality concerns rather than the same decisions: the reference emphasizes transparent, activity-linked costing, while the compared frame emphasizes research coherence, evaluative validity, operational review, and execution-risk disclosure. Neither side contradicts or qualifies the other.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e2ca1865-cbb7-45d3-b82f-edd13825d1c9",
+              "memory_uid": "05e0261e-5c52-5030-8176-0f02d4522931"
+            },
+            {
+              "frame_uid": "e2ca1865-cbb7-45d3-b82f-edd13825d1c9",
+              "memory_uid": "1083e9b3-698a-57b1-91ab-ce04cec1e5e5"
+            },
+            {
+              "frame_uid": "e2ca1865-cbb7-45d3-b82f-edd13825d1c9",
+              "memory_uid": "3652f268-d86f-55d6-935d-d3bdc487aae6"
+            },
+            {
+              "frame_uid": "e2ca1865-cbb7-45d3-b82f-edd13825d1c9",
+              "memory_uid": "4e1e1201-94b8-5a7a-8737-edc4c62881ff"
+            },
+            {
+              "frame_uid": "e2ca1865-cbb7-45d3-b82f-edd13825d1c9",
+              "memory_uid": "f7a16d08-fbe2-5508-890d-cdbf70c1146e"
+            }
+          ],
+          "reason": "These memories split one one-sided policy covering visible totals and categories, activity linkage, estimate bases, same-page checkability, and the permitted density needed for proportionality judgments.",
+          "status": "RESOLVED",
+          "summary": "Decision-essential cost information should remain checkable in the main text beside the activities and benefits it supports, even when this makes the prose denser.",
+          "uid": "b4d40246-7717-5b0c-8fed-03ad006c4058"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e2ca1865-cbb7-45d3-b82f-edd13825d1c9",
+              "memory_uid": "2f5f9039-e038-51c1-8af0-21a78772c512"
+            },
+            {
+              "frame_uid": "e2ca1865-cbb7-45d3-b82f-edd13825d1c9",
+              "memory_uid": "2ca1d5a1-d78a-55b2-ab21-fd6ad73366b4"
+            }
+          ],
+          "reason": "These memories state the maintenance rule and the observed revision behavior that motivates it; the compared frame contains no corresponding cost-synchronization claim.",
+          "status": "RESOLVED",
+          "summary": "Activity-linked cost statements should be repeated and updated with work-plan revisions to prevent the narrative and requested amount from drifting apart.",
+          "uid": "e28cdb51-9bac-5a38-b0b2-7d576f96dbe5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3f212c42-98c2-48a2-a167-45cdaeea444a",
+              "memory_uid": "6d203c86-b6e0-586a-b896-b654fa319ed1"
+            },
+            {
+              "frame_uid": "3f212c42-98c2-48a2-a167-45cdaeea444a",
+              "memory_uid": "6ba1d344-5d98-5c25-ba1e-b28c08d39747"
+            }
+          ],
+          "reason": "Both memories describe the same integrated validity review, with one prescribing the review and the other defining its final coherence test.",
+          "status": "RESOLVED",
+          "summary": "A focused pre-submission review should verify a coherent logical flow from the user problem through intervention and field evaluation to the expected contribution.",
+          "uid": "e4bd3198-ffa4-570d-848e-cb289af1f073"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3f212c42-98c2-48a2-a167-45cdaeea444a",
+              "memory_uid": "6b75bfb1-67f5-50bb-9e0c-04026062de96"
+            },
+            {
+              "frame_uid": "3f212c42-98c2-48a2-a167-45cdaeea444a",
+              "memory_uid": "4a85ebbd-a4ee-5c88-9e93-5fc545f41c64"
+            }
+          ],
+          "reason": "The memories pair a specific alignment check with its reviewer-facing rationale, a concern absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Research questions should be checked against system functions because disconnection weakens the perceived validity of the design intervention.",
+          "uid": "e41fef25-5247-5a34-bb0f-3f2df200a667"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3f212c42-98c2-48a2-a167-45cdaeea444a",
+              "memory_uid": "3abfda89-82ab-5cc5-bdcd-5e2f274fd727"
+            },
+            {
+              "frame_uid": "3f212c42-98c2-48a2-a167-45cdaeea444a",
+              "memory_uid": "75c4c71d-28e3-559c-99d1-f0dccc31a9e2"
+            }
+          ],
+          "reason": "The memories express one evaluation-design requirement and its consequence, without a corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Field tasks should be checked for their ability to produce representative measures because failure to do so weakens evaluation validity.",
+          "uid": "0777a207-4451-5f58-b3b6-178d7384613e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3f212c42-98c2-48a2-a167-45cdaeea444a",
+              "memory_uid": "f14f1974-9035-5a2c-931a-89a5004a2567"
+            },
+            {
+              "frame_uid": "3f212c42-98c2-48a2-a167-45cdaeea444a",
+              "memory_uid": "577e5506-78e8-5768-b288-7a5986347cce"
+            },
+            {
+              "frame_uid": "3f212c42-98c2-48a2-a167-45cdaeea444a",
+              "memory_uid": "f8253f92-c60c-57e1-a630-6b31abe080ae"
+            }
+          ],
+          "reason": "These memories divide one practical-utility requirement among an alignment check, its reviewer-facing rationale, and a concise contribution-level verification.",
+          "status": "RESOLVED",
+          "summary": "Collected evidence and claimed contributions should be tied explicitly to specific design or operational decisions they could change.",
+          "uid": "9ed30066-bf6b-55d5-a8b2-66a424418b0d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3f212c42-98c2-48a2-a167-45cdaeea444a",
+              "memory_uid": "9ce34a9a-4ba2-5b32-a1de-b0469ddc3f95"
+            }
+          ],
+          "reason": "This is an independently useful operational-readiness review with no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Field liaisons should conduct a sequential pre-submission walkthrough of installation failures, operational interruptions, and recovery scenarios.",
+          "uid": "b4fc37fd-95fa-5055-b2e0-edd88f5b1746"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3f212c42-98c2-48a2-a167-45cdaeea444a",
+              "memory_uid": "f5ad6933-3e22-5c47-bdaf-bacc9c9a5b3c"
+            }
+          ],
+          "reason": "This is an independently useful disclosure requirement not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Unconfirmed field partners and equipment should be distinguished from finalized resources so remaining execution risks can be assessed.",
+          "uid": "9fceaa99-925b-56e5-8937-48114bd443e5"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame requires a coherent pre-submission logic review, targeted alignment checks, operational-failure walkthroughs, and clear disclosure of unresolved field resources.",
+        "differences": "",
+        "reference_only": "The reference requires decision-essential cost details in the main narrative and safeguards alignment between changing activities and their associated amounts."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "b98c8c66-752c-49d6-9613-2c49dac86823"
+    },
+    "analysis_digest": "20940615fe28c8a87ef83ca0ff1a638d1797c7f695e7da88b36582b40f35050a",
+    "key": "8f4115c0dd844a2f0144287f030b6299a35d62f3083b7cf1a5b77401a6eb31c6",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 37.704916417002096,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "8f4115c0dd844a2f0144287f030b6299a35d62f3083b7cf1a5b77401a6eb31c6",
+  "created_at": "2026-08-13T18:15:37.072890Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/budget",
+  "pair_key": "4b64af470101009f0d13110eb6731448e0c9f5bc0035463150fc0bbf48f3e480",
+  "provider_seconds": 37.704916417002096,
+  "right": "task-2/advisor2/review",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

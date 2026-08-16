@@ -1,0 +1,413 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:28:16.459825+00:00",
+      "frames": [
+        {
+          "context_digest": "587a9d2fb6abf2b486ccfc50ff85ae7280d7d7bd4003d85ce5877a4edfc9293f",
+          "context_name": "task-2/advisor1/terminology",
+          "context_uid": "7699c7c5-e48b-5548-b0aa-256d793c6c06",
+          "memories": [
+            {
+              "content": "Use the same term throughout the proposal for the same interaction concept or interface element.",
+              "content_digest": "2f11d02134609c6397d8f60105cc452e34129bc1c427a512455247e54951f18a",
+              "position": 0,
+              "uid": "949a884d-b348-5fa0-b1dd-adbebafe10a9"
+            },
+            {
+              "content": "Use abbreviations only for recurring terms of three or more words.",
+              "content_digest": "dcceb4407d24df4034dceca613413471bb46898a487aed0cc0905e48ede482e7",
+              "position": 1,
+              "uid": "2f484151-b5fc-51a9-8a88-b30a403617b3"
+            },
+            {
+              "content": "Present the full name and abbreviation together when using an abbreviation for the first time.",
+              "content_digest": "02e1b2b4cbc8f9a61e299bf1500663ae8cd4036155b2a7dec8c2ce40087ac29b",
+              "position": 2,
+              "uid": "21131a6f-d35c-51e3-895f-46cd21a3b566"
+            },
+            {
+              "content": "Prioritize the research role over diagnostic labels or deficits when referring to participants.",
+              "content_digest": "7b99c6ec90abdbb68d4af8e95a03df3149b9d2d4d637fbd33a70a2acf7073a12",
+              "position": 3,
+              "uid": "e02c3110-05c4-58a4-8d76-c8fd2426a0d5"
+            },
+            {
+              "content": "Reviewers from different subfields struggle to infer undefined abbreviations from context alone.",
+              "content_digest": "13af5eb9fe88f3f2d73192adfb48f7a20de09e22e777a952daa83ca1c030f9ee",
+              "position": 4,
+              "uid": "af028910-e48b-5605-b92b-9378bdfa525c"
+            },
+            {
+              "content": "Use the term formative evaluation for studies seeking design modification evidence, and distinguish it from final efficacy judgments.",
+              "content_digest": "4ba9bca850286ff6286cf4b3bf44395d608ec700c46acd8cd26c54e26d43b378",
+              "position": 5,
+              "uid": "39792d18-2be0-5135-a063-c5213247d330"
+            },
+            {
+              "content": "The user can have contribution labels such as principles, models, or guidelines approved only if they align with the abstraction level of the actual deliverables.",
+              "content_digest": "efed93b748ce74e3e9ed96949bf539c809ea4c36ae77bbb54670285f691f74e9",
+              "position": 6,
+              "uid": "bcaa8c30-ca6e-5b9f-af93-88513a2f16b1"
+            },
+            {
+              "content": "Design principles describe the relationship between conditions and outcomes rather than serving as instructions that merely replicate a single screen layout.",
+              "content_digest": "22385c2bb345db07d19c442e5d99a5c527c2795848b9e29fe198d0ede6255d6f",
+              "position": 7,
+              "uid": "82ad9fe2-4063-5e89-9097-c975aa2920cb"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "a312a16b-4f7f-4095-979b-3de595c1272d"
+        },
+        {
+          "context_digest": "74ec0b91876efe6caed2938aaf4a0b06272de678fbf74dc9da1c217aa0bd042f",
+          "context_name": "task-2/advisor2/compensation",
+          "context_uid": "4ffbd453-7d61-56f7-90ad-34d77b485ef8",
+          "memories": [
+            {
+              "content": "Calculate user research compensation budgets based on the estimated participation burden, combining session time with required technical and travel preparation.",
+              "content_digest": "ba439fe3920339f56e377d8f82a64ab3ad27fb25e0eec3c65b610c81af53d175",
+              "position": 0,
+              "uid": "be9e402b-8d3b-58da-9766-2cf2ec25b9ae"
+            },
+            {
+              "content": "Compensate participants who withdraw from the study midway for their actual participation time.",
+              "content_digest": "599f542ec6f4a5a1a61f5c1a31547088e015439978a64b268879b5a2b65c9be4",
+              "position": 1,
+              "uid": "85157c57-410f-5c7d-8183-b37d61eebf8a"
+            },
+            {
+              "content": "Compensate for the time actually spent in sessions, regardless of the research modality.",
+              "content_digest": "b19b9dbece5d564de69e703491018fbd78ab834149eed0590a552773526b6e29",
+              "position": 2,
+              "uid": "8abeab95-3e41-5378-8409-08200aee9d58"
+            },
+            {
+              "content": "Allow the issuance of gift cards of equivalent value to participants in remote studies who cannot use electronic transfers.",
+              "content_digest": "8ac881488d0064f4b4c6143e2d8c69ab9806b419044adef266c50738c7afb291",
+              "position": 3,
+              "uid": "9b59c6ed-5dbe-5ccc-87b5-6be31f414e68"
+            },
+            {
+              "content": "Do not treat an unresolved payment method as a deficiency at the proposal stage.",
+              "content_digest": "80109274870eb1023e4cbcc6861a906a4d94db5dab2b2659bcebccde125c9ac3",
+              "position": 4,
+              "uid": "5c6c461d-05e5-5b0c-b801-245de2f9c8d7"
+            },
+            {
+              "content": "Allow differential compensation amounts for on-site and remote studies when participation burden varies due to travel or technical preparation.",
+              "content_digest": "556c5e49f7996a651a64825df2389f070629b9bc664c758d934f308c7fd6eea2",
+              "position": 5,
+              "uid": "44abc098-8c9f-5abb-bc49-9deb25066d93"
+            },
+            {
+              "content": "Participants judge the fairness of compensation based on the combined burden of session time and required technical and travel preparation.",
+              "content_digest": "80dd84e8b183e02f1fd772890b48712bb04a04852055eece98957a0c9028288c",
+              "position": 6,
+              "uid": "2a252668-f3f2-5582-b248-43ad81c54a48"
+            },
+            {
+              "content": "In longitudinal studies requiring diary entries and repeated reporting, include out-of-session recording time in compensation calculations.",
+              "content_digest": "7d103d93741e40d54c8df8347f2ce648a1cd96e19589663fa515bfb24b5bd844",
+              "position": 7,
+              "uid": "7e647a83-81b0-52d6-9362-e513dc2a5032"
+            },
+            {
+              "content": "Distinguish between participant research compensation and labor costs for field staff performing installation and operational support as part of their duties.",
+              "content_digest": "b1566527e9c1d7d3f93631d1503b08ddb4a6818daa570c118f265b47603592f0",
+              "position": 8,
+              "uid": "d77affab-60c8-5403-b189-17022b484640"
+            },
+            {
+              "content": "The user tends to count session time but omit participants’ advance setup and follow-up reporting time.",
+              "content_digest": "98911b7db2d8c3962d7ef48919265f40cdb61a711062e5459a4f6d43f71d6fd9",
+              "position": 9,
+              "uid": "0c470c6b-26a6-5501-93ac-c51fecd708ae"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "9fb59e6b-3167-4383-8b7b-e12f8c401d15"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate operational domains: the reference frame governs proposal terminology, participant-centered wording, study labels, and contribution framing, while the compared frame governs participant compensation, burden accounting, payment methods, withdrawal, modality, and staff-cost boundaries. No shared or conflicting policy is present.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a312a16b-4f7f-4095-979b-3de595c1272d",
+              "memory_uid": "949a884d-b348-5fa0-b1dd-adbebafe10a9"
+            }
+          ],
+          "reason": "This is a one-sided terminology-consistency rule with no materially related claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Use one consistent term for each interaction concept or interface element throughout a proposal.",
+          "uid": "311c6f8e-4d5e-52b6-830d-8391c4d7a9d5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a312a16b-4f7f-4095-979b-3de595c1272d",
+              "memory_uid": "2f484151-b5fc-51a9-8a88-b30a403617b3"
+            }
+          ],
+          "reason": "This is a specific one-sided threshold for abbreviation use and is independent of the compensation policies.",
+          "status": "RESOLVED",
+          "summary": "Reserve abbreviations for recurring terms containing at least three words.",
+          "uid": "aa143dfc-12de-5648-989a-1875b49d198c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a312a16b-4f7f-4095-979b-3de595c1272d",
+              "memory_uid": "21131a6f-d35c-51e3-895f-46cd21a3b566"
+            }
+          ],
+          "reason": "This is a one-sided abbreviation-definition rule not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Introduce an abbreviation together with its full name at first use.",
+          "uid": "f76245b3-2cc4-5812-9b5c-7973a1e4bfa6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a312a16b-4f7f-4095-979b-3de595c1272d",
+              "memory_uid": "e02c3110-05c4-58a4-8d76-c8fd2426a0d5"
+            }
+          ],
+          "reason": "This is an independent one-sided participant-language policy rather than a compensation policy.",
+          "status": "RESOLVED",
+          "summary": "Refer to participants by prioritizing their research role over diagnoses or deficits.",
+          "uid": "453be7ce-496b-51e9-ac7f-1f6056397de8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a312a16b-4f7f-4095-979b-3de595c1272d",
+              "memory_uid": "af028910-e48b-5605-b92b-9378bdfa525c"
+            }
+          ],
+          "reason": "This is a one-sided rationale about interdisciplinary proposal readability with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Undefined abbreviations are difficult for reviewers from different subfields to infer reliably.",
+          "uid": "9c76bd99-30a8-540e-9e0a-479d777424a0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a312a16b-4f7f-4095-979b-3de595c1272d",
+              "memory_uid": "39792d18-2be0-5135-a063-c5213247d330"
+            }
+          ],
+          "reason": "This is an independent one-sided study-characterization rule absent from the compensation frame.",
+          "status": "RESOLVED",
+          "summary": "Call design-modification studies formative evaluations and distinguish them from final efficacy judgments.",
+          "uid": "55c9f5a1-9d71-55a2-8650-4a977965ae0f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a312a16b-4f7f-4095-979b-3de595c1272d",
+              "memory_uid": "bcaa8c30-ca6e-5b9f-af93-88513a2f16b1"
+            }
+          ],
+          "reason": "This is a one-sided rule for framing contributions and does not materially address participant compensation.",
+          "status": "RESOLVED",
+          "summary": "Approve contribution labels only when their abstraction level matches the actual deliverables.",
+          "uid": "21180910-bd9d-5716-863f-289e5c02bb9d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a312a16b-4f7f-4095-979b-3de595c1272d",
+              "memory_uid": "82ad9fe2-4063-5e89-9097-c975aa2920cb"
+            }
+          ],
+          "reason": "This independently defines the proper abstraction of design principles, with no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "Design principles should express condition–outcome relationships rather than instructions reproducing one screen layout.",
+          "uid": "433d6f14-8e34-5744-b1dc-e17fdc26f540"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9fb59e6b-3167-4383-8b7b-e12f8c401d15",
+              "memory_uid": "be9e402b-8d3b-58da-9766-2cf2ec25b9ae"
+            }
+          ],
+          "reason": "This is a one-sided burden-accounting policy not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Base participant-compensation budgets on session time plus required technical and travel preparation.",
+          "uid": "f391936e-cb07-5db6-88ca-7f471c6e0dc6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9fb59e6b-3167-4383-8b7b-e12f8c401d15",
+              "memory_uid": "85157c57-410f-5c7d-8183-b37d61eebf8a"
+            }
+          ],
+          "reason": "This is an independent compensation rule for withdrawal cases with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Pay participants who withdraw midway for the time they actually participated.",
+          "uid": "0b23f226-0a46-512e-bec0-45ae9be78262"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9fb59e6b-3167-4383-8b7b-e12f8c401d15",
+              "memory_uid": "8abeab95-3e41-5378-8409-08200aee9d58"
+            }
+          ],
+          "reason": "This is a one-sided modality-neutral session-time policy absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Compensate actual session time regardless of whether research is conducted remotely or on site.",
+          "uid": "dd0095d0-fe38-54c2-9ee5-5e6974e5144e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9fb59e6b-3167-4383-8b7b-e12f8c401d15",
+              "memory_uid": "9b59c6ed-5dbe-5ccc-87b5-6be31f414e68"
+            }
+          ],
+          "reason": "This is an independent one-sided payment-method accommodation.",
+          "status": "RESOLVED",
+          "summary": "Permit equivalent-value gift cards for remote participants unable to receive electronic transfers.",
+          "uid": "5e33f8c8-0983-58df-91a9-b165261bf341"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9fb59e6b-3167-4383-8b7b-e12f8c401d15",
+              "memory_uid": "5c6c461d-05e5-5b0c-b801-245de2f9c8d7"
+            }
+          ],
+          "reason": "This is a one-sided proposal-review policy concerning payment logistics, with no related reference claim.",
+          "status": "RESOLVED",
+          "summary": "Do not classify an unresolved payment method as a proposal-stage deficiency.",
+          "uid": "3b20404f-a9b3-57aa-8d87-e3a7c76c77a2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9fb59e6b-3167-4383-8b7b-e12f8c401d15",
+              "memory_uid": "44abc098-8c9f-5abb-bc49-9deb25066d93"
+            }
+          ],
+          "reason": "This is an independent burden-sensitive modality policy absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Permit different remote and on-site compensation amounts when travel or technical preparation changes participant burden.",
+          "uid": "12498a09-a323-51a4-a45b-c95284f8b79d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9fb59e6b-3167-4383-8b7b-e12f8c401d15",
+              "memory_uid": "2a252668-f3f2-5582-b248-43ad81c54a48"
+            }
+          ],
+          "reason": "This is a one-sided explanatory claim supporting comprehensive burden accounting.",
+          "status": "RESOLVED",
+          "summary": "Participants assess compensation fairness using session time together with technical and travel preparation burdens.",
+          "uid": "663e56b7-3e70-552f-b466-57e4fe74730e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9fb59e6b-3167-4383-8b7b-e12f8c401d15",
+              "memory_uid": "7e647a83-81b0-52d6-9362-e513dc2a5032"
+            }
+          ],
+          "reason": "This is an independent one-sided policy for out-of-session longitudinal work.",
+          "status": "RESOLVED",
+          "summary": "Include diary-entry and repeated-reporting time in compensation calculations for longitudinal studies.",
+          "uid": "fa51a194-1918-593e-8e17-4643305f933c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9fb59e6b-3167-4383-8b7b-e12f8c401d15",
+              "memory_uid": "d77affab-60c8-5403-b189-17022b484640"
+            }
+          ],
+          "reason": "This is a one-sided cost-classification boundary with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Separate participant research compensation from labor costs for staff performing installation or operational support.",
+          "uid": "ccee6316-404b-51a5-9611-5753f4e28d56"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9fb59e6b-3167-4383-8b7b-e12f8c401d15",
+              "memory_uid": "0c470c6b-26a6-5501-93ac-c51fecd708ae"
+            }
+          ],
+          "reason": "This is a distinct one-sided observation about incomplete compensation calculations.",
+          "status": "RESOLVED",
+          "summary": "The user tends to omit advance setup and follow-up reporting when estimating participant time.",
+          "uid": "1a86dff9-799f-5175-aa45-3c3a09ac24e0"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame addresses burden-based compensation, withdrawal and longitudinal work, modality differences, payment alternatives, proposal-stage uncertainty, and the separation of participant payments from staff labor costs.",
+        "differences": "",
+        "reference_only": "The reference frame sets proposal-language rules for consistent terminology, abbreviations, respectful participant descriptions, formative evaluation, and appropriately abstract contribution labels and design principles."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "e0464200-e241-4afa-a93c-5f2e7a28f4ff"
+    },
+    "analysis_digest": "b5a608a56bec10befc842ff64d43c8fdce176e5e01c8db86fcee424114d44a2e",
+    "key": "53a215eece469be943771afa43b40fd7f3f6636cf1393756c173848a6a6f999a",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 43.62758549999853,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "53a215eece469be943771afa43b40fd7f3f6636cf1393756c173848a6a6f999a",
+  "created_at": "2026-08-13T18:29:00.086980Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/terminology",
+  "pair_key": "a902cb75bdd30a0e7dda083b900817f5b219395fb7e3cf7d5a227636d97626ca",
+  "provider_seconds": 43.62758549999853,
+  "right": "task-2/advisor2/compensation",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

@@ -1,0 +1,398 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:22:17.483022+00:00",
+      "frames": [
+        {
+          "context_digest": "d216a114524e2b755fff42b8577d5027d3e528aed50c5f588cebf57767bb7fc8",
+          "context_name": "task-2/advisor1/methods",
+          "context_uid": "d2f78b99-5dcf-5876-89a9-1058bceca333",
+          "memories": [
+            {
+              "content": "Link each HCI research question directly to corresponding user data and analysis procedures.",
+              "content_digest": "21e2d5e7eb4ec06057a8405359656cd03a98f4ae67956016d98582af44bfb402",
+              "position": 0,
+              "uid": "c8bcefee-c64a-5a1f-911c-502cc4522701"
+            },
+            {
+              "content": "In preregistered studies, specify the conditions under which deviations from the plan are permissible.",
+              "content_digest": "0ecac6de4eb5e3eec39477c5a6324acb8a1bd6cefb17eacc2c73cdd53160b85f",
+              "position": 1,
+              "uid": "8747b27e-6c2b-5498-9eac-c403e26101a6"
+            },
+            {
+              "content": "In preregistered studies, specify how to record content that deviates from the plan.",
+              "content_digest": "821b3ad70335f24d96aeffd2260e3bc27bb6efd1108a68b00ecc5cb7e7adb242",
+              "position": 2,
+              "uid": "c3ad4ad8-4c5c-54c5-8d65-2dae15fa69a0"
+            },
+            {
+              "content": "Commit to one exact target number of participants so the schedule, workload, and budget can be checked against the same quantity.",
+              "content_digest": "7ff7f3d29fc21399565b4047d3f78e6415e1b51a9247139fc156ea7d4f6d2f13",
+              "position": 3,
+              "uid": "df53a41c-2fbf-532a-a5b0-560a196bf5cb"
+            },
+            {
+              "content": "Specify the interview protocols, recording devices, or log tools used to collect each type of user data.",
+              "content_digest": "0396cbcbfd6e96ef9fd2af507855c4b71eb3003a15fc79d240cd0b751b6b5788",
+              "position": 4,
+              "uid": "24d49198-fd7b-5810-bc56-1910a796f76e"
+            },
+            {
+              "content": "Specify whether each type of user data is collected before, during, or after the interaction.",
+              "content_digest": "80a3ff6e82631a044e8859709930b675163439d11564d1b59601bca0ee030fba",
+              "position": 5,
+              "uid": "2f367cf3-50c5-59bc-972e-6173e56343ac"
+            },
+            {
+              "content": "Readers cannot tell whether the schedule and budget agree when different sections imply different target counts.",
+              "content_digest": "9b5de55faa7e64cf1149ef1bb60cf990815e789e7d1c4a3c0e6297fbbd300aae",
+              "position": 6,
+              "uid": "91db3bd1-4417-5db6-b7a6-3e79c87ebe88"
+            },
+            {
+              "content": "In formative evaluation prototypes, implementation instability exists as an independent cause of task failure alongside design choices.",
+              "content_digest": "dab5f616c4354c0e9f381b0e860e5ec5ff1afc249a4ad427f194c559781b83a8",
+              "position": 7,
+              "uid": "49746579-92d7-51ea-b158-7d770443d101"
+            },
+            {
+              "content": "If a prototype safety signal occurs during formative evaluation, existing institutional safety procedures take precedence over planned data collection.",
+              "content_digest": "2f2768eb4fbce9367786ab13ca8a608e82104cee45200f4aa59854efcf2edc3e",
+              "position": 8,
+              "uid": "20d116ab-f9cc-5f61-808b-8555da09d707"
+            },
+            {
+              "content": "Reviewers judge answerability by tracing the path from each research question to the data and analysis.",
+              "content_digest": "0fac56a79481bdcd7b169c7e3d9ab8fbd0b4f76d33dfe9f4a2f703f80e84aea9",
+              "position": 9,
+              "uid": "881bc037-c099-50e4-b7e0-d38fba5146c9"
+            },
+            {
+              "content": "The author of this proposal tends to present implemented feature lists directly as design contributions.",
+              "content_digest": "6cf2a1292756154c2a0a045f1e4bd4889994faaa838f93e8a2b9c949957ed920",
+              "position": 10,
+              "uid": "9a969676-6093-5fac-bda8-92ebdac70c37"
+            },
+            {
+              "content": "Calculate the required sessions, facilitator hours, and participant payments from the same exact target rather than from separate rough estimates.",
+              "content_digest": "ea6c96c9e5e7d5db7bd2210fd484e715e35727bd1e6f7c2ea2a2c4c12e488f2a",
+              "position": 11,
+              "uid": "0ecc319a-ae60-5510-883d-52e613138164"
+            },
+            {
+              "content": "If recruitment falls below the exact target, state the shortfall explicitly and revise the affected schedule or deliverable.",
+              "content_digest": "bdf962f17a92886e7a5ec0003460dce9ed9c02d02473f66c6f6b4e97c0c304b9",
+              "position": 12,
+              "uid": "c4dfdb65-e673-52c0-a40c-e909d6014e00"
+            },
+            {
+              "content": "Do not use a wide range merely to postpone choosing the quantity that the rest of the proposal must support.",
+              "content_digest": "332385b05f91f97c398bc954b6fc9e62da182f7e42de6dd5691435df6922fd43",
+              "position": 13,
+              "uid": "a7c3a123-3f05-52e0-b33e-c450d1a070ac"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "cad2c751-b09f-41fd-80d8-900f36237865"
+        },
+        {
+          "context_digest": "673626cf0c3650052d63b04173d43516860e2035d7038878998898bc5bebb2e3",
+          "context_name": "task-2/advisor2/evaluation",
+          "context_uid": "6e9f8ad5-a43d-5dfd-99a3-604f2757da0d",
+          "memories": [
+            {
+              "content": "Specify a single representative measure that will drive operational decisions to maintain, modify, or discontinue the deployed design.",
+              "content_digest": "dd9abb7bbbdf6846921a984789426b27a45df60ce38408422b6b0774835b44f8",
+              "position": 0,
+              "uid": "f27576c7-6f53-5412-901c-19df7e1d5e2e"
+            },
+            {
+              "content": "The HCI review panel verifies whether operational decisions can be made based on the declared primary measure.",
+              "content_digest": "1d88ce414bdbfcf9565c712f8f0d72378569d723c0c5b5c6007dc18a96f6378f",
+              "position": 1,
+              "uid": "8608bdf3-49d7-54d0-a2fb-c883c24e40ef"
+            },
+            {
+              "content": "Establish decision thresholds indicating at what levels key metrics trigger maintaining, modifying, or discontinuing the design.",
+              "content_digest": "866bad632421bfd3487fba69b855ccb36aeb9e31c6208b339db22301bdd3fc28",
+              "position": 2,
+              "uid": "b06bb706-f911-5767-8e27-b64c74d0e592"
+            },
+            {
+              "content": "Evaluate whether reducing workload for one role creates new tasks for other roles through the proposed design changes.",
+              "content_digest": "6b38b84cdc2a78f61f3163cccd787dec39167596f4f720788ec4c930f698fa9f",
+              "position": 3,
+              "uid": "473ec6e8-29f0-5c83-b36d-b7d32eeb25a3"
+            },
+            {
+              "content": "Distinguish usability from organizational adoption intent as separate evaluation outcomes.",
+              "content_digest": "7328bf54063078377068871ee3970709d9a8763204c2c3a08321e025e028868c",
+              "position": 4,
+              "uid": "935cf79f-3e67-567d-ab55-35e8fad7eb37"
+            },
+            {
+              "content": "Implementation fidelity indicates whether planned features and operational procedures were delivered in the field according to intended specifications.",
+              "content_digest": "b04d0bc0590dd77d3bc0bde581481992d57ad48c14517a2a1d63f996e51290b2",
+              "position": 5,
+              "uid": "bea0e97f-1217-507b-87a7-09ce85bae9fe"
+            },
+            {
+              "content": "Initial evaluations and long-term operation do not share identical measurement conditions due to differences in system exposure duration and frequency of repeated use.",
+              "content_digest": "49e90b293b90d173b11d1bb89e85f688c55cb923c2a19eb2058a539388327715",
+              "position": 6,
+              "uid": "dbe435ff-fe32-54fe-a2e6-7b46694ce151"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "aca8ee9e-3c33-4aa7-a7c7-3d6970ce6186"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames largely contribute complementary evaluation guidance rather than overlapping claims. The reference emphasizes study traceability, preregistration, data collection, participant planning, safety, and proposal reasoning; the compared frame emphasizes deployment decisions, organizational effects, evaluation outcomes, and longitudinal measurement. Their implementation concerns differ by evaluation setting.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cad2c751-b09f-41fd-80d8-900f36237865",
+              "memory_uid": "c8bcefee-c64a-5a1f-911c-502cc4522701"
+            },
+            {
+              "frame_uid": "cad2c751-b09f-41fd-80d8-900f36237865",
+              "memory_uid": "881bc037-c099-50e4-b7e0-d38fba5146c9"
+            }
+          ],
+          "reason": "The reference memories state the same one-sided traceability requirement from authoring and reviewer perspectives; the compared frame does not address research-question answerability.",
+          "status": "RESOLVED",
+          "summary": "Research questions should be directly traceable to the user data and analyses that establish their answerability.",
+          "uid": "a7d7819e-17b1-541d-8a32-4909ccc6a1e1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cad2c751-b09f-41fd-80d8-900f36237865",
+              "memory_uid": "8747b27e-6c2b-5498-9eac-c403e26101a6"
+            },
+            {
+              "frame_uid": "cad2c751-b09f-41fd-80d8-900f36237865",
+              "memory_uid": "c3ad4ad8-4c5c-54c5-8d65-2dae15fa69a0"
+            }
+          ],
+          "reason": "These reference memories split one governance requirement into authorization and documentation components, with no corresponding compared-frame claim.",
+          "status": "RESOLVED",
+          "summary": "Preregistered studies should define when deviations are permitted and how deviating content is recorded.",
+          "uid": "9daae502-2cc1-56a3-9637-9643725400c3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cad2c751-b09f-41fd-80d8-900f36237865",
+              "memory_uid": "df53a41c-2fbf-532a-a5b0-560a196bf5cb"
+            },
+            {
+              "frame_uid": "cad2c751-b09f-41fd-80d8-900f36237865",
+              "memory_uid": "91db3bd1-4417-5db6-b7a6-3e79c87ebe88"
+            },
+            {
+              "frame_uid": "cad2c751-b09f-41fd-80d8-900f36237865",
+              "memory_uid": "0ecc319a-ae60-5510-883d-52e613138164"
+            },
+            {
+              "frame_uid": "cad2c751-b09f-41fd-80d8-900f36237865",
+              "memory_uid": "c4dfdb65-e673-52c0-a40c-e909d6014e00"
+            },
+            {
+              "frame_uid": "cad2c751-b09f-41fd-80d8-900f36237865",
+              "memory_uid": "a7c3a123-3f05-52e0-b33e-c450d1a070ac"
+            }
+          ],
+          "reason": "The reference memories jointly develop one participant-planning policy covering target selection, consistency, resource calculations, and shortfall handling; the compared frame contains no participant-count policy.",
+          "status": "RESOLVED",
+          "summary": "A single exact participant target should govern feasibility calculations, and any recruitment shortfall should be disclosed with affected plans revised.",
+          "uid": "f30f3d20-794f-5621-afe4-3ef0fbc0e4af"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cad2c751-b09f-41fd-80d8-900f36237865",
+              "memory_uid": "24d49198-fd7b-5810-bc56-1910a796f76e"
+            }
+          ],
+          "reason": "This is an independently useful reference-only specification of collection instruments.",
+          "status": "RESOLVED",
+          "summary": "Each user-data type should identify the interview protocol, recording device, or logging tool used to collect it.",
+          "uid": "3e8dd43a-fc67-5c03-9c5a-9b66f61ed636"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cad2c751-b09f-41fd-80d8-900f36237865",
+              "memory_uid": "2f367cf3-50c5-59bc-972e-6173e56343ac"
+            }
+          ],
+          "reason": "This is an independently useful reference-only specification of within-interaction collection timing.",
+          "status": "RESOLVED",
+          "summary": "Each user-data type should state whether collection occurs before, during, or after interaction.",
+          "uid": "e661137f-a9a2-58dc-bd42-9250f6959c33"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "cad2c751-b09f-41fd-80d8-900f36237865",
+              "memory_uid": "49746579-92d7-51ea-b158-7d770443d101"
+            },
+            {
+              "frame_uid": "aca8ee9e-3c33-4aa7-a7c7-3d6970ce6186",
+              "memory_uid": "bea0e97f-1217-507b-87a7-09ce85bae9fe"
+            }
+          ],
+          "reason": "The claims address a shared need to interpret implementation effects, but their explicit settings preserve different constructs: instability as a formative failure cause and fidelity as field delivery conformance.",
+          "status": "RESOLVED",
+          "summary": "Implementation must be considered separately from design effects, with formative prototypes examined for instability and field deployments examined for fidelity to intended specifications.",
+          "uid": "a1fc4211-760b-5602-a13d-7c0a82937875"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cad2c751-b09f-41fd-80d8-900f36237865",
+              "memory_uid": "20d116ab-f9cc-5f61-808b-8555da09d707"
+            }
+          ],
+          "reason": "This conditional safety rule appears only in the reference frame and is independent of its other evaluation guidance.",
+          "status": "RESOLVED",
+          "summary": "During formative evaluation, institutional safety procedures take precedence over planned data collection when a prototype safety signal occurs.",
+          "uid": "fcfd5f09-aa55-5a0e-9dc1-81663d78469a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cad2c751-b09f-41fd-80d8-900f36237865",
+              "memory_uid": "9a969676-6093-5fac-bda8-92ebdac70c37"
+            }
+          ],
+          "reason": "This reference-only observation concerns a specific proposal-writing tendency not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to present implemented feature lists as though they were design contributions.",
+          "uid": "2002b6e6-3420-5ae0-ba37-ddcd20de693b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "aca8ee9e-3c33-4aa7-a7c7-3d6970ce6186",
+              "memory_uid": "f27576c7-6f53-5412-901c-19df7e1d5e2e"
+            },
+            {
+              "frame_uid": "aca8ee9e-3c33-4aa7-a7c7-3d6970ce6186",
+              "memory_uid": "8608bdf3-49d7-54d0-a2fb-c883c24e40ef"
+            }
+          ],
+          "reason": "The compared memories express one one-sided requirement from design-decision and reviewer-verification perspectives; the reference frame instead addresses research-question answerability.",
+          "status": "RESOLVED",
+          "summary": "A declared primary measure should support maintain, modify, or discontinue decisions and allow reviewers to assess whether those decisions are operationally possible.",
+          "uid": "949148a7-0695-5816-9296-12b749bd202d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "aca8ee9e-3c33-4aa7-a7c7-3d6970ce6186",
+              "memory_uid": "b06bb706-f911-5767-8e27-b64c74d0e592"
+            }
+          ],
+          "reason": "This compared-only claim independently specifies decision rules beyond merely choosing a primary measure.",
+          "status": "RESOLVED",
+          "summary": "Key metrics should have thresholds that trigger maintaining, modifying, or discontinuing the design.",
+          "uid": "a7a55f63-b6bd-5de4-bef6-11a5a9cd90e7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "aca8ee9e-3c33-4aa7-a7c7-3d6970ce6186",
+              "memory_uid": "473ec6e8-29f0-5c83-b36d-b7d32eeb25a3"
+            }
+          ],
+          "reason": "This organizational workload-distribution concern appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Evaluation should determine whether workload reductions for one role create new tasks for other roles.",
+          "uid": "8af26074-8437-5ea3-ab18-ec6f448ef512"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "aca8ee9e-3c33-4aa7-a7c7-3d6970ce6186",
+              "memory_uid": "935cf79f-3e67-567d-ab55-35e8fad7eb37"
+            }
+          ],
+          "reason": "This compared-only claim establishes an outcome distinction absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Usability and organizational adoption intent should be evaluated as separate outcomes.",
+          "uid": "b105c9ee-cf6d-5b7c-8006-2b930efd1497"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "aca8ee9e-3c33-4aa7-a7c7-3d6970ce6186",
+              "memory_uid": "dbe435ff-fe32-54fe-a2e6-7b46694ce151"
+            }
+          ],
+          "reason": "This compared-only claim concerns evaluation horizons, not the reference frame's timing of data collection around an interaction.",
+          "status": "RESOLVED",
+          "summary": "Initial evaluation and long-term operation have different measurement conditions because exposure duration and repeated-use frequency differ.",
+          "uid": "bbc8e1b3-8bb3-5e14-844b-8c247e38c39b"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame uniquely covers primary operational measures and thresholds, cross-role workload effects, usability versus adoption intent, and measurement changes between initial and long-term use.",
+        "differences": "Both address implementation-related interpretation, but formative prototype instability is framed as a cause of task failure, whereas field implementation fidelity concerns delivery against specifications.",
+        "reference_only": "The reference uniquely covers research-question traceability, preregistered deviations, exact participant planning, collection methods and timing, safety precedence, and distinguishing feature lists from design contributions."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "179a7acc-30c2-499a-92f6-c1b1016bfa65"
+    },
+    "analysis_digest": "9f72d98f87c63d16f4b79e6bc922df8e545b9a39937bb711c8e4b0a1d68e288f",
+    "key": "41598e4bda0e6523ac649b703f70466196e12235bef9e7e1a3a0ec9d10370696",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 43.89584904200092,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "41598e4bda0e6523ac649b703f70466196e12235bef9e7e1a3a0ec9d10370696",
+  "created_at": "2026-08-13T18:23:01.378443Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/methods",
+  "pair_key": "1f762da902f2a06a13e6ecbb83df694895f38949829976fc97fd341170cd207b",
+  "provider_seconds": 43.89584904200092,
+  "right": "task-2/advisor2/evaluation",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

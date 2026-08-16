@@ -4,7 +4,7 @@ import typer
 
 import memcommit.ops as ops
 from memcommit.commands.branch_dialog import choose_branch_creation
-from memcommit.commands.context_picker import context_memory_rows
+from memcommit.context_targeting.tui.picker import context_memory_rows
 from memcommit.interfaces.console.text import (
     display_escape_text,
 )

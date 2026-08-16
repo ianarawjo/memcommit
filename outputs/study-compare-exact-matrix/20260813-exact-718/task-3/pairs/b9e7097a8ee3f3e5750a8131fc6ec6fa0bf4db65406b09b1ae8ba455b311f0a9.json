@@ -1,0 +1,379 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:45:26.652156+00:00",
+      "frames": [
+        {
+          "context_digest": "17b940da39446a9f934dff43ea7db561d14060561065852a34658fe4aaa1702f",
+          "context_name": "task-3/local/personal-memory/2024/10",
+          "context_uid": "7c55b789-a7d0-5070-9cf8-6f5e205415dc",
+          "memories": [
+            {
+              "content": "The user renewed their local library membership in October 2024.",
+              "content_digest": "eb9209032856bdbc69fbfa67e053bf8cd2bc23f8e8e25c0be9a5aa3f7e05f4e9",
+              "position": 0,
+              "uid": "04711182-acef-52a9-bd58-7fe98a54854a"
+            },
+            {
+              "content": "On an evening walk, the user saw an unlit street and took a detour along a main road.",
+              "content_digest": "62d001de1c6c4599e51c4e0713f577a2838e95e03f26064778e64542f390a599",
+              "position": 1,
+              "uid": "0229d0b1-750c-521b-a126-22c9d9d001c4"
+            },
+            {
+              "content": "On a day the user chose a well-lit pedestrian route, the walk took 12 minutes longer than usual.",
+              "content_digest": "ad3770626bef71bc9a29ec7772aeebeb70231e89b417b05b4da9c62a65b89afe",
+              "position": 2,
+              "uid": "e310fe87-8cde-5399-be00-9f8d7ec44e94"
+            },
+            {
+              "content": "On a day the user sat by the library window, they heard vehicle noise with every page they read.",
+              "content_digest": "090a190c68a5166d84cde1eed20f9a03c2b99722ed383eb3b5703489c01d85e0",
+              "position": 3,
+              "uid": "4f37306b-08cd-512a-b92e-ca6761da1a5b"
+            },
+            {
+              "content": "On the next visit, the user sat farther inside and did not move for an hour.",
+              "content_digest": "a071b4c7699fe17f63f0ab6263da1259aea00ad635169a313d4821f57071a86a",
+              "position": 4,
+              "uid": "5897ffa4-cfc6-5012-8931-15420ec5cf7c"
+            },
+            {
+              "content": "The user wrote the due date of a borrowed book on paper and then lost the paper.",
+              "content_digest": "43ef22512c79634cb9e3dc59006c7d06c3513a9d5d1f89eedbb392964cc34f02",
+              "position": 5,
+              "uid": "ce38bd13-3d51-5bff-9eba-ed70a8217356"
+            },
+            {
+              "content": "After entering the due date on their phone, the user saw a reminder the day before and put the book in their bag.",
+              "content_digest": "38782cba2f3bf260d62cf8e80c4a7e4a3a196d4d29ced3c4fe19d050e12c1e0a",
+              "position": 6,
+              "uid": "a304315b-bc0a-591b-b8c2-7eea5145819d"
+            },
+            {
+              "content": "Library staff expect a person requesting a replacement membership card to bring identity-verification material.",
+              "content_digest": "1ac59309aedbfa946661bf5bbc4d5141c420df059937893caba88725dfe77d24",
+              "position": 7,
+              "uid": "ef060b89-6c54-5c20-86be-c07766a35daa"
+            },
+            {
+              "content": "Check recent lighting and pedestrian conditions before proposing an evening walking route.",
+              "content_digest": "1b247adfb3723d14979b2cc7ecf6786c457d60e521b8708a6d08d38d3d1af437",
+              "position": 8,
+              "uid": "7669e5eb-c0fd-5182-ae9a-5f9ae95ddf2f"
+            },
+            {
+              "content": "The local agent can compare past reasons for detours but cannot directly observe current lighting and pedestrian conditions.",
+              "content_digest": "8a5f0e4cbb2fa6c19f2cb5d4e500ed460189b515604c87c6c2a4c8348c4efc44",
+              "position": 9,
+              "uid": "e96f7007-5814-5986-b121-4ce3b22506e1"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "96303846-0273-48ab-a539-dd7a1b6ef0c0"
+        },
+        {
+          "context_digest": "40dca3509f1e21c564970ebb7664df755d25c1c19c4e79b458c803662fb827ce",
+          "context_name": "task-3/local/personal-memory/2025/11",
+          "context_uid": "af363401-7cdc-5426-ad00-4f98635e2dab",
+          "memories": [
+            {
+              "content": "The user recorded a family dinner in the calendar for the final week of November.",
+              "content_digest": "59755036ea9e7d172a5e673253fc7f089e61efe043b2e660f429fe2fa9003d34",
+              "position": 0,
+              "uid": "3f6eaf6c-00e7-5bd7-9809-367f54a0f707"
+            },
+            {
+              "content": "In a crowded restaurant, the user had to ask several times for orders to be repeated, interrupting the flow of conversation.",
+              "content_digest": "2d79e2f4f88a70bc8fbf9efca1b1751fbf51d88667f304c8e8c965a0a536cee7",
+              "position": 1,
+              "uid": "9fd0b9b6-986d-54b0-965e-45feaf9cd482"
+            },
+            {
+              "content": "When the user held the next gathering at their father's home, they continued the conversation on the sofa after the meal.",
+              "content_digest": "4b22fa055bb342db0589b0c54e415f4fa2af02445d3c55b3f38510bd6ca62f38",
+              "position": 2,
+              "uid": "cbc477c4-83c4-506b-9da8-9252d14d7f6b"
+            },
+            {
+              "content": "At a gathering with loud music prepared by their older sister, the user developed a headache and went outside briefly.",
+              "content_digest": "c9b34c3e3211ca7f15eb9a6f8ba97941222bc35ec0253d3da3f383c7247c3e83",
+              "position": 3,
+              "uid": "bbfc537e-3fcc-5065-ab93-4777bcdfc10c"
+            },
+            {
+              "content": "On a day the user held a yard barbecue with their younger brother, the open space dispersed the sound and made conversation easier.",
+              "content_digest": "dd35056c7731d3249a3c2689ee9fb6bfe6974544e302630de6ea230378fea9eb",
+              "position": 4,
+              "uid": "b61367fa-dd17-5ff2-9d6b-f81f6123735a"
+            },
+            {
+              "content": "After seeing a message that their maternal aunt would arrive at 5 p.m., the user delayed meal preparation by an hour.",
+              "content_digest": "31992a8945bfacfc9422f3180b203865f951f200561cd23dad901ec795c5de10",
+              "position": 5,
+              "uid": "681cdbd5-595d-5211-914d-edfd9a6b130d"
+            },
+            {
+              "content": "On a day the user waited without knowing their maternal uncle's arrival time, they reheated the food twice.",
+              "content_digest": "fae7c462a85e844648cb99419e6fdb3a2cd8c7721209ea49a40b4df597635176",
+              "position": 6,
+              "uid": "81c0c4e9-5ae4-5e8a-b11c-7d33032fd8ec"
+            },
+            {
+              "content": "The user's maternal uncle considers it easier to time his departure when he knows the family meal's start time in advance.",
+              "content_digest": "793f47adaa4c5274d15377b0f4adbc2415c0bd5243baf7a1c77c0d92e987a7e8",
+              "position": 7,
+              "uid": "56078821-34d0-540f-ae66-03bdd7bd1df3"
+            },
+            {
+              "content": "Before scheduling a family meal, confirm the attendees' arrival times and the location with the user.",
+              "content_digest": "d057fab5cbe97472da2a796114018a7491d20db6a826cd56943268f73ffeb792",
+              "position": 8,
+              "uid": "19c8ae40-1f5b-5fec-9538-e7bc7cfb036a"
+            },
+            {
+              "content": "Available restaurant reservation times may diminish quickly during the year-end gathering season.",
+              "content_digest": "7bfc817a42ab2d2c67ad04eae58fb3c86bbede15b7cc4ef431a75528bb425e7e",
+              "position": 9,
+              "uid": "3ea9fa3b-4411-55d0-ac90-2ed5515e6ef7"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "57b69ba7-39f3-41e7-a65c-e795fc6b316d"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate domains: the reference centers on library use and safe evening walking, while the compared frame centers on family-meal planning and gathering environments. No claim governs the same operational decision across both sides, and no conflict or ambiguity is present.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "96303846-0273-48ab-a539-dd7a1b6ef0c0",
+              "memory_uid": "04711182-acef-52a9-bd58-7fe98a54854a"
+            }
+          ],
+          "reason": "This is independently useful reference-side membership history with no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "The user renewed their local library membership in October 2024.",
+          "uid": "db635bce-2d22-5976-b4a4-e94390921d7a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "96303846-0273-48ab-a539-dd7a1b6ef0c0",
+              "memory_uid": "0229d0b1-750c-521b-a126-22c9d9d001c4"
+            },
+            {
+              "frame_uid": "96303846-0273-48ab-a539-dd7a1b6ef0c0",
+              "memory_uid": "e310fe87-8cde-5399-be00-9f8d7ec44e94"
+            }
+          ],
+          "reason": "These reference-side experiences jointly express the travel-time consequence of avoiding poorly lit routes; the compared frame contains no walking-route claim.",
+          "status": "RESOLVED",
+          "summary": "Choosing safer or better-lit evening routes led the user to detour or spend additional walking time.",
+          "uid": "b47e85e0-2945-55c0-9b84-84d24f02a177"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "96303846-0273-48ab-a539-dd7a1b6ef0c0",
+              "memory_uid": "4f37306b-08cd-512a-b92e-ca6761da1a5b"
+            },
+            {
+              "frame_uid": "96303846-0273-48ab-a539-dd7a1b6ef0c0",
+              "memory_uid": "5897ffa4-cfc6-5012-8931-15420ec5cf7c"
+            }
+          ],
+          "reason": "These memories form a reference-side account of changing library seating after a noisy reading experience, without a corresponding compared-side library claim.",
+          "status": "RESOLVED",
+          "summary": "The user's library seating experiences contrasted traffic-disrupted reading by a window with remaining settled farther inside on the next visit.",
+          "uid": "6272f6fa-88d2-5896-9a65-885370e30e03"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "96303846-0273-48ab-a539-dd7a1b6ef0c0",
+              "memory_uid": "ce38bd13-3d51-5bff-9eba-ed70a8217356"
+            },
+            {
+              "frame_uid": "96303846-0273-48ab-a539-dd7a1b6ef0c0",
+              "memory_uid": "a304315b-bc0a-591b-b8c2-7eea5145819d"
+            }
+          ],
+          "reason": "These reference-side memories contrast two due-date tracking methods within one library-loan episode; no compared-side claim addresses borrowed-item reminders.",
+          "status": "RESOLVED",
+          "summary": "A lost paper due-date note was followed by successful use of a phone reminder to prepare a borrowed book for return.",
+          "uid": "d72a0cb6-6ce4-5310-8ba5-f97732d59068"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "96303846-0273-48ab-a539-dd7a1b6ef0c0",
+              "memory_uid": "ef060b89-6c54-5c20-86be-c07766a35daa"
+            }
+          ],
+          "reason": "This is an independently useful reference-side procedural requirement absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Library staff expect identity-verification material when someone requests a replacement membership card.",
+          "uid": "0852fb32-4d67-5138-8ff2-3cdfb2bba450"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "96303846-0273-48ab-a539-dd7a1b6ef0c0",
+              "memory_uid": "7669e5eb-c0fd-5182-ae9a-5f9ae95ddf2f"
+            },
+            {
+              "frame_uid": "96303846-0273-48ab-a539-dd7a1b6ef0c0",
+              "memory_uid": "e96f7007-5814-5986-b121-4ce3b22506e1"
+            }
+          ],
+          "reason": "These reference-side memories jointly define a current-condition verification requirement and the relevant local capability limit; the compared frame has no matching route policy.",
+          "status": "RESOLVED",
+          "summary": "Evening-route proposals require recent lighting and pedestrian information that the local agent cannot observe directly, although it can compare past detour reasons.",
+          "uid": "a8d80fe5-2012-56e8-993f-7f1f7c9f87ef"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "57b69ba7-39f3-41e7-a65c-e795fc6b316d",
+              "memory_uid": "3f6eaf6c-00e7-5bd7-9809-367f54a0f707"
+            }
+          ],
+          "reason": "This is independently useful compared-side calendar history with no corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "The user recorded a family dinner for the final week of November.",
+          "uid": "9a72157c-ef1d-5130-a0c5-1614ebb72ec8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "57b69ba7-39f3-41e7-a65c-e795fc6b316d",
+              "memory_uid": "9fd0b9b6-986d-54b0-965e-45feaf9cd482"
+            },
+            {
+              "frame_uid": "57b69ba7-39f3-41e7-a65c-e795fc6b316d",
+              "memory_uid": "cbc477c4-83c4-506b-9da8-9252d14d7f6b"
+            }
+          ],
+          "reason": "These compared-side memories form a venue-based contrast in conversational continuity; the reference frame contains no family-gathering venue claim.",
+          "status": "RESOLVED",
+          "summary": "A crowded restaurant disrupted conversation, whereas a subsequent gathering at the user's father's home allowed conversation to continue after the meal.",
+          "uid": "fb9829d3-7704-5560-92f6-5cbc496b3d19"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "57b69ba7-39f3-41e7-a65c-e795fc6b316d",
+              "memory_uid": "bbfc537e-3fcc-5065-ab93-4777bcdfc10c"
+            },
+            {
+              "frame_uid": "57b69ba7-39f3-41e7-a65c-e795fc6b316d",
+              "memory_uid": "b61367fa-dd17-5ff2-9d6b-f81f6123735a"
+            }
+          ],
+          "reason": "These compared-side experiences jointly contrast adverse and favorable acoustic settings for gatherings; the reference frame does not address gathering acoustics.",
+          "status": "RESOLVED",
+          "summary": "Gathering sound conditions affected the user's comfort and ability to converse, with loud music prompting a brief exit and open outdoor space making conversation easier.",
+          "uid": "4fe19b28-4df2-52a0-b94b-ac114bd059a9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "57b69ba7-39f3-41e7-a65c-e795fc6b316d",
+              "memory_uid": "681cdbd5-595d-5211-914d-edfd9a6b130d"
+            },
+            {
+              "frame_uid": "57b69ba7-39f3-41e7-a65c-e795fc6b316d",
+              "memory_uid": "81c0c4e9-5ae4-5e8a-b11c-7d33032fd8ec"
+            },
+            {
+              "frame_uid": "57b69ba7-39f3-41e7-a65c-e795fc6b316d",
+              "memory_uid": "56078821-34d0-540f-ae66-03bdd7bd1df3"
+            }
+          ],
+          "reason": "These compared-side memories jointly describe the practical value of advance timing coordination; no reference-side claim concerns family-meal timing.",
+          "status": "RESOLVED",
+          "summary": "Advance arrival or meal-start information supported family-meal timing, while missing timing information caused repeated reheating.",
+          "uid": "3ab28006-6815-5477-9138-5e4f98584964"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "57b69ba7-39f3-41e7-a65c-e795fc6b316d",
+              "memory_uid": "19c8ae40-1f5b-5fec-9538-e7bc7cfb036a"
+            }
+          ],
+          "reason": "This is an independently useful compared-side scheduling policy whose location requirement is not supplied by the related timing examples or by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Before scheduling a family meal, attendees' arrival times and the location should be confirmed with the user.",
+          "uid": "d5476891-92a3-5e6a-8959-61f7da085b84"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "57b69ba7-39f3-41e7-a65c-e795fc6b316d",
+              "memory_uid": "3ea9fa3b-4411-55d0-ac90-2ed5515e6ef7"
+            }
+          ],
+          "reason": "This is an independently useful compared-side planning constraint with no corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "Restaurant reservation availability may shrink quickly during the year-end gathering season.",
+          "uid": "71bef35d-bdaa-5e04-9a2b-c7a47f1521f0"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame describes family-meal scheduling, timing coordination, restaurant availability, and how venue and sound conditions affected conversation and comfort.",
+        "differences": "",
+        "reference_only": "The reference describes library membership, seating, due-date reminders, replacement-card requirements, and evening-route safety checks, including limits on observing current conditions."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "1a22b912-2196-41f5-87fe-6aaf9882e841"
+    },
+    "analysis_digest": "fc3e352d0a003eb8984272d17370dd727074753791c154f397b950da06de0d0e",
+    "key": "f6ed5a3f17c59ed0530c7ff6c393a774d6d847ab0d95e0cc2b5f70189b4c9d06",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 58.32229570799973,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "f6ed5a3f17c59ed0530c7ff6c393a774d6d847ab0d95e0cc2b5f70189b4c9d06",
+  "created_at": "2026-08-13T18:46:24.974071Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/10",
+  "pair_key": "b9e7097a8ee3f3e5750a8131fc6ec6fa0bf4db65406b09b1ae8ba455b311f0a9",
+  "provider_seconds": 58.32229570799973,
+  "right": "task-3/local/personal-memory/2025/11",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

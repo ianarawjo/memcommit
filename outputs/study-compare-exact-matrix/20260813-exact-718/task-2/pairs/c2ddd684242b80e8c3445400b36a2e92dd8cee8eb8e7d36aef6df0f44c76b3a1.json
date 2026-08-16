@@ -1,0 +1,408 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:21:14.092917+00:00",
+      "frames": [
+        {
+          "context_digest": "4ae7659c0c6976de9bf2292f9e35962963b7931b470c2294d4f0e70b3500bff0",
+          "context_name": "task-2/advisor1/feasibility",
+          "context_uid": "52db6b06-e86a-556a-913e-30e45f7e9529",
+          "memories": [
+            {
+              "content": "Mark unverified schedule assumptions as such.",
+              "content_digest": "d4cdcdbcdb51d96f9a7435e72c2e4ef25a3e3822a765a88afafeca5194bda96e",
+              "position": 0,
+              "uid": "b150c774-27f6-5ec8-8cb9-9a00be19ce9b"
+            },
+            {
+              "content": "Mark unverified recruitment assumptions as such.",
+              "content_digest": "4cc28528fee1c7b09f709638e2b57d3bc9efe635d20500ee98567f8f59b8cf21",
+              "position": 1,
+              "uid": "6c7d14ed-67e5-56ff-befb-7648b95aa7a3"
+            },
+            {
+              "content": "Mark unverified technical assumptions as such.",
+              "content_digest": "8942e49cd46e3e9746330349df11e49d4a6c9250c7aa4c52c2d9ade1c97c735c",
+              "position": 2,
+              "uid": "00bf39b5-fe97-5fd0-b579-a5c13b5e6af7"
+            },
+            {
+              "content": "Clarify which stage of prototype fabrication or user study each requested resource is used for.",
+              "content_digest": "81ba64e23304f8fbbb3af4f2c30dfa3c517899c486e88ba211189a7911fcbd64",
+              "position": 3,
+              "uid": "3ae97c88-7537-5733-b48d-e02c9283f486"
+            },
+            {
+              "content": "Operations reviewers judge feasibility based on the personnel assigned to each procedure.",
+              "content_digest": "fe29bb7e592d116001a25ce11c603ae29f21d446925c28db692f14970d5b8134",
+              "position": 4,
+              "uid": "e2b5c1f0-97c2-5d46-af80-993d8d5606c9"
+            },
+            {
+              "content": "Operations reviewers judge feasibility based on the equipment assigned to each procedure.",
+              "content_digest": "859ab328c21506d11dd1f6d98e98d5a552446e774931a8bc13396750acf0793b",
+              "position": 5,
+              "uid": "f636b400-d3a2-5873-bf5b-c990b0f7ea42"
+            },
+            {
+              "content": "Operations reviewers judge feasibility based on the time allocated to each procedure.",
+              "content_digest": "08656886328ece4d813e36b1145805ffd3f3d4c6c855c20b1464143fb12868ab",
+              "position": 6,
+              "uid": "49385488-2315-51bc-bea0-749a1aea52f1"
+            },
+            {
+              "content": "Verify that the planned number of formative evaluation iterations is feasible within the time for prototype modification and recruitment resources.",
+              "content_digest": "9e181a14a97abd740a85679554395d7b315c07f0e4171ef276a2c31553b285c7",
+              "position": 7,
+              "uid": "f1c22a48-9d8d-5e82-9837-690d66e719db"
+            },
+            {
+              "content": "Include only the minimum functionality required to compare primary design assumptions in the scope of the formative evaluation prototype.",
+              "content_digest": "7769c2a4c03dc1c279bbf34bf0cefdcd076e3c1d8a1e56015bf20357ecfcf433",
+              "position": 8,
+              "uid": "4d69f030-0dc0-5df7-a153-0b595a3f68de"
+            },
+            {
+              "content": "The user's iterative design plan can be judged feasible only if time and personnel are allocated for modifying the prototype between iterations.",
+              "content_digest": "0339285cf9fd632814c5b5eb2b48fd46e3baf09ea95fb406f71b5d2cc804fa7e",
+              "position": 9,
+              "uid": "152f8621-f5fb-5c5e-a961-1fde77ed0bb3"
+            },
+            {
+              "content": "Delays in participant recruitment can compress the time available for prototype modification between formative evaluations.",
+              "content_digest": "9945f30dba63d2d070bad59cb2fb15b6a26d635f337949c3891b58d17c43973a",
+              "position": 10,
+              "uid": "1877a138-31f6-59a5-b666-ae57985f540d"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "68e49ef5-51d0-4f84-9f7e-defe4e8f6f54"
+        },
+        {
+          "context_digest": "6cd44802c5b4878ee84adef31f52231d09d37ccc0ef9a7256d0421114835a6bd",
+          "context_name": "task-2/advisor2/claim-evidence",
+          "context_uid": "1ca4b72a-fcbb-5997-a1b5-f764662460a5",
+          "memories": [
+            {
+              "content": "Place observational evidence or sources adjacent to claims regarding user needs or field effects.",
+              "content_digest": "513b102a6ed66a1dd3fb3380065f34552036a6dffed20d7101487342096021e3",
+              "position": 0,
+              "uid": "b39cf79f-d174-5ecb-98c9-b3f62ce0696a"
+            },
+            {
+              "content": "Distinguish at the sentence level between facts already confirmed in the field and predictions to be examined in the user study.",
+              "content_digest": "63a7fdcf7da5c4fa36a2c7a6f8542837956fa0dcdedee781593f399516501067",
+              "position": 1,
+              "uid": "b95e0185-f933-508d-8da7-41c65e2cc340"
+            },
+            {
+              "content": "Do not use verbs implying proof of causality if the design does not support causal inference.",
+              "content_digest": "0db514f790eb85ba0800c1f8c659cd4236136b9e36c034899c36f6116c040f04",
+              "position": 2,
+              "uid": "f82f1e1f-3f27-5668-a5a4-e64b0f88b44a"
+            },
+            {
+              "content": "Prioritize citations of recent systems and field research in rapidly changing HCI topics.",
+              "content_digest": "e8cd0847480ba8d07f971f21978873d13b6bd34d4e4625dd3dde8039afd5b88c",
+              "position": 3,
+              "uid": "b5461283-9001-510c-9a30-bb367f247b25"
+            },
+            {
+              "content": "Explain the user or operational stakeholder needs that each design choice aims to address.",
+              "content_digest": "59df6b478a0e200ceaa520bb7c4535b2078a8354efae0eec77a06cb6843bfab6",
+              "position": 4,
+              "uid": "87340c01-2e0f-5b82-9410-2133648022da"
+            },
+            {
+              "content": "Support each important conclusion with the closest evidence that directly examined it.",
+              "content_digest": "6731286cd67ee18644df531752f10913f4df9e7c7acf936da99caafacd597c0a",
+              "position": 5,
+              "uid": "8b15a9ad-aa53-5a54-beb2-f1cc8d6da846"
+            },
+            {
+              "content": "Reviewers first check direct evidence placed closest to important conclusions.",
+              "content_digest": "940880f0ee481e00ff7f935c9b76af8137d0f8a8664a2c53fb3d044681980c8f",
+              "position": 6,
+              "uid": "565a2263-e3bc-5379-9a80-64665b491c88"
+            },
+            {
+              "content": "Use field cases in which people completed tasks by working around existing tools as evidence for the need for the design.",
+              "content_digest": "4c731184cb33bda8ab315870713872842339013be68cf5f79c43a8b9f4e297d4",
+              "position": 7,
+              "uid": "27b58ee9-5cad-5872-8eb7-a694728d8e79"
+            },
+            {
+              "content": "Distinguish between problems reported by operational stakeholders and those directly observed by the researcher as separate forms of evidence.",
+              "content_digest": "39586ea932c540d6c7a1b0faff870d7ef6433052792defdc110beb513276ffe6",
+              "position": 8,
+              "uid": "cf7e9410-2144-53c4-a236-a16a7b5be494"
+            },
+            {
+              "content": "Field breakdown logs can reveal both system failures and user adaptive behaviors, including their timing and conditions.",
+              "content_digest": "331910b18eef90e53453e700a55b43143b3e8d07d3bb2c88bade31fddb0e5965",
+              "position": 9,
+              "uid": "ad643b33-fba1-5643-b57f-3bb8c3829122"
+            },
+            {
+              "content": "In field sites introducing new systems, formal procedures often coexist with existing manual routines for a period, making it difficult to isolate the effects of single design changes.",
+              "content_digest": "7def8e340a5ae1ad7cce9228e3e4279f499f47f0d2576bbe23e59f3703f04084",
+              "position": 10,
+              "uid": "546548e3-c47a-5a74-a04a-0a328602ead4"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "a3297eaa-ee19-48a3-933f-10db126ec3f5"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames share a concern for clearly identifying what remains unverified, but apply it in different contexts. Otherwise, the reference concentrates on prototype and study feasibility, while the compared frame concentrates on evidentiary support, field observations, stakeholder needs, and limits on causal interpretation.",
+      "relations": [
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "68e49ef5-51d0-4f84-9f7e-defe4e8f6f54",
+              "memory_uid": "b150c774-27f6-5ec8-8cb9-9a00be19ce9b"
+            },
+            {
+              "frame_uid": "68e49ef5-51d0-4f84-9f7e-defe4e8f6f54",
+              "memory_uid": "6c7d14ed-67e5-56ff-befb-7648b95aa7a3"
+            },
+            {
+              "frame_uid": "68e49ef5-51d0-4f84-9f7e-defe4e8f6f54",
+              "memory_uid": "00bf39b5-fe97-5fd0-b579-a5c13b5e6af7"
+            },
+            {
+              "frame_uid": "a3297eaa-ee19-48a3-933f-10db126ec3f5",
+              "memory_uid": "b95e0185-f933-508d-8da7-41c65e2cc340"
+            }
+          ],
+          "reason": "The policies share an uncertainty-labeling purpose, but their explicit subject-matter conditions differ and must be preserved.",
+          "status": "RESOLVED",
+          "summary": "Both require explicit separation of established information from propositions not yet verified; one covers schedule, recruitment, and technical assumptions, while the other covers field-confirmed facts versus user-study predictions.",
+          "uid": "93af4f17-e071-5c17-92cb-f7f106ae86bf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "68e49ef5-51d0-4f84-9f7e-defe4e8f6f54",
+              "memory_uid": "3ae97c88-7537-5733-b48d-e02c9283f486"
+            }
+          ],
+          "reason": "Only the reference frame specifies stage-level clarification of resource use.",
+          "status": "RESOLVED",
+          "summary": "Requested resources should be mapped to the prototype-fabrication or user-study stage in which they are used.",
+          "uid": "e75cd5e6-adf7-5bfd-9d22-cae16c25508a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "68e49ef5-51d0-4f84-9f7e-defe4e8f6f54",
+              "memory_uid": "e2b5c1f0-97c2-5d46-af80-993d8d5606c9"
+            },
+            {
+              "frame_uid": "68e49ef5-51d0-4f84-9f7e-defe4e8f6f54",
+              "memory_uid": "f636b400-d3a2-5873-bf5b-c990b0f7ea42"
+            },
+            {
+              "frame_uid": "68e49ef5-51d0-4f84-9f7e-defe4e8f6f54",
+              "memory_uid": "49385488-2315-51bc-bea0-749a1aea52f1"
+            }
+          ],
+          "reason": "These reference-side statements split one operational feasibility criterion into its principal resource inputs.",
+          "status": "RESOLVED",
+          "summary": "Procedure feasibility is assessed from its assigned personnel, equipment, and time.",
+          "uid": "5584cb1f-3652-556c-9d36-d1ef9d4c4230"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "68e49ef5-51d0-4f84-9f7e-defe4e8f6f54",
+              "memory_uid": "f1c22a48-9d8d-5e82-9837-690d66e719db"
+            },
+            {
+              "frame_uid": "68e49ef5-51d0-4f84-9f7e-defe4e8f6f54",
+              "memory_uid": "152f8621-f5fb-5c5e-a961-1fde77ed0bb3"
+            },
+            {
+              "frame_uid": "68e49ef5-51d0-4f84-9f7e-defe4e8f6f54",
+              "memory_uid": "1877a138-31f6-59a5-b666-ae57985f540d"
+            }
+          ],
+          "reason": "These reference-side statements jointly describe the dependencies and timing risk governing an iterative evaluation plan.",
+          "status": "RESOLVED",
+          "summary": "Formative iteration feasibility depends on sufficient recruitment capacity and time and personnel for prototype modification, with recruitment delays reducing available modification time.",
+          "uid": "353a4d3b-aa72-56b1-bb6c-1f1673bafde1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "68e49ef5-51d0-4f84-9f7e-defe4e8f6f54",
+              "memory_uid": "4d69f030-0dc0-5df7-a153-0b595a3f68de"
+            }
+          ],
+          "reason": "Only the reference frame defines this prototype-scope constraint.",
+          "status": "RESOLVED",
+          "summary": "A formative evaluation prototype should contain only the minimum functionality needed to compare primary design assumptions.",
+          "uid": "78eb504c-4b0a-5526-9efa-9e92adeeaf27"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a3297eaa-ee19-48a3-933f-10db126ec3f5",
+              "memory_uid": "b39cf79f-d174-5ecb-98c9-b3f62ce0696a"
+            },
+            {
+              "frame_uid": "a3297eaa-ee19-48a3-933f-10db126ec3f5",
+              "memory_uid": "8b15a9ad-aa53-5a54-beb2-f1cc8d6da846"
+            },
+            {
+              "frame_uid": "a3297eaa-ee19-48a3-933f-10db126ec3f5",
+              "memory_uid": "565a2263-e3bc-5379-9a80-64665b491c88"
+            }
+          ],
+          "reason": "These compared-side statements restate and explain one evidence-proximity policy.",
+          "status": "RESOLVED",
+          "summary": "Direct observational evidence or sources should be placed close to the important claims and conclusions they support.",
+          "uid": "f80c1dca-a1c0-5426-9ca4-34ec2f0a8281"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a3297eaa-ee19-48a3-933f-10db126ec3f5",
+              "memory_uid": "f82f1e1f-3f27-5668-a5a4-e64b0f88b44a"
+            }
+          ],
+          "reason": "Only the compared frame constrains causal wording according to study design.",
+          "status": "RESOLVED",
+          "summary": "Causal proof language should not be used when the study design cannot support causal inference.",
+          "uid": "aa303a14-ceb3-500d-91d8-5891dcaf0391"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a3297eaa-ee19-48a3-933f-10db126ec3f5",
+              "memory_uid": "b5461283-9001-510c-9a30-bb367f247b25"
+            }
+          ],
+          "reason": "Only the compared frame states a recency policy for source selection.",
+          "status": "RESOLVED",
+          "summary": "Rapidly changing HCI topics should prioritize citations to recent systems and field research.",
+          "uid": "ae85a20b-7385-591d-8108-8b88e3572639"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a3297eaa-ee19-48a3-933f-10db126ec3f5",
+              "memory_uid": "87340c01-2e0f-5b82-9410-2133648022da"
+            }
+          ],
+          "reason": "Only the compared frame requires an explicit design-choice-to-need rationale.",
+          "status": "RESOLVED",
+          "summary": "Each design choice should be connected to the user or operational stakeholder need it addresses.",
+          "uid": "af7cdf99-f9d6-5110-8b84-544814bee633"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a3297eaa-ee19-48a3-933f-10db126ec3f5",
+              "memory_uid": "27b58ee9-5cad-5872-8eb7-a694728d8e79"
+            }
+          ],
+          "reason": "Only the compared frame identifies workaround cases as a specific form of design-need evidence.",
+          "status": "RESOLVED",
+          "summary": "Field cases where people work around existing tools can evidence the need for a design.",
+          "uid": "b47991a0-b618-5044-affc-f03b208ad04f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a3297eaa-ee19-48a3-933f-10db126ec3f5",
+              "memory_uid": "cf7e9410-2144-53c4-a236-a16a7b5be494"
+            }
+          ],
+          "reason": "Only the compared frame requires this evidence-provenance distinction.",
+          "status": "RESOLVED",
+          "summary": "Stakeholder-reported problems and researcher-observed problems should be distinguished as separate evidence forms.",
+          "uid": "4f3efc84-970a-5333-95df-89cd1d32668a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a3297eaa-ee19-48a3-933f-10db126ec3f5",
+              "memory_uid": "ad643b33-fba1-5643-b57f-3bb8c3829122"
+            }
+          ],
+          "reason": "Only the compared frame describes the evidentiary value of breakdown logs.",
+          "status": "RESOLVED",
+          "summary": "Field breakdown logs can expose system failures and adaptive user behavior together with their timing and conditions.",
+          "uid": "7baf2a7b-d204-56e8-9494-dcd3fb377e0c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a3297eaa-ee19-48a3-933f-10db126ec3f5",
+              "memory_uid": "546548e3-c47a-5a74-a04a-0a328602ead4"
+            }
+          ],
+          "reason": "Only the compared frame identifies this field-transition confounding condition.",
+          "status": "RESOLVED",
+          "summary": "Coexistence of new systems and established manual routines can make the effects of individual design changes difficult to isolate.",
+          "uid": "77a4ef94-a315-5dbc-aa2c-1e72a866be01"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame uniquely addresses evidence placement and provenance, causal language, citation recency, stakeholder needs, workaround cases, breakdown logs, and field-transition confounding.",
+        "differences": "Both distinguish verified knowledge from untested propositions, with the reference covering planning assumptions and the compared frame covering field facts and study predictions.",
+        "reference_only": "The reference uniquely addresses procedural resourcing, iteration feasibility, recruitment delays, fabrication-stage resource use, and minimum prototype scope."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "ce6d0496-cc3e-43c1-b1fd-78b50012e434"
+    },
+    "analysis_digest": "f8adeac04363979998d831ce713bff2aba7cdcea7356a346c14fc5404a94a4f0",
+    "key": "53f60fd56f41ebe814275b34a632c1954219bb854d317843b0b07d34c21c09f4",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 48.756782500000554,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "53f60fd56f41ebe814275b34a632c1954219bb854d317843b0b07d34c21c09f4",
+  "created_at": "2026-08-13T18:22:02.849204Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/feasibility",
+  "pair_key": "c2ddd684242b80e8c3445400b36a2e92dd8cee8eb8e7d36aef6df0f44c76b3a1",
+  "provider_seconds": 48.756782500000554,
+  "right": "task-2/advisor2/claim-evidence",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

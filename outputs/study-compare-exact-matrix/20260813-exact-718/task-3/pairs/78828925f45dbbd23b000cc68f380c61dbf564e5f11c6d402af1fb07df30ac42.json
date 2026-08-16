@@ -1,0 +1,352 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:48:09.008127+00:00",
+      "frames": [
+        {
+          "context_digest": "0b8af0ea4e580cc332939d026149e543e9251c54de246e3eabb83c941e6c12f2",
+          "context_name": "task-3/local/personal-memory/2024/12",
+          "context_uid": "66c3e5de-61bb-5795-8e5a-4e28f64be857",
+          "memories": [
+            {
+              "content": "The user used an accessible entrance at a clinic in December 2024.",
+              "content_digest": "a940bc9fb7423a1bdb9dde547cd39eb8ad66d4fa3051649c62b042fc63935263",
+              "position": 0,
+              "uid": "a6923620-267d-5129-b8c4-cd9b1e1a1e7b"
+            },
+            {
+              "content": "On a day snow had accumulated and blocked the main-entrance ramp, the user went to a side entrance.",
+              "content_digest": "460c05d8e8b4b7443ff42cbeead66e07201846394bcbe5948f63e585a197006f",
+              "position": 1,
+              "uid": "fb0e1d1f-0ef5-5214-b6d7-f6ca5c68f582"
+            },
+            {
+              "content": "The user learned on site that the elevator was under inspection and delayed the appointment.",
+              "content_digest": "b5efa024c597b57651178431d22173d4ca1242c3a4c9607f8bd5a7ff681af6f4",
+              "position": 2,
+              "uid": "4cb45120-4376-5c7b-ae92-faa9e4b9330c"
+            },
+            {
+              "content": "The day before the next visit, the user called to check whether the elevator would be operating.",
+              "content_digest": "93c66066de480a4d2f30b7b7c4d955acfceb227ac898766b6375829804b580eb",
+              "position": 3,
+              "uid": "479f4434-879c-5335-b0c9-c0bfa19ecdcd"
+            },
+            {
+              "content": "The user waited for their turn in front of a ticket machine near the waiting chairs.",
+              "content_digest": "fada8c09d46af2e1bcbd2b1e97d9cb786ceca83fc13d1240627639dd6cb96e65",
+              "position": 4,
+              "uid": "0f2c78a7-8f92-573d-af8a-a360ceb77b24"
+            },
+            {
+              "content": "On a day the user waited in a corridor without chairs, they leaned against the wall and changed position several times.",
+              "content_digest": "0037afaeb85d94f985b1628b7b8f8194fb00d7d7e72e1746c6bae2c2ba66fe6f",
+              "position": 5,
+              "uid": "7b9197ac-4263-5169-8d3b-d34f5d893d36"
+            },
+            {
+              "content": "On a day their older sister accompanied them, the user found a place to sit immediately after reception.",
+              "content_digest": "1ae59de552a922fd3b4d39e7e5dc1ec65ff08ee68e3448f2152f27dfec710a5a",
+              "position": 6,
+              "uid": "7b0b7571-f29c-56e5-a27a-82d69a4a6982"
+            },
+            {
+              "content": "Reception staff expect that a first-time visitor may ask where the accessible entrance is.",
+              "content_digest": "7dc3300dc630b737c0f7b437eba30179aa6aaa03efd61c968604ee505a43aa73",
+              "position": 7,
+              "uid": "e9515d6b-10d9-579f-abf7-5030db64218a"
+            },
+            {
+              "content": "The local agent cannot infer the user's condition from a record of using an accessible route alone.",
+              "content_digest": "2d8a50f62f32c43ca62e1e23b75c34361ece43fd8367964174fdc73d66795df4",
+              "position": 8,
+              "uid": "8e57141d-c603-56cd-ab9e-c14b4e944b45"
+            },
+            {
+              "content": "Snow accumulation and snow-removal work can temporarily block an entrance route used under ordinary conditions.",
+              "content_digest": "4fb152c120860688789bdd4b825de45799e9fa00c0c18c334492dd4b274adde9",
+              "position": 9,
+              "uid": "a6076438-307c-56fe-9d2c-848181846ce5"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "6866ee61-de6b-4c82-84c8-7c1c044bbb2f"
+        },
+        {
+          "context_digest": "1d47d83944d91bc0316a61894412e9b4361758603b9532687cf68473f1d30198",
+          "context_name": "task-3/local/personal-memory/2026/01",
+          "context_uid": "e48e6eac-20f7-599d-9f76-4238bd9dd96d",
+          "memories": [
+            {
+              "content": "The user keeps gloves and scarves in a basket inside the entrance.",
+              "content_digest": "df54c52cb6bc89e2e66c747df9807c6892db272c2a23ac5ac91e3f64aaa2a5da",
+              "position": 0,
+              "uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409"
+            },
+            {
+              "content": "On a day the user could not find their gloves, they walked with their hands in their pockets and missed the bus.",
+              "content_digest": "d4205aee5fe3f2c18adc3622930cc7f74de231de9812ca594dbd95a0af7199ff",
+              "position": 1,
+              "uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5"
+            },
+            {
+              "content": "Before the next outing, the user put the gloves in the entrance basket the night before and left on time.",
+              "content_digest": "23a7026d7d1a7edd3278e7b8aa147ef0d315059663f78da5498ad6c1b4a5407c",
+              "position": 2,
+              "uid": "a11f0943-8ee1-5305-87fb-64982fb36f82"
+            },
+            {
+              "content": "On a snowy day, the user chose a shorter route but turned back at stairs that had not been cleared of snow.",
+              "content_digest": "e9e241d2bc4d7c2fa9a44471aa6d1c16d42d50fe2ed99ccfb50713107714be9b",
+              "position": 3,
+              "uid": "f623f245-cdd5-5080-8869-b52cf2914076"
+            },
+            {
+              "content": "The next day, the user took a cleared sidewalk along the main road and avoided slippery sections.",
+              "content_digest": "62c8ec8b38778e9922cf433af4ceb4d59f60bee52dc758e3b88bb1163637f108",
+              "position": 4,
+              "uid": "17ac56f1-1302-5350-99d5-b95ef7feb768"
+            },
+            {
+              "content": "The user fell asleep with the heat turned up, became too warm before dawn, and woke twice.",
+              "content_digest": "912dbbc88a0f4a174b714a794793781f4d2f6c889f73cd7f825338addcab5d6c",
+              "position": 5,
+              "uid": "96988fa9-44b1-511e-8c99-4372f902cfe3"
+            },
+            {
+              "content": "The next night, the user turned down the heat and used one additional thin blanket.",
+              "content_digest": "3d12a4609d4731ebe71bacc841c979ac3497553238c3b5c2191842bbf075ba89",
+              "position": 6,
+              "uid": "b628acaa-50da-552c-8665-244dc4ab8263"
+            },
+            {
+              "content": "On a morning with heavy snow, the user's father expects the user will worry about road conditions and sends a text before departure.",
+              "content_digest": "dcd6bcb23bee46e49813bb14dd8dcb91983d5830f0536d7f23fcdb3a8af0667c",
+              "position": 7,
+              "uid": "08dfb937-7b28-55b5-801c-c0da00cbd414"
+            },
+            {
+              "content": "Before proposing a winter travel route, check recent snow-clearing conditions and accessible entrances.",
+              "content_digest": "dcab87102a9979c51dd369d5ba5ed00b7445c8ccd14450edcb8bec7859689606",
+              "position": 8,
+              "uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d"
+            },
+            {
+              "content": "The local agent cannot know the actual condition of the sidewalk the user will take from a weather forecast alone.",
+              "content_digest": "6b4bcc2f2f508f130c047ff677cadae0eae5b4cc5e5dd6bb3a1fb3784d7793b1",
+              "position": 9,
+              "uid": "802c4031-57de-592a-9bc8-6ee3d54921c8"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "9634116f-017b-41d7-9721-f304e55ff19a"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames share a practical theme of adapting winter access and travel to verified snow-clearing conditions. Otherwise, the reference records clinic access, elevator, waiting, and inference details, while the compared frame records clothing preparation, temperature adjustment, and family support.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "6866ee61-de6b-4c82-84c8-7c1c044bbb2f",
+              "memory_uid": "fb0e1d1f-0ef5-5214-b6d7-f6ca5c68f582"
+            },
+            {
+              "frame_uid": "6866ee61-de6b-4c82-84c8-7c1c044bbb2f",
+              "memory_uid": "a6076438-307c-56fe-9d2c-848181846ce5"
+            },
+            {
+              "frame_uid": "9634116f-017b-41d7-9721-f304e55ff19a",
+              "memory_uid": "f623f245-cdd5-5080-8869-b52cf2914076"
+            },
+            {
+              "frame_uid": "9634116f-017b-41d7-9721-f304e55ff19a",
+              "memory_uid": "17ac56f1-1302-5350-99d5-b95ef7feb768"
+            },
+            {
+              "frame_uid": "9634116f-017b-41d7-9721-f304e55ff19a",
+              "memory_uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d"
+            },
+            {
+              "frame_uid": "9634116f-017b-41d7-9721-f304e55ff19a",
+              "memory_uid": "802c4031-57de-592a-9bc8-6ee3d54921c8"
+            }
+          ],
+          "reason": "The reference supplies an entrance obstruction and the general possibility of temporary blockage; the compared frame supplies route outcomes, a cleared alternative, a verification policy, and a limit on forecast-only knowledge. These complementary claims materially inform the same winter route-access decision.",
+          "status": "RESOLVED",
+          "summary": "Both frames support adapting winter travel or access choices to current snow-clearing conditions rather than assuming a customary, shorter, or forecast-indicated route is usable.",
+          "uid": "b7c4b08e-853e-51e4-ad0f-98175830d069"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6866ee61-de6b-4c82-84c8-7c1c044bbb2f",
+              "memory_uid": "a6923620-267d-5129-b8c4-cd9b1e1a1e7b"
+            }
+          ],
+          "reason": "The compared frame contains no corresponding claim about that clinic visit or entrance use.",
+          "status": "RESOLVED",
+          "summary": "The reference records the user’s use of an accessible clinic entrance in December 2024.",
+          "uid": "1ea3bdcd-70ef-55b9-92b4-bf823a2da035"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6866ee61-de6b-4c82-84c8-7c1c044bbb2f",
+              "memory_uid": "4cb45120-4376-5c7b-ae92-faa9e4b9330c"
+            },
+            {
+              "frame_uid": "6866ee61-de6b-4c82-84c8-7c1c044bbb2f",
+              "memory_uid": "479f4434-879c-5335-b0c9-c0bfa19ecdcd"
+            }
+          ],
+          "reason": "These memories form one reference-only disruption-and-preparation sequence with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "An unexpected clinic elevator inspection delayed an appointment, and the user checked elevator operation before the next visit.",
+          "uid": "45c4466b-d163-596c-ae82-19f3d4767a21"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6866ee61-de6b-4c82-84c8-7c1c044bbb2f",
+              "memory_uid": "0f2c78a7-8f92-573d-af8a-a360ceb77b24"
+            },
+            {
+              "frame_uid": "6866ee61-de6b-4c82-84c8-7c1c044bbb2f",
+              "memory_uid": "7b9197ac-4263-5169-8d3b-d34f5d893d36"
+            },
+            {
+              "frame_uid": "6866ee61-de6b-4c82-84c8-7c1c044bbb2f",
+              "memory_uid": "7b0b7571-f29c-56e5-a27a-82d69a4a6982"
+            }
+          ],
+          "reason": "The memories split one reference-only account of variable waiting and seating circumstances; the compared frame contains no clinic waiting-area information.",
+          "status": "RESOLVED",
+          "summary": "The reference describes differing clinic waiting locations and seating availability across visits, including chairs nearby, a chairless corridor, and immediate seating after reception.",
+          "uid": "f9b20425-0f97-5e3d-92d1-2bb6a723f953"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6866ee61-de6b-4c82-84c8-7c1c044bbb2f",
+              "memory_uid": "e9515d6b-10d9-579f-abf7-5030db64218a"
+            }
+          ],
+          "reason": "This staff expectation is independently useful reference-only information and is not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Reception staff expect first-time visitors may ask where the accessible entrance is.",
+          "uid": "b5d575bb-eb61-559a-ad63-9cad0b9f0b0a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6866ee61-de6b-4c82-84c8-7c1c044bbb2f",
+              "memory_uid": "8e57141d-c603-56cd-ab9e-c14b4e944b45"
+            }
+          ],
+          "reason": "The compared frame’s uncertainty concerns future sidewalk conditions from weather forecasts, a different operational inference, so it does not supply an equivalent or compatible counterpart.",
+          "status": "RESOLVED",
+          "summary": "Use of an accessible route alone does not justify inferring the user’s condition.",
+          "uid": "6e202b61-c0dd-58ec-9433-86bab9f5b8bb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9634116f-017b-41d7-9721-f304e55ff19a",
+              "memory_uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409"
+            },
+            {
+              "frame_uid": "9634116f-017b-41d7-9721-f304e55ff19a",
+              "memory_uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5"
+            },
+            {
+              "frame_uid": "9634116f-017b-41d7-9721-f304e55ff19a",
+              "memory_uid": "a11f0943-8ee1-5305-87fb-64982fb36f82"
+            }
+          ],
+          "reason": "These memories form one compared-only clothing-organization sequence with no corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The compared frame links designated entrance-basket storage and advance glove preparation with avoiding a repeated search-related departure delay.",
+          "uid": "83ab181a-8bac-56b3-a9aa-b25525d01128"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9634116f-017b-41d7-9721-f304e55ff19a",
+              "memory_uid": "96988fa9-44b1-511e-8c99-4372f902cfe3"
+            },
+            {
+              "frame_uid": "9634116f-017b-41d7-9721-f304e55ff19a",
+              "memory_uid": "b628acaa-50da-552c-8665-244dc4ab8263"
+            }
+          ],
+          "reason": "This compared-only experience-and-adjustment sequence has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "After excess heat disrupted sleep, the user reduced the heat and added a thin blanket the next night.",
+          "uid": "7e4ac810-ef4d-580c-8187-feb1a1745aa2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9634116f-017b-41d7-9721-f304e55ff19a",
+              "memory_uid": "08dfb937-7b28-55b5-801c-c0da00cbd414"
+            }
+          ],
+          "reason": "This family expectation and support action is independently useful compared-only information, not a claim about route usability or verification itself.",
+          "status": "RESOLVED",
+          "summary": "The user’s father anticipates concern about road conditions during heavy snow and sends a pre-departure text.",
+          "uid": "fe21892a-e1a4-532b-a9b2-7f4d26a7e822"
+        }
+      ],
+      "reports": {
+        "both": "Both describe winter routes becoming unusable because of snow and support choosing or verifying a currently cleared, accessible alternative.",
+        "compared_only": "The compared frame uniquely covers organizing winter clothing, adjusting nighttime warmth after disrupted sleep, and a father’s anticipatory travel-support message.",
+        "differences": "",
+        "reference_only": "The reference uniquely covers clinic entrance use, elevator disruption and advance checking, variable waiting-area seating, staff expectations, and limits on inferring a user condition."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "d4bd7b72-f860-435b-a854-61b3f04f71ae"
+    },
+    "analysis_digest": "ef5b84c7e508942c0ca60b4287ed90a5cfb03e7c33d2b8932c710465619b387c",
+    "key": "93d3cfd96f51ea355a46cbedb156e93b5d4c18fe657428335c39a13a84b1d499",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 60.381904957997904,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "93d3cfd96f51ea355a46cbedb156e93b5d4c18fe657428335c39a13a84b1d499",
+  "created_at": "2026-08-13T18:49:09.389252Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/12",
+  "pair_key": "78828925f45dbbd23b000cc68f380c61dbf564e5f11c6d402af1fb07df30ac42",
+  "provider_seconds": 60.381904957997904,
+  "right": "task-3/local/personal-memory/2026/01",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

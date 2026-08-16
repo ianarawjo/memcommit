@@ -1,0 +1,438 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:22:13.146689+00:00",
+      "frames": [
+        {
+          "context_digest": "d216a114524e2b755fff42b8577d5027d3e528aed50c5f588cebf57767bb7fc8",
+          "context_name": "task-2/advisor1/methods",
+          "context_uid": "d2f78b99-5dcf-5876-89a9-1058bceca333",
+          "memories": [
+            {
+              "content": "Link each HCI research question directly to corresponding user data and analysis procedures.",
+              "content_digest": "21e2d5e7eb4ec06057a8405359656cd03a98f4ae67956016d98582af44bfb402",
+              "position": 0,
+              "uid": "c8bcefee-c64a-5a1f-911c-502cc4522701"
+            },
+            {
+              "content": "In preregistered studies, specify the conditions under which deviations from the plan are permissible.",
+              "content_digest": "0ecac6de4eb5e3eec39477c5a6324acb8a1bd6cefb17eacc2c73cdd53160b85f",
+              "position": 1,
+              "uid": "8747b27e-6c2b-5498-9eac-c403e26101a6"
+            },
+            {
+              "content": "In preregistered studies, specify how to record content that deviates from the plan.",
+              "content_digest": "821b3ad70335f24d96aeffd2260e3bc27bb6efd1108a68b00ecc5cb7e7adb242",
+              "position": 2,
+              "uid": "c3ad4ad8-4c5c-54c5-8d65-2dae15fa69a0"
+            },
+            {
+              "content": "Commit to one exact target number of participants so the schedule, workload, and budget can be checked against the same quantity.",
+              "content_digest": "7ff7f3d29fc21399565b4047d3f78e6415e1b51a9247139fc156ea7d4f6d2f13",
+              "position": 3,
+              "uid": "df53a41c-2fbf-532a-a5b0-560a196bf5cb"
+            },
+            {
+              "content": "Specify the interview protocols, recording devices, or log tools used to collect each type of user data.",
+              "content_digest": "0396cbcbfd6e96ef9fd2af507855c4b71eb3003a15fc79d240cd0b751b6b5788",
+              "position": 4,
+              "uid": "24d49198-fd7b-5810-bc56-1910a796f76e"
+            },
+            {
+              "content": "Specify whether each type of user data is collected before, during, or after the interaction.",
+              "content_digest": "80a3ff6e82631a044e8859709930b675163439d11564d1b59601bca0ee030fba",
+              "position": 5,
+              "uid": "2f367cf3-50c5-59bc-972e-6173e56343ac"
+            },
+            {
+              "content": "Readers cannot tell whether the schedule and budget agree when different sections imply different target counts.",
+              "content_digest": "9b5de55faa7e64cf1149ef1bb60cf990815e789e7d1c4a3c0e6297fbbd300aae",
+              "position": 6,
+              "uid": "91db3bd1-4417-5db6-b7a6-3e79c87ebe88"
+            },
+            {
+              "content": "In formative evaluation prototypes, implementation instability exists as an independent cause of task failure alongside design choices.",
+              "content_digest": "dab5f616c4354c0e9f381b0e860e5ec5ff1afc249a4ad427f194c559781b83a8",
+              "position": 7,
+              "uid": "49746579-92d7-51ea-b158-7d770443d101"
+            },
+            {
+              "content": "If a prototype safety signal occurs during formative evaluation, existing institutional safety procedures take precedence over planned data collection.",
+              "content_digest": "2f2768eb4fbce9367786ab13ca8a608e82104cee45200f4aa59854efcf2edc3e",
+              "position": 8,
+              "uid": "20d116ab-f9cc-5f61-808b-8555da09d707"
+            },
+            {
+              "content": "Reviewers judge answerability by tracing the path from each research question to the data and analysis.",
+              "content_digest": "0fac56a79481bdcd7b169c7e3d9ab8fbd0b4f76d33dfe9f4a2f703f80e84aea9",
+              "position": 9,
+              "uid": "881bc037-c099-50e4-b7e0-d38fba5146c9"
+            },
+            {
+              "content": "The author of this proposal tends to present implemented feature lists directly as design contributions.",
+              "content_digest": "6cf2a1292756154c2a0a045f1e4bd4889994faaa838f93e8a2b9c949957ed920",
+              "position": 10,
+              "uid": "9a969676-6093-5fac-bda8-92ebdac70c37"
+            },
+            {
+              "content": "Calculate the required sessions, facilitator hours, and participant payments from the same exact target rather than from separate rough estimates.",
+              "content_digest": "ea6c96c9e5e7d5db7bd2210fd484e715e35727bd1e6f7c2ea2a2c4c12e488f2a",
+              "position": 11,
+              "uid": "0ecc319a-ae60-5510-883d-52e613138164"
+            },
+            {
+              "content": "If recruitment falls below the exact target, state the shortfall explicitly and revise the affected schedule or deliverable.",
+              "content_digest": "bdf962f17a92886e7a5ec0003460dce9ed9c02d02473f66c6f6b4e97c0c304b9",
+              "position": 12,
+              "uid": "c4dfdb65-e673-52c0-a40c-e909d6014e00"
+            },
+            {
+              "content": "Do not use a wide range merely to postpone choosing the quantity that the rest of the proposal must support.",
+              "content_digest": "332385b05f91f97c398bc954b6fc9e62da182f7e42de6dd5691435df6922fd43",
+              "position": 13,
+              "uid": "a7c3a123-3f05-52e0-b33e-c450d1a070ac"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "e4470a43-4488-48a2-bcab-477223651941"
+        },
+        {
+          "context_digest": "6cd44802c5b4878ee84adef31f52231d09d37ccc0ef9a7256d0421114835a6bd",
+          "context_name": "task-2/advisor2/claim-evidence",
+          "context_uid": "1ca4b72a-fcbb-5997-a1b5-f764662460a5",
+          "memories": [
+            {
+              "content": "Place observational evidence or sources adjacent to claims regarding user needs or field effects.",
+              "content_digest": "513b102a6ed66a1dd3fb3380065f34552036a6dffed20d7101487342096021e3",
+              "position": 0,
+              "uid": "b39cf79f-d174-5ecb-98c9-b3f62ce0696a"
+            },
+            {
+              "content": "Distinguish at the sentence level between facts already confirmed in the field and predictions to be examined in the user study.",
+              "content_digest": "63a7fdcf7da5c4fa36a2c7a6f8542837956fa0dcdedee781593f399516501067",
+              "position": 1,
+              "uid": "b95e0185-f933-508d-8da7-41c65e2cc340"
+            },
+            {
+              "content": "Do not use verbs implying proof of causality if the design does not support causal inference.",
+              "content_digest": "0db514f790eb85ba0800c1f8c659cd4236136b9e36c034899c36f6116c040f04",
+              "position": 2,
+              "uid": "f82f1e1f-3f27-5668-a5a4-e64b0f88b44a"
+            },
+            {
+              "content": "Prioritize citations of recent systems and field research in rapidly changing HCI topics.",
+              "content_digest": "e8cd0847480ba8d07f971f21978873d13b6bd34d4e4625dd3dde8039afd5b88c",
+              "position": 3,
+              "uid": "b5461283-9001-510c-9a30-bb367f247b25"
+            },
+            {
+              "content": "Explain the user or operational stakeholder needs that each design choice aims to address.",
+              "content_digest": "59df6b478a0e200ceaa520bb7c4535b2078a8354efae0eec77a06cb6843bfab6",
+              "position": 4,
+              "uid": "87340c01-2e0f-5b82-9410-2133648022da"
+            },
+            {
+              "content": "Support each important conclusion with the closest evidence that directly examined it.",
+              "content_digest": "6731286cd67ee18644df531752f10913f4df9e7c7acf936da99caafacd597c0a",
+              "position": 5,
+              "uid": "8b15a9ad-aa53-5a54-beb2-f1cc8d6da846"
+            },
+            {
+              "content": "Reviewers first check direct evidence placed closest to important conclusions.",
+              "content_digest": "940880f0ee481e00ff7f935c9b76af8137d0f8a8664a2c53fb3d044681980c8f",
+              "position": 6,
+              "uid": "565a2263-e3bc-5379-9a80-64665b491c88"
+            },
+            {
+              "content": "Use field cases in which people completed tasks by working around existing tools as evidence for the need for the design.",
+              "content_digest": "4c731184cb33bda8ab315870713872842339013be68cf5f79c43a8b9f4e297d4",
+              "position": 7,
+              "uid": "27b58ee9-5cad-5872-8eb7-a694728d8e79"
+            },
+            {
+              "content": "Distinguish between problems reported by operational stakeholders and those directly observed by the researcher as separate forms of evidence.",
+              "content_digest": "39586ea932c540d6c7a1b0faff870d7ef6433052792defdc110beb513276ffe6",
+              "position": 8,
+              "uid": "cf7e9410-2144-53c4-a236-a16a7b5be494"
+            },
+            {
+              "content": "Field breakdown logs can reveal both system failures and user adaptive behaviors, including their timing and conditions.",
+              "content_digest": "331910b18eef90e53453e700a55b43143b3e8d07d3bb2c88bade31fddb0e5965",
+              "position": 9,
+              "uid": "ad643b33-fba1-5643-b57f-3bb8c3829122"
+            },
+            {
+              "content": "In field sites introducing new systems, formal procedures often coexist with existing manual routines for a period, making it difficult to isolate the effects of single design changes.",
+              "content_digest": "7def8e340a5ae1ad7cce9228e3e4279f499f47f0d2576bbe23e59f3703f04084",
+              "position": 10,
+              "uid": "546548e3-c47a-5a74-a04a-0a328602ead4"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "b6f5bf36-47bc-4e49-be3f-4991781ee019"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames align on traceable evidence chains and need-grounded design justification. They preserve context-specific attribution cautions for unstable prototypes and transitional field sites, while otherwise contributing separate guidance on study planning, safety, evidentiary language, sourcing, and field observation.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "e4470a43-4488-48a2-bcab-477223651941",
+              "memory_uid": "c8bcefee-c64a-5a1f-911c-502cc4522701"
+            },
+            {
+              "frame_uid": "e4470a43-4488-48a2-bcab-477223651941",
+              "memory_uid": "881bc037-c099-50e4-b7e0-d38fba5146c9"
+            },
+            {
+              "frame_uid": "b6f5bf36-47bc-4e49-be3f-4991781ee019",
+              "memory_uid": "b39cf79f-d174-5ecb-98c9-b3f62ce0696a"
+            },
+            {
+              "frame_uid": "b6f5bf36-47bc-4e49-be3f-4991781ee019",
+              "memory_uid": "8b15a9ad-aa53-5a54-beb2-f1cc8d6da846"
+            },
+            {
+              "frame_uid": "b6f5bf36-47bc-4e49-be3f-4991781ee019",
+              "memory_uid": "565a2263-e3bc-5379-9a80-64665b491c88"
+            }
+          ],
+          "reason": "Research-question mapping and nearby direct evidence are complementary traceability practices addressing how readers and reviewers verify answerability and support.",
+          "status": "RESOLVED",
+          "summary": "Make important questions and claims assessable through visible links to the directly relevant evidence, data, and analysis.",
+          "uid": "c98e3546-e990-5694-88c4-13f9b7d8459d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e4470a43-4488-48a2-bcab-477223651941",
+              "memory_uid": "8747b27e-6c2b-5498-9eac-c403e26101a6"
+            },
+            {
+              "frame_uid": "e4470a43-4488-48a2-bcab-477223651941",
+              "memory_uid": "c3ad4ad8-4c5c-54c5-8d65-2dae15fa69a0"
+            }
+          ],
+          "reason": "This is a unified, independently useful reference-side policy for governing deviations from a preregistered plan.",
+          "status": "RESOLVED",
+          "summary": "Preregistered studies should define both when plan deviations are permissible and how deviating content is recorded.",
+          "uid": "bbbf6463-8e63-5cb3-a413-207d6e0a445c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e4470a43-4488-48a2-bcab-477223651941",
+              "memory_uid": "df53a41c-2fbf-532a-a5b0-560a196bf5cb"
+            },
+            {
+              "frame_uid": "e4470a43-4488-48a2-bcab-477223651941",
+              "memory_uid": "91db3bd1-4417-5db6-b7a6-3e79c87ebe88"
+            },
+            {
+              "frame_uid": "e4470a43-4488-48a2-bcab-477223651941",
+              "memory_uid": "0ecc319a-ae60-5510-883d-52e613138164"
+            },
+            {
+              "frame_uid": "e4470a43-4488-48a2-bcab-477223651941",
+              "memory_uid": "a7c3a123-3f05-52e0-b33e-c450d1a070ac"
+            }
+          ],
+          "reason": "These statements jointly establish a single reference-side planning rule and explain why ranges or inconsistent quantities undermine proposal checking.",
+          "status": "RESOLVED",
+          "summary": "Use one exact participant target consistently to derive and check schedules, workload, sessions, staffing, payments, and budget.",
+          "uid": "f9fbc498-4df9-5623-a853-dc1e79ab4a8b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e4470a43-4488-48a2-bcab-477223651941",
+              "memory_uid": "24d49198-fd7b-5810-bc56-1910a796f76e"
+            },
+            {
+              "frame_uid": "e4470a43-4488-48a2-bcab-477223651941",
+              "memory_uid": "2f367cf3-50c5-59bc-972e-6173e56343ac"
+            }
+          ],
+          "reason": "These reference-side statements split the method and timing dimensions of one independently useful data-collection specification.",
+          "status": "RESOLVED",
+          "summary": "Specify the instruments or protocols and interaction timing used to collect each type of user data.",
+          "uid": "f6b4d008-c2a9-5a4f-a8b8-c10f12cd6678"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "e4470a43-4488-48a2-bcab-477223651941",
+              "memory_uid": "49746579-92d7-51ea-b158-7d770443d101"
+            },
+            {
+              "frame_uid": "b6f5bf36-47bc-4e49-be3f-4991781ee019",
+              "memory_uid": "546548e3-c47a-5a74-a04a-0a328602ead4"
+            }
+          ],
+          "reason": "The explicit settings preserve the distinction: formative prototypes may fail through implementation instability, whereas newly introduced field systems coexist with manual routines that confound isolated effects.",
+          "status": "RESOLVED",
+          "summary": "Evaluation settings introduce different barriers to attributing outcomes solely to design choices.",
+          "uid": "dbfb7e1a-de28-58e8-ae82-3e660486d4b3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e4470a43-4488-48a2-bcab-477223651941",
+              "memory_uid": "20d116ab-f9cc-5f61-808b-8555da09d707"
+            }
+          ],
+          "reason": "This is an independently useful reference-side safety rule with no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "During formative evaluation, a prototype safety signal makes institutional safety procedures take precedence over planned data collection.",
+          "uid": "ba72a624-81fe-53c3-b8ec-f8dd96d25a93"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "e4470a43-4488-48a2-bcab-477223651941",
+              "memory_uid": "9a969676-6093-5fac-bda8-92ebdac70c37"
+            },
+            {
+              "frame_uid": "b6f5bf36-47bc-4e49-be3f-4991781ee019",
+              "memory_uid": "87340c01-2e0f-5b82-9410-2133648022da"
+            },
+            {
+              "frame_uid": "b6f5bf36-47bc-4e49-be3f-4991781ee019",
+              "memory_uid": "27b58ee9-5cad-5872-8eb7-a694728d8e79"
+            }
+          ],
+          "reason": "The diagnosis of feature-list framing and the prescriptions to connect choices with needs and field cases jointly address how a design contribution is substantiated.",
+          "status": "RESOLVED",
+          "summary": "Design contributions should be justified through the stakeholder needs they address and evidence of shortcomings or workarounds in existing tools, rather than feature lists alone.",
+          "uid": "0df0e460-93ba-51af-87bd-b3a619eb4c7a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e4470a43-4488-48a2-bcab-477223651941",
+              "memory_uid": "c4dfdb65-e673-52c0-a40c-e909d6014e00"
+            }
+          ],
+          "reason": "This is an independently useful reference-side contingency policy beyond establishing and calculating from the target itself.",
+          "status": "RESOLVED",
+          "summary": "If recruitment misses the exact target, disclose the shortfall and revise the affected schedule or deliverable.",
+          "uid": "3d1553fc-b8fa-5b6d-ac4b-7f67e27b5669"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b6f5bf36-47bc-4e49-be3f-4991781ee019",
+              "memory_uid": "b95e0185-f933-508d-8da7-41c65e2cc340"
+            }
+          ],
+          "reason": "This is an independently useful compared-side rule for marking epistemic status in study writing.",
+          "status": "RESOLVED",
+          "summary": "Distinguish confirmed field facts from predictions that the user study will examine.",
+          "uid": "30fa86f3-803f-5bfd-809d-27e1173b1f72"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b6f5bf36-47bc-4e49-be3f-4991781ee019",
+              "memory_uid": "f82f1e1f-3f27-5668-a5a4-e64b0f88b44a"
+            }
+          ],
+          "reason": "This is an independently useful compared-side constraint on interpreting and wording conclusions.",
+          "status": "RESOLVED",
+          "summary": "Avoid proof-oriented causal verbs when the study design cannot support causal inference.",
+          "uid": "523d0c7f-3b73-53b2-af55-78536b29381d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b6f5bf36-47bc-4e49-be3f-4991781ee019",
+              "memory_uid": "b5461283-9001-510c-9a30-bb367f247b25"
+            }
+          ],
+          "reason": "This is an independently useful compared-side source-selection policy.",
+          "status": "RESOLVED",
+          "summary": "Prioritize recent systems and field research when citing rapidly changing HCI topics.",
+          "uid": "21fcd3fd-eaba-5472-b88e-c355c20978ff"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b6f5bf36-47bc-4e49-be3f-4991781ee019",
+              "memory_uid": "cf7e9410-2144-53c4-a236-a16a7b5be494"
+            }
+          ],
+          "reason": "This is an independently useful compared-side distinction concerning evidence provenance.",
+          "status": "RESOLVED",
+          "summary": "Treat stakeholder-reported problems and researcher-observed problems as separate forms of evidence.",
+          "uid": "1f7c06b0-7b0b-501f-bedd-e751cacae209"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b6f5bf36-47bc-4e49-be3f-4991781ee019",
+              "memory_uid": "ad643b33-fba1-5643-b57f-3bb8c3829122"
+            }
+          ],
+          "reason": "This is an independently useful compared-side claim about the analytical value of a particular field evidence source.",
+          "status": "RESOLVED",
+          "summary": "Use field breakdown logs to reveal system failures and user adaptations together with their timing and conditions.",
+          "uid": "9228d101-13bd-5f70-af3f-26b0a09ae759"
+        }
+      ],
+      "reports": {
+        "both": "Both emphasize traceable support for important claims and grounding design contributions in stakeholder needs and field evidence.",
+        "compared_only": "The compared frame adds fact–prediction and evidence-source distinctions, causal-language restraint, citation recency, and using breakdown logs to understand failures and adaptations.",
+        "differences": "Attribution risks differ by setting: prototype instability can cause formative task failure, while transitional field routines complicate isolating design effects.",
+        "reference_only": "The reference adds preregistration controls, exact participant-based planning, data-collection specifications, recruitment-shortfall handling, and safety precedence."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "b7e5cbfc-04a6-4947-b512-40bcd14e8bf0"
+    },
+    "analysis_digest": "be1f9bd3754a6bc90fb7fa47c214ad9e1ba966440d95fbc872c07bcbd628698e",
+    "key": "bc06a3907e816c7118b9b8816c256993c4a70889195c5e5a3c9269ac9551c334",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 55.4067520000026,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "bc06a3907e816c7118b9b8816c256993c4a70889195c5e5a3c9269ac9551c334",
+  "created_at": "2026-08-13T18:23:08.552715Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/methods",
+  "pair_key": "c87c774c39a94bb3e1db9e31c1cc18c3c00c9d6abefabd72c2aa19cd5b1e8132",
+  "provider_seconds": 55.4067520000026,
+  "right": "task-2/advisor2/claim-evidence",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

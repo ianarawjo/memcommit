@@ -1354,6 +1354,7 @@ def _run_existing_ground_shell(
         reload_session=reload_session,
         run_fit=run_fit,
         lookup_fit=lookup_fit,
+        auto_fit=True,
         initial_receipt=initial_receipt,
         context_hints=context_hints,
         new_context_hint=new_context_hint,
@@ -1669,7 +1670,10 @@ def render_ground_snapshot(
             f"[{requirement.uid[:8]}]"
         )
         lines.append(
-            f"               {safe_terminal_text(requirement.description)}"
+            "               "
+            + safe_terminal_text(
+                requirement.description or "(not specified)"
+            )
         )
         if requirement.blocked_reason:
             lines.append(
@@ -2221,7 +2225,13 @@ def cmd(
     ] = None,
     rationale: Annotated[
         Optional[str],
-        typer.Option("--rationale", help="Reason for the proposed judgment"),
+        typer.Option(
+            "--rationale",
+            help=(
+                "Reason for the proposed judgment; optional for a directly "
+                "user-stated Rule"
+            ),
+        ),
     ] = None,
     case_role: Annotated[
         Optional[str],
@@ -2740,20 +2750,14 @@ def cmd(
                 GroundTargetSpec(
                     context_name=publication_target,
                     role="PUBLICATION_TARGET",
-                    description=(
-                        "Maintain the organizational baseline and publish "
-                        "every supported campus-facing change."
-                    ),
+                    description="",
                     blocked_reason=blocked.get(publication_target, ""),
                 ),
                 *(
                     GroundTargetSpec(
                         context_name=name,
                         role="PLACEMENT_TARGET",
-                        description=(
-                            "Establish at least one approved, traceable "
-                            "placement Ground Memory for this local category."
-                        ),
+                        description="",
                         blocked_reason=blocked.get(name, ""),
                     )
                     for name in (placement_target or ())
@@ -2896,18 +2900,20 @@ def cmd(
                 and propose_rule is not None
                 and not case_requested
             ):
-                if rationale is None:
+                effective_provenance = (
+                    rule_provenance
+                    or ("USER_STATED" if rationale is None else "DISTILLED")
+                ).upper()
+                if rationale is None and effective_provenance != "USER_STATED":
                     raise GroundError(
-                        "A rule proposal requires --rationale."
+                        "A derived rule proposal requires --rationale."
                     )
                 session = propose_ground_rule(
                     session,
                     rule=propose_rule,
-                    rationale=rationale,
+                    rationale=rationale or "",
                     current_contexts=contexts,
-                    rule_provenance=(
-                        rule_provenance or "DISTILLED"
-                    ).upper(),
+                    rule_provenance=effective_provenance,
                     target_context_names=tuple(propose_rule_target or ()),
                 )
             elif not native_example_requested:

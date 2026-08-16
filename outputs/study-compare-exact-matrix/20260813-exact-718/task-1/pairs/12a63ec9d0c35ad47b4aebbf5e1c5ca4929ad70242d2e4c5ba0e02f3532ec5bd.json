@@ -1,0 +1,1978 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:12:33.715950+00:00",
+      "frames": [
+        {
+          "context_digest": "58782baaff2baaa1507d8a85d11f762ea650936a4ef761eb5ac6635394232964",
+          "context_name": "task-1/campus-wiki/temporary-parking",
+          "context_uid": "c0d853a6-985e-574f-a921-7602a470d432",
+          "memories": [
+            {
+              "content": "Outdoor Parking Lot A to the left of the Main Building is connected to the Main Building underground parking garage by an inclined access road.",
+              "content_digest": "18cc074f4e5ac0f1a724c6cba6ec943aecbb4b3c443b97c1ec60b81fbd873032",
+              "position": 0,
+              "uid": "5d690022-0ab6-52ed-b6a1-77d719c8c6ce"
+            },
+            {
+              "content": "General vehicles may enter and park in the Main Building underground parking garage during operating hours.",
+              "content_digest": "ba9f80db44671014277cb0cc9afedb2f8a0af4b57f61641dbe23b146964317a1",
+              "position": 1,
+              "uid": "6960c0ca-295d-5449-91dc-d9293a6bb79d"
+            },
+            {
+              "content": "The pedestrian entrance to the underground parking garage is open to general pedestrians during operating hours.",
+              "content_digest": "68bfcdb4f291f6e0a58d57a0a303392beb8deb8f5e7a919cb013df17c9e60a9e",
+              "position": 2,
+              "uid": "67d07765-ac5f-58f6-b7a5-f733cc4228d2"
+            },
+            {
+              "content": "The interior stairs leading down from the Main Building lobby to the underground parking garage are available during operating hours.",
+              "content_digest": "1ce15f6e831969e8893e49b6cddce7c1234d0b220d7af0d647e24d420223105f",
+              "position": 3,
+              "uid": "489960d6-711f-55d0-a410-16bcd6e9acf8"
+            },
+            {
+              "content": "Outdoor Parking Lot C uses an access road separate from the Main Building underground parking garage.",
+              "content_digest": "1768b1ca01d4f02a1c69f9a9fcab3c7ac95ca24b326b6cbcac494c0c8bca2d93",
+              "position": 4,
+              "uid": "df455ec8-c30d-5607-a9b8-8f84d93f0617"
+            },
+            {
+              "content": "Outdoor Parking Lot C is outside the Main Building construction zone.",
+              "content_digest": "40c603f93397814789b999c1d61859fd352ab12da34dfecfeb83eded1460399d",
+              "position": 5,
+              "uid": "6a37c02f-4843-579f-b5b1-f90d6dbd0e5a"
+            },
+            {
+              "content": "The Outdoor Parking Lot A–Main Building–Central Library route is normally one of the shortest routes to the library after parking.",
+              "content_digest": "53adff510338a993e65fe520365a89e639a131f55032a68249563497a2d49527",
+              "position": 6,
+              "uid": "a81363fe-3ae5-5213-a555-e447515a1a73"
+            },
+            {
+              "content": "Do not generalize the closure of one parking area into a campus-wide parking ban.",
+              "content_digest": "a2304a359d2d13a88fbf8523e9ae9564e69e974ed9a9bcbd394b56f5f8f88a5c",
+              "position": 7,
+              "uid": "ccf54508-b01d-5fe5-bad3-083e3ce211cd"
+            },
+            {
+              "content": "Check separately for available alternative parking areas.",
+              "content_digest": "836280efded8d96f97c494cd37dc9c86883b623e0ea656ea11121f8804ac0746",
+              "position": 8,
+              "uid": "1a4e603c-7f69-5bfc-b974-281dc8618326"
+            },
+            {
+              "content": "First-time visiting drivers often expect there to be general parking spaces in the parking lot closest to the Main Building.",
+              "content_digest": "6b7a856ca908bf6e8d2dcca2798ab3edfd41edc9256cf931f51fcb831c953ae6",
+              "position": 9,
+              "uid": "3bd9a7e3-af83-5d3d-9cca-0a3926c446e1"
+            },
+            {
+              "content": "Visitors who need mobility assistance expect a safe pickup and drop-off point near the accessible entrance.",
+              "content_digest": "8adfed4eff7326c5b6fb1965edc3ffab65984a8371a3d989ba7e5ba38e26e9ee",
+              "position": 10,
+              "uid": "879b70b3-1404-559c-9cdb-9fdca1289e44"
+            },
+            {
+              "content": "Visitors with luggage expect to be able to load and unload briefly near the Main Building entrance.",
+              "content_digest": "96644d95bdd27f53961db30e33412db615d9dc53741b145aa92f55967fe553f3",
+              "position": 11,
+              "uid": "c89147c1-1b06-5e93-97a1-85d59fd33e57"
+            },
+            {
+              "content": "Staff often expect that their access authorization also allows them to use the parking lot adjacent to the Main Building.",
+              "content_digest": "256bfd6bbe554505fcab15b2ae9a786caa16815e0ee113ee5fc47961b2935059",
+              "position": 12,
+              "uid": "c9b6827a-36c3-5895-916c-a7066f398f5b"
+            },
+            {
+              "content": "Staff who need mobility assistance give priority to pickup and drop-off points near an accessible entrance.",
+              "content_digest": "8b08eab435b350f02fc4e0e31103a448382a38f1d4a16a1ea35a84505df87722",
+              "position": 13,
+              "uid": "07101ab9-cebf-5fd6-8967-2ea16a80d03d"
+            },
+            {
+              "content": "Staff transporting equipment prefer a loading and unloading point close to the destination space.",
+              "content_digest": "09d406a27f2c9018d3dfe1eb29f591d310765ed5cb8e154cca3464b3409ba8ab",
+              "position": 14,
+              "uid": "39b76444-a4f8-53c2-ae7d-9ee71de43eea"
+            },
+            {
+              "content": "The parking information agent can explain posted open statuses.",
+              "content_digest": "5f018b0a3d5b035173cdcce9758f9623dee311e08da48336c72e1b48d537cf8b",
+              "position": 15,
+              "uid": "9514e9f2-d556-50dc-8739-01c37b3322fc"
+            },
+            {
+              "content": "The parking information agent can explain posted connecting routes.",
+              "content_digest": "792081e7d84b2c3c366d2b2407b908f269e072dd44cf9a1a9d0dc9b071d54b46",
+              "position": 16,
+              "uid": "9acc9ad2-3a59-5b37-9f08-010fe8731a79"
+            },
+            {
+              "content": "The parking information agent cannot check real-time space availability.",
+              "content_digest": "91728d9b8db274848858d546456dff4996ed7b1a054aef62f650cca7df38e548",
+              "position": 17,
+              "uid": "6a38e1b0-b9bb-5941-aa03-3f29b492feaa"
+            },
+            {
+              "content": "The parking information agent cannot guarantee when on-site controls will be lifted.",
+              "content_digest": "e48f13b58760234ed4387e901e59d4b15d2d1af57a21b4b42e6ada97204690da",
+              "position": 18,
+              "uid": "7063d138-91cf-5dbf-b7af-bb0451dd342d"
+            },
+            {
+              "content": "Delivery drivers and external maintenance providers sometimes expect to be able to load and unload briefly at the edge of Outdoor Parking Lot A.",
+              "content_digest": "675fc12dd82aa5e4873773fa88feef3ac1fc45797de2b1791fa1b1879b48f89a",
+              "position": 19,
+              "uid": "efbe330f-eb79-5a05-8ef8-0664355d320c"
+            },
+            {
+              "content": "Outdoor Parking Lot C accepts visitor vehicles during posted operating hours.",
+              "content_digest": "4ace74f54e366339fe5a13b61ed400aab23fca559dd01175c29378a7ad531ab4",
+              "position": 20,
+              "uid": "c0ac84d9-367b-5809-856e-9f0d6c471b2b"
+            },
+            {
+              "content": "Instructions for registering visitor vehicles are posted on the sign at the parking area entrance.",
+              "content_digest": "a974ae9e9c2118bdf4f42b91735c53dee6403663197a76abfc37754aa935e4ba",
+              "position": 21,
+              "uid": "96092024-bab8-5c6e-b100-ff87e06cb760"
+            },
+            {
+              "content": "A valid parking permit is required to use accessible parking areas.",
+              "content_digest": "8f8d67a126c09e4936d561bb2f12878f174e37a7fd08294b2d8436a76d84b45d",
+              "position": 22,
+              "uid": "7b323c8d-eddd-5041-aee1-bbd8dbc06918"
+            },
+            {
+              "content": "The accessible parking area in Outdoor Parking Lot C is near the walkway toward the Student Centre.",
+              "content_digest": "7dfaef61c7df044069394eab075fae38befe9dfcb0f5afb4271308db7a749f64",
+              "position": 23,
+              "uid": "8180f5e5-fd9f-51a7-b239-c75a86c20da6"
+            },
+            {
+              "content": "The pickup and drop-off zone in front of the Main Building's main entrance is not a long-term parking space.",
+              "content_digest": "4902d36f2b556d3a52d2a5649e9a70d39b82fe96e8852ccd0d3942f24dc84b9a",
+              "position": 24,
+              "uid": "b7f4ae20-3bbf-51dd-b230-81c5e5107e48"
+            },
+            {
+              "content": "The maximum use time for short-term loading and unloading spaces is indicated on on-site signs.",
+              "content_digest": "eebac73ce70b3f089c7574e1516f93d69211cfd1042e9e24dcf8d1fce70bc7ee",
+              "position": 25,
+              "uid": "27246135-eca5-56ed-81c3-bb75584703d6"
+            },
+            {
+              "content": "Motorcycles park in the motorcycle areas marked on the campus map.",
+              "content_digest": "772c54cc1ca56cbe0e58d75229e391b60bfba122d9ee0346070b25e2da3e5da8",
+              "position": 26,
+              "uid": "dc40ae37-6f8d-5864-aab1-59462c325af3"
+            },
+            {
+              "content": "Bicycles are parked at designated bicycle racks, not in vehicle parking spaces.",
+              "content_digest": "ac8f58b8166480c5dfb38c21d48d5dd8262537d7e5d4c1bc973090fed2288824",
+              "position": 27,
+              "uid": "077234a0-bc91-589a-8d91-2cdd1180e9a1"
+            },
+            {
+              "content": "Outdoor Parking Lot C has electric vehicle charging spaces.",
+              "content_digest": "18b57e6589f3455c60a9a0cf01fe76f0d3093fe19c09d14b42d3ffee6289c37f",
+              "position": 28,
+              "uid": "c578f6a4-6065-5752-950b-e79ff7228ce7"
+            },
+            {
+              "content": "Electric vehicle charging spaces are for vehicles that are charging.",
+              "content_digest": "6dc2a05403a402a4a1c5573ee225aaafd3218764d3ead9819c7d0b25f4754e92",
+              "position": 29,
+              "uid": "38ce79ed-cae6-5a9e-bdba-eb92559ebaa8"
+            },
+            {
+              "content": "Visitor parking fees are displayed on the parking registration screen.",
+              "content_digest": "d51c247482ddec1f8abf83c7d2c95f9e07f8d2ad9ccdf7b145ed455cf5d1d2b4",
+              "position": 30,
+              "uid": "7471f5bc-555a-5db4-838e-74723bbd55fe"
+            },
+            {
+              "content": "The parking information agent cannot infer unposted discounted fees.",
+              "content_digest": "ca637a54a0c01fadbbe8f780775f3b24105fd9f09132a3d75da5c76bd1944ba5",
+              "position": 31,
+              "uid": "340389ed-6852-509c-a278-78bbbad4beb8"
+            },
+            {
+              "content": "Parking operating hours on public holidays may differ from weekday operating hours.",
+              "content_digest": "f89801ec6f05ac09664026b552e72f7ee4d22880949661180b0e388b1b7afd79",
+              "position": 32,
+              "uid": "f617356c-98ff-5d40-a41b-dd4be0c8c311"
+            },
+            {
+              "content": "Parts of outdoor parking lots may be temporarily restricted during heavy snow or icy conditions.",
+              "content_digest": "ff206b050b8b1c388d9bc0b804c34bbdfe4d26255dfec4ae564c2a09b5dc8cba",
+              "position": 33,
+              "uid": "35576f85-e20a-5bed-a9fd-f47e867c1fce"
+            },
+            {
+              "content": "On days with large public events, parking demand near the event venue increases.",
+              "content_digest": "3c1289c3dcf885a10e23bc8a699225ce64b80a80e3fc36859ff0dcb4338ae99c",
+              "position": 34,
+              "uid": "3fc6abeb-db56-5a34-ae34-b4cd394723c4"
+            },
+            {
+              "content": "Drivers who need mobility assistance expect a step-free accessible route from the parking space to the destination.",
+              "content_digest": "2ba3a9f9745db70faf2bc2c65de4862cf937fb499ad2b974ad798c5f1aab642c",
+              "position": 35,
+              "uid": "308c9814-4989-563e-b9dd-306be896940e"
+            },
+            {
+              "content": "First-time visiting drivers sometimes confuse Outdoor Parking Lot A with Outdoor Parking Lot C.",
+              "content_digest": "4bc08770ee8f35eb2c8a3d28c53636f0eda275bb7b96d3f9e3e2dfa18811ee9d",
+              "position": 36,
+              "uid": "8061fc97-13ee-587e-ba5d-09ca5fb72171"
+            },
+            {
+              "content": "The parking information agent cannot check in real time whether on-site control signs have been installed and determines availability using only posted parking-space statuses.",
+              "content_digest": "968ec1ac9b345485482e0f34a7ac7fc9aab2559cabc930faccc4f8635561a19b",
+              "position": 37,
+              "uid": "7d5bdc29-c284-5027-bc5e-6589b53ab5e9"
+            },
+            {
+              "content": "The West Gate stop is on the walkway outside Outdoor Parking Lot C.",
+              "content_digest": "ebc891856e08efd42b13569f3acd96381dd6734a96677b025c8e35bd7f253567",
+              "position": 38,
+              "uid": "a77dadf9-5d20-57aa-bb81-b35058832bc6"
+            },
+            {
+              "content": "The campus shuttle stops at the shuttle stop in front of the Student Centre.",
+              "content_digest": "ce36f26d000cacff871bc0a7a80d5075120c6708b024530f988f89ade93cba3e",
+              "position": 39,
+              "uid": "012add6d-ba82-5674-a432-0c092d575d21"
+            },
+            {
+              "content": "Campus shuttle operating hours vary between academic terms and recess periods.",
+              "content_digest": "00d519f54a8e3d2ef95410f2c2f1d2f4afb489d2f1dadb705a9839da72faa405",
+              "position": 40,
+              "uid": "6ca42597-3142-5f24-9f29-14c694bc83e2"
+            },
+            {
+              "content": "The parking information agent can explain parking lot access roads shown on the public map.",
+              "content_digest": "f923564304a06ba5b1023b014d1f3e5c64047fe24864d65b36b9d6f5e4cbfae4",
+              "position": 41,
+              "uid": "f1283ab9-f63b-5249-ac89-2dcc6f3dbee4"
+            },
+            {
+              "content": "The parking information agent cannot register a visitor vehicle on the visitor's behalf.",
+              "content_digest": "dd3188cf63b731e4b0d607520091d12b42326a39c4f1b7f95710f5633321c59f",
+              "position": 42,
+              "uid": "db986c20-8190-5a89-87db-4c56c5d6c82d"
+            },
+            {
+              "content": "The parking information agent cannot waive parking fees.",
+              "content_digest": "64939a84359e7208ddb700b3a7a25aaae7a04c13e63fb7c08be5d9a1faeabf3d",
+              "position": 43,
+              "uid": "1a0b250f-c4f1-5a9f-a114-5420a859dd32"
+            },
+            {
+              "content": "Check official parking notices for weather-related parking restrictions.",
+              "content_digest": "9be74301e2ce9991475a7367dbac8c70bcc429e218178f2ec5ac16b1df265e52",
+              "position": 44,
+              "uid": "f201604e-92ae-5315-8359-5e68dd9eeecb"
+            },
+            {
+              "content": "Do not generalize the full status of one parking lot to another parking lot.",
+              "content_digest": "2b6f76cfb649a3428de8ce604affdec1c482ee4356effa3a27d9a2fe52752268",
+              "position": 45,
+              "uid": "b5466afb-8d3b-51b0-8e44-9fd47165fe17"
+            },
+            {
+              "content": "Valid parking authorization does not guarantee the availability of a specific parking space.",
+              "content_digest": "f8d83721b341617c144d299982fcc3fbc02d9a105ac24a7a94377de6ccda311c",
+              "position": 46,
+              "uid": "38b6565e-25a0-5b7c-ba03-747c1901af7e"
+            },
+            {
+              "content": "An accessible pickup and drop-off zone is marked in front of the Main Building's main entrance.",
+              "content_digest": "6b263c7f7476b43ba69e7a01ea9abbb996b118d4913d09cf9cb0d926e98dfcce",
+              "position": 47,
+              "uid": "11d0062b-7941-5512-b5dc-f2d1379741e6"
+            },
+            {
+              "content": "The dedicated car-sharing spaces in Outdoor Parking Lot C are identified by signs.",
+              "content_digest": "38c33e528bf44dfdf72773fdd892a194becb93d8f04016f69fe865c4d53367f1",
+              "position": 48,
+              "uid": "a299c675-7179-5cb1-b5e4-552198bdc91f"
+            },
+            {
+              "content": "Report vehicles blocking passageways or accessible parking areas to the parking management office.",
+              "content_digest": "1fbc02ff22ed6bee2d9a2643fac8ca838ad408fa1e38d97482b7b1d32ecfdc5c",
+              "position": 49,
+              "uid": "a671229f-9c73-5183-bec3-8d23d0dd8d53"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9"
+        },
+        {
+          "context_digest": "21e6ff7770a4be3a2e4559ae244f97bac0994330993c8696b62c71e33cf30d9d",
+          "context_name": "task-1/participant",
+          "context_uid": "9616d981-2fc9-4d24-a1a9-86aba2b824f2",
+          "memories": [
+            {
+              "content": "[task-1/participant/construction-updates/building-access] Modify campus-wiki/building-access: During the construction period, the third-floor rear entrance cannot be used for general passage.",
+              "content_digest": "7dc1650206368ce8eb071fdecd0b3ffb1a05cbc03e1e66e2ff8bff6770551cb8",
+              "position": 0,
+              "uid": "8b077f2a-6a9f-50f0-ae91-f6536fb226cb"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/building-access] Modify campus-wiki/building-access: During the construction period, the end time for general access through the main entrance is shortened from 10:00 p.m. to 5:00 p.m.",
+              "content_digest": "e247859967a25b15738b797c945faf09dab9915dacb7e9277f1e7c0fa850ba7e",
+              "position": 1,
+              "uid": "56c34a24-0954-5c64-9fd4-880995e6e53c"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/building-access] Modify campus-wiki/building-access: During the construction period, the existing accessible route cannot be used because it is being reconstructed.",
+              "content_digest": "47f4a5f40ca6e28a900bc009441bc7774431345e1ad0dc4dc9a44a4e4096bd44",
+              "position": 2,
+              "uid": "84a45a62-09c7-5187-8fa6-ff7063f9e8d0"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/building-access] Add campus-wiki/building-access: The temporary accessible route next to the main entrance can be used throughout the construction period.",
+              "content_digest": "f3ec86c0a1562d8152b6eb855c31bc19ea4bf735f4c30f6ad5a69183da0d0454",
+              "position": 3,
+              "uid": "89e6f853-8c98-51ba-98cc-ad5c84580a53"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/building-access] Modify campus-wiki/building-access: Instruct students authorized to enter after 5:00 p.m. to use a physical NFC student ID card rather than the app.",
+              "content_digest": "9ce33c80155ace726031bac94eeb2b6f6d61193741df260ced85ef52bb379ce7",
+              "position": 4,
+              "uid": "f9d7eb4e-221f-5b5f-a237-213a31e04093"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/building-access] Modify campus-wiki/building-access: During the construction period, instruct staff and construction/facilities personnel to use only the designated staff entrance instead of the third-floor rear entrance.",
+              "content_digest": "d6834b3a5f2db32e9b6eb05b21adb7e584c127f675b49af945a226b1a545d0a6",
+              "position": 5,
+              "uid": "f1b7843e-2c8a-5434-94a4-1383534abb3a"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/building-access] Modify campus-wiki/building-access: In access guidance during the construction period, the access guidance agent may prioritize the 5:00 p.m. closing of the main entrance and the closure of the third-floor rear entrance.",
+              "content_digest": "468b941d6b0d93209942f77ca24ce1571d981912b9b36e27158216cf8f7a29b8",
+              "position": 6,
+              "uid": "be002fc9-b9e0-5d73-9c15-622c0688c73c"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/building-access] Modify campus-wiki/building-access: A student accustomed to reaching the Central Library through the third-floor rear entrance may expect to be able to pass through during the construction period, go as far as the closed rear entrance, and then turn back or search again for an alternative route there.",
+              "content_digest": "1d84c2aa03451f57970cf24132a35945e193e122112bfb9444b883a98b5a3fb2",
+              "position": 7,
+              "uid": "2d8e8c75-1dad-5dbc-9eaa-04cd522410f0"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/building-access] Add campus-wiki/building-access: During the construction period, the general accessible route bypasses the existing accessible route under reconstruction and leads from the temporary passage next to the main entrance to the first-floor lobby.",
+              "content_digest": "bc34929f8d1531c6eff3e04d95c14f3b05f2872641a9919e7b64a234920f16c5",
+              "position": 8,
+              "uid": "50fb8bfa-2764-5b4f-a83c-80bf2d3a73d0"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/building-access] Add campus-wiki/building-access: Proactively inform students who are trying to reach the Central Library or who normally use the third-floor rear entrance that they cannot use that route during the construction period.",
+              "content_digest": "d66e4536235d4059881b687a5c4fa619aa8ae683d6a860b6d05244f961451466",
+              "position": 9,
+              "uid": "ebc1d272-2f9a-5b2e-a5a4-6c0539f46527"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/building-access] Modify campus-wiki/building-access: A leader of an external group tour may expect the route used on a previous visit to remain valid during the construction period and lead the visiting group to the closed third-floor rear entrance.",
+              "content_digest": "b59208969c8da20430cfd730e9c13f9abd81399f85eec0b7543ed2824fe81565",
+              "position": 10,
+              "uid": "31f5b67b-40f8-5690-b772-b329ce50e443"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/event-relocations] Modify campus-wiki/event-relocations: Viewing in the tenth-floor exhibition and event hall is suspended during the construction period.",
+              "content_digest": "f5ccb1cac7758f6ffe46c519aa448a46186704c7d7dda6686b4b2d27c932e008",
+              "position": 11,
+              "uid": "3fcfa405-cf3d-500e-810b-28ddc81fefca"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/event-relocations] Modify campus-wiki/event-relocations: Do not accept new reservations for Main Building event venues during the construction period.",
+              "content_digest": "c29238ad6a690eead9060257124b47200bdacbaa04922b3b98908284a30e68ba",
+              "position": 12,
+              "uid": "1754ab18-13ca-5e07-a40c-eb12e45dcd1e"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/event-relocations] Add campus-wiki/event-relocations: During the construction period, direct users to the auditorium in the detached east building as an alternative to Main Building event venues.",
+              "content_digest": "b7bd56fb1b989659f95e348cf8beb1bf4e1f098d91fe85b40e9e9962ad9f3786",
+              "position": 13,
+              "uid": "686d630d-defe-5aa1-a28d-470b3ebb9059"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/event-relocations] Add campus-wiki/event-relocations: During the construction period, direct users to the third-floor multipurpose room in the Engineering Building as an alternative to Main Building event venues.",
+              "content_digest": "44bc68b7f83e4cf1568589c810959a9e195a8847ca4ef2b1f409753ab3ed328f",
+              "position": 14,
+              "uid": "967fc4ad-d6e6-5f2c-b3e0-973f163f9a9a"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/event-relocations] Add campus-wiki/event-relocations: During the construction period, the auditorium in the detached east building is converted into an alternative event space for Main Building events.",
+              "content_digest": "e163d1dc3f80748fe227e641a8ea81274a891580ca71efa532ad111915c80797",
+              "position": 15,
+              "uid": "9d4a1560-5a6d-5c3f-8414-a56f1acc7f18"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/event-relocations] Modify campus-wiki/event-relocations: During the construction period, the event guidance agent may exclude closed Main Building event venues from comparison candidates and compare only designated alternative spaces.",
+              "content_digest": "b5d0c343490b571413b18d1c32e6f97fe55cd33a468c22290d165236fcdc4464",
+              "position": 16,
+              "uid": "2587dbb3-dc02-5e13-b1de-9d704c7a706a"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/event-relocations] Modify campus-wiki/event-relocations: During the construction period, the event guidance agent cannot create or restore reservations for Main Building event venues and may provide only the reservation channel for each alternative space.",
+              "content_digest": "4777b8f1482f9e435ea80ec27d70ec734481302a4a4042786382cb739911596e",
+              "position": 17,
+              "uid": "eee1213e-3582-5c9a-bde8-78af7b216df0"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/event-relocations] Modify campus-wiki/event-relocations: An external visitor who has previously visited a Main Building event venue may expect the entrance and floor from the previous visit to remain unchanged and miss guidance about the alternative venue during the construction period.",
+              "content_digest": "df0b7a568eeb9111c53b5b76b0e0574a39b279379761408bfe26151ef4d99444",
+              "position": 18,
+              "uid": "b867c632-6a7e-55c8-8371-91b3f0e1bb89"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/event-relocations] Add campus-wiki/event-relocations: During the construction period, the separate loading entrance of the auditorium in the detached east building is converted into the loading point for event equipment relocated from the Main Building.",
+              "content_digest": "339938aa88f0f080a368abc4ac254e036c7ccb6dbdb4b199364d63d090ee5b14",
+              "position": 19,
+              "uid": "9ab36f33-97ce-5790-8b2e-d0ab195039ef"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/event-relocations] Modify campus-wiki/event-relocations: An external event operator may assume that the existing Main Building loading procedure remains valid during the construction period, send equipment to the existing loading entrance, or check the access rules for the alternative venue too late.",
+              "content_digest": "595ce6c0db7f7dd9dc36282f8e8cdf9f9f98a0acc4c8d58877cda41153cb0f84",
+              "position": 20,
+              "uid": "8bf7a20c-ced2-51ad-8847-1fbb946ea3a5"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/temporary-parking] Modify campus-wiki/temporary-parking: During the construction period, the underground parking garage cannot be used for general parking.",
+              "content_digest": "9728688f06d73cde9c858a278e42f6ea77116fd70c3bc10573562b57d9f8c6c8",
+              "position": 21,
+              "uid": "84196dc5-9ae8-5663-866a-048024119fd2"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/temporary-parking] Modify campus-wiki/temporary-parking: During the construction period, the pedestrian entrance door to the underground parking garage is kept locked.",
+              "content_digest": "d16d0586ebc45d78332ac91c54d9064fef5b8c920e8b676116ecbb73d4b3a00f",
+              "position": 22,
+              "uid": "fdffd727-3579-5edc-8433-1f1f372b7576"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/temporary-parking] Add campus-wiki/temporary-parking: During the construction period, instruct staff to use a physical access card to pass through the locked pedestrian entrance door to the underground parking garage.",
+              "content_digest": "e5514a2d6df0a0946d8e76eb58e7b62bbf3f66fd95997a3d1636ed8cbe8d996b",
+              "position": 23,
+              "uid": "6dc791c0-f2a0-5e5e-a1ae-4ec35d7159a4"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/temporary-parking] Add campus-wiki/temporary-parking: Instruct construction/facilities personnel to access the underground parking garage through the controlled on-site access procedure that has been approved.",
+              "content_digest": "b5c4133b9391d29730c5cb88d702d7be6a050675112a87124557741305ed6282",
+              "position": 24,
+              "uid": "fb0765f1-92fa-50b6-ab78-35ca165ab2e6"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/temporary-parking] Modify campus-wiki/temporary-parking: The stairs from the Main Building down to the underground parking garage are closed to all users.",
+              "content_digest": "2759178ebbcd5b26ec193c984b4a27bf6900fa479a03dfad3bab14881dddaceb",
+              "position": 25,
+              "uid": "5a4dd86f-bead-50bb-b6e8-45c176b6d65f"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/temporary-parking] Add campus-wiki/temporary-parking: The underground parking garage is used as a temporary storage area for construction materials.",
+              "content_digest": "fbf52d09930d18286c83bf5730cf32beaecd3fbcfeb4e0f4937aa4752504b59c",
+              "position": 26,
+              "uid": "32e116a4-526b-5cd1-af16-4872680376b5"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/temporary-parking] Add campus-wiki/temporary-parking: After the clear-out, personal items left in the underground parking garage were moved to the lost and found center.",
+              "content_digest": "c9af4549388e241eda8602ee388cffa23654589667c1094e1b0e0a0a39dc18f3",
+              "position": 27,
+              "uid": "8fa46317-ba39-54bb-8cf0-f85770bd5032"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/temporary-parking] Add campus-wiki/temporary-parking: Outdoor Parking Lot A connected to the Main Building is closed during the construction period.",
+              "content_digest": "a6fd9961bfa8f677c5862c0637798d48b85ca769422bd850390873f728f9f91c",
+              "position": 28,
+              "uid": "cc5f97c1-ce8c-5ac0-8f3e-ecdc6df597fc"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/temporary-parking] Modify campus-wiki/temporary-parking: During the construction period, Outdoor Parking Lot C operates as a temporary alternative parking lot for vehicles visiting the Main Building.",
+              "content_digest": "9591a8f54930b76dd94e90e1eacbe1686c1d0b68a890d7a85d4e9b31202300fc",
+              "position": 29,
+              "uid": "9b8a7458-4ebc-5b82-be5b-522268680f63"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/temporary-parking] Add campus-wiki/temporary-parking: Outdoor Parking Lot A is planned to reopen immediately after construction on the Main Building ends.",
+              "content_digest": "1a0f8701a969e5201e11b880b638a90be55c0c1341fa6129fee84b9d479916b5",
+              "position": 30,
+              "uid": "d47493d3-5b50-53d0-a5b9-5dedbdb268a4"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/temporary-parking] Modify campus-wiki/temporary-parking: During the construction period, the sloped access road connecting Outdoor Parking Lot A and the Main Building underground parking garage is blocked.",
+              "content_digest": "21c5293d10279c2a82f243aef4217e6a9c3ae38c1cacef0840b118d2b91e3d59",
+              "position": 31,
+              "uid": "91de6da4-a9f4-5e2a-a585-14609a8d8497"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/temporary-parking] Modify campus-wiki/temporary-parking: Based on posted information, the parking guidance agent may explain the closures of the underground parking garage and Outdoor Parking Lot A and the alternative use of Outdoor Parking Lot C during the construction period.",
+              "content_digest": "d87913f35381a593cab88a51257a89bdd19e52a9f6fe64929ad50b69c09f3f05",
+              "position": 32,
+              "uid": "71a5daa6-e289-51bf-bf1f-051d9958091e"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/temporary-parking] Modify campus-wiki/temporary-parking: During the construction period, the parking guidance agent may explain the location of Outdoor Parking Lot C but cannot check or guarantee available spaces at the time of an inquiry.",
+              "content_digest": "56cb24b07b659b46198fb25f50119eadd5807daf0c84475d42198e98036e9a7c",
+              "position": 33,
+              "uid": "7f72387d-58fc-511c-84c3-940933217e9d"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/temporary-parking] Modify campus-wiki/temporary-parking: A visitor accustomed to parking at the Main Building may expect to be able to enter the underground parking garage or Outdoor Parking Lot A during the construction period, drive as far as the closed access road, and then search again for Outdoor Parking Lot C.",
+              "content_digest": "b3a795f16dc4ee828853fb89ad0cc880af273dd7ec4cef53742734d7d04b7927",
+              "position": 34,
+              "uid": "85518d54-4515-5bc0-ad8c-f5dd4e2b7d51"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/temporary-parking] Modify campus-wiki/temporary-parking: Delivery drivers and external maintenance contractors accustomed to unloading in Outdoor Parking Lot A may approach the same point during the construction period and then reconfirm the delivery time or unloading location at the control line.",
+              "content_digest": "86169381f7d19d67b800578f8c972530afe6738cc9ec72fc61f833a2a65abcdd",
+              "position": 35,
+              "uid": "ceffae14-e966-566e-83b2-df46680d4582"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/shop-updates] Add campus-wiki/shop-updates: The ATM on the first floor of the Main Building is closed during the construction period.",
+              "content_digest": "789eca58b9880131611d48c05ec487c8862edb27ea8bb0faf4ec40a33b0f6bbe",
+              "position": 36,
+              "uid": "37113bd0-5194-521b-9d9e-48903d819520"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/shop-updates] Add campus-wiki/shop-updates: The 24-hour unattended store on the first floor of the Main Building is closed during the construction period.",
+              "content_digest": "da9952b63ba13b9eb8feee43437becc2b75cf70dd2cd7ec2d6bc601fd0871ece",
+              "position": 37,
+              "uid": "741db845-9a4e-5281-825c-e046801b8be5"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/shop-updates] Add campus-wiki/shop-updates: During the construction period, direct users of the Main Building ATM to the ATM on the first floor of the West Complex.",
+              "content_digest": "f73d740c987d92d4050609865afebbe0803dbc8585f6ab1e7ed84020e62468e7",
+              "position": 38,
+              "uid": "b49d48fb-d2d9-55b8-bc87-b8e0066541f8"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/shop-updates] Add campus-wiki/shop-updates: During the construction period, direct users of the Main Building's 24-hour store to the Campus Store in the Engineering Building between 7:00 a.m. and 11:00 p.m.",
+              "content_digest": "225cdc5a812a4e36ad282a5673da3e492e8586edb5fae941a2c93cde725f707b",
+              "position": 39,
+              "uid": "3094e271-3bb6-57cf-ae78-c67eeac30d94"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/shop-updates] Add campus-wiki/shop-updates: Explain that after 11:00 p.m. there is no alternative on-campus store to replace the 24-hour unattended store in the Main Building.",
+              "content_digest": "13fbc242520b5b0bd79223a452f743801370f1fa6bc10bc9a0cbb94be7c00f63",
+              "position": 40,
+              "uid": "c88880dc-ebfa-5847-89d2-692cd22406d5"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/shop-updates] Modify campus-wiki/shop-updates: The Campus Store on the first floor of the Main Building is closed during the construction period.",
+              "content_digest": "910d6b58650093fe6d789f96e196bfa3efcb66db9a8c23d4673c0bcc92d2e2f6",
+              "position": 41,
+              "uid": "9e0d0ca2-362c-5498-9560-a217d74eaaab"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/shop-updates] Modify campus-wiki/shop-updates: During the construction period, the Campus Store in the Engineering Building operates from 7:00 a.m. to 11:00 p.m.",
+              "content_digest": "ebdfe1b7c8a5c880b610dad170bf7aaa6b461265229e230c1f4e413631d3bb09",
+              "position": 42,
+              "uid": "9c623c17-1942-52a6-bf3d-ebc25d6ad078"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/shop-updates] Add campus-wiki/shop-updates: The cafe on the first floor of the Main Building does not operate during the construction period.",
+              "content_digest": "3461628515c8d9b5a1926c9677528ab09ddd7ba5c9dca99ca1de5d7bb21c883c",
+              "position": 43,
+              "uid": "048d155c-f81b-5293-b493-44fbce424662"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/shop-updates] Add campus-wiki/shop-updates: During the cafe closure, instruct only staff to use the coffee machine inside the first-floor Innovation Hub.",
+              "content_digest": "1c67b03d40c5583f15e85108e87314c3cbadae8f1bccb790435cdeba96883680",
+              "position": 44,
+              "uid": "80d1e21d-3839-5515-b235-e1c1282599e5"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/shop-updates] Modify campus-wiki/shop-updates: A student who used the Main Building ATM in the evening may expect to be able to withdraw cash at the same location during the construction period, come to the Main Building, and then have to find the West Complex ATM.",
+              "content_digest": "5d1780ad4633f1d8ed62ad738e113c1e546a7cb1916067a776a6f27a4a7092f7",
+              "position": 45,
+              "uid": "0a73702a-306c-5b54-a2c3-d3e4a23d6a9f"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/shop-updates] Modify campus-wiki/shop-updates: During the construction period, the amenities guidance agent may exclude the closed Main Building ATM, unattended store, Campus Store, and cafe from recommendations and provide guidance only to posted alternative facilities.",
+              "content_digest": "5b9bfcebaeab886826a86da3b9695b0895e59c8663146d6a12af46c32aa9b54e",
+              "position": 46,
+              "uid": "e7b747cf-a1d2-571a-af5b-e1d3514434f1"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/shop-updates] Add campus-wiki/shop-updates: During the construction period, the route for ATM use changes from the first floor of the Main Building to the first floor of the West Complex without passing through the Main Building construction zone.",
+              "content_digest": "5bcc4260e2ddb5df5ae669f775243a3496684ae621d944437bee3770bd7784d0",
+              "position": 47,
+              "uid": "b8300d7e-381c-5bce-81e7-fbb8a00eac9d"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/shop-updates] Modify campus-wiki/shop-updates: The concessionaire operating the Campus Store in the Engineering Building may expect more alternative users because of the closure of Main Building facilities and seek to increase evening staffing and inventory above normal levels during the construction period.",
+              "content_digest": "cb8f92b94291a35403b8b74802ad9a8a791f7d5fa8efcb263cd0512cfd99a2a0",
+              "position": 48,
+              "uid": "50be93d9-d0da-542c-beab-be56adde4ee2"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/facility-updates] Add campus-wiki/facility-updates: The Main Building undergoes major facility improvement construction during summer break.",
+              "content_digest": "eb5537c07641a564231ce3c120aa40955fa6cc01c5e5d4d2b2b9ef2e7b86925e",
+              "position": 49,
+              "uid": "99c29cea-9270-5a77-952c-b3f48da55612"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/facility-updates] Add campus-wiki/facility-updates: During the construction period, the elevators operate alternately, one at a time.",
+              "content_digest": "5400432c936ed03379576d88999a05ca0981dd7f3f2aecc2cae174842acdcd93",
+              "position": 50,
+              "uid": "26131bc5-ee41-5d66-9507-4f11f9d0afde"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/facility-updates] Add campus-wiki/facility-updates: The visitor services desk suspends in-person operations during the construction period.",
+              "content_digest": "7764839a0d3752bab84ead07aca717ff41cb965c422668b9962fd45a54c8ada2",
+              "position": 51,
+              "uid": "5e34a7f5-41ab-5322-849b-f8304a1a3148"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/facility-updates] Add campus-wiki/facility-updates: During the construction period, visitor services are replaced by the visitor menu in the integrated campus portal.",
+              "content_digest": "4f868f275fea9135b81ed231a574c98c711311c8e2d14b15ed67bda9943224e4",
+              "position": 52,
+              "uid": "f460b6d0-66c8-581c-860f-a925cc03770e"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/facility-updates] Add campus-wiki/facility-updates: The general restroom on the first floor of the Main Building cannot be used during the construction period.",
+              "content_digest": "a00c6ff1308fd9c64b32e56b1b2f4fc11ebe20491517fe234f50f59ec1082ebf",
+              "position": 53,
+              "uid": "cd0830c7-5289-529f-bedd-b0fd27d29b3f"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/facility-updates] Add campus-wiki/facility-updates: The general restroom on the second floor of the Main Building cannot be used during the construction period.",
+              "content_digest": "a57a0a0895fd1299e87de2e39d990edb2b6f9e68707e48d2b39bbb43584f50b7",
+              "position": 54,
+              "uid": "d73ccf7b-55d0-5f1c-8197-d3c9551da84d"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/facility-updates] Add campus-wiki/facility-updates: The general restroom on the third floor of the Main Building cannot be used during the construction period.",
+              "content_digest": "309b3e3a82ae52c4e0362dd8e90dcc5af425bcdbe583dbcb33003002a7e80819",
+              "position": 55,
+              "uid": "b9dda61f-7f10-5fad-ab6e-82ba3e7f8cf6"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/facility-updates] Add campus-wiki/facility-updates: Because the general restrooms on the first through third floors of the Main Building are closed during the construction period, the nearest general restroom changes to the exhibition hall on the third floor of the West Complex.",
+              "content_digest": "2c63758d06e2206c01d62db9317a25c6161c05a7e5b913292e8fa61b688f8707",
+              "position": 56,
+              "uid": "7a58eb23-f1a1-552b-b4b1-c3732cbeeb86"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/facility-updates] Add campus-wiki/facility-updates: During the construction period, direct students, staff, and members who cannot use the Main Building restrooms to the Central Library restrooms.",
+              "content_digest": "d3866e034ec26d2eaa41c99964346191eca4369cb5bdeb5c3e29fd90b975967c",
+              "position": 57,
+              "uid": "cb4f2f04-25c6-58ed-acd6-71b0a9c29b69"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/facility-updates] Add campus-wiki/facility-updates: As a rule, direct general visitors who cannot use the Main Building restrooms during the construction period to restrooms outside the Main Building.",
+              "content_digest": "741f10b5d5dadd9852ce57ff3dfd99871ca5945559932feb0fa46e68b8fb61a9",
+              "position": 58,
+              "uid": "0df15633-8f63-54c3-b679-1ab878e8c4f3"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/facility-updates] Add campus-wiki/facility-updates: During the construction period, direct users who cannot use the accessible restroom in the Main Building to the Student Centre.",
+              "content_digest": "e2cb9613d4d7f1430e65a49436d7f80d41c341aee65bc5438229284a203194a0",
+              "position": 59,
+              "uid": "aa595f26-74ce-5f66-8a54-87bcc962cb06"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/facility-updates] Add campus-wiki/facility-updates: The first-floor Innovation Hub does not operate its consultation desk during the construction period.",
+              "content_digest": "930fcb4e507d77c311210947d9b614b9a0911cc3eb34df621b568eb892e9782f",
+              "position": 60,
+              "uid": "8e868c0f-3a92-54e6-a76d-21d3ded46c65"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/facility-updates] Add campus-wiki/facility-updates: An Innovation Hub visitor accustomed to in-person consultation may expect to receive an immediate consultation at the first-floor desk during the construction period, see that the desk is closed, and then search again for the online consultation channel.",
+              "content_digest": "ebb45511f709e2749bdd41acda054ed404231856494ffba91b09ff8de0c28e0f",
+              "position": 61,
+              "uid": "1dbffba3-b393-5a96-89c4-785df0782e3a"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/facility-updates] Add campus-wiki/facility-updates: Air conditioning is occasionally interrupted for five to ten minutes for facility inspections.",
+              "content_digest": "2c59b0761b79204506ebed6f6a7f4d8b6e0c99fc4f508596aaa11bb916aacc9b",
+              "position": 62,
+              "uid": "e79f6d6c-7637-5ef6-b373-651c21a6bb29"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/facility-updates] Add campus-wiki/facility-updates: The construction period runs from June 24 through August 23.",
+              "content_digest": "a33b8917238fb0e00ca76f300e54da6ff3d627be2c9b56ac50e07c9554b6bb61",
+              "position": 63,
+              "uid": "faea18ec-3091-571f-be3f-345bdbf086b3"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/facility-updates] Add campus-wiki/facility-updates: During the construction period, the facility guidance agent's response scope is limited to publicly disclosed operational impacts and it cannot verify or infer nonpublic types of work.",
+              "content_digest": "aa6877b50ccfb527994b78fb7a703189cd245c96de4671d96e1a0e02c39d03e9",
+              "position": 64,
+              "uid": "ecf1c8bb-4099-5e7f-82e0-a95928defd5f"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/facility-updates] Modify campus-wiki/facility-updates: Cleaning and security contract staff may find the designated service entrance during the construction period more burdensome than the familiar lobby shift change and may go to the wrong entrance at the start of a shift.",
+              "content_digest": "a1eaddf121d994c072cfafc370c56401206e95fb9924aff55cc14c1481f2a017",
+              "position": 65,
+              "uid": "0c87297c-f5fb-5380-9cc3-efa21c0fb60b"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/route-changes] Add campus-wiki/route-changes: The indoor route that passed through the first through third floors of the Main Building to the Central Library cannot be used during the construction period.",
+              "content_digest": "e1bf8bccd385ff241d3f9ca528a5e24e01d852c4d8f49508dd44d551cb3c284a",
+              "position": 66,
+              "uid": "8017409a-8af8-5a55-a49e-e9ccb44b9f34"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/route-changes] Add campus-wiki/route-changes: The route from the third-floor rear entrance to the Central Library is closed during the construction period.",
+              "content_digest": "848cf64b179ad0e674d4b90062932c845d4f79e9ff51aefd0ee9d25512dc42f6",
+              "position": 67,
+              "uid": "dbb3c40c-7699-509d-901d-be9de2f110dc"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/route-changes] Add campus-wiki/route-changes: The Outdoor Parking Lot A–Main Building–Central Library route is closed during the construction period.",
+              "content_digest": "62e0420beb1396b48c95c1d20d37e42e839a15a2225c9c745459fd87b113c825",
+              "position": 68,
+              "uid": "2d20c61d-ff20-5bb6-bcdc-3dcbf6c3e21f"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/route-changes] Modify campus-wiki/route-changes: A student who prefers the air-conditioned indoor route through the Main Building in summer may experience substantial heat and travel burden when redirected to an outdoor alternative route during the construction period.",
+              "content_digest": "e315c13da4983b1e7ae8886c7f2ba4f48de24cbb5e502043ee64cd02e90ba192",
+              "position": 69,
+              "uid": "a8bb36e1-2629-5b8f-b4dc-af9b88020dc9"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/route-changes] Add campus-wiki/route-changes: When providing directions to the accessible restroom in the Student Centre during the construction period, instruct users to take the accessible route to the left as viewed from the Main Building.",
+              "content_digest": "ba4adfac920ec1c9593dff92a90385561a44b69c8b8ad912571d4bde4966d81f",
+              "position": 70,
+              "uid": "8276ab56-741f-5f60-ab77-79fe6dc0ba55"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/route-changes] Add campus-wiki/route-changes: During the construction period, the designated alternative accessible route to the Central Library is Outdoor Parking Lot C–Student Centre accessible entrance–Central Library west entrance.",
+              "content_digest": "a394826575d63f7b521afc36f524b9bfb32be6d912ad292e6b9e6d69de2d9420",
+              "position": 71,
+              "uid": "9af0f95c-0a5e-584e-ba7b-92789e071f7e"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/route-changes] Add campus-wiki/route-changes: During the construction period, the Central Library west entrance is designated as the official alternative entrance for the closed connecting route through the Main Building.",
+              "content_digest": "224bc47e620270bbcb44de96fd2d16663728707d470871effce3260a2031b149",
+              "position": 72,
+              "uid": "fd27f19b-5f2c-51ee-a9b2-7182120163cb"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/route-changes] Modify campus-wiki/route-changes: During the construction period, the route guidance agent may exclude from comparison candidates closed routes that pass through the first through third floors of the Main Building, the third-floor rear entrance, or Outdoor Parking Lot A.",
+              "content_digest": "07d76959a24962add643d14a90bb991ddfc1b8d472f38aa1d925506183919ba8",
+              "position": 73,
+              "uid": "638f272f-9fbd-5d1f-bfd8-b01618424065"
+            },
+            {
+              "content": "[task-1/participant/construction-updates/route-changes] Modify campus-wiki/route-changes: If the indoor shortcut through the Main Building is closed during the construction period, a mobility-support companion may reconfirm the distance and slope of the alternative accessible route before accompanying the user.",
+              "content_digest": "f0ae09830918777a20b18786c411ceb941b9b4ec5f89e2b83abf31804431167c",
+              "position": 74,
+              "uid": "ba9d70f9-02c4-56d9-ac23-f2a532c22488"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "c712b991-547b-4699-901c-3669bda81dd5"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames align on construction-aware parking guidance and accessible alternatives while preserving ordinary-operation baselines. Explicit construction conditions narrow garage, lot, entrance, stair, and library-route access. Each frame also contributes substantial independent guidance: enduring parking rules on one side and temporary building-wide operational changes on the other.",
+      "relations": [
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "5d690022-0ab6-52ed-b6a1-77d719c8c6ce"
+            },
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "91de6da4-a9f4-5e2a-a585-14609a8d8497"
+            }
+          ],
+          "reason": "The construction-period condition preserves the ordinary connection while changing its temporary usability.",
+          "status": "RESOLVED",
+          "summary": "The Lot A–garage access road exists normally but is blocked during construction.",
+          "uid": "6bf8a662-4f05-507d-8d9c-678689208562"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "6960c0ca-295d-5449-91dc-d9293a6bb79d"
+            },
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "84196dc5-9ae8-5663-866a-048024119fd2"
+            }
+          ],
+          "reason": "The explicit construction period distinguishes the otherwise opposing access rules.",
+          "status": "RESOLVED",
+          "summary": "General underground-garage parking is available in ordinary operating hours but unavailable during construction.",
+          "uid": "157819f2-98fc-5905-b3a8-99cca0eac6ce"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "67d07765-ac5f-58f6-b7a5-f733cc4228d2"
+            },
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "fdffd727-3579-5edc-8433-1f1f372b7576"
+            },
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "6dc791c0-f2a0-5e5e-a1ae-4ec35d7159a4"
+            },
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "fb0765f1-92fa-50b6-ab78-35ca165ab2e6"
+            }
+          ],
+          "reason": "The temporary condition and user-specific procedures explain the access difference.",
+          "status": "RESOLVED",
+          "summary": "Ordinary pedestrian garage access becomes locked during construction, with controlled exceptions for authorized staff and facilities personnel.",
+          "uid": "1aeea65b-14bb-577a-b2b3-19dc051f27e7"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "489960d6-711f-55d0-a410-16bcd6e9acf8"
+            },
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "5a4dd86f-bead-50bb-b6e8-45c176b6d65f"
+            }
+          ],
+          "reason": "The construction condition safely separates the two stair-access rules.",
+          "status": "RESOLVED",
+          "summary": "Lobby stairs to the garage are ordinarily available but closed to everyone during construction.",
+          "uid": "1757f02b-a383-5e24-8503-9ed47ca9d5e8"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "df455ec8-c30d-5607-a9b8-8f84d93f0617"
+            },
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "6a37c02f-4843-579f-b5b1-f90d6dbd0e5a"
+            },
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "1a4e603c-7f69-5bfc-b974-281dc8618326"
+            },
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "c0ac84d9-367b-5809-856e-9f0d6c471b2b"
+            },
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "9b8a7458-4ebc-5b82-be5b-522268680f63"
+            }
+          ],
+          "reason": "The location, access, visitor-use, and alternative-parking claims jointly support the same parking decision.",
+          "status": "RESOLVED",
+          "summary": "Lot C is independently accessible and suitable for visitors, making it the temporary Main Building parking alternative.",
+          "uid": "fabce4bb-931b-5de3-82f7-c05ea497342e"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "a81363fe-3ae5-5213-a555-e447515a1a73"
+            },
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "cc5f97c1-ce8c-5ac0-8f3e-ecdc6df597fc"
+            },
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "2d20c61d-ff20-5bb6-bcdc-3dcbf6c3e21f"
+            }
+          ],
+          "reason": "The explicit construction condition preserves the ordinary route assessment while defining its temporary closure.",
+          "status": "RESOLVED",
+          "summary": "The normally short Lot A–Main Building–Library route is unavailable during construction because Lot A and the route are closed.",
+          "uid": "4b621cd6-23c6-5665-ac5d-37ffeee9c9ee"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "3bd9a7e3-af83-5d3d-9cca-0a3926c446e1"
+            },
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "c9b6827a-36c3-5895-916c-a7066f398f5b"
+            },
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "8061fc97-13ee-587e-ba5d-09ca5fb72171"
+            },
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "85518d54-4515-5bc0-ad8c-f5dd4e2b7d51"
+            }
+          ],
+          "reason": "The claims consistently describe the same predictable parking-navigation error without imposing incompatible rules.",
+          "status": "RESOLVED",
+          "summary": "People may wrongly expect familiar or nearby Main Building parking and require redirection to Lot C.",
+          "uid": "6be5443c-e458-54bb-b1bb-fe143f1d13e7"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "efbe330f-eb79-5a05-8ef8-0664355d320c"
+            },
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "ceffae14-e966-566e-83b2-df46680d4582"
+            }
+          ],
+          "reason": "The ordinary unloading expectation and construction-period behavior describe the same operational risk.",
+          "status": "RESOLVED",
+          "summary": "Delivery and maintenance drivers may expect to unload at Lot A and encounter construction controls instead.",
+          "uid": "52671684-0568-5f8c-a36a-45cb8a8a886e"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "9514e9f2-d556-50dc-8739-01c37b3322fc"
+            },
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "7d5bdc29-c284-5027-bc5e-6589b53ab5e9"
+            },
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "71a5daa6-e289-51bf-bf1f-051d9958091e"
+            }
+          ],
+          "reason": "The stated capabilities and limitations consistently define posted-status guidance.",
+          "status": "RESOLVED",
+          "summary": "Parking agents explain construction closures and alternatives from posted information without real-time verification of control signs.",
+          "uid": "19382ca1-dbdb-591f-924d-26b1b4992167"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "6a38e1b0-b9bb-5941-aa03-3f29b492feaa"
+            },
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "f1283ab9-f63b-5249-ac89-2dcc6f3dbee4"
+            },
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "38b6565e-25a0-5b7c-ba03-747c1901af7e"
+            },
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "7f72387d-58fc-511c-84c3-940933217e9d"
+            }
+          ],
+          "reason": "The claims jointly govern location guidance and its capacity limitations.",
+          "status": "RESOLVED",
+          "summary": "Parking guidance can identify Lot C and mapped access while neither checking nor guaranteeing current space availability.",
+          "uid": "e7c97df4-149a-5b62-a053-5f286ad1ccea"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "8180f5e5-fd9f-51a7-b239-c75a86c20da6"
+            },
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "308c9814-4989-563e-b9dd-306be896940e"
+            },
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "9af0f95c-0a5e-584e-ba7b-92789e071f7e"
+            },
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "ba9d70f9-02c4-56d9-ac23-f2a532c22488"
+            }
+          ],
+          "reason": "The claims materially support the same accessible-route planning decision.",
+          "status": "RESOLVED",
+          "summary": "Accessible travel from Lot C toward the library uses the Student Centre route, with step-free suitability, distance, and slope remaining relevant.",
+          "uid": "4fb7d5fb-b67b-5224-b5ca-d59be66b8919"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "ccf54508-b01d-5fe5-bad3-083e3ce211cd"
+            },
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "b5466afb-8d3b-51b0-8e44-9fd47165fe17"
+            }
+          ],
+          "reason": "This is an independently useful reference-side interpretation rule absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Parking conditions at one area must not be generalized to other areas or the entire campus.",
+          "uid": "d7828aa1-08cd-50f9-97df-842381e3aa0a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "879b70b3-1404-559c-9cdb-9fdca1289e44"
+            },
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "07101ab9-cebf-5fd6-8967-2ea16a80d03d"
+            }
+          ],
+          "reason": "These memories split one reference-only accessibility need across user groups.",
+          "status": "RESOLVED",
+          "summary": "Visitors and staff needing mobility assistance prioritize a safe pickup and drop-off point near an accessible entrance.",
+          "uid": "6cee3f64-5515-5d1e-8125-5abaf9ebb861"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "c89147c1-1b06-5e93-97a1-85d59fd33e57"
+            },
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "39b76444-a4f8-53c2-ae7d-9ee71de43eea"
+            }
+          ],
+          "reason": "These memories express one reference-only proximity requirement for different loads.",
+          "status": "RESOLVED",
+          "summary": "People carrying luggage or equipment prefer brief loading and unloading close to their destination.",
+          "uid": "609c5d33-c640-57ff-a97e-b7da27cfcada"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "7063d138-91cf-5dbf-b7af-bb0451dd342d"
+            }
+          ],
+          "reason": "This agent limitation appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The parking information agent cannot guarantee when on-site controls will end.",
+          "uid": "730da1d8-46a0-52f0-a0e2-6243fd49c19c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "96092024-bab8-5c6e-b100-ff87e06cb760"
+            }
+          ],
+          "reason": "This registration procedure appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Visitor-vehicle registration instructions are posted at the parking entrance.",
+          "uid": "30ca306c-8c02-536c-b3dc-129167673e5d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "7b323c8d-eddd-5041-aee1-bbd8dbc06918"
+            }
+          ],
+          "reason": "This authorization rule appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Accessible parking requires a valid parking permit.",
+          "uid": "8bcee27b-3048-5b06-b418-2bc333c6147a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "b7f4ae20-3bbf-51dd-b230-81c5e5107e48"
+            },
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "27246135-eca5-56ed-81c3-bb75584703d6"
+            }
+          ],
+          "reason": "These memories split one reference-only short-stay parking rule.",
+          "status": "RESOLVED",
+          "summary": "The Main Building pickup zone is not long-term parking, and posted signs set short-term loading limits.",
+          "uid": "7954447d-ade3-5133-9048-e14e69b92ab9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "dc40ae37-6f8d-5864-aab1-59462c325af3"
+            }
+          ],
+          "reason": "This vehicle-specific parking rule appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Motorcycles use the motorcycle areas marked on the campus map.",
+          "uid": "84fcadd7-0d88-50cd-b486-8366551c033b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "077234a0-bc91-589a-8d91-2cdd1180e9a1"
+            }
+          ],
+          "reason": "This vehicle-specific parking rule appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Bicycles use designated racks rather than vehicle spaces.",
+          "uid": "51eaa0d3-43f3-5b40-a117-9f2ff565b40f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "c578f6a4-6065-5752-950b-e79ff7228ce7"
+            },
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "38ce79ed-cae6-5a9e-bdba-eb92559ebaa8"
+            }
+          ],
+          "reason": "These memories form one reference-only charging-space policy.",
+          "status": "RESOLVED",
+          "summary": "Lot C provides electric-vehicle charging spaces reserved for vehicles actively charging.",
+          "uid": "6432eacd-a662-5744-9dbb-bb93ac35a35c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "7471f5bc-555a-5db4-838e-74723bbd55fe"
+            }
+          ],
+          "reason": "This fee-display rule appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Visitor parking fees are shown on the registration screen.",
+          "uid": "63ea3322-d675-5a75-9ba4-70a3926c1ece"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "340389ed-6852-509c-a278-78bbbad4beb8"
+            }
+          ],
+          "reason": "This fee-guidance limitation appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The parking agent cannot infer discounts that are not posted.",
+          "uid": "09218739-68bb-5ba4-ace8-50addb43cd0c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "f617356c-98ff-5d40-a41b-dd4be0c8c311"
+            }
+          ],
+          "reason": "This calendar qualification appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Public-holiday parking hours may differ from weekday hours.",
+          "uid": "b15ce8a4-a5f8-5240-ad1a-054b6de8e99d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "35576f85-e20a-5bed-a9fd-f47e867c1fce"
+            },
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "f201604e-92ae-5315-8359-5e68dd9eeecb"
+            }
+          ],
+          "reason": "These memories split one reference-only weather-restriction policy and its verification step.",
+          "status": "RESOLVED",
+          "summary": "Snow or ice may restrict outdoor parking, and official notices should be checked.",
+          "uid": "cd4f24af-9bd9-56f5-9876-c807e086ce65"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "3fc6abeb-db56-5a34-ae34-b4cd394723c4"
+            }
+          ],
+          "reason": "This demand consideration appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Large public events increase parking demand near their venues.",
+          "uid": "673e9559-3ad9-5e89-ba10-b4a66458755a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "a77dadf9-5d20-57aa-bb81-b35058832bc6"
+            }
+          ],
+          "reason": "This transit-location fact appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The West Gate stop is on the walkway outside Lot C.",
+          "uid": "cd7cc270-8a41-5ec4-b70f-13c5dc8990be"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "012add6d-ba82-5674-a432-0c092d575d21"
+            }
+          ],
+          "reason": "This shuttle-location fact appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The campus shuttle stops in front of the Student Centre.",
+          "uid": "f132431d-eeb1-5a22-827a-47b4e11b868e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "6ca42597-3142-5f24-9f29-14c694bc83e2"
+            }
+          ],
+          "reason": "This transit-schedule qualification appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Shuttle hours vary between academic terms and recesses.",
+          "uid": "f4d7f917-6e50-5e46-8857-9935a0f749e6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "db986c20-8190-5a89-87db-4c56c5d6c82d"
+            }
+          ],
+          "reason": "This transactional limitation appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The parking agent cannot register a visitor vehicle for the visitor.",
+          "uid": "e7430f04-4cd2-54c4-be41-096d42fab4b2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "1a0b250f-c4f1-5a9f-a114-5420a859dd32"
+            }
+          ],
+          "reason": "This transactional limitation appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The parking agent cannot waive parking fees.",
+          "uid": "9784fa64-7135-5166-8a39-9762ffb1b811"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "11d0062b-7941-5512-b5dc-f2d1379741e6"
+            }
+          ],
+          "reason": "This designated-zone fact appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "An accessible pickup and drop-off zone is marked at the Main Building entrance.",
+          "uid": "91dd2de6-0a58-5d13-b5ba-a2e290db7120"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "a299c675-7179-5cb1-b5e4-552198bdc91f"
+            }
+          ],
+          "reason": "This parking-space category appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Signed dedicated car-sharing spaces are located in Lot C.",
+          "uid": "d0c5b610-f031-5a7c-ab05-948862738e4c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "a671229f-9c73-5183-bec3-8d23d0dd8d53"
+            }
+          ],
+          "reason": "This enforcement-escalation instruction appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Vehicles blocking passageways or accessible areas should be reported to parking management.",
+          "uid": "58901f29-320b-50df-929e-3585794aa2e0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "8b077f2a-6a9f-50f0-ae91-f6536fb226cb"
+            },
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "dbb3c40c-7699-509d-901d-be9de2f110dc"
+            }
+          ],
+          "reason": "These compared-side memories restate one temporary route closure.",
+          "status": "RESOLVED",
+          "summary": "The third-floor rear entrance and its library route are closed during construction.",
+          "uid": "9b29e94e-8338-5de1-b7f8-a77bffc2b55e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "56c34a24-0954-5c64-9fd4-880995e6e53c"
+            }
+          ],
+          "reason": "This temporary access-hours change appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Construction shortens general main-entrance access to 5:00 p.m.",
+          "uid": "a6360b6d-764d-5483-9a68-82c8beb48dc0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "84a45a62-09c7-5187-8fa6-ff7063f9e8d0"
+            },
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "89e6f853-8c98-51ba-98cc-ad5c84580a53"
+            },
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "50fb8bfa-2764-5b4f-a83c-80bf2d3a73d0"
+            }
+          ],
+          "reason": "These compared-side memories describe one temporary accessible-route substitution.",
+          "status": "RESOLVED",
+          "summary": "A temporary passage beside the main entrance replaces the reconstructed accessible route and leads to the first-floor lobby.",
+          "uid": "52b44899-d860-553c-b23b-883d1c7ff447"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "f9d7eb4e-221f-5b5f-a237-213a31e04093"
+            }
+          ],
+          "reason": "This temporary credential procedure appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Authorized students entering after 5:00 p.m. must use a physical NFC student card rather than the app.",
+          "uid": "651b56f8-d28e-5eca-917b-1655c637c956"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "f1b7843e-2c8a-5434-94a4-1383534abb3a"
+            }
+          ],
+          "reason": "This role-specific entrance rule appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Staff and construction or facilities personnel must use the designated staff entrance during construction.",
+          "uid": "e2f2eea9-beac-55b6-ac9f-1c9486556578"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "be002fc9-b9e0-5d73-9c15-622c0688c73c"
+            }
+          ],
+          "reason": "This guidance-prioritization policy appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Construction access guidance may prioritize the 5:00 p.m. main-entrance cutoff and rear-entrance closure.",
+          "uid": "1abd9d46-0685-587d-a9ff-ded869435dd8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "2d8e8c75-1dad-5dbc-9eaa-04cd522410f0"
+            },
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "ebc1d272-2f9a-5b2e-a5a4-6c0539f46527"
+            },
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "31f5b67b-40f8-5690-b772-b329ce50e443"
+            }
+          ],
+          "reason": "These memories describe one compared-only navigation risk and mitigation.",
+          "status": "RESOLVED",
+          "summary": "Users familiar with the rear entrance may reach its closure, so affected students and visitors should receive proactive warning.",
+          "uid": "a95d2d84-deab-56dc-881b-343df1584e22"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "3fcfa405-cf3d-500e-810b-28ddc81fefca"
+            }
+          ],
+          "reason": "This venue closure appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Viewing in the tenth-floor exhibition and event hall is suspended during construction.",
+          "uid": "4fe38a8d-7905-5a0e-bd7c-ee8c39dfb71e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "1754ab18-13ca-5e07-a40c-eb12e45dcd1e"
+            },
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "eee1213e-3582-5c9a-bde8-78af7b216df0"
+            }
+          ],
+          "reason": "These memories split one compared-only reservation suspension and agent limitation.",
+          "status": "RESOLVED",
+          "summary": "Main Building event reservations stop during construction, and the agent cannot create or restore them.",
+          "uid": "5cbdc319-af66-5ece-86e1-ec234e65f617"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "686d630d-defe-5aa1-a28d-470b3ebb9059"
+            },
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "967fc4ad-d6e6-5f2c-b3e0-973f163f9a9a"
+            },
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "9d4a1560-5a6d-5c3f-8414-a56f1acc7f18"
+            }
+          ],
+          "reason": "These memories define one compared-only event-relocation arrangement.",
+          "status": "RESOLVED",
+          "summary": "The east-building auditorium and Engineering Building multipurpose room serve as alternative Main Building event spaces.",
+          "uid": "1962cd01-447c-57b2-bc8b-deb33df09131"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "2587dbb3-dc02-5e13-b1de-9d704c7a706a"
+            }
+          ],
+          "reason": "This temporary comparison policy appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Event guidance compares only designated alternatives and excludes closed Main Building venues.",
+          "uid": "f16ef868-1aab-5bfe-9f9b-9401ef17c5b3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "b867c632-6a7e-55c8-8371-91b3f0e1bb89"
+            }
+          ],
+          "reason": "This event-navigation risk appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Returning event visitors may follow an obsolete Main Building venue route and miss relocation guidance.",
+          "uid": "b8e9fc8b-1dca-572b-a796-1f4722cbc609"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "9ab36f33-97ce-5790-8b2e-d0ab195039ef"
+            },
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "8bf7a20c-ced2-51ad-8847-1fbb946ea3a5"
+            }
+          ],
+          "reason": "These memories describe one compared-only loading relocation and associated risk.",
+          "status": "RESOLVED",
+          "summary": "Relocated event equipment uses the east auditorium loading entrance, although operators may mistakenly follow the former procedure.",
+          "uid": "7ecdc114-4637-5843-9a9c-385b313c7172"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "32e116a4-526b-5cd1-af16-4872680376b5"
+            }
+          ],
+          "reason": "This temporary facility use appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The underground garage becomes temporary construction-material storage.",
+          "uid": "910d5566-5751-59d1-aa2d-aa1e5d38be13"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "8fa46317-ba39-54bb-8cf0-f85770bd5032"
+            }
+          ],
+          "reason": "This disposition notice appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Personal items left after the garage clear-out were moved to lost and found.",
+          "uid": "93db4b78-19ac-57b1-b7a4-f2e10797e439"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "d47493d3-5b50-53d0-a5b9-5dedbdb268a4"
+            }
+          ],
+          "reason": "This reopening plan appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Lot A is planned to reopen immediately after Main Building construction ends.",
+          "uid": "d6a50fc9-010b-547d-b4cd-163a7f0d7ff7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "37113bd0-5194-521b-9d9e-48903d819520"
+            },
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "b49d48fb-d2d9-55b8-bc87-b8e0066541f8"
+            },
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "0a73702a-306c-5b54-a2c3-d3e4a23d6a9f"
+            },
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "b8300d7e-381c-5bce-81e7-fbb8a00eac9d"
+            }
+          ],
+          "reason": "These memories describe one compared-only ATM relocation and its navigation consequence.",
+          "status": "RESOLVED",
+          "summary": "The Main Building ATM closes, shifting users to the first-floor West Complex ATM by a route outside the construction zone.",
+          "uid": "e3e34e6b-5140-50b8-8d59-88cc48ed2816"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "741db845-9a4e-5281-825c-e046801b8be5"
+            },
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "3094e271-3bb6-57cf-ae78-c67eeac30d94"
+            },
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "c88880dc-ebfa-5847-89d2-692cd22406d5"
+            }
+          ],
+          "reason": "These memories form one compared-only store substitution with a late-night service gap.",
+          "status": "RESOLVED",
+          "summary": "The 24-hour Main Building store closes; the Engineering Campus Store substitutes only from 7:00 a.m. to 11:00 p.m.",
+          "uid": "56fed9d9-a321-55f1-a3ca-e4bc9b674710"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "9e0d0ca2-362c-5498-9560-a217d74eaaab"
+            },
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "9c623c17-1942-52a6-bf3d-ebc25d6ad078"
+            }
+          ],
+          "reason": "These memories define one compared-only Campus Store operating change.",
+          "status": "RESOLVED",
+          "summary": "The Main Building Campus Store closes while the Engineering Building store operates from 7:00 a.m. to 11:00 p.m.",
+          "uid": "7b3ea961-c183-530f-98e3-84236ce798c0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "048d155c-f81b-5293-b493-44fbce424662"
+            },
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "80d1e21d-3839-5515-b235-e1c1282599e5"
+            }
+          ],
+          "reason": "These memories define one compared-only cafe closure and restricted substitute.",
+          "status": "RESOLVED",
+          "summary": "The Main Building cafe closes, with the Innovation Hub coffee machine available only to staff.",
+          "uid": "c295354a-d6e6-550d-8e69-5cbdcf620e50"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "e7b747cf-a1d2-571a-af5b-e1d3514434f1"
+            }
+          ],
+          "reason": "This temporary recommendation policy appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Amenities guidance excludes closed Main Building facilities and recommends only posted alternatives.",
+          "uid": "10913ee8-c832-5b6d-909e-4a53aa891d04"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "50be93d9-d0da-542c-beab-be56adde4ee2"
+            }
+          ],
+          "reason": "This operator-planning expectation appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The Engineering Campus Store may anticipate extra alternative users and increase evening staffing and inventory.",
+          "uid": "27a032aa-7e54-5b58-b020-c1f27ae26372"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "99c29cea-9270-5a77-952c-b3f48da55612"
+            },
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "faea18ec-3091-571f-be3f-345bdbf086b3"
+            }
+          ],
+          "reason": "These memories split one compared-only construction timeframe.",
+          "status": "RESOLVED",
+          "summary": "Major Main Building construction occurs during summer break from June 24 through August 23.",
+          "uid": "77a4f7b8-af79-5a13-83e0-c3177bd9772a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "26131bc5-ee41-5d66-9507-4f11f9d0afde"
+            }
+          ],
+          "reason": "This temporary elevator rule appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Main Building elevators operate alternately, one at a time, during construction.",
+          "uid": "8e51417a-06c6-52a9-98cb-30ab8753e570"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "5e34a7f5-41ab-5322-849b-f8304a1a3148"
+            },
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "f460b6d0-66c8-581c-860f-a925cc03770e"
+            }
+          ],
+          "reason": "These memories describe one compared-only service-channel substitution.",
+          "status": "RESOLVED",
+          "summary": "In-person visitor services stop during construction and are replaced by the campus portal visitor menu.",
+          "uid": "da74ccf2-deea-547d-9f6e-5bf6d72dca08"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "cd0830c7-5289-529f-bedd-b0fd27d29b3f"
+            },
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "d73ccf7b-55d0-5f1c-8197-d3c9551da84d"
+            },
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "b9dda61f-7f10-5fad-ab6e-82ba3e7f8cf6"
+            },
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "7a58eb23-f1a1-552b-b4b1-c3732cbeeb86"
+            }
+          ],
+          "reason": "These memories split one compared-only multi-floor restroom closure and nearest replacement.",
+          "status": "RESOLVED",
+          "summary": "General restrooms on Main Building floors one through three close, making the West Complex exhibition-hall restroom the nearest general option.",
+          "uid": "e7b04ed5-2de9-5752-b176-6b6b84819075"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "cb4f2f04-25c6-58ed-acd6-71b0a9c29b69"
+            }
+          ],
+          "reason": "This audience-specific alternative appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Students, staff, and members affected by Main Building restroom closures are directed to Central Library restrooms.",
+          "uid": "c72a5976-253d-5604-a0a5-3df79cd8f5d7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "0df15633-8f63-54c3-b679-1ab878e8c4f3"
+            }
+          ],
+          "reason": "This audience-specific restroom rule appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "General visitors affected by Main Building restroom closures are directed outside the building.",
+          "uid": "5d207c6f-4bd9-557d-a477-dd7e6d6e8b6c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "aa595f26-74ce-5f66-8a54-87bcc962cb06"
+            }
+          ],
+          "reason": "This accessible-restroom alternative appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Users unable to use the Main Building accessible restroom are directed to the Student Centre.",
+          "uid": "b10e92ce-2b99-5635-9368-f1fbee85ca02"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "8e868c0f-3a92-54e6-a76d-21d3ded46c65"
+            },
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "1dbffba3-b393-5a96-89c4-785df0782e3a"
+            }
+          ],
+          "reason": "These memories describe one compared-only service closure and user consequence.",
+          "status": "RESOLVED",
+          "summary": "The Innovation Hub consultation desk closes, and returning visitors may need to search for its online channel.",
+          "uid": "f494d8af-8fad-59a5-b7e8-f5974ccbaca4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "e79f6d6c-7637-5ef6-b373-651c21a6bb29"
+            }
+          ],
+          "reason": "This operational impact appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Facility inspections occasionally interrupt air conditioning for five to ten minutes.",
+          "uid": "e0951dca-e3fd-5aed-ad3a-be08d0b457e3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "ecf1c8bb-4099-5e7f-82e0-a95928defd5f"
+            }
+          ],
+          "reason": "This agent-scope restriction appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Facility guidance is limited to public operational impacts and cannot infer nonpublic work.",
+          "uid": "37210818-546a-5698-84ee-c7039706f1b2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "0c87297c-f5fb-5380-9cc3-efa21c0fb60b"
+            }
+          ],
+          "reason": "This workforce-navigation risk appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Cleaning and security contractors may find the designated service entrance burdensome and initially use the wrong entrance.",
+          "uid": "90b22763-4062-5233-a764-53e8d0a53ccd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "8017409a-8af8-5a55-a49e-e9ccb44b9f34"
+            }
+          ],
+          "reason": "This temporary route closure appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The indoor route through Main Building floors one through three to the library closes during construction.",
+          "uid": "48831a3b-0077-5ffd-85e1-def7b46767cc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "a8bb36e1-2629-5b8f-b4dc-af9b88020dc9"
+            }
+          ],
+          "reason": "This route-change impact appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Redirecting users from the air-conditioned indoor shortcut to an outdoor route may add heat and travel burden.",
+          "uid": "def5f335-5936-5fb9-8119-94bd9dd35067"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "8276ab56-741f-5f60-ab77-79fe6dc0ba55"
+            }
+          ],
+          "reason": "This directional instruction appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Directions from the Main Building to the Student Centre accessible restroom use the accessible route on the left.",
+          "uid": "c89d217d-4487-515a-b282-12df83543ab6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "fd27f19b-5f2c-51ee-a9b2-7182120163cb"
+            }
+          ],
+          "reason": "This temporary entrance designation appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The Central Library west entrance is the official alternative for the closed Main Building connection.",
+          "uid": "e77a68f8-1ffa-54e4-a915-952116e6c104"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c712b991-547b-4699-901c-3669bda81dd5",
+              "memory_uid": "638f272f-9fbd-5d1f-bfd8-b01618424065"
+            }
+          ],
+          "reason": "This temporary route-comparison policy appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Route guidance excludes construction-closed routes through the Main Building, rear entrance, or Lot A.",
+          "uid": "4e3dab2f-1a92-5b0e-8cb4-ebb98f856721"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7e7a46e-f018-427b-82cb-7c856ec403c9",
+              "memory_uid": "9acc9ad2-3a59-5b37-9f08-010fe8731a79"
+            }
+          ],
+          "reason": "This general route-explanation capability appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The parking information agent can explain posted connecting routes.",
+          "uid": "179ae620-83cd-5967-8f69-5ec637f1b22d"
+        }
+      ],
+      "reports": {
+        "both": "Both support Outdoor Parking Lot C as the construction alternative, posted-information guidance, capacity caveats, accessible trip planning, and warnings about familiar parking or unloading assumptions.",
+        "compared_only": "The compared frame adds temporary building entrances, events, amenities, restrooms, facilities, service channels, and alternative-route operations.",
+        "differences": "Ordinary garage, pedestrian, stair, access-road, and library-route availability is explicitly replaced by construction-period closures or controlled access.",
+        "reference_only": "The reference adds enduring parking, permit, charging, fee, weather, transit, short-stay, vehicle-type, and enforcement guidance."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "85f7f3fd-403b-4390-8c50-612b5120eca3"
+    },
+    "analysis_digest": "949fd05631cd5792ee860c7981a117b8283b25b45563775e42a2e72c50ce102a",
+    "key": "48e516d1a8742908e8760cd8b77d7d3b6ea6382e9050cba9b6b2267ab47ae3fd",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 189.50003666600242,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-1",
+    "task_description": {
+      "context_digest": "17a794e48857a8178811052488c3bd4cc66e9029847f2ce038825e49ed5afcc8",
+      "context_uid": "e2c67cf1-c2a8-5aef-a2cb-583a9fd8d6c6",
+      "name": "task-1/description"
+    }
+  },
+  "artifact_key": "48e516d1a8742908e8760cd8b77d7d3b6ea6382e9050cba9b6b2267ab47ae3fd",
+  "created_at": "2026-08-13T18:15:43.213816Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-1/campus-wiki/temporary-parking",
+  "pair_key": "12a63ec9d0c35ad47b4aebbf5e1c5ca4929ad70242d2e4c5ba0e02f3532ec5bd",
+  "provider_seconds": 189.50003666600242,
+  "right": "task-1/participant",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-1"
+}

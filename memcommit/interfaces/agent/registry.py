@@ -34,6 +34,11 @@ from memcommit.interfaces.agent.distill import (
     DistillAgentAdapter,
     distill_agent_tool_schema,
 )
+from memcommit.interfaces.agent.dedup import (
+    DEDUP_AGENT_TOOL_NAME,
+    DedupAgentAdapter,
+    dedup_agent_tool_schema,
+)
 from memcommit.interfaces.agent.elaborate import (
     ELABORATE_AGENT_TOOL_NAME,
     ElaborateAgentAdapter,
@@ -246,6 +251,7 @@ def build_default_agent_tool_registry(client: MemCommitClient) -> AgentToolRegis
     elaborate = ElaborateAgentAdapter(client)
     fit = FitAgentAdapter(client)
     resolve = ResolveAgentAdapter(client)
+    dedup = DedupAgentAdapter(client)
     return AgentToolRegistry(
         (
             AgentToolBinding(
@@ -307,6 +313,11 @@ def build_default_agent_tool_registry(client: MemCommitClient) -> AgentToolRegis
                 name=RESOLVE_AGENT_TOOL_NAME,
                 schema_factory=resolve_agent_tool_schema,
                 handler=resolve.invoke,
+            ),
+            AgentToolBinding(
+                name=DEDUP_AGENT_TOOL_NAME,
+                schema_factory=dedup_agent_tool_schema,
+                handler=dedup.invoke,
             ),
         )
     )

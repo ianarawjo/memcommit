@@ -1,0 +1,352 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:53:17.860262+00:00",
+      "frames": [
+        {
+          "context_digest": "5e42fc3dcfbf5576148277f6841977ca8a5cabd4a3fc67a5581f6f6cc816c900",
+          "context_name": "task-3/local/personal-memory/2025/10",
+          "context_uid": "8130b676-dc51-5c31-b7dc-185afdf9cf07",
+          "memories": [
+            {
+              "content": "The user keeps waterproof shoes for rainy days to the left of the entrance.",
+              "content_digest": "5b9e5a20153c7865010318800d740a410faef0c13fe2278c20ce984a89b7dea5",
+              "position": 0,
+              "uid": "82c1e806-de3a-5633-8a08-175487e69fd6"
+            },
+            {
+              "content": "On a day the user walked in the rain wearing thin shoes, their socks became wet and they changed them after arrival.",
+              "content_digest": "fdbdab8c08a4b1d933ff8ac3ddedee8541ddf070e8c6e6020b6c1d14b992c621",
+              "position": 1,
+              "uid": "25df6384-836f-5f8e-bd97-73a1fb171c48"
+            },
+            {
+              "content": "On the next rainy day, the user wore waterproof shoes and their feet remained dry.",
+              "content_digest": "0e87d74fb93fe062cd12efe2f5a04fbae5ce13a60491fd9ad04c4e006acbd87f",
+              "position": 2,
+              "uid": "55abae4f-206a-586e-8b35-406d7525c0a1"
+            },
+            {
+              "content": "On a day the user walked for a long time in new shoes, their heel chafed and they shortened the route home.",
+              "content_digest": "aeb369b995cdf17ea73ae8546b454eab70f33bf6d3c67a09aee2805c1c598b6d",
+              "position": 3,
+              "uid": "c6d21ec4-6bdf-55df-b4d4-05cb531bf4bd"
+            },
+            {
+              "content": "The user wore the same shoes on two short outings before using them on a long walk.",
+              "content_digest": "0d7ed5656f35f4fe025c6ba80e4c829f5b9851c193f981de9a461f848317d60a",
+              "position": 4,
+              "uid": "a6424854-e51e-5afc-8b9f-9e2f0273f70e"
+            },
+            {
+              "content": "On a day the user dried an umbrella outside the entrance, they found it immediately before the next outing.",
+              "content_digest": "dbc2453ca5f895e2cfe7f58e5624cf4c5d6793468af3b25df7e9a4ddb7d50159",
+              "position": 5,
+              "uid": "1b436b46-3d1f-5aa2-99e3-94b7c2412bfd"
+            },
+            {
+              "content": "On a day the user put a folded wet umbrella in their bag, documents inside became wet.",
+              "content_digest": "1f63fbc8c6b491a734f0f7a4190e26aec22826c1ff839242e0ca71d933312c9c",
+              "position": 6,
+              "uid": "ccd1f422-6130-5f19-869e-681102a3a1fa"
+            },
+            {
+              "content": "When rain is forecast, the user's mother expects the user may forget an umbrella and sets out a spare at the entrance.",
+              "content_digest": "80bdfaefb6f781aa91ef7217331e75f09b4766650c2b078dfadf592b2eb27b08",
+              "position": 7,
+              "uid": "c69a8e87-2b6f-5514-ab0d-0037531592f8"
+            },
+            {
+              "content": "When proposing a long-distance walking plan, check both the weather that day and recent records of shoe discomfort.",
+              "content_digest": "f54a546d423099c3abbb65bb49e4ddf773a8191dcffbb8b3d5153dfd70553b73",
+              "position": 8,
+              "uid": "4567ea9f-1800-51ed-bfac-f4cdf674d4cf"
+            },
+            {
+              "content": "Even if the local agent knows a shoe's location, it cannot know its current condition or whether it is usable.",
+              "content_digest": "28202c222ca800a5e19dbaebea2b3c992748f530a695517cf123b10187a31bc8",
+              "position": 9,
+              "uid": "a4ff1b76-755d-530a-b24c-8655115e4fbe"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "7848ab0d-ff02-440c-9eac-4c19a03e0a4d"
+        },
+        {
+          "context_digest": "1d47d83944d91bc0316a61894412e9b4361758603b9532687cf68473f1d30198",
+          "context_name": "task-3/local/personal-memory/2026/01",
+          "context_uid": "e48e6eac-20f7-599d-9f76-4238bd9dd96d",
+          "memories": [
+            {
+              "content": "The user keeps gloves and scarves in a basket inside the entrance.",
+              "content_digest": "df54c52cb6bc89e2e66c747df9807c6892db272c2a23ac5ac91e3f64aaa2a5da",
+              "position": 0,
+              "uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409"
+            },
+            {
+              "content": "On a day the user could not find their gloves, they walked with their hands in their pockets and missed the bus.",
+              "content_digest": "d4205aee5fe3f2c18adc3622930cc7f74de231de9812ca594dbd95a0af7199ff",
+              "position": 1,
+              "uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5"
+            },
+            {
+              "content": "Before the next outing, the user put the gloves in the entrance basket the night before and left on time.",
+              "content_digest": "23a7026d7d1a7edd3278e7b8aa147ef0d315059663f78da5498ad6c1b4a5407c",
+              "position": 2,
+              "uid": "a11f0943-8ee1-5305-87fb-64982fb36f82"
+            },
+            {
+              "content": "On a snowy day, the user chose a shorter route but turned back at stairs that had not been cleared of snow.",
+              "content_digest": "e9e241d2bc4d7c2fa9a44471aa6d1c16d42d50fe2ed99ccfb50713107714be9b",
+              "position": 3,
+              "uid": "f623f245-cdd5-5080-8869-b52cf2914076"
+            },
+            {
+              "content": "The next day, the user took a cleared sidewalk along the main road and avoided slippery sections.",
+              "content_digest": "62c8ec8b38778e9922cf433af4ceb4d59f60bee52dc758e3b88bb1163637f108",
+              "position": 4,
+              "uid": "17ac56f1-1302-5350-99d5-b95ef7feb768"
+            },
+            {
+              "content": "The user fell asleep with the heat turned up, became too warm before dawn, and woke twice.",
+              "content_digest": "912dbbc88a0f4a174b714a794793781f4d2f6c889f73cd7f825338addcab5d6c",
+              "position": 5,
+              "uid": "96988fa9-44b1-511e-8c99-4372f902cfe3"
+            },
+            {
+              "content": "The next night, the user turned down the heat and used one additional thin blanket.",
+              "content_digest": "3d12a4609d4731ebe71bacc841c979ac3497553238c3b5c2191842bbf075ba89",
+              "position": 6,
+              "uid": "b628acaa-50da-552c-8665-244dc4ab8263"
+            },
+            {
+              "content": "On a morning with heavy snow, the user's father expects the user will worry about road conditions and sends a text before departure.",
+              "content_digest": "dcd6bcb23bee46e49813bb14dd8dcb91983d5830f0536d7f23fcdb3a8af0667c",
+              "position": 7,
+              "uid": "08dfb937-7b28-55b5-801c-c0da00cbd414"
+            },
+            {
+              "content": "Before proposing a winter travel route, check recent snow-clearing conditions and accessible entrances.",
+              "content_digest": "dcab87102a9979c51dd369d5ba5ed00b7445c8ccd14450edcb8bec7859689606",
+              "position": 8,
+              "uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d"
+            },
+            {
+              "content": "The local agent cannot know the actual condition of the sidewalk the user will take from a weather forecast alone.",
+              "content_digest": "6b4bcc2f2f508f130c047ff677cadae0eae5b4cc5e5dd6bb3a1fb3784d7793b1",
+              "position": 9,
+              "uid": "802c4031-57de-592a-9bc8-6ee3d54921c8"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "36b46c62-dfb1-44aa-9382-d860b12d4ab3"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames converge on entrance staging of weather gear, family support before difficult weather, evidence-based route planning, and limits on inferred real-world conditions. They separately preserve lessons about rain footwear, shoe chafing, wet umbrellas, snow-safe routing, and sleep temperature.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "7848ab0d-ff02-440c-9eac-4c19a03e0a4d",
+              "memory_uid": "82c1e806-de3a-5633-8a08-175487e69fd6"
+            },
+            {
+              "frame_uid": "7848ab0d-ff02-440c-9eac-4c19a03e0a4d",
+              "memory_uid": "1b436b46-3d1f-5aa2-99e3-94b7c2412bfd"
+            },
+            {
+              "frame_uid": "36b46c62-dfb1-44aa-9382-d860b12d4ab3",
+              "memory_uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409"
+            },
+            {
+              "frame_uid": "36b46c62-dfb1-44aa-9382-d860b12d4ab3",
+              "memory_uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5"
+            },
+            {
+              "frame_uid": "36b46c62-dfb1-44aa-9382-d860b12d4ab3",
+              "memory_uid": "a11f0943-8ee1-5305-87fb-64982fb36f82"
+            }
+          ],
+          "reason": "The memories describe weather accessories kept near the entrance, successful retrieval when staged there, or delay when an accessory could not be found; they materially inform the same organization policy.",
+          "status": "RESOLVED",
+          "summary": "Both frames associate designated entrance storage of weather gear with reliable retrieval and departure readiness.",
+          "uid": "6307e77f-0ea6-5e08-9d30-336a8839000d"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "7848ab0d-ff02-440c-9eac-4c19a03e0a4d",
+              "memory_uid": "c69a8e87-2b6f-5514-ab0d-0037531592f8"
+            },
+            {
+              "frame_uid": "36b46c62-dfb1-44aa-9382-d860b12d4ab3",
+              "memory_uid": "08dfb937-7b28-55b5-801c-c0da00cbd414"
+            }
+          ],
+          "reason": "Rain prompts an umbrella spare, while heavy snow prompts a road-condition message; these are complementary instances of anticipatory family support.",
+          "status": "RESOLVED",
+          "summary": "Both frames describe a parent anticipating a weather-related departure difficulty and offering help before the user leaves.",
+          "uid": "d911f4a5-cf9e-5f16-ab6c-1520898a3d37"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "7848ab0d-ff02-440c-9eac-4c19a03e0a4d",
+              "memory_uid": "4567ea9f-1800-51ed-bfac-f4cdf674d4cf"
+            },
+            {
+              "frame_uid": "36b46c62-dfb1-44aa-9382-d860b12d4ab3",
+              "memory_uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d"
+            }
+          ],
+          "reason": "Weather and shoe-discomfort records inform long walks, while snow clearance and accessible entrances inform winter travel; both govern evidence-based route planning without contradiction.",
+          "status": "RESOLVED",
+          "summary": "Both frames require route proposals to consider recent, decision-relevant conditions beyond a generic travel plan.",
+          "uid": "8f65f120-b8cf-5487-bf53-a77c9b679d47"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "7848ab0d-ff02-440c-9eac-4c19a03e0a4d",
+              "memory_uid": "a4ff1b76-755d-530a-b24c-8655115e4fbe"
+            },
+            {
+              "frame_uid": "36b46c62-dfb1-44aa-9382-d860b12d4ab3",
+              "memory_uid": "802c4031-57de-592a-9bc8-6ee3d54921c8"
+            }
+          ],
+          "reason": "Knowing a shoe's location does not reveal its condition, and a forecast does not reveal the actual sidewalk condition; both constrain unsupported real-world inferences.",
+          "status": "RESOLVED",
+          "summary": "Both frames warn that limited contextual knowledge does not establish the current usability or safety of a physical travel condition.",
+          "uid": "e158feed-a118-5c94-8807-37bf220bbf78"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7848ab0d-ff02-440c-9eac-4c19a03e0a4d",
+              "memory_uid": "25df6384-836f-5f8e-bd97-73a1fb171c48"
+            },
+            {
+              "frame_uid": "7848ab0d-ff02-440c-9eac-4c19a03e0a4d",
+              "memory_uid": "55abae4f-206a-586e-8b35-406d7525c0a1"
+            }
+          ],
+          "reason": "These reference-side episodes jointly express a specific lesson about selecting waterproof footwear for rain that the compared frame does not address.",
+          "status": "RESOLVED",
+          "summary": "Thin shoes led to wet socks in rain, whereas waterproof shoes kept the user's feet dry on the next rainy day.",
+          "uid": "0eca46be-53a3-53f9-84bf-6c8e991ebcc2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7848ab0d-ff02-440c-9eac-4c19a03e0a4d",
+              "memory_uid": "c6d21ec4-6bdf-55df-b4d4-05cb531bf4bd"
+            },
+            {
+              "frame_uid": "7848ab0d-ff02-440c-9eac-4c19a03e0a4d",
+              "memory_uid": "a6424854-e51e-5afc-8b9f-9e2f0273f70e"
+            }
+          ],
+          "reason": "The paired reference-side memories form one experience about distance-dependent shoe discomfort, with no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "Short outings in new shoes did not prevent heel chafing during a later long walk, which caused the user to shorten the route.",
+          "uid": "2150c34d-6578-5a94-9d35-dcc5dbb589ce"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7848ab0d-ff02-440c-9eac-4c19a03e0a4d",
+              "memory_uid": "ccd1f422-6130-5f19-869e-681102a3a1fa"
+            }
+          ],
+          "reason": "This is an independently useful reference-side consequence concerning wet-umbrella handling that is absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Putting a folded wet umbrella in a bag caused documents inside to become wet.",
+          "uid": "f5c0ce4d-8563-55dc-8ae7-9ad2c56ca558"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "36b46c62-dfb1-44aa-9382-d860b12d4ab3",
+              "memory_uid": "f623f245-cdd5-5080-8869-b52cf2914076"
+            },
+            {
+              "frame_uid": "36b46c62-dfb1-44aa-9382-d860b12d4ab3",
+              "memory_uid": "17ac56f1-1302-5350-99d5-b95ef7feb768"
+            }
+          ],
+          "reason": "These compared-side episodes jointly describe adapting route choice to actual snow clearance, a specific experience not present in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "After uncleared snowy stairs blocked a shorter route, the user used a cleared main-road sidewalk and avoided slippery sections the next day.",
+          "uid": "200fd76e-ff49-5249-a43a-018b901287eb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "36b46c62-dfb1-44aa-9382-d860b12d4ab3",
+              "memory_uid": "96988fa9-44b1-511e-8c99-4372f902cfe3"
+            },
+            {
+              "frame_uid": "36b46c62-dfb1-44aa-9382-d860b12d4ab3",
+              "memory_uid": "b628acaa-50da-552c-8665-244dc4ab8263"
+            }
+          ],
+          "reason": "The compared-side memories form one temperature-management adjustment for sleep that the reference frame does not address.",
+          "status": "RESOLVED",
+          "summary": "Excess heat disrupted the user's sleep, after which they lowered the heat and added one thin blanket the following night.",
+          "uid": "35c4cc48-7ebc-5a37-afc6-023e8bb95f39"
+        }
+      ],
+      "reports": {
+        "both": "Both support entrance-based weather-gear readiness, anticipatory family help, context-sensitive route planning, and caution about inferring current physical conditions from limited information.",
+        "compared_only": "The compared frame records adapting routes to snow clearance and improving sleep by lowering heat while adding a thin blanket.",
+        "differences": "",
+        "reference_only": "The reference records rain-footwear outcomes, long-walk chafing despite short trials, and document damage from bagging a wet umbrella."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "8cf5193a-52a7-47eb-99d2-44244edd9444"
+    },
+    "analysis_digest": "d713b7dc09bf4c6418b4ac3d0db622b1c17ec2e47ed4573b8404289687ca2f7d",
+    "key": "ec59c37af18dae8e421e9bb541e08d7813529986ed5709647c99644299afaae3",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 65.04541912500281,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "ec59c37af18dae8e421e9bb541e08d7813529986ed5709647c99644299afaae3",
+  "created_at": "2026-08-13T18:54:22.905287Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/10",
+  "pair_key": "88e2b4208aaa1a3d3478be00c5e2066240c4797f0b32eec7b125342ad727b518",
+  "provider_seconds": 65.04541912500281,
+  "right": "task-3/local/personal-memory/2026/01",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

@@ -1,0 +1,326 @@
+{
+  "coverage": {
+    "expected": 34,
+    "observed": 34
+  },
+  "created_at": "2026-08-11T00:37:33.200633Z",
+  "description_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+  "issues": [],
+  "kind": "STUDY_COMPARE_GRAPH_PAIR",
+  "left": {
+    "context_digest": "575a6469cd861141af21f23427ca2f750d8e4fceb992f86ec9326fe88653f18d",
+    "context_uid": "37cd6139-4882-5fd3-a261-97370a3b5d12",
+    "memory_count": 9,
+    "name": "task-3/local/guardrails/approval-and-delivery"
+  },
+  "method": "COMPACT_DECISION_VECTOR_V1",
+  "operation": "COMPARE",
+  "pair_key": "2536d99fe1b4de8c23d6603b150581ec18783769cae0e427631f61f69cb2911d",
+  "provider": {
+    "condition": "COMPACT_DECISION_VECTOR",
+    "contract_valid": true,
+    "elapsed_seconds": 87.45213758399768,
+    "error_type": null,
+    "failure_category": null,
+    "operation": "compare_contexts_compact_ab_v1",
+    "prompt_chars": 15508,
+    "provider_calls": 1,
+    "provider_run": {
+      "completion_tokens": null,
+      "identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "operation": "compare_contexts_compact_ab_v1",
+      "prompt_tokens": null,
+      "upstream_model": "gpt-5.6-sol",
+      "upstream_provider": "openai-codex"
+    },
+    "provider_seconds": 87.45118008299323,
+    "response_bytes": 1187,
+    "response_chars": 1187,
+    "schema_chars": 1380,
+    "validation_error": null,
+    "validation_seconds": 0.0009481669985689223
+  },
+  "relations": [
+    {
+      "comment": "The compared frame allows recipient, purpose, information-list, or channel fields to be marked unknown when unverifiable, whereas the reference requires the actual recipient, purpose, and exact Memory list before transmission.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "96442184-816a-58f1-a72d-40eb907688fe",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "33169da3-3a2a-5e33-8fe2-66dbe9c0b641",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "f449bbaa-c795-51b3-8f19-f6f26d819445",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "777f7b41-569d-5496-b079-3067dfed49d9",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "2955e504-e422-562a-ba1d-9c91e673b119",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000001",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "9b905e4c-8522-5138-bc4e-b4deb308d28d",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "ce35336a-9b15-5448-b664-d6e8a5306d32",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "14d28101-761a-5d2a-8f80-d89f526b8598",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "1b4f6c8d-818b-50db-9ae2-ae92bbd94264",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000002",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "d7d7f1a5-f831-5d03-9137-ae485cebb67a",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "8cc545c2-9808-5401-b845-ac3a2f0a72e3",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "1076a390-d7d1-5d72-8271-35a3d7770942",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "1cf83eaa-ceff-5436-a108-c5e4dede0f9d",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000003",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "The reference addresses a recipient's possible retention judgment, while the compared frame leaves actual retention permission contingent on applicable policy.",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "b0db9a0f-f96d-5766-b1fb-483e89d0b4a3",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "d5722825-ebd9-56ce-979f-992db24e6709",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000004",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "The reference addresses a recipient's possible internal-forwarding judgment, while the compared frame leaves actual forwarding authority contingent on applicable rules.",
+      "kind": "COMPATIBLE",
+      "members": [
+        {
+          "memory_uid": "319e6774-f20f-571e-b92f-e6c71f345320",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "40110fb1-4797-52f9-8718-caaf668cac9d",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000005",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "adba0a3f-38b0-5869-bcaf-7c940cf3c95d",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "250cba93-dc05-52eb-9e0d-a4a191ed50de",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "39b5e1f6-782d-5da1-86e0-13229940671a",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000006",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "b696bf85-364e-532c-a6ae-5d049b311368",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "bea24cd0-a2c6-5445-aa78-805175f4518a",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000007",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "aa464413-c292-58ea-8785-1da5620c3fdb",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "62b94e08-bea9-5e9b-bd55-7aba3c8d0e45",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000008",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "dcf1b441-c8bd-541d-a26b-839b19ef33f8",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000009",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "6c3b4e2d-994e-5d0f-9628-0ca35366dc13",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000010",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "c81aebd6-81ab-5ab5-8e5a-9bacdb7228a0",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000011",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "1b3925ec-6490-5d7e-9492-2dd7e9093da2",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "03681efd-c272-54d0-bfb1-d2ee68647e1f",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "b9835a1e-de2d-56da-9f7d-7f9ebbf07908",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000012",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "c99b4cb8-3d97-5ed1-85c5-786ab54acd21",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000013",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "fcb07dc8-574b-5274-949c-392ca6ccd011",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000014",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "88548b91-8546-5321-8fa1-1ddb3571b97a",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000015",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "67b0db35-5f3b-54dc-968d-9679441cf499",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000016",
+      "status": "RESOLVED"
+    }
+  ],
+  "right": {
+    "context_digest": "0302f4dfe4e11809cc2ca075cf351c0ae9d52b18873ea20931fbb0ea0199d8c3",
+    "context_uid": "1ed7cefe-167c-59fb-acb7-fcf3cbbdad46",
+    "memory_count": 25,
+    "name": "task-3/remote/government/healthcare-agent/info-request/transmission-guidance"
+  },
+  "schema_version": 1,
+  "semantic_content_in_participant_report": false,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

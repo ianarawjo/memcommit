@@ -1,0 +1,397 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:51:19.612137+00:00",
+      "frames": [
+        {
+          "context_digest": "43b741cd1df20a084f3517aec7f886d4e5022812f0536eb126a6caf2d5570489",
+          "context_name": "task-3/local/personal-memory/2025/05",
+          "context_uid": "1f913bb6-790c-5490-a20d-127c7aab5892",
+          "memories": [
+            {
+              "content": "The user keeps two potted herbs beside a south-facing window.",
+              "content_digest": "b79056c033f208bb02b99fef1c011e5537e2ea8c19c3894863c3a5ad56054e08",
+              "position": 0,
+              "uid": "cb09b8ab-c7c4-51bb-a227-039c7cdfae5d"
+            },
+            {
+              "content": "During a week when the user watered every day based only on the soil surface, the leaves of one plant turned yellow.",
+              "content_digest": "042f4be9fd5481a7252d1c0065e95085e11e81e475531afe45b9f1d268d4c5b4",
+              "position": 1,
+              "uid": "95978183-0070-5b12-b117-be39bb343a5e"
+            },
+            {
+              "content": "During a week when the user checked below the soil surface with a finger before watering, the plant grew new leaves.",
+              "content_digest": "06ca2ec53f03677fdfd78bb1d391f197d3f49b974f6e812f25ba49ce34f74249",
+              "position": 2,
+              "uid": "8c610ce5-1eb7-52e5-ad81-e8062d23cd19"
+            },
+            {
+              "content": "On a day the user left the window open for a long time, strong wind knocked over one pot.",
+              "content_digest": "914f67a75fdf73cee064a465a9f0e6ee9ba012f1a40c614e199a9354756203a8",
+              "position": 3,
+              "uid": "3f886c0c-071b-5f2d-adad-da01345d702f"
+            },
+            {
+              "content": "The next day, the user moved the pot inward from the windowsill so the same wind would not knock it over.",
+              "content_digest": "f190916b360b6543865ced49cf5d9a987e96c9147966181e5920342bb41ba50c",
+              "position": 4,
+              "uid": "afe855b8-f5ad-559c-a63f-6f655ba371a2"
+            },
+            {
+              "content": "The user put a plant-name label in a small pot received from their maternal aunt.",
+              "content_digest": "82284f0102305db41eaaecafe86bc05833090853320f2ebb8e5f44abb2d78a63",
+              "position": 5,
+              "uid": "384c4f5f-b15c-5742-ac79-20106d0dd30b"
+            },
+            {
+              "content": "The user confused the care instructions for an unlabeled pot with those for another plant.",
+              "content_digest": "824267db866253690527d5ab08166f4228401443ed903708d33ac22542811750",
+              "position": 6,
+              "uid": "48dc89af-ed9d-51a5-a4b1-b809fd818143"
+            },
+            {
+              "content": "The user's maternal aunt considers understanding the sunlight at a pot's location more important than watering frequency when caring for it.",
+              "content_digest": "8a24f6df4a58db3e538f77e572a3cf152b7a4aff3527ec3d8616e85a675bc7c0",
+              "position": 7,
+              "uid": "a2426820-65d6-5c78-ac50-0f32b366ae47"
+            },
+            {
+              "content": "Before creating a plant-care reminder, check each plant's name and most recent watering date.",
+              "content_digest": "ecd7ef911951f3c2383cd916a4efbd94bdf439f63de1687c2f637a161ac8a60d",
+              "position": 8,
+              "uid": "efd51196-ed48-5699-a0f4-c5b8e149d11c"
+            },
+            {
+              "content": "The soil in the user's potted herbs beside the south-facing window dries at different rates depending on the season and amount of sunlight.",
+              "content_digest": "f716b16e802d30d4c2d1ed4bff855812682e53a9fc4e29988e2662ae321d0a4f",
+              "position": 9,
+              "uid": "4c93eeff-566e-5a1a-afb9-035c97fb9c73"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "91bfc63f-0f65-4d72-9d0d-f2a27308eaf4"
+        },
+        {
+          "context_digest": "4b8dc68a205171fe661b04620d0fba2bbb386ff21d494699c34a74dc2ab86080",
+          "context_name": "task-3/local/personal-memory/2026/03",
+          "context_uid": "97d36150-4792-5a5c-9332-5eb1de8bcf04",
+          "memories": [
+            {
+              "content": "The user stores tax-related receipts in digital folders by year.",
+              "content_digest": "778f983547572b31798b7041899812a7b0b574d74b585baf6883e94919dee6ec",
+              "position": 0,
+              "uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393"
+            },
+            {
+              "content": "The user found three paper receipts late and recalculated the expense total already prepared.",
+              "content_digest": "542368a141ec82a1bd7da4b534d88ea62c487d16a37f454569bf6400cbc749e9",
+              "position": 1,
+              "uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878"
+            },
+            {
+              "content": "Starting the next month, the user photographed receipts on the day they were received and reduced omissions.",
+              "content_digest": "b95e0a1afa1196a9bff117bf12b1630edcc4eb65bfdfeb3128ae5937563a492e",
+              "position": 2,
+              "uid": "ff436ea5-1b3e-55df-8302-bd8a96740671"
+            },
+            {
+              "content": "The user named every file with only the photo date and spent a long time looking for a needed receipt.",
+              "content_digest": "c3aa33e0b7e007bdfc5c12dcda659e2a52938548fbf53d5a1ab034487a528857",
+              "position": 3,
+              "uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e"
+            },
+            {
+              "content": "The user later included the expense category in the filename and found the receipt immediately through search.",
+              "content_digest": "cdae97761f614b932d3b330723627bee8b0e3d033e2bf1061b721367237acee1",
+              "position": 4,
+              "uid": "89d6fa9a-b795-59df-be34-1c05a9861d35"
+            },
+            {
+              "content": "While reviewing documents just before submission, the user discovered one blank signature field.",
+              "content_digest": "a525c117b97eec82c678f276b319158703bf9cc558fb83cb81c0820d5c9e3174",
+              "position": 5,
+              "uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2"
+            },
+            {
+              "content": "Before submitting an administrative document, the user checks the signature field as the final item on the checklist.",
+              "content_digest": "542bec3cbc3fc8b22c95da274e479e96bfbf061a3b644d0d7f213de5a030dbd5",
+              "position": 6,
+              "uid": "5551622f-66cf-5542-8c47-1cddadab5c02"
+            },
+            {
+              "content": "Staff at a tax-support counter expect to receive an electronic copy in which every item is legible rather than a blurred or cropped photo.",
+              "content_digest": "d328ca248fdeecf0756e23b1202e7007bc8c3c25ae769439b0fd2efdbbe47580",
+              "position": 7,
+              "uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f"
+            },
+            {
+              "content": "The local agent can organize receipts by date and category but cannot determine whether an expense is deductible.",
+              "content_digest": "bcc769721a99b099ca20e5e527fa8904d54ecbaf9ae7d7616b95e1adaf1f89a9",
+              "position": 8,
+              "uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094"
+            },
+            {
+              "content": "The accepted scope and submission deadlines for administrative documents may vary under that year's guidance.",
+              "content_digest": "1ab61126b8efb0c2a9c6114c367018158f2e136bafa87e33f60aadb0686d0537",
+              "position": 9,
+              "uid": "de398064-3179-590b-8c62-effb17060115"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "ba8befd0-9ad0-45a5-8162-ff4585a4e3a6"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate practical domains: plant care and placement versus receipt handling and document submission. Each side contains internally related observations, responses, and guidance, but no claims address the same operational decision closely enough to support a cross-frame relation or conflict.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "91bfc63f-0f65-4d72-9d0d-f2a27308eaf4",
+              "memory_uid": "cb09b8ab-c7c4-51bb-a227-039c7cdfae5d"
+            }
+          ],
+          "reason": "This is one-sided environmental context with no compared-frame claim about plant location or growing conditions.",
+          "status": "RESOLVED",
+          "summary": "Two potted herbs are kept beside a south-facing window.",
+          "uid": "b513bc3c-5caa-525b-9941-b8805ebfb72b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "91bfc63f-0f65-4d72-9d0d-f2a27308eaf4",
+              "memory_uid": "95978183-0070-5b12-b117-be39bb343a5e"
+            },
+            {
+              "frame_uid": "91bfc63f-0f65-4d72-9d0d-f2a27308eaf4",
+              "memory_uid": "8c610ce5-1eb7-52e5-ad81-e8062d23cd19"
+            }
+          ],
+          "reason": "The two observations split one plant-watering comparison: daily surface-led watering accompanied yellowing, while subsurface checking accompanied new growth.",
+          "status": "RESOLVED",
+          "summary": "Observed outcomes favor checking moisture below the surface over watering daily based only on surface appearance.",
+          "uid": "0d3f8d6f-b847-575c-bf01-a00dccae653f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "91bfc63f-0f65-4d72-9d0d-f2a27308eaf4",
+              "memory_uid": "3f886c0c-071b-5f2d-adad-da01345d702f"
+            },
+            {
+              "frame_uid": "91bfc63f-0f65-4d72-9d0d-f2a27308eaf4",
+              "memory_uid": "afe855b8-f5ad-559c-a63f-6f655ba371a2"
+            }
+          ],
+          "reason": "The incident and response form one plant-placement safety episode without a counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A wind-related pot accident led the user to move the pot inward to prevent recurrence.",
+          "uid": "018fe84e-b365-5c9a-8212-f375bd384a23"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "91bfc63f-0f65-4d72-9d0d-f2a27308eaf4",
+              "memory_uid": "384c4f5f-b15c-5742-ac79-20106d0dd30b"
+            },
+            {
+              "frame_uid": "91bfc63f-0f65-4d72-9d0d-f2a27308eaf4",
+              "memory_uid": "48dc89af-ed9d-51a5-a4b1-b809fd818143"
+            }
+          ],
+          "reason": "The labeling action and prior unlabeled-pot confusion split one plant-identification claim unique to the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Plant-name labeling addresses the risk of confusing care instructions between pots.",
+          "uid": "769ed661-95a0-5a9e-bcd7-d2aa870e4f5d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "91bfc63f-0f65-4d72-9d0d-f2a27308eaf4",
+              "memory_uid": "a2426820-65d6-5c78-ac50-0f32b366ae47"
+            }
+          ],
+          "reason": "This attributed plant-care priority has no corresponding compared-frame policy.",
+          "status": "RESOLVED",
+          "summary": "The maternal aunt prioritizes understanding sunlight at a pot’s location over watering frequency.",
+          "uid": "bc1b20d9-d5b3-5cf1-9899-2dbb24d0a60f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "91bfc63f-0f65-4d72-9d0d-f2a27308eaf4",
+              "memory_uid": "efd51196-ed48-5699-a0f4-c5b8e149d11c"
+            }
+          ],
+          "reason": "This reminder prerequisite is independently useful plant-care guidance found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Plant name and most recent watering date should be checked before creating a care reminder.",
+          "uid": "fef976f6-ee80-569c-be39-24c8969347af"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "91bfc63f-0f65-4d72-9d0d-f2a27308eaf4",
+              "memory_uid": "4c93eeff-566e-5a1a-afb9-035c97fb9c73"
+            }
+          ],
+          "reason": "This plant-specific variability claim has no compared-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "The herbs’ soil dries at rates that vary with season and sunlight.",
+          "uid": "8bbd6216-1c4d-56d2-a9eb-e48e0d11976f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ba8befd0-9ad0-45a5-8162-ff4585a4e3a6",
+              "memory_uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393"
+            }
+          ],
+          "reason": "This receipt-storage practice appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Tax-related receipts are stored in year-based digital folders.",
+          "uid": "7d580023-27ed-5c8d-8ddd-65979fa0b633"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ba8befd0-9ad0-45a5-8162-ff4585a4e3a6",
+              "memory_uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878"
+            },
+            {
+              "frame_uid": "ba8befd0-9ad0-45a5-8162-ff4585a4e3a6",
+              "memory_uid": "ff436ea5-1b3e-55df-8302-bd8a96740671"
+            }
+          ],
+          "reason": "The omission incident and changed capture practice split one receipt-completeness improvement claim unique to the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Late paper receipts caused an expense-total recalculation, while same-day receipt photography subsequently reduced omissions.",
+          "uid": "6ac22115-bc05-542e-8301-51becfb0da75"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ba8befd0-9ad0-45a5-8162-ff4585a4e3a6",
+              "memory_uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e"
+            },
+            {
+              "frame_uid": "ba8befd0-9ad0-45a5-8162-ff4585a4e3a6",
+              "memory_uid": "89d6fa9a-b795-59df-be34-1c05a9861d35"
+            }
+          ],
+          "reason": "The slow date-only search and later immediate category-assisted search form one file-naming comparison without a reference-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "Adding expense categories to date-based filenames improved receipt retrieval through search.",
+          "uid": "da818ea1-0081-53c2-aef8-91f9e8e41fbd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ba8befd0-9ad0-45a5-8162-ff4585a4e3a6",
+              "memory_uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2"
+            },
+            {
+              "frame_uid": "ba8befd0-9ad0-45a5-8162-ff4585a4e3a6",
+              "memory_uid": "5551622f-66cf-5542-8c47-1cddadab5c02"
+            }
+          ],
+          "reason": "The oversight and resulting checklist practice split one signature-verification claim unique to the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Discovery of a blank signature field led to checking the signature field last before administrative submission.",
+          "uid": "7cb8d05b-53b2-5b90-a1b3-b65679104d68"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ba8befd0-9ad0-45a5-8162-ff4585a4e3a6",
+              "memory_uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f"
+            }
+          ],
+          "reason": "This document-quality expectation appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Tax-support staff expect electronic copies whose contents are fully legible rather than blurred or cropped.",
+          "uid": "027cd74e-79fa-5bc3-8325-4b93296f5d8a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ba8befd0-9ad0-45a5-8162-ff4585a4e3a6",
+              "memory_uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094"
+            }
+          ],
+          "reason": "This capability boundary is independently useful and has no corresponding reference-frame claim.",
+          "status": "RESOLVED",
+          "summary": "The local agent can organize receipts by date and category but cannot determine deductibility.",
+          "uid": "9b1cf655-e9f9-588c-be42-74d29e3fbb2b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ba8befd0-9ad0-45a5-8162-ff4585a4e3a6",
+              "memory_uid": "de398064-3179-590b-8c62-effb17060115"
+            }
+          ],
+          "reason": "This year-dependent administrative constraint appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Accepted document scope and submission deadlines may vary with the applicable year’s guidance.",
+          "uid": "ec6f2fa4-656a-52c0-9fb4-508375c93f55"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers receipt capture, storage and searchable naming, signature checks, copy legibility, organizational limits, and guidance-dependent submission scope and deadlines.",
+        "differences": "",
+        "reference_only": "The reference describes herb placement, moisture-based watering evidence, wind protection, plant labeling, sunlight and seasonal drying, and checks needed before creating care reminders."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "c36d45a2-a2ad-4df5-87c9-d7b80214970c"
+    },
+    "analysis_digest": "2d0a71a8efbff7ce2e51323c0528a5c942734f3982c51b05fc708050510d9cec",
+    "key": "614ab7002efd544cbf0fc5cb9b9f8a6727ed362fe571a00ffee0a5ecef958db8",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 54.39180704099999,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "614ab7002efd544cbf0fc5cb9b9f8a6727ed362fe571a00ffee0a5ecef958db8",
+  "created_at": "2026-08-13T18:52:14.003188Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/05",
+  "pair_key": "85870e0beb7a19e95d85cb8740098dbed0b90554f2ed714e7ec668bededf314d",
+  "provider_seconds": 54.39180704099999,
+  "right": "task-3/local/personal-memory/2026/03",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

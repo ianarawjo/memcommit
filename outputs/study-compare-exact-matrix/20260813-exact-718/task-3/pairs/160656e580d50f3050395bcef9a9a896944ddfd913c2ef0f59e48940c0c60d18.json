@@ -1,0 +1,397 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:40:37.394011+00:00",
+      "frames": [
+        {
+          "context_digest": "6cb54691fcd12037c24daa71882bad82cd67c16ea72979f2a41e1e1b8eae22a8",
+          "context_name": "task-3/local/personal-memory/2024/06",
+          "context_uid": "8c641e5b-01d9-560c-a8c0-b52cee7402c8",
+          "memories": [
+            {
+              "content": "The user stores copies of identity documents in an encrypted folder.",
+              "content_digest": "83efe427335c1415d4a8d601d6e1c5d7a129c6962b74468d313b123e045b052f",
+              "position": 0,
+              "uid": "79576c1e-fa88-5d6e-b5e2-3d4ec11c3e06"
+            },
+            {
+              "content": "On a day the user transferred between buses twice, they rested for an hour after the trip.",
+              "content_digest": "907b9cc4c16b4b3fe53c2323d31afc83347ddc63775bd865bc42b62ca539f5bb",
+              "position": 1,
+              "uid": "28a1ff0b-e2d4-5cb6-9c26-949d86f76bac"
+            },
+            {
+              "content": "On a day the user took a direct route with a similar travel time, they remained seated to the destination.",
+              "content_digest": "0c0d1b12aa0ad393ac43982fe7d36d08f75d9e634c933593ef6a0a96614bb9ea",
+              "position": 2,
+              "uid": "0ad4a1f9-e3e9-517e-8cfc-f8e6307f1d3e"
+            },
+            {
+              "content": "After arriving at an entrance with stairs only, the user went around to an entrance on the other side of the building.",
+              "content_digest": "775d4c0a211f4509a0488cb3b2a790ae22c1b2ba2e96ed6b9100ae3cfb454315",
+              "position": 3,
+              "uid": "f772b0c7-502f-55b7-b431-ee6b20518d38"
+            },
+            {
+              "content": "On a day the user checked the accessible entrance location in advance, they arrived before the agreed time.",
+              "content_digest": "4e087a4e0ca48a3414580ce0d974da4b2221b304302de01cf305945866320a6a",
+              "position": 4,
+              "uid": "0b2d800b-a4ab-5422-bf06-56d17b98f604"
+            },
+            {
+              "content": "On a rainy day, the user's clothes became wet while crossing an uncovered section at a transfer stop.",
+              "content_digest": "dad5c9f35f0469edc528091e47f22365c1cb5de1b32e70335826d67a576fb47d",
+              "position": 5,
+              "uid": "b233f332-4927-549b-8dab-b554977fe363"
+            },
+            {
+              "content": "On a day the user traveled with their maternal uncle, they agreed to meet at an entrance near the elevator.",
+              "content_digest": "c81b012ae6686f47d54809c50ab559077b0e170d54792d34038f0f8fc32c6a96",
+              "position": 6,
+              "uid": "b38d0d63-c4b0-5955-857d-03cbcfd27f5b"
+            },
+            {
+              "content": "The user's maternal uncle prefers an aisle seat from which it is easy to stand during long-distance travel.",
+              "content_digest": "3ea31753296866c1bf438b51eba4110b0c6ed2e907e86dc21796166ed19d82df",
+              "position": 7,
+              "uid": "4668d326-b11c-5467-bca4-e8d5e242e375"
+            },
+            {
+              "content": "The local agent cannot know whether an accessible entrance is operating that day from past route records alone.",
+              "content_digest": "00fc09badcb1d569e3cb1e392ad18406a032d17749f71b44ed7bc121d5d72b4c",
+              "position": 8,
+              "uid": "a77c985c-3986-5141-9805-e3321b3cfa2c"
+            },
+            {
+              "content": "The transfer route the user takes has more boarding and alighting events and walking segments than the direct route.",
+              "content_digest": "f9320e36494ea5beb854d6bbe38a817ae73cd9fe68b75977438d35e44fb38fe6",
+              "position": 9,
+              "uid": "988926a1-3e28-5b3e-a41c-d9338971643e"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "09d07525-40e7-45d1-9219-d1954ea0f3b0"
+        },
+        {
+          "context_digest": "07c43eb0b8ecd9107f1d879a409b45289e236f48f620ff85f1d30ce594809149",
+          "context_name": "task-3/local/personal-memory/2025/09",
+          "context_uid": "5cd8ed5f-2f1f-5deb-8347-fc3bfa484d99",
+          "memories": [
+            {
+              "content": "The user keeps the book they are reading and a note-taking notebook on a small living-room desk.",
+              "content_digest": "d2c70cf4c27fe62f5915f2f5c669484c4a875e4ee21f8d7d89a5ff6746f14cf1",
+              "position": 0,
+              "uid": "3d3f7960-daf5-5a51-98b3-14261c5aa66c"
+            },
+            {
+              "content": "While reading in the living room with the television on, the user read the same paragraph three times.",
+              "content_digest": "00e41e6d5fe1dcfe961fa0f739860823ecf338dc55d5b9beea265ca823974582",
+              "position": 1,
+              "uid": "28714a4e-bc14-5703-b594-126471ae0585"
+            },
+            {
+              "content": "The next day, after turning off the television, the user read 40 pages without interruption.",
+              "content_digest": "c28ba9c872757b6683ab03d73e6ad61f71484d55986aae4c0976862a85e3a8b1",
+              "position": 2,
+              "uid": "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df"
+            },
+            {
+              "content": "On a day the phone was on the desk, the user stopped taking notes each time they checked a notification.",
+              "content_digest": "f95cb8b1b8abe89d7bf597ca5fb78f0862fe97a7cf0d8bc5a46c04026ebd6889",
+              "position": 3,
+              "uid": "1b1c9f90-2561-53d5-88fe-d54618450143"
+            },
+            {
+              "content": "During the next reading period, the user left the phone in another room and did not check it for an hour.",
+              "content_digest": "89dc50732e19b88a77657b285ce71c399d229b510265cc9adfbdf6ad706680cd",
+              "position": 4,
+              "uid": "076a7caa-5dcf-5f9d-8bee-efc952652efa"
+            },
+            {
+              "content": "A note attached to a paper book fell out, and the user had to find their place again.",
+              "content_digest": "723e48ceeba6c94e627c79af0518c811cfc8337f9eeae3a80ae388ec98786994",
+              "position": 5,
+              "uid": "1dad71ec-6a5d-550e-89d2-a86dc3dacb11"
+            },
+            {
+              "content": "With the next book, the user recorded the page number in the notebook and resumed reading immediately.",
+              "content_digest": "c74c2f80bf403da64f0a6de97ff04bc1f41cf68d0d33829fa926cc2549e8ea75",
+              "position": 6,
+              "uid": "58494743-fc7f-59e9-8e17-80b8a644470a"
+            },
+            {
+              "content": "The user's father expects that lowering the television volume while the user reads will make it easier for the user to concentrate.",
+              "content_digest": "281b1f8f55f8d22fbebdb2220405dc3e2300e29e0a568c1fac36d4bb1c39c186",
+              "position": 7,
+              "uid": "cce66589-892c-5d73-bdbc-2c6e94e0992e"
+            },
+            {
+              "content": "The local agent can summarize past reading environments and interruption records but cannot predict the next reading time.",
+              "content_digest": "50e5376e22f503048a7f1bf4055bfb31cb4aa3c75b1c816f2febce913716eb58",
+              "position": 8,
+              "uid": "20b2a27f-908f-5ed7-a288-f7c1030674fc"
+            },
+            {
+              "content": "The user feels that repeated notifications interrupt their flow of concentration.",
+              "content_digest": "d777b2a01cfac23e6ef7701c04c33592f8382fa78f8e307bae9ddbffc9a8e2ef",
+              "position": 9,
+              "uid": "310f4cfc-b117-5511-8e13-2bd2ebec9fe5"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "9d397194-e62f-46cb-805c-3c92d5aa61d5"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames contain complementary but non-overlapping information: the reference describes document security and travel accessibility experiences, while the compared frame describes reading conditions, interruption management, place-keeping, and prediction limits. No cross-frame claim governs the same operational decision.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "09d07525-40e7-45d1-9219-d1954ea0f3b0",
+              "memory_uid": "79576c1e-fa88-5d6e-b5e2-3d4ec11c3e06"
+            }
+          ],
+          "reason": "This is independently useful information about document security, with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user stores identity-document copies in an encrypted folder.",
+          "uid": "d03bc885-b519-567a-aa2e-6364a399e33a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "09d07525-40e7-45d1-9219-d1954ea0f3b0",
+              "memory_uid": "28a1ff0b-e2d4-5cb6-9c26-949d86f76bac"
+            },
+            {
+              "frame_uid": "09d07525-40e7-45d1-9219-d1954ea0f3b0",
+              "memory_uid": "0ad4a1f9-e3e9-517e-8cfc-f8e6307f1d3e"
+            },
+            {
+              "frame_uid": "09d07525-40e7-45d1-9219-d1954ea0f3b0",
+              "memory_uid": "988926a1-3e28-5b3e-a41c-d9338971643e"
+            }
+          ],
+          "reason": "These memories jointly form a one-sided comparison of the physical burden associated with transfer and direct routes; the compared frame contains no travel-route claim.",
+          "status": "RESOLVED",
+          "summary": "Transfer travel involved more transitions and walking and was followed by rest, while a similarly timed direct trip allowed the user to remain seated.",
+          "uid": "92565c3b-2f50-5cfe-a7d7-f8107e01799a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "09d07525-40e7-45d1-9219-d1954ea0f3b0",
+              "memory_uid": "f772b0c7-502f-55b7-b431-ee6b20518d38"
+            }
+          ],
+          "reason": "This is a specific accessibility-navigation response absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "When faced with a stairs-only entrance, the user went around to another entrance.",
+          "uid": "ac57f82f-01b4-572f-9ede-1e54cdb76f33"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "09d07525-40e7-45d1-9219-d1954ea0f3b0",
+              "memory_uid": "0b2d800b-a4ab-5422-bf06-56d17b98f604"
+            }
+          ],
+          "reason": "This is independently useful information about advance accessibility planning and timing, with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "After checking an accessible entrance location in advance, the user arrived before the agreed time.",
+          "uid": "a0fb97ae-41e6-5579-a8e9-5b07790d0c98"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "09d07525-40e7-45d1-9219-d1954ea0f3b0",
+              "memory_uid": "b233f332-4927-549b-8dab-b554977fe363"
+            }
+          ],
+          "reason": "This records a route-specific weather exposure not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Rain exposed the user to an uncovered transfer section and left their clothes wet.",
+          "uid": "b3361141-74a5-54c9-8bcf-22d875c4c389"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "09d07525-40e7-45d1-9219-d1954ea0f3b0",
+              "memory_uid": "b38d0d63-c4b0-5955-857d-03cbcfd27f5b"
+            }
+          ],
+          "reason": "This is a distinct travel coordination detail with no corresponding compared-side information.",
+          "status": "RESOLVED",
+          "summary": "When traveling with their maternal uncle, the user arranged to meet near an elevator entrance.",
+          "uid": "4b2efe23-57d0-56d6-9e36-21698836b58d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "09d07525-40e7-45d1-9219-d1954ea0f3b0",
+              "memory_uid": "4668d326-b11c-5467-bca4-e8d5e242e375"
+            }
+          ],
+          "reason": "This is an independently useful seating preference absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user's maternal uncle prefers an aisle seat that makes standing easier during long-distance travel.",
+          "uid": "fcdfa531-5616-5f8b-b7e0-91d30058f339"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "09d07525-40e7-45d1-9219-d1954ea0f3b0",
+              "memory_uid": "a77c985c-3986-5141-9805-e3321b3cfa2c"
+            }
+          ],
+          "reason": "This defines a limitation concerning current entrance operation, distinct from the compared frame's limitation concerning future reading time.",
+          "status": "RESOLVED",
+          "summary": "Past route records alone cannot establish whether an accessible entrance is operating on a particular day.",
+          "uid": "51aa2f6b-ecd1-5023-9042-e6110f3f50de"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9d397194-e62f-46cb-805c-3c92d5aa61d5",
+              "memory_uid": "3d3f7960-daf5-5a51-98b3-14261c5aa66c"
+            }
+          ],
+          "reason": "This is independently useful information about the reading setup, with no corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "The user keeps their current book and note-taking notebook on a small living-room desk.",
+          "uid": "bbba7d59-f129-5c3d-a604-c5fc65734561"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9d397194-e62f-46cb-805c-3c92d5aa61d5",
+              "memory_uid": "28714a4e-bc14-5703-b594-126471ae0585"
+            },
+            {
+              "frame_uid": "9d397194-e62f-46cb-805c-3c92d5aa61d5",
+              "memory_uid": "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df"
+            }
+          ],
+          "reason": "These memories split one one-sided account of how television presence relates to reading continuity; the reference frame contains no reading-environment claim.",
+          "status": "RESOLVED",
+          "summary": "Reading with the television on involved repeated rereading, whereas turning it off preceded 40 uninterrupted pages.",
+          "uid": "5d17b034-c104-5a0c-8362-070b0ee11eef"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9d397194-e62f-46cb-805c-3c92d5aa61d5",
+              "memory_uid": "1b1c9f90-2561-53d5-88fe-d54618450143"
+            },
+            {
+              "frame_uid": "9d397194-e62f-46cb-805c-3c92d5aa61d5",
+              "memory_uid": "076a7caa-5dcf-5f9d-8bee-efc952652efa"
+            },
+            {
+              "frame_uid": "9d397194-e62f-46cb-805c-3c92d5aa61d5",
+              "memory_uid": "310f4cfc-b117-5511-8e13-2bd2ebec9fe5"
+            }
+          ],
+          "reason": "These memories jointly express one one-sided claim about notification disruption and a condition that avoided it; no corresponding claim appears in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Phone notifications interrupted note-taking and concentration, while leaving the phone elsewhere enabled an hour without checking it.",
+          "uid": "858cf3f8-fd52-57c2-9584-1b71dce5e586"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9d397194-e62f-46cb-805c-3c92d5aa61d5",
+              "memory_uid": "1dad71ec-6a5d-550e-89d2-a86dc3dacb11"
+            },
+            {
+              "frame_uid": "9d397194-e62f-46cb-805c-3c92d5aa61d5",
+              "memory_uid": "58494743-fc7f-59e9-8e17-80b8a644470a"
+            }
+          ],
+          "reason": "These memories form a one-sided comparison of two place-keeping methods, with no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A loose note caused the user to lose their place, while recording the page number in a notebook enabled immediate resumption.",
+          "uid": "509c940b-2a44-532f-87ab-63e756763b76"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9d397194-e62f-46cb-805c-3c92d5aa61d5",
+              "memory_uid": "cce66589-892c-5d73-bdbc-2c6e94e0992e"
+            }
+          ],
+          "reason": "This is a family member's expectation rather than the user's observed television-on/off experience, and it has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user's father expects lower television volume to improve the user's concentration while reading.",
+          "uid": "a888fd6d-dd56-5dad-a151-c42671e5e7f1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9d397194-e62f-46cb-805c-3c92d5aa61d5",
+              "memory_uid": "20b2a27f-908f-5ed7-a288-f7c1030674fc"
+            }
+          ],
+          "reason": "This defines a limitation concerning future reading timing, distinct from the reference frame's limitation concerning current entrance operation.",
+          "status": "RESOLVED",
+          "summary": "The local agent can summarize past reading environments and interruptions but cannot predict the next reading time.",
+          "uid": "20610a48-0a56-590a-8b29-f68ea535e195"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers reading materials, television and phone distractions, interruption controls, reliable place-keeping, a family expectation about television volume, and limits on predicting future reading time.",
+        "differences": "",
+        "reference_only": "The reference covers encrypted identity-document storage, route burden and recovery, accessible-entrance navigation, weather exposure, travel arrangements and seating preferences, and limits of inferring entrance operation from route history."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "efbff634-3f65-4145-96a8-421e52b01d30"
+    },
+    "analysis_digest": "ebc1fc515fb712f95646c0cb59fef35403322f1b88009d6e8f235ea201d7c563",
+    "key": "e98dc4b4de69089f49d1ffbc40c04857208e7a782c0c2a8a783114daf55a0710",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 49.29104004200053,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "e98dc4b4de69089f49d1ffbc40c04857208e7a782c0c2a8a783114daf55a0710",
+  "created_at": "2026-08-13T18:41:26.684070Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/06",
+  "pair_key": "160656e580d50f3050395bcef9a9a896944ddfd913c2ef0f59e48940c0c60d18",
+  "provider_seconds": 49.29104004200053,
+  "right": "task-3/local/personal-memory/2025/09",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

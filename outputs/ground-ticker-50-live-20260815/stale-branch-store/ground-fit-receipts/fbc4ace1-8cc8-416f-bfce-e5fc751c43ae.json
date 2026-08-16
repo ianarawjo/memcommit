@@ -1,0 +1,270 @@
+{
+  "schema_version": 1,
+  "ruleset_version": "ground-fit-v1",
+  "uid": "fbc4ace1-8cc8-416f-bfce-e5fc751c43ae",
+  "ground_uid": "6848208c-c01b-4ed0-bf3c-ec2d50d4d170",
+  "ground_name": "ticker-50-live",
+  "ground_revision": 32,
+  "ground_digest": "c03a41afcef26b85e1e16cfd436b8dc9b228cadd64ddeb4b79c5f9375b7eb5d4",
+  "rules": [
+    {
+      "uid": "bd3c6e30-167b-4522-afd3-0c357df60f58",
+      "alias": "r1",
+      "statement": "Synthetic ticker policy: (1) For an organization name containing multiple meaningful words, form the base symbol from the initial letters of those words while omitting leading articles, legal/entity suffixes, and standalone connectors; preserve meaningful abbreviations such as “AI” as a single initial-bearing name element. (2) For a single-word organization name, use a compact prefix of that name as the base symbol rather than reducing it to one initial. (3) When an organization name ends with a share-class designation of the form “Class X,” retain the organization’s ordinary base symbol and append “.X.”"
+    }
+  ],
+  "examples": [
+    {
+      "uid": "1c1f0af3-7ef4-4b4e-966b-6e7f4afa19dc",
+      "alias": "e1",
+      "statement": "Applying the synthetic ticker policy to \"North Star Energy Inc.\" produces \"NSE\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "6461ea73-9d7d-43bf-84ad-ad58cccc9e86",
+      "alias": "e2",
+      "statement": "Applying the synthetic ticker policy to \"Blue River Logistics LLC\" produces \"BRL\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "a54fe1c7-93fa-4661-b922-ad74fa5ae7cb",
+      "alias": "e3",
+      "statement": "Applying the synthetic ticker policy to \"Redwood\" produces \"REDW\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "b7d58350-f293-4ac5-aee1-78eaa770be83",
+      "alias": "e4",
+      "statement": "Applying the synthetic ticker policy to \"Harbor Light Studios Ltd.\" produces \"HLS\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "33e9bec9-c3e9-4873-a489-687aed6a9e90",
+      "alias": "e5",
+      "statement": "Applying the synthetic ticker policy to \"The Green Valley Bank Corporation\" produces \"GVB\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "2c203665-a7e6-46e9-a472-b71e32a52c24",
+      "alias": "e6",
+      "statement": "Applying the synthetic ticker policy to \"Cedar & Stone Foods Co.\" produces \"CSF\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "d1ddb2e2-302f-41c4-8df1-fbffc00f9c1f",
+      "alias": "e7",
+      "statement": "Applying the synthetic ticker policy to \"Axiom AI Technologies Inc.\" produces \"AAT\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "93bc250e-54f8-42ab-a577-e2481bc8c152",
+      "alias": "e8",
+      "statement": "Applying the synthetic ticker policy to \"Nova Health Group PLC\" produces \"NHG\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "49cee4c6-53d6-446a-b34b-30ce7fdf6cdf",
+      "alias": "e9",
+      "statement": "Applying the synthetic ticker policy to \"North Star Energy Inc. Class B\" produces \"NSE.B\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "a90384c1-5638-466d-a5fb-783f91330eeb",
+      "alias": "e10",
+      "statement": "Applying the synthetic ticker policy to \"Blue River Logistics LLC Class A\" produces \"BRL.A\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "e3ca6391-9d0c-417a-8c73-c2fcda3ead86",
+      "alias": "e11",
+      "statement": "Applying the synthetic ticker policy to \"Redwood Class C\" produces \"REDW.C\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "838e85e5-6fa6-463f-b609-e92c8616af84",
+      "alias": "e12",
+      "statement": "Applying the synthetic ticker policy to \"Harbor Light Studios Ltd. Class B\" produces \"HLS.B\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    }
+  ],
+  "judgments": [
+    {
+      "example_uid": "1c1f0af3-7ef4-4b4e-966b-6e7f4afa19dc",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "The meaningful words North, Star, and Energy contribute N, S, and E; Inc. is omitted.",
+      "observed": ""
+    },
+    {
+      "example_uid": "6461ea73-9d7d-43bf-84ad-ad58cccc9e86",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "Blue, River, and Logistics contribute B, R, and L; LLC is omitted.",
+      "observed": ""
+    },
+    {
+      "example_uid": "a54fe1c7-93fa-4661-b922-ad74fa5ae7cb",
+      "status": "UNDERDETERMINED",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "The rule requires a compact prefix for a single-word name but does not determine that the prefix must be exactly REDW.",
+      "observed": ""
+    },
+    {
+      "example_uid": "b7d58350-f293-4ac5-aee1-78eaa770be83",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "Harbor, Light, and Studios contribute H, L, and S; Ltd. is omitted.",
+      "observed": ""
+    },
+    {
+      "example_uid": "33e9bec9-c3e9-4873-a489-687aed6a9e90",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "The leading article The and entity suffix Corporation are omitted, while Green, Valley, and Bank contribute G, V, and B.",
+      "observed": ""
+    },
+    {
+      "example_uid": "2c203665-a7e6-46e9-a472-b71e32a52c24",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "The standalone connector & and entity suffix Co. are omitted, while Cedar, Stone, and Foods contribute C, S, and F.",
+      "observed": ""
+    },
+    {
+      "example_uid": "d1ddb2e2-302f-41c4-8df1-fbffc00f9c1f",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "Axiom, AI, and Technologies are meaningful elements contributing A, A, and T; Inc. is omitted.",
+      "observed": ""
+    },
+    {
+      "example_uid": "93bc250e-54f8-42ab-a577-e2481bc8c152",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "Nova, Health, and Group contribute N, H, and G; PLC is omitted.",
+      "observed": ""
+    },
+    {
+      "example_uid": "49cee4c6-53d6-446a-b34b-30ce7fdf6cdf",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "North Star Energy has base NSE after omitting Inc., and Class B requires appending .B.",
+      "observed": ""
+    },
+    {
+      "example_uid": "a90384c1-5638-466d-a5fb-783f91330eeb",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "Blue River Logistics has base BRL after omitting LLC, and Class A requires appending .A.",
+      "observed": ""
+    },
+    {
+      "example_uid": "e3ca6391-9d0c-417a-8c73-c2fcda3ead86",
+      "status": "UNDERDETERMINED",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "Class C determines the .C suffix, but the single-word rule does not determine that Redwood's exact base prefix is REDW.",
+      "observed": ""
+    },
+    {
+      "example_uid": "838e85e5-6fa6-463f-b609-e92c8616af84",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "Harbor Light Studios has base HLS after omitting Ltd., and Class B requires appending .B.",
+      "observed": ""
+    }
+  ],
+  "overview": "The multiword and share-class examples are determined by the policy. The single-word Redwood examples are underdetermined because “compact prefix” does not specify an exact prefix length.",
+  "created_at": "2026-08-15T23:30:14.943813Z",
+  "provider_identity": {
+    "provider": "codex_chatgpt",
+    "model": "gpt-5.6-sol",
+    "model_digest": null,
+    "runtime": "codex-cli",
+    "endpoint": null,
+    "reasoning_effort": "none"
+  }
+}

@@ -1,0 +1,284 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:20:44.411780+00:00",
+      "frames": [
+        {
+          "context_digest": "c4484b7a8284d7e31066ad3f4c4edf8844a2e0ce8695a323093f753243b6b18f",
+          "context_name": "task-2/advisor1/expression",
+          "context_uid": "39a6f298-c511-5c21-a106-998c1df9d951",
+          "memories": [
+            {
+              "content": "Use a flow diagram rather than a sequence table when alternate procedural branches lead to different outcomes.",
+              "content_digest": "48075a546ef4f1c2735e202cf43df2c164e4382f323007f542915195d025bf58",
+              "position": 0,
+              "uid": "51fa3fcc-9d5f-52f0-809d-62d7cdd8a865"
+            },
+            {
+              "content": "Draw alternate branches and their resulting outcomes in the same flow diagram so readers can compare them at once.",
+              "content_digest": "85d1fdc887f442e05b4089e28a6dc671e757eb781eae9c39646673054306ec34",
+              "position": 1,
+              "uid": "e686bd4d-3ebd-5e55-ba39-f26971247965"
+            },
+            {
+              "content": "The visual fidelity of a prototype may differ from its functional fidelity.",
+              "content_digest": "bfc110d2df084fd4f8393284db693ead012f2bfd9a4e804fd89f9a4e45e16e8c",
+              "position": 2,
+              "uid": "019662a9-6f03-527f-9b6d-be5a2966d9e9"
+            },
+            {
+              "content": "A flow diagram can make alternate branches and their different outcomes visible in one view.",
+              "content_digest": "8f69a73784cb0c304671161a6c42c63480c0ce0cc4864e613d8dde466365d496",
+              "position": 3,
+              "uid": "a6dfe9a7-1df8-561f-8d3e-fc19518beca9"
+            },
+            {
+              "content": "HCI reviewers often skim prototype screens and interaction flow diagrams before reading the main text.",
+              "content_digest": "ee7009a111b29298f748336d571f4d0233e08ef0255f6cfe69cb4c26def96394",
+              "position": 4,
+              "uid": "7047a23d-45b3-5d5c-a00b-c12552e9680d"
+            },
+            {
+              "content": "Readers can understand the overall branching shape of a procedure more quickly from a flow diagram than from rows read one at a time.",
+              "content_digest": "beb9438eb216e54223266b4f592245450812228d69f7a38908e4c260a0aaca01",
+              "position": 5,
+              "uid": "50a71968-7e3f-5b99-b3fa-769af386d0c0"
+            },
+            {
+              "content": "Redrawing a branching flow diagram after a procedural change usually takes longer than updating one row in a table.",
+              "content_digest": "cb0e535e1e58a4dbf42c5f22a3eded19fa0c228c6531b70530b226eeb2dbf24c",
+              "position": 6,
+              "uid": "ae1610f6-a855-56c1-a0fb-fd3207dab615"
+            },
+            {
+              "content": "Reviewers often inspect the proposal’s main visual before reading the procedural explanation in full.",
+              "content_digest": "a609677d56e7297c736ee92c7a45eb4d83824985a780d8ca4df664f1494c5cb2",
+              "position": 7,
+              "uid": "d2825b84-b4a6-58c9-8f8e-9e19c6192a03"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "de4c5264-51df-4828-9bee-03450676f7fd"
+        },
+        {
+          "context_digest": "4371a72e6fb939731cb550ca5363a3b5210680482f84c18b36ba933f4454ecc1",
+          "context_name": "task-2/advisor2/expression",
+          "context_uid": "cf8e8baf-292e-57c3-8e2c-3f9b3d52f3d3",
+          "memories": [
+            {
+              "content": "Use a sequence table rather than a flow diagram when the procedure is likely to change repeatedly during drafting.",
+              "content_digest": "575bb4530af1e93b215ea57f0fd63e1e09136554da98aecf87288cc39ea9697c",
+              "position": 0,
+              "uid": "4264c20d-3e44-578d-866e-7787cc7b59e2"
+            },
+            {
+              "content": "The visual fidelity of a prototype and its level of connection to actual data and services may differ.",
+              "content_digest": "9478cb005a07ca7edfa924579b3d5221b1fa1143b5d8327369e7ee799b76aa9f",
+              "position": 1,
+              "uid": "70a8c3f0-0f6a-5881-abd6-29f52833b7bd"
+            },
+            {
+              "content": "Service flow diagrams indicate human-system transitions that are not revealed by individual screens alone.",
+              "content_digest": "5e3e18a38b1e62724d2ae0445549e214a219d205a80735bc6b4c0e643a96b8b3",
+              "position": 2,
+              "uid": "b410aa8d-db87-586b-a1cd-4af5767a9f7a"
+            },
+            {
+              "content": "HCI reviewers often scan system structure and service flow diagrams before the main text.",
+              "content_digest": "22a46440a6aeda0cb7d39cc6fedf6bbff6cac91232ec0cb163bf1fc17ff257d4",
+              "position": 3,
+              "uid": "a385fbb1-85b4-5132-bbc7-8fd8daedb715"
+            },
+            {
+              "content": "Give each step, actor, condition, and outcome a stable row in the sequence table.",
+              "content_digest": "2a073bf2ec4c5592ddc405d83cb438a5ed880699d3c157f310fb3dbff7851622",
+              "position": 4,
+              "uid": "22254f16-4628-5fd9-b1af-6e66dc2572b3"
+            },
+            {
+              "content": "Updating one row in a sequence table is usually faster than redrawing a branching diagram after a procedural change.",
+              "content_digest": "cf97dbf66018a6be1ee42dfc79ff8de44e8742db2b42c9d1ef70b3f252805a39",
+              "position": 5,
+              "uid": "32028269-5d43-5a65-b22b-9e570ceabfde"
+            },
+            {
+              "content": "Readers can check sequence tables step by step but may find the overall branching shape less immediate.",
+              "content_digest": "18b5de0cdd22ef1774151332afdbc408f9f591cf889e51271f81a372f74ef86d",
+              "position": 6,
+              "uid": "939ee3d0-b611-574a-a25b-82708394bd5e"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "86877f15-803b-4c1b-a7c4-ca0110823be1"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames jointly favor matching visual form to procedural needs: flow diagrams clarify branching, while sequence tables ease repeated revision. They also align on prototype fidelity and reviewers’ visual-first reading. Compared adds service-transition and table-structure guidance without contradiction.",
+      "relations": [
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "de4c5264-51df-4828-9bee-03450676f7fd",
+              "memory_uid": "51fa3fcc-9d5f-52f0-809d-62d7cdd8a865"
+            },
+            {
+              "frame_uid": "86877f15-803b-4c1b-a7c4-ca0110823be1",
+              "memory_uid": "4264c20d-3e44-578d-866e-7787cc7b59e2"
+            }
+          ],
+          "reason": "The recommendations address the same format choice but are governed by explicit, different procedural conditions, so both conditions must be preserved.",
+          "status": "RESOLVED",
+          "summary": "Flow diagrams are recommended for comparing outcome-bearing branches, whereas sequence tables are recommended when repeated drafting changes make easy updates important.",
+          "uid": "6e11ec62-a230-52fb-9a61-caa02cf40fbd"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "de4c5264-51df-4828-9bee-03450676f7fd",
+              "memory_uid": "e686bd4d-3ebd-5e55-ba39-f26971247965"
+            },
+            {
+              "frame_uid": "de4c5264-51df-4828-9bee-03450676f7fd",
+              "memory_uid": "a6dfe9a7-1df8-561f-8d3e-fc19518beca9"
+            },
+            {
+              "frame_uid": "de4c5264-51df-4828-9bee-03450676f7fd",
+              "memory_uid": "50a71968-7e3f-5b99-b3fa-769af386d0c0"
+            },
+            {
+              "frame_uid": "86877f15-803b-4c1b-a7c4-ca0110823be1",
+              "memory_uid": "939ee3d0-b611-574a-a25b-82708394bd5e"
+            }
+          ],
+          "reason": "The claims consistently describe the comparative visibility benefit of flow diagrams and the corresponding limitation of sequence tables.",
+          "status": "RESOLVED",
+          "summary": "Flow diagrams can place alternate branches and outcomes together, making the overall branching shape more immediate than in a row-by-row sequence table.",
+          "uid": "9299f142-f2d4-5c8b-a252-607eab7a6a53"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "de4c5264-51df-4828-9bee-03450676f7fd",
+              "memory_uid": "019662a9-6f03-527f-9b6d-be5a2966d9e9"
+            },
+            {
+              "frame_uid": "86877f15-803b-4c1b-a7c4-ca0110823be1",
+              "memory_uid": "70a8c3f0-0f6a-5881-abd6-29f52833b7bd"
+            }
+          ],
+          "reason": "Both claims distinguish visual realism from another operational fidelity dimension, with the compared claim specifying data and service connection.",
+          "status": "RESOLVED",
+          "summary": "A prototype’s visual fidelity can differ from its nonvisual functional or implementation fidelity, including connection to actual data and services.",
+          "uid": "a6f0ef0a-16d9-54f7-97b0-e85d94396510"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "de4c5264-51df-4828-9bee-03450676f7fd",
+              "memory_uid": "7047a23d-45b3-5d5c-a00b-c12552e9680d"
+            },
+            {
+              "frame_uid": "de4c5264-51df-4828-9bee-03450676f7fd",
+              "memory_uid": "d2825b84-b4a6-58c9-8f8e-9e19c6192a03"
+            },
+            {
+              "frame_uid": "86877f15-803b-4c1b-a7c4-ca0110823be1",
+              "memory_uid": "a385fbb1-85b4-5132-bbc7-8fd8daedb715"
+            }
+          ],
+          "reason": "All claims describe the same visual-first review behavior while naming complementary kinds of visuals.",
+          "status": "RESOLVED",
+          "summary": "HCI reviewers often inspect proposal visuals, including screens and structural or flow diagrams, before reading the main explanation fully.",
+          "uid": "8fcaccc8-91f4-58ee-9cfd-44ac2cc7a0df"
+        },
+        {
+          "kind": "EQUIVALENT",
+          "members": [
+            {
+              "frame_uid": "de4c5264-51df-4828-9bee-03450676f7fd",
+              "memory_uid": "ae1610f6-a855-56c1-a0fb-fd3207dab615"
+            },
+            {
+              "frame_uid": "86877f15-803b-4c1b-a7c4-ca0110823be1",
+              "memory_uid": "32028269-5d43-5a65-b22b-9e570ceabfde"
+            }
+          ],
+          "reason": "The two statements express the same comparative maintenance-cost claim under the same scope.",
+          "status": "RESOLVED",
+          "summary": "After a procedural change, updating one sequence-table row is usually faster than redrawing a branching flow diagram.",
+          "uid": "b3267989-8d51-518a-b205-cfe20ac019e8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "86877f15-803b-4c1b-a7c4-ca0110823be1",
+              "memory_uid": "b410aa8d-db87-586b-a1cd-4af5767a9f7a"
+            }
+          ],
+          "reason": "This independently useful claim appears only in the compared frame and is not restated by the reference material.",
+          "status": "RESOLVED",
+          "summary": "Service flow diagrams reveal human-system transitions that individual screens do not show.",
+          "uid": "aac8b39c-f865-52a2-9514-9782fcccba81"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "86877f15-803b-4c1b-a7c4-ca0110823be1",
+              "memory_uid": "22254f16-4628-5fd9-b1af-6e66dc2572b3"
+            }
+          ],
+          "reason": "This independently useful table-structure prescription appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Sequence tables should assign stable rows to steps, actors, conditions, and outcomes.",
+          "uid": "6dc1e349-9c99-5609-a9cd-fb33dcb8229d"
+        }
+      ],
+      "reports": {
+        "both": "Both describe branching visibility, table-maintenance efficiency, separable prototype fidelities, and reviewers examining visuals before full prose.",
+        "compared_only": "Compared uniquely identifies human-system transitions in service flows and specifies stable table rows for procedural elements.",
+        "differences": "Format recommendations apply under different conditions: branching outcomes favor flow diagrams, while repeated drafting changes favor sequence tables.",
+        "reference_only": ""
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "8269bd1b-48a8-4b8b-84f3-6d44698ed2a0"
+    },
+    "analysis_digest": "135202a078b968c2b7d05533b26fdecad3097de84db0389586ba8e50ba7c6487",
+    "key": "a7e26b6f3ae82dfd4dbd5eeda08335ec708213c63e8f0498f92f2b0ba1ec26ea",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 36.1961745410008,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "a7e26b6f3ae82dfd4dbd5eeda08335ec708213c63e8f0498f92f2b0ba1ec26ea",
+  "created_at": "2026-08-13T18:21:20.607581Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/expression",
+  "pair_key": "4ed8b11358bcb62c701bff1bea03f0f267ab4ba446fad7cb047345f5854932fe",
+  "provider_seconds": 36.1961745410008,
+  "right": "task-2/advisor2/expression",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

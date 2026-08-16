@@ -1,0 +1,424 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:33:44.834414+00:00",
+      "frames": [
+        {
+          "context_digest": "2f00e067f4f35600b73e87b5555d405e2801a33ba18a54c91e63e23a79f27a4c",
+          "context_name": "task-3/local/personal-memory/2024/01",
+          "context_uid": "cbd2e4d6-2601-5d3f-8bf2-2f66b755b007",
+          "memories": [
+            {
+              "content": "The user's mother's birthday falls in the third week of January.",
+              "content_digest": "d635ded9b470acdd462156515700e66c23dcb513a7034bb365be0ac139ec0422",
+              "position": 0,
+              "uid": "2cd0229d-b7f1-581b-8019-25bdb485afd9"
+            },
+            {
+              "content": "At the user's last family meal out, noise from the next table made conversation nearly impossible.",
+              "content_digest": "dc337d32e4b09167289e19a6b1c8fe970e7eaa6fdd6868ed1c7c300e018fcd15",
+              "position": 1,
+              "uid": "c62f1669-11c9-5a81-b5f5-304acce69c23"
+            },
+            {
+              "content": "At a barbecue at home in the same month, the user was comfortable because no one had to raise their voice.",
+              "content_digest": "63763b293a491200bf1f7a251467c1fa8c2cb8d4d8450732c01666dcdea183e3",
+              "position": 2,
+              "uid": "674f4bdf-27c3-5870-a68e-91e4a093dd93"
+            },
+            {
+              "content": "During their mother's birthday meal, the user left a restaurant with loud music after 30 minutes.",
+              "content_digest": "560755c6f051ec6f85e32dc4ee9447dfc97418fca6f9f414f6910c518a52c2c0",
+              "position": 3,
+              "uid": "21509788-2e3d-548b-8303-f34cfea68c9b"
+            },
+            {
+              "content": "When discussing postponed matters with family, the user prefers a quiet, one-on-one dining environment.",
+              "content_digest": "f22bedcf60a64b3666a7e4363d6a55c48547535492010fcb205a182c1ee920a8",
+              "position": 4,
+              "uid": "74eaea9d-7640-51ba-aa77-9c050581dc46"
+            },
+            {
+              "content": "At a large banquet hall reserved by their older sister, the user remembered the surrounding noise more than the food.",
+              "content_digest": "566e443c69410f1672ab209ba2257604e373cd305ab27243a39574481407af71",
+              "position": 5,
+              "uid": "1384df1d-2173-5673-96f5-a4d86835d404"
+            },
+            {
+              "content": "On a day the user ate grilled food at home with their younger brother, conversation was easy to continue, so the user stayed another hour after the meal.",
+              "content_digest": "c93ccbe3524946f1def05a1b385fbe3387945f51164b00c56f1ff80b477d011f",
+              "position": 6,
+              "uid": "3cf68c8e-5da9-51d3-a402-c10f4137b1f4"
+            },
+            {
+              "content": "The user's mother considers having the whole family eat at the same time more important than receiving a birthday gift.",
+              "content_digest": "d302cf7db2b83b103ea11323ab1b9d36168d224b405d4d0dd51b46b494014291",
+              "position": 7,
+              "uid": "a1984768-d20d-59cd-84c9-cb08c6b7affb"
+            },
+            {
+              "content": "When proposing a birthday meal for the user's mother, check the schedule and attendees; if conversation is the purpose, first consider a low-noise location, then confirm the final choice with the user.",
+              "content_digest": "481169c62cf6fae6b4f29184ffacef9c3c9d825a34d1545ca592bc35537bc65c",
+              "position": 8,
+              "uid": "f52d11e2-2449-5c9d-887b-96c8b5cd0184"
+            },
+            {
+              "content": "The local agent can compare past dining environments and the user's responses, but those records alone cannot determine the location of the next gathering.",
+              "content_digest": "b05fef8420abe3c47c2cd9f2de9149c9c6bda7dca301f09ac7f94eac1a29d2fa",
+              "position": 9,
+              "uid": "c8fccfbe-7756-5d62-9cd7-403dd6741915"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "97bfe176-98f9-4cde-bfaf-591b518478df"
+        },
+        {
+          "context_digest": "14adbc31fc3a2dc50b7b980d1e24569b16fff058104a812c7f3b4e1542b7abf0",
+          "context_name": "task-3/local/personal-memory/2025/03",
+          "context_uid": "913e0bfd-f6d9-579e-9a37-ba5daa9d17f1",
+          "memories": [
+            {
+              "content": "The user stores prepared meals on the second shelf of the freezer.",
+              "content_digest": "cd837b62b643f752da54b21de2f4f7a3d963a7c658d5b83dff39d1d92e0fdbad",
+              "position": 0,
+              "uid": "5d989bab-c471-5de9-bb73-29cabc4753dd"
+            },
+            {
+              "content": "The user went to the market without a shopping list and bought onions that were already at home.",
+              "content_digest": "f667c860e046bb27662b26d7cc4ed083ee48d9d7915237dc4b92ec378481a093",
+              "position": 1,
+              "uid": "d1725ae4-3fd3-5250-92b3-73d84d9152a7"
+            },
+            {
+              "content": "On a day the user shopped after checking a refrigerator photo, they did not make a duplicate purchase.",
+              "content_digest": "7283d4afe58c0ab05d9cb426bb80bed0e26e0b1783ff7cdd00a5f6e89d21861b",
+              "position": 2,
+              "uid": "904ff225-26df-5424-8a82-23d733649106"
+            },
+            {
+              "content": "On a day the user made a spicy stew, they left part of one bowl uneaten.",
+              "content_digest": "2765ec701f8e058d35ddee4a485c40221523ee2d9b56301ec1658ec4e419cbc2",
+              "position": 3,
+              "uid": "67a003c7-648a-59dc-8e82-03f9e452ffce"
+            },
+            {
+              "content": "The next time the user cooked it, they used half as much chili powder and finished the meal.",
+              "content_digest": "bdd7df7c762bbce31a40a45c2124e49ae3a6439dfc2133c574443d7eb3a7b1bb",
+              "position": 4,
+              "uid": "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9"
+            },
+            {
+              "content": "When cooking with their younger brother, the user assigned the cooking sequence only verbally and they did the same task twice.",
+              "content_digest": "bd92611cfc05fd42bb5d25e8dd7838ca1b2f6d99869bf1f61921b46950a4b532",
+              "position": 5,
+              "uid": "64bf4401-e972-5d15-a526-21ca901a6a9f"
+            },
+            {
+              "content": "The next time, the user and their younger brother split ingredient preparation and heat control and finished the meal 20 minutes earlier.",
+              "content_digest": "c3a28e7256d781ecb2d8710145880ffe79495e32d47ae1949c4be54e52a44555",
+              "position": 6,
+              "uid": "57e09ea5-54ff-5fce-aada-68daffbacc8b"
+            },
+            {
+              "content": "When cooking together, the user's younger brother prefers to divide the cooking and dishwashing roles in advance.",
+              "content_digest": "3bbc428c4f3b4e28a8e2341206ac78b39240eea53a9862192528029b0a57d12b",
+              "position": 7,
+              "uid": "0a5d054f-94bd-5955-bdb7-9b5427e2260b"
+            },
+            {
+              "content": "The local agent can compare responses across several meals, but it cannot conclude from one unfinished food item that the user dislikes that ingredient.",
+              "content_digest": "5787c1636d9dd4a5cb5bd70533b7dd44b2d6cff1047f5c408f5bcaa1b6577fe1",
+              "position": 8,
+              "uid": "1f94b78b-1635-551c-b90c-bea2a67ca595"
+            },
+            {
+              "content": "The condition of frozen prepared food may vary with its packaging and storage duration.",
+              "content_digest": "84bdac276dce5b50b19bc0c7c471468a22cc9945b1da7357700a58c157cf4ca1",
+              "position": 9,
+              "uid": "f64ef6c4-7665-5574-9d58-fc124b0bfe3f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "47e5c526-176e-4369-8609-ec88cd8f963a"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The reference frame centers on planning a quiet, conversation-friendly family birthday meal, supported by dining experiences and family priorities. The compared frame independently covers household food storage, shopping preparation, spice adjustment, shared cooking roles, and limits on inferring preferences from isolated observations.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "97bfe176-98f9-4cde-bfaf-591b518478df",
+              "memory_uid": "2cd0229d-b7f1-581b-8019-25bdb485afd9"
+            }
+          ],
+          "reason": "This is independently useful calendar information supplied only by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s mother has a birthday in the third week of January.",
+          "uid": "329b8fb2-8d82-5951-88af-cfc1cf7370c0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "97bfe176-98f9-4cde-bfaf-591b518478df",
+              "memory_uid": "c62f1669-11c9-5a81-b5f5-304acce69c23"
+            }
+          ],
+          "reason": "This is a specific adverse dining episode supplied only by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Noise from a neighboring table recently made family conversation nearly impossible.",
+          "uid": "5cd77ed9-a1e8-5960-8076-b984501bcc71"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "97bfe176-98f9-4cde-bfaf-591b518478df",
+              "memory_uid": "674f4bdf-27c3-5870-a68e-91e4a093dd93"
+            }
+          ],
+          "reason": "This is a specific positive dining episode supplied only by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user was comfortable at a quiet home barbecue where normal-volume conversation was possible.",
+          "uid": "e3709b1d-2e90-5cf0-824c-2feb4bcd9a6f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "97bfe176-98f9-4cde-bfaf-591b518478df",
+              "memory_uid": "21509788-2e3d-548b-8303-f34cfea68c9b"
+            }
+          ],
+          "reason": "This is a distinct behavioral response to a particular noisy birthday venue, supplied only by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user left a loud restaurant after thirty minutes during their mother’s birthday meal.",
+          "uid": "0c9505d4-75f5-511f-a215-02ad334aae26"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "97bfe176-98f9-4cde-bfaf-591b518478df",
+              "memory_uid": "74eaea9d-7640-51ba-aa77-9c050581dc46"
+            }
+          ],
+          "reason": "This is a context-specific environmental preference supplied only by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "For postponed family discussions, the user prefers a quiet, one-on-one dining setting.",
+          "uid": "5550d17c-002c-5cf6-b800-dd9c6e827521"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "97bfe176-98f9-4cde-bfaf-591b518478df",
+              "memory_uid": "1384df1d-2173-5673-96f5-a4d86835d404"
+            }
+          ],
+          "reason": "This is a distinct large-gathering experience supplied only by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "At a banquet hall reserved by the older sister, surrounding noise overshadowed the food in the user’s memory.",
+          "uid": "e7015077-5144-5eac-813e-77301d10650e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "97bfe176-98f9-4cde-bfaf-591b518478df",
+              "memory_uid": "3cf68c8e-5da9-51d3-a402-c10f4137b1f4"
+            }
+          ],
+          "reason": "This is a specific behavioral response to a conversational home meal, supplied only by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Easy conversation during a home meal with the younger brother led the user to stay an extra hour.",
+          "uid": "69118b39-a3b9-5f74-8747-019f399d872c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "97bfe176-98f9-4cde-bfaf-591b518478df",
+              "memory_uid": "a1984768-d20d-59cd-84c9-cb08c6b7affb"
+            }
+          ],
+          "reason": "This is an independently useful family priority supplied only by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s mother values having the whole family eat together more than receiving a birthday gift.",
+          "uid": "156516d6-5940-58de-aee6-0e03ec3f8104"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "97bfe176-98f9-4cde-bfaf-591b518478df",
+              "memory_uid": "f52d11e2-2449-5c9d-887b-96c8b5cd0184"
+            }
+          ],
+          "reason": "This is a conditional planning policy supplied only by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Birthday-meal proposals should check schedules and attendees, prioritize low noise when conversation matters, and leave the final choice to the user.",
+          "uid": "50fa01da-9f02-5e99-91e5-3b944bdc469a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "97bfe176-98f9-4cde-bfaf-591b518478df",
+              "memory_uid": "c8fccfbe-7756-5d62-9cd7-403dd6741915"
+            }
+          ],
+          "reason": "This is a venue-selection inference limit supplied only by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Past dining environments and responses can be compared but cannot alone determine the next gathering’s location.",
+          "uid": "fec6d3d4-1a99-5fff-bc50-eb9d873d9b4f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "47e5c526-176e-4369-8609-ec88cd8f963a",
+              "memory_uid": "5d989bab-c471-5de9-bb73-29cabc4753dd"
+            }
+          ],
+          "reason": "This is independently useful storage-location information supplied only by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user stores prepared meals on the freezer’s second shelf.",
+          "uid": "5201a9de-3f0d-50fa-b6bf-56a3cf876857"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "47e5c526-176e-4369-8609-ec88cd8f963a",
+              "memory_uid": "d1725ae4-3fd3-5250-92b3-73d84d9152a7"
+            },
+            {
+              "frame_uid": "47e5c526-176e-4369-8609-ec88cd8f963a",
+              "memory_uid": "904ff225-26df-5424-8a82-23d733649106"
+            }
+          ],
+          "reason": "These compared-side episodes jointly express one underlying claim about inventory checking and duplicate purchases.",
+          "status": "RESOLVED",
+          "summary": "Shopping without an inventory aid led to a duplicate onion purchase, while checking a refrigerator photo avoided duplication on another occasion.",
+          "uid": "45cc47c4-b9e2-5264-a93f-dbb4f1b8a702"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "47e5c526-176e-4369-8609-ec88cd8f963a",
+              "memory_uid": "67a003c7-648a-59dc-8e82-03f9e452ffce"
+            },
+            {
+              "frame_uid": "47e5c526-176e-4369-8609-ec88cd8f963a",
+              "memory_uid": "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9"
+            }
+          ],
+          "reason": "These compared-side observations form one before-and-after claim about adjusting the stew’s heat.",
+          "status": "RESOLVED",
+          "summary": "After leaving some spicy stew uneaten, the user halved the chili powder on the next attempt and finished the meal.",
+          "uid": "37e784c9-0f07-5f85-9500-e8ae88334db7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "47e5c526-176e-4369-8609-ec88cd8f963a",
+              "memory_uid": "64bf4401-e972-5d15-a526-21ca901a6a9f"
+            },
+            {
+              "frame_uid": "47e5c526-176e-4369-8609-ec88cd8f963a",
+              "memory_uid": "57e09ea5-54ff-5fce-aada-68daffbacc8b"
+            }
+          ],
+          "reason": "These compared-side observations form one before-and-after claim about explicit task division during shared cooking.",
+          "status": "RESOLVED",
+          "summary": "After verbal-only sequencing caused duplicated work, dividing ingredient preparation and heat control with the younger brother shortened cooking by twenty minutes.",
+          "uid": "29d234d6-748c-5b8e-9081-96e23cd59626"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "47e5c526-176e-4369-8609-ec88cd8f963a",
+              "memory_uid": "0a5d054f-94bd-5955-bdb7-9b5427e2260b"
+            }
+          ],
+          "reason": "This is an independently useful collaboration preference supplied only by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "When cooking together, the younger brother prefers assigning cooking and dishwashing roles in advance.",
+          "uid": "8a894e5d-8207-525c-8cc4-45032bdb56f7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "47e5c526-176e-4369-8609-ec88cd8f963a",
+              "memory_uid": "1f94b78b-1635-551c-b90c-bea2a67ca595"
+            }
+          ],
+          "reason": "This is an ingredient-preference inference limit supplied only by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Meal responses can be compared, but one unfinished food item does not establish that the user dislikes an ingredient.",
+          "uid": "99f3b511-9e30-5bba-bc80-850b7ac94624"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "47e5c526-176e-4369-8609-ec88cd8f963a",
+              "memory_uid": "f64ef6c4-7665-5574-9d58-fc124b0bfe3f"
+            }
+          ],
+          "reason": "This is independently useful food-storage qualification supplied only by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The condition of frozen prepared food may depend on packaging and storage duration.",
+          "uid": "6235bf31-dc06-53f2-92f2-692bd2deffe2"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers freezer storage, inventory-aware shopping, adjusting stew heat, coordinating cooking with a younger brother, caution about inferring ingredient dislike, and packaging and duration effects on frozen food.",
+        "differences": "",
+        "reference_only": "The reference describes the mother’s birthday timing and family-togetherness priority, the user’s responses to noisy and quiet meals, a preference for private conversation, cautious venue planning, and limits on predicting the next gathering."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "fa2fff2e-1899-4196-b517-1b741ceba78b"
+    },
+    "analysis_digest": "8cc1733ae27e83a0baeeb1aa54d566c14802d1a0adb22d57208753d6ee292b72",
+    "key": "cf6e464abf7232b2e7931bd348afd09d31b525644b251764d557910d85367209",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 41.76093129199944,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "cf6e464abf7232b2e7931bd348afd09d31b525644b251764d557910d85367209",
+  "created_at": "2026-08-13T18:34:26.595428Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/01",
+  "pair_key": "5328e615e841f24b5513b2274980f73496f7f9e5b062b9ad1aeafecbbeac6d22",
+  "provider_seconds": 41.76093129199944,
+  "right": "task-3/local/personal-memory/2025/03",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

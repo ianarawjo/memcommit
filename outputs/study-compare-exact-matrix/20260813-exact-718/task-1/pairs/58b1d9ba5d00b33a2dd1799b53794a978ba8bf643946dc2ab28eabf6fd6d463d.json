@@ -1,0 +1,1048 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:07:32.563981+00:00",
+      "frames": [
+        {
+          "context_digest": "12ceaec566d88cc25aa1cb3d01be314d59accc5a4d1ee3d9ca48a787d4da793e",
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memories": [
+            {
+              "content": "The rear entrance on the third floor of the Main Building connects directly to the pedestrian route leading to the Central Library.",
+              "content_digest": "9d5581deae6b994e48e0378d186c9f6dd6a96b6e8852884d4c04d587169b7c0e",
+              "position": 0,
+              "uid": "ee271f65-7387-52f2-8e6e-23ad7f224f03"
+            },
+            {
+              "content": "With your back to the main entrance, Outdoor Parking Lot A is on the left.",
+              "content_digest": "43947c7ca89ec3a0c03b214b1f29f2bca4c7d1fc181e62106a42a51647974d25",
+              "position": 1,
+              "uid": "8a953afd-7a48-52e8-b48a-38d8c49b55c5"
+            },
+            {
+              "content": "With your back to the main entrance, the West Complex is on the left.",
+              "content_digest": "eb6dc3f0d24df373f16507d8daa3dd5f203cff0fdac2ed23f76f0ef7b8b0d2fd",
+              "position": 2,
+              "uid": "b54ac954-0a84-502c-a096-a4f85a0d317a"
+            },
+            {
+              "content": "With your back to the main entrance, the Humanities Building is on the right.",
+              "content_digest": "7c6759caa419fc49040d7f555d0004679636e1d7eebef8d6df7d627bddade688",
+              "position": 3,
+              "uid": "5e23ba3e-d573-54c3-99b0-fea607a63e46"
+            },
+            {
+              "content": "The Student Centre is behind the Central Library.",
+              "content_digest": "8180c31ed7592111dcf4a90c8b2f2f8df4bfb229121f7a0ee954cffe0e6e009f",
+              "position": 4,
+              "uid": "9f4c539b-1205-5ed7-a441-d9a46615ea01"
+            },
+            {
+              "content": "The Outdoor Parking Lot A–Main Building–Central Library route is usually short.",
+              "content_digest": "8af24aae915c6ecd73213706c5d1abf828f9d368ddae9d65218c188457eb19bc",
+              "position": 5,
+              "uid": "8f2f2422-0ac3-5dc2-8a17-871c0deedcf3"
+            },
+            {
+              "content": "The Outdoor Parking Lot A–Main Building–Central Library route has a long indoor section.",
+              "content_digest": "64da583fb63bf57da25fd6e1cac8409ea92fb5a05cc4fe3a5a6bb8ffd99c5b96",
+              "position": 6,
+              "uid": "6ded9e53-4073-5911-82c6-b3981c2daf98"
+            },
+            {
+              "content": "The route from Outdoor Parking Lot C through the Student Centre accessible entrance to the west entrance of the Central Library does not pass through the Main Building.",
+              "content_digest": "caad347940601a977f2f6e894b281e4cd0a9b49ee2a473d22600935436a3d8d8",
+              "position": 7,
+              "uid": "494bc428-f0be-5a21-9475-14fc405c9fda"
+            },
+            {
+              "content": "In summer, students prefer the air-conditioned indoor route from the first to the third floor of the Main Building over the outdoor route.",
+              "content_digest": "82ef522ab5c99a4d3be5696c26ad4c7c15b2f270202f8c2de89d71d78a18da6b",
+              "position": 8,
+              "uid": "4369c450-1ca1-58e7-b98f-c087552a0a5a"
+            },
+            {
+              "content": "Recommend only routes that are currently confirmed to be open.",
+              "content_digest": "c85b08f4f660a0b388fed362a422749e84149d0ef28d5c61bd511db83d90e94d",
+              "position": 9,
+              "uid": "02df0e1e-fc32-5136-a0c2-5af11f99293e"
+            },
+            {
+              "content": "Explain the distinction between the standard shortest route and the accessible route.",
+              "content_digest": "f2da6123e45eb769e63b3bf3851aad5df37239ede10aa0f9d8e3bcf175828247",
+              "position": 10,
+              "uid": "759a38f7-7b7f-5eae-bbec-f00df27c9f4b"
+            },
+            {
+              "content": "The route guidance agent can compare routes using stored geographic information.",
+              "content_digest": "bf7c6287ad909f763a13ce1a2a5e896bbdd36b5a1bb67e0dbf5414d2263a60de",
+              "position": 11,
+              "uid": "78ebae58-9630-5674-90e7-a35951661d19"
+            },
+            {
+              "content": "The route guidance agent cannot check congestion in real time.",
+              "content_digest": "0e979dfd40592f250f45ee641cbbe0d52c7fd5a1b29eaea6e848414dfd10b21b",
+              "position": 12,
+              "uid": "f0864b5f-4148-5c8c-a778-de0a028146d7"
+            },
+            {
+              "content": "The route guidance agent cannot check for movable obstacles.",
+              "content_digest": "602924d7a3ed27bbc42b2119870bab60de6c30990ad016a67c759720440644c8",
+              "position": 13,
+              "uid": "056cce65-dd73-50e6-8745-27d4d71effb1"
+            },
+            {
+              "content": "The route guidance agent cannot check in real time for newly installed temporary signs or movable control barriers at the time of inquiry.",
+              "content_digest": "81df6a062a8bdeae0e37bc2657190e8228bfedc1b9ad4804c3dd520528e0986e",
+              "position": 14,
+              "uid": "084210ca-d235-52d4-9801-3e78c7d53454"
+            },
+            {
+              "content": "There is no continuous accessible route that a wheelchair can use in the direction of the stairs on the right side of the Main Building.",
+              "content_digest": "ebe786f747a876cafb4fc7b04a01beba9b159242ac0a5130103d2ea695a5d401",
+              "position": 15,
+              "uid": "1fa0cf4f-6bc2-50f6-90a7-871b286b00bf"
+            },
+            {
+              "content": "The detour from the stairs on the right side of the Main Building to the Student Centre is long.",
+              "content_digest": "83226658900db6841ea78b798e91341c9fe64ee0c9a442fff8573441de2783e7",
+              "position": 16,
+              "uid": "c33f2c68-d304-51e0-8489-7e8876775cfd"
+            },
+            {
+              "content": "Mobility support companions prefer the indoor route through the Main Building to the Central Library because it is less affected by weather.",
+              "content_digest": "4295cc67b8bf8ce83069c73d5c1c6bdc13fdfe556ccf60f1cad87db36925572f",
+              "position": 17,
+              "uid": "f9832b10-f7cf-5ac0-a7bc-9e9da6ca3646"
+            },
+            {
+              "content": "The public campus map shows building entrances and pedestrian paths between buildings.",
+              "content_digest": "7a683aba2852e0b6e5e94a90a470ccb33881d31dd477f6c27f1266b58c6c0ac9",
+              "position": 18,
+              "uid": "fd111f85-255e-5c35-acfb-b860f35cc4a8"
+            },
+            {
+              "content": "The public campus map separately marks step-free accessible routes.",
+              "content_digest": "dc7a160abf0a454a76b04ac077a161215bed22fa46093b8b3a7e589b593c6b75",
+              "position": 19,
+              "uid": "4bad21e5-cc32-5995-93fd-d0938a41d427"
+            },
+            {
+              "content": "The pedestrian path in front of the Main Building's main entrance has a sign indicating the direction of the accessible route.",
+              "content_digest": "1e5a39b8a524a09d02b5bdc2cecf74744ce678dc069c864a3a010ba56b051daa",
+              "position": 20,
+              "uid": "d1aaec66-fff8-5270-b939-cd8877f75339"
+            },
+            {
+              "content": "A step-free pedestrian path runs from Outdoor Parking Lot C to the Student Centre accessible entrance.",
+              "content_digest": "5a10621a03b6d62101cc75c6a942eb938fdc6f5506dd9df390cda3b3dbdf775b",
+              "position": 21,
+              "uid": "b7802de6-8e3c-5e90-8e2e-b7d949009352"
+            },
+            {
+              "content": "An accessible route runs from the Student Centre to the west entrance of the Central Library.",
+              "content_digest": "7075dec7266ffd0edd4aa1a318a6b5baf2fc5d136e076cc9258a120779391583",
+              "position": 22,
+              "uid": "065b33d3-3aae-5aa2-b9f0-f779f612e0ea"
+            },
+            {
+              "content": "There is an above-ground pedestrian path from the West Complex to the Main Building's main entrance.",
+              "content_digest": "838d5d2540189aa76d926b55434f17d0b7f2b92fa77a1ec7f0fd415f6ae21dd0",
+              "position": 23,
+              "uid": "79728c8e-66d0-574d-aeee-2e6e4a928db3"
+            },
+            {
+              "content": "The pedestrian path from the Humanities Building to the Main Building's main entrance passes in front of the stairs on the right side of the Main Building.",
+              "content_digest": "c7eeb5bb956169023f0205324d8ec4a6e309530b91169b0f61af0a1d1a6ceb35",
+              "position": 24,
+              "uid": "41f16b3e-4ab3-5f38-9942-7e8896fec3b6"
+            },
+            {
+              "content": "Using the elevator from the first-floor lobby of the Main Building provides step-free access to the level of the third-floor rear entrance.",
+              "content_digest": "4d1d6af5e0e09e6873286a4e75d31a46068da1de839b6fc2e93b10aa4c66cf4a",
+              "position": 25,
+              "uid": "2af1d276-7a46-514d-b8c8-cd9f1e2a9ef2"
+            },
+            {
+              "content": "The escalator route in the Main Building includes a section where stairs cannot be avoided.",
+              "content_digest": "be106efc7ae6ae4d7fdb837d64ab8c725e4db9abb686c67ad9871ab777bacbd9",
+              "position": 26,
+              "uid": "cae9af0e-9225-5193-b581-5b2d8096fc14"
+            },
+            {
+              "content": "When step-free travel is required, direct people to the elevator route rather than the escalator route.",
+              "content_digest": "7e34b15ebf4dc34fa49ce9a704dfb20a6fc40229959672d69545b943517d5669",
+              "position": 27,
+              "uid": "a1617fa2-fa36-5af1-91c9-a8924ae1f5a9"
+            },
+            {
+              "content": "The elevator closest to the Main Building's main entrance is inside the first-floor lobby.",
+              "content_digest": "134a7ad88f6b37e5aae36316bc065f10f076a6c6e256e4b55db244489716dff9",
+              "position": 28,
+              "uid": "03c25e0f-3cd1-5a27-a806-0d09664a3fc3"
+            },
+            {
+              "content": "The above-ground route between the Main Building and the Central Library has a rest bench midway.",
+              "content_digest": "518c186757f6bc18193db8007cac9743cd98341c0ec2d0f4c254290f9345160f",
+              "position": 29,
+              "uid": "6fad00c2-1f97-5377-8a3a-b36d19705d4b"
+            },
+            {
+              "content": "Solbit Plaza is between the Main Building's main entrance and the West Complex.",
+              "content_digest": "913ea1d1fa70b17e2629c4725f30a51e2dbf07d758cad8c976fac9b8cc58de67",
+              "position": 30,
+              "uid": "c3558237-458f-5487-8718-0c48b9bdf568"
+            },
+            {
+              "content": "When it rains or snows, travel time on sloped outdoor pedestrian paths may be longer than usual.",
+              "content_digest": "51247db4eb36cfd1cdd95fc3995c88f890f011b36caf540e1969766725ac2716",
+              "position": 31,
+              "uid": "09862f9d-91cd-5e36-b6b9-b042b5d84d5b"
+            },
+            {
+              "content": "Snow removal personnel judge that when it snows, major accessible routes must be cleared before other pedestrian paths.",
+              "content_digest": "7edf3087557f5b11e32de7494d2835c9638ededf810a55571c0ac4eef3d3d3f8",
+              "position": 32,
+              "uid": "034676e0-f7b6-52ea-90a3-e6d3f656bc2f"
+            },
+            {
+              "content": "Students going to the library after parking prefer the familiar, short Outdoor Parking Lot A–Main Building–Central Library route.",
+              "content_digest": "460cc499a0d3c4840f422619eda9d159570f734a98eb8483dbed941b69765381",
+              "position": 33,
+              "uid": "6c4eeef5-0905-5923-b201-666b504b95f1"
+            },
+            {
+              "content": "During class change times, pedestrian traffic increases between the third floor of the Main Building and the Central Library.",
+              "content_digest": "1864f6ba6d10ef739e50468e986bf65f864331a54eed50cd42c25dd16854a122",
+              "position": 34,
+              "uid": "4dcddb86-e56c-552a-810d-c04a1934b475"
+            },
+            {
+              "content": "First-time visitors find directions based on visible facilities easier to understand than directions based on building numbers.",
+              "content_digest": "cc6d82a34c94ac9b621d4bfece71b8a41e41c011cc7e26015da9b553e7a0359f",
+              "position": 35,
+              "uid": "ddcc1848-f9df-5772-9e9a-0c6ed42e557a"
+            },
+            {
+              "content": "Because of the sloped terrain, first-time visitors sometimes confuse the levels of the Main Building's first-floor main entrance and third-floor rear entrance.",
+              "content_digest": "9607a34ee7f3be953b865453452e055b7f1e8f031bf9d4d6f9e456192166add3",
+              "position": 36,
+              "uid": "0a78908e-a479-5e5a-b54e-b09f2cb1f7bc"
+            },
+            {
+              "content": "Delivery drivers consider designated service routes that do not mix with pedestrians more predictable and safer.",
+              "content_digest": "81cfcfcbf06974f0c1e0436ea3f96d7808ad8f66f840867a09bd28a43c5cfcd7",
+              "position": 37,
+              "uid": "80355a5f-5170-59b1-82b1-517c5c20a1bb"
+            },
+            {
+              "content": "The route guidance agent cannot check on-site congestion in real time and can compare posted detours to identify routes with fewer branches.",
+              "content_digest": "a9df91be70751e819cb906a31b38f099ce6f692c546a5381d57e3d570d440b15",
+              "position": 38,
+              "uid": "27e0d8cf-02ac-5b42-8970-da451a27e055"
+            },
+            {
+              "content": "The route guidance agent can distinguish stair routes from elevator routes on the public map.",
+              "content_digest": "6e14fecba59109a5e8a127d465da3cf8d63ce72b1f3519d8a88fda5105f94713",
+              "position": 39,
+              "uid": "08d5128e-e371-5251-a3e8-acf488ccbc59"
+            },
+            {
+              "content": "The route guidance agent cannot measure on-site pedestrian traffic at the time of inquiry.",
+              "content_digest": "1a9bbe7cb9b8cf868f432069cc01e958df6de0fca5089e29045084088397c0e7",
+              "position": 40,
+              "uid": "d7a22205-1d0a-5106-a764-fc2e97769bc8"
+            },
+            {
+              "content": "The route guidance agent cannot guarantee an individual user's travel time.",
+              "content_digest": "4b22f61b5477a539671e624b8abbd30b6c5038849896b4887ec7499ce696f327",
+              "position": 41,
+              "uid": "2db61a85-42af-5b31-b070-5ba2ef965cc7"
+            },
+            {
+              "content": "Check the current notice for the destination entrance before giving directions.",
+              "content_digest": "16133b9ac84d5a11eeb2abf261e75402de7de2d88e44562ee96aa7f9e52b1329",
+              "position": 42,
+              "uid": "5a6b05a2-e14b-5b88-a9b7-58db2e3b2845"
+            },
+            {
+              "content": "Do not recommend staff-only passages as detours to general users.",
+              "content_digest": "a2792c871aac4f59086bd8e3cfb510e36b7b21b39a54e3637bd8792934cf9009",
+              "position": 43,
+              "uid": "49a1ffe4-b705-5503-9853-e755bef73239"
+            },
+            {
+              "content": "If the shortest route has stairs, also present an available accessible route.",
+              "content_digest": "77a1194c1626128d8f87c45cf4c13e848dfca23024f929ac0a719ba8fb4b0697",
+              "position": 44,
+              "uid": "2742f895-9179-5e72-bef7-2ab08c68db2c"
+            },
+            {
+              "content": "In an emergency, instruct people to follow on-site evacuation signs and safety personnel's directions rather than general wayfinding guidance.",
+              "content_digest": "da7cde9b59303f83816ad147ed8dd939ca3446d8d60ba901fc979189f5e524a9",
+              "position": 45,
+              "uid": "3b535b19-637b-5f2a-8441-8c509e7a1bfa"
+            },
+            {
+              "content": "A pedestrian path from the West Gate stop to the Main Building's main entrance runs through Solbit Plaza.",
+              "content_digest": "e66b4dfd1764dbd23117f4984bc2756c01c0753d242aac7a72714ed1e1e5c2fb",
+              "position": 46,
+              "uid": "2f6bcece-e018-5b44-8936-430839892e49"
+            },
+            {
+              "content": "There is a step-free route from the shuttle stop in front of the Student Centre to the west entrance of the Central Library.",
+              "content_digest": "6c97b7171fe97b4b909d15c9e658c4019ce2dddd1e23b89446808df03d287d26",
+              "position": 47,
+              "uid": "675f922d-084f-54bd-bc38-f7aae69a370b"
+            },
+            {
+              "content": "Bicycle users dismount at the designated rack on the edge of Solbit Plaza and proceed on foot.",
+              "content_digest": "b4e2898f605b6e8fd6e06452a260416039f29508942baf698fddb4c595d2c246",
+              "position": 48,
+              "uid": "30e5c146-ea97-5317-bf6f-dedbffaeaafa"
+            },
+            {
+              "content": "Do not suggest informal shortcuts that are not on the public map as default routes.",
+              "content_digest": "f30caa45af213f8ae6b0d28bc7208c48e00abc5632e4d9667b8bbb900a3f29f2",
+              "position": 49,
+              "uid": "da43a5f5-41af-5a8a-b867-b854fe4c4ae5"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "937927ca-810d-4b93-b03a-34df528b3111"
+        },
+        {
+          "context_digest": "89449289c4bdbb1e379336d3718b50c3d3bacfc5e8fb80fcddc92a133d106896",
+          "context_name": "task-1/participant/construction-updates/route-changes",
+          "context_uid": "725d4213-9ce1-569c-9e91-e4cd0d046bd5",
+          "memories": [
+            {
+              "content": "Add campus-wiki/route-changes: The indoor route that passed through the first through third floors of the Main Building to the Central Library cannot be used during the construction period.",
+              "content_digest": "8c0a9b88912165a538fab8a4e36faf6595cb350d3c6b098bceb114c0a14fa454",
+              "position": 0,
+              "uid": "8017409a-8af8-5a55-a49e-e9ccb44b9f34"
+            },
+            {
+              "content": "Add campus-wiki/route-changes: The route from the third-floor rear entrance to the Central Library is closed during the construction period.",
+              "content_digest": "154fed89b432d760e0a85a04944fb44abda6b88e0cd525454109b8132fe9d767",
+              "position": 1,
+              "uid": "dbb3c40c-7699-509d-901d-be9de2f110dc"
+            },
+            {
+              "content": "Add campus-wiki/route-changes: The Outdoor Parking Lot A–Main Building–Central Library route is closed during the construction period.",
+              "content_digest": "8a2ae18f699247abffe8f15292c34586fc00aab83967d59e8d9e5e0109eacc68",
+              "position": 2,
+              "uid": "2d20c61d-ff20-5bb6-bcdc-3dcbf6c3e21f"
+            },
+            {
+              "content": "Modify campus-wiki/route-changes: A student who prefers the air-conditioned indoor route through the Main Building in summer may experience substantial heat and travel burden when redirected to an outdoor alternative route during the construction period.",
+              "content_digest": "5a8f61fa78c57b591bfb9c9cdfc456f6679f4c47834cf5a1a8a61df241e0e246",
+              "position": 3,
+              "uid": "a8bb36e1-2629-5b8f-b4dc-af9b88020dc9"
+            },
+            {
+              "content": "Add campus-wiki/route-changes: When providing directions to the accessible restroom in the Student Centre during the construction period, instruct users to take the accessible route to the left as viewed from the Main Building.",
+              "content_digest": "d1daeafba59512cdcad389af173aebc99aa2330602fc1ff011f750fb06a74a42",
+              "position": 4,
+              "uid": "8276ab56-741f-5f60-ab77-79fe6dc0ba55"
+            },
+            {
+              "content": "Add campus-wiki/route-changes: During the construction period, the designated alternative accessible route to the Central Library is Outdoor Parking Lot C–Student Centre accessible entrance–Central Library west entrance.",
+              "content_digest": "c8f5dab391db6ea31bcc66030da486681c116d1bd69668e005e0e4ebc64132a6",
+              "position": 5,
+              "uid": "9af0f95c-0a5e-584e-ba7b-92789e071f7e"
+            },
+            {
+              "content": "Add campus-wiki/route-changes: During the construction period, the Central Library west entrance is designated as the official alternative entrance for the closed connecting route through the Main Building.",
+              "content_digest": "48e95c6255031ddaac7e4f54ae2403b33463514aa152c4516022f68ff5050540",
+              "position": 6,
+              "uid": "fd27f19b-5f2c-51ee-a9b2-7182120163cb"
+            },
+            {
+              "content": "Modify campus-wiki/route-changes: During the construction period, the route guidance agent may exclude from comparison candidates closed routes that pass through the first through third floors of the Main Building, the third-floor rear entrance, or Outdoor Parking Lot A.",
+              "content_digest": "80eda31eb9ae4a3aa98637b1d0043c816d83bad2384f22dcb69ed1ba5d75cb24",
+              "position": 7,
+              "uid": "638f272f-9fbd-5d1f-bfd8-b01618424065"
+            },
+            {
+              "content": "Modify campus-wiki/route-changes: If the indoor shortcut through the Main Building is closed during the construction period, a mobility-support companion may reconfirm the distance and slope of the alternative accessible route before accompanying the user.",
+              "content_digest": "e1f6fd794cdf9ba8f19f0df39c6f4bb82c6c7109f9b20a5ca0f6f5037b3f03ef",
+              "position": 8,
+              "uid": "ba9d70f9-02c4-56d9-ac23-f2a532c22488"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "cca68d0a-de5c-477c-b0e4-2ba1d9bf90d5"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames combine extensive baseline campus wayfinding with construction-period changes. Temporary closures disable familiar Main Building connections and redirect accessible travel through the Student Centre to the Central Library’s west entrance, while most landmarks, agent limits, safety rules, and specialized routes appear only in the reference frame.",
+      "relations": [
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "ee271f65-7387-52f2-8e6e-23ad7f224f03"
+            },
+            {
+              "frame_uid": "cca68d0a-de5c-477c-b0e4-2ba1d9bf90d5",
+              "memory_uid": "dbb3c40c-7699-509d-901d-be9de2f110dc"
+            }
+          ],
+          "reason": "The construction period is an explicit temporal condition that limits the baseline connection without denying its ordinary configuration.",
+          "status": "RESOLVED",
+          "summary": "The third-floor rear entrance ordinarily connects to the Central Library route, but that connection is closed during construction.",
+          "uid": "61e76ee0-cc5b-58de-934e-2536eb345135"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "8f2f2422-0ac3-5dc2-8a17-871c0deedcf3"
+            },
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "6ded9e53-4073-5911-82c6-b3981c2daf98"
+            },
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "6c4eeef5-0905-5923-b201-666b504b95f1"
+            },
+            {
+              "frame_uid": "cca68d0a-de5c-477c-b0e4-2ba1d9bf90d5",
+              "memory_uid": "2d20c61d-ff20-5bb6-bcdc-3dcbf6c3e21f"
+            }
+          ],
+          "reason": "The ordinary route descriptions and temporary closure govern different explicit time scopes and must both be preserved.",
+          "status": "RESOLVED",
+          "summary": "The familiar Parking Lot A–Main Building–Central Library route has established length, indoor-section, and preference characteristics, but is closed during construction.",
+          "uid": "a2f4448f-de2a-5c8c-a7a4-164d65d9597a"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "4369c450-1ca1-58e7-b98f-c087552a0a5a"
+            },
+            {
+              "frame_uid": "cca68d0a-de5c-477c-b0e4-2ba1d9bf90d5",
+              "memory_uid": "8017409a-8af8-5a55-a49e-e9ccb44b9f34"
+            },
+            {
+              "frame_uid": "cca68d0a-de5c-477c-b0e4-2ba1d9bf90d5",
+              "memory_uid": "a8bb36e1-2629-5b8f-b4dc-af9b88020dc9"
+            }
+          ],
+          "reason": "Construction explicitly conditions route availability and explains the changed summer travel experience.",
+          "status": "RESOLVED",
+          "summary": "Students ordinarily prefer the air-conditioned indoor Main Building route in summer, while construction closes it and makes the outdoor redirection substantially hotter and more burdensome.",
+          "uid": "7dd6869d-a502-5667-b033-12dec5623cdc"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "f9832b10-f7cf-5ac0-a7bc-9e9da6ca3646"
+            },
+            {
+              "frame_uid": "cca68d0a-de5c-477c-b0e4-2ba1d9bf90d5",
+              "memory_uid": "ba9d70f9-02c4-56d9-ac23-f2a532c22488"
+            }
+          ],
+          "reason": "The construction-closure condition explains why the normal preference gives way to additional checking of the alternative.",
+          "status": "RESOLVED",
+          "summary": "Mobility-support companions ordinarily prefer the weather-protected indoor route, but may reconfirm the distance and slope of an accessible alternative when construction closes the shortcut.",
+          "uid": "6e6699fb-9766-51c1-acb9-416de37fc9ef"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "494bc428-f0be-5a21-9475-14fc405c9fda"
+            },
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "b7802de6-8e3c-5e90-8e2e-b7d949009352"
+            },
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "065b33d3-3aae-5aa2-b9f0-f779f612e0ea"
+            },
+            {
+              "frame_uid": "cca68d0a-de5c-477c-b0e4-2ba1d9bf90d5",
+              "memory_uid": "9af0f95c-0a5e-584e-ba7b-92789e071f7e"
+            },
+            {
+              "frame_uid": "cca68d0a-de5c-477c-b0e4-2ba1d9bf90d5",
+              "memory_uid": "fd27f19b-5f2c-51ee-a9b2-7182120163cb"
+            }
+          ],
+          "reason": "The physical accessible route is baseline information, while its designated construction role is explicitly time-scoped.",
+          "status": "RESOLVED",
+          "summary": "A step-free route already runs from Parking Lot C through the Student Centre to the Central Library west entrance; during construction it becomes the designated alternative route and the west entrance becomes the official alternative entrance.",
+          "uid": "95b15dd0-569d-58c0-aad6-0130b79c1918"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "02df0e1e-fc32-5136-a0c2-5af11f99293e"
+            },
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "78ebae58-9630-5674-90e7-a35951661d19"
+            },
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "5a6b05a2-e14b-5b88-a9b7-58db2e3b2845"
+            },
+            {
+              "frame_uid": "cca68d0a-de5c-477c-b0e4-2ba1d9bf90d5",
+              "memory_uid": "638f272f-9fbd-5d1f-bfd8-b01618424065"
+            }
+          ],
+          "reason": "The construction rule is a condition-specific application of the baseline comparison and opening-verification policy.",
+          "status": "RESOLVED",
+          "summary": "General guidance compares stored routes and verifies current openings and entrance notices; during construction it may exclude specified closed Main Building, rear-entrance, and Parking Lot A candidates.",
+          "uid": "3dc05571-46e5-57d4-a3a0-f7c49424c0d2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cca68d0a-de5c-477c-b0e4-2ba1d9bf90d5",
+              "memory_uid": "8276ab56-741f-5f60-ab77-79fe6dc0ba55"
+            }
+          ],
+          "reason": "Only the compared frame supplies this destination-specific directional instruction.",
+          "status": "RESOLVED",
+          "summary": "Construction-period directions to the Student Centre accessible restroom use the accessible route to the left when viewed from the Main Building.",
+          "uid": "93b22388-c3a9-58f6-8bda-dd6229cbd1dc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "8a953afd-7a48-52e8-b48a-38d8c49b55c5"
+            }
+          ],
+          "reason": "Only the reference frame supplies this landmark orientation.",
+          "status": "RESOLVED",
+          "summary": "Parking Lot A is left of the main entrance when facing away from it.",
+          "uid": "6b50620e-44da-566d-87cb-55aca0c93226"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "b54ac954-0a84-502c-a096-a4f85a0d317a"
+            }
+          ],
+          "reason": "Only the reference frame supplies this landmark orientation.",
+          "status": "RESOLVED",
+          "summary": "The West Complex is left of the main entrance when facing away from it.",
+          "uid": "ce80c94f-45d3-541f-b2d0-e9ccbfe2ae9f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "5e23ba3e-d573-54c3-99b0-fea607a63e46"
+            }
+          ],
+          "reason": "Only the reference frame supplies this landmark orientation.",
+          "status": "RESOLVED",
+          "summary": "The Humanities Building is right of the main entrance when facing away from it.",
+          "uid": "5b5c22a0-4025-5fe8-9a2e-fa89132262c5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "9f4c539b-1205-5ed7-a441-d9a46615ea01"
+            }
+          ],
+          "reason": "Only the reference frame supplies this relative location.",
+          "status": "RESOLVED",
+          "summary": "The Student Centre is behind the Central Library.",
+          "uid": "918c9b78-68ff-5719-b2cc-76fd556d60e5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "759a38f7-7b7f-5eae-bbec-f00df27c9f4b"
+            }
+          ],
+          "reason": "Only the reference frame states this route-explanation requirement.",
+          "status": "RESOLVED",
+          "summary": "Guidance should explain the difference between the standard shortest route and the accessible route.",
+          "uid": "58483d70-c9f4-58dc-b1ea-99eb5258c78c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "f0864b5f-4148-5c8c-a778-de0a028146d7"
+            },
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "d7a22205-1d0a-5106-a764-fc2e97769bc8"
+            }
+          ],
+          "reason": "These reference memories restate the same one-sided real-time traffic-measurement limitation.",
+          "status": "RESOLVED",
+          "summary": "The route guidance agent cannot determine real-time on-site congestion or pedestrian traffic.",
+          "uid": "323d7e63-fe03-56e3-91da-b70c0335f926"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "056cce65-dd73-50e6-8745-27d4d71effb1"
+            },
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "084210ca-d235-52d4-9801-3e78c7d53454"
+            }
+          ],
+          "reason": "These reference memories split the same one-sided limitation concerning transient on-site conditions.",
+          "status": "RESOLVED",
+          "summary": "The route guidance agent cannot detect movable obstacles or newly installed temporary signs and movable barriers in real time.",
+          "uid": "35e91972-2548-5f56-8352-7f7f4b2c0170"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "1fa0cf4f-6bc2-50f6-90a7-871b286b00bf"
+            }
+          ],
+          "reason": "Only the reference frame identifies this accessibility gap.",
+          "status": "RESOLVED",
+          "summary": "No continuous wheelchair-accessible route follows the direction of the stairs on the Main Building’s right side.",
+          "uid": "5bc7af0b-563d-5db3-889f-65de81be7c3f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "c33f2c68-d304-51e0-8489-7e8876775cfd"
+            }
+          ],
+          "reason": "Only the reference frame describes this detour length.",
+          "status": "RESOLVED",
+          "summary": "The detour from the stairs on the Main Building’s right side to the Student Centre is long.",
+          "uid": "5d4d8251-08de-5d78-ace2-0f7a87f1c93c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "fd111f85-255e-5c35-acfb-b860f35cc4a8"
+            }
+          ],
+          "reason": "Only the reference frame describes this general map content.",
+          "status": "RESOLVED",
+          "summary": "The public campus map shows building entrances and interbuilding pedestrian paths.",
+          "uid": "89386709-1a5d-596e-abd8-9c1df57a8036"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "4bad21e5-cc32-5995-93fd-d0938a41d427"
+            }
+          ],
+          "reason": "Only the reference frame describes this accessibility-specific map marking.",
+          "status": "RESOLVED",
+          "summary": "The public campus map separately marks step-free accessible routes.",
+          "uid": "c9f893c5-fff3-5866-805f-fd985b1b58cc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "d1aaec66-fff8-5270-b939-cd8877f75339"
+            }
+          ],
+          "reason": "Only the reference frame identifies this wayfinding sign.",
+          "status": "RESOLVED",
+          "summary": "A sign on the path before the Main Building’s main entrance indicates the accessible-route direction.",
+          "uid": "1d53dc03-cab7-523a-9c9d-83fcede365c5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "79728c8e-66d0-574d-aeee-2e6e4a928db3"
+            }
+          ],
+          "reason": "Only the reference frame describes this connection.",
+          "status": "RESOLVED",
+          "summary": "An above-ground pedestrian path connects the West Complex to the Main Building’s main entrance.",
+          "uid": "1e90b9e5-d109-5b24-9e97-9349483e0a6b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "41f16b3e-4ab3-5f38-9942-7e8896fec3b6"
+            }
+          ],
+          "reason": "Only the reference frame describes this path alignment.",
+          "status": "RESOLVED",
+          "summary": "The Humanities Building path to the Main Building passes before the stairs on the building’s right side.",
+          "uid": "eb4b41a5-d2fa-594c-b622-ee9fa547131b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "2af1d276-7a46-514d-b8c8-cd9f1e2a9ef2"
+            }
+          ],
+          "reason": "Only the reference frame supplies this elevator accessibility fact.",
+          "status": "RESOLVED",
+          "summary": "The Main Building lobby elevator provides step-free access from the first floor to the third-floor rear-entrance level.",
+          "uid": "ff943254-d46f-549d-a4ba-7e21f11a4348"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "cae9af0e-9225-5193-b581-5b2d8096fc14"
+            }
+          ],
+          "reason": "Only the reference frame states this escalator-route limitation.",
+          "status": "RESOLVED",
+          "summary": "The Main Building escalator route contains an unavoidable stair section.",
+          "uid": "1d3db2ba-8c29-5414-9b32-f7f3db07b713"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "a1617fa2-fa36-5af1-91c9-a8924ae1f5a9"
+            }
+          ],
+          "reason": "Only the reference frame supplies this accessibility routing rule.",
+          "status": "RESOLVED",
+          "summary": "People requiring step-free travel should be directed to the elevator rather than the escalator.",
+          "uid": "e616a21a-3453-5f5a-b870-c466579f1a7a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "03c25e0f-3cd1-5a27-a806-0d09664a3fc3"
+            }
+          ],
+          "reason": "Only the reference frame identifies this elevator location.",
+          "status": "RESOLVED",
+          "summary": "The elevator nearest the Main Building’s main entrance is inside the first-floor lobby.",
+          "uid": "18e33a62-9e34-55ff-8c1f-a2fa487eb4d3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "6fad00c2-1f97-5377-8a3a-b36d19705d4b"
+            }
+          ],
+          "reason": "Only the reference frame identifies this route amenity.",
+          "status": "RESOLVED",
+          "summary": "The above-ground Main Building–Central Library route has a rest bench midway.",
+          "uid": "ec67a695-2e8d-5997-b4d1-93a34e0749be"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "c3558237-458f-5487-8718-0c48b9bdf568"
+            }
+          ],
+          "reason": "Only the reference frame supplies this plaza location.",
+          "status": "RESOLVED",
+          "summary": "Solbit Plaza lies between the Main Building’s main entrance and the West Complex.",
+          "uid": "eecd7920-b56b-5ec7-a8f7-c30b8f7b1f17"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "09862f9d-91cd-5e36-b6b9-b042b5d84d5b"
+            }
+          ],
+          "reason": "Only the reference frame states this weather-related travel effect.",
+          "status": "RESOLVED",
+          "summary": "Rain or snow may lengthen travel time on sloped outdoor pedestrian paths.",
+          "uid": "c3db0bd8-ebba-5702-a4d2-9f64207409b4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "034676e0-f7b6-52ea-90a3-e6d3f656bc2f"
+            }
+          ],
+          "reason": "Only the reference frame supplies this snow-clearance priority.",
+          "status": "RESOLVED",
+          "summary": "Snow-removal personnel prioritize major accessible routes over other pedestrian paths during snowfall.",
+          "uid": "519be12d-158c-53a1-b216-7be50b15c82a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "4dcddb86-e56c-552a-810d-c04a1934b475"
+            }
+          ],
+          "reason": "Only the reference frame describes this recurring traffic pattern.",
+          "status": "RESOLVED",
+          "summary": "Pedestrian traffic between the Main Building’s third floor and the Central Library rises during class changes.",
+          "uid": "cad6f7bf-d68e-52e1-b66b-5415f5035de7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "ddcc1848-f9df-5772-9e9a-0c6ed42e557a"
+            }
+          ],
+          "reason": "Only the reference frame states this visitor wayfinding preference.",
+          "status": "RESOLVED",
+          "summary": "First-time visitors understand directions based on visible facilities more easily than building-number directions.",
+          "uid": "3d2d3020-afe4-52bb-a87d-3dd64939b1e6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "0a78908e-a479-5e5a-b54e-b09f2cb1f7bc"
+            }
+          ],
+          "reason": "Only the reference frame identifies this navigation difficulty.",
+          "status": "RESOLVED",
+          "summary": "Sloped terrain can cause first-time visitors to confuse the Main Building’s first-floor main entrance with its third-floor rear entrance.",
+          "uid": "e19286c4-03b8-53c0-aaa1-8492cdf55b7b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "80355a5f-5170-59b1-82b1-517c5c20a1bb"
+            }
+          ],
+          "reason": "Only the reference frame states this service-route preference.",
+          "status": "RESOLVED",
+          "summary": "Delivery drivers regard designated service routes separated from pedestrians as safer and more predictable.",
+          "uid": "5f9ed569-fcb1-5f22-8b22-7cfae9509c8d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "27e0d8cf-02ac-5b42-8970-da451a27e055"
+            }
+          ],
+          "reason": "Only the reference frame supplies this combined limitation and detour-comparison capability.",
+          "status": "RESOLVED",
+          "summary": "Although unable to check real-time congestion, the route guidance agent can compare posted detours to find routes with fewer branches.",
+          "uid": "467584c7-7cd7-5c92-a677-72bfb010dec8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "08d5128e-e371-5251-a3e8-acf488ccbc59"
+            }
+          ],
+          "reason": "Only the reference frame supplies this map-reading capability.",
+          "status": "RESOLVED",
+          "summary": "The route guidance agent can distinguish stair routes from elevator routes on the public map.",
+          "uid": "2a42ae97-5247-5b55-8024-511d52eeefd2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "2db61a85-42af-5b31-b070-5ba2ef965cc7"
+            }
+          ],
+          "reason": "Only the reference frame states this prediction limitation.",
+          "status": "RESOLVED",
+          "summary": "The route guidance agent cannot guarantee an individual user’s travel time.",
+          "uid": "c4ad5397-f743-5471-bf08-0e5c768d4949"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "49a1ffe4-b705-5503-9853-e755bef73239"
+            }
+          ],
+          "reason": "Only the reference frame supplies this access restriction.",
+          "status": "RESOLVED",
+          "summary": "Staff-only passages must not be recommended as detours to general users.",
+          "uid": "a61289d0-8a15-5491-8dd0-aaa4a1864e12"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "2742f895-9179-5e72-bef7-2ab08c68db2c"
+            }
+          ],
+          "reason": "Only the reference frame states this alternative-presentation rule.",
+          "status": "RESOLVED",
+          "summary": "When the shortest route contains stairs, guidance should also present an available accessible route.",
+          "uid": "64073b67-dfe2-5440-a1f3-356c53901acf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "3b535b19-637b-5f2a-8441-8c509e7a1bfa"
+            }
+          ],
+          "reason": "Only the reference frame supplies this emergency precedence rule.",
+          "status": "RESOLVED",
+          "summary": "In emergencies, people should follow on-site evacuation signs and safety personnel rather than general wayfinding guidance.",
+          "uid": "47c81811-c100-5e4c-bbd8-e645337a10b2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "2f6bcece-e018-5b44-8936-430839892e49"
+            }
+          ],
+          "reason": "Only the reference frame describes this transit-stop connection.",
+          "status": "RESOLVED",
+          "summary": "The pedestrian path from the West Gate stop to the Main Building’s main entrance passes through Solbit Plaza.",
+          "uid": "2c965e17-0eb4-52b2-93aa-644d3d592790"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "675f922d-084f-54bd-bc38-f7aae69a370b"
+            }
+          ],
+          "reason": "Only the reference frame describes this shuttle-origin accessible route.",
+          "status": "RESOLVED",
+          "summary": "A step-free route connects the shuttle stop before the Student Centre to the Central Library west entrance.",
+          "uid": "b1bde5da-e061-54b0-a4cb-fc3f60a108e5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "30e5c146-ea97-5317-bf6f-dedbffaeaafa"
+            }
+          ],
+          "reason": "Only the reference frame supplies this bicycle-transition instruction.",
+          "status": "RESOLVED",
+          "summary": "Bicycle users dismount at the designated rack on Solbit Plaza’s edge and continue on foot.",
+          "uid": "5d413eeb-5f32-518a-8ba3-67f7930d9dd5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "937927ca-810d-4b93-b03a-34df528b3111",
+              "memory_uid": "da43a5f5-41af-5a8a-b867-b854fe4c4ae5"
+            }
+          ],
+          "reason": "Only the reference frame states this default-route restriction.",
+          "status": "RESOLVED",
+          "summary": "Informal shortcuts absent from the public map should not be suggested as default routes.",
+          "uid": "efb1deea-f016-5bd1-8395-cbd999bb18f9"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Construction-period guidance uniquely directs users toward the accessible restroom in the Student Centre by taking the accessible route to the left from the Main Building viewpoint.",
+        "differences": "Construction closes the indoor Main Building, third-floor rear-entrance, and Parking Lot A routes, changes their user impacts, establishes a Student Centre accessible detour, and permits closed candidates to be excluded from route comparison.",
+        "reference_only": "Baseline-only material covers landmarks and paths, accessibility infrastructure, weather and traffic effects, map and agent limitations, user preferences, route-presentation rules, safety restrictions, and specialized pedestrian, shuttle, bicycle, and service guidance."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "f399d27d-b46d-4942-8274-ec6b4ded5710"
+    },
+    "analysis_digest": "247b770dc749c84cf4a85a5dd18a65f1cbe454214a7da96bbf6c698caa20aedd",
+    "key": "e0f46189cc37994b0e6d95b7d66fa8b1485a7f9259011b232b8d703ab8d8ca80",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 98.54496379199918,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-1",
+    "task_description": {
+      "context_digest": "17a794e48857a8178811052488c3bd4cc66e9029847f2ce038825e49ed5afcc8",
+      "context_uid": "e2c67cf1-c2a8-5aef-a2cb-583a9fd8d6c6",
+      "name": "task-1/description"
+    }
+  },
+  "artifact_key": "e0f46189cc37994b0e6d95b7d66fa8b1485a7f9259011b232b8d703ab8d8ca80",
+  "created_at": "2026-08-13T18:09:11.107862Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-1/campus-wiki/route-changes",
+  "pair_key": "58b1d9ba5d00b33a2dd1799b53794a978ba8bf643946dc2ab28eabf6fd6d463d",
+  "provider_seconds": 98.54496379199918,
+  "right": "task-1/participant/construction-updates/route-changes",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-1"
+}

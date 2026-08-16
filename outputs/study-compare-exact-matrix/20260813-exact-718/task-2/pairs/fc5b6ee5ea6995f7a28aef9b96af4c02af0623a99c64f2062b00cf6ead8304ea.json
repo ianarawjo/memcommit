@@ -1,0 +1,436 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:24:13.722266+00:00",
+      "frames": [
+        {
+          "context_digest": "adcb1ff51b2facc8282e8a56d8fec5150dd8e7376b7889d21013f71fee66b9b8",
+          "context_name": "task-2/advisor1/review",
+          "context_uid": "57ec8c37-1a0a-5f3b-82e9-51adad82677c",
+          "memories": [
+            {
+              "content": "Conduct one review prior to submission focusing solely on the validity of user problems, design interventions, and evaluation logic.",
+              "content_digest": "3dd669e72e74416ccd0b8eaf32f6b24dc7400ceb50c133a18f3ff33f89075334",
+              "position": 0,
+              "uid": "0dda8eb3-3287-5bb6-9b26-b1c00cc038d9"
+            },
+            {
+              "content": "Cross-check whether research questions align with the core functions of the prototype.",
+              "content_digest": "b3fbab30f9c640c7b3f6424f2cbc7d66bfa1f455f937f7fb28a6cc8b3763597d",
+              "position": 1,
+              "uid": "c8e0c9dd-dc4a-5a7d-9a82-e7ee449a4b25"
+            },
+            {
+              "content": "Cross-check whether evaluation tasks align with representative measures.",
+              "content_digest": "1e49d1844cb2a0a66a3dec114e44713885299f7a80763ae4e9a416eba505d61f",
+              "position": 2,
+              "uid": "f93c5baa-3c2b-5e37-b07b-0b00e8b22ab9"
+            },
+            {
+              "content": "Cross-check whether collected evidence aligns with design and operational decisions to be changed.",
+              "content_digest": "bc977c73db48b06ad23b68fa58f2fa5f64b19d09856b0e80c8ddac0b039568f8",
+              "position": 3,
+              "uid": "8dae0ad6-2a6d-5d99-98db-b0d48a1140e5"
+            },
+            {
+              "content": "Verify at the end that user problems, design interventions, user studies, and expected contributions form a coherent logical flow.",
+              "content_digest": "8b8d84adb9296241a03a4e6b91acee829ff1eaea443f9dd0b132d7b64a53dcff",
+              "position": 4,
+              "uid": "0f89ab25-d9ee-5669-aa99-a0fe07803915"
+            },
+            {
+              "content": "HCI reviewers view the validity of design interventions as low if research questions are not linked to prototype functions.",
+              "content_digest": "e7e5bb6d9618adc9d4903a4d4cbbf53007381999a95e4ed2137e3705a988fa13",
+              "position": 5,
+              "uid": "3e4a9a3b-abc2-54ed-9b87-f81abf61b541"
+            },
+            {
+              "content": "HCI reviewers view the validity of evaluation plans as low if evaluation tasks do not produce representative measures.",
+              "content_digest": "b23af1197034e73ce7b5bf0c6870ee410e44a07810ebaae12259087f2c12f8f1",
+              "position": 6,
+              "uid": "fb785649-1947-5e7d-aafb-308f14fb21b4"
+            },
+            {
+              "content": "HCI reviewers view the practicality of contributions as low if collected evidence cannot change design or operational decisions.",
+              "content_digest": "3720d356aa625bea8226fb668004f599e61140f1ad1543b643eb72b7a39ec43d",
+              "position": 7,
+              "uid": "02f8ddd8-32b0-5e3b-b358-5e0472a6e0d2"
+            },
+            {
+              "content": "Cross-check at the end whether each research question, formative evaluation data, and design modification judgment are seamlessly connected.",
+              "content_digest": "f3b3d431c05e942ff3cea0ac2d239eeee33e224047a452debe0246c57472f74d",
+              "position": 8,
+              "uid": "d17ba26c-187e-57bc-8468-c9c053fc303d"
+            },
+            {
+              "content": "Review whether the application conditions of proposed design principles and boundary cases of failure are presented together.",
+              "content_digest": "28ab914aa4a03e8f1908176b235017a80838ed660d996773a44b3963b927bcb3",
+              "position": 9,
+              "uid": "48a91d19-cc68-5400-8971-8125236f3fbf"
+            },
+            {
+              "content": "The user can have contributions reviewed only if prototype outcomes and the transferable design knowledge derived from them are separated.",
+              "content_digest": "2deadd2cfeed19a3e544c81a345a40f2f3b4561a8d28b073b70400a5e82ae0cb",
+              "position": 10,
+              "uid": "774341c9-b92d-53a5-a24c-59c75e39756b"
+            },
+            {
+              "content": "The scope of observation in controlled formative evaluations does not include long-term adaptation and operational changes in real-world usage contexts.",
+              "content_digest": "76a1a3c03c7d93acc8a6aca832fd24ab9624ea9e53c8207876160ed1055682e2",
+              "position": 11,
+              "uid": "877015ae-ab0b-561c-9fe3-3abb2d0aaa4e"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "524ee391-58bc-4e78-a9a5-aa4ddcc2ff6b"
+        },
+        {
+          "context_digest": "b379636c1034c71339b717628e5e233c5f245d0452c487967c8e881d38e4b4a7",
+          "context_name": "task-2/advisor2/feasibility",
+          "context_uid": "2a4a102a-14f5-53bb-88ef-681448ebecff",
+          "memories": [
+            {
+              "content": "Mark unverified schedule assumptions as such.",
+              "content_digest": "d4cdcdbcdb51d96f9a7435e72c2e4ef25a3e3822a765a88afafeca5194bda96e",
+              "position": 0,
+              "uid": "5c9755f8-78bd-5654-a3c7-8be0864e4f12"
+            },
+            {
+              "content": "Mark unverified recruitment assumptions as such.",
+              "content_digest": "4cc28528fee1c7b09f709638e2b57d3bc9efe635d20500ee98567f8f59b8cf21",
+              "position": 1,
+              "uid": "75af48aa-b39e-5b55-95d9-f7f7d2becbad"
+            },
+            {
+              "content": "Mark unverified technical assumptions as such.",
+              "content_digest": "8942e49cd46e3e9746330349df11e49d4a6c9250c7aa4c52c2d9ade1c97c735c",
+              "position": 2,
+              "uid": "292e33b0-4bfd-5e3a-9379-0fbf3619c42d"
+            },
+            {
+              "content": "Trace back the resources required for each core prototype feature and field research procedure.",
+              "content_digest": "b1ac088b664c62c3c1cfb96f6bb31a3ab5fc0fd77d0d1fba58e1da621b5dd56a",
+              "position": 3,
+              "uid": "c0c1fd8d-1aae-51a3-a1d4-66c1481d7b48"
+            },
+            {
+              "content": "Operations reviewers judge feasibility by examining the personnel required for each procedure.",
+              "content_digest": "3199aba38f58f677147b94eca54221e4d0add145a2a58194c3851efcc22e8fab",
+              "position": 4,
+              "uid": "7be25c27-6d67-50fe-90b5-76fca32a93d8"
+            },
+            {
+              "content": "Operations reviewers judge feasibility by examining the equipment required for each procedure.",
+              "content_digest": "13f9b86391d66cf558fc6eead29969c80acdf78d2164c96aa99641bf6c2891fd",
+              "position": 5,
+              "uid": "1aae182f-4eb3-58b7-b8cd-5ce517ead36a"
+            },
+            {
+              "content": "Operations reviewers judge feasibility by examining the time required for each procedure.",
+              "content_digest": "29efef51e7b8e35c459099af93b8ea90d019d83de3cf894e04b184078619fff4",
+              "position": 6,
+              "uid": "84f6e5e3-96b4-538b-a633-1b656204a296"
+            },
+            {
+              "content": "Document separately the commitments and confirmation status of field partners required for recruitment, installation, and operational support.",
+              "content_digest": "ba0ceb0fa886251bfe2b5a83154500862f8c2d4a82ed74fc9ddb3600010cc0b3",
+              "position": 7,
+              "uid": "16a461c4-d90d-5d0f-bfd0-4c1a116ec2be"
+            },
+            {
+              "content": "Designate a responsible party for software updates, equipment inspections, and user support during the deployment period.",
+              "content_digest": "54caa62836c502faf35561d45fba1d02a059c8ed6436ce714114bd392cb3bc9d",
+              "position": 8,
+              "uid": "0ce26892-666f-5ebe-95b2-c6f48915f18b"
+            },
+            {
+              "content": "The user's deployment readiness can be assessed only when dependencies on external services and field personnel are visible.",
+              "content_digest": "931fa67dd8ea84954ce3f0b9631301c320fdcf1bf46fb7fda0214e77636c8c1c",
+              "position": 9,
+              "uid": "4f35fd0c-005a-56a7-b33a-d74bde2d65eb"
+            },
+            {
+              "content": "Field schedules and assigned personnel may change due to operational factors beyond the researcher’s control.",
+              "content_digest": "71739481ce3043f342d9c7c52297c7644931a0a096215fc15150915b74968d84",
+              "position": 10,
+              "uid": "3b96bf66-59e4-5dbf-98d3-937402abc67b"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "e03d2d01-9810-43e3-bde3-a0247e8b8719"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address complementary but separate review concerns: the reference frame concentrates on research and contribution validity, while the compared frame concentrates on deployment feasibility, dependency visibility, and operational accountability. Neither frame supplies a scope-aligned counterpart to the other’s substantive claims.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "524ee391-58bc-4e78-a9a5-aa4ddcc2ff6b",
+              "memory_uid": "0dda8eb3-3287-5bb6-9b26-b1c00cc038d9"
+            }
+          ],
+          "reason": "This establishes a one-sided review stage and focus with no scope-aligned feasibility counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A pre-submission review should focus specifically on the validity of user problems, design interventions, and evaluation logic.",
+          "uid": "0eeafe13-ca79-5b0e-9b5a-c1421ca91594"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "524ee391-58bc-4e78-a9a5-aa4ddcc2ff6b",
+              "memory_uid": "c8e0c9dd-dc4a-5a7d-9a82-e7ee449a4b25"
+            },
+            {
+              "frame_uid": "524ee391-58bc-4e78-a9a5-aa4ddcc2ff6b",
+              "memory_uid": "3e4a9a3b-abc2-54ed-9b87-f81abf61b541"
+            }
+          ],
+          "reason": "The directive and reviewer judgment express one underlying research-validity claim absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Research questions should be linked to the prototype’s core functions to sustain the validity of design interventions.",
+          "uid": "53478cc0-a59f-5f9a-a350-31de5a51d16f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "524ee391-58bc-4e78-a9a5-aa4ddcc2ff6b",
+              "memory_uid": "f93c5baa-3c2b-5e37-b07b-0b00e8b22ab9"
+            },
+            {
+              "frame_uid": "524ee391-58bc-4e78-a9a5-aa4ddcc2ff6b",
+              "memory_uid": "fb785649-1947-5e7d-aafb-308f14fb21b4"
+            }
+          ],
+          "reason": "The cross-check and reviewer judgment split one underlying evaluation-validity claim absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Evaluation tasks should produce representative measures to sustain the validity of the evaluation plan.",
+          "uid": "662c02e8-6da1-588f-9bf2-97b087c3eb65"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "524ee391-58bc-4e78-a9a5-aa4ddcc2ff6b",
+              "memory_uid": "8dae0ad6-2a6d-5d99-98db-b0d48a1140e5"
+            },
+            {
+              "frame_uid": "524ee391-58bc-4e78-a9a5-aa4ddcc2ff6b",
+              "memory_uid": "02f8ddd8-32b0-5e3b-b358-5e0472a6e0d2"
+            }
+          ],
+          "reason": "The directive and reviewer judgment express one underlying evidence-actionability claim, whereas the compared frame addresses the feasibility of executing deployment.",
+          "status": "RESOLVED",
+          "summary": "Collected evidence should be capable of informing changes to design or operational decisions so that contributions remain practical.",
+          "uid": "cb89a1fd-2056-59c3-b7d9-7464a4be8f62"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "524ee391-58bc-4e78-a9a5-aa4ddcc2ff6b",
+              "memory_uid": "0f89ab25-d9ee-5669-aa99-a0fe07803915"
+            }
+          ],
+          "reason": "This end-stage coherence criterion is independently useful and has no matching claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "User problems, interventions, studies, and expected contributions should form a coherent logical flow.",
+          "uid": "b269a85a-d52e-5da6-b047-c76eccb4f5a2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "524ee391-58bc-4e78-a9a5-aa4ddcc2ff6b",
+              "memory_uid": "d17ba26c-187e-57bc-8468-c9c053fc303d"
+            }
+          ],
+          "reason": "This specific traceability requirement is independently useful and is not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Research questions, formative evaluation data, and judgments about design modifications should be continuously connected.",
+          "uid": "5925b395-a692-57c3-9a88-9db4872332e2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "524ee391-58bc-4e78-a9a5-aa4ddcc2ff6b",
+              "memory_uid": "48a91d19-cc68-5400-8971-8125236f3fbf"
+            }
+          ],
+          "reason": "This concerns the qualified scope of transferable design principles, which the compared frame does not discuss.",
+          "status": "RESOLVED",
+          "summary": "Proposed design principles should present their application conditions together with boundary cases of failure.",
+          "uid": "02d43bbb-f106-51ff-9326-8451dcfa72b9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "524ee391-58bc-4e78-a9a5-aa4ddcc2ff6b",
+              "memory_uid": "774341c9-b92d-53a5-a24c-59c75e39756b"
+            }
+          ],
+          "reason": "This is a distinct contribution-structure requirement without a scope-aligned counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Prototype outcomes should be separated from the transferable design knowledge derived from them when presenting contributions for review.",
+          "uid": "80b7d690-0ce7-5c84-ab87-1292fef924af"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "524ee391-58bc-4e78-a9a5-aa4ddcc2ff6b",
+              "memory_uid": "877015ae-ab0b-561c-9fe3-3abb2d0aaa4e"
+            }
+          ],
+          "reason": "This states a specific evidentiary boundary that is not supplied by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Controlled formative evaluations do not observe long-term adaptation or operational change in real-world use.",
+          "uid": "ff0f9e34-1ffb-5276-8c2c-a8cad6202ba8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e03d2d01-9810-43e3-bde3-a0247e8b8719",
+              "memory_uid": "5c9755f8-78bd-5654-a3c7-8be0864e4f12"
+            },
+            {
+              "frame_uid": "e03d2d01-9810-43e3-bde3-a0247e8b8719",
+              "memory_uid": "75af48aa-b39e-5b55-95d9-f7f7d2becbad"
+            },
+            {
+              "frame_uid": "e03d2d01-9810-43e3-bde3-a0247e8b8719",
+              "memory_uid": "292e33b0-4bfd-5e3a-9379-0fbf3619c42d"
+            }
+          ],
+          "reason": "These memories split one transparency policy across three assumption types, with no corresponding policy in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Unverified schedule, recruitment, and technical assumptions should be explicitly marked as unverified.",
+          "uid": "e4fffa5a-bbf0-5f74-a162-a83df7e6e425"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e03d2d01-9810-43e3-bde3-a0247e8b8719",
+              "memory_uid": "c0c1fd8d-1aae-51a3-a1d4-66c1481d7b48"
+            },
+            {
+              "frame_uid": "e03d2d01-9810-43e3-bde3-a0247e8b8719",
+              "memory_uid": "7be25c27-6d67-50fe-90b5-76fca32a93d8"
+            },
+            {
+              "frame_uid": "e03d2d01-9810-43e3-bde3-a0247e8b8719",
+              "memory_uid": "1aae182f-4eb3-58b7-b8cd-5ce517ead36a"
+            },
+            {
+              "frame_uid": "e03d2d01-9810-43e3-bde3-a0247e8b8719",
+              "memory_uid": "84f6e5e3-96b4-538b-a633-1b656204a296"
+            }
+          ],
+          "reason": "The resource-tracing directive and reviewer criteria divide one resource-based feasibility claim into operational dimensions absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Feasibility should be supported by tracing required personnel, equipment, and time to core prototype features and field research procedures.",
+          "uid": "fe7b623f-c64e-5e72-8a52-884c53a774ac"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e03d2d01-9810-43e3-bde3-a0247e8b8719",
+              "memory_uid": "16a461c4-d90d-5d0f-bfd0-4c1a116ec2be"
+            }
+          ],
+          "reason": "This partner-readiness documentation requirement has no scope-aligned counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Field-partner commitments and confirmation status should be documented separately for recruitment, installation, and operational support.",
+          "uid": "b134e681-c6c0-5d07-a7a7-4f0443ed83a6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e03d2d01-9810-43e3-bde3-a0247e8b8719",
+              "memory_uid": "0ce26892-666f-5ebe-95b2-c6f48915f18b"
+            }
+          ],
+          "reason": "This assigns ongoing deployment accountability, a concern not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Responsible parties should be designated for software updates, equipment inspections, and user support during deployment.",
+          "uid": "abc5b537-d1e7-5f79-802b-a8864b3f6471"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e03d2d01-9810-43e3-bde3-a0247e8b8719",
+              "memory_uid": "4f35fd0c-005a-56a7-b33a-d74bde2d65eb"
+            }
+          ],
+          "reason": "This is a distinct prerequisite for readiness assessment absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "External-service and field-personnel dependencies must be visible for deployment readiness to be assessed.",
+          "uid": "e16dc148-2729-55c7-972c-4f8e3489f223"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e03d2d01-9810-43e3-bde3-a0247e8b8719",
+              "memory_uid": "3b96bf66-59e4-5dbf-98d3-937402abc67b"
+            }
+          ],
+          "reason": "This records deployment volatility independently of the reference frame’s controlled-evaluation limitation.",
+          "status": "RESOLVED",
+          "summary": "Operational factors outside researcher control may change field schedules and assigned personnel.",
+          "uid": "45c42aa7-b712-5e83-b50d-34a6236016f7"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers transparent uncertainty, resource-based feasibility, partner and service dependencies, deployment responsibilities, and operational volatility affecting schedules and personnel.",
+        "differences": "",
+        "reference_only": "The reference frame covers pre-submission validity review, alignment among questions, prototype functions, measures, evidence, and design changes, coherent contribution logic, principle boundaries, separation of outcomes from transferable knowledge, and limits of controlled formative evaluation."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "58b9e492-394c-4a8a-ad05-aeb388fc6f29"
+    },
+    "analysis_digest": "5ee898b6fdae59c1527fd59b9efdd84494435aa14fcd8c619f4392a3c7086165",
+    "key": "555b06ea24e26247fbfffb9e647b747d06fe87398a340aec3e914be39bbbee4a",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 44.58979558400097,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "555b06ea24e26247fbfffb9e647b747d06fe87398a340aec3e914be39bbbee4a",
+  "created_at": "2026-08-13T18:24:58.311466Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/review",
+  "pair_key": "fc5b6ee5ea6995f7a28aef9b96af4c02af0623a99c64f2062b00cf6ead8304ea",
+  "provider_seconds": 44.58979558400097,
+  "right": "task-2/advisor2/feasibility",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

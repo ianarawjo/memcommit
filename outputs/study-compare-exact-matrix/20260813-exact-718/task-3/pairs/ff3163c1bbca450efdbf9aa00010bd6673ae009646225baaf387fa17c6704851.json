@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:53:26.964920+00:00",
+      "frames": [
+        {
+          "context_digest": "5e42fc3dcfbf5576148277f6841977ca8a5cabd4a3fc67a5581f6f6cc816c900",
+          "context_name": "task-3/local/personal-memory/2025/10",
+          "context_uid": "8130b676-dc51-5c31-b7dc-185afdf9cf07",
+          "memories": [
+            {
+              "content": "The user keeps waterproof shoes for rainy days to the left of the entrance.",
+              "content_digest": "5b9e5a20153c7865010318800d740a410faef0c13fe2278c20ce984a89b7dea5",
+              "position": 0,
+              "uid": "82c1e806-de3a-5633-8a08-175487e69fd6"
+            },
+            {
+              "content": "On a day the user walked in the rain wearing thin shoes, their socks became wet and they changed them after arrival.",
+              "content_digest": "fdbdab8c08a4b1d933ff8ac3ddedee8541ddf070e8c6e6020b6c1d14b992c621",
+              "position": 1,
+              "uid": "25df6384-836f-5f8e-bd97-73a1fb171c48"
+            },
+            {
+              "content": "On the next rainy day, the user wore waterproof shoes and their feet remained dry.",
+              "content_digest": "0e87d74fb93fe062cd12efe2f5a04fbae5ce13a60491fd9ad04c4e006acbd87f",
+              "position": 2,
+              "uid": "55abae4f-206a-586e-8b35-406d7525c0a1"
+            },
+            {
+              "content": "On a day the user walked for a long time in new shoes, their heel chafed and they shortened the route home.",
+              "content_digest": "aeb369b995cdf17ea73ae8546b454eab70f33bf6d3c67a09aee2805c1c598b6d",
+              "position": 3,
+              "uid": "c6d21ec4-6bdf-55df-b4d4-05cb531bf4bd"
+            },
+            {
+              "content": "The user wore the same shoes on two short outings before using them on a long walk.",
+              "content_digest": "0d7ed5656f35f4fe025c6ba80e4c829f5b9851c193f981de9a461f848317d60a",
+              "position": 4,
+              "uid": "a6424854-e51e-5afc-8b9f-9e2f0273f70e"
+            },
+            {
+              "content": "On a day the user dried an umbrella outside the entrance, they found it immediately before the next outing.",
+              "content_digest": "dbc2453ca5f895e2cfe7f58e5624cf4c5d6793468af3b25df7e9a4ddb7d50159",
+              "position": 5,
+              "uid": "1b436b46-3d1f-5aa2-99e3-94b7c2412bfd"
+            },
+            {
+              "content": "On a day the user put a folded wet umbrella in their bag, documents inside became wet.",
+              "content_digest": "1f63fbc8c6b491a734f0f7a4190e26aec22826c1ff839242e0ca71d933312c9c",
+              "position": 6,
+              "uid": "ccd1f422-6130-5f19-869e-681102a3a1fa"
+            },
+            {
+              "content": "When rain is forecast, the user's mother expects the user may forget an umbrella and sets out a spare at the entrance.",
+              "content_digest": "80bdfaefb6f781aa91ef7217331e75f09b4766650c2b078dfadf592b2eb27b08",
+              "position": 7,
+              "uid": "c69a8e87-2b6f-5514-ab0d-0037531592f8"
+            },
+            {
+              "content": "When proposing a long-distance walking plan, check both the weather that day and recent records of shoe discomfort.",
+              "content_digest": "f54a546d423099c3abbb65bb49e4ddf773a8191dcffbb8b3d5153dfd70553b73",
+              "position": 8,
+              "uid": "4567ea9f-1800-51ed-bfac-f4cdf674d4cf"
+            },
+            {
+              "content": "Even if the local agent knows a shoe's location, it cannot know its current condition or whether it is usable.",
+              "content_digest": "28202c222ca800a5e19dbaebea2b3c992748f530a695517cf123b10187a31bc8",
+              "position": 9,
+              "uid": "a4ff1b76-755d-530a-b24c-8655115e4fbe"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "ec59efb5-75ab-4af0-8379-7d95a4b13e16"
+        },
+        {
+          "context_digest": "d28031209c5edc768a592166e26351dd5bce0c7568d379fcaceab173450041c8",
+          "context_name": "task-3/local/personal-memory/2026/02",
+          "context_uid": "7ffcbc10-1703-54b0-9545-99742b51d333",
+          "memories": [
+            {
+              "content": "The user keeps basic repair tools in a box beneath the sink.",
+              "content_digest": "c2a23bace63735c502081b19682a8ceb3e37156b9aadd6f7739e2005c20469d6",
+              "position": 0,
+              "uid": "7d3daf76-a21e-5117-a534-6175ab2d2861"
+            },
+            {
+              "content": "On a day the faucet leaked, the user placed only a towel beneath it, and the floor became wet as well.",
+              "content_digest": "ad6baa7e1848e4e61bdaf22bc5c8665122330b5c70c8ae192216abbba17c6134",
+              "position": 1,
+              "uid": "70a6d9f5-180f-5174-b247-690e10baa23e"
+            },
+            {
+              "content": "After sending a photo to building management, the user finalized the time for a repair visit.",
+              "content_digest": "82b36c7a95e51a0dfa32768c2a437d509b75c0f93bc51a99a636f2c9739a20da",
+              "position": 2,
+              "uid": "9fcd922c-147c-517b-82b3-180fdfb13f33"
+            },
+            {
+              "content": "Before the technician's visit, the user emptied the area beneath the sink so work could begin immediately.",
+              "content_digest": "dbc3b48e5bc4b406dc17067dd93d92e845e3706f47c8706f9a5d5ef17bf64617",
+              "position": 3,
+              "uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5"
+            },
+            {
+              "content": "On a day the user wrote the visit time only in the calendar and turned off the reminder, they heard the doorbell late.",
+              "content_digest": "95fab6bcab815dd8bdd5fecb867f84c6d2f1a901771603b1dbf197cde3c1d19d",
+              "position": 4,
+              "uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65"
+            },
+            {
+              "content": "For the next visit, the user enabled a reminder 30 minutes beforehand and answered immediately at the entrance.",
+              "content_digest": "818783ff21b2d369935b9994c17b28f93f84ea7558dab9f2de20d0aad21f86a3",
+              "position": 5,
+              "uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a"
+            },
+            {
+              "content": "After the repair, the user called their maternal aunt to confirm that the spare key entrusted to her was still there.",
+              "content_digest": "ac01b9816dda2d6bf16f22b41157120b7ffdd75d19638f6313a88e1ce6e7a1f1",
+              "position": 6,
+              "uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441"
+            },
+            {
+              "content": "The user's maternal aunt considers it unsafe to hand the spare key to a repair technician without the user's explicit request.",
+              "content_digest": "f7c7c0306c81cc6de9f02aa1aed7d411db3f29757d024e7d5a1679b1ff308948",
+              "position": 7,
+              "uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd"
+            },
+            {
+              "content": "Obtain the user's reconfirmation before scheduling an external worker to enter the residential unit.",
+              "content_digest": "34382e40f4907bea82728787fdeb150e299d46a0079ae2847d4eda6d6d892d22",
+              "position": 8,
+              "uid": "4716a67b-8602-564c-9e89-85cd4ee158f9"
+            },
+            {
+              "content": "A multi-unit residential building's repair schedule may change because of emergency work or parts availability.",
+              "content_digest": "d701fdd1ffbf17ff0890c583b5bf39849e3c6e3cc296fde7e00d3d1ecc0ef196",
+              "position": 9,
+              "uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "a4bec63b-eed1-41a5-9899-8fb9b49a7749"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate domains: the reference frame concerns rain gear, footwear experience, umbrella handling, and walking-plan limits, while the compared frame concerns leak repair, technician access, visit reminders, spare-key safeguards, and scheduling uncertainty. Neither side supplies a directly matching operational claim.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ec59efb5-75ab-4af0-8379-7d95a4b13e16",
+              "memory_uid": "82c1e806-de3a-5633-8a08-175487e69fd6"
+            }
+          ],
+          "reason": "Only the reference frame provides this rain-footwear storage practice.",
+          "status": "RESOLVED",
+          "summary": "Waterproof shoes are stored to the left of the entrance for rainy days.",
+          "uid": "924b8411-fc28-5988-94b4-728a094ede9a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ec59efb5-75ab-4af0-8379-7d95a4b13e16",
+              "memory_uid": "25df6384-836f-5f8e-bd97-73a1fb171c48"
+            }
+          ],
+          "reason": "Only the reference frame records this consequence of unsuitable rain footwear.",
+          "status": "RESOLVED",
+          "summary": "Thin shoes led to wet socks during a rainy walk and required changing them afterward.",
+          "uid": "04b196be-2e22-5d7b-81e4-781fecbe49c2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ec59efb5-75ab-4af0-8379-7d95a4b13e16",
+              "memory_uid": "55abae4f-206a-586e-8b35-406d7525c0a1"
+            }
+          ],
+          "reason": "Only the reference frame records this successful rain-footwear outcome.",
+          "status": "RESOLVED",
+          "summary": "Waterproof shoes kept the user's feet dry on a subsequent rainy day.",
+          "uid": "0b897f3e-d4df-5c7c-a340-1a06648de6b5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ec59efb5-75ab-4af0-8379-7d95a4b13e16",
+              "memory_uid": "c6d21ec4-6bdf-55df-b4d4-05cb531bf4bd"
+            }
+          ],
+          "reason": "Only the reference frame records this long-walk discomfort event.",
+          "status": "RESOLVED",
+          "summary": "A long walk in new shoes caused heel chafing and an early return.",
+          "uid": "f9f9f451-ef62-5000-a554-2d71f1ac4e05"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ec59efb5-75ab-4af0-8379-7d95a4b13e16",
+              "memory_uid": "a6424854-e51e-5afc-8b9f-9e2f0273f70e"
+            }
+          ],
+          "reason": "Only the reference frame records this staged pattern of shoe use.",
+          "status": "RESOLVED",
+          "summary": "The user tested the same shoes on two short outings before a long walk.",
+          "uid": "9d535ff2-1b58-52c8-bc96-81fedb2404d5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ec59efb5-75ab-4af0-8379-7d95a4b13e16",
+              "memory_uid": "1b436b46-3d1f-5aa2-99e3-94b7c2412bfd"
+            }
+          ],
+          "reason": "Only the reference frame records this umbrella-drying and retrieval outcome.",
+          "status": "RESOLVED",
+          "summary": "Drying an umbrella outside the entrance made it immediately available for the next outing.",
+          "uid": "11f56284-308c-5d5b-be61-241ce7459c83"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ec59efb5-75ab-4af0-8379-7d95a4b13e16",
+              "memory_uid": "ccd1f422-6130-5f19-869e-681102a3a1fa"
+            }
+          ],
+          "reason": "Only the reference frame records this consequence of wet-umbrella storage.",
+          "status": "RESOLVED",
+          "summary": "Putting a folded wet umbrella in a bag caused documents inside to become wet.",
+          "uid": "0d97c999-be43-5876-ae0b-c76304a8a2e2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ec59efb5-75ab-4af0-8379-7d95a4b13e16",
+              "memory_uid": "c69a8e87-2b6f-5514-ab0d-0037531592f8"
+            }
+          ],
+          "reason": "Only the reference frame records this household rain-preparation practice and expectation.",
+          "status": "RESOLVED",
+          "summary": "When rain is forecast, the user's mother sets out a spare umbrella because the user may forget one.",
+          "uid": "2b127683-ff2d-54e0-b9b9-8dabdef4d1df"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ec59efb5-75ab-4af0-8379-7d95a4b13e16",
+              "memory_uid": "4567ea9f-1800-51ed-bfac-f4cdf674d4cf"
+            }
+          ],
+          "reason": "Only the reference frame provides this planning rule for long walks.",
+          "status": "RESOLVED",
+          "summary": "Long-distance walking proposals should consider both current weather and recent shoe-discomfort records.",
+          "uid": "eb01a24c-5fe2-58db-b2ff-82721459ae4f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ec59efb5-75ab-4af0-8379-7d95a4b13e16",
+              "memory_uid": "a4ff1b76-755d-530a-b24c-8655115e4fbe"
+            }
+          ],
+          "reason": "Only the reference frame states this epistemic limitation concerning footwear.",
+          "status": "RESOLVED",
+          "summary": "Knowing a shoe's location does not establish its current condition or usability.",
+          "uid": "8ae4ed4a-35d7-5fc0-94f3-4c94eff3b5b6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a4bec63b-eed1-41a5-9899-8fb9b49a7749",
+              "memory_uid": "7d3daf76-a21e-5117-a534-6175ab2d2861"
+            }
+          ],
+          "reason": "Only the compared frame provides this repair-tool storage location.",
+          "status": "RESOLVED",
+          "summary": "Basic repair tools are stored in a box beneath the sink.",
+          "uid": "df9d1149-aae9-5717-9157-8c277b5a5ecd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a4bec63b-eed1-41a5-9899-8fb9b49a7749",
+              "memory_uid": "70a6d9f5-180f-5174-b247-690e10baa23e"
+            }
+          ],
+          "reason": "Only the compared frame records this inadequate leak-containment outcome.",
+          "status": "RESOLVED",
+          "summary": "Using only a towel beneath a leaking faucet failed to prevent the floor from becoming wet.",
+          "uid": "135fbeeb-8632-59ce-993a-ca4299d93c3c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a4bec63b-eed1-41a5-9899-8fb9b49a7749",
+              "memory_uid": "9fcd922c-147c-517b-82b3-180fdfb13f33"
+            }
+          ],
+          "reason": "Only the compared frame records this repair-coordination sequence.",
+          "status": "RESOLVED",
+          "summary": "The user finalized a repair-visit time after sending building management a photo.",
+          "uid": "5dbe9334-39cf-58e5-af10-54517ec3d2eb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a4bec63b-eed1-41a5-9899-8fb9b49a7749",
+              "memory_uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5"
+            }
+          ],
+          "reason": "Only the compared frame records this preparation for technician access.",
+          "status": "RESOLVED",
+          "summary": "The user cleared the area beneath the sink before the technician arrived so work could start immediately.",
+          "uid": "8e9964c4-f8fe-55ad-a992-338b6da886df"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a4bec63b-eed1-41a5-9899-8fb9b49a7749",
+              "memory_uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65"
+            }
+          ],
+          "reason": "Only the compared frame records this missed-reminder outcome.",
+          "status": "RESOLVED",
+          "summary": "With the visit recorded only in the calendar and its reminder disabled, the user responded late to the doorbell.",
+          "uid": "e8481b15-54d3-5ce2-a285-91576f552e22"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a4bec63b-eed1-41a5-9899-8fb9b49a7749",
+              "memory_uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a"
+            }
+          ],
+          "reason": "Only the compared frame records this successful visit-reminder outcome.",
+          "status": "RESOLVED",
+          "summary": "A reminder set thirty minutes before the next visit enabled the user to answer immediately.",
+          "uid": "e8558705-e339-520e-b826-b0ebb48e594e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a4bec63b-eed1-41a5-9899-8fb9b49a7749",
+              "memory_uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441"
+            }
+          ],
+          "reason": "Only the compared frame records this verification of spare-key custody.",
+          "status": "RESOLVED",
+          "summary": "After the repair, the user confirmed that the maternal aunt still held the entrusted spare key.",
+          "uid": "382facba-d8c0-5182-8c47-4820b18ff3dd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a4bec63b-eed1-41a5-9899-8fb9b49a7749",
+              "memory_uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd"
+            }
+          ],
+          "reason": "Only the compared frame records this safeguard governing release of the spare key.",
+          "status": "RESOLVED",
+          "summary": "The maternal aunt considers giving the spare key to a technician unsafe without the user's explicit request.",
+          "uid": "fb7327bb-0f7d-5ade-9ca8-8f2338b6f8df"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a4bec63b-eed1-41a5-9899-8fb9b49a7749",
+              "memory_uid": "4716a67b-8602-564c-9e89-85cd4ee158f9"
+            }
+          ],
+          "reason": "Only the compared frame provides this residential-access scheduling rule.",
+          "status": "RESOLVED",
+          "summary": "The user's reconfirmation is required before scheduling an external worker to enter the residential unit.",
+          "uid": "ded5b9bf-6169-5755-a399-7c5e2469c83b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a4bec63b-eed1-41a5-9899-8fb9b49a7749",
+              "memory_uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+            }
+          ],
+          "reason": "Only the compared frame states these sources of repair-schedule uncertainty.",
+          "status": "RESOLVED",
+          "summary": "Emergency work or parts availability may change a multi-unit building's repair schedule.",
+          "uid": "a113be8e-ab42-51f3-9621-1018f75dde95"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame uniquely records leak response and repair coordination, visit preparation and reminders, spare-key safeguards, reconfirmation before residential access, and repair-schedule uncertainty.",
+        "differences": "",
+        "reference_only": "The reference uniquely records rain footwear and umbrella experiences, household preparation for rain, long-walk planning considerations, and limits on knowing shoe usability."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "eaf41c33-7e6e-4b02-8cab-e05d64fe2403"
+    },
+    "analysis_digest": "4bc756fab157923a07842f1bd61166a46d90559d85fd041155981d36c3bfa8ba",
+    "key": "c943c29739b9a5d7bc241c07bb1b51dbba1390bc311aaa1797b87cf544564ba9",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 38.36719120899943,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "c943c29739b9a5d7bc241c07bb1b51dbba1390bc311aaa1797b87cf544564ba9",
+  "created_at": "2026-08-13T18:54:05.331767Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/10",
+  "pair_key": "ff3163c1bbca450efdbf9aa00010bd6673ae009646225baaf387fa17c6704851",
+  "provider_seconds": 38.36719120899943,
+  "right": "task-3/local/personal-memory/2026/02",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

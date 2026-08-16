@@ -1,0 +1,400 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:23:55.937474+00:00",
+      "frames": [
+        {
+          "context_digest": "adcb1ff51b2facc8282e8a56d8fec5150dd8e7376b7889d21013f71fee66b9b8",
+          "context_name": "task-2/advisor1/review",
+          "context_uid": "57ec8c37-1a0a-5f3b-82e9-51adad82677c",
+          "memories": [
+            {
+              "content": "Conduct one review prior to submission focusing solely on the validity of user problems, design interventions, and evaluation logic.",
+              "content_digest": "3dd669e72e74416ccd0b8eaf32f6b24dc7400ceb50c133a18f3ff33f89075334",
+              "position": 0,
+              "uid": "0dda8eb3-3287-5bb6-9b26-b1c00cc038d9"
+            },
+            {
+              "content": "Cross-check whether research questions align with the core functions of the prototype.",
+              "content_digest": "b3fbab30f9c640c7b3f6424f2cbc7d66bfa1f455f937f7fb28a6cc8b3763597d",
+              "position": 1,
+              "uid": "c8e0c9dd-dc4a-5a7d-9a82-e7ee449a4b25"
+            },
+            {
+              "content": "Cross-check whether evaluation tasks align with representative measures.",
+              "content_digest": "1e49d1844cb2a0a66a3dec114e44713885299f7a80763ae4e9a416eba505d61f",
+              "position": 2,
+              "uid": "f93c5baa-3c2b-5e37-b07b-0b00e8b22ab9"
+            },
+            {
+              "content": "Cross-check whether collected evidence aligns with design and operational decisions to be changed.",
+              "content_digest": "bc977c73db48b06ad23b68fa58f2fa5f64b19d09856b0e80c8ddac0b039568f8",
+              "position": 3,
+              "uid": "8dae0ad6-2a6d-5d99-98db-b0d48a1140e5"
+            },
+            {
+              "content": "Verify at the end that user problems, design interventions, user studies, and expected contributions form a coherent logical flow.",
+              "content_digest": "8b8d84adb9296241a03a4e6b91acee829ff1eaea443f9dd0b132d7b64a53dcff",
+              "position": 4,
+              "uid": "0f89ab25-d9ee-5669-aa99-a0fe07803915"
+            },
+            {
+              "content": "HCI reviewers view the validity of design interventions as low if research questions are not linked to prototype functions.",
+              "content_digest": "e7e5bb6d9618adc9d4903a4d4cbbf53007381999a95e4ed2137e3705a988fa13",
+              "position": 5,
+              "uid": "3e4a9a3b-abc2-54ed-9b87-f81abf61b541"
+            },
+            {
+              "content": "HCI reviewers view the validity of evaluation plans as low if evaluation tasks do not produce representative measures.",
+              "content_digest": "b23af1197034e73ce7b5bf0c6870ee410e44a07810ebaae12259087f2c12f8f1",
+              "position": 6,
+              "uid": "fb785649-1947-5e7d-aafb-308f14fb21b4"
+            },
+            {
+              "content": "HCI reviewers view the practicality of contributions as low if collected evidence cannot change design or operational decisions.",
+              "content_digest": "3720d356aa625bea8226fb668004f599e61140f1ad1543b643eb72b7a39ec43d",
+              "position": 7,
+              "uid": "02f8ddd8-32b0-5e3b-b358-5e0472a6e0d2"
+            },
+            {
+              "content": "Cross-check at the end whether each research question, formative evaluation data, and design modification judgment are seamlessly connected.",
+              "content_digest": "f3b3d431c05e942ff3cea0ac2d239eeee33e224047a452debe0246c57472f74d",
+              "position": 8,
+              "uid": "d17ba26c-187e-57bc-8468-c9c053fc303d"
+            },
+            {
+              "content": "Review whether the application conditions of proposed design principles and boundary cases of failure are presented together.",
+              "content_digest": "28ab914aa4a03e8f1908176b235017a80838ed660d996773a44b3963b927bcb3",
+              "position": 9,
+              "uid": "48a91d19-cc68-5400-8971-8125236f3fbf"
+            },
+            {
+              "content": "The user can have contributions reviewed only if prototype outcomes and the transferable design knowledge derived from them are separated.",
+              "content_digest": "2deadd2cfeed19a3e544c81a345a40f2f3b4561a8d28b073b70400a5e82ae0cb",
+              "position": 10,
+              "uid": "774341c9-b92d-53a5-a24c-59c75e39756b"
+            },
+            {
+              "content": "The scope of observation in controlled formative evaluations does not include long-term adaptation and operational changes in real-world usage contexts.",
+              "content_digest": "76a1a3c03c7d93acc8a6aca832fd24ab9624ea9e53c8207876160ed1055682e2",
+              "position": 11,
+              "uid": "877015ae-ab0b-561c-9fe3-3abb2d0aaa4e"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "32eaa865-c085-4c94-bdd6-8e3634d43711"
+        },
+        {
+          "context_digest": "6cd44802c5b4878ee84adef31f52231d09d37ccc0ef9a7256d0421114835a6bd",
+          "context_name": "task-2/advisor2/claim-evidence",
+          "context_uid": "1ca4b72a-fcbb-5997-a1b5-f764662460a5",
+          "memories": [
+            {
+              "content": "Place observational evidence or sources adjacent to claims regarding user needs or field effects.",
+              "content_digest": "513b102a6ed66a1dd3fb3380065f34552036a6dffed20d7101487342096021e3",
+              "position": 0,
+              "uid": "b39cf79f-d174-5ecb-98c9-b3f62ce0696a"
+            },
+            {
+              "content": "Distinguish at the sentence level between facts already confirmed in the field and predictions to be examined in the user study.",
+              "content_digest": "63a7fdcf7da5c4fa36a2c7a6f8542837956fa0dcdedee781593f399516501067",
+              "position": 1,
+              "uid": "b95e0185-f933-508d-8da7-41c65e2cc340"
+            },
+            {
+              "content": "Do not use verbs implying proof of causality if the design does not support causal inference.",
+              "content_digest": "0db514f790eb85ba0800c1f8c659cd4236136b9e36c034899c36f6116c040f04",
+              "position": 2,
+              "uid": "f82f1e1f-3f27-5668-a5a4-e64b0f88b44a"
+            },
+            {
+              "content": "Prioritize citations of recent systems and field research in rapidly changing HCI topics.",
+              "content_digest": "e8cd0847480ba8d07f971f21978873d13b6bd34d4e4625dd3dde8039afd5b88c",
+              "position": 3,
+              "uid": "b5461283-9001-510c-9a30-bb367f247b25"
+            },
+            {
+              "content": "Explain the user or operational stakeholder needs that each design choice aims to address.",
+              "content_digest": "59df6b478a0e200ceaa520bb7c4535b2078a8354efae0eec77a06cb6843bfab6",
+              "position": 4,
+              "uid": "87340c01-2e0f-5b82-9410-2133648022da"
+            },
+            {
+              "content": "Support each important conclusion with the closest evidence that directly examined it.",
+              "content_digest": "6731286cd67ee18644df531752f10913f4df9e7c7acf936da99caafacd597c0a",
+              "position": 5,
+              "uid": "8b15a9ad-aa53-5a54-beb2-f1cc8d6da846"
+            },
+            {
+              "content": "Reviewers first check direct evidence placed closest to important conclusions.",
+              "content_digest": "940880f0ee481e00ff7f935c9b76af8137d0f8a8664a2c53fb3d044681980c8f",
+              "position": 6,
+              "uid": "565a2263-e3bc-5379-9a80-64665b491c88"
+            },
+            {
+              "content": "Use field cases in which people completed tasks by working around existing tools as evidence for the need for the design.",
+              "content_digest": "4c731184cb33bda8ab315870713872842339013be68cf5f79c43a8b9f4e297d4",
+              "position": 7,
+              "uid": "27b58ee9-5cad-5872-8eb7-a694728d8e79"
+            },
+            {
+              "content": "Distinguish between problems reported by operational stakeholders and those directly observed by the researcher as separate forms of evidence.",
+              "content_digest": "39586ea932c540d6c7a1b0faff870d7ef6433052792defdc110beb513276ffe6",
+              "position": 8,
+              "uid": "cf7e9410-2144-53c4-a236-a16a7b5be494"
+            },
+            {
+              "content": "Field breakdown logs can reveal both system failures and user adaptive behaviors, including their timing and conditions.",
+              "content_digest": "331910b18eef90e53453e700a55b43143b3e8d07d3bb2c88bade31fddb0e5965",
+              "position": 9,
+              "uid": "ad643b33-fba1-5643-b57f-3bb8c3829122"
+            },
+            {
+              "content": "In field sites introducing new systems, formal procedures often coexist with existing manual routines for a period, making it difficult to isolate the effects of single design changes.",
+              "content_digest": "7def8e340a5ae1ad7cce9228e3e4279f499f47f0d2576bbe23e59f3703f04084",
+              "position": 10,
+              "uid": "546548e3-c47a-5a74-a04a-0a328602ead4"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "10de4e12-5642-4683-ac35-ff3982817536"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "Both frames strengthen HCI review logic, especially the justification of design interventions and attention to evidentiary limits. The reference emphasizes end-to-end research coherence and contribution framing, while the compared frame adds evidence presentation, provenance, citation, and field-observation practices.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "32eaa865-c085-4c94-bdd6-8e3634d43711",
+              "memory_uid": "0dda8eb3-3287-5bb6-9b26-b1c00cc038d9"
+            },
+            {
+              "frame_uid": "32eaa865-c085-4c94-bdd6-8e3634d43711",
+              "memory_uid": "0f89ab25-d9ee-5669-aa99-a0fe07803915"
+            },
+            {
+              "frame_uid": "10de4e12-5642-4683-ac35-ff3982817536",
+              "memory_uid": "87340c01-2e0f-5b82-9410-2133648022da"
+            },
+            {
+              "frame_uid": "10de4e12-5642-4683-ac35-ff3982817536",
+              "memory_uid": "27b58ee9-5cad-5872-8eb7-a694728d8e79"
+            }
+          ],
+          "reason": "The reference requires validity and logical-flow review across user problems and interventions, while the compared frame requires explaining each design choice’s target need and identifies workaround cases as supporting evidence.",
+          "status": "RESOLVED",
+          "summary": "Design interventions should be reviewed as part of a coherent rationale connecting them to substantiated user or operational needs.",
+          "uid": "245bc758-9f4f-569e-9a4c-773717bdf2fc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "32eaa865-c085-4c94-bdd6-8e3634d43711",
+              "memory_uid": "c8e0c9dd-dc4a-5a7d-9a82-e7ee449a4b25"
+            },
+            {
+              "frame_uid": "32eaa865-c085-4c94-bdd6-8e3634d43711",
+              "memory_uid": "3e4a9a3b-abc2-54ed-9b87-f81abf61b541"
+            }
+          ],
+          "reason": "The reference supplies both the check and its reviewer-facing rationale; the compared frame contains no corresponding research-question-to-function policy.",
+          "status": "RESOLVED",
+          "summary": "Research questions should align with prototype functions so that intervention validity is not weakened.",
+          "uid": "c38215b1-9727-5056-a606-c3dad28fbf3e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "32eaa865-c085-4c94-bdd6-8e3634d43711",
+              "memory_uid": "f93c5baa-3c2b-5e37-b07b-0b00e8b22ab9"
+            },
+            {
+              "frame_uid": "32eaa865-c085-4c94-bdd6-8e3634d43711",
+              "memory_uid": "fb785649-1947-5e7d-aafb-308f14fb21b4"
+            }
+          ],
+          "reason": "The reference states the alignment check and its reviewer-facing consequence; the compared frame does not address task-to-measure correspondence.",
+          "status": "RESOLVED",
+          "summary": "Evaluation tasks should produce representative measures so that the evaluation plan remains valid.",
+          "uid": "da389c44-611d-5bdf-8928-5b680d75c482"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "32eaa865-c085-4c94-bdd6-8e3634d43711",
+              "memory_uid": "8dae0ad6-2a6d-5d99-98db-b0d48a1140e5"
+            },
+            {
+              "frame_uid": "32eaa865-c085-4c94-bdd6-8e3634d43711",
+              "memory_uid": "02f8ddd8-32b0-5e3b-b358-5e0472a6e0d2"
+            },
+            {
+              "frame_uid": "32eaa865-c085-4c94-bdd6-8e3634d43711",
+              "memory_uid": "d17ba26c-187e-57bc-8468-c9c053fc303d"
+            }
+          ],
+          "reason": "The reference combines the actionable-evidence criterion, its contribution rationale, and an end-stage coherence check; the compared frame does not require evidence to support change decisions.",
+          "status": "RESOLVED",
+          "summary": "Collected and formative evidence should connect research questions to concrete design or operational modification judgments.",
+          "uid": "b6e873a7-7994-564e-816d-5252827c7015"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "32eaa865-c085-4c94-bdd6-8e3634d43711",
+              "memory_uid": "48a91d19-cc68-5400-8971-8125236f3fbf"
+            },
+            {
+              "frame_uid": "10de4e12-5642-4683-ac35-ff3982817536",
+              "memory_uid": "ad643b33-fba1-5643-b57f-3bb8c3829122"
+            }
+          ],
+          "reason": "The reference asks for application conditions and failure boundaries alongside design principles, while the compared frame identifies field logs as a compatible source for examining those boundaries.",
+          "status": "RESOLVED",
+          "summary": "Failure conditions and contextual boundaries should be made visible, with field breakdown records offering evidence about failures, adaptations, timing, and conditions.",
+          "uid": "2ff3d2d8-e3a6-5a5e-9515-271cbbb4f0dc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "32eaa865-c085-4c94-bdd6-8e3634d43711",
+              "memory_uid": "774341c9-b92d-53a5-a24c-59c75e39756b"
+            }
+          ],
+          "reason": "This contribution-framing requirement appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Prototype outcomes should be separated from the transferable design knowledge derived from them when presenting contributions.",
+          "uid": "425e9674-0697-565e-88cc-418ef55c7a2e"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "32eaa865-c085-4c94-bdd6-8e3634d43711",
+              "memory_uid": "877015ae-ab0b-561c-9fe3-3abb2d0aaa4e"
+            },
+            {
+              "frame_uid": "10de4e12-5642-4683-ac35-ff3982817536",
+              "memory_uid": "f82f1e1f-3f27-5668-a5a4-e64b0f88b44a"
+            },
+            {
+              "frame_uid": "10de4e12-5642-4683-ac35-ff3982817536",
+              "memory_uid": "546548e3-c47a-5a74-a04a-0a328602ead4"
+            }
+          ],
+          "reason": "Controlled formative evaluation excludes long-term adaptation and operational change, whereas field introduction can confound individual design effects through coexisting routines; unsupported causal wording is therefore constrained by the applicable design.",
+          "status": "RESOLVED",
+          "summary": "Inference limits must be preserved according to evaluation setting and study design.",
+          "uid": "1bcbf143-e64d-5c28-a512-869a47f9de17"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "10de4e12-5642-4683-ac35-ff3982817536",
+              "memory_uid": "b39cf79f-d174-5ecb-98c9-b3f62ce0696a"
+            },
+            {
+              "frame_uid": "10de4e12-5642-4683-ac35-ff3982817536",
+              "memory_uid": "8b15a9ad-aa53-5a54-beb2-f1cc8d6da846"
+            },
+            {
+              "frame_uid": "10de4e12-5642-4683-ac35-ff3982817536",
+              "memory_uid": "565a2263-e3bc-5379-9a80-64665b491c88"
+            }
+          ],
+          "reason": "The compared frame states the placement policy, its directness criterion, and the associated reviewer behavior; the reference frame has no evidence-proximity rule.",
+          "status": "RESOLVED",
+          "summary": "Direct evidence or sources should be placed close to the important claims and conclusions they support.",
+          "uid": "857c12cd-9509-57d3-a97d-8d60299be648"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "10de4e12-5642-4683-ac35-ff3982817536",
+              "memory_uid": "b95e0185-f933-508d-8da7-41c65e2cc340"
+            }
+          ],
+          "reason": "This claim-status distinction appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Confirmed field facts should be distinguished sentence by sentence from predictions awaiting user-study examination.",
+          "uid": "99b55b07-414c-5bcc-bf7f-25fdbff25ece"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "10de4e12-5642-4683-ac35-ff3982817536",
+              "memory_uid": "b5461283-9001-510c-9a30-bb367f247b25"
+            }
+          ],
+          "reason": "This temporal source-selection policy appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Rapidly changing HCI topics should prioritize citations to recent systems and field research.",
+          "uid": "ee3a5e85-417e-5a1d-9ca0-dcbf4a745660"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "10de4e12-5642-4683-ac35-ff3982817536",
+              "memory_uid": "cf7e9410-2144-53c4-a236-a16a7b5be494"
+            }
+          ],
+          "reason": "This evidence-provenance distinction appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Stakeholder-reported problems and researcher-observed problems should be presented as separate forms of evidence.",
+          "uid": "5a174d29-0b4d-5823-84fb-5ec4e2ed99b4"
+        }
+      ],
+      "reports": {
+        "both": "Both connect design choices to demonstrated user or stakeholder needs and attend to evidence about failure conditions and adaptation.",
+        "compared_only": "The compared frame uniquely addresses evidence proximity, fact-versus-prediction labeling, current citations, and separation of reported from directly observed problems.",
+        "differences": "Inference limits vary by setting: controlled formative evaluation omits long-term change, while field rollouts introduce confounding routines and require restrained causal language.",
+        "reference_only": "The reference uniquely checks question–prototype, task–measure, and evidence–decision alignment, plus separation of prototype outcomes from transferable knowledge."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "0ddffd19-03d6-454b-9002-132cceb3d877"
+    },
+    "analysis_digest": "ad69217ba0282fc159e3ae259c96fa92ff246cc38897dcc97458b91069f37241",
+    "key": "52d0f130015d0cf7173c127df5a5596ed82dedf2d18387752a90a9dc75dd6682",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 60.5302372499973,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "52d0f130015d0cf7173c127df5a5596ed82dedf2d18387752a90a9dc75dd6682",
+  "created_at": "2026-08-13T18:24:56.467353Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/review",
+  "pair_key": "de146c9b4d61e3ecce8327399d44fc36f5cf442bc010b8963b46c26caa410414",
+  "provider_seconds": 60.5302372499973,
+  "right": "task-2/advisor2/claim-evidence",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

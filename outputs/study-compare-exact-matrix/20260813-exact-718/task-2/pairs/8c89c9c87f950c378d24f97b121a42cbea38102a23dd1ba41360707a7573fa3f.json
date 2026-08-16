@@ -1,0 +1,413 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:18:57.391909+00:00",
+      "frames": [
+        {
+          "context_digest": "89608fbad1167ce0da41a7a6312a1b4e92ee55ff6a7d97bb480a0c75d588a7f2",
+          "context_name": "task-2/advisor1/ethics",
+          "context_uid": "5cdea05f-b6ec-586d-a87f-5347d1d51f96",
+          "memories": [
+            {
+              "content": "Link expected participant burden in each user study task to its corresponding mitigation strategy.",
+              "content_digest": "3595c8f1662100b6c6345bb709c7b2eba285f1979f8d3a5b925c4f32ed9aa4dc",
+              "position": 0,
+              "uid": "e93ea2ee-a8b0-5f3d-b6fd-c76f385eef50"
+            },
+            {
+              "content": "Specify the accommodations necessary for participants to access the prototype and research tasks.",
+              "content_digest": "9879ddf2306813f412b89c1f67f4b1a4779ff9acf55b0b34942bc6f1f555f695",
+              "position": 1,
+              "uid": "6ecf6a7b-f4e9-5d96-a52c-520197d4a2a6"
+            },
+            {
+              "content": "Specify how accessibility accommodations will be provided during user study sessions.",
+              "content_digest": "cce1831f8b2bb3015bc4e69e64a2b1cd4ea6f7249daf28da6686eec262038dc5",
+              "position": 2,
+              "uid": "bc41fce0-dbfc-5d23-9d97-9f81531c098c"
+            },
+            {
+              "content": "Describe how personal identifiers will be separated from research data immediately after collection.",
+              "content_digest": "bd80d3a47e10f1c8a9aec0362cb51995bfe9ecd22f86be916cb0a9009b5f23bf",
+              "position": 3,
+              "uid": "9768e0d9-ef46-52a4-af04-8f6ca3c176c5"
+            },
+            {
+              "content": "Specify the equipment to be loaned to participants who lack necessary devices.",
+              "content_digest": "69991f284e369e31da55a2a23afef032bd50f43dfe66d417a816b242d10c9926",
+              "position": 4,
+              "uid": "e874407e-4d36-55a6-949e-44e5944f1bb4"
+            },
+            {
+              "content": "Describe the procedure for returning equipment loaned to participants.",
+              "content_digest": "100ffbad1288c3263bc4a1044b2d42da35c36a3f73786e58e4391fbac98c84f2",
+              "position": 5,
+              "uid": "df16dca6-0b48-5753-aa18-7e5524187a1e"
+            },
+            {
+              "content": "HCI ethics reviewers verify that expected burdens and mitigation strategies correspond to each user study task.",
+              "content_digest": "1ce06fdbd6b8c4542063ab2413ba80a40c86336dcc43ebb4e1590a246e76d968",
+              "position": 6,
+              "uid": "7d0b3072-7bac-5bc6-9c79-acc808c38f1f"
+            },
+            {
+              "content": "Inform participants that the formative evaluation prototype is not a finished service.",
+              "content_digest": "b02788b149a575392cc58dcba87c21026eec4d733f4e1ef0b3149fcc0e318e74",
+              "position": 7,
+              "uid": "407a4c1c-c333-5764-8d89-252bed150f99"
+            },
+            {
+              "content": "Set an upper limit on cumulative task burden when requesting repeated evaluations from the same participant.",
+              "content_digest": "9d8e4304568abc398445be0aeddc4d1c9945bf48e0295240d48c071dd979646e",
+              "position": 8,
+              "uid": "28646fd3-54af-51f9-97da-ad9489ecda79"
+            },
+            {
+              "content": "The author of this proposal tends to emphasize expected benefits of the prototype over participant burden.",
+              "content_digest": "ffb40ab90087893e20227797ee997e40803e3b812f8a1634e282ab9920cf28d4",
+              "position": 9,
+              "uid": "218aafb6-9332-5693-a2e7-c7777dc64de7"
+            },
+            {
+              "content": "In organizations where leaders or institutional staff handle recruitment, recruitment authority and academic or professional evaluation authority may be combined in the same role.",
+              "content_digest": "d7baf962a2cae0da6c9057f909918788101229b54d57340fb1d5aad459597c05",
+              "position": 10,
+              "uid": "1ecb7268-f77a-5643-a456-357df6cd8f6e"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "a985fd45-47b6-4e70-8ce9-79fbf2f2fed1"
+        },
+        {
+          "context_digest": "4371a72e6fb939731cb550ca5363a3b5210680482f84c18b36ba933f4454ecc1",
+          "context_name": "task-2/advisor2/expression",
+          "context_uid": "cf8e8baf-292e-57c3-8e2c-3f9b3d52f3d3",
+          "memories": [
+            {
+              "content": "Use a sequence table rather than a flow diagram when the procedure is likely to change repeatedly during drafting.",
+              "content_digest": "575bb4530af1e93b215ea57f0fd63e1e09136554da98aecf87288cc39ea9697c",
+              "position": 0,
+              "uid": "4264c20d-3e44-578d-866e-7787cc7b59e2"
+            },
+            {
+              "content": "The visual fidelity of a prototype and its level of connection to actual data and services may differ.",
+              "content_digest": "9478cb005a07ca7edfa924579b3d5221b1fa1143b5d8327369e7ee799b76aa9f",
+              "position": 1,
+              "uid": "70a8c3f0-0f6a-5881-abd6-29f52833b7bd"
+            },
+            {
+              "content": "Service flow diagrams indicate human-system transitions that are not revealed by individual screens alone.",
+              "content_digest": "5e3e18a38b1e62724d2ae0445549e214a219d205a80735bc6b4c0e643a96b8b3",
+              "position": 2,
+              "uid": "b410aa8d-db87-586b-a1cd-4af5767a9f7a"
+            },
+            {
+              "content": "HCI reviewers often scan system structure and service flow diagrams before the main text.",
+              "content_digest": "22a46440a6aeda0cb7d39cc6fedf6bbff6cac91232ec0cb163bf1fc17ff257d4",
+              "position": 3,
+              "uid": "a385fbb1-85b4-5132-bbc7-8fd8daedb715"
+            },
+            {
+              "content": "Give each step, actor, condition, and outcome a stable row in the sequence table.",
+              "content_digest": "2a073bf2ec4c5592ddc405d83cb438a5ed880699d3c157f310fb3dbff7851622",
+              "position": 4,
+              "uid": "22254f16-4628-5fd9-b1af-6e66dc2572b3"
+            },
+            {
+              "content": "Updating one row in a sequence table is usually faster than redrawing a branching diagram after a procedural change.",
+              "content_digest": "cf97dbf66018a6be1ee42dfc79ff8de44e8742db2b42c9d1ef70b3f252805a39",
+              "position": 5,
+              "uid": "32028269-5d43-5a65-b22b-9e570ceabfde"
+            },
+            {
+              "content": "Readers can check sequence tables step by step but may find the overall branching shape less immediate.",
+              "content_digest": "18b5de0cdd22ef1774151332afdbc408f9f591cf889e51271f81a372f74ef86d",
+              "position": 6,
+              "uid": "939ee3d0-b611-574a-a25b-82708394bd5e"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "3b3c9a1d-e1df-489f-8e39-e2aea06e1681"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate operational domains. The reference frame concentrates on participant protection, access, privacy, equipment, prototype communication, recruitment power, and ethics review; the compared frame concentrates on choosing, structuring, maintaining, and interpreting procedural representations. No scope-aligned overlap or contradiction is present.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a985fd45-47b6-4e70-8ce9-79fbf2f2fed1",
+              "memory_uid": "e93ea2ee-a8b0-5f3d-b6fd-c76f385eef50"
+            }
+          ],
+          "reason": "Only the reference frame supplies this task-level planning requirement.",
+          "status": "RESOLVED",
+          "summary": "Each user-study task should link its expected participant burden to a corresponding mitigation strategy.",
+          "uid": "63db15c6-20f5-56a2-b63a-5de86edaf4f3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a985fd45-47b6-4e70-8ce9-79fbf2f2fed1",
+              "memory_uid": "6ecf6a7b-f4e9-5d96-a52c-520197d4a2a6"
+            }
+          ],
+          "reason": "Only the reference frame identifies the required accommodations as a planning concern.",
+          "status": "RESOLVED",
+          "summary": "The accommodations needed for access to the prototype and research tasks should be specified.",
+          "uid": "a1e7727d-444d-5320-abba-681ecb9989d0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a985fd45-47b6-4e70-8ce9-79fbf2f2fed1",
+              "memory_uid": "bc41fce0-dbfc-5d23-9d97-9f81531c098c"
+            }
+          ],
+          "reason": "Only the reference frame addresses the operational delivery of accommodations.",
+          "status": "RESOLVED",
+          "summary": "The study plan should explain how accessibility accommodations will be provided during sessions.",
+          "uid": "fe455986-1007-52d1-b183-5573a90befa1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a985fd45-47b6-4e70-8ce9-79fbf2f2fed1",
+              "memory_uid": "9768e0d9-ef46-52a4-af04-8f6ca3c176c5"
+            }
+          ],
+          "reason": "Only the reference frame provides this privacy-handling procedure.",
+          "status": "RESOLVED",
+          "summary": "Personal identifiers should be separated from research data immediately after collection.",
+          "uid": "6752c8d9-7e37-5dec-a699-99b0c7a9e45a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a985fd45-47b6-4e70-8ce9-79fbf2f2fed1",
+              "memory_uid": "e874407e-4d36-55a6-949e-44e5944f1bb4"
+            }
+          ],
+          "reason": "Only the reference frame addresses what equipment will be supplied.",
+          "status": "RESOLVED",
+          "summary": "Equipment loaned to participants lacking necessary devices should be specified.",
+          "uid": "0b27d85f-bba8-5a9d-be78-79d7f8802bdd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a985fd45-47b6-4e70-8ce9-79fbf2f2fed1",
+              "memory_uid": "df16dca6-0b48-5753-aa18-7e5524187a1e"
+            }
+          ],
+          "reason": "Only the reference frame addresses equipment-return logistics.",
+          "status": "RESOLVED",
+          "summary": "A procedure should govern the return of equipment loaned to participants.",
+          "uid": "351fdf62-ecdb-553d-95d8-edcaff1c860d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a985fd45-47b6-4e70-8ce9-79fbf2f2fed1",
+              "memory_uid": "7d0b3072-7bac-5bc6-9c79-acc808c38f1f"
+            }
+          ],
+          "reason": "Only the reference frame states this reviewer responsibility.",
+          "status": "RESOLVED",
+          "summary": "HCI ethics reviewers verify task-level correspondence between expected burdens and mitigation strategies.",
+          "uid": "a0d046f8-0a40-557f-807e-aa8b0158287d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a985fd45-47b6-4e70-8ce9-79fbf2f2fed1",
+              "memory_uid": "407a4c1c-c333-5764-8d89-252bed150f99"
+            }
+          ],
+          "reason": "Only the reference frame supplies this participant-facing disclosure requirement.",
+          "status": "RESOLVED",
+          "summary": "Participants should be told that the formative-evaluation prototype is not a finished service.",
+          "uid": "e045ea2d-5ac1-5f80-ba34-eec7846badc1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a985fd45-47b6-4e70-8ce9-79fbf2f2fed1",
+              "memory_uid": "28646fd3-54af-51f9-97da-ad9489ecda79"
+            }
+          ],
+          "reason": "Only the reference frame addresses cumulative burden across repeated participation.",
+          "status": "RESOLVED",
+          "summary": "Repeated evaluations involving the same participant should have an upper limit on cumulative task burden.",
+          "uid": "0947edec-2f39-56da-aded-46dbfa6d04a5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a985fd45-47b6-4e70-8ce9-79fbf2f2fed1",
+              "memory_uid": "218aafb6-9332-5693-a2e7-c7777dc64de7"
+            }
+          ],
+          "reason": "Only the reference frame records this proposal-specific evaluative observation.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to emphasize expected prototype benefits over participant burden.",
+          "uid": "d509d40d-d06e-5b0c-bc8d-7591ced5ef58"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a985fd45-47b6-4e70-8ce9-79fbf2f2fed1",
+              "memory_uid": "1ecb7268-f77a-5643-a456-357df6cd8f6e"
+            }
+          ],
+          "reason": "Only the reference frame identifies this organizational power condition.",
+          "status": "RESOLVED",
+          "summary": "Recruitment authority and academic or professional evaluation authority may be combined when organizational leaders or staff recruit participants.",
+          "uid": "83b7877a-b23a-531d-9100-5679cf76f5a1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3b3c9a1d-e1df-489f-8e39-e2aea06e1681",
+              "memory_uid": "4264c20d-3e44-578d-866e-7787cc7b59e2"
+            }
+          ],
+          "reason": "Only the compared frame gives this conditional representation-choice rule.",
+          "status": "RESOLVED",
+          "summary": "A sequence table is preferred to a flow diagram when the procedure is likely to change repeatedly during drafting.",
+          "uid": "3bd9cd4d-466c-5a12-bd94-51568475e663"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3b3c9a1d-e1df-489f-8e39-e2aea06e1681",
+              "memory_uid": "70a8c3f0-0f6a-5881-abd6-29f52833b7bd"
+            }
+          ],
+          "reason": "Only the compared frame distinguishes these prototype dimensions.",
+          "status": "RESOLVED",
+          "summary": "A prototype's visual fidelity may differ from its degree of connection to actual data and services.",
+          "uid": "f8e591aa-4262-5eda-9ab2-fa0637c66000"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3b3c9a1d-e1df-489f-8e39-e2aea06e1681",
+              "memory_uid": "b410aa8d-db87-586b-a1cd-4af5767a9f7a"
+            }
+          ],
+          "reason": "Only the compared frame states this informational benefit of service-flow diagrams.",
+          "status": "RESOLVED",
+          "summary": "Service-flow diagrams reveal human-system transitions that individual screens do not show.",
+          "uid": "c1aec4ab-a3ae-518f-bcfd-c4bb461cdf3a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3b3c9a1d-e1df-489f-8e39-e2aea06e1681",
+              "memory_uid": "a385fbb1-85b4-5132-bbc7-8fd8daedb715"
+            }
+          ],
+          "reason": "Only the compared frame describes this reviewer navigation behavior.",
+          "status": "RESOLVED",
+          "summary": "HCI reviewers often scan system-structure and service-flow diagrams before reading the main text.",
+          "uid": "dd36a424-58e6-527f-b4f7-ca5625636ee1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3b3c9a1d-e1df-489f-8e39-e2aea06e1681",
+              "memory_uid": "22254f16-4628-5fd9-b1af-6e66dc2572b3"
+            }
+          ],
+          "reason": "Only the compared frame specifies this table-structuring rule.",
+          "status": "RESOLVED",
+          "summary": "Each step, actor, condition, and outcome should receive a stable row in a sequence table.",
+          "uid": "8384975c-c914-5654-9952-d3848fc8b29e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3b3c9a1d-e1df-489f-8e39-e2aea06e1681",
+              "memory_uid": "32028269-5d43-5a65-b22b-9e570ceabfde"
+            }
+          ],
+          "reason": "Only the compared frame states this maintenance advantage.",
+          "status": "RESOLVED",
+          "summary": "Localized sequence-table updates are usually faster than redrawing a branching diagram after procedural changes.",
+          "uid": "95c3b9ad-2fb2-5b3f-8bad-d33835a34665"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3b3c9a1d-e1df-489f-8e39-e2aea06e1681",
+              "memory_uid": "939ee3d0-b611-574a-a25b-82708394bd5e"
+            }
+          ],
+          "reason": "Only the compared frame identifies this representation tradeoff.",
+          "status": "RESOLVED",
+          "summary": "Sequence tables support stepwise checking but can make the overall branching shape less immediate.",
+          "uid": "b0a7fec3-32f9-5e68-8ae7-2770723a7b88"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only material addresses sequence-table design and maintainability, prototype fidelity dimensions, service-flow diagrams, reviewer reading behavior, and visualization tradeoffs.",
+        "differences": "",
+        "reference_only": "Reference-only material addresses study burden, accommodations, de-identification, equipment loans, prototype expectations, repeated participation, proposal bias, recruitment power, and ethics review."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "7d60c783-69d7-4484-a092-d528198ce435"
+    },
+    "analysis_digest": "0f6c49bf993c1acb5269f16f9c9a11474980a6f1f448437fddd819d5c0971a54",
+    "key": "a6c144ec800bd1d29a53ee6dcccb8b71856fd2d617da30a18fcae8d3c63bd0d5",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 40.2002809580008,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "a6c144ec800bd1d29a53ee6dcccb8b71856fd2d617da30a18fcae8d3c63bd0d5",
+  "created_at": "2026-08-13T18:19:37.591801Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/ethics",
+  "pair_key": "8c89c9c87f950c378d24f97b121a42cbea38102a23dd1ba41360707a7573fa3f",
+  "provider_seconds": 40.2002809580008,
+  "right": "task-2/advisor2/expression",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

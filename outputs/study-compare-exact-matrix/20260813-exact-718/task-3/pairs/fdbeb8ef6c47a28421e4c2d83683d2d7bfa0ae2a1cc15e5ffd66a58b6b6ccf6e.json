@@ -1,0 +1,397 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:36:31.174649+00:00",
+      "frames": [
+        {
+          "context_digest": "9fdb8cdfae14edf54f7410c0e8dd59527179de290b3d7c5f1b0f58494275b076",
+          "context_name": "task-3/local/personal-memory/2024/03",
+          "context_uid": "97c5905c-359b-5497-956f-b92db9ddbd2f",
+          "memories": [
+            {
+              "content": "The instructions for one medication the user takes say to take it after the evening meal.",
+              "content_digest": "32bba9f2936e560ddd5f4c5515895f2954b9c8722fcd501644569d1ff4f7b97c",
+              "position": 0,
+              "uid": "12ba4249-9450-5f2e-b648-5369a7997b26"
+            },
+            {
+              "content": "On a day with a morning appointment, the user miscalculated the fasting period and checked again at the reception desk.",
+              "content_digest": "532396ed2265321fbd4ca28ed1de2962211a357195bc9839503330c6cb0ab281",
+              "position": 1,
+              "uid": "051e79ff-5363-5160-9a13-46568fd13306"
+            },
+            {
+              "content": "For an afternoon visit, the user felt less rushed while preparing to travel than for a morning visit.",
+              "content_digest": "276fa255e4a4945f1475fa66129069ea33514bc24c98a246e9ab0d0000c156fa",
+              "position": 2,
+              "uid": "e7f1fcf7-ee2f-57d8-98cb-781e31e481e8"
+            },
+            {
+              "content": "On a day there was no waiting chair, the user stood for 20 minutes and their back became uncomfortable.",
+              "content_digest": "1c412785950057f01b1e7c10b716977cdb8bfb2b0605ef5bfdbdc6e349f6aaf8",
+              "position": 3,
+              "uid": "18d58666-2cfa-5959-8da9-2745bed56e11"
+            },
+            {
+              "content": "On a day medication instructions were explained all at once and at length, the user failed to write down an important time.",
+              "content_digest": "f3629bba06d053fa20712982f70b8dfd574b41a1b5ecd29d7c29f1b60742f647",
+              "position": 4,
+              "uid": "8fdede6e-64ed-5e4c-81f4-7a1075165568"
+            },
+            {
+              "content": "On a day medication times were confirmed one line at a time, the user copied them directly into their schedule after returning home.",
+              "content_digest": "acade505d6c0cdfddae0d169dea81c06a757aa7d7d2c760f6cdc253b06af5ded",
+              "position": 5,
+              "uid": "21f679f7-7d75-5c01-b6c3-b0d4bea5f2f0"
+            },
+            {
+              "content": "On a visit when their younger brother drove them, the user did not have to find a separate route home.",
+              "content_digest": "5e17c1227c7cbee7e995728edd17b4301903dfdc7a7bdc5f5ff3e06edfd357b3",
+              "position": 6,
+              "uid": "3ec03d39-3240-56d1-80da-313f79f2bf3a"
+            },
+            {
+              "content": "The user's younger brother prefers to receive a request for weekday-afternoon transportation two days beforehand rather than on the day itself.",
+              "content_digest": "7d1bf920ff730ddff86f328aaa3c3edf9d424170044bcd789a3ac55bffb5a839",
+              "position": 7,
+              "uid": "3069baac-fa68-5e94-8ba3-e888cf622f8c"
+            },
+            {
+              "content": "The local agent cannot determine the current prescription or whether use continues from medication notes alone.",
+              "content_digest": "89990815daa01f70a77b970b6a38cb9063f32fed898bd36e39a85551a1ad6200",
+              "position": 8,
+              "uid": "d7f215c6-57ea-561a-9627-3ce94203d507"
+            },
+            {
+              "content": "The waiting area at that clinic has too few chairs, so there may be periods when people must wait standing.",
+              "content_digest": "66c27ba4d6f3fb0d16b322a6de6d8afeb5c650fbe04162006a3288dd886ce1f0",
+              "position": 9,
+              "uid": "e6023aed-938d-5954-b8a7-8cb01340ee37"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "62972fae-7b03-4456-88e0-922146818d23"
+        },
+        {
+          "context_digest": "e56d4062f59b72f23e5414f759cd9f2b09c659d820a29a979fe2edb8bfc3e7a4",
+          "context_name": "task-3/local/personal-memory/2025/01",
+          "context_uid": "2ce7ce06-145c-50c7-bfb4-cb175b9a5255",
+          "memories": [
+            {
+              "content": "One of the user's identity documents needs renewal in the second half of 2025.",
+              "content_digest": "0ade63adc8aedc4dbc0003f2cbc2759010c8bf2645a95fedd3db28b7cfbe0daa",
+              "position": 0,
+              "uid": "50911f7e-75a1-5099-99f1-e471bb8e6cb6"
+            },
+            {
+              "content": "The user postponed an application until the next day after spending time looking for document photos in scattered folders.",
+              "content_digest": "fa1703848374c3364cf49be01e115e08897e16a4ccda3c9edef1212189159ce6",
+              "position": 1,
+              "uid": "d5bd9f79-7295-5014-9668-83b7cffc78e2"
+            },
+            {
+              "content": "After gathering the necessary copies in one folder, the user completed the renewal form in one sitting.",
+              "content_digest": "133721b244e02fce2fe24312b703e59225c023d65bea31bf65decb36a18b4ba5",
+              "position": 2,
+              "uid": "5f92f6a3-1739-580c-bd63-1a936098ccd0"
+            },
+            {
+              "content": "The user entered an abbreviated name on an official form and then discovered that it differed from the supporting document.",
+              "content_digest": "d32485dcfd1311d0739bf9887a330f25bf9b3f47f077c56ec7cdb667bde20a55",
+              "position": 3,
+              "uid": "929107ac-c62d-5920-9f71-12d4c9a102e9"
+            },
+            {
+              "content": "On the next application, after comparing the name with the source document, the user did not receive a correction request.",
+              "content_digest": "e6aa9e63c72f762c00824787c3b971f2cdf76a343c336f329e5b28b0f164d02d",
+              "position": 4,
+              "uid": "df8b90c2-4310-5e89-b979-508309bf6b04"
+            },
+            {
+              "content": "The user put only the submission deadline in the calendar and missed the application deadline by one day because they did not check the issuance period.",
+              "content_digest": "995703686975cdd718d999557d4b5ca13a95c3c1eabfbb73808bb5150eda824b",
+              "position": 5,
+              "uid": "306b9df1-d713-5413-b448-e2b42376d827"
+            },
+            {
+              "content": "On the next application, the user recorded the expected issuance date separately in the calendar.",
+              "content_digest": "b83c9061bf30d64e48b74959513fd37e7ab043446dae7e4fd284102a249a1240",
+              "position": 6,
+              "uid": "870b57b5-4cdb-54fc-b17f-8ffb86dad802"
+            },
+            {
+              "content": "Staff at a public-service counter expect a person requesting identity verification to bring an original as well as a copy.",
+              "content_digest": "eae3721b7f1d905172c169c5a483d2af74aa40bced23d1bbcb8d571ab27df706",
+              "position": 7,
+              "uid": "a0fe456c-0794-5bce-8ef9-9558e9833471"
+            },
+            {
+              "content": "When planning an official application, put both the submission deadline and expected issuance date in the calendar and verify them.",
+              "content_digest": "c5b37d86ef85d5023b60578e7f5f6af1bc49711e32ecc0255bc826a743dce0e1",
+              "position": 8,
+              "uid": "111972b9-e05f-5e1b-b121-ef9e51572d1d"
+            },
+            {
+              "content": "The local agent cannot determine the current validity of an identity document without its expiration date.",
+              "content_digest": "ebc9f4fe21d4ad7e53681d32ded2c049c7d4bf57e24ef71213a5ebdbaaaee521",
+              "position": 9,
+              "uid": "c9872898-ec4f-576e-b154-ff6fda581a1a"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "13c5db9f-c919-40c0-96ea-2358153743ce"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate practical domains rather than shared policies: the reference concerns medication and clinic visits, while the compared frame concerns identity-document applications. Their internally related observations form coherent one-sided claims, with no justified cross-frame equivalence, compatibility, scoped difference, or conflict.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "62972fae-7b03-4456-88e0-922146818d23",
+              "memory_uid": "12ba4249-9450-5f2e-b648-5369a7997b26"
+            }
+          ],
+          "reason": "This is independently useful medication-timing information supplied only by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "One medication carries an instruction to be taken after the evening meal.",
+          "uid": "38e6ff51-ea2b-5337-9fc7-bfc5a9a1bafb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "62972fae-7b03-4456-88e0-922146818d23",
+              "memory_uid": "051e79ff-5363-5160-9a13-46568fd13306"
+            }
+          ],
+          "reason": "This is a one-sided observation about fasting preparation and verification, not an identity-application policy.",
+          "status": "RESOLVED",
+          "summary": "A fasting-period calculation for a morning appointment required checking at reception.",
+          "uid": "bc1b32e8-c758-5f7b-bfd3-2ca545b6d8c9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "62972fae-7b03-4456-88e0-922146818d23",
+              "memory_uid": "e7f1fcf7-ee2f-57d8-98cb-781e31e481e8"
+            }
+          ],
+          "reason": "This independently useful appointment-timing preference appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "An afternoon visit allowed less-rushed travel preparation than a morning visit.",
+          "uid": "9838e803-40f6-54fd-b7f4-81f7e30a84c4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "62972fae-7b03-4456-88e0-922146818d23",
+              "memory_uid": "18d58666-2cfa-5959-8da9-2745bed56e11"
+            },
+            {
+              "frame_uid": "62972fae-7b03-4456-88e0-922146818d23",
+              "memory_uid": "e6023aed-938d-5954-b8a7-8cb01340ee37"
+            }
+          ],
+          "reason": "The reference memories split one underlying clinic-seating claim into a general shortage and a concrete adverse experience; the compared frame has no corresponding claim.",
+          "status": "RESOLVED",
+          "summary": "Insufficient clinic seating can leave people waiting while standing, with physical discomfort observed during one such wait.",
+          "uid": "a8ceab83-a624-58cd-8e80-b095944927dc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "62972fae-7b03-4456-88e0-922146818d23",
+              "memory_uid": "8fdede6e-64ed-5e4c-81f4-7a1075165568"
+            },
+            {
+              "frame_uid": "62972fae-7b03-4456-88e0-922146818d23",
+              "memory_uid": "21f679f7-7d75-5c01-b6c3-b0d4bea5f2f0"
+            }
+          ],
+          "reason": "Both reference observations jointly describe how the delivery format of medication instructions affects recording them, without a corresponding compared-frame policy.",
+          "status": "RESOLVED",
+          "summary": "Presenting medication times line by line supported accurate schedule entry, whereas a lengthy all-at-once explanation led to a missed time.",
+          "uid": "6ca134f9-58b9-5f16-a054-161d2597b4c2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "62972fae-7b03-4456-88e0-922146818d23",
+              "memory_uid": "3ec03d39-3240-56d1-80da-313f79f2bf3a"
+            }
+          ],
+          "reason": "This is independently useful transport-outcome information found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A ride from the user's younger brother removed the need to arrange a separate route home.",
+          "uid": "c6944eac-0f6d-5b27-8df3-ae338912365d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "62972fae-7b03-4456-88e0-922146818d23",
+              "memory_uid": "3069baac-fa68-5e94-8ba3-e888cf622f8c"
+            }
+          ],
+          "reason": "This is a distinct advance-notice preference for coordinating transport, supplied only by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user's younger brother prefers two days' notice for weekday-afternoon transportation requests.",
+          "uid": "92f1afa1-c99a-5886-825b-fc76d822f1d9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "62972fae-7b03-4456-88e0-922146818d23",
+              "memory_uid": "d7f215c6-57ea-561a-9627-3ce94203d507"
+            }
+          ],
+          "reason": "This is a reference-only limit on inferring current medication status; the document-validity limitation concerns a different operational determination.",
+          "status": "RESOLVED",
+          "summary": "Medication notes alone do not establish the current prescription or whether medication use continues.",
+          "uid": "6bc8f731-9984-5e28-b690-70fee4a34737"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "13c5db9f-c919-40c0-96ea-2358153743ce",
+              "memory_uid": "50911f7e-75a1-5099-99f1-e471bb8e6cb6"
+            }
+          ],
+          "reason": "This time-specific renewal information appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "One identity document required renewal during the second half of 2025.",
+          "uid": "39995867-d8de-5a72-ae2a-7659bf4d3bc6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "13c5db9f-c919-40c0-96ea-2358153743ce",
+              "memory_uid": "d5bd9f79-7295-5014-9668-83b7cffc78e2"
+            },
+            {
+              "frame_uid": "13c5db9f-c919-40c0-96ea-2358153743ce",
+              "memory_uid": "5f92f6a3-1739-580c-bd63-1a936098ccd0"
+            }
+          ],
+          "reason": "The compared observations split one underlying application-material organization claim into an impediment and a successful contrasting case.",
+          "status": "RESOLVED",
+          "summary": "Consolidating required document copies in one folder supported completing a renewal form without postponement.",
+          "uid": "17d0166c-1ce2-5c60-815c-c08277e59875"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "13c5db9f-c919-40c0-96ea-2358153743ce",
+              "memory_uid": "929107ac-c62d-5920-9f71-12d4c9a102e9"
+            },
+            {
+              "frame_uid": "13c5db9f-c919-40c0-96ea-2358153743ce",
+              "memory_uid": "df8b90c2-4310-5e89-b979-508309bf6b04"
+            }
+          ],
+          "reason": "The compared observations jointly describe the consequence of omitting versus performing the same name-verification step.",
+          "status": "RESOLVED",
+          "summary": "Checking the official-form name against the supporting document helps avoid discrepancies and correction requests.",
+          "uid": "74fb954c-0694-5735-8591-60bd3f3be585"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "13c5db9f-c919-40c0-96ea-2358153743ce",
+              "memory_uid": "306b9df1-d713-5413-b448-e2b42376d827"
+            },
+            {
+              "frame_uid": "13c5db9f-c919-40c0-96ea-2358153743ce",
+              "memory_uid": "870b57b5-4cdb-54fc-b17f-8ffb86dad802"
+            },
+            {
+              "frame_uid": "13c5db9f-c919-40c0-96ea-2358153743ce",
+              "memory_uid": "111972b9-e05f-5e1b-b121-ef9e51572d1d"
+            }
+          ],
+          "reason": "The compared memories provide the failure, subsequent practice, and explicit policy for one underlying calendar-planning claim.",
+          "status": "RESOLVED",
+          "summary": "Application planning should separately record and verify both the submission deadline and expected issuance date.",
+          "uid": "a2d5bff8-a239-588a-8b5a-e060d22f40d7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "13c5db9f-c919-40c0-96ea-2358153743ce",
+              "memory_uid": "a0fe456c-0794-5bce-8ef9-9558e9833471"
+            }
+          ],
+          "reason": "This independently useful evidence requirement is supplied only by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Identity verification at a public-service counter requires bringing both an original document and a copy.",
+          "uid": "6439a4b5-da57-572d-a07d-88a3196f31f2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "13c5db9f-c919-40c0-96ea-2358153743ce",
+              "memory_uid": "c9872898-ec4f-576e-b154-ff6fda581a1a"
+            }
+          ],
+          "reason": "This is a compared-only evidentiary limit specific to document validity, not the same operational determination as prescription continuity.",
+          "status": "RESOLVED",
+          "summary": "Current identity-document validity cannot be determined without its expiration date.",
+          "uid": "82859bd5-43c0-53d3-a15e-1b7a8adc0f69"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers document renewal, organizing application materials, matching names to evidence, tracking submission and issuance dates, bringing originals and copies, and uncertainty about current document validity.",
+        "differences": "",
+        "reference_only": "The reference covers evening medication timing, fasting and appointment preparation, limited clinic seating, clearer recording of medication instructions, advance coordination with a brother for transport, and uncertainty about current prescriptions."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "66eda860-34da-41ca-852f-4fb5b52b16bb"
+    },
+    "analysis_digest": "40798af6d05961538d06d8165cd8a68b7b0269c6004942e7e3c3ebb51a573eb8",
+    "key": "35dcaf3187ea70c3841fdf358f0097a463f09bb936a5ebbe3765d41290907b35",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 50.39319545900071,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "35dcaf3187ea70c3841fdf358f0097a463f09bb936a5ebbe3765d41290907b35",
+  "created_at": "2026-08-13T18:37:21.567399Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/03",
+  "pair_key": "fdbeb8ef6c47a28421e4c2d83683d2d7bfa0ae2a1cc15e5ffd66a58b6b6ccf6e",
+  "provider_seconds": 50.39319545900071,
+  "right": "task-3/local/personal-memory/2025/01",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

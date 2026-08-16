@@ -1,0 +1,388 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:37:13.898977+00:00",
+      "frames": [
+        {
+          "context_digest": "9fdb8cdfae14edf54f7410c0e8dd59527179de290b3d7c5f1b0f58494275b076",
+          "context_name": "task-3/local/personal-memory/2024/03",
+          "context_uid": "97c5905c-359b-5497-956f-b92db9ddbd2f",
+          "memories": [
+            {
+              "content": "The instructions for one medication the user takes say to take it after the evening meal.",
+              "content_digest": "32bba9f2936e560ddd5f4c5515895f2954b9c8722fcd501644569d1ff4f7b97c",
+              "position": 0,
+              "uid": "12ba4249-9450-5f2e-b648-5369a7997b26"
+            },
+            {
+              "content": "On a day with a morning appointment, the user miscalculated the fasting period and checked again at the reception desk.",
+              "content_digest": "532396ed2265321fbd4ca28ed1de2962211a357195bc9839503330c6cb0ab281",
+              "position": 1,
+              "uid": "051e79ff-5363-5160-9a13-46568fd13306"
+            },
+            {
+              "content": "For an afternoon visit, the user felt less rushed while preparing to travel than for a morning visit.",
+              "content_digest": "276fa255e4a4945f1475fa66129069ea33514bc24c98a246e9ab0d0000c156fa",
+              "position": 2,
+              "uid": "e7f1fcf7-ee2f-57d8-98cb-781e31e481e8"
+            },
+            {
+              "content": "On a day there was no waiting chair, the user stood for 20 minutes and their back became uncomfortable.",
+              "content_digest": "1c412785950057f01b1e7c10b716977cdb8bfb2b0605ef5bfdbdc6e349f6aaf8",
+              "position": 3,
+              "uid": "18d58666-2cfa-5959-8da9-2745bed56e11"
+            },
+            {
+              "content": "On a day medication instructions were explained all at once and at length, the user failed to write down an important time.",
+              "content_digest": "f3629bba06d053fa20712982f70b8dfd574b41a1b5ecd29d7c29f1b60742f647",
+              "position": 4,
+              "uid": "8fdede6e-64ed-5e4c-81f4-7a1075165568"
+            },
+            {
+              "content": "On a day medication times were confirmed one line at a time, the user copied them directly into their schedule after returning home.",
+              "content_digest": "acade505d6c0cdfddae0d169dea81c06a757aa7d7d2c760f6cdc253b06af5ded",
+              "position": 5,
+              "uid": "21f679f7-7d75-5c01-b6c3-b0d4bea5f2f0"
+            },
+            {
+              "content": "On a visit when their younger brother drove them, the user did not have to find a separate route home.",
+              "content_digest": "5e17c1227c7cbee7e995728edd17b4301903dfdc7a7bdc5f5ff3e06edfd357b3",
+              "position": 6,
+              "uid": "3ec03d39-3240-56d1-80da-313f79f2bf3a"
+            },
+            {
+              "content": "The user's younger brother prefers to receive a request for weekday-afternoon transportation two days beforehand rather than on the day itself.",
+              "content_digest": "7d1bf920ff730ddff86f328aaa3c3edf9d424170044bcd789a3ac55bffb5a839",
+              "position": 7,
+              "uid": "3069baac-fa68-5e94-8ba3-e888cf622f8c"
+            },
+            {
+              "content": "The local agent cannot determine the current prescription or whether use continues from medication notes alone.",
+              "content_digest": "89990815daa01f70a77b970b6a38cb9063f32fed898bd36e39a85551a1ad6200",
+              "position": 8,
+              "uid": "d7f215c6-57ea-561a-9627-3ce94203d507"
+            },
+            {
+              "content": "The waiting area at that clinic has too few chairs, so there may be periods when people must wait standing.",
+              "content_digest": "66c27ba4d6f3fb0d16b322a6de6d8afeb5c650fbe04162006a3288dd886ce1f0",
+              "position": 9,
+              "uid": "e6023aed-938d-5954-b8a7-8cb01340ee37"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "20b4363e-cc15-42a5-9f08-5dc7768397c0"
+        },
+        {
+          "context_digest": "07c43eb0b8ecd9107f1d879a409b45289e236f48f620ff85f1d30ce594809149",
+          "context_name": "task-3/local/personal-memory/2025/09",
+          "context_uid": "5cd8ed5f-2f1f-5deb-8347-fc3bfa484d99",
+          "memories": [
+            {
+              "content": "The user keeps the book they are reading and a note-taking notebook on a small living-room desk.",
+              "content_digest": "d2c70cf4c27fe62f5915f2f5c669484c4a875e4ee21f8d7d89a5ff6746f14cf1",
+              "position": 0,
+              "uid": "3d3f7960-daf5-5a51-98b3-14261c5aa66c"
+            },
+            {
+              "content": "While reading in the living room with the television on, the user read the same paragraph three times.",
+              "content_digest": "00e41e6d5fe1dcfe961fa0f739860823ecf338dc55d5b9beea265ca823974582",
+              "position": 1,
+              "uid": "28714a4e-bc14-5703-b594-126471ae0585"
+            },
+            {
+              "content": "The next day, after turning off the television, the user read 40 pages without interruption.",
+              "content_digest": "c28ba9c872757b6683ab03d73e6ad61f71484d55986aae4c0976862a85e3a8b1",
+              "position": 2,
+              "uid": "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df"
+            },
+            {
+              "content": "On a day the phone was on the desk, the user stopped taking notes each time they checked a notification.",
+              "content_digest": "f95cb8b1b8abe89d7bf597ca5fb78f0862fe97a7cf0d8bc5a46c04026ebd6889",
+              "position": 3,
+              "uid": "1b1c9f90-2561-53d5-88fe-d54618450143"
+            },
+            {
+              "content": "During the next reading period, the user left the phone in another room and did not check it for an hour.",
+              "content_digest": "89dc50732e19b88a77657b285ce71c399d229b510265cc9adfbdf6ad706680cd",
+              "position": 4,
+              "uid": "076a7caa-5dcf-5f9d-8bee-efc952652efa"
+            },
+            {
+              "content": "A note attached to a paper book fell out, and the user had to find their place again.",
+              "content_digest": "723e48ceeba6c94e627c79af0518c811cfc8337f9eeae3a80ae388ec98786994",
+              "position": 5,
+              "uid": "1dad71ec-6a5d-550e-89d2-a86dc3dacb11"
+            },
+            {
+              "content": "With the next book, the user recorded the page number in the notebook and resumed reading immediately.",
+              "content_digest": "c74c2f80bf403da64f0a6de97ff04bc1f41cf68d0d33829fa926cc2549e8ea75",
+              "position": 6,
+              "uid": "58494743-fc7f-59e9-8e17-80b8a644470a"
+            },
+            {
+              "content": "The user's father expects that lowering the television volume while the user reads will make it easier for the user to concentrate.",
+              "content_digest": "281b1f8f55f8d22fbebdb2220405dc3e2300e29e0a568c1fac36d4bb1c39c186",
+              "position": 7,
+              "uid": "cce66589-892c-5d73-bdbc-2c6e94e0992e"
+            },
+            {
+              "content": "The local agent can summarize past reading environments and interruption records but cannot predict the next reading time.",
+              "content_digest": "50e5376e22f503048a7f1bf4055bfb31cb4aa3c75b1c816f2febce913716eb58",
+              "position": 8,
+              "uid": "20b2a27f-908f-5ed7-a288-f7c1030674fc"
+            },
+            {
+              "content": "The user feels that repeated notifications interrupt their flow of concentration.",
+              "content_digest": "d777b2a01cfac23e6ef7701c04c33592f8382fa78f8e307bae9ddbffc9a8e2ef",
+              "position": 9,
+              "uid": "310f4cfc-b117-5511-8e13-2bd2ebec9fe5"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "a2a024cb-c1f9-41f0-b559-5aadb8f4dce8"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate operational domains: healthcare visits, medication communication, transport, and clinic access on one side; reading setup, concentration, interruption control, and place-keeping on the other. No claims overlap closely enough to form a cross-frame semantic relation.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "20b4363e-cc15-42a5-9f08-5dc7768397c0",
+              "memory_uid": "12ba4249-9450-5f2e-b648-5369a7997b26"
+            }
+          ],
+          "reason": "This is an independently useful medication-timing instruction found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "One medication is instructed to be taken after the evening meal.",
+          "uid": "fc5dca76-527c-5eee-b3ea-2627a7f39e21"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "20b4363e-cc15-42a5-9f08-5dc7768397c0",
+              "memory_uid": "051e79ff-5363-5160-9a13-46568fd13306"
+            }
+          ],
+          "reason": "This is a one-sided observation about fasting preparation and verification for a morning appointment.",
+          "status": "RESOLVED",
+          "summary": "A morning appointment involved a fasting-period miscalculation that required checking at reception.",
+          "uid": "27193700-9f01-5c45-882b-4479109b292b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "20b4363e-cc15-42a5-9f08-5dc7768397c0",
+              "memory_uid": "e7f1fcf7-ee2f-57d8-98cb-781e31e481e8"
+            }
+          ],
+          "reason": "This is a one-sided comparison of appointment timing and perceived preparation pressure.",
+          "status": "RESOLVED",
+          "summary": "Afternoon appointment travel preparation felt less rushed than preparation for a morning visit.",
+          "uid": "f24045a0-a5aa-5505-8634-75f9a7bf7001"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "20b4363e-cc15-42a5-9f08-5dc7768397c0",
+              "memory_uid": "18d58666-2cfa-5959-8da9-2745bed56e11"
+            },
+            {
+              "frame_uid": "20b4363e-cc15-42a5-9f08-5dc7768397c0",
+              "memory_uid": "e6023aed-938d-5954-b8a7-8cb01340ee37"
+            }
+          ],
+          "reason": "The general seating shortage and the specific uncomfortable wait jointly express one underlying clinic-access concern found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Insufficient clinic seating can force standing, with an observed instance causing back discomfort.",
+          "uid": "df26e408-1a1d-5e6c-96f1-5f7e6028f7ae"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "20b4363e-cc15-42a5-9f08-5dc7768397c0",
+              "memory_uid": "8fdede6e-64ed-5e4c-81f4-7a1075165568"
+            },
+            {
+              "frame_uid": "20b4363e-cc15-42a5-9f08-5dc7768397c0",
+              "memory_uid": "21f679f7-7d75-5c01-b6c3-b0d4bea5f2f0"
+            }
+          ],
+          "reason": "The contrasting experiences jointly express one underlying reference-only claim about communication format and accurate recording of medication times.",
+          "status": "RESOLVED",
+          "summary": "Medication times were captured more reliably when confirmed individually than when explained at length all at once.",
+          "uid": "fc79cfa2-8c4a-5b62-8d0c-7e4251d1d744"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "20b4363e-cc15-42a5-9f08-5dc7768397c0",
+              "memory_uid": "3ec03d39-3240-56d1-80da-313f79f2bf3a"
+            }
+          ],
+          "reason": "This is an independently useful one-sided observation about the benefit of family transportation.",
+          "status": "RESOLVED",
+          "summary": "A ride from the user's younger brother eliminated the need to arrange a separate route home.",
+          "uid": "55a64d7a-e9b5-536c-bc75-6232efc54f87"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "20b4363e-cc15-42a5-9f08-5dc7768397c0",
+              "memory_uid": "3069baac-fa68-5e94-8ba3-e888cf622f8c"
+            }
+          ],
+          "reason": "This is an independently useful one-sided scheduling preference for arranging transportation.",
+          "status": "RESOLVED",
+          "summary": "The user's younger brother prefers weekday-afternoon transportation requests two days in advance.",
+          "uid": "613879dd-1152-59cb-8138-3a55dbac4e73"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "20b4363e-cc15-42a5-9f08-5dc7768397c0",
+              "memory_uid": "d7f215c6-57ea-561a-9627-3ce94203d507"
+            }
+          ],
+          "reason": "This is a reference-only limitation on what the local agent can infer from medication records.",
+          "status": "RESOLVED",
+          "summary": "Medication notes alone do not establish the current prescription or whether its use continues.",
+          "uid": "8e815e41-cc19-5984-ae4f-07a3b0286ff9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a2a024cb-c1f9-41f0-b559-5aadb8f4dce8",
+              "memory_uid": "3d3f7960-daf5-5a51-98b3-14261c5aa66c"
+            }
+          ],
+          "reason": "This is an independently useful compared-only fact about the user's reading setup.",
+          "status": "RESOLVED",
+          "summary": "The user keeps their current book and note-taking notebook on a small living-room desk.",
+          "uid": "65523633-155c-50c3-b05d-fcdaded44678"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a2a024cb-c1f9-41f0-b559-5aadb8f4dce8",
+              "memory_uid": "28714a4e-bc14-5703-b594-126471ae0585"
+            },
+            {
+              "frame_uid": "a2a024cb-c1f9-41f0-b559-5aadb8f4dce8",
+              "memory_uid": "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df"
+            },
+            {
+              "frame_uid": "a2a024cb-c1f9-41f0-b559-5aadb8f4dce8",
+              "memory_uid": "cce66589-892c-5d73-bdbc-2c6e94e0992e"
+            }
+          ],
+          "reason": "The repeated paragraph, uninterrupted reading after turning the television off, and the father's expectation all support one compared-only claim about television sound and concentration.",
+          "status": "RESOLVED",
+          "summary": "Television sound is associated with poorer reading concentration, while reducing or removing it is expected to help.",
+          "uid": "b8ad6815-0fdd-5b72-9dc7-55af4b57de2f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a2a024cb-c1f9-41f0-b559-5aadb8f4dce8",
+              "memory_uid": "1b1c9f90-2561-53d5-88fe-d54618450143"
+            },
+            {
+              "frame_uid": "a2a024cb-c1f9-41f0-b559-5aadb8f4dce8",
+              "memory_uid": "076a7caa-5dcf-5f9d-8bee-efc952652efa"
+            },
+            {
+              "frame_uid": "a2a024cb-c1f9-41f0-b559-5aadb8f4dce8",
+              "memory_uid": "310f4cfc-b117-5511-8e13-2bd2ebec9fe5"
+            }
+          ],
+          "reason": "The interruption incidents, successful phone separation, and stated experience jointly express one compared-only claim about notification control.",
+          "status": "RESOLVED",
+          "summary": "Nearby phone notifications interrupt note-taking and concentration, while placing the phone elsewhere prevents checking during reading.",
+          "uid": "6bf2e92d-2ca5-5aea-80a3-9d0f4c133ecb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a2a024cb-c1f9-41f0-b559-5aadb8f4dce8",
+              "memory_uid": "1dad71ec-6a5d-550e-89d2-a86dc3dacb11"
+            },
+            {
+              "frame_uid": "a2a024cb-c1f9-41f0-b559-5aadb8f4dce8",
+              "memory_uid": "58494743-fc7f-59e9-8e17-80b8a644470a"
+            }
+          ],
+          "reason": "The lost loose note and immediate resumption using the notebook jointly express one compared-only claim about dependable reading-place tracking.",
+          "status": "RESOLVED",
+          "summary": "Recording the page number in a notebook provided more reliable place-keeping than attaching a loose note to the book.",
+          "uid": "177e5c21-b39d-5791-974f-9a8f68de4ae8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a2a024cb-c1f9-41f0-b559-5aadb8f4dce8",
+              "memory_uid": "20b2a27f-908f-5ed7-a288-f7c1030674fc"
+            }
+          ],
+          "reason": "This is a compared-only limitation on the local agent's reading-related knowledge and prediction.",
+          "status": "RESOLVED",
+          "summary": "Past reading environments and interruptions can be summarized, but the next reading time cannot be predicted.",
+          "uid": "da628364-56c5-5a5e-9e54-d7f4c9ecd0cf"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers reading-material placement, television and notification distractions, phone separation, reliable page tracking, and limits on predicting future reading times.",
+        "differences": "",
+        "reference_only": "The reference covers medication timing and communication, appointment preparation, clinic seating, transportation support, and limits on inferring prescription status."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "6ade5c00-3763-4ba3-9b4d-3e5c3f0c4d6c"
+    },
+    "analysis_digest": "65a3cc599497113fe29c004b63aa18ffe31e5160ed8d33fab2fd359d75f1358a",
+    "key": "0d8aaebde7d4f5db943695dc4339bf59cdc4fc2e804821352fb48c6e405d937e",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 39.57615704099953,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "0d8aaebde7d4f5db943695dc4339bf59cdc4fc2e804821352fb48c6e405d937e",
+  "created_at": "2026-08-13T18:37:53.475075Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/03",
+  "pair_key": "102afd555c03b82df7c1ff4fa376ea12f7d0d691326e516d885ffdf18659027c",
+  "provider_seconds": 39.57615704099953,
+  "right": "task-3/local/personal-memory/2025/09",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

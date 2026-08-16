@@ -1,0 +1,397 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:50:18.359349+00:00",
+      "frames": [
+        {
+          "context_digest": "14adbc31fc3a2dc50b7b980d1e24569b16fff058104a812c7f3b4e1542b7abf0",
+          "context_name": "task-3/local/personal-memory/2025/03",
+          "context_uid": "913e0bfd-f6d9-579e-9a37-ba5daa9d17f1",
+          "memories": [
+            {
+              "content": "The user stores prepared meals on the second shelf of the freezer.",
+              "content_digest": "cd837b62b643f752da54b21de2f4f7a3d963a7c658d5b83dff39d1d92e0fdbad",
+              "position": 0,
+              "uid": "5d989bab-c471-5de9-bb73-29cabc4753dd"
+            },
+            {
+              "content": "The user went to the market without a shopping list and bought onions that were already at home.",
+              "content_digest": "f667c860e046bb27662b26d7cc4ed083ee48d9d7915237dc4b92ec378481a093",
+              "position": 1,
+              "uid": "d1725ae4-3fd3-5250-92b3-73d84d9152a7"
+            },
+            {
+              "content": "On a day the user shopped after checking a refrigerator photo, they did not make a duplicate purchase.",
+              "content_digest": "7283d4afe58c0ab05d9cb426bb80bed0e26e0b1783ff7cdd00a5f6e89d21861b",
+              "position": 2,
+              "uid": "904ff225-26df-5424-8a82-23d733649106"
+            },
+            {
+              "content": "On a day the user made a spicy stew, they left part of one bowl uneaten.",
+              "content_digest": "2765ec701f8e058d35ddee4a485c40221523ee2d9b56301ec1658ec4e419cbc2",
+              "position": 3,
+              "uid": "67a003c7-648a-59dc-8e82-03f9e452ffce"
+            },
+            {
+              "content": "The next time the user cooked it, they used half as much chili powder and finished the meal.",
+              "content_digest": "bdd7df7c762bbce31a40a45c2124e49ae3a6439dfc2133c574443d7eb3a7b1bb",
+              "position": 4,
+              "uid": "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9"
+            },
+            {
+              "content": "When cooking with their younger brother, the user assigned the cooking sequence only verbally and they did the same task twice.",
+              "content_digest": "bd92611cfc05fd42bb5d25e8dd7838ca1b2f6d99869bf1f61921b46950a4b532",
+              "position": 5,
+              "uid": "64bf4401-e972-5d15-a526-21ca901a6a9f"
+            },
+            {
+              "content": "The next time, the user and their younger brother split ingredient preparation and heat control and finished the meal 20 minutes earlier.",
+              "content_digest": "c3a28e7256d781ecb2d8710145880ffe79495e32d47ae1949c4be54e52a44555",
+              "position": 6,
+              "uid": "57e09ea5-54ff-5fce-aada-68daffbacc8b"
+            },
+            {
+              "content": "When cooking together, the user's younger brother prefers to divide the cooking and dishwashing roles in advance.",
+              "content_digest": "3bbc428c4f3b4e28a8e2341206ac78b39240eea53a9862192528029b0a57d12b",
+              "position": 7,
+              "uid": "0a5d054f-94bd-5955-bdb7-9b5427e2260b"
+            },
+            {
+              "content": "The local agent can compare responses across several meals, but it cannot conclude from one unfinished food item that the user dislikes that ingredient.",
+              "content_digest": "5787c1636d9dd4a5cb5bd70533b7dd44b2d6cff1047f5c408f5bcaa1b6577fe1",
+              "position": 8,
+              "uid": "1f94b78b-1635-551c-b90c-bea2a67ca595"
+            },
+            {
+              "content": "The condition of frozen prepared food may vary with its packaging and storage duration.",
+              "content_digest": "84bdac276dce5b50b19bc0c7c471468a22cc9945b1da7357700a58c157cf4ca1",
+              "position": 9,
+              "uid": "f64ef6c4-7665-5574-9d58-fc124b0bfe3f"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "7b4b2778-d83e-44bc-b9d0-185af08fb7bd"
+        },
+        {
+          "context_digest": "4b8dc68a205171fe661b04620d0fba2bbb386ff21d494699c34a74dc2ab86080",
+          "context_name": "task-3/local/personal-memory/2026/03",
+          "context_uid": "97d36150-4792-5a5c-9332-5eb1de8bcf04",
+          "memories": [
+            {
+              "content": "The user stores tax-related receipts in digital folders by year.",
+              "content_digest": "778f983547572b31798b7041899812a7b0b574d74b585baf6883e94919dee6ec",
+              "position": 0,
+              "uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393"
+            },
+            {
+              "content": "The user found three paper receipts late and recalculated the expense total already prepared.",
+              "content_digest": "542368a141ec82a1bd7da4b534d88ea62c487d16a37f454569bf6400cbc749e9",
+              "position": 1,
+              "uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878"
+            },
+            {
+              "content": "Starting the next month, the user photographed receipts on the day they were received and reduced omissions.",
+              "content_digest": "b95e0a1afa1196a9bff117bf12b1630edcc4eb65bfdfeb3128ae5937563a492e",
+              "position": 2,
+              "uid": "ff436ea5-1b3e-55df-8302-bd8a96740671"
+            },
+            {
+              "content": "The user named every file with only the photo date and spent a long time looking for a needed receipt.",
+              "content_digest": "c3aa33e0b7e007bdfc5c12dcda659e2a52938548fbf53d5a1ab034487a528857",
+              "position": 3,
+              "uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e"
+            },
+            {
+              "content": "The user later included the expense category in the filename and found the receipt immediately through search.",
+              "content_digest": "cdae97761f614b932d3b330723627bee8b0e3d033e2bf1061b721367237acee1",
+              "position": 4,
+              "uid": "89d6fa9a-b795-59df-be34-1c05a9861d35"
+            },
+            {
+              "content": "While reviewing documents just before submission, the user discovered one blank signature field.",
+              "content_digest": "a525c117b97eec82c678f276b319158703bf9cc558fb83cb81c0820d5c9e3174",
+              "position": 5,
+              "uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2"
+            },
+            {
+              "content": "Before submitting an administrative document, the user checks the signature field as the final item on the checklist.",
+              "content_digest": "542bec3cbc3fc8b22c95da274e479e96bfbf061a3b644d0d7f213de5a030dbd5",
+              "position": 6,
+              "uid": "5551622f-66cf-5542-8c47-1cddadab5c02"
+            },
+            {
+              "content": "Staff at a tax-support counter expect to receive an electronic copy in which every item is legible rather than a blurred or cropped photo.",
+              "content_digest": "d328ca248fdeecf0756e23b1202e7007bc8c3c25ae769439b0fd2efdbbe47580",
+              "position": 7,
+              "uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f"
+            },
+            {
+              "content": "The local agent can organize receipts by date and category but cannot determine whether an expense is deductible.",
+              "content_digest": "bcc769721a99b099ca20e5e527fa8904d54ecbaf9ae7d7616b95e1adaf1f89a9",
+              "position": 8,
+              "uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094"
+            },
+            {
+              "content": "The accepted scope and submission deadlines for administrative documents may vary under that year's guidance.",
+              "content_digest": "1ab61126b8efb0c2a9c6114c367018158f2e136bafa87e33f60aadb0686d0537",
+              "position": 9,
+              "uid": "de398064-3179-590b-8c62-effb17060115"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "38017145-27a6-4a73-a905-fded5dacd69f"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate domains: the reference records food storage, shopping, cooking, collaboration, and meal-related inference limits, while the compared frame records receipt handling, document submission, tax-support expectations, and administrative limits. No claims govern the same operational decision closely enough to relate across sides.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7b4b2778-d83e-44bc-b9d0-185af08fb7bd",
+              "memory_uid": "5d989bab-c471-5de9-bb73-29cabc4753dd"
+            }
+          ],
+          "reason": "This is independently useful food-storage information with no counterpart concerning the same decision in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Prepared meals are stored on the freezer’s second shelf.",
+          "uid": "ddd7f04f-69ad-56ef-9c5b-97d144135053"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7b4b2778-d83e-44bc-b9d0-185af08fb7bd",
+              "memory_uid": "d1725ae4-3fd3-5250-92b3-73d84d9152a7"
+            },
+            {
+              "frame_uid": "7b4b2778-d83e-44bc-b9d0-185af08fb7bd",
+              "memory_uid": "904ff225-26df-5424-8a82-23d733649106"
+            }
+          ],
+          "reason": "These memories jointly describe one inventory-checking lesson, which has no counterpart governing grocery-purchase preparation in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Checking available food before shopping was associated with avoiding a duplicate purchase, unlike shopping without a list.",
+          "uid": "dd180ce2-edcf-58d4-87b2-62ae39f87824"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7b4b2778-d83e-44bc-b9d0-185af08fb7bd",
+              "memory_uid": "67a003c7-648a-59dc-8e82-03f9e452ffce"
+            },
+            {
+              "frame_uid": "7b4b2778-d83e-44bc-b9d0-185af08fb7bd",
+              "memory_uid": "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9"
+            }
+          ],
+          "reason": "These memories form one recipe-adjustment episode with no counterpart concerning meal seasoning or consumption in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "After leaving spicy stew unfinished, the user halved the chili powder on the next occasion and finished the meal.",
+          "uid": "eed7fb49-693a-5cb3-a931-ed575b304b78"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7b4b2778-d83e-44bc-b9d0-185af08fb7bd",
+              "memory_uid": "64bf4401-e972-5d15-a526-21ca901a6a9f"
+            },
+            {
+              "frame_uid": "7b4b2778-d83e-44bc-b9d0-185af08fb7bd",
+              "memory_uid": "57e09ea5-54ff-5fce-aada-68daffbacc8b"
+            }
+          ],
+          "reason": "These memories jointly describe one improvement in shared cooking coordination, with no counterpart concerning collaborative cooking in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "After verbal task assignment caused duplicated work, the user and their younger brother divided preparation and heat control and finished earlier.",
+          "uid": "e3865817-295c-5bb4-8624-5e4eb0636a85"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7b4b2778-d83e-44bc-b9d0-185af08fb7bd",
+              "memory_uid": "0a5d054f-94bd-5955-bdb7-9b5427e2260b"
+            }
+          ],
+          "reason": "This is an independently useful collaborator preference absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s younger brother prefers cooking and dishwashing roles to be divided in advance.",
+          "uid": "2066f5ff-f8e9-55ac-a15c-550befa68a90"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7b4b2778-d83e-44bc-b9d0-185af08fb7bd",
+              "memory_uid": "1f94b78b-1635-551c-b90c-bea2a67ca595"
+            }
+          ],
+          "reason": "This meal-preference inference boundary addresses a different decision from the compared frame’s receipt and tax boundaries.",
+          "status": "RESOLVED",
+          "summary": "The local agent may compare responses across meals but cannot infer ingredient dislike from one unfinished item.",
+          "uid": "f1ca9961-b593-50cb-83e6-3cb75ba6d36c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7b4b2778-d83e-44bc-b9d0-185af08fb7bd",
+              "memory_uid": "f64ef6c4-7665-5574-9d58-fc124b0bfe3f"
+            }
+          ],
+          "reason": "This food-quality qualification has no counterpart concerning frozen-food assessment in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Frozen prepared food condition may depend on packaging and storage duration.",
+          "uid": "9c1cb0b5-7665-582d-8f3a-9ab05c55f3ed"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "38017145-27a6-4a73-a905-fded5dacd69f",
+              "memory_uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393"
+            }
+          ],
+          "reason": "This is independently useful receipt-filing information with no counterpart concerning the same decision in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Tax-related receipts are stored in digital folders organized by year.",
+          "uid": "c167bbc7-57c3-5e09-b5b7-6375066a991c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "38017145-27a6-4a73-a905-fded5dacd69f",
+              "memory_uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878"
+            },
+            {
+              "frame_uid": "38017145-27a6-4a73-a905-fded5dacd69f",
+              "memory_uid": "ff436ea5-1b3e-55df-8302-bd8a96740671"
+            }
+          ],
+          "reason": "These memories jointly describe one improvement in receipt capture, with no counterpart governing financial-record completeness in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "After late paper receipts forced recalculation, the user began photographing receipts upon receipt and reduced omissions.",
+          "uid": "dc4ff4f5-40c6-5402-b066-3d94e7fc375b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "38017145-27a6-4a73-a905-fded5dacd69f",
+              "memory_uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e"
+            },
+            {
+              "frame_uid": "38017145-27a6-4a73-a905-fded5dacd69f",
+              "memory_uid": "89d6fa9a-b795-59df-be34-1c05a9861d35"
+            }
+          ],
+          "reason": "These memories form one filename-refinement episode with no counterpart concerning document search in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Adding expense categories to date-based filenames made needed receipts immediately searchable.",
+          "uid": "1bd50847-b11f-5442-9f72-3223c42224d6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "38017145-27a6-4a73-a905-fded5dacd69f",
+              "memory_uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2"
+            },
+            {
+              "frame_uid": "38017145-27a6-4a73-a905-fded5dacd69f",
+              "memory_uid": "5551622f-66cf-5542-8c47-1cddadab5c02"
+            }
+          ],
+          "reason": "These memories jointly describe one signature-verification lesson, with no counterpart concerning administrative submission checks in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "After discovering a blank signature field before submission, the user made that field the final checklist item.",
+          "uid": "9ff4cf81-b3af-50a6-8c42-c5c85ca5a1f5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "38017145-27a6-4a73-a905-fded5dacd69f",
+              "memory_uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f"
+            }
+          ],
+          "reason": "This independently useful submission-quality expectation is absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Tax-support staff expect an electronic copy whose contents are fully legible rather than blurred or cropped.",
+          "uid": "57403654-ce20-581b-9821-580314c6e056"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "38017145-27a6-4a73-a905-fded5dacd69f",
+              "memory_uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094"
+            }
+          ],
+          "reason": "This tax-classification boundary addresses a different operational decision from the reference frame’s meal-related inference limit.",
+          "status": "RESOLVED",
+          "summary": "The local agent may organize receipts by date and category but cannot determine deductibility.",
+          "uid": "be3dbf8a-e218-5c6e-8f40-c181436d783c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "38017145-27a6-4a73-a905-fded5dacd69f",
+              "memory_uid": "de398064-3179-590b-8c62-effb17060115"
+            }
+          ],
+          "reason": "This independently useful administrative qualification has no counterpart concerning filing rules in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Accepted document scope and submission deadlines may vary with the year’s guidance.",
+          "uid": "b7824c51-20d9-5094-8154-ddcdfa6febb6"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame describes receipt organization and capture, searchable filenames, signature checks, legibility expectations, limits on tax classification, and year-dependent filing guidance.",
+        "differences": "",
+        "reference_only": "The reference describes freezer storage, inventory-aware shopping, recipe adjustment, coordinated cooking, a family member’s role preference, limits on inferring food dislikes, and factors affecting frozen meals."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "ec28be93-c18c-473c-b7a3-06413a2c33d1"
+    },
+    "analysis_digest": "f1116175b198f7212617b87883a2826a7cc582e6522a4fe6f9b62a576ebbbfe9",
+    "key": "9ab9eeefba89b62417970266fa1b603d5addeefd49492a5326c756f51a4ed6a4",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 42.635925375001534,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "9ab9eeefba89b62417970266fa1b603d5addeefd49492a5326c756f51a4ed6a4",
+  "created_at": "2026-08-13T18:51:00.994839Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/03",
+  "pair_key": "f96309629af311f794e0df5a0a9dcb07e53b7fec34d6ba8e7c310525755d65eb",
+  "provider_seconds": 42.635925375001534,
+  "right": "task-3/local/personal-memory/2026/03",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

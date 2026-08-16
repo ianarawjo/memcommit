@@ -1,0 +1,377 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:21:32.918558+00:00",
+      "frames": [
+        {
+          "context_digest": "4ae7659c0c6976de9bf2292f9e35962963b7931b470c2294d4f0e70b3500bff0",
+          "context_name": "task-2/advisor1/feasibility",
+          "context_uid": "52db6b06-e86a-556a-913e-30e45f7e9529",
+          "memories": [
+            {
+              "content": "Mark unverified schedule assumptions as such.",
+              "content_digest": "d4cdcdbcdb51d96f9a7435e72c2e4ef25a3e3822a765a88afafeca5194bda96e",
+              "position": 0,
+              "uid": "b150c774-27f6-5ec8-8cb9-9a00be19ce9b"
+            },
+            {
+              "content": "Mark unverified recruitment assumptions as such.",
+              "content_digest": "4cc28528fee1c7b09f709638e2b57d3bc9efe635d20500ee98567f8f59b8cf21",
+              "position": 1,
+              "uid": "6c7d14ed-67e5-56ff-befb-7648b95aa7a3"
+            },
+            {
+              "content": "Mark unverified technical assumptions as such.",
+              "content_digest": "8942e49cd46e3e9746330349df11e49d4a6c9250c7aa4c52c2d9ade1c97c735c",
+              "position": 2,
+              "uid": "00bf39b5-fe97-5fd0-b579-a5c13b5e6af7"
+            },
+            {
+              "content": "Clarify which stage of prototype fabrication or user study each requested resource is used for.",
+              "content_digest": "81ba64e23304f8fbbb3af4f2c30dfa3c517899c486e88ba211189a7911fcbd64",
+              "position": 3,
+              "uid": "3ae97c88-7537-5733-b48d-e02c9283f486"
+            },
+            {
+              "content": "Operations reviewers judge feasibility based on the personnel assigned to each procedure.",
+              "content_digest": "fe29bb7e592d116001a25ce11c603ae29f21d446925c28db692f14970d5b8134",
+              "position": 4,
+              "uid": "e2b5c1f0-97c2-5d46-af80-993d8d5606c9"
+            },
+            {
+              "content": "Operations reviewers judge feasibility based on the equipment assigned to each procedure.",
+              "content_digest": "859ab328c21506d11dd1f6d98e98d5a552446e774931a8bc13396750acf0793b",
+              "position": 5,
+              "uid": "f636b400-d3a2-5873-bf5b-c990b0f7ea42"
+            },
+            {
+              "content": "Operations reviewers judge feasibility based on the time allocated to each procedure.",
+              "content_digest": "08656886328ece4d813e36b1145805ffd3f3d4c6c855c20b1464143fb12868ab",
+              "position": 6,
+              "uid": "49385488-2315-51bc-bea0-749a1aea52f1"
+            },
+            {
+              "content": "Verify that the planned number of formative evaluation iterations is feasible within the time for prototype modification and recruitment resources.",
+              "content_digest": "9e181a14a97abd740a85679554395d7b315c07f0e4171ef276a2c31553b285c7",
+              "position": 7,
+              "uid": "f1c22a48-9d8d-5e82-9837-690d66e719db"
+            },
+            {
+              "content": "Include only the minimum functionality required to compare primary design assumptions in the scope of the formative evaluation prototype.",
+              "content_digest": "7769c2a4c03dc1c279bbf34bf0cefdcd076e3c1d8a1e56015bf20357ecfcf433",
+              "position": 8,
+              "uid": "4d69f030-0dc0-5df7-a153-0b595a3f68de"
+            },
+            {
+              "content": "The user's iterative design plan can be judged feasible only if time and personnel are allocated for modifying the prototype between iterations.",
+              "content_digest": "0339285cf9fd632814c5b5eb2b48fd46e3baf09ea95fb406f71b5d2cc804fa7e",
+              "position": 9,
+              "uid": "152f8621-f5fb-5c5e-a961-1fde77ed0bb3"
+            },
+            {
+              "content": "Delays in participant recruitment can compress the time available for prototype modification between formative evaluations.",
+              "content_digest": "9945f30dba63d2d070bad59cb2fb15b6a26d635f337949c3891b58d17c43973a",
+              "position": 10,
+              "uid": "1877a138-31f6-59a5-b666-ae57985f540d"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "7ca07d3f-33c3-4074-a190-a206236fb09e"
+        },
+        {
+          "context_digest": "673626cf0c3650052d63b04173d43516860e2035d7038878998898bc5bebb2e3",
+          "context_name": "task-2/advisor2/evaluation",
+          "context_uid": "6e9f8ad5-a43d-5dfd-99a3-604f2757da0d",
+          "memories": [
+            {
+              "content": "Specify a single representative measure that will drive operational decisions to maintain, modify, or discontinue the deployed design.",
+              "content_digest": "dd9abb7bbbdf6846921a984789426b27a45df60ce38408422b6b0774835b44f8",
+              "position": 0,
+              "uid": "f27576c7-6f53-5412-901c-19df7e1d5e2e"
+            },
+            {
+              "content": "The HCI review panel verifies whether operational decisions can be made based on the declared primary measure.",
+              "content_digest": "1d88ce414bdbfcf9565c712f8f0d72378569d723c0c5b5c6007dc18a96f6378f",
+              "position": 1,
+              "uid": "8608bdf3-49d7-54d0-a2fb-c883c24e40ef"
+            },
+            {
+              "content": "Establish decision thresholds indicating at what levels key metrics trigger maintaining, modifying, or discontinuing the design.",
+              "content_digest": "866bad632421bfd3487fba69b855ccb36aeb9e31c6208b339db22301bdd3fc28",
+              "position": 2,
+              "uid": "b06bb706-f911-5767-8e27-b64c74d0e592"
+            },
+            {
+              "content": "Evaluate whether reducing workload for one role creates new tasks for other roles through the proposed design changes.",
+              "content_digest": "6b38b84cdc2a78f61f3163cccd787dec39167596f4f720788ec4c930f698fa9f",
+              "position": 3,
+              "uid": "473ec6e8-29f0-5c83-b36d-b7d32eeb25a3"
+            },
+            {
+              "content": "Distinguish usability from organizational adoption intent as separate evaluation outcomes.",
+              "content_digest": "7328bf54063078377068871ee3970709d9a8763204c2c3a08321e025e028868c",
+              "position": 4,
+              "uid": "935cf79f-3e67-567d-ab55-35e8fad7eb37"
+            },
+            {
+              "content": "Implementation fidelity indicates whether planned features and operational procedures were delivered in the field according to intended specifications.",
+              "content_digest": "b04d0bc0590dd77d3bc0bde581481992d57ad48c14517a2a1d63f996e51290b2",
+              "position": 5,
+              "uid": "bea0e97f-1217-507b-87a7-09ce85bae9fe"
+            },
+            {
+              "content": "Initial evaluations and long-term operation do not share identical measurement conditions due to differences in system exposure duration and frequency of repeated use.",
+              "content_digest": "49e90b293b90d173b11d1bb89e85f688c55cb923c2a19eb2058a539388327715",
+              "position": 6,
+              "uid": "dbe435ff-fe32-54fe-a2e6-7b46694ce151"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "46c46b9f-0ac2-469a-8208-ae4a01243f01"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address complementary but separate review concerns. The reference centers on assumption labeling, prototype scope, and formative-iteration feasibility, while the compared frame centers on deployed-design measurement, decision rules, organizational effects, implementation fidelity, and longitudinal evaluation conditions.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7ca07d3f-33c3-4074-a190-a206236fb09e",
+              "memory_uid": "b150c774-27f6-5ec8-8cb9-9a00be19ce9b"
+            },
+            {
+              "frame_uid": "7ca07d3f-33c3-4074-a190-a206236fb09e",
+              "memory_uid": "6c7d14ed-67e5-56ff-befb-7648b95aa7a3"
+            },
+            {
+              "frame_uid": "7ca07d3f-33c3-4074-a190-a206236fb09e",
+              "memory_uid": "00bf39b5-fe97-5fd0-b579-a5c13b5e6af7"
+            }
+          ],
+          "reason": "These memories split one reference-only disclosure rule across three assumption domains; the compared frame contains no corresponding assumption-labeling policy.",
+          "status": "RESOLVED",
+          "summary": "Unverified schedule, recruitment, and technical assumptions should be explicitly labeled.",
+          "uid": "15b2ad1a-c2ff-58ec-b8ff-4ed2129472b7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7ca07d3f-33c3-4074-a190-a206236fb09e",
+              "memory_uid": "3ae97c88-7537-5733-b48d-e02c9283f486"
+            }
+          ],
+          "reason": "This is an independently useful reference-only requirement for explaining resource use across project stages.",
+          "status": "RESOLVED",
+          "summary": "Each requested resource should be tied to its prototype-fabrication or user-study stage.",
+          "uid": "e3e666a7-6286-5cf2-9941-141ec81f6a16"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7ca07d3f-33c3-4074-a190-a206236fb09e",
+              "memory_uid": "e2b5c1f0-97c2-5d46-af80-993d8d5606c9"
+            },
+            {
+              "frame_uid": "7ca07d3f-33c3-4074-a190-a206236fb09e",
+              "memory_uid": "f636b400-d3a2-5873-bf5b-c990b0f7ea42"
+            },
+            {
+              "frame_uid": "7ca07d3f-33c3-4074-a190-a206236fb09e",
+              "memory_uid": "49385488-2315-51bc-bea0-749a1aea52f1"
+            }
+          ],
+          "reason": "These memories divide one reference-only feasibility standard into its three stated procedure-level inputs.",
+          "status": "RESOLVED",
+          "summary": "Operations reviewers assess procedure feasibility from assigned personnel, equipment, and time.",
+          "uid": "986787c5-7adc-5e15-ae38-26976fd3f55c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7ca07d3f-33c3-4074-a190-a206236fb09e",
+              "memory_uid": "f1c22a48-9d8d-5e82-9837-690d66e719db"
+            }
+          ],
+          "reason": "This reference-only claim governs whether the proposed iteration count is feasible under two named constraints.",
+          "status": "RESOLVED",
+          "summary": "The planned number of formative iterations should be checked against modification time and recruitment resources.",
+          "uid": "2a069d29-0221-53c8-839e-1bee48ef110c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7ca07d3f-33c3-4074-a190-a206236fb09e",
+              "memory_uid": "4d69f030-0dc0-5df7-a153-0b595a3f68de"
+            }
+          ],
+          "reason": "This is a standalone reference-only prototype-scoping rule not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The formative prototype should contain only functionality needed to compare primary design assumptions.",
+          "uid": "5d93ff19-d78e-55fb-9d73-c65e00051f74"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7ca07d3f-33c3-4074-a190-a206236fb09e",
+              "memory_uid": "152f8621-f5fb-5c5e-a961-1fde77ed0bb3"
+            }
+          ],
+          "reason": "This reference-only claim specifies a necessary inter-iteration capacity condition.",
+          "status": "RESOLVED",
+          "summary": "Iterative-plan feasibility requires time and personnel for prototype modification between iterations.",
+          "uid": "1b0bdf1b-27c0-56c3-94e6-c0bd1c033dc8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7ca07d3f-33c3-4074-a190-a206236fb09e",
+              "memory_uid": "1877a138-31f6-59a5-b666-ae57985f540d"
+            }
+          ],
+          "reason": "This is a reference-only causal scheduling risk distinct from the general feasibility requirements.",
+          "status": "RESOLVED",
+          "summary": "Participant-recruitment delays can reduce the time available for modification between formative evaluations.",
+          "uid": "8c22d711-3c5b-50e8-b540-1669ea41a267"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "46c46b9f-0ac2-469a-8208-ae4a01243f01",
+              "memory_uid": "f27576c7-6f53-5412-901c-19df7e1d5e2e"
+            }
+          ],
+          "reason": "This is an independently useful compared-only requirement for selecting the principal operational decision measure.",
+          "status": "RESOLVED",
+          "summary": "A single representative measure should drive decisions to maintain, modify, or discontinue a deployed design.",
+          "uid": "61331ef7-b1f6-5745-9869-d6949f6d9c33"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "46c46b9f-0ac2-469a-8208-ae4a01243f01",
+              "memory_uid": "8608bdf3-49d7-54d0-a2fb-c883c24e40ef"
+            }
+          ],
+          "reason": "This compared-only claim defines a review criterion for decision-making adequacy rather than measure selection itself.",
+          "status": "RESOLVED",
+          "summary": "The HCI review panel checks whether the declared primary measure supports operational decisions.",
+          "uid": "ba4de143-5d63-5bd3-b360-2b12b70c6cab"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "46c46b9f-0ac2-469a-8208-ae4a01243f01",
+              "memory_uid": "b06bb706-f911-5767-8e27-b64c74d0e592"
+            }
+          ],
+          "reason": "This compared-only claim adds explicit action thresholds as a separate component of operational governance.",
+          "status": "RESOLVED",
+          "summary": "Key metrics should have thresholds that trigger maintaining, modifying, or discontinuing the design.",
+          "uid": "18c2f2fa-90cb-5b0a-ba15-5686f2a4c7c7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "46c46b9f-0ac2-469a-8208-ae4a01243f01",
+              "memory_uid": "473ec6e8-29f0-5c83-b36d-b7d32eeb25a3"
+            }
+          ],
+          "reason": "This is a standalone compared-only organizational-impact assessment.",
+          "status": "RESOLVED",
+          "summary": "Design changes should be evaluated for workload reductions in one role that create tasks for other roles.",
+          "uid": "3a56d48e-f998-5828-be84-5f3796435a55"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "46c46b9f-0ac2-469a-8208-ae4a01243f01",
+              "memory_uid": "935cf79f-3e67-567d-ab55-35e8fad7eb37"
+            }
+          ],
+          "reason": "This compared-only claim distinguishes two outcome constructs that the reference frame does not discuss.",
+          "status": "RESOLVED",
+          "summary": "Usability and organizational adoption intent should be treated as separate evaluation outcomes.",
+          "uid": "a617c97e-42b3-5108-a018-e5f05e69ec40"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "46c46b9f-0ac2-469a-8208-ae4a01243f01",
+              "memory_uid": "bea0e97f-1217-507b-87a7-09ce85bae9fe"
+            }
+          ],
+          "reason": "This is an independently useful compared-only definition concerning field delivery against specifications.",
+          "status": "RESOLVED",
+          "summary": "Implementation fidelity reflects whether planned features and procedures were delivered in the field as intended.",
+          "uid": "502d6d80-8f61-575b-9557-cc6e38247f8f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "46c46b9f-0ac2-469a-8208-ae4a01243f01",
+              "memory_uid": "dbe435ff-fe32-54fe-a2e6-7b46694ce151"
+            }
+          ],
+          "reason": "This compared-only claim identifies a longitudinal measurement distinction absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Initial and long-term evaluations have different measurement conditions because exposure duration and repeated-use frequency differ.",
+          "uid": "d71e2038-7388-58f6-8b4a-03782dc52c5b"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only content defines operational measures and thresholds, reviewability of decisions, workload redistribution, distinct adoption outcomes, implementation fidelity, and measurement changes between initial and long-term use.",
+        "differences": "",
+        "reference_only": "Reference-only content covers transparent assumptions, resource-to-stage mapping, procedure-level feasibility, lean prototype scope, and the timing, staffing, and recruitment constraints surrounding formative iterations."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "18ecf560-639c-490a-8551-0b5f1c23b377"
+    },
+    "analysis_digest": "61eb95fd26dc9d9a5a30a6e3249d7963d5b311673256445ae27981fd05f73c97",
+    "key": "d2f66d7abfda63554edf391e2afc234c9f5e1f53e4cf4266041fe9911d5cc97a",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 35.156774957999005,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "d2f66d7abfda63554edf391e2afc234c9f5e1f53e4cf4266041fe9911d5cc97a",
+  "created_at": "2026-08-13T18:22:08.074873Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/feasibility",
+  "pair_key": "0a698830d96f3fdc266fe27de089d13e2ba8e0fc178475c55b7dcbbab88c73f3",
+  "provider_seconds": 35.156774957999005,
+  "right": "task-2/advisor2/evaluation",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

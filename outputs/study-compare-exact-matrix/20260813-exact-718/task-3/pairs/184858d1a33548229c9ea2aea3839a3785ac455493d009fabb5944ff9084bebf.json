@@ -1,0 +1,388 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:34:27.449314+00:00",
+      "frames": [
+        {
+          "context_digest": "2f00e067f4f35600b73e87b5555d405e2801a33ba18a54c91e63e23a79f27a4c",
+          "context_name": "task-3/local/personal-memory/2024/01",
+          "context_uid": "cbd2e4d6-2601-5d3f-8bf2-2f66b755b007",
+          "memories": [
+            {
+              "content": "The user's mother's birthday falls in the third week of January.",
+              "content_digest": "d635ded9b470acdd462156515700e66c23dcb513a7034bb365be0ac139ec0422",
+              "position": 0,
+              "uid": "2cd0229d-b7f1-581b-8019-25bdb485afd9"
+            },
+            {
+              "content": "At the user's last family meal out, noise from the next table made conversation nearly impossible.",
+              "content_digest": "dc337d32e4b09167289e19a6b1c8fe970e7eaa6fdd6868ed1c7c300e018fcd15",
+              "position": 1,
+              "uid": "c62f1669-11c9-5a81-b5f5-304acce69c23"
+            },
+            {
+              "content": "At a barbecue at home in the same month, the user was comfortable because no one had to raise their voice.",
+              "content_digest": "63763b293a491200bf1f7a251467c1fa8c2cb8d4d8450732c01666dcdea183e3",
+              "position": 2,
+              "uid": "674f4bdf-27c3-5870-a68e-91e4a093dd93"
+            },
+            {
+              "content": "During their mother's birthday meal, the user left a restaurant with loud music after 30 minutes.",
+              "content_digest": "560755c6f051ec6f85e32dc4ee9447dfc97418fca6f9f414f6910c518a52c2c0",
+              "position": 3,
+              "uid": "21509788-2e3d-548b-8303-f34cfea68c9b"
+            },
+            {
+              "content": "When discussing postponed matters with family, the user prefers a quiet, one-on-one dining environment.",
+              "content_digest": "f22bedcf60a64b3666a7e4363d6a55c48547535492010fcb205a182c1ee920a8",
+              "position": 4,
+              "uid": "74eaea9d-7640-51ba-aa77-9c050581dc46"
+            },
+            {
+              "content": "At a large banquet hall reserved by their older sister, the user remembered the surrounding noise more than the food.",
+              "content_digest": "566e443c69410f1672ab209ba2257604e373cd305ab27243a39574481407af71",
+              "position": 5,
+              "uid": "1384df1d-2173-5673-96f5-a4d86835d404"
+            },
+            {
+              "content": "On a day the user ate grilled food at home with their younger brother, conversation was easy to continue, so the user stayed another hour after the meal.",
+              "content_digest": "c93ccbe3524946f1def05a1b385fbe3387945f51164b00c56f1ff80b477d011f",
+              "position": 6,
+              "uid": "3cf68c8e-5da9-51d3-a402-c10f4137b1f4"
+            },
+            {
+              "content": "The user's mother considers having the whole family eat at the same time more important than receiving a birthday gift.",
+              "content_digest": "d302cf7db2b83b103ea11323ab1b9d36168d224b405d4d0dd51b46b494014291",
+              "position": 7,
+              "uid": "a1984768-d20d-59cd-84c9-cb08c6b7affb"
+            },
+            {
+              "content": "When proposing a birthday meal for the user's mother, check the schedule and attendees; if conversation is the purpose, first consider a low-noise location, then confirm the final choice with the user.",
+              "content_digest": "481169c62cf6fae6b4f29184ffacef9c3c9d825a34d1545ca592bc35537bc65c",
+              "position": 8,
+              "uid": "f52d11e2-2449-5c9d-887b-96c8b5cd0184"
+            },
+            {
+              "content": "The local agent can compare past dining environments and the user's responses, but those records alone cannot determine the location of the next gathering.",
+              "content_digest": "b05fef8420abe3c47c2cd9f2de9149c9c6bda7dca301f09ac7f94eac1a29d2fa",
+              "position": 9,
+              "uid": "c8fccfbe-7756-5d62-9cd7-403dd6741915"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "adc724b0-ec07-4f47-be6b-8f5eb8fd1cf5"
+        },
+        {
+          "context_digest": "ac4f93d71b525f6156f0b669075a833a2a41161be6abe677ec382bff6e6060e8",
+          "context_name": "task-3/local/personal-memory/2025/08",
+          "context_uid": "ed84de75-8e18-5bec-908c-a1ff9827b3e3",
+          "memories": [
+            {
+              "content": "The user keeps packing tape for returns in an upper kitchen drawer.",
+              "content_digest": "ed359d883caffd7ce4daddc297ddcc9d26da233dc2a36dc4dbc96e300b2248e9",
+              "position": 0,
+              "uid": "15c3941e-ed44-508f-ae30-b51456b5ba86"
+            },
+            {
+              "content": "The user arrived ten minutes before the post office closed and found that numbered-ticket intake had ended.",
+              "content_digest": "3c4609eea9455bbd46a6f238aa750f61f348ce7b2cf421a4d123f1b707b52550",
+              "position": 1,
+              "uid": "84d1fd1c-9508-5f05-9a7c-1d5f20ecf4a4"
+            },
+            {
+              "content": "Before the next visit, the user checked the operating hours and arrived one hour before closing.",
+              "content_digest": "b2997262abf4ba476c63de3550e54269ef7d61bb56d3adb5b6d9f54ba13fc078",
+              "position": 2,
+              "uid": "8946f9da-e325-59c3-9260-2d2f590d3701"
+            },
+            {
+              "content": "The user went to the counter without closing a return box and had to go back to the packing station.",
+              "content_digest": "759122c3f88ca71b992a725e357beab72f9820de872a7bd895b808c2df21f2b2",
+              "position": 3,
+              "uid": "67e8b160-a57d-56e5-a766-741b7ce0e939"
+            },
+            {
+              "content": "For the next return, the user sealed the box at home and completed intake in one attempt.",
+              "content_digest": "007fcec32ea3788854161e68c95c2aaba90e94a721d03b350e1619afc54840e3",
+              "position": 4,
+              "uid": "efd0706b-600a-5ac1-926e-cc0602ca0086"
+            },
+            {
+              "content": "The user scheduled bank and post-office errands for the same day, but they took a long time because the destinations were in different directions.",
+              "content_digest": "000e1975fde79f4d6caf36adad0c2e481a032537cfa410e46649866d985567c2",
+              "position": 5,
+              "uid": "1e8a6f7e-0911-5a34-ad82-172479d1a7a4"
+            },
+            {
+              "content": "The following week, after checking the locations on a map, the user visited nearby branches in sequence.",
+              "content_digest": "c3de08c5b6074dff2b3f6303f5efc3740cc430b634cb365a5d570061a30a53fa",
+              "position": 6,
+              "uid": "a8670161-257e-51ab-8e30-0e282952278f"
+            },
+            {
+              "content": "Postal staff expect a return-label barcode to arrive affixed flat, without a fold.",
+              "content_digest": "6293ace2d67781644694976af71d5696cad28979d9641718ccd59f16b3397a47",
+              "position": 7,
+              "uid": "2db70f53-99ee-556c-a8c1-b809881cbebd"
+            },
+            {
+              "content": "Before grouping errands into one outing, check each institution's location and operating hours that day.",
+              "content_digest": "7fef923f9ed507db5aad6cf65eaee2c965075e51fef0ff73fa669f1e7f69314a",
+              "position": 8,
+              "uid": "38d60cc4-2f91-5cc2-b511-55cdbbe12c32"
+            },
+            {
+              "content": "Postal and financial counters may operate on different hours than usual around public holidays.",
+              "content_digest": "2d5dc709c468405ea894f343e922dc2546b826ed7488e613f4d4dd730bccccfd",
+              "position": 9,
+              "uid": "1272087c-a535-5612-8c7a-1bc257183788"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "561e535e-469a-434c-8c2e-1634c56c19ec"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover unrelated domains: the reference frame concerns family birthday dining and sensitivity to noisy settings, while the compared frame concerns preparing and planning postal and banking errands. Neither frame supplies a scope-aligned counterpart to the other, and no conflict is present.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "adc724b0-ec07-4f47-be6b-8f5eb8fd1cf5",
+              "memory_uid": "2cd0229d-b7f1-581b-8019-25bdb485afd9"
+            }
+          ],
+          "reason": "This one-sided calendar fact has no operationally related counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s mother’s birthday is in the third week of January.",
+          "uid": "343295fa-74cf-5a7f-844b-c817d8a19c86"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "adc724b0-ec07-4f47-be6b-8f5eb8fd1cf5",
+              "memory_uid": "c62f1669-11c9-5a81-b5f5-304acce69c23"
+            },
+            {
+              "frame_uid": "adc724b0-ec07-4f47-be6b-8f5eb8fd1cf5",
+              "memory_uid": "674f4bdf-27c3-5870-a68e-91e4a093dd93"
+            },
+            {
+              "frame_uid": "adc724b0-ec07-4f47-be6b-8f5eb8fd1cf5",
+              "memory_uid": "21509788-2e3d-548b-8303-f34cfea68c9b"
+            },
+            {
+              "frame_uid": "adc724b0-ec07-4f47-be6b-8f5eb8fd1cf5",
+              "memory_uid": "1384df1d-2173-5673-96f5-a4d86835d404"
+            },
+            {
+              "frame_uid": "adc724b0-ec07-4f47-be6b-8f5eb8fd1cf5",
+              "memory_uid": "3cf68c8e-5da9-51d3-a402-c10f4137b1f4"
+            }
+          ],
+          "reason": "Each member is an experiential example of how ambient dining noise affected the user’s conversation, comfort, attention, or willingness to remain, with no related compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "Across several family meals, quieter settings supported comfortable, sustained conversation, while noisy restaurants and banquet settings impaired conversation or shortened and overshadowed the experience.",
+          "uid": "dfadfbaa-b12e-5aae-91d7-d8dfb363e0e1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "adc724b0-ec07-4f47-be6b-8f5eb8fd1cf5",
+              "memory_uid": "74eaea9d-7640-51ba-aa77-9c050581dc46"
+            }
+          ],
+          "reason": "This context-specific dining preference is independently useful and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user prefers a quiet, one-on-one dining setting when discussing postponed family matters.",
+          "uid": "7f08b74d-48c9-5555-80b4-85fcf5d531ec"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "adc724b0-ec07-4f47-be6b-8f5eb8fd1cf5",
+              "memory_uid": "a1984768-d20d-59cd-84c9-cb08c6b7affb"
+            }
+          ],
+          "reason": "This one-sided statement of the mother’s birthday priority is unrelated to the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s mother prioritizes having the whole family share her birthday meal over receiving a gift.",
+          "uid": "e71d099c-24bf-57c3-ab4b-4f66b489e7b0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "adc724b0-ec07-4f47-be6b-8f5eb8fd1cf5",
+              "memory_uid": "f52d11e2-2449-5c9d-887b-96c8b5cd0184"
+            }
+          ],
+          "reason": "This is a distinct conditional planning procedure for a family meal, not a counterpart to the compared frame’s errand-planning policy.",
+          "status": "RESOLVED",
+          "summary": "Birthday-meal proposals should check schedules and attendees, favor low noise when conversation is the purpose, and leave the final choice for user confirmation.",
+          "uid": "f68694a2-bb21-5fb6-b360-2cdbf31a1acd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "adc724b0-ec07-4f47-be6b-8f5eb8fd1cf5",
+              "memory_uid": "c8fccfbe-7756-5d62-9cd7-403dd6741915"
+            }
+          ],
+          "reason": "This one-sided epistemic limit concerns choosing a future gathering venue and has no compared-side analogue.",
+          "status": "RESOLVED",
+          "summary": "Past dining environments and reactions can be compared, but they cannot alone determine the next gathering’s location.",
+          "uid": "54adb44c-334e-546e-b3d7-2cf0b6cea5a5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "561e535e-469a-434c-8c2e-1634c56c19ec",
+              "memory_uid": "15c3941e-ed44-508f-ae30-b51456b5ba86"
+            }
+          ],
+          "reason": "This one-sided household storage fact has no operationally related counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user stores return-packing tape in an upper kitchen drawer.",
+          "uid": "3c1dd2f8-5e69-509b-a6bc-d8e7337a65c2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "561e535e-469a-434c-8c2e-1634c56c19ec",
+              "memory_uid": "84d1fd1c-9508-5f05-9a7c-1d5f20ecf4a4"
+            },
+            {
+              "frame_uid": "561e535e-469a-434c-8c2e-1634c56c19ec",
+              "memory_uid": "8946f9da-e325-59c3-9260-2d2f590d3701"
+            }
+          ],
+          "reason": "Both members form one before-and-after account about allowing sufficient time for postal intake, with no related reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "After arriving too late for numbered-ticket intake despite the post office still being open, the user checked hours and arrived substantially earlier on the next visit.",
+          "uid": "a10844b1-0a42-5639-9a59-3b722b2ba1c6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "561e535e-469a-434c-8c2e-1634c56c19ec",
+              "memory_uid": "67e8b160-a57d-56e5-a766-741b7ce0e939"
+            },
+            {
+              "frame_uid": "561e535e-469a-434c-8c2e-1634c56c19ec",
+              "memory_uid": "efd0706b-600a-5ac1-926e-cc0602ca0086"
+            }
+          ],
+          "reason": "Both members form one before-and-after account about sealing a return before reaching the counter, with no related reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "After an unsealed return box caused an extra trip to the packing station, the user sealed the next box at home and completed intake in one attempt.",
+          "uid": "26625c39-0bb3-59b2-9c49-b65ea2b9c646"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "561e535e-469a-434c-8c2e-1634c56c19ec",
+              "memory_uid": "1e8a6f7e-0911-5a34-ad82-172479d1a7a4"
+            },
+            {
+              "frame_uid": "561e535e-469a-434c-8c2e-1634c56c19ec",
+              "memory_uid": "a8670161-257e-51ab-8e30-0e282952278f"
+            }
+          ],
+          "reason": "Both members form one before-and-after account about improving multi-stop errand routing, with no related reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "After poorly located bank and postal destinations made a combined outing slow, the user mapped nearby branches and visited them sequentially the following week.",
+          "uid": "a3635d37-8325-5054-9c81-b85bb4b0b6e7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "561e535e-469a-434c-8c2e-1634c56c19ec",
+              "memory_uid": "2db70f53-99ee-556c-a8c1-b809881cbebd"
+            }
+          ],
+          "reason": "This one-sided packaging requirement is independently useful and has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Postal staff expect a return-label barcode to be attached flat and without a fold.",
+          "uid": "6f78b207-234f-5e2f-b653-fb0c4ca2fd1a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "561e535e-469a-434c-8c2e-1634c56c19ec",
+              "memory_uid": "38d60cc4-2f91-5cc2-b511-55cdbbe12c32"
+            }
+          ],
+          "reason": "This is a distinct operational policy for planning an outing and does not materially address the reference frame’s family-meal decision.",
+          "status": "RESOLVED",
+          "summary": "Before combining errands, check every institution’s location and operating hours for that day.",
+          "uid": "0d419540-2e8a-552f-b6ab-8af49c43e263"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "561e535e-469a-434c-8c2e-1634c56c19ec",
+              "memory_uid": "1272087c-a535-5612-8c7a-1bc257183788"
+            }
+          ],
+          "reason": "This one-sided scheduling caveat is independently useful and has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Postal and financial counters may use atypical hours around public holidays.",
+          "uid": "8e37243a-77bf-55d2-a636-2ccb20dd558f"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers return supplies and packaging, postal intake timing and label requirements, route planning for combined errands, and possible holiday-hour changes.",
+        "differences": "",
+        "reference_only": "The reference describes birthday timing and family priorities, the user’s preference and experiences around quiet dining, a cautious meal-planning procedure, and limits on inferring the next venue."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "a71ead19-c804-4247-b079-16fb0682da3a"
+    },
+    "analysis_digest": "93bde8343acc84deeab7887de499bc56ca29581b574b38f0dcb34632c48f676b",
+    "key": "ede9196766abe4f5d2e65137883b4136d1e6fae9bd93322d7c67fdc3327a6a7e",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 40.88753416700274,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "ede9196766abe4f5d2e65137883b4136d1e6fae9bd93322d7c67fdc3327a6a7e",
+  "created_at": "2026-08-13T18:35:08.336486Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/01",
+  "pair_key": "184858d1a33548229c9ea2aea3839a3785ac455493d009fabb5944ff9084bebf",
+  "provider_seconds": 40.88753416700274,
+  "right": "task-3/local/personal-memory/2025/08",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

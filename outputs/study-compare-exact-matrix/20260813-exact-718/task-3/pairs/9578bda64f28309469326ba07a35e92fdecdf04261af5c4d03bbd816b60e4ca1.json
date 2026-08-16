@@ -1,0 +1,406 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:45:02.151355+00:00",
+      "frames": [
+        {
+          "context_digest": "17b940da39446a9f934dff43ea7db561d14060561065852a34658fe4aaa1702f",
+          "context_name": "task-3/local/personal-memory/2024/10",
+          "context_uid": "7c55b789-a7d0-5070-9cf8-6f5e205415dc",
+          "memories": [
+            {
+              "content": "The user renewed their local library membership in October 2024.",
+              "content_digest": "eb9209032856bdbc69fbfa67e053bf8cd2bc23f8e8e25c0be9a5aa3f7e05f4e9",
+              "position": 0,
+              "uid": "04711182-acef-52a9-bd58-7fe98a54854a"
+            },
+            {
+              "content": "On an evening walk, the user saw an unlit street and took a detour along a main road.",
+              "content_digest": "62d001de1c6c4599e51c4e0713f577a2838e95e03f26064778e64542f390a599",
+              "position": 1,
+              "uid": "0229d0b1-750c-521b-a126-22c9d9d001c4"
+            },
+            {
+              "content": "On a day the user chose a well-lit pedestrian route, the walk took 12 minutes longer than usual.",
+              "content_digest": "ad3770626bef71bc9a29ec7772aeebeb70231e89b417b05b4da9c62a65b89afe",
+              "position": 2,
+              "uid": "e310fe87-8cde-5399-be00-9f8d7ec44e94"
+            },
+            {
+              "content": "On a day the user sat by the library window, they heard vehicle noise with every page they read.",
+              "content_digest": "090a190c68a5166d84cde1eed20f9a03c2b99722ed383eb3b5703489c01d85e0",
+              "position": 3,
+              "uid": "4f37306b-08cd-512a-b92e-ca6761da1a5b"
+            },
+            {
+              "content": "On the next visit, the user sat farther inside and did not move for an hour.",
+              "content_digest": "a071b4c7699fe17f63f0ab6263da1259aea00ad635169a313d4821f57071a86a",
+              "position": 4,
+              "uid": "5897ffa4-cfc6-5012-8931-15420ec5cf7c"
+            },
+            {
+              "content": "The user wrote the due date of a borrowed book on paper and then lost the paper.",
+              "content_digest": "43ef22512c79634cb9e3dc59006c7d06c3513a9d5d1f89eedbb392964cc34f02",
+              "position": 5,
+              "uid": "ce38bd13-3d51-5bff-9eba-ed70a8217356"
+            },
+            {
+              "content": "After entering the due date on their phone, the user saw a reminder the day before and put the book in their bag.",
+              "content_digest": "38782cba2f3bf260d62cf8e80c4a7e4a3a196d4d29ced3c4fe19d050e12c1e0a",
+              "position": 6,
+              "uid": "a304315b-bc0a-591b-b8c2-7eea5145819d"
+            },
+            {
+              "content": "Library staff expect a person requesting a replacement membership card to bring identity-verification material.",
+              "content_digest": "1ac59309aedbfa946661bf5bbc4d5141c420df059937893caba88725dfe77d24",
+              "position": 7,
+              "uid": "ef060b89-6c54-5c20-86be-c07766a35daa"
+            },
+            {
+              "content": "Check recent lighting and pedestrian conditions before proposing an evening walking route.",
+              "content_digest": "1b247adfb3723d14979b2cc7ecf6786c457d60e521b8708a6d08d38d3d1af437",
+              "position": 8,
+              "uid": "7669e5eb-c0fd-5182-ae9a-5f9ae95ddf2f"
+            },
+            {
+              "content": "The local agent can compare past reasons for detours but cannot directly observe current lighting and pedestrian conditions.",
+              "content_digest": "8a5f0e4cbb2fa6c19f2cb5d4e500ed460189b515604c87c6c2a4c8348c4efc44",
+              "position": 9,
+              "uid": "e96f7007-5814-5986-b121-4ce3b22506e1"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "fd4d9def-55d6-443c-949f-fa8262283873"
+        },
+        {
+          "context_digest": "3e738289251b9bdf3deb1c7a7540e6ce811b09e26a020af3a76d47b4c85c7ab1",
+          "context_name": "task-3/local/personal-memory/2025/02",
+          "context_uid": "ce7367b8-8532-5f43-972a-1665ca8e3e80",
+          "memories": [
+            {
+              "content": "The user reviewed their emergency-contact list in February 2025.",
+              "content_digest": "b2f108376dbbf53e8885b9c61080d4c873209d8c6e399c37412fa507fec08b0b",
+              "position": 0,
+              "uid": "3ff046b1-5810-51ca-8d43-c99ef6a90b41"
+            },
+            {
+              "content": "When preparation instructions arrived as a long paragraph, the user missed two items.",
+              "content_digest": "43bde452a403f85bcffa6f7ba6b3142ed45604730083327c6f57092b98f397aa",
+              "position": 1,
+              "uid": "e2a304e5-6100-5a5f-b508-0a7f28f6bda7"
+            },
+            {
+              "content": "After changing the same content into a checklist, the user marked every item they had prepared.",
+              "content_digest": "0f8115061b489894115fd252f079ee673504ed09dea4d88d558e64ed6189f1be",
+              "position": 2,
+              "uid": "51d03bff-3e33-5f68-9df6-ed7efa8e3de9"
+            },
+            {
+              "content": "The user called their mother on a weekend evening, but they spoke only briefly because the mother was out.",
+              "content_digest": "a9a1e7d87532667781677f4760beeb086f1e423365a915a0ec0b494892cbb361",
+              "position": 3,
+              "uid": "0987293e-3e21-5cbc-bb46-59245a5fa041"
+            },
+            {
+              "content": "The user called again on Saturday morning the following week and spoke for 40 minutes.",
+              "content_digest": "f08c9f170345686b2091e3b0ecd49f049e245d584886da62d586185010f713bf",
+              "position": 4,
+              "uid": "dc3de6ad-56ea-528a-a9b7-349e79af2326"
+            },
+            {
+              "content": "The user sent a text to an old number for an emergency contact and saw that delivery failed.",
+              "content_digest": "692321e996b9ac8e3500a2da7765f77e0d14c6f040cf2c33944cbdcb39c706de",
+              "position": 5,
+              "uid": "6546d41b-3d5b-5802-a9e7-ac028405e3f2"
+            },
+            {
+              "content": "After confirming the new number with their older sister, the user updated the contact list.",
+              "content_digest": "8d2e954a978e35c1da92948ccc8e45f38fcc25ea3fafe7c389ef546f6eda1ae1",
+              "position": 6,
+              "uid": "ea6eb9d2-9b01-5330-a4d5-886d4bc6cd85"
+            },
+            {
+              "content": "For nonurgent contact, the user's older sister prefers to reply by text when available rather than take a call immediately.",
+              "content_digest": "86639aee50903bc3261e6f88ac7d649c8197927fe214d5d17e0e6f5b3d69a59d",
+              "position": 7,
+              "uid": "12fe7e64-192e-5359-8f96-d2875f7e5399"
+            },
+            {
+              "content": "Before using an emergency contact, reconfirm the number and relationship information with the user.",
+              "content_digest": "78e41f61ba99eaf8840d5d318d08327ca6bb087addd6e22269e8b63281bb67c7",
+              "position": 8,
+              "uid": "e6f89ded-5687-5c25-8df8-88f288d450c6"
+            },
+            {
+              "content": "The user feels that a reminder the day before an appointment gives them enough time to recheck preparation items.",
+              "content_digest": "1a9fcc01df362c76b6d9c8e4fa2d33229a2ae2762c0c6d25e0fc89312a6e0ed4",
+              "position": 9,
+              "uid": "f9197c33-ff93-5215-a3a5-e4087bea2a0d"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "cf577470-e137-4f4b-8da7-6323ecb5d2bb"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover largely separate personal routines and operational guidance: library and evening-walk experiences versus emergency contacts and preparation. Their only substantive overlap concerns day-before reminders, with different task contexts that should remain explicit.",
+      "relations": [
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "fd4d9def-55d6-443c-949f-fa8262283873",
+              "memory_uid": "a304315b-bc0a-591b-b8c2-7eea5145819d"
+            },
+            {
+              "frame_uid": "cf577470-e137-4f4b-8da7-6323ecb5d2bb",
+              "memory_uid": "f9197c33-ff93-5215-a3a5-e4087bea2a0d"
+            }
+          ],
+          "reason": "Both claims concern the operational usefulness of the same reminder lead time, while their explicit tasks and resulting actions differ and must be preserved.",
+          "status": "RESOLVED",
+          "summary": "A day-before reminder supports timely follow-through, scoped respectively to a borrowed-book return and appointment preparation.",
+          "uid": "c0e6a802-86fd-573c-9288-21a06e55d457"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fd4d9def-55d6-443c-949f-fa8262283873",
+              "memory_uid": "04711182-acef-52a9-bd58-7fe98a54854a"
+            }
+          ],
+          "reason": "This is independently useful reference-only membership history with no corresponding compared-frame claim.",
+          "status": "RESOLVED",
+          "summary": "The user renewed their local library membership in October 2024.",
+          "uid": "7e8e70cc-860a-5f6f-8e6d-ae4e462303a0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fd4d9def-55d6-443c-949f-fa8262283873",
+              "memory_uid": "0229d0b1-750c-521b-a126-22c9d9d001c4"
+            }
+          ],
+          "reason": "This reference-only episode records a route response to poor lighting and has no substantive counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user avoided an unlit street during an evening walk by detouring along a main road.",
+          "uid": "6ed0a2cd-4b6a-525d-934b-60142a8d9710"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fd4d9def-55d6-443c-949f-fa8262283873",
+              "memory_uid": "e310fe87-8cde-5399-be00-9f8d7ec44e94"
+            }
+          ],
+          "reason": "This reference-only claim quantifies a safety-route time tradeoff not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Choosing a well-lit pedestrian route added 12 minutes to the user’s usual walk.",
+          "uid": "d41ed984-8d8d-51c2-908c-3a865d800873"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fd4d9def-55d6-443c-949f-fa8262283873",
+              "memory_uid": "4f37306b-08cd-512a-b92e-ca6761da1a5b"
+            }
+          ],
+          "reason": "This reference-only seating experience has no substantive counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Vehicle noise repeatedly disrupted the user’s reading beside the library window.",
+          "uid": "d20c93ff-196c-556d-8e89-dd4d9f642071"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fd4d9def-55d6-443c-949f-fa8262283873",
+              "memory_uid": "5897ffa4-cfc6-5012-8931-15420ec5cf7c"
+            }
+          ],
+          "reason": "This is a separate reference-only observation about seating behavior, without a compared-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "On a later library visit, the user sat farther inside and remained there for an hour.",
+          "uid": "7ecdc0a2-8eb8-549b-bdd2-53ca561bbe80"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fd4d9def-55d6-443c-949f-fa8262283873",
+              "memory_uid": "ce38bd13-3d51-5bff-9eba-ed70a8217356"
+            }
+          ],
+          "reason": "This reference-only failure of a paper record is independently useful and is not asserted in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user recorded a borrowed-book due date on paper and then lost the paper.",
+          "uid": "b2f141a2-389b-5e21-b869-39fcd9ce5933"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fd4d9def-55d6-443c-949f-fa8262283873",
+              "memory_uid": "ef060b89-6c54-5c20-86be-c07766a35daa"
+            }
+          ],
+          "reason": "This reference-only procedural requirement has no corresponding compared-frame policy.",
+          "status": "RESOLVED",
+          "summary": "Library staff expect identity-verification material when someone requests a replacement membership card.",
+          "uid": "f7e9e91d-b3ed-5a4f-8127-f05bfd00eb7b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fd4d9def-55d6-443c-949f-fa8262283873",
+              "memory_uid": "7669e5eb-c0fd-5182-ae9a-5f9ae95ddf2f"
+            },
+            {
+              "frame_uid": "fd4d9def-55d6-443c-949f-fa8262283873",
+              "memory_uid": "e96f7007-5814-5986-b121-4ce3b22506e1"
+            }
+          ],
+          "reason": "These reference memories split one operational constraint: current conditions must be checked because historical detour reasoning does not supply direct present observation.",
+          "status": "RESOLVED",
+          "summary": "Evening-route proposals require recent lighting and pedestrian information that the local agent cannot directly observe.",
+          "uid": "1db45763-ddbf-5f4b-8b7a-bc017921b5d3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cf577470-e137-4f4b-8da7-6323ecb5d2bb",
+              "memory_uid": "3ff046b1-5810-51ca-8d43-c99ef6a90b41"
+            }
+          ],
+          "reason": "This compared-only maintenance history has no corresponding reference-frame claim.",
+          "status": "RESOLVED",
+          "summary": "The user reviewed their emergency-contact list in February 2025.",
+          "uid": "015c22ec-4c95-5d29-a688-68cd54d99771"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cf577470-e137-4f4b-8da7-6323ecb5d2bb",
+              "memory_uid": "e2a304e5-6100-5a5f-b508-0a7f28f6bda7"
+            },
+            {
+              "frame_uid": "cf577470-e137-4f4b-8da7-6323ecb5d2bb",
+              "memory_uid": "51d03bff-3e33-5f68-9df6-ed7efa8e3de9"
+            }
+          ],
+          "reason": "These compared memories jointly express one one-sided formatting claim through contrasting outcomes: missed items in prose and complete marking with a checklist.",
+          "status": "RESOLVED",
+          "summary": "Checklist formatting improved preparation tracking compared with presenting the same instructions as a long paragraph.",
+          "uid": "6a60c8cb-ab1c-5bba-b943-a98d326034a6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cf577470-e137-4f4b-8da7-6323ecb5d2bb",
+              "memory_uid": "0987293e-3e21-5cbc-bb46-59245a5fa041"
+            },
+            {
+              "frame_uid": "cf577470-e137-4f4b-8da7-6323ecb5d2bb",
+              "memory_uid": "dc3de6ad-56ea-528a-a9b7-349e79af2326"
+            }
+          ],
+          "reason": "These compared memories form one paired observation about call timing and conversation duration, absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Different call times coincided with a brief unavailable-evening conversation and a 40-minute Saturday-morning conversation with the user’s mother.",
+          "uid": "c6a71c62-d2e1-59ef-993f-c37f8710b00a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cf577470-e137-4f4b-8da7-6323ecb5d2bb",
+              "memory_uid": "6546d41b-3d5b-5802-a9e7-ac028405e3f2"
+            },
+            {
+              "frame_uid": "cf577470-e137-4f4b-8da7-6323ecb5d2bb",
+              "memory_uid": "ea6eb9d2-9b01-5330-a4d5-886d4bc6cd85"
+            }
+          ],
+          "reason": "These compared memories split one contact-correction episode from failure detection through confirmation and update.",
+          "status": "RESOLVED",
+          "summary": "After a text to an old emergency-contact number failed, the user confirmed the new number with their older sister and updated the list.",
+          "uid": "b0a3d3bf-843c-5e2c-b755-3cc40a9f2cee"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cf577470-e137-4f4b-8da7-6323ecb5d2bb",
+              "memory_uid": "12fe7e64-192e-5359-8f96-d2875f7e5399"
+            }
+          ],
+          "reason": "This compared-only communication preference has no substantive reference-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "For nonurgent contact, the user’s older sister prefers replying by text when available instead of taking an immediate call.",
+          "uid": "ce9c80e9-769c-578a-b8ae-15b2d797182f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cf577470-e137-4f4b-8da7-6323ecb5d2bb",
+              "memory_uid": "e6f89ded-5687-5c25-8df8-88f288d450c6"
+            }
+          ],
+          "reason": "This compared-only operational policy is distinct from the reference frame’s library and route guidance.",
+          "status": "RESOLVED",
+          "summary": "Before using an emergency contact, reconfirm the number and relationship information with the user.",
+          "uid": "000954c6-8322-55d5-98c3-2d156c8c5132"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers emergency-contact maintenance, checklist-based preparation, call timing, and a relative’s nonurgent communication preference.",
+        "differences": "Day-before reminders support action in both frames, but one concerns returning a borrowed book and the other concerns rechecking appointment preparation.",
+        "reference_only": "The reference covers library membership, seating, borrowing and card requirements, plus evening-route safety, travel time, and the need for current conditions beyond the agent’s observation."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "37b7c757-710c-4e86-837c-f203a008bd6e"
+    },
+    "analysis_digest": "26481bdb7f012e590c03981ad64bcf46ed3cf8b73b678066ae7d8c6949e0489c",
+    "key": "33644fd6c3586b3dae0eb9f398410cde08219a5f8458cdf0ece27d65340be6a6",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 73.20229174999986,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "33644fd6c3586b3dae0eb9f398410cde08219a5f8458cdf0ece27d65340be6a6",
+  "created_at": "2026-08-13T18:46:15.353185Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/10",
+  "pair_key": "9578bda64f28309469326ba07a35e92fdecdf04261af5c4d03bbd816b60e4ca1",
+  "provider_seconds": 73.20229174999986,
+  "right": "task-3/local/personal-memory/2025/02",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

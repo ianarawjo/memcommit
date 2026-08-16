@@ -1,0 +1,375 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:19:42.482759+00:00",
+      "frames": [
+        {
+          "context_digest": "42df7e2f7640040d1d6f6f6e566e80d178668a05ab6918b64eed91b91a41b7fb",
+          "context_name": "task-2/advisor1/evaluation",
+          "context_uid": "30568e2f-ce17-50ce-a25b-1cc4bdb94689",
+          "memories": [
+            {
+              "content": "Specify a single representative measure that serves as the criterion for retaining, modifying, or discarding compared design alternatives.",
+              "content_digest": "53aa7c1f81a4fac9e76985be094717aa122e7077a6fcfde46946babd5929d390",
+              "position": 0,
+              "uid": "a50f6ecb-de38-5769-8a6e-23b84a7eb35c"
+            },
+            {
+              "content": "HCI review panels verify whether clear criteria for judging design alternatives are established using the declared primary measure.",
+              "content_digest": "fabd83103e5c3474f56de113c477f7ced5e863a508ec39bd4ae23653d63ad354",
+              "position": 1,
+              "uid": "44c61beb-24a2-584a-ad96-e622690d8171"
+            },
+            {
+              "content": "Collect process measures to diagnose interaction steps where problems occurred, alongside the primary outcome measure.",
+              "content_digest": "6cc2fedef1b0af1c594e48610e08a169f3bca2405bf8773945eca33396aecb36",
+              "position": 2,
+              "uid": "23202824-b576-5d77-b591-8b4cc0757632"
+            },
+            {
+              "content": "Interpret evaluation results as differences between compared design alternatives rather than as success or failure of a single prototype.",
+              "content_digest": "5c578d52a7dbbf4e4b646e707bbee4ac37bcd23bceb0b4d5e09ef3c08df9c2f4",
+              "position": 3,
+              "uid": "65ae88bf-8002-5ada-8590-eaf345b38863"
+            },
+            {
+              "content": "Check boundary cases to verify whether the derived design principles retain explanatory power for adjacent situations not included in the comparison.",
+              "content_digest": "3edc3e181a8086233d889f35cb98c9448875fe3fee915467f712ca3eb2886de1",
+              "position": 4,
+              "uid": "79af5e5f-4868-5e76-bcd5-3f8e1d6a0bd1"
+            },
+            {
+              "content": "Controlled evaluation environments do not reproduce time pressure, peer intervention, or voluntary termination conditions found in daily use.",
+              "content_digest": "e58a1bc6a423874525aca9f864b9b0dbd1e3ef9961410608c5837c88f1153d9b",
+              "position": 5,
+              "uid": "3a65fc8b-a5b4-50fc-a60e-fc6f3fc44547"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "2f7a43a5-8bf3-41e3-a6b3-40e14c80a360"
+        },
+        {
+          "context_digest": "74ec0b91876efe6caed2938aaf4a0b06272de678fbf74dc9da1c217aa0bd042f",
+          "context_name": "task-2/advisor2/compensation",
+          "context_uid": "4ffbd453-7d61-56f7-90ad-34d77b485ef8",
+          "memories": [
+            {
+              "content": "Calculate user research compensation budgets based on the estimated participation burden, combining session time with required technical and travel preparation.",
+              "content_digest": "ba439fe3920339f56e377d8f82a64ab3ad27fb25e0eec3c65b610c81af53d175",
+              "position": 0,
+              "uid": "be9e402b-8d3b-58da-9766-2cf2ec25b9ae"
+            },
+            {
+              "content": "Compensate participants who withdraw from the study midway for their actual participation time.",
+              "content_digest": "599f542ec6f4a5a1a61f5c1a31547088e015439978a64b268879b5a2b65c9be4",
+              "position": 1,
+              "uid": "85157c57-410f-5c7d-8183-b37d61eebf8a"
+            },
+            {
+              "content": "Compensate for the time actually spent in sessions, regardless of the research modality.",
+              "content_digest": "b19b9dbece5d564de69e703491018fbd78ab834149eed0590a552773526b6e29",
+              "position": 2,
+              "uid": "8abeab95-3e41-5378-8409-08200aee9d58"
+            },
+            {
+              "content": "Allow the issuance of gift cards of equivalent value to participants in remote studies who cannot use electronic transfers.",
+              "content_digest": "8ac881488d0064f4b4c6143e2d8c69ab9806b419044adef266c50738c7afb291",
+              "position": 3,
+              "uid": "9b59c6ed-5dbe-5ccc-87b5-6be31f414e68"
+            },
+            {
+              "content": "Do not treat an unresolved payment method as a deficiency at the proposal stage.",
+              "content_digest": "80109274870eb1023e4cbcc6861a906a4d94db5dab2b2659bcebccde125c9ac3",
+              "position": 4,
+              "uid": "5c6c461d-05e5-5b0c-b801-245de2f9c8d7"
+            },
+            {
+              "content": "Allow differential compensation amounts for on-site and remote studies when participation burden varies due to travel or technical preparation.",
+              "content_digest": "556c5e49f7996a651a64825df2389f070629b9bc664c758d934f308c7fd6eea2",
+              "position": 5,
+              "uid": "44abc098-8c9f-5abb-bc49-9deb25066d93"
+            },
+            {
+              "content": "Participants judge the fairness of compensation based on the combined burden of session time and required technical and travel preparation.",
+              "content_digest": "80dd84e8b183e02f1fd772890b48712bb04a04852055eece98957a0c9028288c",
+              "position": 6,
+              "uid": "2a252668-f3f2-5582-b248-43ad81c54a48"
+            },
+            {
+              "content": "In longitudinal studies requiring diary entries and repeated reporting, include out-of-session recording time in compensation calculations.",
+              "content_digest": "7d103d93741e40d54c8df8347f2ce648a1cd96e19589663fa515bfb24b5bd844",
+              "position": 7,
+              "uid": "7e647a83-81b0-52d6-9362-e513dc2a5032"
+            },
+            {
+              "content": "Distinguish between participant research compensation and labor costs for field staff performing installation and operational support as part of their duties.",
+              "content_digest": "b1566527e9c1d7d3f93631d1503b08ddb4a6818daa570c118f265b47603592f0",
+              "position": 8,
+              "uid": "d77affab-60c8-5403-b189-17022b484640"
+            },
+            {
+              "content": "The user tends to count session time but omit participants’ advance setup and follow-up reporting time.",
+              "content_digest": "98911b7db2d8c3962d7ef48919265f40cdb61a711062e5459a4f6d43f71d6fd9",
+              "position": 9,
+              "uid": "0c470c6b-26a6-5501-93ac-c51fecd708ae"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "d314976a-5cbb-4794-93b6-bccab6f195f8"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate operational domains. The reference covers comparative design evaluation and validity, while the compared frame covers participant-compensation fairness, calculation, payment, and classification; neither supplies a counterpart to the other’s claims.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2f7a43a5-8bf3-41e3-a6b3-40e14c80a360",
+              "memory_uid": "a50f6ecb-de38-5769-8a6e-23b84a7eb35c"
+            }
+          ],
+          "reason": "Only the reference frame establishes a primary measure as the decision criterion for design alternatives.",
+          "status": "RESOLVED",
+          "summary": "A single representative measure should determine whether compared design alternatives are retained, modified, or discarded.",
+          "uid": "a1b60393-89f3-52ec-9502-82034e6405a5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2f7a43a5-8bf3-41e3-a6b3-40e14c80a360",
+              "memory_uid": "44c61beb-24a2-584a-ad96-e622690d8171"
+            }
+          ],
+          "reason": "Only the reference frame assigns review panels this verification responsibility.",
+          "status": "RESOLVED",
+          "summary": "HCI review panels verify that declared primary measures provide clear criteria for judging design alternatives.",
+          "uid": "1fda4e22-f130-514e-8787-faf3e91e2e44"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2f7a43a5-8bf3-41e3-a6b3-40e14c80a360",
+              "memory_uid": "23202824-b576-5d77-b591-8b4cc0757632"
+            }
+          ],
+          "reason": "Only the reference frame requires diagnostic process measures alongside the primary outcome.",
+          "status": "RESOLVED",
+          "summary": "Process measures should accompany the primary outcome measure to locate problematic interaction steps.",
+          "uid": "bef4614d-da9b-57db-aea3-99b7c82c3a4e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2f7a43a5-8bf3-41e3-a6b3-40e14c80a360",
+              "memory_uid": "65ae88bf-8002-5ada-8590-eaf345b38863"
+            }
+          ],
+          "reason": "Only the reference frame states this comparative interpretation rule.",
+          "status": "RESOLVED",
+          "summary": "Evaluation results should be interpreted as differences among alternatives rather than as a single prototype’s success or failure.",
+          "uid": "c5a06612-d8aa-5cab-a24c-9ee83b50135a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2f7a43a5-8bf3-41e3-a6b3-40e14c80a360",
+              "memory_uid": "79af5e5f-4868-5e76-bcd5-3f8e1d6a0bd1"
+            }
+          ],
+          "reason": "Only the reference frame requires testing derived principles against adjacent situations.",
+          "status": "RESOLVED",
+          "summary": "Adjacent boundary cases should test whether derived design principles retain explanatory power beyond the original comparison.",
+          "uid": "f5e296c4-deae-501a-b4d8-c78e219575bf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2f7a43a5-8bf3-41e3-a6b3-40e14c80a360",
+              "memory_uid": "3a65fc8b-a5b4-50fc-a60e-fc6f3fc44547"
+            }
+          ],
+          "reason": "Only the reference frame identifies these external-validity limitations.",
+          "status": "RESOLVED",
+          "summary": "Controlled evaluations omit daily-use conditions such as time pressure, peer intervention, and voluntary termination.",
+          "uid": "7878e451-65ac-5b10-9b17-6923b13a81d5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d314976a-5cbb-4794-93b6-bccab6f195f8",
+              "memory_uid": "be9e402b-8d3b-58da-9766-2cf2ec25b9ae"
+            }
+          ],
+          "reason": "Only the compared frame defines this burden-based budgeting method.",
+          "status": "RESOLVED",
+          "summary": "Research compensation budgets should reflect session time plus required technical and travel preparation.",
+          "uid": "db16f253-584c-5a59-a5c0-7545881f4135"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d314976a-5cbb-4794-93b6-bccab6f195f8",
+              "memory_uid": "85157c57-410f-5c7d-8183-b37d61eebf8a"
+            }
+          ],
+          "reason": "Only the compared frame governs compensation following mid-study withdrawal.",
+          "status": "RESOLVED",
+          "summary": "Participants who withdraw midway should be compensated for their actual participation time.",
+          "uid": "4ca29b8d-0b5b-574a-b210-5ca20bb0e136"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d314976a-5cbb-4794-93b6-bccab6f195f8",
+              "memory_uid": "8abeab95-3e41-5378-8409-08200aee9d58"
+            }
+          ],
+          "reason": "Only the compared frame establishes modality-independent payment for time spent in sessions.",
+          "status": "RESOLVED",
+          "summary": "Actual session time should be compensated regardless of research modality.",
+          "uid": "e0e9f498-07ca-5508-a576-a7c69808cf0a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d314976a-5cbb-4794-93b6-bccab6f195f8",
+              "memory_uid": "9b59c6ed-5dbe-5ccc-87b5-6be31f414e68"
+            }
+          ],
+          "reason": "Only the compared frame provides this alternative payment method.",
+          "status": "RESOLVED",
+          "summary": "Remote participants unable to use electronic transfers may receive equivalent-value gift cards.",
+          "uid": "0946dd99-9d8b-5377-9171-83f23387ac47"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d314976a-5cbb-4794-93b6-bccab6f195f8",
+              "memory_uid": "5c6c461d-05e5-5b0c-b801-245de2f9c8d7"
+            }
+          ],
+          "reason": "Only the compared frame defines how payment-method uncertainty affects proposal review.",
+          "status": "RESOLVED",
+          "summary": "An unresolved payment method should not count as a proposal-stage deficiency.",
+          "uid": "d7beae02-c56f-5bba-8cf5-780540ccbb52"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d314976a-5cbb-4794-93b6-bccab6f195f8",
+              "memory_uid": "44abc098-8c9f-5abb-bc49-9deb25066d93"
+            }
+          ],
+          "reason": "Only the compared frame permits modality-based amount differences tied to participation burden.",
+          "status": "RESOLVED",
+          "summary": "On-site and remote compensation may differ when travel or technical-preparation burdens differ.",
+          "uid": "32da0f6c-257f-58fe-988f-65c8e47bd734"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d314976a-5cbb-4794-93b6-bccab6f195f8",
+              "memory_uid": "2a252668-f3f2-5582-b248-43ad81c54a48"
+            }
+          ],
+          "reason": "Only the compared frame states how participants judge compensation fairness.",
+          "status": "RESOLVED",
+          "summary": "Participants assess compensation fairness from the combined burden of session time and required preparation.",
+          "uid": "e4b90ecf-c6e1-54dc-9cbc-6d016bad8ea7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d314976a-5cbb-4794-93b6-bccab6f195f8",
+              "memory_uid": "7e647a83-81b0-52d6-9362-e513dc2a5032"
+            }
+          ],
+          "reason": "Only the compared frame addresses compensation for longitudinal out-of-session recording.",
+          "status": "RESOLVED",
+          "summary": "Longitudinal-study compensation should include time spent on diary entries and repeated reporting outside sessions.",
+          "uid": "1d5f840c-14ce-5ec1-9907-6061e9f7b241"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d314976a-5cbb-4794-93b6-bccab6f195f8",
+              "memory_uid": "d77affab-60c8-5403-b189-17022b484640"
+            }
+          ],
+          "reason": "Only the compared frame requires separating participant payments from staff labor costs.",
+          "status": "RESOLVED",
+          "summary": "Participant compensation should be distinguished from labor costs for field staff providing installation and operational support.",
+          "uid": "7cf49ebc-e408-507e-ac93-3469975e4980"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d314976a-5cbb-4794-93b6-bccab6f195f8",
+              "memory_uid": "0c470c6b-26a6-5501-93ac-c51fecd708ae"
+            }
+          ],
+          "reason": "Only the compared frame identifies this recurring omission in burden calculations.",
+          "status": "RESOLVED",
+          "summary": "Compensation planning commonly counts session time while omitting advance setup and follow-up reporting time.",
+          "uid": "cc0fef9b-0a84-5091-b249-530b5cba7dab"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame addresses burden-based participant compensation, special participation conditions, payment methods, proposal review, staff-cost separation, and commonly omitted participant effort.",
+        "differences": "",
+        "reference_only": "The reference specifies comparative design criteria, diagnostic measures, result interpretation, boundary testing, review oversight, and limits of controlled environments."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "78656dc2-3fcb-4098-90c7-6df9f5921bbf"
+    },
+    "analysis_digest": "67c597ed223e28f0e879acab429e64011285e14764d84f9d067d44b01128eb64",
+    "key": "d56710a120e3f63e10f862e67c74af66a3e9118e11558d17d687c31718246667",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 38.55483883399938,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "d56710a120e3f63e10f862e67c74af66a3e9118e11558d17d687c31718246667",
+  "created_at": "2026-08-13T18:20:21.036992Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/evaluation",
+  "pair_key": "99faa9bb25ec32721a5ff17864cf151555233ae881af9cb57843fe71f4f7a8ef",
+  "provider_seconds": 38.55483883399938,
+  "right": "task-2/advisor2/compensation",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

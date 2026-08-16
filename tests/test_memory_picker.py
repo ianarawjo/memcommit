@@ -15,7 +15,7 @@ from memcommit.commands.memory_picker import (
     choose_memory,
     choose_memory_report_target,
 )
-import memcommit.commands.context_picker as context_picker
+import memcommit.context_targeting.tui.picker as context_picker
 import memcommit.ops as ops
 from memcommit.provenance import TraceCandidate, collect_trace_candidates
 from memcommit.store import MemoryStore

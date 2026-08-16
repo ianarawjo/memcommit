@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:35:56.542999+00:00",
+      "frames": [
+        {
+          "context_digest": "4c7d7890b4c8dbd807acc103affd0572c325fd2e0f58346a97c3ed49e48ba34e",
+          "context_name": "task-3/local/personal-memory/2024/02",
+          "context_uid": "7bedad96-d78b-5977-a4c9-71049dcfcec8",
+          "memories": [
+            {
+              "content": "The user's maternal aunt keeps one spare key to the user's home.",
+              "content_digest": "2e45c292a3cbc26a1c9928c4546c6029c7dcd2aa6aa0a45a7cfb4be7888dd5c6",
+              "position": 0,
+              "uid": "1c627e4c-c393-5bd3-a5ae-b3318821be73"
+            },
+            {
+              "content": "If the door is locked, the user is accustomed to contacting their maternal aunt, who has the spare key, before contacting building management.",
+              "content_digest": "709cc4a1ae26126bd3238ea8c0e343415d95d084ddaf022590ff4197003c7b81",
+              "position": 1,
+              "uid": "e80936de-87af-5dbb-ab94-d456bbfaab0a"
+            },
+            {
+              "content": "When going to collect the spare key from their maternal aunt, the user wants to give an arrival time first so neither person has to wait.",
+              "content_digest": "5dab57d537091a28848dfa3592d16e038d6e78eeb8159489c17475befeb62a53",
+              "position": 2,
+              "uid": "7c26cf33-0630-5138-910a-6d37d6ed2b63"
+            },
+            {
+              "content": "The user feels at ease only after returning a borrowed spare key in person on the same day.",
+              "content_digest": "d3b9e78e166fb3af3dc248bcddbf1c1df15d3eed57655991a52c23b4ebb6ba14",
+              "position": 3,
+              "uid": "c3f0f26c-8d89-55e3-8bf3-398271e417e7"
+            },
+            {
+              "content": "The user feels uneasy about writing down a new entrance passcode on paper.",
+              "content_digest": "fe40a50fb7f0b0e1514a2f7e6ea3748e73cbd76fa45b862b4880c9eba68a2312",
+              "position": 4,
+              "uid": "7d7d00a3-c5af-5441-bb50-9631fbfd7979"
+            },
+            {
+              "content": "The user found it difficult when a family member arrived without notice during a meeting and the user could not respond immediately.",
+              "content_digest": "30d2126eb016f1fab8b8bd670bc00ee6ac5182f28b0afe696b2c30f4d7bc128f",
+              "position": 5,
+              "uid": "2e0df581-bd54-54f5-94ef-b719427fc88c"
+            },
+            {
+              "content": "On a day their younger brother received a package for them, the user felt reassured after checking the delivery photo.",
+              "content_digest": "54eacbc39b057a6a18f8ddd8e1db587dbef231ecb10ed8cd84a46b3575ac470c",
+              "position": 6,
+              "uid": "9278b64e-7550-5eb6-bbfd-544a2ae4ec3d"
+            },
+            {
+              "content": "The user's maternal aunt wants confirmation that the user is coming in person before handing over the spare key.",
+              "content_digest": "5d780f2fb96eac2d3c65e7417ee00e64e29c2f8873c432b291e62773723182c9",
+              "position": 7,
+              "uid": "76fb9115-a3f2-5ce3-a445-c3d1e38e4253"
+            },
+            {
+              "content": "Confirm with the user before sharing the spare key's storage location or the maternal aunt's contact information.",
+              "content_digest": "ac00da1acd77d05fd277a0a92d2ab62cbefb3c334e6e7c2cb3b046fbea217a6c",
+              "position": 8,
+              "uid": "6fa50e1d-8bd1-557a-9b03-1e4a4dc664bd"
+            },
+            {
+              "content": "The management office of a multi-unit residential building does not hold a unit key without verifying identity.",
+              "content_digest": "841f44fddced7681d5c9b47aaa2536f14536f1309b1f73104df7cb44738efbd1",
+              "position": 9,
+              "uid": "b18ff5b4-4f0d-5b93-8c41-439e5b15c710"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "18128a2b-be60-4709-bbe3-5f2261e8d8a4"
+        },
+        {
+          "context_digest": "5e42fc3dcfbf5576148277f6841977ca8a5cabd4a3fc67a5581f6f6cc816c900",
+          "context_name": "task-3/local/personal-memory/2025/10",
+          "context_uid": "8130b676-dc51-5c31-b7dc-185afdf9cf07",
+          "memories": [
+            {
+              "content": "The user keeps waterproof shoes for rainy days to the left of the entrance.",
+              "content_digest": "5b9e5a20153c7865010318800d740a410faef0c13fe2278c20ce984a89b7dea5",
+              "position": 0,
+              "uid": "82c1e806-de3a-5633-8a08-175487e69fd6"
+            },
+            {
+              "content": "On a day the user walked in the rain wearing thin shoes, their socks became wet and they changed them after arrival.",
+              "content_digest": "fdbdab8c08a4b1d933ff8ac3ddedee8541ddf070e8c6e6020b6c1d14b992c621",
+              "position": 1,
+              "uid": "25df6384-836f-5f8e-bd97-73a1fb171c48"
+            },
+            {
+              "content": "On the next rainy day, the user wore waterproof shoes and their feet remained dry.",
+              "content_digest": "0e87d74fb93fe062cd12efe2f5a04fbae5ce13a60491fd9ad04c4e006acbd87f",
+              "position": 2,
+              "uid": "55abae4f-206a-586e-8b35-406d7525c0a1"
+            },
+            {
+              "content": "On a day the user walked for a long time in new shoes, their heel chafed and they shortened the route home.",
+              "content_digest": "aeb369b995cdf17ea73ae8546b454eab70f33bf6d3c67a09aee2805c1c598b6d",
+              "position": 3,
+              "uid": "c6d21ec4-6bdf-55df-b4d4-05cb531bf4bd"
+            },
+            {
+              "content": "The user wore the same shoes on two short outings before using them on a long walk.",
+              "content_digest": "0d7ed5656f35f4fe025c6ba80e4c829f5b9851c193f981de9a461f848317d60a",
+              "position": 4,
+              "uid": "a6424854-e51e-5afc-8b9f-9e2f0273f70e"
+            },
+            {
+              "content": "On a day the user dried an umbrella outside the entrance, they found it immediately before the next outing.",
+              "content_digest": "dbc2453ca5f895e2cfe7f58e5624cf4c5d6793468af3b25df7e9a4ddb7d50159",
+              "position": 5,
+              "uid": "1b436b46-3d1f-5aa2-99e3-94b7c2412bfd"
+            },
+            {
+              "content": "On a day the user put a folded wet umbrella in their bag, documents inside became wet.",
+              "content_digest": "1f63fbc8c6b491a734f0f7a4190e26aec22826c1ff839242e0ca71d933312c9c",
+              "position": 6,
+              "uid": "ccd1f422-6130-5f19-869e-681102a3a1fa"
+            },
+            {
+              "content": "When rain is forecast, the user's mother expects the user may forget an umbrella and sets out a spare at the entrance.",
+              "content_digest": "80bdfaefb6f781aa91ef7217331e75f09b4766650c2b078dfadf592b2eb27b08",
+              "position": 7,
+              "uid": "c69a8e87-2b6f-5514-ab0d-0037531592f8"
+            },
+            {
+              "content": "When proposing a long-distance walking plan, check both the weather that day and recent records of shoe discomfort.",
+              "content_digest": "f54a546d423099c3abbb65bb49e4ddf773a8191dcffbb8b3d5153dfd70553b73",
+              "position": 8,
+              "uid": "4567ea9f-1800-51ed-bfac-f4cdf674d4cf"
+            },
+            {
+              "content": "Even if the local agent knows a shoe's location, it cannot know its current condition or whether it is usable.",
+              "content_digest": "28202c222ca800a5e19dbaebea2b3c992748f530a695517cf123b10187a31bc8",
+              "position": 9,
+              "uid": "a4ff1b76-755d-530a-b24c-8655115e4fbe"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "e007ffb7-0174-4d57-b0de-8a368d0749b7"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate practical domains: the reference frame concerns home access, key handling, privacy, and related family coordination, while the compared frame concerns rainy-weather gear, footwear comfort, umbrella handling, and walking plans. No operational claim overlaps sufficiently for a cross-frame relation.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "18128a2b-be60-4709-bbe3-5f2261e8d8a4",
+              "memory_uid": "1c627e4c-c393-5bd3-a5ae-b3318821be73"
+            }
+          ],
+          "reason": "This is independently useful reference-only information about key custody, with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The maternal aunt keeps a spare key to the user's home.",
+          "uid": "7356f706-e9f4-5715-8a49-419d7c50b5cc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "18128a2b-be60-4709-bbe3-5f2261e8d8a4",
+              "memory_uid": "e80936de-87af-5dbb-ab94-d456bbfaab0a"
+            }
+          ],
+          "reason": "This is an independently useful reference-only access procedure, with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "For a lockout, the user ordinarily contacts the maternal aunt before building management.",
+          "uid": "5c7efd0c-b0f1-5696-a6f4-bedcb825d6b6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "18128a2b-be60-4709-bbe3-5f2261e8d8a4",
+              "memory_uid": "7c26cf33-0630-5138-910a-6d37d6ed2b63"
+            }
+          ],
+          "reason": "This is independently useful reference-only coordination information, with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user wants to provide an arrival time before collecting the spare key.",
+          "uid": "66e7c1dd-ea0d-59cb-a854-8bf32dc33986"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "18128a2b-be60-4709-bbe3-5f2261e8d8a4",
+              "memory_uid": "c3f0f26c-8d89-55e3-8bf3-398271e417e7"
+            }
+          ],
+          "reason": "This is an independently useful reference-only key-return preference, with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user prefers to return a borrowed spare key in person on the same day.",
+          "uid": "181accab-6538-527f-a9cb-6ee34dc7236b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "18128a2b-be60-4709-bbe3-5f2261e8d8a4",
+              "memory_uid": "7d7d00a3-c5af-5441-bb50-9631fbfd7979"
+            }
+          ],
+          "reason": "This is an independently useful reference-only security preference, with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user is uneasy about recording a new entrance passcode on paper.",
+          "uid": "1346feb0-512b-5559-921f-1dcc5963e618"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "18128a2b-be60-4709-bbe3-5f2261e8d8a4",
+              "memory_uid": "2e0df581-bd54-54f5-94ef-b719427fc88c"
+            }
+          ],
+          "reason": "This is an independently useful reference-only experience concerning visit notice, with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "An unannounced family arrival during a meeting caused difficulty when the user could not respond immediately.",
+          "uid": "d2ed497b-cf76-58a5-89c5-4df0d1184028"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "18128a2b-be60-4709-bbe3-5f2261e8d8a4",
+              "memory_uid": "9278b64e-7550-5eb6-bbfd-544a2ae4ec3d"
+            }
+          ],
+          "reason": "This is an independently useful reference-only delivery experience, with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A delivery photo reassured the user after their younger brother received a package for them.",
+          "uid": "95482403-4df9-54e2-99ca-28fe406353f9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "18128a2b-be60-4709-bbe3-5f2261e8d8a4",
+              "memory_uid": "76fb9115-a3f2-5ce3-a445-c3d1e38e4253"
+            }
+          ],
+          "reason": "This is an independently useful reference-only handover condition, with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The maternal aunt requires confirmation of an in-person visit before handing over the spare key.",
+          "uid": "f25b8979-b00c-5872-8334-142a2b030dab"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "18128a2b-be60-4709-bbe3-5f2261e8d8a4",
+              "memory_uid": "6fa50e1d-8bd1-557a-9b03-1e4a4dc664bd"
+            }
+          ],
+          "reason": "This is an independently useful reference-only privacy rule, with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "User confirmation is required before disclosing the spare key's location or the maternal aunt's contact information.",
+          "uid": "53304465-56d5-5138-a8ed-57f683ecd7b2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "18128a2b-be60-4709-bbe3-5f2261e8d8a4",
+              "memory_uid": "b18ff5b4-4f0d-5b93-8c41-439e5b15c710"
+            }
+          ],
+          "reason": "This is independently useful reference-only information about management access controls, with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Building management does not provide access to a unit key without identity verification.",
+          "uid": "0beaad73-73d5-5df1-9dc4-8e832dba3266"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e007ffb7-0174-4d57-b0de-8a368d0749b7",
+              "memory_uid": "82c1e806-de3a-5633-8a08-175487e69fd6"
+            }
+          ],
+          "reason": "This is independently useful compared-only information about footwear and its location, with no corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user's waterproof shoes are kept to the left of the entrance for rainy days.",
+          "uid": "12050a98-e941-522e-bd84-9c7cf148b726"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e007ffb7-0174-4d57-b0de-8a368d0749b7",
+              "memory_uid": "25df6384-836f-5f8e-bd97-73a1fb171c48"
+            }
+          ],
+          "reason": "This is an independently useful compared-only footwear experience, with no corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Thin shoes led to wet socks during a rainy walk.",
+          "uid": "f8fddc6f-d9db-5243-9cdf-436003754ef5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e007ffb7-0174-4d57-b0de-8a368d0749b7",
+              "memory_uid": "55abae4f-206a-586e-8b35-406d7525c0a1"
+            }
+          ],
+          "reason": "This is an independently useful compared-only observation about footwear performance, with no corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Waterproof shoes kept the user's feet dry on a rainy day.",
+          "uid": "fdf457e6-606f-57f4-ac5b-e55ae6b22b5b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e007ffb7-0174-4d57-b0de-8a368d0749b7",
+              "memory_uid": "c6d21ec4-6bdf-55df-b4d4-05cb531bf4bd"
+            }
+          ],
+          "reason": "This is an independently useful compared-only experience about shoe discomfort, with no corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A long walk in new shoes caused heel chafing and prompted a shorter route home.",
+          "uid": "2eb22193-2475-5fa2-87c8-ccf17b34ba66"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e007ffb7-0174-4d57-b0de-8a368d0749b7",
+              "memory_uid": "a6424854-e51e-5afc-8b9f-9e2f0273f70e"
+            }
+          ],
+          "reason": "This is independently useful compared-only information about shoe break-in behavior, with no corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user tested the same shoes on short outings before a long walk.",
+          "uid": "2d4c9c18-6f96-5c20-8e85-f6a2bd0e2f9c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e007ffb7-0174-4d57-b0de-8a368d0749b7",
+              "memory_uid": "1b436b46-3d1f-5aa2-99e3-94b7c2412bfd"
+            }
+          ],
+          "reason": "This is an independently useful compared-only umbrella-handling experience, with no corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Drying an umbrella outside the entrance made it easy to find before the next outing.",
+          "uid": "98bcc090-b6f7-564a-81bf-2f293b27b050"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e007ffb7-0174-4d57-b0de-8a368d0749b7",
+              "memory_uid": "ccd1f422-6130-5f19-869e-681102a3a1fa"
+            }
+          ],
+          "reason": "This is an independently useful compared-only account of moisture damage, with no corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Putting a folded wet umbrella in a bag caused documents inside to become wet.",
+          "uid": "6e130d90-e672-5a27-b224-749fbf043eca"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e007ffb7-0174-4d57-b0de-8a368d0749b7",
+              "memory_uid": "c69a8e87-2b6f-5514-ab0d-0037531592f8"
+            }
+          ],
+          "reason": "This is independently useful compared-only information about family rain preparation, with no corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "When rain is forecast, the user's mother sets out a spare umbrella because the user may forget one.",
+          "uid": "308c610c-1231-5100-b141-3406d4730c06"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e007ffb7-0174-4d57-b0de-8a368d0749b7",
+              "memory_uid": "4567ea9f-1800-51ed-bfac-f4cdf674d4cf"
+            }
+          ],
+          "reason": "This is an independently useful compared-only planning rule, with no corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Long-distance walking proposals should account for both the day's weather and recent shoe-discomfort records.",
+          "uid": "b2370c92-d0fa-5c1a-b353-5036afdc7141"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e007ffb7-0174-4d57-b0de-8a368d0749b7",
+              "memory_uid": "a4ff1b76-755d-530a-b24c-8655115e4fbe"
+            }
+          ],
+          "reason": "This is an independently useful compared-only epistemic constraint, with no corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Knowing a shoe's location does not establish its current condition or usability.",
+          "uid": "edc50cb3-e104-596d-b4b2-3214b598c301"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Weather and walking information covers waterproof footwear, shoe discomfort and break-in experience, umbrella placement and moisture risks, family rain preparation, route-planning checks, and uncertainty about gear condition.",
+        "differences": "",
+        "reference_only": "Home-access information covers spare-key custody and retrieval, return expectations, disclosure privacy, passcode unease, management verification, unannounced visits, and delivery-photo reassurance."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "6716de67-86c4-45b9-b30b-4f4e6cc58830"
+    },
+    "analysis_digest": "30cec5ddec0743ef886296f1c7f933ebc1ff63d20a14055dc026a0c419bbbd23",
+    "key": "379b57f0bb39065916f02324d053c238ee45ad97aae48cdf818c925b4603674b",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 39.00116158400124,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "379b57f0bb39065916f02324d053c238ee45ad97aae48cdf818c925b4603674b",
+  "created_at": "2026-08-13T18:36:35.543770Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/02",
+  "pair_key": "e7469ed8ec708763c16638f2d7f2811a9c8b504a7cb95aa2431a2f4e9d8c99b2",
+  "provider_seconds": 39.00116158400124,
+  "right": "task-3/local/personal-memory/2025/10",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

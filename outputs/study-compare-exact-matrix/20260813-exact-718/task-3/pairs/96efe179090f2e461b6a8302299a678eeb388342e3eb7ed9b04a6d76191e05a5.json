@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:48:15.640638+00:00",
+      "frames": [
+        {
+          "context_digest": "0b8af0ea4e580cc332939d026149e543e9251c54de246e3eabb83c941e6c12f2",
+          "context_name": "task-3/local/personal-memory/2024/12",
+          "context_uid": "66c3e5de-61bb-5795-8e5a-4e28f64be857",
+          "memories": [
+            {
+              "content": "The user used an accessible entrance at a clinic in December 2024.",
+              "content_digest": "a940bc9fb7423a1bdb9dde547cd39eb8ad66d4fa3051649c62b042fc63935263",
+              "position": 0,
+              "uid": "a6923620-267d-5129-b8c4-cd9b1e1a1e7b"
+            },
+            {
+              "content": "On a day snow had accumulated and blocked the main-entrance ramp, the user went to a side entrance.",
+              "content_digest": "460c05d8e8b4b7443ff42cbeead66e07201846394bcbe5948f63e585a197006f",
+              "position": 1,
+              "uid": "fb0e1d1f-0ef5-5214-b6d7-f6ca5c68f582"
+            },
+            {
+              "content": "The user learned on site that the elevator was under inspection and delayed the appointment.",
+              "content_digest": "b5efa024c597b57651178431d22173d4ca1242c3a4c9607f8bd5a7ff681af6f4",
+              "position": 2,
+              "uid": "4cb45120-4376-5c7b-ae92-faa9e4b9330c"
+            },
+            {
+              "content": "The day before the next visit, the user called to check whether the elevator would be operating.",
+              "content_digest": "93c66066de480a4d2f30b7b7c4d955acfceb227ac898766b6375829804b580eb",
+              "position": 3,
+              "uid": "479f4434-879c-5335-b0c9-c0bfa19ecdcd"
+            },
+            {
+              "content": "The user waited for their turn in front of a ticket machine near the waiting chairs.",
+              "content_digest": "fada8c09d46af2e1bcbd2b1e97d9cb786ceca83fc13d1240627639dd6cb96e65",
+              "position": 4,
+              "uid": "0f2c78a7-8f92-573d-af8a-a360ceb77b24"
+            },
+            {
+              "content": "On a day the user waited in a corridor without chairs, they leaned against the wall and changed position several times.",
+              "content_digest": "0037afaeb85d94f985b1628b7b8f8194fb00d7d7e72e1746c6bae2c2ba66fe6f",
+              "position": 5,
+              "uid": "7b9197ac-4263-5169-8d3b-d34f5d893d36"
+            },
+            {
+              "content": "On a day their older sister accompanied them, the user found a place to sit immediately after reception.",
+              "content_digest": "1ae59de552a922fd3b4d39e7e5dc1ec65ff08ee68e3448f2152f27dfec710a5a",
+              "position": 6,
+              "uid": "7b0b7571-f29c-56e5-a27a-82d69a4a6982"
+            },
+            {
+              "content": "Reception staff expect that a first-time visitor may ask where the accessible entrance is.",
+              "content_digest": "7dc3300dc630b737c0f7b437eba30179aa6aaa03efd61c968604ee505a43aa73",
+              "position": 7,
+              "uid": "e9515d6b-10d9-579f-abf7-5030db64218a"
+            },
+            {
+              "content": "The local agent cannot infer the user's condition from a record of using an accessible route alone.",
+              "content_digest": "2d8a50f62f32c43ca62e1e23b75c34361ece43fd8367964174fdc73d66795df4",
+              "position": 8,
+              "uid": "8e57141d-c603-56cd-ab9e-c14b4e944b45"
+            },
+            {
+              "content": "Snow accumulation and snow-removal work can temporarily block an entrance route used under ordinary conditions.",
+              "content_digest": "4fb152c120860688789bdd4b825de45799e9fa00c0c18c334492dd4b274adde9",
+              "position": 9,
+              "uid": "a6076438-307c-56fe-9d2c-848181846ce5"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "06bec158-d1b8-4b10-9c69-ec422aca6e9c"
+        },
+        {
+          "context_digest": "d28031209c5edc768a592166e26351dd5bce0c7568d379fcaceab173450041c8",
+          "context_name": "task-3/local/personal-memory/2026/02",
+          "context_uid": "7ffcbc10-1703-54b0-9545-99742b51d333",
+          "memories": [
+            {
+              "content": "The user keeps basic repair tools in a box beneath the sink.",
+              "content_digest": "c2a23bace63735c502081b19682a8ceb3e37156b9aadd6f7739e2005c20469d6",
+              "position": 0,
+              "uid": "7d3daf76-a21e-5117-a534-6175ab2d2861"
+            },
+            {
+              "content": "On a day the faucet leaked, the user placed only a towel beneath it, and the floor became wet as well.",
+              "content_digest": "ad6baa7e1848e4e61bdaf22bc5c8665122330b5c70c8ae192216abbba17c6134",
+              "position": 1,
+              "uid": "70a6d9f5-180f-5174-b247-690e10baa23e"
+            },
+            {
+              "content": "After sending a photo to building management, the user finalized the time for a repair visit.",
+              "content_digest": "82b36c7a95e51a0dfa32768c2a437d509b75c0f93bc51a99a636f2c9739a20da",
+              "position": 2,
+              "uid": "9fcd922c-147c-517b-82b3-180fdfb13f33"
+            },
+            {
+              "content": "Before the technician's visit, the user emptied the area beneath the sink so work could begin immediately.",
+              "content_digest": "dbc3b48e5bc4b406dc17067dd93d92e845e3706f47c8706f9a5d5ef17bf64617",
+              "position": 3,
+              "uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5"
+            },
+            {
+              "content": "On a day the user wrote the visit time only in the calendar and turned off the reminder, they heard the doorbell late.",
+              "content_digest": "95fab6bcab815dd8bdd5fecb867f84c6d2f1a901771603b1dbf197cde3c1d19d",
+              "position": 4,
+              "uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65"
+            },
+            {
+              "content": "For the next visit, the user enabled a reminder 30 minutes beforehand and answered immediately at the entrance.",
+              "content_digest": "818783ff21b2d369935b9994c17b28f93f84ea7558dab9f2de20d0aad21f86a3",
+              "position": 5,
+              "uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a"
+            },
+            {
+              "content": "After the repair, the user called their maternal aunt to confirm that the spare key entrusted to her was still there.",
+              "content_digest": "ac01b9816dda2d6bf16f22b41157120b7ffdd75d19638f6313a88e1ce6e7a1f1",
+              "position": 6,
+              "uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441"
+            },
+            {
+              "content": "The user's maternal aunt considers it unsafe to hand the spare key to a repair technician without the user's explicit request.",
+              "content_digest": "f7c7c0306c81cc6de9f02aa1aed7d411db3f29757d024e7d5a1679b1ff308948",
+              "position": 7,
+              "uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd"
+            },
+            {
+              "content": "Obtain the user's reconfirmation before scheduling an external worker to enter the residential unit.",
+              "content_digest": "34382e40f4907bea82728787fdeb150e299d46a0079ae2847d4eda6d6d892d22",
+              "position": 8,
+              "uid": "4716a67b-8602-564c-9e89-85cd4ee158f9"
+            },
+            {
+              "content": "A multi-unit residential building's repair schedule may change because of emergency work or parts availability.",
+              "content_digest": "d701fdd1ffbf17ff0890c583b5bf39849e3c6e3cc296fde7e00d3d1ecc0ef196",
+              "position": 9,
+              "uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "325ab578-9284-406e-8cf7-3f469702878d"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames concern separate domains: clinic accessibility and visit experiences versus residential repair coordination and entry security. Neither frame supplies a claim that materially addresses the same operational decision as a claim in the other, and no contradiction or ambiguity requires resolution.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "06bec158-d1b8-4b10-9c69-ec422aca6e9c",
+              "memory_uid": "a6923620-267d-5129-b8c4-cd9b1e1a1e7b"
+            }
+          ],
+          "reason": "This is independently useful clinic-access history with no counterpart addressing the same event or decision.",
+          "status": "RESOLVED",
+          "summary": "The user used an accessible clinic entrance in December 2024.",
+          "uid": "2d03030e-d199-59ac-a2fa-fc8f391d320a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "06bec158-d1b8-4b10-9c69-ec422aca6e9c",
+              "memory_uid": "fb0e1d1f-0ef5-5214-b6d7-f6ca5c68f582"
+            }
+          ],
+          "reason": "This records a specific route adaptation without a counterpart concerning that access condition or choice.",
+          "status": "RESOLVED",
+          "summary": "When snow blocked the clinic’s main ramp, the user used a side entrance.",
+          "uid": "273258da-2adc-57d4-9cd7-3f50df242bfa"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "06bec158-d1b8-4b10-9c69-ec422aca6e9c",
+              "memory_uid": "4cb45120-4376-5c7b-ae92-faa9e4b9330c"
+            }
+          ],
+          "reason": "This is a specific clinic disruption not addressed by the residential-repair frame.",
+          "status": "RESOLVED",
+          "summary": "An elevator inspection discovered on site delayed the user’s appointment.",
+          "uid": "c6e0319e-494e-55ef-8d9f-02640bdcb1cd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "06bec158-d1b8-4b10-9c69-ec422aca6e9c",
+              "memory_uid": "479f4434-879c-5335-b0c9-c0bfa19ecdcd"
+            }
+          ],
+          "reason": "This describes proactive clinic-access checking, not the same operational decision as any repair-related preparation or reminder.",
+          "status": "RESOLVED",
+          "summary": "Before a later clinic visit, the user called to verify elevator operation.",
+          "uid": "5ab1aad6-c7ed-5f66-994d-ef96d298b5e2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "06bec158-d1b8-4b10-9c69-ec422aca6e9c",
+              "memory_uid": "0f2c78a7-8f92-573d-af8a-a360ceb77b24"
+            }
+          ],
+          "reason": "This clinic waiting-location detail has no substantive counterpart in the other frame.",
+          "status": "RESOLVED",
+          "summary": "The user waited by a ticket machine near waiting chairs.",
+          "uid": "18228b8a-2516-5532-9236-13efb6e963f2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "06bec158-d1b8-4b10-9c69-ec422aca6e9c",
+              "memory_uid": "7b9197ac-4263-5169-8d3b-d34f5d893d36"
+            }
+          ],
+          "reason": "This specific waiting experience is independently useful and unmatched by the repair frame.",
+          "status": "RESOLVED",
+          "summary": "While waiting in a chairless corridor, the user leaned against a wall and repeatedly changed position.",
+          "uid": "2807a501-ad7d-56d6-88d8-d2451ce186f0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "06bec158-d1b8-4b10-9c69-ec422aca6e9c",
+              "memory_uid": "7b0b7571-f29c-56e5-a27a-82d69a4a6982"
+            }
+          ],
+          "reason": "This records a distinct accompanied clinic experience without a counterpart concerning seating or reception.",
+          "status": "RESOLVED",
+          "summary": "When accompanied by an older sister, the user found seating immediately after reception.",
+          "uid": "e93df1b0-9b48-518c-935c-9f8ff4e80f0b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "06bec158-d1b8-4b10-9c69-ec422aca6e9c",
+              "memory_uid": "e9515d6b-10d9-579f-abf7-5030db64218a"
+            }
+          ],
+          "reason": "This clinic visitor-guidance expectation does not address the same policy or decision as any residential-repair claim.",
+          "status": "RESOLVED",
+          "summary": "Reception staff anticipate that first-time visitors may request directions to the accessible entrance.",
+          "uid": "fa50a238-4e4d-55df-9b05-fe4ecdf0fe62"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "06bec158-d1b8-4b10-9c69-ec422aca6e9c",
+              "memory_uid": "8e57141d-c603-56cd-ab9e-c14b4e944b45"
+            }
+          ],
+          "reason": "This is an inference constraint absent from, and operationally separate from, the repair and entry-security material.",
+          "status": "RESOLVED",
+          "summary": "Accessible-route use alone does not support inferring the user’s condition.",
+          "uid": "1e965e40-1de4-5f2e-baa9-04bc2ece8eda"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "06bec158-d1b8-4b10-9c69-ec422aca6e9c",
+              "memory_uid": "a6076438-307c-56fe-9d2c-848181846ce5"
+            }
+          ],
+          "reason": "This general clinic-route contingency has no counterpart governing residential repair scheduling or entry.",
+          "status": "RESOLVED",
+          "summary": "Snow accumulation or removal work can temporarily block a normally used entrance route.",
+          "uid": "100063de-8fb5-5d1f-bafd-9abd761e1bcc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "325ab578-9284-406e-8cf7-3f469702878d",
+              "memory_uid": "7d3daf76-a21e-5117-a534-6175ab2d2861"
+            }
+          ],
+          "reason": "This household storage fact is independently useful and absent from the clinic-access frame.",
+          "status": "RESOLVED",
+          "summary": "The user stores basic repair tools beneath the sink.",
+          "uid": "52e4853c-99ba-5034-ba9a-324050aa6fab"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "325ab578-9284-406e-8cf7-3f469702878d",
+              "memory_uid": "70a6d9f5-180f-5174-b247-690e10baa23e"
+            }
+          ],
+          "reason": "This specific leak-response outcome has no counterpart concerning the same event or mitigation decision.",
+          "status": "RESOLVED",
+          "summary": "During a faucet leak, using only a towel allowed water to reach the floor.",
+          "uid": "d02cb1d1-e5b9-51b7-a30e-6823e8018b44"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "325ab578-9284-406e-8cf7-3f469702878d",
+              "memory_uid": "9fcd922c-147c-517b-82b3-180fdfb13f33"
+            }
+          ],
+          "reason": "This repair-coordination event is operationally separate from clinic visit checking and access.",
+          "status": "RESOLVED",
+          "summary": "The user sent building management a photo and finalized a repair-visit time.",
+          "uid": "1eec0274-ec4e-512f-a8c7-b8d063fb355e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "325ab578-9284-406e-8cf7-3f469702878d",
+              "memory_uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5"
+            }
+          ],
+          "reason": "This worksite-preparation behavior has no matching claim in the clinic frame.",
+          "status": "RESOLVED",
+          "summary": "The user cleared the area beneath the sink before the technician arrived.",
+          "uid": "da39ef9b-4c1a-5dac-b0ab-58444eb45f01"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "325ab578-9284-406e-8cf7-3f469702878d",
+              "memory_uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65"
+            }
+          ],
+          "reason": "This describes a specific reminder configuration and outcome not addressed by the clinic material.",
+          "status": "RESOLVED",
+          "summary": "With the repair visit recorded only in a calendar and its reminder disabled, the user answered the doorbell late.",
+          "uid": "041a08fd-3b79-578c-96c7-86e43dc31746"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "325ab578-9284-406e-8cf7-3f469702878d",
+              "memory_uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a"
+            }
+          ],
+          "reason": "This later reminder practice and outcome are independently useful and unmatched by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "For a later repair visit, a 30-minute reminder helped the user answer immediately.",
+          "uid": "2a583dc7-1333-575f-8138-5d4fdb2152e3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "325ab578-9284-406e-8cf7-3f469702878d",
+              "memory_uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441"
+            }
+          ],
+          "reason": "This spare-key verification event has no substantive counterpart in the clinic frame.",
+          "status": "RESOLVED",
+          "summary": "After the repair, the user confirmed with a maternal aunt that the entrusted spare key remained with her.",
+          "uid": "f5889815-21b4-5cd7-a28b-1738e0223d8e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "325ab578-9284-406e-8cf7-3f469702878d",
+              "memory_uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd"
+            }
+          ],
+          "reason": "This third-party key-security judgment concerns residential access and is absent from the clinic-access material.",
+          "status": "RESOLVED",
+          "summary": "The user’s maternal aunt considers giving a technician the spare key unsafe without the user’s explicit request.",
+          "uid": "7bd0f05c-14a0-5064-8cc7-8a61272ceaf3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "325ab578-9284-406e-8cf7-3f469702878d",
+              "memory_uid": "4716a67b-8602-564c-9e89-85cd4ee158f9"
+            }
+          ],
+          "reason": "This residential-entry consent policy does not govern the same case as any clinic-access or waiting claim.",
+          "status": "RESOLVED",
+          "summary": "The user should reconfirm before an external worker is scheduled to enter the residence.",
+          "uid": "128bc2ca-c5cd-541b-b1e9-a31886b4a667"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "325ab578-9284-406e-8cf7-3f469702878d",
+              "memory_uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+            }
+          ],
+          "reason": "This repair-scheduling contingency is operationally distinct from temporary clinic-route blockage.",
+          "status": "RESOLVED",
+          "summary": "Emergency work or parts availability may change a multi-unit building’s repair schedule.",
+          "uid": "fd484226-3590-518c-bdd6-f25d4fb04135"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers leak response, repair preparation and scheduling, reminder use, spare-key security, consent before residential entry, and possible schedule disruption.",
+        "differences": "",
+        "reference_only": "The reference covers clinic access, temporary route and elevator barriers, proactive checking, waiting and seating experiences, visitor guidance, and limits on inferring a condition from route use."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "969c8baf-eb0d-4879-a824-9917ad9c3097"
+    },
+    "analysis_digest": "bf6df81439d8ebdd951688882703d4b54dce88879911173ad2653992d57c53da",
+    "key": "d7247957023f89aa752d5a8f72323a1d5531da479dbd56210c26ce655074e36f",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 38.810241416998906,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "d7247957023f89aa752d5a8f72323a1d5531da479dbd56210c26ce655074e36f",
+  "created_at": "2026-08-13T18:48:54.450496Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/12",
+  "pair_key": "96efe179090f2e461b6a8302299a678eeb388342e3eb7ed9b04a6d76191e05a5",
+  "provider_seconds": 38.810241416998906,
+  "right": "task-3/local/personal-memory/2026/02",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

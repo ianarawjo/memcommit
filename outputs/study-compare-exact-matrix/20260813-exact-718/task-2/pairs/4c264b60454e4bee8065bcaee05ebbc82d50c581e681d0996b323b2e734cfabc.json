@@ -1,0 +1,261 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:14:52.857843+00:00",
+      "frames": [
+        {
+          "context_digest": "30f0425cad991a5bb1b473f7e73c2c039db2d91dc0c95116413d0a8e7b6fed29",
+          "context_name": "task-2/advisor1/budget",
+          "context_uid": "d6d3ee9e-eb0f-5c28-9463-7a680d53b470",
+          "memories": [
+            {
+              "content": "Keep the total, major cost categories, and one-line estimate basis in the main text so the resource argument can be understood without leaving the proposal.",
+              "content_digest": "5dc9db0be6499fc408063be04c9e1cc344986512f4d24d5697f5c53a08529c9a",
+              "position": 0,
+              "uid": "05e0261e-5c52-5030-8176-0f02d4522931"
+            },
+            {
+              "content": "Place each major cost beside the activity or deliverable it enables in the main text.",
+              "content_digest": "b97219830051faf46cff7c9541c331012571866926740ed4d6a7925c12fb21a8",
+              "position": 1,
+              "uid": "1083e9b3-698a-57b1-91ab-ce04cec1e5e5"
+            },
+            {
+              "content": "State the quantity and unit-rate basis for each major cost in the same paragraph that requests it.",
+              "content_digest": "5ce37d95d9d037bbab71276fa8f0e8e383b472d0122817ab7b711c971b8cbf5d",
+              "position": 2,
+              "uid": "3652f268-d86f-55d6-935d-d3bdc487aae6"
+            },
+            {
+              "content": "Readers may question a proposed priority when its cost cannot be checked on the same page as the claimed benefit.",
+              "content_digest": "26fa14ff80ece7682cb51c7356a47a8e60e94edd4551f59ecd2fa3017bd9bffd",
+              "position": 3,
+              "uid": "4e1e1201-94b8-5a7a-8737-edc4c62881ff"
+            },
+            {
+              "content": "Update the cost sentence whenever the related activity changes so the narrative and requested amount cannot drift apart.",
+              "content_digest": "343c11198b38874476e0cda3707dd07436699852db0934e2e8f8c95a7ea3c3ea",
+              "position": 4,
+              "uid": "2f5f9039-e038-51c1-8af0-21a78772c512"
+            },
+            {
+              "content": "Accept a denser main-text paragraph when the estimate basis is essential to deciding whether the request is proportionate.",
+              "content_digest": "59ca1aafc11b37b097251b4b7c6b15e249262304f79b261bd4351d3ca89cb5fe",
+              "position": 5,
+              "uid": "f7a16d08-fbe2-5508-890d-cdbf70c1146e"
+            },
+            {
+              "content": "The user tends to revise the work plan but forget a detached budget table unless the key amount is repeated beside the activity.",
+              "content_digest": "393651043824d9e9c528e5de7618854b71970967d172ee1e9bc3c77aec3baab0",
+              "position": 6,
+              "uid": "2ca1d5a1-d78a-55b2-ab21-fd6ad73366b4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "98b57c86-ceb1-472b-bb1c-5555b590a9a5"
+        },
+        {
+          "context_digest": "bb54539faeedf2db9ada09643c11270aabf235d8e3e6df98500f90f9b82aed49",
+          "context_name": "task-2/advisor2/reproducibility",
+          "context_uid": "5f2f3c0f-4cb1-5151-b381-847df75b6457",
+          "memories": [
+            {
+              "content": "HCI reviewers find it difficult to assess result reproducibility if the system version used in the field deployment is not disclosed.",
+              "content_digest": "83ac18cb56f74dbeb7834909b999669bb9a46d320b288bf38fb7b6c9bd0812f2",
+              "position": 0,
+              "uid": "40f11374-d91b-546a-9e93-fcf98a0fde98"
+            },
+            {
+              "content": "Record changes in system configurations, field procedures, and data collection tools during deployment, along with their timestamps and rationales.",
+              "content_digest": "ac399146f49e6ae5d21272de0cd13db6346d4cd67b096ecfa9bd314b026f403e",
+              "position": 1,
+              "uid": "cc72ad54-4cf3-56cd-9119-46776f5b2184"
+            },
+            {
+              "content": "The history of deployment versions and configuration changes provides necessary evidence for interpreting results from different field sites.",
+              "content_digest": "39ae70de900b646362a96cfa7d734a6404604b468398b09da9fb05783b389d25",
+              "position": 2,
+              "uid": "75f22b45-fb1b-568c-bb05-080fdacdcab2"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "33c8dfbe-a753-4856-8054-af229d9c2284"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate operational concerns: the reference focuses on keeping proposal costs visible, attributable, checkable, and synchronized with activities, while the compared frame focuses on documenting deployment versions and changes so field results remain reproducible and interpretable.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "98b57c86-ceb1-472b-bb1c-5555b590a9a5",
+              "memory_uid": "05e0261e-5c52-5030-8176-0f02d4522931"
+            }
+          ],
+          "reason": "This is independently useful reference-only guidance about making the overall resource argument understandable without navigating elsewhere.",
+          "status": "RESOLVED",
+          "summary": "The proposal’s main text should include the total, major cost categories, and a concise estimate basis.",
+          "uid": "36532a8e-983e-5d08-98e0-fa7817a04d78"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "98b57c86-ceb1-472b-bb1c-5555b590a9a5",
+              "memory_uid": "1083e9b3-698a-57b1-91ab-ce04cec1e5e5"
+            }
+          ],
+          "reason": "This is independently useful reference-only guidance linking requested resources directly to their operational purpose.",
+          "status": "RESOLVED",
+          "summary": "Each major cost should appear beside the activity or deliverable it enables.",
+          "uid": "3aca2ff9-5207-5150-8b15-26d2b26cc1fc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "98b57c86-ceb1-472b-bb1c-5555b590a9a5",
+              "memory_uid": "3652f268-d86f-55d6-935d-d3bdc487aae6"
+            }
+          ],
+          "reason": "This is independently useful reference-only guidance for locally checking how individual requested amounts were calculated.",
+          "status": "RESOLVED",
+          "summary": "Each major cost request should state its quantity and unit-rate basis in the same paragraph.",
+          "uid": "77950f39-a4c5-5285-9408-fc72a5b254b4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "98b57c86-ceb1-472b-bb1c-5555b590a9a5",
+              "memory_uid": "4e1e1201-94b8-5a7a-8737-edc4c62881ff"
+            }
+          ],
+          "reason": "This is an independently useful reference-only observation about the credibility risk created by separating cost evidence from benefit claims.",
+          "status": "RESOLVED",
+          "summary": "A priority may be questioned when its cost and claimed benefit cannot be checked on the same page.",
+          "uid": "6ba85248-cd39-5586-b61b-acef855b18a5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "98b57c86-ceb1-472b-bb1c-5555b590a9a5",
+              "memory_uid": "2f5f9039-e038-51c1-8af0-21a78772c512"
+            }
+          ],
+          "reason": "This is independently useful reference-only maintenance guidance intended to prevent the narrative and requested amount from drifting apart.",
+          "status": "RESOLVED",
+          "summary": "Cost wording should be updated whenever its related activity changes.",
+          "uid": "40b0de94-91fa-56f2-a249-270879695133"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "98b57c86-ceb1-472b-bb1c-5555b590a9a5",
+              "memory_uid": "f7a16d08-fbe2-5508-890d-cdbf70c1146e"
+            }
+          ],
+          "reason": "This is an independently useful reference-only presentation tradeoff concerning decision-critical cost substantiation.",
+          "status": "RESOLVED",
+          "summary": "Denser main text is acceptable when estimate details are essential to judging whether a request is proportionate.",
+          "uid": "83f071de-8435-52c0-8e3a-9e1289705cc8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "98b57c86-ceb1-472b-bb1c-5555b590a9a5",
+              "memory_uid": "2ca1d5a1-d78a-55b2-ab21-fd6ad73366b4"
+            }
+          ],
+          "reason": "This is an independently useful reference-only user-behavior observation explaining a revision risk and a specific mitigation.",
+          "status": "RESOLVED",
+          "summary": "Repeating key amounts beside activities reduces the risk that work-plan revisions leave a detached budget table outdated.",
+          "uid": "b10cafb8-deda-5ede-a7f8-9193f059917e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "33c8dfbe-a753-4856-8054-af229d9c2284",
+              "memory_uid": "40f11374-d91b-546a-9e93-fcf98a0fde98"
+            }
+          ],
+          "reason": "This is independently useful compared-only guidance about identifying the deployed system state.",
+          "status": "RESOLVED",
+          "summary": "The system version used in a field deployment should be disclosed so reviewers can assess reproducibility.",
+          "uid": "3b683da0-9879-5078-b84a-e849505d5072"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "33c8dfbe-a753-4856-8054-af229d9c2284",
+              "memory_uid": "cc72ad54-4cf3-56cd-9119-46776f5b2184"
+            }
+          ],
+          "reason": "This is independently useful compared-only guidance defining the contents of a deployment change log.",
+          "status": "RESOLVED",
+          "summary": "Deployment changes to configurations, field procedures, and data-collection tools should be recorded with timestamps and rationales.",
+          "uid": "4e5a8bb4-c433-542d-80ab-28b9f359772c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "33c8dfbe-a753-4856-8054-af229d9c2284",
+              "memory_uid": "75f22b45-fb1b-568c-bb05-080fdacdcab2"
+            }
+          ],
+          "reason": "This is an independently useful compared-only claim about the analytical value of historical deployment records.",
+          "status": "RESOLVED",
+          "summary": "Deployment version and configuration histories provide evidence needed to interpret results across field sites.",
+          "uid": "2ee8b6ee-4aa2-54f7-b88a-1cf67007afaa"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Deployment guidance calls for disclosed system versions and timestamped change histories covering configurations, procedures, tools, and rationales to support reproducibility and cross-site interpretation.",
+        "differences": "",
+        "reference_only": "Proposal guidance keeps major costs and their estimate basis beside enabled activities, prioritizing same-page scrutiny and updates when plans change despite added text density."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "a9f3570a-7ce3-4517-8b70-38d2922214e2"
+    },
+    "analysis_digest": "e6c8989f7d98492ff3bff3ab1565cad2160a31be44212635e25fff202ea12242",
+    "key": "713af5ee1a07d08ed22e6ea186eec9ac85dd23f3eb80916ac5724665b7a0c299",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 27.342159375002666,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "713af5ee1a07d08ed22e6ea186eec9ac85dd23f3eb80916ac5724665b7a0c299",
+  "created_at": "2026-08-13T18:15:20.199612Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/budget",
+  "pair_key": "4c264b60454e4bee8065bcaee05ebbc82d50c581e681d0996b323b2e734cfabc",
+  "provider_seconds": 27.342159375002666,
+  "right": "task-2/advisor2/reproducibility",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

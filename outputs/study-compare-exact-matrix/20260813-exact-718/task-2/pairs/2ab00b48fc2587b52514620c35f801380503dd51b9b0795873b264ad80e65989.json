@@ -1,0 +1,281 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:25:34.013828+00:00",
+      "frames": [
+        {
+          "context_digest": "d2c716d52357c4200adc8772d5823715ffd736eb766028c1c62bbb32852bc344",
+          "context_name": "task-2/advisor1/scope",
+          "context_uid": "6db29abe-5784-5eec-acaa-060bac0e11f1",
+          "memories": [
+            {
+              "content": "Define in one sentence the user groups and usage contexts to which the design knowledge does not apply.",
+              "content_digest": "3193ffe501a06d6148b39c333853b42bc0278b2ab3c3df88162b049548ff16bb",
+              "position": 0,
+              "uid": "e594a6ab-81e9-5e5f-8ef5-e6bb8f3760d7"
+            },
+            {
+              "content": "Reviewers judge the generalization boundary of results through explicitly excluded targets and situations.",
+              "content_digest": "a929649a7bd07f29f31a8cd1969a3c160ba5f61c0def76e204443c30234f84b0",
+              "position": 1,
+              "uid": "31cdacff-7c49-547d-9f97-598a07b67fb6"
+            },
+            {
+              "content": "Specify user goals, interaction conditions, and technological constraints under which the proposed design knowledge can be transferred.",
+              "content_digest": "6ae1bfaeadb1863db1997685527706d210a379a376a24d3de1168e952f847627",
+              "position": 2,
+              "uid": "1459d986-4dc9-51f3-bf13-dbb0b07045c8"
+            },
+            {
+              "content": "Small-scale formative studies can support analytic generalization distinct from statistical representativeness when results are expressed in terms of design conditions and mechanisms.",
+              "content_digest": "1963572a303acbf383890b7d97b52349f572df761e89ea3fd5116058cd2e1cea",
+              "position": 3,
+              "uid": "1db5fcd6-f93c-5630-9810-053c10b5ceba"
+            },
+            {
+              "content": "The author of this proposal tends to apply design knowledge derived from an accessible sample to a broader user population.",
+              "content_digest": "df2a7f1284c1994c6dec49eb7995acd1ed341a9e6b8f4b06c854d85fa9d77d6c",
+              "position": 4,
+              "uid": "fd29c315-521f-53c0-add5-c668ec318a43"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "d150594a-2f5f-4b88-ac97-ec22936c419c"
+        },
+        {
+          "context_digest": "4efbf2f6c096022137cee2c075c75219bb4fd0f441579901b8445bb2d92101f5",
+          "context_name": "task-2/advisor2/budget",
+          "context_uid": "ae02c2b2-49d3-5c30-b686-81ea17a8a87e",
+          "memories": [
+            {
+              "content": "Keep the main text to the total and major categories, and place quantities, unit rates, and assumptions in one compact budget table or appendix.",
+              "content_digest": "2e0d76a9c09d14facdf93e8b82cb1c4f583b8a6063b74552f2c23b7d37224e9c",
+              "position": 0,
+              "uid": "d614b55d-d9f6-5347-8d02-2d219d621a09"
+            },
+            {
+              "content": "Give each cost category, quantity, unit rate, and subtotal a stable row in the separate budget table.",
+              "content_digest": "ecd8aa50fc469bb763f36784d140b871b82a283b39f30f46e9e166776321c602",
+              "position": 1,
+              "uid": "24500129-4b07-564f-ba67-39e40d7d7860"
+            },
+            {
+              "content": "Put the estimate basis in a dedicated table column so one assumption can be checked or revised without rewriting the narrative.",
+              "content_digest": "6ed604ab2ca300f215d13f18cb5344e9322635ad047ce36c08242765e7fb09f4",
+              "position": 2,
+              "uid": "07bad409-af9c-512a-b829-7ceb28273f91"
+            },
+            {
+              "content": "Readers can verify arithmetic and compare categories faster in a consistent table than in amounts distributed across prose.",
+              "content_digest": "1dc966a0ade3af3bc636cb99d456edbdb918c2a23efd4a5792db9f8ede061195",
+              "position": 3,
+              "uid": "abf6d361-c2eb-512f-87e0-f3af9c5eb677"
+            },
+            {
+              "content": "Revise one table row and its subtotal when an estimate changes instead of repeating the new amount across several prose paragraphs.",
+              "content_digest": "dcd7d010f7d2c1898fffe71ccc7a0067233dcbcf66fe4b429043b1900d097f84",
+              "position": 4,
+              "uid": "473cf3ca-9832-5d9c-97df-974f1d9b0d1b"
+            },
+            {
+              "content": "Keep detailed arithmetic out of the main argument when readers can reach the complete table from a clear reference.",
+              "content_digest": "940a8cdee63c326d9c9be89cc07e7f223f239e3537113d32c098f711bd816cf7",
+              "position": 5,
+              "uid": "675956de-2c61-53e1-bb89-9b49d92558ba"
+            },
+            {
+              "content": "The user tends to interrupt the argument with long cost enumerations when no separate budget table is available.",
+              "content_digest": "2c0715ec3cfa247a35c3acc854b0716dca764619050aa635c0c242a5b56aa2f1",
+              "position": 6,
+              "uid": "f4371f72-f222-5066-b2f4-0a6be5d6865e"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "2ae66432-cdc5-4bac-b501-d5228018f0fa"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate concerns: the reference frame defines defensible transfer and generalization boundaries for design knowledge, while the compared frame structures budget information for clarity, verification, and maintainability. Neither frame supplies a claim that substantively corresponds to one in the other.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d150594a-2f5f-4b88-ac97-ec22936c419c",
+              "memory_uid": "e594a6ab-81e9-5e5f-8ef5-e6bb8f3760d7"
+            },
+            {
+              "frame_uid": "d150594a-2f5f-4b88-ac97-ec22936c419c",
+              "memory_uid": "31cdacff-7c49-547d-9f97-598a07b67fb6"
+            }
+          ],
+          "reason": "Both memories express the same one-sided claim that excluded targets and contexts should be stated so the limits of generalization can be assessed.",
+          "status": "RESOLVED",
+          "summary": "Explicit exclusions identify the user groups and situations outside the design knowledge’s generalization boundary and make that boundary reviewable.",
+          "uid": "8f5bf8da-c758-506e-a585-a908f13ed0e9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d150594a-2f5f-4b88-ac97-ec22936c419c",
+              "memory_uid": "1459d986-4dc9-51f3-bf13-dbb0b07045c8"
+            }
+          ],
+          "reason": "Only the reference frame provides operational conditions for determining where proposed design knowledge can transfer.",
+          "status": "RESOLVED",
+          "summary": "Transferability should be bounded by specified user goals, interaction conditions, and technological constraints.",
+          "uid": "30b7856f-a192-50bc-ad53-135d9856fbe8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d150594a-2f5f-4b88-ac97-ec22936c419c",
+              "memory_uid": "1db5fcd6-f93c-5630-9810-053c10b5ceba"
+            }
+          ],
+          "reason": "Only the reference frame distinguishes mechanism-based analytic generalization from population-level statistical representation.",
+          "status": "RESOLVED",
+          "summary": "Small formative studies may support analytic generalization without statistical representativeness when findings identify design conditions and mechanisms.",
+          "uid": "a2a19e0c-4fac-5e7b-8a34-d6abbb169f1e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d150594a-2f5f-4b88-ac97-ec22936c419c",
+              "memory_uid": "fd29c315-521f-53c0-add5-c668ec318a43"
+            }
+          ],
+          "reason": "Only the reference frame records this specific tendency toward overgeneralization.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to extend design knowledge from an accessible sample to a broader population.",
+          "uid": "288c3e3f-1d33-5e64-8931-8e797f86691b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2ae66432-cdc5-4bac-b501-d5228018f0fa",
+              "memory_uid": "d614b55d-d9f6-5347-8d02-2d219d621a09"
+            },
+            {
+              "frame_uid": "2ae66432-cdc5-4bac-b501-d5228018f0fa",
+              "memory_uid": "675956de-2c61-53e1-bb89-9b49d92558ba"
+            }
+          ],
+          "reason": "Both memories state the same one-sided separation policy, with the clear-reference condition preserving access to the full detail.",
+          "status": "RESOLVED",
+          "summary": "Keep detailed budget arithmetic outside the main argument in a complete compact table or appendix reached through a clear reference, while retaining totals and major categories in the main text.",
+          "uid": "7816a08d-6a28-5501-b2eb-0ea3bfd664e5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2ae66432-cdc5-4bac-b501-d5228018f0fa",
+              "memory_uid": "24500129-4b07-564f-ba67-39e40d7d7860"
+            }
+          ],
+          "reason": "Only the compared frame specifies stable row-level organization for budget components.",
+          "status": "RESOLVED",
+          "summary": "Each cost category, quantity, unit rate, and subtotal should occupy a stable row in the separate budget table.",
+          "uid": "bf7607e4-cb00-5e43-8010-31b96c8bc9e7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2ae66432-cdc5-4bac-b501-d5228018f0fa",
+              "memory_uid": "07bad409-af9c-512a-b829-7ceb28273f91"
+            }
+          ],
+          "reason": "Only the compared frame specifies a separate structural location for each estimate basis.",
+          "status": "RESOLVED",
+          "summary": "Estimate assumptions should occupy a dedicated table column so they can be checked or revised independently of the narrative.",
+          "uid": "831b0c0e-d36f-58fb-baf0-9cff3514e518"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2ae66432-cdc5-4bac-b501-d5228018f0fa",
+              "memory_uid": "abf6d361-c2eb-512f-87e0-f3af9c5eb677"
+            }
+          ],
+          "reason": "Only the compared frame states this reader-facing verification and comparison benefit.",
+          "status": "RESOLVED",
+          "summary": "A consistent budget table lets readers verify arithmetic and compare cost categories faster than prose-distributed amounts.",
+          "uid": "1aedc3ca-2dfe-5e75-8dc0-b2b716fd0658"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2ae66432-cdc5-4bac-b501-d5228018f0fa",
+              "memory_uid": "473cf3ca-9832-5d9c-97df-974f1d9b0d1b"
+            }
+          ],
+          "reason": "Only the compared frame specifies the maintenance procedure for changed estimates.",
+          "status": "RESOLVED",
+          "summary": "When an estimate changes, revise its table row and subtotal rather than repeating the update across multiple prose passages.",
+          "uid": "331ffc34-8987-5ce4-a1f6-b48579fda80e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2ae66432-cdc5-4bac-b501-d5228018f0fa",
+              "memory_uid": "f4371f72-f222-5066-b2f4-0a6be5d6865e"
+            }
+          ],
+          "reason": "Only the compared frame records this specific tendency in budget presentation.",
+          "status": "RESOLVED",
+          "summary": "Without a separate budget table, the user tends to interrupt the argument with lengthy cost enumerations.",
+          "uid": "bc799319-831d-54a1-b7d1-7426ade7ce3f"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers separating budget detail from the argument, structuring estimate data, supporting verification and revision, and a tendency toward disruptive cost enumeration.",
+        "differences": "",
+        "reference_only": "The reference frame covers exclusions, transfer conditions, analytic generalization, and a tendency to overextend findings from accessible samples."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "559eb02f-e35d-4f3e-95ae-14c824998372"
+    },
+    "analysis_digest": "5681f5eafc88fe8965413f9cedcf3038bbcc1ed2e9f24023b819b9b70ba9818d",
+    "key": "6cbb74c9e97667ccb7f3493a668ea185e6b59d458365cac74d7c301b16cf6dab",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 32.440449207999336,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "6cbb74c9e97667ccb7f3493a668ea185e6b59d458365cac74d7c301b16cf6dab",
+  "created_at": "2026-08-13T18:26:06.453984Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/scope",
+  "pair_key": "2ab00b48fc2587b52514620c35f801380503dd51b9b0795873b264ad80e65989",
+  "provider_seconds": 32.440449207999336,
+  "right": "task-2/advisor2/budget",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

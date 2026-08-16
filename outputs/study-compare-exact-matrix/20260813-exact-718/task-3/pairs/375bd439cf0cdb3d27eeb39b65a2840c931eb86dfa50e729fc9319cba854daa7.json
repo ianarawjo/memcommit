@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:53:35.595550+00:00",
+      "frames": [
+        {
+          "context_digest": "5e42fc3dcfbf5576148277f6841977ca8a5cabd4a3fc67a5581f6f6cc816c900",
+          "context_name": "task-3/local/personal-memory/2025/10",
+          "context_uid": "8130b676-dc51-5c31-b7dc-185afdf9cf07",
+          "memories": [
+            {
+              "content": "The user keeps waterproof shoes for rainy days to the left of the entrance.",
+              "content_digest": "5b9e5a20153c7865010318800d740a410faef0c13fe2278c20ce984a89b7dea5",
+              "position": 0,
+              "uid": "82c1e806-de3a-5633-8a08-175487e69fd6"
+            },
+            {
+              "content": "On a day the user walked in the rain wearing thin shoes, their socks became wet and they changed them after arrival.",
+              "content_digest": "fdbdab8c08a4b1d933ff8ac3ddedee8541ddf070e8c6e6020b6c1d14b992c621",
+              "position": 1,
+              "uid": "25df6384-836f-5f8e-bd97-73a1fb171c48"
+            },
+            {
+              "content": "On the next rainy day, the user wore waterproof shoes and their feet remained dry.",
+              "content_digest": "0e87d74fb93fe062cd12efe2f5a04fbae5ce13a60491fd9ad04c4e006acbd87f",
+              "position": 2,
+              "uid": "55abae4f-206a-586e-8b35-406d7525c0a1"
+            },
+            {
+              "content": "On a day the user walked for a long time in new shoes, their heel chafed and they shortened the route home.",
+              "content_digest": "aeb369b995cdf17ea73ae8546b454eab70f33bf6d3c67a09aee2805c1c598b6d",
+              "position": 3,
+              "uid": "c6d21ec4-6bdf-55df-b4d4-05cb531bf4bd"
+            },
+            {
+              "content": "The user wore the same shoes on two short outings before using them on a long walk.",
+              "content_digest": "0d7ed5656f35f4fe025c6ba80e4c829f5b9851c193f981de9a461f848317d60a",
+              "position": 4,
+              "uid": "a6424854-e51e-5afc-8b9f-9e2f0273f70e"
+            },
+            {
+              "content": "On a day the user dried an umbrella outside the entrance, they found it immediately before the next outing.",
+              "content_digest": "dbc2453ca5f895e2cfe7f58e5624cf4c5d6793468af3b25df7e9a4ddb7d50159",
+              "position": 5,
+              "uid": "1b436b46-3d1f-5aa2-99e3-94b7c2412bfd"
+            },
+            {
+              "content": "On a day the user put a folded wet umbrella in their bag, documents inside became wet.",
+              "content_digest": "1f63fbc8c6b491a734f0f7a4190e26aec22826c1ff839242e0ca71d933312c9c",
+              "position": 6,
+              "uid": "ccd1f422-6130-5f19-869e-681102a3a1fa"
+            },
+            {
+              "content": "When rain is forecast, the user's mother expects the user may forget an umbrella and sets out a spare at the entrance.",
+              "content_digest": "80bdfaefb6f781aa91ef7217331e75f09b4766650c2b078dfadf592b2eb27b08",
+              "position": 7,
+              "uid": "c69a8e87-2b6f-5514-ab0d-0037531592f8"
+            },
+            {
+              "content": "When proposing a long-distance walking plan, check both the weather that day and recent records of shoe discomfort.",
+              "content_digest": "f54a546d423099c3abbb65bb49e4ddf773a8191dcffbb8b3d5153dfd70553b73",
+              "position": 8,
+              "uid": "4567ea9f-1800-51ed-bfac-f4cdf674d4cf"
+            },
+            {
+              "content": "Even if the local agent knows a shoe's location, it cannot know its current condition or whether it is usable.",
+              "content_digest": "28202c222ca800a5e19dbaebea2b3c992748f530a695517cf123b10187a31bc8",
+              "position": 9,
+              "uid": "a4ff1b76-755d-530a-b24c-8655115e4fbe"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "2e7ec4f1-1d50-4111-a7b2-5222d3a31c65"
+        },
+        {
+          "context_digest": "4eadf16a0c655a266bec3ebe56b056075c55e7f716f6879a0b6a905fe34136df",
+          "context_name": "task-3/local/personal-memory/2026/05",
+          "context_uid": "fd476504-4d4e-54d9-80b8-3dc2b18555d8",
+          "memories": [
+            {
+              "content": "The user keeps a picnic mat on the bottom shelf of the entrance storage cabinet.",
+              "content_digest": "c17479bd6a0f978f71b106b562507e702c3b84af5119be6bce48e4ee1664e728",
+              "position": 0,
+              "uid": "a9da4cfc-a6aa-51ae-9ec4-0de5c7a09227"
+            },
+            {
+              "content": "On a day the user went to the riverside, they sat in a place without shade and moved after an hour.",
+              "content_digest": "f9ab1da828ca5af06cb8bf54fe85136e316f503dab465fad514ab5a3f8243633",
+              "position": 1,
+              "uid": "fa2735e1-f4af-57d3-a18c-795715b6715b"
+            },
+            {
+              "content": "At the next outdoor meal, the user chose a place near a large tree and stayed for two hours.",
+              "content_digest": "189b7d85561df45986a6b7c9fe681b5ef53b22ca1f5e83fa8d64a7d93b35a577",
+              "position": 2,
+              "uid": "3bd8b8f2-c5b4-5004-8b9e-e388cc26ea7a"
+            },
+            {
+              "content": "On a hot day when the user brought only one bottle of water, they bought another drink partway through the outing.",
+              "content_digest": "92aa494a12664105a4bffc50a9026fadbec78332f750636093ea82ecc68e9597",
+              "position": 3,
+              "uid": "c7c4b494-39a6-5f5c-b37f-51c5061ac926"
+            },
+            {
+              "content": "On the next outing, the user brought two small bottles of water after freezing them.",
+              "content_digest": "69b3035b57b58b1aa778bd0da75dc806c1c449e7e35dc448aff92f7499c3148d",
+              "position": 4,
+              "uid": "dd9f5b3c-9c2e-5dbc-bf6e-eb7761eeb075"
+            },
+            {
+              "content": "When meeting their maternal uncle at a park, the user and the uncle waited at different entrances for 15 minutes.",
+              "content_digest": "9785e87b9fe79813762eb2e19e6d4f256a55f4799c92d095aaf695a8a1de5851",
+              "position": 5,
+              "uid": "2ed2a41c-f6ae-54d6-875c-a195d8fdacee"
+            },
+            {
+              "content": "For the next meeting, the user sent a photo of the entrance sign, and they met at the same place.",
+              "content_digest": "de40b6b7df84784639b97cf7ce153ad8af6e77320d75f3869979e5e3d39169e2",
+              "position": 6,
+              "uid": "23f3a4fc-d51e-5d0b-87f0-d5be407a57f3"
+            },
+            {
+              "content": "For a park meeting, the user's maternal uncle prefers an entrance that requires less walking from the parking area.",
+              "content_digest": "552a43b869c6f06cbf571f794106727406d87841d43addc92f31a3532f73d6f3",
+              "position": 7,
+              "uid": "e9f459f3-8ff0-5a0e-b78b-eda8d18b914e"
+            },
+            {
+              "content": "When making an outdoor plan, confirm the exact entrance and an alternative location in case of rain.",
+              "content_digest": "a265a6364c182de35363b58135b1da60d11595d1e3e0029f6851ac272261a959",
+              "position": 8,
+              "uid": "70277b86-d5db-5b58-8a94-e77372d15a4c"
+            },
+            {
+              "content": "Some park restrooms and drinking fountains may be closed seasonally.",
+              "content_digest": "8e5c4f5f85d4d27dc2211f46e3ab3bbed7f3d9687070b9028992b670986b09ca",
+              "position": 9,
+              "uid": "5a54437b-9b0e-5103-860d-d878be70b3ef"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "482eeda1-4bdd-4629-b733-5fd04920108f"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames provide complementary but operationally independent context: one concerns rainy-weather footwear, umbrellas, and walking comfort, while the other concerns picnics, heat, hydration, and park coordination. No claims govern the same decision closely enough to form a cross-frame semantic relation.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2e7ec4f1-1d50-4111-a7b2-5222d3a31c65",
+              "memory_uid": "82c1e806-de3a-5633-8a08-175487e69fd6"
+            }
+          ],
+          "reason": "This is independently useful reference-side location and purpose information with no compared-side counterpart addressing waterproof footwear storage.",
+          "status": "RESOLVED",
+          "summary": "Waterproof shoes are stored to the left of the entrance for rainy days.",
+          "uid": "bb111d0a-85e6-541f-b864-255c06f3fb4f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2e7ec4f1-1d50-4111-a7b2-5222d3a31c65",
+              "memory_uid": "25df6384-836f-5f8e-bd97-73a1fb171c48"
+            }
+          ],
+          "reason": "This reference-side experience concerns inadequate rain footwear and has no compared-side claim about the same event or operational lesson.",
+          "status": "RESOLVED",
+          "summary": "Thin shoes led to wet socks during a rainy walk, requiring a change after arrival.",
+          "uid": "77972922-4f05-5e1c-bf82-36fd55370005"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2e7ec4f1-1d50-4111-a7b2-5222d3a31c65",
+              "memory_uid": "55abae4f-206a-586e-8b35-406d7525c0a1"
+            }
+          ],
+          "reason": "This reference-side outcome concerns effective rain footwear and has no compared-side counterpart governing that choice.",
+          "status": "RESOLVED",
+          "summary": "Wearing waterproof shoes on a later rainy day kept the user's feet dry.",
+          "uid": "b6171d8d-fb55-5227-b864-fc426acfe34d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2e7ec4f1-1d50-4111-a7b2-5222d3a31c65",
+              "memory_uid": "c6d21ec4-6bdf-55df-b4d4-05cb531bf4bd"
+            }
+          ],
+          "reason": "This reference-side experience provides distinct evidence about shoe discomfort during long walking.",
+          "status": "RESOLVED",
+          "summary": "A long walk in new shoes caused heel chafing and prompted a shorter route home.",
+          "uid": "66cac4fd-2a28-5ec1-a0bb-f5db44349447"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2e7ec4f1-1d50-4111-a7b2-5222d3a31c65",
+              "memory_uid": "a6424854-e51e-5afc-8b9f-9e2f0273f70e"
+            }
+          ],
+          "reason": "This reference-side usage history is independently useful and is not restated or qualified by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user wore the same shoes on short outings before taking a long walk in them.",
+          "uid": "a2459c7d-1b41-5f12-8a4b-cca8011741a0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2e7ec4f1-1d50-4111-a7b2-5222d3a31c65",
+              "memory_uid": "1b436b46-3d1f-5aa2-99e3-94b7c2412bfd"
+            }
+          ],
+          "reason": "This reference-side experience concerns umbrella placement and retrieval, which the compared frame does not address.",
+          "status": "RESOLVED",
+          "summary": "Drying an umbrella outside the entrance made it immediately available for the next outing.",
+          "uid": "166f32cb-e762-5b41-b8b7-34b8da7a141b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2e7ec4f1-1d50-4111-a7b2-5222d3a31c65",
+              "memory_uid": "ccd1f422-6130-5f19-869e-681102a3a1fa"
+            }
+          ],
+          "reason": "This reference-side consequence of umbrella handling is independent of the compared-side outdoor-planning information.",
+          "status": "RESOLVED",
+          "summary": "Putting a folded wet umbrella in a bag caused documents inside to become wet.",
+          "uid": "1e5c4bd5-e705-567c-adfd-c153dea3ff19"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2e7ec4f1-1d50-4111-a7b2-5222d3a31c65",
+              "memory_uid": "c69a8e87-2b6f-5514-ab0d-0037531592f8"
+            }
+          ],
+          "reason": "This reference-side reminder arrangement has no compared-side counterpart concerning umbrella preparation.",
+          "status": "RESOLVED",
+          "summary": "When rain is forecast, the user's mother sets out a spare umbrella because the user may forget one.",
+          "uid": "c03ddde6-3d41-5924-917e-04b5ca2a7a70"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2e7ec4f1-1d50-4111-a7b2-5222d3a31c65",
+              "memory_uid": "4567ea9f-1800-51ed-bfac-f4cdf674d4cf"
+            }
+          ],
+          "reason": "This policy governs long-walk feasibility and footwear comfort, whereas the compared planning policy governs meeting location and rain contingency rather than the same operational decision.",
+          "status": "RESOLVED",
+          "summary": "Long-distance walking proposals should consider both current weather and recent shoe-discomfort records.",
+          "uid": "a7c25f17-565e-5c77-aa12-43364ffcf186"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2e7ec4f1-1d50-4111-a7b2-5222d3a31c65",
+              "memory_uid": "a4ff1b76-755d-530a-b24c-8655115e4fbe"
+            }
+          ],
+          "reason": "This reference-side limitation on local knowledge is independently useful and has no compared-side analogue.",
+          "status": "RESOLVED",
+          "summary": "Knowing a shoe's location does not establish its current condition or usability.",
+          "uid": "4c5db380-5898-5610-9245-65e491099b2d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "482eeda1-4bdd-4629-b733-5fd04920108f",
+              "memory_uid": "a9da4cfc-a6aa-51ae-9ec4-0de5c7a09227"
+            }
+          ],
+          "reason": "This compared-side storage fact concerns picnic equipment and has no reference-side counterpart addressing the mat.",
+          "status": "RESOLVED",
+          "summary": "The picnic mat is stored on the bottom shelf of the entrance storage cabinet.",
+          "uid": "d415ec0d-5e21-56b1-8a98-8d248dd7dd1c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "482eeda1-4bdd-4629-b733-5fd04920108f",
+              "memory_uid": "fa2735e1-f4af-57d3-a18c-795715b6715b"
+            }
+          ],
+          "reason": "This compared-side experience supplies distinct information about shade during an outdoor stay.",
+          "status": "RESOLVED",
+          "summary": "At the riverside, the user left an unshaded spot after an hour.",
+          "uid": "ec7b155c-1f94-5ece-93a4-ed034f047d86"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "482eeda1-4bdd-4629-b733-5fd04920108f",
+              "memory_uid": "3bd8b8f2-c5b4-5004-8b9e-e388cc26ea7a"
+            }
+          ],
+          "reason": "This compared-side experience concerns selection of a shaded location and is not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "At a later outdoor meal, the user chose a spot near a large tree and stayed for two hours.",
+          "uid": "7b849102-1281-535a-b051-334ec5d1c209"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "482eeda1-4bdd-4629-b733-5fd04920108f",
+              "memory_uid": "c7c4b494-39a6-5f5c-b37f-51c5061ac926"
+            }
+          ],
+          "reason": "This compared-side hydration experience has no reference-side counterpart governing water preparation.",
+          "status": "RESOLVED",
+          "summary": "On a hot outing, one bottle of water was insufficient and the user bought another drink.",
+          "uid": "1d554409-3dbb-5cf4-b88d-7d045d7f6bfa"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "482eeda1-4bdd-4629-b733-5fd04920108f",
+              "memory_uid": "dd9f5b3c-9c2e-5dbc-bf6e-eb7761eeb075"
+            }
+          ],
+          "reason": "This compared-side preparation detail is independently useful hydration context absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "On a later outing, the user brought two small bottles of water after freezing them.",
+          "uid": "5980a706-29ef-531e-b9f1-d4a6953296a4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "482eeda1-4bdd-4629-b733-5fd04920108f",
+              "memory_uid": "2ed2a41c-f6ae-54d6-875c-a195d8fdacee"
+            }
+          ],
+          "reason": "This compared-side coordination failure concerns ambiguous meeting entrances and has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user and their maternal uncle waited at different park entrances for 15 minutes.",
+          "uid": "a0c54052-8bb6-5aa3-840a-4a98b72f0c55"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "482eeda1-4bdd-4629-b733-5fd04920108f",
+              "memory_uid": "23f3a4fc-d51e-5d0b-87f0-d5be407a57f3"
+            }
+          ],
+          "reason": "This compared-side coordination method is independently useful and is not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Sending a photo of the entrance sign enabled the user and their uncle to meet at the same place.",
+          "uid": "b34e6134-8bb8-5d39-bb76-72037164eb10"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "482eeda1-4bdd-4629-b733-5fd04920108f",
+              "memory_uid": "e9f459f3-8ff0-5a0e-b78b-eda8d18b914e"
+            }
+          ],
+          "reason": "This compared-side accessibility preference has no reference-side counterpart concerning park entrance selection.",
+          "status": "RESOLVED",
+          "summary": "For park meetings, the user's maternal uncle prefers the entrance requiring less walking from parking.",
+          "uid": "da20b4ec-d0fb-59df-8c8f-9fda3885b461"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "482eeda1-4bdd-4629-b733-5fd04920108f",
+              "memory_uid": "70277b86-d5db-5b58-8a94-e77372d15a4c"
+            }
+          ],
+          "reason": "This policy governs meeting-point precision and a rain fallback, while the reference planning policy addresses weather and shoe discomfort for long walks rather than the same decision.",
+          "status": "RESOLVED",
+          "summary": "Outdoor plans should confirm the exact entrance and an alternative location for rain.",
+          "uid": "326accfd-9e12-55eb-b05d-7ae5fb24c1f9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "482eeda1-4bdd-4629-b733-5fd04920108f",
+              "memory_uid": "5a54437b-9b0e-5103-860d-d878be70b3ef"
+            }
+          ],
+          "reason": "This compared-side facility-availability caveat is independently useful and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Park restrooms and drinking fountains may close seasonally.",
+          "uid": "09d0af19-5aac-5d86-bcde-d4a8f945f19f"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only context covers picnic storage, shade and hydration experiences, park meeting coordination and accessibility, outdoor-plan contingencies, and seasonal facility closures.",
+        "differences": "",
+        "reference_only": "Reference-only context covers rain footwear, shoe discomfort, umbrella handling and reminders, long-walk checks, and uncertainty about shoe condition."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "34599089-c0e7-4790-b224-4ed9fabde0c3"
+    },
+    "analysis_digest": "4d2a11aca5a13181fe5344737a69ff53f0f73e789bcfa5ec4e9a81d0b2c883e0",
+    "key": "f0fbc65b19562e989e0ed52d4ab5cda917e66ef9d3f1fcc1a16369dae94f182d",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 42.861656875000335,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "f0fbc65b19562e989e0ed52d4ab5cda917e66ef9d3f1fcc1a16369dae94f182d",
+  "created_at": "2026-08-13T18:54:18.456824Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/10",
+  "pair_key": "375bd439cf0cdb3d27eeb39b65a2840c931eb86dfa50e729fc9319cba854daa7",
+  "provider_seconds": 42.861656875000335,
+  "right": "task-3/local/personal-memory/2026/05",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

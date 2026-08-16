@@ -1,0 +1,341 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:21:35.321556+00:00",
+      "frames": [
+        {
+          "context_digest": "4ae7659c0c6976de9bf2292f9e35962963b7931b470c2294d4f0e70b3500bff0",
+          "context_name": "task-2/advisor1/feasibility",
+          "context_uid": "52db6b06-e86a-556a-913e-30e45f7e9529",
+          "memories": [
+            {
+              "content": "Mark unverified schedule assumptions as such.",
+              "content_digest": "d4cdcdbcdb51d96f9a7435e72c2e4ef25a3e3822a765a88afafeca5194bda96e",
+              "position": 0,
+              "uid": "b150c774-27f6-5ec8-8cb9-9a00be19ce9b"
+            },
+            {
+              "content": "Mark unverified recruitment assumptions as such.",
+              "content_digest": "4cc28528fee1c7b09f709638e2b57d3bc9efe635d20500ee98567f8f59b8cf21",
+              "position": 1,
+              "uid": "6c7d14ed-67e5-56ff-befb-7648b95aa7a3"
+            },
+            {
+              "content": "Mark unverified technical assumptions as such.",
+              "content_digest": "8942e49cd46e3e9746330349df11e49d4a6c9250c7aa4c52c2d9ade1c97c735c",
+              "position": 2,
+              "uid": "00bf39b5-fe97-5fd0-b579-a5c13b5e6af7"
+            },
+            {
+              "content": "Clarify which stage of prototype fabrication or user study each requested resource is used for.",
+              "content_digest": "81ba64e23304f8fbbb3af4f2c30dfa3c517899c486e88ba211189a7911fcbd64",
+              "position": 3,
+              "uid": "3ae97c88-7537-5733-b48d-e02c9283f486"
+            },
+            {
+              "content": "Operations reviewers judge feasibility based on the personnel assigned to each procedure.",
+              "content_digest": "fe29bb7e592d116001a25ce11c603ae29f21d446925c28db692f14970d5b8134",
+              "position": 4,
+              "uid": "e2b5c1f0-97c2-5d46-af80-993d8d5606c9"
+            },
+            {
+              "content": "Operations reviewers judge feasibility based on the equipment assigned to each procedure.",
+              "content_digest": "859ab328c21506d11dd1f6d98e98d5a552446e774931a8bc13396750acf0793b",
+              "position": 5,
+              "uid": "f636b400-d3a2-5873-bf5b-c990b0f7ea42"
+            },
+            {
+              "content": "Operations reviewers judge feasibility based on the time allocated to each procedure.",
+              "content_digest": "08656886328ece4d813e36b1145805ffd3f3d4c6c855c20b1464143fb12868ab",
+              "position": 6,
+              "uid": "49385488-2315-51bc-bea0-749a1aea52f1"
+            },
+            {
+              "content": "Verify that the planned number of formative evaluation iterations is feasible within the time for prototype modification and recruitment resources.",
+              "content_digest": "9e181a14a97abd740a85679554395d7b315c07f0e4171ef276a2c31553b285c7",
+              "position": 7,
+              "uid": "f1c22a48-9d8d-5e82-9837-690d66e719db"
+            },
+            {
+              "content": "Include only the minimum functionality required to compare primary design assumptions in the scope of the formative evaluation prototype.",
+              "content_digest": "7769c2a4c03dc1c279bbf34bf0cefdcd076e3c1d8a1e56015bf20357ecfcf433",
+              "position": 8,
+              "uid": "4d69f030-0dc0-5df7-a153-0b595a3f68de"
+            },
+            {
+              "content": "The user's iterative design plan can be judged feasible only if time and personnel are allocated for modifying the prototype between iterations.",
+              "content_digest": "0339285cf9fd632814c5b5eb2b48fd46e3baf09ea95fb406f71b5d2cc804fa7e",
+              "position": 9,
+              "uid": "152f8621-f5fb-5c5e-a961-1fde77ed0bb3"
+            },
+            {
+              "content": "Delays in participant recruitment can compress the time available for prototype modification between formative evaluations.",
+              "content_digest": "9945f30dba63d2d070bad59cb2fb15b6a26d635f337949c3891b58d17c43973a",
+              "position": 10,
+              "uid": "1877a138-31f6-59a5-b666-ae57985f540d"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "a2021352-12fd-42a7-87fe-769ff5ce260c"
+        },
+        {
+          "context_digest": "4371a72e6fb939731cb550ca5363a3b5210680482f84c18b36ba933f4454ecc1",
+          "context_name": "task-2/advisor2/expression",
+          "context_uid": "cf8e8baf-292e-57c3-8e2c-3f9b3d52f3d3",
+          "memories": [
+            {
+              "content": "Use a sequence table rather than a flow diagram when the procedure is likely to change repeatedly during drafting.",
+              "content_digest": "575bb4530af1e93b215ea57f0fd63e1e09136554da98aecf87288cc39ea9697c",
+              "position": 0,
+              "uid": "4264c20d-3e44-578d-866e-7787cc7b59e2"
+            },
+            {
+              "content": "The visual fidelity of a prototype and its level of connection to actual data and services may differ.",
+              "content_digest": "9478cb005a07ca7edfa924579b3d5221b1fa1143b5d8327369e7ee799b76aa9f",
+              "position": 1,
+              "uid": "70a8c3f0-0f6a-5881-abd6-29f52833b7bd"
+            },
+            {
+              "content": "Service flow diagrams indicate human-system transitions that are not revealed by individual screens alone.",
+              "content_digest": "5e3e18a38b1e62724d2ae0445549e214a219d205a80735bc6b4c0e643a96b8b3",
+              "position": 2,
+              "uid": "b410aa8d-db87-586b-a1cd-4af5767a9f7a"
+            },
+            {
+              "content": "HCI reviewers often scan system structure and service flow diagrams before the main text.",
+              "content_digest": "22a46440a6aeda0cb7d39cc6fedf6bbff6cac91232ec0cb163bf1fc17ff257d4",
+              "position": 3,
+              "uid": "a385fbb1-85b4-5132-bbc7-8fd8daedb715"
+            },
+            {
+              "content": "Give each step, actor, condition, and outcome a stable row in the sequence table.",
+              "content_digest": "2a073bf2ec4c5592ddc405d83cb438a5ed880699d3c157f310fb3dbff7851622",
+              "position": 4,
+              "uid": "22254f16-4628-5fd9-b1af-6e66dc2572b3"
+            },
+            {
+              "content": "Updating one row in a sequence table is usually faster than redrawing a branching diagram after a procedural change.",
+              "content_digest": "cf97dbf66018a6be1ee42dfc79ff8de44e8742db2b42c9d1ef70b3f252805a39",
+              "position": 5,
+              "uid": "32028269-5d43-5a65-b22b-9e570ceabfde"
+            },
+            {
+              "content": "Readers can check sequence tables step by step but may find the overall branching shape less immediate.",
+              "content_digest": "18b5de0cdd22ef1774151332afdbc408f9f591cf889e51271f81a372f74ef86d",
+              "position": 6,
+              "uid": "939ee3d0-b611-574a-a25b-82708394bd5e"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "63f2b850-7731-465c-b53c-44ee42a0d904"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address largely separate concerns: the reference emphasizes feasibility, resource allocation, uncertainty labeling, and evaluation scope, while the compared frame emphasizes procedural representations and reviewer navigation. They converge only on defining prototype characteristics deliberately for evaluation.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a2021352-12fd-42a7-87fe-769ff5ce260c",
+              "memory_uid": "b150c774-27f6-5ec8-8cb9-9a00be19ce9b"
+            },
+            {
+              "frame_uid": "a2021352-12fd-42a7-87fe-769ff5ce260c",
+              "memory_uid": "6c7d14ed-67e5-56ff-befb-7648b95aa7a3"
+            },
+            {
+              "frame_uid": "a2021352-12fd-42a7-87fe-769ff5ce260c",
+              "memory_uid": "00bf39b5-fe97-5fd0-b579-a5c13b5e6af7"
+            }
+          ],
+          "reason": "These memories split one reference-only disclosure policy across three assumption domains; the compared frame contains no corresponding policy.",
+          "status": "RESOLVED",
+          "summary": "Unverified schedule, recruitment, and technical assumptions should be explicitly identified as unverified.",
+          "uid": "82841c89-2824-5f22-b226-ad15436c631a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a2021352-12fd-42a7-87fe-769ff5ce260c",
+              "memory_uid": "3ae97c88-7537-5733-b48d-e02c9283f486"
+            }
+          ],
+          "reason": "This is an independently useful reference-only requirement for clarifying resource use.",
+          "status": "RESOLVED",
+          "summary": "Each requested resource should be tied to the prototype-fabrication or user-study stage where it is used.",
+          "uid": "99bce334-2f32-5384-ab2c-47634d43e6c1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a2021352-12fd-42a7-87fe-769ff5ce260c",
+              "memory_uid": "e2b5c1f0-97c2-5d46-af80-993d8d5606c9"
+            },
+            {
+              "frame_uid": "a2021352-12fd-42a7-87fe-769ff5ce260c",
+              "memory_uid": "f636b400-d3a2-5873-bf5b-c990b0f7ea42"
+            },
+            {
+              "frame_uid": "a2021352-12fd-42a7-87fe-769ff5ce260c",
+              "memory_uid": "49385488-2315-51bc-bea0-749a1aea52f1"
+            }
+          ],
+          "reason": "These memories split one reference-only feasibility criterion across its principal resource inputs.",
+          "status": "RESOLVED",
+          "summary": "Procedure-level feasibility is judged from assigned personnel, equipment, and time.",
+          "uid": "434a050e-101e-5b23-ac34-25442297591d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a2021352-12fd-42a7-87fe-769ff5ce260c",
+              "memory_uid": "f1c22a48-9d8d-5e82-9837-690d66e719db"
+            },
+            {
+              "frame_uid": "a2021352-12fd-42a7-87fe-769ff5ce260c",
+              "memory_uid": "152f8621-f5fb-5c5e-a961-1fde77ed0bb3"
+            }
+          ],
+          "reason": "These reference-only memories express complementary parts of one underlying requirement to resource iteration and between-iteration modification feasibly.",
+          "status": "RESOLVED",
+          "summary": "The planned formative-evaluation iterations must be supported by adequate time and people for prototype modification, alongside recruitment capacity.",
+          "uid": "acec7ce0-3ed7-5a93-8bb6-134bc103e954"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "a2021352-12fd-42a7-87fe-769ff5ce260c",
+              "memory_uid": "4d69f030-0dc0-5df7-a153-0b595a3f68de"
+            },
+            {
+              "frame_uid": "63f2b850-7731-465c-b53c-44ee42a0d904",
+              "memory_uid": "70a8c3f0-0f6a-5881-abd6-29f52833b7bd"
+            }
+          ],
+          "reason": "Both claims materially guide prototype configuration and can jointly govern the same evaluation without requiring an unstated scope distinction.",
+          "status": "RESOLVED",
+          "summary": "Evaluation prototypes should contain only functionality needed to compare primary assumptions, while visual fidelity and connection to real data or services may be specified independently.",
+          "uid": "03c3bdf6-c2d1-55b6-9ca4-9ad093267a41"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a2021352-12fd-42a7-87fe-769ff5ce260c",
+              "memory_uid": "1877a138-31f6-59a5-b666-ae57985f540d"
+            }
+          ],
+          "reason": "This is an independently useful reference-only schedule risk not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Participant-recruitment delays can reduce the time available for prototype modification between formative evaluations.",
+          "uid": "a42a3da6-0283-5ecd-ae0a-e838629f1d1d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "63f2b850-7731-465c-b53c-44ee42a0d904",
+              "memory_uid": "4264c20d-3e44-578d-866e-7787cc7b59e2"
+            },
+            {
+              "frame_uid": "63f2b850-7731-465c-b53c-44ee42a0d904",
+              "memory_uid": "22254f16-4628-5fd9-b1af-6e66dc2572b3"
+            },
+            {
+              "frame_uid": "63f2b850-7731-465c-b53c-44ee42a0d904",
+              "memory_uid": "32028269-5d43-5a65-b22b-9e570ceabfde"
+            }
+          ],
+          "reason": "These compared-only memories split one underlying drafting recommendation into the representation choice, row structure, and maintenance benefit.",
+          "status": "RESOLVED",
+          "summary": "Frequently changing procedures are suited to sequence tables with stable rows because individual steps can be updated without redrawing a branching diagram.",
+          "uid": "5173071b-c5d7-5adf-8924-381c801a9126"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "63f2b850-7731-465c-b53c-44ee42a0d904",
+              "memory_uid": "b410aa8d-db87-586b-a1cd-4af5767a9f7a"
+            }
+          ],
+          "reason": "This is an independently useful compared-only claim about information conveyed by service-flow diagrams.",
+          "status": "RESOLVED",
+          "summary": "Service-flow diagrams reveal human-system transitions that individual screens do not show.",
+          "uid": "6d66b6cf-e7e0-5b3a-a477-4581e3e25572"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "63f2b850-7731-465c-b53c-44ee42a0d904",
+              "memory_uid": "a385fbb1-85b4-5132-bbc7-8fd8daedb715"
+            }
+          ],
+          "reason": "This is an independently useful compared-only observation about reviewer navigation behavior.",
+          "status": "RESOLVED",
+          "summary": "HCI reviewers often inspect system-structure and service-flow diagrams before reading the main text.",
+          "uid": "5d36ba50-2d6f-5c36-a51e-f7703ea7178b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "63f2b850-7731-465c-b53c-44ee42a0d904",
+              "memory_uid": "939ee3d0-b611-574a-a25b-82708394bd5e"
+            }
+          ],
+          "reason": "This is an independently useful compared-only tradeoff distinct from the recommendation to use sequence tables for mutable procedures.",
+          "status": "RESOLVED",
+          "summary": "Sequence tables support stepwise checking but make the overall branching structure less immediate.",
+          "uid": "9b3a63d3-1f19-5a39-8fdb-f87d36964ecb"
+        }
+      ],
+      "reports": {
+        "both": "Both support deliberate prototype scoping: required functionality should be minimal for testing key assumptions, while visual fidelity and live-service integration remain separable dimensions.",
+        "compared_only": "Compared-only guidance covers maintainable sequence tables, their readability tradeoff, service-flow diagrams, and reviewers’ tendency to inspect structural visuals early.",
+        "differences": "",
+        "reference_only": "Reference-only guidance covers labeling uncertainty, mapping resources to stages and procedures, resourcing iterative evaluation and modification, and anticipating recruitment delays."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "558cca8f-0d26-412e-80be-233b91ba7716"
+    },
+    "analysis_digest": "ce9a8fb0ab8443844d7dfef559b6222c13a78d5f31c881b3159874a298e43bbf",
+    "key": "6dcacb1294a2646af48618e5224ab6a65a38e7eb06272121d571f1b4da132300",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 37.774224666998634,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "6dcacb1294a2646af48618e5224ab6a65a38e7eb06272121d571f1b4da132300",
+  "created_at": "2026-08-13T18:22:13.095476Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/feasibility",
+  "pair_key": "f46d9e320dfc0e44b489efdb9afd28a298d8a993ddeef4324b0d0a6fece64000",
+  "provider_seconds": 37.774224666998634,
+  "right": "task-2/advisor2/expression",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

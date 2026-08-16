@@ -1,0 +1,399 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:23:00.122985+00:00",
+      "frames": [
+        {
+          "context_digest": "d216a114524e2b755fff42b8577d5027d3e528aed50c5f588cebf57767bb7fc8",
+          "context_name": "task-2/advisor1/methods",
+          "context_uid": "d2f78b99-5dcf-5876-89a9-1058bceca333",
+          "memories": [
+            {
+              "content": "Link each HCI research question directly to corresponding user data and analysis procedures.",
+              "content_digest": "21e2d5e7eb4ec06057a8405359656cd03a98f4ae67956016d98582af44bfb402",
+              "position": 0,
+              "uid": "c8bcefee-c64a-5a1f-911c-502cc4522701"
+            },
+            {
+              "content": "In preregistered studies, specify the conditions under which deviations from the plan are permissible.",
+              "content_digest": "0ecac6de4eb5e3eec39477c5a6324acb8a1bd6cefb17eacc2c73cdd53160b85f",
+              "position": 1,
+              "uid": "8747b27e-6c2b-5498-9eac-c403e26101a6"
+            },
+            {
+              "content": "In preregistered studies, specify how to record content that deviates from the plan.",
+              "content_digest": "821b3ad70335f24d96aeffd2260e3bc27bb6efd1108a68b00ecc5cb7e7adb242",
+              "position": 2,
+              "uid": "c3ad4ad8-4c5c-54c5-8d65-2dae15fa69a0"
+            },
+            {
+              "content": "Commit to one exact target number of participants so the schedule, workload, and budget can be checked against the same quantity.",
+              "content_digest": "7ff7f3d29fc21399565b4047d3f78e6415e1b51a9247139fc156ea7d4f6d2f13",
+              "position": 3,
+              "uid": "df53a41c-2fbf-532a-a5b0-560a196bf5cb"
+            },
+            {
+              "content": "Specify the interview protocols, recording devices, or log tools used to collect each type of user data.",
+              "content_digest": "0396cbcbfd6e96ef9fd2af507855c4b71eb3003a15fc79d240cd0b751b6b5788",
+              "position": 4,
+              "uid": "24d49198-fd7b-5810-bc56-1910a796f76e"
+            },
+            {
+              "content": "Specify whether each type of user data is collected before, during, or after the interaction.",
+              "content_digest": "80a3ff6e82631a044e8859709930b675163439d11564d1b59601bca0ee030fba",
+              "position": 5,
+              "uid": "2f367cf3-50c5-59bc-972e-6173e56343ac"
+            },
+            {
+              "content": "Readers cannot tell whether the schedule and budget agree when different sections imply different target counts.",
+              "content_digest": "9b5de55faa7e64cf1149ef1bb60cf990815e789e7d1c4a3c0e6297fbbd300aae",
+              "position": 6,
+              "uid": "91db3bd1-4417-5db6-b7a6-3e79c87ebe88"
+            },
+            {
+              "content": "In formative evaluation prototypes, implementation instability exists as an independent cause of task failure alongside design choices.",
+              "content_digest": "dab5f616c4354c0e9f381b0e860e5ec5ff1afc249a4ad427f194c559781b83a8",
+              "position": 7,
+              "uid": "49746579-92d7-51ea-b158-7d770443d101"
+            },
+            {
+              "content": "If a prototype safety signal occurs during formative evaluation, existing institutional safety procedures take precedence over planned data collection.",
+              "content_digest": "2f2768eb4fbce9367786ab13ca8a608e82104cee45200f4aa59854efcf2edc3e",
+              "position": 8,
+              "uid": "20d116ab-f9cc-5f61-808b-8555da09d707"
+            },
+            {
+              "content": "Reviewers judge answerability by tracing the path from each research question to the data and analysis.",
+              "content_digest": "0fac56a79481bdcd7b169c7e3d9ab8fbd0b4f76d33dfe9f4a2f703f80e84aea9",
+              "position": 9,
+              "uid": "881bc037-c099-50e4-b7e0-d38fba5146c9"
+            },
+            {
+              "content": "The author of this proposal tends to present implemented feature lists directly as design contributions.",
+              "content_digest": "6cf2a1292756154c2a0a045f1e4bd4889994faaa838f93e8a2b9c949957ed920",
+              "position": 10,
+              "uid": "9a969676-6093-5fac-bda8-92ebdac70c37"
+            },
+            {
+              "content": "Calculate the required sessions, facilitator hours, and participant payments from the same exact target rather than from separate rough estimates.",
+              "content_digest": "ea6c96c9e5e7d5db7bd2210fd484e715e35727bd1e6f7c2ea2a2c4c12e488f2a",
+              "position": 11,
+              "uid": "0ecc319a-ae60-5510-883d-52e613138164"
+            },
+            {
+              "content": "If recruitment falls below the exact target, state the shortfall explicitly and revise the affected schedule or deliverable.",
+              "content_digest": "bdf962f17a92886e7a5ec0003460dce9ed9c02d02473f66c6f6b4e97c0c304b9",
+              "position": 12,
+              "uid": "c4dfdb65-e673-52c0-a40c-e909d6014e00"
+            },
+            {
+              "content": "Do not use a wide range merely to postpone choosing the quantity that the rest of the proposal must support.",
+              "content_digest": "332385b05f91f97c398bc954b6fc9e62da182f7e42de6dd5691435df6922fd43",
+              "position": 13,
+              "uid": "a7c3a123-3f05-52e0-b33e-c450d1a070ac"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "d9703586-7640-4d1d-b401-ae7b6229506f"
+        },
+        {
+          "context_digest": "1396f236b90acd99b836eb5367828f8319d0465ea25b66f696a7f583f4f5ecf6",
+          "context_name": "task-2/advisor2/terminology",
+          "context_uid": "a2976fe7-0e07-5045-9e91-6a214128a482",
+          "memories": [
+            {
+              "content": "Do not change names referring to the same user roles, system functions, or operational stages midway.",
+              "content_digest": "a0f821f4497e7518806857e9005d12e27f6043fda6dbd91ba33ef188e0a3be16",
+              "position": 0,
+              "uid": "e2ae95ed-9033-5625-9179-33f4cf4a95c1"
+            },
+            {
+              "content": "Use abbreviations only for long recurring terms in a two-page proposal.",
+              "content_digest": "e6cad365bd42a8327e3cac92b8cf49cc456fa3e2f5c6624797fa509c0aac6846",
+              "position": 1,
+              "uid": "4be60357-09fa-523d-8c8d-8e03ace8fde9"
+            },
+            {
+              "content": "Present the full term and abbreviation together when using an abbreviation for the first time.",
+              "content_digest": "7b7c1f90727c822edbc13af17d64d45552d1c7ddb5fa18e665369423fd93ffbe",
+              "position": 2,
+              "uid": "0dd5d707-7d13-5be0-8377-421507650cba"
+            },
+            {
+              "content": "Refer to participants based on the roles they perform in the study rather than their status.",
+              "content_digest": "d89feff6e3dad0eea0ba4b1b291b140048af9f0f89d84c8ac196ae547a7b03bd",
+              "position": 3,
+              "uid": "9b3f0cde-7c3e-5b6a-9500-855f31d65ef2"
+            },
+            {
+              "content": "Reviewers from different subfields find it difficult to infer an abbreviation from context alone when it is not defined at first use.",
+              "content_digest": "4ffe91fb52db337a4ad30dc56d0439e12851f17f411c414b6d673e79bd91e68b",
+              "position": 4,
+              "uid": "8c896114-85e6-5c3c-ae3f-6e8e6b59f2fe"
+            },
+            {
+              "content": "When introducing an operational role for the first time, define both the decisions it can make and the actions it performs.",
+              "content_digest": "916b66a818f988f69e2e3c90f0ed0dbb7d29fc9e030b3fc7f822b3817106cbc3",
+              "position": 5,
+              "uid": "dc9e3f25-7aac-500b-b431-f6d810dd09bb"
+            },
+            {
+              "content": "Individuals holding identical job titles may possess different system modification privileges and data access rights depending on their deployment site.",
+              "content_digest": "e0315abc2f42a8f2657aa52e04899096ce799ba790fcd77d22b4196f917790ac",
+              "position": 6,
+              "uid": "04956cab-eb3a-5b71-be45-b1edd6c4a216"
+            },
+            {
+              "content": "The user tends to group distinct field roles under the single label “user.”",
+              "content_digest": "ba75af998618324dbdfa225a2cd503c42888f77daf4d44eb4f79b3a7db8e4bbe",
+              "position": 7,
+              "uid": "fc8613e8-86ca-5322-bb5d-03dfbca71c46"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "97af1cfc-4959-4c83-a47f-871941ab8c11"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames are complementary but substantively separate: the reference focuses on study traceability, preregistration, data collection, participant planning, prototype risk, and contribution framing, while the compared frame focuses on terminology, abbreviations, and precise operational-role descriptions. Neither supplies a scope-aligned counterpart to the other.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d9703586-7640-4d1d-b401-ae7b6229506f",
+              "memory_uid": "c8bcefee-c64a-5a1f-911c-502cc4522701"
+            },
+            {
+              "frame_uid": "d9703586-7640-4d1d-b401-ae7b6229506f",
+              "memory_uid": "881bc037-c099-50e4-b7e0-d38fba5146c9"
+            }
+          ],
+          "reason": "These reference memories state and explain one traceability requirement, with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Research-question answerability depends on directly tracing each question to its user data and analysis procedures.",
+          "uid": "6ba1b664-ddbc-55c0-b5f3-d51c0a6ed103"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d9703586-7640-4d1d-b401-ae7b6229506f",
+              "memory_uid": "8747b27e-6c2b-5498-9eac-c403e26101a6"
+            },
+            {
+              "frame_uid": "d9703586-7640-4d1d-b401-ae7b6229506f",
+              "memory_uid": "c3ad4ad8-4c5c-54c5-8d65-2dae15fa69a0"
+            }
+          ],
+          "reason": "The reference memories split one deviation-governance policy into authorization and recording requirements; the compared frame does not address preregistration.",
+          "status": "RESOLVED",
+          "summary": "Preregistered-study deviations require advance governance covering both permissible conditions and documentation.",
+          "uid": "9e441832-a5f6-5cee-a38f-bcd3743db1a0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d9703586-7640-4d1d-b401-ae7b6229506f",
+              "memory_uid": "df53a41c-2fbf-532a-a5b0-560a196bf5cb"
+            },
+            {
+              "frame_uid": "d9703586-7640-4d1d-b401-ae7b6229506f",
+              "memory_uid": "91db3bd1-4417-5db6-b7a6-3e79c87ebe88"
+            },
+            {
+              "frame_uid": "d9703586-7640-4d1d-b401-ae7b6229506f",
+              "memory_uid": "0ecc319a-ae60-5510-883d-52e613138164"
+            },
+            {
+              "frame_uid": "d9703586-7640-4d1d-b401-ae7b6229506f",
+              "memory_uid": "c4dfdb65-e673-52c0-a40c-e909d6014e00"
+            },
+            {
+              "frame_uid": "d9703586-7640-4d1d-b401-ae7b6229506f",
+              "memory_uid": "a7c3a123-3f05-52e0-b33e-c450d1a070ac"
+            }
+          ],
+          "reason": "These reference memories jointly state, motivate, and operationalize one exact-target planning policy; no compared memory governs participant quantity planning.",
+          "status": "RESOLVED",
+          "summary": "Participant planning should use one exact target consistently across schedule, workload, budget, payments, and explicit shortfall handling.",
+          "uid": "1d9b89a0-ee77-5157-8da3-68dfba9933f4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d9703586-7640-4d1d-b401-ae7b6229506f",
+              "memory_uid": "24d49198-fd7b-5810-bc56-1910a796f76e"
+            },
+            {
+              "frame_uid": "d9703586-7640-4d1d-b401-ae7b6229506f",
+              "memory_uid": "2f367cf3-50c5-59bc-972e-6173e56343ac"
+            }
+          ],
+          "reason": "The reference memories split one data-collection specification requirement into method and timing; the compared frame has no counterpart.",
+          "status": "RESOLVED",
+          "summary": "Each user-data type should identify both its collection tools or protocols and its timing relative to interaction.",
+          "uid": "0fef33f7-8a0f-5944-b5d2-ffdb39b1cead"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d9703586-7640-4d1d-b401-ae7b6229506f",
+              "memory_uid": "49746579-92d7-51ea-b158-7d770443d101"
+            }
+          ],
+          "reason": "This is a one-sided causal interpretation for prototype task failures, distinct from the compared frame’s terminology policies.",
+          "status": "RESOLVED",
+          "summary": "Formative evaluation should treat prototype implementation instability as a failure cause independent of design choices.",
+          "uid": "daf75666-0e78-5a8c-bff2-d44ef9f59030"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d9703586-7640-4d1d-b401-ae7b6229506f",
+              "memory_uid": "20d116ab-f9cc-5f61-808b-8555da09d707"
+            }
+          ],
+          "reason": "This is a one-sided safety-priority rule with no scope-aligned claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A formative-prototype safety signal makes institutional safety procedures take precedence over planned data collection.",
+          "uid": "b6f1d8b3-9992-53bf-9f3c-d45170132e93"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d9703586-7640-4d1d-b401-ae7b6229506f",
+              "memory_uid": "9a969676-6093-5fac-bda8-92ebdac70c37"
+            }
+          ],
+          "reason": "This is a one-sided observation about contribution framing and is not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to present implemented feature lists directly as design contributions.",
+          "uid": "459a8db5-4270-5e85-a95f-7c275898fe0f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "97af1cfc-4959-4c83-a47f-871941ab8c11",
+              "memory_uid": "e2ae95ed-9033-5625-9179-33f4cf4a95c1"
+            }
+          ],
+          "reason": "This compared-only policy governs renaming the same concepts, independently of the reference frame’s study-design requirements.",
+          "status": "RESOLVED",
+          "summary": "Names for the same roles, functions, and operational stages should remain consistent throughout a proposal.",
+          "uid": "4a77e02c-d7cc-59a8-be7f-540a38389154"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "97af1cfc-4959-4c83-a47f-871941ab8c11",
+              "memory_uid": "4be60357-09fa-523d-8c8d-8e03ace8fde9"
+            },
+            {
+              "frame_uid": "97af1cfc-4959-4c83-a47f-871941ab8c11",
+              "memory_uid": "0dd5d707-7d13-5be0-8377-421507650cba"
+            },
+            {
+              "frame_uid": "97af1cfc-4959-4c83-a47f-871941ab8c11",
+              "memory_uid": "8c896114-85e6-5c3c-ae3f-6e8e6b59f2fe"
+            }
+          ],
+          "reason": "These compared memories jointly provide selection, introduction, and reader-impact aspects of one abbreviation policy; the reference frame has no counterpart.",
+          "status": "RESOLVED",
+          "summary": "A short proposal should reserve abbreviations for long recurring terms and define each at first use for cross-subfield readability.",
+          "uid": "ebfd7ba2-52fd-5e7e-b4fc-868489c804e7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "97af1cfc-4959-4c83-a47f-871941ab8c11",
+              "memory_uid": "9b3f0cde-7c3e-5b6a-9500-855f31d65ef2"
+            },
+            {
+              "frame_uid": "97af1cfc-4959-4c83-a47f-871941ab8c11",
+              "memory_uid": "fc8613e8-86ca-5322-bb5d-03dfbca71c46"
+            }
+          ],
+          "reason": "The compared memories state and motivate one role-sensitive labeling policy; the reference frame does not address participant naming.",
+          "status": "RESOLVED",
+          "summary": "Participant terminology should distinguish performed field roles rather than collapse distinct people into generic or status-based labels.",
+          "uid": "5f341b3d-b83a-52e1-babe-accaaf46730d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "97af1cfc-4959-4c83-a47f-871941ab8c11",
+              "memory_uid": "dc9e3f25-7aac-500b-b431-f6d810dd09bb"
+            }
+          ],
+          "reason": "This compared-only requirement concerns the content of role definitions, not any operational decision covered by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A newly introduced operational role should be defined by both its decision authority and its performed actions.",
+          "uid": "7cde86c6-1958-5fef-91b2-d1797eac27f1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "97af1cfc-4959-4c83-a47f-871941ab8c11",
+              "memory_uid": "04956cab-eb3a-5b71-be45-b1edd6c4a216"
+            }
+          ],
+          "reason": "This compared-only claim warns that titles do not determine site-specific authority, a distinct issue absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Identical job titles can entail different modification privileges and data-access rights across deployment sites.",
+          "uid": "cc2ee711-fc27-5eea-a5dd-078250abb1d0"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame promotes stable terminology, selective and defined abbreviations, role-based participant labels, explicit role authority and actions, and recognition of site-dependent privileges.",
+        "differences": "",
+        "reference_only": "The reference specifies research traceability, deviation governance, collection methods and timing, exact participant planning, prototype failure and safety handling, and a contribution-framing concern."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "9160cd25-3d70-40e1-80fa-95e1afa849af"
+    },
+    "analysis_digest": "46fba1ccb4a0ce95a499d6ab3ff15edef78c4ffe21be2fcb3d58f74d8755fa56",
+    "key": "dca219ca8acf803480b560c209f92596191f99fa72bf351f2ab6c8ba78367b69",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 58.93280991700158,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "dca219ca8acf803480b560c209f92596191f99fa72bf351f2ab6c8ba78367b69",
+  "created_at": "2026-08-13T18:23:59.055340Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/methods",
+  "pair_key": "a5c3a7673808f2c61a8739c855c20ba143932f0ecba5b3e920f8f68af4d77913",
+  "provider_seconds": 58.93280991700158,
+  "right": "task-2/advisor2/terminology",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

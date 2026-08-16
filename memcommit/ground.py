@@ -387,6 +387,7 @@ class GroundTargetRequirement:
             description=_string(
                 data["description"],
                 "grounding target description",
+                empty=True,
             ),
             minimum_accepted_cases=minimum,
             blocked_reason=_string(
@@ -1392,6 +1393,7 @@ def bind_ground_workbench(
                 description=_string(
                     spec.description,
                     "grounding target description",
+                    empty=True,
                 ),
                 minimum_accepted_cases=minimum,
                 blocked_reason=_string(
@@ -1592,7 +1594,6 @@ def propose_ground_rule(
     """Propose one reusable Rule without manufacturing a Ground Memory."""
     _proposal_contexts(session, current_contexts)
     rule = _string(rule, "grounding proposed rule")
-    rationale = _string(rationale, "grounding proposal rationale")
     if (
         rule_provenance not in _RULE_PROVENANCE
         or rule_provenance == "JOINTLY_REVISED"
@@ -1602,6 +1603,14 @@ def propose_ground_rule(
             "DISTILLED_FROM_GOAL and INDUCED_FROM_CASES remain readable; "
             "JOINTLY_REVISED is created by review."
         )
+    # A directly stated Rule may be complete in the person's own wording.
+    # Derived Rules still need an explicit inference rationale so provenance
+    # cannot silently turn a user statement into model-authored reasoning.
+    rationale = _string(
+        rationale,
+        "grounding proposal rationale",
+        empty=rule_provenance == "USER_STATED",
+    )
     target_frame_by_name = {
         frame.context_name: frame
         for frame in session.frames

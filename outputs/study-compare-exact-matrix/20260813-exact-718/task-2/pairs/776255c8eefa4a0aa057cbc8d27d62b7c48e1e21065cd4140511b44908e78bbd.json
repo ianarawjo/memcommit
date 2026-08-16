@@ -1,0 +1,310 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:21:03.122181+00:00",
+      "frames": [
+        {
+          "context_digest": "c4484b7a8284d7e31066ad3f4c4edf8844a2e0ce8695a323093f753243b6b18f",
+          "context_name": "task-2/advisor1/expression",
+          "context_uid": "39a6f298-c511-5c21-a106-998c1df9d951",
+          "memories": [
+            {
+              "content": "Use a flow diagram rather than a sequence table when alternate procedural branches lead to different outcomes.",
+              "content_digest": "48075a546ef4f1c2735e202cf43df2c164e4382f323007f542915195d025bf58",
+              "position": 0,
+              "uid": "51fa3fcc-9d5f-52f0-809d-62d7cdd8a865"
+            },
+            {
+              "content": "Draw alternate branches and their resulting outcomes in the same flow diagram so readers can compare them at once.",
+              "content_digest": "85d1fdc887f442e05b4089e28a6dc671e757eb781eae9c39646673054306ec34",
+              "position": 1,
+              "uid": "e686bd4d-3ebd-5e55-ba39-f26971247965"
+            },
+            {
+              "content": "The visual fidelity of a prototype may differ from its functional fidelity.",
+              "content_digest": "bfc110d2df084fd4f8393284db693ead012f2bfd9a4e804fd89f9a4e45e16e8c",
+              "position": 2,
+              "uid": "019662a9-6f03-527f-9b6d-be5a2966d9e9"
+            },
+            {
+              "content": "A flow diagram can make alternate branches and their different outcomes visible in one view.",
+              "content_digest": "8f69a73784cb0c304671161a6c42c63480c0ce0cc4864e613d8dde466365d496",
+              "position": 3,
+              "uid": "a6dfe9a7-1df8-561f-8d3e-fc19518beca9"
+            },
+            {
+              "content": "HCI reviewers often skim prototype screens and interaction flow diagrams before reading the main text.",
+              "content_digest": "ee7009a111b29298f748336d571f4d0233e08ef0255f6cfe69cb4c26def96394",
+              "position": 4,
+              "uid": "7047a23d-45b3-5d5c-a00b-c12552e9680d"
+            },
+            {
+              "content": "Readers can understand the overall branching shape of a procedure more quickly from a flow diagram than from rows read one at a time.",
+              "content_digest": "beb9438eb216e54223266b4f592245450812228d69f7a38908e4c260a0aaca01",
+              "position": 5,
+              "uid": "50a71968-7e3f-5b99-b3fa-769af386d0c0"
+            },
+            {
+              "content": "Redrawing a branching flow diagram after a procedural change usually takes longer than updating one row in a table.",
+              "content_digest": "cb0e535e1e58a4dbf42c5f22a3eded19fa0c228c6531b70530b226eeb2dbf24c",
+              "position": 6,
+              "uid": "ae1610f6-a855-56c1-a0fb-fd3207dab615"
+            },
+            {
+              "content": "Reviewers often inspect the proposal’s main visual before reading the procedural explanation in full.",
+              "content_digest": "a609677d56e7297c736ee92c7a45eb4d83824985a780d8ca4df664f1494c5cb2",
+              "position": 7,
+              "uid": "d2825b84-b4a6-58c9-8f8e-9e19c6192a03"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "2c93fc26-63d5-4179-8e8a-8c01960c45ce"
+        },
+        {
+          "context_digest": "b598a4ff3268ef8c6c0d7bc5ff34af370074bcdd30d61bd3623fcdfb167f37d6",
+          "context_name": "task-2/advisor2/safety",
+          "context_uid": "4283d797-6a33-5f39-b7f6-f4dbd3264389",
+          "memories": [
+            {
+              "content": "List whom to notify and in what order if serious discomfort is reported during the study.",
+              "content_digest": "3453feb8597fb15c827f22297d58dc804fdc1d8080b9e93ba35b85a4425092b6",
+              "position": 0,
+              "uid": "ceb095a9-3068-55ea-a06f-d954c121e007"
+            },
+            {
+              "content": "Field staff rely on the pre-defined contact sequence when serious discomfort is reported.",
+              "content_digest": "ba38f8a5c993c810e19b9120f4492c3accf962c8b8fd7642539ac24f363099e0",
+              "position": 1,
+              "uid": "962d7645-02b3-5611-8415-4370794c10d4"
+            },
+            {
+              "content": "Define the thresholds for participant harm, operational disruption, and data anomalies at which deployment and data collection must cease.",
+              "content_digest": "7f7f124d266efd8255c4615ebc7eb375447047ed5a2b96327f28f8f17d048813",
+              "position": 2,
+              "uid": "a3270872-1901-5d24-8ef1-374833599bf9"
+            },
+            {
+              "content": "Establish procedures to restore existing systems and workflow states after suspending field deployment.",
+              "content_digest": "1a5f7636ec45e60df11db8b0d3763345c0bfaf9a92c1e5d581e6b36452c31208",
+              "position": 3,
+              "uid": "f6dd1368-0d90-5f1a-97d0-56594ce8f4b3"
+            },
+            {
+              "content": "The user's stop plan can be judged feasible only when it identifies who has authority to order recovery and who is responsible for carrying it out.",
+              "content_digest": "3fa05bd19fdeeb320a37cfb89ad853a868b64055f7b21eb182798b0119f6620c",
+              "position": 4,
+              "uid": "342e4697-873f-56a8-b4a4-896efe910144"
+            },
+            {
+              "content": "In organizations where error reporting is linked to individual performance evaluations, safety signal records may be separated from research decision logs, potentially breaking the traceability path for the same incident.",
+              "content_digest": "2bf13ff8ab1a778e8a793ede627b28d40798ae40d25c7a6d25eb5e2e79dd8e97",
+              "position": 5,
+              "uid": "6c4e9175-4590-5689-ae2b-678f0eb930b9"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "7a992f7f-b032-45cd-aebe-fdd93efcff54"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate operational domains. The reference frame focuses on choosing, designing, reviewing, and maintaining branching-flow visuals, while the compared frame specifies safety escalation, stopping, recovery, accountability, and incident-traceability provisions for field research.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2c93fc26-63d5-4179-8e8a-8c01960c45ce",
+              "memory_uid": "51fa3fcc-9d5f-52f0-809d-62d7cdd8a865"
+            }
+          ],
+          "reason": "This is a one-sided format-selection policy for representing branching procedures; the compared frame contains no claim addressing that visualization decision.",
+          "status": "RESOLVED",
+          "summary": "Choose a flow diagram over a sequence table when procedural branches produce different outcomes.",
+          "uid": "809ccb0e-9f69-5761-b50d-8c392d55d13e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2c93fc26-63d5-4179-8e8a-8c01960c45ce",
+              "memory_uid": "e686bd4d-3ebd-5e55-ba39-f26971247965"
+            },
+            {
+              "frame_uid": "2c93fc26-63d5-4179-8e8a-8c01960c45ce",
+              "memory_uid": "a6dfe9a7-1df8-561f-8d3e-fc19518beca9"
+            }
+          ],
+          "reason": "These memories state the same one-sided design affordance and presentation principle; the compared frame does not address simultaneous visual comparison of branches.",
+          "status": "RESOLVED",
+          "summary": "A flow diagram should expose alternate branches and their outcomes together in one view.",
+          "uid": "7bdc8714-20e5-509d-823e-bf51a0b63173"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2c93fc26-63d5-4179-8e8a-8c01960c45ce",
+              "memory_uid": "019662a9-6f03-527f-9b6d-be5a2966d9e9"
+            }
+          ],
+          "reason": "This is an independent one-sided distinction about prototype fidelity, with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A prototype’s visual fidelity and functional fidelity can differ.",
+          "uid": "5c1ae0b8-9647-5826-92bd-3d02baf6ef96"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2c93fc26-63d5-4179-8e8a-8c01960c45ce",
+              "memory_uid": "7047a23d-45b3-5d5c-a00b-c12552e9680d"
+            },
+            {
+              "frame_uid": "2c93fc26-63d5-4179-8e8a-8c01960c45ce",
+              "memory_uid": "d2825b84-b4a6-58c9-8f8e-9e19c6192a03"
+            }
+          ],
+          "reason": "These memories restate a one-sided observation about visual-first review behavior; the compared frame does not address review-reading order.",
+          "status": "RESOLVED",
+          "summary": "Reviewers commonly inspect principal visuals and interaction-flow material before reading the full explanation.",
+          "uid": "5fceda8d-a512-5978-96ff-43c720ca7ad4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2c93fc26-63d5-4179-8e8a-8c01960c45ce",
+              "memory_uid": "50a71968-7e3f-5b99-b3fa-769af386d0c0"
+            }
+          ],
+          "reason": "This is a one-sided comparative comprehension benefit, not an operational issue addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Flow diagrams can communicate the overall shape of branching procedures faster than row-by-row tables.",
+          "uid": "396fa8eb-0e2a-5a28-bc96-6e47dcf8d0f4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2c93fc26-63d5-4179-8e8a-8c01960c45ce",
+              "memory_uid": "ae1610f6-a855-56c1-a0fb-fd3207dab615"
+            }
+          ],
+          "reason": "This is an independent one-sided maintenance tradeoff; the compared frame contains no corresponding representation-maintenance claim.",
+          "status": "RESOLVED",
+          "summary": "Updating a branching flow diagram after procedural change is usually slower than changing one table row.",
+          "uid": "3362e31d-334c-54de-8c0e-d273e473b89a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7a992f7f-b032-45cd-aebe-fdd93efcff54",
+              "memory_uid": "ceb095a9-3068-55ea-a06f-d954c121e007"
+            },
+            {
+              "frame_uid": "7a992f7f-b032-45cd-aebe-fdd93efcff54",
+              "memory_uid": "962d7645-02b3-5611-8415-4370794c10d4"
+            }
+          ],
+          "reason": "These memories split one one-sided operational claim between defining the sequence and field staff’s reliance on it; the reference frame does not address safety escalation.",
+          "status": "RESOLVED",
+          "summary": "Serious discomfort requires a predefined notification sequence identifying contacts and order.",
+          "uid": "4ac83cad-c386-5263-aac5-a606ea5c4c50"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7a992f7f-b032-45cd-aebe-fdd93efcff54",
+              "memory_uid": "a3270872-1901-5d24-8ef1-374833599bf9"
+            }
+          ],
+          "reason": "This is an independent one-sided stop-threshold requirement absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Cease-deployment and data-collection thresholds should be defined for participant harm, operational disruption, and data anomalies.",
+          "uid": "a5534e2c-f6f4-54e3-b455-7f9be993983a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7a992f7f-b032-45cd-aebe-fdd93efcff54",
+              "memory_uid": "f6dd1368-0d90-5f1a-97d0-56594ce8f4b3"
+            }
+          ],
+          "reason": "This is an independent one-sided recovery-procedure requirement absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Procedures should restore existing systems and workflow states after field deployment is suspended.",
+          "uid": "1534eec0-b936-5d15-888c-b891ebbf13f5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7a992f7f-b032-45cd-aebe-fdd93efcff54",
+              "memory_uid": "342e4697-873f-56a8-b4a4-896efe910144"
+            }
+          ],
+          "reason": "This is an independent one-sided accountability criterion for recovery, with no matching claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A feasible stop plan identifies both who may order recovery and who must execute it.",
+          "uid": "9fd70855-b3ea-5cce-a4d6-276561088540"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7a992f7f-b032-45cd-aebe-fdd93efcff54",
+              "memory_uid": "6c4e9175-4590-5689-ae2b-678f0eb930b9"
+            }
+          ],
+          "reason": "This is a conditional one-sided organizational traceability risk; the reference frame contains no claim about safety records or research decision logs.",
+          "status": "RESOLVED",
+          "summary": "Linking error reports to individual evaluations can separate safety records from decision logs and break incident traceability.",
+          "uid": "2741ece4-0796-55e2-beba-70a8c3a9418c"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only material addresses discomfort-notification sequences, stop thresholds, system and workflow recovery, recovery authority and responsibility, and a conditional risk to incident traceability.",
+        "differences": "",
+        "reference_only": "Reference-only material addresses flow diagrams for branching procedures, prototype fidelity, reviewers’ visual-first reading habits, faster structural comprehension, and diagram-maintenance cost."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "4798add3-e302-4cf5-be7b-fe78e4bbc48c"
+    },
+    "analysis_digest": "d7c741f9cc74e95751ec5f1b2e2ca3218f5be16a2e18edaa520d913230446d9c",
+    "key": "10e30bc6c88c7ebfb8425cd2feb74e6dba6d6dc73cd1afc7f9b28243b2a1c3a3",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 32.16441579200182,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "10e30bc6c88c7ebfb8425cd2feb74e6dba6d6dc73cd1afc7f9b28243b2a1c3a3",
+  "created_at": "2026-08-13T18:21:35.286015Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/expression",
+  "pair_key": "776255c8eefa4a0aa057cbc8d27d62b7c48e1e21065cd4140511b44908e78bbd",
+  "provider_seconds": 32.16441579200182,
+  "right": "task-2/advisor2/safety",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

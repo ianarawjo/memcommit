@@ -1,0 +1,95 @@
+{
+  "call": {
+    "condition": "MINIMAL_IO_DECISION_ONLY",
+    "contract_valid": false,
+    "elapsed_seconds": 149.94689625001047,
+    "error_type": null,
+    "failure_category": "INVALID_OUTPUT",
+    "normalized_analysis": null,
+    "operation": "compare_contexts_minimal_io_v1",
+    "prompt_chars": 36482,
+    "prompt_digest": "4bf7938087a37d6e29d3ca141b95d5bf55d1f456ca48b34e360ccbceb05d19d2",
+    "provider_run": {
+      "completion_tokens": null,
+      "identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "low",
+        "runtime": "codex-cli"
+      },
+      "operation": "compare_contexts_minimal_io_v1",
+      "prompt_tokens": null,
+      "upstream_model": "gpt-5.6-sol",
+      "upstream_provider": "openai-codex"
+    },
+    "provider_seconds": 149.94673062500078,
+    "raw_response": "{\"a\":[1,1,2,3,4,5,6,7,8,8,8,9,1,1,8,8,8,10,11,12,12,13,14,15,16,17,18,19,20,21,21,22,23,24,25,25,26,27,28,29,30,31,31,30,30,30,30,32,33,33,34,33,17,16,16,35,21,36,21,21,36,37,18,18,38,38,39,40,40,39,41,42,37,43,39,39,39,13,13,44,44,44,44,45,46,46,46,46,46,46,47,48,49,49,12,50,51,52,53,53,54,54,54,55,55,55,56,57,58,58,58,59,60,61,62,63,64,64,65,65,65,66,67,67,67,67,67,67,68,69,70,70,71,72,73,73,73,73,74,74,75,76,76,76,76,76,76,76,76,76],\"b\":[1,1,2,3,4,5,6,7,8,8,9,1,1,10,11,12,12,13,14,19,20,21,22,23,24,25,25,30,31,31,30,32,33,33,34,33,35,21,36,36,37,18,18,38,38,39,40,40,39,41,42,37,43,44,44,46,46,46,46,46,46,46,49,49,50,51,53,53,53,58,59,59,59,60,57,61,67,67,67,67,67,67,67,67,73,73,73,73,73,73,73,76,76,76,76,76,76,76,76,76,8,8,8,8,15,75,18,77,78,78,79,30,30,30,80,80,80,21,21,21,39,39,39,39,39,13,13,44,81,82,83,28,84,84,84,84,49,49,49,85,85,85,85,86,86,86,86,61,61,670000000000],\"k\":[\"S\",\"P\",\"E\",\"E\",\"P\",\"P\",\"P\",\"C\",\"E\",\"E\",\"P\",\"S\",\"S\",\"S\",\"P\",\"P\",\"D\",\"C\",\"E\",\"E\",\"S\",\"E\",\"P\",\"E\",\"E\",\"D\",\"D\",\"S\",\"D\",\"S\",\"S\",\"E\",\"E\",\"S\",\"P\",\"P\",\"E\",\"E\",\"C\",\"E\",\"S\",\"S\",\"E\",\"P\",\"D\",\"S\",\"P\",\"D\",\"P\",\"E\",\"E\",\"D\",\"E\",\"P\",\"P\",\"P\",\"E\",\"P\",\"E\",\"P\",\"P\",\"D\",\"D\",\"D\",\"D\",\"D\",\"C\",\"D\",\"D\",\"D\",\"D\",\"D\",\"P\",\"D\",\"P\",\"E\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\",\"D\"]}",
+    "response_bytes": 1239,
+    "response_chars": 1239,
+    "response_digest": "28589af91fa7640d2ca5424ff8474a0803c805e033c4558199aa993dff600542",
+    "schema_chars": 350,
+    "schema_digest": "b6902ca01ebb36cfb41961fab6d64c9369e5959c5a1ef9260462d0eabb77576b",
+    "validation_error": "Invalid compact b group ID.",
+    "validation_seconds": 0.00013262499123811722
+  },
+  "comparisons": {},
+  "corpus": {
+    "all_content_preserved_in_order": true,
+    "compared_count": 150,
+    "content_sequence_digest": "2d1ec84afa2f73069cdeaf7cd08fc872d7fca2c1d0239d087ae809ee2074515a",
+    "fixture": "task2-advisor1-vs-task2-advisor2",
+    "language": "en",
+    "minimal_payload_chars": 35005,
+    "minimal_payload_digest": "701e90b395303c69d4f55be4f76afe98ea24ab13e93878f5f1b1949d6405d340",
+    "reference_count": 150,
+    "source_count": 300
+  },
+  "experiment": {
+    "calls": 1,
+    "changed_from_compact_ab": [
+      "CONTENT_ONLY_POSITIONAL_INPUT",
+      "ONE_LETTER_KIND_VECTOR",
+      "NO_PROVIDER_NOTES",
+      "NO_PROVIDER_ISSUES"
+    ],
+    "condition": "MINIMAL_IO_DECISION_ONLY",
+    "host_generated_projection": [
+      "status",
+      "relation_uid",
+      "members",
+      "summary",
+      "reason",
+      "overview",
+      "category_reports",
+      "unresolved_review_marker"
+    ],
+    "production_behavior_changed": false,
+    "prompt_version": 1
+  },
+  "kind": "memcommit.semantic-eval.compare-minimal-io-v1",
+  "provider": {
+    "endpoint": null,
+    "model": "gpt-5.6-sol",
+    "model_digest": null,
+    "provider": "codex_chatgpt",
+    "reasoning_effort": "low",
+    "runtime": "codex-cli"
+  },
+  "reference_ledger": {
+    "digest": "db71b006236dd9c15f2c1aa02626e8dd190a54364c6033c59c78f32dc6feaa8e",
+    "kind": "memcommit.semantic-eval.compare-latency-ab-v1",
+    "run_id": "20260810T195758565018Z-2ce209de"
+  },
+  "run_id": "20260811T000749410452Z-fa98e4fc",
+  "schema_version": 1,
+  "started_at": "2026-08-11T00:07:49.410452Z",
+  "status": "INCOMPLETE",
+  "timing": {
+    "campaign_seconds": 149.94689625001047,
+    "provider_connection_seconds": 0.02212266701098997,
+    "provider_seconds": 149.94673062500078,
+    "total_seconds": 149.96901891702146
+  }
+}

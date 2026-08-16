@@ -1,0 +1,379 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:41:34.564174+00:00",
+      "frames": [
+        {
+          "context_digest": "58f58090449931225a941a4219f3fce7ebcf23bbabc0e0aa93a8733d4ba32701",
+          "context_name": "task-3/local/personal-memory/2024/07",
+          "context_uid": "8747b4f6-d17c-5b02-83f4-fc3af73e2da0",
+          "memories": [
+            {
+              "content": "The user updated the utility account for their residence in July 2024.",
+              "content_digest": "89c6a8e8dd7ad799b9ef4cb2b10963ce0b9ad55e713716d9729f903e76c0f71a",
+              "position": 0,
+              "uid": "65a332a2-2707-55f8-b7a6-a7378e6fbb7a"
+            },
+            {
+              "content": "After putting a paper bill in a drawer, the user checked it one day after the payment date.",
+              "content_digest": "474d42322de3190caee3e4feeb831bcb6a7b57e58427667d74be084ee9c64257",
+              "position": 1,
+              "uid": "fb94e1fd-9b3d-567a-81d8-d7a0ee90e04e"
+            },
+            {
+              "content": "In the month after receiving an electronic billing alert, the user paid two days before the deadline.",
+              "content_digest": "c16cf32e0018eb1cdf94e3070036d7fb93b0ccc8adb633a057642ff41284eaa0",
+              "position": 2,
+              "uid": "7d8db31a-c330-5852-9d7c-c9da7f98d899"
+            },
+            {
+              "content": "The user saw a water-inspection notice late and started washing dishes during the scheduled shutoff.",
+              "content_digest": "d5bea20cc35a46502ba919c52bee7519453346789d4bb881c82a9c08e6840cb0",
+              "position": 3,
+              "uid": "008dd110-feb2-5b4b-b602-bb3e23475a95"
+            },
+            {
+              "content": "After transferring a management-office notice to their phone calendar, the user did not miss the inspection time.",
+              "content_digest": "ce2c06404fcb8988b61da98f2ddd58d3db6506ff74aa1c7dfd43f841fa6fb25d",
+              "position": 4,
+              "uid": "a03ed01a-3d15-5eaf-9415-529705fd1245"
+            },
+            {
+              "content": "During a boiler technician's visit, the user had not cleared boxes from the entrance in advance and had to rearrange the passage.",
+              "content_digest": "39f4ca86667c0622dce2b6fee2b04df73131bf9d98e81478f1fa818b5dfe70c2",
+              "position": 5,
+              "uid": "2fb4b0bd-1257-5e50-881a-7f312940e1c5"
+            },
+            {
+              "content": "The user cleared the entrance the day before the next visit so the inspection could begin immediately.",
+              "content_digest": "e99fb029e3ca864e4f293358a85f33d73f4d7d2b9fda7dcd437ffdf183350666",
+              "position": 6,
+              "uid": "d05286e8-f183-5f4a-99d8-3dcca1aeaa09"
+            },
+            {
+              "content": "The building manager expects that a one-day advance visit notice gives a resident enough time to prepare the work area.",
+              "content_digest": "f992e380bfa87fa04c9f7dde8eceee69eb6b0aa3ad79c180d9023dafd7dd2abd",
+              "position": 7,
+              "uid": "44d28aa3-1aa4-5276-b545-86ee2cb17078"
+            },
+            {
+              "content": "Confirm the user's available time before finalizing a service visit to the residence.",
+              "content_digest": "dee4efa145a0f8b25c47a1c6855c02feee2de292e78b2e3790763796981db1e5",
+              "position": 8,
+              "uid": "77f77450-ab10-5469-8e2f-5445060926bc"
+            },
+            {
+              "content": "The local agent can compare payment records with notice times but cannot verify whether a residential service problem was resolved.",
+              "content_digest": "09e052010507ce17344888df5171f58996245cceb9012e160d540f030e7ba98a",
+              "position": 9,
+              "uid": "fd7f98b4-d5b9-5196-ad5e-c4356681ecf4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "d76ba341-914f-4753-ab46-dddf9a4a159d"
+        },
+        {
+          "context_digest": "b727ef7cf1cb7ca0f00ea3598d36577397e092dcb632f55c3eafb942850922d7",
+          "context_name": "task-3/local/personal-memory/2025/04",
+          "context_uid": "720d2021-1ec5-52ab-ace4-a93e02b05ad9",
+          "memories": [
+            {
+              "content": "The user keeps the shared laundry-room access card in an entrance drawer.",
+              "content_digest": "3c98e367c99e0867f1217c891dc5d982c115fd9d1b4bc3957cca6dbb6338203b",
+              "position": 0,
+              "uid": "a1c67646-6a75-504a-9508-d69e1d04b3e5"
+            },
+            {
+              "content": "The user went downstairs 25 minutes after the laundry finished and received a note from another household.",
+              "content_digest": "44968f6f10c0ae2d1dd775eb066564dada6346c6f59bdacf90d687c57e6c1e0f",
+              "position": 1,
+              "uid": "9479e799-95d7-50d2-af62-d1e0914a389b"
+            },
+            {
+              "content": "For the next load, the user set a reminder five minutes before the end and removed the laundry immediately.",
+              "content_digest": "bc77b81f6126e44bbffeb4ae2dfbb641d31a9742b7a196a106ac385321b48958",
+              "position": 2,
+              "uid": "528cb5ea-8c36-5206-beaa-19432250ec4d"
+            },
+            {
+              "content": "The user washed light-colored clothes with new jeans, and color transferred onto white socks.",
+              "content_digest": "ed0f36cf5ebe8f9542ad39ba45fc109634d72f1cb2b266c15dfe6655e3df3add",
+              "position": 3,
+              "uid": "85fb1639-2176-5329-b490-3325ff030db4"
+            },
+            {
+              "content": "The user later washed the new jeans separately, and the color of the other clothes did not change.",
+              "content_digest": "6e47fe1a02ac39064ea9db2d06d8a1f01f80302825bbe412df745401612e4a84",
+              "position": 4,
+              "uid": "431d170a-863f-596d-97c0-0c9634524ee5"
+            },
+            {
+              "content": "On a day the user did not check the dryer filter, the clothes needed another drying cycle.",
+              "content_digest": "8127e9f3ea34724673517f1e260a73acfb70e287a7e7de84e196ad1cb815f5a7",
+              "position": 5,
+              "uid": "4df33adc-cfba-50f2-b141-e2ebed38b81c"
+            },
+            {
+              "content": "On the next use, after emptying the filter, the user finished drying in one cycle.",
+              "content_digest": "932cfb8fc93277783d8990dad62cfd3e1c9a86e39ad1bd019ce00dac632c53d5",
+              "position": 6,
+              "uid": "ba7daae9-938d-55a1-af20-21cd10d395d8"
+            },
+            {
+              "content": "The building manager judges that not leaving finished laundry for a long time is fair to other households.",
+              "content_digest": "5eabe2d3dff252bb250abcde8fe2d528362afb0e73e7628e839715c3e8a3cd56",
+              "position": 7,
+              "uid": "abbf8742-38e3-5810-b222-fe91e3340962"
+            },
+            {
+              "content": "When creating a shared laundry-room reminder, base it on the end time of the machine the user started.",
+              "content_digest": "e00bc6fe09fea6fde6a27817bd6824a141c1ac4a656b9659067b7e1af9881b1f",
+              "position": 8,
+              "uid": "06273d22-0b42-5c55-9d70-eda14084219a"
+            },
+            {
+              "content": "Even if the local agent knows where the card is kept, it cannot know which machines in the shared laundry room are currently available.",
+              "content_digest": "d03f5583c9e4c686307af90ff00ff54e5ac0990e34296b3d241e4f299d15f4b7",
+              "position": 9,
+              "uid": "03ac930e-d745-5c29-8c24-5ced669817f9"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "4a5db209-5d4e-45fa-8a5e-38db18e09825"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate residential routines: the reference concerns utility billing and service visits, while the compared frame concerns shared-laundry use and garment care. Their reminder themes are context-specific and do not govern the same operational decisions, so no cross-frame equivalence, compatibility, scope distinction, or conflict is supported.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d76ba341-914f-4753-ab46-dddf9a4a159d",
+              "memory_uid": "65a332a2-2707-55f8-b7a6-a7378e6fbb7a"
+            }
+          ],
+          "reason": "This is independently useful account-history information found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The utility account for the residence was updated in July 2024.",
+          "uid": "bda725e4-5f71-543c-9e22-ac560abfd2fb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d76ba341-914f-4753-ab46-dddf9a4a159d",
+              "memory_uid": "fb94e1fd-9b3d-567a-81d8-d7a0ee90e04e"
+            },
+            {
+              "frame_uid": "d76ba341-914f-4753-ab46-dddf9a4a159d",
+              "memory_uid": "7d8db31a-c330-5852-9d7c-c9da7f98d899"
+            }
+          ],
+          "reason": "These reference memories jointly express the context-specific effect of bill-notice handling on payment timing; the compared frame contains no claim about utility payments.",
+          "status": "RESOLVED",
+          "summary": "A paper bill was checked after its payment date, whereas an electronic alert was followed by payment before the deadline.",
+          "uid": "99a3ca68-9e68-5494-859b-888160bae9c9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d76ba341-914f-4753-ab46-dddf9a4a159d",
+              "memory_uid": "008dd110-feb2-5b4b-b602-bb3e23475a95"
+            },
+            {
+              "frame_uid": "d76ba341-914f-4753-ab46-dddf9a4a159d",
+              "memory_uid": "a03ed01a-3d15-5eaf-9415-529705fd1245"
+            }
+          ],
+          "reason": "These reference memories split one claim about managing residential inspection notices; laundry reminders do not govern inspection attendance or shutoff preparation.",
+          "status": "RESOLVED",
+          "summary": "Late notice awareness disrupted preparation for one water inspection, while transferring a later notice to a phone calendar prevented missing the inspection time.",
+          "uid": "d61435ce-5965-571e-b816-1fcb07e80d4a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d76ba341-914f-4753-ab46-dddf9a4a159d",
+              "memory_uid": "2fb4b0bd-1257-5e50-881a-7f312940e1c5"
+            },
+            {
+              "frame_uid": "d76ba341-914f-4753-ab46-dddf9a4a159d",
+              "memory_uid": "d05286e8-f183-5f4a-99d8-3dcca1aeaa09"
+            }
+          ],
+          "reason": "These memories jointly describe work-area preparation for residential service visits, which has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Failure to clear the entrance delayed access during one technician visit, while clearing it before the next visit allowed the inspection to start immediately.",
+          "uid": "8e42bdb9-9072-5ffe-8af4-1e10d669842c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d76ba341-914f-4753-ab46-dddf9a4a159d",
+              "memory_uid": "44d28aa3-1aa4-5276-b545-86ee2cb17078"
+            }
+          ],
+          "reason": "This one-sided expectation concerns advance notice and visit preparation, not shared-laundry fairness or timing.",
+          "status": "RESOLVED",
+          "summary": "The building manager considers one day of advance notice sufficient for a resident to prepare a service work area.",
+          "uid": "171c37cf-4a57-5dad-9429-ef779d651eec"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d76ba341-914f-4753-ab46-dddf9a4a159d",
+              "memory_uid": "77f77450-ab10-5469-8e2f-5445060926bc"
+            }
+          ],
+          "reason": "This is an independently useful scheduling instruction present only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s availability should be confirmed before a residential service visit is finalized.",
+          "uid": "95522ae7-8132-576a-aa91-2bb0b94d7b11"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d76ba341-914f-4753-ab46-dddf9a4a159d",
+              "memory_uid": "fd7f98b4-d5b9-5196-ad5e-c4356681ecf4"
+            }
+          ],
+          "reason": "This capability boundary concerns utility records and service-resolution verification and is not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The local agent can compare payment and notice timing but cannot verify whether a residential service problem was resolved.",
+          "uid": "7f2a3232-c414-588b-9d1f-785a5e9b16eb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4a5db209-5d4e-45fa-8a5e-38db18e09825",
+              "memory_uid": "a1c67646-6a75-504a-9508-d69e1d04b3e5"
+            }
+          ],
+          "reason": "This is independently useful location information found only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The shared laundry-room access card is kept in an entrance drawer.",
+          "uid": "21b52a56-e302-57af-85c2-f1b119b76a80"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4a5db209-5d4e-45fa-8a5e-38db18e09825",
+              "memory_uid": "9479e799-95d7-50d2-af62-d1e0914a389b"
+            },
+            {
+              "frame_uid": "4a5db209-5d4e-45fa-8a5e-38db18e09825",
+              "memory_uid": "528cb5ea-8c36-5206-beaa-19432250ec4d"
+            },
+            {
+              "frame_uid": "4a5db209-5d4e-45fa-8a5e-38db18e09825",
+              "memory_uid": "abbf8742-38e3-5810-b222-fe91e3340962"
+            },
+            {
+              "frame_uid": "4a5db209-5d4e-45fa-8a5e-38db18e09825",
+              "memory_uid": "06273d22-0b42-5c55-9d70-eda14084219a"
+            }
+          ],
+          "reason": "These compared memories jointly establish a shared-laundry timing practice, its consequence, its reminder rule, and its fairness basis; reference reminders concern different operational events.",
+          "status": "RESOLVED",
+          "summary": "Delayed collection of finished laundry inconvenienced another household, while an end-time-based reminder enabled immediate removal consistent with the manager’s fairness judgment.",
+          "uid": "3e056072-7fd8-5fed-818b-dc285de953fe"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4a5db209-5d4e-45fa-8a5e-38db18e09825",
+              "memory_uid": "85fb1639-2176-5329-b490-3325ff030db4"
+            },
+            {
+              "frame_uid": "4a5db209-5d4e-45fa-8a5e-38db18e09825",
+              "memory_uid": "431d170a-863f-596d-97c0-0c9634524ee5"
+            }
+          ],
+          "reason": "These compared memories split one garment-sorting claim with no reference-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "Washing new jeans with light clothes caused color transfer, while washing the jeans separately avoided further color changes.",
+          "uid": "3f3e2aac-1d89-5dd0-aaf2-ed5f56af9a55"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4a5db209-5d4e-45fa-8a5e-38db18e09825",
+              "memory_uid": "4df33adc-cfba-50f2-b141-e2ebed38b81c"
+            },
+            {
+              "frame_uid": "4a5db209-5d4e-45fa-8a5e-38db18e09825",
+              "memory_uid": "ba7daae9-938d-55a1-af20-21cd10d395d8"
+            }
+          ],
+          "reason": "These compared memories jointly describe the effect of filter maintenance, which is absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Skipping the dryer-filter check required another drying cycle, while emptying the filter allowed drying to finish in one cycle.",
+          "uid": "5a7756a6-1841-527d-9ae6-57472ddc716a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4a5db209-5d4e-45fa-8a5e-38db18e09825",
+              "memory_uid": "03ac930e-d745-5c29-8c24-5ced669817f9"
+            }
+          ],
+          "reason": "This capability boundary concerns live laundry-machine availability and is not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Knowing where the laundry card is kept does not enable the local agent to know which shared-room machines are currently available.",
+          "uid": "d34771ae-99f0-52e5-bad2-33a9646adcac"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame records card storage, timely laundry removal and reminders, color-safe washing, dryer-filter effects, shared-room fairness, and limits on knowing machine availability.",
+        "differences": "",
+        "reference_only": "The reference records a utility-account update, billing-alert outcomes, inspection-notice handling, work-area preparation, visit scheduling, a manager’s preparation expectation, and limits on verifying service resolution."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "47445907-dfee-451c-9f4d-5515f7412599"
+    },
+    "analysis_digest": "13472af4b8daf96a9d247e1783121fd573131490651c26dc0470a62f11e7155d",
+    "key": "f3ece9662fa15d90ac8736b6bf670f91b2ae0554fa87f7bea12f0a0dd0005351",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 38.62876183299886,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "f3ece9662fa15d90ac8736b6bf670f91b2ae0554fa87f7bea12f0a0dd0005351",
+  "created_at": "2026-08-13T18:42:13.192529Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/07",
+  "pair_key": "d88e7bedcd45de85249e44000933ed9f372e3155927671637e3187840d8ec444",
+  "provider_seconds": 38.62876183299886,
+  "right": "task-3/local/personal-memory/2025/04",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

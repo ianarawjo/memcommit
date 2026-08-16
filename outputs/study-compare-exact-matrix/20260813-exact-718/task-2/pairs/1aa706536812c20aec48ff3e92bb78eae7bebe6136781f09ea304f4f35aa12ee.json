@@ -1,0 +1,332 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:25:26.374767+00:00",
+      "frames": [
+        {
+          "context_digest": "3dd1208c3f947a57bc5f1d490a28c999913d43cad775b2b01e50c6059d6b660e",
+          "context_name": "task-2/advisor1/safety",
+          "context_uid": "cd6c1fab-786a-52ea-9437-9a4d209ba419",
+          "memories": [
+            {
+              "content": "Specify the order and recipients for reporting serious discomfort during the study.",
+              "content_digest": "1de38a3ec5fc3267ebeb35482a458d4aaf50d2aea44c6dba334f184e50ddddd2",
+              "position": 0,
+              "uid": "9d6f5228-d182-571a-83d2-6a67becb7736"
+            },
+            {
+              "content": "Field staff rely on a pre-defined contact sequence when serious discomfort is reported.",
+              "content_digest": "ed3a3b19d92a50c7dd324981b702bac31e0130fda38fe37150e500481ed11d84",
+              "position": 1,
+              "uid": "00ed485d-66c2-59ad-9c5b-9ae445412690"
+            },
+            {
+              "content": "Establish criteria for halting the use of a design alternative if recurring severe errors appear during formative evaluation.",
+              "content_digest": "dcca56df756b89f89a0a9dbf2bf45aee6480392b368c9cf3402223d3084b801b",
+              "position": 2,
+              "uid": "9c6e1561-f671-52cb-aa67-245cc4987ad4"
+            },
+            {
+              "content": "Do not include a design alternative halted for safety reasons in subsequent evaluation iterations without modification.",
+              "content_digest": "01668098161666622f4d7ed8298e3e63a06fa9b10a4cfd53b200d820f96f5c50",
+              "position": 3,
+              "uid": "2381ecf7-2b11-583d-91d9-0a5cfc279ba1"
+            },
+            {
+              "content": "Even in controlled environments, delayed prototype recovery procedures increase session interruption time and alter data collection conditions for the same task.",
+              "content_digest": "fd0f364ef66cfa7be937779ed4ce3ffb1a406bc227d09c26b288a751c5e0d427",
+              "position": 4,
+              "uid": "c5ce1b00-36d9-5cdd-a318-93b88ca0e322"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "55dd4e67-0f93-4cc8-9ee6-f7658ebca6e1"
+        },
+        {
+          "context_digest": "7842b257aa1d32e6e598b019791827a580a1864e19e05d9101413b11d5b0227d",
+          "context_name": "task-2/advisor2/style",
+          "context_uid": "f0ea0447-bfe6-503c-89da-e90f24af6e2d",
+          "memories": [
+            {
+              "content": "Use an em dash only for a deliberate interruption or sharp contrast; otherwise split the sentence or choose ordinary punctuation.",
+              "content_digest": "3c37a896774ebccbec1e4bb3ad4a4e61ece1bb4ae246226c93b1d78c651bee7b",
+              "position": 0,
+              "uid": "9bd2a9da-9720-5001-b958-f7a2a2658f87"
+            },
+            {
+              "content": "In procedural passages, begin each sentence with the action, condition, or output instead of repeating “we” so the steps remain easy to follow and reuse.",
+              "content_digest": "c61f6b8ae3612497403f306de2cbe4e6a25db285109e89f74d61439abf5fae30",
+              "position": 1,
+              "uid": "e3e20261-e03c-52fb-be9e-04f5f9b1294d"
+            },
+            {
+              "content": "Write system behaviors confirmed in the actual usage environment as observed states.",
+              "content_digest": "972e1f5ba9188f1a423c2b47782e1a3938749419e8c170fabc97e6dd4f86cab2",
+              "position": 2,
+              "uid": "8d8d0e8d-dad1-50b5-9438-049052748a6a"
+            },
+            {
+              "content": "Write system behaviors not yet confirmed in the field as conditional plans.",
+              "content_digest": "9b7f3fffb87af8004e9645b6494bd2b990a1f1bfb054ca0efecea2bfb74d850d",
+              "position": 3,
+              "uid": "8c74ba87-822b-5ce2-9a3a-3adc02ab9744"
+            },
+            {
+              "content": "Readers can reconstruct a sequence more accurately when each sentence begins with the action or condition rather than the author.",
+              "content_digest": "e6748d23d892cb074ac5259f3c733727746640973a5b62c0ed1b7c6a684e9db8",
+              "position": 4,
+              "uid": "1f29de31-5429-5dfc-ab27-01779fa16704"
+            },
+            {
+              "content": "Do not mechanically split connected thoughts into separate short sentences when doing so destroys the intended reading rhythm.",
+              "content_digest": "754be36b29f7b647390c9308fb7a1cfd9e3228ab0f875c8d53e01febbbb3fd8c",
+              "position": 5,
+              "uid": "1d181223-f750-57d2-97a5-b79f276a589f"
+            },
+            {
+              "content": "Preserve a longer sentence when its clauses form one continuous movement that is easier to follow together than apart.",
+              "content_digest": "074e374f77a4fa6f559e3d69746ab3c706d2b1f3d2e4b98a21e8d1e4d59ef087",
+              "position": 6,
+              "uid": "a5ce5f9f-8852-5080-ae35-21abcf4a0973"
+            },
+            {
+              "content": "The user understands that short sentences are easier to scan but feels that uniformly segmented prose loses its reading rhythm.",
+              "content_digest": "acf7ca20f09995c87c51434dc2ff489efc886ada5b2282dc4bc4014befd8fdc0",
+              "position": 7,
+              "uid": "888ce8af-a36e-5e74-9a0c-604aac48d3b7"
+            },
+            {
+              "content": "Write procedural sentences so their opening phrase can be reused as a checklist item without changing the step's meaning.",
+              "content_digest": "7fd5b55fc09e74df05628f1c61bd543b39b906847b86e7f09337a67b47553156",
+              "position": 8,
+              "uid": "ddf40413-3274-5662-ba5e-d6cae2a1e546"
+            },
+            {
+              "content": "The user should choose “I” as an individual author or “we” for a named team and should not mix them when describing the same responsible party.",
+              "content_digest": "951763104930e99be0182b59dbaa6d7d7a20fd23fe968e39a15bd0798a1bd1b7",
+              "position": 9,
+              "uid": "6b7aaddf-5bbd-5015-811d-9f4d7a4b4ad1"
+            },
+            {
+              "content": "Action-first procedural sentences can be reordered or copied into a checklist more easily because their subject is the step rather than the proposal author.",
+              "content_digest": "397e3c0b9262e13d94969669930081ac76d4967adec4c5fd1f681869b613bc36",
+              "position": 10,
+              "uid": "89c2ce30-d6aa-5762-bf17-c697caac68e4"
+            },
+            {
+              "content": "The user can explain whether an em dash marks an intentional interruption or contrast rather than using it decoratively.",
+              "content_digest": "ec27bb0d2ba0656602348660944cb483789dfaec189d6e32ad6145c8e17f81b2",
+              "position": 11,
+              "uid": "9f1b647a-bd2b-50df-8141-5b8c142c0fa5"
+            },
+            {
+              "content": "An em dash creates a stronger interruption than a comma and can make a deliberate contrast easier to hear in the sentence.",
+              "content_digest": "aa3c3cdb31d26aeeb33b047a22860bf1dbe0819e9cc93f03da112b04367b844e",
+              "position": 12,
+              "uid": "49a42872-adcc-5bf8-9029-1d134cac6267"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "2a67f5d4-d715-459f-875b-f06a8172ce47"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate concerns: the reference covers study safety procedures and prototype recovery effects, while the compared frame covers prose style, procedural sentence structure, evidentiary phrasing, punctuation, rhythm, and authorial voice. No claims govern the same operational decision.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "55dd4e67-0f93-4cc8-9ee6-f7658ebca6e1",
+              "memory_uid": "9d6f5228-d182-571a-83d2-6a67becb7736"
+            },
+            {
+              "frame_uid": "55dd4e67-0f93-4cc8-9ee6-f7658ebca6e1",
+              "memory_uid": "00ed485d-66c2-59ad-9c5b-9ae445412690"
+            }
+          ],
+          "reason": "These statements express complementary parts of one one-sided escalation procedure: defining the contact sequence and relying on it in the field.",
+          "status": "RESOLVED",
+          "summary": "Serious discomfort during a study is handled through a predefined reporting sequence with specified order and recipients.",
+          "uid": "a9e2fc5c-4674-5044-92ad-e232012f106a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "55dd4e67-0f93-4cc8-9ee6-f7658ebca6e1",
+              "memory_uid": "9c6e1561-f671-52cb-aa67-245cc4987ad4"
+            }
+          ],
+          "reason": "This independently useful safety rule appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Formative evaluation needs criteria for halting a design alternative when severe errors recur.",
+          "uid": "6b507206-e763-5d9d-89c1-edd3759d07cb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "55dd4e67-0f93-4cc8-9ee6-f7658ebca6e1",
+              "memory_uid": "2381ecf7-2b11-583d-91d9-0a5cfc279ba1"
+            }
+          ],
+          "reason": "This independently useful rule governs subsequent reuse rather than the initial halting decision and appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A design alternative halted for safety reasons must be modified before entering later evaluation iterations.",
+          "uid": "9a70a99c-eadb-59cd-96ce-e79ec5837343"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "55dd4e67-0f93-4cc8-9ee6-f7658ebca6e1",
+              "memory_uid": "c5ce1b00-36d9-5cdd-a318-93b88ca0e322"
+            }
+          ],
+          "reason": "This independently useful operational observation appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Delayed prototype recovery increases interruption time and changes data-collection conditions even in controlled environments.",
+          "uid": "e101a3e0-a19f-5baf-ab3f-de3b2021d1f9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2a67f5d4-d715-459f-875b-f06a8172ce47",
+              "memory_uid": "9bd2a9da-9720-5001-b958-f7a2a2658f87"
+            },
+            {
+              "frame_uid": "2a67f5d4-d715-459f-875b-f06a8172ce47",
+              "memory_uid": "9f1b647a-bd2b-50df-8141-5b8c142c0fa5"
+            },
+            {
+              "frame_uid": "2a67f5d4-d715-459f-875b-f06a8172ce47",
+              "memory_uid": "49a42872-adcc-5bf8-9029-1d134cac6267"
+            }
+          ],
+          "reason": "These statements provide the rule, semantic rationale, and user-facing test for one one-sided punctuation policy.",
+          "status": "RESOLVED",
+          "summary": "Em dashes should mark explainable, deliberate interruptions or sharp contrasts, reflecting their stronger disruptive effect than commas.",
+          "uid": "ec7d8401-f062-54c5-86c8-c2f2c9cad84d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2a67f5d4-d715-459f-875b-f06a8172ce47",
+              "memory_uid": "e3e20261-e03c-52fb-be9e-04f5f9b1294d"
+            },
+            {
+              "frame_uid": "2a67f5d4-d715-459f-875b-f06a8172ce47",
+              "memory_uid": "1f29de31-5429-5dfc-ab27-01779fa16704"
+            },
+            {
+              "frame_uid": "2a67f5d4-d715-459f-875b-f06a8172ce47",
+              "memory_uid": "ddf40413-3274-5662-ba5e-d6cae2a1e546"
+            },
+            {
+              "frame_uid": "2a67f5d4-d715-459f-875b-f06a8172ce47",
+              "memory_uid": "89c2ce30-d6aa-5762-bf17-c697caac68e4"
+            }
+          ],
+          "reason": "These statements restate and elaborate one one-sided action-first procedural-writing policy and its reuse benefits.",
+          "status": "RESOLVED",
+          "summary": "Procedural sentences should begin with actions, conditions, or outputs so sequences remain clear and steps can be reused, reordered, or copied into checklists.",
+          "uid": "41efe5de-a690-522f-912e-ea9e0b0047e4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2a67f5d4-d715-459f-875b-f06a8172ce47",
+              "memory_uid": "8d8d0e8d-dad1-50b5-9438-049052748a6a"
+            },
+            {
+              "frame_uid": "2a67f5d4-d715-459f-875b-f06a8172ce47",
+              "memory_uid": "8c74ba87-822b-5ce2-9a3a-3adc02ab9744"
+            }
+          ],
+          "reason": "These statements split one one-sided evidentiary-writing policy according to explicit confirmation status.",
+          "status": "RESOLVED",
+          "summary": "System behavior should be written as an observed state when confirmed in actual use and as a conditional plan when not yet field-confirmed.",
+          "uid": "9fbb1bb9-2776-5c1e-bf32-77e77406c9f8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2a67f5d4-d715-459f-875b-f06a8172ce47",
+              "memory_uid": "1d181223-f750-57d2-97a5-b79f276a589f"
+            },
+            {
+              "frame_uid": "2a67f5d4-d715-459f-875b-f06a8172ce47",
+              "memory_uid": "a5ce5f9f-8852-5080-ae35-21abcf4a0973"
+            },
+            {
+              "frame_uid": "2a67f5d4-d715-459f-875b-f06a8172ce47",
+              "memory_uid": "888ce8af-a36e-5e74-9a0c-604aac48d3b7"
+            }
+          ],
+          "reason": "These statements express the rule, condition, and motivating preference behind one one-sided sentence-rhythm policy.",
+          "status": "RESOLVED",
+          "summary": "Connected clauses should remain together when segmentation would damage a continuous, readable rhythm, despite the scanability of short sentences.",
+          "uid": "0dea5fba-7a0d-5b96-b8dc-0d757c984c3f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2a67f5d4-d715-459f-875b-f06a8172ce47",
+              "memory_uid": "6b7aaddf-5bbd-5015-811d-9f4d7a4b4ad1"
+            }
+          ],
+          "reason": "This independently useful authorial-voice rule appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Descriptions of one responsible party should consistently use “I” for an individual or “we” for a named team.",
+          "uid": "3a927b78-7b83-5a06-bcae-f606175d308e"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame sets writing guidance for em dashes, action-first procedures, observed versus conditional behaviors, sentence rhythm, checklist reuse, and consistent authorial pronouns.",
+        "differences": "",
+        "reference_only": "The reference specifies serious-discomfort escalation, safety-based stopping and later reuse restrictions, and the effect of delayed prototype recovery on sessions and data conditions."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "dd91a455-3cb6-4902-b1b4-da1ba01c907c"
+    },
+    "analysis_digest": "6f681c35036bde94cee5e3a87174721c4fd5f5ff82eedc3b8b02e49ddfe81830",
+    "key": "cce4a1247b7af7802e47d808122b7ae853d6367e4a329450b2289059337c7017",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 52.371245624999574,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "cce4a1247b7af7802e47d808122b7ae853d6367e4a329450b2289059337c7017",
+  "created_at": "2026-08-13T18:26:18.745718Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/safety",
+  "pair_key": "1aa706536812c20aec48ff3e92bb78eae7bebe6136781f09ea304f4f35aa12ee",
+  "provider_seconds": 52.371245624999574,
+  "right": "task-2/advisor2/style",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

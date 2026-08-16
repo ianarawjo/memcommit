@@ -1,0 +1,397 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:50:47.288584+00:00",
+      "frames": [
+        {
+          "context_digest": "b727ef7cf1cb7ca0f00ea3598d36577397e092dcb632f55c3eafb942850922d7",
+          "context_name": "task-3/local/personal-memory/2025/04",
+          "context_uid": "720d2021-1ec5-52ab-ace4-a93e02b05ad9",
+          "memories": [
+            {
+              "content": "The user keeps the shared laundry-room access card in an entrance drawer.",
+              "content_digest": "3c98e367c99e0867f1217c891dc5d982c115fd9d1b4bc3957cca6dbb6338203b",
+              "position": 0,
+              "uid": "a1c67646-6a75-504a-9508-d69e1d04b3e5"
+            },
+            {
+              "content": "The user went downstairs 25 minutes after the laundry finished and received a note from another household.",
+              "content_digest": "44968f6f10c0ae2d1dd775eb066564dada6346c6f59bdacf90d687c57e6c1e0f",
+              "position": 1,
+              "uid": "9479e799-95d7-50d2-af62-d1e0914a389b"
+            },
+            {
+              "content": "For the next load, the user set a reminder five minutes before the end and removed the laundry immediately.",
+              "content_digest": "bc77b81f6126e44bbffeb4ae2dfbb641d31a9742b7a196a106ac385321b48958",
+              "position": 2,
+              "uid": "528cb5ea-8c36-5206-beaa-19432250ec4d"
+            },
+            {
+              "content": "The user washed light-colored clothes with new jeans, and color transferred onto white socks.",
+              "content_digest": "ed0f36cf5ebe8f9542ad39ba45fc109634d72f1cb2b266c15dfe6655e3df3add",
+              "position": 3,
+              "uid": "85fb1639-2176-5329-b490-3325ff030db4"
+            },
+            {
+              "content": "The user later washed the new jeans separately, and the color of the other clothes did not change.",
+              "content_digest": "6e47fe1a02ac39064ea9db2d06d8a1f01f80302825bbe412df745401612e4a84",
+              "position": 4,
+              "uid": "431d170a-863f-596d-97c0-0c9634524ee5"
+            },
+            {
+              "content": "On a day the user did not check the dryer filter, the clothes needed another drying cycle.",
+              "content_digest": "8127e9f3ea34724673517f1e260a73acfb70e287a7e7de84e196ad1cb815f5a7",
+              "position": 5,
+              "uid": "4df33adc-cfba-50f2-b141-e2ebed38b81c"
+            },
+            {
+              "content": "On the next use, after emptying the filter, the user finished drying in one cycle.",
+              "content_digest": "932cfb8fc93277783d8990dad62cfd3e1c9a86e39ad1bd019ce00dac632c53d5",
+              "position": 6,
+              "uid": "ba7daae9-938d-55a1-af20-21cd10d395d8"
+            },
+            {
+              "content": "The building manager judges that not leaving finished laundry for a long time is fair to other households.",
+              "content_digest": "5eabe2d3dff252bb250abcde8fe2d528362afb0e73e7628e839715c3e8a3cd56",
+              "position": 7,
+              "uid": "abbf8742-38e3-5810-b222-fe91e3340962"
+            },
+            {
+              "content": "When creating a shared laundry-room reminder, base it on the end time of the machine the user started.",
+              "content_digest": "e00bc6fe09fea6fde6a27817bd6824a141c1ac4a656b9659067b7e1af9881b1f",
+              "position": 8,
+              "uid": "06273d22-0b42-5c55-9d70-eda14084219a"
+            },
+            {
+              "content": "Even if the local agent knows where the card is kept, it cannot know which machines in the shared laundry room are currently available.",
+              "content_digest": "d03f5583c9e4c686307af90ff00ff54e5ac0990e34296b3d241e4f299d15f4b7",
+              "position": 9,
+              "uid": "03ac930e-d745-5c29-8c24-5ced669817f9"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "0900b053-5499-43e7-a16f-ec27d47649ab"
+        },
+        {
+          "context_digest": "d28031209c5edc768a592166e26351dd5bce0c7568d379fcaceab173450041c8",
+          "context_name": "task-3/local/personal-memory/2026/02",
+          "context_uid": "7ffcbc10-1703-54b0-9545-99742b51d333",
+          "memories": [
+            {
+              "content": "The user keeps basic repair tools in a box beneath the sink.",
+              "content_digest": "c2a23bace63735c502081b19682a8ceb3e37156b9aadd6f7739e2005c20469d6",
+              "position": 0,
+              "uid": "7d3daf76-a21e-5117-a534-6175ab2d2861"
+            },
+            {
+              "content": "On a day the faucet leaked, the user placed only a towel beneath it, and the floor became wet as well.",
+              "content_digest": "ad6baa7e1848e4e61bdaf22bc5c8665122330b5c70c8ae192216abbba17c6134",
+              "position": 1,
+              "uid": "70a6d9f5-180f-5174-b247-690e10baa23e"
+            },
+            {
+              "content": "After sending a photo to building management, the user finalized the time for a repair visit.",
+              "content_digest": "82b36c7a95e51a0dfa32768c2a437d509b75c0f93bc51a99a636f2c9739a20da",
+              "position": 2,
+              "uid": "9fcd922c-147c-517b-82b3-180fdfb13f33"
+            },
+            {
+              "content": "Before the technician's visit, the user emptied the area beneath the sink so work could begin immediately.",
+              "content_digest": "dbc3b48e5bc4b406dc17067dd93d92e845e3706f47c8706f9a5d5ef17bf64617",
+              "position": 3,
+              "uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5"
+            },
+            {
+              "content": "On a day the user wrote the visit time only in the calendar and turned off the reminder, they heard the doorbell late.",
+              "content_digest": "95fab6bcab815dd8bdd5fecb867f84c6d2f1a901771603b1dbf197cde3c1d19d",
+              "position": 4,
+              "uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65"
+            },
+            {
+              "content": "For the next visit, the user enabled a reminder 30 minutes beforehand and answered immediately at the entrance.",
+              "content_digest": "818783ff21b2d369935b9994c17b28f93f84ea7558dab9f2de20d0aad21f86a3",
+              "position": 5,
+              "uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a"
+            },
+            {
+              "content": "After the repair, the user called their maternal aunt to confirm that the spare key entrusted to her was still there.",
+              "content_digest": "ac01b9816dda2d6bf16f22b41157120b7ffdd75d19638f6313a88e1ce6e7a1f1",
+              "position": 6,
+              "uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441"
+            },
+            {
+              "content": "The user's maternal aunt considers it unsafe to hand the spare key to a repair technician without the user's explicit request.",
+              "content_digest": "f7c7c0306c81cc6de9f02aa1aed7d411db3f29757d024e7d5a1679b1ff308948",
+              "position": 7,
+              "uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd"
+            },
+            {
+              "content": "Obtain the user's reconfirmation before scheduling an external worker to enter the residential unit.",
+              "content_digest": "34382e40f4907bea82728787fdeb150e299d46a0079ae2847d4eda6d6d892d22",
+              "position": 8,
+              "uid": "4716a67b-8602-564c-9e89-85cd4ee158f9"
+            },
+            {
+              "content": "A multi-unit residential building's repair schedule may change because of emergency work or parts availability.",
+              "content_digest": "d701fdd1ffbf17ff0890c583b5bf39849e3c6e3cc296fde7e00d3d1ecc0ef196",
+              "position": 9,
+              "uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "a990b464-635b-488e-8917-7fe284a522bc"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "Both frames show event-timed reminders improving prompt action, with different lead times for laundry completion and repair visits. Otherwise, each frame contributes independent operational knowledge: laundry access, handling, and machine use on one side, and leak response, repair coordination, and residential access safeguards on the other.",
+      "relations": [
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "0900b053-5499-43e7-a16f-ec27d47649ab",
+              "memory_uid": "9479e799-95d7-50d2-af62-d1e0914a389b"
+            },
+            {
+              "frame_uid": "0900b053-5499-43e7-a16f-ec27d47649ab",
+              "memory_uid": "528cb5ea-8c36-5206-beaa-19432250ec4d"
+            },
+            {
+              "frame_uid": "0900b053-5499-43e7-a16f-ec27d47649ab",
+              "memory_uid": "06273d22-0b42-5c55-9d70-eda14084219a"
+            },
+            {
+              "frame_uid": "a990b464-635b-488e-8917-7fe284a522bc",
+              "memory_uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65"
+            },
+            {
+              "frame_uid": "a990b464-635b-488e-8917-7fe284a522bc",
+              "memory_uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a"
+            }
+          ],
+          "reason": "The operational pattern is shared, while the explicit event type explains why the reminder basis and lead time differ.",
+          "status": "RESOLVED",
+          "summary": "Event-timed reminders improve prompt responses, with a five-minute lead for laundry completion and a 30-minute lead for repair visits.",
+          "uid": "43e6b2c4-467b-5aba-b4ea-d2ecd978816e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0900b053-5499-43e7-a16f-ec27d47649ab",
+              "memory_uid": "a1c67646-6a75-504a-9508-d69e1d04b3e5"
+            }
+          ],
+          "reason": "This is independently useful laundry-access information with no corresponding repair-frame claim.",
+          "status": "RESOLVED",
+          "summary": "The shared laundry-room access card is kept in an entrance drawer.",
+          "uid": "8371b8d4-eee2-5dce-b291-3d41026c5e41"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0900b053-5499-43e7-a16f-ec27d47649ab",
+              "memory_uid": "85fb1639-2176-5329-b490-3325ff030db4"
+            },
+            {
+              "frame_uid": "0900b053-5499-43e7-a16f-ec27d47649ab",
+              "memory_uid": "431d170a-863f-596d-97c0-0c9634524ee5"
+            }
+          ],
+          "reason": "The two laundry experiences jointly support one one-sided clothes-sorting claim absent from the repair frame.",
+          "status": "RESOLVED",
+          "summary": "Washing new jeans separately prevents color transfer to light-colored clothes.",
+          "uid": "ba9a0888-7885-55d4-9f62-2fcaddbf60d3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0900b053-5499-43e7-a16f-ec27d47649ab",
+              "memory_uid": "4df33adc-cfba-50f2-b141-e2ebed38b81c"
+            },
+            {
+              "frame_uid": "0900b053-5499-43e7-a16f-ec27d47649ab",
+              "memory_uid": "ba7daae9-938d-55a1-af20-21cd10d395d8"
+            }
+          ],
+          "reason": "The contrasting dryer experiences jointly support one one-sided machine-use claim absent from the repair frame.",
+          "status": "RESOLVED",
+          "summary": "Emptying the dryer filter can allow clothes to finish drying in one cycle.",
+          "uid": "3f8dfc03-a38b-5222-a98d-1184babef41a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0900b053-5499-43e7-a16f-ec27d47649ab",
+              "memory_uid": "abbf8742-38e3-5810-b222-fe91e3340962"
+            }
+          ],
+          "reason": "This building-manager judgment is an independent shared-laundry norm with no counterpart in the repair frame.",
+          "status": "RESOLVED",
+          "summary": "Avoiding long delays in removing finished laundry is fair to other households.",
+          "uid": "a29f15ed-56dd-5b71-ab9d-1718e8fc7002"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0900b053-5499-43e7-a16f-ec27d47649ab",
+              "memory_uid": "03ac930e-d745-5c29-8c24-5ced669817f9"
+            }
+          ],
+          "reason": "This is an independent limitation on local knowledge with no corresponding repair-frame claim.",
+          "status": "RESOLVED",
+          "summary": "Knowing the access-card location does not reveal current shared-machine availability.",
+          "uid": "1f17997c-03db-5412-92e7-52a08be05bf1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a990b464-635b-488e-8917-7fe284a522bc",
+              "memory_uid": "7d3daf76-a21e-5117-a534-6175ab2d2861"
+            }
+          ],
+          "reason": "This is independently useful repair-tool location information with no counterpart in the laundry frame.",
+          "status": "RESOLVED",
+          "summary": "Basic repair tools are stored beneath the sink.",
+          "uid": "9d23ba7e-1a42-5879-870a-f4882308d634"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a990b464-635b-488e-8917-7fe284a522bc",
+              "memory_uid": "70a6d9f5-180f-5174-b247-690e10baa23e"
+            }
+          ],
+          "reason": "This is an independent leak-containment outcome absent from the laundry frame.",
+          "status": "RESOLVED",
+          "summary": "Placing only a towel beneath a leaking faucet did not prevent the floor from becoming wet.",
+          "uid": "8609a1c7-71cf-596e-9544-c947252196f2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a990b464-635b-488e-8917-7fe284a522bc",
+              "memory_uid": "9fcd922c-147c-517b-82b3-180fdfb13f33"
+            }
+          ],
+          "reason": "This is an independent repair-coordination sequence absent from the laundry frame.",
+          "status": "RESOLVED",
+          "summary": "Sending building management a photo preceded finalizing a repair-visit time.",
+          "uid": "b819eda1-4890-5237-9d25-8deb0654e6b8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a990b464-635b-488e-8917-7fe284a522bc",
+              "memory_uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5"
+            }
+          ],
+          "reason": "This is an independent repair-preparation practice absent from the laundry frame.",
+          "status": "RESOLVED",
+          "summary": "Emptying the area beneath the sink before a technician arrives allows work to begin immediately.",
+          "uid": "c678903f-6eb9-544c-b358-e65680f6cc03"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a990b464-635b-488e-8917-7fe284a522bc",
+              "memory_uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441"
+            }
+          ],
+          "reason": "This is independent spare-key custody information with no counterpart in the laundry frame.",
+          "status": "RESOLVED",
+          "summary": "The user confirmed with their maternal aunt that the entrusted spare key remained with her.",
+          "uid": "b30df03e-d346-56b3-b89d-77e6254a1a98"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a990b464-635b-488e-8917-7fe284a522bc",
+              "memory_uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd"
+            }
+          ],
+          "reason": "This is an independent key-handover safeguard with no counterpart in the laundry frame.",
+          "status": "RESOLVED",
+          "summary": "The maternal aunt considers giving a repair technician the spare key unsafe without the user’s explicit request.",
+          "uid": "af1d34da-5bf3-5a0d-8b71-317311abdad9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a990b464-635b-488e-8917-7fe284a522bc",
+              "memory_uid": "4716a67b-8602-564c-9e89-85cd4ee158f9"
+            }
+          ],
+          "reason": "This is an independent entry-authorization policy, distinct from physical key handover and absent from the laundry frame.",
+          "status": "RESOLVED",
+          "summary": "The user should reconfirm before an external worker is scheduled to enter the residential unit.",
+          "uid": "2b7ae29b-f572-587d-91d6-242504eba7ac"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a990b464-635b-488e-8917-7fe284a522bc",
+              "memory_uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+            }
+          ],
+          "reason": "This is independent scheduling-risk information with no counterpart in the laundry frame.",
+          "status": "RESOLVED",
+          "summary": "Repair schedules in multi-unit buildings may change because of emergency work or parts availability.",
+          "uid": "8402dddf-783d-520c-8dc1-e260c3eeb4bb"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The repair frame covers tool storage, leak containment, management coordination, workspace preparation, spare-key custody, worker-entry authorization, and schedule uncertainty.",
+        "differences": "Reminders are tied to the relevant event, but laundry pickup uses the machine’s end time and a five-minute lead, while repair attendance uses a 30-minute warning before the visit.",
+        "reference_only": "The laundry frame covers card location, prompt-pickup fairness, color-transfer prevention, dryer-filter efficiency, and lack of live machine-availability knowledge."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "24374426-daf0-4655-8b1e-6ca616a3e787"
+    },
+    "analysis_digest": "115ac8592c0e31bd36498f8d75016f7df3f314534097eac52f5f839b0fb438ed",
+    "key": "e831bf9229e18ea1610c545745373615644f2040b902a04baa03db6f5fc66f76",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 50.5016707499999,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "e831bf9229e18ea1610c545745373615644f2040b902a04baa03db6f5fc66f76",
+  "created_at": "2026-08-13T18:51:37.789829Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/04",
+  "pair_key": "12d24d42f552dc3f9cad739725fe18f4c5cbe9cd91d06709b7c5a67db3185f04",
+  "provider_seconds": 50.5016707499999,
+  "right": "task-3/local/personal-memory/2026/02",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

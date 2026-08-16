@@ -1,0 +1,397 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:37:27.192378+00:00",
+      "frames": [
+        {
+          "context_digest": "9fdb8cdfae14edf54f7410c0e8dd59527179de290b3d7c5f1b0f58494275b076",
+          "context_name": "task-3/local/personal-memory/2024/03",
+          "context_uid": "97c5905c-359b-5497-956f-b92db9ddbd2f",
+          "memories": [
+            {
+              "content": "The instructions for one medication the user takes say to take it after the evening meal.",
+              "content_digest": "32bba9f2936e560ddd5f4c5515895f2954b9c8722fcd501644569d1ff4f7b97c",
+              "position": 0,
+              "uid": "12ba4249-9450-5f2e-b648-5369a7997b26"
+            },
+            {
+              "content": "On a day with a morning appointment, the user miscalculated the fasting period and checked again at the reception desk.",
+              "content_digest": "532396ed2265321fbd4ca28ed1de2962211a357195bc9839503330c6cb0ab281",
+              "position": 1,
+              "uid": "051e79ff-5363-5160-9a13-46568fd13306"
+            },
+            {
+              "content": "For an afternoon visit, the user felt less rushed while preparing to travel than for a morning visit.",
+              "content_digest": "276fa255e4a4945f1475fa66129069ea33514bc24c98a246e9ab0d0000c156fa",
+              "position": 2,
+              "uid": "e7f1fcf7-ee2f-57d8-98cb-781e31e481e8"
+            },
+            {
+              "content": "On a day there was no waiting chair, the user stood for 20 minutes and their back became uncomfortable.",
+              "content_digest": "1c412785950057f01b1e7c10b716977cdb8bfb2b0605ef5bfdbdc6e349f6aaf8",
+              "position": 3,
+              "uid": "18d58666-2cfa-5959-8da9-2745bed56e11"
+            },
+            {
+              "content": "On a day medication instructions were explained all at once and at length, the user failed to write down an important time.",
+              "content_digest": "f3629bba06d053fa20712982f70b8dfd574b41a1b5ecd29d7c29f1b60742f647",
+              "position": 4,
+              "uid": "8fdede6e-64ed-5e4c-81f4-7a1075165568"
+            },
+            {
+              "content": "On a day medication times were confirmed one line at a time, the user copied them directly into their schedule after returning home.",
+              "content_digest": "acade505d6c0cdfddae0d169dea81c06a757aa7d7d2c760f6cdc253b06af5ded",
+              "position": 5,
+              "uid": "21f679f7-7d75-5c01-b6c3-b0d4bea5f2f0"
+            },
+            {
+              "content": "On a visit when their younger brother drove them, the user did not have to find a separate route home.",
+              "content_digest": "5e17c1227c7cbee7e995728edd17b4301903dfdc7a7bdc5f5ff3e06edfd357b3",
+              "position": 6,
+              "uid": "3ec03d39-3240-56d1-80da-313f79f2bf3a"
+            },
+            {
+              "content": "The user's younger brother prefers to receive a request for weekday-afternoon transportation two days beforehand rather than on the day itself.",
+              "content_digest": "7d1bf920ff730ddff86f328aaa3c3edf9d424170044bcd789a3ac55bffb5a839",
+              "position": 7,
+              "uid": "3069baac-fa68-5e94-8ba3-e888cf622f8c"
+            },
+            {
+              "content": "The local agent cannot determine the current prescription or whether use continues from medication notes alone.",
+              "content_digest": "89990815daa01f70a77b970b6a38cb9063f32fed898bd36e39a85551a1ad6200",
+              "position": 8,
+              "uid": "d7f215c6-57ea-561a-9627-3ce94203d507"
+            },
+            {
+              "content": "The waiting area at that clinic has too few chairs, so there may be periods when people must wait standing.",
+              "content_digest": "66c27ba4d6f3fb0d16b322a6de6d8afeb5c650fbe04162006a3288dd886ce1f0",
+              "position": 9,
+              "uid": "e6023aed-938d-5954-b8a7-8cb01340ee37"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "eee6dece-754c-4bb7-bccb-b55cb1a8ec8d"
+        },
+        {
+          "context_digest": "df0924e320cd14a29eaed60f78e82fd509c4062949b35706b2a7cb94571fb599",
+          "context_name": "task-3/local/personal-memory/2026/04",
+          "context_uid": "16e860a8-7a90-5b7a-adc3-1c487ef97e03",
+          "memories": [
+            {
+              "content": "The user collects clothes for donation in a large bag beside the entrance.",
+              "content_digest": "39f2f01c59b7fa4ca7529d510e1b0a6ffab6706861042f771cfe97f6f806efac",
+              "position": 0,
+              "uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            },
+            {
+              "content": "After emptying an entire drawer at once, the user could not find a charger they needed.",
+              "content_digest": "674c33ba6475f42b29b03e6f8711e0216f983f3d37fee3dacf9336e3bb4596bf",
+              "position": 1,
+              "uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            },
+            {
+              "content": "During the next organizing session, the user sorted items by type and put only items to be discarded in the bag.",
+              "content_digest": "63104b5a7fd380f818c8758c51f9550c7a7fa41ff91f1dd314225d1824b69643",
+              "position": 2,
+              "uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            },
+            {
+              "content": "Even after photographing unworn clothes, the user did not take them out again for one month.",
+              "content_digest": "519f131096440719dcd3412f4439c5cfe44b7f402684170209708040692dc5fd",
+              "position": 3,
+              "uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            },
+            {
+              "content": "After moving those clothes to the donation bag, the user cleared one closet compartment.",
+              "content_digest": "45db58ae108a299344d982d8606fff26f733252da691cf01417e760909ff6057",
+              "position": 4,
+              "uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            },
+            {
+              "content": "The user nearly discarded an important paper with advertising and checked the recycling box again.",
+              "content_digest": "6bf928f67944656e5f3c68d8869c0cefd039a588f0ba735f94520231ef58017c",
+              "position": 5,
+              "uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            },
+            {
+              "content": "During the next organizing session, the user kept a separate document box and did not mix the papers.",
+              "content_digest": "adac8d4266c6b11e15d29c484665bc5dcc915f9aa319198b6a69d0e7b0131bb3",
+              "position": 6,
+              "uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            },
+            {
+              "content": "The user's mother asks the user to check whether she needs kitchen items in good condition before discarding them.",
+              "content_digest": "0752bc2ac00c0b1301c45ab4c2e73f63c57e6ebc4255dcc1c13330ffda906612",
+              "position": 7,
+              "uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            },
+            {
+              "content": "Confirm with the user before marking a personal document or another person's property as a disposal candidate.",
+              "content_digest": "17062e2cd4738619e81e211cb2f53d14e78c5f4eab9ae49053ce7e06935a7db5",
+              "position": 8,
+              "uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            },
+            {
+              "content": "The local agent cannot determine an object's emotional meaning from frequency of use alone.",
+              "content_digest": "9c86bcfe2b209bf7957dced0eab000b42f97b6a435d705ccaccb15e49be3691d",
+              "position": 9,
+              "uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "f4e36045-dc26-4de9-9aaf-7d1a2d4e2081"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate domains rather than shared policies: the reference concerns medication handling, clinic visits, transportation, and seating, while the compared frame concerns household sorting and disposal safeguards. No contradiction or uncertain correspondence arises because each claim remains independently useful within its own domain.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eee6dece-754c-4bb7-bccb-b55cb1a8ec8d",
+              "memory_uid": "12ba4249-9450-5f2e-b648-5369a7997b26"
+            }
+          ],
+          "reason": "Only the reference frame supplies this specific medication-timing instruction.",
+          "status": "RESOLVED",
+          "summary": "One medication carries an instruction to be taken after the evening meal.",
+          "uid": "8394d5ec-c940-5d84-b353-6ec034ba924e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eee6dece-754c-4bb7-bccb-b55cb1a8ec8d",
+              "memory_uid": "051e79ff-5363-5160-9a13-46568fd13306"
+            }
+          ],
+          "reason": "Only the reference frame describes this appointment-preparation error and subsequent check.",
+          "status": "RESOLVED",
+          "summary": "A fasting-period miscalculation for a morning appointment led the user to verify the timing at reception.",
+          "uid": "76d5c5e4-8bd0-5b39-99a7-5d066945c200"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eee6dece-754c-4bb7-bccb-b55cb1a8ec8d",
+              "memory_uid": "e7f1fcf7-ee2f-57d8-98cb-781e31e481e8"
+            }
+          ],
+          "reason": "Only the reference frame supplies this time-of-day preference concerning visit preparation.",
+          "status": "RESOLVED",
+          "summary": "The user experienced less rushed travel preparation for an afternoon visit than for a morning visit.",
+          "uid": "bb0880a1-f376-5462-8a26-d265c7173191"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eee6dece-754c-4bb7-bccb-b55cb1a8ec8d",
+              "memory_uid": "18d58666-2cfa-5959-8da9-2745bed56e11"
+            },
+            {
+              "frame_uid": "eee6dece-754c-4bb7-bccb-b55cb1a8ec8d",
+              "memory_uid": "e6023aed-938d-5954-b8a7-8cb01340ee37"
+            }
+          ],
+          "reason": "The reference memories provide general and observed aspects of one clinic-seating problem; the compared frame contains no corresponding claim.",
+          "status": "RESOLVED",
+          "summary": "Insufficient clinic seating can require standing, which caused the user back discomfort during one twenty-minute wait.",
+          "uid": "1d596c7e-6ee5-5c69-b507-8a92f36051c8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eee6dece-754c-4bb7-bccb-b55cb1a8ec8d",
+              "memory_uid": "8fdede6e-64ed-5e4c-81f4-7a1075165568"
+            },
+            {
+              "frame_uid": "eee6dece-754c-4bb7-bccb-b55cb1a8ec8d",
+              "memory_uid": "21f679f7-7d75-5c01-b6c3-b0d4bea5f2f0"
+            }
+          ],
+          "reason": "The reference memories provide contrasting outcomes that jointly support one claim about medication-instruction format.",
+          "status": "RESOLVED",
+          "summary": "Medication times were captured more successfully when confirmed line by line than when explained all at once and at length.",
+          "uid": "10bc9836-bb92-5059-8ea7-57a5ddd8127a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eee6dece-754c-4bb7-bccb-b55cb1a8ec8d",
+              "memory_uid": "3ec03d39-3240-56d1-80da-313f79f2bf3a"
+            },
+            {
+              "frame_uid": "eee6dece-754c-4bb7-bccb-b55cb1a8ec8d",
+              "memory_uid": "3069baac-fa68-5e94-8ba3-e888cf622f8c"
+            }
+          ],
+          "reason": "The reference memories split one practical claim about the benefit and advance coordination of brother-provided transportation.",
+          "status": "RESOLVED",
+          "summary": "Transportation from the younger brother can remove separate return-route planning, with weekday-afternoon requests preferably made two days ahead.",
+          "uid": "72d4e9ec-1199-5275-9f18-16e95ba76fbb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eee6dece-754c-4bb7-bccb-b55cb1a8ec8d",
+              "memory_uid": "d7f215c6-57ea-561a-9627-3ce94203d507"
+            }
+          ],
+          "reason": "Only the reference frame states this limit on local-agent inference.",
+          "status": "RESOLVED",
+          "summary": "Medication notes alone do not establish the current prescription or whether medication use continues.",
+          "uid": "e958a2fd-4577-5243-8144-5b65675251d4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f4e36045-dc26-4de9-9aaf-7d1a2d4e2081",
+              "memory_uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            }
+          ],
+          "reason": "Only the compared frame identifies this donation-staging arrangement.",
+          "status": "RESOLVED",
+          "summary": "The user collects donation clothing in a large bag beside the entrance.",
+          "uid": "b6265940-cb0e-5e4b-88fc-afbef1f9585d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f4e36045-dc26-4de9-9aaf-7d1a2d4e2081",
+              "memory_uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            },
+            {
+              "frame_uid": "f4e36045-dc26-4de9-9aaf-7d1a2d4e2081",
+              "memory_uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            }
+          ],
+          "reason": "The compared memories describe the failed and improved approaches underlying one incremental-sorting practice.",
+          "status": "RESOLVED",
+          "summary": "After losing track of a needed charger when emptying a whole drawer, the user used type-based sorting and reserved the bag for discard items.",
+          "uid": "96e6f3d6-92fa-5f7e-bf2f-79fec90c9a29"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f4e36045-dc26-4de9-9aaf-7d1a2d4e2081",
+              "memory_uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            },
+            {
+              "frame_uid": "f4e36045-dc26-4de9-9aaf-7d1a2d4e2081",
+              "memory_uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            }
+          ],
+          "reason": "The compared memories contrast two steps and their outcomes within one clothing-removal claim.",
+          "status": "RESOLVED",
+          "summary": "Photographing unworn clothes did not prompt removal, whereas moving them to the donation bag cleared a closet compartment.",
+          "uid": "6c54deb4-3770-5f92-b8eb-c5333e7355f2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f4e36045-dc26-4de9-9aaf-7d1a2d4e2081",
+              "memory_uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            },
+            {
+              "frame_uid": "f4e36045-dc26-4de9-9aaf-7d1a2d4e2081",
+              "memory_uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            }
+          ],
+          "reason": "The compared memories provide the mistake and subsequent safeguard underlying one paper-separation practice.",
+          "status": "RESOLVED",
+          "summary": "After nearly recycling an important paper with advertising, the user kept documents in a separate box during the next session.",
+          "uid": "8af5f0a0-e25e-58a5-a027-1473ba07414c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f4e36045-dc26-4de9-9aaf-7d1a2d4e2081",
+              "memory_uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            }
+          ],
+          "reason": "Only the compared frame supplies this family consultation preference.",
+          "status": "RESOLVED",
+          "summary": "The user's mother wants to be asked whether she needs usable kitchen items before they are discarded.",
+          "uid": "768d6327-9fdc-56db-972b-7e66471f7f80"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f4e36045-dc26-4de9-9aaf-7d1a2d4e2081",
+              "memory_uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            }
+          ],
+          "reason": "Only the compared frame states this explicit disposal-confirmation policy.",
+          "status": "RESOLVED",
+          "summary": "The user should confirm before a personal document or another person's property is marked as a disposal candidate.",
+          "uid": "d5b7a057-8877-5b80-a13f-8308e0f31283"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f4e36045-dc26-4de9-9aaf-7d1a2d4e2081",
+              "memory_uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "reason": "Only the compared frame states this limit on local-agent inference.",
+          "status": "RESOLVED",
+          "summary": "Frequency of use alone does not establish an object's emotional meaning.",
+          "uid": "69bdc360-093d-5409-acdd-0834ecded1e0"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only material covers donation staging, safer incremental sorting, document and ownership checks, space-clearing outcomes, family consultation, and limits on inferring emotional significance.",
+        "differences": "",
+        "reference_only": "Reference-only material covers medication timing and communication, appointment preparation, clinic seating, transportation coordination, and limits on inferring current prescriptions."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "8e53f5b3-0913-4f80-83ea-49ddce57e25c"
+    },
+    "analysis_digest": "21a887d960c192184993541b873c6591dbd4dc3652e99b4e6fff95fcdf755bf3",
+    "key": "d5d3fe1affd5976b44be0f9a737209db4ca0b22cf2ee1ff8007dfff7de6b4119",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 42.665713124999456,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "d5d3fe1affd5976b44be0f9a737209db4ca0b22cf2ee1ff8007dfff7de6b4119",
+  "created_at": "2026-08-13T18:38:09.857653Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/03",
+  "pair_key": "6078ff818c6edf31dffca8e85cb6ef40fdc7e79a88eeca1554a12e3c635946b1",
+  "provider_seconds": 42.665713124999456,
+  "right": "task-3/local/personal-memory/2026/04",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

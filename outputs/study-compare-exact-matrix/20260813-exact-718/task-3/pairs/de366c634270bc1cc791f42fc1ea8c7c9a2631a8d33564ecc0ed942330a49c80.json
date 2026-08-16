@@ -1,0 +1,406 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:42:47.121784+00:00",
+      "frames": [
+        {
+          "context_digest": "4f6b609414f921ca470614699bdac42e9f2932482375026def79956485b0569e",
+          "context_name": "task-3/local/personal-memory/2024/08",
+          "context_uid": "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+          "memories": [
+            {
+              "content": "The user has set a monthly limit in their budget record for spending other than living expenses.",
+              "content_digest": "5c0df9500947f7e044a8755d66d58adccca01db3aed42b43ab9748b8c4f431e9",
+              "position": 0,
+              "uid": "5f80c7ec-e294-5905-abab-91027c9d827b"
+            },
+            {
+              "content": "In a week when the user went grocery shopping and visited the bank separately, they made the same round trip twice.",
+              "content_digest": "4e814adad1a4c201f6348f1c14b14950b5c549bba64bf70cfccd08ca9efc5bd3",
+              "position": 1,
+              "uid": "2428ab2c-37ce-5de1-84dc-abcdfc8ce062"
+            },
+            {
+              "content": "The following week, the user completed both errands in one outing and reduced travel time.",
+              "content_digest": "ad5555ca7daa9d977cfcf5eb4f476eb5730cead6d307c986497716d69f1145b0",
+              "position": 2,
+              "uid": "bf30d1ef-d7cd-5aa3-b65b-ff04aae647e7"
+            },
+            {
+              "content": "When a bill alert arrived on the due date, the user postponed payment until after a meeting.",
+              "content_digest": "c62dda61c680da9ac1fd5ab9124fa05635d20ad9e4bbb7aef36723d289c05102",
+              "position": 3,
+              "uid": "442672e1-2188-5aa3-ad38-5e9c16f25bd5"
+            },
+            {
+              "content": "In a month when the user received an alert three days before the deadline, they finished payment before dinner.",
+              "content_digest": "939ac83da176d5bb1b7e2196402b9faacb962d947b85b9a61c31854867c1e62e",
+              "position": 4,
+              "uid": "c7385cce-ec43-5902-973c-5b8af54c3557"
+            },
+            {
+              "content": "The user collected cash receipts in their wallet and entered all the amounts at once at the end of the month.",
+              "content_digest": "3171a8128ed3855ac9a4c2b542516333fc3728ed1d7260974888b94d0b32c3e6",
+              "position": 5,
+              "uid": "d926c45c-ea49-589c-a7e4-491c9a1514f8"
+            },
+            {
+              "content": "After recording one large expense, the user ate out two fewer times that week.",
+              "content_digest": "af55fd94b01e0ece728347e9349f96b5733c57dae752f9559dc4e08bef7a3320",
+              "position": 6,
+              "uid": "9433523f-8c4e-5424-b370-d325ba5154d1"
+            },
+            {
+              "content": "The user's older sister prefers to settle the jointly paid cost of a meal by electronic transfer rather than cash.",
+              "content_digest": "d84d2ea68add4202e8c421e9c1702c29ca88bd6ae838588bd415fdbd1980cb2b",
+              "position": 7,
+              "uid": "d9531336-ac5f-5ba0-bf26-9c69c854578f"
+            },
+            {
+              "content": "Confirm the amount and account with the user before creating an automatic payment schedule.",
+              "content_digest": "b1d0c16fd880f4ae2657415ddc8fe0f223ccdd931248bb4412a6c95754d4cce1",
+              "position": 8,
+              "uid": "9941d390-8b40-5fee-8bcf-df6f36befcb0"
+            },
+            {
+              "content": "The timing of payment processing and late-payment recording may differ by billing institution.",
+              "content_digest": "203e65e4eb8451ec7551fb166357f107d17b8c89a2341b32fc25a3fb67ec7f98",
+              "position": 9,
+              "uid": "79aea8fd-5d48-50f7-adf6-b7ebe33bfb08"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "c518a986-d703-4d6d-99fb-e9a0027b6cc0"
+        },
+        {
+          "context_digest": "43b741cd1df20a084f3517aec7f886d4e5022812f0536eb126a6caf2d5570489",
+          "context_name": "task-3/local/personal-memory/2025/05",
+          "context_uid": "1f913bb6-790c-5490-a20d-127c7aab5892",
+          "memories": [
+            {
+              "content": "The user keeps two potted herbs beside a south-facing window.",
+              "content_digest": "b79056c033f208bb02b99fef1c011e5537e2ea8c19c3894863c3a5ad56054e08",
+              "position": 0,
+              "uid": "cb09b8ab-c7c4-51bb-a227-039c7cdfae5d"
+            },
+            {
+              "content": "During a week when the user watered every day based only on the soil surface, the leaves of one plant turned yellow.",
+              "content_digest": "042f4be9fd5481a7252d1c0065e95085e11e81e475531afe45b9f1d268d4c5b4",
+              "position": 1,
+              "uid": "95978183-0070-5b12-b117-be39bb343a5e"
+            },
+            {
+              "content": "During a week when the user checked below the soil surface with a finger before watering, the plant grew new leaves.",
+              "content_digest": "06ca2ec53f03677fdfd78bb1d391f197d3f49b974f6e812f25ba49ce34f74249",
+              "position": 2,
+              "uid": "8c610ce5-1eb7-52e5-ad81-e8062d23cd19"
+            },
+            {
+              "content": "On a day the user left the window open for a long time, strong wind knocked over one pot.",
+              "content_digest": "914f67a75fdf73cee064a465a9f0e6ee9ba012f1a40c614e199a9354756203a8",
+              "position": 3,
+              "uid": "3f886c0c-071b-5f2d-adad-da01345d702f"
+            },
+            {
+              "content": "The next day, the user moved the pot inward from the windowsill so the same wind would not knock it over.",
+              "content_digest": "f190916b360b6543865ced49cf5d9a987e96c9147966181e5920342bb41ba50c",
+              "position": 4,
+              "uid": "afe855b8-f5ad-559c-a63f-6f655ba371a2"
+            },
+            {
+              "content": "The user put a plant-name label in a small pot received from their maternal aunt.",
+              "content_digest": "82284f0102305db41eaaecafe86bc05833090853320f2ebb8e5f44abb2d78a63",
+              "position": 5,
+              "uid": "384c4f5f-b15c-5742-ac79-20106d0dd30b"
+            },
+            {
+              "content": "The user confused the care instructions for an unlabeled pot with those for another plant.",
+              "content_digest": "824267db866253690527d5ab08166f4228401443ed903708d33ac22542811750",
+              "position": 6,
+              "uid": "48dc89af-ed9d-51a5-a4b1-b809fd818143"
+            },
+            {
+              "content": "The user's maternal aunt considers understanding the sunlight at a pot's location more important than watering frequency when caring for it.",
+              "content_digest": "8a24f6df4a58db3e538f77e572a3cf152b7a4aff3527ec3d8616e85a675bc7c0",
+              "position": 7,
+              "uid": "a2426820-65d6-5c78-ac50-0f32b366ae47"
+            },
+            {
+              "content": "Before creating a plant-care reminder, check each plant's name and most recent watering date.",
+              "content_digest": "ecd7ef911951f3c2383cd916a4efbd94bdf439f63de1687c2f637a161ac8a60d",
+              "position": 8,
+              "uid": "efd51196-ed48-5699-a0f4-c5b8e149d11c"
+            },
+            {
+              "content": "The soil in the user's potted herbs beside the south-facing window dries at different rates depending on the season and amount of sunlight.",
+              "content_digest": "f716b16e802d30d4c2d1ed4bff855812682e53a9fc4e29988e2662ae321d0a4f",
+              "position": 9,
+              "uid": "4c93eeff-566e-5a1a-afb9-035c97fb9c73"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "98b4c1b1-5056-495b-84c6-d2215b2dd8bc"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames occupy separate practical domains: personal finance and bill management versus household plant care. Each contributes independently useful observations, preferences, cautions, and reminder prerequisites; none addresses the same operational decision closely enough for a cross-frame relation.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c518a986-d703-4d6d-99fb-e9a0027b6cc0",
+              "memory_uid": "5f80c7ec-e294-5905-abab-91027c9d827b"
+            }
+          ],
+          "reason": "This is a one-sided budgeting constraint with no plant-care counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user maintains a monthly cap for non-living expenses.",
+          "uid": "42e3c97f-d506-525a-a985-f29a55d4eceb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c518a986-d703-4d6d-99fb-e9a0027b6cc0",
+              "memory_uid": "2428ab2c-37ce-5de1-84dc-abcdfc8ce062"
+            },
+            {
+              "frame_uid": "c518a986-d703-4d6d-99fb-e9a0027b6cc0",
+              "memory_uid": "bf30d1ef-d7cd-5aa3-b65b-ff04aae647e7"
+            }
+          ],
+          "reason": "These observations jointly express a one-sided travel-efficiency claim without a counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Combining grocery and bank errands into one outing reduced travel compared with making the same trip twice.",
+          "uid": "cf1fd498-3d79-5d55-ad73-0477c35d7970"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c518a986-d703-4d6d-99fb-e9a0027b6cc0",
+              "memory_uid": "442672e1-2188-5aa3-ad38-5e9c16f25bd5"
+            },
+            {
+              "frame_uid": "c518a986-d703-4d6d-99fb-e9a0027b6cc0",
+              "memory_uid": "c7385cce-ec43-5902-973c-5b8af54c3557"
+            }
+          ],
+          "reason": "These examples jointly describe a one-sided relationship between alert timing and payment behavior.",
+          "status": "RESOLVED",
+          "summary": "Earlier bill alerts were associated with earlier payment, while a due-date alert preceded postponement.",
+          "uid": "bc94d14b-a532-5526-8633-c0f73a2d86b2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c518a986-d703-4d6d-99fb-e9a0027b6cc0",
+              "memory_uid": "d926c45c-ea49-589c-a7e4-491c9a1514f8"
+            }
+          ],
+          "reason": "This expense-recording habit has no operational counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user accumulated cash receipts and entered them together at month end.",
+          "uid": "c49a41d8-4b98-5411-8104-a340a20d20aa"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c518a986-d703-4d6d-99fb-e9a0027b6cc0",
+              "memory_uid": "9433523f-8c4e-5424-b370-d325ba5154d1"
+            }
+          ],
+          "reason": "This one-sided spending-response observation is independent of the plant-care content.",
+          "status": "RESOLVED",
+          "summary": "Recording a large expense was followed by fewer restaurant visits that week.",
+          "uid": "2d3f79e5-fa79-50d5-915d-1095027382b6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c518a986-d703-4d6d-99fb-e9a0027b6cc0",
+              "memory_uid": "d9531336-ac5f-5ba0-bf26-9c69c854578f"
+            }
+          ],
+          "reason": "This payment-method preference has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s older sister prefers electronic transfer over cash for settling a jointly paid meal.",
+          "uid": "4efcbc2f-26ca-5317-96fb-8120934f8661"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c518a986-d703-4d6d-99fb-e9a0027b6cc0",
+              "memory_uid": "9941d390-8b40-5fee-8bcf-df6f36befcb0"
+            }
+          ],
+          "reason": "This safeguard governs payment automation, not the materially different plant-reminder decision.",
+          "status": "RESOLVED",
+          "summary": "The amount and account should be confirmed with the user before an automatic payment schedule is created.",
+          "uid": "13898c74-bff2-5df8-9408-206e72a90b14"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c518a986-d703-4d6d-99fb-e9a0027b6cc0",
+              "memory_uid": "79aea8fd-5d48-50f7-adf6-b7ebe33bfb08"
+            }
+          ],
+          "reason": "This billing-system qualification is independently useful and absent from the compared domain.",
+          "status": "RESOLVED",
+          "summary": "Payment-processing and late-recording timing can vary among billing institutions.",
+          "uid": "49228b1f-58c9-5fca-9bcf-b4fcb7605285"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "98b4c1b1-5056-495b-84c6-d2215b2dd8bc",
+              "memory_uid": "cb09b8ab-c7c4-51bb-a227-039c7cdfae5d"
+            },
+            {
+              "frame_uid": "98b4c1b1-5056-495b-84c6-d2215b2dd8bc",
+              "memory_uid": "4c93eeff-566e-5a1a-afb9-035c97fb9c73"
+            }
+          ],
+          "reason": "These details jointly describe the plants’ setting and variable drying conditions, with no finance counterpart.",
+          "status": "RESOLVED",
+          "summary": "Two potted herbs sit by a south-facing window, where soil-drying rates vary with season and sunlight.",
+          "uid": "940bc889-465b-5a6e-bad6-d1a021e1f625"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "98b4c1b1-5056-495b-84c6-d2215b2dd8bc",
+              "memory_uid": "95978183-0070-5b12-b117-be39bb343a5e"
+            },
+            {
+              "frame_uid": "98b4c1b1-5056-495b-84c6-d2215b2dd8bc",
+              "memory_uid": "8c610ce5-1eb7-52e5-ad81-e8062d23cd19"
+            }
+          ],
+          "reason": "These observations jointly express a one-sided distinction between watering approaches.",
+          "status": "RESOLVED",
+          "summary": "Surface-based daily watering coincided with yellowing, whereas checking below the surface before watering coincided with new growth.",
+          "uid": "d1e8d180-4bf8-5318-bb1f-d91cda699856"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "98b4c1b1-5056-495b-84c6-d2215b2dd8bc",
+              "memory_uid": "3f886c0c-071b-5f2d-adad-da01345d702f"
+            },
+            {
+              "frame_uid": "98b4c1b1-5056-495b-84c6-d2215b2dd8bc",
+              "memory_uid": "afe855b8-f5ad-559c-a63f-6f655ba371a2"
+            }
+          ],
+          "reason": "The incident and response form one plant-safety claim without a reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "After wind from an open window knocked over a pot, the user moved it inward to prevent recurrence.",
+          "uid": "d92343c3-a0fe-5f68-a94f-d599de5f2f86"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "98b4c1b1-5056-495b-84c6-d2215b2dd8bc",
+              "memory_uid": "384c4f5f-b15c-5742-ac79-20106d0dd30b"
+            }
+          ],
+          "reason": "This labeling action is one-sided and independently useful.",
+          "status": "RESOLVED",
+          "summary": "The user labeled a small pot received from their maternal aunt with the plant’s name.",
+          "uid": "aa575bfd-7fee-5576-a5b2-7ad970169b1c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "98b4c1b1-5056-495b-84c6-d2215b2dd8bc",
+              "memory_uid": "48dc89af-ed9d-51a5-a4b1-b809fd818143"
+            }
+          ],
+          "reason": "This identification problem has no operational counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "An unlabeled pot led the user to confuse its care instructions with another plant’s.",
+          "uid": "06c2a5a7-fa90-5186-8e2b-425b365fa71c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "98b4c1b1-5056-495b-84c6-d2215b2dd8bc",
+              "memory_uid": "a2426820-65d6-5c78-ac50-0f32b366ae47"
+            }
+          ],
+          "reason": "This plant-care preference is independent of the reference frame’s financial preferences.",
+          "status": "RESOLVED",
+          "summary": "The user’s maternal aunt prioritizes understanding location-specific sunlight over watering frequency.",
+          "uid": "90698c07-af08-5506-bdd6-f465f8401e34"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "98b4c1b1-5056-495b-84c6-d2215b2dd8bc",
+              "memory_uid": "efd51196-ed48-5699-a0f4-c5b8e149d11c"
+            }
+          ],
+          "reason": "This prerequisite governs plant-care reminders, not the materially different payment-scheduling safeguard.",
+          "status": "RESOLVED",
+          "summary": "Each plant’s name and latest watering date should be checked before creating a care reminder.",
+          "uid": "c0e0ec6e-9384-531e-a73f-98bc46899c6e"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers herb placement, soil-sensitive watering, wind protection, plant labeling, a relative’s care priority, reminder prerequisites, and seasonal variation in soil drying.",
+        "differences": "",
+        "reference_only": "The reference covers budgeting, efficient errand planning, bill-alert timing, expense-recording habits, shared-meal settlement preferences, payment-schedule confirmation, and institution-dependent processing."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "96e329c0-dfda-4a08-aee2-30fe66cf7ce1"
+    },
+    "analysis_digest": "81e1747d61d38f80719fd8e50b2b3386ad4b854c41dc0ff54dc8cd13e5f8ae6a",
+    "key": "be8704e941bfdae7f05ca05446ecd8b7ed3d2b8b897be09273efbff8f4c41561",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 45.38438220899843,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "be8704e941bfdae7f05ca05446ecd8b7ed3d2b8b897be09273efbff8f4c41561",
+  "created_at": "2026-08-13T18:43:32.505756Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/08",
+  "pair_key": "de366c634270bc1cc791f42fc1ea8c7c9a2631a8d33564ecc0ed942330a49c80",
+  "provider_seconds": 45.38438220899843,
+  "right": "task-3/local/personal-memory/2025/05",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

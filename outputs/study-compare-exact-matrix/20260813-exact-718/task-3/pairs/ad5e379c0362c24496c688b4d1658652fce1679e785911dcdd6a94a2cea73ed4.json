@@ -1,0 +1,415 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:36:22.058306+00:00",
+      "frames": [
+        {
+          "context_digest": "4c7d7890b4c8dbd807acc103affd0572c325fd2e0f58346a97c3ed49e48ba34e",
+          "context_name": "task-3/local/personal-memory/2024/02",
+          "context_uid": "7bedad96-d78b-5977-a4c9-71049dcfcec8",
+          "memories": [
+            {
+              "content": "The user's maternal aunt keeps one spare key to the user's home.",
+              "content_digest": "2e45c292a3cbc26a1c9928c4546c6029c7dcd2aa6aa0a45a7cfb4be7888dd5c6",
+              "position": 0,
+              "uid": "1c627e4c-c393-5bd3-a5ae-b3318821be73"
+            },
+            {
+              "content": "If the door is locked, the user is accustomed to contacting their maternal aunt, who has the spare key, before contacting building management.",
+              "content_digest": "709cc4a1ae26126bd3238ea8c0e343415d95d084ddaf022590ff4197003c7b81",
+              "position": 1,
+              "uid": "e80936de-87af-5dbb-ab94-d456bbfaab0a"
+            },
+            {
+              "content": "When going to collect the spare key from their maternal aunt, the user wants to give an arrival time first so neither person has to wait.",
+              "content_digest": "5dab57d537091a28848dfa3592d16e038d6e78eeb8159489c17475befeb62a53",
+              "position": 2,
+              "uid": "7c26cf33-0630-5138-910a-6d37d6ed2b63"
+            },
+            {
+              "content": "The user feels at ease only after returning a borrowed spare key in person on the same day.",
+              "content_digest": "d3b9e78e166fb3af3dc248bcddbf1c1df15d3eed57655991a52c23b4ebb6ba14",
+              "position": 3,
+              "uid": "c3f0f26c-8d89-55e3-8bf3-398271e417e7"
+            },
+            {
+              "content": "The user feels uneasy about writing down a new entrance passcode on paper.",
+              "content_digest": "fe40a50fb7f0b0e1514a2f7e6ea3748e73cbd76fa45b862b4880c9eba68a2312",
+              "position": 4,
+              "uid": "7d7d00a3-c5af-5441-bb50-9631fbfd7979"
+            },
+            {
+              "content": "The user found it difficult when a family member arrived without notice during a meeting and the user could not respond immediately.",
+              "content_digest": "30d2126eb016f1fab8b8bd670bc00ee6ac5182f28b0afe696b2c30f4d7bc128f",
+              "position": 5,
+              "uid": "2e0df581-bd54-54f5-94ef-b719427fc88c"
+            },
+            {
+              "content": "On a day their younger brother received a package for them, the user felt reassured after checking the delivery photo.",
+              "content_digest": "54eacbc39b057a6a18f8ddd8e1db587dbef231ecb10ed8cd84a46b3575ac470c",
+              "position": 6,
+              "uid": "9278b64e-7550-5eb6-bbfd-544a2ae4ec3d"
+            },
+            {
+              "content": "The user's maternal aunt wants confirmation that the user is coming in person before handing over the spare key.",
+              "content_digest": "5d780f2fb96eac2d3c65e7417ee00e64e29c2f8873c432b291e62773723182c9",
+              "position": 7,
+              "uid": "76fb9115-a3f2-5ce3-a445-c3d1e38e4253"
+            },
+            {
+              "content": "Confirm with the user before sharing the spare key's storage location or the maternal aunt's contact information.",
+              "content_digest": "ac00da1acd77d05fd277a0a92d2ab62cbefb3c334e6e7c2cb3b046fbea217a6c",
+              "position": 8,
+              "uid": "6fa50e1d-8bd1-557a-9b03-1e4a4dc664bd"
+            },
+            {
+              "content": "The management office of a multi-unit residential building does not hold a unit key without verifying identity.",
+              "content_digest": "841f44fddced7681d5c9b47aaa2536f14536f1309b1f73104df7cb44738efbd1",
+              "position": 9,
+              "uid": "b18ff5b4-4f0d-5b93-8c41-439e5b15c710"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "c0bbd4c6-8f56-4635-acaf-7c99006fdf7b"
+        },
+        {
+          "context_digest": "1d47d83944d91bc0316a61894412e9b4361758603b9532687cf68473f1d30198",
+          "context_name": "task-3/local/personal-memory/2026/01",
+          "context_uid": "e48e6eac-20f7-599d-9f76-4238bd9dd96d",
+          "memories": [
+            {
+              "content": "The user keeps gloves and scarves in a basket inside the entrance.",
+              "content_digest": "df54c52cb6bc89e2e66c747df9807c6892db272c2a23ac5ac91e3f64aaa2a5da",
+              "position": 0,
+              "uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409"
+            },
+            {
+              "content": "On a day the user could not find their gloves, they walked with their hands in their pockets and missed the bus.",
+              "content_digest": "d4205aee5fe3f2c18adc3622930cc7f74de231de9812ca594dbd95a0af7199ff",
+              "position": 1,
+              "uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5"
+            },
+            {
+              "content": "Before the next outing, the user put the gloves in the entrance basket the night before and left on time.",
+              "content_digest": "23a7026d7d1a7edd3278e7b8aa147ef0d315059663f78da5498ad6c1b4a5407c",
+              "position": 2,
+              "uid": "a11f0943-8ee1-5305-87fb-64982fb36f82"
+            },
+            {
+              "content": "On a snowy day, the user chose a shorter route but turned back at stairs that had not been cleared of snow.",
+              "content_digest": "e9e241d2bc4d7c2fa9a44471aa6d1c16d42d50fe2ed99ccfb50713107714be9b",
+              "position": 3,
+              "uid": "f623f245-cdd5-5080-8869-b52cf2914076"
+            },
+            {
+              "content": "The next day, the user took a cleared sidewalk along the main road and avoided slippery sections.",
+              "content_digest": "62c8ec8b38778e9922cf433af4ceb4d59f60bee52dc758e3b88bb1163637f108",
+              "position": 4,
+              "uid": "17ac56f1-1302-5350-99d5-b95ef7feb768"
+            },
+            {
+              "content": "The user fell asleep with the heat turned up, became too warm before dawn, and woke twice.",
+              "content_digest": "912dbbc88a0f4a174b714a794793781f4d2f6c889f73cd7f825338addcab5d6c",
+              "position": 5,
+              "uid": "96988fa9-44b1-511e-8c99-4372f902cfe3"
+            },
+            {
+              "content": "The next night, the user turned down the heat and used one additional thin blanket.",
+              "content_digest": "3d12a4609d4731ebe71bacc841c979ac3497553238c3b5c2191842bbf075ba89",
+              "position": 6,
+              "uid": "b628acaa-50da-552c-8665-244dc4ab8263"
+            },
+            {
+              "content": "On a morning with heavy snow, the user's father expects the user will worry about road conditions and sends a text before departure.",
+              "content_digest": "dcd6bcb23bee46e49813bb14dd8dcb91983d5830f0536d7f23fcdb3a8af0667c",
+              "position": 7,
+              "uid": "08dfb937-7b28-55b5-801c-c0da00cbd414"
+            },
+            {
+              "content": "Before proposing a winter travel route, check recent snow-clearing conditions and accessible entrances.",
+              "content_digest": "dcab87102a9979c51dd369d5ba5ed00b7445c8ccd14450edcb8bec7859689606",
+              "position": 8,
+              "uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d"
+            },
+            {
+              "content": "The local agent cannot know the actual condition of the sidewalk the user will take from a weather forecast alone.",
+              "content_digest": "6b4bcc2f2f508f130c047ff677cadae0eae5b4cc5e5dd6bb3a1fb3784d7793b1",
+              "position": 9,
+              "uid": "802c4031-57de-592a-9bc8-6ee3d54921c8"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "9d000e2f-4ae0-46d8-89bb-7943d6911721"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames contain independently useful guidance in separate practical domains. The reference centers on home access, family coordination, privacy, and verification, while the compared frame covers winter preparation, route safety, temperature comfort, and travel-condition checks; no substantive overlap or incompatibility is established.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c0bbd4c6-8f56-4635-acaf-7c99006fdf7b",
+              "memory_uid": "1c627e4c-c393-5bd3-a5ae-b3318821be73"
+            }
+          ],
+          "reason": "This is independently useful home-access information with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The maternal aunt holds a spare key to the user's home.",
+          "uid": "a9695fe4-cce1-5525-805b-a793b0b2ae79"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c0bbd4c6-8f56-4635-acaf-7c99006fdf7b",
+              "memory_uid": "e80936de-87af-5dbb-ab94-d456bbfaab0a"
+            }
+          ],
+          "reason": "This contact-order preference governs a specific home-entry problem not addressed in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "For a lockout, the user normally contacts the maternal aunt before building management.",
+          "uid": "299638b1-a128-57e3-a411-803e0ad042be"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c0bbd4c6-8f56-4635-acaf-7c99006fdf7b",
+              "memory_uid": "7c26cf33-0630-5138-910a-6d37d6ed2b63"
+            },
+            {
+              "frame_uid": "c0bbd4c6-8f56-4635-acaf-7c99006fdf7b",
+              "memory_uid": "76fb9115-a3f2-5ce3-a445-c3d1e38e4253"
+            }
+          ],
+          "reason": "These memories split one pickup-coordination requirement intended to confirm the visit and prevent either person from waiting; the compared frame has no counterpart.",
+          "status": "RESOLVED",
+          "summary": "An in-person spare-key pickup requires advance coordination: the aunt wants confirmation, and the user wants to provide an arrival time.",
+          "uid": "84f06b12-b975-59c4-b17f-674cd12fc425"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c0bbd4c6-8f56-4635-acaf-7c99006fdf7b",
+              "memory_uid": "c3f0f26c-8d89-55e3-8bf3-398271e417e7"
+            }
+          ],
+          "reason": "This is a distinct preference concerning prompt, physical key return that is absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user feels at ease only after returning a borrowed spare key in person the same day.",
+          "uid": "c039c8e4-a09c-56fa-ade9-e667b0619582"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c0bbd4c6-8f56-4635-acaf-7c99006fdf7b",
+              "memory_uid": "7d7d00a3-c5af-5441-bb50-9631fbfd7979"
+            }
+          ],
+          "reason": "This security-related preference is independently useful and has no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "The user is uncomfortable recording a new entrance passcode on paper.",
+          "uid": "e3f2267f-74d5-5f80-a6f6-87065460de1f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c0bbd4c6-8f56-4635-acaf-7c99006fdf7b",
+              "memory_uid": "2e0df581-bd54-54f5-94ef-b719427fc88c"
+            }
+          ],
+          "reason": "This describes a specific problem with unscheduled arrival and immediate availability, not the winter travel matters in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "An unannounced family arrival during a meeting was difficult because the user could not respond immediately.",
+          "uid": "4438c928-03e6-5157-8541-8ecb070ec2cc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c0bbd4c6-8f56-4635-acaf-7c99006fdf7b",
+              "memory_uid": "9278b64e-7550-5eb6-bbfd-544a2ae4ec3d"
+            }
+          ],
+          "reason": "This is a distinct package-verification experience with no operational counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A delivery photo reassured the user after their younger brother received a package for them.",
+          "uid": "afc7901c-0d5a-5a17-9327-5d6c91bdc2ba"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c0bbd4c6-8f56-4635-acaf-7c99006fdf7b",
+              "memory_uid": "6fa50e1d-8bd1-557a-9b03-1e4a4dc664bd"
+            }
+          ],
+          "reason": "This disclosure-consent rule is independently useful and unaddressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "User confirmation is required before sharing the spare key's location or the maternal aunt's contact information.",
+          "uid": "00611bdc-1e43-5900-aa5a-b7cfcd1a0f3c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c0bbd4c6-8f56-4635-acaf-7c99006fdf7b",
+              "memory_uid": "b18ff5b4-4f0d-5b93-8c41-439e5b15c710"
+            }
+          ],
+          "reason": "This is a distinct access-control constraint concerning management-held keys, with no corresponding compared-side information.",
+          "status": "RESOLVED",
+          "summary": "Building management does not hold a unit key without first verifying identity.",
+          "uid": "f21fc415-7b75-5468-b817-4d1f221b4c61"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9d000e2f-4ae0-46d8-89bb-7943d6911721",
+              "memory_uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409"
+            }
+          ],
+          "reason": "This winter-accessory storage arrangement is independently useful and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user stores gloves and scarves in a basket inside the entrance.",
+          "uid": "5326af34-973d-508f-8696-b07fc83e4036"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9d000e2f-4ae0-46d8-89bb-7943d6911721",
+              "memory_uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5"
+            }
+          ],
+          "reason": "This records a specific consequence of missing winter gear, which the reference frame does not address.",
+          "status": "RESOLVED",
+          "summary": "Failure to find gloves led the user to walk with hands in pockets and miss the bus.",
+          "uid": "2c64ddc3-11a8-5546-b2e9-dd431fc7b0fb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9d000e2f-4ae0-46d8-89bb-7943d6911721",
+              "memory_uid": "a11f0943-8ee1-5305-87fb-64982fb36f82"
+            }
+          ],
+          "reason": "This is a distinct advance-preparation practice with no corresponding home-access claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Placing gloves in the entrance basket the night before helped the user leave on time.",
+          "uid": "d0449cd3-04c5-53f5-9868-631d74c4a275"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9d000e2f-4ae0-46d8-89bb-7943d6911721",
+              "memory_uid": "f623f245-cdd5-5080-8869-b52cf2914076"
+            },
+            {
+              "frame_uid": "9d000e2f-4ae0-46d8-89bb-7943d6911721",
+              "memory_uid": "17ac56f1-1302-5350-99d5-b95ef7feb768"
+            }
+          ],
+          "reason": "These memories split one route-adaptation account contrasting an unusable shortcut with a safer cleared route; the reference frame has no counterpart.",
+          "status": "RESOLVED",
+          "summary": "After turning back from uncleared snowy stairs, the user used a cleared main-road sidewalk and avoided slippery sections the next day.",
+          "uid": "7047ca53-5d54-5c4a-b4c2-04508bc122ec"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9d000e2f-4ae0-46d8-89bb-7943d6911721",
+              "memory_uid": "96988fa9-44b1-511e-8c99-4372f902cfe3"
+            },
+            {
+              "frame_uid": "9d000e2f-4ae0-46d8-89bb-7943d6911721",
+              "memory_uid": "b628acaa-50da-552c-8665-244dc4ab8263"
+            }
+          ],
+          "reason": "These memories split one comfort-adjustment account linking overheating and waking to the subsequent heating and bedding change; the reference frame has no counterpart.",
+          "status": "RESOLVED",
+          "summary": "After excessive heat disrupted sleep, the user lowered the heat the next night and added a thin blanket.",
+          "uid": "0ff3d37c-9735-5ffa-a0d8-e8467c7a7633"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9d000e2f-4ae0-46d8-89bb-7943d6911721",
+              "memory_uid": "08dfb937-7b28-55b5-801c-c0da00cbd414"
+            }
+          ],
+          "reason": "This is a distinct family communication practice tied specifically to snowy travel, not the reference frame's access coordination.",
+          "status": "RESOLVED",
+          "summary": "During heavy snow, the user's father anticipates road-condition worry and texts before departing.",
+          "uid": "cf28c8eb-48b2-5cd8-9ad7-062b2c4e1f9e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9d000e2f-4ae0-46d8-89bb-7943d6911721",
+              "memory_uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d"
+            },
+            {
+              "frame_uid": "9d000e2f-4ae0-46d8-89bb-7943d6911721",
+              "memory_uid": "802c4031-57de-592a-9bc8-6ee3d54921c8"
+            }
+          ],
+          "reason": "These memories split one route-verification policy and its epistemic basis; no corresponding route-planning guidance appears in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Winter route proposals should use recent clearing and accessible-entrance information because forecasts alone cannot establish actual sidewalk conditions.",
+          "uid": "9cf2732b-e551-52ef-a85c-aa979aa878bf"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Winter routines cover accessory storage and preparation, snowy-route adaptation, nighttime heat adjustment, family departure notices, and verifying current clearing and accessibility conditions beyond forecasts.",
+        "differences": "",
+        "reference_only": "Home-access information covers spare-key custody and handling, pickup and return coordination, disclosure consent, management identity checks, passcode discomfort, unannounced visits, and delivery-photo reassurance."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "a00ea2e9-514d-40bb-a034-4e0e443e7613"
+    },
+    "analysis_digest": "986f8afbd586034ed4db08c45b4768726229caf6aa05cbf8906592fbc9fdc584",
+    "key": "4fd41d92ae89ce41d321a06ded1ca0635b05995404f8d28c5c0171bdcc6cc6eb",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 53.15821291699831,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "4fd41d92ae89ce41d321a06ded1ca0635b05995404f8d28c5c0171bdcc6cc6eb",
+  "created_at": "2026-08-13T18:37:15.216079Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/02",
+  "pair_key": "ad5e379c0362c24496c688b4d1658652fce1679e785911dcdd6a94a2cea73ed4",
+  "provider_seconds": 53.15821291699831,
+  "right": "task-3/local/personal-memory/2026/01",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

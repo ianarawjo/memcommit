@@ -2,11 +2,7 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.commands.context_picker import choose_context, context_memory_rows
-from memcommit.context_locator import (
-    is_relative_context_locator,
-    resolve_context_locator,
-)
+from memcommit.context_targeting.tui.picker import choose_context, context_memory_rows
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
 from memcommit.authority.access import (
@@ -18,11 +14,21 @@ from memcommit.context_targeting.catalog import (
     freeze_granted_context_navigation,
     grant_navigation_annotation,
 )
-from memcommit.profiles import authority_grant_snapshot_lock
-from memcommit.store import ConcurrentContextUpdateError, MemoryStore
+from memcommit.interfaces.cli.switch import render_switch_context
+from memcommit.interfaces.tui.operations.switch import (
+    SwitchTuiSetup,
+    run_switch_tui,
+)
+from memcommit.store import MemoryStore
 from memcommit.source_projection.presentation import (
     SourceDisplayValue,
 )
+from memcommit.switch_application import (
+    SwitchContextError,
+    SwitchContextRequest,
+    resolve_switch_context_name,
+)
+from memcommit.switch_runtime import execute_switch_context, prepare_switch
 
 
 _GrantedPickerState = GrantedContextNavigation
@@ -78,8 +84,15 @@ def cmd(
     store = MemoryStore()
     expected_current = store.current_context_name()
     if name is None:
-        names = store.list_context_names()
-        if not names:
+        try:
+            snapshot = prepare_switch(
+                store,
+                expected_current=expected_current,
+            )
+        except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
+            typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
+            raise typer.Exit(1)
+        if not snapshot.local_context_names:
             typer.secho(
                 "Error: no contexts exist. Run 'mem init <name>' first.",
                 fg=typer.colors.RED,
@@ -87,18 +100,8 @@ def cmd(
             )
             raise typer.Exit(1)
         try:
-            granted_state = _granted_picker_state(store)
-            virtual_names = granted_state.names
-            virtual_annotations = granted_state.annotations
-            local_annotations = _local_picker_annotations(names, store)
-            local_options = (
-                {"local_annotations": local_annotations}
-                if local_annotations
-                else {}
-            )
-
             def load_picker_memories(context_name: str):
-                if context_name in names:
+                if context_name in snapshot.local_context_names:
                     return context_memory_rows(store.load(context_name))
                 access = resolve_context_access(
                     store,
@@ -109,26 +112,27 @@ def cmd(
                 return context_memory_rows(
                     GrantedReadStore(access).load(access.display_name)
                 )
-
-            if virtual_names:
-                name = choose_context(
-                    names,
-                    current=expected_current,
-                    accept_label="switch",
-                    **local_options,
-                    virtual_names=virtual_names,
-                    selectable_virtual_names=granted_state.selectable_names,
-                    virtual_annotations=virtual_annotations,
+            request = run_switch_tui(
+                SwitchTuiSetup(
+                    expected_current=expected_current,
+                    local_context_names=snapshot.local_context_names,
+                    virtual_context_names=snapshot.granted_navigation.names,
+                    selectable_virtual_names=(
+                        snapshot.granted_navigation.selectable_names
+                    ),
+                    local_annotations=_local_picker_annotations(
+                        snapshot.local_context_names,
+                        store,
+                    ),
+                    virtual_annotations=(
+                        snapshot.granted_navigation.annotations
+                    ),
                     memory_loader=load_picker_memories,
-                )
-            else:
-                name = choose_context(
-                    names,
-                    current=expected_current,
-                    accept_label="switch",
-                    **local_options,
-                    memory_loader=load_picker_memories,
-                )
+                ),
+                # Preserve the established command-level injection seam while
+                # the concrete screen lives with its operation adapter.
+                chooser=choose_context,
+            )
         except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
             typer.secho(
                 f"Error: {error}",
@@ -136,77 +140,24 @@ def cmd(
                 err=True,
             )
             raise typer.Exit(1)
-        if name is None:
+        if request is None:
             typer.echo("Switch cancelled.")
             return
-
-    selector = name
-    if is_relative_context_locator(selector):
-        if expected_current is None:
-            typer.secho(
-                f"Error: cannot switch to '{selector}': no current context is set.",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(1)
-        if selector == ".." and "/" not in expected_current:
-            typer.secho(
-                f"Error: context '{expected_current}' has no namespace parent.",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(1)
-        try:
-            name = resolve_context_locator(
-                selector,
-                current=expected_current,
-            )
-        except ValueError as error:
-            typer.secho(
-                f"Error: {error}",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(1)
-        # Slash namespaces are lexical only. Explicit Context embeddings are
-        # not unique filesystem-style parents and never affect relative paths.
-        if (
-            selector == ".."
-            and store.context_exists(expected_current)
-            and not store.context_exists(name)
-        ):
-            typer.secho(
-                f"Error: namespace parent context '{name}' does not exist.",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(1)
-        if (
-            store.context_exists(expected_current)
-            and not store.context_exists(name)
-        ):
-            typer.secho(
-                f"Error: context '{name}' does not exist.",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(1)
+    else:
+        request = SwitchContextRequest(
+            selector=name,
+            expected_current=expected_current,
+        )
 
     try:
-        access = resolve_context_access(
-            store,
-            name,
-            current_name=expected_current,
-            required_permission="READ",
-        )
-        target = (
-            GrantedReadStore(access).load_direct(access.display_name)
-            if access.is_granted
-            else store.load(name)
-        )
+        target_name = resolve_switch_context_name(request)
+        result = execute_switch_context(request, store=store)
+    except SwitchContextError as error:
+        typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
+        raise typer.Exit(1)
     except FileNotFoundError:
         typer.secho(
-            f"Error: context '{name}' does not exist.",
+            f"Error: context '{target_name}' does not exist.",
             fg=typer.colors.RED,
             err=True,
         )
@@ -219,45 +170,9 @@ def cmd(
         ValueError,
     ) as e:
         typer.secho(
-            f"Error: cannot switch to context '{name}': {e}",
+            f"Error: cannot switch to context '{target_name}': {e}",
             fg=typer.colors.RED,
             err=True,
         )
         raise typer.Exit(1)
-
-    try:
-        # Bind both the target record and the current-state snapshot. Without
-        # this CAS, a concurrent switch could be silently overwritten after a
-        # relative selector or picker result was resolved.
-        if access.is_granted:
-            with authority_grant_snapshot_lock() as registry:
-                # Resolve once more under the registry lock before publishing
-                # the virtual current pointer. Later commands independently
-                # reauthorize that pointer, so revocation fails closed.
-                resolve_context_access(
-                    store,
-                    name,
-                    current_name=expected_current,
-                    required_permission="READ",
-                    registry=registry,
-                )
-                store.set_current_virtual_context_if(expected_current, name)
-        else:
-            store.set_current_context_if(
-                expected_current,
-                name,
-                expected_context_uid=target.uid,
-                expected_context_digest=target._store_digest or "",
-            )
-    except (ConcurrentContextUpdateError, OSError, ValueError) as error:
-        typer.secho(
-            f"Error: cannot switch to context '{name}': {error}",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(1)
-
-    if expected_current == name:
-        typer.echo(f"Already on '{name}'.")
-        return
-    typer.secho(f"Switched to context '{name}'.", fg=typer.colors.GREEN)
+    render_switch_context(result)

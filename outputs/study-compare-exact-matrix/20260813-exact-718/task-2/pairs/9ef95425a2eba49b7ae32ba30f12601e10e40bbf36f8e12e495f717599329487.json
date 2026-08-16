@@ -1,0 +1,264 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:18:22.464192+00:00",
+      "frames": [
+        {
+          "context_digest": "52dc61895a6d116135c474d4828efde944579b3a5949b6d64c07dd9853f60801",
+          "context_name": "task-2/advisor1/emphasis",
+          "context_uid": "6f253a9e-f504-53bf-a1d1-de2c4532171e",
+          "memories": [
+            {
+              "content": "Do not exceed two primary HCI contributions.",
+              "content_digest": "c605e418506d380237fb8ce4723bcc2fedebcd5da0d8dd78ef813e21aaf71a7a",
+              "position": 0,
+              "uid": "4a1de8df-6f03-5a3d-bbfa-7c1144d2ec5c"
+            },
+            {
+              "content": "Name each design or empirical contribution and present it in a single sentence.",
+              "content_digest": "286e33467b65e080f192172ae85d481a89c8e1b2d73e1089772eab30e0ae48fa",
+              "position": 1,
+              "uid": "b5b6a901-9047-5482-a0e1-d29e5f7171e8"
+            },
+            {
+              "content": "In studies recruiting community participants, emphasize the time burden associated with participation.",
+              "content_digest": "67a881933729e29cc0ce33f61f50af810f6f12ab5aa9598d453cf3a959a5977f",
+              "position": 2,
+              "uid": "e89de514-48a5-5e9b-96ca-f194c0ed79ab"
+            },
+            {
+              "content": "In studies recruiting community participants, emphasize the travel burden associated with participation.",
+              "content_digest": "3c4e20244bb88626ef1d2ebc89774e29ac85a9ce774a3faaa726131059b8ae33",
+              "position": 3,
+              "uid": "f7025cbb-4005-53c6-9031-e33f04a86b92"
+            },
+            {
+              "content": "HCI reviewers find it difficult to identify primary contributions when named design or empirical contributions exceed two.",
+              "content_digest": "70a2dccd85ce8ca18db239926980dfe13a20b90a9dffa6acae73e5034fce1fbc",
+              "position": 4,
+              "uid": "a42891a1-b674-5747-a77c-43699b0b9723"
+            },
+            {
+              "content": "Emphasize the core design decisions that formative evaluation will change rather than a polished product demonstration.",
+              "content_digest": "be5cad46c349a7c4b538f1a947d979ec25b0f6a34494e4d3a7bb9550508766d4",
+              "position": 5,
+              "uid": "9d7169d5-058f-5f7c-b1ac-30cabd8ba02e"
+            },
+            {
+              "content": "Emphasize design principles transferable to other similar interactions as the primary contribution, rather than the performance of a specific prototype.",
+              "content_digest": "a39c447e1b61b2204233800bafd380163fb5492ddd25cb730bbc6c6a95114e56",
+              "position": 6,
+              "uid": "f8931b4e-9656-548d-84a1-f2f2c3eb47b1"
+            },
+            {
+              "content": "Formative evaluation creates grounds for modification in subsequent iterations rather than definitively determining the superiority of design alternatives.",
+              "content_digest": "0cdd894b41de667b621d6c385d3373c799f4fea53898f65d324c26e86a1c8807",
+              "position": 7,
+              "uid": "9bf9e735-7598-5977-abe2-87b2c9c38a24"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "07a2e1b6-98b8-48be-866f-862bd1d6fda3"
+        },
+        {
+          "context_digest": "3cadca09eeabe1389261c2e43133d8b304ed2cad66332f3444e686a824f10a21",
+          "context_name": "task-2/advisor2/scope",
+          "context_uid": "86efd53c-c08d-537c-983f-91a7b915640d",
+          "memories": [
+            {
+              "content": "Specify in one sentence the user population and actual usage environment to which the design knowledge applies.",
+              "content_digest": "3bb25f3252678a84fe361c9562692c27556d31b6fac53da87b763648e80ed6ac",
+              "position": 0,
+              "uid": "6cfd5026-0c04-5ed8-baac-a56e68723aa3"
+            },
+            {
+              "content": "Reviewers judge the generalization boundary of results through the specified target population and environment.",
+              "content_digest": "9119780de23a4734bc8e0ba3c39dce251611932fd86bec479b522adaf1882758",
+              "position": 1,
+              "uid": "5bc7cf05-8c47-57d4-a749-ec7d2ec45e3e"
+            },
+            {
+              "content": "Specify the workflow, technical infrastructure, and operational-authority conditions that must match before applying the design guidelines at another field site.",
+              "content_digest": "2970e43d1b52b63b6f76c3c55a5534d24508bcd32402e66098d75dbb52d8083b",
+              "position": 2,
+              "uid": "25731e2b-8535-5b37-a377-0a3a99dbe189"
+            },
+            {
+              "content": "The transferability of field design knowledge depends not only on user characteristics but also on workflow and technological–organizational infrastructure.",
+              "content_digest": "71b7cbcf151114f17886e57f026c2b2ebdd666c7aa88f95c85880a1bc96fdcd2",
+              "position": 3,
+              "uid": "d79ba448-76b6-592e-b4ba-8cfd98683755"
+            },
+            {
+              "content": "The user tends to apply results confirmed at one deployment site to all similar organizations.",
+              "content_digest": "810ee3a6b79606e7f199a30aa146f47e405ff71d1728a3bbfef16b601f5c0d5e",
+              "position": 4,
+              "uid": "cde0ee2b-af3c-5c0d-b23c-632778c93e20"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "bd12c1b9-3c5e-40ef-874a-9fa4db8c78db"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "Both frames value transferable HCI knowledge, while the compared frame makes its applicability boundaries explicit. The reference frame separately governs contribution presentation, recruitment burdens, and formative-evaluation framing; the compared frame additionally records a tendency toward overgeneralizing single-site results.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "07a2e1b6-98b8-48be-866f-862bd1d6fda3",
+              "memory_uid": "f8931b4e-9656-548d-84a1-f2f2c3eb47b1"
+            },
+            {
+              "frame_uid": "bd12c1b9-3c5e-40ef-874a-9fa4db8c78db",
+              "memory_uid": "6cfd5026-0c04-5ed8-baac-a56e68723aa3"
+            },
+            {
+              "frame_uid": "bd12c1b9-3c5e-40ef-874a-9fa4db8c78db",
+              "memory_uid": "5bc7cf05-8c47-57d4-a749-ec7d2ec45e3e"
+            },
+            {
+              "frame_uid": "bd12c1b9-3c5e-40ef-874a-9fa4db8c78db",
+              "memory_uid": "25731e2b-8535-5b37-a377-0a3a99dbe189"
+            },
+            {
+              "frame_uid": "bd12c1b9-3c5e-40ef-874a-9fa4db8c78db",
+              "memory_uid": "d79ba448-76b6-592e-b4ba-8cfd98683755"
+            }
+          ],
+          "reason": "The reference prioritizes principles usable beyond a specific prototype, while the compared memories specify population, environment, workflow, infrastructure, and organizational-authority boundaries for such transfer; these jointly govern how transferable contributions are stated.",
+          "status": "RESOLVED",
+          "summary": "Transferable design knowledge should be foregrounded together with the conditions governing where it applies.",
+          "uid": "2efe0bfd-9b4d-566f-9fd8-8ee381623032"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "07a2e1b6-98b8-48be-866f-862bd1d6fda3",
+              "memory_uid": "4a1de8df-6f03-5a3d-bbfa-7c1144d2ec5c"
+            },
+            {
+              "frame_uid": "07a2e1b6-98b8-48be-866f-862bd1d6fda3",
+              "memory_uid": "a42891a1-b674-5747-a77c-43699b0b9723"
+            }
+          ],
+          "reason": "The reference uniquely states the numerical limit and explains that exceeding it impedes reviewers’ identification of primary contributions.",
+          "status": "RESOLVED",
+          "summary": "Primary HCI contributions should not exceed two.",
+          "uid": "99c1d0df-42be-5cde-805b-a4eac54ad20b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "07a2e1b6-98b8-48be-866f-862bd1d6fda3",
+              "memory_uid": "b5b6a901-9047-5482-a0e1-d29e5f7171e8"
+            }
+          ],
+          "reason": "This is an independently useful reference-only presentation rule, distinct from the separate limit on the number of contributions.",
+          "status": "RESOLVED",
+          "summary": "Each design or empirical contribution should be named and expressed in one sentence.",
+          "uid": "4b00da81-b23f-5117-80a5-d6ddf9abc76c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "07a2e1b6-98b8-48be-866f-862bd1d6fda3",
+              "memory_uid": "e89de514-48a5-5e9b-96ca-f194c0ed79ab"
+            },
+            {
+              "frame_uid": "07a2e1b6-98b8-48be-866f-862bd1d6fda3",
+              "memory_uid": "f7025cbb-4005-53c6-9031-e33f04a86b92"
+            }
+          ],
+          "reason": "The two reference memories split one underlying recruitment-burden claim into its time and travel components, with no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "Community-participant studies should emphasize participation’s time and travel burdens.",
+          "uid": "8dbfb74a-9782-517c-b198-8616bbf98d58"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "07a2e1b6-98b8-48be-866f-862bd1d6fda3",
+              "memory_uid": "9d7169d5-058f-5f7c-b1ac-30cabd8ba02e"
+            }
+          ],
+          "reason": "This reference-only claim governs what a formative design account should foreground.",
+          "status": "RESOLVED",
+          "summary": "Formative work should emphasize design decisions subject to change rather than presenting a polished product.",
+          "uid": "38a2df67-a578-55cf-a2f9-07532c88e8bb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "07a2e1b6-98b8-48be-866f-862bd1d6fda3",
+              "memory_uid": "9bf9e735-7598-5977-abe2-87b2c9c38a24"
+            }
+          ],
+          "reason": "This reference-only claim independently governs the evidentiary interpretation of formative evaluation.",
+          "status": "RESOLVED",
+          "summary": "Formative evaluation supports later modification rather than definitively establishing one alternative’s superiority.",
+          "uid": "1823161f-1ded-51f5-8371-a94fe38afed4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bd12c1b9-3c5e-40ef-874a-9fa4db8c78db",
+              "memory_uid": "cde0ee2b-af3c-5c0d-b23c-632778c93e20"
+            }
+          ],
+          "reason": "The compared frame alone supplies this descriptive tendency; it is useful context but does not itself state the applicability-boundary policy expressed by the other compared memories.",
+          "status": "RESOLVED",
+          "summary": "Users tend to generalize results from one deployment site to all similar organizations.",
+          "uid": "a0749223-a840-5530-9871-dc9379f490cc"
+        }
+      ],
+      "reports": {
+        "both": "Both promote transferable design knowledge; the compared frame further identifies population, environment, workflow, infrastructure, and authority as applicability conditions.",
+        "compared_only": "The compared frame alone notes a tendency to generalize one deployment’s findings across similar organizations.",
+        "differences": "",
+        "reference_only": "The reference alone limits and formats primary contributions, highlights participant time and travel burdens, and frames formative evaluation around revisable decisions and iteration rather than polish or superiority."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "a3d70661-b11e-4f83-80f7-f7a06872e343"
+    },
+    "analysis_digest": "55bbfead6faf8b5a642857b4ef9f007aba3862bdccb484457f70775a6c26ade3",
+    "key": "26dcb8b690a1bfbe0f74dfce3be90c183cb50332c1a133ab72b7185d093b8e33",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 28.338331125003606,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "26dcb8b690a1bfbe0f74dfce3be90c183cb50332c1a133ab72b7185d093b8e33",
+  "created_at": "2026-08-13T18:18:50.801994Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/emphasis",
+  "pair_key": "9ef95425a2eba49b7ae32ba30f12601e10e40bbf36f8e12e495f717599329487",
+  "provider_seconds": 28.338331125003606,
+  "right": "task-2/advisor2/scope",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

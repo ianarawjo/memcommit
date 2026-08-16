@@ -1,0 +1,1187 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:04:50.646573+00:00",
+      "frames": [
+        {
+          "context_digest": "cbe8e726e8cd6a04e54c12a6d14115f85e5c813c7e854dca5ab0cfc21046aa6f",
+          "context_name": "task-1/campus-wiki/event-relocations",
+          "context_uid": "c56f66c9-ea2f-504b-85f3-69eb66929924",
+          "memories": [
+            {
+              "content": "The meeting space on the first floor of the Main Building can be reserved for external events.",
+              "content_digest": "2cb93158ce0dc1c04b5e5a9229f15eef4a8e44934c2bce7db2300408aa7ea40b",
+              "position": 0,
+              "uid": "a0700edb-d51a-54f3-88e9-6096cec36b1e"
+            },
+            {
+              "content": "The meeting space on the first floor of the Main Building can be reserved for campus meetings.",
+              "content_digest": "11479ede2996c7057163ca8a109b969276d04a22c80a3d22d715fb65ee008e65",
+              "position": 1,
+              "uid": "63986020-57b0-574d-aa13-277405aed516"
+            },
+            {
+              "content": "The exhibition and event hall on the tenth floor of the Main Building remains open for exhibition viewing during recess.",
+              "content_digest": "b8689cab8cc47edfab4aac02217e458d7632ca231abec23251041d4e286fe2bf",
+              "position": 2,
+              "uid": "a2ec4e87-1f0c-5c29-af2c-5bb560286a2e"
+            },
+            {
+              "content": "The exhibition and event hall on the tenth floor of the Main Building continues to host reserved events during recess.",
+              "content_digest": "847c8dd710e1cbd896a7565d77e490dc7a6aa94bcaf6d085e4fb737424fe6e39",
+              "position": 3,
+              "uid": "11e4782c-aad4-580a-9620-beab3072266d"
+            },
+            {
+              "content": "The auditorium in the separate building east of the Main Building does not share equipment with the Main Building's event facilities.",
+              "content_digest": "e7a314e32cddabd9750b323acb00a8d005931ce5011d78e0e7d4d41f7842adb8",
+              "position": 4,
+              "uid": "ec3a4511-80d6-5881-9623-25a75c6a0899"
+            },
+            {
+              "content": "The auditorium in the separate building east of the Main Building does not share an entrance with the Main Building's event facilities.",
+              "content_digest": "4d05f8dd51457a5c5821bff68fc1a1127c1e0251fc5ea4ed41bbb3e027e7ba14",
+              "position": 5,
+              "uid": "a224b6db-0154-5174-86ff-9c1dfa558762"
+            },
+            {
+              "content": "Present only spaces confirmed to be operating as alternative event venues.",
+              "content_digest": "dbdeeec6b859a2d6f5a307c0b3ae94f9d2f78476d4dd65cf299ae3b1f2d892d5",
+              "position": 6,
+              "uid": "50369ec7-7a24-55e3-898c-d9dc9a4c86ed"
+            },
+            {
+              "content": "Do not present a space whose available schedule has not been checked as though it were a confirmed reservation.",
+              "content_digest": "788ca274001c3957d34b7e8d601790e18e5564e370331c5886daa4caeae761cc",
+              "position": 7,
+              "uid": "a3c819d4-5ec6-5622-a27f-ce8b6e18b2d0"
+            },
+            {
+              "content": "External visitors who have previously been to an event venue in the Main Building tend to look for the same entrance and floor they used on their previous visit when they visit again.",
+              "content_digest": "c617259df341cbd034fe6221c5a24325ad19f30e9fbd594472f957cd602e5bae",
+              "position": 8,
+              "uid": "2a0f0a0e-1930-5983-9074-de449f8669d5"
+            },
+            {
+              "content": "The event information agent can compare published event spaces.",
+              "content_digest": "ecedd1c7a8ba14aa5e39551fc5facaad6175193fd19517e160b0f4aea404775f",
+              "position": 9,
+              "uid": "ed4e7c60-edeb-59e3-a590-f6e359069f77"
+            },
+            {
+              "content": "The event information agent can compare published operating hours.",
+              "content_digest": "adb5726cf86783445eee4d64571203b2aa66cdda37a6fa8c553c45e0ba602442",
+              "position": 10,
+              "uid": "0170aa1a-9723-5f87-9aa3-37150022f6ac"
+            },
+            {
+              "content": "The event information agent cannot create reservations.",
+              "content_digest": "a435ab4c83c83d556a74d5a2523a0f32547634e43756fe9317064da8a8fe3400",
+              "position": 11,
+              "uid": "1929991c-36ee-5897-9409-d83400120362"
+            },
+            {
+              "content": "The event information agent cannot guarantee remaining seat availability.",
+              "content_digest": "201f56a99a13f44d16948dd28ea52f9648d528eddb3154f08275270c48a6b03b",
+              "position": 12,
+              "uid": "c7b42a0e-e4c9-53d2-b2b5-87307bb4957f"
+            },
+            {
+              "content": "Some seminar rooms on the fifth floor of the Main Building are also used for regularly scheduled classes.",
+              "content_digest": "5f969f7fe59a7da4348352c2943f7c3dfe47017ad73be563ff7ca463d00469e8",
+              "position": 13,
+              "uid": "a1b88b90-3b59-5f36-8ac4-e45f1962ae64"
+            },
+            {
+              "content": "Some seminar rooms on the sixth floor of the Main Building are also used for regularly scheduled classes.",
+              "content_digest": "ed3fc4a82047c3f3203284e6803bffb062f20ed4c355d6f3be64846541466009",
+              "position": 14,
+              "uid": "c4fe128d-067a-528d-8ef8-b2810e56884c"
+            },
+            {
+              "content": "Check class schedules before presenting any seminar rooms on the fifth and sixth floors of the Main Building as alternative event rooms.",
+              "content_digest": "6f500da5f88e27245f9d5d8fcff66e5c08cb9e6cc009226c62f0bb576a670798",
+              "position": 15,
+              "uid": "b79a722a-c043-5e7f-8469-1c761d85219a"
+            },
+            {
+              "content": "External event operators expect the loading entrance and route to the stage to be clearly confirmed by the day before the event.",
+              "content_digest": "aec7cf4089e9ef01ed02391fde38d9af58471df8c0653e4b537914ff18f5594f",
+              "position": 16,
+              "uid": "4bc2268d-5966-53bd-9501-e8fb0861ddd0"
+            },
+            {
+              "content": "The names and capacities of reservable campus spaces are published in the public space directory.",
+              "content_digest": "b4e7ee0d308507be467ee3eb300e45ef765dce9fb33c9a68c2cc8552bd154e3e",
+              "position": 17,
+              "uid": "d8cc31a3-a547-5691-92a9-efcb1c96367d"
+            },
+            {
+              "content": "Submit event space reservation requests through the campus space reservation portal.",
+              "content_digest": "99b760c3c747b09678c44e82305d5e48179c3d0ce1af0706818a8d534923c36f",
+              "position": 18,
+              "uid": "087bb085-9bc8-57f3-83ee-7e90895904ef"
+            },
+            {
+              "content": "Event organizers must confirm that the capacity is appropriate for the expected number of attendees.",
+              "content_digest": "2450bac951eb2d533f79bf281fd732077e97b00adf96efdd44d636f76a2d5574",
+              "position": 19,
+              "uid": "bf506b28-8854-567c-80de-477512ae1f11"
+            },
+            {
+              "content": "Events that require accessible seating can indicate that need in the reservation request.",
+              "content_digest": "e156b2719f1eab921525f66fba4db9cf2667e4f8c5cc12e4ef63cced9519dad7",
+              "position": 20,
+              "uid": "5015ee36-4f8c-54c7-ae80-caa21c1c837f"
+            },
+            {
+              "content": "Campus event reservations by external organizations require a campus sponsoring department.",
+              "content_digest": "f921ef478ec1956159bb68a89aee5129b5c04102cea385de40962b0e290dcc80",
+              "position": 21,
+              "uid": "bc10fe3c-0618-5c74-91c9-e50ef58d287e"
+            },
+            {
+              "content": "Student organization event reservations must be requested through a registered organization account.",
+              "content_digest": "c9eb067ef6d427d75f67a3bd4eaeaff14153b582eac756ecca655a3b3658b705",
+              "position": 22,
+              "uid": "a2b87746-8b25-5f2e-b5f9-78b2d8f8281d"
+            },
+            {
+              "content": "A space reservation is confirmed after an approval confirmation is issued.",
+              "content_digest": "0c4a85ddb9ebbe8ff35a820fcb8621837e6c698d0bd28d6c1949b04f33662711",
+              "position": 23,
+              "uid": "f995af31-6820-58b1-a805-3d2d03c75014"
+            },
+            {
+              "content": "Space use for recurring events must be approved again each semester.",
+              "content_digest": "487d84b74b7a33ef75bee2d1df7d54ee4b87ac0740ff46e8d9b6b18f0d41385e",
+              "position": 24,
+              "uid": "cc720c59-0014-5460-9ccc-94316c641a3c"
+            },
+            {
+              "content": "The reservation time includes the time needed for event setup and teardown.",
+              "content_digest": "0c532a725da37cfa1c234fcb24731d8c371d891f8c17c1b14416b841ad567d82",
+              "position": 25,
+              "uid": "a72cb1ad-ea1d-5e17-a5cd-06b082340d0d"
+            },
+            {
+              "content": "After the event ends, return moved furniture to the space's default arrangement.",
+              "content_digest": "9e13d0617fe2ffa33a39dc61f30cff07d16fb7067ea49d4ed67d86a36862ba46",
+              "position": 26,
+              "uid": "c70f4d03-7cc1-528b-a5f8-5944c2012b10"
+            },
+            {
+              "content": "Check the usage rules for each space to determine whether food may be brought in.",
+              "content_digest": "1f14e201a7de70d0d728489d36149088139c74c78ade90e8f8b42dcd9fd2da32",
+              "position": 27,
+              "uid": "55540a25-fbd0-5cc8-b2db-b83ac4042735"
+            },
+            {
+              "content": "Request event audio and video support separately from the space reservation.",
+              "content_digest": "3141529ff18153f4356fd790f896f8146df9e3afd1a27f06e366ecdaeb54ddf8",
+              "position": 28,
+              "uid": "9e496450-0188-5f64-84b2-295cd1e9c5da"
+            },
+            {
+              "content": "Install temporary event signs so they do not obstruct passageways or emergency exits.",
+              "content_digest": "98f5751208670e11e8f137893e9710b722cdd1fdaf0c0ef16663d7b9fbf5e938",
+              "position": 29,
+              "uid": "819beea8-c827-53e1-9a95-cb22de35f9ee"
+            },
+            {
+              "content": "The event information agent can compare the capacities of spaces in the public directory.",
+              "content_digest": "5ef422335b1ca12915a3c35cae4fe078d3dc3c6078f89f3024a738df7db7fd69",
+              "position": 30,
+              "uid": "a4c8e1a2-81e8-52a5-92cd-c79a382cb671"
+            },
+            {
+              "content": "The event information agent cannot access private participant lists.",
+              "content_digest": "350cf3004875bcb1d2bdad1a1ae3e780e563fac36bf388bde9ada9459d85bfe6",
+              "position": 31,
+              "uid": "7795aa61-2921-549b-996c-64240f8e9b2a"
+            },
+            {
+              "content": "The event information agent cannot guarantee when a reservation under review will be approved.",
+              "content_digest": "b113b1f7f424ef537f0191e6e63e1830d8744b8a6ff57559c69b8c58d3e67aa2",
+              "position": 32,
+              "uid": "fdae8ad0-8b99-543b-8c09-f0af60653036"
+            },
+            {
+              "content": "Check both the official event schedule and facilities notices to confirm whether a space is operating that day.",
+              "content_digest": "46da755b84388bee671614ffd205ac057fd0e6eb8c6a9758127ea31a19787d2c",
+              "position": 33,
+              "uid": "232cd8db-6319-5bd0-a4b9-5861838268e3"
+            },
+            {
+              "content": "Do not present a temporarily held space as a confirmed reserved space.",
+              "content_digest": "9d25b79659945b48f071275209e280247420ee05a885791cfcaae7c6d1bb86a8",
+              "position": 34,
+              "uid": "3329f2cc-afc5-559f-bc3b-ea82df8881d1"
+            },
+            {
+              "content": "Visitors attending external events often expect that they can enter the building any time before the event begins.",
+              "content_digest": "e5ca9f9f883a033953f72cd974c6d49ce81174527b41f6dc050eb2875898be00",
+              "position": 35,
+              "uid": "f986e70e-4775-5ab3-9d8e-3ea9fc3df540"
+            },
+            {
+              "content": "Event operators bringing equipment expect the loading entrance and route to the stage to be clearly stated in the reservation confirmation.",
+              "content_digest": "51c5dcd95401963467be1cf236c91b505374afc00f464d11b9eb694448a7de80",
+              "position": 36,
+              "uid": "13211336-6483-5331-96e5-24490ce7da63"
+            },
+            {
+              "content": "Attendees who need event accessibility support may easily miss the advance contact requirement because they expect the necessary support to be prepared without a separate request.",
+              "content_digest": "c421698fb86bd667aec234fd2abfcaf27dca7c496f522b195739510889c092a6",
+              "position": 37,
+              "uid": "22f9c5bf-d01c-59e0-90e3-0cf93bdae8b6"
+            },
+            {
+              "content": "The small seminar rooms in the Main Building have lower capacities than the auditorium in the separate building.",
+              "content_digest": "ef4e14eaa9d478edbaafa33e5d54a59ced88ffbbf676cb327c36b26240b77128",
+              "position": 38,
+              "uid": "e9c632bf-da2a-5b8a-86c0-87da4a8f3ffc"
+            },
+            {
+              "content": "Exhibition viewing hours on the tenth floor of the Main Building are published separately from the usage hours for reserved events.",
+              "content_digest": "8ee29ed1c6fa1a0556191065783f9e413432128e2439b9a2a7662a10f502c697",
+              "position": 39,
+              "uid": "8ec61da7-e53e-5ef4-b7e6-edafc872ffd8"
+            },
+            {
+              "content": "The meeting space on the first floor of the Main Building has a flexible area without fixed seating.",
+              "content_digest": "9358ee0b432eef43a9695a3dcdb3c603d5657ff1fc8c8d294f117fbde2f853e0",
+              "position": 40,
+              "uid": "5fa014b2-5fca-581b-b07a-7990cea080af"
+            },
+            {
+              "content": "The auditorium in the separate building has an event information desk separate from the Main Building.",
+              "content_digest": "033a64b0004316fb3686a89da3df0383bd7ada65f4fa549738c56fc588eab67c",
+              "position": 41,
+              "uid": "bb2aa827-e021-5b02-b7ed-e005ca2c291b"
+            },
+            {
+              "content": "External event vendors expect the campus sponsoring department to confirm the loading time and route.",
+              "content_digest": "6b0f7adda7ce94ebabe202e6863c64598b0cea48b8697cf2ea1cb4a0e16b3d72",
+              "position": 42,
+              "uid": "cc2a4dc4-bf8a-5902-8ee1-c3c334549ef2"
+            },
+            {
+              "content": "Canceled public events are marked as canceled on the official event schedule.",
+              "content_digest": "423672fbf246a65487b4596be1b0e78467dda6a3f999983354942f26d10f9009",
+              "position": 43,
+              "uid": "5bc6cebc-fff5-59e7-bec6-b6d8d83feb35"
+            },
+            {
+              "content": "Spaces that can be reserved on weekdays may not operate on public holidays.",
+              "content_digest": "2e15fbac8c067676a25d6439bbb6516830ea918653060e5ef79f5fe02f69fdfb",
+              "position": 44,
+              "uid": "a32a3a9f-4d3e-5727-a91a-ce827831d7d2"
+            },
+            {
+              "content": "Emergency safety measures take priority over approved space reservations.",
+              "content_digest": "5991cc74e0b38021b2ff93b2ad7d6f882ecafae7960169911b418b142ed6f0ad",
+              "position": 45,
+              "uid": "ff9fa75e-f040-54a7-b4b6-30153da4eebd"
+            },
+            {
+              "content": "If space names appear identical, check the building name and floor together.",
+              "content_digest": "1d8961a2c71e7007fd10461d54726fbe6fa146fa49448255772ab0860e59c2a4",
+              "position": 46,
+              "uid": "83b95f40-46ad-54f6-b535-85e99a83ee99"
+            },
+            {
+              "content": "Turn in items found at an event venue to the information desk in that building.",
+              "content_digest": "738e973c5711d07aa44b3c3e6d3aa7b5bff4dd3859db2577096aaf793613caf9",
+              "position": 47,
+              "uid": "d68f7446-40e6-54bf-b812-313b2595c2c8"
+            },
+            {
+              "content": "Event organizers expect the permitted scope of photography to be clearly communicated to attendees in advance.",
+              "content_digest": "08aecbebd7b56543d4702a4bd798e9e636f99c8ad8980303abcf3849390fe04b",
+              "position": 48,
+              "uid": "4510b985-b70a-5606-8bbe-98bf494ab656"
+            },
+            {
+              "content": "Distinguish between public event information and private participant information when providing guidance.",
+              "content_digest": "f9b97f711458443844fea2d91aa7cddd6ab287b2d78e322ab37fe87bbe942b87",
+              "position": 49,
+              "uid": "2fa16a36-c2d4-5fcd-ad8f-29780fc0bf06"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042"
+        },
+        {
+          "context_digest": "55a29d0b1b6f2f0ca728a22ba33d72aaa87f2b67d103b6e01de51c20fa721b51",
+          "context_name": "task-1/participant/construction-updates/shop-updates",
+          "context_uid": "94dbac4b-70b5-5c76-b53a-1ebc69248a41",
+          "memories": [
+            {
+              "content": "Add campus-wiki/shop-updates: The ATM on the first floor of the Main Building is closed during the construction period.",
+              "content_digest": "9c5aa27570e0e2700fda36f27a0dd97d27daa9d3096dc7d353440489fc6d17f4",
+              "position": 0,
+              "uid": "37113bd0-5194-521b-9d9e-48903d819520"
+            },
+            {
+              "content": "Add campus-wiki/shop-updates: The 24-hour unattended store on the first floor of the Main Building is closed during the construction period.",
+              "content_digest": "ef949eb8c4e67133d73e13aa012410352f95630ca5b37183f788190aa78c46ab",
+              "position": 1,
+              "uid": "741db845-9a4e-5281-825c-e046801b8be5"
+            },
+            {
+              "content": "Add campus-wiki/shop-updates: During the construction period, direct users of the Main Building ATM to the ATM on the first floor of the West Complex.",
+              "content_digest": "caf6d19fa67667fc574eef5da0d166d843c1263ad96effab38e3b3fc7e99e001",
+              "position": 2,
+              "uid": "b49d48fb-d2d9-55b8-bc87-b8e0066541f8"
+            },
+            {
+              "content": "Add campus-wiki/shop-updates: During the construction period, direct users of the Main Building's 24-hour store to the Campus Store in the Engineering Building between 7:00 a.m. and 11:00 p.m.",
+              "content_digest": "5ae53e1b59cd11ee8af5dd38fcabd080e2fcbc4b7188dff97eb66a9dcafc4a7d",
+              "position": 3,
+              "uid": "3094e271-3bb6-57cf-ae78-c67eeac30d94"
+            },
+            {
+              "content": "Add campus-wiki/shop-updates: Explain that after 11:00 p.m. there is no alternative on-campus store to replace the 24-hour unattended store in the Main Building.",
+              "content_digest": "f46e632f91ff8c7264b7a57fbff4036e79faec9bb1e39ae9812d246191f054e5",
+              "position": 4,
+              "uid": "c88880dc-ebfa-5847-89d2-692cd22406d5"
+            },
+            {
+              "content": "Modify campus-wiki/shop-updates: The Campus Store on the first floor of the Main Building is closed during the construction period.",
+              "content_digest": "9f70033352f539616b31ed2bc545fa63edc4ef065684623fb5fd6f0eed5eae9b",
+              "position": 5,
+              "uid": "9e0d0ca2-362c-5498-9560-a217d74eaaab"
+            },
+            {
+              "content": "Modify campus-wiki/shop-updates: During the construction period, the Campus Store in the Engineering Building operates from 7:00 a.m. to 11:00 p.m.",
+              "content_digest": "31fa2ee2fb31c9cdeccf16222a325738c869cc0b645c70fb78a5dc745261dba7",
+              "position": 6,
+              "uid": "9c623c17-1942-52a6-bf3d-ebc25d6ad078"
+            },
+            {
+              "content": "Add campus-wiki/shop-updates: The cafe on the first floor of the Main Building does not operate during the construction period.",
+              "content_digest": "a93f57dca84d8ad52e001965948d66941fbf101bf6602951d96586edd4dafb73",
+              "position": 7,
+              "uid": "048d155c-f81b-5293-b493-44fbce424662"
+            },
+            {
+              "content": "Add campus-wiki/shop-updates: During the cafe closure, instruct only staff to use the coffee machine inside the first-floor Innovation Hub.",
+              "content_digest": "ac8c6848d5f9eb080a13db9f3481b7185212798f7e4316ab1ce95078f4c572a9",
+              "position": 8,
+              "uid": "80d1e21d-3839-5515-b235-e1c1282599e5"
+            },
+            {
+              "content": "Modify campus-wiki/shop-updates: A student who used the Main Building ATM in the evening may expect to be able to withdraw cash at the same location during the construction period, come to the Main Building, and then have to find the West Complex ATM.",
+              "content_digest": "4003382735d7c160772cb6444912cd0a1b572dc89f6a8e94670fef3a2099d071",
+              "position": 9,
+              "uid": "0a73702a-306c-5b54-a2c3-d3e4a23d6a9f"
+            },
+            {
+              "content": "Modify campus-wiki/shop-updates: During the construction period, the amenities guidance agent may exclude the closed Main Building ATM, unattended store, Campus Store, and cafe from recommendations and provide guidance only to posted alternative facilities.",
+              "content_digest": "76c6fc5e99a27a79caa030aa9126d16e6c10eb95a86cc0496f47a954df9e3173",
+              "position": 10,
+              "uid": "e7b747cf-a1d2-571a-af5b-e1d3514434f1"
+            },
+            {
+              "content": "Add campus-wiki/shop-updates: During the construction period, the route for ATM use changes from the first floor of the Main Building to the first floor of the West Complex without passing through the Main Building construction zone.",
+              "content_digest": "e45fdbdf6776a010ad9692c7d780853d498973f66a3f8bcc4a3f746a1485270e",
+              "position": 11,
+              "uid": "b8300d7e-381c-5bce-81e7-fbb8a00eac9d"
+            },
+            {
+              "content": "Modify campus-wiki/shop-updates: The concessionaire operating the Campus Store in the Engineering Building may expect more alternative users because of the closure of Main Building facilities and seek to increase evening staffing and inventory above normal levels during the construction period.",
+              "content_digest": "5d3b92486b39f0220b05e3ee6896f3e55d2ebe1b5a582b5025fe7f8641af9ef5",
+              "position": 12,
+              "uid": "50be93d9-d0da-542c-beab-be56adde4ee2"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "8e001840-490f-4ad4-9c2f-7359a1a097ed"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate operational domains: event-space reservations and venue guidance versus temporary retail and amenity closures during construction. Their information is independently useful, with no scope-aligned claims that warrant equivalence, compatibility, conflict, or conditional comparison.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "a0700edb-d51a-54f3-88e9-6096cec36b1e"
+            },
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "63986020-57b0-574d-aa13-277405aed516"
+            }
+          ],
+          "reason": "Only the reference describes the reservable uses of this meeting space.",
+          "status": "RESOLVED",
+          "summary": "The first-floor Main Building meeting space is reservable for external events and campus meetings.",
+          "uid": "2d23aa9c-9771-5d55-bbf4-0152509afee0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "a2ec4e87-1f0c-5c29-af2c-5bb560286a2e"
+            },
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "11e4782c-aad4-580a-9620-beab3072266d"
+            }
+          ],
+          "reason": "Only the reference describes recess operations for the exhibition and event hall.",
+          "status": "RESOLVED",
+          "summary": "The tenth-floor hall remains available during recess for exhibition viewing and reserved events.",
+          "uid": "07e2dec1-2730-5888-87a7-af8c63e2f508"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "ec3a4511-80d6-5881-9623-25a75c6a0899"
+            }
+          ],
+          "reason": "Only the reference states this equipment-separation fact.",
+          "status": "RESOLVED",
+          "summary": "The separate-building auditorium does not share equipment with Main Building event facilities.",
+          "uid": "e49d7385-6a22-5fb8-9370-e8ceb3922830"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "a224b6db-0154-5174-86ff-9c1dfa558762"
+            }
+          ],
+          "reason": "Only the reference states this entrance-separation fact.",
+          "status": "RESOLVED",
+          "summary": "The separate-building auditorium has an entrance distinct from Main Building event facilities.",
+          "uid": "2a8f6925-9502-5fe8-bfb7-98be9949b597"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "50369ec7-7a24-55e3-898c-d9dc9a4c86ed"
+            }
+          ],
+          "reason": "Only the reference establishes this event-venue recommendation rule.",
+          "status": "RESOLVED",
+          "summary": "Alternative event venues should be presented only when their operation is confirmed.",
+          "uid": "c6a70a9d-f280-5b46-aaf1-6ba9c4c75a7b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "a3c819d4-5ec6-5622-a27f-ce8b6e18b2d0"
+            },
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "3329f2cc-afc5-559f-bc3b-ea82df8881d1"
+            }
+          ],
+          "reason": "Only the reference distinguishes tentative or unchecked status from confirmed reservations.",
+          "status": "RESOLVED",
+          "summary": "Unchecked availability and temporary holds must not be represented as confirmed reservations.",
+          "uid": "2467527a-5074-5f0e-a5d1-8cee9f118c4d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "2a0f0a0e-1930-5983-9074-de449f8669d5"
+            }
+          ],
+          "reason": "Only the reference describes this venue-navigation expectation.",
+          "status": "RESOLVED",
+          "summary": "Returning external visitors tend to seek the Main Building entrance and floor used previously.",
+          "uid": "788c6d02-ee5c-5bbb-8fb4-6a3faef4d268"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "ed4e7c60-edeb-59e3-a590-f6e359069f77"
+            }
+          ],
+          "reason": "Only the reference states this agent capability.",
+          "status": "RESOLVED",
+          "summary": "The event information agent can compare published event spaces.",
+          "uid": "baf6c269-ad44-5e49-80a6-863924fedd84"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "0170aa1a-9723-5f87-9aa3-37150022f6ac"
+            }
+          ],
+          "reason": "Only the reference states this agent capability.",
+          "status": "RESOLVED",
+          "summary": "The event information agent can compare published operating hours.",
+          "uid": "78fedeb1-f1cc-5701-8714-4d4427bf8559"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "1929991c-36ee-5897-9409-d83400120362"
+            }
+          ],
+          "reason": "Only the reference states this agent limitation.",
+          "status": "RESOLVED",
+          "summary": "The event information agent cannot create reservations.",
+          "uid": "a0f38872-23b0-550a-8127-72884a9a6a9e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "c7b42a0e-e4c9-53d2-b2b5-87307bb4957f"
+            }
+          ],
+          "reason": "Only the reference states this agent limitation.",
+          "status": "RESOLVED",
+          "summary": "The event information agent cannot guarantee remaining seat availability.",
+          "uid": "84c61485-6468-57c4-8e8a-64855abba447"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "a1b88b90-3b59-5f36-8ac4-e45f1962ae64"
+            },
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "c4fe128d-067a-528d-8ef8-b2810e56884c"
+            },
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "b79a722a-c043-5e7f-8469-1c761d85219a"
+            }
+          ],
+          "reason": "Only the reference links regular classroom use on both floors to this verification requirement.",
+          "status": "RESOLVED",
+          "summary": "Class schedules must be checked before fifth- and sixth-floor seminar rooms are offered as event alternatives.",
+          "uid": "476bd844-425d-5e29-9403-a63bf6375580"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "4bc2268d-5966-53bd-9501-e8fb0861ddd0"
+            },
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "13211336-6483-5331-96e5-24490ce7da63"
+            },
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "cc2a4dc4-bf8a-5902-8ee1-c3c334549ef2"
+            }
+          ],
+          "reason": "Only the reference describes these related logistics expectations for operators, vendors, and sponsoring departments.",
+          "status": "RESOLVED",
+          "summary": "Equipment-loading times, entrances, and stage routes are expected to be clearly confirmed before external events.",
+          "uid": "d62bcdca-2ba4-5045-9e81-d36c34a92cd9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "d8cc31a3-a547-5691-92a9-efcb1c96367d"
+            }
+          ],
+          "reason": "Only the reference identifies this directory content.",
+          "status": "RESOLVED",
+          "summary": "The public space directory publishes names and capacities of reservable campus spaces.",
+          "uid": "55664430-a857-56e1-b17a-66f06a469d67"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "087bb085-9bc8-57f3-83ee-7e90895904ef"
+            }
+          ],
+          "reason": "Only the reference specifies this submission channel.",
+          "status": "RESOLVED",
+          "summary": "Event-space reservation requests are submitted through the campus reservation portal.",
+          "uid": "cc187d78-f928-5374-8675-d01d01acdd29"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "bf506b28-8854-567c-80de-477512ae1f11"
+            }
+          ],
+          "reason": "Only the reference assigns this capacity-checking responsibility.",
+          "status": "RESOLVED",
+          "summary": "Organizers must confirm that venue capacity suits expected attendance.",
+          "uid": "9b844aa1-f548-5c16-8436-954d4a8a3ef4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "5015ee36-4f8c-54c7-ae80-caa21c1c837f"
+            }
+          ],
+          "reason": "Only the reference describes this reservation option.",
+          "status": "RESOLVED",
+          "summary": "Accessible seating needs can be indicated in the reservation request.",
+          "uid": "9d6d70aa-6e1a-520a-82ea-564aae9049bd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "bc10fe3c-0618-5c74-91c9-e50ef58d287e"
+            }
+          ],
+          "reason": "Only the reference states this sponsorship requirement.",
+          "status": "RESOLVED",
+          "summary": "External organizations require a campus sponsoring department for event reservations.",
+          "uid": "c1d07b19-5725-51b4-9d44-ac34b7380b59"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "a2b87746-8b25-5f2e-b5f9-78b2d8f8281d"
+            }
+          ],
+          "reason": "Only the reference states this account requirement.",
+          "status": "RESOLVED",
+          "summary": "Student-organization reservations require a registered organization account.",
+          "uid": "597451bf-9e90-5039-b292-7f16a0a4d31b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "f995af31-6820-58b1-a805-3d2d03c75014"
+            }
+          ],
+          "reason": "Only the reference defines the confirmation threshold.",
+          "status": "RESOLVED",
+          "summary": "A space reservation becomes confirmed when approval confirmation is issued.",
+          "uid": "0254a0af-5671-5a37-8254-8942c2c73fa2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "cc720c59-0014-5460-9ccc-94316c641a3c"
+            }
+          ],
+          "reason": "Only the reference states this renewal requirement.",
+          "status": "RESOLVED",
+          "summary": "Recurring event use must be approved again each semester.",
+          "uid": "8352517c-7bdb-50da-9609-7ff766119aeb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "a72cb1ad-ea1d-5e17-a5cd-06b082340d0d"
+            }
+          ],
+          "reason": "Only the reference defines this timing rule.",
+          "status": "RESOLVED",
+          "summary": "Reserved time includes event setup and teardown.",
+          "uid": "ba339a47-473a-5020-b2f9-fca7c5eec77c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "c70f4d03-7cc1-528b-a5f8-5944c2012b10"
+            }
+          ],
+          "reason": "Only the reference states this post-event duty.",
+          "status": "RESOLVED",
+          "summary": "Moved furniture must be returned to the venue’s default arrangement after an event.",
+          "uid": "f78c6f41-3fed-5e1f-be4c-a0b3d279217b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "55540a25-fbd0-5cc8-b2db-b83ac4042735"
+            }
+          ],
+          "reason": "Only the reference states this venue-specific check.",
+          "status": "RESOLVED",
+          "summary": "Food permission must be checked in each space’s usage rules.",
+          "uid": "2ccfab5e-07fb-5d7d-9cfc-217a7b1823c4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "9e496450-0188-5f64-84b2-295cd1e9c5da"
+            }
+          ],
+          "reason": "Only the reference states this separate-request requirement.",
+          "status": "RESOLVED",
+          "summary": "Event audiovisual support must be requested separately from the space reservation.",
+          "uid": "772ffcb7-9b54-547f-8cc5-9b2dee52b832"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "819beea8-c827-53e1-9a95-cb22de35f9ee"
+            }
+          ],
+          "reason": "Only the reference states this signage safety rule.",
+          "status": "RESOLVED",
+          "summary": "Temporary event signs must not obstruct passageways or emergency exits.",
+          "uid": "5c243a39-15fe-59e6-ac8a-43d318921f4c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "a4c8e1a2-81e8-52a5-92cd-c79a382cb671"
+            }
+          ],
+          "reason": "Only the reference states this agent capability.",
+          "status": "RESOLVED",
+          "summary": "The event information agent can compare public-directory venue capacities.",
+          "uid": "63828aba-7806-58ce-8b6c-73ac98a721d7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "7795aa61-2921-549b-996c-64240f8e9b2a"
+            }
+          ],
+          "reason": "Only the reference states this privacy limitation.",
+          "status": "RESOLVED",
+          "summary": "The event information agent cannot access private participant lists.",
+          "uid": "3c90d090-aa97-54d5-b42c-2d24f7238e71"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "fdae8ad0-8b99-543b-8c09-f0af60653036"
+            }
+          ],
+          "reason": "Only the reference states this approval-timing limitation.",
+          "status": "RESOLVED",
+          "summary": "The event information agent cannot guarantee when a pending reservation will be approved.",
+          "uid": "568f541b-3546-5feb-8b88-36d43fbdf4cd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "232cd8db-6319-5bd0-a4b9-5861838268e3"
+            }
+          ],
+          "reason": "Only the reference establishes this two-source operating check.",
+          "status": "RESOLVED",
+          "summary": "Daily venue operation should be verified against the official event schedule and facilities notices.",
+          "uid": "fe4a4fd7-d695-5250-9a82-1299624b01fc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "f986e70e-4775-5ab3-9d8e-3ea9fc3df540"
+            }
+          ],
+          "reason": "Only the reference describes this access expectation.",
+          "status": "RESOLVED",
+          "summary": "External-event visitors may expect building access at any time before an event begins.",
+          "uid": "5f0d3e32-395f-54e1-9b31-1f97bdbd52dd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "22f9c5bf-d01c-59e0-90e3-0cf93bdae8b6"
+            }
+          ],
+          "reason": "Only the reference describes this accessibility-support expectation risk.",
+          "status": "RESOLVED",
+          "summary": "Attendees may overlook advance accessibility-contact requirements because they expect support without a separate request.",
+          "uid": "331bec56-0bfa-5043-98b2-d74273fde922"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "e9c632bf-da2a-5b8a-86c0-87da4a8f3ffc"
+            }
+          ],
+          "reason": "Only the reference provides this relative-capacity comparison.",
+          "status": "RESOLVED",
+          "summary": "Small Main Building seminar rooms have lower capacities than the separate-building auditorium.",
+          "uid": "0e1be16c-1830-5302-8459-fbf3f20ce367"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "8ec61da7-e53e-5ef4-b7e6-edafc872ffd8"
+            }
+          ],
+          "reason": "Only the reference distinguishes these schedules.",
+          "status": "RESOLVED",
+          "summary": "Tenth-floor exhibition-viewing hours are published separately from reserved-event usage hours.",
+          "uid": "a59eb086-73f5-5c27-8daf-fc16ef25b94a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "5fa014b2-5fca-581b-b07a-7990cea080af"
+            }
+          ],
+          "reason": "Only the reference describes this venue feature.",
+          "status": "RESOLVED",
+          "summary": "The first-floor meeting space has a flexible area without fixed seating.",
+          "uid": "05994a9f-1291-53e3-a6cf-27bd49ba1087"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "bb2aa827-e021-5b02-b7ed-e005ca2c291b"
+            }
+          ],
+          "reason": "Only the reference describes this building-specific desk.",
+          "status": "RESOLVED",
+          "summary": "The separate-building auditorium has its own event information desk.",
+          "uid": "f78b3bf2-5a07-5ba0-a634-bc876cb05995"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "5bc6cebc-fff5-59e7-bec6-b6d8d83feb35"
+            }
+          ],
+          "reason": "Only the reference describes how cancellations are published.",
+          "status": "RESOLVED",
+          "summary": "Canceled public events are marked on the official event schedule.",
+          "uid": "4c679f93-6b4a-52ee-bdd6-6a5bda0f0f3c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "a32a3a9f-4d3e-5727-a91a-ce827831d7d2"
+            }
+          ],
+          "reason": "Only the reference states this holiday caveat.",
+          "status": "RESOLVED",
+          "summary": "Weekday-reservable spaces may be closed on public holidays.",
+          "uid": "b8cd5bfb-e67e-5626-abc7-0039449946fe"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "ff9fa75e-f040-54a7-b4b6-30153da4eebd"
+            }
+          ],
+          "reason": "Only the reference establishes this priority rule.",
+          "status": "RESOLVED",
+          "summary": "Emergency safety measures override approved space reservations.",
+          "uid": "9278cd07-9103-5eaa-8dcb-08505e71a98e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "83b95f40-46ad-54f6-b535-85e99a83ee99"
+            }
+          ],
+          "reason": "Only the reference states this identification rule.",
+          "status": "RESOLVED",
+          "summary": "Identically named spaces should be distinguished using both building and floor.",
+          "uid": "16ac2418-e164-55b7-b95f-2f1c845dfba9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "d68f7446-40e6-54bf-b812-313b2595c2c8"
+            }
+          ],
+          "reason": "Only the reference provides this lost-property procedure.",
+          "status": "RESOLVED",
+          "summary": "Found items should be turned in to the information desk in the venue’s building.",
+          "uid": "9c4c772f-e636-5eca-9d24-cf47b79a7f1d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "4510b985-b70a-5606-8bbe-98bf494ab656"
+            }
+          ],
+          "reason": "Only the reference describes this communication expectation.",
+          "status": "RESOLVED",
+          "summary": "Organizers are expected to communicate permitted photography scope before events.",
+          "uid": "f43abaa4-ee98-5582-b1a0-0d79ed1c31f5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b3812eee-88e1-4c0f-9ce2-89e90ca69042",
+              "memory_uid": "2fa16a36-c2d4-5fcd-ad8f-29780fc0bf06"
+            }
+          ],
+          "reason": "Only the reference states this information-handling rule.",
+          "status": "RESOLVED",
+          "summary": "Guidance must distinguish public event information from private participant information.",
+          "uid": "2585d862-d21b-529f-bdf4-e53dfe1a3d9f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8e001840-490f-4ad4-9c2f-7359a1a097ed",
+              "memory_uid": "37113bd0-5194-521b-9d9e-48903d819520"
+            }
+          ],
+          "reason": "Only the compared frame describes this temporary ATM closure.",
+          "status": "RESOLVED",
+          "summary": "The Main Building first-floor ATM is closed during construction.",
+          "uid": "26b11f8d-8776-541d-9500-faae5befe111"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8e001840-490f-4ad4-9c2f-7359a1a097ed",
+              "memory_uid": "741db845-9a4e-5281-825c-e046801b8be5"
+            }
+          ],
+          "reason": "Only the compared frame describes this temporary unattended-store closure.",
+          "status": "RESOLVED",
+          "summary": "The Main Building first-floor unattended store is closed during construction.",
+          "uid": "0fcc5616-eace-5919-909e-496ea91d5921"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8e001840-490f-4ad4-9c2f-7359a1a097ed",
+              "memory_uid": "b49d48fb-d2d9-55b8-bc87-b8e0066541f8"
+            },
+            {
+              "frame_uid": "8e001840-490f-4ad4-9c2f-7359a1a097ed",
+              "memory_uid": "b8300d7e-381c-5bce-81e7-fbb8a00eac9d"
+            }
+          ],
+          "reason": "Only the compared frame provides this replacement ATM and routing guidance.",
+          "status": "RESOLVED",
+          "summary": "During construction, ATM users should use a route to the West Complex first-floor ATM that avoids the construction zone.",
+          "uid": "afe667f1-8c01-564d-9893-5f159b31c640"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8e001840-490f-4ad4-9c2f-7359a1a097ed",
+              "memory_uid": "3094e271-3bb6-57cf-ae78-c67eeac30d94"
+            },
+            {
+              "frame_uid": "8e001840-490f-4ad4-9c2f-7359a1a097ed",
+              "memory_uid": "9c623c17-1942-52a6-bf3d-ebc25d6ad078"
+            }
+          ],
+          "reason": "Only the compared frame identifies this alternative and its operating hours.",
+          "status": "RESOLVED",
+          "summary": "The Engineering Building Campus Store serves as the construction-period store alternative from 7:00 a.m. to 11:00 p.m.",
+          "uid": "94b209f1-d0cb-51a5-9cfe-547cec8e6ba7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8e001840-490f-4ad4-9c2f-7359a1a097ed",
+              "memory_uid": "c88880dc-ebfa-5847-89d2-692cd22406d5"
+            }
+          ],
+          "reason": "Only the compared frame identifies this late-night service gap.",
+          "status": "RESOLVED",
+          "summary": "After 11:00 p.m., no on-campus store replaces the Main Building’s unattended store.",
+          "uid": "5cf7f15e-2699-5474-a648-8b111d9a4494"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8e001840-490f-4ad4-9c2f-7359a1a097ed",
+              "memory_uid": "9e0d0ca2-362c-5498-9560-a217d74eaaab"
+            }
+          ],
+          "reason": "Only the compared frame describes this temporary Campus Store closure.",
+          "status": "RESOLVED",
+          "summary": "The Main Building first-floor Campus Store is closed during construction.",
+          "uid": "baf7aebc-db3a-53ff-ba96-1a76868abf03"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8e001840-490f-4ad4-9c2f-7359a1a097ed",
+              "memory_uid": "048d155c-f81b-5293-b493-44fbce424662"
+            }
+          ],
+          "reason": "Only the compared frame describes this temporary cafe closure.",
+          "status": "RESOLVED",
+          "summary": "The Main Building first-floor cafe is closed during construction.",
+          "uid": "b12ba32b-9a85-519e-a53d-7cfd7fbeed5d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8e001840-490f-4ad4-9c2f-7359a1a097ed",
+              "memory_uid": "80d1e21d-3839-5515-b235-e1c1282599e5"
+            }
+          ],
+          "reason": "Only the compared frame provides this restricted alternative.",
+          "status": "RESOLVED",
+          "summary": "During the cafe closure, only staff should be directed to the Innovation Hub coffee machine.",
+          "uid": "0b78eab9-35fd-5c2b-83b1-75d7f9c7f8ad"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8e001840-490f-4ad4-9c2f-7359a1a097ed",
+              "memory_uid": "0a73702a-306c-5b54-a2c3-d3e4a23d6a9f"
+            }
+          ],
+          "reason": "Only the compared frame describes this construction-period user expectation.",
+          "status": "RESOLVED",
+          "summary": "Prior evening ATM users may wrongly expect continued Main Building access and then need to locate the West Complex ATM.",
+          "uid": "cd079ddd-8db0-5eab-bae3-7f1dda544b69"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8e001840-490f-4ad4-9c2f-7359a1a097ed",
+              "memory_uid": "e7b747cf-a1d2-571a-af5b-e1d3514434f1"
+            }
+          ],
+          "reason": "Only the compared frame establishes this amenities-agent recommendation policy.",
+          "status": "RESOLVED",
+          "summary": "Construction-period amenity guidance may exclude closed Main Building facilities and recommend only posted alternatives.",
+          "uid": "e04739db-97e0-5ce6-b54e-314b2060e9f6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8e001840-490f-4ad4-9c2f-7359a1a097ed",
+              "memory_uid": "50be93d9-d0da-542c-beab-be56adde4ee2"
+            }
+          ],
+          "reason": "Only the compared frame describes this concessionaire expectation and response.",
+          "status": "RESOLVED",
+          "summary": "The alternative Engineering Building store operator may anticipate higher evening demand and increase staffing and inventory.",
+          "uid": "1156b867-ceee-5e00-88ba-6d377868a7e4"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers construction-period amenity closures, posted alternatives and routes, restricted coffee access, likely user confusion, recommendation filtering, and anticipated demand at an alternative store.",
+        "differences": "",
+        "reference_only": "The reference covers venue availability, reservation requirements, operational verification, organizer duties, accessibility, safety, visitor expectations, and the event information agent’s capabilities and limits."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "d3fb9e8f-793b-4a83-8bbf-1ddce646c5d7"
+    },
+    "analysis_digest": "5685c4c25549dd6a2eb32388b980315a739a84f53796bb790e06c785e2c85693",
+    "key": "911f9dcc6cef11d00709890caf91a8c854366638ad34e85c2344dcf6df0390b8",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 93.58204791599928,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-1",
+    "task_description": {
+      "context_digest": "17a794e48857a8178811052488c3bd4cc66e9029847f2ce038825e49ed5afcc8",
+      "context_uid": "e2c67cf1-c2a8-5aef-a2cb-583a9fd8d6c6",
+      "name": "task-1/description"
+    }
+  },
+  "artifact_key": "911f9dcc6cef11d00709890caf91a8c854366638ad34e85c2344dcf6df0390b8",
+  "created_at": "2026-08-13T18:06:24.227746Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-1/campus-wiki/event-relocations",
+  "pair_key": "0f6d51ed07b6e43711f1e225e173f4ef816ab8166948fd2510d508eae24d7a96",
+  "provider_seconds": 93.58204791599928,
+  "right": "task-1/participant/construction-updates/shop-updates",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-1"
+}

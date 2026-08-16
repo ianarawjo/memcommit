@@ -1,0 +1,378 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:22:02.738908+00:00",
+      "frames": [
+        {
+          "context_digest": "4ae7659c0c6976de9bf2292f9e35962963b7931b470c2294d4f0e70b3500bff0",
+          "context_name": "task-2/advisor1/feasibility",
+          "context_uid": "52db6b06-e86a-556a-913e-30e45f7e9529",
+          "memories": [
+            {
+              "content": "Mark unverified schedule assumptions as such.",
+              "content_digest": "d4cdcdbcdb51d96f9a7435e72c2e4ef25a3e3822a765a88afafeca5194bda96e",
+              "position": 0,
+              "uid": "b150c774-27f6-5ec8-8cb9-9a00be19ce9b"
+            },
+            {
+              "content": "Mark unverified recruitment assumptions as such.",
+              "content_digest": "4cc28528fee1c7b09f709638e2b57d3bc9efe635d20500ee98567f8f59b8cf21",
+              "position": 1,
+              "uid": "6c7d14ed-67e5-56ff-befb-7648b95aa7a3"
+            },
+            {
+              "content": "Mark unverified technical assumptions as such.",
+              "content_digest": "8942e49cd46e3e9746330349df11e49d4a6c9250c7aa4c52c2d9ade1c97c735c",
+              "position": 2,
+              "uid": "00bf39b5-fe97-5fd0-b579-a5c13b5e6af7"
+            },
+            {
+              "content": "Clarify which stage of prototype fabrication or user study each requested resource is used for.",
+              "content_digest": "81ba64e23304f8fbbb3af4f2c30dfa3c517899c486e88ba211189a7911fcbd64",
+              "position": 3,
+              "uid": "3ae97c88-7537-5733-b48d-e02c9283f486"
+            },
+            {
+              "content": "Operations reviewers judge feasibility based on the personnel assigned to each procedure.",
+              "content_digest": "fe29bb7e592d116001a25ce11c603ae29f21d446925c28db692f14970d5b8134",
+              "position": 4,
+              "uid": "e2b5c1f0-97c2-5d46-af80-993d8d5606c9"
+            },
+            {
+              "content": "Operations reviewers judge feasibility based on the equipment assigned to each procedure.",
+              "content_digest": "859ab328c21506d11dd1f6d98e98d5a552446e774931a8bc13396750acf0793b",
+              "position": 5,
+              "uid": "f636b400-d3a2-5873-bf5b-c990b0f7ea42"
+            },
+            {
+              "content": "Operations reviewers judge feasibility based on the time allocated to each procedure.",
+              "content_digest": "08656886328ece4d813e36b1145805ffd3f3d4c6c855c20b1464143fb12868ab",
+              "position": 6,
+              "uid": "49385488-2315-51bc-bea0-749a1aea52f1"
+            },
+            {
+              "content": "Verify that the planned number of formative evaluation iterations is feasible within the time for prototype modification and recruitment resources.",
+              "content_digest": "9e181a14a97abd740a85679554395d7b315c07f0e4171ef276a2c31553b285c7",
+              "position": 7,
+              "uid": "f1c22a48-9d8d-5e82-9837-690d66e719db"
+            },
+            {
+              "content": "Include only the minimum functionality required to compare primary design assumptions in the scope of the formative evaluation prototype.",
+              "content_digest": "7769c2a4c03dc1c279bbf34bf0cefdcd076e3c1d8a1e56015bf20357ecfcf433",
+              "position": 8,
+              "uid": "4d69f030-0dc0-5df7-a153-0b595a3f68de"
+            },
+            {
+              "content": "The user's iterative design plan can be judged feasible only if time and personnel are allocated for modifying the prototype between iterations.",
+              "content_digest": "0339285cf9fd632814c5b5eb2b48fd46e3baf09ea95fb406f71b5d2cc804fa7e",
+              "position": 9,
+              "uid": "152f8621-f5fb-5c5e-a961-1fde77ed0bb3"
+            },
+            {
+              "content": "Delays in participant recruitment can compress the time available for prototype modification between formative evaluations.",
+              "content_digest": "9945f30dba63d2d070bad59cb2fb15b6a26d635f337949c3891b58d17c43973a",
+              "position": 10,
+              "uid": "1877a138-31f6-59a5-b666-ae57985f540d"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "6f26be17-c2ba-4a95-89c1-fcccedac84f5"
+        },
+        {
+          "context_digest": "1396f236b90acd99b836eb5367828f8319d0465ea25b66f696a7f583f4f5ecf6",
+          "context_name": "task-2/advisor2/terminology",
+          "context_uid": "a2976fe7-0e07-5045-9e91-6a214128a482",
+          "memories": [
+            {
+              "content": "Do not change names referring to the same user roles, system functions, or operational stages midway.",
+              "content_digest": "a0f821f4497e7518806857e9005d12e27f6043fda6dbd91ba33ef188e0a3be16",
+              "position": 0,
+              "uid": "e2ae95ed-9033-5625-9179-33f4cf4a95c1"
+            },
+            {
+              "content": "Use abbreviations only for long recurring terms in a two-page proposal.",
+              "content_digest": "e6cad365bd42a8327e3cac92b8cf49cc456fa3e2f5c6624797fa509c0aac6846",
+              "position": 1,
+              "uid": "4be60357-09fa-523d-8c8d-8e03ace8fde9"
+            },
+            {
+              "content": "Present the full term and abbreviation together when using an abbreviation for the first time.",
+              "content_digest": "7b7c1f90727c822edbc13af17d64d45552d1c7ddb5fa18e665369423fd93ffbe",
+              "position": 2,
+              "uid": "0dd5d707-7d13-5be0-8377-421507650cba"
+            },
+            {
+              "content": "Refer to participants based on the roles they perform in the study rather than their status.",
+              "content_digest": "d89feff6e3dad0eea0ba4b1b291b140048af9f0f89d84c8ac196ae547a7b03bd",
+              "position": 3,
+              "uid": "9b3f0cde-7c3e-5b6a-9500-855f31d65ef2"
+            },
+            {
+              "content": "Reviewers from different subfields find it difficult to infer an abbreviation from context alone when it is not defined at first use.",
+              "content_digest": "4ffe91fb52db337a4ad30dc56d0439e12851f17f411c414b6d673e79bd91e68b",
+              "position": 4,
+              "uid": "8c896114-85e6-5c3c-ae3f-6e8e6b59f2fe"
+            },
+            {
+              "content": "When introducing an operational role for the first time, define both the decisions it can make and the actions it performs.",
+              "content_digest": "916b66a818f988f69e2e3c90f0ed0dbb7d29fc9e030b3fc7f822b3817106cbc3",
+              "position": 5,
+              "uid": "dc9e3f25-7aac-500b-b431-f6d810dd09bb"
+            },
+            {
+              "content": "Individuals holding identical job titles may possess different system modification privileges and data access rights depending on their deployment site.",
+              "content_digest": "e0315abc2f42a8f2657aa52e04899096ce799ba790fcd77d22b4196f917790ac",
+              "position": 6,
+              "uid": "04956cab-eb3a-5b71-be45-b1edd6c4a216"
+            },
+            {
+              "content": "The user tends to group distinct field roles under the single label “user.”",
+              "content_digest": "ba75af998618324dbdfa225a2cd503c42888f77daf4d44eb4f79b3a7db8e4bbe",
+              "position": 7,
+              "uid": "fc8613e8-86ca-5322-bb5d-03dfbca71c46"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "dd3a94e0-74ea-4f66-adbb-7a1bb0288cd1"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address complementary concerns without semantic overlap or disagreement. The reference frame focuses on feasibility, resource staging, prototype scope, and uncertainty disclosure; the compared frame focuses on terminology, abbreviations, and precise role definitions.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6f26be17-c2ba-4a95-89c1-fcccedac84f5",
+              "memory_uid": "b150c774-27f6-5ec8-8cb9-9a00be19ce9b"
+            },
+            {
+              "frame_uid": "6f26be17-c2ba-4a95-89c1-fcccedac84f5",
+              "memory_uid": "6c7d14ed-67e5-56ff-befb-7648b95aa7a3"
+            },
+            {
+              "frame_uid": "6f26be17-c2ba-4a95-89c1-fcccedac84f5",
+              "memory_uid": "00bf39b5-fe97-5fd0-b579-a5c13b5e6af7"
+            }
+          ],
+          "reason": "These memories split one disclosure policy across three assumption domains, with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Unverified schedule, recruitment, and technical assumptions should be explicitly identified as unverified.",
+          "uid": "1c6c8ff8-e602-5c9b-9a40-2d93e16f6264"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6f26be17-c2ba-4a95-89c1-fcccedac84f5",
+              "memory_uid": "3ae97c88-7537-5733-b48d-e02c9283f486"
+            }
+          ],
+          "reason": "This is independently useful guidance about resource staging that the compared frame does not address.",
+          "status": "RESOLVED",
+          "summary": "Each requested resource should be tied to the prototype-fabrication or user-study stage where it is used.",
+          "uid": "158f73aa-e148-55e6-a952-f61025c6c433"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6f26be17-c2ba-4a95-89c1-fcccedac84f5",
+              "memory_uid": "e2b5c1f0-97c2-5d46-af80-993d8d5606c9"
+            },
+            {
+              "frame_uid": "6f26be17-c2ba-4a95-89c1-fcccedac84f5",
+              "memory_uid": "f636b400-d3a2-5873-bf5b-c990b0f7ea42"
+            },
+            {
+              "frame_uid": "6f26be17-c2ba-4a95-89c1-fcccedac84f5",
+              "memory_uid": "49385488-2315-51bc-bea0-749a1aea52f1"
+            }
+          ],
+          "reason": "These memories split one feasibility criterion across its principal resource inputs, with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Procedure feasibility is judged from assigned personnel, equipment, and time.",
+          "uid": "3663ab71-fe17-5f8a-81f3-f8a20feb0b80"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6f26be17-c2ba-4a95-89c1-fcccedac84f5",
+              "memory_uid": "f1c22a48-9d8d-5e82-9837-690d66e719db"
+            }
+          ],
+          "reason": "This is a specific feasibility check absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The planned number of formative iterations should be checked against modification time and recruitment resources.",
+          "uid": "c3acbaa9-d53f-5bef-b139-9284e5f16363"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6f26be17-c2ba-4a95-89c1-fcccedac84f5",
+              "memory_uid": "4d69f030-0dc0-5df7-a153-0b595a3f68de"
+            }
+          ],
+          "reason": "This prototype-scope policy is independently useful and unaddressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A formative evaluation prototype should include only the minimum functionality needed to compare primary design assumptions.",
+          "uid": "a20ca6d2-2982-5bd6-bd98-d8433329a770"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6f26be17-c2ba-4a95-89c1-fcccedac84f5",
+              "memory_uid": "152f8621-f5fb-5c5e-a961-1fde77ed0bb3"
+            }
+          ],
+          "reason": "This allocation requirement is distinct from terminology guidance and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "An iterative design plan requires allocated time and personnel for prototype changes between iterations to be judged feasible.",
+          "uid": "a1ca1dcc-cb11-5241-bdd7-a5d41980bfa7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6f26be17-c2ba-4a95-89c1-fcccedac84f5",
+              "memory_uid": "1877a138-31f6-59a5-b666-ae57985f540d"
+            }
+          ],
+          "reason": "This identifies a specific schedule risk not discussed in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Participant-recruitment delays can reduce the prototype-modification time available between formative evaluations.",
+          "uid": "21286a3a-e00c-5c76-9d3c-d801a7693258"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "dd3a94e0-74ea-4f66-adbb-7a1bb0288cd1",
+              "memory_uid": "e2ae95ed-9033-5625-9179-33f4cf4a95c1"
+            }
+          ],
+          "reason": "This terminology-consistency policy has no corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Names for the same roles, functions, and operational stages should remain consistent throughout a proposal.",
+          "uid": "b9e3ab9b-ba36-584e-99ab-ab9d8f231629"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "dd3a94e0-74ea-4f66-adbb-7a1bb0288cd1",
+              "memory_uid": "4be60357-09fa-523d-8c8d-8e03ace8fde9"
+            }
+          ],
+          "reason": "This abbreviation-selection rule is independently useful and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "In a two-page proposal, abbreviations should be reserved for long terms that recur.",
+          "uid": "66277942-855f-5b45-8636-d520eed9c4b9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "dd3a94e0-74ea-4f66-adbb-7a1bb0288cd1",
+              "memory_uid": "0dd5d707-7d13-5be0-8377-421507650cba"
+            },
+            {
+              "frame_uid": "dd3a94e0-74ea-4f66-adbb-7a1bb0288cd1",
+              "memory_uid": "8c896114-85e6-5c3c-ae3f-6e8e6b59f2fe"
+            }
+          ],
+          "reason": "The memories provide the rule and its reviewer-comprehension rationale, forming one one-sided claim not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "An abbreviation should be paired with its full term at first use so cross-subfield reviewers need not infer its meaning.",
+          "uid": "f6b5bac7-57ae-5a04-88ff-7278277f3b41"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "dd3a94e0-74ea-4f66-adbb-7a1bb0288cd1",
+              "memory_uid": "9b3f0cde-7c3e-5b6a-9500-855f31d65ef2"
+            },
+            {
+              "frame_uid": "dd3a94e0-74ea-4f66-adbb-7a1bb0288cd1",
+              "memory_uid": "fc8613e8-86ca-5322-bb5d-03dfbca71c46"
+            }
+          ],
+          "reason": "The memories state the preferred naming policy and the observed overgeneralization it corrects, with no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Participants should be named by their study roles rather than collapsed under status-based or generic labels such as “user.”",
+          "uid": "d357cdaa-85d1-589f-892f-00e48bcb297a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "dd3a94e0-74ea-4f66-adbb-7a1bb0288cd1",
+              "memory_uid": "dc9e3f25-7aac-500b-b431-f6d810dd09bb"
+            }
+          ],
+          "reason": "This role-definition requirement is independently useful and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A newly introduced operational role should be defined by both its decision authority and its actions.",
+          "uid": "61f5b90d-eadd-5c5f-a1e4-03d2005af52d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "dd3a94e0-74ea-4f66-adbb-7a1bb0288cd1",
+              "memory_uid": "04956cab-eb3a-5b71-be45-b1edd6c4a216"
+            }
+          ],
+          "reason": "This site-dependent role distinction is not covered by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Identical job titles may entail different modification privileges and data-access rights at different deployment sites.",
+          "uid": "92cfb867-8dc6-5242-93ff-ddc6a68cbf8d"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers stable terminology, restrained and defined abbreviations, role-based participant naming, explicit operational authority, and site-dependent privileges.",
+        "differences": "",
+        "reference_only": "The reference frame covers disclosure of unverified assumptions, procedure-level feasibility, resource staging, prototype scope, and iteration risks involving modification and recruitment."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "240c581e-0222-4a25-8e46-f4961fd3f9ab"
+    },
+    "analysis_digest": "bc3b09405a8fa80e983f58c51089649ea4ebe44eaabb621376c599404f5e39a7",
+    "key": "0a07bce2d237479921d1c93d1ee1d841c1fdd3e1c4b8642da91261405d5c96c3",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 41.09633220900287,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "0a07bce2d237479921d1c93d1ee1d841c1fdd3e1c4b8642da91261405d5c96c3",
+  "created_at": "2026-08-13T18:22:43.834762Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/feasibility",
+  "pair_key": "107c761b9e6a0cb857a6c423cd7fe22894e63105725788e7c670cc705bb47ecf",
+  "provider_seconds": 41.09633220900287,
+  "right": "task-2/advisor2/terminology",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

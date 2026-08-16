@@ -7,7 +7,8 @@ contract binds a complete set of required or optional items to one frozen
 operation artifact revision, validates exact item and choice identities,
 rejects duplicate or capability-crossing submissions, preserves frozen item
 order, and reports whether required work remains. Structural Merge, saved Meld
-issue turns, and public Fit-repair Resolve are production consumers.
+issue turns, public Fit-repair Resolve, and deterministic Dedup are production
+consumers.
 
 This is distinct from the shared Resolution Workbench.  The workbench owns
 presentation and UID-addressed interaction.  The lifecycle contract owns only
@@ -24,7 +25,7 @@ unresolved stage, but the condition and legal repair differ:
 | Merge | one or more structural collisions have no legal disposition | exact `KEEP_TARGET` or `TAKE_SOURCE` choices |
 | Meld | Source disposition is incomplete or a required issue remains | preservation, coalescing, synthesis, or grounded semantic revision |
 | Fit repair | the complete proposition frame is `MAY` or `NO` | a grounded minimum-change candidate independently verified as `YES` |
-| Dedup | a confirmed duplicate group has no survivor/reference plan | stable survivor plus complete absorbed-UID and reference migration plan |
+| Dedup | a confirmed duplicate component has no survivor plan | one unchanged existing survivor plus the complete absorbed-UID plan; V1 blocks inbound references rather than migrating them |
 | Clarification | one materially ambiguous reading remains ungrounded | an explicit interpretation or scope supplied by evidence or the person |
 
 Calling every operation Fit would erase these distinctions.  Conversely,
@@ -145,8 +146,10 @@ ambiguity -> clarify, and Resolve only if joint Fit remains MAY/NO
 conflict  -> Resolve
 ```
 
-Find and Audit remain read-only.  Their future handoff creates a separately
-authorized, frozen operation request; it does not mutate from the finder.
+Find and Audit remain read-only. Typed quality-finding handoffs create a
+separately authorized, frozen operation request; they do not mutate from the
+finder. Conflict-to-Resolve and confirmed-duplicate-to-Dedup are implemented;
+clarification remains separate future work.
 
 Resolve V1 projects its verified candidate UIDs as the legal choices of one
 required `resolve-plan` item. Candidate generation, independent grounding and
@@ -156,6 +159,23 @@ only the exact selected UID before the Resolve runtime repeats authority,
 freshness, pre-image, reference, and checkpoint checks. The full contract is
 recorded in
 [`resolve-fit-repair-design-rationale.md`](resolve-fit-repair-design-rationale.md).
+
+## Deterministic Dedup vertical slice
+
+`DedupRequest` accepts only typed single-Context duplicate handoffs whose
+classification is `EXACT`, `SURFACE_EQUIVALENT`, or `SEMANTIC_EQUIVALENT`.
+The operation creates connected components, projects each component as one
+required Resolution item, and makes its existing member UIDs the only legal
+choices. Context order supplies the deterministic recommendation; it does not
+bypass explicit selection or exact whole-set approval.
+
+The shared lifecycle validates component/choice identity and complete
+coverage. Dedup alone owns finder-source revalidation, Grant
+`READ + DERIVE + DELETE`, unchanged-survivor semantics, absorbed-UID
+calculation, command locking, inbound-reference blocking, Context CAS, and the
+single checkpoint. No provider or generic solver callback is involved. The
+full contract is recorded in
+[`dedup-design-rationale.md`](dedup-design-rationale.md).
 
 ## Interface and persistence boundary
 
@@ -178,6 +198,7 @@ recorded in
 - The two existing Resolution TUI models are not consolidated here; that is
   the separately tracked `TUI-03` feature-parity migration.
 - Merge remains provider-free and has no semantic rewrite candidate.
-- Dedup reference migration, clarification persistence, and typed finder
-  handoff remain future operation-owned work. Resolve V1 deliberately does not
-  make those semantics generic.
+- Dedup reference migration and clarification persistence remain future
+  operation-owned work. Typed conflict and duplicate handoffs are implemented,
+  but Resolve and Dedup deliberately retain different solvers and mutation
+  semantics.

@@ -1,0 +1,301 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:23:16.946248+00:00",
+      "frames": [
+        {
+          "context_digest": "9d55b4a5604285e426b317f7f4732b35ca1e9df044f7015b3ae6a6be0df5492b",
+          "context_name": "task-2/advisor1/reproducibility",
+          "context_uid": "7d293f75-52b6-5f27-99c4-54f2be3d8e59",
+          "memories": [
+            {
+              "content": "HCI reviewers find it difficult to assess the reproducibility of results if the prototype version used in the evaluation is not disclosed.",
+              "content_digest": "9b89217d4ef2c7524af665ea80d7d60e61f1663fd8ea4bdde533c8d3a0da2044",
+              "position": 0,
+              "uid": "fb400759-63ed-568a-b94e-5f0c2fe94b67"
+            },
+            {
+              "content": "Record the manipulated and fixed elements of compared design alternatives so that other researchers can reconstruct them.",
+              "content_digest": "26b84b5f0644980de51d764218ce90fb614eb02a2df38fb3632f44d360a93cd3",
+              "position": 1,
+              "uid": "e52e8470-6419-5306-9ddd-00a86003dcf3"
+            },
+            {
+              "content": "Records of formative evaluation decisions enable the reconstruction of connections between raw data, interpretation, and design modifications.",
+              "content_digest": "f213479e4bd1947d418083139346ed7f666bc597133962617d94bdd3a9af0083",
+              "position": 2,
+              "uid": "8f4edf8c-491d-56fe-bde4-d9ce25d6de50"
+            },
+            {
+              "content": "The user must make it possible to trace which observations each prototype version reflects so the process of deriving design knowledge can be reviewed.",
+              "content_digest": "1c9b8a6f650f2eb652b1e9cbb62ad9dcbb3ec13f2e160b52db83492640eb0ae9",
+              "position": 3,
+              "uid": "87662a7e-ffc7-521a-a06c-7db8184377e8"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "3035b047-8a2b-4d31-80e7-48911ef4d170"
+        },
+        {
+          "context_digest": "74ec0b91876efe6caed2938aaf4a0b06272de678fbf74dc9da1c217aa0bd042f",
+          "context_name": "task-2/advisor2/compensation",
+          "context_uid": "4ffbd453-7d61-56f7-90ad-34d77b485ef8",
+          "memories": [
+            {
+              "content": "Calculate user research compensation budgets based on the estimated participation burden, combining session time with required technical and travel preparation.",
+              "content_digest": "ba439fe3920339f56e377d8f82a64ab3ad27fb25e0eec3c65b610c81af53d175",
+              "position": 0,
+              "uid": "be9e402b-8d3b-58da-9766-2cf2ec25b9ae"
+            },
+            {
+              "content": "Compensate participants who withdraw from the study midway for their actual participation time.",
+              "content_digest": "599f542ec6f4a5a1a61f5c1a31547088e015439978a64b268879b5a2b65c9be4",
+              "position": 1,
+              "uid": "85157c57-410f-5c7d-8183-b37d61eebf8a"
+            },
+            {
+              "content": "Compensate for the time actually spent in sessions, regardless of the research modality.",
+              "content_digest": "b19b9dbece5d564de69e703491018fbd78ab834149eed0590a552773526b6e29",
+              "position": 2,
+              "uid": "8abeab95-3e41-5378-8409-08200aee9d58"
+            },
+            {
+              "content": "Allow the issuance of gift cards of equivalent value to participants in remote studies who cannot use electronic transfers.",
+              "content_digest": "8ac881488d0064f4b4c6143e2d8c69ab9806b419044adef266c50738c7afb291",
+              "position": 3,
+              "uid": "9b59c6ed-5dbe-5ccc-87b5-6be31f414e68"
+            },
+            {
+              "content": "Do not treat an unresolved payment method as a deficiency at the proposal stage.",
+              "content_digest": "80109274870eb1023e4cbcc6861a906a4d94db5dab2b2659bcebccde125c9ac3",
+              "position": 4,
+              "uid": "5c6c461d-05e5-5b0c-b801-245de2f9c8d7"
+            },
+            {
+              "content": "Allow differential compensation amounts for on-site and remote studies when participation burden varies due to travel or technical preparation.",
+              "content_digest": "556c5e49f7996a651a64825df2389f070629b9bc664c758d934f308c7fd6eea2",
+              "position": 5,
+              "uid": "44abc098-8c9f-5abb-bc49-9deb25066d93"
+            },
+            {
+              "content": "Participants judge the fairness of compensation based on the combined burden of session time and required technical and travel preparation.",
+              "content_digest": "80dd84e8b183e02f1fd772890b48712bb04a04852055eece98957a0c9028288c",
+              "position": 6,
+              "uid": "2a252668-f3f2-5582-b248-43ad81c54a48"
+            },
+            {
+              "content": "In longitudinal studies requiring diary entries and repeated reporting, include out-of-session recording time in compensation calculations.",
+              "content_digest": "7d103d93741e40d54c8df8347f2ce648a1cd96e19589663fa515bfb24b5bd844",
+              "position": 7,
+              "uid": "7e647a83-81b0-52d6-9362-e513dc2a5032"
+            },
+            {
+              "content": "Distinguish between participant research compensation and labor costs for field staff performing installation and operational support as part of their duties.",
+              "content_digest": "b1566527e9c1d7d3f93631d1503b08ddb4a6818daa570c118f265b47603592f0",
+              "position": 8,
+              "uid": "d77affab-60c8-5403-b189-17022b484640"
+            },
+            {
+              "content": "The user tends to count session time but omit participants’ advance setup and follow-up reporting time.",
+              "content_digest": "98911b7db2d8c3962d7ef48919265f40cdb61a711062e5459a4f6d43f71d6fd9",
+              "position": 9,
+              "uid": "0c470c6b-26a6-5501-93ac-c51fecd708ae"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "73c70a1e-7a70-4532-9381-e934c812e58c"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate operational domains. The reference frame focuses on documenting prototype provenance and design-evaluation decisions for reproducibility, while the compared frame establishes participant-compensation principles covering burden, timing, payment methods, study conditions, and role boundaries.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3035b047-8a2b-4d31-80e7-48911ef4d170",
+              "memory_uid": "fb400759-63ed-568a-b94e-5f0c2fe94b67"
+            }
+          ],
+          "reason": "This is an independently useful reference-only requirement about identifying the evaluated artifact; the compared frame contains no corresponding claim.",
+          "status": "RESOLVED",
+          "summary": "Evaluations should disclose the prototype version used so reviewers can assess reproducibility.",
+          "uid": "3659495e-7488-52fd-b6f8-d0d8c6278043"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3035b047-8a2b-4d31-80e7-48911ef4d170",
+              "memory_uid": "e52e8470-6419-5306-9ddd-00a86003dcf3"
+            }
+          ],
+          "reason": "This reference-only claim concerns documenting experimental design differences and is independent of the compensation policies in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Researchers should record manipulated and fixed elements of design alternatives to support reconstruction.",
+          "uid": "eba33d02-3903-5ed2-8fa7-8c66f56331d6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3035b047-8a2b-4d31-80e7-48911ef4d170",
+              "memory_uid": "8f4edf8c-491d-56fe-bde4-d9ce25d6de50"
+            },
+            {
+              "frame_uid": "3035b047-8a2b-4d31-80e7-48911ef4d170",
+              "memory_uid": "87662a7e-ffc7-521a-a06c-7db8184377e8"
+            }
+          ],
+          "reason": "The reference memories split one provenance requirement: preserving reviewable connections between evaluation evidence, decisions, modifications, and successive prototypes. No compared memory addresses this requirement.",
+          "status": "RESOLVED",
+          "summary": "Formative evaluation records should trace observations and raw data through interpretation to design modifications and prototype versions.",
+          "uid": "c254bd60-b107-5d35-bb5d-de088b6359f5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "73c70a1e-7a70-4532-9381-e934c812e58c",
+              "memory_uid": "be9e402b-8d3b-58da-9766-2cf2ec25b9ae"
+            },
+            {
+              "frame_uid": "73c70a1e-7a70-4532-9381-e934c812e58c",
+              "memory_uid": "44abc098-8c9f-5abb-bc49-9deb25066d93"
+            },
+            {
+              "frame_uid": "73c70a1e-7a70-4532-9381-e934c812e58c",
+              "memory_uid": "2a252668-f3f2-5582-b248-43ad81c54a48"
+            },
+            {
+              "frame_uid": "73c70a1e-7a70-4532-9381-e934c812e58c",
+              "memory_uid": "0c470c6b-26a6-5501-93ac-c51fecd708ae"
+            }
+          ],
+          "reason": "These compared memories provide the rationale, budgeting rule, modality consequence, and recurring omission for one burden-based compensation policy. The reference frame has no corresponding compensation claim.",
+          "status": "RESOLVED",
+          "summary": "Compensation should reflect total participation burden, including session time and required technical or travel preparation, allowing modality-based differences when burden differs.",
+          "uid": "f8c9e996-523f-510d-9c63-eaa8539df6f2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "73c70a1e-7a70-4532-9381-e934c812e58c",
+              "memory_uid": "85157c57-410f-5c7d-8183-b37d61eebf8a"
+            }
+          ],
+          "reason": "This is a compared-only rule for the specific case of mid-study withdrawal and is independently useful from general burden calculation.",
+          "status": "RESOLVED",
+          "summary": "Participants who withdraw midway should be compensated for their actual participation time.",
+          "uid": "889d7dcd-c4eb-59c2-9fc8-0360f8983b0b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "73c70a1e-7a70-4532-9381-e934c812e58c",
+              "memory_uid": "8abeab95-3e41-5378-8409-08200aee9d58"
+            }
+          ],
+          "reason": "This compared-only baseline applies across remote and on-site sessions and is distinct from adjustments for preparation, travel, withdrawal, or longitudinal reporting.",
+          "status": "RESOLVED",
+          "summary": "Time actually spent in research sessions should be compensated regardless of modality.",
+          "uid": "446355df-1531-522a-a85c-4506c2e1e7d6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "73c70a1e-7a70-4532-9381-e934c812e58c",
+              "memory_uid": "9b59c6ed-5dbe-5ccc-87b5-6be31f414e68"
+            }
+          ],
+          "reason": "This is an independently useful compared-only policy about an alternative payment instrument under a stated accessibility condition.",
+          "status": "RESOLVED",
+          "summary": "Remote participants unable to use electronic transfers may receive gift cards of equivalent value.",
+          "uid": "283c69c3-bf12-5f6f-8893-ff8780e67bcf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "73c70a1e-7a70-4532-9381-e934c812e58c",
+              "memory_uid": "5c6c461d-05e5-5b0c-b801-245de2f9c8d7"
+            }
+          ],
+          "reason": "This compared-only evaluation rule concerns when payment logistics must be settled, rather than compensation amount or burden.",
+          "status": "RESOLVED",
+          "summary": "An unresolved payment method should not be treated as a proposal-stage deficiency.",
+          "uid": "0a65e99e-0c1b-5b95-b1c4-c0082fbcee58"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "73c70a1e-7a70-4532-9381-e934c812e58c",
+              "memory_uid": "7e647a83-81b0-52d6-9362-e513dc2a5032"
+            }
+          ],
+          "reason": "This is an independently useful compared-only rule scoped to longitudinal out-of-session recording work.",
+          "status": "RESOLVED",
+          "summary": "Compensation for longitudinal studies should include time spent on diary entries and repeated reporting outside sessions.",
+          "uid": "23709241-4403-53f6-9b9a-ed8c9b579ed7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "73c70a1e-7a70-4532-9381-e934c812e58c",
+              "memory_uid": "d77affab-60c8-5403-b189-17022b484640"
+            }
+          ],
+          "reason": "This compared-only accounting boundary separates participant burden payments from employee or contractor labor costs.",
+          "status": "RESOLVED",
+          "summary": "Participant research compensation should be distinguished from labor costs for field staff performing installation and operational support as job duties.",
+          "uid": "1527626a-83fd-50ce-a29e-ab4c9f1bf322"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame uniquely bases compensation on actual and total participation burden, with provisions for withdrawal, modality, longitudinal reporting, payment alternatives, proposal-stage uncertainty, and separation of participant payments from staff labor costs.",
+        "differences": "",
+        "reference_only": "The reference uniquely requires disclosure of evaluated prototype versions, reconstruction of design alternatives, and traceability from observations and raw data through interpretation to prototype changes."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "085a469b-f261-4c84-a843-744abfe65428"
+    },
+    "analysis_digest": "0cc27c6f3e2e49c599d19d0874e1a8e7ced0ab1c9dd5a6324e0be3950b2920a4",
+    "key": "3476094e417e985d147f7424b13970de8e4836665a2ea00c6dbd923206889080",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 31.48831395799789,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "3476094e417e985d147f7424b13970de8e4836665a2ea00c6dbd923206889080",
+  "created_at": "2026-08-13T18:23:48.434008Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/reproducibility",
+  "pair_key": "5fc325dcdb40eac853a8e95c6cbff917cbe47d9d04e12d09dff9057461349999",
+  "provider_seconds": 31.48831395799789,
+  "right": "task-2/advisor2/compensation",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

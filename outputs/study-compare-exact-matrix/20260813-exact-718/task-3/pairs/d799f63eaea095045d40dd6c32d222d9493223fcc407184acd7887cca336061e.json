@@ -1,0 +1,388 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:42:58.055121+00:00",
+      "frames": [
+        {
+          "context_digest": "4f6b609414f921ca470614699bdac42e9f2932482375026def79956485b0569e",
+          "context_name": "task-3/local/personal-memory/2024/08",
+          "context_uid": "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+          "memories": [
+            {
+              "content": "The user has set a monthly limit in their budget record for spending other than living expenses.",
+              "content_digest": "5c0df9500947f7e044a8755d66d58adccca01db3aed42b43ab9748b8c4f431e9",
+              "position": 0,
+              "uid": "5f80c7ec-e294-5905-abab-91027c9d827b"
+            },
+            {
+              "content": "In a week when the user went grocery shopping and visited the bank separately, they made the same round trip twice.",
+              "content_digest": "4e814adad1a4c201f6348f1c14b14950b5c549bba64bf70cfccd08ca9efc5bd3",
+              "position": 1,
+              "uid": "2428ab2c-37ce-5de1-84dc-abcdfc8ce062"
+            },
+            {
+              "content": "The following week, the user completed both errands in one outing and reduced travel time.",
+              "content_digest": "ad5555ca7daa9d977cfcf5eb4f476eb5730cead6d307c986497716d69f1145b0",
+              "position": 2,
+              "uid": "bf30d1ef-d7cd-5aa3-b65b-ff04aae647e7"
+            },
+            {
+              "content": "When a bill alert arrived on the due date, the user postponed payment until after a meeting.",
+              "content_digest": "c62dda61c680da9ac1fd5ab9124fa05635d20ad9e4bbb7aef36723d289c05102",
+              "position": 3,
+              "uid": "442672e1-2188-5aa3-ad38-5e9c16f25bd5"
+            },
+            {
+              "content": "In a month when the user received an alert three days before the deadline, they finished payment before dinner.",
+              "content_digest": "939ac83da176d5bb1b7e2196402b9faacb962d947b85b9a61c31854867c1e62e",
+              "position": 4,
+              "uid": "c7385cce-ec43-5902-973c-5b8af54c3557"
+            },
+            {
+              "content": "The user collected cash receipts in their wallet and entered all the amounts at once at the end of the month.",
+              "content_digest": "3171a8128ed3855ac9a4c2b542516333fc3728ed1d7260974888b94d0b32c3e6",
+              "position": 5,
+              "uid": "d926c45c-ea49-589c-a7e4-491c9a1514f8"
+            },
+            {
+              "content": "After recording one large expense, the user ate out two fewer times that week.",
+              "content_digest": "af55fd94b01e0ece728347e9349f96b5733c57dae752f9559dc4e08bef7a3320",
+              "position": 6,
+              "uid": "9433523f-8c4e-5424-b370-d325ba5154d1"
+            },
+            {
+              "content": "The user's older sister prefers to settle the jointly paid cost of a meal by electronic transfer rather than cash.",
+              "content_digest": "d84d2ea68add4202e8c421e9c1702c29ca88bd6ae838588bd415fdbd1980cb2b",
+              "position": 7,
+              "uid": "d9531336-ac5f-5ba0-bf26-9c69c854578f"
+            },
+            {
+              "content": "Confirm the amount and account with the user before creating an automatic payment schedule.",
+              "content_digest": "b1d0c16fd880f4ae2657415ddc8fe0f223ccdd931248bb4412a6c95754d4cce1",
+              "position": 8,
+              "uid": "9941d390-8b40-5fee-8bcf-df6f36befcb0"
+            },
+            {
+              "content": "The timing of payment processing and late-payment recording may differ by billing institution.",
+              "content_digest": "203e65e4eb8451ec7551fb166357f107d17b8c89a2341b32fc25a3fb67ec7f98",
+              "position": 9,
+              "uid": "79aea8fd-5d48-50f7-adf6-b7ebe33bfb08"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "1f5995a6-1567-46ff-b62f-cc6eda35ce5b"
+        },
+        {
+          "context_digest": "ac4f93d71b525f6156f0b669075a833a2a41161be6abe677ec382bff6e6060e8",
+          "context_name": "task-3/local/personal-memory/2025/08",
+          "context_uid": "ed84de75-8e18-5bec-908c-a1ff9827b3e3",
+          "memories": [
+            {
+              "content": "The user keeps packing tape for returns in an upper kitchen drawer.",
+              "content_digest": "ed359d883caffd7ce4daddc297ddcc9d26da233dc2a36dc4dbc96e300b2248e9",
+              "position": 0,
+              "uid": "15c3941e-ed44-508f-ae30-b51456b5ba86"
+            },
+            {
+              "content": "The user arrived ten minutes before the post office closed and found that numbered-ticket intake had ended.",
+              "content_digest": "3c4609eea9455bbd46a6f238aa750f61f348ce7b2cf421a4d123f1b707b52550",
+              "position": 1,
+              "uid": "84d1fd1c-9508-5f05-9a7c-1d5f20ecf4a4"
+            },
+            {
+              "content": "Before the next visit, the user checked the operating hours and arrived one hour before closing.",
+              "content_digest": "b2997262abf4ba476c63de3550e54269ef7d61bb56d3adb5b6d9f54ba13fc078",
+              "position": 2,
+              "uid": "8946f9da-e325-59c3-9260-2d2f590d3701"
+            },
+            {
+              "content": "The user went to the counter without closing a return box and had to go back to the packing station.",
+              "content_digest": "759122c3f88ca71b992a725e357beab72f9820de872a7bd895b808c2df21f2b2",
+              "position": 3,
+              "uid": "67e8b160-a57d-56e5-a766-741b7ce0e939"
+            },
+            {
+              "content": "For the next return, the user sealed the box at home and completed intake in one attempt.",
+              "content_digest": "007fcec32ea3788854161e68c95c2aaba90e94a721d03b350e1619afc54840e3",
+              "position": 4,
+              "uid": "efd0706b-600a-5ac1-926e-cc0602ca0086"
+            },
+            {
+              "content": "The user scheduled bank and post-office errands for the same day, but they took a long time because the destinations were in different directions.",
+              "content_digest": "000e1975fde79f4d6caf36adad0c2e481a032537cfa410e46649866d985567c2",
+              "position": 5,
+              "uid": "1e8a6f7e-0911-5a34-ad82-172479d1a7a4"
+            },
+            {
+              "content": "The following week, after checking the locations on a map, the user visited nearby branches in sequence.",
+              "content_digest": "c3de08c5b6074dff2b3f6303f5efc3740cc430b634cb365a5d570061a30a53fa",
+              "position": 6,
+              "uid": "a8670161-257e-51ab-8e30-0e282952278f"
+            },
+            {
+              "content": "Postal staff expect a return-label barcode to arrive affixed flat, without a fold.",
+              "content_digest": "6293ace2d67781644694976af71d5696cad28979d9641718ccd59f16b3397a47",
+              "position": 7,
+              "uid": "2db70f53-99ee-556c-a8c1-b809881cbebd"
+            },
+            {
+              "content": "Before grouping errands into one outing, check each institution's location and operating hours that day.",
+              "content_digest": "7fef923f9ed507db5aad6cf65eaee2c965075e51fef0ff73fa669f1e7f69314a",
+              "position": 8,
+              "uid": "38d60cc4-2f91-5cc2-b511-55cdbbe12c32"
+            },
+            {
+              "content": "Postal and financial counters may operate on different hours than usual around public holidays.",
+              "content_digest": "2d5dc709c468405ea894f343e922dc2546b826ed7488e613f4d4dd730bccccfd",
+              "position": 9,
+              "uid": "1272087c-a535-5612-8c7a-1bc257183788"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "4fdac304-c00a-4386-ab3e-ade1bf33e185"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames overlap on errand consolidation, with travel savings depending on route and branch proximity. Otherwise, the reference focuses on budgeting and payment behavior, while the compared frame adds postal-return preparation and access practices. No claims are irreconcilable or unsafe to interpret.",
+      "relations": [
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "1f5995a6-1567-46ff-b62f-cc6eda35ce5b",
+              "memory_uid": "2428ab2c-37ce-5de1-84dc-abcdfc8ce062"
+            },
+            {
+              "frame_uid": "1f5995a6-1567-46ff-b62f-cc6eda35ce5b",
+              "memory_uid": "bf30d1ef-d7cd-5aa3-b65b-ff04aae647e7"
+            },
+            {
+              "frame_uid": "4fdac304-c00a-4386-ab3e-ade1bf33e185",
+              "memory_uid": "1e8a6f7e-0911-5a34-ad82-172479d1a7a4"
+            },
+            {
+              "frame_uid": "4fdac304-c00a-4386-ab3e-ade1bf33e185",
+              "memory_uid": "a8670161-257e-51ab-8e30-0e282952278f"
+            },
+            {
+              "frame_uid": "4fdac304-c00a-4386-ab3e-ade1bf33e185",
+              "memory_uid": "38d60cc4-2f91-5cc2-b511-55cdbbe12c32"
+            }
+          ],
+          "reason": "Both frames address whether errands should be consolidated, and the compared frame explicitly makes location checking and nearby branch selection the condition explaining different travel outcomes.",
+          "status": "RESOLVED",
+          "summary": "Combining errands can reduce travel effort when the selected destinations form an efficient route, while grouping poorly located destinations may remain time-consuming.",
+          "uid": "a2d3e69a-acff-5613-a049-67cacaae8939"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1f5995a6-1567-46ff-b62f-cc6eda35ce5b",
+              "memory_uid": "5f80c7ec-e294-5905-abab-91027c9d827b"
+            }
+          ],
+          "reason": "This is an independently useful budgeting constraint found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user has a monthly spending limit for expenses other than living costs.",
+          "uid": "bed6fca1-421c-558b-8a1d-641108c5fbe3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1f5995a6-1567-46ff-b62f-cc6eda35ce5b",
+              "memory_uid": "442672e1-2188-5aa3-ad38-5e9c16f25bd5"
+            },
+            {
+              "frame_uid": "1f5995a6-1567-46ff-b62f-cc6eda35ce5b",
+              "memory_uid": "c7385cce-ec43-5902-973c-5b8af54c3557"
+            }
+          ],
+          "reason": "These reference memories form one before-and-after claim about alert lead time and the user's payment timing.",
+          "status": "RESOLVED",
+          "summary": "Earlier bill alerts enabled earlier completion, whereas a due-date alert was followed by postponement until another commitment ended.",
+          "uid": "c633967e-1956-58c9-8f14-a9caada49aec"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1f5995a6-1567-46ff-b62f-cc6eda35ce5b",
+              "memory_uid": "d926c45c-ea49-589c-a7e4-491c9a1514f8"
+            }
+          ],
+          "reason": "This is a one-sided expense-recording habit not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user batches wallet-held cash receipts for entry at month end.",
+          "uid": "0e4d78d2-dd9f-5e79-bc92-ea25bd7b02c6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1f5995a6-1567-46ff-b62f-cc6eda35ce5b",
+              "memory_uid": "9433523f-8c4e-5424-b370-d325ba5154d1"
+            }
+          ],
+          "reason": "This is a distinct behavioral response to expense recording found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Recording a large expense was followed by reduced restaurant spending that week.",
+          "uid": "d3155ef2-878d-59b2-8b88-8c588417eabd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1f5995a6-1567-46ff-b62f-cc6eda35ce5b",
+              "memory_uid": "d9531336-ac5f-5ba0-bf26-9c69c854578f"
+            }
+          ],
+          "reason": "This is a one-sided settlement preference concerning another participant.",
+          "status": "RESOLVED",
+          "summary": "The user's older sister prefers electronic transfer over cash when settling a jointly paid meal cost.",
+          "uid": "d696c9e6-d7c1-513b-9b08-8c739dca900b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1f5995a6-1567-46ff-b62f-cc6eda35ce5b",
+              "memory_uid": "9941d390-8b40-5fee-8bcf-df6f36befcb0"
+            }
+          ],
+          "reason": "This is a reference-only authorization safeguard for automatic payments.",
+          "status": "RESOLVED",
+          "summary": "The payment amount and account should be confirmed with the user before an automatic payment schedule is created.",
+          "uid": "34a14af6-735e-55a0-bc83-3a9001df148f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1f5995a6-1567-46ff-b62f-cc6eda35ce5b",
+              "memory_uid": "79aea8fd-5d48-50f7-adf6-b7ebe33bfb08"
+            }
+          ],
+          "reason": "This is a reference-only caveat about payment administration, distinct from physical counter operating hours.",
+          "status": "RESOLVED",
+          "summary": "Billing institutions may differ in payment-processing and late-payment recording timing.",
+          "uid": "b744b955-52cf-59d6-9216-601c9f35c554"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4fdac304-c00a-4386-ab3e-ade1bf33e185",
+              "memory_uid": "15c3941e-ed44-508f-ae30-b51456b5ba86"
+            }
+          ],
+          "reason": "This is a compared-only fact about the location of a return supply.",
+          "status": "RESOLVED",
+          "summary": "The user stores return-packing tape in an upper kitchen drawer.",
+          "uid": "ffcfb6e7-6c54-536f-9989-98de7af0902a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4fdac304-c00a-4386-ab3e-ade1bf33e185",
+              "memory_uid": "84d1fd1c-9508-5f05-9a7c-1d5f20ecf4a4"
+            },
+            {
+              "frame_uid": "4fdac304-c00a-4386-ab3e-ade1bf33e185",
+              "memory_uid": "8946f9da-e325-59c3-9260-2d2f590d3701"
+            }
+          ],
+          "reason": "These compared memories split one learning sequence about planning arrival for post-office intake.",
+          "status": "RESOLVED",
+          "summary": "After arriving too late for numbered-ticket intake, the user checked operating hours and arrived substantially earlier on the next visit.",
+          "uid": "0ac60082-d0fd-5a70-a884-b98e70c8d50b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4fdac304-c00a-4386-ab3e-ade1bf33e185",
+              "memory_uid": "67e8b160-a57d-56e5-a766-741b7ce0e939"
+            },
+            {
+              "frame_uid": "4fdac304-c00a-4386-ab3e-ade1bf33e185",
+              "memory_uid": "efd0706b-600a-5ac1-926e-cc0602ca0086"
+            }
+          ],
+          "reason": "These compared memories form one before-and-after claim about preparing and sealing a return box before approaching the counter.",
+          "status": "RESOLVED",
+          "summary": "After an unsealed return box caused a trip back to the packing station, the user sealed the next box at home and completed intake in one attempt.",
+          "uid": "f3dbfb16-f7a8-5676-83b4-05882fd64e32"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4fdac304-c00a-4386-ab3e-ade1bf33e185",
+              "memory_uid": "2db70f53-99ee-556c-a8c1-b809881cbebd"
+            }
+          ],
+          "reason": "This is a compared-only packaging requirement independent of the box-sealing sequence.",
+          "status": "RESOLVED",
+          "summary": "Postal staff expect a return-label barcode to be attached flat and without a fold.",
+          "uid": "6f5128e4-5e4b-5758-842f-78af12f821ca"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4fdac304-c00a-4386-ab3e-ade1bf33e185",
+              "memory_uid": "1272087c-a535-5612-8c7a-1bc257183788"
+            }
+          ],
+          "reason": "This is a compared-only access caveat tied specifically to holiday operating hours.",
+          "status": "RESOLVED",
+          "summary": "Postal and financial counter hours may differ from their usual schedules around public holidays.",
+          "uid": "eeff1f55-864b-5492-95bf-ba4cb26e58ed"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers return-supply storage, post-office arrival planning, box and barcode preparation, and holiday counter-hour variability.",
+        "differences": "Errand consolidation succeeds when destinations and routes are suitably aligned; grouping alone may still produce lengthy travel.",
+        "reference_only": "The reference covers discretionary budgeting, bill-alert timing, expense recording and spending response, shared-meal settlement, automatic-payment confirmation, and billing-institution processing variability."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "b7b6a40c-9292-43c3-ac16-a253114da6fd"
+    },
+    "analysis_digest": "0181404dafb224f0d65e2bf197e7c1bc138496138cb3acf9fccb055ada704b02",
+    "key": "c00956c65bc9f219885c5e00bbf10a49f8cdd4e9de179db86654cb52f0f0c3de",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 45.52730212499955,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "c00956c65bc9f219885c5e00bbf10a49f8cdd4e9de179db86654cb52f0f0c3de",
+  "created_at": "2026-08-13T18:43:43.581928Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/08",
+  "pair_key": "d799f63eaea095045d40dd6c32d222d9493223fcc407184acd7887cca336061e",
+  "provider_seconds": 45.52730212499955,
+  "right": "task-3/local/personal-memory/2025/08",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

@@ -189,6 +189,7 @@ HELP_CATEGORY_GROUPS = (
             "translate",
             "merge",
             "resolve",
+            "dedup",
         ),
     ),
     (
@@ -260,6 +261,12 @@ COMMAND_FORMS = {
         "mem resolve --context [context] --allow-create (also permit CREATE candidates)",
         'mem resolve --context [context] --allow-delete --guidance "[grounds]" (permit grounded DELETE candidates)',
         "mem resolve --context [context] --candidate [full_id] --expected-revision [revision] --apply (regenerate, verify, and apply one exact candidate)",
+    ),
+    "dedup": (
+        "mem dedup (show the required find-duplicates handoff error)",
+        "mem dedup --finding-handoff '[json]' (review confirmed duplicate components)",
+        "mem dedup --finding-handoff '[json]' --plain (print deterministic survivor recommendations)",
+        "mem dedup --finding-handoff '[json]' --survivor [component]=[memory] --expected-revision [revision] --apply (apply one exact complete survivor set)",
     ),
     "atomize": (
         "mem atomize (enter the current Context's interactive Atomize session)",

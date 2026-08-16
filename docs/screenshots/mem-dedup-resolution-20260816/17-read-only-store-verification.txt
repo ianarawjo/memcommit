@@ -1,0 +1,3 @@
+COMMAND EXIT · 0                                                                                                                                                                    
+SUCCESS VERIFICATION · MEMORIES [('20000000-0000-4000-8000-000000000100', 'The office opens at eight on weekdays.'), ('20000000-0000-4000-8000-000000000300', 'The office closes at 
+17:00 on weekdays.')] · CHECKPOINTS 1 · COMMANDS ['dedup'] · PROVIDER OPERATIONS ['find_duplicates']

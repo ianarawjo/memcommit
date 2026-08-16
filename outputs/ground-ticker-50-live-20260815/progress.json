@@ -1,0 +1,5 @@
+{
+  "examples": 50,
+  "rounds": 7,
+  "stage": "retry-completed"
+}

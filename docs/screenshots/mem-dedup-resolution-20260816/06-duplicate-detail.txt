@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                                                                                                                                                                                 ^┃
+┃ DUPLICATE 1/1                                                                                                                                                                    ┃
+┃ The office opens at eight on weekdays. ↔ The weekday office opening time is 08:00.                                                                                               ┃
+┃ [SEMANTIC_EQUIVALENT] OPEN                                                                                                                                                       ┃
+┃ REVIEW SET · REQUIRED 0 · OPTIONAL 1                                                                                                                                             ┃
+┃ CLASSIFICATION                                                                                                                                                                   ┃
+┃ SEMANTIC_EQUIVALENT                                                                                                                                                              ┃
+┃                                                                                                                                                                                  ┃
+┃ SOURCE MEMORIES                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃ SOURCE 1 · FROM dedup/capture                                                                                                                                                    ┃
+┃   [20000000] The office opens at eight on weekdays.                                                                                                                              ┃
+┃                                                                                                                                                                                  ┃
+┃ SOURCE 2 · FROM dedup/capture                                                                                                                                                    ┃
+┃   [20000000] The weekday office opening time is 08:00.                                                                                                                           ┃
+┃                                                                                                                                                                                  ┃
+┃ WHY THESE MEMORIES ARE DUPLICATES                                                                                                                                                ┃
+┃ Both Memories state the same weekday opening time without adding a distinct condition.                                                                                           ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌──────────────────────────────────────────────────────────────────────────────────| RESPONSES |───────────────────────────────────────────────────────────────────────────────────┐
+│ REVIEW DECISION                                                                                                                                                                 ^│
+│ Should this emitted duplicate evidence link be retained?                                                                                                                         │
+│ EVIDENCE LINK DISPOSITION                                                                                                                                                        │
+│ ↑/↓ move through choices and Response · Enter select                                                                                                                             │
+│  1. CONFIRM LINK                                                                                                                                                                 │
+│  Retain this pair as positive duplicate evidence.                                                                                                                                │
+│                                                                                                                                                                                  │
+│  2. REJECT LINK                                                                                                                                                                  │
+│  Reject this evidence link; keep the two Memories distinct.                                                                                                                     v│
+│┌──────────────────────────────────────────────────────────────────────────────────| RESPONSE |──────────────────────────────────────────────────────────────────────────────────┐│
+││›                                                                                                                                                                              ^││
+││                                                                                                                                                                                ││
+││                                                                                                                                                                                ││
+││                                                                                                                                                                               v││
+│└────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│  REPORT         Complete Find Duplicates report                                                                                                                                 ^│
+│› DUPLICATE      The office opens at eight on weekdays. ↔ The weekday office opening time is 08:00.                                                                               │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ COMPLETE ]  Required review is complete · 1 optional review remains open. No whole-set action is required; close or revisit an item.                                            │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ section/item  Tab switch  ←/→ option  Enter choose/other  C send/comment  Esc/Backspace report H Help  y/Y copy  Q close

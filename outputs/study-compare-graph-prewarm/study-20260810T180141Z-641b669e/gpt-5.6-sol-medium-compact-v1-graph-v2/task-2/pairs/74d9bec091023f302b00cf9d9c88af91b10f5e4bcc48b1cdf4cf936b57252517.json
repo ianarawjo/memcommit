@@ -1,0 +1,242 @@
+{
+  "coverage": {
+    "expected": 25,
+    "observed": 25
+  },
+  "created_at": "2026-08-11T00:20:33.819476Z",
+  "description_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+  "issues": [],
+  "kind": "STUDY_COMPARE_GRAPH_PAIR",
+  "left": {
+    "context_digest": "c4484b7a8284d7e31066ad3f4c4edf8844a2e0ce8695a323093f753243b6b18f",
+    "context_uid": "39a6f298-c511-5c21-a106-998c1df9d951",
+    "memory_count": 8,
+    "name": "task-2/advisor1/expression"
+  },
+  "method": "COMPACT_DECISION_VECTOR_V1",
+  "operation": "COMPARE",
+  "pair_key": "74d9bec091023f302b00cf9d9c88af91b10f5e4bcc48b1cdf4cf936b57252517",
+  "provider": {
+    "condition": "COMPACT_DECISION_VECTOR",
+    "contract_valid": true,
+    "elapsed_seconds": 30.40544349999982,
+    "error_type": null,
+    "failure_category": null,
+    "operation": "compare_contexts_compact_ab_v1",
+    "prompt_chars": 9520,
+    "provider_calls": 1,
+    "provider_run": {
+      "completion_tokens": null,
+      "identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "operation": "compare_contexts_compact_ab_v1",
+      "prompt_tokens": null,
+      "upstream_model": "gpt-5.6-sol",
+      "upstream_provider": "openai-codex"
+    },
+    "provider_seconds": 30.404703667009016,
+    "response_bytes": 620,
+    "response_chars": 620,
+    "schema_chars": 1380,
+    "validation_error": null,
+    "validation_seconds": 0.0007296249968931079
+  },
+  "relations": [
+    {
+      "comment": "The flow-diagram guidance applies when alternate branches produce different outcomes, while the visual-summary guidance applies to unfamiliar interaction procedures and requires transition conditions.",
+      "kind": "SCOPED",
+      "members": [
+        {
+          "memory_uid": "51fa3fcc-9d5f-52f0-809d-62d7cdd8a865",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "e686bd4d-3ebd-5e55-ba39-f26971247965",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "a6dfe9a7-1df8-561f-8d3e-fc19518beca9",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "50a71968-7e3f-5b99-b3fa-769af386d0c0",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "18ebdcbc-cf5a-5e6c-b2cd-b4cd07d7e59e",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "5ab99a77-8836-50cf-8377-fdd23a208bc4",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000001",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "019662a9-6f03-527f-9b6d-be5a2966d9e9",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000002",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "7047a23d-45b3-5d5c-a00b-c12552e9680d",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "d2825b84-b4a6-58c9-8f8e-9e19c6192a03",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000003",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "ae1610f6-a855-56c1-a0fb-fd3207dab615",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000004",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "44249c8a-e84f-5c20-a9cd-a55457e98511",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "21371c6c-c74f-5791-8f9b-6d099306bfb5",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "8ecaec22-7c25-5a39-a85b-56db9c3b607e",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "a4536b84-40f2-57db-84e4-024c97c9fecb",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000005",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "f69ea80c-0d56-5fe8-9d24-8793eefa6643",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000006",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "b9b7932b-85c1-5a14-80f7-0983dbf22380",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "fc0a3a72-2da2-5843-be3a-a4ff2adf8fac",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000007",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "2f7092a7-2625-5d27-bd76-a13ee5809cc2",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000008",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "a1857f07-36cd-5a6c-946d-a308e712e9eb",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "895b5ac9-1aa4-51d2-b89a-94e9fe5b869d",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "3005f4c5-e17b-531b-b9bf-c9d69411c71f",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "2312cb6e-4f50-56f5-b725-ba5e45697a73",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "1d90043b-f010-5a14-9493-77f636c13975",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "b77fe6ec-676b-5bb9-9119-45aefea2aa27",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000009",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "4913f63e-ceb9-587a-ade9-494fc8f28849",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000010",
+      "status": "RESOLVED"
+    }
+  ],
+  "right": {
+    "context_digest": "130876ecc1e3921197d330f5ad8493b927360f3505da3eff8df01d4f595a4934",
+    "context_uid": "0ff7abfd-58d3-58c2-b42a-31dca38cb7bd",
+    "memory_count": 17,
+    "name": "task-2/advisor1/structure"
+  },
+  "schema_version": 1,
+  "semantic_content_in_participant_report": false,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

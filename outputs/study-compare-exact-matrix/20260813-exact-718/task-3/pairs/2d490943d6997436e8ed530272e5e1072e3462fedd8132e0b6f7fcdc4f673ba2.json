@@ -1,0 +1,388 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:50:36.622134+00:00",
+      "frames": [
+        {
+          "context_digest": "14adbc31fc3a2dc50b7b980d1e24569b16fff058104a812c7f3b4e1542b7abf0",
+          "context_name": "task-3/local/personal-memory/2025/03",
+          "context_uid": "913e0bfd-f6d9-579e-9a37-ba5daa9d17f1",
+          "memories": [
+            {
+              "content": "The user stores prepared meals on the second shelf of the freezer.",
+              "content_digest": "cd837b62b643f752da54b21de2f4f7a3d963a7c658d5b83dff39d1d92e0fdbad",
+              "position": 0,
+              "uid": "5d989bab-c471-5de9-bb73-29cabc4753dd"
+            },
+            {
+              "content": "The user went to the market without a shopping list and bought onions that were already at home.",
+              "content_digest": "f667c860e046bb27662b26d7cc4ed083ee48d9d7915237dc4b92ec378481a093",
+              "position": 1,
+              "uid": "d1725ae4-3fd3-5250-92b3-73d84d9152a7"
+            },
+            {
+              "content": "On a day the user shopped after checking a refrigerator photo, they did not make a duplicate purchase.",
+              "content_digest": "7283d4afe58c0ab05d9cb426bb80bed0e26e0b1783ff7cdd00a5f6e89d21861b",
+              "position": 2,
+              "uid": "904ff225-26df-5424-8a82-23d733649106"
+            },
+            {
+              "content": "On a day the user made a spicy stew, they left part of one bowl uneaten.",
+              "content_digest": "2765ec701f8e058d35ddee4a485c40221523ee2d9b56301ec1658ec4e419cbc2",
+              "position": 3,
+              "uid": "67a003c7-648a-59dc-8e82-03f9e452ffce"
+            },
+            {
+              "content": "The next time the user cooked it, they used half as much chili powder and finished the meal.",
+              "content_digest": "bdd7df7c762bbce31a40a45c2124e49ae3a6439dfc2133c574443d7eb3a7b1bb",
+              "position": 4,
+              "uid": "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9"
+            },
+            {
+              "content": "When cooking with their younger brother, the user assigned the cooking sequence only verbally and they did the same task twice.",
+              "content_digest": "bd92611cfc05fd42bb5d25e8dd7838ca1b2f6d99869bf1f61921b46950a4b532",
+              "position": 5,
+              "uid": "64bf4401-e972-5d15-a526-21ca901a6a9f"
+            },
+            {
+              "content": "The next time, the user and their younger brother split ingredient preparation and heat control and finished the meal 20 minutes earlier.",
+              "content_digest": "c3a28e7256d781ecb2d8710145880ffe79495e32d47ae1949c4be54e52a44555",
+              "position": 6,
+              "uid": "57e09ea5-54ff-5fce-aada-68daffbacc8b"
+            },
+            {
+              "content": "When cooking together, the user's younger brother prefers to divide the cooking and dishwashing roles in advance.",
+              "content_digest": "3bbc428c4f3b4e28a8e2341206ac78b39240eea53a9862192528029b0a57d12b",
+              "position": 7,
+              "uid": "0a5d054f-94bd-5955-bdb7-9b5427e2260b"
+            },
+            {
+              "content": "The local agent can compare responses across several meals, but it cannot conclude from one unfinished food item that the user dislikes that ingredient.",
+              "content_digest": "5787c1636d9dd4a5cb5bd70533b7dd44b2d6cff1047f5c408f5bcaa1b6577fe1",
+              "position": 8,
+              "uid": "1f94b78b-1635-551c-b90c-bea2a67ca595"
+            },
+            {
+              "content": "The condition of frozen prepared food may vary with its packaging and storage duration.",
+              "content_digest": "84bdac276dce5b50b19bc0c7c471468a22cc9945b1da7357700a58c157cf4ca1",
+              "position": 9,
+              "uid": "f64ef6c4-7665-5574-9d58-fc124b0bfe3f"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "a66bc4b1-c855-41b2-bd8c-2768219baf13"
+        },
+        {
+          "context_digest": "5a45aaafce189f861f7195d3a753aa86812f64c689213961136327ca721c9d3e",
+          "context_name": "task-3/local/personal-memory/2026/06",
+          "context_uid": "f2e6c2e0-886a-52d8-98d4-03009ea37991",
+          "memories": [
+            {
+              "content": "The user keeps four folding chairs for family barbecues in storage.",
+              "content_digest": "7e2bb593a723adbac468184af4063e0ef74420baa03d6249ef77a84f2e6bc9df",
+              "position": 0,
+              "uid": "cce43b8e-c1c1-5208-8d9a-ee665b805d4c"
+            },
+            {
+              "content": "When six family members gathered in a noisy indoor restaurant, the user asked several times for the person across from them to repeat what was said.",
+              "content_digest": "d858d40478a37bed08580523df1915b85b4e2217b2fc506acedacaca55d2158d",
+              "position": 1,
+              "uid": "e682f0fd-e92f-566e-b1ec-1d5ebf091b60"
+            },
+            {
+              "content": "The user held the next gathering in their father's yard and moved between seats while speaking with everyone.",
+              "content_digest": "44843518c924955fa15e245dc41763a6fe21a95f6f590bd395f7b8a2d6357256",
+              "position": 2,
+              "uid": "c1f2b53e-6184-552b-a321-9796bb121055"
+            },
+            {
+              "content": "On a day the user started the barbecue at midday, sunlight led them to finish the meal quickly.",
+              "content_digest": "f275c2211b4bd69f40351800db57965b8ba44afbadb6e90a0291acae4e7a541b",
+              "position": 3,
+              "uid": "56d5befe-d5f4-59df-82e4-a66ba868dfc2"
+            },
+            {
+              "content": "The next time, the user started at 6 p.m. and remained outside until sunset.",
+              "content_digest": "13c413fbf16ea0704c10d09c5ee065a49ab789b0a3dadb1fc5068631dd95b292",
+              "position": 4,
+              "uid": "83d73ede-6f5a-550e-ba1c-c146b73a9917"
+            },
+            {
+              "content": "Because the side dishes brought by the user's mother and older sister had no labels, the user opened the same container twice.",
+              "content_digest": "5cc4205a743f5d8adca15876d7b0dd864089595ce729f4e3c1cc9a2272c6849b",
+              "position": 5,
+              "uid": "cf0947e8-c133-5259-bac2-e8ee6d74929e"
+            },
+            {
+              "content": "At the next gathering, the user wrote each food's name and who brought it on a small piece of paper.",
+              "content_digest": "6a93e0b5f7e3da8eff2e5c69a3f86c28dfc1a39c1ba7602a61cc1f6a96b837f9",
+              "position": 6,
+              "uid": "d42e48ca-39de-529f-bba2-332b779bd6c2"
+            },
+            {
+              "content": "After a barbecue, the user's younger brother prefers to divide leftover food into small containers to take home rather than discard it.",
+              "content_digest": "9febf1dab1f5000cddc636cd753d3c418b84810cbc6e394df7e8917d3fa29b72",
+              "position": 7,
+              "uid": "3958627e-a0fa-5e32-9e87-7ee874fc6fe7"
+            },
+            {
+              "content": "The local agent can summarize preparation and responses from prior family barbecues but cannot know the next attendees or weather.",
+              "content_digest": "6be2ed6916fc8a6200a4646b5db3b5ea0df7650e664bd098f973fb5229257cec",
+              "position": 8,
+              "uid": "1f24b5c2-554c-5356-b335-c6879e53ba7f"
+            },
+            {
+              "content": "The user's father's yard receives strong direct sunlight at midday; after 6 p.m., shade and wind lower the felt temperature.",
+              "content_digest": "a0bf855f5bb0422568bbed468e5299d111143362d7b9fe2dcf35dbaf8bcbf4c6",
+              "position": 9,
+              "uid": "d88b1b21-c58f-51d5-a60b-54bb11473d96"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "e095708e-9219-4660-98b4-80e435ea476e"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate household practices: the reference centers on meal storage, shopping, cooking adjustments, collaboration, and inference limits, while the compared frame centers on barbecue logistics, setting, timing, labeling, leftovers, and forecasting limits. No claims govern the same operational decision closely enough for a cross-frame relation.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a66bc4b1-c855-41b2-bd8c-2768219baf13",
+              "memory_uid": "5d989bab-c471-5de9-bb73-29cabc4753dd"
+            }
+          ],
+          "reason": "This is independently useful reference-only information about the user’s established storage location.",
+          "status": "RESOLVED",
+          "summary": "Prepared meals are stored on the freezer’s second shelf.",
+          "uid": "cb858ae4-6375-5bf5-ad53-86b82796695c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a66bc4b1-c855-41b2-bd8c-2768219baf13",
+              "memory_uid": "d1725ae4-3fd3-5250-92b3-73d84d9152a7"
+            },
+            {
+              "frame_uid": "a66bc4b1-c855-41b2-bd8c-2768219baf13",
+              "memory_uid": "904ff225-26df-5424-8a82-23d733649106"
+            }
+          ],
+          "reason": "The two reference episodes jointly contrast shopping without an inventory aid, which produced a duplicate onion purchase, with consulting a refrigerator photo, which did not.",
+          "status": "RESOLVED",
+          "summary": "Checking available inventory before shopping was associated with avoiding a duplicate purchase.",
+          "uid": "12417aa5-d206-57d6-97a7-7c0406d95c1d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a66bc4b1-c855-41b2-bd8c-2768219baf13",
+              "memory_uid": "67a003c7-648a-59dc-8e82-03f9e452ffce"
+            },
+            {
+              "frame_uid": "a66bc4b1-c855-41b2-bd8c-2768219baf13",
+              "memory_uid": "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9"
+            }
+          ],
+          "reason": "The two reference episodes form one before-and-after account of a cooking adjustment and the user’s meal response.",
+          "status": "RESOLVED",
+          "summary": "Reducing chili powder after an unfinished spicy stew was followed by finishing the next meal.",
+          "uid": "792b83f4-5875-5307-98a3-5e48f62f4d02"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a66bc4b1-c855-41b2-bd8c-2768219baf13",
+              "memory_uid": "64bf4401-e972-5d15-a526-21ca901a6a9f"
+            },
+            {
+              "frame_uid": "a66bc4b1-c855-41b2-bd8c-2768219baf13",
+              "memory_uid": "57e09ea5-54ff-5fce-aada-68daffbacc8b"
+            }
+          ],
+          "reason": "The reference episodes form one before-and-after account of coordination while cooking with the younger brother.",
+          "status": "RESOLVED",
+          "summary": "Explicitly splitting preparation and heat-control duties followed duplicated work and was associated with faster completion.",
+          "uid": "c4026962-93bd-50c0-b01a-4d23d11fed06"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a66bc4b1-c855-41b2-bd8c-2768219baf13",
+              "memory_uid": "0a5d054f-94bd-5955-bdb7-9b5427e2260b"
+            }
+          ],
+          "reason": "This is an independently useful reference-only preference concerning division of responsibilities.",
+          "status": "RESOLVED",
+          "summary": "The younger brother prefers assigning cooking and dishwashing roles in advance when cooking together.",
+          "uid": "5bb7267a-3b15-598b-8f01-651512a4421e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a66bc4b1-c855-41b2-bd8c-2768219baf13",
+              "memory_uid": "1f94b78b-1635-551c-b90c-bea2a67ca595"
+            }
+          ],
+          "reason": "This is an independently useful reference-only boundary on preference inference.",
+          "status": "RESOLVED",
+          "summary": "The local agent may compare responses across meals but cannot infer ingredient dislike from one unfinished item.",
+          "uid": "3c3836a2-5c2b-52e3-aad9-c2dc54b21b3f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a66bc4b1-c855-41b2-bd8c-2768219baf13",
+              "memory_uid": "f64ef6c4-7665-5574-9d58-fc124b0bfe3f"
+            }
+          ],
+          "reason": "This is independently useful reference-only context about factors affecting stored food.",
+          "status": "RESOLVED",
+          "summary": "Frozen prepared-food condition may depend on packaging and storage duration.",
+          "uid": "f4942f52-d00f-5eb9-be76-5e15ebb406ac"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e095708e-9219-4660-98b4-80e435ea476e",
+              "memory_uid": "cce43b8e-c1c1-5208-8d9a-ee665b805d4c"
+            }
+          ],
+          "reason": "This is independently useful compared-only information about available gathering equipment.",
+          "status": "RESOLVED",
+          "summary": "The user stores four folding chairs for family barbecues.",
+          "uid": "5f6f0e98-b3c4-5c25-8075-5aa73c6a8a4b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e095708e-9219-4660-98b4-80e435ea476e",
+              "memory_uid": "e682f0fd-e92f-566e-b1ec-1d5ebf091b60"
+            },
+            {
+              "frame_uid": "e095708e-9219-4660-98b4-80e435ea476e",
+              "memory_uid": "c1f2b53e-6184-552b-a321-9796bb121055"
+            }
+          ],
+          "reason": "The compared episodes form one before-and-after account of gathering setting and conversational access.",
+          "status": "RESOLVED",
+          "summary": "After difficulty hearing across a noisy restaurant table, the next gathering used the father’s yard, where the user moved between seats to converse.",
+          "uid": "9bd79685-b85e-5d40-9a0a-66e9de16bbe3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e095708e-9219-4660-98b4-80e435ea476e",
+              "memory_uid": "56d5befe-d5f4-59df-82e4-a66ba868dfc2"
+            },
+            {
+              "frame_uid": "e095708e-9219-4660-98b4-80e435ea476e",
+              "memory_uid": "83d73ede-6f5a-550e-ba1c-c146b73a9917"
+            },
+            {
+              "frame_uid": "e095708e-9219-4660-98b4-80e435ea476e",
+              "memory_uid": "d88b1b21-c58f-51d5-a60b-54bb11473d96"
+            }
+          ],
+          "reason": "The compared memories jointly describe one time-of-day distinction affecting outdoor barbecue comfort and duration.",
+          "status": "RESOLVED",
+          "summary": "Midday direct sunlight shortened a barbecue meal, whereas a 6 p.m. start provided cooler shade and wind and supported staying until sunset.",
+          "uid": "ef5ccc64-65d5-5082-9b46-cb30e8606c99"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e095708e-9219-4660-98b4-80e435ea476e",
+              "memory_uid": "cf0947e8-c133-5259-bac2-e8ee6d74929e"
+            },
+            {
+              "frame_uid": "e095708e-9219-4660-98b4-80e435ea476e",
+              "memory_uid": "d42e48ca-39de-529f-bba2-332b779bd6c2"
+            }
+          ],
+          "reason": "The compared episodes form one before-and-after account of labeling shared dishes.",
+          "status": "RESOLVED",
+          "summary": "After unlabeled side dishes caused the same container to be opened twice, foods were labeled with their names and contributors.",
+          "uid": "021a76d9-78df-50fe-bef7-2b8ec0f887b6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e095708e-9219-4660-98b4-80e435ea476e",
+              "memory_uid": "3958627e-a0fa-5e32-9e87-7ee874fc6fe7"
+            }
+          ],
+          "reason": "This is an independently useful compared-only preference about leftover handling.",
+          "status": "RESOLVED",
+          "summary": "After barbecues, the younger brother prefers portioning leftovers into small take-home containers rather than discarding them.",
+          "uid": "d4a68af6-69bd-5700-a58b-60381ca03752"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "e095708e-9219-4660-98b4-80e435ea476e",
+              "memory_uid": "1f24b5c2-554c-5356-b335-c6879e53ba7f"
+            }
+          ],
+          "reason": "This is an independently useful compared-only boundary on summarization and forecasting.",
+          "status": "RESOLVED",
+          "summary": "The local agent can summarize earlier barbecue preparation and responses but cannot know future attendees or weather.",
+          "uid": "32b1809b-8159-57af-8c14-33584bda9289"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only content concerns barbecue seating and conversation, venue choice, sunlight-sensitive timing, food labels, leftover sharing, stored chairs, and limits on forecasting attendance or weather.",
+        "differences": "",
+        "reference_only": "Reference-only content concerns freezer storage, inventory checks, spice adjustment, shared cooking roles, a sibling’s role preference, cautious preference inference, and frozen-food variability."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "b8440aeb-9763-46a7-b30a-330f2494d878"
+    },
+    "analysis_digest": "1da672be7602319db3b5706031344394f76037a812c3aecb6e40a1ba5ba7d5fe",
+    "key": "e33f8998f9dc85cfd937a5bbb3bbdde11644566dd347366ab8ce7e465d9973c1",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 35.78136529100084,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "e33f8998f9dc85cfd937a5bbb3bbdde11644566dd347366ab8ce7e465d9973c1",
+  "created_at": "2026-08-13T18:51:12.403123Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/03",
+  "pair_key": "2d490943d6997436e8ed530272e5e1072e3462fedd8132e0b6f7fcdc4f673ba2",
+  "provider_seconds": 35.78136529100084,
+  "right": "task-3/local/personal-memory/2026/06",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

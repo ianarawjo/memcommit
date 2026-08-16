@@ -1,0 +1,396 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:24:13.346469+00:00",
+      "frames": [
+        {
+          "context_digest": "adcb1ff51b2facc8282e8a56d8fec5150dd8e7376b7889d21013f71fee66b9b8",
+          "context_name": "task-2/advisor1/review",
+          "context_uid": "57ec8c37-1a0a-5f3b-82e9-51adad82677c",
+          "memories": [
+            {
+              "content": "Conduct one review prior to submission focusing solely on the validity of user problems, design interventions, and evaluation logic.",
+              "content_digest": "3dd669e72e74416ccd0b8eaf32f6b24dc7400ceb50c133a18f3ff33f89075334",
+              "position": 0,
+              "uid": "0dda8eb3-3287-5bb6-9b26-b1c00cc038d9"
+            },
+            {
+              "content": "Cross-check whether research questions align with the core functions of the prototype.",
+              "content_digest": "b3fbab30f9c640c7b3f6424f2cbc7d66bfa1f455f937f7fb28a6cc8b3763597d",
+              "position": 1,
+              "uid": "c8e0c9dd-dc4a-5a7d-9a82-e7ee449a4b25"
+            },
+            {
+              "content": "Cross-check whether evaluation tasks align with representative measures.",
+              "content_digest": "1e49d1844cb2a0a66a3dec114e44713885299f7a80763ae4e9a416eba505d61f",
+              "position": 2,
+              "uid": "f93c5baa-3c2b-5e37-b07b-0b00e8b22ab9"
+            },
+            {
+              "content": "Cross-check whether collected evidence aligns with design and operational decisions to be changed.",
+              "content_digest": "bc977c73db48b06ad23b68fa58f2fa5f64b19d09856b0e80c8ddac0b039568f8",
+              "position": 3,
+              "uid": "8dae0ad6-2a6d-5d99-98db-b0d48a1140e5"
+            },
+            {
+              "content": "Verify at the end that user problems, design interventions, user studies, and expected contributions form a coherent logical flow.",
+              "content_digest": "8b8d84adb9296241a03a4e6b91acee829ff1eaea443f9dd0b132d7b64a53dcff",
+              "position": 4,
+              "uid": "0f89ab25-d9ee-5669-aa99-a0fe07803915"
+            },
+            {
+              "content": "HCI reviewers view the validity of design interventions as low if research questions are not linked to prototype functions.",
+              "content_digest": "e7e5bb6d9618adc9d4903a4d4cbbf53007381999a95e4ed2137e3705a988fa13",
+              "position": 5,
+              "uid": "3e4a9a3b-abc2-54ed-9b87-f81abf61b541"
+            },
+            {
+              "content": "HCI reviewers view the validity of evaluation plans as low if evaluation tasks do not produce representative measures.",
+              "content_digest": "b23af1197034e73ce7b5bf0c6870ee410e44a07810ebaae12259087f2c12f8f1",
+              "position": 6,
+              "uid": "fb785649-1947-5e7d-aafb-308f14fb21b4"
+            },
+            {
+              "content": "HCI reviewers view the practicality of contributions as low if collected evidence cannot change design or operational decisions.",
+              "content_digest": "3720d356aa625bea8226fb668004f599e61140f1ad1543b643eb72b7a39ec43d",
+              "position": 7,
+              "uid": "02f8ddd8-32b0-5e3b-b358-5e0472a6e0d2"
+            },
+            {
+              "content": "Cross-check at the end whether each research question, formative evaluation data, and design modification judgment are seamlessly connected.",
+              "content_digest": "f3b3d431c05e942ff3cea0ac2d239eeee33e224047a452debe0246c57472f74d",
+              "position": 8,
+              "uid": "d17ba26c-187e-57bc-8468-c9c053fc303d"
+            },
+            {
+              "content": "Review whether the application conditions of proposed design principles and boundary cases of failure are presented together.",
+              "content_digest": "28ab914aa4a03e8f1908176b235017a80838ed660d996773a44b3963b927bcb3",
+              "position": 9,
+              "uid": "48a91d19-cc68-5400-8971-8125236f3fbf"
+            },
+            {
+              "content": "The user can have contributions reviewed only if prototype outcomes and the transferable design knowledge derived from them are separated.",
+              "content_digest": "2deadd2cfeed19a3e544c81a345a40f2f3b4561a8d28b073b70400a5e82ae0cb",
+              "position": 10,
+              "uid": "774341c9-b92d-53a5-a24c-59c75e39756b"
+            },
+            {
+              "content": "The scope of observation in controlled formative evaluations does not include long-term adaptation and operational changes in real-world usage contexts.",
+              "content_digest": "76a1a3c03c7d93acc8a6aca832fd24ab9624ea9e53c8207876160ed1055682e2",
+              "position": 11,
+              "uid": "877015ae-ab0b-561c-9fe3-3abb2d0aaa4e"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "682b8ce4-553f-4ff6-ad16-524c049c6b11"
+        },
+        {
+          "context_digest": "4371a72e6fb939731cb550ca5363a3b5210680482f84c18b36ba933f4454ecc1",
+          "context_name": "task-2/advisor2/expression",
+          "context_uid": "cf8e8baf-292e-57c3-8e2c-3f9b3d52f3d3",
+          "memories": [
+            {
+              "content": "Use a sequence table rather than a flow diagram when the procedure is likely to change repeatedly during drafting.",
+              "content_digest": "575bb4530af1e93b215ea57f0fd63e1e09136554da98aecf87288cc39ea9697c",
+              "position": 0,
+              "uid": "4264c20d-3e44-578d-866e-7787cc7b59e2"
+            },
+            {
+              "content": "The visual fidelity of a prototype and its level of connection to actual data and services may differ.",
+              "content_digest": "9478cb005a07ca7edfa924579b3d5221b1fa1143b5d8327369e7ee799b76aa9f",
+              "position": 1,
+              "uid": "70a8c3f0-0f6a-5881-abd6-29f52833b7bd"
+            },
+            {
+              "content": "Service flow diagrams indicate human-system transitions that are not revealed by individual screens alone.",
+              "content_digest": "5e3e18a38b1e62724d2ae0445549e214a219d205a80735bc6b4c0e643a96b8b3",
+              "position": 2,
+              "uid": "b410aa8d-db87-586b-a1cd-4af5767a9f7a"
+            },
+            {
+              "content": "HCI reviewers often scan system structure and service flow diagrams before the main text.",
+              "content_digest": "22a46440a6aeda0cb7d39cc6fedf6bbff6cac91232ec0cb163bf1fc17ff257d4",
+              "position": 3,
+              "uid": "a385fbb1-85b4-5132-bbc7-8fd8daedb715"
+            },
+            {
+              "content": "Give each step, actor, condition, and outcome a stable row in the sequence table.",
+              "content_digest": "2a073bf2ec4c5592ddc405d83cb438a5ed880699d3c157f310fb3dbff7851622",
+              "position": 4,
+              "uid": "22254f16-4628-5fd9-b1af-6e66dc2572b3"
+            },
+            {
+              "content": "Updating one row in a sequence table is usually faster than redrawing a branching diagram after a procedural change.",
+              "content_digest": "cf97dbf66018a6be1ee42dfc79ff8de44e8742db2b42c9d1ef70b3f252805a39",
+              "position": 5,
+              "uid": "32028269-5d43-5a65-b22b-9e570ceabfde"
+            },
+            {
+              "content": "Readers can check sequence tables step by step but may find the overall branching shape less immediate.",
+              "content_digest": "18b5de0cdd22ef1774151332afdbc408f9f591cf889e51271f81a372f74ef86d",
+              "position": 6,
+              "uid": "939ee3d0-b611-574a-a25b-82708394bd5e"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "2342c3a9-1d93-454b-aabb-8cac5b7e9377"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate aspects of HCI work without overlapping operational claims. The reference frame concentrates on validating research, evaluation, evidence, contribution logic, and study limits, while the compared frame concentrates on choosing and structuring sequence tables and service-flow representations.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "682b8ce4-553f-4ff6-ad16-524c049c6b11",
+              "memory_uid": "0dda8eb3-3287-5bb6-9b26-b1c00cc038d9"
+            }
+          ],
+          "reason": "Only the reference frame specifies this focused review; the compared frame concerns representational formats rather than validity review.",
+          "status": "RESOLVED",
+          "summary": "Conduct a focused pre-submission review of problem validity, design interventions, and evaluation logic.",
+          "uid": "99d3ea2d-10be-5462-8e1d-58d590ec8d2c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "682b8ce4-553f-4ff6-ad16-524c049c6b11",
+              "memory_uid": "c8e0c9dd-dc4a-5a7d-9a82-e7ee449a4b25"
+            },
+            {
+              "frame_uid": "682b8ce4-553f-4ff6-ad16-524c049c6b11",
+              "memory_uid": "3e4a9a3b-abc2-54ed-9b87-f81abf61b541"
+            }
+          ],
+          "reason": "The reference frame supplies both the alignment check and its reviewer-facing rationale; no compared claim addresses this research-to-function linkage.",
+          "status": "RESOLVED",
+          "summary": "Research questions should be linked to prototype functions to support the validity of design interventions.",
+          "uid": "61abde10-0b0c-5ad7-bd9b-73cfc8d7c045"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "682b8ce4-553f-4ff6-ad16-524c049c6b11",
+              "memory_uid": "f93c5baa-3c2b-5e37-b07b-0b00e8b22ab9"
+            },
+            {
+              "frame_uid": "682b8ce4-553f-4ff6-ad16-524c049c6b11",
+              "memory_uid": "fb785649-1947-5e7d-aafb-308f14fb21b4"
+            }
+          ],
+          "reason": "The reference frame supplies both the alignment check and its reviewer-facing rationale; the compared frame does not address measurement validity.",
+          "status": "RESOLVED",
+          "summary": "Evaluation tasks should produce representative measures to support a valid evaluation plan.",
+          "uid": "dd122705-0e46-5dde-a423-367601a78d77"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "682b8ce4-553f-4ff6-ad16-524c049c6b11",
+              "memory_uid": "8dae0ad6-2a6d-5d99-98db-b0d48a1140e5"
+            },
+            {
+              "frame_uid": "682b8ce4-553f-4ff6-ad16-524c049c6b11",
+              "memory_uid": "02f8ddd8-32b0-5e3b-b358-5e0472a6e0d2"
+            }
+          ],
+          "reason": "The reference frame supplies both the evidence check and its reviewer-facing consequence; no compared claim governs decision-changing evidence.",
+          "status": "RESOLVED",
+          "summary": "Collected evidence should be capable of informing changes to design or operational decisions so contributions remain practical.",
+          "uid": "c8ee8b1c-0ac3-55c1-97ae-dcdc4ad1b590"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "682b8ce4-553f-4ff6-ad16-524c049c6b11",
+              "memory_uid": "0f89ab25-d9ee-5669-aa99-a0fe07803915"
+            }
+          ],
+          "reason": "This end-stage coherence check appears only in the reference frame and is independent of the compared frame's presentation-format guidance.",
+          "status": "RESOLVED",
+          "summary": "Verify that user problems, design interventions, user studies, and expected contributions form a coherent logical flow.",
+          "uid": "7c588a6f-ccfe-5552-b037-326fc987d6ec"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "682b8ce4-553f-4ff6-ad16-524c049c6b11",
+              "memory_uid": "d17ba26c-187e-57bc-8468-c9c053fc303d"
+            }
+          ],
+          "reason": "Only the reference frame specifies this detailed formative-evaluation chain.",
+          "status": "RESOLVED",
+          "summary": "Check traceability from each research question through formative evaluation data to design-modification judgments.",
+          "uid": "0a34d150-c134-57f7-8fcf-541bc6a9fe58"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "682b8ce4-553f-4ff6-ad16-524c049c6b11",
+              "memory_uid": "48a91d19-cc68-5400-8971-8125236f3fbf"
+            }
+          ],
+          "reason": "Only the reference frame addresses the qualified scope and limits of design principles.",
+          "status": "RESOLVED",
+          "summary": "Present the application conditions of proposed design principles together with their failure boundary cases.",
+          "uid": "7c925a6d-a3fb-5728-9820-833bd2828a69"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "682b8ce4-553f-4ff6-ad16-524c049c6b11",
+              "memory_uid": "774341c9-b92d-53a5-a24c-59c75e39756b"
+            }
+          ],
+          "reason": "Only the reference frame specifies this distinction between artifact outcomes and transferable contributions.",
+          "status": "RESOLVED",
+          "summary": "Separate prototype outcomes from transferable design knowledge when presenting contributions for review.",
+          "uid": "498d1b2c-a705-5db9-a5f6-7e651ed17570"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "682b8ce4-553f-4ff6-ad16-524c049c6b11",
+              "memory_uid": "877015ae-ab0b-561c-9fe3-3abb2d0aaa4e"
+            }
+          ],
+          "reason": "This limitation on evaluation scope is stated only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Controlled formative evaluations do not observe long-term adaptation or operational change in real-world use.",
+          "uid": "66a839b4-a8f9-5a5c-908f-74bbaaf3d166"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2342c3a9-1d93-454b-aabb-8cac5b7e9377",
+              "memory_uid": "4264c20d-3e44-578d-866e-7787cc7b59e2"
+            },
+            {
+              "frame_uid": "2342c3a9-1d93-454b-aabb-8cac5b7e9377",
+              "memory_uid": "32028269-5d43-5a65-b22b-9e570ceabfde"
+            }
+          ],
+          "reason": "The compared frame gives both the format choice and its maintenance rationale; the reference frame contains no procedural-representation policy.",
+          "status": "RESOLVED",
+          "summary": "Use a sequence table for procedures likely to change repeatedly because row updates are easier than redrawing branching diagrams.",
+          "uid": "289b24d3-ccf2-5d17-b065-baf20765eacb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2342c3a9-1d93-454b-aabb-8cac5b7e9377",
+              "memory_uid": "70a8c3f0-0f6a-5881-abd6-29f52833b7bd"
+            }
+          ],
+          "reason": "Only the compared frame distinguishes appearance fidelity from operational integration.",
+          "status": "RESOLVED",
+          "summary": "Prototype visual fidelity and connection to real data and services are separate dimensions.",
+          "uid": "6666d33e-8572-5711-8e7c-c5a4106e24a1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2342c3a9-1d93-454b-aabb-8cac5b7e9377",
+              "memory_uid": "b410aa8d-db87-586b-a1cd-4af5767a9f7a"
+            }
+          ],
+          "reason": "Only the compared frame describes this informational role of service-flow diagrams.",
+          "status": "RESOLVED",
+          "summary": "Service-flow diagrams reveal human-system transitions that individual screens do not show.",
+          "uid": "eb26d20f-b29a-5e63-8ad0-7920729c350d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2342c3a9-1d93-454b-aabb-8cac5b7e9377",
+              "memory_uid": "a385fbb1-85b4-5132-bbc7-8fd8daedb715"
+            }
+          ],
+          "reason": "Only the compared frame states this reviewer navigation behavior.",
+          "status": "RESOLVED",
+          "summary": "HCI reviewers often inspect system-structure and service-flow diagrams before reading the main text.",
+          "uid": "4a59c54c-182c-5724-aa2d-ea0f8c3c79fc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2342c3a9-1d93-454b-aabb-8cac5b7e9377",
+              "memory_uid": "22254f16-4628-5fd9-b1af-6e66dc2572b3"
+            }
+          ],
+          "reason": "Only the compared frame prescribes this table structure.",
+          "status": "RESOLVED",
+          "summary": "Assign every step, actor, condition, and outcome a stable row in a sequence table.",
+          "uid": "71bd022d-0a4e-58f7-b1be-9505824f08d0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2342c3a9-1d93-454b-aabb-8cac5b7e9377",
+              "memory_uid": "939ee3d0-b611-574a-a25b-82708394bd5e"
+            }
+          ],
+          "reason": "Only the compared frame identifies this readability tradeoff.",
+          "status": "RESOLVED",
+          "summary": "Sequence tables support stepwise checking but make the overall branching shape less immediate.",
+          "uid": "05ff4ac1-b92b-541c-9bf2-bcf157c813e7"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers prototype fidelity versus integration, diagram-reading behavior, service-flow visibility, and sequence-table selection, structure, maintainability, and readability tradeoffs.",
+        "differences": "",
+        "reference_only": "The reference covers review logic linking problems, research questions, prototype functions, measures, evidence, decisions, contributions, design-principle boundaries, and controlled-evaluation limits."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "7990629d-6951-4a5c-9d2c-2dcbd1d3760d"
+    },
+    "analysis_digest": "f61d3756b5248162c477c9a4d87568517c784edd0cd980837a72448227c39cfc",
+    "key": "8405b860fe85e35a905701245ecba66c1a46d3e03ea9d9007cc3cac829357d1d",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 35.495288417001575,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "8405b860fe85e35a905701245ecba66c1a46d3e03ea9d9007cc3cac829357d1d",
+  "created_at": "2026-08-13T18:24:48.841421Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/review",
+  "pair_key": "e6991a05c39d8fa134992452b6ac286e8df8d27017d752416ce53bf60240da8a",
+  "provider_seconds": 35.495288417001575,
+  "right": "task-2/advisor2/expression",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

@@ -1,0 +1,397 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:36:35.222198+00:00",
+      "frames": [
+        {
+          "context_digest": "9fdb8cdfae14edf54f7410c0e8dd59527179de290b3d7c5f1b0f58494275b076",
+          "context_name": "task-3/local/personal-memory/2024/03",
+          "context_uid": "97c5905c-359b-5497-956f-b92db9ddbd2f",
+          "memories": [
+            {
+              "content": "The instructions for one medication the user takes say to take it after the evening meal.",
+              "content_digest": "32bba9f2936e560ddd5f4c5515895f2954b9c8722fcd501644569d1ff4f7b97c",
+              "position": 0,
+              "uid": "12ba4249-9450-5f2e-b648-5369a7997b26"
+            },
+            {
+              "content": "On a day with a morning appointment, the user miscalculated the fasting period and checked again at the reception desk.",
+              "content_digest": "532396ed2265321fbd4ca28ed1de2962211a357195bc9839503330c6cb0ab281",
+              "position": 1,
+              "uid": "051e79ff-5363-5160-9a13-46568fd13306"
+            },
+            {
+              "content": "For an afternoon visit, the user felt less rushed while preparing to travel than for a morning visit.",
+              "content_digest": "276fa255e4a4945f1475fa66129069ea33514bc24c98a246e9ab0d0000c156fa",
+              "position": 2,
+              "uid": "e7f1fcf7-ee2f-57d8-98cb-781e31e481e8"
+            },
+            {
+              "content": "On a day there was no waiting chair, the user stood for 20 minutes and their back became uncomfortable.",
+              "content_digest": "1c412785950057f01b1e7c10b716977cdb8bfb2b0605ef5bfdbdc6e349f6aaf8",
+              "position": 3,
+              "uid": "18d58666-2cfa-5959-8da9-2745bed56e11"
+            },
+            {
+              "content": "On a day medication instructions were explained all at once and at length, the user failed to write down an important time.",
+              "content_digest": "f3629bba06d053fa20712982f70b8dfd574b41a1b5ecd29d7c29f1b60742f647",
+              "position": 4,
+              "uid": "8fdede6e-64ed-5e4c-81f4-7a1075165568"
+            },
+            {
+              "content": "On a day medication times were confirmed one line at a time, the user copied them directly into their schedule after returning home.",
+              "content_digest": "acade505d6c0cdfddae0d169dea81c06a757aa7d7d2c760f6cdc253b06af5ded",
+              "position": 5,
+              "uid": "21f679f7-7d75-5c01-b6c3-b0d4bea5f2f0"
+            },
+            {
+              "content": "On a visit when their younger brother drove them, the user did not have to find a separate route home.",
+              "content_digest": "5e17c1227c7cbee7e995728edd17b4301903dfdc7a7bdc5f5ff3e06edfd357b3",
+              "position": 6,
+              "uid": "3ec03d39-3240-56d1-80da-313f79f2bf3a"
+            },
+            {
+              "content": "The user's younger brother prefers to receive a request for weekday-afternoon transportation two days beforehand rather than on the day itself.",
+              "content_digest": "7d1bf920ff730ddff86f328aaa3c3edf9d424170044bcd789a3ac55bffb5a839",
+              "position": 7,
+              "uid": "3069baac-fa68-5e94-8ba3-e888cf622f8c"
+            },
+            {
+              "content": "The local agent cannot determine the current prescription or whether use continues from medication notes alone.",
+              "content_digest": "89990815daa01f70a77b970b6a38cb9063f32fed898bd36e39a85551a1ad6200",
+              "position": 8,
+              "uid": "d7f215c6-57ea-561a-9627-3ce94203d507"
+            },
+            {
+              "content": "The waiting area at that clinic has too few chairs, so there may be periods when people must wait standing.",
+              "content_digest": "66c27ba4d6f3fb0d16b322a6de6d8afeb5c650fbe04162006a3288dd886ce1f0",
+              "position": 9,
+              "uid": "e6023aed-938d-5954-b8a7-8cb01340ee37"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "cbd6037c-adb8-4dd0-8462-b4edf92c1f58"
+        },
+        {
+          "context_digest": "14adbc31fc3a2dc50b7b980d1e24569b16fff058104a812c7f3b4e1542b7abf0",
+          "context_name": "task-3/local/personal-memory/2025/03",
+          "context_uid": "913e0bfd-f6d9-579e-9a37-ba5daa9d17f1",
+          "memories": [
+            {
+              "content": "The user stores prepared meals on the second shelf of the freezer.",
+              "content_digest": "cd837b62b643f752da54b21de2f4f7a3d963a7c658d5b83dff39d1d92e0fdbad",
+              "position": 0,
+              "uid": "5d989bab-c471-5de9-bb73-29cabc4753dd"
+            },
+            {
+              "content": "The user went to the market without a shopping list and bought onions that were already at home.",
+              "content_digest": "f667c860e046bb27662b26d7cc4ed083ee48d9d7915237dc4b92ec378481a093",
+              "position": 1,
+              "uid": "d1725ae4-3fd3-5250-92b3-73d84d9152a7"
+            },
+            {
+              "content": "On a day the user shopped after checking a refrigerator photo, they did not make a duplicate purchase.",
+              "content_digest": "7283d4afe58c0ab05d9cb426bb80bed0e26e0b1783ff7cdd00a5f6e89d21861b",
+              "position": 2,
+              "uid": "904ff225-26df-5424-8a82-23d733649106"
+            },
+            {
+              "content": "On a day the user made a spicy stew, they left part of one bowl uneaten.",
+              "content_digest": "2765ec701f8e058d35ddee4a485c40221523ee2d9b56301ec1658ec4e419cbc2",
+              "position": 3,
+              "uid": "67a003c7-648a-59dc-8e82-03f9e452ffce"
+            },
+            {
+              "content": "The next time the user cooked it, they used half as much chili powder and finished the meal.",
+              "content_digest": "bdd7df7c762bbce31a40a45c2124e49ae3a6439dfc2133c574443d7eb3a7b1bb",
+              "position": 4,
+              "uid": "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9"
+            },
+            {
+              "content": "When cooking with their younger brother, the user assigned the cooking sequence only verbally and they did the same task twice.",
+              "content_digest": "bd92611cfc05fd42bb5d25e8dd7838ca1b2f6d99869bf1f61921b46950a4b532",
+              "position": 5,
+              "uid": "64bf4401-e972-5d15-a526-21ca901a6a9f"
+            },
+            {
+              "content": "The next time, the user and their younger brother split ingredient preparation and heat control and finished the meal 20 minutes earlier.",
+              "content_digest": "c3a28e7256d781ecb2d8710145880ffe79495e32d47ae1949c4be54e52a44555",
+              "position": 6,
+              "uid": "57e09ea5-54ff-5fce-aada-68daffbacc8b"
+            },
+            {
+              "content": "When cooking together, the user's younger brother prefers to divide the cooking and dishwashing roles in advance.",
+              "content_digest": "3bbc428c4f3b4e28a8e2341206ac78b39240eea53a9862192528029b0a57d12b",
+              "position": 7,
+              "uid": "0a5d054f-94bd-5955-bdb7-9b5427e2260b"
+            },
+            {
+              "content": "The local agent can compare responses across several meals, but it cannot conclude from one unfinished food item that the user dislikes that ingredient.",
+              "content_digest": "5787c1636d9dd4a5cb5bd70533b7dd44b2d6cff1047f5c408f5bcaa1b6577fe1",
+              "position": 8,
+              "uid": "1f94b78b-1635-551c-b90c-bea2a67ca595"
+            },
+            {
+              "content": "The condition of frozen prepared food may vary with its packaging and storage duration.",
+              "content_digest": "84bdac276dce5b50b19bc0c7c471468a22cc9945b1da7357700a58c157cf4ca1",
+              "position": 9,
+              "uid": "f64ef6c4-7665-5574-9d58-fc124b0bfe3f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "5c31f849-6ee1-47ee-a17c-9a6277b81c44"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate domains: the reference focuses on clinic visits, medication communication, transportation, and waiting conditions, while the compared frame focuses on food storage, shopping, meal adjustment, and shared cooking. No claims govern the same operational decision, and no conflict or ambiguity arises.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cbd6037c-adb8-4dd0-8462-b4edf92c1f58",
+              "memory_uid": "12ba4249-9450-5f2e-b648-5369a7997b26"
+            }
+          ],
+          "reason": "This is independently useful medication-timing information with no compared-side claim addressing that regimen.",
+          "status": "RESOLVED",
+          "summary": "One medication carries an instruction to take it after the evening meal.",
+          "uid": "f20112d6-277c-5d4b-a6f1-22cd0778c85d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cbd6037c-adb8-4dd0-8462-b4edf92c1f58",
+              "memory_uid": "051e79ff-5363-5160-9a13-46568fd13306"
+            }
+          ],
+          "reason": "This is a one-sided observation about appointment fasting preparation and corrective verification.",
+          "status": "RESOLVED",
+          "summary": "A fasting-period miscalculation for a morning appointment led the user to verify the requirement at reception.",
+          "uid": "ae79ce61-9538-512c-a458-ca56c75d6411"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cbd6037c-adb8-4dd0-8462-b4edf92c1f58",
+              "memory_uid": "e7f1fcf7-ee2f-57d8-98cb-781e31e481e8"
+            }
+          ],
+          "reason": "This independently describes how appointment time affected travel preparation.",
+          "status": "RESOLVED",
+          "summary": "The user experienced less rushed travel preparation for an afternoon visit than for a morning visit.",
+          "uid": "cacffe99-463d-5637-a496-790e63eefb8f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cbd6037c-adb8-4dd0-8462-b4edf92c1f58",
+              "memory_uid": "18d58666-2cfa-5959-8da9-2745bed56e11"
+            },
+            {
+              "frame_uid": "cbd6037c-adb8-4dd0-8462-b4edf92c1f58",
+              "memory_uid": "e6023aed-938d-5954-b8a7-8cb01340ee37"
+            }
+          ],
+          "reason": "The memories jointly describe the clinic seating shortage and a direct consequence for the user, with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Insufficient clinic seating can require standing, and one such wait caused the user back discomfort after 20 minutes.",
+          "uid": "ab84b519-f067-5e83-868a-349b6a26a03a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cbd6037c-adb8-4dd0-8462-b4edf92c1f58",
+              "memory_uid": "8fdede6e-64ed-5e4c-81f4-7a1075165568"
+            },
+            {
+              "frame_uid": "cbd6037c-adb8-4dd0-8462-b4edf92c1f58",
+              "memory_uid": "21f679f7-7d75-5c01-b6c3-b0d4bea5f2f0"
+            }
+          ],
+          "reason": "The memories jointly support one one-sided claim that instruction pacing affected successful capture of medication times.",
+          "status": "RESOLVED",
+          "summary": "Medication instructions delivered at length led to a missed time, whereas line-by-line confirmation enabled the user to transfer times into their schedule.",
+          "uid": "e239d45f-c61f-5b03-93d8-57cfe1f6785b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cbd6037c-adb8-4dd0-8462-b4edf92c1f58",
+              "memory_uid": "3ec03d39-3240-56d1-80da-313f79f2bf3a"
+            }
+          ],
+          "reason": "This is independently useful transportation information absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "When the younger brother drove, the user did not need to arrange a separate route home.",
+          "uid": "1334471c-2ff5-5012-a5af-32764396778e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cbd6037c-adb8-4dd0-8462-b4edf92c1f58",
+              "memory_uid": "3069baac-fa68-5e94-8ba3-e888cf622f8c"
+            }
+          ],
+          "reason": "This is a distinct scheduling preference for transportation, not a claim about shared cooking roles.",
+          "status": "RESOLVED",
+          "summary": "The younger brother prefers weekday-afternoon transportation requests two days in advance.",
+          "uid": "17ce5bea-d35b-5888-979c-2a7a9da3ef8f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cbd6037c-adb8-4dd0-8462-b4edf92c1f58",
+              "memory_uid": "d7f215c6-57ea-561a-9627-3ce94203d507"
+            }
+          ],
+          "reason": "This is a one-sided epistemic limit specific to medication status; the compared frame's inference limit concerns a different decision.",
+          "status": "RESOLVED",
+          "summary": "Medication notes alone do not establish the current prescription or whether its use continues.",
+          "uid": "0eece3e0-3973-5bb8-9d65-e240c6b7eaf0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5c31f849-6ee1-47ee-a17c-9a6277b81c44",
+              "memory_uid": "5d989bab-c471-5de9-bb73-29cabc4753dd"
+            }
+          ],
+          "reason": "This is independently useful food-storage location information with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user stores prepared meals on the freezer's second shelf.",
+          "uid": "9011b486-0a59-5b3a-a7bb-85d6e89ab081"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5c31f849-6ee1-47ee-a17c-9a6277b81c44",
+              "memory_uid": "d1725ae4-3fd3-5250-92b3-73d84d9152a7"
+            },
+            {
+              "frame_uid": "5c31f849-6ee1-47ee-a17c-9a6277b81c44",
+              "memory_uid": "904ff225-26df-5424-8a82-23d733649106"
+            }
+          ],
+          "reason": "The memories jointly describe one one-sided claim about inventory checking and duplicate-purchase prevention.",
+          "status": "RESOLVED",
+          "summary": "Shopping without an inventory aid produced a duplicate onion purchase, while checking a refrigerator photo avoided duplication.",
+          "uid": "e077a4df-26e7-5d9a-be4e-ce1681398eef"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5c31f849-6ee1-47ee-a17c-9a6277b81c44",
+              "memory_uid": "67a003c7-648a-59dc-8e82-03f9e452ffce"
+            },
+            {
+              "frame_uid": "5c31f849-6ee1-47ee-a17c-9a6277b81c44",
+              "memory_uid": "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9"
+            }
+          ],
+          "reason": "The memories jointly describe a meal adjustment and its observed outcome, with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "After leaving spicy stew unfinished, the user halved the chili powder on the next occasion and finished the meal.",
+          "uid": "89d0ed76-0ace-5ff1-970c-044bd4b4841f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5c31f849-6ee1-47ee-a17c-9a6277b81c44",
+              "memory_uid": "64bf4401-e972-5d15-a526-21ca901a6a9f"
+            },
+            {
+              "frame_uid": "5c31f849-6ee1-47ee-a17c-9a6277b81c44",
+              "memory_uid": "57e09ea5-54ff-5fce-aada-68daffbacc8b"
+            },
+            {
+              "frame_uid": "5c31f849-6ee1-47ee-a17c-9a6277b81c44",
+              "memory_uid": "0a5d054f-94bd-5955-bdb7-9b5427e2260b"
+            }
+          ],
+          "reason": "The memories jointly contrast duplicated work under verbal sequencing with a faster role split and state the brother's related coordination preference.",
+          "status": "RESOLVED",
+          "summary": "Explicit advance division of cooking responsibilities improved coordination and speed and matched the younger brother's preference for predefined cooking and dishwashing roles.",
+          "uid": "764d79ce-846f-5a5e-8aad-514f8396433b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5c31f849-6ee1-47ee-a17c-9a6277b81c44",
+              "memory_uid": "1f94b78b-1635-551c-b90c-bea2a67ca595"
+            }
+          ],
+          "reason": "This is a one-sided epistemic limit specific to inferring food preferences.",
+          "status": "RESOLVED",
+          "summary": "Several meal responses may be compared, but one unfinished food item cannot establish dislike of an ingredient.",
+          "uid": "b03c0b33-d46a-59b6-bcba-0f46c0cce52f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5c31f849-6ee1-47ee-a17c-9a6277b81c44",
+              "memory_uid": "f64ef6c4-7665-5574-9d58-fc124b0bfe3f"
+            }
+          ],
+          "reason": "This independently identifies factors affecting stored-food condition and has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The condition of frozen prepared food may depend on packaging and storage duration.",
+          "uid": "f2ee53aa-9de6-5cb8-abae-11bcd674f2e4"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only content addresses freezer storage, inventory checks before shopping, adjusting spice levels, advance division of shared cooking roles, and limits on inferring food preferences or frozen-food condition.",
+        "differences": "",
+        "reference_only": "Reference-only content addresses evening medication timing, appointment preparation, clinic seating, paced medication explanations, transportation by the younger brother, and limits on inferring current prescriptions."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "e9247ddc-467b-4a45-9cd3-5e42e2a37c18"
+    },
+    "analysis_digest": "8e2a91db31a14153b08dddaa78be862cce2c0c0deb319efa6ff04eb229e3e0ac",
+    "key": "b696ff72cbf23a8c4d7499590fa1ae57fc3a8c82a5344fc7587928debefa17f6",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 51.93066091699802,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "b696ff72cbf23a8c4d7499590fa1ae57fc3a8c82a5344fc7587928debefa17f6",
+  "created_at": "2026-08-13T18:37:27.152382Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/03",
+  "pair_key": "aa8b659652e750144dc9fefcf5baa2233549210092fab361d9f8a32455a6b6ef",
+  "provider_seconds": 51.93066091699802,
+  "right": "task-3/local/personal-memory/2025/03",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

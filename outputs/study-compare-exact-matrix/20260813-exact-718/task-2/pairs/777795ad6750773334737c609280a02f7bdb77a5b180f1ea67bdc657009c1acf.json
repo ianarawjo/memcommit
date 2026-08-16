@@ -1,0 +1,215 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:23:44.193332+00:00",
+      "frames": [
+        {
+          "context_digest": "9d55b4a5604285e426b317f7f4732b35ca1e9df044f7015b3ae6a6be0df5492b",
+          "context_name": "task-2/advisor1/reproducibility",
+          "context_uid": "7d293f75-52b6-5f27-99c4-54f2be3d8e59",
+          "memories": [
+            {
+              "content": "HCI reviewers find it difficult to assess the reproducibility of results if the prototype version used in the evaluation is not disclosed.",
+              "content_digest": "9b89217d4ef2c7524af665ea80d7d60e61f1663fd8ea4bdde533c8d3a0da2044",
+              "position": 0,
+              "uid": "fb400759-63ed-568a-b94e-5f0c2fe94b67"
+            },
+            {
+              "content": "Record the manipulated and fixed elements of compared design alternatives so that other researchers can reconstruct them.",
+              "content_digest": "26b84b5f0644980de51d764218ce90fb614eb02a2df38fb3632f44d360a93cd3",
+              "position": 1,
+              "uid": "e52e8470-6419-5306-9ddd-00a86003dcf3"
+            },
+            {
+              "content": "Records of formative evaluation decisions enable the reconstruction of connections between raw data, interpretation, and design modifications.",
+              "content_digest": "f213479e4bd1947d418083139346ed7f666bc597133962617d94bdd3a9af0083",
+              "position": 2,
+              "uid": "8f4edf8c-491d-56fe-bde4-d9ce25d6de50"
+            },
+            {
+              "content": "The user must make it possible to trace which observations each prototype version reflects so the process of deriving design knowledge can be reviewed.",
+              "content_digest": "1c9b8a6f650f2eb652b1e9cbb62ad9dcbb3ec13f2e160b52db83492640eb0ae9",
+              "position": 3,
+              "uid": "87662a7e-ffc7-521a-a06c-7db8184377e8"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "768b6ea8-57c8-48db-9dd1-8e2607dc97bf"
+        },
+        {
+          "context_digest": "3cadca09eeabe1389261c2e43133d8b304ed2cad66332f3444e686a824f10a21",
+          "context_name": "task-2/advisor2/scope",
+          "context_uid": "86efd53c-c08d-537c-983f-91a7b915640d",
+          "memories": [
+            {
+              "content": "Specify in one sentence the user population and actual usage environment to which the design knowledge applies.",
+              "content_digest": "3bb25f3252678a84fe361c9562692c27556d31b6fac53da87b763648e80ed6ac",
+              "position": 0,
+              "uid": "6cfd5026-0c04-5ed8-baac-a56e68723aa3"
+            },
+            {
+              "content": "Reviewers judge the generalization boundary of results through the specified target population and environment.",
+              "content_digest": "9119780de23a4734bc8e0ba3c39dce251611932fd86bec479b522adaf1882758",
+              "position": 1,
+              "uid": "5bc7cf05-8c47-57d4-a749-ec7d2ec45e3e"
+            },
+            {
+              "content": "Specify the workflow, technical infrastructure, and operational-authority conditions that must match before applying the design guidelines at another field site.",
+              "content_digest": "2970e43d1b52b63b6f76c3c55a5534d24508bcd32402e66098d75dbb52d8083b",
+              "position": 2,
+              "uid": "25731e2b-8535-5b37-a377-0a3a99dbe189"
+            },
+            {
+              "content": "The transferability of field design knowledge depends not only on user characteristics but also on workflow and technological–organizational infrastructure.",
+              "content_digest": "71b7cbcf151114f17886e57f026c2b2ebdd666c7aa88f95c85880a1bc96fdcd2",
+              "position": 3,
+              "uid": "d79ba448-76b6-592e-b4ba-8cfd98683755"
+            },
+            {
+              "content": "The user tends to apply results confirmed at one deployment site to all similar organizations.",
+              "content_digest": "810ee3a6b79606e7f199a30aa146f47e405ff71d1728a3bbfef16b601f5c0d5e",
+              "position": 4,
+              "uid": "cde0ee2b-af3c-5c0d-b23c-632778c93e20"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "f3b4cadc-8526-41cb-970f-ac84ff0f1434"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address complementary aspects of trustworthy HCI design knowledge. The reference frame focuses on reproducibility and formative-design provenance, while the compared frame focuses on contextual transfer boundaries and the risk of overgeneralizing findings across deployment sites.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "768b6ea8-57c8-48db-9dd1-8e2607dc97bf",
+              "memory_uid": "fb400759-63ed-568a-b94e-5f0c2fe94b67"
+            }
+          ],
+          "reason": "This is independently useful reference-only guidance about identifying the evaluated artifact; the compared frame contains no corresponding reproducibility claim.",
+          "status": "RESOLVED",
+          "summary": "The evaluated prototype version should be disclosed so reviewers can assess reproducibility.",
+          "uid": "d481a7bf-4fd7-5355-82a7-37a018a799b9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "768b6ea8-57c8-48db-9dd1-8e2607dc97bf",
+              "memory_uid": "e52e8470-6419-5306-9ddd-00a86003dcf3"
+            }
+          ],
+          "reason": "This is an independent reference-only documentation requirement for reconstructing design comparisons, not a claim about contextual transferability.",
+          "status": "RESOLVED",
+          "summary": "Manipulated and fixed elements of compared design alternatives should be recorded to support reconstruction.",
+          "uid": "fbf74ff7-0111-5a70-ac80-7fee62fa32c9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "768b6ea8-57c8-48db-9dd1-8e2607dc97bf",
+              "memory_uid": "8f4edf8c-491d-56fe-bde4-d9ce25d6de50"
+            },
+            {
+              "frame_uid": "768b6ea8-57c8-48db-9dd1-8e2607dc97bf",
+              "memory_uid": "87662a7e-ffc7-521a-a06c-7db8184377e8"
+            }
+          ],
+          "reason": "The reference memories split one underlying traceability claim across evaluation decisions and version-specific observation links; the compared frame does not address this provenance chain.",
+          "status": "RESOLVED",
+          "summary": "Formative evaluation provenance should connect observations and raw data through interpretation to design modifications and prototype versions.",
+          "uid": "ece1b719-4d7b-55e1-97be-5762a832e1e3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f3b4cadc-8526-41cb-970f-ac84ff0f1434",
+              "memory_uid": "6cfd5026-0c04-5ed8-baac-a56e68723aa3"
+            },
+            {
+              "frame_uid": "f3b4cadc-8526-41cb-970f-ac84ff0f1434",
+              "memory_uid": "5bc7cf05-8c47-57d4-a749-ec7d2ec45e3e"
+            }
+          ],
+          "reason": "The compared memories state the same one-sided scope-boundary practice from author and reviewer perspectives; the reference frame does not address population or environment.",
+          "status": "RESOLVED",
+          "summary": "A design-knowledge claim’s applicable population and usage environment should be specified so reviewers can judge its generalization boundary.",
+          "uid": "b2d4803e-7e7a-5e24-8bc6-be4788ba3884"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f3b4cadc-8526-41cb-970f-ac84ff0f1434",
+              "memory_uid": "25731e2b-8535-5b37-a377-0a3a99dbe189"
+            },
+            {
+              "frame_uid": "f3b4cadc-8526-41cb-970f-ac84ff0f1434",
+              "memory_uid": "d79ba448-76b6-592e-b4ba-8cfd98683755"
+            }
+          ],
+          "reason": "The compared memories split one underlying transferability claim between its required documentation and its substantive contextual dependencies; the reference frame has no corresponding cross-site conditions.",
+          "status": "RESOLVED",
+          "summary": "Cross-site application of design guidance depends on matching workflow, technical and organizational infrastructure, and operational-authority conditions.",
+          "uid": "18b1934f-d82b-5590-a4e9-2d0cc64e3be7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f3b4cadc-8526-41cb-970f-ac84ff0f1434",
+              "memory_uid": "cde0ee2b-af3c-5c0d-b23c-632778c93e20"
+            }
+          ],
+          "reason": "This is an independently useful compared-only observation about overgeneralization behavior, distinct from the frame’s prescriptions for specifying transfer conditions.",
+          "status": "RESOLVED",
+          "summary": "Users tend to generalize results from one deployment site across similar organizations.",
+          "uid": "9f309015-1ab6-5c19-a0c7-c2d7a40fa5fe"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame defines transferability through population, environment, workflow, infrastructure, and authority conditions, while noting a tendency to overgeneralize results from one site.",
+        "differences": "",
+        "reference_only": "The reference frame calls for disclosing evaluated prototype versions, documenting controlled design differences, and preserving traceable links among observations, interpretations, modifications, and versions."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "367923a6-8935-4d31-9181-8418c11aa471"
+    },
+    "analysis_digest": "b49a322e39d844b199ac9aa3ccd64e84251284dd23aad6eacb1513cc30047cbd",
+    "key": "c9910754d3190bec9fef7108afe911fc7b29ffbaf237b2ef0785cca825250c76",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 29.491237542002636,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "c9910754d3190bec9fef7108afe911fc7b29ffbaf237b2ef0785cca825250c76",
+  "created_at": "2026-08-13T18:24:13.684224Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/reproducibility",
+  "pair_key": "777795ad6750773334737c609280a02f7bdb77a5b180f1ea67bdc657009c1acf",
+  "provider_seconds": 29.491237542002636,
+  "right": "task-2/advisor2/scope",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

@@ -1,0 +1,292 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:20:18.528893+00:00",
+      "frames": [
+        {
+          "context_digest": "42df7e2f7640040d1d6f6f6e566e80d178668a05ab6918b64eed91b91a41b7fb",
+          "context_name": "task-2/advisor1/evaluation",
+          "context_uid": "30568e2f-ce17-50ce-a25b-1cc4bdb94689",
+          "memories": [
+            {
+              "content": "Specify a single representative measure that serves as the criterion for retaining, modifying, or discarding compared design alternatives.",
+              "content_digest": "53aa7c1f81a4fac9e76985be094717aa122e7077a6fcfde46946babd5929d390",
+              "position": 0,
+              "uid": "a50f6ecb-de38-5769-8a6e-23b84a7eb35c"
+            },
+            {
+              "content": "HCI review panels verify whether clear criteria for judging design alternatives are established using the declared primary measure.",
+              "content_digest": "fabd83103e5c3474f56de113c477f7ced5e863a508ec39bd4ae23653d63ad354",
+              "position": 1,
+              "uid": "44c61beb-24a2-584a-ad96-e622690d8171"
+            },
+            {
+              "content": "Collect process measures to diagnose interaction steps where problems occurred, alongside the primary outcome measure.",
+              "content_digest": "6cc2fedef1b0af1c594e48610e08a169f3bca2405bf8773945eca33396aecb36",
+              "position": 2,
+              "uid": "23202824-b576-5d77-b591-8b4cc0757632"
+            },
+            {
+              "content": "Interpret evaluation results as differences between compared design alternatives rather than as success or failure of a single prototype.",
+              "content_digest": "5c578d52a7dbbf4e4b646e707bbee4ac37bcd23bceb0b4d5e09ef3c08df9c2f4",
+              "position": 3,
+              "uid": "65ae88bf-8002-5ada-8590-eaf345b38863"
+            },
+            {
+              "content": "Check boundary cases to verify whether the derived design principles retain explanatory power for adjacent situations not included in the comparison.",
+              "content_digest": "3edc3e181a8086233d889f35cb98c9448875fe3fee915467f712ca3eb2886de1",
+              "position": 4,
+              "uid": "79af5e5f-4868-5e76-bcd5-3f8e1d6a0bd1"
+            },
+            {
+              "content": "Controlled evaluation environments do not reproduce time pressure, peer intervention, or voluntary termination conditions found in daily use.",
+              "content_digest": "e58a1bc6a423874525aca9f864b9b0dbd1e3ef9961410608c5837c88f1153d9b",
+              "position": 5,
+              "uid": "3a65fc8b-a5b4-50fc-a60e-fc6f3fc44547"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "c208d668-79d8-4c25-8b8d-458f02f82f4f"
+        },
+        {
+          "context_digest": "1396f236b90acd99b836eb5367828f8319d0465ea25b66f696a7f583f4f5ecf6",
+          "context_name": "task-2/advisor2/terminology",
+          "context_uid": "a2976fe7-0e07-5045-9e91-6a214128a482",
+          "memories": [
+            {
+              "content": "Do not change names referring to the same user roles, system functions, or operational stages midway.",
+              "content_digest": "a0f821f4497e7518806857e9005d12e27f6043fda6dbd91ba33ef188e0a3be16",
+              "position": 0,
+              "uid": "e2ae95ed-9033-5625-9179-33f4cf4a95c1"
+            },
+            {
+              "content": "Use abbreviations only for long recurring terms in a two-page proposal.",
+              "content_digest": "e6cad365bd42a8327e3cac92b8cf49cc456fa3e2f5c6624797fa509c0aac6846",
+              "position": 1,
+              "uid": "4be60357-09fa-523d-8c8d-8e03ace8fde9"
+            },
+            {
+              "content": "Present the full term and abbreviation together when using an abbreviation for the first time.",
+              "content_digest": "7b7c1f90727c822edbc13af17d64d45552d1c7ddb5fa18e665369423fd93ffbe",
+              "position": 2,
+              "uid": "0dd5d707-7d13-5be0-8377-421507650cba"
+            },
+            {
+              "content": "Refer to participants based on the roles they perform in the study rather than their status.",
+              "content_digest": "d89feff6e3dad0eea0ba4b1b291b140048af9f0f89d84c8ac196ae547a7b03bd",
+              "position": 3,
+              "uid": "9b3f0cde-7c3e-5b6a-9500-855f31d65ef2"
+            },
+            {
+              "content": "Reviewers from different subfields find it difficult to infer an abbreviation from context alone when it is not defined at first use.",
+              "content_digest": "4ffe91fb52db337a4ad30dc56d0439e12851f17f411c414b6d673e79bd91e68b",
+              "position": 4,
+              "uid": "8c896114-85e6-5c3c-ae3f-6e8e6b59f2fe"
+            },
+            {
+              "content": "When introducing an operational role for the first time, define both the decisions it can make and the actions it performs.",
+              "content_digest": "916b66a818f988f69e2e3c90f0ed0dbb7d29fc9e030b3fc7f822b3817106cbc3",
+              "position": 5,
+              "uid": "dc9e3f25-7aac-500b-b431-f6d810dd09bb"
+            },
+            {
+              "content": "Individuals holding identical job titles may possess different system modification privileges and data access rights depending on their deployment site.",
+              "content_digest": "e0315abc2f42a8f2657aa52e04899096ce799ba790fcd77d22b4196f917790ac",
+              "position": 6,
+              "uid": "04956cab-eb3a-5b71-be45-b1edd6c4a216"
+            },
+            {
+              "content": "The user tends to group distinct field roles under the single label “user.”",
+              "content_digest": "ba75af998618324dbdfa225a2cd503c42888f77daf4d44eb4f79b3a7db8e4bbe",
+              "position": 7,
+              "uid": "fc8613e8-86ca-5322-bb5d-03dfbca71c46"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "d3c20143-a063-4cb9-bfff-21038cf130df"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate concerns: the reference frame governs comparative HCI evaluation, while the compared frame governs precise terminology for abbreviations and operational roles. Neither supplies a scope-qualified counterpart to the other, and no contradiction is present.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c208d668-79d8-4c25-8b8d-458f02f82f4f",
+              "memory_uid": "a50f6ecb-de38-5769-8a6e-23b84a7eb35c"
+            },
+            {
+              "frame_uid": "c208d668-79d8-4c25-8b8d-458f02f82f4f",
+              "memory_uid": "44c61beb-24a2-584a-ad96-e622690d8171"
+            }
+          ],
+          "reason": "These statements split one one-sided policy into establishment of the decision criterion and verification that it is properly established.",
+          "status": "RESOLVED",
+          "summary": "A declared primary measure should govern judgments among design alternatives, with review panels checking that this criterion is clear.",
+          "uid": "a511afd9-db77-5954-9e62-5a647a5b713c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c208d668-79d8-4c25-8b8d-458f02f82f4f",
+              "memory_uid": "23202824-b576-5d77-b591-8b4cc0757632"
+            }
+          ],
+          "reason": "Only the reference frame supplies this independently useful diagnostic-measure requirement.",
+          "status": "RESOLVED",
+          "summary": "Process measures should accompany the primary outcome measure to locate problematic interaction steps.",
+          "uid": "a4ec24f8-62b6-5be1-9b3f-1e42145576ec"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c208d668-79d8-4c25-8b8d-458f02f82f4f",
+              "memory_uid": "65ae88bf-8002-5ada-8590-eaf345b38863"
+            }
+          ],
+          "reason": "Only the reference frame specifies this comparative interpretation policy.",
+          "status": "RESOLVED",
+          "summary": "Evaluation results should be interpreted as differences among alternatives rather than as a verdict on one prototype.",
+          "uid": "7ef6854d-0790-5ab6-b95d-b40b28edef1c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c208d668-79d8-4c25-8b8d-458f02f82f4f",
+              "memory_uid": "79af5e5f-4868-5e76-bcd5-3f8e1d6a0bd1"
+            }
+          ],
+          "reason": "Only the reference frame provides this generalization check.",
+          "status": "RESOLVED",
+          "summary": "Derived design principles should be tested against adjacent, previously unexamined situations for continued explanatory power.",
+          "uid": "19a1cd25-8e83-5df7-a8ae-88b83c662fbe"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c208d668-79d8-4c25-8b8d-458f02f82f4f",
+              "memory_uid": "3a65fc8b-a5b4-50fc-a60e-fc6f3fc44547"
+            }
+          ],
+          "reason": "Only the reference frame identifies this ecological-validity limitation.",
+          "status": "RESOLVED",
+          "summary": "Controlled evaluations omit important daily-use conditions such as time pressure, peer intervention, and voluntary termination.",
+          "uid": "b17f055c-3be3-5d0a-ba25-cd65c308d9bb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d3c20143-a063-4cb9-bfff-21038cf130df",
+              "memory_uid": "e2ae95ed-9033-5625-9179-33f4cf4a95c1"
+            }
+          ],
+          "reason": "Only the compared frame states this terminology-consistency rule.",
+          "status": "RESOLVED",
+          "summary": "Names for recurring roles, functions, and stages should remain consistent throughout a document.",
+          "uid": "0210f8d2-7c05-59ff-aeba-1092706e8294"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d3c20143-a063-4cb9-bfff-21038cf130df",
+              "memory_uid": "4be60357-09fa-523d-8c8d-8e03ace8fde9"
+            }
+          ],
+          "reason": "Only the compared frame supplies this independent restriction on when abbreviations are warranted.",
+          "status": "RESOLVED",
+          "summary": "In a short proposal, abbreviations should be reserved for long terms that recur.",
+          "uid": "7530e4eb-9d40-54fb-b3c5-56c1169b0472"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d3c20143-a063-4cb9-bfff-21038cf130df",
+              "memory_uid": "0dd5d707-7d13-5be0-8377-421507650cba"
+            },
+            {
+              "frame_uid": "d3c20143-a063-4cb9-bfff-21038cf130df",
+              "memory_uid": "8c896114-85e6-5c3c-ae3f-6e8e6b59f2fe"
+            }
+          ],
+          "reason": "The statements express one one-sided first-use definition requirement and its supporting accessibility rationale.",
+          "status": "RESOLVED",
+          "summary": "An abbreviation should be paired with its full term at first use because readers across subfields may not infer it reliably.",
+          "uid": "1e7f5c3e-fd6b-565c-b58d-d68087e9ed7e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d3c20143-a063-4cb9-bfff-21038cf130df",
+              "memory_uid": "9b3f0cde-7c3e-5b6a-9500-855f31d65ef2"
+            },
+            {
+              "frame_uid": "d3c20143-a063-4cb9-bfff-21038cf130df",
+              "memory_uid": "dc9e3f25-7aac-500b-b431-f6d810dd09bb"
+            },
+            {
+              "frame_uid": "d3c20143-a063-4cb9-bfff-21038cf130df",
+              "memory_uid": "04956cab-eb3a-5b71-be45-b1edd6c4a216"
+            },
+            {
+              "frame_uid": "d3c20143-a063-4cb9-bfff-21038cf130df",
+              "memory_uid": "fc8613e8-86ca-5322-bb5d-03dfbca71c46"
+            }
+          ],
+          "reason": "Each statement contributes to one underlying role-description policy by specifying operational grounding or explaining why broad labels fail to capture meaningful capability differences.",
+          "status": "RESOLVED",
+          "summary": "Participants should be represented by explicitly defined operational roles because status, job titles, and generic labels can obscure differences in duties and authority.",
+          "uid": "f38e3399-5161-5570-a8ad-09f35cc58e60"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers naming consistency, restrained and defined abbreviations, and role descriptions grounded in actual responsibilities and permissions rather than broad labels or status.",
+        "differences": "",
+        "reference_only": "The reference frame covers primary and diagnostic measures, comparative interpretation, boundary-case testing, and limits of controlled environments."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "c21d5431-4a59-4161-979a-56e5519b950a"
+    },
+    "analysis_digest": "bbc500726baf16eac8e5a445665eee68b41797fc1856565b97868b1e3c08a639",
+    "key": "61e9931a9d57d62308c1dae13de120045e88acd2054505025bcd46ddde611778",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 34.69245566600148,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "61e9931a9d57d62308c1dae13de120045e88acd2054505025bcd46ddde611778",
+  "created_at": "2026-08-13T18:20:53.220874Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/evaluation",
+  "pair_key": "eb9a67220de7007c7c9559152acbb3b18159c2385774651fec91aa67db1492c4",
+  "provider_seconds": 34.69245566600148,
+  "right": "task-2/advisor2/terminology",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

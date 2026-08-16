@@ -1,0 +1,234 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:25:24.420165+00:00",
+      "frames": [
+        {
+          "context_digest": "3dd1208c3f947a57bc5f1d490a28c999913d43cad775b2b01e50c6059d6b660e",
+          "context_name": "task-2/advisor1/safety",
+          "context_uid": "cd6c1fab-786a-52ea-9437-9a4d209ba419",
+          "memories": [
+            {
+              "content": "Specify the order and recipients for reporting serious discomfort during the study.",
+              "content_digest": "1de38a3ec5fc3267ebeb35482a458d4aaf50d2aea44c6dba334f184e50ddddd2",
+              "position": 0,
+              "uid": "9d6f5228-d182-571a-83d2-6a67becb7736"
+            },
+            {
+              "content": "Field staff rely on a pre-defined contact sequence when serious discomfort is reported.",
+              "content_digest": "ed3a3b19d92a50c7dd324981b702bac31e0130fda38fe37150e500481ed11d84",
+              "position": 1,
+              "uid": "00ed485d-66c2-59ad-9c5b-9ae445412690"
+            },
+            {
+              "content": "Establish criteria for halting the use of a design alternative if recurring severe errors appear during formative evaluation.",
+              "content_digest": "dcca56df756b89f89a0a9dbf2bf45aee6480392b368c9cf3402223d3084b801b",
+              "position": 2,
+              "uid": "9c6e1561-f671-52cb-aa67-245cc4987ad4"
+            },
+            {
+              "content": "Do not include a design alternative halted for safety reasons in subsequent evaluation iterations without modification.",
+              "content_digest": "01668098161666622f4d7ed8298e3e63a06fa9b10a4cfd53b200d820f96f5c50",
+              "position": 3,
+              "uid": "2381ecf7-2b11-583d-91d9-0a5cfc279ba1"
+            },
+            {
+              "content": "Even in controlled environments, delayed prototype recovery procedures increase session interruption time and alter data collection conditions for the same task.",
+              "content_digest": "fd0f364ef66cfa7be937779ed4ce3ffb1a406bc227d09c26b288a751c5e0d427",
+              "position": 4,
+              "uid": "c5ce1b00-36d9-5cdd-a318-93b88ca0e322"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "5b11ee8d-8889-4c8c-9c9d-568efe53648c"
+        },
+        {
+          "context_digest": "3cadca09eeabe1389261c2e43133d8b304ed2cad66332f3444e686a824f10a21",
+          "context_name": "task-2/advisor2/scope",
+          "context_uid": "86efd53c-c08d-537c-983f-91a7b915640d",
+          "memories": [
+            {
+              "content": "Specify in one sentence the user population and actual usage environment to which the design knowledge applies.",
+              "content_digest": "3bb25f3252678a84fe361c9562692c27556d31b6fac53da87b763648e80ed6ac",
+              "position": 0,
+              "uid": "6cfd5026-0c04-5ed8-baac-a56e68723aa3"
+            },
+            {
+              "content": "Reviewers judge the generalization boundary of results through the specified target population and environment.",
+              "content_digest": "9119780de23a4734bc8e0ba3c39dce251611932fd86bec479b522adaf1882758",
+              "position": 1,
+              "uid": "5bc7cf05-8c47-57d4-a749-ec7d2ec45e3e"
+            },
+            {
+              "content": "Specify the workflow, technical infrastructure, and operational-authority conditions that must match before applying the design guidelines at another field site.",
+              "content_digest": "2970e43d1b52b63b6f76c3c55a5534d24508bcd32402e66098d75dbb52d8083b",
+              "position": 2,
+              "uid": "25731e2b-8535-5b37-a377-0a3a99dbe189"
+            },
+            {
+              "content": "The transferability of field design knowledge depends not only on user characteristics but also on workflow and technological–organizational infrastructure.",
+              "content_digest": "71b7cbcf151114f17886e57f026c2b2ebdd666c7aa88f95c85880a1bc96fdcd2",
+              "position": 3,
+              "uid": "d79ba448-76b6-592e-b4ba-8cfd98683755"
+            },
+            {
+              "content": "The user tends to apply results confirmed at one deployment site to all similar organizations.",
+              "content_digest": "810ee3a6b79606e7f199a30aa146f47e405ff71d1728a3bbfef16b601f5c0d5e",
+              "position": 4,
+              "uid": "cde0ee2b-af3c-5c0d-b23c-632778c93e20"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "2c5c3973-4817-46d0-a46b-4db0a2bd4534"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate operational concerns. The reference covers discomfort escalation, safety-based evaluation controls, and prototype-recovery effects; the compared frame covers generalization boundaries, transfer conditions, and overgeneralization behavior. No shared or scope-dependent claim is established.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5b11ee8d-8889-4c8c-9c9d-568efe53648c",
+              "memory_uid": "9d6f5228-d182-571a-83d2-6a67becb7736"
+            },
+            {
+              "frame_uid": "5b11ee8d-8889-4c8c-9c9d-568efe53648c",
+              "memory_uid": "00ed485d-66c2-59ad-9c5b-9ae445412690"
+            }
+          ],
+          "reason": "The reference memories express complementary normative and operational forms of one reporting-sequence claim, with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Serious discomfort is handled through a specified reporting order and recipient sequence used by field staff.",
+          "uid": "409b8aa5-6e2a-56a6-90c1-fe270da4881a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5b11ee8d-8889-4c8c-9c9d-568efe53648c",
+              "memory_uid": "9c6e1561-f671-52cb-aa67-245cc4987ad4"
+            }
+          ],
+          "reason": "This is an independent reference-only claim about the threshold for stopping an alternative.",
+          "status": "RESOLVED",
+          "summary": "Formative evaluation requires criteria for halting a design alternative when severe errors recur.",
+          "uid": "a84276a3-5518-5273-a14c-2be3873ae73b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5b11ee8d-8889-4c8c-9c9d-568efe53648c",
+              "memory_uid": "2381ecf7-2b11-583d-91d9-0a5cfc279ba1"
+            }
+          ],
+          "reason": "This is an independent reference-only rule governing subsequent reuse after a safety halt.",
+          "status": "RESOLVED",
+          "summary": "A design alternative halted for safety reasons must be modified before inclusion in later evaluation iterations.",
+          "uid": "65063e2f-3533-54f3-8ef3-4127f947c57c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5b11ee8d-8889-4c8c-9c9d-568efe53648c",
+              "memory_uid": "c5ce1b00-36d9-5cdd-a318-93b88ca0e322"
+            }
+          ],
+          "reason": "This reference-only causal observation concerns session continuity and data conditions, independently of the other claims.",
+          "status": "RESOLVED",
+          "summary": "Delayed prototype recovery increases interruption time and changes data-collection conditions even in controlled environments.",
+          "uid": "e9c2a001-4f59-5b62-b075-76233986b4d1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2c5c3973-4817-46d0-a46b-4db0a2bd4534",
+              "memory_uid": "6cfd5026-0c04-5ed8-baac-a56e68723aa3"
+            },
+            {
+              "frame_uid": "2c5c3973-4817-46d0-a46b-4db0a2bd4534",
+              "memory_uid": "5bc7cf05-8c47-57d4-a749-ec7d2ec45e3e"
+            }
+          ],
+          "reason": "The compared memories state procedural and evaluative aspects of one generalization-boundary claim, with no reference counterpart.",
+          "status": "RESOLVED",
+          "summary": "The applicable user population and actual usage environment define the boundary through which reviewers judge generalization.",
+          "uid": "234b4d7e-1b36-5160-8f5f-f179938edb9a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2c5c3973-4817-46d0-a46b-4db0a2bd4534",
+              "memory_uid": "25731e2b-8535-5b37-a377-0a3a99dbe189"
+            },
+            {
+              "frame_uid": "2c5c3973-4817-46d0-a46b-4db0a2bd4534",
+              "memory_uid": "d79ba448-76b6-592e-b4ba-8cfd98683755"
+            }
+          ],
+          "reason": "The compared memories jointly specify one transferability claim and its required contextual dimensions.",
+          "status": "RESOLVED",
+          "summary": "Transfer to another field site depends on matching workflow, technical infrastructure, and organizational or operational-authority conditions, not only user characteristics.",
+          "uid": "95960026-3d80-5607-96a8-397dfeadc1e0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2c5c3973-4817-46d0-a46b-4db0a2bd4534",
+              "memory_uid": "cde0ee2b-af3c-5c0d-b23c-632778c93e20"
+            }
+          ],
+          "reason": "This is an independent compared-only behavioral observation about overgeneralization.",
+          "status": "RESOLVED",
+          "summary": "The user tends to apply findings from one deployment site across all similar organizations.",
+          "uid": "b10cb1db-0dd8-5da7-88d3-298077835cec"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame defines population and environment boundaries, field-site transfer conditions, and a tendency to overgeneralize findings across organizations.",
+        "differences": "",
+        "reference_only": "The reference specifies serious-discomfort reporting, safety-based halting and reuse controls, and the effect of delayed prototype recovery on sessions and data conditions."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "0bb6783e-c6e5-4b29-baa5-3bec564b5bc0"
+    },
+    "analysis_digest": "4e736aab63fb9cf489102dba7ad2789d610a91dcc96cad0696e21ab4b04957d7",
+    "key": "45f34e921038ed0c03886f10c1a9c4abfcbe564e53b7a3fe7c910bec169b31c0",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 23.59013912500086,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "45f34e921038ed0c03886f10c1a9c4abfcbe564e53b7a3fe7c910bec169b31c0",
+  "created_at": "2026-08-13T18:25:48.009921Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/safety",
+  "pair_key": "677a391b4810bb84362b59aeefa0b5ba0007e5bba22a73a0f8b41781716f0fb6",
+  "provider_seconds": 23.59013912500086,
+  "right": "task-2/advisor2/scope",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

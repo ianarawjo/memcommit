@@ -1,0 +1,280 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:28:48.925940+00:00",
+      "frames": [
+        {
+          "context_digest": "587a9d2fb6abf2b486ccfc50ff85ae7280d7d7bd4003d85ce5877a4edfc9293f",
+          "context_name": "task-2/advisor1/terminology",
+          "context_uid": "7699c7c5-e48b-5548-b0aa-256d793c6c06",
+          "memories": [
+            {
+              "content": "Use the same term throughout the proposal for the same interaction concept or interface element.",
+              "content_digest": "2f11d02134609c6397d8f60105cc452e34129bc1c427a512455247e54951f18a",
+              "position": 0,
+              "uid": "949a884d-b348-5fa0-b1dd-adbebafe10a9"
+            },
+            {
+              "content": "Use abbreviations only for recurring terms of three or more words.",
+              "content_digest": "dcceb4407d24df4034dceca613413471bb46898a487aed0cc0905e48ede482e7",
+              "position": 1,
+              "uid": "2f484151-b5fc-51a9-8a88-b30a403617b3"
+            },
+            {
+              "content": "Present the full name and abbreviation together when using an abbreviation for the first time.",
+              "content_digest": "02e1b2b4cbc8f9a61e299bf1500663ae8cd4036155b2a7dec8c2ce40087ac29b",
+              "position": 2,
+              "uid": "21131a6f-d35c-51e3-895f-46cd21a3b566"
+            },
+            {
+              "content": "Prioritize the research role over diagnostic labels or deficits when referring to participants.",
+              "content_digest": "7b99c6ec90abdbb68d4af8e95a03df3149b9d2d4d637fbd33a70a2acf7073a12",
+              "position": 3,
+              "uid": "e02c3110-05c4-58a4-8d76-c8fd2426a0d5"
+            },
+            {
+              "content": "Reviewers from different subfields struggle to infer undefined abbreviations from context alone.",
+              "content_digest": "13af5eb9fe88f3f2d73192adfb48f7a20de09e22e777a952daa83ca1c030f9ee",
+              "position": 4,
+              "uid": "af028910-e48b-5605-b92b-9378bdfa525c"
+            },
+            {
+              "content": "Use the term formative evaluation for studies seeking design modification evidence, and distinguish it from final efficacy judgments.",
+              "content_digest": "4ba9bca850286ff6286cf4b3bf44395d608ec700c46acd8cd26c54e26d43b378",
+              "position": 5,
+              "uid": "39792d18-2be0-5135-a063-c5213247d330"
+            },
+            {
+              "content": "The user can have contribution labels such as principles, models, or guidelines approved only if they align with the abstraction level of the actual deliverables.",
+              "content_digest": "efed93b748ce74e3e9ed96949bf539c809ea4c36ae77bbb54670285f691f74e9",
+              "position": 6,
+              "uid": "bcaa8c30-ca6e-5b9f-af93-88513a2f16b1"
+            },
+            {
+              "content": "Design principles describe the relationship between conditions and outcomes rather than serving as instructions that merely replicate a single screen layout.",
+              "content_digest": "22385c2bb345db07d19c442e5d99a5c527c2795848b9e29fe198d0ede6255d6f",
+              "position": 7,
+              "uid": "82ad9fe2-4063-5e89-9097-c975aa2920cb"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "7d8d3bc8-1a01-408c-9728-32258148eb46"
+        },
+        {
+          "context_digest": "bb54539faeedf2db9ada09643c11270aabf235d8e3e6df98500f90f9b82aed49",
+          "context_name": "task-2/advisor2/reproducibility",
+          "context_uid": "5f2f3c0f-4cb1-5151-b381-847df75b6457",
+          "memories": [
+            {
+              "content": "HCI reviewers find it difficult to assess result reproducibility if the system version used in the field deployment is not disclosed.",
+              "content_digest": "83ac18cb56f74dbeb7834909b999669bb9a46d320b288bf38fb7b6c9bd0812f2",
+              "position": 0,
+              "uid": "40f11374-d91b-546a-9e93-fcf98a0fde98"
+            },
+            {
+              "content": "Record changes in system configurations, field procedures, and data collection tools during deployment, along with their timestamps and rationales.",
+              "content_digest": "ac399146f49e6ae5d21272de0cd13db6346d4cd67b096ecfa9bd314b026f403e",
+              "position": 1,
+              "uid": "cc72ad54-4cf3-56cd-9119-46776f5b2184"
+            },
+            {
+              "content": "The history of deployment versions and configuration changes provides necessary evidence for interpreting results from different field sites.",
+              "content_digest": "39ae70de900b646362a96cfa7d734a6404604b468398b09da9fb05783b389d25",
+              "position": 2,
+              "uid": "75f22b45-fb1b-568c-bb05-080fdacdcab2"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "fd626fc8-f8d2-4586-adc5-75841e6cdcd9"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate but complementary documentation concerns. The reference frame governs proposal terminology, participant language, study characterization, and contribution labeling, while the compared frame governs deployment traceability and the evidence needed to interpret and reproduce field results.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d8d3bc8-1a01-408c-9728-32258148eb46",
+              "memory_uid": "949a884d-b348-5fa0-b1dd-adbebafe10a9"
+            }
+          ],
+          "reason": "Only the reference frame provides this independently useful terminology-consistency rule.",
+          "status": "RESOLVED",
+          "summary": "Consistent naming should be used for the same interaction concept or interface element throughout a proposal.",
+          "uid": "75daf0ab-c584-563f-9b5b-95edec7f4cfb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d8d3bc8-1a01-408c-9728-32258148eb46",
+              "memory_uid": "2f484151-b5fc-51a9-8a88-b30a403617b3"
+            }
+          ],
+          "reason": "Only the reference frame specifies when a term qualifies for abbreviation.",
+          "status": "RESOLVED",
+          "summary": "Abbreviations should be reserved for recurring terms containing at least three words.",
+          "uid": "9a460cb3-a120-5c44-a0a8-bb4b8203830f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d8d3bc8-1a01-408c-9728-32258148eb46",
+              "memory_uid": "21131a6f-d35c-51e3-895f-46cd21a3b566"
+            }
+          ],
+          "reason": "Only the reference frame states this first-use expansion requirement.",
+          "status": "RESOLVED",
+          "summary": "A term's full name should accompany its abbreviation on first use.",
+          "uid": "1b413d3d-e575-5e46-ba7e-69ef377a0d6e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d8d3bc8-1a01-408c-9728-32258148eb46",
+              "memory_uid": "e02c3110-05c4-58a4-8d76-c8fd2426a0d5"
+            }
+          ],
+          "reason": "Only the reference frame supplies this participant-language principle.",
+          "status": "RESOLVED",
+          "summary": "Participant descriptions should foreground the research role rather than diagnostic labels or deficits.",
+          "uid": "ee87ae16-cde7-5e71-9d15-e0748321b39f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d8d3bc8-1a01-408c-9728-32258148eb46",
+              "memory_uid": "af028910-e48b-5605-b92b-9378bdfa525c"
+            }
+          ],
+          "reason": "Only the reference frame identifies this cross-subfield comprehension concern.",
+          "status": "RESOLVED",
+          "summary": "Undefined abbreviations impede comprehension for reviewers outside the immediate subfield.",
+          "uid": "38b21940-ec4b-505e-a400-a70cfc830707"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d8d3bc8-1a01-408c-9728-32258148eb46",
+              "memory_uid": "39792d18-2be0-5135-a063-c5213247d330"
+            }
+          ],
+          "reason": "Only the reference frame defines this study-characterization distinction.",
+          "status": "RESOLVED",
+          "summary": "Studies seeking evidence for design modification should be called formative evaluations and distinguished from final efficacy judgments.",
+          "uid": "6f96c97e-909a-5bd5-ad98-dfe22ac20bed"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d8d3bc8-1a01-408c-9728-32258148eb46",
+              "memory_uid": "bcaa8c30-ca6e-5b9f-af93-88513a2f16b1"
+            }
+          ],
+          "reason": "Only the reference frame provides this criterion for approving contribution labels.",
+          "status": "RESOLVED",
+          "summary": "Contribution labels should match the abstraction level of the actual deliverables.",
+          "uid": "587b8a78-bffd-5af4-90f3-c08422dfb1ce"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d8d3bc8-1a01-408c-9728-32258148eb46",
+              "memory_uid": "82ad9fe2-4063-5e89-9097-c975aa2920cb"
+            }
+          ],
+          "reason": "Only the reference frame defines the appropriate scope and form of design principles.",
+          "status": "RESOLVED",
+          "summary": "Design principles should express condition–outcome relationships rather than instructions reproducing one screen layout.",
+          "uid": "ce66f5b9-aec9-55b2-b20d-c09c01e44c72"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fd626fc8-f8d2-4586-adc5-75841e6cdcd9",
+              "memory_uid": "40f11374-d91b-546a-9e93-fcf98a0fde98"
+            }
+          ],
+          "reason": "Only the compared frame states this deployment-version disclosure rationale.",
+          "status": "RESOLVED",
+          "summary": "The system version used in a field deployment should be disclosed so reviewers can assess reproducibility.",
+          "uid": "06e1cb51-486a-5ba2-8295-34e19f0f2d00"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fd626fc8-f8d2-4586-adc5-75841e6cdcd9",
+              "memory_uid": "cc72ad54-4cf3-56cd-9119-46776f5b2184"
+            }
+          ],
+          "reason": "Only the compared frame specifies this operational change-recording requirement.",
+          "status": "RESOLVED",
+          "summary": "Deployment changes to configurations, procedures, and data-collection tools should be recorded with timestamps and rationales.",
+          "uid": "1597e259-5f81-5eae-afc6-7bd06b52ad15"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fd626fc8-f8d2-4586-adc5-75841e6cdcd9",
+              "memory_uid": "75f22b45-fb1b-568c-bb05-080fdacdcab2"
+            }
+          ],
+          "reason": "Only the compared frame identifies this traceability evidence as necessary for cross-site interpretation.",
+          "status": "RESOLVED",
+          "summary": "Deployment-version and configuration histories are necessary for interpreting results across field sites.",
+          "uid": "d9e643df-e9ed-5cbd-a147-d0ab3679ca03"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers disclosure and logging of deployment versions, configuration changes, procedures, tools, timestamps, and rationales to support reproducibility and cross-site interpretation.",
+        "differences": "",
+        "reference_only": "The reference frame covers consistent terminology, abbreviation discipline, participant-centered language, formative evaluation, and accurate abstraction of contributions and design principles."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "6c646cac-41c1-46e5-8669-ace8b67c5fbe"
+    },
+    "analysis_digest": "3ed15f29a18557b020e5ffedfc27b523e62387b8b3cc919f8e8a7585d9d8f606",
+    "key": "5341aa5663d50d89d41d19aae360125811d9ffd9cd1133c5d58d3586e65a89af",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 26.06049858300321,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "5341aa5663d50d89d41d19aae360125811d9ffd9cd1133c5d58d3586e65a89af",
+  "created_at": "2026-08-13T18:29:14.986018Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/terminology",
+  "pair_key": "8f77e6650109963bf0da06c1d118e4537e559b1fb5864284b3e95e80f3f055d0",
+  "provider_seconds": 26.06049858300321,
+  "right": "task-2/advisor2/reproducibility",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

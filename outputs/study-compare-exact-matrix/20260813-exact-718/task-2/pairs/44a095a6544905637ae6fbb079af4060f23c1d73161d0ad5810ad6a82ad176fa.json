@@ -1,0 +1,263 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:23:48.473749+00:00",
+      "frames": [
+        {
+          "context_digest": "9d55b4a5604285e426b317f7f4732b35ca1e9df044f7015b3ae6a6be0df5492b",
+          "context_name": "task-2/advisor1/reproducibility",
+          "context_uid": "7d293f75-52b6-5f27-99c4-54f2be3d8e59",
+          "memories": [
+            {
+              "content": "HCI reviewers find it difficult to assess the reproducibility of results if the prototype version used in the evaluation is not disclosed.",
+              "content_digest": "9b89217d4ef2c7524af665ea80d7d60e61f1663fd8ea4bdde533c8d3a0da2044",
+              "position": 0,
+              "uid": "fb400759-63ed-568a-b94e-5f0c2fe94b67"
+            },
+            {
+              "content": "Record the manipulated and fixed elements of compared design alternatives so that other researchers can reconstruct them.",
+              "content_digest": "26b84b5f0644980de51d764218ce90fb614eb02a2df38fb3632f44d360a93cd3",
+              "position": 1,
+              "uid": "e52e8470-6419-5306-9ddd-00a86003dcf3"
+            },
+            {
+              "content": "Records of formative evaluation decisions enable the reconstruction of connections between raw data, interpretation, and design modifications.",
+              "content_digest": "f213479e4bd1947d418083139346ed7f666bc597133962617d94bdd3a9af0083",
+              "position": 2,
+              "uid": "8f4edf8c-491d-56fe-bde4-d9ce25d6de50"
+            },
+            {
+              "content": "The user must make it possible to trace which observations each prototype version reflects so the process of deriving design knowledge can be reviewed.",
+              "content_digest": "1c9b8a6f650f2eb652b1e9cbb62ad9dcbb3ec13f2e160b52db83492640eb0ae9",
+              "position": 3,
+              "uid": "87662a7e-ffc7-521a-a06c-7db8184377e8"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "60bff5b6-1824-4c2d-93ea-372a02617396"
+        },
+        {
+          "context_digest": "1396f236b90acd99b836eb5367828f8319d0465ea25b66f696a7f583f4f5ecf6",
+          "context_name": "task-2/advisor2/terminology",
+          "context_uid": "a2976fe7-0e07-5045-9e91-6a214128a482",
+          "memories": [
+            {
+              "content": "Do not change names referring to the same user roles, system functions, or operational stages midway.",
+              "content_digest": "a0f821f4497e7518806857e9005d12e27f6043fda6dbd91ba33ef188e0a3be16",
+              "position": 0,
+              "uid": "e2ae95ed-9033-5625-9179-33f4cf4a95c1"
+            },
+            {
+              "content": "Use abbreviations only for long recurring terms in a two-page proposal.",
+              "content_digest": "e6cad365bd42a8327e3cac92b8cf49cc456fa3e2f5c6624797fa509c0aac6846",
+              "position": 1,
+              "uid": "4be60357-09fa-523d-8c8d-8e03ace8fde9"
+            },
+            {
+              "content": "Present the full term and abbreviation together when using an abbreviation for the first time.",
+              "content_digest": "7b7c1f90727c822edbc13af17d64d45552d1c7ddb5fa18e665369423fd93ffbe",
+              "position": 2,
+              "uid": "0dd5d707-7d13-5be0-8377-421507650cba"
+            },
+            {
+              "content": "Refer to participants based on the roles they perform in the study rather than their status.",
+              "content_digest": "d89feff6e3dad0eea0ba4b1b291b140048af9f0f89d84c8ac196ae547a7b03bd",
+              "position": 3,
+              "uid": "9b3f0cde-7c3e-5b6a-9500-855f31d65ef2"
+            },
+            {
+              "content": "Reviewers from different subfields find it difficult to infer an abbreviation from context alone when it is not defined at first use.",
+              "content_digest": "4ffe91fb52db337a4ad30dc56d0439e12851f17f411c414b6d673e79bd91e68b",
+              "position": 4,
+              "uid": "8c896114-85e6-5c3c-ae3f-6e8e6b59f2fe"
+            },
+            {
+              "content": "When introducing an operational role for the first time, define both the decisions it can make and the actions it performs.",
+              "content_digest": "916b66a818f988f69e2e3c90f0ed0dbb7d29fc9e030b3fc7f822b3817106cbc3",
+              "position": 5,
+              "uid": "dc9e3f25-7aac-500b-b431-f6d810dd09bb"
+            },
+            {
+              "content": "Individuals holding identical job titles may possess different system modification privileges and data access rights depending on their deployment site.",
+              "content_digest": "e0315abc2f42a8f2657aa52e04899096ce799ba790fcd77d22b4196f917790ac",
+              "position": 6,
+              "uid": "04956cab-eb3a-5b71-be45-b1edd6c4a216"
+            },
+            {
+              "content": "The user tends to group distinct field roles under the single label “user.”",
+              "content_digest": "ba75af998618324dbdfa225a2cd503c42888f77daf4d44eb4f79b3a7db8e4bbe",
+              "position": 7,
+              "uid": "fc8613e8-86ca-5322-bb5d-03dfbca71c46"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "5ef51ce1-4a57-4a82-b93c-12ca35e2c5b8"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate documentation concerns rather than competing policies. The reference frame focuses on reconstructing prototype evaluations and design evolution, while the compared frame governs terminology, abbreviations, and precise descriptions of participant roles and permissions.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "60bff5b6-1824-4c2d-93ea-372a02617396",
+              "memory_uid": "fb400759-63ed-568a-b94e-5f0c2fe94b67"
+            }
+          ],
+          "reason": "This is independently useful reference-only guidance about identifying the evaluated artifact; the compared frame contains no claim addressing prototype-version disclosure.",
+          "status": "RESOLVED",
+          "summary": "Evaluations should disclose the prototype version used so reviewers can assess reproducibility.",
+          "uid": "1f4905a7-5f16-5111-a008-f5ff34508e7f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "60bff5b6-1824-4c2d-93ea-372a02617396",
+              "memory_uid": "e52e8470-6419-5306-9ddd-00a86003dcf3"
+            }
+          ],
+          "reason": "This is an independent reference-only requirement concerning the composition of compared designs, not terminology or participant-role description.",
+          "status": "RESOLVED",
+          "summary": "Documentation should identify manipulated and fixed elements of design alternatives to enable reconstruction.",
+          "uid": "0744517f-4445-538e-95a9-826a8c9ebd61"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "60bff5b6-1824-4c2d-93ea-372a02617396",
+              "memory_uid": "8f4edf8c-491d-56fe-bde4-d9ce25d6de50"
+            }
+          ],
+          "reason": "This reference-only claim concerns evidentiary provenance for design changes and has no operational counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Formative-evaluation decisions should be recorded to preserve the chain from raw data through interpretation to design modifications.",
+          "uid": "0cb894d7-d048-5623-8169-5809b94deb22"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "60bff5b6-1824-4c2d-93ea-372a02617396",
+              "memory_uid": "87662a7e-ffc7-521a-a06c-7db8184377e8"
+            }
+          ],
+          "reason": "This is a distinct reference-only traceability requirement linking observations to artifact versions, which the compared frame does not address.",
+          "status": "RESOLVED",
+          "summary": "Each prototype version should be traceable to the observations it reflects so the derivation of design knowledge can be reviewed.",
+          "uid": "670699fe-824e-51ea-96ee-fdc7126c6d25"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5ef51ce1-4a57-4a82-b93c-12ca35e2c5b8",
+              "memory_uid": "e2ae95ed-9033-5625-9179-33f4cf4a95c1"
+            }
+          ],
+          "reason": "This compared-only naming-consistency policy is independently useful and does not govern the reference frame's evaluation-reconstruction records.",
+          "status": "RESOLVED",
+          "summary": "Names for the same roles, functions, and operational stages should remain consistent throughout a document.",
+          "uid": "dd8d3d9f-4ab6-5547-94ab-9701b831b7ee"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5ef51ce1-4a57-4a82-b93c-12ca35e2c5b8",
+              "memory_uid": "4be60357-09fa-523d-8c8d-8e03ace8fde9"
+            }
+          ],
+          "reason": "This compared-only rule makes a scoped decision about when abbreviations are worthwhile; no reference-side claim addresses abbreviation use.",
+          "status": "RESOLVED",
+          "summary": "In a two-page proposal, abbreviations should be reserved for long terms that recur.",
+          "uid": "4b53aad2-f393-55cb-9fde-10daff120648"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5ef51ce1-4a57-4a82-b93c-12ca35e2c5b8",
+              "memory_uid": "0dd5d707-7d13-5be0-8377-421507650cba"
+            },
+            {
+              "frame_uid": "5ef51ce1-4a57-4a82-b93c-12ca35e2c5b8",
+              "memory_uid": "8c896114-85e6-5c3c-ae3f-6e8e6b59f2fe"
+            }
+          ],
+          "reason": "The members state the same compared-only first-use definition policy and its reviewer-centered rationale; the reference frame contains no corresponding abbreviation guidance.",
+          "status": "RESOLVED",
+          "summary": "An abbreviation should be paired with its full term at first use because reviewers cannot reliably infer undefined abbreviations from context.",
+          "uid": "458551ec-e648-5965-b7ca-2d8bb500c3f1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "5ef51ce1-4a57-4a82-b93c-12ca35e2c5b8",
+              "memory_uid": "9b3f0cde-7c3e-5b6a-9500-855f31d65ef2"
+            },
+            {
+              "frame_uid": "5ef51ce1-4a57-4a82-b93c-12ca35e2c5b8",
+              "memory_uid": "dc9e3f25-7aac-500b-b431-f6d810dd09bb"
+            },
+            {
+              "frame_uid": "5ef51ce1-4a57-4a82-b93c-12ca35e2c5b8",
+              "memory_uid": "04956cab-eb3a-5b71-be45-b1edd6c4a216"
+            },
+            {
+              "frame_uid": "5ef51ce1-4a57-4a82-b93c-12ca35e2c5b8",
+              "memory_uid": "fc8613e8-86ca-5322-bb5d-03dfbca71c46"
+            }
+          ],
+          "reason": "These compared-only statements split one underlying requirement for operationally precise role characterization, including why titles and broad labels can conceal consequential differences.",
+          "status": "RESOLVED",
+          "summary": "Participants should be distinguished by their actual study roles, decisions, actions, privileges, and access rather than by status, job title, or a generic “user” label.",
+          "uid": "8c6f2dfd-0165-5cb1-8173-44088a17db2f"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame promotes stable terminology, selective and defined abbreviations, and role descriptions grounded in study functions, decisions, actions, privileges, and access rather than generic labels or status.",
+        "differences": "",
+        "reference_only": "The reference frame requires disclosure and traceability across prototype versions, design alternatives, observations, formative evidence, interpretations, and modifications."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "4f11e8e0-b8ad-4a1f-8a12-12a86bdfa6db"
+    },
+    "analysis_digest": "74f1968349b84e2f0f14e8b231be66f1ef89936976ff323f38899d43b1fd8a9d",
+    "key": "c212f31c0edd6f8f6378ff0020fae1cf6f3a4da46280b90c53bf1b285b29f1ac",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 29.055158750001283,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "c212f31c0edd6f8f6378ff0020fae1cf6f3a4da46280b90c53bf1b285b29f1ac",
+  "created_at": "2026-08-13T18:24:17.528762Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/reproducibility",
+  "pair_key": "44a095a6544905637ae6fbb079af4060f23c1d73161d0ad5810ad6a82ad176fa",
+  "provider_seconds": 29.055158750001283,
+  "right": "task-2/advisor2/terminology",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

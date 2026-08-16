@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:35:42.363034+00:00",
+      "frames": [
+        {
+          "context_digest": "4c7d7890b4c8dbd807acc103affd0572c325fd2e0f58346a97c3ed49e48ba34e",
+          "context_name": "task-3/local/personal-memory/2024/02",
+          "context_uid": "7bedad96-d78b-5977-a4c9-71049dcfcec8",
+          "memories": [
+            {
+              "content": "The user's maternal aunt keeps one spare key to the user's home.",
+              "content_digest": "2e45c292a3cbc26a1c9928c4546c6029c7dcd2aa6aa0a45a7cfb4be7888dd5c6",
+              "position": 0,
+              "uid": "1c627e4c-c393-5bd3-a5ae-b3318821be73"
+            },
+            {
+              "content": "If the door is locked, the user is accustomed to contacting their maternal aunt, who has the spare key, before contacting building management.",
+              "content_digest": "709cc4a1ae26126bd3238ea8c0e343415d95d084ddaf022590ff4197003c7b81",
+              "position": 1,
+              "uid": "e80936de-87af-5dbb-ab94-d456bbfaab0a"
+            },
+            {
+              "content": "When going to collect the spare key from their maternal aunt, the user wants to give an arrival time first so neither person has to wait.",
+              "content_digest": "5dab57d537091a28848dfa3592d16e038d6e78eeb8159489c17475befeb62a53",
+              "position": 2,
+              "uid": "7c26cf33-0630-5138-910a-6d37d6ed2b63"
+            },
+            {
+              "content": "The user feels at ease only after returning a borrowed spare key in person on the same day.",
+              "content_digest": "d3b9e78e166fb3af3dc248bcddbf1c1df15d3eed57655991a52c23b4ebb6ba14",
+              "position": 3,
+              "uid": "c3f0f26c-8d89-55e3-8bf3-398271e417e7"
+            },
+            {
+              "content": "The user feels uneasy about writing down a new entrance passcode on paper.",
+              "content_digest": "fe40a50fb7f0b0e1514a2f7e6ea3748e73cbd76fa45b862b4880c9eba68a2312",
+              "position": 4,
+              "uid": "7d7d00a3-c5af-5441-bb50-9631fbfd7979"
+            },
+            {
+              "content": "The user found it difficult when a family member arrived without notice during a meeting and the user could not respond immediately.",
+              "content_digest": "30d2126eb016f1fab8b8bd670bc00ee6ac5182f28b0afe696b2c30f4d7bc128f",
+              "position": 5,
+              "uid": "2e0df581-bd54-54f5-94ef-b719427fc88c"
+            },
+            {
+              "content": "On a day their younger brother received a package for them, the user felt reassured after checking the delivery photo.",
+              "content_digest": "54eacbc39b057a6a18f8ddd8e1db587dbef231ecb10ed8cd84a46b3575ac470c",
+              "position": 6,
+              "uid": "9278b64e-7550-5eb6-bbfd-544a2ae4ec3d"
+            },
+            {
+              "content": "The user's maternal aunt wants confirmation that the user is coming in person before handing over the spare key.",
+              "content_digest": "5d780f2fb96eac2d3c65e7417ee00e64e29c2f8873c432b291e62773723182c9",
+              "position": 7,
+              "uid": "76fb9115-a3f2-5ce3-a445-c3d1e38e4253"
+            },
+            {
+              "content": "Confirm with the user before sharing the spare key's storage location or the maternal aunt's contact information.",
+              "content_digest": "ac00da1acd77d05fd277a0a92d2ab62cbefb3c334e6e7c2cb3b046fbea217a6c",
+              "position": 8,
+              "uid": "6fa50e1d-8bd1-557a-9b03-1e4a4dc664bd"
+            },
+            {
+              "content": "The management office of a multi-unit residential building does not hold a unit key without verifying identity.",
+              "content_digest": "841f44fddced7681d5c9b47aaa2536f14536f1309b1f73104df7cb44738efbd1",
+              "position": 9,
+              "uid": "b18ff5b4-4f0d-5b93-8c41-439e5b15c710"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "614d4605-8b8a-4c35-8b5a-ca451cca557f"
+        },
+        {
+          "context_digest": "ca8765e237d85d9bf3ecb78fe1d9a2487066ae14dae9509e40b324ac1277d75a",
+          "context_name": "task-3/local/personal-memory/2025/06",
+          "context_uid": "870f7336-726a-5d9c-bae4-12585311463e",
+          "memories": [
+            {
+              "content": "The user keeps a portable fan charger on a living-room shelf.",
+              "content_digest": "5ab7fad8ae1b3f56bdbc1c3ebf593a3d452590341b6de115f830fdf0d994c12e",
+              "position": 0,
+              "uid": "853a158c-edf9-578a-8e75-3d5daff6e4db"
+            },
+            {
+              "content": "On a hot day, the user worked with only the window open and lost focus in the afternoon.",
+              "content_digest": "3c4225f055db293c53a5a137d0c6353005bcb55b71dbc61bc69831aa5c3c08de",
+              "position": 1,
+              "uid": "f7d5ebdc-0cae-5e07-a060-e129b5a05570"
+            },
+            {
+              "content": "In the room where the user closed the curtains the next morning, the temperature rose less.",
+              "content_digest": "4cb4d1892db8769f4c066859dbb021c67d5015114f8522dfd904057061600ab5",
+              "position": 2,
+              "uid": "99e5c522-535b-5015-8617-06f645147f8b"
+            },
+            {
+              "content": "The user took the portable fan out without charging it, and it turned off after an hour.",
+              "content_digest": "0e1e0e9e985bea5be6976010a390f484b60a931ea7dfaf50a73c66616a73d5da",
+              "position": 3,
+              "uid": "7b3bf50c-63aa-5a1e-9a53-7befea25a468"
+            },
+            {
+              "content": "Before the next outing, the user charged it the night before and used the fan throughout the trip.",
+              "content_digest": "fd4282d169da18d902fc5f766d4e38131240bf3a51e6fa0c5bad69f80f1492af",
+              "position": 4,
+              "uid": "ca8de091-afb2-537f-a83a-09769056879d"
+            },
+            {
+              "content": "On a hot weekend, the user was eating lunch in their father's yard and moved indoors.",
+              "content_digest": "44e7d3bc5eaecec68ad6e7c0979572102f3c717b37712fcfada769959443ae8e",
+              "position": 5,
+              "uid": "4a0604fb-10b4-5132-a6de-ab6a229ff2be"
+            },
+            {
+              "content": "When the user returned to the yard in the evening, shade and wind led them to stay another hour.",
+              "content_digest": "7495f1d4ba2d1d732ab5c962f45b5b0c9c765ee21767373552247a823cf90984",
+              "position": 6,
+              "uid": "1f90941e-776f-5cba-9783-c392983dd72c"
+            },
+            {
+              "content": "The user's father prefers to move an outdoor meal to the evening rather than proceed at midday when the temperature is high.",
+              "content_digest": "5f9628a28b5c6f3b20a371d1c039f37f26c50832970936c8a243f161fd8288f4",
+              "position": 7,
+              "uid": "63391d26-7417-5ea6-ac0a-460af7489963"
+            },
+            {
+              "content": "The local agent can compare past responses to heat but cannot know the current felt temperature without an indoor temperature record.",
+              "content_digest": "815f4fb2c833d75e30cb0e323f5708e356bf38e0bbb573865092be48fbf2746a",
+              "position": 8,
+              "uid": "31502797-1379-5ec4-bd1b-a2e1515fa56e"
+            },
+            {
+              "content": "A room with a west-facing window can warm rapidly in the late afternoon.",
+              "content_digest": "448908f6242021de6d41ddee8121714a1388db6e4e3d067de27e6950ee712c23",
+              "position": 9,
+              "uid": "68f85c30-62c4-579d-97cd-9f401c686e63"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "198379d0-e86c-4729-b8c2-2caa997e71b7"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate practical domains without overlapping operational claims: the reference concerns home access, privacy, visits, and delivery reassurance, while the compared frame concerns coping with heat, fan readiness, outdoor timing, and temperature uncertainty. All information is independently useful and no conflict is present.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "614d4605-8b8a-4c35-8b5a-ca451cca557f",
+              "memory_uid": "1c627e4c-c393-5bd3-a5ae-b3318821be73"
+            }
+          ],
+          "reason": "This is independently useful reference-only information about key custody, with no corresponding heat-related claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The maternal aunt keeps a spare key to the user's home.",
+          "uid": "d7c434ad-a4b7-51f3-b518-492dc283ffca"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "614d4605-8b8a-4c35-8b5a-ca451cca557f",
+              "memory_uid": "e80936de-87af-5dbb-ab94-d456bbfaab0a"
+            }
+          ],
+          "reason": "This reference-only lockout procedure has no operational counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "When locked out, the user normally contacts the maternal aunt before building management.",
+          "uid": "84d4ef8d-3a96-5a1d-8579-714ce4885a70"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "614d4605-8b8a-4c35-8b5a-ca451cca557f",
+              "memory_uid": "7c26cf33-0630-5138-910a-6d37d6ed2b63"
+            }
+          ],
+          "reason": "This is a distinct reference-only coordination preference intended to prevent waiting.",
+          "status": "RESOLVED",
+          "summary": "The user wants to provide an arrival time before collecting the spare key from the aunt.",
+          "uid": "483e8ea7-ebf8-5c67-a746-2c468514c418"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "614d4605-8b8a-4c35-8b5a-ca451cca557f",
+              "memory_uid": "c3f0f26c-8d89-55e3-8bf3-398271e417e7"
+            }
+          ],
+          "reason": "This reference-only return preference is independently useful and is not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user feels at ease only after returning a borrowed spare key in person on the same day.",
+          "uid": "1e6dfb76-5e5f-5765-a1a8-bd0a916495ad"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "614d4605-8b8a-4c35-8b5a-ca451cca557f",
+              "memory_uid": "7d7d00a3-c5af-5441-bb50-9631fbfd7979"
+            }
+          ],
+          "reason": "This is distinct reference-only information about credential handling and personal comfort.",
+          "status": "RESOLVED",
+          "summary": "The user is uneasy about recording a new entrance passcode on paper.",
+          "uid": "2fb2b40b-ce78-554c-a8e1-821ad099f1ee"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "614d4605-8b8a-4c35-8b5a-ca451cca557f",
+              "memory_uid": "2e0df581-bd54-54f5-94ef-b719427fc88c"
+            }
+          ],
+          "reason": "This reference-only experience concerns visit notice and availability, not heat management.",
+          "status": "RESOLVED",
+          "summary": "An unannounced family visit during a meeting was difficult because the user could not respond immediately.",
+          "uid": "902fc78d-1dc1-5607-a75b-1d3ba3630476"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "614d4605-8b8a-4c35-8b5a-ca451cca557f",
+              "memory_uid": "9278b64e-7550-5eb6-bbfd-544a2ae4ec3d"
+            }
+          ],
+          "reason": "This is an independently useful reference-only observation about delivery verification.",
+          "status": "RESOLVED",
+          "summary": "The user felt reassured after checking a delivery photo when their younger brother received a package for them.",
+          "uid": "7d8da498-fefa-53ab-b1e2-1e26596ee9e4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "614d4605-8b8a-4c35-8b5a-ca451cca557f",
+              "memory_uid": "76fb9115-a3f2-5ce3-a445-c3d1e38e4253"
+            }
+          ],
+          "reason": "This distinct reference-only handover condition records the aunt's requirement.",
+          "status": "RESOLVED",
+          "summary": "The aunt wants confirmation of an in-person visit before handing over the spare key.",
+          "uid": "e84bf536-088b-59e0-9ec2-9db05e298038"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "614d4605-8b8a-4c35-8b5a-ca451cca557f",
+              "memory_uid": "6fa50e1d-8bd1-557a-9b03-1e4a4dc664bd"
+            }
+          ],
+          "reason": "This reference-only privacy rule governs disclosure of sensitive access information.",
+          "status": "RESOLVED",
+          "summary": "User confirmation is required before sharing the spare key's location or the aunt's contact information.",
+          "uid": "d867ec01-31bd-5033-a88f-522021b84437"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "614d4605-8b8a-4c35-8b5a-ca451cca557f",
+              "memory_uid": "b18ff5b4-4f0d-5b93-8c41-439e5b15c710"
+            }
+          ],
+          "reason": "This is a distinct reference-only access-control constraint concerning management-held keys.",
+          "status": "RESOLVED",
+          "summary": "The building management office does not release a unit key without identity verification.",
+          "uid": "378b37c1-0a93-50ca-b305-f9c32d2f4e8a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "198379d0-e86c-4729-b8c2-2caa997e71b7",
+              "memory_uid": "853a158c-edf9-578a-8e75-3d5daff6e4db"
+            }
+          ],
+          "reason": "This compared-only storage fact has no counterpart in the home-access frame.",
+          "status": "RESOLVED",
+          "summary": "The portable fan charger is kept on a living-room shelf.",
+          "uid": "0891e62c-2903-5dc6-ba89-3c1b26ee1283"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "198379d0-e86c-4729-b8c2-2caa997e71b7",
+              "memory_uid": "f7d5ebdc-0cae-5e07-a060-e129b5a05570"
+            }
+          ],
+          "reason": "This is an independently useful compared-only observation about heat and concentration.",
+          "status": "RESOLVED",
+          "summary": "Working with only an open window on a hot day was followed by afternoon loss of focus.",
+          "uid": "1b146b9a-be3b-580c-9e09-f40791254df0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "198379d0-e86c-4729-b8c2-2caa997e71b7",
+              "memory_uid": "99e5c522-535b-5015-8617-06f645147f8b"
+            }
+          ],
+          "reason": "This compared-only observation concerns a specific heat-mitigation measure.",
+          "status": "RESOLVED",
+          "summary": "A room warmed less the next morning when the user closed its curtains.",
+          "uid": "52def99f-d848-56a0-83e6-1d7cc27b2001"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "198379d0-e86c-4729-b8c2-2caa997e71b7",
+              "memory_uid": "7b3bf50c-63aa-5a1e-9a53-7befea25a468"
+            }
+          ],
+          "reason": "This distinct compared-only episode records the consequence of inadequate charging.",
+          "status": "RESOLVED",
+          "summary": "The portable fan shut off after an hour when taken out without being charged.",
+          "uid": "3f9ab602-0530-5f3a-9215-b8663e856503"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "198379d0-e86c-4729-b8c2-2caa997e71b7",
+              "memory_uid": "ca8de091-afb2-537f-a83a-09769056879d"
+            }
+          ],
+          "reason": "This distinct compared-only episode records the outcome of advance charging.",
+          "status": "RESOLVED",
+          "summary": "Charging the portable fan the night before allowed it to operate throughout the next trip.",
+          "uid": "e8c98c6a-aae0-50c9-b82f-66928d392444"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "198379d0-e86c-4729-b8c2-2caa997e71b7",
+              "memory_uid": "4a0604fb-10b4-5132-a6de-ab6a229ff2be"
+            }
+          ],
+          "reason": "This compared-only event independently describes the user's response to midday outdoor heat.",
+          "status": "RESOLVED",
+          "summary": "During a hot weekend lunch in the father's yard, the user moved indoors.",
+          "uid": "fba9a009-188d-516d-ba6a-c4c57c43686d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "198379d0-e86c-4729-b8c2-2caa997e71b7",
+              "memory_uid": "1f90941e-776f-5cba-9783-c392983dd72c"
+            }
+          ],
+          "reason": "This distinct compared-only event describes improved outdoor tolerance under cooler conditions.",
+          "status": "RESOLVED",
+          "summary": "In evening shade and wind, the user stayed in the yard for another hour.",
+          "uid": "75a677d0-8472-5b2a-8017-5a1bc854eb03"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "198379d0-e86c-4729-b8c2-2caa997e71b7",
+              "memory_uid": "63391d26-7417-5ea6-ac0a-460af7489963"
+            }
+          ],
+          "reason": "This is an independently useful compared-only scheduling preference.",
+          "status": "RESOLVED",
+          "summary": "The father prefers moving an outdoor meal to the evening when midday temperatures are high.",
+          "uid": "99398c49-df12-5395-8543-6ebd341cac65"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "198379d0-e86c-4729-b8c2-2caa997e71b7",
+              "memory_uid": "31502797-1379-5ec4-bd1b-a2e1515fa56e"
+            }
+          ],
+          "reason": "This compared-only epistemic constraint limits what can safely be inferred about current conditions.",
+          "status": "RESOLVED",
+          "summary": "Without an indoor temperature record, the local agent cannot determine the current felt temperature from past heat responses.",
+          "uid": "1913558b-de0f-515e-8175-9d0e8acc8587"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "198379d0-e86c-4729-b8c2-2caa997e71b7",
+              "memory_uid": "68f85c30-62c4-579d-97cd-9f401c686e63"
+            }
+          ],
+          "reason": "This is distinct compared-only contextual information about room heating.",
+          "status": "RESOLVED",
+          "summary": "A room with a west-facing window can warm quickly in the late afternoon.",
+          "uid": "d8356d7b-6bcf-5b43-8213-d69147999866"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only content covers heat effects and mitigation, portable-fan storage and charging, outdoor-meal timing, west-facing-room warming, and limits on inferring current indoor temperature.",
+        "differences": "",
+        "reference_only": "Reference-only content covers spare-key custody and retrieval, access-information privacy, identity checks, passcode discomfort, advance notice for visits, and delivery-photo reassurance."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "e27b6fa8-bf42-4d87-be96-381dfaa21490"
+    },
+    "analysis_digest": "8ff59a3e105f54b7d413ac4113f2cb6577f5d683d2399d4e3adefdd3dfdf69d5",
+    "key": "b0cfa46316e028f26ef225211586c5d6378a365a99955ea8f33c47a38cf5f826",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 44.64215366699864,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "b0cfa46316e028f26ef225211586c5d6378a365a99955ea8f33c47a38cf5f826",
+  "created_at": "2026-08-13T18:36:27.005028Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/02",
+  "pair_key": "fc4c0ac34f0021281748d13b624fc8a6339394ade554d63e5edc02b601579ae5",
+  "provider_seconds": 44.64215366699864,
+  "right": "task-3/local/personal-memory/2025/06",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

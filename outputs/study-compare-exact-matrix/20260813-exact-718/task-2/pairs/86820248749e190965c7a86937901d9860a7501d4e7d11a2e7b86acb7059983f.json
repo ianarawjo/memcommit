@@ -1,0 +1,275 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:20:21.068945+00:00",
+      "frames": [
+        {
+          "context_digest": "c4484b7a8284d7e31066ad3f4c4edf8844a2e0ce8695a323093f753243b6b18f",
+          "context_name": "task-2/advisor1/expression",
+          "context_uid": "39a6f298-c511-5c21-a106-998c1df9d951",
+          "memories": [
+            {
+              "content": "Use a flow diagram rather than a sequence table when alternate procedural branches lead to different outcomes.",
+              "content_digest": "48075a546ef4f1c2735e202cf43df2c164e4382f323007f542915195d025bf58",
+              "position": 0,
+              "uid": "51fa3fcc-9d5f-52f0-809d-62d7cdd8a865"
+            },
+            {
+              "content": "Draw alternate branches and their resulting outcomes in the same flow diagram so readers can compare them at once.",
+              "content_digest": "85d1fdc887f442e05b4089e28a6dc671e757eb781eae9c39646673054306ec34",
+              "position": 1,
+              "uid": "e686bd4d-3ebd-5e55-ba39-f26971247965"
+            },
+            {
+              "content": "The visual fidelity of a prototype may differ from its functional fidelity.",
+              "content_digest": "bfc110d2df084fd4f8393284db693ead012f2bfd9a4e804fd89f9a4e45e16e8c",
+              "position": 2,
+              "uid": "019662a9-6f03-527f-9b6d-be5a2966d9e9"
+            },
+            {
+              "content": "A flow diagram can make alternate branches and their different outcomes visible in one view.",
+              "content_digest": "8f69a73784cb0c304671161a6c42c63480c0ce0cc4864e613d8dde466365d496",
+              "position": 3,
+              "uid": "a6dfe9a7-1df8-561f-8d3e-fc19518beca9"
+            },
+            {
+              "content": "HCI reviewers often skim prototype screens and interaction flow diagrams before reading the main text.",
+              "content_digest": "ee7009a111b29298f748336d571f4d0233e08ef0255f6cfe69cb4c26def96394",
+              "position": 4,
+              "uid": "7047a23d-45b3-5d5c-a00b-c12552e9680d"
+            },
+            {
+              "content": "Readers can understand the overall branching shape of a procedure more quickly from a flow diagram than from rows read one at a time.",
+              "content_digest": "beb9438eb216e54223266b4f592245450812228d69f7a38908e4c260a0aaca01",
+              "position": 5,
+              "uid": "50a71968-7e3f-5b99-b3fa-769af386d0c0"
+            },
+            {
+              "content": "Redrawing a branching flow diagram after a procedural change usually takes longer than updating one row in a table.",
+              "content_digest": "cb0e535e1e58a4dbf42c5f22a3eded19fa0c228c6531b70530b226eeb2dbf24c",
+              "position": 6,
+              "uid": "ae1610f6-a855-56c1-a0fb-fd3207dab615"
+            },
+            {
+              "content": "Reviewers often inspect the proposal’s main visual before reading the procedural explanation in full.",
+              "content_digest": "a609677d56e7297c736ee92c7a45eb4d83824985a780d8ca4df664f1494c5cb2",
+              "position": 7,
+              "uid": "d2825b84-b4a6-58c9-8f8e-9e19c6192a03"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "7c1bef1f-c176-4467-9cf8-f5a72d3d54d6"
+        },
+        {
+          "context_digest": "4efbf2f6c096022137cee2c075c75219bb4fd0f441579901b8445bb2d92101f5",
+          "context_name": "task-2/advisor2/budget",
+          "context_uid": "ae02c2b2-49d3-5c30-b686-81ea17a8a87e",
+          "memories": [
+            {
+              "content": "Keep the main text to the total and major categories, and place quantities, unit rates, and assumptions in one compact budget table or appendix.",
+              "content_digest": "2e0d76a9c09d14facdf93e8b82cb1c4f583b8a6063b74552f2c23b7d37224e9c",
+              "position": 0,
+              "uid": "d614b55d-d9f6-5347-8d02-2d219d621a09"
+            },
+            {
+              "content": "Give each cost category, quantity, unit rate, and subtotal a stable row in the separate budget table.",
+              "content_digest": "ecd8aa50fc469bb763f36784d140b871b82a283b39f30f46e9e166776321c602",
+              "position": 1,
+              "uid": "24500129-4b07-564f-ba67-39e40d7d7860"
+            },
+            {
+              "content": "Put the estimate basis in a dedicated table column so one assumption can be checked or revised without rewriting the narrative.",
+              "content_digest": "6ed604ab2ca300f215d13f18cb5344e9322635ad047ce36c08242765e7fb09f4",
+              "position": 2,
+              "uid": "07bad409-af9c-512a-b829-7ceb28273f91"
+            },
+            {
+              "content": "Readers can verify arithmetic and compare categories faster in a consistent table than in amounts distributed across prose.",
+              "content_digest": "1dc966a0ade3af3bc636cb99d456edbdb918c2a23efd4a5792db9f8ede061195",
+              "position": 3,
+              "uid": "abf6d361-c2eb-512f-87e0-f3af9c5eb677"
+            },
+            {
+              "content": "Revise one table row and its subtotal when an estimate changes instead of repeating the new amount across several prose paragraphs.",
+              "content_digest": "dcd7d010f7d2c1898fffe71ccc7a0067233dcbcf66fe4b429043b1900d097f84",
+              "position": 4,
+              "uid": "473cf3ca-9832-5d9c-97df-974f1d9b0d1b"
+            },
+            {
+              "content": "Keep detailed arithmetic out of the main argument when readers can reach the complete table from a clear reference.",
+              "content_digest": "940a8cdee63c326d9c9be89cc07e7f223f239e3537113d32c098f711bd816cf7",
+              "position": 5,
+              "uid": "675956de-2c61-53e1-bb89-9b49d92558ba"
+            },
+            {
+              "content": "The user tends to interrupt the argument with long cost enumerations when no separate budget table is available.",
+              "content_digest": "2c0715ec3cfa247a35c3acc854b0716dca764619050aa635c0c242a5b56aa2f1",
+              "position": 6,
+              "uid": "f4371f72-f222-5066-b2f4-0a6be5d6865e"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "b9a45504-20b7-40e1-83f9-27852a75b691"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames offer complementary, scope-dependent guidance on choosing and maintaining visual structures. Branching procedures favor flow diagrams, while budgets favor compact tables. One-sided context covers prototype fidelity, reviewer reading behavior, budget-table structure, and a tendency toward disruptive cost detail.",
+      "relations": [
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "7c1bef1f-c176-4467-9cf8-f5a72d3d54d6",
+              "memory_uid": "51fa3fcc-9d5f-52f0-809d-62d7cdd8a865"
+            },
+            {
+              "frame_uid": "7c1bef1f-c176-4467-9cf8-f5a72d3d54d6",
+              "memory_uid": "e686bd4d-3ebd-5e55-ba39-f26971247965"
+            },
+            {
+              "frame_uid": "7c1bef1f-c176-4467-9cf8-f5a72d3d54d6",
+              "memory_uid": "a6dfe9a7-1df8-561f-8d3e-fc19518beca9"
+            },
+            {
+              "frame_uid": "7c1bef1f-c176-4467-9cf8-f5a72d3d54d6",
+              "memory_uid": "50a71968-7e3f-5b99-b3fa-769af386d0c0"
+            },
+            {
+              "frame_uid": "b9a45504-20b7-40e1-83f9-27852a75b691",
+              "memory_uid": "d614b55d-d9f6-5347-8d02-2d219d621a09"
+            },
+            {
+              "frame_uid": "b9a45504-20b7-40e1-83f9-27852a75b691",
+              "memory_uid": "abf6d361-c2eb-512f-87e0-f3af9c5eb677"
+            },
+            {
+              "frame_uid": "b9a45504-20b7-40e1-83f9-27852a75b691",
+              "memory_uid": "675956de-2c61-53e1-bb89-9b49d92558ba"
+            }
+          ],
+          "reason": "The recommendations address the same presentation decision under explicit content conditions: branches and outcomes benefit from a unified flow view, while quantities, arithmetic, and major budget categories benefit from a reachable table rather than distributed prose.",
+          "status": "RESOLVED",
+          "summary": "Use a flow diagram for branching procedures and a compact table for detailed budgets, keeping each information type in a form that supports rapid comparison and preserves a concise main narrative.",
+          "uid": "1d949089-e63d-5f5e-a43e-3efddedc505e"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "7c1bef1f-c176-4467-9cf8-f5a72d3d54d6",
+              "memory_uid": "ae1610f6-a855-56c1-a0fb-fd3207dab615"
+            },
+            {
+              "frame_uid": "b9a45504-20b7-40e1-83f9-27852a75b691",
+              "memory_uid": "473cf3ca-9832-5d9c-97df-974f1d9b0d1b"
+            }
+          ],
+          "reason": "Both claims concern revising structured information, but their explicit representational scopes explain the different update methods and must be preserved.",
+          "status": "RESOLVED",
+          "summary": "Maintenance effort depends on the representation: procedural changes may require redrawing a branching diagram, whereas estimate changes can be confined to one budget row and subtotal.",
+          "uid": "638020d8-0851-5e4a-901c-bbb07299a2cf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7c1bef1f-c176-4467-9cf8-f5a72d3d54d6",
+              "memory_uid": "019662a9-6f03-527f-9b6d-be5a2966d9e9"
+            }
+          ],
+          "reason": "This independently useful distinction appears only in the reference frame and is not addressed by the budget-presentation guidance.",
+          "status": "RESOLVED",
+          "summary": "A prototype’s visual fidelity can differ from its functional fidelity.",
+          "uid": "e32ecb75-ee39-55f2-a5cd-37c517e909ce"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7c1bef1f-c176-4467-9cf8-f5a72d3d54d6",
+              "memory_uid": "7047a23d-45b3-5d5c-a00b-c12552e9680d"
+            },
+            {
+              "frame_uid": "7c1bef1f-c176-4467-9cf8-f5a72d3d54d6",
+              "memory_uid": "d2825b84-b4a6-58c9-8f8e-9e19c6192a03"
+            }
+          ],
+          "reason": "The reference memories restate one one-sided claim about reviewer reading order; the compared frame supplies no corresponding reviewer-behavior claim.",
+          "status": "RESOLVED",
+          "summary": "Reviewers often inspect prototype screens, interaction flows, or the proposal’s main visual before reading the full explanation.",
+          "uid": "757401be-50b8-5a7f-9d1d-8c05dd0f15ca"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b9a45504-20b7-40e1-83f9-27852a75b691",
+              "memory_uid": "24500129-4b07-564f-ba67-39e40d7d7860"
+            },
+            {
+              "frame_uid": "b9a45504-20b7-40e1-83f9-27852a75b691",
+              "memory_uid": "07bad409-af9c-512a-b829-7ceb28273f91"
+            }
+          ],
+          "reason": "These compared-frame memories split one underlying table-design claim that has no counterpart in the reference frame’s flow-diagram guidance.",
+          "status": "RESOLVED",
+          "summary": "Organize budget details with stable category rows and a dedicated estimate-basis column so individual values or assumptions can be checked and revised independently.",
+          "uid": "ef11956e-01e4-5643-8c8b-f4f87cdc4cae"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b9a45504-20b7-40e1-83f9-27852a75b691",
+              "memory_uid": "f4371f72-f222-5066-b2f4-0a6be5d6865e"
+            }
+          ],
+          "reason": "This is a one-sided observation about user behavior, distinct from the frames’ general presentation and maintenance policies.",
+          "status": "RESOLVED",
+          "summary": "Without a separate budget table, the user tends to interrupt the argument with long cost enumerations.",
+          "uid": "703b08ca-af41-517c-b742-84a8752567ba"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Budget tables benefit from stable category rows and a dedicated assumption column; without a separate table, the user tends to interrupt arguments with lengthy cost enumerations.",
+        "differences": "Representation depends on content: flow diagrams expose procedural branches and outcomes, whereas compact tables support budget verification and concise argument. Their maintenance guidance likewise contrasts diagram redrawing with isolated row updates.",
+        "reference_only": "Prototype visual and functional fidelity may diverge, and reviewers often inspect central visuals before reading explanations fully."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "0683cb09-3ada-4097-8454-45df598269ba"
+    },
+    "analysis_digest": "bf1c9ac59097e6302b9b8bf9674265552eccdfa9f12c89c848d85969e85cf9df",
+    "key": "7be3aeb6bf75ac3321ae0d96cef2a9b17bef9c682fa23aba82d27b964158d375",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 42.55023691699898,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "7be3aeb6bf75ac3321ae0d96cef2a9b17bef9c682fa23aba82d27b964158d375",
+  "created_at": "2026-08-13T18:21:03.618661Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/expression",
+  "pair_key": "86820248749e190965c7a86937901d9860a7501d4e7d11a2e7b86acb7059983f",
+  "provider_seconds": 42.55023691699898,
+  "right": "task-2/advisor2/budget",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

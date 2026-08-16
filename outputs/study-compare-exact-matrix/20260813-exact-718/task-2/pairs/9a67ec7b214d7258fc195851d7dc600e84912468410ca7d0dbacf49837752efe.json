@@ -1,0 +1,350 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:15:20.228111+00:00",
+      "frames": [
+        {
+          "context_digest": "dd57f5a09e0271c33b7dccbe4935bf1a8d5be14dc7c618906e8af51709bbea89",
+          "context_name": "task-2/advisor1/claim-evidence",
+          "context_uid": "b0c4b50c-f70b-5b0c-a1eb-0fd63e0531bf",
+          "memories": [
+            {
+              "content": "Attach adjacent evidence or citations to verifiable claims about user behavior or technology effects.",
+              "content_digest": "3a856fbbda53df425705aaaff741896f5f5460a8feeb8fb8a73c03e592a80c62",
+              "position": 0,
+              "uid": "06f6c673-ea0c-5657-89d2-3f8711097cd7"
+            },
+            {
+              "content": "Distinguish between results observed in the pilot and expectations to be confirmed in the main user study using different expressions.",
+              "content_digest": "9117c0fd3d9cb713f035f9ae95118ae785af5fcf8909485b097f128ef8e12586",
+              "position": 1,
+              "uid": "58991ce7-d394-5087-b14f-0b014b0ec6ad"
+            },
+            {
+              "content": "Do not use verbs that imply proving causation if the design does not support causal inference.",
+              "content_digest": "5ee12e489ec1fd1af46a49cb05cc9447ed3fbf33ad7b4d8ce52ea700926ea29c",
+              "position": 2,
+              "uid": "f5adf029-a750-5a3a-8eb8-d68e43bb5c13"
+            },
+            {
+              "content": "For topics with sufficient HCI research evidence, prioritize citing recent comprehensive studies over listing individual cases.",
+              "content_digest": "2519cd2fca364ac6eef8577892b03d0a83509f6032874e30c30f36fb1e3dde5a",
+              "position": 3,
+              "uid": "b2a7ff8a-dfca-5857-8733-fe03cbd943ec"
+            },
+            {
+              "content": "Explain how each design choice was derived to address specific user needs.",
+              "content_digest": "fee6e06dfe0489b55ae0d75fe4e7b62facf78052a3136b7120d065e100f3b567",
+              "position": 4,
+              "uid": "1f0c95f4-69bb-5764-a358-d428ff7019d2"
+            },
+            {
+              "content": "Support each core claim with evidence that directly examined it rather than with indirect summaries.",
+              "content_digest": "372e0abff6997b041103fd71719c55549c2e3e0a3a5cdf2d4a1a24ec6538cbff",
+              "position": 5,
+              "uid": "cd475113-5354-5f80-b063-7628e4359afc"
+            },
+            {
+              "content": "Reviewers first check the direct evidence placed closest to the core claim.",
+              "content_digest": "61baa516115e1a5bf4f377358ead7c45bab5e666208b9cd6cd87426007493a49",
+              "position": 6,
+              "uid": "86fe1306-7650-58cc-a3df-79870c61784d"
+            },
+            {
+              "content": "Connect the proposed conceptual design principle to at least one observable user behavior.",
+              "content_digest": "d6c6f9dddd0cd99694df2f232e8a71957d53f77e8d10faf324927af679312acc",
+              "position": 7,
+              "uid": "5d022e45-09c0-515e-98f1-68b2aec686bc"
+            },
+            {
+              "content": "Identify which design judgment—retain, modify, or discard—each piece of evidence from formative evaluation supports.",
+              "content_digest": "a507db0052a4d9196c774a5df74c60fe9225bef49c5d9aece328bfb8dca48035",
+              "position": 8,
+              "uid": "9939e9e8-d97d-57db-974a-750566ca9e2b"
+            },
+            {
+              "content": "Results from controlled formative studies do not directly prove effects in actual long-term use.",
+              "content_digest": "aeeca3701d4ba297e928efc2034c474a2ae78101e440d515a57901e6814321a0",
+              "position": 9,
+              "uid": "41060e8e-95ff-58c1-8b71-36a501a9bd23"
+            },
+            {
+              "content": "The user can have an explanation approved as a conceptual contribution only if it is falsifiable with observable data.",
+              "content_digest": "171f4eeae9df2a0a739f90ed451a34a092093b9f6b0db7c6af04012bea734c5f",
+              "position": 10,
+              "uid": "ec54ce10-07db-5ae3-94a5-8f3621fed4a9"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "bd5ce3f7-8834-40b1-9af1-59653f2fef0f"
+        },
+        {
+          "context_digest": "4efbf2f6c096022137cee2c075c75219bb4fd0f441579901b8445bb2d92101f5",
+          "context_name": "task-2/advisor2/budget",
+          "context_uid": "ae02c2b2-49d3-5c30-b686-81ea17a8a87e",
+          "memories": [
+            {
+              "content": "Keep the main text to the total and major categories, and place quantities, unit rates, and assumptions in one compact budget table or appendix.",
+              "content_digest": "2e0d76a9c09d14facdf93e8b82cb1c4f583b8a6063b74552f2c23b7d37224e9c",
+              "position": 0,
+              "uid": "d614b55d-d9f6-5347-8d02-2d219d621a09"
+            },
+            {
+              "content": "Give each cost category, quantity, unit rate, and subtotal a stable row in the separate budget table.",
+              "content_digest": "ecd8aa50fc469bb763f36784d140b871b82a283b39f30f46e9e166776321c602",
+              "position": 1,
+              "uid": "24500129-4b07-564f-ba67-39e40d7d7860"
+            },
+            {
+              "content": "Put the estimate basis in a dedicated table column so one assumption can be checked or revised without rewriting the narrative.",
+              "content_digest": "6ed604ab2ca300f215d13f18cb5344e9322635ad047ce36c08242765e7fb09f4",
+              "position": 2,
+              "uid": "07bad409-af9c-512a-b829-7ceb28273f91"
+            },
+            {
+              "content": "Readers can verify arithmetic and compare categories faster in a consistent table than in amounts distributed across prose.",
+              "content_digest": "1dc966a0ade3af3bc636cb99d456edbdb918c2a23efd4a5792db9f8ede061195",
+              "position": 3,
+              "uid": "abf6d361-c2eb-512f-87e0-f3af9c5eb677"
+            },
+            {
+              "content": "Revise one table row and its subtotal when an estimate changes instead of repeating the new amount across several prose paragraphs.",
+              "content_digest": "dcd7d010f7d2c1898fffe71ccc7a0067233dcbcf66fe4b429043b1900d097f84",
+              "position": 4,
+              "uid": "473cf3ca-9832-5d9c-97df-974f1d9b0d1b"
+            },
+            {
+              "content": "Keep detailed arithmetic out of the main argument when readers can reach the complete table from a clear reference.",
+              "content_digest": "940a8cdee63c326d9c9be89cc07e7f223f239e3537113d32c098f711bd816cf7",
+              "position": 5,
+              "uid": "675956de-2c61-53e1-bb89-9b49d92558ba"
+            },
+            {
+              "content": "The user tends to interrupt the argument with long cost enumerations when no separate budget table is available.",
+              "content_digest": "2c0715ec3cfa247a35c3acc854b0716dca764619050aa635c0c242a5b56aa2f1",
+              "position": 6,
+              "uid": "f4371f72-f222-5066-b2f4-0a6be5d6865e"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "bb19c3cd-788a-40b5-9a88-76b2ad01bdcb"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate editorial domains without governing the same operational decisions. The reference frame emphasizes evidence, inference limits, and design reasoning, while the compared frame structures budget detail for readability, verification, and revision. No contradiction or scope-dependent overlap is present.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bd5ce3f7-8834-40b1-9af1-59653f2fef0f",
+              "memory_uid": "06f6c673-ea0c-5657-89d2-3f8711097cd7"
+            },
+            {
+              "frame_uid": "bd5ce3f7-8834-40b1-9af1-59653f2fef0f",
+              "memory_uid": "cd475113-5354-5f80-b063-7628e4359afc"
+            },
+            {
+              "frame_uid": "bd5ce3f7-8834-40b1-9af1-59653f2fef0f",
+              "memory_uid": "86fe1306-7650-58cc-a3df-79870c61784d"
+            }
+          ],
+          "reason": "The memories jointly state the placement and directness rule and explain that reviewers inspect nearby direct support first; the compared frame contains no corresponding evidence-citation policy.",
+          "status": "RESOLVED",
+          "summary": "Direct evidence should be placed close to the verifiable or core claim it supports.",
+          "uid": "573cbe4f-50de-5d8e-93a5-5b0231e48767"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bd5ce3f7-8834-40b1-9af1-59653f2fef0f",
+              "memory_uid": "58991ce7-d394-5087-b14f-0b014b0ec6ad"
+            }
+          ],
+          "reason": "This is an independently useful rule for distinguishing observed results from future confirmation, with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Pilot observations and expectations for the main study should be expressed differently.",
+          "uid": "e753fedb-665f-5ee3-9762-85b5c13ecf8d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bd5ce3f7-8834-40b1-9af1-59653f2fef0f",
+              "memory_uid": "f5adf029-a750-5a3a-8eb8-d68e43bb5c13"
+            },
+            {
+              "frame_uid": "bd5ce3f7-8834-40b1-9af1-59653f2fef0f",
+              "memory_uid": "41060e8e-95ff-58c1-8b71-36a501a9bd23"
+            }
+          ],
+          "reason": "Both memories impose the same inferential boundary, with controlled formative evidence supplying a specific instance; the compared frame does not address causal inference.",
+          "status": "RESOLVED",
+          "summary": "Claims must not imply causal or real-world long-term proof beyond what the study design supports.",
+          "uid": "f806d775-0bbf-5119-b558-360095bb901d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bd5ce3f7-8834-40b1-9af1-59653f2fef0f",
+              "memory_uid": "b2a7ff8a-dfca-5857-8733-fe03cbd943ec"
+            }
+          ],
+          "reason": "This is a standalone source-selection policy absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Where HCI evidence is sufficient, recent comprehensive studies should be favored over lists of individual cases.",
+          "uid": "1c38385b-08c9-55f0-86da-6dc68c1f0572"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bd5ce3f7-8834-40b1-9af1-59653f2fef0f",
+              "memory_uid": "1f0c95f4-69bb-5764-a358-d428ff7019d2"
+            }
+          ],
+          "reason": "This independently useful design-rationale requirement has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Each design choice should be traced to the specific user need it addresses.",
+          "uid": "69b21003-c3f1-549d-8b34-2eccdae728a9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bd5ce3f7-8834-40b1-9af1-59653f2fef0f",
+              "memory_uid": "5d022e45-09c0-515e-98f1-68b2aec686bc"
+            }
+          ],
+          "reason": "This establishes a behavioral grounding requirement for design principles that the compared frame does not discuss.",
+          "status": "RESOLVED",
+          "summary": "A proposed conceptual design principle should be connected to observable user behavior.",
+          "uid": "5d07e830-5184-5b1c-bb63-0c70de465f97"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bd5ce3f7-8834-40b1-9af1-59653f2fef0f",
+              "memory_uid": "9939e9e8-d97d-57db-974a-750566ca9e2b"
+            }
+          ],
+          "reason": "This is an independent rule connecting evaluation evidence to design judgments, absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Formative evidence should identify whether it supports retaining, modifying, or discarding a design.",
+          "uid": "145f3d38-5e9b-58cd-b4e0-4c90fefdf881"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bd5ce3f7-8834-40b1-9af1-59653f2fef0f",
+              "memory_uid": "ec54ce10-07db-5ae3-94a5-8f3621fed4a9"
+            }
+          ],
+          "reason": "This sets an independent empirical testability condition not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A conceptual explanation qualifies as a contribution only when observable data could falsify it.",
+          "uid": "90e702cd-7340-5ca3-ba60-5685133868d4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bb19c3cd-788a-40b5-9a88-76b2ad01bdcb",
+              "memory_uid": "d614b55d-d9f6-5347-8d02-2d219d621a09"
+            },
+            {
+              "frame_uid": "bb19c3cd-788a-40b5-9a88-76b2ad01bdcb",
+              "memory_uid": "675956de-2c61-53e1-bb89-9b49d92558ba"
+            },
+            {
+              "frame_uid": "bb19c3cd-788a-40b5-9a88-76b2ad01bdcb",
+              "memory_uid": "f4371f72-f222-5066-b2f4-0a6be5d6865e"
+            }
+          ],
+          "reason": "The memories state the narrative-versus-table allocation and its behavioral rationale: without a separate table, long enumerations interrupt the argument; the reference frame has no budget-presentation policy.",
+          "status": "RESOLVED",
+          "summary": "The main argument should present budget totals and major categories while detailed cost enumeration remains in a clearly linked table or appendix.",
+          "uid": "c077e957-9ccd-586a-b996-7c961b5d3928"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bb19c3cd-788a-40b5-9a88-76b2ad01bdcb",
+              "memory_uid": "24500129-4b07-564f-ba67-39e40d7d7860"
+            },
+            {
+              "frame_uid": "bb19c3cd-788a-40b5-9a88-76b2ad01bdcb",
+              "memory_uid": "abf6d361-c2eb-512f-87e0-f3af9c5eb677"
+            },
+            {
+              "frame_uid": "bb19c3cd-788a-40b5-9a88-76b2ad01bdcb",
+              "memory_uid": "473cf3ca-9832-5d9c-97df-974f1d9b0d1b"
+            }
+          ],
+          "reason": "The memories split one table-maintenance principle into row structure, reader verification, and single-row revision; the reference frame provides no corresponding budget-table rule.",
+          "status": "RESOLVED",
+          "summary": "A consistent budget table should use stable category rows so arithmetic, comparisons, and changed estimates can be checked or revised locally.",
+          "uid": "a52f3fe0-665f-540a-a07f-3f0e065aab62"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "bb19c3cd-788a-40b5-9a88-76b2ad01bdcb",
+              "memory_uid": "07bad409-af9c-512a-b829-7ceb28273f91"
+            }
+          ],
+          "reason": "This independently useful table-schema rule enables assumptions to be checked or revised without rewriting the narrative and is absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Each budget estimate's basis should appear in a dedicated table column.",
+          "uid": "0807899f-8fcd-5324-8948-03192e7eb47d"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame keeps budget detail in a linked table, using stable rows and explicit estimate assumptions to preserve narrative flow and simplify checking, comparison, and revision.",
+        "differences": "",
+        "reference_only": "The reference frame requires nearby direct evidence, careful separation of observations from expectations, bounded causal language, strong research synthesis, traceable design reasoning, and empirically testable conceptual claims."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "e5053b4d-c882-4a7e-970c-b93b9c26443e"
+    },
+    "analysis_digest": "d33ac9dd182494b66c119a9a564251c83b1d6faa1e269051b220b9339feeb5a0",
+    "key": "443129f92a8a4a1c28979bcd34d617183a46eef0ec28e84f1b0d14e95ab8e623",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 40.513010667000344,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "443129f92a8a4a1c28979bcd34d617183a46eef0ec28e84f1b0d14e95ab8e623",
+  "created_at": "2026-08-13T18:16:00.740530Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/claim-evidence",
+  "pair_key": "9a67ec7b214d7258fc195851d7dc600e84912468410ca7d0dbacf49837752efe",
+  "provider_seconds": 40.513010667000344,
+  "right": "task-2/advisor2/budget",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

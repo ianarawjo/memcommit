@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:53:43.605703+00:00",
+      "frames": [
+        {
+          "context_digest": "40dca3509f1e21c564970ebb7664df755d25c1c19c4e79b458c803662fb827ce",
+          "context_name": "task-3/local/personal-memory/2025/11",
+          "context_uid": "af363401-7cdc-5426-ad00-4f98635e2dab",
+          "memories": [
+            {
+              "content": "The user recorded a family dinner in the calendar for the final week of November.",
+              "content_digest": "59755036ea9e7d172a5e673253fc7f089e61efe043b2e660f429fe2fa9003d34",
+              "position": 0,
+              "uid": "3f6eaf6c-00e7-5bd7-9809-367f54a0f707"
+            },
+            {
+              "content": "In a crowded restaurant, the user had to ask several times for orders to be repeated, interrupting the flow of conversation.",
+              "content_digest": "2d79e2f4f88a70bc8fbf9efca1b1751fbf51d88667f304c8e8c965a0a536cee7",
+              "position": 1,
+              "uid": "9fd0b9b6-986d-54b0-965e-45feaf9cd482"
+            },
+            {
+              "content": "When the user held the next gathering at their father's home, they continued the conversation on the sofa after the meal.",
+              "content_digest": "4b22fa055bb342db0589b0c54e415f4fa2af02445d3c55b3f38510bd6ca62f38",
+              "position": 2,
+              "uid": "cbc477c4-83c4-506b-9da8-9252d14d7f6b"
+            },
+            {
+              "content": "At a gathering with loud music prepared by their older sister, the user developed a headache and went outside briefly.",
+              "content_digest": "c9b34c3e3211ca7f15eb9a6f8ba97941222bc35ec0253d3da3f383c7247c3e83",
+              "position": 3,
+              "uid": "bbfc537e-3fcc-5065-ab93-4777bcdfc10c"
+            },
+            {
+              "content": "On a day the user held a yard barbecue with their younger brother, the open space dispersed the sound and made conversation easier.",
+              "content_digest": "dd35056c7731d3249a3c2689ee9fb6bfe6974544e302630de6ea230378fea9eb",
+              "position": 4,
+              "uid": "b61367fa-dd17-5ff2-9d6b-f81f6123735a"
+            },
+            {
+              "content": "After seeing a message that their maternal aunt would arrive at 5 p.m., the user delayed meal preparation by an hour.",
+              "content_digest": "31992a8945bfacfc9422f3180b203865f951f200561cd23dad901ec795c5de10",
+              "position": 5,
+              "uid": "681cdbd5-595d-5211-914d-edfd9a6b130d"
+            },
+            {
+              "content": "On a day the user waited without knowing their maternal uncle's arrival time, they reheated the food twice.",
+              "content_digest": "fae7c462a85e844648cb99419e6fdb3a2cd8c7721209ea49a40b4df597635176",
+              "position": 6,
+              "uid": "81c0c4e9-5ae4-5e8a-b11c-7d33032fd8ec"
+            },
+            {
+              "content": "The user's maternal uncle considers it easier to time his departure when he knows the family meal's start time in advance.",
+              "content_digest": "793f47adaa4c5274d15377b0f4adbc2415c0bd5243baf7a1c77c0d92e987a7e8",
+              "position": 7,
+              "uid": "56078821-34d0-540f-ae66-03bdd7bd1df3"
+            },
+            {
+              "content": "Before scheduling a family meal, confirm the attendees' arrival times and the location with the user.",
+              "content_digest": "d057fab5cbe97472da2a796114018a7491d20db6a826cd56943268f73ffeb792",
+              "position": 8,
+              "uid": "19c8ae40-1f5b-5fec-9538-e7bc7cfb036a"
+            },
+            {
+              "content": "Available restaurant reservation times may diminish quickly during the year-end gathering season.",
+              "content_digest": "7bfc817a42ab2d2c67ad04eae58fb3c86bbede15b7cc4ef431a75528bb425e7e",
+              "position": 9,
+              "uid": "3ea9fa3b-4411-55d0-ac90-2ed5515e6ef7"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "a8004c49-36d8-4d3d-888c-2675f542517c"
+        },
+        {
+          "context_digest": "4b8dc68a205171fe661b04620d0fba2bbb386ff21d494699c34a74dc2ab86080",
+          "context_name": "task-3/local/personal-memory/2026/03",
+          "context_uid": "97d36150-4792-5a5c-9332-5eb1de8bcf04",
+          "memories": [
+            {
+              "content": "The user stores tax-related receipts in digital folders by year.",
+              "content_digest": "778f983547572b31798b7041899812a7b0b574d74b585baf6883e94919dee6ec",
+              "position": 0,
+              "uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393"
+            },
+            {
+              "content": "The user found three paper receipts late and recalculated the expense total already prepared.",
+              "content_digest": "542368a141ec82a1bd7da4b534d88ea62c487d16a37f454569bf6400cbc749e9",
+              "position": 1,
+              "uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878"
+            },
+            {
+              "content": "Starting the next month, the user photographed receipts on the day they were received and reduced omissions.",
+              "content_digest": "b95e0a1afa1196a9bff117bf12b1630edcc4eb65bfdfeb3128ae5937563a492e",
+              "position": 2,
+              "uid": "ff436ea5-1b3e-55df-8302-bd8a96740671"
+            },
+            {
+              "content": "The user named every file with only the photo date and spent a long time looking for a needed receipt.",
+              "content_digest": "c3aa33e0b7e007bdfc5c12dcda659e2a52938548fbf53d5a1ab034487a528857",
+              "position": 3,
+              "uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e"
+            },
+            {
+              "content": "The user later included the expense category in the filename and found the receipt immediately through search.",
+              "content_digest": "cdae97761f614b932d3b330723627bee8b0e3d033e2bf1061b721367237acee1",
+              "position": 4,
+              "uid": "89d6fa9a-b795-59df-be34-1c05a9861d35"
+            },
+            {
+              "content": "While reviewing documents just before submission, the user discovered one blank signature field.",
+              "content_digest": "a525c117b97eec82c678f276b319158703bf9cc558fb83cb81c0820d5c9e3174",
+              "position": 5,
+              "uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2"
+            },
+            {
+              "content": "Before submitting an administrative document, the user checks the signature field as the final item on the checklist.",
+              "content_digest": "542bec3cbc3fc8b22c95da274e479e96bfbf061a3b644d0d7f213de5a030dbd5",
+              "position": 6,
+              "uid": "5551622f-66cf-5542-8c47-1cddadab5c02"
+            },
+            {
+              "content": "Staff at a tax-support counter expect to receive an electronic copy in which every item is legible rather than a blurred or cropped photo.",
+              "content_digest": "d328ca248fdeecf0756e23b1202e7007bc8c3c25ae769439b0fd2efdbbe47580",
+              "position": 7,
+              "uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f"
+            },
+            {
+              "content": "The local agent can organize receipts by date and category but cannot determine whether an expense is deductible.",
+              "content_digest": "bcc769721a99b099ca20e5e527fa8904d54ecbaf9ae7d7616b95e1adaf1f89a9",
+              "position": 8,
+              "uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094"
+            },
+            {
+              "content": "The accepted scope and submission deadlines for administrative documents may vary under that year's guidance.",
+              "content_digest": "1ab61126b8efb0c2a9c6114c367018158f2e136bafa87e33f60aadb0686d0537",
+              "position": 9,
+              "uid": "de398064-3179-590b-8c62-effb17060115"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "a992453b-3496-4706-97eb-82a8fde83fc0"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate domains without overlapping operational claims: the reference frame concerns planning family gatherings and managing noise and timing, while the compared frame concerns receipt organization, document checks, submission quality, and limits on tax-related assistance.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a8004c49-36d8-4d3d-888c-2675f542517c",
+              "memory_uid": "3f6eaf6c-00e7-5bd7-9809-367f54a0f707"
+            }
+          ],
+          "reason": "This is independently useful reference-side information about an existing family event, with no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "A family dinner was entered in the calendar for late November.",
+          "uid": "fde8f082-5789-5098-b379-851ad47b149e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a8004c49-36d8-4d3d-888c-2675f542517c",
+              "memory_uid": "9fd0b9b6-986d-54b0-965e-45feaf9cd482"
+            }
+          ],
+          "reason": "This is independently useful reference-side evidence about a noisy venue, with no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "Restaurant crowd noise forced repeated order clarification and disrupted conversation.",
+          "uid": "a7ab018e-6ecb-533f-b56c-dbeecd4e819c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a8004c49-36d8-4d3d-888c-2675f542517c",
+              "memory_uid": "cbc477c4-83c4-506b-9da8-9252d14d7f6b"
+            }
+          ],
+          "reason": "This is independently useful reference-side information about a home gathering's setting and flow, with no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "A gathering at the user's father's home continued with conversation on the sofa after the meal.",
+          "uid": "9c5ffba5-b30e-52bd-bada-aaa37b43905c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a8004c49-36d8-4d3d-888c-2675f542517c",
+              "memory_uid": "bbfc537e-3fcc-5065-ab93-4777bcdfc10c"
+            }
+          ],
+          "reason": "This is independently useful reference-side evidence about the user's response to loud music, with no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "Loud music at a gathering caused the user a headache and prompted a brief retreat outside.",
+          "uid": "e15310ac-7cbb-5510-92c5-87ddce6ae711"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a8004c49-36d8-4d3d-888c-2675f542517c",
+              "memory_uid": "b61367fa-dd17-5ff2-9d6b-f81f6123735a"
+            }
+          ],
+          "reason": "This is independently useful reference-side evidence about favorable outdoor acoustics, with no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "An outdoor yard barbecue dispersed sound and made conversation easier.",
+          "uid": "b8bf011f-f7fa-5d62-803c-29c64df2fc34"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a8004c49-36d8-4d3d-888c-2675f542517c",
+              "memory_uid": "681cdbd5-595d-5211-914d-edfd9a6b130d"
+            }
+          ],
+          "reason": "This is independently useful reference-side evidence about adjusting preparation to a known arrival time, with no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "Knowing the maternal aunt would arrive at 5 p.m. led the user to delay meal preparation by an hour.",
+          "uid": "9efbef2c-98c8-5d58-b52e-9d4b7d4a5972"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a8004c49-36d8-4d3d-888c-2675f542517c",
+              "memory_uid": "81c0c4e9-5ae4-5e8a-b11c-7d33032fd8ec"
+            }
+          ],
+          "reason": "This is independently useful reference-side evidence about the cost of uncertain arrival timing, with no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "An unknown arrival time for the maternal uncle led the user to reheat food twice.",
+          "uid": "52b926ab-2475-52e5-a6ae-3b87e3e7fc99"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a8004c49-36d8-4d3d-888c-2675f542517c",
+              "memory_uid": "56078821-34d0-540f-ae66-03bdd7bd1df3"
+            }
+          ],
+          "reason": "This is independently useful reference-side information about advance start-time communication, with no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "The maternal uncle can time his departure more easily when told the meal's start time in advance.",
+          "uid": "9534b1c2-ee0a-50c0-b7aa-771de1d6e5ab"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a8004c49-36d8-4d3d-888c-2675f542517c",
+              "memory_uid": "19c8ae40-1f5b-5fec-9538-e7bc7cfb036a"
+            }
+          ],
+          "reason": "This is an independently useful reference-side scheduling policy, with no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "Before scheduling a family meal, the user's attendees' arrival times and the location should be confirmed with the user.",
+          "uid": "995a9be9-db60-51ff-b92e-813f3bdd7005"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a8004c49-36d8-4d3d-888c-2675f542517c",
+              "memory_uid": "3ea9fa3b-4411-55d0-ac90-2ed5515e6ef7"
+            }
+          ],
+          "reason": "This is independently useful reference-side planning information about seasonal reservation pressure, with no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "Restaurant reservation availability may shrink quickly during the year-end gathering season.",
+          "uid": "20648f62-d111-5399-a584-152a16826437"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a992453b-3496-4706-97eb-82a8fde83fc0",
+              "memory_uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393"
+            }
+          ],
+          "reason": "This is independently useful compared-side information about receipt storage, with no corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "The user stores tax-related receipts in digital folders organized by year.",
+          "uid": "c4abe907-579f-52f7-9c4b-5e1828b58ba1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a992453b-3496-4706-97eb-82a8fde83fc0",
+              "memory_uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878"
+            }
+          ],
+          "reason": "This is independently useful compared-side evidence about omissions and rework, with no corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "Three late-found paper receipts forced the user to recalculate a prepared expense total.",
+          "uid": "cbfeb650-ef3a-5c80-9190-f396267a96b9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a992453b-3496-4706-97eb-82a8fde83fc0",
+              "memory_uid": "ff436ea5-1b3e-55df-8302-bd8a96740671"
+            }
+          ],
+          "reason": "This is independently useful compared-side evidence about a receipt-capture practice, with no corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "Photographing receipts on the day of receipt reduced omissions.",
+          "uid": "d1de1f65-a13f-565f-be9f-67a762a5279e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a992453b-3496-4706-97eb-82a8fde83fc0",
+              "memory_uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e"
+            }
+          ],
+          "reason": "This is independently useful compared-side evidence about ineffective receipt naming, with no corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "Using only photo dates as filenames made a needed receipt time-consuming to find.",
+          "uid": "693f959d-9841-57b8-97cf-13fef6f2fd35"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a992453b-3496-4706-97eb-82a8fde83fc0",
+              "memory_uid": "89d6fa9a-b795-59df-be34-1c05a9861d35"
+            }
+          ],
+          "reason": "This is independently useful compared-side evidence about improved receipt naming, with no corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "Adding expense categories to filenames enabled immediate receipt retrieval through search.",
+          "uid": "d908248d-066b-5030-8bbb-1263e557001b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a992453b-3496-4706-97eb-82a8fde83fc0",
+              "memory_uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2"
+            }
+          ],
+          "reason": "This is independently useful compared-side evidence about a near-missed document requirement, with no corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "A blank signature field was discovered during a review immediately before submission.",
+          "uid": "a7b5d298-d829-54a0-a421-ba9cabfb500f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a992453b-3496-4706-97eb-82a8fde83fc0",
+              "memory_uid": "5551622f-66cf-5542-8c47-1cddadab5c02"
+            }
+          ],
+          "reason": "This is an independently useful compared-side submission practice, with no corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "The user checks the signature field last on the checklist before submitting an administrative document.",
+          "uid": "297d3098-8604-50dd-81cd-ebca82190663"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a992453b-3496-4706-97eb-82a8fde83fc0",
+              "memory_uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f"
+            }
+          ],
+          "reason": "This is an independently useful compared-side submission-quality requirement, with no corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "Tax-support staff expect an electronic copy whose contents are fully legible rather than blurred or cropped.",
+          "uid": "e3b94a09-e232-53d2-9df8-d7744f75c0a0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a992453b-3496-4706-97eb-82a8fde83fc0",
+              "memory_uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094"
+            }
+          ],
+          "reason": "This is an independently useful compared-side capability boundary, with no corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "The local agent can organize receipts by date and category but cannot decide expense deductibility.",
+          "uid": "04517cd0-83e8-5e93-8707-0715bd642a9c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a992453b-3496-4706-97eb-82a8fde83fc0",
+              "memory_uid": "de398064-3179-590b-8c62-effb17060115"
+            }
+          ],
+          "reason": "This is independently useful compared-side information about time-varying administrative requirements, with no corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "Accepted document scope and submission deadlines may change with each year's guidance.",
+          "uid": "f27fb8c2-d784-5db0-82bc-20ad34632f48"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers receipt capture and retrieval, signature checks, legible electronic submissions, assistance limits, and changing administrative guidance.",
+        "differences": "",
+        "reference_only": "The reference frame covers family-meal scheduling, venue acoustics, arrival coordination, preparation timing, and year-end reservation pressure."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "dbbf0b6c-b658-49c9-96bf-ebf85294c847"
+    },
+    "analysis_digest": "b53ee3b761740a3a58a1b0c26968eed9c63822dd1fae710280e53cfa25274b83",
+    "key": "1199a95897742bad5811285d65c88bfabec327fd159c46427ce3928b50582145",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 36.64303724999991,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "1199a95897742bad5811285d65c88bfabec327fd159c46427ce3928b50582145",
+  "created_at": "2026-08-13T18:54:20.248384Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/11",
+  "pair_key": "ff2ffc1fc369098c19b0f49c6932c40a14cc221eb4879fd33cb1e8f8aa06aa8f",
+  "provider_seconds": 36.64303724999991,
+  "right": "task-3/local/personal-memory/2026/03",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

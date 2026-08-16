@@ -1,0 +1,397 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:42:37.501249+00:00",
+      "frames": [
+        {
+          "context_digest": "4f6b609414f921ca470614699bdac42e9f2932482375026def79956485b0569e",
+          "context_name": "task-3/local/personal-memory/2024/08",
+          "context_uid": "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+          "memories": [
+            {
+              "content": "The user has set a monthly limit in their budget record for spending other than living expenses.",
+              "content_digest": "5c0df9500947f7e044a8755d66d58adccca01db3aed42b43ab9748b8c4f431e9",
+              "position": 0,
+              "uid": "5f80c7ec-e294-5905-abab-91027c9d827b"
+            },
+            {
+              "content": "In a week when the user went grocery shopping and visited the bank separately, they made the same round trip twice.",
+              "content_digest": "4e814adad1a4c201f6348f1c14b14950b5c549bba64bf70cfccd08ca9efc5bd3",
+              "position": 1,
+              "uid": "2428ab2c-37ce-5de1-84dc-abcdfc8ce062"
+            },
+            {
+              "content": "The following week, the user completed both errands in one outing and reduced travel time.",
+              "content_digest": "ad5555ca7daa9d977cfcf5eb4f476eb5730cead6d307c986497716d69f1145b0",
+              "position": 2,
+              "uid": "bf30d1ef-d7cd-5aa3-b65b-ff04aae647e7"
+            },
+            {
+              "content": "When a bill alert arrived on the due date, the user postponed payment until after a meeting.",
+              "content_digest": "c62dda61c680da9ac1fd5ab9124fa05635d20ad9e4bbb7aef36723d289c05102",
+              "position": 3,
+              "uid": "442672e1-2188-5aa3-ad38-5e9c16f25bd5"
+            },
+            {
+              "content": "In a month when the user received an alert three days before the deadline, they finished payment before dinner.",
+              "content_digest": "939ac83da176d5bb1b7e2196402b9faacb962d947b85b9a61c31854867c1e62e",
+              "position": 4,
+              "uid": "c7385cce-ec43-5902-973c-5b8af54c3557"
+            },
+            {
+              "content": "The user collected cash receipts in their wallet and entered all the amounts at once at the end of the month.",
+              "content_digest": "3171a8128ed3855ac9a4c2b542516333fc3728ed1d7260974888b94d0b32c3e6",
+              "position": 5,
+              "uid": "d926c45c-ea49-589c-a7e4-491c9a1514f8"
+            },
+            {
+              "content": "After recording one large expense, the user ate out two fewer times that week.",
+              "content_digest": "af55fd94b01e0ece728347e9349f96b5733c57dae752f9559dc4e08bef7a3320",
+              "position": 6,
+              "uid": "9433523f-8c4e-5424-b370-d325ba5154d1"
+            },
+            {
+              "content": "The user's older sister prefers to settle the jointly paid cost of a meal by electronic transfer rather than cash.",
+              "content_digest": "d84d2ea68add4202e8c421e9c1702c29ca88bd6ae838588bd415fdbd1980cb2b",
+              "position": 7,
+              "uid": "d9531336-ac5f-5ba0-bf26-9c69c854578f"
+            },
+            {
+              "content": "Confirm the amount and account with the user before creating an automatic payment schedule.",
+              "content_digest": "b1d0c16fd880f4ae2657415ddc8fe0f223ccdd931248bb4412a6c95754d4cce1",
+              "position": 8,
+              "uid": "9941d390-8b40-5fee-8bcf-df6f36befcb0"
+            },
+            {
+              "content": "The timing of payment processing and late-payment recording may differ by billing institution.",
+              "content_digest": "203e65e4eb8451ec7551fb166357f107d17b8c89a2341b32fc25a3fb67ec7f98",
+              "position": 9,
+              "uid": "79aea8fd-5d48-50f7-adf6-b7ebe33bfb08"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "4242ee38-1748-4b1b-a498-a6b372263850"
+        },
+        {
+          "context_digest": "e56d4062f59b72f23e5414f759cd9f2b09c659d820a29a979fe2edb8bfc3e7a4",
+          "context_name": "task-3/local/personal-memory/2025/01",
+          "context_uid": "2ce7ce06-145c-50c7-bfb4-cb175b9a5255",
+          "memories": [
+            {
+              "content": "One of the user's identity documents needs renewal in the second half of 2025.",
+              "content_digest": "0ade63adc8aedc4dbc0003f2cbc2759010c8bf2645a95fedd3db28b7cfbe0daa",
+              "position": 0,
+              "uid": "50911f7e-75a1-5099-99f1-e471bb8e6cb6"
+            },
+            {
+              "content": "The user postponed an application until the next day after spending time looking for document photos in scattered folders.",
+              "content_digest": "fa1703848374c3364cf49be01e115e08897e16a4ccda3c9edef1212189159ce6",
+              "position": 1,
+              "uid": "d5bd9f79-7295-5014-9668-83b7cffc78e2"
+            },
+            {
+              "content": "After gathering the necessary copies in one folder, the user completed the renewal form in one sitting.",
+              "content_digest": "133721b244e02fce2fe24312b703e59225c023d65bea31bf65decb36a18b4ba5",
+              "position": 2,
+              "uid": "5f92f6a3-1739-580c-bd63-1a936098ccd0"
+            },
+            {
+              "content": "The user entered an abbreviated name on an official form and then discovered that it differed from the supporting document.",
+              "content_digest": "d32485dcfd1311d0739bf9887a330f25bf9b3f47f077c56ec7cdb667bde20a55",
+              "position": 3,
+              "uid": "929107ac-c62d-5920-9f71-12d4c9a102e9"
+            },
+            {
+              "content": "On the next application, after comparing the name with the source document, the user did not receive a correction request.",
+              "content_digest": "e6aa9e63c72f762c00824787c3b971f2cdf76a343c336f329e5b28b0f164d02d",
+              "position": 4,
+              "uid": "df8b90c2-4310-5e89-b979-508309bf6b04"
+            },
+            {
+              "content": "The user put only the submission deadline in the calendar and missed the application deadline by one day because they did not check the issuance period.",
+              "content_digest": "995703686975cdd718d999557d4b5ca13a95c3c1eabfbb73808bb5150eda824b",
+              "position": 5,
+              "uid": "306b9df1-d713-5413-b448-e2b42376d827"
+            },
+            {
+              "content": "On the next application, the user recorded the expected issuance date separately in the calendar.",
+              "content_digest": "b83c9061bf30d64e48b74959513fd37e7ab043446dae7e4fd284102a249a1240",
+              "position": 6,
+              "uid": "870b57b5-4cdb-54fc-b17f-8ffb86dad802"
+            },
+            {
+              "content": "Staff at a public-service counter expect a person requesting identity verification to bring an original as well as a copy.",
+              "content_digest": "eae3721b7f1d905172c169c5a483d2af74aa40bced23d1bbcb8d571ab27df706",
+              "position": 7,
+              "uid": "a0fe456c-0794-5bce-8ef9-9558e9833471"
+            },
+            {
+              "content": "When planning an official application, put both the submission deadline and expected issuance date in the calendar and verify them.",
+              "content_digest": "c5b37d86ef85d5023b60578e7f5f6af1bc49711e32ecc0255bc826a743dce0e1",
+              "position": 8,
+              "uid": "111972b9-e05f-5e1b-b121-ef9e51572d1d"
+            },
+            {
+              "content": "The local agent cannot determine the current validity of an identity document without its expiration date.",
+              "content_digest": "ebc9f4fe21d4ad7e53681d32ded2c049c7d4bf57e24ef71213a5ebdbaaaee521",
+              "position": 9,
+              "uid": "c9872898-ec4f-576e-b154-ff6fda581a1a"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "ded209a9-058d-477f-a98e-3b4d7c807af1"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames contain independently useful guidance and observations in separate domains. The reference centers on budgeting, errands, bill payment, and shared costs, while the compared frame centers on identity-document renewal and official applications; no scope-aligned shared claim or contradiction is established.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4242ee38-1748-4b1b-a498-a6b372263850",
+              "memory_uid": "5f80c7ec-e294-5905-abab-91027c9d827b"
+            }
+          ],
+          "reason": "This is an independently useful budgeting constraint with no corresponding operational claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user has a monthly limit for spending outside living expenses.",
+          "uid": "614dbf2b-cb3e-56d4-8a6b-faff65ab8391"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4242ee38-1748-4b1b-a498-a6b372263850",
+              "memory_uid": "2428ab2c-37ce-5de1-84dc-abcdfc8ce062"
+            },
+            {
+              "frame_uid": "4242ee38-1748-4b1b-a498-a6b372263850",
+              "memory_uid": "bf30d1ef-d7cd-5aa3-b65b-ff04aae647e7"
+            }
+          ],
+          "reason": "The two observations form one before-and-after claim about batching physical errands, which the compared frame does not address.",
+          "status": "RESOLVED",
+          "summary": "Combining grocery and banking errands into one outing reduced travel compared with making the same trip twice.",
+          "uid": "5fbc5661-4ebd-57eb-ad9a-149a18704f28"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4242ee38-1748-4b1b-a498-a6b372263850",
+              "memory_uid": "442672e1-2188-5aa3-ad38-5e9c16f25bd5"
+            },
+            {
+              "frame_uid": "4242ee38-1748-4b1b-a498-a6b372263850",
+              "memory_uid": "c7385cce-ec43-5902-973c-5b8af54c3557"
+            }
+          ],
+          "reason": "The examples jointly support one claim about bill-alert timing and payment behavior, absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "An advance bill alert supported earlier payment, whereas a due-date alert was followed by postponement.",
+          "uid": "b4db9269-f953-5acc-b990-918d0bf9caa9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4242ee38-1748-4b1b-a498-a6b372263850",
+              "memory_uid": "d926c45c-ea49-589c-a7e4-491c9a1514f8"
+            }
+          ],
+          "reason": "This is a distinct observation about delayed expense entry with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user accumulated cash receipts and recorded them together at month end.",
+          "uid": "07080196-6cbd-5bb8-bf2f-507b983da975"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4242ee38-1748-4b1b-a498-a6b372263850",
+              "memory_uid": "9433523f-8c4e-5424-b370-d325ba5154d1"
+            }
+          ],
+          "reason": "This independently useful behavioral effect of expense recording is not covered by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Recording a large expense was followed by reduced restaurant spending that week.",
+          "uid": "40d38081-7939-5e36-b0f7-0066424d3f39"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4242ee38-1748-4b1b-a498-a6b372263850",
+              "memory_uid": "d9531336-ac5f-5ba0-bf26-9c69c854578f"
+            }
+          ],
+          "reason": "This specific shared-cost settlement preference has no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user's older sister prefers electronic transfer when settling a jointly paid meal.",
+          "uid": "ed7f3483-ef0c-52e7-a270-5456407b97eb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4242ee38-1748-4b1b-a498-a6b372263850",
+              "memory_uid": "9941d390-8b40-5fee-8bcf-df6f36befcb0"
+            }
+          ],
+          "reason": "This is a standalone authorization safeguard for automatic payments, not an official-application policy.",
+          "status": "RESOLVED",
+          "summary": "The amount and account should be confirmed with the user before an automatic payment schedule is created.",
+          "uid": "ce8567aa-8087-53f8-b422-3adb4731a5c3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4242ee38-1748-4b1b-a498-a6b372263850",
+              "memory_uid": "79aea8fd-5d48-50f7-adf6-b7ebe33bfb08"
+            }
+          ],
+          "reason": "This institution-dependent billing caveat is independently useful and absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Payment-processing timing and late-payment recording can vary by billing institution.",
+          "uid": "ec23e2fa-b256-5346-8b95-c16e06f4eac6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ded209a9-058d-477f-a98e-3b4d7c807af1",
+              "memory_uid": "50911f7e-75a1-5099-99f1-e471bb8e6cb6"
+            }
+          ],
+          "reason": "This document-renewal timing fact has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "One identity document needs renewal during the second half of 2025.",
+          "uid": "d88d757d-d799-5649-9c7d-c584a86816b7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ded209a9-058d-477f-a98e-3b4d7c807af1",
+              "memory_uid": "d5bd9f79-7295-5014-9668-83b7cffc78e2"
+            },
+            {
+              "frame_uid": "ded209a9-058d-477f-a98e-3b4d7c807af1",
+              "memory_uid": "5f92f6a3-1739-580c-bd63-1a936098ccd0"
+            }
+          ],
+          "reason": "The observations form one before-and-after claim about organizing application materials, which the reference frame does not address.",
+          "status": "RESOLVED",
+          "summary": "Gathering required document copies into one folder enabled the user to complete a renewal form in one sitting after scattered photos had caused delay.",
+          "uid": "dc9da3ad-0998-5376-bc8f-556cb079db4f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ded209a9-058d-477f-a98e-3b4d7c807af1",
+              "memory_uid": "929107ac-c62d-5920-9f71-12d4c9a102e9"
+            },
+            {
+              "frame_uid": "ded209a9-058d-477f-a98e-3b4d7c807af1",
+              "memory_uid": "df8b90c2-4310-5e89-b979-508309bf6b04"
+            }
+          ],
+          "reason": "The two application experiences support one claim about verifying official-name consistency, absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Comparing the entered name with the supporting document avoided the correction problem previously caused by an abbreviation mismatch.",
+          "uid": "2bba2ac7-3eaf-564c-9d45-78e33152ced0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ded209a9-058d-477f-a98e-3b4d7c807af1",
+              "memory_uid": "306b9df1-d713-5413-b448-e2b42376d827"
+            },
+            {
+              "frame_uid": "ded209a9-058d-477f-a98e-3b4d7c807af1",
+              "memory_uid": "870b57b5-4cdb-54fc-b17f-8ffb86dad802"
+            },
+            {
+              "frame_uid": "ded209a9-058d-477f-a98e-3b4d7c807af1",
+              "memory_uid": "111972b9-e05f-5e1b-b121-ef9e51572d1d"
+            }
+          ],
+          "reason": "The missed deadline, subsequent calendar practice, and explicit instruction jointly express one application-scheduling policy with no reference-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "Official applications should track and verify both the submission deadline and expected issuance date, rather than recording only the submission deadline.",
+          "uid": "658ac055-3d08-54b2-9943-e5190e48c114"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ded209a9-058d-477f-a98e-3b4d7c807af1",
+              "memory_uid": "a0fe456c-0794-5bce-8ef9-9558e9833471"
+            }
+          ],
+          "reason": "This counter-service document requirement is independently useful and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Public-service counter staff expect identity-verification requesters to bring both an original document and a copy.",
+          "uid": "468fcf78-71ba-5bcb-8013-7d062daf2295"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ded209a9-058d-477f-a98e-3b4d7c807af1",
+              "memory_uid": "c9872898-ec4f-576e-b154-ff6fda581a1a"
+            }
+          ],
+          "reason": "This information requirement for assessing document validity has no corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The current validity of an identity document cannot be determined locally without its expiration date.",
+          "uid": "7a4546a3-cff8-53cc-90d7-91e610fb7e2d"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers document renewal, organizing application materials, matching official names, calendaring submission and issuance dates, counter-document requirements, and the expiration data needed to assess validity.",
+        "differences": "",
+        "reference_only": "The reference covers discretionary spending limits, efficient errand batching, timely bill handling, expense-recording effects, electronic cost settlement, and safeguards around automatic payments and institution-specific processing."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "22ede5d5-e5c7-4f85-88e1-006e371e3735"
+    },
+    "analysis_digest": "68c0081a56a0c2a52c6caadca656e2327c84d6c0c556962a8dc715c0289d0c08",
+    "key": "4bbefc7e67291288e55e01256ec030b6e03f5560cc0389021b3b37fd3be49ee6",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 54.39304270900175,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "4bbefc7e67291288e55e01256ec030b6e03f5560cc0389021b3b37fd3be49ee6",
+  "created_at": "2026-08-13T18:43:31.893891Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/08",
+  "pair_key": "1a494c51c633da686cb05c6028f5cc1dbff3fe820da89c9062b9323f710ab6ba",
+  "provider_seconds": 54.39304270900175,
+  "right": "task-3/local/personal-memory/2025/01",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

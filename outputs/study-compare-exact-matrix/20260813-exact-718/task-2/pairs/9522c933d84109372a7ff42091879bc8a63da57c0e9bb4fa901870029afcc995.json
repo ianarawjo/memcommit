@@ -1,0 +1,371 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:21:14.096541+00:00",
+      "frames": [
+        {
+          "context_digest": "4ae7659c0c6976de9bf2292f9e35962963b7931b470c2294d4f0e70b3500bff0",
+          "context_name": "task-2/advisor1/feasibility",
+          "context_uid": "52db6b06-e86a-556a-913e-30e45f7e9529",
+          "memories": [
+            {
+              "content": "Mark unverified schedule assumptions as such.",
+              "content_digest": "d4cdcdbcdb51d96f9a7435e72c2e4ef25a3e3822a765a88afafeca5194bda96e",
+              "position": 0,
+              "uid": "b150c774-27f6-5ec8-8cb9-9a00be19ce9b"
+            },
+            {
+              "content": "Mark unverified recruitment assumptions as such.",
+              "content_digest": "4cc28528fee1c7b09f709638e2b57d3bc9efe635d20500ee98567f8f59b8cf21",
+              "position": 1,
+              "uid": "6c7d14ed-67e5-56ff-befb-7648b95aa7a3"
+            },
+            {
+              "content": "Mark unverified technical assumptions as such.",
+              "content_digest": "8942e49cd46e3e9746330349df11e49d4a6c9250c7aa4c52c2d9ade1c97c735c",
+              "position": 2,
+              "uid": "00bf39b5-fe97-5fd0-b579-a5c13b5e6af7"
+            },
+            {
+              "content": "Clarify which stage of prototype fabrication or user study each requested resource is used for.",
+              "content_digest": "81ba64e23304f8fbbb3af4f2c30dfa3c517899c486e88ba211189a7911fcbd64",
+              "position": 3,
+              "uid": "3ae97c88-7537-5733-b48d-e02c9283f486"
+            },
+            {
+              "content": "Operations reviewers judge feasibility based on the personnel assigned to each procedure.",
+              "content_digest": "fe29bb7e592d116001a25ce11c603ae29f21d446925c28db692f14970d5b8134",
+              "position": 4,
+              "uid": "e2b5c1f0-97c2-5d46-af80-993d8d5606c9"
+            },
+            {
+              "content": "Operations reviewers judge feasibility based on the equipment assigned to each procedure.",
+              "content_digest": "859ab328c21506d11dd1f6d98e98d5a552446e774931a8bc13396750acf0793b",
+              "position": 5,
+              "uid": "f636b400-d3a2-5873-bf5b-c990b0f7ea42"
+            },
+            {
+              "content": "Operations reviewers judge feasibility based on the time allocated to each procedure.",
+              "content_digest": "08656886328ece4d813e36b1145805ffd3f3d4c6c855c20b1464143fb12868ab",
+              "position": 6,
+              "uid": "49385488-2315-51bc-bea0-749a1aea52f1"
+            },
+            {
+              "content": "Verify that the planned number of formative evaluation iterations is feasible within the time for prototype modification and recruitment resources.",
+              "content_digest": "9e181a14a97abd740a85679554395d7b315c07f0e4171ef276a2c31553b285c7",
+              "position": 7,
+              "uid": "f1c22a48-9d8d-5e82-9837-690d66e719db"
+            },
+            {
+              "content": "Include only the minimum functionality required to compare primary design assumptions in the scope of the formative evaluation prototype.",
+              "content_digest": "7769c2a4c03dc1c279bbf34bf0cefdcd076e3c1d8a1e56015bf20357ecfcf433",
+              "position": 8,
+              "uid": "4d69f030-0dc0-5df7-a153-0b595a3f68de"
+            },
+            {
+              "content": "The user's iterative design plan can be judged feasible only if time and personnel are allocated for modifying the prototype between iterations.",
+              "content_digest": "0339285cf9fd632814c5b5eb2b48fd46e3baf09ea95fb406f71b5d2cc804fa7e",
+              "position": 9,
+              "uid": "152f8621-f5fb-5c5e-a961-1fde77ed0bb3"
+            },
+            {
+              "content": "Delays in participant recruitment can compress the time available for prototype modification between formative evaluations.",
+              "content_digest": "9945f30dba63d2d070bad59cb2fb15b6a26d635f337949c3891b58d17c43973a",
+              "position": 10,
+              "uid": "1877a138-31f6-59a5-b666-ae57985f540d"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "6b9e3f4e-b910-4efa-8c3f-7c8ea8fa0804"
+        },
+        {
+          "context_digest": "74ec0b91876efe6caed2938aaf4a0b06272de678fbf74dc9da1c217aa0bd042f",
+          "context_name": "task-2/advisor2/compensation",
+          "context_uid": "4ffbd453-7d61-56f7-90ad-34d77b485ef8",
+          "memories": [
+            {
+              "content": "Calculate user research compensation budgets based on the estimated participation burden, combining session time with required technical and travel preparation.",
+              "content_digest": "ba439fe3920339f56e377d8f82a64ab3ad27fb25e0eec3c65b610c81af53d175",
+              "position": 0,
+              "uid": "be9e402b-8d3b-58da-9766-2cf2ec25b9ae"
+            },
+            {
+              "content": "Compensate participants who withdraw from the study midway for their actual participation time.",
+              "content_digest": "599f542ec6f4a5a1a61f5c1a31547088e015439978a64b268879b5a2b65c9be4",
+              "position": 1,
+              "uid": "85157c57-410f-5c7d-8183-b37d61eebf8a"
+            },
+            {
+              "content": "Compensate for the time actually spent in sessions, regardless of the research modality.",
+              "content_digest": "b19b9dbece5d564de69e703491018fbd78ab834149eed0590a552773526b6e29",
+              "position": 2,
+              "uid": "8abeab95-3e41-5378-8409-08200aee9d58"
+            },
+            {
+              "content": "Allow the issuance of gift cards of equivalent value to participants in remote studies who cannot use electronic transfers.",
+              "content_digest": "8ac881488d0064f4b4c6143e2d8c69ab9806b419044adef266c50738c7afb291",
+              "position": 3,
+              "uid": "9b59c6ed-5dbe-5ccc-87b5-6be31f414e68"
+            },
+            {
+              "content": "Do not treat an unresolved payment method as a deficiency at the proposal stage.",
+              "content_digest": "80109274870eb1023e4cbcc6861a906a4d94db5dab2b2659bcebccde125c9ac3",
+              "position": 4,
+              "uid": "5c6c461d-05e5-5b0c-b801-245de2f9c8d7"
+            },
+            {
+              "content": "Allow differential compensation amounts for on-site and remote studies when participation burden varies due to travel or technical preparation.",
+              "content_digest": "556c5e49f7996a651a64825df2389f070629b9bc664c758d934f308c7fd6eea2",
+              "position": 5,
+              "uid": "44abc098-8c9f-5abb-bc49-9deb25066d93"
+            },
+            {
+              "content": "Participants judge the fairness of compensation based on the combined burden of session time and required technical and travel preparation.",
+              "content_digest": "80dd84e8b183e02f1fd772890b48712bb04a04852055eece98957a0c9028288c",
+              "position": 6,
+              "uid": "2a252668-f3f2-5582-b248-43ad81c54a48"
+            },
+            {
+              "content": "In longitudinal studies requiring diary entries and repeated reporting, include out-of-session recording time in compensation calculations.",
+              "content_digest": "7d103d93741e40d54c8df8347f2ce648a1cd96e19589663fa515bfb24b5bd844",
+              "position": 7,
+              "uid": "7e647a83-81b0-52d6-9362-e513dc2a5032"
+            },
+            {
+              "content": "Distinguish between participant research compensation and labor costs for field staff performing installation and operational support as part of their duties.",
+              "content_digest": "b1566527e9c1d7d3f93631d1503b08ddb4a6818daa570c118f265b47603592f0",
+              "position": 8,
+              "uid": "d77affab-60c8-5403-b189-17022b484640"
+            },
+            {
+              "content": "The user tends to count session time but omit participants’ advance setup and follow-up reporting time.",
+              "content_digest": "98911b7db2d8c3962d7ef48919265f40cdb61a711062e5459a4f6d43f71d6fd9",
+              "position": 9,
+              "uid": "0c470c6b-26a6-5501-93ac-c51fecd708ae"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "0efc4629-9d15-4893-bc95-8fe48dde8afd"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate operational domains. The reference focuses on transparent assumptions, prototype scope, resource staging, and iterative-study feasibility, while the compared frame establishes participant-compensation principles, payment flexibility, burden accounting, and separation from staff labor costs.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6b9e3f4e-b910-4efa-8c3f-7c8ea8fa0804",
+              "memory_uid": "b150c774-27f6-5ec8-8cb9-9a00be19ce9b"
+            },
+            {
+              "frame_uid": "6b9e3f4e-b910-4efa-8c3f-7c8ea8fa0804",
+              "memory_uid": "6c7d14ed-67e5-56ff-befb-7648b95aa7a3"
+            },
+            {
+              "frame_uid": "6b9e3f4e-b910-4efa-8c3f-7c8ea8fa0804",
+              "memory_uid": "00bf39b5-fe97-5fd0-b579-a5c13b5e6af7"
+            }
+          ],
+          "reason": "These reference-side memories split one disclosure rule across three assumption categories; the compared frame contains no corresponding compensation-policy claim.",
+          "status": "RESOLVED",
+          "summary": "Unverified planning assumptions should be explicitly identified across schedule, recruitment, and technical matters.",
+          "uid": "1564671f-4152-54e7-b6dc-69c4f67974be"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6b9e3f4e-b910-4efa-8c3f-7c8ea8fa0804",
+              "memory_uid": "3ae97c88-7537-5733-b48d-e02c9283f486"
+            }
+          ],
+          "reason": "This is independently useful reference-side guidance about resource timing and traceability, with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Requested resources should be mapped to the fabrication or user-study stage where they are used.",
+          "uid": "cc054829-94bb-59bc-b896-c304d9f2371c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6b9e3f4e-b910-4efa-8c3f-7c8ea8fa0804",
+              "memory_uid": "e2b5c1f0-97c2-5d46-af80-993d8d5606c9"
+            },
+            {
+              "frame_uid": "6b9e3f4e-b910-4efa-8c3f-7c8ea8fa0804",
+              "memory_uid": "f636b400-d3a2-5873-bf5b-c990b0f7ea42"
+            },
+            {
+              "frame_uid": "6b9e3f4e-b910-4efa-8c3f-7c8ea8fa0804",
+              "memory_uid": "49385488-2315-51bc-bea0-749a1aea52f1"
+            }
+          ],
+          "reason": "These reference-side memories divide one procedure-level feasibility criterion into its principal resource inputs; the compared frame does not address that decision.",
+          "status": "RESOLVED",
+          "summary": "Procedure feasibility is judged from its assigned personnel, equipment, and time.",
+          "uid": "b168a1d4-2f63-554b-9812-8cbf65c82c4d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6b9e3f4e-b910-4efa-8c3f-7c8ea8fa0804",
+              "memory_uid": "f1c22a48-9d8d-5e82-9837-690d66e719db"
+            },
+            {
+              "frame_uid": "6b9e3f4e-b910-4efa-8c3f-7c8ea8fa0804",
+              "memory_uid": "152f8621-f5fb-5c5e-a961-1fde77ed0bb3"
+            },
+            {
+              "frame_uid": "6b9e3f4e-b910-4efa-8c3f-7c8ea8fa0804",
+              "memory_uid": "1877a138-31f6-59a5-b666-ae57985f540d"
+            }
+          ],
+          "reason": "These memories describe complementary parts of one iterative-feasibility claim, including necessary allocations and the risk that recruitment delays reduce modification time.",
+          "status": "RESOLVED",
+          "summary": "Formative-evaluation iteration plans depend on sufficient prototype-modification capacity and supporting recruitment and personnel resources.",
+          "uid": "a0e5da40-a52b-5cd7-a14c-43420505fc81"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6b9e3f4e-b910-4efa-8c3f-7c8ea8fa0804",
+              "memory_uid": "4d69f030-0dc0-5df7-a153-0b595a3f68de"
+            }
+          ],
+          "reason": "This is a standalone reference-side prototype-scoping policy absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A formative-evaluation prototype should include only the minimum functionality needed to compare primary design assumptions.",
+          "uid": "d90bdd0a-8af5-5901-aa40-8eaa1636e916"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0efc4629-9d15-4893-bc95-8fe48dde8afd",
+              "memory_uid": "be9e402b-8d3b-58da-9766-2cf2ec25b9ae"
+            },
+            {
+              "frame_uid": "0efc4629-9d15-4893-bc95-8fe48dde8afd",
+              "memory_uid": "44abc098-8c9f-5abb-bc49-9deb25066d93"
+            },
+            {
+              "frame_uid": "0efc4629-9d15-4893-bc95-8fe48dde8afd",
+              "memory_uid": "2a252668-f3f2-5582-b248-43ad81c54a48"
+            },
+            {
+              "frame_uid": "0efc4629-9d15-4893-bc95-8fe48dde8afd",
+              "memory_uid": "7e647a83-81b0-52d6-9362-e513dc2a5032"
+            },
+            {
+              "frame_uid": "0efc4629-9d15-4893-bc95-8fe48dde8afd",
+              "memory_uid": "0c470c6b-26a6-5501-93ac-c51fecd708ae"
+            }
+          ],
+          "reason": "These compared-side memories state, justify, specialize, or identify omissions from one burden-based compensation principle; the reference frame does not govern compensation.",
+          "status": "RESOLVED",
+          "summary": "Participant compensation should reflect total participation burden beyond session time, including modality-specific preparation, travel, setup, diary, and follow-up work.",
+          "uid": "aff0ec18-8696-5d04-9bcc-db71ac5343d4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0efc4629-9d15-4893-bc95-8fe48dde8afd",
+              "memory_uid": "85157c57-410f-5c7d-8183-b37d61eebf8a"
+            },
+            {
+              "frame_uid": "0efc4629-9d15-4893-bc95-8fe48dde8afd",
+              "memory_uid": "8abeab95-3e41-5378-8409-08200aee9d58"
+            }
+          ],
+          "reason": "These compared-side memories express one actual-time payment rule and its withdrawal application, with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Participants should be compensated for actual session participation time, including when they withdraw midway and regardless of modality.",
+          "uid": "b2bee5a2-e20a-57fc-87bb-1efd4fbef9e6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0efc4629-9d15-4893-bc95-8fe48dde8afd",
+              "memory_uid": "9b59c6ed-5dbe-5ccc-87b5-6be31f414e68"
+            }
+          ],
+          "reason": "This is a standalone compared-side payment-method accommodation absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Remote participants unable to use electronic transfers may receive gift cards of equivalent value.",
+          "uid": "4f8fcab8-fa0d-5147-a9c4-21af4cb06020"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0efc4629-9d15-4893-bc95-8fe48dde8afd",
+              "memory_uid": "5c6c461d-05e5-5b0c-b801-245de2f9c8d7"
+            }
+          ],
+          "reason": "This is an independently useful compared-side proposal-review rule, not a counterpart to the reference frame's feasibility guidance.",
+          "status": "RESOLVED",
+          "summary": "An unresolved participant payment method should not be treated as a proposal-stage deficiency.",
+          "uid": "b9fa9418-944e-539f-a909-aa005854aac0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "0efc4629-9d15-4893-bc95-8fe48dde8afd",
+              "memory_uid": "d77affab-60c8-5403-b189-17022b484640"
+            }
+          ],
+          "reason": "This compared-side accounting distinction has no corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Participant research compensation should be distinguished from labor costs for field staff performing installation and operational support duties.",
+          "uid": "79f53b87-3d7a-5d7c-ba70-724a1032c492"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers burden-based and time-based compensation, withdrawals, modality differences, alternative payment methods, longitudinal reporting, proposal-stage flexibility, and staff labor distinctions.",
+        "differences": "",
+        "reference_only": "The reference covers assumption labeling, procedure-level feasibility, prototype scope, resource timing, and iteration risks involving modification capacity and recruitment."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "aa24cf19-bf88-46f5-a7eb-ae1031684a83"
+    },
+    "analysis_digest": "4e31bbdeb337c3c5ffca2760a33a538bbc61b6a81fda4d46dc93a46b0511de49",
+    "key": "7915e2845e06c7bb8f0145131f8727e09902dd4820095defcdbf9239f5d77816",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 35.87591324999812,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "7915e2845e06c7bb8f0145131f8727e09902dd4820095defcdbf9239f5d77816",
+  "created_at": "2026-08-13T18:21:49.971596Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/feasibility",
+  "pair_key": "9522c933d84109372a7ff42091879bc8a63da57c0e9bb4fa901870029afcc995",
+  "provider_seconds": 35.87591324999812,
+  "right": "task-2/advisor2/compensation",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

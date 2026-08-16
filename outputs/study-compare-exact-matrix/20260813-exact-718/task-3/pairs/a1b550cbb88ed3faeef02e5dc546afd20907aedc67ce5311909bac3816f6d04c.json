@@ -1,0 +1,406 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:41:06.949268+00:00",
+      "frames": [
+        {
+          "context_digest": "6cb54691fcd12037c24daa71882bad82cd67c16ea72979f2a41e1e1b8eae22a8",
+          "context_name": "task-3/local/personal-memory/2024/06",
+          "context_uid": "8c641e5b-01d9-560c-a8c0-b52cee7402c8",
+          "memories": [
+            {
+              "content": "The user stores copies of identity documents in an encrypted folder.",
+              "content_digest": "83efe427335c1415d4a8d601d6e1c5d7a129c6962b74468d313b123e045b052f",
+              "position": 0,
+              "uid": "79576c1e-fa88-5d6e-b5e2-3d4ec11c3e06"
+            },
+            {
+              "content": "On a day the user transferred between buses twice, they rested for an hour after the trip.",
+              "content_digest": "907b9cc4c16b4b3fe53c2323d31afc83347ddc63775bd865bc42b62ca539f5bb",
+              "position": 1,
+              "uid": "28a1ff0b-e2d4-5cb6-9c26-949d86f76bac"
+            },
+            {
+              "content": "On a day the user took a direct route with a similar travel time, they remained seated to the destination.",
+              "content_digest": "0c0d1b12aa0ad393ac43982fe7d36d08f75d9e634c933593ef6a0a96614bb9ea",
+              "position": 2,
+              "uid": "0ad4a1f9-e3e9-517e-8cfc-f8e6307f1d3e"
+            },
+            {
+              "content": "After arriving at an entrance with stairs only, the user went around to an entrance on the other side of the building.",
+              "content_digest": "775d4c0a211f4509a0488cb3b2a790ae22c1b2ba2e96ed6b9100ae3cfb454315",
+              "position": 3,
+              "uid": "f772b0c7-502f-55b7-b431-ee6b20518d38"
+            },
+            {
+              "content": "On a day the user checked the accessible entrance location in advance, they arrived before the agreed time.",
+              "content_digest": "4e087a4e0ca48a3414580ce0d974da4b2221b304302de01cf305945866320a6a",
+              "position": 4,
+              "uid": "0b2d800b-a4ab-5422-bf06-56d17b98f604"
+            },
+            {
+              "content": "On a rainy day, the user's clothes became wet while crossing an uncovered section at a transfer stop.",
+              "content_digest": "dad5c9f35f0469edc528091e47f22365c1cb5de1b32e70335826d67a576fb47d",
+              "position": 5,
+              "uid": "b233f332-4927-549b-8dab-b554977fe363"
+            },
+            {
+              "content": "On a day the user traveled with their maternal uncle, they agreed to meet at an entrance near the elevator.",
+              "content_digest": "c81b012ae6686f47d54809c50ab559077b0e170d54792d34038f0f8fc32c6a96",
+              "position": 6,
+              "uid": "b38d0d63-c4b0-5955-857d-03cbcfd27f5b"
+            },
+            {
+              "content": "The user's maternal uncle prefers an aisle seat from which it is easy to stand during long-distance travel.",
+              "content_digest": "3ea31753296866c1bf438b51eba4110b0c6ed2e907e86dc21796166ed19d82df",
+              "position": 7,
+              "uid": "4668d326-b11c-5467-bca4-e8d5e242e375"
+            },
+            {
+              "content": "The local agent cannot know whether an accessible entrance is operating that day from past route records alone.",
+              "content_digest": "00fc09badcb1d569e3cb1e392ad18406a032d17749f71b44ed7bc121d5d72b4c",
+              "position": 8,
+              "uid": "a77c985c-3986-5141-9805-e3321b3cfa2c"
+            },
+            {
+              "content": "The transfer route the user takes has more boarding and alighting events and walking segments than the direct route.",
+              "content_digest": "f9320e36494ea5beb854d6bbe38a817ae73cd9fe68b75977438d35e44fb38fe6",
+              "position": 9,
+              "uid": "988926a1-3e28-5b3e-a41c-d9338971643e"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "121494f0-48fc-427a-bf04-550eebc79104"
+        },
+        {
+          "context_digest": "4b8dc68a205171fe661b04620d0fba2bbb386ff21d494699c34a74dc2ab86080",
+          "context_name": "task-3/local/personal-memory/2026/03",
+          "context_uid": "97d36150-4792-5a5c-9332-5eb1de8bcf04",
+          "memories": [
+            {
+              "content": "The user stores tax-related receipts in digital folders by year.",
+              "content_digest": "778f983547572b31798b7041899812a7b0b574d74b585baf6883e94919dee6ec",
+              "position": 0,
+              "uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393"
+            },
+            {
+              "content": "The user found three paper receipts late and recalculated the expense total already prepared.",
+              "content_digest": "542368a141ec82a1bd7da4b534d88ea62c487d16a37f454569bf6400cbc749e9",
+              "position": 1,
+              "uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878"
+            },
+            {
+              "content": "Starting the next month, the user photographed receipts on the day they were received and reduced omissions.",
+              "content_digest": "b95e0a1afa1196a9bff117bf12b1630edcc4eb65bfdfeb3128ae5937563a492e",
+              "position": 2,
+              "uid": "ff436ea5-1b3e-55df-8302-bd8a96740671"
+            },
+            {
+              "content": "The user named every file with only the photo date and spent a long time looking for a needed receipt.",
+              "content_digest": "c3aa33e0b7e007bdfc5c12dcda659e2a52938548fbf53d5a1ab034487a528857",
+              "position": 3,
+              "uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e"
+            },
+            {
+              "content": "The user later included the expense category in the filename and found the receipt immediately through search.",
+              "content_digest": "cdae97761f614b932d3b330723627bee8b0e3d033e2bf1061b721367237acee1",
+              "position": 4,
+              "uid": "89d6fa9a-b795-59df-be34-1c05a9861d35"
+            },
+            {
+              "content": "While reviewing documents just before submission, the user discovered one blank signature field.",
+              "content_digest": "a525c117b97eec82c678f276b319158703bf9cc558fb83cb81c0820d5c9e3174",
+              "position": 5,
+              "uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2"
+            },
+            {
+              "content": "Before submitting an administrative document, the user checks the signature field as the final item on the checklist.",
+              "content_digest": "542bec3cbc3fc8b22c95da274e479e96bfbf061a3b644d0d7f213de5a030dbd5",
+              "position": 6,
+              "uid": "5551622f-66cf-5542-8c47-1cddadab5c02"
+            },
+            {
+              "content": "Staff at a tax-support counter expect to receive an electronic copy in which every item is legible rather than a blurred or cropped photo.",
+              "content_digest": "d328ca248fdeecf0756e23b1202e7007bc8c3c25ae769439b0fd2efdbbe47580",
+              "position": 7,
+              "uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f"
+            },
+            {
+              "content": "The local agent can organize receipts by date and category but cannot determine whether an expense is deductible.",
+              "content_digest": "bcc769721a99b099ca20e5e527fa8904d54ecbaf9ae7d7616b95e1adaf1f89a9",
+              "position": 8,
+              "uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094"
+            },
+            {
+              "content": "The accepted scope and submission deadlines for administrative documents may vary under that year's guidance.",
+              "content_digest": "1ab61126b8efb0c2a9c6114c367018158f2e136bafa87e33f60aadb0686d0537",
+              "position": 9,
+              "uid": "de398064-3179-590b-8c62-effb17060115"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "625383dc-630e-4270-bc47-821e0e95f0ab"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate operational areas rather than competing guidance. The reference describes document security, travel effort, accessibility, weather exposure, coordination, seating preference, and route-data limits; the compared frame describes receipt management, submission checks, document quality, agent limits, and changing administrative guidance.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "121494f0-48fc-427a-bf04-550eebc79104",
+              "memory_uid": "79576c1e-fa88-5d6e-b5e2-3d4ec11c3e06"
+            }
+          ],
+          "reason": "This is independently useful security information, with no claim in the compared frame about protecting identity documents or encrypting stored files.",
+          "status": "RESOLVED",
+          "summary": "Identity-document copies are kept in an encrypted folder.",
+          "uid": "593a69c2-55cc-5379-9d18-2189126f2e93"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "121494f0-48fc-427a-bf04-550eebc79104",
+              "memory_uid": "28a1ff0b-e2d4-5cb6-9c26-949d86f76bac"
+            },
+            {
+              "frame_uid": "121494f0-48fc-427a-bf04-550eebc79104",
+              "memory_uid": "0ad4a1f9-e3e9-517e-8cfc-f8e6307f1d3e"
+            },
+            {
+              "frame_uid": "121494f0-48fc-427a-bf04-550eebc79104",
+              "memory_uid": "988926a1-3e28-5b3e-a41c-d9338971643e"
+            }
+          ],
+          "reason": "These memories jointly describe the one-sided operational distinction between transfer and direct travel burden; the compared frame contains no travel-routing claim.",
+          "status": "RESOLVED",
+          "summary": "Compared with a similarly timed direct trip, the transfer route involved more physical transitions, while the observed direct trip allowed continuous sitting and the transfer trip was followed by rest.",
+          "uid": "3b88ed0b-c3fa-5a6e-8f28-bc0242587559"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "121494f0-48fc-427a-bf04-550eebc79104",
+              "memory_uid": "f772b0c7-502f-55b7-b431-ee6b20518d38"
+            }
+          ],
+          "reason": "This is a specific accessibility workaround absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "When confronted with a stairs-only entrance, the user navigated to another side of the building for an alternative entrance.",
+          "uid": "aa0877a4-a8e4-5390-8756-67bdcb23926a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "121494f0-48fc-427a-bf04-550eebc79104",
+              "memory_uid": "0b2d800b-a4ab-5422-bf06-56d17b98f604"
+            }
+          ],
+          "reason": "This is independently useful evidence about advance accessibility planning, with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Checking the accessible entrance location beforehand coincided with arriving before the agreed time.",
+          "uid": "e6b57403-6631-5c59-8e87-a5f31a0ed8ef"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "121494f0-48fc-427a-bf04-550eebc79104",
+              "memory_uid": "b233f332-4927-549b-8dab-b554977fe363"
+            }
+          ],
+          "reason": "This travel-weather exposure is not addressed by any compared-frame memory.",
+          "status": "RESOLVED",
+          "summary": "An uncovered section at a transfer stop exposed the user to rain and wet clothing.",
+          "uid": "5158ea53-686f-5e57-bac8-3878cf8f6709"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "121494f0-48fc-427a-bf04-550eebc79104",
+              "memory_uid": "b38d0d63-c4b0-5955-857d-03cbcfd27f5b"
+            }
+          ],
+          "reason": "This is a specific travel-coordination and accessibility detail absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "While traveling with their maternal uncle, the user arranged to meet at an entrance near the elevator.",
+          "uid": "ad64a9aa-ed4f-5e19-b861-8f9719594319"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "121494f0-48fc-427a-bf04-550eebc79104",
+              "memory_uid": "4668d326-b11c-5467-bca4-e8d5e242e375"
+            }
+          ],
+          "reason": "This personal seating preference is independently useful and has no compared-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user's maternal uncle prefers an aisle seat that makes standing easier on long-distance trips.",
+          "uid": "ef737d2b-0283-58b4-9df7-62bfd266b570"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "121494f0-48fc-427a-bf04-550eebc79104",
+              "memory_uid": "a77c985c-3986-5141-9805-e3321b3cfa2c"
+            }
+          ],
+          "reason": "This defines a route-planning knowledge limit distinct from the compared frame's different administrative judgment limits.",
+          "status": "RESOLVED",
+          "summary": "Past route records alone cannot establish whether an accessible entrance is operating on a particular day.",
+          "uid": "8110880e-29ca-5bc2-a230-a1496ea19d84"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "625383dc-630e-4270-bc47-821e0e95f0ab",
+              "memory_uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393"
+            }
+          ],
+          "reason": "This filing practice concerns tax receipts and yearly organization, neither of which appears in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Tax-related receipts are organized in digital folders by year.",
+          "uid": "7de25c49-1c27-594a-b95f-b3f26c104e29"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "625383dc-630e-4270-bc47-821e0e95f0ab",
+              "memory_uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878"
+            },
+            {
+              "frame_uid": "625383dc-630e-4270-bc47-821e0e95f0ab",
+              "memory_uid": "ff436ea5-1b3e-55df-8302-bd8a96740671"
+            }
+          ],
+          "reason": "The memories form a single before-and-after claim about same-day receipt capture reducing omissions and rework; the reference frame contains no receipt-capture practice.",
+          "status": "RESOLVED",
+          "summary": "Late discovery of paper receipts caused recalculation, while photographing receipts when received subsequently reduced omissions.",
+          "uid": "cef8b055-b3e7-5ac2-8193-3a01b773c33c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "625383dc-630e-4270-bc47-821e0e95f0ab",
+              "memory_uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e"
+            },
+            {
+              "frame_uid": "625383dc-630e-4270-bc47-821e0e95f0ab",
+              "memory_uid": "89d6fa9a-b795-59df-be34-1c05a9861d35"
+            }
+          ],
+          "reason": "The memories jointly express one filename-specificity claim about receipt retrieval, with no corresponding reference-frame policy.",
+          "status": "RESOLVED",
+          "summary": "Date-only filenames hindered receipt retrieval, whereas adding the expense category enabled immediate search-based retrieval.",
+          "uid": "9bd7da66-618c-5f16-967e-76bd88cbe4f5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "625383dc-630e-4270-bc47-821e0e95f0ab",
+              "memory_uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2"
+            },
+            {
+              "frame_uid": "625383dc-630e-4270-bc47-821e0e95f0ab",
+              "memory_uid": "5551622f-66cf-5542-8c47-1cddadab5c02"
+            }
+          ],
+          "reason": "These memories jointly describe one submission-checking safeguard absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Discovery of a blank signature field prompted a practice of checking the signature field last before administrative submission.",
+          "uid": "1ad2deec-ff20-503b-90d6-3b6f73b0405a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "625383dc-630e-4270-bc47-821e0e95f0ab",
+              "memory_uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f"
+            }
+          ],
+          "reason": "This external document-quality expectation has no reference-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "Tax-support staff expect an electronic copy in which every item is legible rather than blurred or cropped.",
+          "uid": "07bdf8c4-8361-52a3-802f-a5199563120a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "625383dc-630e-4270-bc47-821e0e95f0ab",
+              "memory_uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094"
+            }
+          ],
+          "reason": "This defines a tax-specific boundary between clerical organization and substantive judgment, distinct from the reference frame's route-status limitation.",
+          "status": "RESOLVED",
+          "summary": "The local agent may organize receipts by date and category but cannot determine expense deductibility.",
+          "uid": "2ac3eb04-3e42-552a-a33b-0ece693c5d9d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "625383dc-630e-4270-bc47-821e0e95f0ab",
+              "memory_uid": "de398064-3179-590b-8c62-effb17060115"
+            }
+          ],
+          "reason": "This time-sensitive administrative constraint is independently useful and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Accepted scope and submission deadlines for administrative documents may vary with the year's guidance.",
+          "uid": "37af2d2f-c04b-5eee-81ec-3fa6b15b2a65"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only material concerns tax-receipt capture, organization and retrieval, signature checks, legible electronic submissions, limits on deductibility judgments, and year-specific administrative rules and deadlines.",
+        "differences": "",
+        "reference_only": "Reference-only material concerns encrypted identity-document storage and practical travel accessibility, including transfer burden, entrance planning, weather exposure, meeting arrangements, seating preferences, and limits of historical route data."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "9d87be9a-cfe9-480c-b6ce-a9ff516c8c50"
+    },
+    "analysis_digest": "220782d0121cbfa4d054d29d04cc60e8bbc8159ad4592e85a398f0a48b1e03fd",
+    "key": "1948beaec2e1b2537bbd7f1382f0f39a9432d998e2906900f6919723576394dd",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 46.72402287500154,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "1948beaec2e1b2537bbd7f1382f0f39a9432d998e2906900f6919723576394dd",
+  "created_at": "2026-08-13T18:41:53.673138Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/06",
+  "pair_key": "a1b550cbb88ed3faeef02e5dc546afd20907aedc67ce5311909bac3816f6d04c",
+  "provider_seconds": 46.72402287500154,
+  "right": "task-3/local/personal-memory/2026/03",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

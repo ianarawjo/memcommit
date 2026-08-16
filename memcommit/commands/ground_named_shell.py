@@ -23,7 +23,7 @@ from memcommit.commands.exact_command_review import (
     ExactCommandReview,
     render_exact_command_blocks,
 )
-from memcommit.commands.context_picker import choose_context
+from memcommit.context_targeting.tui.picker import choose_context
 from memcommit.commands.ground_shell import (
     GROUND_CONTEXTS_FRAME_HEIGHT,
     GROUND_GOAL_FRAME_HEIGHT,
@@ -304,9 +304,92 @@ def render_named_ground_header(session: GroundSession) -> str:
     )
 
 
-def render_named_ground_goal_pane(session: GroundSession) -> str:
+def _coherence_finding_applies(finding, alias: str) -> bool:
+    if alias not in finding.subject_aliases:
+        return False
+    if finding.status == "FIT" or not finding.material_aliases:
+        return True
+    return alias in finding.material_aliases
+
+
+def _coherence_subject_mark(
+    receipt: GroundFitReceipt | None,
+    subject_uid: str,
+) -> str:
+    if receipt is None or receipt.report.coherence is None:
+        return "·"
+    if not receipt.current:
+        return "◷"
+    coherence = receipt.report.coherence
+    subject = next(
+        (item for item in coherence.subjects if item.uid == subject_uid),
+        None,
+    )
+    if subject is None:
+        return "·"
+    findings = tuple(
+        item
+        for item in coherence.findings
+        if _coherence_finding_applies(item, subject.alias)
+    )
+    return "!" if any(item.status != "FIT" for item in findings) else "✓"
+
+
+def _coherence_issue_lines(
+    receipt: GroundFitReceipt | None,
+    subject_uid: str,
+) -> tuple[str, ...]:
+    if (
+        receipt is None
+        or not receipt.current
+        or receipt.report.coherence is None
+    ):
+        return ()
+    coherence = receipt.report.coherence
+    subject = next(
+        (item for item in coherence.subjects if item.uid == subject_uid),
+        None,
+    )
+    if subject is None:
+        return ()
+    return tuple(
+        f"{item.axis} · {item.status} · {safe_terminal_text(item.reason)}"
+        for item in coherence.findings
+        if item.status != "FIT"
+        and _coherence_finding_applies(item, subject.alias)
+    )
+
+
+def _coherence_context_mark(receipt: GroundFitReceipt | None) -> str:
+    if receipt is None or receipt.report.coherence is None:
+        return "·"
+    if not receipt.current:
+        return "◷"
+    return (
+        "!"
+        if any(
+            item.axis == "CONTEXT" and item.status != "FIT"
+            for item in receipt.report.coherence.findings
+        )
+        else "✓"
+    )
+
+
+def render_named_ground_goal_pane(
+    session: GroundSession,
+    *,
+    fit_receipt: GroundFitReceipt | None = None,
+) -> str:
     """Render the complete Goal without truncation."""
-    return safe_terminal_text(session.goal or "(not yet stated)")
+    if fit_receipt is None:
+        return safe_terminal_text(session.goal or "(not yet stated)")
+    return "\n".join(
+        [
+            f"FIT · {_coherence_subject_mark(fit_receipt, session.uid)}",
+            safe_terminal_text(session.goal or "(not yet stated)"),
+            *_coherence_issue_lines(fit_receipt, session.uid),
+        ]
+    )
 
 
 def render_named_ground_contexts_pane(
@@ -314,6 +397,7 @@ def render_named_ground_contexts_pane(
     *,
     context_hints: tuple[str, ...] = (),
     new_context_hint: str | None = None,
+    fit_receipt: GroundFitReceipt | None = None,
 ) -> str:
     """Render saved frame metadata without reading live Context contents."""
     if not is_bound_ground_schema(session.schema_version) or not session.frames:
@@ -356,7 +440,11 @@ def render_named_ground_contexts_pane(
         "PUBLICATION_TARGET": "PUBLICATION TARGET",
         "PLACEMENT_TARGET": "PLACEMENT TARGET",
     }
-    blocks: list[str] = []
+    blocks: list[str] = (
+        [f"FIT · {_coherence_context_mark(fit_receipt)}"]
+        if fit_receipt is not None
+        else []
+    )
     for frame in session.frames:
         counts = f"{frame.direct_memory_count} direct Memories"
         if frame.direct_item_count != frame.direct_memory_count:
@@ -383,6 +471,7 @@ def render_named_ground_rules_pane(
     drafts_stale: bool = False,
     selected_rule_index: int | None = None,
     placement_hint: str = "",
+    fit_receipt: GroundFitReceipt | None = None,
 ) -> str:
     """Render saved Rules and the current unsaved classified draft queue."""
     rules = _aliased_items(session, "RULE")
@@ -394,11 +483,17 @@ def render_named_ground_rules_pane(
                 item.rule_provenance or item.origin
             )
             marker = "› " if index == selected_rule_index else ""
+            fit_suffix = (
+                f" · FIT {_coherence_subject_mark(fit_receipt, item.uid)}"
+                if fit_receipt is not None
+                else ""
+            )
             lines = [
                 f"{marker}{alias} [{item.status}] · "
-                f"{safe_terminal_text(provenance)}",
+                f"{safe_terminal_text(provenance)}{fit_suffix}",
                 safe_terminal_text(item.content),
             ]
+            lines.extend(_coherence_issue_lines(fit_receipt, item.uid))
             if item.rationale:
                 lines.extend(
                     [
@@ -613,6 +708,9 @@ def render_named_ground_memory_detail(
         )
         if judgment.observed:
             lines.extend(("OBSERVED", safe_terminal_text(judgment.observed)))
+    coherence_issues = _coherence_issue_lines(fit_receipt, item.uid)
+    if coherence_issues:
+        lines.extend(("", "GROUND FIT", *coherence_issues))
     return "\n".join(lines)
 
 
@@ -640,6 +738,9 @@ def _fit_label(
     judgment = judgments.get(example_uid)
     if receipt is None or judgment is None:
         return "·"
+    coherence_mark = _coherence_subject_mark(receipt, example_uid)
+    if coherence_mark in {"!", "◷"}:
+        return coherence_mark
     return fit_mark(
         FitResult(receipt.report, receipt.current),
         status=judgment.status,
@@ -962,6 +1063,7 @@ def run_named_ground_shell(
     reload_session: NamedGroundReloader | None = None,
     run_fit: NamedGroundFitRunner | None = None,
     lookup_fit: NamedGroundFitLookup | None = None,
+    auto_fit: bool = False,
     initial_receipt: str = "",
     context_hints: tuple[str, ...] = (),
     new_context_hint: str | None = None,
@@ -995,6 +1097,8 @@ def run_named_ground_shell(
     error_message = {"value": ""}
     status_message = {"value": ""}
     fit_turn: BackgroundExecutorTurn[FitReport] = BackgroundExecutorTurn()
+    auto_fit_pending = {"value": False}
+    auto_fit_enabled = auto_fit and run_fit is not None
     deferred_exit_status: dict[
         str, Literal["CLOSED", "BACK_TO_PICKER"]
     ] = {"value": "CLOSED"}
@@ -1113,6 +1217,7 @@ def run_named_ground_shell(
             active,
             context_hints=context_hints,
             new_context_hint=new_context_hint,
+            fit_receipt=fit_receipt["value"],
         )
         if not placement_choice["CONTEXTS"]:
             return base
@@ -1124,7 +1229,10 @@ def run_named_ground_shell(
         )
     goal_pane = build_scrollable_text_pane(
         "GOAL",
-        render_named_ground_goal_pane(session),
+        render_named_ground_goal_pane(
+            session,
+            fit_receipt=fit_receipt["value"],
+        ),
         buffer_name="ground-named-goal",
         height=GROUND_GOAL_FRAME_HEIGHT,
         notification=lambda: pane_notifications["GOAL"],
@@ -1142,6 +1250,7 @@ def run_named_ground_shell(
             session,
             selected_rule_index=0,
             placement_hint=placement_choice["RULES"],
+            fit_receipt=fit_receipt["value"],
         ),
         buffer_name="ground-named-rules",
         height=pane_height,
@@ -1208,7 +1317,10 @@ def run_named_ground_shell(
     )
     header = Window(
         FormattedTextControl(
-            lambda: render_named_ground_header(current["value"])
+            lambda: (
+                render_named_ground_header(current["value"])
+                + (" · AUTO-FIT ON" if auto_fit_enabled else "")
+            )
         ),
         height=Dimension.exact(1),
         dont_extend_height=True,
@@ -1322,21 +1434,23 @@ def run_named_ground_shell(
                     " ↑/↓ · draft    Enter · talk here    "
                     "P · placement    R · review READY Rule    B · Grounds    Q · quit"
                 )
-            return (
-                " ↑/↓ · saved Rule    Enter · talk here    "
-                "P · placement    E · edit selected    B · Grounds    Q · quit"
-            )
+                return (
+                    " ↑/↓ · saved Rule    Enter · talk here    "
+                    "F · Fit    P · placement    E · edit selected    "
+                    "B · Grounds    Q · quit"
+                )
         if active_mode == "INPUT" and application.layout.has_focus(
             goal_pane.text_area
         ):
             return (
-                " Enter · talk here    E · edit Goal    "
+                " Enter · talk here    F · Fit    E · edit Goal    "
                 "B · Grounds    Q · quit"
             )
         if active_mode == "INPUT":
             if application.layout.has_focus(contexts_pane.text_area):
                 return (
-                    " P · placement Context tree    Enter · talk here    "
+                    " F · Fit    P · placement Context tree    "
+                    "Enter · talk here    "
                     "B · Grounds    Q · quit"
                 )
             if application.layout.has_focus(input_area):
@@ -1499,6 +1613,7 @@ def run_named_ground_shell(
                 else selected_rule_index["value"]
             ),
             placement_hint=placement_choice["RULES"],
+            fit_receipt=fit_receipt["value"],
         )
         rules_pane.set_text(rendered, anchor="preserve")
         if align_draft and draft_queue["value"]:
@@ -1553,7 +1668,10 @@ def run_named_ground_shell(
     def sync_panes(*, dialogue_anchor: str = "end") -> None:
         active = current["value"]
         goal_pane.set_text(
-            render_named_ground_goal_pane(active),
+            render_named_ground_goal_pane(
+                active,
+                fit_receipt=fit_receipt["value"],
+            ),
             anchor="preserve",
         )
         contexts_pane.set_text(
@@ -2125,6 +2243,12 @@ def run_named_ground_shell(
             lambda: bool(_aliased_items(current["value"], "CASE"))
         )
     )
+    fit_pane_focus = (
+        has_focus(goal_pane.text_area)
+        | has_focus(contexts_pane.text_area)
+        | has_focus(rules_pane.text_area)
+        | has_focus(cases_pane.text_area)
+    ) & ~inline_editor_mode
     memory_detail_focus = memory_pane_focus & Condition(
         lambda: memory_detail_open["value"]
     )
@@ -2201,7 +2325,10 @@ def run_named_ground_shell(
                     app_input=app_input,
                     app_output=app_output,
                     require_tty=require_tty,
-                )
+                ),
+                # Placement opens a synchronous nested picker while the named
+                # Ground event loop is active.
+                in_executor=True,
             )
             if result is None:
                 status_message["value"] = "Placement selection cancelled."
@@ -2396,13 +2523,63 @@ def run_named_ground_shell(
 
     @bindings.add(
         "f",
-        filter=normal_input_mode & memory_pane_focus,
+        filter=normal_input_mode & fit_pane_focus,
         eager=True,
     )
     def _run_fit_from_cases(event) -> None:
+        _start_fit(event.app, automatic=False)
+
+    def _auto_fit_is_executable(active: GroundSession) -> bool:
+        """Avoid a provider turn until the saved Ground has both Fit sides."""
+
+        if not is_bound_ground_schema(active.schema_version):
+            return False
+        has_rule = any(
+            item.kind == "RULE" and item.status in {"PROPOSED", "ACCEPTED"}
+            for item in active.items
+        )
+        has_example = any(
+            item.kind == "CASE"
+            and item.status in {"PROPOSED", "ACCEPTED"}
+            and item.disposition == "INCLUDE"
+            and (
+                bool(item.proposition.strip())
+                if active.schema_version == GROUND_PROPOSITION_SCHEMA_VERSION
+                else bool(item.expected.strip())
+            )
+            for item in active.items
+        )
+        return has_rule and has_example
+
+    def _fit_receipt_needs_refresh(active: GroundSession) -> bool:
+        receipt = fit_receipt["value"]
+        if receipt is None or not receipt.current:
+            return True
+        # A legacy Rule–Example-only receipt is readable, but it is not the
+        # complete Context/vertical/peer detection promised by AUTO-FIT.
+        return receipt.report.coherence is None
+
+    def _schedule_auto_fit(app: Application) -> None:
+        if (
+            not auto_fit_enabled
+            or not _auto_fit_is_executable(current["value"])
+            or not _fit_receipt_needs_refresh(current["value"])
+        ):
+            auto_fit_pending["value"] = False
+            return
+        if fit_turn.busy:
+            # A reviewed mutation may land while an earlier frozen Fit is in
+            # flight. Finish that receipt boundary, then fit the latest saved
+            # revision once; never publish or retry a partial older result.
+            auto_fit_pending["value"] = True
+            return
+        auto_fit_pending["value"] = False
+        _start_fit(app, automatic=True)
+
+    def _start_fit(app: Application, *, automatic: bool) -> None:
         if run_fit is None:
             status_message["value"] = "Fit is unavailable in this Ground adapter."
-            event.app.invalidate()
+            app.invalidate()
             return
 
         try:
@@ -2412,7 +2589,7 @@ def run_named_ground_shell(
                 "FIT FAILED · NOTHING APPLIED · "
                 f"{type(error).__name__}: {safe_terminal_text(str(error))}"
             )
-            event.app.invalidate()
+            app.invalidate()
             return
 
         frozen_session = current["value"]
@@ -2435,8 +2612,8 @@ def run_named_ground_shell(
             status_message["value"] = (
                 f"{fit_mark(result)} {fit_fraction(result)}"
             )
-            mark_pane_updates("MEMORIES")
-            sync_memories_pane(align_selection=True)
+            mark_pane_updates("GOAL", "CONTEXTS", "RULES", "MEMORIES")
+            sync_panes()
 
         def on_error(error: Exception) -> None:
             status_message["value"] = (
@@ -2445,7 +2622,12 @@ def run_named_ground_shell(
             )
 
         def on_idle() -> None:
-            application.layout.focus(cases_pane.text_area)
+            if auto_fit_pending["value"]:
+                auto_fit_pending["value"] = False
+                _schedule_auto_fit(application)
+                return
+            if not automatic:
+                application.layout.focus(cases_pane.text_area)
 
         def on_close() -> None:
             application.exit(
@@ -2457,10 +2639,13 @@ def run_named_ground_shell(
                 )
             )
 
-        status_message["value"] = "FIT RUNNING · Ground and Contexts unchanged"
+        status_message["value"] = (
+            ("AUTO-FIT" if automatic else "FIT")
+            + " RUNNING · Ground and Contexts unchanged"
+        )
         sync_memories_pane(align_selection=True)
         started = fit_turn.start(
-            event.app,
+            app,
             work=lambda: run_fit(frozen_session),
             on_success=on_success,
             on_error=on_error,
@@ -2471,7 +2656,7 @@ def run_named_ground_shell(
             status_message["value"] = (
                 "FIT ALREADY RUNNING · wait for the current receipt boundary"
             )
-        event.app.invalidate()
+        app.invalidate()
 
     def move_saved_item(
         *,
@@ -2885,6 +3070,7 @@ def run_named_ground_shell(
             sync_rules_pane(align_draft=True)
             application.layout.focus(rules_pane.text_area)
             event.app.invalidate()
+        _schedule_auto_fit(event.app)
 
     @bindings.add("up", filter=approval_dialogue_focus, eager=True)
     @bindings.add("left", filter=approval_dialogue_focus, eager=True)
@@ -3009,7 +3195,13 @@ def run_named_ground_shell(
         exit_view(event, status="CLOSED")
 
     try:
-        return application.run()
+        return application.run(
+            pre_run=(
+                lambda: _schedule_auto_fit(application)
+                if auto_fit_enabled
+                else None
+            )
+        )
     except (EOFError, KeyboardInterrupt):
         return NamedGroundShellResult(
             status="CLOSED",

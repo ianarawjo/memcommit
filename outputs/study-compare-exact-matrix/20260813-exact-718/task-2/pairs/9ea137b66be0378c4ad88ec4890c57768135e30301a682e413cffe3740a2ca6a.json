@@ -1,0 +1,328 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:28:51.223369+00:00",
+      "frames": [
+        {
+          "context_digest": "587a9d2fb6abf2b486ccfc50ff85ae7280d7d7bd4003d85ce5877a4edfc9293f",
+          "context_name": "task-2/advisor1/terminology",
+          "context_uid": "7699c7c5-e48b-5548-b0aa-256d793c6c06",
+          "memories": [
+            {
+              "content": "Use the same term throughout the proposal for the same interaction concept or interface element.",
+              "content_digest": "2f11d02134609c6397d8f60105cc452e34129bc1c427a512455247e54951f18a",
+              "position": 0,
+              "uid": "949a884d-b348-5fa0-b1dd-adbebafe10a9"
+            },
+            {
+              "content": "Use abbreviations only for recurring terms of three or more words.",
+              "content_digest": "dcceb4407d24df4034dceca613413471bb46898a487aed0cc0905e48ede482e7",
+              "position": 1,
+              "uid": "2f484151-b5fc-51a9-8a88-b30a403617b3"
+            },
+            {
+              "content": "Present the full name and abbreviation together when using an abbreviation for the first time.",
+              "content_digest": "02e1b2b4cbc8f9a61e299bf1500663ae8cd4036155b2a7dec8c2ce40087ac29b",
+              "position": 2,
+              "uid": "21131a6f-d35c-51e3-895f-46cd21a3b566"
+            },
+            {
+              "content": "Prioritize the research role over diagnostic labels or deficits when referring to participants.",
+              "content_digest": "7b99c6ec90abdbb68d4af8e95a03df3149b9d2d4d637fbd33a70a2acf7073a12",
+              "position": 3,
+              "uid": "e02c3110-05c4-58a4-8d76-c8fd2426a0d5"
+            },
+            {
+              "content": "Reviewers from different subfields struggle to infer undefined abbreviations from context alone.",
+              "content_digest": "13af5eb9fe88f3f2d73192adfb48f7a20de09e22e777a952daa83ca1c030f9ee",
+              "position": 4,
+              "uid": "af028910-e48b-5605-b92b-9378bdfa525c"
+            },
+            {
+              "content": "Use the term formative evaluation for studies seeking design modification evidence, and distinguish it from final efficacy judgments.",
+              "content_digest": "4ba9bca850286ff6286cf4b3bf44395d608ec700c46acd8cd26c54e26d43b378",
+              "position": 5,
+              "uid": "39792d18-2be0-5135-a063-c5213247d330"
+            },
+            {
+              "content": "The user can have contribution labels such as principles, models, or guidelines approved only if they align with the abstraction level of the actual deliverables.",
+              "content_digest": "efed93b748ce74e3e9ed96949bf539c809ea4c36ae77bbb54670285f691f74e9",
+              "position": 6,
+              "uid": "bcaa8c30-ca6e-5b9f-af93-88513a2f16b1"
+            },
+            {
+              "content": "Design principles describe the relationship between conditions and outcomes rather than serving as instructions that merely replicate a single screen layout.",
+              "content_digest": "22385c2bb345db07d19c442e5d99a5c527c2795848b9e29fe198d0ede6255d6f",
+              "position": 7,
+              "uid": "82ad9fe2-4063-5e89-9097-c975aa2920cb"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "6e045500-5d64-47d0-9225-af631029db33"
+        },
+        {
+          "context_digest": "b598a4ff3268ef8c6c0d7bc5ff34af370074bcdd30d61bd3623fcdfb167f37d6",
+          "context_name": "task-2/advisor2/safety",
+          "context_uid": "4283d797-6a33-5f39-b7f6-f4dbd3264389",
+          "memories": [
+            {
+              "content": "List whom to notify and in what order if serious discomfort is reported during the study.",
+              "content_digest": "3453feb8597fb15c827f22297d58dc804fdc1d8080b9e93ba35b85a4425092b6",
+              "position": 0,
+              "uid": "ceb095a9-3068-55ea-a06f-d954c121e007"
+            },
+            {
+              "content": "Field staff rely on the pre-defined contact sequence when serious discomfort is reported.",
+              "content_digest": "ba38f8a5c993c810e19b9120f4492c3accf962c8b8fd7642539ac24f363099e0",
+              "position": 1,
+              "uid": "962d7645-02b3-5611-8415-4370794c10d4"
+            },
+            {
+              "content": "Define the thresholds for participant harm, operational disruption, and data anomalies at which deployment and data collection must cease.",
+              "content_digest": "7f7f124d266efd8255c4615ebc7eb375447047ed5a2b96327f28f8f17d048813",
+              "position": 2,
+              "uid": "a3270872-1901-5d24-8ef1-374833599bf9"
+            },
+            {
+              "content": "Establish procedures to restore existing systems and workflow states after suspending field deployment.",
+              "content_digest": "1a5f7636ec45e60df11db8b0d3763345c0bfaf9a92c1e5d581e6b36452c31208",
+              "position": 3,
+              "uid": "f6dd1368-0d90-5f1a-97d0-56594ce8f4b3"
+            },
+            {
+              "content": "The user's stop plan can be judged feasible only when it identifies who has authority to order recovery and who is responsible for carrying it out.",
+              "content_digest": "3fa05bd19fdeeb320a37cfb89ad853a868b64055f7b21eb182798b0119f6620c",
+              "position": 4,
+              "uid": "342e4697-873f-56a8-b4a4-896efe910144"
+            },
+            {
+              "content": "In organizations where error reporting is linked to individual performance evaluations, safety signal records may be separated from research decision logs, potentially breaking the traceability path for the same incident.",
+              "content_digest": "2bf13ff8ab1a778e8a793ede627b28d40798ae40d25c7a6d25eb5e2e79dd8e97",
+              "position": 5,
+              "uid": "6c4e9175-4590-5689-ae2b-678f0eb930b9"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "af72537d-f8d6-46e9-b8d3-57936f351ffc"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate governance domains. The reference frame sets proposal-language, participant-framing, study-labeling, and contribution-label standards, while the compared frame covers serious-discomfort escalation, stopping thresholds, operational recovery, recovery ownership, and incident traceability risks. No cross-frame contradiction or shared operational claim appears.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6e045500-5d64-47d0-9225-af631029db33",
+              "memory_uid": "949a884d-b348-5fa0-b1dd-adbebafe10a9"
+            }
+          ],
+          "reason": "This terminology-consistency rule is independently useful and has no substantive counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A proposal should use one consistent term for each interaction concept or interface element.",
+          "uid": "fc7348e7-b832-592e-bf77-302e71481035"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6e045500-5d64-47d0-9225-af631029db33",
+              "memory_uid": "2f484151-b5fc-51a9-8a88-b30a403617b3"
+            }
+          ],
+          "reason": "This eligibility rule for abbreviations is independently useful and is not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Abbreviations should be limited to recurring terms containing at least three words.",
+          "uid": "ca7d4a11-e8d1-5b95-a44c-ab8469272697"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6e045500-5d64-47d0-9225-af631029db33",
+              "memory_uid": "21131a6f-d35c-51e3-895f-46cd21a3b566"
+            }
+          ],
+          "reason": "This first-use presentation requirement is independently useful and has no compared-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "An abbreviation’s first use should pair it with the full name.",
+          "uid": "a52ae524-bc77-58dd-893a-7761d21a8b9e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6e045500-5d64-47d0-9225-af631029db33",
+              "memory_uid": "e02c3110-05c4-58a4-8d76-c8fd2426a0d5"
+            }
+          ],
+          "reason": "This participant-framing standard is independently useful and absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "References to participants should foreground their research role rather than diagnoses or deficits.",
+          "uid": "3dd3187a-ca8d-58c0-bdaf-daa0e92e3d75"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6e045500-5d64-47d0-9225-af631029db33",
+              "memory_uid": "af028910-e48b-5605-b92b-9378bdfa525c"
+            }
+          ],
+          "reason": "This cross-subfield comprehension observation supplies independently useful rationale and is not expressed in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Undefined abbreviations impede comprehension across reviewers from different subfields.",
+          "uid": "55557afc-638e-5a7a-b89b-a233f130b936"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6e045500-5d64-47d0-9225-af631029db33",
+              "memory_uid": "39792d18-2be0-5135-a063-c5213247d330"
+            }
+          ],
+          "reason": "This study-purpose terminology rule is independently useful and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Studies seeking evidence for design modification should be called formative evaluations and distinguished from final efficacy judgments.",
+          "uid": "638236b5-7adc-532f-8a29-b83f68102094"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6e045500-5d64-47d0-9225-af631029db33",
+              "memory_uid": "bcaa8c30-ca6e-5b9f-af93-88513a2f16b1"
+            }
+          ],
+          "reason": "This criterion for judging contribution labels is independently useful and is not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Contribution labels should be approved only when their abstraction level matches the actual deliverables.",
+          "uid": "f5097759-e9c6-5a10-959c-4d3ad8996b72"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6e045500-5d64-47d0-9225-af631029db33",
+              "memory_uid": "82ad9fe2-4063-5e89-9097-c975aa2920cb"
+            }
+          ],
+          "reason": "This definition distinguishes genuine design principles from layout-specific instructions and has no compared-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "Design principles should express condition–outcome relationships rather than instructions reproducing one screen layout.",
+          "uid": "7ea9409b-4649-58a2-99af-da05b622b8c4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "af72537d-f8d6-46e9-b8d3-57936f351ffc",
+              "memory_uid": "ceb095a9-3068-55ea-a06f-d954c121e007"
+            },
+            {
+              "frame_uid": "af72537d-f8d6-46e9-b8d3-57936f351ffc",
+              "memory_uid": "962d7645-02b3-5611-8415-4370794c10d4"
+            }
+          ],
+          "reason": "The memories split one underlying operational claim into the required contact sequence and staff reliance on that sequence; the reference frame contains no counterpart.",
+          "status": "RESOLVED",
+          "summary": "Serious-discomfort response should use a predefined ordered sequence of notification contacts that field staff can follow.",
+          "uid": "831a71f2-2171-56a0-9871-a87b33c39ade"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "af72537d-f8d6-46e9-b8d3-57936f351ffc",
+              "memory_uid": "a3270872-1901-5d24-8ef1-374833599bf9"
+            }
+          ],
+          "reason": "This stopping-threshold policy is independently useful and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Predefined harm, disruption, and data-anomaly thresholds should determine when deployment and data collection must cease.",
+          "uid": "be89e379-ebaf-5329-814f-8dbd66246845"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "af72537d-f8d6-46e9-b8d3-57936f351ffc",
+              "memory_uid": "f6dd1368-0d90-5f1a-97d0-56594ce8f4b3"
+            }
+          ],
+          "reason": "This operational restoration requirement is independently useful and has no reference-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "A suspension plan should include procedures for restoring existing systems and workflow states.",
+          "uid": "a41a4cfc-4832-5b79-8bdc-6afa0d98c590"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "af72537d-f8d6-46e9-b8d3-57936f351ffc",
+              "memory_uid": "342e4697-873f-56a8-b4a4-896efe910144"
+            }
+          ],
+          "reason": "This allocation-of-roles criterion is independently useful and is not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A feasible stop plan should identify both the authority ordering recovery and the party responsible for executing it.",
+          "uid": "e231303c-0ae4-55b3-8da4-93dd09039e46"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "af72537d-f8d6-46e9-b8d3-57936f351ffc",
+              "memory_uid": "6c4e9175-4590-5689-ae2b-678f0eb930b9"
+            }
+          ],
+          "reason": "This conditional organizational risk is independently useful and has no substantive counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Performance-linked error reporting can separate safety records from research decision logs and break incident traceability.",
+          "uid": "8c22e43f-39e7-52db-8c6c-231fbb82d962"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame uniquely governs serious-discomfort escalation, mandatory stopping thresholds, system recovery procedures and ownership, and traceability risks created by separating safety records from decision logs.",
+        "differences": "",
+        "reference_only": "The reference uniquely governs consistent terminology, abbreviation discipline, participant-respectful language, formative-evaluation naming, and contribution labels matched to deliverable abstraction."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "2b52a0a0-2713-4bdf-85a6-fc27081e9d0a"
+    },
+    "analysis_digest": "59201a2fbc03456d01054d5d6dd56a3a5623de59c6b6f3d874e3d29f13101ab3",
+    "key": "523b60de9bbd2baace4de44996ea3faf477a3cf6368f2eac3b35f81d97af3036",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 40.47190683300141,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "523b60de9bbd2baace4de44996ea3faf477a3cf6368f2eac3b35f81d97af3036",
+  "created_at": "2026-08-13T18:29:31.695223Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/terminology",
+  "pair_key": "9ea137b66be0378c4ad88ec4890c57768135e30301a682e413cffe3740a2ca6a",
+  "provider_seconds": 40.47190683300141,
+  "right": "task-2/advisor2/safety",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

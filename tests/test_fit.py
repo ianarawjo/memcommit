@@ -10,11 +10,16 @@ import memcommit.commands.fit as fit_command
 import memcommit.ops as ops
 from memcommit.cli import app
 from memcommit.fit import (
+    FIT_SCHEMA_VERSION,
     FitError,
     FitExample,
     FitReport,
     FitRule,
     fit_ground_examples,
+)
+from memcommit.fit_coherence import (
+    FIT_COHERENCE_OPERATION,
+    FIT_COHERENCE_PAYLOAD_MARKER,
 )
 from memcommit.fit_runtime import execute_and_save_ground_fit, freeze_ground_fit
 from memcommit.fit_store import FitStore
@@ -44,6 +49,45 @@ class _Provider:
         self.prompt = prompt
         self.operation = operation
         return json.dumps(self.response)
+
+
+class _GroundProvider:
+    """Return exact-output Fit plus exhaustive all-fitting graph checks."""
+
+    def __init__(self) -> None:
+        self.operations: list[str] = []
+
+    def complete(self, prompt: str, *, operation: str, output_schema=None) -> str:
+        self.operations.append(operation)
+        if operation == FIT_COHERENCE_OPERATION:
+            payload = json.loads(prompt.split(FIT_COHERENCE_PAYLOAD_MARKER, 1)[1])
+            return json.dumps(
+                {
+                    "overview": "The complete Ground graph stays aligned.",
+                    "findings": [
+                        {
+                            **check,
+                            "status": "FIT",
+                            "material_aliases": [],
+                            "reason": "The frozen relation stays coherent.",
+                        }
+                        for check in payload["checks"]
+                    ],
+                }
+            )
+        return json.dumps(
+            {
+                "overview": "The active Rule reproduces the reviewed Example.",
+                "predictions": [
+                    {
+                        "case_id": "e1",
+                        "disposition": "PREDICTED",
+                        "predicted": "AAT",
+                        "reason": "The initials produce the expected symbol.",
+                    }
+                ],
+            }
+        )
 
 
 def _rule(statement: str = "Use the first four letters in uppercase.") -> FitRule:
@@ -210,20 +254,8 @@ def _saved_ground(store: MemoryStore):
     return session, contexts
 
 
-def _passing_provider() -> _Provider:
-    return _Provider(
-        {
-            "overview": "The active Rule reproduces the reviewed Example.",
-            "predictions": [
-                {
-                    "case_id": "e1",
-                    "disposition": "PREDICTED",
-                    "predicted": "AAT",
-                    "reason": "The initials produce the expected symbol.",
-                }
-            ],
-        }
-    )
+def _passing_provider() -> _GroundProvider:
+    return _GroundProvider()
 
 
 def test_version_three_fit_uses_native_propositions_and_explicit_rule_scope(
@@ -287,6 +319,9 @@ def test_fit_store_publishes_current_receipt_then_reports_stale(
 
     assert receipt is not None and receipt.current
     assert receipt.report.uid == report.uid
+    assert report.schema_version == FIT_SCHEMA_VERSION
+    assert report.coherence is not None
+    assert report.coherence.issue_count == 0
     assert FitStore(store).load(report.uid) == report
 
     revised = propose_ground_rule(
@@ -303,6 +338,53 @@ def test_fit_store_publishes_current_receipt_then_reports_stale(
         expected_digest=ground_session_record_digest(session),
     )
     stale = FitStore(store).latest_for_ground(revised)
+
+    assert stale is not None and not stale.current
+    assert stale.report.uid == report.uid
+
+
+def test_ground_fit_rejects_stale_context_before_provider_connection(
+    isolated_store,
+) -> None:
+    store = MemoryStore()
+    session, contexts = _saved_ground(store)
+    raw = contexts[0]
+    ops.add(raw, "A later raw-scope statement changes the bound Context.")
+    store.save(raw)
+    connected = False
+
+    def connect():
+        nonlocal connected
+        connected = True
+        return _passing_provider()
+
+    with pytest.raises(FitError, match="stale"):
+        execute_and_save_ground_fit(
+            store=store,
+            ground_name=session.contract_name,
+            provider_factory=connect,
+        )
+
+    assert not connected
+    assert FitStore(store).list(ground_uid=session.uid) == ()
+
+
+def test_context_edit_makes_unified_fit_receipt_stale(
+    isolated_store,
+) -> None:
+    store = MemoryStore()
+    session, contexts = _saved_ground(store)
+    report = execute_and_save_ground_fit(
+        store=store,
+        ground_name=session.contract_name,
+        provider_factory=_passing_provider,
+    )
+    assert FitStore(store).latest_for_ground(session).current  # type: ignore[union-attr]
+
+    raw = contexts[0]
+    ops.add(raw, "A later Context statement invalidates contextual Fit.")
+    store.save(raw)
+    stale = FitStore(store).latest_for_ground(session)
 
     assert stale is not None and not stale.current
     assert stale.report.uid == report.uid
@@ -365,7 +447,9 @@ def test_mem_fit_runs_and_reopens_immutable_receipt(
     result = CliRunner().invoke(app, ["fit", "--ground", session.contract_name])
 
     assert result.exit_code == 0, result.output
-    assert result.output == "✓ ticker · 1/1\n"
+    assert result.output == (
+        "✓ ticker · 6/6 checks · CONTEXT 0 · VERTICAL 0 · PEER 0\n"
+    )
     receipt = FitStore(store).latest_for_ground(session)
     assert receipt is not None
 
@@ -380,7 +464,9 @@ def test_mem_fit_runs_and_reopens_immutable_receipt(
         ],
     )
     assert reopened.exit_code == 0, reopened.output
-    assert reopened.output == "✓ ticker · 1/1\n"
+    assert reopened.output == (
+        "✓ ticker · 6/6 checks · CONTEXT 0 · VERTICAL 0 · PEER 0\n"
+    )
 
 
 def test_mem_fit_plain_flag_preserves_one_line_noninteractive_result(
@@ -401,7 +487,9 @@ def test_mem_fit_plain_flag_preserves_one_line_noninteractive_result(
     )
 
     assert result.exit_code == 0, result.output
-    assert result.output == "✓ ticker · 1/1\n"
+    assert result.output == (
+        "✓ ticker · 6/6 checks · CONTEXT 0 · VERTICAL 0 · PEER 0\n"
+    )
 
 
 def test_mem_fit_forced_tui_fails_before_opening_storage(monkeypatch) -> None:

@@ -1,0 +1,433 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:35:23.887136+00:00",
+      "frames": [
+        {
+          "context_digest": "4c7d7890b4c8dbd807acc103affd0572c325fd2e0f58346a97c3ed49e48ba34e",
+          "context_name": "task-3/local/personal-memory/2024/02",
+          "context_uid": "7bedad96-d78b-5977-a4c9-71049dcfcec8",
+          "memories": [
+            {
+              "content": "The user's maternal aunt keeps one spare key to the user's home.",
+              "content_digest": "2e45c292a3cbc26a1c9928c4546c6029c7dcd2aa6aa0a45a7cfb4be7888dd5c6",
+              "position": 0,
+              "uid": "1c627e4c-c393-5bd3-a5ae-b3318821be73"
+            },
+            {
+              "content": "If the door is locked, the user is accustomed to contacting their maternal aunt, who has the spare key, before contacting building management.",
+              "content_digest": "709cc4a1ae26126bd3238ea8c0e343415d95d084ddaf022590ff4197003c7b81",
+              "position": 1,
+              "uid": "e80936de-87af-5dbb-ab94-d456bbfaab0a"
+            },
+            {
+              "content": "When going to collect the spare key from their maternal aunt, the user wants to give an arrival time first so neither person has to wait.",
+              "content_digest": "5dab57d537091a28848dfa3592d16e038d6e78eeb8159489c17475befeb62a53",
+              "position": 2,
+              "uid": "7c26cf33-0630-5138-910a-6d37d6ed2b63"
+            },
+            {
+              "content": "The user feels at ease only after returning a borrowed spare key in person on the same day.",
+              "content_digest": "d3b9e78e166fb3af3dc248bcddbf1c1df15d3eed57655991a52c23b4ebb6ba14",
+              "position": 3,
+              "uid": "c3f0f26c-8d89-55e3-8bf3-398271e417e7"
+            },
+            {
+              "content": "The user feels uneasy about writing down a new entrance passcode on paper.",
+              "content_digest": "fe40a50fb7f0b0e1514a2f7e6ea3748e73cbd76fa45b862b4880c9eba68a2312",
+              "position": 4,
+              "uid": "7d7d00a3-c5af-5441-bb50-9631fbfd7979"
+            },
+            {
+              "content": "The user found it difficult when a family member arrived without notice during a meeting and the user could not respond immediately.",
+              "content_digest": "30d2126eb016f1fab8b8bd670bc00ee6ac5182f28b0afe696b2c30f4d7bc128f",
+              "position": 5,
+              "uid": "2e0df581-bd54-54f5-94ef-b719427fc88c"
+            },
+            {
+              "content": "On a day their younger brother received a package for them, the user felt reassured after checking the delivery photo.",
+              "content_digest": "54eacbc39b057a6a18f8ddd8e1db587dbef231ecb10ed8cd84a46b3575ac470c",
+              "position": 6,
+              "uid": "9278b64e-7550-5eb6-bbfd-544a2ae4ec3d"
+            },
+            {
+              "content": "The user's maternal aunt wants confirmation that the user is coming in person before handing over the spare key.",
+              "content_digest": "5d780f2fb96eac2d3c65e7417ee00e64e29c2f8873c432b291e62773723182c9",
+              "position": 7,
+              "uid": "76fb9115-a3f2-5ce3-a445-c3d1e38e4253"
+            },
+            {
+              "content": "Confirm with the user before sharing the spare key's storage location or the maternal aunt's contact information.",
+              "content_digest": "ac00da1acd77d05fd277a0a92d2ab62cbefb3c334e6e7c2cb3b046fbea217a6c",
+              "position": 8,
+              "uid": "6fa50e1d-8bd1-557a-9b03-1e4a4dc664bd"
+            },
+            {
+              "content": "The management office of a multi-unit residential building does not hold a unit key without verifying identity.",
+              "content_digest": "841f44fddced7681d5c9b47aaa2536f14536f1309b1f73104df7cb44738efbd1",
+              "position": 9,
+              "uid": "b18ff5b4-4f0d-5b93-8c41-439e5b15c710"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "d88610d2-94a1-4729-b726-ed77ba407663"
+        },
+        {
+          "context_digest": "3e738289251b9bdf3deb1c7a7540e6ce811b09e26a020af3a76d47b4c85c7ab1",
+          "context_name": "task-3/local/personal-memory/2025/02",
+          "context_uid": "ce7367b8-8532-5f43-972a-1665ca8e3e80",
+          "memories": [
+            {
+              "content": "The user reviewed their emergency-contact list in February 2025.",
+              "content_digest": "b2f108376dbbf53e8885b9c61080d4c873209d8c6e399c37412fa507fec08b0b",
+              "position": 0,
+              "uid": "3ff046b1-5810-51ca-8d43-c99ef6a90b41"
+            },
+            {
+              "content": "When preparation instructions arrived as a long paragraph, the user missed two items.",
+              "content_digest": "43bde452a403f85bcffa6f7ba6b3142ed45604730083327c6f57092b98f397aa",
+              "position": 1,
+              "uid": "e2a304e5-6100-5a5f-b508-0a7f28f6bda7"
+            },
+            {
+              "content": "After changing the same content into a checklist, the user marked every item they had prepared.",
+              "content_digest": "0f8115061b489894115fd252f079ee673504ed09dea4d88d558e64ed6189f1be",
+              "position": 2,
+              "uid": "51d03bff-3e33-5f68-9df6-ed7efa8e3de9"
+            },
+            {
+              "content": "The user called their mother on a weekend evening, but they spoke only briefly because the mother was out.",
+              "content_digest": "a9a1e7d87532667781677f4760beeb086f1e423365a915a0ec0b494892cbb361",
+              "position": 3,
+              "uid": "0987293e-3e21-5cbc-bb46-59245a5fa041"
+            },
+            {
+              "content": "The user called again on Saturday morning the following week and spoke for 40 minutes.",
+              "content_digest": "f08c9f170345686b2091e3b0ecd49f049e245d584886da62d586185010f713bf",
+              "position": 4,
+              "uid": "dc3de6ad-56ea-528a-a9b7-349e79af2326"
+            },
+            {
+              "content": "The user sent a text to an old number for an emergency contact and saw that delivery failed.",
+              "content_digest": "692321e996b9ac8e3500a2da7765f77e0d14c6f040cf2c33944cbdcb39c706de",
+              "position": 5,
+              "uid": "6546d41b-3d5b-5802-a9e7-ac028405e3f2"
+            },
+            {
+              "content": "After confirming the new number with their older sister, the user updated the contact list.",
+              "content_digest": "8d2e954a978e35c1da92948ccc8e45f38fcc25ea3fafe7c389ef546f6eda1ae1",
+              "position": 6,
+              "uid": "ea6eb9d2-9b01-5330-a4d5-886d4bc6cd85"
+            },
+            {
+              "content": "For nonurgent contact, the user's older sister prefers to reply by text when available rather than take a call immediately.",
+              "content_digest": "86639aee50903bc3261e6f88ac7d649c8197927fe214d5d17e0e6f5b3d69a59d",
+              "position": 7,
+              "uid": "12fe7e64-192e-5359-8f96-d2875f7e5399"
+            },
+            {
+              "content": "Before using an emergency contact, reconfirm the number and relationship information with the user.",
+              "content_digest": "78e41f61ba99eaf8840d5d318d08327ca6bb087addd6e22269e8b63281bb67c7",
+              "position": 8,
+              "uid": "e6f89ded-5687-5c25-8df8-88f288d450c6"
+            },
+            {
+              "content": "The user feels that a reminder the day before an appointment gives them enough time to recheck preparation items.",
+              "content_digest": "1a9fcc01df362c76b6d9c8e4fa2d33229a2ae2762c0c6d25e0fc89312a6e0ed4",
+              "position": 9,
+              "uid": "f9197c33-ff93-5215-a3a5-e4087bea2a0d"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "78481417-7e6b-4014-a234-5ffd1a830d55"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate practical domains: the reference centers on home access, key handling, privacy, visitors, and deliveries, while the compared frame centers on contact records, communication timing, preparation formats, and reminders. No claims overlap enough for a cross-frame semantic relation.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d88610d2-94a1-4729-b726-ed77ba407663",
+              "memory_uid": "1c627e4c-c393-5bd3-a5ae-b3318821be73"
+            }
+          ],
+          "reason": "This is a one-sided fact about home-key custody with no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The maternal aunt holds a spare key to the user's home.",
+          "uid": "79b8a5c0-c399-5efc-a967-f6adb8eeb121"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d88610d2-94a1-4729-b726-ed77ba407663",
+              "memory_uid": "e80936de-87af-5dbb-ab94-d456bbfaab0a"
+            }
+          ],
+          "reason": "This is a one-sided home-access escalation practice, distinct from the compared frame's contact-list procedures.",
+          "status": "RESOLVED",
+          "summary": "For a locked door, the user normally contacts the key-holding aunt before building management.",
+          "uid": "9e7bbb62-fa8b-5ebc-9991-2336e26a6fa2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d88610d2-94a1-4729-b726-ed77ba407663",
+              "memory_uid": "7c26cf33-0630-5138-910a-6d37d6ed2b63"
+            }
+          ],
+          "reason": "This is a one-sided preference governing coordination of an in-person key pickup.",
+          "status": "RESOLVED",
+          "summary": "The user wants to provide an arrival time before collecting the spare key so neither party waits.",
+          "uid": "859ef144-e29b-5d69-afbc-72662e178031"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d88610d2-94a1-4729-b726-ed77ba407663",
+              "memory_uid": "c3f0f26c-8d89-55e3-8bf3-398271e417e7"
+            }
+          ],
+          "reason": "This is a one-sided preference about prompt, in-person return of a physical key.",
+          "status": "RESOLVED",
+          "summary": "The user feels comfortable only after returning a borrowed spare key in person that same day.",
+          "uid": "722b5130-dbdb-5493-9c83-1f78787ae4f9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d88610d2-94a1-4729-b726-ed77ba407663",
+              "memory_uid": "7d7d00a3-c5af-5441-bb50-9631fbfd7979"
+            }
+          ],
+          "reason": "This is a one-sided security-related feeling with no matching compared-frame claim.",
+          "status": "RESOLVED",
+          "summary": "The user is uneasy about recording a new entrance passcode on paper.",
+          "uid": "5d41d817-ea3e-56ce-8bf5-549a778b8ebd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d88610d2-94a1-4729-b726-ed77ba407663",
+              "memory_uid": "2e0df581-bd54-54f5-94ef-b719427fc88c"
+            }
+          ],
+          "reason": "This is a one-sided experience concerning unexpected arrival and availability.",
+          "status": "RESOLVED",
+          "summary": "An unannounced family visit during a meeting was difficult because the user could not respond immediately.",
+          "uid": "22bdba25-b746-53e4-85af-1754b6cd96e0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d88610d2-94a1-4729-b726-ed77ba407663",
+              "memory_uid": "9278b64e-7550-5eb6-bbfd-544a2ae4ec3d"
+            }
+          ],
+          "reason": "This is a one-sided package-handling experience with no corresponding compared-frame claim.",
+          "status": "RESOLVED",
+          "summary": "The user felt reassured by checking a delivery photo when their younger brother received a package for them.",
+          "uid": "9d9b1b54-f79f-512a-af0a-19e7dc157e59"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d88610d2-94a1-4729-b726-ed77ba407663",
+              "memory_uid": "76fb9115-a3f2-5ce3-a445-c3d1e38e4253"
+            }
+          ],
+          "reason": "This is a one-sided condition imposed by the key holder for physical handover.",
+          "status": "RESOLVED",
+          "summary": "The aunt requires confirmation of an in-person visit before handing over the spare key.",
+          "uid": "feb319f8-b36d-52a2-bee9-6e53228135c3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d88610d2-94a1-4729-b726-ed77ba407663",
+              "memory_uid": "6fa50e1d-8bd1-557a-9b03-1e4a4dc664bd"
+            }
+          ],
+          "reason": "This is a one-sided consent rule specifically governing disclosure of key-access information.",
+          "status": "RESOLVED",
+          "summary": "The user must be consulted before the key's storage location or the aunt's contact details are shared.",
+          "uid": "4cf25ba4-c129-56c0-8e0d-9e68b886fdb9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d88610d2-94a1-4729-b726-ed77ba407663",
+              "memory_uid": "b18ff5b4-4f0d-5b93-8c41-439e5b15c710"
+            }
+          ],
+          "reason": "This is a one-sided institutional constraint on unit-key custody.",
+          "status": "RESOLVED",
+          "summary": "A multi-unit building's management office will not hold a unit key without identity verification.",
+          "uid": "90bbaf52-1aed-5a25-bd6b-6b32d9d69ee3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78481417-7e6b-4014-a234-5ffd1a830d55",
+              "memory_uid": "3ff046b1-5810-51ca-8d43-c99ef6a90b41"
+            }
+          ],
+          "reason": "This is a one-sided dated maintenance event with no reference-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user reviewed their emergency-contact list in February 2025.",
+          "uid": "75224fa9-f16b-5d80-9a28-f6b9b33ff87b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78481417-7e6b-4014-a234-5ffd1a830d55",
+              "memory_uid": "e2a304e5-6100-5a5f-b508-0a7f28f6bda7"
+            },
+            {
+              "frame_uid": "78481417-7e6b-4014-a234-5ffd1a830d55",
+              "memory_uid": "51d03bff-3e33-5f68-9df6-ed7efa8e3de9"
+            }
+          ],
+          "reason": "Both memories jointly express one one-sided comparison showing the checklist format supported more complete preparation tracking.",
+          "status": "RESOLVED",
+          "summary": "The user missed preparation items in paragraph form but marked every prepared item after the same content became a checklist.",
+          "uid": "6df39d72-3e04-536f-8c10-ea2fdc77e5c7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78481417-7e6b-4014-a234-5ffd1a830d55",
+              "memory_uid": "0987293e-3e21-5cbc-bb46-59245a5fa041"
+            }
+          ],
+          "reason": "This is a one-sided communication event tied to the mother's availability.",
+          "status": "RESOLVED",
+          "summary": "A weekend-evening call with the user's mother was brief because she was out.",
+          "uid": "8ad88253-5bde-52f8-90ba-2ab409255b05"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78481417-7e6b-4014-a234-5ffd1a830d55",
+              "memory_uid": "dc3de6ad-56ea-528a-a9b7-349e79af2326"
+            }
+          ],
+          "reason": "This is a separate one-sided communication event and does not establish a general timing rule.",
+          "status": "RESOLVED",
+          "summary": "The user had a 40-minute call with their mother on Saturday morning the following week.",
+          "uid": "b155ea99-6cdd-538b-b4ba-44c0df93a0c2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78481417-7e6b-4014-a234-5ffd1a830d55",
+              "memory_uid": "6546d41b-3d5b-5802-a9e7-ac028405e3f2"
+            },
+            {
+              "frame_uid": "78481417-7e6b-4014-a234-5ffd1a830d55",
+              "memory_uid": "ea6eb9d2-9b01-5330-a4d5-886d4bc6cd85"
+            }
+          ],
+          "reason": "Both memories form one one-sided sequence in which a failed delivery prompted verification and correction of contact data.",
+          "status": "RESOLVED",
+          "summary": "After a text to an old emergency-contact number failed, the user confirmed the new number with their older sister and updated the list.",
+          "uid": "ea795a54-8561-5422-a1e9-6e62769f187a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78481417-7e6b-4014-a234-5ffd1a830d55",
+              "memory_uid": "12fe7e64-192e-5359-8f96-d2875f7e5399"
+            }
+          ],
+          "reason": "This is a one-sided, explicitly scoped communication preference.",
+          "status": "RESOLVED",
+          "summary": "For nonurgent contact, the older sister prefers replying by text when available instead of taking an immediate call.",
+          "uid": "ec94275a-fa19-5d5a-a623-03474a7a74d1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78481417-7e6b-4014-a234-5ffd1a830d55",
+              "memory_uid": "e6f89ded-5687-5c25-8df8-88f288d450c6"
+            }
+          ],
+          "reason": "This is a one-sided verification rule for emergency-contact records, not a rule about disclosing home-access information.",
+          "status": "RESOLVED",
+          "summary": "Before using an emergency contact, reconfirm its number and relationship information with the user.",
+          "uid": "33271de5-e99c-52b2-aeef-e2fa15e17272"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "78481417-7e6b-4014-a234-5ffd1a830d55",
+              "memory_uid": "f9197c33-ff93-5215-a3a5-e4087bea2a0d"
+            }
+          ],
+          "reason": "This is a one-sided preference about reminder timing and appointment preparation.",
+          "status": "RESOLVED",
+          "summary": "The user considers a reminder one day before an appointment sufficient for rechecking preparation items.",
+          "uid": "aac40bc7-fade-5a7d-b5b0-b5fc53ad5679"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame describes contact-list maintenance and verification, family communication experiences and preferences, improved preparation with checklists, and the usefulness of advance appointment reminders.",
+        "differences": "",
+        "reference_only": "The reference describes spare-key custody and retrieval, same-day return, access-data privacy, management identity checks, passcode discomfort, unannounced visits, and delivery-photo reassurance."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "a349e9cd-d74f-4d7c-9223-1d11b5cdaffa"
+    },
+    "analysis_digest": "55bca47fd8fbaf6852ea4f52d40e4cbc783d4679b8cc77fcde098d12bb43d2ee",
+    "key": "491375b6d6eddbd553cf89e3a50c909ea533f11842000a8dce94a95e8ceb5c3f",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 41.916852042002574,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "491375b6d6eddbd553cf89e3a50c909ea533f11842000a8dce94a95e8ceb5c3f",
+  "created_at": "2026-08-13T18:36:05.803883Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/02",
+  "pair_key": "3e7276591a7932c214a8465d87f1a71eacb56e4a7dd3ae53ed4d43ebf735fb24",
+  "provider_seconds": 41.916852042002574,
+  "right": "task-3/local/personal-memory/2025/02",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

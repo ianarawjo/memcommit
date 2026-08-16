@@ -1,0 +1,215 @@
+{
+  "coverage": {
+    "expected": 18,
+    "observed": 18
+  },
+  "created_at": "2026-08-11T00:48:22.038486Z",
+  "description_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+  "issues": [],
+  "kind": "STUDY_COMPARE_GRAPH_PAIR",
+  "left": {
+    "context_digest": "dd9148dc81399f484999854189f0ef908d9b244551d50fe7576d8d5e5dc5a615",
+    "context_uid": "900828d4-48ca-5a05-9807-620165233930",
+    "memory_count": 8,
+    "name": "task-3/local/guardrails/purpose-and-scope"
+  },
+  "method": "COMPACT_FALLBACK_EXHAUSTIVE_V1",
+  "operation": "COMPARE",
+  "pair_key": "ebae3df28bc73a82187cfecc9ef58ed352c65d339400cbb911b3b43baba0b0e4",
+  "provider": {
+    "compact_provider_seconds": 29.590112542005954,
+    "compact_validation_error": "Every compact group must be used by at least one source Memory.",
+    "condition": "COMPACT_WITH_EXHAUSTIVE_FALLBACK",
+    "fallback_provider_seconds": 37.695217250002315,
+    "provider_calls": 2,
+    "provider_seconds": 67.28532979200827
+  },
+  "relations": [
+    {
+      "comment": "These reference-side statements split the same data-minimization rule, with no corresponding claim in the compared frame.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "c971c24d-2543-5874-91e3-b97aec8bc77a",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "75944d44-d6e7-52fc-a68a-676b0df123ed",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000001",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "These reference-side statements express the same purpose-bound approval constraint, which the compared frame does not address.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "3d3749df-7036-548b-b939-7b6b32c79af6",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "58850532-c154-5e64-87cb-91c81d3e5ca5",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000002",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "This is an independent reference-side procedural requirement absent from the compared frame.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "78bba4e2-c5d0-5df3-8f81-6641515e4875",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000003",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "This independent recipient-scope constraint appears only in the reference frame.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "e0133c8a-5382-50d2-9d9a-74e3ff700f69",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000004",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "This independent item-scope constraint appears only in the reference frame.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "05953013-6bb7-5f2c-8024-23ef357161fa",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000005",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "This independent expectation about downstream use appears only in the reference frame.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "b5618dee-42df-583f-a839-e8e611ccdabd",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000006",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "This independent storage-location fact appears only in the compared frame.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "5d989bab-c471-5de9-bb73-29cabc4753dd",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000007",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "These compared-side episodes provide contrasting parts of one inventory-checking observation, with no corresponding reference-side claim.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "d1725ae4-3fd3-5250-92b3-73d84d9152a7",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "904ff225-26df-5424-8a82-23d733649106",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000008",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "These compared-side episodes form one adjustment-and-outcome account absent from the reference frame.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "67a003c7-648a-59dc-8e82-03f9e452ffce",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000009",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "These compared-side episodes split one coordination-and-outcome account, which the reference frame does not address.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "64bf4401-e972-5d15-a526-21ca901a6a9f",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "57e09ea5-54ff-5fce-aada-68daffbacc8b",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000010",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "This independent collaboration preference appears only in the compared frame.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "0a5d054f-94bd-5955-bdb7-9b5427e2260b",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000011",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "This independent evidentiary limit appears only in the compared frame.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "1f94b78b-1635-551c-b90c-bea2a67ca595",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000012",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "This independent food-storage qualification appears only in the compared frame.",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "f64ef6c4-7665-5574-9d58-fc124b0bfe3f",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000013",
+      "status": "RESOLVED"
+    }
+  ],
+  "right": {
+    "context_digest": "14adbc31fc3a2dc50b7b980d1e24569b16fff058104a812c7f3b4e1542b7abf0",
+    "context_uid": "913e0bfd-f6d9-579e-9a37-ba5daa9d17f1",
+    "memory_count": 10,
+    "name": "task-3/local/personal-memory/2025/03"
+  },
+  "schema_version": 1,
+  "semantic_content_in_participant_report": false,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

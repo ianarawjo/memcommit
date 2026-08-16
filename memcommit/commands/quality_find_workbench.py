@@ -79,7 +79,9 @@ from memcommit.resolution_workbench import ResolutionNavigation
 from memcommit.quality_finding_handoff import (
     QualityFindingHandoff,
     quality_finding_handoff,
+    quality_finding_handoffs,
 )
+from memcommit.dedup_application import DEDUP_ELIGIBLE_RELATIONS
 from memcommit.session_workbench_navigation import SessionWorkbenchNavigation
 from memcommit.source_projection.presentation import SourceDisplayValue
 from memcommit.store import MemoryStore
@@ -543,28 +545,25 @@ def run_quality_find_resolution_workbench(
     app_output: Output | None = None,
     require_tty: bool = True,
     handoff_handler: Callable[[QualityFindingHandoff], None] | None = None,
+    duplicate_handoff_handler: (
+        Callable[[tuple[QualityFindingHandoff, ...]], None] | None
+    ) = None,
 ) -> QualityFindWorkbenchSession:
     """Inspect and answer one process-local report in the common workbench."""
 
     navigation = ResolutionNavigation()
     workbench_navigation = SessionWorkbenchNavigation()
-    item_handoff = (
-        SessionTodoView(
-            "RESOLVE",
-            "Resolve selected conflict",
-            (
-                "Enter to open Resolve for this exact conflict. Resolve will "
-                "recheck the complete source, authority, and Fit before any Apply."
-            ),
+
+    def confirmed_duplicate_handoffs() -> tuple[QualityFindingHandoff, ...]:
+        if session.kind != "duplicates":
+            return ()
+        return tuple(
+            handoff
+            for handoff in quality_finding_handoffs(session)
+            if handoff.classification in DEDUP_ELIGIBLE_RELATIONS
+            and handoff.review_draft.selected_option_uid
+            == f"{handoff.finding_uid}:confirm"
         )
-        if (
-            handoff_handler is not None
-            and session.kind == "conflicts"
-            and len(session.source.contexts) == 1
-            and bool(session.report.findings)
-        )
-        else None
-    )
 
     def load_draft(item_uid: str) -> tuple[str | None, str]:
         response = session.response_for(item_uid)
@@ -580,6 +579,43 @@ def run_quality_find_resolution_workbench(
         response.text = text
 
     while True:
+        item_handoff = (
+            SessionTodoView(
+                "RESOLVE",
+                "Resolve selected conflict",
+                (
+                    "Enter to open Resolve for this exact conflict. Resolve will "
+                    "recheck the complete source, authority, and Fit before any Apply."
+                ),
+            )
+            if (
+                handoff_handler is not None
+                and session.kind == "conflicts"
+                and len(session.source.contexts) == 1
+                and bool(session.report.findings)
+            )
+            else (
+                lambda: (
+                    SessionTodoView(
+                        "DEDUP",
+                        (
+                            "Dedup "
+                            f"{len(confirmed_duplicate_handoffs())} confirmed "
+                            "duplicate link(s)"
+                        ),
+                        (
+                            "Enter to submit only the confirmed eligible links. "
+                            "Dedup will recheck the Source, DELETE authority, "
+                            "components, and inbound references before exact Apply."
+                        ),
+                    )
+                    if confirmed_duplicate_handoffs()
+                    else None
+                )
+            )
+            if duplicate_handoff_handler is not None
+            else None
+        )
         action = run_resolution_workbench_shell(
             lambda: quality_find_resolution_view(session, source),
             navigation=navigation,
@@ -599,6 +635,14 @@ def run_quality_find_resolution_workbench(
         if action.kind == "CLOSE":
             return session
         if action.kind == "HANDOFF" and action.item_uid is not None:
+            if session.kind == "duplicates":
+                confirmed = confirmed_duplicate_handoffs()
+                if duplicate_handoff_handler is None or not confirmed:
+                    raise QualityFindWorkbenchError(
+                        "Confirmed duplicate handoff is unavailable in this adapter."
+                    )
+                duplicate_handoff_handler(confirmed)
+                return session
             if handoff_handler is None:
                 raise QualityFindWorkbenchError(
                     "Quality finding handoff is unavailable in this adapter."
@@ -619,6 +663,9 @@ def run_interactive_quality_find(
     kind: QualityFindKind,
     analyze: QualityFindAnalyzer,
     handoff_handler: Callable[[QualityFindingHandoff], None] | None = None,
+    duplicate_handoff_handler: (
+        Callable[[tuple[QualityFindingHandoff, ...]], None] | None
+    ) = None,
 ) -> bool:
     """Select, analyze, and inspect one flagless quality-finder invocation."""
 
@@ -679,5 +726,6 @@ def run_interactive_quality_find(
         session,
         source,
         handoff_handler=handoff_handler,
+        duplicate_handoff_handler=duplicate_handoff_handler,
     )
     return True

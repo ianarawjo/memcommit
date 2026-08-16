@@ -1,0 +1,361 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:46:29.597433+00:00",
+      "frames": [
+        {
+          "context_digest": "492e513a553a9191e2c646cca49364b336ae6d163de5688eeca8cc661bbbdb32",
+          "context_name": "task-3/local/personal-memory/2024/11",
+          "context_uid": "0d5e1eef-1669-5589-94ba-b46c9c2080dc",
+          "memories": [
+            {
+              "content": "The user changed their schedule once in November 2024 because of their mother's hospital visit.",
+              "content_digest": "f08f07dda1b468ab191a59d87e7ceb8068189964edee2010abdae6e525d6103f",
+              "position": 0,
+              "uid": "bb17c696-0c1c-516f-8ad9-68a4b159ce22"
+            },
+            {
+              "content": "After seeing the reason for the schedule change written in a calendar invitation, the user asked for it to be removed.",
+              "content_digest": "7bfc906526c255f90a85b6dcc4b28ea1b0a9389e9f17ba989a4ce098280578c8",
+              "position": 1,
+              "uid": "195ba5ab-3ee0-5594-a859-9f2b5eadf9ea"
+            },
+            {
+              "content": "The user was able to reschedule the appointment after providing only a new time, without a reason.",
+              "content_digest": "14f1bd0410c76aa3a0eb28a2212fd06558ab23b6dc012aa5529980a67efe3e2b",
+              "position": 2,
+              "uid": "4c8759cc-66aa-527c-a9d5-197d39b5d2b7"
+            },
+            {
+              "content": "On a day the user traveled in their father's car, they photographed the parking location.",
+              "content_digest": "111e71af27be5d109557440569352964544e9b702810741445172a6cf51f94f5",
+              "position": 3,
+              "uid": "d4b27ea7-d329-5dc7-b7ca-91d0cd50a958"
+            },
+            {
+              "content": "On the next visit, when the user did not take a photo, they walked one circuit of the parking garage while looking for the exit.",
+              "content_digest": "6d61d67e35552cb739d0220e480189706ec5bbac74f93b87149a6948d9ac2805",
+              "position": 4,
+              "uid": "32a19a57-9b04-5f86-92ba-202a9ac803e4"
+            },
+            {
+              "content": "After hearing preparation items from their mother by phone, the user omitted two items.",
+              "content_digest": "449dc73aad797f5acd3d898292cf9942f7d3b65b9faf52769ae5b3332285b4f3",
+              "position": 5,
+              "uid": "0eeffd8c-acd6-57bf-950d-20cfa1fe62b3"
+            },
+            {
+              "content": "After receiving the preparation items again by text, the user put all of them in their bag.",
+              "content_digest": "9539ab90f598a96d97a73b7954db8834d3106861ba6ecc814e579a348e0145d6",
+              "position": 6,
+              "uid": "07ea3801-8666-581d-b846-2f45bf99ca19"
+            },
+            {
+              "content": "The user's mother does not want the reason for her visit disclosed in the user's external schedule.",
+              "content_digest": "b1aff7bb5b5df1ec773fd8875205cd9fdfa2fd5b520cf91b7c84c9e3054b4feb",
+              "position": 7,
+              "uid": "9e70b92e-1d8d-51ef-962d-bd9b348a56d5"
+            },
+            {
+              "content": "Do not include the mother's reason for a visit when conveying the user's availability externally.",
+              "content_digest": "b9473919c63f233fc66c49bbf00b20a8ab9532bcb1b8ce3896c442afed4229d9",
+              "position": 8,
+              "uid": "d76686fd-9f1d-5d94-931b-4b49c86a8f4e"
+            },
+            {
+              "content": "Some daily-life services may operate for shorter hours during the year-end holiday period.",
+              "content_digest": "48d4487aba4c395527f9dfeac9488f45556d1bd89475f8620b0a64d84e4479fc",
+              "position": 9,
+              "uid": "820a5de9-9e08-52c7-8747-5155fe341bb4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "f17a06ec-0377-4d99-ba9c-6fa22fa17348"
+        },
+        {
+          "context_digest": "ac4f93d71b525f6156f0b669075a833a2a41161be6abe677ec382bff6e6060e8",
+          "context_name": "task-3/local/personal-memory/2025/08",
+          "context_uid": "ed84de75-8e18-5bec-908c-a1ff9827b3e3",
+          "memories": [
+            {
+              "content": "The user keeps packing tape for returns in an upper kitchen drawer.",
+              "content_digest": "ed359d883caffd7ce4daddc297ddcc9d26da233dc2a36dc4dbc96e300b2248e9",
+              "position": 0,
+              "uid": "15c3941e-ed44-508f-ae30-b51456b5ba86"
+            },
+            {
+              "content": "The user arrived ten minutes before the post office closed and found that numbered-ticket intake had ended.",
+              "content_digest": "3c4609eea9455bbd46a6f238aa750f61f348ce7b2cf421a4d123f1b707b52550",
+              "position": 1,
+              "uid": "84d1fd1c-9508-5f05-9a7c-1d5f20ecf4a4"
+            },
+            {
+              "content": "Before the next visit, the user checked the operating hours and arrived one hour before closing.",
+              "content_digest": "b2997262abf4ba476c63de3550e54269ef7d61bb56d3adb5b6d9f54ba13fc078",
+              "position": 2,
+              "uid": "8946f9da-e325-59c3-9260-2d2f590d3701"
+            },
+            {
+              "content": "The user went to the counter without closing a return box and had to go back to the packing station.",
+              "content_digest": "759122c3f88ca71b992a725e357beab72f9820de872a7bd895b808c2df21f2b2",
+              "position": 3,
+              "uid": "67e8b160-a57d-56e5-a766-741b7ce0e939"
+            },
+            {
+              "content": "For the next return, the user sealed the box at home and completed intake in one attempt.",
+              "content_digest": "007fcec32ea3788854161e68c95c2aaba90e94a721d03b350e1619afc54840e3",
+              "position": 4,
+              "uid": "efd0706b-600a-5ac1-926e-cc0602ca0086"
+            },
+            {
+              "content": "The user scheduled bank and post-office errands for the same day, but they took a long time because the destinations were in different directions.",
+              "content_digest": "000e1975fde79f4d6caf36adad0c2e481a032537cfa410e46649866d985567c2",
+              "position": 5,
+              "uid": "1e8a6f7e-0911-5a34-ad82-172479d1a7a4"
+            },
+            {
+              "content": "The following week, after checking the locations on a map, the user visited nearby branches in sequence.",
+              "content_digest": "c3de08c5b6074dff2b3f6303f5efc3740cc430b634cb365a5d570061a30a53fa",
+              "position": 6,
+              "uid": "a8670161-257e-51ab-8e30-0e282952278f"
+            },
+            {
+              "content": "Postal staff expect a return-label barcode to arrive affixed flat, without a fold.",
+              "content_digest": "6293ace2d67781644694976af71d5696cad28979d9641718ccd59f16b3397a47",
+              "position": 7,
+              "uid": "2db70f53-99ee-556c-a8c1-b809881cbebd"
+            },
+            {
+              "content": "Before grouping errands into one outing, check each institution's location and operating hours that day.",
+              "content_digest": "7fef923f9ed507db5aad6cf65eaee2c965075e51fef0ff73fa669f1e7f69314a",
+              "position": 8,
+              "uid": "38d60cc4-2f91-5cc2-b511-55cdbbe12c32"
+            },
+            {
+              "content": "Postal and financial counters may operate on different hours than usual around public holidays.",
+              "content_digest": "2d5dc709c468405ea894f343e922dc2546b826ed7488e613f4d4dd730bccccfd",
+              "position": 9,
+              "uid": "1272087c-a535-5612-8c7a-1bc257183788"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "a009e42d-5f62-4e70-93e9-32bd4b8103d4"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate practical domains: the reference centers on schedule privacy, navigation, and written preparation, while the compared frame centers on returns and errand planning. They overlap only in holiday-hours awareness, with different service and holiday scopes that should remain explicit.",
+      "relations": [
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "f17a06ec-0377-4d99-ba9c-6fa22fa17348",
+              "memory_uid": "820a5de9-9e08-52c7-8747-5155fe341bb4"
+            },
+            {
+              "frame_uid": "a009e42d-5f62-4e70-93e9-32bd4b8103d4",
+              "memory_uid": "1272087c-a535-5612-8c7a-1bc257183788"
+            }
+          ],
+          "reason": "One claim concerns potentially shorter hours for daily-life services during year-end, while the other concerns unusual hours for postal and financial counters around public holidays; those explicit scopes explain and preserve the difference.",
+          "status": "RESOLVED",
+          "summary": "Holiday periods may alter service operating hours, with the frames naming different services and holiday contexts.",
+          "uid": "ff040b74-8517-5820-93c6-8b6b0e0eba0d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f17a06ec-0377-4d99-ba9c-6fa22fa17348",
+              "memory_uid": "bb17c696-0c1c-516f-8ad9-68a4b159ce22"
+            }
+          ],
+          "reason": "This is a one-sided historical scheduling fact with no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user once changed their schedule because of their mother's hospital visit.",
+          "uid": "37ee4e86-ce76-543e-a385-787df0e6fdcd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f17a06ec-0377-4d99-ba9c-6fa22fa17348",
+              "memory_uid": "195ba5ab-3ee0-5594-a859-9f2b5eadf9ea"
+            },
+            {
+              "frame_uid": "f17a06ec-0377-4d99-ba9c-6fa22fa17348",
+              "memory_uid": "9e70b92e-1d8d-51ef-962d-bd9b348a56d5"
+            },
+            {
+              "frame_uid": "f17a06ec-0377-4d99-ba9c-6fa22fa17348",
+              "memory_uid": "d76686fd-9f1d-5d94-931b-4b49c86a8f4e"
+            }
+          ],
+          "reason": "The removal request, the mother's disclosure preference, and the explicit instruction are parts of the same one-sided privacy claim.",
+          "status": "RESOLVED",
+          "summary": "The mother's visit reason should be omitted from the user's externally shared schedule information.",
+          "uid": "ef0a4f03-908c-5fc6-a627-9e2e01634804"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f17a06ec-0377-4d99-ba9c-6fa22fa17348",
+              "memory_uid": "4c8759cc-66aa-527c-a9d5-197d39b5d2b7"
+            }
+          ],
+          "reason": "This is a one-sided fact about the information required for rescheduling and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user could reschedule by supplying a new time without giving a reason.",
+          "uid": "bebf7da4-692a-5878-8fc9-880af86637cc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f17a06ec-0377-4d99-ba9c-6fa22fa17348",
+              "memory_uid": "d4b27ea7-d329-5dc7-b7ca-91d0cd50a958"
+            },
+            {
+              "frame_uid": "f17a06ec-0377-4d99-ba9c-6fa22fa17348",
+              "memory_uid": "32a19a57-9b04-5f86-92ba-202a9ac803e4"
+            }
+          ],
+          "reason": "The photo-taking instance and the subsequent no-photo search outcome split one one-sided practical navigation lesson.",
+          "status": "RESOLVED",
+          "summary": "Photographing the parking location helped avoid difficulty navigating the garage on a later visit.",
+          "uid": "1aa4c365-5462-5622-8139-2e297e52e0f6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f17a06ec-0377-4d99-ba9c-6fa22fa17348",
+              "memory_uid": "0eeffd8c-acd6-57bf-950d-20cfa1fe62b3"
+            },
+            {
+              "frame_uid": "f17a06ec-0377-4d99-ba9c-6fa22fa17348",
+              "memory_uid": "07ea3801-8666-581d-b846-2f45bf99ca19"
+            }
+          ],
+          "reason": "The omission after the phone call and complete packing after the text jointly express one one-sided lesson about written preparation lists.",
+          "status": "RESOLVED",
+          "summary": "Receiving preparation items in writing helped the user pack all of them, unlike receiving them by phone.",
+          "uid": "edbb6ed6-3b69-5124-84f7-f4be9307e471"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a009e42d-5f62-4e70-93e9-32bd4b8103d4",
+              "memory_uid": "15c3941e-ed44-508f-ae30-b51456b5ba86"
+            }
+          ],
+          "reason": "This one-sided storage-location fact has no materially corresponding reference claim.",
+          "status": "RESOLVED",
+          "summary": "The user stores return-packing tape in an upper kitchen drawer.",
+          "uid": "a4bc4a88-e9f8-50c9-94ee-9879797567ba"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a009e42d-5f62-4e70-93e9-32bd4b8103d4",
+              "memory_uid": "84d1fd1c-9508-5f05-9a7c-1d5f20ecf4a4"
+            },
+            {
+              "frame_uid": "a009e42d-5f62-4e70-93e9-32bd4b8103d4",
+              "memory_uid": "8946f9da-e325-59c3-9260-2d2f590d3701"
+            },
+            {
+              "frame_uid": "a009e42d-5f62-4e70-93e9-32bd4b8103d4",
+              "memory_uid": "1e8a6f7e-0911-5a34-ad82-172479d1a7a4"
+            },
+            {
+              "frame_uid": "a009e42d-5f62-4e70-93e9-32bd4b8103d4",
+              "memory_uid": "a8670161-257e-51ab-8e30-0e282952278f"
+            },
+            {
+              "frame_uid": "a009e42d-5f62-4e70-93e9-32bd4b8103d4",
+              "memory_uid": "38d60cc4-2f91-5cc2-b511-55cdbbe12c32"
+            }
+          ],
+          "reason": "The late postal arrival, improved timing, inefficient routing, improved branch sequencing, and combined guidance split one underlying one-sided errand-planning claim.",
+          "status": "RESOLVED",
+          "summary": "Checking operating hours and locations before an outing supports timely, efficient sequencing of errands.",
+          "uid": "c258ddb0-4acd-5f55-8cc4-429031a6f8eb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a009e42d-5f62-4e70-93e9-32bd4b8103d4",
+              "memory_uid": "67e8b160-a57d-56e5-a766-741b7ce0e939"
+            },
+            {
+              "frame_uid": "a009e42d-5f62-4e70-93e9-32bd4b8103d4",
+              "memory_uid": "efd0706b-600a-5ac1-926e-cc0602ca0086"
+            }
+          ],
+          "reason": "The failed unsealed attempt and the later successful home-sealed attempt express one one-sided return-preparation lesson.",
+          "status": "RESOLVED",
+          "summary": "Sealing a return box before reaching the counter avoids a repeated trip to the packing station.",
+          "uid": "2b02aeb4-f550-5dc8-9140-a2945a4b4831"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a009e42d-5f62-4e70-93e9-32bd4b8103d4",
+              "memory_uid": "2db70f53-99ee-556c-a8c1-b809881cbebd"
+            }
+          ],
+          "reason": "This one-sided packaging requirement has no materially corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Postal staff expect the return-label barcode to be attached flat and without a fold.",
+          "uid": "3a9e574e-d88d-5e66-8814-6203193d5d8a"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers return supplies and packaging requirements, barcode placement, and planning errands by checking hours and locations.",
+        "differences": "Both note holiday-related operating-hour changes, but one concerns daily-life services during year-end while the other concerns postal and financial counters around public holidays.",
+        "reference_only": "The reference records schedule privacy and reason-free rescheduling, plus benefits from photographing parking locations and receiving preparation lists in writing."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "c5679fba-bc5a-4bcb-b686-50d1c6e8f990"
+    },
+    "analysis_digest": "5f061f554ff67233d5c1f93745cbb3faaf500e589fb8bccf19aa5fcf94feda6c",
+    "key": "be2a9135874a86e3305b4c4c83c5c4f2beafddefd1440a598a6bac00fff1a954",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 66.13679754199984,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "be2a9135874a86e3305b4c4c83c5c4f2beafddefd1440a598a6bac00fff1a954",
+  "created_at": "2026-08-13T18:47:35.733771Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/11",
+  "pair_key": "d2759e84f67e956e7e0ca7f315170a81b716ac3e8b9887bf790a65306acbe184",
+  "provider_seconds": 66.13679754199984,
+  "right": "task-3/local/personal-memory/2025/08",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

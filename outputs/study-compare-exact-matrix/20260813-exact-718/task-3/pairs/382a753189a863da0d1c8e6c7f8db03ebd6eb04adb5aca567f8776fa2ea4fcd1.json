@@ -1,0 +1,361 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:39:24.423664+00:00",
+      "frames": [
+        {
+          "context_digest": "3f1b018c2a3a8594d00bffba053626a876fef4893e678dd9600986d9d41c0f31",
+          "context_name": "task-3/local/personal-memory/2024/05",
+          "context_uid": "683986e6-d517-5a53-9dc1-16b69cf0d12e",
+          "memories": [
+            {
+              "content": "The user keeps a small table fan beside the bedroom window.",
+              "content_digest": "b8a464f5e2a33edcef1259af4a412b047ba190bae9cfe42aaf1dbd722efc7f0c",
+              "position": 0,
+              "uid": "3088c235-435c-52ee-9ffc-26cf85ec196e"
+            },
+            {
+              "content": "On a day the user drank coffee late in the afternoon, they could not fall asleep until dawn.",
+              "content_digest": "ef4cf019ebc163fc24f03b8bd505599cd13fc83f33565d51ffb4379dc21d72b8",
+              "position": 1,
+              "uid": "7811ed66-2f22-54d8-a215-62a843264ba5"
+            },
+            {
+              "content": "On a day the user drank coffee before 2 p.m., they fell asleep at their usual time.",
+              "content_digest": "046ac3f8454da623f73d1293fb954b72a3ea056642fd9ee7948c35f110e77669",
+              "position": 2,
+              "uid": "d0f94a56-5cf8-5215-9cfa-5993b3b781be"
+            },
+            {
+              "content": "On a tired day, the user ate dinner out and postponed even washing the dishes after returning home.",
+              "content_digest": "ac36f6c1039dc74f764b4671f718f1e124823dc75fd45abda010285523280b71",
+              "position": 3,
+              "uid": "fc19394a-6634-5aae-bfa5-bba91e707954"
+            },
+            {
+              "content": "In the same week, on a day the user made simple noodles at home, they rested immediately after the meal.",
+              "content_digest": "45bb543f6c6ca213b856683b3c53448ac0d044bcf24f694eda292d6c4923ac5c",
+              "position": 4,
+              "uid": "be7aa7f3-1b67-5677-950d-9942ca337a99"
+            },
+            {
+              "content": "On a night the window was left open, street noise woke the user twice.",
+              "content_digest": "13f3dd86b869b25ee75e1b80d9cdb890b79434fa976fbd7246e89ba808f1a6c6",
+              "position": 5,
+              "uid": "47faaefd-2d60-5693-9847-2c1d5d2f9092"
+            },
+            {
+              "content": "On a night the table fan was running, the user was not too warm even with the window closed.",
+              "content_digest": "96ce23df1cf4f913e3b4c339cc3a857a6a8776e3f3f48e865eae65f02297bba8",
+              "position": 6,
+              "uid": "d6eea310-1313-5a51-b032-f3f518620610"
+            },
+            {
+              "content": "The user's father prefers to have coffee available after dinner and believes it will not cause a sleep problem.",
+              "content_digest": "197616278309e370f0d0e633700b1bde2c6e4395dbc8ed2b942e14fb6c1c9cc5",
+              "position": 7,
+              "uid": "056defa1-8256-561d-a2b4-a70df4058c33"
+            },
+            {
+              "content": "When making a sleep-related suggestion, do not treat one or two records as a general lifestyle habit.",
+              "content_digest": "963795e89a1e2365dd81abf463fb9a80c1c22b9c0e59b121681f89c09860e583",
+              "position": 8,
+              "uid": "7cecee60-fabd-55a3-998b-78810bd9eaf4"
+            },
+            {
+              "content": "The user tends to go to bed much later after drinking coffee late in the afternoon.",
+              "content_digest": "e54652939c104807d5c501753f85aee97883cc55e1d056787b86857cd5b8292d",
+              "position": 9,
+              "uid": "9ace13d3-d881-5720-bfd5-f7884db67756"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "90e563d1-6155-4c4e-8d01-521b9b176d5b"
+        },
+        {
+          "context_digest": "ac4f93d71b525f6156f0b669075a833a2a41161be6abe677ec382bff6e6060e8",
+          "context_name": "task-3/local/personal-memory/2025/08",
+          "context_uid": "ed84de75-8e18-5bec-908c-a1ff9827b3e3",
+          "memories": [
+            {
+              "content": "The user keeps packing tape for returns in an upper kitchen drawer.",
+              "content_digest": "ed359d883caffd7ce4daddc297ddcc9d26da233dc2a36dc4dbc96e300b2248e9",
+              "position": 0,
+              "uid": "15c3941e-ed44-508f-ae30-b51456b5ba86"
+            },
+            {
+              "content": "The user arrived ten minutes before the post office closed and found that numbered-ticket intake had ended.",
+              "content_digest": "3c4609eea9455bbd46a6f238aa750f61f348ce7b2cf421a4d123f1b707b52550",
+              "position": 1,
+              "uid": "84d1fd1c-9508-5f05-9a7c-1d5f20ecf4a4"
+            },
+            {
+              "content": "Before the next visit, the user checked the operating hours and arrived one hour before closing.",
+              "content_digest": "b2997262abf4ba476c63de3550e54269ef7d61bb56d3adb5b6d9f54ba13fc078",
+              "position": 2,
+              "uid": "8946f9da-e325-59c3-9260-2d2f590d3701"
+            },
+            {
+              "content": "The user went to the counter without closing a return box and had to go back to the packing station.",
+              "content_digest": "759122c3f88ca71b992a725e357beab72f9820de872a7bd895b808c2df21f2b2",
+              "position": 3,
+              "uid": "67e8b160-a57d-56e5-a766-741b7ce0e939"
+            },
+            {
+              "content": "For the next return, the user sealed the box at home and completed intake in one attempt.",
+              "content_digest": "007fcec32ea3788854161e68c95c2aaba90e94a721d03b350e1619afc54840e3",
+              "position": 4,
+              "uid": "efd0706b-600a-5ac1-926e-cc0602ca0086"
+            },
+            {
+              "content": "The user scheduled bank and post-office errands for the same day, but they took a long time because the destinations were in different directions.",
+              "content_digest": "000e1975fde79f4d6caf36adad0c2e481a032537cfa410e46649866d985567c2",
+              "position": 5,
+              "uid": "1e8a6f7e-0911-5a34-ad82-172479d1a7a4"
+            },
+            {
+              "content": "The following week, after checking the locations on a map, the user visited nearby branches in sequence.",
+              "content_digest": "c3de08c5b6074dff2b3f6303f5efc3740cc430b634cb365a5d570061a30a53fa",
+              "position": 6,
+              "uid": "a8670161-257e-51ab-8e30-0e282952278f"
+            },
+            {
+              "content": "Postal staff expect a return-label barcode to arrive affixed flat, without a fold.",
+              "content_digest": "6293ace2d67781644694976af71d5696cad28979d9641718ccd59f16b3397a47",
+              "position": 7,
+              "uid": "2db70f53-99ee-556c-a8c1-b809881cbebd"
+            },
+            {
+              "content": "Before grouping errands into one outing, check each institution's location and operating hours that day.",
+              "content_digest": "7fef923f9ed507db5aad6cf65eaee2c965075e51fef0ff73fa669f1e7f69314a",
+              "position": 8,
+              "uid": "38d60cc4-2f91-5cc2-b511-55cdbbe12c32"
+            },
+            {
+              "content": "Postal and financial counters may operate on different hours than usual around public holidays.",
+              "content_digest": "2d5dc709c468405ea894f343e922dc2546b826ed7488e613f4d4dd730bccccfd",
+              "position": 9,
+              "uid": "1272087c-a535-5612-8c7a-1bc257183788"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "151dbdde-5d4b-4395-8fdb-d1d23a423817"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate practical domains: the reference frame concerns sleep, caffeine, meal fatigue, and bedroom conditions, while the compared frame concerns preparing returns and planning postal, banking, and routing errands. Neither frame contains a counterpart to the other’s claims.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "90e563d1-6155-4c4e-8d01-521b9b176d5b",
+              "memory_uid": "3088c235-435c-52ee-9ffc-26cf85ec196e"
+            },
+            {
+              "frame_uid": "90e563d1-6155-4c4e-8d01-521b9b176d5b",
+              "memory_uid": "47faaefd-2d60-5693-9847-2c1d5d2f9092"
+            },
+            {
+              "frame_uid": "90e563d1-6155-4c4e-8d01-521b9b176d5b",
+              "memory_uid": "d6eea310-1313-5a51-b032-f3f518620610"
+            }
+          ],
+          "reason": "These reference-only memories jointly describe one sleep-environment setup: the fan is beside the window, an open window admitted disruptive noise, and running the fan allowed the window to remain closed without excessive warmth.",
+          "status": "RESOLVED",
+          "summary": "A bedside fan and window choices affect bedroom comfort and exposure to street noise.",
+          "uid": "1f4e724c-f755-512a-b1a0-bab051e48447"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "90e563d1-6155-4c4e-8d01-521b9b176d5b",
+              "memory_uid": "7811ed66-2f22-54d8-a215-62a843264ba5"
+            },
+            {
+              "frame_uid": "90e563d1-6155-4c4e-8d01-521b9b176d5b",
+              "memory_uid": "d0f94a56-5cf8-5215-9cfa-5993b3b781be"
+            },
+            {
+              "frame_uid": "90e563d1-6155-4c4e-8d01-521b9b176d5b",
+              "memory_uid": "9ace13d3-d881-5720-bfd5-f7884db67756"
+            }
+          ],
+          "reason": "These reference-only memories split one timing-sensitive caffeine claim across a late-coffee episode, an earlier-coffee contrast, and a broader tendency toward later bedtimes after late-afternoon coffee.",
+          "status": "RESOLVED",
+          "summary": "The user’s observed sleep timing varies with how late they drink coffee.",
+          "uid": "41650318-49c0-53f5-b25e-6dc9c62b4446"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "90e563d1-6155-4c4e-8d01-521b9b176d5b",
+              "memory_uid": "fc19394a-6634-5aae-bfa5-bba91e707954"
+            },
+            {
+              "frame_uid": "90e563d1-6155-4c4e-8d01-521b9b176d5b",
+              "memory_uid": "be7aa7f3-1b67-5677-950d-9942ca337a99"
+            }
+          ],
+          "reason": "These reference-only observations describe the same underlying pattern of conserving effort around dinner when tired, using either food prepared elsewhere or a simple home meal.",
+          "status": "RESOLVED",
+          "summary": "On tired days, low-effort meal choices were followed by immediate rest or postponed chores.",
+          "uid": "2db4bea6-5305-5906-ad29-45356a427598"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "90e563d1-6155-4c4e-8d01-521b9b176d5b",
+              "memory_uid": "056defa1-8256-561d-a2b4-a70df4058c33"
+            }
+          ],
+          "reason": "This is an independently useful reference-only preference and belief concerning another person, with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s father wants coffee available after dinner and does not expect it to impair sleep.",
+          "uid": "bdf62f65-c12a-5210-9d14-c09c6b182b81"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "90e563d1-6155-4c4e-8d01-521b9b176d5b",
+              "memory_uid": "7cecee60-fabd-55a3-998b-78810bd9eaf4"
+            }
+          ],
+          "reason": "This reference-only instruction governs interpretation of sparse sleep observations and has no corresponding evidence-handling policy in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Sleep suggestions should not generalize a lifestyle habit from only one or two records.",
+          "uid": "4e78a06c-51bc-5615-8924-582d4984f977"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "151dbdde-5d4b-4395-8fdb-d1d23a423817",
+              "memory_uid": "15c3941e-ed44-508f-ae30-b51456b5ba86"
+            },
+            {
+              "frame_uid": "151dbdde-5d4b-4395-8fdb-d1d23a423817",
+              "memory_uid": "67e8b160-a57d-56e5-a766-741b7ce0e939"
+            },
+            {
+              "frame_uid": "151dbdde-5d4b-4395-8fdb-d1d23a423817",
+              "memory_uid": "efd0706b-600a-5ac1-926e-cc0602ca0086"
+            }
+          ],
+          "reason": "These compared-only memories split one return-box preparation claim across tape storage, an unsealed-box failure, and a later one-attempt success after sealing at home.",
+          "status": "RESOLVED",
+          "summary": "Keeping packing tape available and sealing a return box at home can prevent a failed counter attempt.",
+          "uid": "1ab0d751-7317-5562-91b8-b12c0f334b5a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "151dbdde-5d4b-4395-8fdb-d1d23a423817",
+              "memory_uid": "84d1fd1c-9508-5f05-9a7c-1d5f20ecf4a4"
+            },
+            {
+              "frame_uid": "151dbdde-5d4b-4395-8fdb-d1d23a423817",
+              "memory_uid": "8946f9da-e325-59c3-9260-2d2f590d3701"
+            }
+          ],
+          "reason": "These compared-only memories provide failure and success observations for the same operational decision about when to arrive for postal intake.",
+          "status": "RESOLVED",
+          "summary": "Arriving shortly before posted closing may be too late for intake, whereas arriving substantially earlier can avoid that problem.",
+          "uid": "1909ca2a-88a6-5048-8556-d7eacab7df1b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "151dbdde-5d4b-4395-8fdb-d1d23a423817",
+              "memory_uid": "1e8a6f7e-0911-5a34-ad82-172479d1a7a4"
+            },
+            {
+              "frame_uid": "151dbdde-5d4b-4395-8fdb-d1d23a423817",
+              "memory_uid": "a8670161-257e-51ab-8e30-0e282952278f"
+            },
+            {
+              "frame_uid": "151dbdde-5d4b-4395-8fdb-d1d23a423817",
+              "memory_uid": "38d60cc4-2f91-5cc2-b511-55cdbbe12c32"
+            }
+          ],
+          "reason": "These compared-only memories split one errand-planning claim across inefficient routing, improved sequencing of nearby branches, and explicit advance-checking guidance.",
+          "status": "RESOLVED",
+          "summary": "Grouped errands should account for both branch locations and daily operating hours before the outing.",
+          "uid": "9efedf32-ce19-5fec-aa3e-872cd3f79b74"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "151dbdde-5d4b-4395-8fdb-d1d23a423817",
+              "memory_uid": "2db70f53-99ee-556c-a8c1-b809881cbebd"
+            }
+          ],
+          "reason": "This compared-only packaging requirement is independently useful and has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Postal staff expect a return-label barcode to be attached flat and without a fold.",
+          "uid": "0047483a-73c7-5d28-881e-dc8ad04e3727"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "151dbdde-5d4b-4395-8fdb-d1d23a423817",
+              "memory_uid": "1272087c-a535-5612-8c7a-1bc257183788"
+            }
+          ],
+          "reason": "This compared-only holiday-specific scheduling caveat is independently useful and has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Postal and financial counter hours may differ from their usual schedules around public holidays.",
+          "uid": "d5cbf761-10f2-50fc-bed2-6df7bbc04890"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame records return-package preparation, counter-arrival timing, efficient errand routing, barcode placement requirements, and possible holiday-hour changes.",
+        "differences": "",
+        "reference_only": "The reference frame records caffeine-related sleep timing, bedroom cooling and noise conditions, low-effort meals on tired days, a family coffee preference, and caution against generalizing from sparse observations."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "ffe94271-b3c8-439d-8e0b-f2a71f563f2f"
+    },
+    "analysis_digest": "bd3fd92ee2b2d3d4eee90f7e5fc79807337f23ded582befdeb403ae78a79cd79",
+    "key": "44c1bf6e795268a89700fafb8e89a1a776490ec88aea2e554fb19170c73759c6",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 48.20369637499971,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "44c1bf6e795268a89700fafb8e89a1a776490ec88aea2e554fb19170c73759c6",
+  "created_at": "2026-08-13T18:40:12.626772Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/05",
+  "pair_key": "382a753189a863da0d1c8e6c7f8db03ebd6eb04adb5aca567f8776fa2ea4fcd1",
+  "provider_seconds": 48.20369637499971,
+  "right": "task-3/local/personal-memory/2025/08",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

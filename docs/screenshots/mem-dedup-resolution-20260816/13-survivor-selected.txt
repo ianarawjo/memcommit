@@ -1,0 +1,52 @@
+ MEM DEDUP · RESOLUTION SESSION                                                                                                                                                     
+ DETERMINISTIC · EXISTING UID SURVIVOR · EXACT WHOLE-SET APPLY                                                                                                                      
+┌────────────────────────────────────────────────────────────────────| VIEWER · DUPLICATE COMPONENT EVIDENCE |─────────────────────────────────────────────────────────────────────┐
+│DEDUP COMPONENT · EXISTING SURVIVOR ONLY                                                                                                                                         ^│
+│ID · dedup-component-4c8bc32e0fadecebc21a247ecd98bdce9ea0d169a7e37837cfdaa97176ef3706                                                                                             │
+│Choose one existing UID. Its wording stays unchanged; every other member UID is absorbed.                                                                                         │
+│                                                                                                                                                                                  │
+│MEMBERS                                                                                                                                                                           │
+│  RECOMMENDED · #1 · [20000000-0000-4000-8000-000000000100]                                                                                                                       │
+│  The office opens at eight on weekdays.                                                                                                                                          │
+│  #2 · [20000000-0000-4000-8000-000000000200]                                                                                                                                     │
+│  The weekday office opening time is 08:00.                                                                                                                                       │
+│                                                                                                                                                                                  │
+│CONFIRMED EVIDENCE                                                                                                                                                                │
+│  SEMANTIC_EQUIVALENT · [20000000] ↔ [20000000]                                                                                                                                   │
+│  WHY · Both Memories state the same weekday opening time without adding a distinct condition.                                                                                    │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ RESPONSES · REQUIRED · EXISTING SURVIVOR ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃QUESTION · Choose one unchanged survivor from 2 members.                                                                                                                          ┃
+┃                                                                                                                                                                                  ┃
+┃✓ 1. KEEP [20000000] · RECOMMENDED                                                                                                                                                ┃
+┃  Keep Context item #1 unchanged; absorb the other UIDs.                                                                                                                          ┃
+┃                                                                                                                                                                                  ┃
+┃  2. KEEP [20000000]                                                                                                                                                              ┃
+┃  Keep Context item #2 unchanged; absorb the other UIDs.                                                                                                                          ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────| ITEMS · REQUIRED DUPLICATE COMPONENTS |─────────────────────────────────────────────────────────────────────┐
+│REQUIRED 1 · ANSWERED 1 · REMAINING 0                                                                                                                                             │
+│✓ 1. DUPLICATE COMPONENT · Choose one unchanged survivor from 2 members.                                                                                                          │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────────────────────────────────────────────| TO DO · ONE NEXT ACTION |────────────────────────────────────────────────────────────────────────────┐
+│REVIEW AND APPLY                                                                                                                                                                  │
+│Enter opens the exact whole-set final review.                                                                                                                                     │
+│[ PRESS ENTER ]                                                                                                                                                                   │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ move · Enter open/select · Tab frames · Esc/Backspace back · y focused · Y complete · Q close

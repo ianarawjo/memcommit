@@ -1,0 +1,388 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:38:37.755269+00:00",
+      "frames": [
+        {
+          "context_digest": "db438345c3ec4b3f69562a274c9f81a93bd6e6df97bc89b60abcd193dc89b562",
+          "context_name": "task-3/local/personal-memory/2024/04",
+          "context_uid": "206e1cd3-93da-5341-bda3-95cde4814c20",
+          "memories": [
+            {
+              "content": "The user completed a routine dental checkup in April 2024.",
+              "content_digest": "bbaa093f8dee5b5ee42c4a180e683fce00bc9364f5a009b9fa1e7f2ac233bc01",
+              "position": 0,
+              "uid": "9cea83cd-e39f-53bd-9e79-d30aa465ad02"
+            },
+            {
+              "content": "When the user heard three checkup questions in succession, they asked for the first question again.",
+              "content_digest": "e1b76973991f009295489249af1a7cd0fa7957f24f330e39337e01e5b1acdcbb",
+              "position": 1,
+              "uid": "51f8326f-60d4-5ba3-ba32-a04331dcb930"
+            },
+            {
+              "content": "At the next visit, when questions were asked one at a time, the user answered each without omission.",
+              "content_digest": "30c943f2e043f485a7a7e1ac19343c753ed8f834d00716725322505e28e0b15a",
+              "position": 2,
+              "uid": "cd0bce79-71d5-5d46-9c68-8a1d096dd53a"
+            },
+            {
+              "content": "The user called to reschedule an appointment at lunchtime but did not reach anyone.",
+              "content_digest": "1d4bd2122c160d35080b232ebb8ae5080c2ce34124645b3ec8040d7d29af9752",
+              "position": 3,
+              "uid": "71e27b0c-5c10-5102-aeac-98b0841723f2"
+            },
+            {
+              "content": "After returning home, the user kept a photo of the paper instructions received at the clinic.",
+              "content_digest": "68cddec62167a3910122a129dcfdb3c5604a4fea996d01f870734739dd3b0221",
+              "position": 4,
+              "uid": "86ad5410-0cc7-5876-8e3a-a3f0dd1680c7"
+            },
+            {
+              "content": "On a day the user put only the visit address in the calendar, they had to search again for the floor.",
+              "content_digest": "0d6926aba2c90930bfa984d7af1b12c60f35e53ba9916dfbee2c2391961db1a9",
+              "position": 5,
+              "uid": "aab36950-7e2b-588f-bb7c-d3bd6e36c501"
+            },
+            {
+              "content": "On a day the user shared the checkup time with their older sister, the sister called to check in after the user returned home.",
+              "content_digest": "b7d0fea8e8f2fc13126453039dcedebcda3c67ce2ea96c4a2d5b60365448e0e3",
+              "position": 6,
+              "uid": "50ac9268-9259-56fd-8678-1dfc8f919efb"
+            },
+            {
+              "content": "The scheduling staff at that clinic expect requests to change appointments to arrive by telephone.",
+              "content_digest": "28eec4f0ef0b96764a3f7ea54ee3db9fd4d5f1b62a5a2fa29d0a6193f1d8a18c",
+              "position": 7,
+              "uid": "5141ca66-9860-5ec5-b028-ac8670f586ca"
+            },
+            {
+              "content": "Before adding a follow-up visit to the calendar, confirm the date, time, address, and floor with the user.",
+              "content_digest": "0555c837f721fccd5918b2275086bb39c75e016e27574027185cfbada1c766af",
+              "position": 8,
+              "uid": "e265e637-fa41-53d0-aa9b-0102e9962f9a"
+            },
+            {
+              "content": "The local agent can track completed checkups and scheduled appointments but cannot determine whether a follow-up visit is needed.",
+              "content_digest": "be24b47ccb071438fd01bb99b11af3c63f22e260312a26d901824e6bb0d4cd89",
+              "position": 9,
+              "uid": "7aece7ae-b327-537e-9cef-fe24ee8fc618"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "2e251101-e689-481a-a77b-5b6e8bf64a49"
+        },
+        {
+          "context_digest": "d28031209c5edc768a592166e26351dd5bce0c7568d379fcaceab173450041c8",
+          "context_name": "task-3/local/personal-memory/2026/02",
+          "context_uid": "7ffcbc10-1703-54b0-9545-99742b51d333",
+          "memories": [
+            {
+              "content": "The user keeps basic repair tools in a box beneath the sink.",
+              "content_digest": "c2a23bace63735c502081b19682a8ceb3e37156b9aadd6f7739e2005c20469d6",
+              "position": 0,
+              "uid": "7d3daf76-a21e-5117-a534-6175ab2d2861"
+            },
+            {
+              "content": "On a day the faucet leaked, the user placed only a towel beneath it, and the floor became wet as well.",
+              "content_digest": "ad6baa7e1848e4e61bdaf22bc5c8665122330b5c70c8ae192216abbba17c6134",
+              "position": 1,
+              "uid": "70a6d9f5-180f-5174-b247-690e10baa23e"
+            },
+            {
+              "content": "After sending a photo to building management, the user finalized the time for a repair visit.",
+              "content_digest": "82b36c7a95e51a0dfa32768c2a437d509b75c0f93bc51a99a636f2c9739a20da",
+              "position": 2,
+              "uid": "9fcd922c-147c-517b-82b3-180fdfb13f33"
+            },
+            {
+              "content": "Before the technician's visit, the user emptied the area beneath the sink so work could begin immediately.",
+              "content_digest": "dbc3b48e5bc4b406dc17067dd93d92e845e3706f47c8706f9a5d5ef17bf64617",
+              "position": 3,
+              "uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5"
+            },
+            {
+              "content": "On a day the user wrote the visit time only in the calendar and turned off the reminder, they heard the doorbell late.",
+              "content_digest": "95fab6bcab815dd8bdd5fecb867f84c6d2f1a901771603b1dbf197cde3c1d19d",
+              "position": 4,
+              "uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65"
+            },
+            {
+              "content": "For the next visit, the user enabled a reminder 30 minutes beforehand and answered immediately at the entrance.",
+              "content_digest": "818783ff21b2d369935b9994c17b28f93f84ea7558dab9f2de20d0aad21f86a3",
+              "position": 5,
+              "uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a"
+            },
+            {
+              "content": "After the repair, the user called their maternal aunt to confirm that the spare key entrusted to her was still there.",
+              "content_digest": "ac01b9816dda2d6bf16f22b41157120b7ffdd75d19638f6313a88e1ce6e7a1f1",
+              "position": 6,
+              "uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441"
+            },
+            {
+              "content": "The user's maternal aunt considers it unsafe to hand the spare key to a repair technician without the user's explicit request.",
+              "content_digest": "f7c7c0306c81cc6de9f02aa1aed7d411db3f29757d024e7d5a1679b1ff308948",
+              "position": 7,
+              "uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd"
+            },
+            {
+              "content": "Obtain the user's reconfirmation before scheduling an external worker to enter the residential unit.",
+              "content_digest": "34382e40f4907bea82728787fdeb150e299d46a0079ae2847d4eda6d6d892d22",
+              "position": 8,
+              "uid": "4716a67b-8602-564c-9e89-85cd4ee158f9"
+            },
+            {
+              "content": "A multi-unit residential building's repair schedule may change because of emergency work or parts availability.",
+              "content_digest": "d701fdd1ffbf17ff0890c583b5bf39849e3c6e3cc296fde7e00d3d1ecc0ef196",
+              "position": 9,
+              "uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "06b08ea4-d8c5-4520-8471-6b91ad673caf"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate dental-care and home-repair contexts. Their only substantive intersection is visit preparation: both support confirming or recording details, while the information and safeguards required differ explicitly by visit type. All other claims provide independent context, observations, policies, or limitations without contradiction.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2e251101-e689-481a-a77b-5b6e8bf64a49",
+              "memory_uid": "9cea83cd-e39f-53bd-9e79-d30aa465ad02"
+            }
+          ],
+          "reason": "This is independently useful dental history with no corresponding repair-side claim.",
+          "status": "RESOLVED",
+          "summary": "The user completed a routine dental checkup in April 2024.",
+          "uid": "8d04cf34-a334-5242-aabc-5ed45bc11eed"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2e251101-e689-481a-a77b-5b6e8bf64a49",
+              "memory_uid": "51f8326f-60d4-5ba3-ba32-a04331dcb930"
+            },
+            {
+              "frame_uid": "2e251101-e689-481a-a77b-5b6e8bf64a49",
+              "memory_uid": "cd0bce79-71d5-5d46-9c68-8a1d096dd53a"
+            }
+          ],
+          "reason": "The two observations jointly establish one dental-communication pacing pattern absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user answers checkup questions more completely when they are presented one at a time rather than in succession.",
+          "uid": "58e1522a-5f1f-53a8-a79a-64b8a26d479d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2e251101-e689-481a-a77b-5b6e8bf64a49",
+              "memory_uid": "71e27b0c-5c10-5102-aeac-98b0841723f2"
+            },
+            {
+              "frame_uid": "2e251101-e689-481a-a77b-5b6e8bf64a49",
+              "memory_uid": "5141ca66-9860-5ec5-b028-ac8670f586ca"
+            }
+          ],
+          "reason": "The event and clinic practice split one claim about the dental rescheduling channel and its observed accessibility.",
+          "status": "RESOLVED",
+          "summary": "Appointment-change requests at the dental clinic are expected by telephone, although a lunchtime call went unanswered.",
+          "uid": "e7309e64-7e5f-58f9-ad8d-e8eef50269da"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2e251101-e689-481a-a77b-5b6e8bf64a49",
+              "memory_uid": "86ad5410-0cc7-5876-8e3a-a3f0dd1680c7"
+            }
+          ],
+          "reason": "This is a one-sided record-retention observation, not equivalent to sending a repair photograph for coordination.",
+          "status": "RESOLVED",
+          "summary": "The user retained a photograph of paper instructions received at the clinic.",
+          "uid": "0c41cdd6-ef03-5553-a74e-62479cc2e273"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "2e251101-e689-481a-a77b-5b6e8bf64a49",
+              "memory_uid": "aab36950-7e2b-588f-bb7c-d3bd6e36c501"
+            },
+            {
+              "frame_uid": "2e251101-e689-481a-a77b-5b6e8bf64a49",
+              "memory_uid": "e265e637-fa41-53d0-aa9b-0102e9962f9a"
+            },
+            {
+              "frame_uid": "06b08ea4-d8c5-4520-8471-6b91ad673caf",
+              "memory_uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65"
+            },
+            {
+              "frame_uid": "06b08ea4-d8c5-4520-8471-6b91ad673caf",
+              "memory_uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a"
+            },
+            {
+              "frame_uid": "06b08ea4-d8c5-4520-8471-6b91ad673caf",
+              "memory_uid": "4716a67b-8602-564c-9e89-85cd4ee158f9"
+            }
+          ],
+          "reason": "The claims address preparing for a scheduled visit, while explicit dental-clinic and residential-entry scopes explain and preserve their different operational requirements.",
+          "status": "RESOLVED",
+          "summary": "Visit preparation requires user-confirmed supports tailored to the visit: complete dental location and timing details, but reminders and renewed entry consent for residential repair visits.",
+          "uid": "6277d295-f67f-54bf-8c2b-955742535529"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2e251101-e689-481a-a77b-5b6e8bf64a49",
+              "memory_uid": "50ac9268-9259-56fd-8678-1dfc8f919efb"
+            }
+          ],
+          "reason": "This is a dental-related family-support observation with no corresponding claim about the same support role.",
+          "status": "RESOLVED",
+          "summary": "Sharing a checkup time with the user's older sister led to a post-visit check-in.",
+          "uid": "46f394f7-2f35-555f-8f6b-35e13deae924"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2e251101-e689-481a-a77b-5b6e8bf64a49",
+              "memory_uid": "7aece7ae-b327-537e-9cef-fe24ee8fc618"
+            }
+          ],
+          "reason": "This capability boundary is independently useful and has no counterpart in the repair frame.",
+          "status": "RESOLVED",
+          "summary": "The local agent can track checkups and appointments but cannot determine whether dental follow-up is needed.",
+          "uid": "d482d5ae-83a2-5885-906f-79003bc1622c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "06b08ea4-d8c5-4520-8471-6b91ad673caf",
+              "memory_uid": "7d3daf76-a21e-5117-a534-6175ab2d2861"
+            }
+          ],
+          "reason": "This household-resource fact has no dental-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user stores basic repair tools beneath the sink.",
+          "uid": "c84442e6-c98d-50f0-837e-efe0fbd3c58a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "06b08ea4-d8c5-4520-8471-6b91ad673caf",
+              "memory_uid": "70a6d9f5-180f-5174-b247-690e10baa23e"
+            }
+          ],
+          "reason": "This is an independent observation about inadequate leak containment.",
+          "status": "RESOLVED",
+          "summary": "Using only a towel beneath a leaking faucet did not prevent the floor from becoming wet.",
+          "uid": "0e4db05c-6add-5ce0-b227-64a48f3340db"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "06b08ea4-d8c5-4520-8471-6b91ad673caf",
+              "memory_uid": "9fcd922c-147c-517b-82b3-180fdfb13f33"
+            }
+          ],
+          "reason": "This repair-coordination sequence has no corresponding dental claim.",
+          "status": "RESOLVED",
+          "summary": "The user finalized a repair-visit time after sending building management a photograph.",
+          "uid": "47f0dbc7-d1ef-539b-ab09-22bb0a6d7b92"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "06b08ea4-d8c5-4520-8471-6b91ad673caf",
+              "memory_uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5"
+            }
+          ],
+          "reason": "This is an independent preparation practice specific to physical repair access.",
+          "status": "RESOLVED",
+          "summary": "The user cleared the area beneath the sink before a technician arrived, allowing work to begin immediately.",
+          "uid": "7db38a8f-7d91-5e78-8d22-504e850ad515"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "06b08ea4-d8c5-4520-8471-6b91ad673caf",
+              "memory_uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441"
+            },
+            {
+              "frame_uid": "06b08ea4-d8c5-4520-8471-6b91ad673caf",
+              "memory_uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd"
+            }
+          ],
+          "reason": "The key check and the aunt's safety rule jointly describe one one-sided spare-key control arrangement.",
+          "status": "RESOLVED",
+          "summary": "The user's maternal aunt retains a spare key and will not give it to a repair technician without the user's explicit request.",
+          "uid": "71858468-aa18-594e-a8d8-ee4b8656d488"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "06b08ea4-d8c5-4520-8471-6b91ad673caf",
+              "memory_uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+            }
+          ],
+          "reason": "This repair-scheduling contingency is independently useful and is not stated for dental appointments.",
+          "status": "RESOLVED",
+          "summary": "Repair schedules in multi-unit residential buildings may change because of emergencies or parts availability.",
+          "uid": "d66616f7-7c40-54cc-ae7d-a419097aa6f3"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The repair frame adds tools, leak containment, management coordination, workspace preparation, spare-key safeguards, and possible schedule disruption.",
+        "differences": "Visit preparation is context-specific: dental visits require complete location and time details, while residential repair visits emphasize reminders and renewed consent for entry.",
+        "reference_only": "The dental frame adds checkup history, question pacing, telephone rescheduling, retained instructions, family check-ins, and limits on determining clinical need."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "95d97927-287d-4de5-961c-d34b259dc9cc"
+    },
+    "analysis_digest": "8982022fef658086056d22b447d3635124c8c78dceb2c332336d0196a1269064",
+    "key": "e99dacf3881baf4f2b0bf74c4b712e4615da2f5452291223a9b44c3bfb7f07b8",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 45.92032758299683,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "e99dacf3881baf4f2b0bf74c4b712e4615da2f5452291223a9b44c3bfb7f07b8",
+  "created_at": "2026-08-13T18:39:23.675179Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/04",
+  "pair_key": "b28d2f80964d7cd38cdcc3fd6f445d7153047700b24bb172db7fb90ce827f6aa",
+  "provider_seconds": 45.92032758299683,
+  "right": "task-3/local/personal-memory/2026/02",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

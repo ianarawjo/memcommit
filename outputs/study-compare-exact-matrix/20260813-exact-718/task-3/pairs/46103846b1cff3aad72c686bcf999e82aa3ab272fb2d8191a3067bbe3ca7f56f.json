@@ -1,0 +1,397 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:43:01.307165+00:00",
+      "frames": [
+        {
+          "context_digest": "4f6b609414f921ca470614699bdac42e9f2932482375026def79956485b0569e",
+          "context_name": "task-3/local/personal-memory/2024/08",
+          "context_uid": "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+          "memories": [
+            {
+              "content": "The user has set a monthly limit in their budget record for spending other than living expenses.",
+              "content_digest": "5c0df9500947f7e044a8755d66d58adccca01db3aed42b43ab9748b8c4f431e9",
+              "position": 0,
+              "uid": "5f80c7ec-e294-5905-abab-91027c9d827b"
+            },
+            {
+              "content": "In a week when the user went grocery shopping and visited the bank separately, they made the same round trip twice.",
+              "content_digest": "4e814adad1a4c201f6348f1c14b14950b5c549bba64bf70cfccd08ca9efc5bd3",
+              "position": 1,
+              "uid": "2428ab2c-37ce-5de1-84dc-abcdfc8ce062"
+            },
+            {
+              "content": "The following week, the user completed both errands in one outing and reduced travel time.",
+              "content_digest": "ad5555ca7daa9d977cfcf5eb4f476eb5730cead6d307c986497716d69f1145b0",
+              "position": 2,
+              "uid": "bf30d1ef-d7cd-5aa3-b65b-ff04aae647e7"
+            },
+            {
+              "content": "When a bill alert arrived on the due date, the user postponed payment until after a meeting.",
+              "content_digest": "c62dda61c680da9ac1fd5ab9124fa05635d20ad9e4bbb7aef36723d289c05102",
+              "position": 3,
+              "uid": "442672e1-2188-5aa3-ad38-5e9c16f25bd5"
+            },
+            {
+              "content": "In a month when the user received an alert three days before the deadline, they finished payment before dinner.",
+              "content_digest": "939ac83da176d5bb1b7e2196402b9faacb962d947b85b9a61c31854867c1e62e",
+              "position": 4,
+              "uid": "c7385cce-ec43-5902-973c-5b8af54c3557"
+            },
+            {
+              "content": "The user collected cash receipts in their wallet and entered all the amounts at once at the end of the month.",
+              "content_digest": "3171a8128ed3855ac9a4c2b542516333fc3728ed1d7260974888b94d0b32c3e6",
+              "position": 5,
+              "uid": "d926c45c-ea49-589c-a7e4-491c9a1514f8"
+            },
+            {
+              "content": "After recording one large expense, the user ate out two fewer times that week.",
+              "content_digest": "af55fd94b01e0ece728347e9349f96b5733c57dae752f9559dc4e08bef7a3320",
+              "position": 6,
+              "uid": "9433523f-8c4e-5424-b370-d325ba5154d1"
+            },
+            {
+              "content": "The user's older sister prefers to settle the jointly paid cost of a meal by electronic transfer rather than cash.",
+              "content_digest": "d84d2ea68add4202e8c421e9c1702c29ca88bd6ae838588bd415fdbd1980cb2b",
+              "position": 7,
+              "uid": "d9531336-ac5f-5ba0-bf26-9c69c854578f"
+            },
+            {
+              "content": "Confirm the amount and account with the user before creating an automatic payment schedule.",
+              "content_digest": "b1d0c16fd880f4ae2657415ddc8fe0f223ccdd931248bb4412a6c95754d4cce1",
+              "position": 8,
+              "uid": "9941d390-8b40-5fee-8bcf-df6f36befcb0"
+            },
+            {
+              "content": "The timing of payment processing and late-payment recording may differ by billing institution.",
+              "content_digest": "203e65e4eb8451ec7551fb166357f107d17b8c89a2341b32fc25a3fb67ec7f98",
+              "position": 9,
+              "uid": "79aea8fd-5d48-50f7-adf6-b7ebe33bfb08"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "58cc58af-6131-40be-bfbb-de80cc010dfa"
+        },
+        {
+          "context_digest": "07c43eb0b8ecd9107f1d879a409b45289e236f48f620ff85f1d30ce594809149",
+          "context_name": "task-3/local/personal-memory/2025/09",
+          "context_uid": "5cd8ed5f-2f1f-5deb-8347-fc3bfa484d99",
+          "memories": [
+            {
+              "content": "The user keeps the book they are reading and a note-taking notebook on a small living-room desk.",
+              "content_digest": "d2c70cf4c27fe62f5915f2f5c669484c4a875e4ee21f8d7d89a5ff6746f14cf1",
+              "position": 0,
+              "uid": "3d3f7960-daf5-5a51-98b3-14261c5aa66c"
+            },
+            {
+              "content": "While reading in the living room with the television on, the user read the same paragraph three times.",
+              "content_digest": "00e41e6d5fe1dcfe961fa0f739860823ecf338dc55d5b9beea265ca823974582",
+              "position": 1,
+              "uid": "28714a4e-bc14-5703-b594-126471ae0585"
+            },
+            {
+              "content": "The next day, after turning off the television, the user read 40 pages without interruption.",
+              "content_digest": "c28ba9c872757b6683ab03d73e6ad61f71484d55986aae4c0976862a85e3a8b1",
+              "position": 2,
+              "uid": "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df"
+            },
+            {
+              "content": "On a day the phone was on the desk, the user stopped taking notes each time they checked a notification.",
+              "content_digest": "f95cb8b1b8abe89d7bf597ca5fb78f0862fe97a7cf0d8bc5a46c04026ebd6889",
+              "position": 3,
+              "uid": "1b1c9f90-2561-53d5-88fe-d54618450143"
+            },
+            {
+              "content": "During the next reading period, the user left the phone in another room and did not check it for an hour.",
+              "content_digest": "89dc50732e19b88a77657b285ce71c399d229b510265cc9adfbdf6ad706680cd",
+              "position": 4,
+              "uid": "076a7caa-5dcf-5f9d-8bee-efc952652efa"
+            },
+            {
+              "content": "A note attached to a paper book fell out, and the user had to find their place again.",
+              "content_digest": "723e48ceeba6c94e627c79af0518c811cfc8337f9eeae3a80ae388ec98786994",
+              "position": 5,
+              "uid": "1dad71ec-6a5d-550e-89d2-a86dc3dacb11"
+            },
+            {
+              "content": "With the next book, the user recorded the page number in the notebook and resumed reading immediately.",
+              "content_digest": "c74c2f80bf403da64f0a6de97ff04bc1f41cf68d0d33829fa926cc2549e8ea75",
+              "position": 6,
+              "uid": "58494743-fc7f-59e9-8e17-80b8a644470a"
+            },
+            {
+              "content": "The user's father expects that lowering the television volume while the user reads will make it easier for the user to concentrate.",
+              "content_digest": "281b1f8f55f8d22fbebdb2220405dc3e2300e29e0a568c1fac36d4bb1c39c186",
+              "position": 7,
+              "uid": "cce66589-892c-5d73-bdbc-2c6e94e0992e"
+            },
+            {
+              "content": "The local agent can summarize past reading environments and interruption records but cannot predict the next reading time.",
+              "content_digest": "50e5376e22f503048a7f1bf4055bfb31cb4aa3c75b1c816f2febce913716eb58",
+              "position": 8,
+              "uid": "20b2a27f-908f-5ed7-a288-f7c1030674fc"
+            },
+            {
+              "content": "The user feels that repeated notifications interrupt their flow of concentration.",
+              "content_digest": "d777b2a01cfac23e6ef7701c04c33592f8382fa78f8e307bae9ddbffc9a8e2ef",
+              "position": 9,
+              "uid": "310f4cfc-b117-5511-8e13-2bd2ebec9fe5"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "ea2dc333-4f59-429f-84fd-4ae5a64b5475"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate domains: the reference records budgeting, errands, billing, receipts, and shared-cost practices, while the compared frame records reading setup, distractions, placekeeping, concentration, and agent limits. No cross-frame claims address the same operational decision closely enough to relate.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "58cc58af-6131-40be-bfbb-de80cc010dfa",
+              "memory_uid": "5f80c7ec-e294-5905-abab-91027c9d827b"
+            }
+          ],
+          "reason": "This is independently useful reference-only budgeting information with no compared-side claim about spending limits.",
+          "status": "RESOLVED",
+          "summary": "The user maintains a monthly limit for non-living spending.",
+          "uid": "de527ed6-c986-5c10-8ef1-865a36ba1a04"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "58cc58af-6131-40be-bfbb-de80cc010dfa",
+              "memory_uid": "2428ab2c-37ce-5de1-84dc-abcdfc8ce062"
+            },
+            {
+              "frame_uid": "58cc58af-6131-40be-bfbb-de80cc010dfa",
+              "memory_uid": "bf30d1ef-d7cd-5aa3-b65b-ff04aae647e7"
+            }
+          ],
+          "reason": "These memories split one reference-only claim that consolidating the errands avoided duplicate travel and reduced travel time.",
+          "status": "RESOLVED",
+          "summary": "Separate and combined grocery-and-bank outings provide contrasting observations about travel efficiency.",
+          "uid": "858452af-fa1d-5fc0-afb5-05b29d7fdb35"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "58cc58af-6131-40be-bfbb-de80cc010dfa",
+              "memory_uid": "442672e1-2188-5aa3-ad38-5e9c16f25bd5"
+            },
+            {
+              "frame_uid": "58cc58af-6131-40be-bfbb-de80cc010dfa",
+              "memory_uid": "c7385cce-ec43-5902-973c-5b8af54c3557"
+            }
+          ],
+          "reason": "These memories jointly contrast due-date notification followed by postponement with advance notification followed by earlier completion; the compared frame has no billing-alert counterpart.",
+          "status": "RESOLVED",
+          "summary": "Different bill-alert lead times are associated with different payment timing.",
+          "uid": "f758b036-4a51-56c9-bc48-eaeb83cc472f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "58cc58af-6131-40be-bfbb-de80cc010dfa",
+              "memory_uid": "d926c45c-ea49-589c-a7e4-491c9a1514f8"
+            }
+          ],
+          "reason": "This is an independent reference-only recordkeeping practice.",
+          "status": "RESOLVED",
+          "summary": "The user batches wallet receipt entry at month end.",
+          "uid": "d7e3ef61-9440-5475-a44c-04be17a92144"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "58cc58af-6131-40be-bfbb-de80cc010dfa",
+              "memory_uid": "9433523f-8c4e-5424-b370-d325ba5154d1"
+            }
+          ],
+          "reason": "This is an independent reference-only observation about spending feedback and subsequent behavior.",
+          "status": "RESOLVED",
+          "summary": "Recording a large expense was followed by reduced restaurant spending that week.",
+          "uid": "002dcb9d-2def-5171-bdd5-3cfdca322d4d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "58cc58af-6131-40be-bfbb-de80cc010dfa",
+              "memory_uid": "d9531336-ac5f-5ba0-bf26-9c69c854578f"
+            }
+          ],
+          "reason": "This is independent reference-only information about a family member's reimbursement preference.",
+          "status": "RESOLVED",
+          "summary": "The user's older sister prefers electronic transfer for settling a jointly paid meal.",
+          "uid": "38b58953-3467-52f2-bd20-bae495bc0f97"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "58cc58af-6131-40be-bfbb-de80cc010dfa",
+              "memory_uid": "9941d390-8b40-5fee-8bcf-df6f36befcb0"
+            }
+          ],
+          "reason": "This is an independent reference-only safeguard governing payment automation.",
+          "status": "RESOLVED",
+          "summary": "Automatic payment scheduling requires prior confirmation of the amount and account with the user.",
+          "uid": "3240098f-9854-548f-b250-3c8f829edf38"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "58cc58af-6131-40be-bfbb-de80cc010dfa",
+              "memory_uid": "79aea8fd-5d48-50f7-adf6-b7ebe33bfb08"
+            }
+          ],
+          "reason": "This is independent reference-only qualification about institution-dependent billing behavior.",
+          "status": "RESOLVED",
+          "summary": "Payment processing and late-payment recording can vary by billing institution.",
+          "uid": "cf3c59c8-9445-55f6-bd44-70ae63eb31df"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ea2dc333-4f59-429f-84fd-4ae5a64b5475",
+              "memory_uid": "3d3f7960-daf5-5a51-98b3-14261c5aa66c"
+            }
+          ],
+          "reason": "This is independent compared-only information about the user's reading setup.",
+          "status": "RESOLVED",
+          "summary": "The user keeps current reading and note-taking materials on a small living-room desk.",
+          "uid": "a71ce0df-e23c-5318-af98-cefa1db54e97"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ea2dc333-4f59-429f-84fd-4ae5a64b5475",
+              "memory_uid": "28714a4e-bc14-5703-b594-126471ae0585"
+            },
+            {
+              "frame_uid": "ea2dc333-4f59-429f-84fd-4ae5a64b5475",
+              "memory_uid": "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df"
+            }
+          ],
+          "reason": "These memories split one compared-only observation linking television presence with poorer reading continuity.",
+          "status": "RESOLVED",
+          "summary": "Reading with television on involved repetition, while turning it off preceded sustained uninterrupted reading.",
+          "uid": "feaeedef-cead-5e8e-a303-a112c0fec043"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ea2dc333-4f59-429f-84fd-4ae5a64b5475",
+              "memory_uid": "1b1c9f90-2561-53d5-88fe-d54618450143"
+            },
+            {
+              "frame_uid": "ea2dc333-4f59-429f-84fd-4ae5a64b5475",
+              "memory_uid": "076a7caa-5dcf-5f9d-8bee-efc952652efa"
+            },
+            {
+              "frame_uid": "ea2dc333-4f59-429f-84fd-4ae5a64b5475",
+              "memory_uid": "310f4cfc-b117-5511-8e13-2bd2ebec9fe5"
+            }
+          ],
+          "reason": "These memories collectively express one compared-only claim about notification disruption and the observed benefit of removing phone access.",
+          "status": "RESOLVED",
+          "summary": "Phone notifications interrupt the user's note-taking and concentration, while placing the phone elsewhere prevents checking.",
+          "uid": "b3f95d0f-3c64-5c1c-b3ac-37cce26c90fe"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ea2dc333-4f59-429f-84fd-4ae5a64b5475",
+              "memory_uid": "1dad71ec-6a5d-550e-89d2-a86dc3dacb11"
+            },
+            {
+              "frame_uid": "ea2dc333-4f59-429f-84fd-4ae5a64b5475",
+              "memory_uid": "58494743-fc7f-59e9-8e17-80b8a644470a"
+            }
+          ],
+          "reason": "These memories split one compared-only contrast between failed and effective placekeeping methods.",
+          "status": "RESOLVED",
+          "summary": "Notebook-based page recording enabled easier reading resumption than a loose paper note.",
+          "uid": "2def1afa-e5ad-53a1-a2cd-d70b8b1c06a0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ea2dc333-4f59-429f-84fd-4ae5a64b5475",
+              "memory_uid": "cce66589-892c-5d73-bdbc-2c6e94e0992e"
+            }
+          ],
+          "reason": "This is an independent compared-only expectation attributed to the father, distinct from the user's observed reading episodes.",
+          "status": "RESOLVED",
+          "summary": "The user's father expects lower television volume to improve the user's concentration while reading.",
+          "uid": "5b58ade3-3a2c-5fb1-909a-58466dd69949"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "ea2dc333-4f59-429f-84fd-4ae5a64b5475",
+              "memory_uid": "20b2a27f-908f-5ed7-a288-f7c1030674fc"
+            }
+          ],
+          "reason": "This is an independent compared-only capability boundary.",
+          "status": "RESOLVED",
+          "summary": "The local agent can summarize past reading conditions and interruptions but cannot predict the next reading time.",
+          "uid": "2ad9e653-3c0c-54f5-bb9d-05a833c74925"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only material concerns reading materials, television and phone distractions, placekeeping methods, a family expectation about concentration, and limits on summarizing or predicting reading activity.",
+        "differences": "",
+        "reference_only": "Reference-only material concerns spending limits, errand efficiency, bill-alert timing, receipt entry, expense-driven restraint, meal reimbursement, payment-schedule confirmation, and institution-dependent processing."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "7ecec501-81b7-4c18-96bb-cec09e52470f"
+    },
+    "analysis_digest": "2a037c925e7e83f5f11d2e7a89f6d24429b48c2239d154c006d8a02cffff7956",
+    "key": "237c0b61baccd7a5f11c4c32e3e941ac1350c1146f4863051e0d235d7058abc8",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 46.57483349999893,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "237c0b61baccd7a5f11c4c32e3e941ac1350c1146f4863051e0d235d7058abc8",
+  "created_at": "2026-08-13T18:43:47.881661Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/08",
+  "pair_key": "46103846b1cff3aad72c686bcf999e82aa3ab272fb2d8191a3067bbe3ca7f56f",
+  "provider_seconds": 46.57483349999893,
+  "right": "task-3/local/personal-memory/2025/09",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

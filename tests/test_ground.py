@@ -3061,6 +3061,74 @@ def test_cli_binds_proposes_accepts_and_revises_goal_in_named_workbench(
     } == checkpoints_before
 
 
+def test_cli_binding_leaves_requirements_unspecified_and_direct_rule_skips_rationale(
+    isolated_store,
+) -> None:
+    store = MemoryStore()
+    raw, derived, targets, _candidate = _task_1_workbench(store)
+
+    bound = runner.invoke(
+        app,
+        [
+            "ground",
+            "direct-rule",
+            "--goal",
+            "Learn one rule from reviewed examples.",
+            "--description",
+            "Bind the evidence and output frames without inventing policy.",
+            "--raw-context",
+            raw.name,
+            "--derived-context",
+            derived.name,
+            "--publication-target",
+            targets[0].name,
+            "--snapshot",
+        ],
+    )
+
+    assert bound.exit_code == 0, bound.output
+    assert "(not specified)" in bound.output
+    assert "campus-facing" not in bound.output
+    session = store.load_ground_session("direct-rule")
+    assert session is not None
+    assert tuple(item.description for item in session.requirements) == ("",)
+
+    direct = runner.invoke(
+        app,
+        [
+            "ground",
+            "direct-rule",
+            "--propose-rule",
+            "Use actual companies and their observed tickers.",
+        ],
+    )
+
+    assert direct.exit_code == 0, direct.output
+    updated = store.load_ground_session("direct-rule")
+    assert updated is not None
+    rule = updated.items_of_kind("RULE")[0]
+    assert rule.rule_provenance == "USER_STATED"
+    assert rule.rationale == ""
+
+    derived_without_reason = runner.invoke(
+        app,
+        [
+            "ground",
+            "direct-rule",
+            "--propose-rule",
+            "Infer a second rule from the examples.",
+            "--rule-provenance",
+            "DISTILLED",
+        ],
+    )
+
+    assert derived_without_reason.exit_code == 1
+    assert "derived rule proposal requires --rationale" in (
+        derived_without_reason.output.lower()
+    )
+    assert store.load_ground_session("direct-rule") == updated
+
+
 def test_one_working_rule_can_hold_multiple_fit_and_boundary_cases(
     isolated_store,
 ):

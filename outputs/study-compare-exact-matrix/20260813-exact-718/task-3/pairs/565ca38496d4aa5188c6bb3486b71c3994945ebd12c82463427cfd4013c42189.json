@@ -1,0 +1,388 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:43:17.428576+00:00",
+      "frames": [
+        {
+          "context_digest": "4f6b609414f921ca470614699bdac42e9f2932482375026def79956485b0569e",
+          "context_name": "task-3/local/personal-memory/2024/08",
+          "context_uid": "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+          "memories": [
+            {
+              "content": "The user has set a monthly limit in their budget record for spending other than living expenses.",
+              "content_digest": "5c0df9500947f7e044a8755d66d58adccca01db3aed42b43ab9748b8c4f431e9",
+              "position": 0,
+              "uid": "5f80c7ec-e294-5905-abab-91027c9d827b"
+            },
+            {
+              "content": "In a week when the user went grocery shopping and visited the bank separately, they made the same round trip twice.",
+              "content_digest": "4e814adad1a4c201f6348f1c14b14950b5c549bba64bf70cfccd08ca9efc5bd3",
+              "position": 1,
+              "uid": "2428ab2c-37ce-5de1-84dc-abcdfc8ce062"
+            },
+            {
+              "content": "The following week, the user completed both errands in one outing and reduced travel time.",
+              "content_digest": "ad5555ca7daa9d977cfcf5eb4f476eb5730cead6d307c986497716d69f1145b0",
+              "position": 2,
+              "uid": "bf30d1ef-d7cd-5aa3-b65b-ff04aae647e7"
+            },
+            {
+              "content": "When a bill alert arrived on the due date, the user postponed payment until after a meeting.",
+              "content_digest": "c62dda61c680da9ac1fd5ab9124fa05635d20ad9e4bbb7aef36723d289c05102",
+              "position": 3,
+              "uid": "442672e1-2188-5aa3-ad38-5e9c16f25bd5"
+            },
+            {
+              "content": "In a month when the user received an alert three days before the deadline, they finished payment before dinner.",
+              "content_digest": "939ac83da176d5bb1b7e2196402b9faacb962d947b85b9a61c31854867c1e62e",
+              "position": 4,
+              "uid": "c7385cce-ec43-5902-973c-5b8af54c3557"
+            },
+            {
+              "content": "The user collected cash receipts in their wallet and entered all the amounts at once at the end of the month.",
+              "content_digest": "3171a8128ed3855ac9a4c2b542516333fc3728ed1d7260974888b94d0b32c3e6",
+              "position": 5,
+              "uid": "d926c45c-ea49-589c-a7e4-491c9a1514f8"
+            },
+            {
+              "content": "After recording one large expense, the user ate out two fewer times that week.",
+              "content_digest": "af55fd94b01e0ece728347e9349f96b5733c57dae752f9559dc4e08bef7a3320",
+              "position": 6,
+              "uid": "9433523f-8c4e-5424-b370-d325ba5154d1"
+            },
+            {
+              "content": "The user's older sister prefers to settle the jointly paid cost of a meal by electronic transfer rather than cash.",
+              "content_digest": "d84d2ea68add4202e8c421e9c1702c29ca88bd6ae838588bd415fdbd1980cb2b",
+              "position": 7,
+              "uid": "d9531336-ac5f-5ba0-bf26-9c69c854578f"
+            },
+            {
+              "content": "Confirm the amount and account with the user before creating an automatic payment schedule.",
+              "content_digest": "b1d0c16fd880f4ae2657415ddc8fe0f223ccdd931248bb4412a6c95754d4cce1",
+              "position": 8,
+              "uid": "9941d390-8b40-5fee-8bcf-df6f36befcb0"
+            },
+            {
+              "content": "The timing of payment processing and late-payment recording may differ by billing institution.",
+              "content_digest": "203e65e4eb8451ec7551fb166357f107d17b8c89a2341b32fc25a3fb67ec7f98",
+              "position": 9,
+              "uid": "79aea8fd-5d48-50f7-adf6-b7ebe33bfb08"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "628efaf8-3359-4888-9c67-dbb1c71a90b7"
+        },
+        {
+          "context_digest": "1d47d83944d91bc0316a61894412e9b4361758603b9532687cf68473f1d30198",
+          "context_name": "task-3/local/personal-memory/2026/01",
+          "context_uid": "e48e6eac-20f7-599d-9f76-4238bd9dd96d",
+          "memories": [
+            {
+              "content": "The user keeps gloves and scarves in a basket inside the entrance.",
+              "content_digest": "df54c52cb6bc89e2e66c747df9807c6892db272c2a23ac5ac91e3f64aaa2a5da",
+              "position": 0,
+              "uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409"
+            },
+            {
+              "content": "On a day the user could not find their gloves, they walked with their hands in their pockets and missed the bus.",
+              "content_digest": "d4205aee5fe3f2c18adc3622930cc7f74de231de9812ca594dbd95a0af7199ff",
+              "position": 1,
+              "uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5"
+            },
+            {
+              "content": "Before the next outing, the user put the gloves in the entrance basket the night before and left on time.",
+              "content_digest": "23a7026d7d1a7edd3278e7b8aa147ef0d315059663f78da5498ad6c1b4a5407c",
+              "position": 2,
+              "uid": "a11f0943-8ee1-5305-87fb-64982fb36f82"
+            },
+            {
+              "content": "On a snowy day, the user chose a shorter route but turned back at stairs that had not been cleared of snow.",
+              "content_digest": "e9e241d2bc4d7c2fa9a44471aa6d1c16d42d50fe2ed99ccfb50713107714be9b",
+              "position": 3,
+              "uid": "f623f245-cdd5-5080-8869-b52cf2914076"
+            },
+            {
+              "content": "The next day, the user took a cleared sidewalk along the main road and avoided slippery sections.",
+              "content_digest": "62c8ec8b38778e9922cf433af4ceb4d59f60bee52dc758e3b88bb1163637f108",
+              "position": 4,
+              "uid": "17ac56f1-1302-5350-99d5-b95ef7feb768"
+            },
+            {
+              "content": "The user fell asleep with the heat turned up, became too warm before dawn, and woke twice.",
+              "content_digest": "912dbbc88a0f4a174b714a794793781f4d2f6c889f73cd7f825338addcab5d6c",
+              "position": 5,
+              "uid": "96988fa9-44b1-511e-8c99-4372f902cfe3"
+            },
+            {
+              "content": "The next night, the user turned down the heat and used one additional thin blanket.",
+              "content_digest": "3d12a4609d4731ebe71bacc841c979ac3497553238c3b5c2191842bbf075ba89",
+              "position": 6,
+              "uid": "b628acaa-50da-552c-8665-244dc4ab8263"
+            },
+            {
+              "content": "On a morning with heavy snow, the user's father expects the user will worry about road conditions and sends a text before departure.",
+              "content_digest": "dcd6bcb23bee46e49813bb14dd8dcb91983d5830f0536d7f23fcdb3a8af0667c",
+              "position": 7,
+              "uid": "08dfb937-7b28-55b5-801c-c0da00cbd414"
+            },
+            {
+              "content": "Before proposing a winter travel route, check recent snow-clearing conditions and accessible entrances.",
+              "content_digest": "dcab87102a9979c51dd369d5ba5ed00b7445c8ccd14450edcb8bec7859689606",
+              "position": 8,
+              "uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d"
+            },
+            {
+              "content": "The local agent cannot know the actual condition of the sidewalk the user will take from a weather forecast alone.",
+              "content_digest": "6b4bcc2f2f508f130c047ff677cadae0eae5b4cc5e5dd6bb3a1fb3784d7793b1",
+              "position": 9,
+              "uid": "802c4031-57de-592a-9bc8-6ee3d54921c8"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "58020b44-c21a-4e61-8b88-2fd1a815f81a"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate operational domains: personal finance and bill handling versus winter preparation, travel, and home comfort. No cross-frame claim materially governs the same decision, so each substantive one-sided claim remains independently useful without conflict or ambiguity.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "628efaf8-3359-4888-9c67-dbb1c71a90b7",
+              "memory_uid": "5f80c7ec-e294-5905-abab-91027c9d827b"
+            }
+          ],
+          "reason": "This is a one-sided budgeting constraint with no compared-frame claim addressing that financial decision.",
+          "status": "RESOLVED",
+          "summary": "The user maintains a monthly limit for spending outside living expenses.",
+          "uid": "e58a2a28-986a-51ef-845e-308779f53cc9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "628efaf8-3359-4888-9c67-dbb1c71a90b7",
+              "memory_uid": "2428ab2c-37ce-5de1-84dc-abcdfc8ce062"
+            },
+            {
+              "frame_uid": "628efaf8-3359-4888-9c67-dbb1c71a90b7",
+              "memory_uid": "bf30d1ef-d7cd-5aa3-b65b-ff04aae647e7"
+            }
+          ],
+          "reason": "The paired experiences describe one finance-related errand-efficiency lesson absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Combining grocery and bank errands into one outing reduced repeated travel and travel time.",
+          "uid": "de5683e6-e1e6-5acd-a965-723d9710e60f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "628efaf8-3359-4888-9c67-dbb1c71a90b7",
+              "memory_uid": "442672e1-2188-5aa3-ad38-5e9c16f25bd5"
+            },
+            {
+              "frame_uid": "628efaf8-3359-4888-9c67-dbb1c71a90b7",
+              "memory_uid": "c7385cce-ec43-5902-973c-5b8af54c3557"
+            }
+          ],
+          "reason": "Both examples support one one-sided claim about alert lead time and payment timing; no compared memory addresses bill reminders.",
+          "status": "RESOLVED",
+          "summary": "Earlier bill alerts were associated with earlier payment, while a due-date alert was followed by postponement.",
+          "uid": "aeb97606-f5ad-517d-b314-984bdd948e0f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "628efaf8-3359-4888-9c67-dbb1c71a90b7",
+              "memory_uid": "d926c45c-ea49-589c-a7e4-491c9a1514f8"
+            }
+          ],
+          "reason": "This is an independently useful expense-recording practice not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user accumulated cash receipts and entered their amounts together at month end.",
+          "uid": "2be81001-b07b-59fc-9cd6-6206efc1fa74"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "628efaf8-3359-4888-9c67-dbb1c71a90b7",
+              "memory_uid": "9433523f-8c4e-5424-b370-d325ba5154d1"
+            }
+          ],
+          "reason": "This is a distinct observation about spending awareness and subsequent behavior with no compared counterpart.",
+          "status": "RESOLVED",
+          "summary": "Recording a large expense was followed by fewer restaurant meals that week.",
+          "uid": "01b1f794-933b-575c-aadb-ea2bff56b765"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "628efaf8-3359-4888-9c67-dbb1c71a90b7",
+              "memory_uid": "d9531336-ac5f-5ba0-bf26-9c69c854578f"
+            }
+          ],
+          "reason": "This payment-method preference is one-sided and unrelated to the compared frame's winter routines.",
+          "status": "RESOLVED",
+          "summary": "The user's older sister prefers electronic transfer over cash when settling a jointly paid meal cost.",
+          "uid": "a356d6ab-81f0-5c29-944e-26eb8802ac27"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "628efaf8-3359-4888-9c67-dbb1c71a90b7",
+              "memory_uid": "9941d390-8b40-5fee-8bcf-df6f36befcb0"
+            }
+          ],
+          "reason": "This is a distinct financial safeguard with no compared-frame claim governing automatic payments.",
+          "status": "RESOLVED",
+          "summary": "Automatic payment schedules should be created only after confirming the amount and account with the user.",
+          "uid": "8f994802-650f-55a1-9f8e-a43844ed6380"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "628efaf8-3359-4888-9c67-dbb1c71a90b7",
+              "memory_uid": "79aea8fd-5d48-50f7-adf6-b7ebe33bfb08"
+            }
+          ],
+          "reason": "This institution-dependent qualification is independently useful and absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Payment-processing timing and late-payment recording can vary among billing institutions.",
+          "uid": "99af291a-e086-547b-8bff-579224bde5ef"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "58020b44-c21a-4e61-8b88-2fd1a815f81a",
+              "memory_uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409"
+            },
+            {
+              "frame_uid": "58020b44-c21a-4e61-8b88-2fd1a815f81a",
+              "memory_uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5"
+            },
+            {
+              "frame_uid": "58020b44-c21a-4e61-8b88-2fd1a815f81a",
+              "memory_uid": "a11f0943-8ee1-5305-87fb-64982fb36f82"
+            }
+          ],
+          "reason": "The storage habit and contrasting outings form one preparation lesson with no reference-frame claim about winter-item readiness.",
+          "status": "RESOLVED",
+          "summary": "Keeping gloves in the entrance basket and placing them there before departure supports timely winter outings.",
+          "uid": "ffcbf27a-4795-5d55-8611-32a6ee9e83a8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "58020b44-c21a-4e61-8b88-2fd1a815f81a",
+              "memory_uid": "f623f245-cdd5-5080-8869-b52cf2914076"
+            },
+            {
+              "frame_uid": "58020b44-c21a-4e61-8b88-2fd1a815f81a",
+              "memory_uid": "17ac56f1-1302-5350-99d5-b95ef7feb768"
+            }
+          ],
+          "reason": "The two route experiences jointly describe one winter-path selection lesson absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A cleared main-road sidewalk avoided the obstruction and slippery conditions encountered on a shorter snowy route.",
+          "uid": "92c8dc21-e868-5039-998a-a914afaccddc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "58020b44-c21a-4e61-8b88-2fd1a815f81a",
+              "memory_uid": "96988fa9-44b1-511e-8c99-4372f902cfe3"
+            },
+            {
+              "frame_uid": "58020b44-c21a-4e61-8b88-2fd1a815f81a",
+              "memory_uid": "b628acaa-50da-552c-8665-244dc4ab8263"
+            }
+          ],
+          "reason": "These sequential observations form one home-comfort adjustment claim with no reference counterpart.",
+          "status": "RESOLVED",
+          "summary": "After excessive heat disrupted sleep, the user lowered the heat and used an additional thin blanket the next night.",
+          "uid": "7ee7ebb5-0586-555f-805a-f8440c35352f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "58020b44-c21a-4e61-8b88-2fd1a815f81a",
+              "memory_uid": "08dfb937-7b28-55b5-801c-c0da00cbd414"
+            }
+          ],
+          "reason": "This family check-in pattern is independently useful and not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user's father anticipates road-condition worry during heavy snow and texts before departure.",
+          "uid": "2b206776-7f68-577d-b6c9-1561564819d7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "58020b44-c21a-4e61-8b88-2fd1a815f81a",
+              "memory_uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d"
+            },
+            {
+              "frame_uid": "58020b44-c21a-4e61-8b88-2fd1a815f81a",
+              "memory_uid": "802c4031-57de-592a-9bc8-6ee3d54921c8"
+            }
+          ],
+          "reason": "The instruction and stated knowledge limitation support one evidence requirement for route proposals, which has no reference-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "Winter route advice requires recent clearing and entrance-access information because a weather forecast alone cannot establish actual sidewalk conditions.",
+          "uid": "203ebd49-1506-58cb-90f5-d59bd9bf2ff1"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers winter-item preparation, safer snowy routes, temperature adjustment, family check-ins, and evidence needed for route advice.",
+        "differences": "",
+        "reference_only": "The reference covers budgeting, efficient errand and payment timing, expense recording, shared-cost preferences, automatic-payment safeguards, and institution-dependent processing."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "9d31a87c-f63f-4be4-b896-38a505272b5c"
+    },
+    "analysis_digest": "41c33f374624ce2bb867f223a6c15d4cc7c815a499ee3bf405a5aff408a4610f",
+    "key": "ace95ab66493e96b653a28e7b01985f4629b878601250c6f7c483a8b4c6738a3",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 56.13339674999952,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "ace95ab66493e96b653a28e7b01985f4629b878601250c6f7c483a8b4c6738a3",
+  "created_at": "2026-08-13T18:44:13.561464Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/08",
+  "pair_key": "565ca38496d4aa5188c6bb3486b71c3994945ebd12c82463427cfd4013c42189",
+  "provider_seconds": 56.13339674999952,
+  "right": "task-3/local/personal-memory/2026/01",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

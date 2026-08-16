@@ -1,0 +1,254 @@
+{
+  "coverage": {
+    "expected": 20,
+    "observed": 20
+  },
+  "created_at": "2026-08-11T00:59:25.571390Z",
+  "description_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+  "issues": [],
+  "kind": "STUDY_COMPARE_GRAPH_PAIR",
+  "left": {
+    "context_digest": "db438345c3ec4b3f69562a274c9f81a93bd6e6df97bc89b60abcd193dc89b562",
+    "context_uid": "206e1cd3-93da-5341-bda3-95cde4814c20",
+    "memory_count": 10,
+    "name": "task-3/local/personal-memory/2024/04"
+  },
+  "method": "COMPACT_DECISION_VECTOR_V1",
+  "operation": "COMPARE",
+  "pair_key": "eabec0511fb03511129ed45e36120fd877f171612c54a1c1a7977ee41c83f4e7",
+  "provider": {
+    "condition": "COMPACT_DECISION_VECTOR",
+    "contract_valid": true,
+    "elapsed_seconds": 31.24938533300883,
+    "error_type": null,
+    "failure_category": null,
+    "operation": "compare_contexts_compact_ab_v1",
+    "prompt_chars": 8046,
+    "provider_calls": 1,
+    "provider_run": {
+      "completion_tokens": null,
+      "identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "operation": "compare_contexts_compact_ab_v1",
+      "prompt_tokens": null,
+      "upstream_model": "gpt-5.6-sol",
+      "upstream_provider": "openai-codex"
+    },
+    "provider_seconds": 31.2486860420031,
+    "response_bytes": 540,
+    "response_chars": 540,
+    "schema_chars": 1382,
+    "validation_error": null,
+    "validation_seconds": 0.0006835419917479157
+  },
+  "relations": [
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "9cea83cd-e39f-53bd-9e79-d30aa465ad02",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000001",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "51f8326f-60d4-5ba3-ba32-a04331dcb930",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "cd0bce79-71d5-5d46-9c68-8a1d096dd53a",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000002",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "71e27b0c-5c10-5102-aeac-98b0841723f2",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000003",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "86ad5410-0cc7-5876-8e3a-a3f0dd1680c7",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000004",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "aab36950-7e2b-588f-bb7c-d3bd6e36c501",
+          "side": "LEFT"
+        },
+        {
+          "memory_uid": "e265e637-fa41-53d0-aa9b-0102e9962f9a",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000005",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "50ac9268-9259-56fd-8678-1dfc8f919efb",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000006",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "5141ca66-9860-5ec5-b028-ac8670f586ca",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000007",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "7aece7ae-b327-537e-9cef-fe24ee8fc618",
+          "side": "LEFT"
+        }
+      ],
+      "relation_key": "r000008",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "3d3f7960-daf5-5a51-98b3-14261c5aa66c",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000009",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "28714a4e-bc14-5703-b594-126471ae0585",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000010",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "1b1c9f90-2561-53d5-88fe-d54618450143",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "076a7caa-5dcf-5f9d-8bee-efc952652efa",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "310f4cfc-b117-5511-8e13-2bd2ebec9fe5",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000011",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "1dad71ec-6a5d-550e-89d2-a86dc3dacb11",
+          "side": "RIGHT"
+        },
+        {
+          "memory_uid": "58494743-fc7f-59e9-8e17-80b8a644470a",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000012",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "cce66589-892c-5d73-bdbc-2c6e94e0992e",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000013",
+      "status": "RESOLVED"
+    },
+    {
+      "comment": "",
+      "kind": "DISTINCT",
+      "members": [
+        {
+          "memory_uid": "20b2a27f-908f-5ed7-a288-f7c1030674fc",
+          "side": "RIGHT"
+        }
+      ],
+      "relation_key": "r000014",
+      "status": "RESOLVED"
+    }
+  ],
+  "right": {
+    "context_digest": "07c43eb0b8ecd9107f1d879a409b45289e236f48f620ff85f1d30ce594809149",
+    "context_uid": "5cd8ed5f-2f1f-5deb-8347-fc3bfa484d99",
+    "memory_count": 10,
+    "name": "task-3/local/personal-memory/2025/09"
+  },
+  "schema_version": 1,
+  "semantic_content_in_participant_report": false,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

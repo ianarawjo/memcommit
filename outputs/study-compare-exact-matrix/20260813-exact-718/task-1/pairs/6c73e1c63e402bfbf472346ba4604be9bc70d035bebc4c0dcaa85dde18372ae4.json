@@ -1,0 +1,1066 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:10:02.005825+00:00",
+      "frames": [
+        {
+          "context_digest": "58782baaff2baaa1507d8a85d11f762ea650936a4ef761eb5ac6635394232964",
+          "context_name": "task-1/campus-wiki/temporary-parking",
+          "context_uid": "c0d853a6-985e-574f-a921-7602a470d432",
+          "memories": [
+            {
+              "content": "Outdoor Parking Lot A to the left of the Main Building is connected to the Main Building underground parking garage by an inclined access road.",
+              "content_digest": "18cc074f4e5ac0f1a724c6cba6ec943aecbb4b3c443b97c1ec60b81fbd873032",
+              "position": 0,
+              "uid": "5d690022-0ab6-52ed-b6a1-77d719c8c6ce"
+            },
+            {
+              "content": "General vehicles may enter and park in the Main Building underground parking garage during operating hours.",
+              "content_digest": "ba9f80db44671014277cb0cc9afedb2f8a0af4b57f61641dbe23b146964317a1",
+              "position": 1,
+              "uid": "6960c0ca-295d-5449-91dc-d9293a6bb79d"
+            },
+            {
+              "content": "The pedestrian entrance to the underground parking garage is open to general pedestrians during operating hours.",
+              "content_digest": "68bfcdb4f291f6e0a58d57a0a303392beb8deb8f5e7a919cb013df17c9e60a9e",
+              "position": 2,
+              "uid": "67d07765-ac5f-58f6-b7a5-f733cc4228d2"
+            },
+            {
+              "content": "The interior stairs leading down from the Main Building lobby to the underground parking garage are available during operating hours.",
+              "content_digest": "1ce15f6e831969e8893e49b6cddce7c1234d0b220d7af0d647e24d420223105f",
+              "position": 3,
+              "uid": "489960d6-711f-55d0-a410-16bcd6e9acf8"
+            },
+            {
+              "content": "Outdoor Parking Lot C uses an access road separate from the Main Building underground parking garage.",
+              "content_digest": "1768b1ca01d4f02a1c69f9a9fcab3c7ac95ca24b326b6cbcac494c0c8bca2d93",
+              "position": 4,
+              "uid": "df455ec8-c30d-5607-a9b8-8f84d93f0617"
+            },
+            {
+              "content": "Outdoor Parking Lot C is outside the Main Building construction zone.",
+              "content_digest": "40c603f93397814789b999c1d61859fd352ab12da34dfecfeb83eded1460399d",
+              "position": 5,
+              "uid": "6a37c02f-4843-579f-b5b1-f90d6dbd0e5a"
+            },
+            {
+              "content": "The Outdoor Parking Lot A–Main Building–Central Library route is normally one of the shortest routes to the library after parking.",
+              "content_digest": "53adff510338a993e65fe520365a89e639a131f55032a68249563497a2d49527",
+              "position": 6,
+              "uid": "a81363fe-3ae5-5213-a555-e447515a1a73"
+            },
+            {
+              "content": "Do not generalize the closure of one parking area into a campus-wide parking ban.",
+              "content_digest": "a2304a359d2d13a88fbf8523e9ae9564e69e974ed9a9bcbd394b56f5f8f88a5c",
+              "position": 7,
+              "uid": "ccf54508-b01d-5fe5-bad3-083e3ce211cd"
+            },
+            {
+              "content": "Check separately for available alternative parking areas.",
+              "content_digest": "836280efded8d96f97c494cd37dc9c86883b623e0ea656ea11121f8804ac0746",
+              "position": 8,
+              "uid": "1a4e603c-7f69-5bfc-b974-281dc8618326"
+            },
+            {
+              "content": "First-time visiting drivers often expect there to be general parking spaces in the parking lot closest to the Main Building.",
+              "content_digest": "6b7a856ca908bf6e8d2dcca2798ab3edfd41edc9256cf931f51fcb831c953ae6",
+              "position": 9,
+              "uid": "3bd9a7e3-af83-5d3d-9cca-0a3926c446e1"
+            },
+            {
+              "content": "Visitors who need mobility assistance expect a safe pickup and drop-off point near the accessible entrance.",
+              "content_digest": "8adfed4eff7326c5b6fb1965edc3ffab65984a8371a3d989ba7e5ba38e26e9ee",
+              "position": 10,
+              "uid": "879b70b3-1404-559c-9cdb-9fdca1289e44"
+            },
+            {
+              "content": "Visitors with luggage expect to be able to load and unload briefly near the Main Building entrance.",
+              "content_digest": "96644d95bdd27f53961db30e33412db615d9dc53741b145aa92f55967fe553f3",
+              "position": 11,
+              "uid": "c89147c1-1b06-5e93-97a1-85d59fd33e57"
+            },
+            {
+              "content": "Staff often expect that their access authorization also allows them to use the parking lot adjacent to the Main Building.",
+              "content_digest": "256bfd6bbe554505fcab15b2ae9a786caa16815e0ee113ee5fc47961b2935059",
+              "position": 12,
+              "uid": "c9b6827a-36c3-5895-916c-a7066f398f5b"
+            },
+            {
+              "content": "Staff who need mobility assistance give priority to pickup and drop-off points near an accessible entrance.",
+              "content_digest": "8b08eab435b350f02fc4e0e31103a448382a38f1d4a16a1ea35a84505df87722",
+              "position": 13,
+              "uid": "07101ab9-cebf-5fd6-8967-2ea16a80d03d"
+            },
+            {
+              "content": "Staff transporting equipment prefer a loading and unloading point close to the destination space.",
+              "content_digest": "09d406a27f2c9018d3dfe1eb29f591d310765ed5cb8e154cca3464b3409ba8ab",
+              "position": 14,
+              "uid": "39b76444-a4f8-53c2-ae7d-9ee71de43eea"
+            },
+            {
+              "content": "The parking information agent can explain posted open statuses.",
+              "content_digest": "5f018b0a3d5b035173cdcce9758f9623dee311e08da48336c72e1b48d537cf8b",
+              "position": 15,
+              "uid": "9514e9f2-d556-50dc-8739-01c37b3322fc"
+            },
+            {
+              "content": "The parking information agent can explain posted connecting routes.",
+              "content_digest": "792081e7d84b2c3c366d2b2407b908f269e072dd44cf9a1a9d0dc9b071d54b46",
+              "position": 16,
+              "uid": "9acc9ad2-3a59-5b37-9f08-010fe8731a79"
+            },
+            {
+              "content": "The parking information agent cannot check real-time space availability.",
+              "content_digest": "91728d9b8db274848858d546456dff4996ed7b1a054aef62f650cca7df38e548",
+              "position": 17,
+              "uid": "6a38e1b0-b9bb-5941-aa03-3f29b492feaa"
+            },
+            {
+              "content": "The parking information agent cannot guarantee when on-site controls will be lifted.",
+              "content_digest": "e48f13b58760234ed4387e901e59d4b15d2d1af57a21b4b42e6ada97204690da",
+              "position": 18,
+              "uid": "7063d138-91cf-5dbf-b7af-bb0451dd342d"
+            },
+            {
+              "content": "Delivery drivers and external maintenance providers sometimes expect to be able to load and unload briefly at the edge of Outdoor Parking Lot A.",
+              "content_digest": "675fc12dd82aa5e4873773fa88feef3ac1fc45797de2b1791fa1b1879b48f89a",
+              "position": 19,
+              "uid": "efbe330f-eb79-5a05-8ef8-0664355d320c"
+            },
+            {
+              "content": "Outdoor Parking Lot C accepts visitor vehicles during posted operating hours.",
+              "content_digest": "4ace74f54e366339fe5a13b61ed400aab23fca559dd01175c29378a7ad531ab4",
+              "position": 20,
+              "uid": "c0ac84d9-367b-5809-856e-9f0d6c471b2b"
+            },
+            {
+              "content": "Instructions for registering visitor vehicles are posted on the sign at the parking area entrance.",
+              "content_digest": "a974ae9e9c2118bdf4f42b91735c53dee6403663197a76abfc37754aa935e4ba",
+              "position": 21,
+              "uid": "96092024-bab8-5c6e-b100-ff87e06cb760"
+            },
+            {
+              "content": "A valid parking permit is required to use accessible parking areas.",
+              "content_digest": "8f8d67a126c09e4936d561bb2f12878f174e37a7fd08294b2d8436a76d84b45d",
+              "position": 22,
+              "uid": "7b323c8d-eddd-5041-aee1-bbd8dbc06918"
+            },
+            {
+              "content": "The accessible parking area in Outdoor Parking Lot C is near the walkway toward the Student Centre.",
+              "content_digest": "7dfaef61c7df044069394eab075fae38befe9dfcb0f5afb4271308db7a749f64",
+              "position": 23,
+              "uid": "8180f5e5-fd9f-51a7-b239-c75a86c20da6"
+            },
+            {
+              "content": "The pickup and drop-off zone in front of the Main Building's main entrance is not a long-term parking space.",
+              "content_digest": "4902d36f2b556d3a52d2a5649e9a70d39b82fe96e8852ccd0d3942f24dc84b9a",
+              "position": 24,
+              "uid": "b7f4ae20-3bbf-51dd-b230-81c5e5107e48"
+            },
+            {
+              "content": "The maximum use time for short-term loading and unloading spaces is indicated on on-site signs.",
+              "content_digest": "eebac73ce70b3f089c7574e1516f93d69211cfd1042e9e24dcf8d1fce70bc7ee",
+              "position": 25,
+              "uid": "27246135-eca5-56ed-81c3-bb75584703d6"
+            },
+            {
+              "content": "Motorcycles park in the motorcycle areas marked on the campus map.",
+              "content_digest": "772c54cc1ca56cbe0e58d75229e391b60bfba122d9ee0346070b25e2da3e5da8",
+              "position": 26,
+              "uid": "dc40ae37-6f8d-5864-aab1-59462c325af3"
+            },
+            {
+              "content": "Bicycles are parked at designated bicycle racks, not in vehicle parking spaces.",
+              "content_digest": "ac8f58b8166480c5dfb38c21d48d5dd8262537d7e5d4c1bc973090fed2288824",
+              "position": 27,
+              "uid": "077234a0-bc91-589a-8d91-2cdd1180e9a1"
+            },
+            {
+              "content": "Outdoor Parking Lot C has electric vehicle charging spaces.",
+              "content_digest": "18b57e6589f3455c60a9a0cf01fe76f0d3093fe19c09d14b42d3ffee6289c37f",
+              "position": 28,
+              "uid": "c578f6a4-6065-5752-950b-e79ff7228ce7"
+            },
+            {
+              "content": "Electric vehicle charging spaces are for vehicles that are charging.",
+              "content_digest": "6dc2a05403a402a4a1c5573ee225aaafd3218764d3ead9819c7d0b25f4754e92",
+              "position": 29,
+              "uid": "38ce79ed-cae6-5a9e-bdba-eb92559ebaa8"
+            },
+            {
+              "content": "Visitor parking fees are displayed on the parking registration screen.",
+              "content_digest": "d51c247482ddec1f8abf83c7d2c95f9e07f8d2ad9ccdf7b145ed455cf5d1d2b4",
+              "position": 30,
+              "uid": "7471f5bc-555a-5db4-838e-74723bbd55fe"
+            },
+            {
+              "content": "The parking information agent cannot infer unposted discounted fees.",
+              "content_digest": "ca637a54a0c01fadbbe8f780775f3b24105fd9f09132a3d75da5c76bd1944ba5",
+              "position": 31,
+              "uid": "340389ed-6852-509c-a278-78bbbad4beb8"
+            },
+            {
+              "content": "Parking operating hours on public holidays may differ from weekday operating hours.",
+              "content_digest": "f89801ec6f05ac09664026b552e72f7ee4d22880949661180b0e388b1b7afd79",
+              "position": 32,
+              "uid": "f617356c-98ff-5d40-a41b-dd4be0c8c311"
+            },
+            {
+              "content": "Parts of outdoor parking lots may be temporarily restricted during heavy snow or icy conditions.",
+              "content_digest": "ff206b050b8b1c388d9bc0b804c34bbdfe4d26255dfec4ae564c2a09b5dc8cba",
+              "position": 33,
+              "uid": "35576f85-e20a-5bed-a9fd-f47e867c1fce"
+            },
+            {
+              "content": "On days with large public events, parking demand near the event venue increases.",
+              "content_digest": "3c1289c3dcf885a10e23bc8a699225ce64b80a80e3fc36859ff0dcb4338ae99c",
+              "position": 34,
+              "uid": "3fc6abeb-db56-5a34-ae34-b4cd394723c4"
+            },
+            {
+              "content": "Drivers who need mobility assistance expect a step-free accessible route from the parking space to the destination.",
+              "content_digest": "2ba3a9f9745db70faf2bc2c65de4862cf937fb499ad2b974ad798c5f1aab642c",
+              "position": 35,
+              "uid": "308c9814-4989-563e-b9dd-306be896940e"
+            },
+            {
+              "content": "First-time visiting drivers sometimes confuse Outdoor Parking Lot A with Outdoor Parking Lot C.",
+              "content_digest": "4bc08770ee8f35eb2c8a3d28c53636f0eda275bb7b96d3f9e3e2dfa18811ee9d",
+              "position": 36,
+              "uid": "8061fc97-13ee-587e-ba5d-09ca5fb72171"
+            },
+            {
+              "content": "The parking information agent cannot check in real time whether on-site control signs have been installed and determines availability using only posted parking-space statuses.",
+              "content_digest": "968ec1ac9b345485482e0f34a7ac7fc9aab2559cabc930faccc4f8635561a19b",
+              "position": 37,
+              "uid": "7d5bdc29-c284-5027-bc5e-6589b53ab5e9"
+            },
+            {
+              "content": "The West Gate stop is on the walkway outside Outdoor Parking Lot C.",
+              "content_digest": "ebc891856e08efd42b13569f3acd96381dd6734a96677b025c8e35bd7f253567",
+              "position": 38,
+              "uid": "a77dadf9-5d20-57aa-bb81-b35058832bc6"
+            },
+            {
+              "content": "The campus shuttle stops at the shuttle stop in front of the Student Centre.",
+              "content_digest": "ce36f26d000cacff871bc0a7a80d5075120c6708b024530f988f89ade93cba3e",
+              "position": 39,
+              "uid": "012add6d-ba82-5674-a432-0c092d575d21"
+            },
+            {
+              "content": "Campus shuttle operating hours vary between academic terms and recess periods.",
+              "content_digest": "00d519f54a8e3d2ef95410f2c2f1d2f4afb489d2f1dadb705a9839da72faa405",
+              "position": 40,
+              "uid": "6ca42597-3142-5f24-9f29-14c694bc83e2"
+            },
+            {
+              "content": "The parking information agent can explain parking lot access roads shown on the public map.",
+              "content_digest": "f923564304a06ba5b1023b014d1f3e5c64047fe24864d65b36b9d6f5e4cbfae4",
+              "position": 41,
+              "uid": "f1283ab9-f63b-5249-ac89-2dcc6f3dbee4"
+            },
+            {
+              "content": "The parking information agent cannot register a visitor vehicle on the visitor's behalf.",
+              "content_digest": "dd3188cf63b731e4b0d607520091d12b42326a39c4f1b7f95710f5633321c59f",
+              "position": 42,
+              "uid": "db986c20-8190-5a89-87db-4c56c5d6c82d"
+            },
+            {
+              "content": "The parking information agent cannot waive parking fees.",
+              "content_digest": "64939a84359e7208ddb700b3a7a25aaae7a04c13e63fb7c08be5d9a1faeabf3d",
+              "position": 43,
+              "uid": "1a0b250f-c4f1-5a9f-a114-5420a859dd32"
+            },
+            {
+              "content": "Check official parking notices for weather-related parking restrictions.",
+              "content_digest": "9be74301e2ce9991475a7367dbac8c70bcc429e218178f2ec5ac16b1df265e52",
+              "position": 44,
+              "uid": "f201604e-92ae-5315-8359-5e68dd9eeecb"
+            },
+            {
+              "content": "Do not generalize the full status of one parking lot to another parking lot.",
+              "content_digest": "2b6f76cfb649a3428de8ce604affdec1c482ee4356effa3a27d9a2fe52752268",
+              "position": 45,
+              "uid": "b5466afb-8d3b-51b0-8e44-9fd47165fe17"
+            },
+            {
+              "content": "Valid parking authorization does not guarantee the availability of a specific parking space.",
+              "content_digest": "f8d83721b341617c144d299982fcc3fbc02d9a105ac24a7a94377de6ccda311c",
+              "position": 46,
+              "uid": "38b6565e-25a0-5b7c-ba03-747c1901af7e"
+            },
+            {
+              "content": "An accessible pickup and drop-off zone is marked in front of the Main Building's main entrance.",
+              "content_digest": "6b263c7f7476b43ba69e7a01ea9abbb996b118d4913d09cf9cb0d926e98dfcce",
+              "position": 47,
+              "uid": "11d0062b-7941-5512-b5dc-f2d1379741e6"
+            },
+            {
+              "content": "The dedicated car-sharing spaces in Outdoor Parking Lot C are identified by signs.",
+              "content_digest": "38c33e528bf44dfdf72773fdd892a194becb93d8f04016f69fe865c4d53367f1",
+              "position": 48,
+              "uid": "a299c675-7179-5cb1-b5e4-552198bdc91f"
+            },
+            {
+              "content": "Report vehicles blocking passageways or accessible parking areas to the parking management office.",
+              "content_digest": "1fbc02ff22ed6bee2d9a2643fac8ca838ad408fa1e38d97482b7b1d32ecfdc5c",
+              "position": 49,
+              "uid": "a671229f-9c73-5183-bec3-8d23d0dd8d53"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70"
+        },
+        {
+          "context_digest": "89449289c4bdbb1e379336d3718b50c3d3bacfc5e8fb80fcddc92a133d106896",
+          "context_name": "task-1/participant/construction-updates/route-changes",
+          "context_uid": "725d4213-9ce1-569c-9e91-e4cd0d046bd5",
+          "memories": [
+            {
+              "content": "Add campus-wiki/route-changes: The indoor route that passed through the first through third floors of the Main Building to the Central Library cannot be used during the construction period.",
+              "content_digest": "8c0a9b88912165a538fab8a4e36faf6595cb350d3c6b098bceb114c0a14fa454",
+              "position": 0,
+              "uid": "8017409a-8af8-5a55-a49e-e9ccb44b9f34"
+            },
+            {
+              "content": "Add campus-wiki/route-changes: The route from the third-floor rear entrance to the Central Library is closed during the construction period.",
+              "content_digest": "154fed89b432d760e0a85a04944fb44abda6b88e0cd525454109b8132fe9d767",
+              "position": 1,
+              "uid": "dbb3c40c-7699-509d-901d-be9de2f110dc"
+            },
+            {
+              "content": "Add campus-wiki/route-changes: The Outdoor Parking Lot A–Main Building–Central Library route is closed during the construction period.",
+              "content_digest": "8a2ae18f699247abffe8f15292c34586fc00aab83967d59e8d9e5e0109eacc68",
+              "position": 2,
+              "uid": "2d20c61d-ff20-5bb6-bcdc-3dcbf6c3e21f"
+            },
+            {
+              "content": "Modify campus-wiki/route-changes: A student who prefers the air-conditioned indoor route through the Main Building in summer may experience substantial heat and travel burden when redirected to an outdoor alternative route during the construction period.",
+              "content_digest": "5a8f61fa78c57b591bfb9c9cdfc456f6679f4c47834cf5a1a8a61df241e0e246",
+              "position": 3,
+              "uid": "a8bb36e1-2629-5b8f-b4dc-af9b88020dc9"
+            },
+            {
+              "content": "Add campus-wiki/route-changes: When providing directions to the accessible restroom in the Student Centre during the construction period, instruct users to take the accessible route to the left as viewed from the Main Building.",
+              "content_digest": "d1daeafba59512cdcad389af173aebc99aa2330602fc1ff011f750fb06a74a42",
+              "position": 4,
+              "uid": "8276ab56-741f-5f60-ab77-79fe6dc0ba55"
+            },
+            {
+              "content": "Add campus-wiki/route-changes: During the construction period, the designated alternative accessible route to the Central Library is Outdoor Parking Lot C–Student Centre accessible entrance–Central Library west entrance.",
+              "content_digest": "c8f5dab391db6ea31bcc66030da486681c116d1bd69668e005e0e4ebc64132a6",
+              "position": 5,
+              "uid": "9af0f95c-0a5e-584e-ba7b-92789e071f7e"
+            },
+            {
+              "content": "Add campus-wiki/route-changes: During the construction period, the Central Library west entrance is designated as the official alternative entrance for the closed connecting route through the Main Building.",
+              "content_digest": "48e95c6255031ddaac7e4f54ae2403b33463514aa152c4516022f68ff5050540",
+              "position": 6,
+              "uid": "fd27f19b-5f2c-51ee-a9b2-7182120163cb"
+            },
+            {
+              "content": "Modify campus-wiki/route-changes: During the construction period, the route guidance agent may exclude from comparison candidates closed routes that pass through the first through third floors of the Main Building, the third-floor rear entrance, or Outdoor Parking Lot A.",
+              "content_digest": "80eda31eb9ae4a3aa98637b1d0043c816d83bad2384f22dcb69ed1ba5d75cb24",
+              "position": 7,
+              "uid": "638f272f-9fbd-5d1f-bfd8-b01618424065"
+            },
+            {
+              "content": "Modify campus-wiki/route-changes: If the indoor shortcut through the Main Building is closed during the construction period, a mobility-support companion may reconfirm the distance and slope of the alternative accessible route before accompanying the user.",
+              "content_digest": "e1f6fd794cdf9ba8f19f0df39c6f4bb82c6c7109f9b20a5ca0f6f5037b3f03ef",
+              "position": 8,
+              "uid": "ba9d70f9-02c4-56d9-ac23-f2a532c22488"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "375c68b6-fd49-495d-b311-1698a91a6c6c"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames intersect mainly on construction-period travel: the usual short route becomes unavailable while accessible travel is redirected through Lot C and the Student Centre. The reference otherwise provides broad parking guidance; the compared frame adds construction closures, routing actions, and traveler impacts. No unresolved contradiction is evident.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "5d690022-0ab6-52ed-b6a1-77d719c8c6ce"
+            }
+          ],
+          "reason": "This is independently useful physical-layout information supplied only by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Outdoor Parking Lot A connects to the Main Building underground garage by an inclined access road.",
+          "uid": "8d4584cd-edc5-577a-a55f-65ce3a602153"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "6960c0ca-295d-5449-91dc-d9293a6bb79d"
+            }
+          ],
+          "reason": "This operating-hours vehicle-access rule appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "General vehicles may enter and park in the underground garage during operating hours.",
+          "uid": "6321f80b-aadf-53d9-86b5-5ab05815d7d6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "67d07765-ac5f-58f6-b7a5-f733cc4228d2"
+            }
+          ],
+          "reason": "This pedestrian-access rule is independently useful and appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The underground garage pedestrian entrance is open to general pedestrians during operating hours.",
+          "uid": "4bab1799-db09-5c32-9438-27a45b213783"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "489960d6-711f-55d0-a410-16bcd6e9acf8"
+            }
+          ],
+          "reason": "This distinct pedestrian connection appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Interior stairs connect the Main Building lobby to the underground garage during operating hours.",
+          "uid": "30369790-e009-5be6-b069-c8afa5b26911"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "df455ec8-c30d-5607-a9b8-8f84d93f0617"
+            }
+          ],
+          "reason": "This road-layout distinction appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Outdoor Parking Lot C uses an access road separate from the underground garage.",
+          "uid": "d902dee6-18b0-5489-864f-2b87f2c98cca"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "6a37c02f-4843-579f-b5b1-f90d6dbd0e5a"
+            }
+          ],
+          "reason": "This construction-location fact is independently useful and has no matching claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Outdoor Parking Lot C lies outside the Main Building construction zone.",
+          "uid": "bf7db256-3688-5603-8a0d-c01562c603f2"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "a81363fe-3ae5-5213-a555-e447515a1a73"
+            },
+            {
+              "frame_uid": "375c68b6-fd49-495d-b311-1698a91a6c6c",
+              "memory_uid": "2d20c61d-ff20-5bb6-bcdc-3dcbf6c3e21f"
+            }
+          ],
+          "reason": "The explicit construction-period condition preserves the normal-route claim while explaining when it is unavailable.",
+          "status": "RESOLVED",
+          "summary": "The Outdoor Parking Lot A–Main Building–Central Library route is normally short but is closed during the construction period.",
+          "uid": "dcea90b9-24e3-5eb1-ba48-a2fb3abf5539"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "ccf54508-b01d-5fe5-bad3-083e3ce211cd"
+            },
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "b5466afb-8d3b-51b0-8e44-9fd47165fe17"
+            }
+          ],
+          "reason": "These reference memories express one underlying rule that parking restrictions and fullness are site-specific.",
+          "status": "RESOLVED",
+          "summary": "The status of one parking area must not be generalized into a campus-wide ban or another lot’s status.",
+          "uid": "a2b64bdf-649f-539d-ad8f-194dfa3ad7fb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "1a4e603c-7f69-5bfc-b974-281dc8618326"
+            }
+          ],
+          "reason": "This is an independent parking-search instruction found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Available alternative parking areas should be checked separately.",
+          "uid": "84c83128-7e8e-590f-a287-e27ba853bd22"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "3bd9a7e3-af83-5d3d-9cca-0a3926c446e1"
+            }
+          ],
+          "reason": "This visitor-expectation information appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "First-time visiting drivers often expect general parking near the Main Building.",
+          "uid": "633d0e29-d7fc-588f-9db7-cfb965d1e02f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "879b70b3-1404-559c-9cdb-9fdca1289e44"
+            },
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "07101ab9-cebf-5fd6-8967-2ea16a80d03d"
+            }
+          ],
+          "reason": "The reference memories state the same underlying accessibility need for two user groups.",
+          "status": "RESOLVED",
+          "summary": "Visitors and staff needing mobility assistance prioritize a safe pickup and drop-off point near an accessible entrance.",
+          "uid": "f51abbd3-9846-5bb9-8cd7-01bc9a1ee6a3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "c89147c1-1b06-5e93-97a1-85d59fd33e57"
+            },
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "39b76444-a4f8-53c2-ae7d-9ee71de43eea"
+            },
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "efbe330f-eb79-5a05-8ef8-0664355d320c"
+            }
+          ],
+          "reason": "These reference memories split one underlying stakeholder need for nearby loading access.",
+          "status": "RESOLVED",
+          "summary": "People carrying luggage or equipment and service providers expect convenient brief loading and unloading near their destination.",
+          "uid": "c71e7690-e86e-5cbf-9e51-4c951fd092c4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "c9b6827a-36c3-5895-916c-a7066f398f5b"
+            }
+          ],
+          "reason": "This staff expectation appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Staff may expect their access authorization to permit use of the lot adjacent to the Main Building.",
+          "uid": "b6c6699a-43a0-5a54-92b5-9c541f7add6d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "9514e9f2-d556-50dc-8739-01c37b3322fc"
+            },
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "9acc9ad2-3a59-5b37-9f08-010fe8731a79"
+            },
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "f1283ab9-f63b-5249-ac89-2dcc6f3dbee4"
+            }
+          ],
+          "reason": "These reference memories split one underlying capability to explain published parking and route information.",
+          "status": "RESOLVED",
+          "summary": "The parking information agent can explain posted statuses, connecting routes, and public-map access roads.",
+          "uid": "3d13d7b5-48ec-5382-a2c3-e05fb92ad805"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "6a38e1b0-b9bb-5941-aa03-3f29b492feaa"
+            },
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "7d5bdc29-c284-5027-bc5e-6589b53ab5e9"
+            }
+          ],
+          "reason": "These memories restate and refine one underlying limitation on real-time parking observation.",
+          "status": "RESOLVED",
+          "summary": "The parking information agent cannot observe real-time space availability or installation of on-site control signs and relies on posted statuses.",
+          "uid": "46fde742-9166-5590-afc1-5d8cdbf2c994"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "7063d138-91cf-5dbf-b7af-bb0451dd342d"
+            }
+          ],
+          "reason": "This distinct forecasting limitation appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The parking information agent cannot guarantee when on-site controls will be lifted.",
+          "uid": "5421e992-d784-5f14-99d2-8f42d184a7d1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "c0ac84d9-367b-5809-856e-9f0d6c471b2b"
+            }
+          ],
+          "reason": "This visitor-parking permission appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Outdoor Parking Lot C accepts visitor vehicles during posted operating hours.",
+          "uid": "89e61eb7-08f8-51a4-bf42-8d3a69ecb740"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "96092024-bab8-5c6e-b100-ff87e06cb760"
+            }
+          ],
+          "reason": "This procedural information appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Visitor-vehicle registration instructions are posted at the parking-area entrance.",
+          "uid": "94697d52-a50a-5679-b499-3c7e5e5924ee"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "7b323c8d-eddd-5041-aee1-bbd8dbc06918"
+            }
+          ],
+          "reason": "This authorization requirement appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A valid parking permit is required to use accessible parking areas.",
+          "uid": "cd69238b-600d-5750-8b69-6d805733d395"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "8180f5e5-fd9f-51a7-b239-c75a86c20da6"
+            },
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "308c9814-4989-563e-b9dd-306be896940e"
+            },
+            {
+              "frame_uid": "375c68b6-fd49-495d-b311-1698a91a6c6c",
+              "memory_uid": "9af0f95c-0a5e-584e-ba7b-92789e071f7e"
+            },
+            {
+              "frame_uid": "375c68b6-fd49-495d-b311-1698a91a6c6c",
+              "memory_uid": "fd27f19b-5f2c-51ee-a9b2-7182120163cb"
+            }
+          ],
+          "reason": "The step-free travel requirement, Lot C’s accessible-parking location, and the designated alternative route jointly address the same accessible journey without contradiction.",
+          "status": "RESOLVED",
+          "summary": "Accessible travel needs align with a construction-period route from Lot C through the Student Centre accessible entrance to the Central Library west entrance.",
+          "uid": "159ad66a-291b-5d9a-b8e1-241081e15f29"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "b7f4ae20-3bbf-51dd-b230-81c5e5107e48"
+            },
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "27246135-eca5-56ed-81c3-bb75584703d6"
+            }
+          ],
+          "reason": "These reference memories split one underlying short-term loading-zone use rule.",
+          "status": "RESOLVED",
+          "summary": "The Main Building pickup and drop-off zone is not long-term parking, and posted signs specify short-term loading limits.",
+          "uid": "58fd005d-9e8a-5cc5-a064-ff88d8ca4b57"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "dc40ae37-6f8d-5864-aab1-59462c325af3"
+            }
+          ],
+          "reason": "This mode-specific parking rule appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Motorcycles must use motorcycle areas marked on the campus map.",
+          "uid": "3812fcb6-5d94-513d-aa38-55d25251b2e4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "077234a0-bc91-589a-8d91-2cdd1180e9a1"
+            }
+          ],
+          "reason": "This independently useful bicycle-parking rule appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Bicycles belong at designated racks rather than vehicle parking spaces.",
+          "uid": "5eeeb260-d499-5f6c-b82a-a8f2f1633dde"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "c578f6a4-6065-5752-950b-e79ff7228ce7"
+            },
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "38ce79ed-cae6-5a9e-bdba-eb92559ebaa8"
+            }
+          ],
+          "reason": "These reference memories split one underlying claim about charging-space availability and permitted use.",
+          "status": "RESOLVED",
+          "summary": "Outdoor Parking Lot C has charging spaces reserved for vehicles that are charging.",
+          "uid": "67d26575-0dda-5c50-ba62-49377e5e15cb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "7471f5bc-555a-5db4-838e-74723bbd55fe"
+            }
+          ],
+          "reason": "This fee-information source appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Visitor parking fees are displayed on the parking registration screen.",
+          "uid": "c2b6358e-6352-5968-b95d-18973e69a265"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "340389ed-6852-509c-a278-78bbbad4beb8"
+            }
+          ],
+          "reason": "This distinct fee-information limitation appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The parking information agent cannot infer unposted discounted fees.",
+          "uid": "613e7450-6436-5e27-b47b-4a8c1db6d9d8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "f617356c-98ff-5d40-a41b-dd4be0c8c311"
+            }
+          ],
+          "reason": "This calendar-dependent operating-hours condition appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Public-holiday parking hours may differ from weekday hours.",
+          "uid": "0d1bf184-6f52-5fe9-964a-e6fd8e12029c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "35576f85-e20a-5bed-a9fd-f47e867c1fce"
+            }
+          ],
+          "reason": "This weather-dependent parking condition appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Heavy snow or ice may temporarily restrict parts of outdoor parking lots.",
+          "uid": "c4837e00-02a3-5612-a116-dbc836028a82"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "3fc6abeb-db56-5a34-ae34-b4cd394723c4"
+            }
+          ],
+          "reason": "This demand condition is independently useful and appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Large public events increase parking demand near their venues.",
+          "uid": "def2436d-31c2-5a48-84ac-b4e2c954fb73"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "8061fc97-13ee-587e-ba5d-09ca5fb72171"
+            }
+          ],
+          "reason": "This navigation-risk observation appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "First-time visiting drivers may confuse Outdoor Parking Lots A and C.",
+          "uid": "906a8ae2-76d4-59c4-8c60-6d26d204a8fe"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "a77dadf9-5d20-57aa-bb81-b35058832bc6"
+            }
+          ],
+          "reason": "This stop-location fact appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The West Gate stop is on the walkway outside Outdoor Parking Lot C.",
+          "uid": "aba5f977-08f8-5ce6-b532-deca303d474f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "012add6d-ba82-5674-a432-0c092d575d21"
+            }
+          ],
+          "reason": "This separate shuttle-stop location appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The campus shuttle stops in front of the Student Centre.",
+          "uid": "4c06c459-c7b4-55f1-8f16-c18d2b59a45f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "6ca42597-3142-5f24-9f29-14c694bc83e2"
+            }
+          ],
+          "reason": "This schedule condition appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Campus shuttle hours vary between academic terms and recess periods.",
+          "uid": "207a2ee2-340b-5e6b-8e41-61f056e9d766"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "db986c20-8190-5a89-87db-4c56c5d6c82d"
+            }
+          ],
+          "reason": "This transactional authority limit appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The parking information agent cannot register a visitor vehicle for the visitor.",
+          "uid": "f80f6317-7c6b-5849-af9d-36b6770713b8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "1a0b250f-c4f1-5a9f-a114-5420a859dd32"
+            }
+          ],
+          "reason": "This separate financial authority limit appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The parking information agent cannot waive parking fees.",
+          "uid": "e6406808-c6a0-5e93-9a61-d282ab313aad"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "f201604e-92ae-5315-8359-5e68dd9eeecb"
+            }
+          ],
+          "reason": "This source-checking instruction appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Official parking notices should be checked for weather-related restrictions.",
+          "uid": "a9c6ab4c-ef06-58c9-b307-d60b8868bc3a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "38b6565e-25a0-5b7c-ba03-747c1901af7e"
+            }
+          ],
+          "reason": "This distinction between authorization and availability appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Valid parking authorization does not guarantee a particular space is available.",
+          "uid": "60c13a65-8cf3-55f2-8015-a74ed920813d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "11d0062b-7941-5512-b5dc-f2d1379741e6"
+            }
+          ],
+          "reason": "This facility-location fact appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "An accessible pickup and drop-off zone is marked at the Main Building main entrance.",
+          "uid": "1c89123d-525b-5627-b97d-7b25b8a1f462"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "a299c675-7179-5cb1-b5e4-552198bdc91f"
+            }
+          ],
+          "reason": "This specialized-space information appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Signs identify dedicated car-sharing spaces in Outdoor Parking Lot C.",
+          "uid": "762ad5f1-4c8f-5de6-87a9-4718c757c195"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b61050b3-9a74-4355-b3f4-b9f1e59a8a70",
+              "memory_uid": "a671229f-9c73-5183-bec3-8d23d0dd8d53"
+            }
+          ],
+          "reason": "This incident-reporting instruction appears only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Vehicles blocking passageways or accessible parking areas should be reported to parking management.",
+          "uid": "089731c5-9de3-563a-b4d3-98cba0f15be4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "375c68b6-fd49-495d-b311-1698a91a6c6c",
+              "memory_uid": "8017409a-8af8-5a55-a49e-e9ccb44b9f34"
+            },
+            {
+              "frame_uid": "375c68b6-fd49-495d-b311-1698a91a6c6c",
+              "memory_uid": "dbb3c40c-7699-509d-901d-be9de2f110dc"
+            }
+          ],
+          "reason": "The compared memories split one underlying closure of the Main Building indoor connecting route.",
+          "status": "RESOLVED",
+          "summary": "During construction, the indoor connection through the Main Building floors and its third-floor rear entrance route to the library are closed.",
+          "uid": "4bcefb9f-c95a-5935-8ec3-2f1b48bf91ad"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "375c68b6-fd49-495d-b311-1698a91a6c6c",
+              "memory_uid": "a8bb36e1-2629-5b8f-b4dc-af9b88020dc9"
+            }
+          ],
+          "reason": "This traveler-impact consideration appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Redirecting an indoor-route user outdoors during summer construction may impose substantial heat and travel burden.",
+          "uid": "ca956c5d-0fbe-58ec-b0c0-a62fe2950c8a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "375c68b6-fd49-495d-b311-1698a91a6c6c",
+              "memory_uid": "8276ab56-741f-5f60-ab77-79fe6dc0ba55"
+            }
+          ],
+          "reason": "This destination-specific direction appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "During construction, directions to the Student Centre accessible restroom should use the accessible route to the left when viewed from the Main Building.",
+          "uid": "a369f148-1ec9-562d-a3ff-4f879b8b1a13"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "375c68b6-fd49-495d-b311-1698a91a6c6c",
+              "memory_uid": "638f272f-9fbd-5d1f-bfd8-b01618424065"
+            }
+          ],
+          "reason": "This route-comparison behavior appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "During construction, the route guidance agent may exclude candidates using closed Main Building floors, the rear entrance, or Outdoor Parking Lot A.",
+          "uid": "5a58f861-ff17-5a35-8b8d-008e9000d4f1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "375c68b6-fd49-495d-b311-1698a91a6c6c",
+              "memory_uid": "ba9d70f9-02c4-56d9-ac23-f2a532c22488"
+            }
+          ],
+          "reason": "This companion verification practice appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "When the indoor shortcut is closed, a mobility-support companion may reconfirm the alternative accessible route’s distance and slope.",
+          "uid": "a93f0d86-d074-5f90-9b3c-fb3fd9976632"
+        }
+      ],
+      "reports": {
+        "both": "Accessible-travel guidance aligns a step-free need with the designated construction-period route from Lot C through the Student Centre to the library west entrance.",
+        "compared_only": "The compared frame adds indoor-route closures, heat and travel burdens, restroom directions, closed-route filtering, and companion checks of an alternative route’s distance and slope.",
+        "differences": "A normally short route through Outdoor Parking Lot A and the Main Building is specifically closed during construction.",
+        "reference_only": "The reference covers parking access, permits, specialized spaces, loading zones, posted fees and hours, weather and event conditions, shuttle links, user expectations, and the information agent’s capabilities and limits."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "b3470c2e-966d-4e51-a6f0-ad4464a00387"
+    },
+    "analysis_digest": "705f99ded6968a7dfe75ba364d6cd6d6ad96fb9c2f081b01161d3d758d36c1c3",
+    "key": "6927ae8212a17a6e866ecd062a2e946ec683b5390e870e6a7628e2d64d1411cd",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 132.18547808400035,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-1",
+    "task_description": {
+      "context_digest": "17a794e48857a8178811052488c3bd4cc66e9029847f2ce038825e49ed5afcc8",
+      "context_uid": "e2c67cf1-c2a8-5aef-a2cb-583a9fd8d6c6",
+      "name": "task-1/description"
+    }
+  },
+  "artifact_key": "6927ae8212a17a6e866ecd062a2e946ec683b5390e870e6a7628e2d64d1411cd",
+  "created_at": "2026-08-13T18:12:14.190194Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-1/campus-wiki/temporary-parking",
+  "pair_key": "6c73e1c63e402bfbf472346ba4604be9bc70d035bebc4c0dcaa85dde18372ae4",
+  "provider_seconds": 132.18547808400035,
+  "right": "task-1/participant/construction-updates/route-changes",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-1"
+}

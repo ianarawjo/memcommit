@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:47:30.659042+00:00",
+      "frames": [
+        {
+          "context_digest": "0b8af0ea4e580cc332939d026149e543e9251c54de246e3eabb83c941e6c12f2",
+          "context_name": "task-3/local/personal-memory/2024/12",
+          "context_uid": "66c3e5de-61bb-5795-8e5a-4e28f64be857",
+          "memories": [
+            {
+              "content": "The user used an accessible entrance at a clinic in December 2024.",
+              "content_digest": "a940bc9fb7423a1bdb9dde547cd39eb8ad66d4fa3051649c62b042fc63935263",
+              "position": 0,
+              "uid": "a6923620-267d-5129-b8c4-cd9b1e1a1e7b"
+            },
+            {
+              "content": "On a day snow had accumulated and blocked the main-entrance ramp, the user went to a side entrance.",
+              "content_digest": "460c05d8e8b4b7443ff42cbeead66e07201846394bcbe5948f63e585a197006f",
+              "position": 1,
+              "uid": "fb0e1d1f-0ef5-5214-b6d7-f6ca5c68f582"
+            },
+            {
+              "content": "The user learned on site that the elevator was under inspection and delayed the appointment.",
+              "content_digest": "b5efa024c597b57651178431d22173d4ca1242c3a4c9607f8bd5a7ff681af6f4",
+              "position": 2,
+              "uid": "4cb45120-4376-5c7b-ae92-faa9e4b9330c"
+            },
+            {
+              "content": "The day before the next visit, the user called to check whether the elevator would be operating.",
+              "content_digest": "93c66066de480a4d2f30b7b7c4d955acfceb227ac898766b6375829804b580eb",
+              "position": 3,
+              "uid": "479f4434-879c-5335-b0c9-c0bfa19ecdcd"
+            },
+            {
+              "content": "The user waited for their turn in front of a ticket machine near the waiting chairs.",
+              "content_digest": "fada8c09d46af2e1bcbd2b1e97d9cb786ceca83fc13d1240627639dd6cb96e65",
+              "position": 4,
+              "uid": "0f2c78a7-8f92-573d-af8a-a360ceb77b24"
+            },
+            {
+              "content": "On a day the user waited in a corridor without chairs, they leaned against the wall and changed position several times.",
+              "content_digest": "0037afaeb85d94f985b1628b7b8f8194fb00d7d7e72e1746c6bae2c2ba66fe6f",
+              "position": 5,
+              "uid": "7b9197ac-4263-5169-8d3b-d34f5d893d36"
+            },
+            {
+              "content": "On a day their older sister accompanied them, the user found a place to sit immediately after reception.",
+              "content_digest": "1ae59de552a922fd3b4d39e7e5dc1ec65ff08ee68e3448f2152f27dfec710a5a",
+              "position": 6,
+              "uid": "7b0b7571-f29c-56e5-a27a-82d69a4a6982"
+            },
+            {
+              "content": "Reception staff expect that a first-time visitor may ask where the accessible entrance is.",
+              "content_digest": "7dc3300dc630b737c0f7b437eba30179aa6aaa03efd61c968604ee505a43aa73",
+              "position": 7,
+              "uid": "e9515d6b-10d9-579f-abf7-5030db64218a"
+            },
+            {
+              "content": "The local agent cannot infer the user's condition from a record of using an accessible route alone.",
+              "content_digest": "2d8a50f62f32c43ca62e1e23b75c34361ece43fd8367964174fdc73d66795df4",
+              "position": 8,
+              "uid": "8e57141d-c603-56cd-ab9e-c14b4e944b45"
+            },
+            {
+              "content": "Snow accumulation and snow-removal work can temporarily block an entrance route used under ordinary conditions.",
+              "content_digest": "4fb152c120860688789bdd4b825de45799e9fa00c0c18c334492dd4b274adde9",
+              "position": 9,
+              "uid": "a6076438-307c-56fe-9d2c-848181846ce5"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "3379f75d-ada3-4d3c-b6ad-6751b9007690"
+        },
+        {
+          "context_digest": "3e738289251b9bdf3deb1c7a7540e6ce811b09e26a020af3a76d47b4c85c7ab1",
+          "context_name": "task-3/local/personal-memory/2025/02",
+          "context_uid": "ce7367b8-8532-5f43-972a-1665ca8e3e80",
+          "memories": [
+            {
+              "content": "The user reviewed their emergency-contact list in February 2025.",
+              "content_digest": "b2f108376dbbf53e8885b9c61080d4c873209d8c6e399c37412fa507fec08b0b",
+              "position": 0,
+              "uid": "3ff046b1-5810-51ca-8d43-c99ef6a90b41"
+            },
+            {
+              "content": "When preparation instructions arrived as a long paragraph, the user missed two items.",
+              "content_digest": "43bde452a403f85bcffa6f7ba6b3142ed45604730083327c6f57092b98f397aa",
+              "position": 1,
+              "uid": "e2a304e5-6100-5a5f-b508-0a7f28f6bda7"
+            },
+            {
+              "content": "After changing the same content into a checklist, the user marked every item they had prepared.",
+              "content_digest": "0f8115061b489894115fd252f079ee673504ed09dea4d88d558e64ed6189f1be",
+              "position": 2,
+              "uid": "51d03bff-3e33-5f68-9df6-ed7efa8e3de9"
+            },
+            {
+              "content": "The user called their mother on a weekend evening, but they spoke only briefly because the mother was out.",
+              "content_digest": "a9a1e7d87532667781677f4760beeb086f1e423365a915a0ec0b494892cbb361",
+              "position": 3,
+              "uid": "0987293e-3e21-5cbc-bb46-59245a5fa041"
+            },
+            {
+              "content": "The user called again on Saturday morning the following week and spoke for 40 minutes.",
+              "content_digest": "f08c9f170345686b2091e3b0ecd49f049e245d584886da62d586185010f713bf",
+              "position": 4,
+              "uid": "dc3de6ad-56ea-528a-a9b7-349e79af2326"
+            },
+            {
+              "content": "The user sent a text to an old number for an emergency contact and saw that delivery failed.",
+              "content_digest": "692321e996b9ac8e3500a2da7765f77e0d14c6f040cf2c33944cbdcb39c706de",
+              "position": 5,
+              "uid": "6546d41b-3d5b-5802-a9e7-ac028405e3f2"
+            },
+            {
+              "content": "After confirming the new number with their older sister, the user updated the contact list.",
+              "content_digest": "8d2e954a978e35c1da92948ccc8e45f38fcc25ea3fafe7c389ef546f6eda1ae1",
+              "position": 6,
+              "uid": "ea6eb9d2-9b01-5330-a4d5-886d4bc6cd85"
+            },
+            {
+              "content": "For nonurgent contact, the user's older sister prefers to reply by text when available rather than take a call immediately.",
+              "content_digest": "86639aee50903bc3261e6f88ac7d649c8197927fe214d5d17e0e6f5b3d69a59d",
+              "position": 7,
+              "uid": "12fe7e64-192e-5359-8f96-d2875f7e5399"
+            },
+            {
+              "content": "Before using an emergency contact, reconfirm the number and relationship information with the user.",
+              "content_digest": "78e41f61ba99eaf8840d5d318d08327ca6bb087addd6e22269e8b63281bb67c7",
+              "position": 8,
+              "uid": "e6f89ded-5687-5c25-8df8-88f288d450c6"
+            },
+            {
+              "content": "The user feels that a reminder the day before an appointment gives them enough time to recheck preparation items.",
+              "content_digest": "1a9fcc01df362c76b6d9c8e4fa2d33229a2ae2762c0c6d25e0fc89312a6e0ed4",
+              "position": 9,
+              "uid": "f9197c33-ff93-5215-a3a5-e4087bea2a0d"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "35f3a660-e058-4eb7-ace6-3980494c472c"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate domains without materially overlapping claims: the reference records clinic access, mobility, waiting, and inference limits, while the compared frame records preparation formats, family contact patterns, emergency-contact maintenance, and reminder timing. No contradiction or scope-based cross-frame difference is established.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3379f75d-ada3-4d3c-b6ad-6751b9007690",
+              "memory_uid": "a6923620-267d-5129-b8c4-cd9b1e1a1e7b"
+            }
+          ],
+          "reason": "This is a one-sided historical clinic-access fact with no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user used a clinic's accessible entrance in December 2024.",
+          "uid": "4f6c3cc1-42e5-5e4f-a4b1-0291060fdfbf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3379f75d-ada3-4d3c-b6ad-6751b9007690",
+              "memory_uid": "fb0e1d1f-0ef5-5214-b6d7-f6ca5c68f582"
+            }
+          ],
+          "reason": "This specific access-barrier event has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Snow blocking the main-entrance ramp led the user to use a side entrance.",
+          "uid": "1d4daafc-0d8a-5fe6-aedd-a920d8386626"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3379f75d-ada3-4d3c-b6ad-6751b9007690",
+              "memory_uid": "4cb45120-4376-5c7b-ae92-faa9e4b9330c"
+            }
+          ],
+          "reason": "This specific clinic elevator disruption has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "An elevator inspection discovered on site delayed the user's appointment.",
+          "uid": "eea9ca99-0dc0-5121-af37-69a202e74c61"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3379f75d-ada3-4d3c-b6ad-6751b9007690",
+              "memory_uid": "479f4434-879c-5335-b0c9-c0bfa19ecdcd"
+            }
+          ],
+          "reason": "This proactive clinic-access check has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Before a later visit, the user called to verify that the elevator would operate.",
+          "uid": "1196264e-8f5b-5e7f-bcca-5783f72fd031"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3379f75d-ada3-4d3c-b6ad-6751b9007690",
+              "memory_uid": "0f2c78a7-8f92-573d-af8a-a360ceb77b24"
+            }
+          ],
+          "reason": "This clinic waiting-location experience has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user waited near seating in front of a ticket machine.",
+          "uid": "26d67117-f958-592c-8d29-172e2060a242"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3379f75d-ada3-4d3c-b6ad-6751b9007690",
+              "memory_uid": "7b9197ac-4263-5169-8d3b-d34f5d893d36"
+            }
+          ],
+          "reason": "This specific response to unavailable seating has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Without corridor chairs, the user leaned against a wall and repeatedly changed position.",
+          "uid": "06132168-8764-5d12-a0b7-6fc73ba7712b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3379f75d-ada3-4d3c-b6ad-6751b9007690",
+              "memory_uid": "7b0b7571-f29c-56e5-a27a-82d69a4a6982"
+            }
+          ],
+          "reason": "This accompanied clinic-seating experience has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "When accompanied by their older sister, the user found seating immediately after reception.",
+          "uid": "64319fbf-1cf9-5b62-b478-c0f990793ce8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3379f75d-ada3-4d3c-b6ad-6751b9007690",
+              "memory_uid": "e9515d6b-10d9-579f-abf7-5030db64218a"
+            }
+          ],
+          "reason": "This staff expectation about clinic wayfinding has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Reception staff anticipate that first-time visitors may request accessible-entrance directions.",
+          "uid": "9b1aca06-4d04-525c-b9b9-ffcdc3a91802"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3379f75d-ada3-4d3c-b6ad-6751b9007690",
+              "memory_uid": "8e57141d-c603-56cd-ab9e-c14b4e944b45"
+            }
+          ],
+          "reason": "This explicit inference limitation has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Accessible-route use alone does not justify inferring the user's condition.",
+          "uid": "b8d90b87-87fb-5fd5-8887-d2219308dc99"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3379f75d-ada3-4d3c-b6ad-6751b9007690",
+              "memory_uid": "a6076438-307c-56fe-9d2c-848181846ce5"
+            }
+          ],
+          "reason": "This general observation about temporary entrance obstruction has no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Snow accumulation and removal work can temporarily obstruct an ordinarily used entrance route.",
+          "uid": "539b6ff4-a453-508d-997d-100ea8f51239"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "35f3a660-e058-4eb7-ace6-3980494c472c",
+              "memory_uid": "3ff046b1-5810-51ca-8d43-c99ef6a90b41"
+            }
+          ],
+          "reason": "This contact-maintenance event has no materially corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user reviewed their emergency-contact list in February 2025.",
+          "uid": "9d7c6c67-be45-5986-a1cd-19cc8462d79b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "35f3a660-e058-4eb7-ace6-3980494c472c",
+              "memory_uid": "e2a304e5-6100-5a5f-b508-0a7f28f6bda7"
+            }
+          ],
+          "reason": "This preparation-format outcome has no materially corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user missed two preparation items when instructions were presented as a long paragraph.",
+          "uid": "a3a36a9b-3292-51b1-9275-40b6def68ce6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "35f3a660-e058-4eb7-ace6-3980494c472c",
+              "memory_uid": "51d03bff-3e33-5f68-9df6-ed7efa8e3de9"
+            }
+          ],
+          "reason": "This checklist-use outcome has no materially corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "With the same preparation content formatted as a checklist, the user marked every prepared item.",
+          "uid": "090073a7-e2ed-5515-b06f-3e07a6363c08"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "35f3a660-e058-4eb7-ace6-3980494c472c",
+              "memory_uid": "0987293e-3e21-5cbc-bb46-59245a5fa041"
+            }
+          ],
+          "reason": "This family-contact event and its stated circumstance have no materially corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A weekend-evening call with the user's mother was brief because she was out.",
+          "uid": "a9a5289e-df72-58c7-83d5-94851c90a887"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "35f3a660-e058-4eb7-ace6-3980494c472c",
+              "memory_uid": "dc3de6ad-56ea-528a-a9b7-349e79af2326"
+            }
+          ],
+          "reason": "This later family-contact event has no materially corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A Saturday-morning call with the user's mother the following week lasted 40 minutes.",
+          "uid": "41f7ad1c-7d69-5e41-b8d0-ac0b2506cf02"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "35f3a660-e058-4eb7-ace6-3980494c472c",
+              "memory_uid": "6546d41b-3d5b-5802-a9e7-ac028405e3f2"
+            }
+          ],
+          "reason": "This evidence of outdated emergency-contact information has no materially corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A text sent to an emergency contact's old number failed delivery.",
+          "uid": "84ff69d0-b769-55e2-81f1-97e22ad4c0da"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "35f3a660-e058-4eb7-ace6-3980494c472c",
+              "memory_uid": "ea6eb9d2-9b01-5330-a4d5-886d4bc6cd85"
+            }
+          ],
+          "reason": "This contact-correction event has no materially corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "After confirming a new number with their older sister, the user updated the contact list.",
+          "uid": "c065b053-46bd-5d1d-a8a0-bc6410254f12"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "35f3a660-e058-4eb7-ace6-3980494c472c",
+              "memory_uid": "12fe7e64-192e-5359-8f96-d2875f7e5399"
+            }
+          ],
+          "reason": "This explicitly scoped communication preference has no materially corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "For nonurgent contact, the user's older sister prefers replying by text when available over taking an immediate call.",
+          "uid": "08afe3ae-4c2a-54a4-abf5-306f755328b8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "35f3a660-e058-4eb7-ace6-3980494c472c",
+              "memory_uid": "e6f89ded-5687-5c25-8df8-88f288d450c6"
+            }
+          ],
+          "reason": "This verification policy has no materially corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Emergency-contact numbers and relationship information should be reconfirmed with the user before use.",
+          "uid": "45bfca17-895e-5453-a435-6fe6dcb0b673"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "35f3a660-e058-4eb7-ace6-3980494c472c",
+              "memory_uid": "f9197c33-ff93-5215-a3a5-e4087bea2a0d"
+            }
+          ],
+          "reason": "This reminder-timing preference has no materially corresponding claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user considers a day-before appointment reminder sufficient for rechecking preparation items.",
+          "uid": "9bf049cb-ee1f-51cd-85c8-d61d54bcdf13"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame describes emergency-contact review and correction, checklist-based preparation, different outcomes from calls to the user's mother, the sister's nonurgent text preference, verification before emergency use, and the usefulness of day-before appointment reminders.",
+        "differences": "",
+        "reference_only": "The reference describes clinic entrance accessibility, temporary snow and elevator barriers, proactive elevator checking, varied waiting and seating experiences, anticipated wayfinding questions, and limits on inferring a condition from accessible-route use."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "678caeaf-203d-4f1c-950b-59be533b6b39"
+    },
+    "analysis_digest": "ad84e4cc65a623e10c55584956d8fd61b953ff730c30f97129f89e33f5822b18",
+    "key": "78ff5b552acb6045989047c6f123373d82d23d9c56c7586c408b7d6962778247",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 38.30914845799998,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "78ff5b552acb6045989047c6f123373d82d23d9c56c7586c408b7d6962778247",
+  "created_at": "2026-08-13T18:48:08.967783Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/12",
+  "pair_key": "0b25b43320b0bb993810b719b11afb9830123ac0ad127e640fb34c321f9af877",
+  "provider_seconds": 38.30914845799998,
+  "right": "task-3/local/personal-memory/2025/02",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

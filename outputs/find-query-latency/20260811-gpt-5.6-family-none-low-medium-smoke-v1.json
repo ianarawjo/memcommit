@@ -1,0 +1,4507 @@
+{
+  "attempts": [
+    {
+      "case_id": "find-accessibility",
+      "cell_id": "find-accessibility:gpt-5.6-sol:none",
+      "digests": {
+        "prompt_sha256": "2841b97ee368eaf4815201f9c9b4ef6795bb1462cc1c76d4f5dbd382ee4a0c68",
+        "response_sha256": "f1410009e094d125c81da7b1f78a20ad53680fcad69ae7ac9eb04eb12d05b5ec",
+        "schema_sha256": "807a81525c636be7c4a4f887aa0236277df6458274bd4b22d3d4e3a6bf0ab7ba"
+      },
+      "effort": "none",
+      "failure": null,
+      "finished_at": "2026-08-11T13:42:43.263051Z",
+      "model": "gpt-5.6-sol",
+      "operation": "find",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "none",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "{\"matches\":[{\"candidate_id\":\"c000140\"},{\"candidate_id\":\"c000133\"},{\"candidate_id\":\"c000033\"},{\"candidate_id\":\"c000026\"},{\"candidate_id\":\"c000024\"}],\"related_query\":\"\",\"related_matches\":[]}",
+      "result": {
+        "matches": [
+          {
+            "candidate_id": "c000140",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000133",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000033",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000026",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000024",
+            "related_query": null,
+            "relevance": "primary"
+          }
+        ]
+      },
+      "score": {
+        "empty_primary_correct": null,
+        "historical_result_precision": 0.8,
+        "historical_result_recall": 0.8,
+        "primary_count": 5,
+        "primary_locators": [
+          "local/personal-memory/2025-02/10",
+          "local/personal-memory/2025-02/03",
+          "local/personal-memory/2024-04/03",
+          "local/personal-memory/2024-03/06",
+          "local/personal-memory/2024-03/04"
+        ],
+        "related_locators": [],
+        "related_query": null,
+        "study_selected_recall": 0.75
+      },
+      "sizes": {
+        "prompt_chars": 64549,
+        "response_chars": 188,
+        "schema_chars": 6537
+      },
+      "started_at": "2026-08-11T13:42:38.302759Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.022605666978051886,
+        "provider_seconds": 4.936041291017318,
+        "total_seconds": 4.9603654999809805,
+        "validation_seconds": 3.1249976018443704e-05
+      }
+    },
+    {
+      "case_id": "find-accessibility",
+      "cell_id": "find-accessibility:gpt-5.6-sol:low",
+      "digests": {
+        "prompt_sha256": "2841b97ee368eaf4815201f9c9b4ef6795bb1462cc1c76d4f5dbd382ee4a0c68",
+        "response_sha256": "4370f1cb657bf05c5e5a5294c28c436152c291d690210c3e14a00c56510edb42",
+        "schema_sha256": "807a81525c636be7c4a4f887aa0236277df6458274bd4b22d3d4e3a6bf0ab7ba"
+      },
+      "effort": "low",
+      "failure": null,
+      "finished_at": "2026-08-11T13:42:58.974054Z",
+      "model": "gpt-5.6-sol",
+      "operation": "find",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "low",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "{\"matches\":[{\"candidate_id\":\"c000033\"},{\"candidate_id\":\"c000026\"},{\"candidate_id\":\"c000140\"},{\"candidate_id\":\"c000055\"},{\"candidate_id\":\"c000114\"}],\"related_query\":\"\",\"related_matches\":[]}",
+      "result": {
+        "matches": [
+          {
+            "candidate_id": "c000033",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000026",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000140",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000055",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000114",
+            "related_query": null,
+            "relevance": "primary"
+          }
+        ]
+      },
+      "score": {
+        "empty_primary_correct": null,
+        "historical_result_precision": 0.6,
+        "historical_result_recall": 0.6,
+        "primary_count": 5,
+        "primary_locators": [
+          "local/personal-memory/2024-04/03",
+          "local/personal-memory/2024-03/06",
+          "local/personal-memory/2025-02/10",
+          "local/personal-memory/2024-06/05",
+          "local/personal-memory/2024-12/04"
+        ],
+        "related_locators": [],
+        "related_query": null,
+        "study_selected_recall": 0.5
+      },
+      "sizes": {
+        "prompt_chars": 64549,
+        "response_chars": 188,
+        "schema_chars": 6537
+      },
+      "started_at": "2026-08-11T13:42:43.265331Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.0351421250088606,
+        "provider_seconds": 15.67067125000176,
+        "total_seconds": 15.708860124985222,
+        "validation_seconds": 4.7416979214176536e-05
+      }
+    },
+    {
+      "case_id": "find-accessibility",
+      "cell_id": "find-accessibility:gpt-5.6-sol:medium",
+      "digests": {
+        "prompt_sha256": "2841b97ee368eaf4815201f9c9b4ef6795bb1462cc1c76d4f5dbd382ee4a0c68",
+        "response_sha256": "4a3a97157bd57d5f00ca8699af5a44dd1dd148cfe2157817db516cf35917c8b2",
+        "schema_sha256": "807a81525c636be7c4a4f887aa0236277df6458274bd4b22d3d4e3a6bf0ab7ba"
+      },
+      "effort": "medium",
+      "failure": null,
+      "finished_at": "2026-08-11T13:43:14.591018Z",
+      "model": "gpt-5.6-sol",
+      "operation": "find",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "{\"matches\":[{\"candidate_id\":\"c000033\"},{\"candidate_id\":\"c000026\"},{\"candidate_id\":\"c000140\"},{\"candidate_id\":\"c000039\"},{\"candidate_id\":\"c000024\"}],\"related_query\":\"\",\"related_matches\":[]}",
+      "result": {
+        "matches": [
+          {
+            "candidate_id": "c000033",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000026",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000140",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000039",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000024",
+            "related_query": null,
+            "relevance": "primary"
+          }
+        ]
+      },
+      "score": {
+        "empty_primary_correct": null,
+        "historical_result_precision": 1.0,
+        "historical_result_recall": 1.0,
+        "primary_count": 5,
+        "primary_locators": [
+          "local/personal-memory/2024-04/03",
+          "local/personal-memory/2024-03/06",
+          "local/personal-memory/2025-02/10",
+          "local/personal-memory/2024-04/09",
+          "local/personal-memory/2024-03/04"
+        ],
+        "related_locators": [],
+        "related_query": null,
+        "study_selected_recall": 1.0
+      },
+      "sizes": {
+        "prompt_chars": 64549,
+        "response_chars": 188,
+        "schema_chars": 6537
+      },
+      "started_at": "2026-08-11T13:42:58.976898Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.03270825001527555,
+        "provider_seconds": 15.578707665990805,
+        "total_seconds": 15.614237917005084,
+        "validation_seconds": 3.504200140014291e-05
+      }
+    },
+    {
+      "case_id": "find-accessibility",
+      "cell_id": "find-accessibility:gpt-5.6-terra:none",
+      "digests": {
+        "prompt_sha256": "2841b97ee368eaf4815201f9c9b4ef6795bb1462cc1c76d4f5dbd382ee4a0c68",
+        "response_sha256": "3f0760123dec04656b6d05ae12fec8b9e86e99c0030ce2c5ee043da00149e3b7",
+        "schema_sha256": "807a81525c636be7c4a4f887aa0236277df6458274bd4b22d3d4e3a6bf0ab7ba"
+      },
+      "effort": "none",
+      "failure": null,
+      "finished_at": "2026-08-11T13:43:18.639095Z",
+      "model": "gpt-5.6-terra",
+      "operation": "find",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-terra",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "none",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "{\"matches\":[{\"candidate_id\":\"c000033\"},{\"candidate_id\":\"c000026\"},{\"candidate_id\":\"c000140\"},{\"candidate_id\":\"c000039\"},{\"candidate_id\":\"c000049\"}],\"related_query\":\"\",\"related_matches\":[]}",
+      "result": {
+        "matches": [
+          {
+            "candidate_id": "c000033",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000026",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000140",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000039",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000049",
+            "related_query": null,
+            "relevance": "primary"
+          }
+        ]
+      },
+      "score": {
+        "empty_primary_correct": null,
+        "historical_result_precision": 0.8,
+        "historical_result_recall": 0.8,
+        "primary_count": 5,
+        "primary_locators": [
+          "local/personal-memory/2024-04/03",
+          "local/personal-memory/2024-03/06",
+          "local/personal-memory/2025-02/10",
+          "local/personal-memory/2024-04/09",
+          "local/personal-memory/2024-05/09"
+        ],
+        "related_locators": [],
+        "related_query": null,
+        "study_selected_recall": 0.75
+      },
+      "sizes": {
+        "prompt_chars": 64549,
+        "response_chars": 188,
+        "schema_chars": 6537
+      },
+      "started_at": "2026-08-11T13:43:14.593396Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.03274137500557117,
+        "provider_seconds": 4.010138499987079,
+        "total_seconds": 4.045769917021971,
+        "validation_seconds": 3.3666001399978995e-05
+      }
+    },
+    {
+      "case_id": "find-accessibility",
+      "cell_id": "find-accessibility:gpt-5.6-terra:low",
+      "digests": {
+        "prompt_sha256": "2841b97ee368eaf4815201f9c9b4ef6795bb1462cc1c76d4f5dbd382ee4a0c68",
+        "response_sha256": "440118ed4770358e935cd17eae239ab5a4cc5f575418b4325bee6381e04f4712",
+        "schema_sha256": "807a81525c636be7c4a4f887aa0236277df6458274bd4b22d3d4e3a6bf0ab7ba"
+      },
+      "effort": "low",
+      "failure": null,
+      "finished_at": "2026-08-11T13:43:27.255212Z",
+      "model": "gpt-5.6-terra",
+      "operation": "find",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-terra",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "low",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "{\"matches\":[{\"candidate_id\":\"c000026\"},{\"candidate_id\":\"c000033\"},{\"candidate_id\":\"c000035\"},{\"candidate_id\":\"c000024\"},{\"candidate_id\":\"c000140\"}],\"related_query\":\"\",\"related_matches\":[]}",
+      "result": {
+        "matches": [
+          {
+            "candidate_id": "c000026",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000033",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000035",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000024",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000140",
+            "related_query": null,
+            "relevance": "primary"
+          }
+        ]
+      },
+      "score": {
+        "empty_primary_correct": null,
+        "historical_result_precision": 0.8,
+        "historical_result_recall": 0.8,
+        "primary_count": 5,
+        "primary_locators": [
+          "local/personal-memory/2024-03/06",
+          "local/personal-memory/2024-04/03",
+          "local/personal-memory/2024-04/05",
+          "local/personal-memory/2024-03/04",
+          "local/personal-memory/2025-02/10"
+        ],
+        "related_locators": [],
+        "related_query": null,
+        "study_selected_recall": 0.75
+      },
+      "sizes": {
+        "prompt_chars": 64549,
+        "response_chars": 188,
+        "schema_chars": 6537
+      },
+      "started_at": "2026-08-11T13:43:18.641896Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.0377154579909984,
+        "provider_seconds": 8.572766833996866,
+        "total_seconds": 8.613428000011481,
+        "validation_seconds": 4.641601117327809e-05
+      }
+    },
+    {
+      "case_id": "find-accessibility",
+      "cell_id": "find-accessibility:gpt-5.6-terra:medium",
+      "digests": {
+        "prompt_sha256": "2841b97ee368eaf4815201f9c9b4ef6795bb1462cc1c76d4f5dbd382ee4a0c68",
+        "response_sha256": "58ed1d1f4d137dd7f1d23556146b47441b1fc6da58f1ad33368f969c612e39f3",
+        "schema_sha256": "807a81525c636be7c4a4f887aa0236277df6458274bd4b22d3d4e3a6bf0ab7ba"
+      },
+      "effort": "medium",
+      "failure": null,
+      "finished_at": "2026-08-11T13:43:36.178503Z",
+      "model": "gpt-5.6-terra",
+      "operation": "find",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-terra",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "{\"matches\":[{\"candidate_id\":\"c000033\"},{\"candidate_id\":\"c000140\"},{\"candidate_id\":\"c000026\"}],\"related_query\":\"\",\"related_matches\":[]}",
+      "result": {
+        "matches": [
+          {
+            "candidate_id": "c000033",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000140",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000026",
+            "related_query": null,
+            "relevance": "primary"
+          }
+        ]
+      },
+      "score": {
+        "empty_primary_correct": null,
+        "historical_result_precision": 1.0,
+        "historical_result_recall": 0.6,
+        "primary_count": 3,
+        "primary_locators": [
+          "local/personal-memory/2024-04/03",
+          "local/personal-memory/2025-02/10",
+          "local/personal-memory/2024-03/06"
+        ],
+        "related_locators": [],
+        "related_query": null,
+        "study_selected_recall": 0.5
+      },
+      "sizes": {
+        "prompt_chars": 64549,
+        "response_chars": 134,
+        "schema_chars": 6537
+      },
+      "started_at": "2026-08-11T13:43:27.258346Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.036640875012381,
+        "provider_seconds": 8.880549875000725,
+        "total_seconds": 8.920258041995112,
+        "validation_seconds": 4.049998824484646e-05
+      }
+    },
+    {
+      "case_id": "find-accessibility",
+      "cell_id": "find-accessibility:gpt-5.6-luna:none",
+      "digests": {
+        "prompt_sha256": "2841b97ee368eaf4815201f9c9b4ef6795bb1462cc1c76d4f5dbd382ee4a0c68",
+        "response_sha256": "796cfcd0324f3ee96179ca7cac440c6d08eea8d84a5433254da5d82bb87cae2d",
+        "schema_sha256": "807a81525c636be7c4a4f887aa0236277df6458274bd4b22d3d4e3a6bf0ab7ba"
+      },
+      "effort": "none",
+      "failure": null,
+      "finished_at": "2026-08-11T13:43:39.789153Z",
+      "model": "gpt-5.6-luna",
+      "operation": "find",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-luna",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "none",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "{\"matches\":[{\"candidate_id\":\"c000030\"},{\"candidate_id\":\"c000039\"},{\"candidate_id\":\"c000118\"},{\"candidate_id\":\"c000140\"}],\"related_query\":\"\",\"related_matches\":[]}",
+      "result": {
+        "matches": [
+          {
+            "candidate_id": "c000030",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000039",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000118",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000140",
+            "related_query": null,
+            "relevance": "primary"
+          }
+        ]
+      },
+      "score": {
+        "empty_primary_correct": null,
+        "historical_result_precision": 0.5,
+        "historical_result_recall": 0.4,
+        "primary_count": 4,
+        "primary_locators": [
+          "local/personal-memory/2024-03/10",
+          "local/personal-memory/2024-04/09",
+          "local/personal-memory/2024-12/08",
+          "local/personal-memory/2025-02/10"
+        ],
+        "related_locators": [],
+        "related_query": null,
+        "study_selected_recall": 0.5
+      },
+      "sizes": {
+        "prompt_chars": 64549,
+        "response_chars": 161,
+        "schema_chars": 6537
+      },
+      "started_at": "2026-08-11T13:43:36.181256Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.042136707983445376,
+        "provider_seconds": 3.56296879198635,
+        "total_seconds": 3.6079777919803746,
+        "validation_seconds": 2.820900408551097e-05
+      }
+    },
+    {
+      "case_id": "find-accessibility",
+      "cell_id": "find-accessibility:gpt-5.6-luna:low",
+      "digests": {
+        "prompt_sha256": "2841b97ee368eaf4815201f9c9b4ef6795bb1462cc1c76d4f5dbd382ee4a0c68",
+        "response_sha256": "279e1eedf8cb9c9410a4214514e8b69ef1795baa7a481bd1dd8458381f0e513b",
+        "schema_sha256": "807a81525c636be7c4a4f887aa0236277df6458274bd4b22d3d4e3a6bf0ab7ba"
+      },
+      "effort": "low",
+      "failure": null,
+      "finished_at": "2026-08-11T13:43:51.837542Z",
+      "model": "gpt-5.6-luna",
+      "operation": "find",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-luna",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "low",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "{\"matches\":[{\"candidate_id\":\"c000033\"},{\"candidate_id\":\"c000026\"},{\"candidate_id\":\"c000032\"},{\"candidate_id\":\"c000024\"},{\"candidate_id\":\"c000140\"}],\"related_query\":\"\",\"related_matches\":[]}",
+      "result": {
+        "matches": [
+          {
+            "candidate_id": "c000033",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000026",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000032",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000024",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000140",
+            "related_query": null,
+            "relevance": "primary"
+          }
+        ]
+      },
+      "score": {
+        "empty_primary_correct": null,
+        "historical_result_precision": 0.8,
+        "historical_result_recall": 0.8,
+        "primary_count": 5,
+        "primary_locators": [
+          "local/personal-memory/2024-04/03",
+          "local/personal-memory/2024-03/06",
+          "local/personal-memory/2024-04/02",
+          "local/personal-memory/2024-03/04",
+          "local/personal-memory/2025-02/10"
+        ],
+        "related_locators": [],
+        "related_query": null,
+        "study_selected_recall": 0.75
+      },
+      "sizes": {
+        "prompt_chars": 64549,
+        "response_chars": 188,
+        "schema_chars": 6537
+      },
+      "started_at": "2026-08-11T13:43:39.791825Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.03768779200618155,
+        "provider_seconds": 12.005357290996471,
+        "total_seconds": 12.045812625001417,
+        "validation_seconds": 2.5708024622872472e-05
+      }
+    },
+    {
+      "case_id": "find-accessibility",
+      "cell_id": "find-accessibility:gpt-5.6-luna:medium",
+      "digests": {
+        "prompt_sha256": "2841b97ee368eaf4815201f9c9b4ef6795bb1462cc1c76d4f5dbd382ee4a0c68",
+        "response_sha256": "cb01133031bf0965e037d18114e9a399a889d1f165811f1865d29795419c4cdb",
+        "schema_sha256": "807a81525c636be7c4a4f887aa0236277df6458274bd4b22d3d4e3a6bf0ab7ba"
+      },
+      "effort": "medium",
+      "failure": null,
+      "finished_at": "2026-08-11T13:44:03.934799Z",
+      "model": "gpt-5.6-luna",
+      "operation": "find",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-luna",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "{\"matches\":[{\"candidate_id\":\"c000026\"},{\"candidate_id\":\"c000033\"},{\"candidate_id\":\"c000140\"},{\"candidate_id\":\"c000035\"},{\"candidate_id\":\"c000055\"}],\"related_query\":\"\",\"related_matches\":[]}",
+      "result": {
+        "matches": [
+          {
+            "candidate_id": "c000026",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000033",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000140",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000035",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000055",
+            "related_query": null,
+            "relevance": "primary"
+          }
+        ]
+      },
+      "score": {
+        "empty_primary_correct": null,
+        "historical_result_precision": 0.6,
+        "historical_result_recall": 0.6,
+        "primary_count": 5,
+        "primary_locators": [
+          "local/personal-memory/2024-03/06",
+          "local/personal-memory/2024-04/03",
+          "local/personal-memory/2025-02/10",
+          "local/personal-memory/2024-04/05",
+          "local/personal-memory/2024-06/05"
+        ],
+        "related_locators": [],
+        "related_query": null,
+        "study_selected_recall": 0.5
+      },
+      "sizes": {
+        "prompt_chars": 64549,
+        "response_chars": 188,
+        "schema_chars": 6537
+      },
+      "started_at": "2026-08-11T13:43:51.840717Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.03509141699760221,
+        "provider_seconds": 12.056265042017912,
+        "total_seconds": 12.094178958010161,
+        "validation_seconds": 2.96669895760715e-05
+      }
+    },
+    {
+      "case_id": "find-coordination",
+      "cell_id": "find-coordination:gpt-5.6-sol:low",
+      "digests": {
+        "prompt_sha256": "c7052d3991811f11393f8cb3f252a6ac054da460ec548cba1a45ecc35c0d3d0b",
+        "response_sha256": "8c421efbdcb4d1937c62fb2fd790520728fdf7073cb81c9cf136b095f9f7b06a",
+        "schema_sha256": "807a81525c636be7c4a4f887aa0236277df6458274bd4b22d3d4e3a6bf0ab7ba"
+      },
+      "effort": "low",
+      "failure": null,
+      "finished_at": "2026-08-11T13:44:15.658094Z",
+      "model": "gpt-5.6-sol",
+      "operation": "find",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "low",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "{\"matches\":[{\"candidate_id\":\"c000140\"},{\"candidate_id\":\"c000133\"},{\"candidate_id\":\"c000033\"},{\"candidate_id\":\"c000026\"},{\"candidate_id\":\"c000023\"}],\"related_query\":\"\",\"related_matches\":[]}",
+      "result": {
+        "matches": [
+          {
+            "candidate_id": "c000140",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000133",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000033",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000026",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000023",
+            "related_query": null,
+            "relevance": "primary"
+          }
+        ]
+      },
+      "score": {
+        "empty_primary_correct": null,
+        "historical_result_precision": 0.6,
+        "historical_result_recall": 0.6,
+        "primary_count": 5,
+        "primary_locators": [
+          "local/personal-memory/2025-02/10",
+          "local/personal-memory/2025-02/03",
+          "local/personal-memory/2024-04/03",
+          "local/personal-memory/2024-03/06",
+          "local/personal-memory/2024-03/03"
+        ],
+        "related_locators": [],
+        "related_query": null,
+        "study_selected_recall": 0.5
+      },
+      "sizes": {
+        "prompt_chars": 64605,
+        "response_chars": 188,
+        "schema_chars": 6537
+      },
+      "started_at": "2026-08-11T13:44:03.937519Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.03638916599447839,
+        "provider_seconds": 11.681498624995584,
+        "total_seconds": 11.72068687499268,
+        "validation_seconds": 3.745799767784774e-05
+      }
+    },
+    {
+      "case_id": "find-coordination",
+      "cell_id": "find-coordination:gpt-5.6-sol:medium",
+      "digests": {
+        "prompt_sha256": "c7052d3991811f11393f8cb3f252a6ac054da460ec548cba1a45ecc35c0d3d0b",
+        "response_sha256": "7fba92dccb8887655fe182ae077d97fff7547685ae7893cb69e523b5adf5d37f",
+        "schema_sha256": "807a81525c636be7c4a4f887aa0236277df6458274bd4b22d3d4e3a6bf0ab7ba"
+      },
+      "effort": "medium",
+      "failure": null,
+      "finished_at": "2026-08-11T13:44:30.863057Z",
+      "model": "gpt-5.6-sol",
+      "operation": "find",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "{\"matches\":[{\"candidate_id\":\"c000140\"},{\"candidate_id\":\"c000039\"},{\"candidate_id\":\"c000033\"},{\"candidate_id\":\"c000026\"},{\"candidate_id\":\"c000023\"}],\"related_query\":\"\",\"related_matches\":[]}",
+      "result": {
+        "matches": [
+          {
+            "candidate_id": "c000140",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000039",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000033",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000026",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000023",
+            "related_query": null,
+            "relevance": "primary"
+          }
+        ]
+      },
+      "score": {
+        "empty_primary_correct": null,
+        "historical_result_precision": 0.6,
+        "historical_result_recall": 0.6,
+        "primary_count": 5,
+        "primary_locators": [
+          "local/personal-memory/2025-02/10",
+          "local/personal-memory/2024-04/09",
+          "local/personal-memory/2024-04/03",
+          "local/personal-memory/2024-03/06",
+          "local/personal-memory/2024-03/03"
+        ],
+        "related_locators": [],
+        "related_query": null,
+        "study_selected_recall": 0.0
+      },
+      "sizes": {
+        "prompt_chars": 64605,
+        "response_chars": 188,
+        "schema_chars": 6537
+      },
+      "started_at": "2026-08-11T13:44:15.661426Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.03780270798597485,
+        "provider_seconds": 15.16119520898792,
+        "total_seconds": 15.201746000006096,
+        "validation_seconds": 2.8166017727926373e-05
+      }
+    },
+    {
+      "case_id": "find-coordination",
+      "cell_id": "find-coordination:gpt-5.6-terra:none",
+      "digests": {
+        "prompt_sha256": "c7052d3991811f11393f8cb3f252a6ac054da460ec548cba1a45ecc35c0d3d0b",
+        "response_sha256": "dc6a028522d458e7d4b64674932647d07f278ccf2527d5536ff52bf3cb29041b",
+        "schema_sha256": "807a81525c636be7c4a4f887aa0236277df6458274bd4b22d3d4e3a6bf0ab7ba"
+      },
+      "effort": "none",
+      "failure": null,
+      "finished_at": "2026-08-11T13:44:35.703639Z",
+      "model": "gpt-5.6-terra",
+      "operation": "find",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-terra",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "none",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "{\"matches\":[{\"candidate_id\":\"c000039\"},{\"candidate_id\":\"c000140\"},{\"candidate_id\":\"c000026\"},{\"candidate_id\":\"c000033\"},{\"candidate_id\":\"c000107\"}],\"related_query\":\"\",\"related_matches\":[]}",
+      "result": {
+        "matches": [
+          {
+            "candidate_id": "c000039",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000140",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000026",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000033",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000107",
+            "related_query": null,
+            "relevance": "primary"
+          }
+        ]
+      },
+      "score": {
+        "empty_primary_correct": null,
+        "historical_result_precision": 0.6,
+        "historical_result_recall": 0.6,
+        "primary_count": 5,
+        "primary_locators": [
+          "local/personal-memory/2024-04/09",
+          "local/personal-memory/2025-02/10",
+          "local/personal-memory/2024-03/06",
+          "local/personal-memory/2024-04/03",
+          "local/personal-memory/2024-11/07"
+        ],
+        "related_locators": [],
+        "related_query": null,
+        "study_selected_recall": 0.0
+      },
+      "sizes": {
+        "prompt_chars": 64605,
+        "response_chars": 188,
+        "schema_chars": 6537
+      },
+      "started_at": "2026-08-11T13:44:30.866534Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.03231179199065082,
+        "provider_seconds": 4.802061375026824,
+        "total_seconds": 4.8371719580027275,
+        "validation_seconds": 2.7125002816319466e-05
+      }
+    },
+    {
+      "case_id": "find-coordination",
+      "cell_id": "find-coordination:gpt-5.6-terra:low",
+      "digests": {
+        "prompt_sha256": "c7052d3991811f11393f8cb3f252a6ac054da460ec548cba1a45ecc35c0d3d0b",
+        "response_sha256": "1ba58a5321eae9f9dd6818654eb5ef4988eb9976c53a19ddf6dfbe9d627143c7",
+        "schema_sha256": "807a81525c636be7c4a4f887aa0236277df6458274bd4b22d3d4e3a6bf0ab7ba"
+      },
+      "effort": "low",
+      "failure": null,
+      "finished_at": "2026-08-11T13:44:43.448592Z",
+      "model": "gpt-5.6-terra",
+      "operation": "find",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-terra",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "low",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "{\"matches\":[{\"candidate_id\":\"c000039\"},{\"candidate_id\":\"c000140\"},{\"candidate_id\":\"c000133\"},{\"candidate_id\":\"c000033\"},{\"candidate_id\":\"c000026\"}],\"related_query\":\"\",\"related_matches\":[]}",
+      "result": {
+        "matches": [
+          {
+            "candidate_id": "c000039",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000140",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000133",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000033",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000026",
+            "related_query": null,
+            "relevance": "primary"
+          }
+        ]
+      },
+      "score": {
+        "empty_primary_correct": null,
+        "historical_result_precision": 0.8,
+        "historical_result_recall": 0.8,
+        "primary_count": 5,
+        "primary_locators": [
+          "local/personal-memory/2024-04/09",
+          "local/personal-memory/2025-02/10",
+          "local/personal-memory/2025-02/03",
+          "local/personal-memory/2024-04/03",
+          "local/personal-memory/2024-03/06"
+        ],
+        "related_locators": [],
+        "related_query": null,
+        "study_selected_recall": 0.5
+      },
+      "sizes": {
+        "prompt_chars": 64605,
+        "response_chars": 188,
+        "schema_chars": 6537
+      },
+      "started_at": "2026-08-11T13:44:35.707010Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.04014462500344962,
+        "provider_seconds": 7.698832666996168,
+        "total_seconds": 7.741670457995497,
+        "validation_seconds": 2.7583009796217084e-05
+      }
+    },
+    {
+      "case_id": "find-coordination",
+      "cell_id": "find-coordination:gpt-5.6-terra:medium",
+      "digests": {
+        "prompt_sha256": "c7052d3991811f11393f8cb3f252a6ac054da460ec548cba1a45ecc35c0d3d0b",
+        "response_sha256": "7430b3127c09615b1bc9c6ff055b44a6eaf3825122e622f490e335dae03ee525",
+        "schema_sha256": "807a81525c636be7c4a4f887aa0236277df6458274bd4b22d3d4e3a6bf0ab7ba"
+      },
+      "effort": "medium",
+      "failure": null,
+      "finished_at": "2026-08-11T13:44:54.046571Z",
+      "model": "gpt-5.6-terra",
+      "operation": "find",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-terra",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "{\"matches\":[{\"candidate_id\":\"c000140\"},{\"candidate_id\":\"c000081\"},{\"candidate_id\":\"c000039\"},{\"candidate_id\":\"c000090\"},{\"candidate_id\":\"c000033\"}],\"related_query\":\"\",\"related_matches\":[]}",
+      "result": {
+        "matches": [
+          {
+            "candidate_id": "c000140",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000081",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000039",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000090",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000033",
+            "related_query": null,
+            "relevance": "primary"
+          }
+        ]
+      },
+      "score": {
+        "empty_primary_correct": null,
+        "historical_result_precision": 0.8,
+        "historical_result_recall": 0.8,
+        "primary_count": 5,
+        "primary_locators": [
+          "local/personal-memory/2025-02/10",
+          "local/personal-memory/2024-09/01",
+          "local/personal-memory/2024-04/09",
+          "local/personal-memory/2024-09/10",
+          "local/personal-memory/2024-04/03"
+        ],
+        "related_locators": [],
+        "related_query": null,
+        "study_selected_recall": 0.5
+      },
+      "sizes": {
+        "prompt_chars": 64605,
+        "response_chars": 188,
+        "schema_chars": 6537
+      },
+      "started_at": "2026-08-11T13:44:43.451870Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.030585625005187467,
+        "provider_seconds": 10.561580791982124,
+        "total_seconds": 10.594808916997863,
+        "validation_seconds": 3.154200385324657e-05
+      }
+    },
+    {
+      "case_id": "find-coordination",
+      "cell_id": "find-coordination:gpt-5.6-luna:none",
+      "digests": {
+        "prompt_sha256": "c7052d3991811f11393f8cb3f252a6ac054da460ec548cba1a45ecc35c0d3d0b",
+        "response_sha256": "f23d42b5561b5b10bd6e1e35dca4129f925eafbce848034e82fad01dd1485eb5",
+        "schema_sha256": "807a81525c636be7c4a4f887aa0236277df6458274bd4b22d3d4e3a6bf0ab7ba"
+      },
+      "effort": "none",
+      "failure": null,
+      "finished_at": "2026-08-11T13:44:58.015826Z",
+      "model": "gpt-5.6-luna",
+      "operation": "find",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-luna",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "none",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "{\"matches\":[],\"related_query\":\"healthcare coordination preferences\",\"related_matches\":[{\"candidate_id\":\"c000039\"},{\"candidate_id\":\"c000083\"},{\"candidate_id\":\"c000129\"},{\"candidate_id\":\"c000140\"},{\"candidate_id\":\"c000028\"}]}",
+      "result": {
+        "matches": [
+          {
+            "candidate_id": "c000039",
+            "related_query": "healthcare coordination preferences",
+            "relevance": "related"
+          },
+          {
+            "candidate_id": "c000083",
+            "related_query": "healthcare coordination preferences",
+            "relevance": "related"
+          },
+          {
+            "candidate_id": "c000129",
+            "related_query": "healthcare coordination preferences",
+            "relevance": "related"
+          },
+          {
+            "candidate_id": "c000140",
+            "related_query": "healthcare coordination preferences",
+            "relevance": "related"
+          },
+          {
+            "candidate_id": "c000028",
+            "related_query": "healthcare coordination preferences",
+            "relevance": "related"
+          }
+        ]
+      },
+      "score": {
+        "empty_primary_correct": null,
+        "historical_result_precision": 0.0,
+        "historical_result_recall": 0.0,
+        "primary_count": 0,
+        "primary_locators": [],
+        "related_locators": [
+          "local/personal-memory/2024-04/09",
+          "local/personal-memory/2024-09/03",
+          "local/personal-memory/2025-01/09",
+          "local/personal-memory/2025-02/10",
+          "local/personal-memory/2024-03/08"
+        ],
+        "related_query": "healthcare coordination preferences",
+        "study_selected_recall": 0.0
+      },
+      "sizes": {
+        "prompt_chars": 64605,
+        "response_chars": 223,
+        "schema_chars": 6537
+      },
+      "started_at": "2026-08-11T13:44:54.050343Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.032462584000313655,
+        "provider_seconds": 3.927498167002341,
+        "total_seconds": 3.9655731659731828,
+        "validation_seconds": 2.937499084509909e-05
+      }
+    },
+    {
+      "case_id": "find-coordination",
+      "cell_id": "find-coordination:gpt-5.6-luna:low",
+      "digests": {
+        "prompt_sha256": "c7052d3991811f11393f8cb3f252a6ac054da460ec548cba1a45ecc35c0d3d0b",
+        "response_sha256": "7fcdeee0b32c6e9bac342d246df6eef210562c3da13629133ec3ca6601ef4e88",
+        "schema_sha256": "807a81525c636be7c4a4f887aa0236277df6458274bd4b22d3d4e3a6bf0ab7ba"
+      },
+      "effort": "low",
+      "failure": null,
+      "finished_at": "2026-08-11T13:45:07.202178Z",
+      "model": "gpt-5.6-luna",
+      "operation": "find",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-luna",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "low",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "{\"matches\":[{\"candidate_id\":\"c000140\"},{\"candidate_id\":\"c000026\"},{\"candidate_id\":\"c000033\"},{\"candidate_id\":\"c000028\"},{\"candidate_id\":\"c000138\"}],\"related_query\":\"\",\"related_matches\":[]}",
+      "result": {
+        "matches": [
+          {
+            "candidate_id": "c000140",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000026",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000033",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000028",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000138",
+            "related_query": null,
+            "relevance": "primary"
+          }
+        ]
+      },
+      "score": {
+        "empty_primary_correct": null,
+        "historical_result_precision": 0.4,
+        "historical_result_recall": 0.4,
+        "primary_count": 5,
+        "primary_locators": [
+          "local/personal-memory/2025-02/10",
+          "local/personal-memory/2024-03/06",
+          "local/personal-memory/2024-04/03",
+          "local/personal-memory/2024-03/08",
+          "local/personal-memory/2025-02/08"
+        ],
+        "related_locators": [],
+        "related_query": null,
+        "study_selected_recall": 0.0
+      },
+      "sizes": {
+        "prompt_chars": 64605,
+        "response_chars": 188,
+        "schema_chars": 6537
+      },
+      "started_at": "2026-08-11T13:44:58.018818Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.036952750000637025,
+        "provider_seconds": 9.143918250018032,
+        "total_seconds": 9.183452332974412,
+        "validation_seconds": 2.7250003768131137e-05
+      }
+    },
+    {
+      "case_id": "find-coordination",
+      "cell_id": "find-coordination:gpt-5.6-luna:medium",
+      "digests": {
+        "prompt_sha256": "c7052d3991811f11393f8cb3f252a6ac054da460ec548cba1a45ecc35c0d3d0b",
+        "response_sha256": "73f67e9fc309e32e96330abaeb79ba66fe31c386d08784e2fc4bbfd31f9ae178",
+        "schema_sha256": "807a81525c636be7c4a4f887aa0236277df6458274bd4b22d3d4e3a6bf0ab7ba"
+      },
+      "effort": "medium",
+      "failure": null,
+      "finished_at": "2026-08-11T13:45:22.237954Z",
+      "model": "gpt-5.6-luna",
+      "operation": "find",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-luna",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "{\"matches\":[{\"candidate_id\":\"c000033\"},{\"candidate_id\":\"c000026\"},{\"candidate_id\":\"c000140\"},{\"candidate_id\":\"c000039\"},{\"candidate_id\":\"c000023\"}],\"related_query\":\"\",\"related_matches\":[]}",
+      "result": {
+        "matches": [
+          {
+            "candidate_id": "c000033",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000026",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000140",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000039",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000023",
+            "related_query": null,
+            "relevance": "primary"
+          }
+        ]
+      },
+      "score": {
+        "empty_primary_correct": null,
+        "historical_result_precision": 0.6,
+        "historical_result_recall": 0.6,
+        "primary_count": 5,
+        "primary_locators": [
+          "local/personal-memory/2024-04/03",
+          "local/personal-memory/2024-03/06",
+          "local/personal-memory/2025-02/10",
+          "local/personal-memory/2024-04/09",
+          "local/personal-memory/2024-03/03"
+        ],
+        "related_locators": [],
+        "related_query": null,
+        "study_selected_recall": 0.0
+      },
+      "sizes": {
+        "prompt_chars": 64605,
+        "response_chars": 188,
+        "schema_chars": 6537
+      },
+      "started_at": "2026-08-11T13:45:07.205851Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.03744479201850481,
+        "provider_seconds": 14.991928832983831,
+        "total_seconds": 15.032206792006036,
+        "validation_seconds": 1.4708988601341844e-05
+      }
+    },
+    {
+      "case_id": "find-coordination",
+      "cell_id": "find-coordination:gpt-5.6-sol:none",
+      "digests": {
+        "prompt_sha256": "c7052d3991811f11393f8cb3f252a6ac054da460ec548cba1a45ecc35c0d3d0b",
+        "response_sha256": "e690b182ab5c42f04e4d9ea86ea0b906e6c070c463b7ad0fedee6f4a08e6f675",
+        "schema_sha256": "807a81525c636be7c4a4f887aa0236277df6458274bd4b22d3d4e3a6bf0ab7ba"
+      },
+      "effort": "none",
+      "failure": null,
+      "finished_at": "2026-08-11T13:45:26.262564Z",
+      "model": "gpt-5.6-sol",
+      "operation": "find",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "none",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "{\"matches\":[{\"candidate_id\":\"c000140\"},{\"candidate_id\":\"c000039\"},{\"candidate_id\":\"c000026\"}],\"related_query\":\"\",\"related_matches\":[]}",
+      "result": {
+        "matches": [
+          {
+            "candidate_id": "c000140",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000039",
+            "related_query": null,
+            "relevance": "primary"
+          },
+          {
+            "candidate_id": "c000026",
+            "related_query": null,
+            "relevance": "primary"
+          }
+        ]
+      },
+      "score": {
+        "empty_primary_correct": null,
+        "historical_result_precision": 0.6666666666666666,
+        "historical_result_recall": 0.4,
+        "primary_count": 3,
+        "primary_locators": [
+          "local/personal-memory/2025-02/10",
+          "local/personal-memory/2024-04/09",
+          "local/personal-memory/2024-03/06"
+        ],
+        "related_locators": [],
+        "related_query": null,
+        "study_selected_recall": 0.0
+      },
+      "sizes": {
+        "prompt_chars": 64605,
+        "response_chars": 134,
+        "schema_chars": 6537
+      },
+      "started_at": "2026-08-11T13:45:22.240186Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.02726191599504091,
+        "provider_seconds": 3.992892667010892,
+        "total_seconds": 4.02244141700794,
+        "validation_seconds": 2.0167004549875855e-05
+      }
+    },
+    {
+      "case_id": "find-unsupported",
+      "cell_id": "find-unsupported:gpt-5.6-sol:medium",
+      "digests": {
+        "prompt_sha256": "f4cf931b308b8050b43848b6a0560b60cc56e68c06ce288063daf7645efbb453",
+        "response_sha256": "7688c91be41d8b9292ec89e6443094dbda52f0828a24a25787b5d9f5e2d7fb1e",
+        "schema_sha256": "807a81525c636be7c4a4f887aa0236277df6458274bd4b22d3d4e3a6bf0ab7ba"
+      },
+      "effort": "medium",
+      "failure": null,
+      "finished_at": "2026-08-11T13:45:34.418617Z",
+      "model": "gpt-5.6-sol",
+      "operation": "find",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "{\"matches\":[],\"related_query\":\"\",\"related_matches\":[]}",
+      "result": {
+        "matches": []
+      },
+      "score": {
+        "empty_primary_correct": true,
+        "historical_result_precision": null,
+        "historical_result_recall": null,
+        "primary_count": 0,
+        "primary_locators": [],
+        "related_locators": [],
+        "related_query": null,
+        "study_selected_recall": null
+      },
+      "sizes": {
+        "prompt_chars": 64426,
+        "response_chars": 54,
+        "schema_chars": 6537
+      },
+      "started_at": "2026-08-11T13:45:26.265782Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.03491379099432379,
+        "provider_seconds": 8.115181750006741,
+        "total_seconds": 8.152927832998103,
+        "validation_seconds": 1.4082994312047958e-05
+      }
+    },
+    {
+      "case_id": "find-unsupported",
+      "cell_id": "find-unsupported:gpt-5.6-terra:none",
+      "digests": {
+        "prompt_sha256": "f4cf931b308b8050b43848b6a0560b60cc56e68c06ce288063daf7645efbb453",
+        "response_sha256": "7688c91be41d8b9292ec89e6443094dbda52f0828a24a25787b5d9f5e2d7fb1e",
+        "schema_sha256": "807a81525c636be7c4a4f887aa0236277df6458274bd4b22d3d4e3a6bf0ab7ba"
+      },
+      "effort": "none",
+      "failure": null,
+      "finished_at": "2026-08-11T13:45:37.974068Z",
+      "model": "gpt-5.6-terra",
+      "operation": "find",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-terra",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "none",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "{\"matches\":[],\"related_query\":\"\",\"related_matches\":[]}",
+      "result": {
+        "matches": []
+      },
+      "score": {
+        "empty_primary_correct": true,
+        "historical_result_precision": null,
+        "historical_result_recall": null,
+        "primary_count": 0,
+        "primary_locators": [],
+        "related_locators": [],
+        "related_query": null,
+        "study_selected_recall": null
+      },
+      "sizes": {
+        "prompt_chars": 64426,
+        "response_chars": 54,
+        "schema_chars": 6537
+      },
+      "started_at": "2026-08-11T13:45:34.422160Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.030608208006015047,
+        "provider_seconds": 3.518478874990251,
+        "total_seconds": 3.5519840829947498,
+        "validation_seconds": 1.2250005966052413e-05
+      }
+    },
+    {
+      "case_id": "find-unsupported",
+      "cell_id": "find-unsupported:gpt-5.6-terra:low",
+      "digests": {
+        "prompt_sha256": "f4cf931b308b8050b43848b6a0560b60cc56e68c06ce288063daf7645efbb453",
+        "response_sha256": "e1855a73acd9f6352d69cf2a927a9f2d38ca2a6cb4cd2d196feea18a6ae40505",
+        "schema_sha256": "807a81525c636be7c4a4f887aa0236277df6458274bd4b22d3d4e3a6bf0ab7ba"
+      },
+      "effort": "low",
+      "failure": null,
+      "finished_at": "2026-08-11T13:45:43.736765Z",
+      "model": "gpt-5.6-terra",
+      "operation": "find",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-terra",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "low",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "{\"matches\":[],\"related_query\":\"the user's medical appointments and clinic visits\",\"related_matches\":[{\"candidate_id\":\"c000022\"},{\"candidate_id\":\"c000031\"},{\"candidate_id\":\"c000111\"}]}",
+      "result": {
+        "matches": [
+          {
+            "candidate_id": "c000022",
+            "related_query": "the user's medical appointments and clinic visits",
+            "relevance": "related"
+          },
+          {
+            "candidate_id": "c000031",
+            "related_query": "the user's medical appointments and clinic visits",
+            "relevance": "related"
+          },
+          {
+            "candidate_id": "c000111",
+            "related_query": "the user's medical appointments and clinic visits",
+            "relevance": "related"
+          }
+        ]
+      },
+      "score": {
+        "empty_primary_correct": true,
+        "historical_result_precision": null,
+        "historical_result_recall": null,
+        "primary_count": 0,
+        "primary_locators": [],
+        "related_locators": [
+          "local/personal-memory/2024-03/02",
+          "local/personal-memory/2024-04/01",
+          "local/personal-memory/2024-12/01"
+        ],
+        "related_query": "the user's medical appointments and clinic visits",
+        "study_selected_recall": null
+      },
+      "sizes": {
+        "prompt_chars": 64426,
+        "response_chars": 183,
+        "schema_chars": 6537
+      },
+      "started_at": "2026-08-11T13:45:37.977474Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.03563679099897854,
+        "provider_seconds": 5.72086929201032,
+        "total_seconds": 5.759372875007102,
+        "validation_seconds": 2.649999805726111e-05
+      }
+    },
+    {
+      "case_id": "find-unsupported",
+      "cell_id": "find-unsupported:gpt-5.6-terra:medium",
+      "digests": {
+        "prompt_sha256": "f4cf931b308b8050b43848b6a0560b60cc56e68c06ce288063daf7645efbb453",
+        "response_sha256": "7688c91be41d8b9292ec89e6443094dbda52f0828a24a25787b5d9f5e2d7fb1e",
+        "schema_sha256": "807a81525c636be7c4a4f887aa0236277df6458274bd4b22d3d4e3a6bf0ab7ba"
+      },
+      "effort": "medium",
+      "failure": null,
+      "finished_at": "2026-08-11T13:45:48.040939Z",
+      "model": "gpt-5.6-terra",
+      "operation": "find",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-terra",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "{\"matches\":[],\"related_query\":\"\",\"related_matches\":[]}",
+      "result": {
+        "matches": []
+      },
+      "score": {
+        "empty_primary_correct": true,
+        "historical_result_precision": null,
+        "historical_result_recall": null,
+        "primary_count": 0,
+        "primary_locators": [],
+        "related_locators": [],
+        "related_query": null,
+        "study_selected_recall": null
+      },
+      "sizes": {
+        "prompt_chars": 64426,
+        "response_chars": 54,
+        "schema_chars": 6537
+      },
+      "started_at": "2026-08-11T13:45:43.740643Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.03154437500052154,
+        "provider_seconds": 4.266123542009154,
+        "total_seconds": 4.300375624996377,
+        "validation_seconds": 1.3042008504271507e-05
+      }
+    },
+    {
+      "case_id": "find-unsupported",
+      "cell_id": "find-unsupported:gpt-5.6-luna:none",
+      "digests": {
+        "prompt_sha256": "f4cf931b308b8050b43848b6a0560b60cc56e68c06ce288063daf7645efbb453",
+        "response_sha256": "7688c91be41d8b9292ec89e6443094dbda52f0828a24a25787b5d9f5e2d7fb1e",
+        "schema_sha256": "807a81525c636be7c4a4f887aa0236277df6458274bd4b22d3d4e3a6bf0ab7ba"
+      },
+      "effort": "none",
+      "failure": null,
+      "finished_at": "2026-08-11T13:45:53.561886Z",
+      "model": "gpt-5.6-luna",
+      "operation": "find",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-luna",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "none",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "{\"matches\":[],\"related_query\":\"\",\"related_matches\":[]}",
+      "result": {
+        "matches": []
+      },
+      "score": {
+        "empty_primary_correct": true,
+        "historical_result_precision": null,
+        "historical_result_recall": null,
+        "primary_count": 0,
+        "primary_locators": [],
+        "related_locators": [],
+        "related_query": null,
+        "study_selected_recall": null
+      },
+      "sizes": {
+        "prompt_chars": 64426,
+        "response_chars": 54,
+        "schema_chars": 6537
+      },
+      "started_at": "2026-08-11T13:45:48.044884Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.031931334000546485,
+        "provider_seconds": 5.482550083019305,
+        "total_seconds": 5.517068790999474,
+        "validation_seconds": 9.459006832912564e-06
+      }
+    },
+    {
+      "case_id": "find-unsupported",
+      "cell_id": "find-unsupported:gpt-5.6-luna:low",
+      "digests": {
+        "prompt_sha256": "f4cf931b308b8050b43848b6a0560b60cc56e68c06ce288063daf7645efbb453",
+        "response_sha256": "7688c91be41d8b9292ec89e6443094dbda52f0828a24a25787b5d9f5e2d7fb1e",
+        "schema_sha256": "807a81525c636be7c4a4f887aa0236277df6458274bd4b22d3d4e3a6bf0ab7ba"
+      },
+      "effort": "low",
+      "failure": null,
+      "finished_at": "2026-08-11T13:45:57.812235Z",
+      "model": "gpt-5.6-luna",
+      "operation": "find",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-luna",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "low",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "{\"matches\":[],\"related_query\":\"\",\"related_matches\":[]}",
+      "result": {
+        "matches": []
+      },
+      "score": {
+        "empty_primary_correct": true,
+        "historical_result_precision": null,
+        "historical_result_recall": null,
+        "primary_count": 0,
+        "primary_locators": [],
+        "related_locators": [],
+        "related_query": null,
+        "study_selected_recall": null
+      },
+      "sizes": {
+        "prompt_chars": 64426,
+        "response_chars": 54,
+        "schema_chars": 6537
+      },
+      "started_at": "2026-08-11T13:45:53.565182Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.028687374986475334,
+        "provider_seconds": 4.2158834580041,
+        "total_seconds": 4.2471133330254816,
+        "validation_seconds": 9.332987247034907e-06
+      }
+    },
+    {
+      "case_id": "find-unsupported",
+      "cell_id": "find-unsupported:gpt-5.6-luna:medium",
+      "digests": {
+        "prompt_sha256": "f4cf931b308b8050b43848b6a0560b60cc56e68c06ce288063daf7645efbb453",
+        "response_sha256": "7688c91be41d8b9292ec89e6443094dbda52f0828a24a25787b5d9f5e2d7fb1e",
+        "schema_sha256": "807a81525c636be7c4a4f887aa0236277df6458274bd4b22d3d4e3a6bf0ab7ba"
+      },
+      "effort": "medium",
+      "failure": null,
+      "finished_at": "2026-08-11T13:46:01.490919Z",
+      "model": "gpt-5.6-luna",
+      "operation": "find",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-luna",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "{\"matches\":[],\"related_query\":\"\",\"related_matches\":[]}",
+      "result": {
+        "matches": []
+      },
+      "score": {
+        "empty_primary_correct": true,
+        "historical_result_precision": null,
+        "historical_result_recall": null,
+        "primary_count": 0,
+        "primary_locators": [],
+        "related_locators": [],
+        "related_query": null,
+        "study_selected_recall": null
+      },
+      "sizes": {
+        "prompt_chars": 64426,
+        "response_chars": 54,
+        "schema_chars": 6537
+      },
+      "started_at": "2026-08-11T13:45:57.815810Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.035499249992426485,
+        "provider_seconds": 3.636966542020673,
+        "total_seconds": 3.675192333990708,
+        "validation_seconds": 1.2916018022224307e-05
+      }
+    },
+    {
+      "case_id": "find-unsupported",
+      "cell_id": "find-unsupported:gpt-5.6-sol:none",
+      "digests": {
+        "prompt_sha256": "f4cf931b308b8050b43848b6a0560b60cc56e68c06ce288063daf7645efbb453",
+        "response_sha256": "7688c91be41d8b9292ec89e6443094dbda52f0828a24a25787b5d9f5e2d7fb1e",
+        "schema_sha256": "807a81525c636be7c4a4f887aa0236277df6458274bd4b22d3d4e3a6bf0ab7ba"
+      },
+      "effort": "none",
+      "failure": null,
+      "finished_at": "2026-08-11T13:46:07.257118Z",
+      "model": "gpt-5.6-sol",
+      "operation": "find",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "none",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "{\"matches\":[],\"related_query\":\"\",\"related_matches\":[]}",
+      "result": {
+        "matches": []
+      },
+      "score": {
+        "empty_primary_correct": true,
+        "historical_result_precision": null,
+        "historical_result_recall": null,
+        "primary_count": 0,
+        "primary_locators": [],
+        "related_locators": [],
+        "related_query": null,
+        "study_selected_recall": null
+      },
+      "sizes": {
+        "prompt_chars": 64426,
+        "response_chars": 54,
+        "schema_chars": 6537
+      },
+      "started_at": "2026-08-11T13:46:01.495267Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.036771042010514066,
+        "provider_seconds": 5.722397875011666,
+        "total_seconds": 5.761960000003455,
+        "validation_seconds": 1.8291990272700787e-05
+      }
+    },
+    {
+      "case_id": "find-unsupported",
+      "cell_id": "find-unsupported:gpt-5.6-sol:low",
+      "digests": {
+        "prompt_sha256": "f4cf931b308b8050b43848b6a0560b60cc56e68c06ce288063daf7645efbb453",
+        "response_sha256": "7688c91be41d8b9292ec89e6443094dbda52f0828a24a25787b5d9f5e2d7fb1e",
+        "schema_sha256": "807a81525c636be7c4a4f887aa0236277df6458274bd4b22d3d4e3a6bf0ab7ba"
+      },
+      "effort": "low",
+      "failure": null,
+      "finished_at": "2026-08-11T13:46:12.477466Z",
+      "model": "gpt-5.6-sol",
+      "operation": "find",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "low",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "{\"matches\":[],\"related_query\":\"\",\"related_matches\":[]}",
+      "result": {
+        "matches": []
+      },
+      "score": {
+        "empty_primary_correct": true,
+        "historical_result_precision": null,
+        "historical_result_recall": null,
+        "primary_count": 0,
+        "primary_locators": [],
+        "related_locators": [],
+        "related_query": null,
+        "study_selected_recall": null
+      },
+      "sizes": {
+        "prompt_chars": 64426,
+        "response_chars": 54,
+        "schema_chars": 6537
+      },
+      "started_at": "2026-08-11T13:46:07.261308Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.03939820799860172,
+        "provider_seconds": 5.17421708299662,
+        "total_seconds": 5.216228792007314,
+        "validation_seconds": 1.0334013495594263e-05
+      }
+    },
+    {
+      "case_id": "query-synthesis",
+      "cell_id": "query-synthesis:gpt-5.6-terra:none",
+      "digests": {
+        "prompt_sha256": "09223c7461be82f8d0513e95e489175bfa43a9d78fa6851a6df7697078539368",
+        "response_sha256": "e40b9373f0f53e73fc4833bb311e6315f1155eac327fbbc9e96386287bcc7268",
+        "schema_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "effort": "none",
+      "failure": null,
+      "finished_at": "2026-08-11T13:46:18.203134Z",
+      "model": "gpt-5.6-terra",
+      "operation": "query",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-terra",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "none",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "All content actually sent through the institution’s transmission screen is one unit of consent to share. Depending on the information type, it may be provided to relevant third parties for healthcare purposes or used for service improvement; the exact recipients, services, and scope vary.\n\nThe institution controls processing, retention, and audit under its policies. Copies already delivered are not automatically deleted if consent is later withdrawn.\n\nThis Q&A agent cannot select, include, exclude, modify, or transmit information; access personal Memories or institution records; verify identity or proxy authority; alter permissions; or delete or control retention of existing records or copies.",
+      "result": {
+        "answer": "All content actually sent through the institution’s transmission screen is one unit of consent to share. Depending on the information type, it may be provided to relevant third parties for healthcare purposes or used for service improvement; the exact recipients, services, and scope vary.\n\nThe institution controls processing, retention, and audit under its policies. Copies already delivered are not automatically deleted if consent is later withdrawn.\n\nThis Q&A agent cannot select, include, exclude, modify, or transmit information; access personal Memories or institution records; verify identity or proxy authority; alter permissions; or delete or control retention of existing records or copies."
+      },
+      "score": {
+        "concept_recall": 1.0,
+        "concepts": [
+          {
+            "concept_id": "consent-unit",
+            "matched": true,
+            "matched_pattern": "all (?:the )?(?:content|information).*(?:send|sent).*(?:one|single).*consent"
+          },
+          {
+            "concept_id": "healthcare-third-parties",
+            "matched": true,
+            "matched_pattern": "third part(?:y|ies).*healthcare"
+          },
+          {
+            "concept_id": "service-improvement",
+            "matched": true,
+            "matched_pattern": "service improvement"
+          },
+          {
+            "concept_id": "scope-varies",
+            "matched": true,
+            "matched_pattern": "exact (?:services|recipients|scope).*(?:var(?:y|ies)|depend|not (?:specified|identified|known)|cannot be identified)"
+          },
+          {
+            "concept_id": "institution-retention",
+            "matched": true,
+            "matched_pattern": "institution.*(?:retention|audit)"
+          },
+          {
+            "concept_id": "agent-boundary",
+            "matched": true,
+            "matched_pattern": "agent cannot.*(?:select|modify|transmit|delete|control)"
+          }
+        ],
+        "forbidden_matches": [],
+        "forbidden_violation": false,
+        "matched_concepts": 6,
+        "required_concepts": 6
+      },
+      "sizes": {
+        "prompt_chars": 17391,
+        "response_chars": 702,
+        "schema_chars": 0
+      },
+      "started_at": "2026-08-11T13:46:12.481221Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.03290954200201668,
+        "provider_seconds": 5.687989250000101,
+        "total_seconds": 5.721993040991947,
+        "validation_seconds": 0.0009039580181706697
+      }
+    },
+    {
+      "case_id": "query-synthesis",
+      "cell_id": "query-synthesis:gpt-5.6-terra:low",
+      "digests": {
+        "prompt_sha256": "09223c7461be82f8d0513e95e489175bfa43a9d78fa6851a6df7697078539368",
+        "response_sha256": "59f913f0da56ecf8c41c1cb830407ac88b5a573c03c6901984e710ff94c0b3ef",
+        "schema_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "effort": "low",
+      "failure": null,
+      "finished_at": "2026-08-11T13:46:23.171981Z",
+      "model": "gpt-5.6-terra",
+      "operation": "query",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-terra",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "low",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "All content actually sent through the transmission screen is treated as one consented sharing unit. It may be provided to relevant third parties for healthcare-related support or processing, and may be used for service improvement depending on the information type; the exact recipients, services, and scope vary.\n\nThe institution controls processing, retention, audits, and any deletion of transmitted information. This Q&A agent cannot access personal Memories or institution records; select, include, exclude, edit, or transmit information; verify identity or proxy authority; alter access permissions; or delete existing records or copies.",
+      "result": {
+        "answer": "All content actually sent through the transmission screen is treated as one consented sharing unit. It may be provided to relevant third parties for healthcare-related support or processing, and may be used for service improvement depending on the information type; the exact recipients, services, and scope vary.\n\nThe institution controls processing, retention, audits, and any deletion of transmitted information. This Q&A agent cannot access personal Memories or institution records; select, include, exclude, edit, or transmit information; verify identity or proxy authority; alter access permissions; or delete existing records or copies."
+      },
+      "score": {
+        "concept_recall": 1.0,
+        "concepts": [
+          {
+            "concept_id": "consent-unit",
+            "matched": true,
+            "matched_pattern": "all (?:the )?(?:content|information).*(?:send|sent).*(?:one|single).*consent"
+          },
+          {
+            "concept_id": "healthcare-third-parties",
+            "matched": true,
+            "matched_pattern": "third part(?:y|ies).*healthcare"
+          },
+          {
+            "concept_id": "service-improvement",
+            "matched": true,
+            "matched_pattern": "service improvement"
+          },
+          {
+            "concept_id": "scope-varies",
+            "matched": true,
+            "matched_pattern": "exact (?:services|recipients|scope).*(?:var(?:y|ies)|depend|not (?:specified|identified|known)|cannot be identified)"
+          },
+          {
+            "concept_id": "institution-retention",
+            "matched": true,
+            "matched_pattern": "institution.*(?:retention|audit)"
+          },
+          {
+            "concept_id": "agent-boundary",
+            "matched": true,
+            "matched_pattern": "agent cannot.*(?:select|modify|transmit|delete|control)"
+          }
+        ],
+        "forbidden_matches": [],
+        "forbidden_violation": false,
+        "matched_concepts": 6,
+        "required_concepts": 6
+      },
+      "sizes": {
+        "prompt_chars": 17391,
+        "response_chars": 643,
+        "schema_chars": 0
+      },
+      "started_at": "2026-08-11T13:46:18.207450Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.03738966601667926,
+        "provider_seconds": 4.926915041985922,
+        "total_seconds": 4.964580458006822,
+        "validation_seconds": 0.00011816699407063425
+      }
+    },
+    {
+      "case_id": "query-synthesis",
+      "cell_id": "query-synthesis:gpt-5.6-terra:medium",
+      "digests": {
+        "prompt_sha256": "09223c7461be82f8d0513e95e489175bfa43a9d78fa6851a6df7697078539368",
+        "response_sha256": "bdacefde26c11175f2c81a87ee11a07d66dd30e878865be2f8b1a0818efd55e3",
+        "schema_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "effort": "medium",
+      "failure": null,
+      "finished_at": "2026-08-11T13:46:28.190185Z",
+      "model": "gpt-5.6-terra",
+      "operation": "query",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-terra",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "All content actually sent through the transmission screen is one unit of consent to share. It may be provided to relevant third parties for healthcare purposes or used for service improvement, depending on the information type; the exact recipients, services, and scope vary.\n\nThe government healthcare institution controls processing, retention, audit, and any deletion of transmitted information. Copies already delivered are not automatically deleted if consent is later withdrawn.\n\nThis Q&A agent cannot select, include, exclude, edit, or transmit information; inspect Memories or institution records; verify identity or proxy authority; alter access permissions; or delete records, copies, or retained information.",
+      "result": {
+        "answer": "All content actually sent through the transmission screen is one unit of consent to share. It may be provided to relevant third parties for healthcare purposes or used for service improvement, depending on the information type; the exact recipients, services, and scope vary.\n\nThe government healthcare institution controls processing, retention, audit, and any deletion of transmitted information. Copies already delivered are not automatically deleted if consent is later withdrawn.\n\nThis Q&A agent cannot select, include, exclude, edit, or transmit information; inspect Memories or institution records; verify identity or proxy authority; alter access permissions; or delete records, copies, or retained information."
+      },
+      "score": {
+        "concept_recall": 1.0,
+        "concepts": [
+          {
+            "concept_id": "consent-unit",
+            "matched": true,
+            "matched_pattern": "all (?:the )?(?:content|information).*(?:send|sent).*(?:one|single).*consent"
+          },
+          {
+            "concept_id": "healthcare-third-parties",
+            "matched": true,
+            "matched_pattern": "third part(?:y|ies).*healthcare"
+          },
+          {
+            "concept_id": "service-improvement",
+            "matched": true,
+            "matched_pattern": "service improvement"
+          },
+          {
+            "concept_id": "scope-varies",
+            "matched": true,
+            "matched_pattern": "exact (?:services|recipients|scope).*(?:var(?:y|ies)|depend|not (?:specified|identified|known)|cannot be identified)"
+          },
+          {
+            "concept_id": "institution-retention",
+            "matched": true,
+            "matched_pattern": "institution.*(?:retention|audit)"
+          },
+          {
+            "concept_id": "agent-boundary",
+            "matched": true,
+            "matched_pattern": "agent cannot.*(?:select|modify|transmit|delete|control)"
+          }
+        ],
+        "forbidden_matches": [],
+        "forbidden_violation": false,
+        "matched_concepts": 6,
+        "required_concepts": 6
+      },
+      "sizes": {
+        "prompt_chars": 17391,
+        "response_chars": 719,
+        "schema_chars": 0
+      },
+      "started_at": "2026-08-11T13:46:23.174507Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.025523166987113655,
+        "provider_seconds": 4.989866666001035,
+        "total_seconds": 5.0157668750034645,
+        "validation_seconds": 0.00022237500525079668
+      }
+    },
+    {
+      "case_id": "query-synthesis",
+      "cell_id": "query-synthesis:gpt-5.6-luna:none",
+      "digests": {
+        "prompt_sha256": "09223c7461be82f8d0513e95e489175bfa43a9d78fa6851a6df7697078539368",
+        "response_sha256": "daa1b7de922885d245cac6fb671988d1e8768323be4499d8dff3b75094a579f9",
+        "schema_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "effort": "none",
+      "failure": null,
+      "finished_at": "2026-08-11T13:46:35.228457Z",
+      "model": "gpt-5.6-luna",
+      "operation": "query",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-luna",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "none",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "All information actually sent through the government healthcare institution system’s transmission screen counts as one unit of consent to share.\n\nIt may be provided to relevant third parties for healthcare-related support or processing and may be used for service improvement, depending on the information supplied. The exact recipients, services, and scope cannot be identified by this Q&A agent.\n\nThe institution controls retention and audit policies. This agent cannot delete transmitted records or copies, control their retention, or revoke access permissions; later withdrawal of consent does not automatically delete copies already delivered.\n\nThis agent cannot access personal Memories or institution records, select, include, exclude, modify, transmit, or delete information, verify identity or proxy authority, or determine eligibility, current accuracy, or specific support needs. Merely mentioning information in this conversation does not transmit it.",
+      "result": {
+        "answer": "All information actually sent through the government healthcare institution system’s transmission screen counts as one unit of consent to share.\n\nIt may be provided to relevant third parties for healthcare-related support or processing and may be used for service improvement, depending on the information supplied. The exact recipients, services, and scope cannot be identified by this Q&A agent.\n\nThe institution controls retention and audit policies. This agent cannot delete transmitted records or copies, control their retention, or revoke access permissions; later withdrawal of consent does not automatically delete copies already delivered.\n\nThis agent cannot access personal Memories or institution records, select, include, exclude, modify, transmit, or delete information, verify identity or proxy authority, or determine eligibility, current accuracy, or specific support needs. Merely mentioning information in this conversation does not transmit it."
+      },
+      "score": {
+        "concept_recall": 1.0,
+        "concepts": [
+          {
+            "concept_id": "consent-unit",
+            "matched": true,
+            "matched_pattern": "all (?:the )?(?:content|information).*(?:send|sent).*(?:one|single).*consent"
+          },
+          {
+            "concept_id": "healthcare-third-parties",
+            "matched": true,
+            "matched_pattern": "third part(?:y|ies).*healthcare"
+          },
+          {
+            "concept_id": "service-improvement",
+            "matched": true,
+            "matched_pattern": "service improvement"
+          },
+          {
+            "concept_id": "scope-varies",
+            "matched": true,
+            "matched_pattern": "exact (?:services|recipients|scope).*(?:var(?:y|ies)|depend|not (?:specified|identified|known)|cannot be identified)"
+          },
+          {
+            "concept_id": "institution-retention",
+            "matched": true,
+            "matched_pattern": "institution.*(?:retention|audit)"
+          },
+          {
+            "concept_id": "agent-boundary",
+            "matched": true,
+            "matched_pattern": "agent cannot.*(?:select|modify|transmit|delete|control)"
+          }
+        ],
+        "forbidden_matches": [],
+        "forbidden_violation": false,
+        "matched_concepts": 6,
+        "required_concepts": 6
+      },
+      "sizes": {
+        "prompt_chars": 17391,
+        "response_chars": 963,
+        "schema_chars": 0
+      },
+      "started_at": "2026-08-11T13:46:28.194738Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.035783333994913846,
+        "provider_seconds": 6.997369083983358,
+        "total_seconds": 7.03379329101881,
+        "validation_seconds": 0.00043370798812247813
+      }
+    },
+    {
+      "case_id": "query-synthesis",
+      "cell_id": "query-synthesis:gpt-5.6-luna:low",
+      "digests": {
+        "prompt_sha256": "09223c7461be82f8d0513e95e489175bfa43a9d78fa6851a6df7697078539368",
+        "response_sha256": "7062ed022780473ac62e1761070596b253ed9f2440bc8e656d9c04d7a01dfc77",
+        "schema_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "effort": "low",
+      "failure": null,
+      "finished_at": "2026-08-11T13:46:41.586607Z",
+      "model": "gpt-5.6-luna",
+      "operation": "query",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-luna",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "low",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "All content you actually send through the government healthcare institution system’s transmission screen is one unit of consent to share, including private reasons and preferences included in that submission. Merely mentioning information in this conversation does not transmit it.\n\nThe information may be provided to relevant third parties for healthcare-related support or processing and may be used for service improvement, depending on the information supplied. The exact recipients, services, and scope cannot be identified by this agent.\n\nThe institution controls retention and audit policies. This agent cannot delete transmitted information or existing copies, control retention periods, or ensure that copies are removed after consent is withdrawn.\n\nThis Q&A agent cannot access personal Memories or institution records, select, include, exclude, modify, transmit, or delete submission content, alter access permissions, verify identity or proxy authority, or determine eligibility, support needs, or currentness of stored information.",
+      "result": {
+        "answer": "All content you actually send through the government healthcare institution system’s transmission screen is one unit of consent to share, including private reasons and preferences included in that submission. Merely mentioning information in this conversation does not transmit it.\n\nThe information may be provided to relevant third parties for healthcare-related support or processing and may be used for service improvement, depending on the information supplied. The exact recipients, services, and scope cannot be identified by this agent.\n\nThe institution controls retention and audit policies. This agent cannot delete transmitted information or existing copies, control retention periods, or ensure that copies are removed after consent is withdrawn.\n\nThis Q&A agent cannot access personal Memories or institution records, select, include, exclude, modify, transmit, or delete submission content, alter access permissions, verify identity or proxy authority, or determine eligibility, support needs, or currentness of stored information."
+      },
+      "score": {
+        "concept_recall": 1.0,
+        "concepts": [
+          {
+            "concept_id": "consent-unit",
+            "matched": true,
+            "matched_pattern": "all (?:the )?(?:content|information).*(?:send|sent).*(?:one|single).*consent"
+          },
+          {
+            "concept_id": "healthcare-third-parties",
+            "matched": true,
+            "matched_pattern": "third part(?:y|ies).*healthcare"
+          },
+          {
+            "concept_id": "service-improvement",
+            "matched": true,
+            "matched_pattern": "service improvement"
+          },
+          {
+            "concept_id": "scope-varies",
+            "matched": true,
+            "matched_pattern": "exact (?:services|recipients|scope).*(?:var(?:y|ies)|depend|not (?:specified|identified|known)|cannot be identified)"
+          },
+          {
+            "concept_id": "institution-retention",
+            "matched": true,
+            "matched_pattern": "institution.*(?:retention|audit)"
+          },
+          {
+            "concept_id": "agent-boundary",
+            "matched": true,
+            "matched_pattern": "agent cannot.*(?:select|modify|transmit|delete|control)"
+          }
+        ],
+        "forbidden_matches": [],
+        "forbidden_violation": false,
+        "matched_concepts": 6,
+        "required_concepts": 6
+      },
+      "sizes": {
+        "prompt_chars": 17391,
+        "response_chars": 1044,
+        "schema_chars": 0
+      },
+      "started_at": "2026-08-11T13:46:35.233005Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.03125237501808442,
+        "provider_seconds": 6.321738958009519,
+        "total_seconds": 6.353692292002961,
+        "validation_seconds": 0.00047229198389686644
+      }
+    },
+    {
+      "case_id": "query-synthesis",
+      "cell_id": "query-synthesis:gpt-5.6-luna:medium",
+      "digests": {
+        "prompt_sha256": "09223c7461be82f8d0513e95e489175bfa43a9d78fa6851a6df7697078539368",
+        "response_sha256": "f43c606b273918ed480457a5ccaa4808eb0d91b4408baf52a73304cd79d996b7",
+        "schema_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "effort": "medium",
+      "failure": null,
+      "finished_at": "2026-08-11T13:46:47.492508Z",
+      "model": "gpt-5.6-luna",
+      "operation": "query",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-luna",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "All content actually sent through the government healthcare institution system’s transmission screen constitutes one unit of consent to share, including private reasons included in that submission. It may be provided to relevant third parties for healthcare-related support or processing and may be used for service improvement; the exact recipients, services, and scope depend on the information supplied.\n\nThe institution controls retention and audit policies. This Q&A agent cannot control retention, delete transmitted records or copies, or alter access permissions—even if consent is later withdrawn.\n\nThe agent cannot inspect personal Memories or institution records, select, include, exclude, modify, transmit, or delete information, verify identity or proxy authority, or determine approval, eligibility, current medical facts, or support needs. Merely mentioning information in this conversation does not transmit it.",
+      "result": {
+        "answer": "All content actually sent through the government healthcare institution system’s transmission screen constitutes one unit of consent to share, including private reasons included in that submission. It may be provided to relevant third parties for healthcare-related support or processing and may be used for service improvement; the exact recipients, services, and scope depend on the information supplied.\n\nThe institution controls retention and audit policies. This Q&A agent cannot control retention, delete transmitted records or copies, or alter access permissions—even if consent is later withdrawn.\n\nThe agent cannot inspect personal Memories or institution records, select, include, exclude, modify, transmit, or delete information, verify identity or proxy authority, or determine approval, eligibility, current medical facts, or support needs. Merely mentioning information in this conversation does not transmit it."
+      },
+      "score": {
+        "concept_recall": 1.0,
+        "concepts": [
+          {
+            "concept_id": "consent-unit",
+            "matched": true,
+            "matched_pattern": "all (?:the )?(?:content|information).*(?:send|sent).*(?:one|single).*consent"
+          },
+          {
+            "concept_id": "healthcare-third-parties",
+            "matched": true,
+            "matched_pattern": "third part(?:y|ies).*healthcare"
+          },
+          {
+            "concept_id": "service-improvement",
+            "matched": true,
+            "matched_pattern": "service improvement"
+          },
+          {
+            "concept_id": "scope-varies",
+            "matched": true,
+            "matched_pattern": "exact (?:services|recipients|scope).*(?:var(?:y|ies)|depend|not (?:specified|identified|known)|cannot be identified)"
+          },
+          {
+            "concept_id": "institution-retention",
+            "matched": true,
+            "matched_pattern": "institution.*(?:retention|audit)"
+          },
+          {
+            "concept_id": "agent-boundary",
+            "matched": true,
+            "matched_pattern": "agent cannot.*(?:select|modify|transmit|delete|control)"
+          }
+        ],
+        "forbidden_matches": [],
+        "forbidden_violation": false,
+        "matched_concepts": 6,
+        "required_concepts": 6
+      },
+      "sizes": {
+        "prompt_chars": 17391,
+        "response_chars": 926,
+        "schema_chars": 0
+      },
+      "started_at": "2026-08-11T13:46:41.591342Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.03651133400853723,
+        "provider_seconds": 5.86432787499507,
+        "total_seconds": 5.901238000020385,
+        "validation_seconds": 0.00020683402544818819
+      }
+    },
+    {
+      "case_id": "query-synthesis",
+      "cell_id": "query-synthesis:gpt-5.6-sol:none",
+      "digests": {
+        "prompt_sha256": "09223c7461be82f8d0513e95e489175bfa43a9d78fa6851a6df7697078539368",
+        "response_sha256": "51fc8fc63d8602a2358b33dab11d8443b12c93f6cdb6ba3a619f2b2e709f15e2",
+        "schema_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "effort": "none",
+      "failure": null,
+      "finished_at": "2026-08-11T13:46:54.275922Z",
+      "model": "gpt-5.6-sol",
+      "operation": "query",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "none",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "All content you actually send through the institution’s transmission screen is treated as one consented sharing unit. Merely mentioning information in this conversation does not transmit it.\n\nSubmitted information may be:\n\n- Received by the government healthcare institution.\n- Shared with relevant third parties—outside people or organizations providing healthcare-related support or processing.\n- Used for healthcare purposes or service improvement.\n\nThe precise recipients, services, and uses depend on the information supplied, and this Q&A agent cannot identify their exact scope.\n\nThe institution controls transmitted information under its retention and audit policies. Withdrawing consent does not automatically delete copies already delivered.\n\nThis agent cannot access personal Memories or institution records; verify identity, proxy authority, accuracy, or currency; select, include, exclude, edit, or transmit information; process it downstream; change access permissions; or control, request, or execute retention or deletion of existing records and copies.",
+      "result": {
+        "answer": "All content you actually send through the institution’s transmission screen is treated as one consented sharing unit. Merely mentioning information in this conversation does not transmit it.\n\nSubmitted information may be:\n\n- Received by the government healthcare institution.\n- Shared with relevant third parties—outside people or organizations providing healthcare-related support or processing.\n- Used for healthcare purposes or service improvement.\n\nThe precise recipients, services, and uses depend on the information supplied, and this Q&A agent cannot identify their exact scope.\n\nThe institution controls transmitted information under its retention and audit policies. Withdrawing consent does not automatically delete copies already delivered.\n\nThis agent cannot access personal Memories or institution records; verify identity, proxy authority, accuracy, or currency; select, include, exclude, edit, or transmit information; process it downstream; change access permissions; or control, request, or execute retention or deletion of existing records and copies."
+      },
+      "score": {
+        "concept_recall": 1.0,
+        "concepts": [
+          {
+            "concept_id": "consent-unit",
+            "matched": true,
+            "matched_pattern": "all (?:the )?(?:content|information).*(?:send|sent).*(?:one|single).*consent"
+          },
+          {
+            "concept_id": "healthcare-third-parties",
+            "matched": true,
+            "matched_pattern": "third part(?:y|ies).*healthcare"
+          },
+          {
+            "concept_id": "service-improvement",
+            "matched": true,
+            "matched_pattern": "service improvement"
+          },
+          {
+            "concept_id": "scope-varies",
+            "matched": true,
+            "matched_pattern": "cannot identify.*exact (?:services|recipients|scope)"
+          },
+          {
+            "concept_id": "institution-retention",
+            "matched": true,
+            "matched_pattern": "institution.*(?:retention|audit)"
+          },
+          {
+            "concept_id": "agent-boundary",
+            "matched": true,
+            "matched_pattern": "agent cannot.*(?:select|modify|transmit|delete|control)"
+          }
+        ],
+        "forbidden_matches": [],
+        "forbidden_violation": false,
+        "matched_concepts": 6,
+        "required_concepts": 6
+      },
+      "sizes": {
+        "prompt_chars": 17391,
+        "response_chars": 1069,
+        "schema_chars": 0
+      },
+      "started_at": "2026-08-11T13:46:47.496941Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.02983595902333036,
+        "provider_seconds": 6.7487547080090735,
+        "total_seconds": 6.77905945800012,
+        "validation_seconds": 0.0002498340036254376
+      }
+    },
+    {
+      "case_id": "query-synthesis",
+      "cell_id": "query-synthesis:gpt-5.6-sol:low",
+      "digests": {
+        "prompt_sha256": "09223c7461be82f8d0513e95e489175bfa43a9d78fa6851a6df7697078539368",
+        "response_sha256": "9d5a9e8e9b6167acadedc7b9040c60ba97f77a820526e50632357e98f265d111",
+        "schema_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "effort": "low",
+      "failure": null,
+      "finished_at": "2026-08-11T13:47:02.621993Z",
+      "model": "gpt-5.6-sol",
+      "operation": "query",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "low",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "All content you send through the institution’s transmission screen is treated as one consented sharing unit. It may be shared with relevant third parties—people or organizations outside the recipient institution that provide healthcare-related support or processing—and may be used for service improvement. The exact recipients, services, and scope depend on the information submitted, and this Q&A agent cannot identify them.\n\nThe institution controls transmitted information under its retention and audit policies. Withdrawing consent does not automatically delete copies already delivered.\n\nThis Q&A agent cannot access personal Memories or institution records; select, include, exclude, edit, or transmit information; perform downstream processing; change access permissions; or control, request, or execute retention or deletion of transmitted records or copies. Merely mentioning information in this conversation does not transmit it.",
+      "result": {
+        "answer": "All content you send through the institution’s transmission screen is treated as one consented sharing unit. It may be shared with relevant third parties—people or organizations outside the recipient institution that provide healthcare-related support or processing—and may be used for service improvement. The exact recipients, services, and scope depend on the information submitted, and this Q&A agent cannot identify them.\n\nThe institution controls transmitted information under its retention and audit policies. Withdrawing consent does not automatically delete copies already delivered.\n\nThis Q&A agent cannot access personal Memories or institution records; select, include, exclude, edit, or transmit information; perform downstream processing; change access permissions; or control, request, or execute retention or deletion of transmitted records or copies. Merely mentioning information in this conversation does not transmit it."
+      },
+      "score": {
+        "concept_recall": 1.0,
+        "concepts": [
+          {
+            "concept_id": "consent-unit",
+            "matched": true,
+            "matched_pattern": "all (?:the )?(?:content|information).*(?:send|sent).*(?:one|single).*consent"
+          },
+          {
+            "concept_id": "healthcare-third-parties",
+            "matched": true,
+            "matched_pattern": "third part(?:y|ies).*healthcare"
+          },
+          {
+            "concept_id": "service-improvement",
+            "matched": true,
+            "matched_pattern": "service improvement"
+          },
+          {
+            "concept_id": "scope-varies",
+            "matched": true,
+            "matched_pattern": "exact (?:services|recipients|scope).*(?:var(?:y|ies)|depend|not (?:specified|identified|known)|cannot be identified)"
+          },
+          {
+            "concept_id": "institution-retention",
+            "matched": true,
+            "matched_pattern": "institution.*(?:retention|audit)"
+          },
+          {
+            "concept_id": "agent-boundary",
+            "matched": true,
+            "matched_pattern": "agent cannot.*(?:select|modify|transmit|delete|control)"
+          }
+        ],
+        "forbidden_matches": [],
+        "forbidden_violation": false,
+        "matched_concepts": 6,
+        "required_concepts": 6
+      },
+      "sizes": {
+        "prompt_chars": 17391,
+        "response_chars": 940,
+        "schema_chars": 0
+      },
+      "started_at": "2026-08-11T13:46:54.280787Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.03649637498892844,
+        "provider_seconds": 8.30441341700498,
+        "total_seconds": 8.341279792017303,
+        "validation_seconds": 0.00015283399261534214
+      }
+    },
+    {
+      "case_id": "query-synthesis",
+      "cell_id": "query-synthesis:gpt-5.6-sol:medium",
+      "digests": {
+        "prompt_sha256": "09223c7461be82f8d0513e95e489175bfa43a9d78fa6851a6df7697078539368",
+        "response_sha256": "010e9ed101d27f5a9e46a2a1de67effe15360873513d4925de24b01a6411c622",
+        "schema_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "effort": "medium",
+      "failure": null,
+      "finished_at": "2026-08-11T13:47:11.685660Z",
+      "model": "gpt-5.6-sol",
+      "operation": "query",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "All content actually sent through the government healthcare institution system’s transmission screen—including any private reasons you include—is treated as one consented sharing unit.\n\nDepending on the information supplied, it may be:\n\n- Provided to relevant third parties—people or organizations outside the recipient institution that support related healthcare or processing.\n- Used for healthcare purposes or service improvement.\n\nThe institution controls retention and auditing under its policies. Withdrawing consent does not automatically delete copies already delivered.\n\nThis Q&A agent cannot identify the exact recipients, services, or scope of use; access personal Memories or institution records; select, edit, include, exclude, transmit, or delete information; change access permissions; verify identity or proxy authority; or control retention, downstream processing, or deletion of transmitted records and copies.",
+      "result": {
+        "answer": "All content actually sent through the government healthcare institution system’s transmission screen—including any private reasons you include—is treated as one consented sharing unit.\n\nDepending on the information supplied, it may be:\n\n- Provided to relevant third parties—people or organizations outside the recipient institution that support related healthcare or processing.\n- Used for healthcare purposes or service improvement.\n\nThe institution controls retention and auditing under its policies. Withdrawing consent does not automatically delete copies already delivered.\n\nThis Q&A agent cannot identify the exact recipients, services, or scope of use; access personal Memories or institution records; select, edit, include, exclude, transmit, or delete information; change access permissions; verify identity or proxy authority; or control retention, downstream processing, or deletion of transmitted records and copies."
+      },
+      "score": {
+        "concept_recall": 1.0,
+        "concepts": [
+          {
+            "concept_id": "consent-unit",
+            "matched": true,
+            "matched_pattern": "all (?:the )?(?:content|information).*(?:send|sent).*(?:one|single).*consent"
+          },
+          {
+            "concept_id": "healthcare-third-parties",
+            "matched": true,
+            "matched_pattern": "third part(?:y|ies).*healthcare"
+          },
+          {
+            "concept_id": "service-improvement",
+            "matched": true,
+            "matched_pattern": "service improvement"
+          },
+          {
+            "concept_id": "scope-varies",
+            "matched": true,
+            "matched_pattern": "cannot identify.*exact (?:services|recipients|scope)"
+          },
+          {
+            "concept_id": "institution-retention",
+            "matched": true,
+            "matched_pattern": "institution.*(?:retention|audit)"
+          },
+          {
+            "concept_id": "agent-boundary",
+            "matched": true,
+            "matched_pattern": "agent cannot.*(?:select|modify|transmit|delete|control)"
+          }
+        ],
+        "forbidden_matches": [],
+        "forbidden_violation": false,
+        "matched_concepts": 6,
+        "required_concepts": 6
+      },
+      "sizes": {
+        "prompt_chars": 17391,
+        "response_chars": 928,
+        "schema_chars": 0
+      },
+      "started_at": "2026-08-11T13:47:02.625061Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.026289790985174477,
+        "provider_seconds": 9.033991832984611,
+        "total_seconds": 9.060705250012688,
+        "validation_seconds": 0.00024537500576116145
+      }
+    },
+    {
+      "case_id": "query-narrow",
+      "cell_id": "query-narrow:gpt-5.6-terra:low",
+      "digests": {
+        "prompt_sha256": "93d284be62efb33ca4369562e089484810733711a86479e49c6dd7807c0a46b1",
+        "response_sha256": "b88b8094f3e3c307cccd431f0a709247b35cbfa39e73d51e2e9172777449bc12",
+        "schema_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "effort": "low",
+      "failure": null,
+      "finished_at": "2026-08-11T13:47:19.291163Z",
+      "model": "gpt-5.6-terra",
+      "operation": "query",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-terra",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "low",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "No. Merely mentioning it here does not send it to the institution or delete it. Only content sent through the institution’s transmission screen is submitted, and this agent cannot delete personal Memories or existing records.",
+      "result": {
+        "answer": "No. Merely mentioning it here does not send it to the institution or delete it. Only content sent through the institution’s transmission screen is submitted, and this agent cannot delete personal Memories or existing records."
+      },
+      "score": {
+        "concept_recall": 1.0,
+        "concepts": [
+          {
+            "concept_id": "mention-does-not-send",
+            "matched": true,
+            "matched_pattern": "merely mentioning.*(?:does not|doesn't|won't).*(?:send|submit|transmit)"
+          },
+          {
+            "concept_id": "transmission-screen-boundary",
+            "matched": true,
+            "matched_pattern": "only.*(?:actually )?sent.*transmission screen"
+          },
+          {
+            "concept_id": "mention-does-not-delete",
+            "matched": true,
+            "matched_pattern": "mentioning.*(?:does not|doesn't|won't).*delet"
+          }
+        ],
+        "forbidden_matches": [],
+        "forbidden_violation": false,
+        "matched_concepts": 3,
+        "required_concepts": 3
+      },
+      "sizes": {
+        "prompt_chars": 17250,
+        "response_chars": 225,
+        "schema_chars": 0
+      },
+      "started_at": "2026-08-11T13:47:11.690820Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.0355396670056507,
+        "provider_seconds": 7.5641468329995405,
+        "total_seconds": 7.600437166984193,
+        "validation_seconds": 0.0005530830239877105
+      }
+    },
+    {
+      "case_id": "query-narrow",
+      "cell_id": "query-narrow:gpt-5.6-terra:medium",
+      "digests": {
+        "prompt_sha256": "93d284be62efb33ca4369562e089484810733711a86479e49c6dd7807c0a46b1",
+        "response_sha256": "33b33206bf9b5a4f2a4a0596a083d7b8b8afc9ec3e48fd6e4a3514785d2ff7a6",
+        "schema_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "effort": "medium",
+      "failure": null,
+      "finished_at": "2026-08-11T13:47:23.733902Z",
+      "model": "gpt-5.6-terra",
+      "operation": "query",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-terra",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "No. Merely mentioning personal Memory content here does not send it to the institution or delete it. Only content actually sent through the institution’s transmission screen is submitted, and this agent cannot access, delete, or transmit personal Memories.",
+      "result": {
+        "answer": "No. Merely mentioning personal Memory content here does not send it to the institution or delete it. Only content actually sent through the institution’s transmission screen is submitted, and this agent cannot access, delete, or transmit personal Memories."
+      },
+      "score": {
+        "concept_recall": 1.0,
+        "concepts": [
+          {
+            "concept_id": "mention-does-not-send",
+            "matched": true,
+            "matched_pattern": "merely mentioning.*(?:does not|doesn't|won't).*(?:send|submit|transmit)"
+          },
+          {
+            "concept_id": "transmission-screen-boundary",
+            "matched": true,
+            "matched_pattern": "only.*(?:actually )?sent.*transmission screen"
+          },
+          {
+            "concept_id": "mention-does-not-delete",
+            "matched": true,
+            "matched_pattern": "mentioning.*(?:does not|doesn't|won't).*delet"
+          }
+        ],
+        "forbidden_matches": [],
+        "forbidden_violation": false,
+        "matched_concepts": 3,
+        "required_concepts": 3
+      },
+      "sizes": {
+        "prompt_chars": 17250,
+        "response_chars": 256,
+        "schema_chars": 0
+      },
+      "started_at": "2026-08-11T13:47:19.296570Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.03296862498973496,
+        "provider_seconds": 4.4040699579927605,
+        "total_seconds": 4.437416125001619,
+        "validation_seconds": 0.00012070799130015075
+      }
+    },
+    {
+      "case_id": "query-narrow",
+      "cell_id": "query-narrow:gpt-5.6-luna:none",
+      "digests": {
+        "prompt_sha256": "93d284be62efb33ca4369562e089484810733711a86479e49c6dd7807c0a46b1",
+        "response_sha256": "39da827f7dba16883ae1b6d8b6cbd665c00e8f80a29180c4af4ea2ab472d30ae",
+        "schema_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "effort": "none",
+      "failure": null,
+      "finished_at": "2026-08-11T13:47:27.029171Z",
+      "model": "gpt-5.6-luna",
+      "operation": "query",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-luna",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "none",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "No. Merely mentioning personal Memory content in this conversation does not send it to the institution or delete it.",
+      "result": {
+        "answer": "No. Merely mentioning personal Memory content in this conversation does not send it to the institution or delete it."
+      },
+      "score": {
+        "concept_recall": 0.6666666666666666,
+        "concepts": [
+          {
+            "concept_id": "mention-does-not-send",
+            "matched": true,
+            "matched_pattern": "merely mentioning.*(?:does not|doesn't|won't).*(?:send|submit|transmit)"
+          },
+          {
+            "concept_id": "transmission-screen-boundary",
+            "matched": false,
+            "matched_pattern": null
+          },
+          {
+            "concept_id": "mention-does-not-delete",
+            "matched": true,
+            "matched_pattern": "mentioning.*(?:does not|doesn't|won't).*delet"
+          }
+        ],
+        "forbidden_matches": [],
+        "forbidden_violation": false,
+        "matched_concepts": 2,
+        "required_concepts": 3
+      },
+      "sizes": {
+        "prompt_chars": 17250,
+        "response_chars": 116,
+        "schema_chars": 0
+      },
+      "started_at": "2026-08-11T13:47:23.738903Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.03479595799581148,
+        "provider_seconds": 3.2550791669928003,
+        "total_seconds": 3.29033541699755,
+        "validation_seconds": 0.0002687920059543103
+      }
+    },
+    {
+      "case_id": "query-narrow",
+      "cell_id": "query-narrow:gpt-5.6-luna:low",
+      "digests": {
+        "prompt_sha256": "93d284be62efb33ca4369562e089484810733711a86479e49c6dd7807c0a46b1",
+        "response_sha256": "39da827f7dba16883ae1b6d8b6cbd665c00e8f80a29180c4af4ea2ab472d30ae",
+        "schema_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "effort": "low",
+      "failure": null,
+      "finished_at": "2026-08-11T13:47:29.988614Z",
+      "model": "gpt-5.6-luna",
+      "operation": "query",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-luna",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "low",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "No. Merely mentioning personal Memory content in this conversation does not send it to the institution or delete it.",
+      "result": {
+        "answer": "No. Merely mentioning personal Memory content in this conversation does not send it to the institution or delete it."
+      },
+      "score": {
+        "concept_recall": 0.6666666666666666,
+        "concepts": [
+          {
+            "concept_id": "mention-does-not-send",
+            "matched": true,
+            "matched_pattern": "merely mentioning.*(?:does not|doesn't|won't).*(?:send|submit|transmit)"
+          },
+          {
+            "concept_id": "transmission-screen-boundary",
+            "matched": false,
+            "matched_pattern": null
+          },
+          {
+            "concept_id": "mention-does-not-delete",
+            "matched": true,
+            "matched_pattern": "mentioning.*(?:does not|doesn't|won't).*delet"
+          }
+        ],
+        "forbidden_matches": [],
+        "forbidden_violation": false,
+        "matched_concepts": 2,
+        "required_concepts": 3
+      },
+      "sizes": {
+        "prompt_chars": 17250,
+        "response_chars": 116,
+        "schema_chars": 0
+      },
+      "started_at": "2026-08-11T13:47:27.034307Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.03635266702622175,
+        "provider_seconds": 2.9177109579904936,
+        "total_seconds": 2.954369790997589,
+        "validation_seconds": 0.00010979099897667766
+      }
+    },
+    {
+      "case_id": "query-narrow",
+      "cell_id": "query-narrow:gpt-5.6-luna:medium",
+      "digests": {
+        "prompt_sha256": "93d284be62efb33ca4369562e089484810733711a86479e49c6dd7807c0a46b1",
+        "response_sha256": "0c5e121b502d74b26022af6e65f29ccc76f713154eec6c423e252f98c9183d91",
+        "schema_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "effort": "medium",
+      "failure": null,
+      "finished_at": "2026-08-11T13:47:33.670462Z",
+      "model": "gpt-5.6-luna",
+      "operation": "query",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-luna",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "No. Merely mentioning personal Memory content in this conversation does not send it to the institution or delete it. The agent cannot access, transmit, select, or delete personal Memories.",
+      "result": {
+        "answer": "No. Merely mentioning personal Memory content in this conversation does not send it to the institution or delete it. The agent cannot access, transmit, select, or delete personal Memories."
+      },
+      "score": {
+        "concept_recall": 0.6666666666666666,
+        "concepts": [
+          {
+            "concept_id": "mention-does-not-send",
+            "matched": true,
+            "matched_pattern": "merely mentioning.*(?:does not|doesn't|won't).*(?:send|submit|transmit)"
+          },
+          {
+            "concept_id": "transmission-screen-boundary",
+            "matched": false,
+            "matched_pattern": null
+          },
+          {
+            "concept_id": "mention-does-not-delete",
+            "matched": true,
+            "matched_pattern": "mentioning.*(?:does not|doesn't|won't).*delet"
+          }
+        ],
+        "forbidden_matches": [],
+        "forbidden_violation": false,
+        "matched_concepts": 2,
+        "required_concepts": 3
+      },
+      "sizes": {
+        "prompt_chars": 17250,
+        "response_chars": 188,
+        "schema_chars": 0
+      },
+      "started_at": "2026-08-11T13:47:29.994313Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.042239250004058704,
+        "provider_seconds": 3.6336663750116713,
+        "total_seconds": 3.6762149580172263,
+        "validation_seconds": 9.829099872149527e-05
+      }
+    },
+    {
+      "case_id": "query-narrow",
+      "cell_id": "query-narrow:gpt-5.6-sol:none",
+      "digests": {
+        "prompt_sha256": "93d284be62efb33ca4369562e089484810733711a86479e49c6dd7807c0a46b1",
+        "response_sha256": "9a511bca78495763afb2514c34cbb750c7dac75a5352761cdcfc4b9bf9361a5f",
+        "schema_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "effort": "none",
+      "failure": null,
+      "finished_at": "2026-08-11T13:47:39.871143Z",
+      "model": "gpt-5.6-sol",
+      "operation": "query",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "none",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "No. Mentioning personal Memory content here neither sends it to the institution nor deletes it. The agent cannot access, transmit, modify, or delete personal Memories; only content actually submitted through the institution’s transmission screen is sent.",
+      "result": {
+        "answer": "No. Mentioning personal Memory content here neither sends it to the institution nor deletes it. The agent cannot access, transmit, modify, or delete personal Memories; only content actually submitted through the institution’s transmission screen is sent."
+      },
+      "score": {
+        "concept_recall": 1.0,
+        "concepts": [
+          {
+            "concept_id": "mention-does-not-send",
+            "matched": true,
+            "matched_pattern": "mentioning.*not.*(?:send|submit|transmit)"
+          },
+          {
+            "concept_id": "transmission-screen-boundary",
+            "matched": true,
+            "matched_pattern": "only.*(?:actually )?submitted.*transmission screen"
+          },
+          {
+            "concept_id": "mention-does-not-delete",
+            "matched": true,
+            "matched_pattern": "agent cannot.*delet"
+          }
+        ],
+        "forbidden_matches": [],
+        "forbidden_violation": false,
+        "matched_concepts": 3,
+        "required_concepts": 3
+      },
+      "sizes": {
+        "prompt_chars": 17250,
+        "response_chars": 254,
+        "schema_chars": 0
+      },
+      "started_at": "2026-08-11T13:47:33.675817Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.035397208004724234,
+        "provider_seconds": 6.159465959004592,
+        "total_seconds": 6.195397792005679,
+        "validation_seconds": 0.0003314589848741889
+      }
+    },
+    {
+      "case_id": "query-narrow",
+      "cell_id": "query-narrow:gpt-5.6-sol:low",
+      "digests": {
+        "prompt_sha256": "93d284be62efb33ca4369562e089484810733711a86479e49c6dd7807c0a46b1",
+        "response_sha256": "81c75bc8e26443e0936faed56fdbcdfc3cc202628b4331092a0aebf4fe27b934",
+        "schema_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "effort": "low",
+      "failure": null,
+      "finished_at": "2026-08-11T13:47:44.386999Z",
+      "model": "gpt-5.6-sol",
+      "operation": "query",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "low",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "No. Merely mentioning personal Memory content here neither sends it to the institution nor deletes it. The agent cannot access, transmit, modify, or delete personal Memories; only content actually sent through the institution’s transmission screen is submitted.",
+      "result": {
+        "answer": "No. Merely mentioning personal Memory content here neither sends it to the institution nor deletes it. The agent cannot access, transmit, modify, or delete personal Memories; only content actually sent through the institution’s transmission screen is submitted."
+      },
+      "score": {
+        "concept_recall": 1.0,
+        "concepts": [
+          {
+            "concept_id": "mention-does-not-send",
+            "matched": true,
+            "matched_pattern": "mentioning.*not.*(?:send|submit|transmit)"
+          },
+          {
+            "concept_id": "transmission-screen-boundary",
+            "matched": true,
+            "matched_pattern": "only.*(?:actually )?sent.*transmission screen"
+          },
+          {
+            "concept_id": "mention-does-not-delete",
+            "matched": true,
+            "matched_pattern": "agent cannot.*delet"
+          }
+        ],
+        "forbidden_matches": [],
+        "forbidden_violation": false,
+        "matched_concepts": 3,
+        "required_concepts": 3
+      },
+      "sizes": {
+        "prompt_chars": 17250,
+        "response_chars": 261,
+        "schema_chars": 0
+      },
+      "started_at": "2026-08-11T13:47:39.875519Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.035000417003175244,
+        "provider_seconds": 4.476272041996708,
+        "total_seconds": 4.511551125004189,
+        "validation_seconds": 0.00010974999167956412
+      }
+    },
+    {
+      "case_id": "query-narrow",
+      "cell_id": "query-narrow:gpt-5.6-sol:medium",
+      "digests": {
+        "prompt_sha256": "93d284be62efb33ca4369562e089484810733711a86479e49c6dd7807c0a46b1",
+        "response_sha256": "9a511bca78495763afb2514c34cbb750c7dac75a5352761cdcfc4b9bf9361a5f",
+        "schema_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "effort": "medium",
+      "failure": null,
+      "finished_at": "2026-08-11T13:47:51.476798Z",
+      "model": "gpt-5.6-sol",
+      "operation": "query",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "No. Mentioning personal Memory content here neither sends it to the institution nor deletes it. The agent cannot access, transmit, modify, or delete personal Memories; only content actually submitted through the institution’s transmission screen is sent.",
+      "result": {
+        "answer": "No. Mentioning personal Memory content here neither sends it to the institution nor deletes it. The agent cannot access, transmit, modify, or delete personal Memories; only content actually submitted through the institution’s transmission screen is sent."
+      },
+      "score": {
+        "concept_recall": 1.0,
+        "concepts": [
+          {
+            "concept_id": "mention-does-not-send",
+            "matched": true,
+            "matched_pattern": "mentioning.*not.*(?:send|submit|transmit)"
+          },
+          {
+            "concept_id": "transmission-screen-boundary",
+            "matched": true,
+            "matched_pattern": "only.*(?:actually )?submitted.*transmission screen"
+          },
+          {
+            "concept_id": "mention-does-not-delete",
+            "matched": true,
+            "matched_pattern": "agent cannot.*delet"
+          }
+        ],
+        "forbidden_matches": [],
+        "forbidden_violation": false,
+        "matched_concepts": 3,
+        "required_concepts": 3
+      },
+      "sizes": {
+        "prompt_chars": 17250,
+        "response_chars": 254,
+        "schema_chars": 0
+      },
+      "started_at": "2026-08-11T13:47:44.392521Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.03501833399059251,
+        "provider_seconds": 7.048985125002218,
+        "total_seconds": 7.084376957995119,
+        "validation_seconds": 0.00016475000302307308
+      }
+    },
+    {
+      "case_id": "query-narrow",
+      "cell_id": "query-narrow:gpt-5.6-terra:none",
+      "digests": {
+        "prompt_sha256": "93d284be62efb33ca4369562e089484810733711a86479e49c6dd7807c0a46b1",
+        "response_sha256": "25f65570b2e77ce93e5ca76a092c8ebad80b7fa2893bc5b917933772a82d1bc0",
+        "schema_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "effort": "none",
+      "failure": null,
+      "finished_at": "2026-08-11T13:47:55.952562Z",
+      "model": "gpt-5.6-terra",
+      "operation": "query",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-terra",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "none",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "No. Merely mentioning personal Memory content here does not send it to the institution or delete it. Only content sent through the institution’s transmission screen is submitted, and this agent cannot access, delete, or transmit personal Memories.",
+      "result": {
+        "answer": "No. Merely mentioning personal Memory content here does not send it to the institution or delete it. Only content sent through the institution’s transmission screen is submitted, and this agent cannot access, delete, or transmit personal Memories."
+      },
+      "score": {
+        "concept_recall": 1.0,
+        "concepts": [
+          {
+            "concept_id": "mention-does-not-send",
+            "matched": true,
+            "matched_pattern": "merely mentioning.*(?:does not|doesn't|won't).*(?:send|submit|transmit)"
+          },
+          {
+            "concept_id": "transmission-screen-boundary",
+            "matched": true,
+            "matched_pattern": "only.*(?:actually )?sent.*transmission screen"
+          },
+          {
+            "concept_id": "mention-does-not-delete",
+            "matched": true,
+            "matched_pattern": "mentioning.*(?:does not|doesn't|won't).*delet"
+          }
+        ],
+        "forbidden_matches": [],
+        "forbidden_violation": false,
+        "matched_concepts": 3,
+        "required_concepts": 3
+      },
+      "sizes": {
+        "prompt_chars": 17250,
+        "response_chars": 247,
+        "schema_chars": 0
+      },
+      "started_at": "2026-08-11T13:47:51.482520Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.03716124998754822,
+        "provider_seconds": 4.432600624975748,
+        "total_seconds": 4.470118249999359,
+        "validation_seconds": 0.00013600001693703234
+      }
+    },
+    {
+      "case_id": "query-unsupported",
+      "cell_id": "query-unsupported:gpt-5.6-terra:medium",
+      "digests": {
+        "prompt_sha256": "581321800a115990d703613a81cb4441e1da53604c674d3441bb7b9dfe5f119f",
+        "response_sha256": "13bf4228c4d3cce117b7d35913443389a2bcdea642879da398b81071ea703ed1",
+        "schema_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "effort": "medium",
+      "failure": null,
+      "finished_at": "2026-08-11T13:48:02.013273Z",
+      "model": "gpt-5.6-terra",
+      "operation": "query",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-terra",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "The available source does not specify an exact retention period or name any third-party company that receives medication information.",
+      "result": {
+        "answer": "The available source does not specify an exact retention period or name any third-party company that receives medication information."
+      },
+      "score": {
+        "concept_recall": 1.0,
+        "concepts": [
+          {
+            "concept_id": "retention-not-specified",
+            "matched": true,
+            "matched_pattern": "does not (?:specify|state|provide).*retention"
+          },
+          {
+            "concept_id": "company-not-identified",
+            "matched": true,
+            "matched_pattern": "does not (?:name|identify|specify|provide).*(?:company|third part(?:y|ies)|recipient)"
+          }
+        ],
+        "forbidden_matches": [],
+        "forbidden_violation": false,
+        "matched_concepts": 2,
+        "required_concepts": 2
+      },
+      "sizes": {
+        "prompt_chars": 17254,
+        "response_chars": 133,
+        "schema_chars": 0
+      },
+      "started_at": "2026-08-11T13:47:55.958665Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.03532008299953304,
+        "provider_seconds": 6.018355917010922,
+        "total_seconds": 6.054686916992068,
+        "validation_seconds": 0.0008235830173362046
+      }
+    },
+    {
+      "case_id": "query-unsupported",
+      "cell_id": "query-unsupported:gpt-5.6-luna:none",
+      "digests": {
+        "prompt_sha256": "581321800a115990d703613a81cb4441e1da53604c674d3441bb7b9dfe5f119f",
+        "response_sha256": "652bd7e1c1d2124e9859e89a7a6f1bb6f7710251b966ed48e2ee13a4b3cd9392",
+        "schema_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "effort": "none",
+      "failure": null,
+      "finished_at": "2026-08-11T13:48:05.607212Z",
+      "model": "gpt-5.6-luna",
+      "operation": "query",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-luna",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "none",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "The available source does not specify an exact retention period or name any third-party company receiving medication information.",
+      "result": {
+        "answer": "The available source does not specify an exact retention period or name any third-party company receiving medication information."
+      },
+      "score": {
+        "concept_recall": 1.0,
+        "concepts": [
+          {
+            "concept_id": "retention-not-specified",
+            "matched": true,
+            "matched_pattern": "does not (?:specify|state|provide).*retention"
+          },
+          {
+            "concept_id": "company-not-identified",
+            "matched": true,
+            "matched_pattern": "does not (?:name|identify|specify|provide).*(?:company|third part(?:y|ies)|recipient)"
+          }
+        ],
+        "forbidden_matches": [],
+        "forbidden_violation": false,
+        "matched_concepts": 2,
+        "required_concepts": 2
+      },
+      "sizes": {
+        "prompt_chars": 17254,
+        "response_chars": 129,
+        "schema_chars": 0
+      },
+      "started_at": "2026-08-11T13:48:02.018766Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.03594045899808407,
+        "provider_seconds": 3.55224933399586,
+        "total_seconds": 3.5885248749982566,
+        "validation_seconds": 0.00014520800323225558
+      }
+    },
+    {
+      "case_id": "query-unsupported",
+      "cell_id": "query-unsupported:gpt-5.6-luna:low",
+      "digests": {
+        "prompt_sha256": "581321800a115990d703613a81cb4441e1da53604c674d3441bb7b9dfe5f119f",
+        "response_sha256": "adb7b54a90c17e4b666214543420a064f4cf84e02facac1e9518b7756d22ec46",
+        "schema_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "effort": "low",
+      "failure": null,
+      "finished_at": "2026-08-11T13:48:08.865951Z",
+      "model": "gpt-5.6-luna",
+      "operation": "query",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-luna",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "low",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "The available source does not specify an exact retention period in days or name any third-party company receiving medication information.",
+      "result": {
+        "answer": "The available source does not specify an exact retention period in days or name any third-party company receiving medication information."
+      },
+      "score": {
+        "concept_recall": 1.0,
+        "concepts": [
+          {
+            "concept_id": "retention-not-specified",
+            "matched": true,
+            "matched_pattern": "does not (?:specify|state|provide).*retention"
+          },
+          {
+            "concept_id": "company-not-identified",
+            "matched": true,
+            "matched_pattern": "does not (?:name|identify|specify|provide).*(?:company|third part(?:y|ies)|recipient)"
+          }
+        ],
+        "forbidden_matches": [],
+        "forbidden_violation": false,
+        "matched_concepts": 2,
+        "required_concepts": 2
+      },
+      "sizes": {
+        "prompt_chars": 17254,
+        "response_chars": 137,
+        "schema_chars": 0
+      },
+      "started_at": "2026-08-11T13:48:05.612670Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.03890333301387727,
+        "provider_seconds": 3.214211417012848,
+        "total_seconds": 3.2533265000092797,
+        "validation_seconds": 7.500001811422408e-05
+      }
+    },
+    {
+      "case_id": "query-unsupported",
+      "cell_id": "query-unsupported:gpt-5.6-luna:medium",
+      "digests": {
+        "prompt_sha256": "581321800a115990d703613a81cb4441e1da53604c674d3441bb7b9dfe5f119f",
+        "response_sha256": "eea18ce75128e1977d060ab6bd4762f641ee52e896d5048c739014d710ee4ced",
+        "schema_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "effort": "medium",
+      "failure": null,
+      "finished_at": "2026-08-11T13:48:13.014442Z",
+      "model": "gpt-5.6-luna",
+      "operation": "query",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-luna",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "The available source does not specify an exact retention period in days or name any third-party company that receives medication information.",
+      "result": {
+        "answer": "The available source does not specify an exact retention period in days or name any third-party company that receives medication information."
+      },
+      "score": {
+        "concept_recall": 1.0,
+        "concepts": [
+          {
+            "concept_id": "retention-not-specified",
+            "matched": true,
+            "matched_pattern": "does not (?:specify|state|provide).*retention"
+          },
+          {
+            "concept_id": "company-not-identified",
+            "matched": true,
+            "matched_pattern": "does not (?:name|identify|specify|provide).*(?:company|third part(?:y|ies)|recipient)"
+          }
+        ],
+        "forbidden_matches": [],
+        "forbidden_violation": false,
+        "matched_concepts": 2,
+        "required_concepts": 2
+      },
+      "sizes": {
+        "prompt_chars": 17254,
+        "response_chars": 141,
+        "schema_chars": 0
+      },
+      "started_at": "2026-08-11T13:48:08.870027Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.0330538330017589,
+        "provider_seconds": 4.111161707987776,
+        "total_seconds": 4.144484708987875,
+        "validation_seconds": 0.00010924998787231743
+      }
+    },
+    {
+      "case_id": "query-unsupported",
+      "cell_id": "query-unsupported:gpt-5.6-sol:none",
+      "digests": {
+        "prompt_sha256": "581321800a115990d703613a81cb4441e1da53604c674d3441bb7b9dfe5f119f",
+        "response_sha256": "876f07c4d295750a68042cf1062ccfd8a1d06aaa092e99b18c6cb636f7d119a2",
+        "schema_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "effort": "none",
+      "failure": null,
+      "finished_at": "2026-08-11T13:48:17.481164Z",
+      "model": "gpt-5.6-sol",
+      "operation": "query",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "none",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "The available source does not specify an exact retention period or name any third-party company that receives medication information. It says retention follows the institution’s policies and recipient scope varies by the information supplied.",
+      "result": {
+        "answer": "The available source does not specify an exact retention period or name any third-party company that receives medication information. It says retention follows the institution’s policies and recipient scope varies by the information supplied."
+      },
+      "score": {
+        "concept_recall": 1.0,
+        "concepts": [
+          {
+            "concept_id": "retention-not-specified",
+            "matched": true,
+            "matched_pattern": "does not (?:specify|state|provide).*retention"
+          },
+          {
+            "concept_id": "company-not-identified",
+            "matched": true,
+            "matched_pattern": "does not (?:name|identify|specify|provide).*(?:company|third part(?:y|ies)|recipient)"
+          }
+        ],
+        "forbidden_matches": [],
+        "forbidden_violation": false,
+        "matched_concepts": 2,
+        "required_concepts": 2
+      },
+      "sizes": {
+        "prompt_chars": 17254,
+        "response_chars": 242,
+        "schema_chars": 0
+      },
+      "started_at": "2026-08-11T13:48:13.020518Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.04361145899747498,
+        "provider_seconds": 4.416773167002248,
+        "total_seconds": 4.460730791994138,
+        "validation_seconds": 0.0001340000017080456
+      }
+    },
+    {
+      "case_id": "query-unsupported",
+      "cell_id": "query-unsupported:gpt-5.6-sol:low",
+      "digests": {
+        "prompt_sha256": "581321800a115990d703613a81cb4441e1da53604c674d3441bb7b9dfe5f119f",
+        "response_sha256": "7b65743b7f02a979502624ce1385f0095b7f5de999e5e7f3999a93916ccfccf1",
+        "schema_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "effort": "low",
+      "failure": null,
+      "finished_at": "2026-08-11T13:48:27.435010Z",
+      "model": "gpt-5.6-sol",
+      "operation": "query",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "low",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "The available source does not specify an exact retention period or name any third-party company receiving medication information. It says retention follows the institution’s policies and that exact recipients depend on the information supplied.",
+      "result": {
+        "answer": "The available source does not specify an exact retention period or name any third-party company receiving medication information. It says retention follows the institution’s policies and that exact recipients depend on the information supplied."
+      },
+      "score": {
+        "concept_recall": 1.0,
+        "concepts": [
+          {
+            "concept_id": "retention-not-specified",
+            "matched": true,
+            "matched_pattern": "does not (?:specify|state|provide).*retention"
+          },
+          {
+            "concept_id": "company-not-identified",
+            "matched": true,
+            "matched_pattern": "does not (?:name|identify|specify|provide).*(?:company|third part(?:y|ies)|recipient)"
+          }
+        ],
+        "forbidden_matches": [],
+        "forbidden_violation": false,
+        "matched_concepts": 2,
+        "required_concepts": 2
+      },
+      "sizes": {
+        "prompt_chars": 17254,
+        "response_chars": 244,
+        "schema_chars": 0
+      },
+      "started_at": "2026-08-11T13:48:17.486710Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.0355460410064552,
+        "provider_seconds": 9.912538583012065,
+        "total_seconds": 9.948396041989326,
+        "validation_seconds": 0.00013520900392904878
+      }
+    },
+    {
+      "case_id": "query-unsupported",
+      "cell_id": "query-unsupported:gpt-5.6-sol:medium",
+      "digests": {
+        "prompt_sha256": "581321800a115990d703613a81cb4441e1da53604c674d3441bb7b9dfe5f119f",
+        "response_sha256": "9335752f872260977de57ba3cdd7c37c81bf034500f582b408fe4319592ba61d",
+        "schema_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "effort": "medium",
+      "failure": null,
+      "finished_at": "2026-08-11T13:48:32.122631Z",
+      "model": "gpt-5.6-sol",
+      "operation": "query",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "medium",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "The available source does not specify an exact retention period in days or name any third-party company receiving medication information. It states that retention follows the institution’s policies and that exact third parties and scope vary by the information supplied.",
+      "result": {
+        "answer": "The available source does not specify an exact retention period in days or name any third-party company receiving medication information. It states that retention follows the institution’s policies and that exact third parties and scope vary by the information supplied."
+      },
+      "score": {
+        "concept_recall": 1.0,
+        "concepts": [
+          {
+            "concept_id": "retention-not-specified",
+            "matched": true,
+            "matched_pattern": "does not (?:specify|state|provide).*retention"
+          },
+          {
+            "concept_id": "company-not-identified",
+            "matched": true,
+            "matched_pattern": "does not (?:name|identify|specify|provide).*(?:company|third part(?:y|ies)|recipient)"
+          }
+        ],
+        "forbidden_matches": [],
+        "forbidden_violation": false,
+        "matched_concepts": 2,
+        "required_concepts": 2
+      },
+      "sizes": {
+        "prompt_chars": 17254,
+        "response_chars": 270,
+        "schema_chars": 0
+      },
+      "started_at": "2026-08-11T13:48:27.440982Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.03809354201075621,
+        "provider_seconds": 4.643281249998836,
+        "total_seconds": 4.681733750010608,
+        "validation_seconds": 0.00016649998724460602
+      }
+    },
+    {
+      "case_id": "query-unsupported",
+      "cell_id": "query-unsupported:gpt-5.6-terra:none",
+      "digests": {
+        "prompt_sha256": "581321800a115990d703613a81cb4441e1da53604c674d3441bb7b9dfe5f119f",
+        "response_sha256": "eea18ce75128e1977d060ab6bd4762f641ee52e896d5048c739014d710ee4ced",
+        "schema_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "effort": "none",
+      "failure": null,
+      "finished_at": "2026-08-11T13:48:35.438317Z",
+      "model": "gpt-5.6-terra",
+      "operation": "query",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-terra",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "none",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "The available source does not specify an exact retention period in days or name any third-party company that receives medication information.",
+      "result": {
+        "answer": "The available source does not specify an exact retention period in days or name any third-party company that receives medication information."
+      },
+      "score": {
+        "concept_recall": 1.0,
+        "concepts": [
+          {
+            "concept_id": "retention-not-specified",
+            "matched": true,
+            "matched_pattern": "does not (?:specify|state|provide).*retention"
+          },
+          {
+            "concept_id": "company-not-identified",
+            "matched": true,
+            "matched_pattern": "does not (?:name|identify|specify|provide).*(?:company|third part(?:y|ies)|recipient)"
+          }
+        ],
+        "forbidden_matches": [],
+        "forbidden_violation": false,
+        "matched_concepts": 2,
+        "required_concepts": 2
+      },
+      "sizes": {
+        "prompt_chars": 17254,
+        "response_chars": 141,
+        "schema_chars": 0
+      },
+      "started_at": "2026-08-11T13:48:32.128574Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.03825229199719615,
+        "provider_seconds": 3.271278458996676,
+        "total_seconds": 3.3097954579861835,
+        "validation_seconds": 9.899999713525176e-05
+      }
+    },
+    {
+      "case_id": "query-unsupported",
+      "cell_id": "query-unsupported:gpt-5.6-terra:low",
+      "digests": {
+        "prompt_sha256": "581321800a115990d703613a81cb4441e1da53604c674d3441bb7b9dfe5f119f",
+        "response_sha256": "eea18ce75128e1977d060ab6bd4762f641ee52e896d5048c739014d710ee4ced",
+        "schema_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "effort": "low",
+      "failure": null,
+      "finished_at": "2026-08-11T13:48:38.450957Z",
+      "model": "gpt-5.6-terra",
+      "operation": "query",
+      "provider_call_count": 1,
+      "provider_identity": {
+        "endpoint": null,
+        "model": "gpt-5.6-terra",
+        "model_digest": null,
+        "provider": "codex_chatgpt",
+        "reasoning_effort": "low",
+        "runtime": "codex-cli"
+      },
+      "raw_response": "The available source does not specify an exact retention period in days or name any third-party company that receives medication information.",
+      "result": {
+        "answer": "The available source does not specify an exact retention period in days or name any third-party company that receives medication information."
+      },
+      "score": {
+        "concept_recall": 1.0,
+        "concepts": [
+          {
+            "concept_id": "retention-not-specified",
+            "matched": true,
+            "matched_pattern": "does not (?:specify|state|provide).*retention"
+          },
+          {
+            "concept_id": "company-not-identified",
+            "matched": true,
+            "matched_pattern": "does not (?:name|identify|specify|provide).*(?:company|third part(?:y|ies)|recipient)"
+          }
+        ],
+        "forbidden_matches": [],
+        "forbidden_violation": false,
+        "matched_concepts": 2,
+        "required_concepts": 2
+      },
+      "sizes": {
+        "prompt_chars": 17254,
+        "response_chars": 141,
+        "schema_chars": 0
+      },
+      "started_at": "2026-08-11T13:48:35.443886Z",
+      "status": "VALID",
+      "timing": {
+        "connection_seconds": 0.030508542025927454,
+        "provider_seconds": 2.9763176670239773,
+        "total_seconds": 3.0071432499971706,
+        "validation_seconds": 0.00012658300693146884
+      }
+    }
+  ],
+  "campaign_fingerprint": "8115b2b800c5d9a51a5de5dcaf5e9b3e7dc31193d12e066e9b85f08eabe09ce4",
+  "cases": [
+    {
+      "case_id": "find-accessibility",
+      "expect_empty_primary": false,
+      "historical_results": [
+        "local/personal-memory/2025-02/10",
+        "local/personal-memory/2024-04/03",
+        "local/personal-memory/2024-03/06",
+        "local/personal-memory/2024-04/09",
+        "local/personal-memory/2024-03/04"
+      ],
+      "label": "Stable accessibility and communication preferences",
+      "operation": "find",
+      "query": "stable current accessibility, communication, sensory, mobility, or accommodation preferences useful across healthcare interactions, excluding private event details and third-party information",
+      "study_selected": [
+        "local/personal-memory/2025-02/10",
+        "local/personal-memory/2024-04/03",
+        "local/personal-memory/2024-04/09",
+        "local/personal-memory/2024-03/04"
+      ]
+    },
+    {
+      "case_id": "find-coordination",
+      "expect_empty_primary": false,
+      "historical_results": [
+        "local/personal-memory/2025-02/10",
+        "local/personal-memory/2024-04/09",
+        "local/personal-memory/2024-09/01",
+        "local/personal-memory/2025-02/03",
+        "local/personal-memory/2024-04/03"
+      ],
+      "label": "Stable healthcare coordination preferences",
+      "operation": "find",
+      "query": "stable current healthcare coordination preferences for scheduling, reminders, preparation, language, preferred contact channel, or support logistics, excluding actual phone numbers, addresses, dates, medication details, and third-party information",
+      "study_selected": [
+        "local/personal-memory/2024-09/01",
+        "local/personal-memory/2025-02/03"
+      ]
+    },
+    {
+      "case_id": "find-unsupported",
+      "expect_empty_primary": true,
+      "historical_results": [],
+      "label": "Unsupported blood-type and hospital lookup",
+      "operation": "find",
+      "query": "the user's blood type and the name of the hospital that diagnosed it",
+      "study_selected": []
+    },
+    {
+      "case_id": "query-synthesis",
+      "concepts": [
+        {
+          "concept_id": "consent-unit",
+          "patterns": [
+            "all (?:the )?(?:content|information).*(?:send|sent).*(?:one|single).*consent",
+            "one (?:submitted )?unit.*consent"
+          ]
+        },
+        {
+          "concept_id": "healthcare-third-parties",
+          "patterns": [
+            "third part(?:y|ies).*healthcare",
+            "healthcare.*third part(?:y|ies)"
+          ]
+        },
+        {
+          "concept_id": "service-improvement",
+          "patterns": [
+            "service improvement"
+          ]
+        },
+        {
+          "concept_id": "scope-varies",
+          "patterns": [
+            "exact (?:services|recipients|scope).*(?:var(?:y|ies)|depend|not (?:specified|identified|known)|cannot be identified)",
+            "depend.*type of information",
+            "cannot identify.*exact (?:services|recipients|scope)"
+          ]
+        },
+        {
+          "concept_id": "institution-retention",
+          "patterns": [
+            "institution.*(?:retention|audit)",
+            "(?:retention|audit).*institution"
+          ]
+        },
+        {
+          "concept_id": "agent-boundary",
+          "patterns": [
+            "agent cannot.*(?:select|modify|transmit|delete|control)",
+            "cannot.*(?:select|modify|transmit|delete).*information"
+          ]
+        }
+      ],
+      "forbidden_patterns": [],
+      "label": "Multi-fact transmission-boundary synthesis",
+      "operation": "query",
+      "question": "When I actually send information through the government healthcare institution system's transmission screen, what counts as consent, who may receive it, what may it be used for, who controls retention or deletion, and what can this Q&A agent not do?"
+    },
+    {
+      "case_id": "query-narrow",
+      "concepts": [
+        {
+          "concept_id": "mention-does-not-send",
+          "patterns": [
+            "merely mentioning.*(?:does not|doesn't|won't).*(?:send|submit|transmit)",
+            "mentioning.*not.*(?:send|submit|transmit)"
+          ]
+        },
+        {
+          "concept_id": "transmission-screen-boundary",
+          "patterns": [
+            "only.*(?:actually )?sent.*transmission screen",
+            "only.*(?:actually )?submitted.*transmission screen",
+            "transmission screen.*(?:counts|constitutes|consent)"
+          ]
+        },
+        {
+          "concept_id": "mention-does-not-delete",
+          "patterns": [
+            "mentioning.*(?:does not|doesn't|won't).*delet",
+            "agent cannot.*delet",
+            "not.*physically delet"
+          ]
+        }
+      ],
+      "forbidden_patterns": [],
+      "label": "Narrow mention-versus-transmission boundary",
+      "operation": "query",
+      "question": "Does merely mentioning personal Memory content in this conversation send it to the institution or delete it?"
+    },
+    {
+      "case_id": "query-unsupported",
+      "concepts": [
+        {
+          "concept_id": "retention-not-specified",
+          "patterns": [
+            "retention (?:period|duration).*(?:not (?:specified|provided|stated|identified)|does not (?:specify|state)|cannot (?:determine|answer))",
+            "(?:not (?:specified|provided|stated)|cannot (?:determine|answer)).*retention",
+            "does not (?:specify|state|provide).*retention"
+          ]
+        },
+        {
+          "concept_id": "company-not-identified",
+          "patterns": [
+            "(?:company|third part(?:y|ies)|recipient).*(?:not (?:named|specified|identified|provided)|does not (?:name|identify)|cannot (?:determine|identify|answer))",
+            "(?:not (?:named|specified|identified)|cannot (?:determine|identify|answer)).*(?:company|third part(?:y|ies)|recipient)",
+            "does not (?:name|identify|specify|provide).*(?:company|third part(?:y|ies)|recipient)"
+          ]
+        }
+      ],
+      "forbidden_patterns": [
+        "\\b\\d+\\s+days?\\b"
+      ],
+      "label": "Unsupported exact retention and recipient details",
+      "operation": "query",
+      "question": "What is the exact retention period in days, and which named third-party company receives medication information?"
+    }
+  ],
+  "conditions": [
+    {
+      "effort": "none",
+      "model": "gpt-5.6-sol"
+    },
+    {
+      "effort": "low",
+      "model": "gpt-5.6-sol"
+    },
+    {
+      "effort": "medium",
+      "model": "gpt-5.6-sol"
+    },
+    {
+      "effort": "none",
+      "model": "gpt-5.6-terra"
+    },
+    {
+      "effort": "low",
+      "model": "gpt-5.6-terra"
+    },
+    {
+      "effort": "medium",
+      "model": "gpt-5.6-terra"
+    },
+    {
+      "effort": "none",
+      "model": "gpt-5.6-luna"
+    },
+    {
+      "effort": "low",
+      "model": "gpt-5.6-luna"
+    },
+    {
+      "effort": "medium",
+      "model": "gpt-5.6-luna"
+    }
+  ],
+  "corpora": {
+    "find": {
+      "dataset": "task3-personal-memory",
+      "records": 300,
+      "sha256": "88f31149a429231e408854181be0897707d8373f2fe3ce0e99372534fcee97e9"
+    },
+    "query": {
+      "dataset": "task3-healthcare-qna",
+      "records": 75,
+      "sha256": "3f267f053bb4436cae0e44bd074da765fa3dd316dd2cfd4c049ea31edd09ddd3"
+    }
+  },
+  "finished_at": "2026-08-11T13:48:38.457176Z",
+  "kind": "find-query-provider-matrix",
+  "rescored_at": "2026-08-11T13:51:05.532690Z",
+  "rescoring_note": "Scoring probes were broadened after raw-answer audit; prompts, provider outputs, statuses, and timings are unchanged.",
+  "schedule": [
+    {
+      "case_id": "find-accessibility",
+      "cell_id": "find-accessibility:gpt-5.6-sol:none",
+      "effort": "none",
+      "model": "gpt-5.6-sol",
+      "operation": "find"
+    },
+    {
+      "case_id": "find-accessibility",
+      "cell_id": "find-accessibility:gpt-5.6-sol:low",
+      "effort": "low",
+      "model": "gpt-5.6-sol",
+      "operation": "find"
+    },
+    {
+      "case_id": "find-accessibility",
+      "cell_id": "find-accessibility:gpt-5.6-sol:medium",
+      "effort": "medium",
+      "model": "gpt-5.6-sol",
+      "operation": "find"
+    },
+    {
+      "case_id": "find-accessibility",
+      "cell_id": "find-accessibility:gpt-5.6-terra:none",
+      "effort": "none",
+      "model": "gpt-5.6-terra",
+      "operation": "find"
+    },
+    {
+      "case_id": "find-accessibility",
+      "cell_id": "find-accessibility:gpt-5.6-terra:low",
+      "effort": "low",
+      "model": "gpt-5.6-terra",
+      "operation": "find"
+    },
+    {
+      "case_id": "find-accessibility",
+      "cell_id": "find-accessibility:gpt-5.6-terra:medium",
+      "effort": "medium",
+      "model": "gpt-5.6-terra",
+      "operation": "find"
+    },
+    {
+      "case_id": "find-accessibility",
+      "cell_id": "find-accessibility:gpt-5.6-luna:none",
+      "effort": "none",
+      "model": "gpt-5.6-luna",
+      "operation": "find"
+    },
+    {
+      "case_id": "find-accessibility",
+      "cell_id": "find-accessibility:gpt-5.6-luna:low",
+      "effort": "low",
+      "model": "gpt-5.6-luna",
+      "operation": "find"
+    },
+    {
+      "case_id": "find-accessibility",
+      "cell_id": "find-accessibility:gpt-5.6-luna:medium",
+      "effort": "medium",
+      "model": "gpt-5.6-luna",
+      "operation": "find"
+    },
+    {
+      "case_id": "find-coordination",
+      "cell_id": "find-coordination:gpt-5.6-sol:low",
+      "effort": "low",
+      "model": "gpt-5.6-sol",
+      "operation": "find"
+    },
+    {
+      "case_id": "find-coordination",
+      "cell_id": "find-coordination:gpt-5.6-sol:medium",
+      "effort": "medium",
+      "model": "gpt-5.6-sol",
+      "operation": "find"
+    },
+    {
+      "case_id": "find-coordination",
+      "cell_id": "find-coordination:gpt-5.6-terra:none",
+      "effort": "none",
+      "model": "gpt-5.6-terra",
+      "operation": "find"
+    },
+    {
+      "case_id": "find-coordination",
+      "cell_id": "find-coordination:gpt-5.6-terra:low",
+      "effort": "low",
+      "model": "gpt-5.6-terra",
+      "operation": "find"
+    },
+    {
+      "case_id": "find-coordination",
+      "cell_id": "find-coordination:gpt-5.6-terra:medium",
+      "effort": "medium",
+      "model": "gpt-5.6-terra",
+      "operation": "find"
+    },
+    {
+      "case_id": "find-coordination",
+      "cell_id": "find-coordination:gpt-5.6-luna:none",
+      "effort": "none",
+      "model": "gpt-5.6-luna",
+      "operation": "find"
+    },
+    {
+      "case_id": "find-coordination",
+      "cell_id": "find-coordination:gpt-5.6-luna:low",
+      "effort": "low",
+      "model": "gpt-5.6-luna",
+      "operation": "find"
+    },
+    {
+      "case_id": "find-coordination",
+      "cell_id": "find-coordination:gpt-5.6-luna:medium",
+      "effort": "medium",
+      "model": "gpt-5.6-luna",
+      "operation": "find"
+    },
+    {
+      "case_id": "find-coordination",
+      "cell_id": "find-coordination:gpt-5.6-sol:none",
+      "effort": "none",
+      "model": "gpt-5.6-sol",
+      "operation": "find"
+    },
+    {
+      "case_id": "find-unsupported",
+      "cell_id": "find-unsupported:gpt-5.6-sol:medium",
+      "effort": "medium",
+      "model": "gpt-5.6-sol",
+      "operation": "find"
+    },
+    {
+      "case_id": "find-unsupported",
+      "cell_id": "find-unsupported:gpt-5.6-terra:none",
+      "effort": "none",
+      "model": "gpt-5.6-terra",
+      "operation": "find"
+    },
+    {
+      "case_id": "find-unsupported",
+      "cell_id": "find-unsupported:gpt-5.6-terra:low",
+      "effort": "low",
+      "model": "gpt-5.6-terra",
+      "operation": "find"
+    },
+    {
+      "case_id": "find-unsupported",
+      "cell_id": "find-unsupported:gpt-5.6-terra:medium",
+      "effort": "medium",
+      "model": "gpt-5.6-terra",
+      "operation": "find"
+    },
+    {
+      "case_id": "find-unsupported",
+      "cell_id": "find-unsupported:gpt-5.6-luna:none",
+      "effort": "none",
+      "model": "gpt-5.6-luna",
+      "operation": "find"
+    },
+    {
+      "case_id": "find-unsupported",
+      "cell_id": "find-unsupported:gpt-5.6-luna:low",
+      "effort": "low",
+      "model": "gpt-5.6-luna",
+      "operation": "find"
+    },
+    {
+      "case_id": "find-unsupported",
+      "cell_id": "find-unsupported:gpt-5.6-luna:medium",
+      "effort": "medium",
+      "model": "gpt-5.6-luna",
+      "operation": "find"
+    },
+    {
+      "case_id": "find-unsupported",
+      "cell_id": "find-unsupported:gpt-5.6-sol:none",
+      "effort": "none",
+      "model": "gpt-5.6-sol",
+      "operation": "find"
+    },
+    {
+      "case_id": "find-unsupported",
+      "cell_id": "find-unsupported:gpt-5.6-sol:low",
+      "effort": "low",
+      "model": "gpt-5.6-sol",
+      "operation": "find"
+    },
+    {
+      "case_id": "query-synthesis",
+      "cell_id": "query-synthesis:gpt-5.6-terra:none",
+      "effort": "none",
+      "model": "gpt-5.6-terra",
+      "operation": "query"
+    },
+    {
+      "case_id": "query-synthesis",
+      "cell_id": "query-synthesis:gpt-5.6-terra:low",
+      "effort": "low",
+      "model": "gpt-5.6-terra",
+      "operation": "query"
+    },
+    {
+      "case_id": "query-synthesis",
+      "cell_id": "query-synthesis:gpt-5.6-terra:medium",
+      "effort": "medium",
+      "model": "gpt-5.6-terra",
+      "operation": "query"
+    },
+    {
+      "case_id": "query-synthesis",
+      "cell_id": "query-synthesis:gpt-5.6-luna:none",
+      "effort": "none",
+      "model": "gpt-5.6-luna",
+      "operation": "query"
+    },
+    {
+      "case_id": "query-synthesis",
+      "cell_id": "query-synthesis:gpt-5.6-luna:low",
+      "effort": "low",
+      "model": "gpt-5.6-luna",
+      "operation": "query"
+    },
+    {
+      "case_id": "query-synthesis",
+      "cell_id": "query-synthesis:gpt-5.6-luna:medium",
+      "effort": "medium",
+      "model": "gpt-5.6-luna",
+      "operation": "query"
+    },
+    {
+      "case_id": "query-synthesis",
+      "cell_id": "query-synthesis:gpt-5.6-sol:none",
+      "effort": "none",
+      "model": "gpt-5.6-sol",
+      "operation": "query"
+    },
+    {
+      "case_id": "query-synthesis",
+      "cell_id": "query-synthesis:gpt-5.6-sol:low",
+      "effort": "low",
+      "model": "gpt-5.6-sol",
+      "operation": "query"
+    },
+    {
+      "case_id": "query-synthesis",
+      "cell_id": "query-synthesis:gpt-5.6-sol:medium",
+      "effort": "medium",
+      "model": "gpt-5.6-sol",
+      "operation": "query"
+    },
+    {
+      "case_id": "query-narrow",
+      "cell_id": "query-narrow:gpt-5.6-terra:low",
+      "effort": "low",
+      "model": "gpt-5.6-terra",
+      "operation": "query"
+    },
+    {
+      "case_id": "query-narrow",
+      "cell_id": "query-narrow:gpt-5.6-terra:medium",
+      "effort": "medium",
+      "model": "gpt-5.6-terra",
+      "operation": "query"
+    },
+    {
+      "case_id": "query-narrow",
+      "cell_id": "query-narrow:gpt-5.6-luna:none",
+      "effort": "none",
+      "model": "gpt-5.6-luna",
+      "operation": "query"
+    },
+    {
+      "case_id": "query-narrow",
+      "cell_id": "query-narrow:gpt-5.6-luna:low",
+      "effort": "low",
+      "model": "gpt-5.6-luna",
+      "operation": "query"
+    },
+    {
+      "case_id": "query-narrow",
+      "cell_id": "query-narrow:gpt-5.6-luna:medium",
+      "effort": "medium",
+      "model": "gpt-5.6-luna",
+      "operation": "query"
+    },
+    {
+      "case_id": "query-narrow",
+      "cell_id": "query-narrow:gpt-5.6-sol:none",
+      "effort": "none",
+      "model": "gpt-5.6-sol",
+      "operation": "query"
+    },
+    {
+      "case_id": "query-narrow",
+      "cell_id": "query-narrow:gpt-5.6-sol:low",
+      "effort": "low",
+      "model": "gpt-5.6-sol",
+      "operation": "query"
+    },
+    {
+      "case_id": "query-narrow",
+      "cell_id": "query-narrow:gpt-5.6-sol:medium",
+      "effort": "medium",
+      "model": "gpt-5.6-sol",
+      "operation": "query"
+    },
+    {
+      "case_id": "query-narrow",
+      "cell_id": "query-narrow:gpt-5.6-terra:none",
+      "effort": "none",
+      "model": "gpt-5.6-terra",
+      "operation": "query"
+    },
+    {
+      "case_id": "query-unsupported",
+      "cell_id": "query-unsupported:gpt-5.6-terra:medium",
+      "effort": "medium",
+      "model": "gpt-5.6-terra",
+      "operation": "query"
+    },
+    {
+      "case_id": "query-unsupported",
+      "cell_id": "query-unsupported:gpt-5.6-luna:none",
+      "effort": "none",
+      "model": "gpt-5.6-luna",
+      "operation": "query"
+    },
+    {
+      "case_id": "query-unsupported",
+      "cell_id": "query-unsupported:gpt-5.6-luna:low",
+      "effort": "low",
+      "model": "gpt-5.6-luna",
+      "operation": "query"
+    },
+    {
+      "case_id": "query-unsupported",
+      "cell_id": "query-unsupported:gpt-5.6-luna:medium",
+      "effort": "medium",
+      "model": "gpt-5.6-luna",
+      "operation": "query"
+    },
+    {
+      "case_id": "query-unsupported",
+      "cell_id": "query-unsupported:gpt-5.6-sol:none",
+      "effort": "none",
+      "model": "gpt-5.6-sol",
+      "operation": "query"
+    },
+    {
+      "case_id": "query-unsupported",
+      "cell_id": "query-unsupported:gpt-5.6-sol:low",
+      "effort": "low",
+      "model": "gpt-5.6-sol",
+      "operation": "query"
+    },
+    {
+      "case_id": "query-unsupported",
+      "cell_id": "query-unsupported:gpt-5.6-sol:medium",
+      "effort": "medium",
+      "model": "gpt-5.6-sol",
+      "operation": "query"
+    },
+    {
+      "case_id": "query-unsupported",
+      "cell_id": "query-unsupported:gpt-5.6-terra:none",
+      "effort": "none",
+      "model": "gpt-5.6-terra",
+      "operation": "query"
+    },
+    {
+      "case_id": "query-unsupported",
+      "cell_id": "query-unsupported:gpt-5.6-terra:low",
+      "effort": "low",
+      "model": "gpt-5.6-terra",
+      "operation": "query"
+    }
+  ],
+  "started_at": "2026-08-11T13:42:38.301799Z",
+  "status": "COMPLETED",
+  "summary": {
+    "attempts": 54,
+    "by_condition": {
+      "gpt-5.6-luna:low": {
+        "attempts": 6,
+        "find_historical_recall_mean": 0.6000000000000001,
+        "find_provider_seconds_max": 12.005357290996471,
+        "find_provider_seconds_median": 9.143918250018032,
+        "find_study_selected_recall_mean": 0.375,
+        "find_unsupported_empty_primary": true,
+        "invalid_response": 0,
+        "provider_error": 0,
+        "provider_seconds_max": 12.005357290996471,
+        "provider_seconds_median": 5.2688112080068095,
+        "query_concept_recall_mean": 0.8888888888888888,
+        "query_concept_recall_min": 0.6666666666666666,
+        "query_forbidden_violations": 0,
+        "query_provider_seconds_max": 6.321738958009519,
+        "query_provider_seconds_median": 3.214211417012848,
+        "valid": 6
+      },
+      "gpt-5.6-luna:medium": {
+        "attempts": 6,
+        "find_historical_recall_mean": 0.6,
+        "find_provider_seconds_max": 14.991928832983831,
+        "find_provider_seconds_median": 12.056265042017912,
+        "find_study_selected_recall_mean": 0.25,
+        "find_unsupported_empty_primary": true,
+        "invalid_response": 0,
+        "provider_error": 0,
+        "provider_seconds_max": 14.991928832983831,
+        "provider_seconds_median": 4.987744791491423,
+        "query_concept_recall_mean": 0.8888888888888888,
+        "query_concept_recall_min": 0.6666666666666666,
+        "query_forbidden_violations": 0,
+        "query_provider_seconds_max": 5.86432787499507,
+        "query_provider_seconds_median": 4.111161707987776,
+        "valid": 6
+      },
+      "gpt-5.6-luna:none": {
+        "attempts": 6,
+        "find_historical_recall_mean": 0.2,
+        "find_provider_seconds_max": 5.482550083019305,
+        "find_provider_seconds_median": 3.927498167002341,
+        "find_study_selected_recall_mean": 0.25,
+        "find_unsupported_empty_primary": true,
+        "invalid_response": 0,
+        "provider_error": 0,
+        "provider_seconds_max": 6.997369083983358,
+        "provider_seconds_median": 3.7452334794943454,
+        "query_concept_recall_mean": 0.8888888888888888,
+        "query_concept_recall_min": 0.6666666666666666,
+        "query_forbidden_violations": 0,
+        "query_provider_seconds_max": 6.997369083983358,
+        "query_provider_seconds_median": 3.55224933399586,
+        "valid": 6
+      },
+      "gpt-5.6-sol:low": {
+        "attempts": 6,
+        "find_historical_recall_mean": 0.6,
+        "find_provider_seconds_max": 15.67067125000176,
+        "find_provider_seconds_median": 11.681498624995584,
+        "find_study_selected_recall_mean": 0.5,
+        "find_unsupported_empty_primary": true,
+        "invalid_response": 0,
+        "provider_error": 0,
+        "provider_seconds_max": 15.67067125000176,
+        "provider_seconds_median": 9.108476000008523,
+        "query_concept_recall_mean": 1.0,
+        "query_concept_recall_min": 1.0,
+        "query_forbidden_violations": 0,
+        "query_provider_seconds_max": 9.912538583012065,
+        "query_provider_seconds_median": 8.30441341700498,
+        "valid": 6
+      },
+      "gpt-5.6-sol:medium": {
+        "attempts": 6,
+        "find_historical_recall_mean": 0.8,
+        "find_provider_seconds_max": 15.578707665990805,
+        "find_provider_seconds_median": 15.16119520898792,
+        "find_study_selected_recall_mean": 0.5,
+        "find_unsupported_empty_primary": true,
+        "invalid_response": 0,
+        "provider_error": 0,
+        "provider_seconds_max": 15.578707665990805,
+        "provider_seconds_median": 8.574586791495676,
+        "query_concept_recall_mean": 1.0,
+        "query_concept_recall_min": 1.0,
+        "query_forbidden_violations": 0,
+        "query_provider_seconds_max": 9.033991832984611,
+        "query_provider_seconds_median": 7.048985125002218,
+        "valid": 6
+      },
+      "gpt-5.6-sol:none": {
+        "attempts": 6,
+        "find_historical_recall_mean": 0.6000000000000001,
+        "find_provider_seconds_max": 5.722397875011666,
+        "find_provider_seconds_median": 4.936041291017318,
+        "find_study_selected_recall_mean": 0.375,
+        "find_unsupported_empty_primary": true,
+        "invalid_response": 0,
+        "provider_error": 0,
+        "provider_seconds_max": 6.7487547080090735,
+        "provider_seconds_median": 5.329219583014492,
+        "query_concept_recall_mean": 1.0,
+        "query_concept_recall_min": 1.0,
+        "query_forbidden_violations": 0,
+        "query_provider_seconds_max": 6.7487547080090735,
+        "query_provider_seconds_median": 6.159465959004592,
+        "valid": 6
+      },
+      "gpt-5.6-terra:low": {
+        "attempts": 6,
+        "find_historical_recall_mean": 0.8,
+        "find_provider_seconds_max": 8.572766833996866,
+        "find_provider_seconds_median": 7.698832666996168,
+        "find_study_selected_recall_mean": 0.625,
+        "find_unsupported_empty_primary": true,
+        "invalid_response": 0,
+        "provider_error": 0,
+        "provider_seconds_max": 8.572766833996866,
+        "provider_seconds_median": 6.64250806250493,
+        "query_concept_recall_mean": 1.0,
+        "query_concept_recall_min": 1.0,
+        "query_forbidden_violations": 0,
+        "query_provider_seconds_max": 7.5641468329995405,
+        "query_provider_seconds_median": 4.926915041985922,
+        "valid": 6
+      },
+      "gpt-5.6-terra:medium": {
+        "attempts": 6,
+        "find_historical_recall_mean": 0.7,
+        "find_provider_seconds_max": 10.561580791982124,
+        "find_provider_seconds_median": 8.880549875000725,
+        "find_study_selected_recall_mean": 0.5,
+        "find_unsupported_empty_primary": true,
+        "invalid_response": 0,
+        "provider_error": 0,
+        "provider_seconds_max": 10.561580791982124,
+        "provider_seconds_median": 5.504111291505978,
+        "query_concept_recall_mean": 1.0,
+        "query_concept_recall_min": 1.0,
+        "query_forbidden_violations": 0,
+        "query_provider_seconds_max": 6.018355917010922,
+        "query_provider_seconds_median": 4.989866666001035,
+        "valid": 6
+      },
+      "gpt-5.6-terra:none": {
+        "attempts": 6,
+        "find_historical_recall_mean": 0.7,
+        "find_provider_seconds_max": 4.802061375026824,
+        "find_provider_seconds_median": 4.010138499987079,
+        "find_study_selected_recall_mean": 0.375,
+        "find_unsupported_empty_primary": true,
+        "invalid_response": 0,
+        "provider_error": 0,
+        "provider_seconds_max": 5.687989250000101,
+        "provider_seconds_median": 4.221369562481414,
+        "query_concept_recall_mean": 1.0,
+        "query_concept_recall_min": 1.0,
+        "query_forbidden_violations": 0,
+        "query_provider_seconds_max": 5.687989250000101,
+        "query_provider_seconds_median": 4.432600624975748,
+        "valid": 6
+      }
+    },
+    "invalid_response": 0,
+    "provider_error": 0,
+    "valid": 54
+  },
+  "timeout_seconds": 600.0,
+  "updated_at": "2026-08-11T13:51:05.532559Z",
+  "version": 2
+}

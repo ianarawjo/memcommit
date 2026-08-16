@@ -1,0 +1,406 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:51:13.797498+00:00",
+      "frames": [
+        {
+          "context_digest": "43b741cd1df20a084f3517aec7f886d4e5022812f0536eb126a6caf2d5570489",
+          "context_name": "task-3/local/personal-memory/2025/05",
+          "context_uid": "1f913bb6-790c-5490-a20d-127c7aab5892",
+          "memories": [
+            {
+              "content": "The user keeps two potted herbs beside a south-facing window.",
+              "content_digest": "b79056c033f208bb02b99fef1c011e5537e2ea8c19c3894863c3a5ad56054e08",
+              "position": 0,
+              "uid": "cb09b8ab-c7c4-51bb-a227-039c7cdfae5d"
+            },
+            {
+              "content": "During a week when the user watered every day based only on the soil surface, the leaves of one plant turned yellow.",
+              "content_digest": "042f4be9fd5481a7252d1c0065e95085e11e81e475531afe45b9f1d268d4c5b4",
+              "position": 1,
+              "uid": "95978183-0070-5b12-b117-be39bb343a5e"
+            },
+            {
+              "content": "During a week when the user checked below the soil surface with a finger before watering, the plant grew new leaves.",
+              "content_digest": "06ca2ec53f03677fdfd78bb1d391f197d3f49b974f6e812f25ba49ce34f74249",
+              "position": 2,
+              "uid": "8c610ce5-1eb7-52e5-ad81-e8062d23cd19"
+            },
+            {
+              "content": "On a day the user left the window open for a long time, strong wind knocked over one pot.",
+              "content_digest": "914f67a75fdf73cee064a465a9f0e6ee9ba012f1a40c614e199a9354756203a8",
+              "position": 3,
+              "uid": "3f886c0c-071b-5f2d-adad-da01345d702f"
+            },
+            {
+              "content": "The next day, the user moved the pot inward from the windowsill so the same wind would not knock it over.",
+              "content_digest": "f190916b360b6543865ced49cf5d9a987e96c9147966181e5920342bb41ba50c",
+              "position": 4,
+              "uid": "afe855b8-f5ad-559c-a63f-6f655ba371a2"
+            },
+            {
+              "content": "The user put a plant-name label in a small pot received from their maternal aunt.",
+              "content_digest": "82284f0102305db41eaaecafe86bc05833090853320f2ebb8e5f44abb2d78a63",
+              "position": 5,
+              "uid": "384c4f5f-b15c-5742-ac79-20106d0dd30b"
+            },
+            {
+              "content": "The user confused the care instructions for an unlabeled pot with those for another plant.",
+              "content_digest": "824267db866253690527d5ab08166f4228401443ed903708d33ac22542811750",
+              "position": 6,
+              "uid": "48dc89af-ed9d-51a5-a4b1-b809fd818143"
+            },
+            {
+              "content": "The user's maternal aunt considers understanding the sunlight at a pot's location more important than watering frequency when caring for it.",
+              "content_digest": "8a24f6df4a58db3e538f77e572a3cf152b7a4aff3527ec3d8616e85a675bc7c0",
+              "position": 7,
+              "uid": "a2426820-65d6-5c78-ac50-0f32b366ae47"
+            },
+            {
+              "content": "Before creating a plant-care reminder, check each plant's name and most recent watering date.",
+              "content_digest": "ecd7ef911951f3c2383cd916a4efbd94bdf439f63de1687c2f637a161ac8a60d",
+              "position": 8,
+              "uid": "efd51196-ed48-5699-a0f4-c5b8e149d11c"
+            },
+            {
+              "content": "The soil in the user's potted herbs beside the south-facing window dries at different rates depending on the season and amount of sunlight.",
+              "content_digest": "f716b16e802d30d4c2d1ed4bff855812682e53a9fc4e29988e2662ae321d0a4f",
+              "position": 9,
+              "uid": "4c93eeff-566e-5a1a-afb9-035c97fb9c73"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "4499a2f4-588b-48a5-9d16-77acfabaa447"
+        },
+        {
+          "context_digest": "1d47d83944d91bc0316a61894412e9b4361758603b9532687cf68473f1d30198",
+          "context_name": "task-3/local/personal-memory/2026/01",
+          "context_uid": "e48e6eac-20f7-599d-9f76-4238bd9dd96d",
+          "memories": [
+            {
+              "content": "The user keeps gloves and scarves in a basket inside the entrance.",
+              "content_digest": "df54c52cb6bc89e2e66c747df9807c6892db272c2a23ac5ac91e3f64aaa2a5da",
+              "position": 0,
+              "uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409"
+            },
+            {
+              "content": "On a day the user could not find their gloves, they walked with their hands in their pockets and missed the bus.",
+              "content_digest": "d4205aee5fe3f2c18adc3622930cc7f74de231de9812ca594dbd95a0af7199ff",
+              "position": 1,
+              "uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5"
+            },
+            {
+              "content": "Before the next outing, the user put the gloves in the entrance basket the night before and left on time.",
+              "content_digest": "23a7026d7d1a7edd3278e7b8aa147ef0d315059663f78da5498ad6c1b4a5407c",
+              "position": 2,
+              "uid": "a11f0943-8ee1-5305-87fb-64982fb36f82"
+            },
+            {
+              "content": "On a snowy day, the user chose a shorter route but turned back at stairs that had not been cleared of snow.",
+              "content_digest": "e9e241d2bc4d7c2fa9a44471aa6d1c16d42d50fe2ed99ccfb50713107714be9b",
+              "position": 3,
+              "uid": "f623f245-cdd5-5080-8869-b52cf2914076"
+            },
+            {
+              "content": "The next day, the user took a cleared sidewalk along the main road and avoided slippery sections.",
+              "content_digest": "62c8ec8b38778e9922cf433af4ceb4d59f60bee52dc758e3b88bb1163637f108",
+              "position": 4,
+              "uid": "17ac56f1-1302-5350-99d5-b95ef7feb768"
+            },
+            {
+              "content": "The user fell asleep with the heat turned up, became too warm before dawn, and woke twice.",
+              "content_digest": "912dbbc88a0f4a174b714a794793781f4d2f6c889f73cd7f825338addcab5d6c",
+              "position": 5,
+              "uid": "96988fa9-44b1-511e-8c99-4372f902cfe3"
+            },
+            {
+              "content": "The next night, the user turned down the heat and used one additional thin blanket.",
+              "content_digest": "3d12a4609d4731ebe71bacc841c979ac3497553238c3b5c2191842bbf075ba89",
+              "position": 6,
+              "uid": "b628acaa-50da-552c-8665-244dc4ab8263"
+            },
+            {
+              "content": "On a morning with heavy snow, the user's father expects the user will worry about road conditions and sends a text before departure.",
+              "content_digest": "dcd6bcb23bee46e49813bb14dd8dcb91983d5830f0536d7f23fcdb3a8af0667c",
+              "position": 7,
+              "uid": "08dfb937-7b28-55b5-801c-c0da00cbd414"
+            },
+            {
+              "content": "Before proposing a winter travel route, check recent snow-clearing conditions and accessible entrances.",
+              "content_digest": "dcab87102a9979c51dd369d5ba5ed00b7445c8ccd14450edcb8bec7859689606",
+              "position": 8,
+              "uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d"
+            },
+            {
+              "content": "The local agent cannot know the actual condition of the sidewalk the user will take from a weather forecast alone.",
+              "content_digest": "6b4bcc2f2f508f130c047ff677cadae0eae5b4cc5e5dd6bb3a1fb3784d7793b1",
+              "position": 9,
+              "uid": "802c4031-57de-592a-9bc8-6ee3d54921c8"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "a215f6c9-a3f6-4858-86bd-35b31300c56a"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate practical domains: indoor herb care and winter routines. No claims govern the same operational decision, and neither frame contradicts or qualifies the other; each contributes independently useful observations, adaptations, contextual beliefs, and pre-action checks.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4499a2f4-588b-48a5-9d16-77acfabaa447",
+              "memory_uid": "cb09b8ab-c7c4-51bb-a227-039c7cdfae5d"
+            }
+          ],
+          "reason": "This independently useful plant-location context has no counterpart governing the same matter in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user keeps two potted herbs by a south-facing window.",
+          "uid": "3fe13741-ef48-5517-ba24-bb269bec806c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4499a2f4-588b-48a5-9d16-77acfabaa447",
+              "memory_uid": "95978183-0070-5b12-b117-be39bb343a5e"
+            },
+            {
+              "frame_uid": "4499a2f4-588b-48a5-9d16-77acfabaa447",
+              "memory_uid": "8c610ce5-1eb7-52e5-ad81-e8062d23cd19"
+            }
+          ],
+          "reason": "These observations jointly express one plant-watering evidence pattern absent from the winter-routine frame.",
+          "status": "RESOLVED",
+          "summary": "Observed plant outcomes differed between daily surface-based watering and checking below the soil surface before watering.",
+          "uid": "9329e7ac-4d80-5be8-82f0-347a2459cc06"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4499a2f4-588b-48a5-9d16-77acfabaa447",
+              "memory_uid": "3f886c0c-071b-5f2d-adad-da01345d702f"
+            },
+            {
+              "frame_uid": "4499a2f4-588b-48a5-9d16-77acfabaa447",
+              "memory_uid": "afe855b8-f5ad-559c-a63f-6f655ba371a2"
+            }
+          ],
+          "reason": "The incident and response form one plant-placement mitigation claim with no operational counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "After open-window wind knocked over a pot, the user moved it inward to prevent recurrence.",
+          "uid": "234b6c91-1ea9-5940-8a7a-d138d1dad8eb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4499a2f4-588b-48a5-9d16-77acfabaa447",
+              "memory_uid": "384c4f5f-b15c-5742-ac79-20106d0dd30b"
+            }
+          ],
+          "reason": "This pot identity and provenance detail is independently useful and unmatched in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user labeled a small pot received from their maternal aunt.",
+          "uid": "01e79fe2-89ff-5dfb-bea6-dc67127ec989"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4499a2f4-588b-48a5-9d16-77acfabaa447",
+              "memory_uid": "48dc89af-ed9d-51a5-a4b1-b809fd818143"
+            }
+          ],
+          "reason": "This identification-related care error has no counterpart addressing the same operational decision.",
+          "status": "RESOLVED",
+          "summary": "An unlabeled pot caused the user to confuse its care instructions with another plant’s.",
+          "uid": "9db4a593-4480-5222-916d-ccb4b063696d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4499a2f4-588b-48a5-9d16-77acfabaa447",
+              "memory_uid": "a2426820-65d6-5c78-ac50-0f32b366ae47"
+            }
+          ],
+          "reason": "This attributed plant-care priority is one-sided and independently useful.",
+          "status": "RESOLVED",
+          "summary": "The user’s maternal aunt prioritizes understanding location-specific sunlight over watering frequency for plant care.",
+          "uid": "bb43e93f-755c-56c5-a189-969753fa620f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4499a2f4-588b-48a5-9d16-77acfabaa447",
+              "memory_uid": "efd51196-ed48-5699-a0f4-c5b8e149d11c"
+            }
+          ],
+          "reason": "This explicit reminder prerequisite addresses a plant-care workflow absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Plant-care reminders should be preceded by checking each plant’s name and latest watering date.",
+          "uid": "8c637eac-fa4e-553f-97c0-c51f101e06fd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "4499a2f4-588b-48a5-9d16-77acfabaa447",
+              "memory_uid": "4c93eeff-566e-5a1a-afb9-035c97fb9c73"
+            }
+          ],
+          "reason": "This environmental plant-care constraint has no same-decision counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The herbs’ soil dries at rates that vary with season and sunlight.",
+          "uid": "56585ea6-c638-5809-ae12-a36bc9ebaac4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a215f6c9-a3f6-4858-86bd-35b31300c56a",
+              "memory_uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409"
+            }
+          ],
+          "reason": "This winter-item storage arrangement is independently useful and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user stores gloves and scarves in an entrance basket.",
+          "uid": "5c10cebe-589a-576e-a942-59e9e807c142"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a215f6c9-a3f6-4858-86bd-35b31300c56a",
+              "memory_uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5"
+            },
+            {
+              "frame_uid": "a215f6c9-a3f6-4858-86bd-35b31300c56a",
+              "memory_uid": "a11f0943-8ee1-5305-87fb-64982fb36f82"
+            }
+          ],
+          "reason": "The problem and corrective preparation form one winter-departure claim with no operational counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "After missing a bus when gloves were unavailable, the user staged them in the entrance basket the night before and subsequently left on time.",
+          "uid": "46e6da01-958e-5053-8083-8460a8e3b2db"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a215f6c9-a3f6-4858-86bd-35b31300c56a",
+              "memory_uid": "f623f245-cdd5-5080-8869-b52cf2914076"
+            },
+            {
+              "frame_uid": "a215f6c9-a3f6-4858-86bd-35b31300c56a",
+              "memory_uid": "17ac56f1-1302-5350-99d5-b95ef7feb768"
+            }
+          ],
+          "reason": "The route failure and subsequent adaptation form one snow-routing claim absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "After an uncleared snowy stairway blocked a shorter route, the user chose a cleared main-road sidewalk and avoided slippery sections.",
+          "uid": "e9384e56-5f3b-5807-8c26-d1d720eb5d5e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a215f6c9-a3f6-4858-86bd-35b31300c56a",
+              "memory_uid": "96988fa9-44b1-511e-8c99-4372f902cfe3"
+            },
+            {
+              "frame_uid": "a215f6c9-a3f6-4858-86bd-35b31300c56a",
+              "memory_uid": "b628acaa-50da-552c-8665-244dc4ab8263"
+            }
+          ],
+          "reason": "The discomfort and adjustment form one nighttime temperature-management claim with no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "After excessive heat disrupted sleep, the user lowered the heat and added a thin blanket the next night.",
+          "uid": "5a0af4fa-18f1-5028-932a-9f7696ba9708"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a215f6c9-a3f6-4858-86bd-35b31300c56a",
+              "memory_uid": "08dfb937-7b28-55b5-801c-c0da00cbd414"
+            }
+          ],
+          "reason": "This attributed expectation and communication behavior is independently useful and one-sided.",
+          "status": "RESOLVED",
+          "summary": "On heavily snowy mornings, the user’s father anticipates concern about road conditions and texts before departure.",
+          "uid": "0356c64c-b0f8-5ab5-afe4-92e0fd6ff062"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a215f6c9-a3f6-4858-86bd-35b31300c56a",
+              "memory_uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d"
+            }
+          ],
+          "reason": "This explicit travel-planning prerequisite addresses a workflow absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Winter route proposals should be preceded by checking recent snow clearing and accessible entrances.",
+          "uid": "ef0d1da4-dd92-5a29-8f8c-cf6da5261b4e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a215f6c9-a3f6-4858-86bd-35b31300c56a",
+              "memory_uid": "802c4031-57de-592a-9bc8-6ee3d54921c8"
+            }
+          ],
+          "reason": "This limitation on local route knowledge is independently useful and has no counterpart governing the same matter in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "A weather forecast alone cannot establish the actual condition of the sidewalk the user will take.",
+          "uid": "f6828234-4c90-588e-ac1e-2da0996868eb"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers winter-item staging, snow-safe routing, nighttime temperature adjustment, a parent’s concern, route-check prerequisites, and forecast limitations.",
+        "differences": "",
+        "reference_only": "The reference covers herb placement, watering evidence, wind protection, labeling, a relative’s care priority, reminder prerequisites, and seasonal drying."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "01bfd154-d2ff-46a5-abdf-aa5944ec2cb8"
+    },
+    "analysis_digest": "051d3cad9d027652d105ff1907667b5686527f7d86a33b5e13cf92f0144f1b70",
+    "key": "47ffceace4ccf6bf4b9e36ffdc9536f36efb9455f1eb381abfe966ee6724ad9b",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 39.49622979199921,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "47ffceace4ccf6bf4b9e36ffdc9536f36efb9455f1eb381abfe966ee6724ad9b",
+  "created_at": "2026-08-13T18:51:53.293375Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/05",
+  "pair_key": "dc6a31e366ba3f491c09eb174c663138e4f48437f522d0c3d5b1572fe4cca4d1",
+  "provider_seconds": 39.49622979199921,
+  "right": "task-3/local/personal-memory/2026/01",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

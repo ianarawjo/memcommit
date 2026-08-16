@@ -1,0 +1,379 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:46:59.494144+00:00",
+      "frames": [
+        {
+          "context_digest": "492e513a553a9191e2c646cca49364b336ae6d163de5688eeca8cc661bbbdb32",
+          "context_name": "task-3/local/personal-memory/2024/11",
+          "context_uid": "0d5e1eef-1669-5589-94ba-b46c9c2080dc",
+          "memories": [
+            {
+              "content": "The user changed their schedule once in November 2024 because of their mother's hospital visit.",
+              "content_digest": "f08f07dda1b468ab191a59d87e7ceb8068189964edee2010abdae6e525d6103f",
+              "position": 0,
+              "uid": "bb17c696-0c1c-516f-8ad9-68a4b159ce22"
+            },
+            {
+              "content": "After seeing the reason for the schedule change written in a calendar invitation, the user asked for it to be removed.",
+              "content_digest": "7bfc906526c255f90a85b6dcc4b28ea1b0a9389e9f17ba989a4ce098280578c8",
+              "position": 1,
+              "uid": "195ba5ab-3ee0-5594-a859-9f2b5eadf9ea"
+            },
+            {
+              "content": "The user was able to reschedule the appointment after providing only a new time, without a reason.",
+              "content_digest": "14f1bd0410c76aa3a0eb28a2212fd06558ab23b6dc012aa5529980a67efe3e2b",
+              "position": 2,
+              "uid": "4c8759cc-66aa-527c-a9d5-197d39b5d2b7"
+            },
+            {
+              "content": "On a day the user traveled in their father's car, they photographed the parking location.",
+              "content_digest": "111e71af27be5d109557440569352964544e9b702810741445172a6cf51f94f5",
+              "position": 3,
+              "uid": "d4b27ea7-d329-5dc7-b7ca-91d0cd50a958"
+            },
+            {
+              "content": "On the next visit, when the user did not take a photo, they walked one circuit of the parking garage while looking for the exit.",
+              "content_digest": "6d61d67e35552cb739d0220e480189706ec5bbac74f93b87149a6948d9ac2805",
+              "position": 4,
+              "uid": "32a19a57-9b04-5f86-92ba-202a9ac803e4"
+            },
+            {
+              "content": "After hearing preparation items from their mother by phone, the user omitted two items.",
+              "content_digest": "449dc73aad797f5acd3d898292cf9942f7d3b65b9faf52769ae5b3332285b4f3",
+              "position": 5,
+              "uid": "0eeffd8c-acd6-57bf-950d-20cfa1fe62b3"
+            },
+            {
+              "content": "After receiving the preparation items again by text, the user put all of them in their bag.",
+              "content_digest": "9539ab90f598a96d97a73b7954db8834d3106861ba6ecc814e579a348e0145d6",
+              "position": 6,
+              "uid": "07ea3801-8666-581d-b846-2f45bf99ca19"
+            },
+            {
+              "content": "The user's mother does not want the reason for her visit disclosed in the user's external schedule.",
+              "content_digest": "b1aff7bb5b5df1ec773fd8875205cd9fdfa2fd5b520cf91b7c84c9e3054b4feb",
+              "position": 7,
+              "uid": "9e70b92e-1d8d-51ef-962d-bd9b348a56d5"
+            },
+            {
+              "content": "Do not include the mother's reason for a visit when conveying the user's availability externally.",
+              "content_digest": "b9473919c63f233fc66c49bbf00b20a8ab9532bcb1b8ce3896c442afed4229d9",
+              "position": 8,
+              "uid": "d76686fd-9f1d-5d94-931b-4b49c86a8f4e"
+            },
+            {
+              "content": "Some daily-life services may operate for shorter hours during the year-end holiday period.",
+              "content_digest": "48d4487aba4c395527f9dfeac9488f45556d1bd89475f8620b0a64d84e4479fc",
+              "position": 9,
+              "uid": "820a5de9-9e08-52c7-8747-5155fe341bb4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "07881570-4d2e-48c9-a025-ee80d5a2103a"
+        },
+        {
+          "context_digest": "4b8dc68a205171fe661b04620d0fba2bbb386ff21d494699c34a74dc2ab86080",
+          "context_name": "task-3/local/personal-memory/2026/03",
+          "context_uid": "97d36150-4792-5a5c-9332-5eb1de8bcf04",
+          "memories": [
+            {
+              "content": "The user stores tax-related receipts in digital folders by year.",
+              "content_digest": "778f983547572b31798b7041899812a7b0b574d74b585baf6883e94919dee6ec",
+              "position": 0,
+              "uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393"
+            },
+            {
+              "content": "The user found three paper receipts late and recalculated the expense total already prepared.",
+              "content_digest": "542368a141ec82a1bd7da4b534d88ea62c487d16a37f454569bf6400cbc749e9",
+              "position": 1,
+              "uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878"
+            },
+            {
+              "content": "Starting the next month, the user photographed receipts on the day they were received and reduced omissions.",
+              "content_digest": "b95e0a1afa1196a9bff117bf12b1630edcc4eb65bfdfeb3128ae5937563a492e",
+              "position": 2,
+              "uid": "ff436ea5-1b3e-55df-8302-bd8a96740671"
+            },
+            {
+              "content": "The user named every file with only the photo date and spent a long time looking for a needed receipt.",
+              "content_digest": "c3aa33e0b7e007bdfc5c12dcda659e2a52938548fbf53d5a1ab034487a528857",
+              "position": 3,
+              "uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e"
+            },
+            {
+              "content": "The user later included the expense category in the filename and found the receipt immediately through search.",
+              "content_digest": "cdae97761f614b932d3b330723627bee8b0e3d033e2bf1061b721367237acee1",
+              "position": 4,
+              "uid": "89d6fa9a-b795-59df-be34-1c05a9861d35"
+            },
+            {
+              "content": "While reviewing documents just before submission, the user discovered one blank signature field.",
+              "content_digest": "a525c117b97eec82c678f276b319158703bf9cc558fb83cb81c0820d5c9e3174",
+              "position": 5,
+              "uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2"
+            },
+            {
+              "content": "Before submitting an administrative document, the user checks the signature field as the final item on the checklist.",
+              "content_digest": "542bec3cbc3fc8b22c95da274e479e96bfbf061a3b644d0d7f213de5a030dbd5",
+              "position": 6,
+              "uid": "5551622f-66cf-5542-8c47-1cddadab5c02"
+            },
+            {
+              "content": "Staff at a tax-support counter expect to receive an electronic copy in which every item is legible rather than a blurred or cropped photo.",
+              "content_digest": "d328ca248fdeecf0756e23b1202e7007bc8c3c25ae769439b0fd2efdbbe47580",
+              "position": 7,
+              "uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f"
+            },
+            {
+              "content": "The local agent can organize receipts by date and category but cannot determine whether an expense is deductible.",
+              "content_digest": "bcc769721a99b099ca20e5e527fa8904d54ecbaf9ae7d7616b95e1adaf1f89a9",
+              "position": 8,
+              "uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094"
+            },
+            {
+              "content": "The accepted scope and submission deadlines for administrative documents may vary under that year's guidance.",
+              "content_digest": "1ab61126b8efb0c2a9c6114c367018158f2e136bafa87e33f60aadb0686d0537",
+              "position": 9,
+              "uid": "de398064-3179-590b-8c62-effb17060115"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "af8867ac-5bc0-4889-bcb0-d298e9c6fd05"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames contain separate operational knowledge: the reference covers schedule privacy, practical memory aids, and holiday service hours, while the compared frame covers receipt organization, document submission checks, and tax-support boundaries. No claims govern the same operational decision, and no conflict or ambiguity appears.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "07881570-4d2e-48c9-a025-ee80d5a2103a",
+              "memory_uid": "bb17c696-0c1c-516f-8ad9-68a4b159ce22"
+            },
+            {
+              "frame_uid": "07881570-4d2e-48c9-a025-ee80d5a2103a",
+              "memory_uid": "195ba5ab-3ee0-5594-a859-9f2b5eadf9ea"
+            },
+            {
+              "frame_uid": "07881570-4d2e-48c9-a025-ee80d5a2103a",
+              "memory_uid": "4c8759cc-66aa-527c-a9d5-197d39b5d2b7"
+            }
+          ],
+          "reason": "These memories form one reference-only episode about changing an appointment without externally retaining the family medical reason; the compared frame has no claim about scheduling or availability disclosure.",
+          "status": "RESOLVED",
+          "summary": "A hospital-related schedule change led the user to remove the disclosed reason and reschedule by supplying only a new time.",
+          "uid": "6cb5b324-b5e6-5859-82ea-9cc184948912"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "07881570-4d2e-48c9-a025-ee80d5a2103a",
+              "memory_uid": "d4b27ea7-d329-5dc7-b7ca-91d0cd50a958"
+            },
+            {
+              "frame_uid": "07881570-4d2e-48c9-a025-ee80d5a2103a",
+              "memory_uid": "32a19a57-9b04-5f86-92ba-202a9ac803e4"
+            }
+          ],
+          "reason": "The two memories split one reference-only observation about a parking-location photo as a practical memory aid; receipt photography in the compared frame serves a materially different recordkeeping decision.",
+          "status": "RESOLVED",
+          "summary": "Photographing a parking location served as a navigation aid, while omitting the photo on a later visit preceded an extra circuit searching for the exit.",
+          "uid": "79802bb8-ed2b-5bb6-b5b5-42dc6ceec55e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "07881570-4d2e-48c9-a025-ee80d5a2103a",
+              "memory_uid": "0eeffd8c-acd6-57bf-950d-20cfa1fe62b3"
+            },
+            {
+              "frame_uid": "07881570-4d2e-48c9-a025-ee80d5a2103a",
+              "memory_uid": "07ea3801-8666-581d-b846-2f45bf99ca19"
+            }
+          ],
+          "reason": "These memories jointly describe one reference-only contrast between spoken and written preparation instructions; the compared frame contains no corresponding packing or instruction-format claim.",
+          "status": "RESOLVED",
+          "summary": "Preparation items conveyed by phone were partly omitted, whereas receiving them by text enabled the user to pack them all.",
+          "uid": "ba9961b6-3192-5df5-97c7-e00952cd6b5e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "07881570-4d2e-48c9-a025-ee80d5a2103a",
+              "memory_uid": "9e70b92e-1d8d-51ef-962d-bd9b348a56d5"
+            },
+            {
+              "frame_uid": "07881570-4d2e-48c9-a025-ee80d5a2103a",
+              "memory_uid": "d76686fd-9f1d-5d94-931b-4b49c86a8f4e"
+            }
+          ],
+          "reason": "The memories state the same reference-only privacy preference and operational disclosure rule; no compared-side memory addresses external schedule content.",
+          "status": "RESOLVED",
+          "summary": "The mother's reason for a visit should not be disclosed when the user's availability is communicated externally.",
+          "uid": "a0d43e7b-8769-5e77-b9d5-7fe863f32eb0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "07881570-4d2e-48c9-a025-ee80d5a2103a",
+              "memory_uid": "820a5de9-9e08-52c7-8747-5155fe341bb4"
+            }
+          ],
+          "reason": "This is an independently useful reference-only caution about seasonal service availability, with no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "Daily-life services may have shorter operating hours during the year-end holiday period.",
+          "uid": "16375e8f-d8d0-50f1-985c-bc961bc5a550"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "af8867ac-5bc0-4889-bcb0-d298e9c6fd05",
+              "memory_uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393"
+            }
+          ],
+          "reason": "This is a compared-only baseline organization practice, distinct from the reference frame's scheduling and everyday memory-aid information.",
+          "status": "RESOLVED",
+          "summary": "The user stores tax-related receipts in digital folders organized by year.",
+          "uid": "c54410ef-2210-5d0d-b43c-610832f84600"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "af8867ac-5bc0-4889-bcb0-d298e9c6fd05",
+              "memory_uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878"
+            },
+            {
+              "frame_uid": "af8867ac-5bc0-4889-bcb0-d298e9c6fd05",
+              "memory_uid": "ff436ea5-1b3e-55df-8302-bd8a96740671"
+            }
+          ],
+          "reason": "The memories form one compared-only problem-and-response account concerning timely receipt capture; the reference frame's parking photo addresses navigation rather than financial record completeness.",
+          "status": "RESOLVED",
+          "summary": "After late paper receipts forced an expense-total recalculation, the user began photographing receipts on receipt day and reduced omissions.",
+          "uid": "e635ca67-e91d-5fcd-b7ad-09b57bd0b67c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "af8867ac-5bc0-4889-bcb0-d298e9c6fd05",
+              "memory_uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e"
+            },
+            {
+              "frame_uid": "af8867ac-5bc0-4889-bcb0-d298e9c6fd05",
+              "memory_uid": "89d6fa9a-b795-59df-be34-1c05a9861d35"
+            }
+          ],
+          "reason": "These memories split one compared-only contrast about filename metadata and receipt searchability; the reference frame contains no file-naming policy.",
+          "status": "RESOLVED",
+          "summary": "Date-only receipt filenames made retrieval slow, while adding the expense category enabled immediate search retrieval.",
+          "uid": "ec97c6ab-9370-595e-badc-55781f9729d0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "af8867ac-5bc0-4889-bcb0-d298e9c6fd05",
+              "memory_uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2"
+            },
+            {
+              "frame_uid": "af8867ac-5bc0-4889-bcb0-d298e9c6fd05",
+              "memory_uid": "5551622f-66cf-5542-8c47-1cddadab5c02"
+            }
+          ],
+          "reason": "The memories describe one compared-only document-review lesson and resulting checklist practice, absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Discovering a blank signature field before submission led to checking the signature field last on the administrative-document checklist.",
+          "uid": "b899557a-5a74-501a-a700-555752352326"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "af8867ac-5bc0-4889-bcb0-d298e9c6fd05",
+              "memory_uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f"
+            }
+          ],
+          "reason": "This is an independently useful compared-only submission-quality requirement; no reference-side memory addresses document image quality.",
+          "status": "RESOLVED",
+          "summary": "Tax-support staff expect an electronic copy whose contents are fully legible rather than blurred or cropped.",
+          "uid": "5755762a-e14a-5a1f-88e9-23c9c51d0605"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "af8867ac-5bc0-4889-bcb0-d298e9c6fd05",
+              "memory_uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094"
+            }
+          ],
+          "reason": "This compared-only claim defines a capability boundary for tax-related assistance, with no corresponding agent-scope claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The local agent can organize receipts by date and category but cannot determine expense deductibility.",
+          "uid": "3be865bd-321f-557d-ac6f-c27bb8bd2c2c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "af8867ac-5bc0-4889-bcb0-d298e9c6fd05",
+              "memory_uid": "de398064-3179-590b-8c62-effb17060115"
+            }
+          ],
+          "reason": "This is a compared-only warning that filing requirements are year-dependent; shorter holiday service hours in the reference frame concern availability, not administrative acceptance rules.",
+          "status": "RESOLVED",
+          "summary": "Accepted document scope and submission deadlines may vary according to the applicable year's guidance.",
+          "uid": "814447b7-15b6-5ee2-bc62-af6b86a15562"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only material addresses receipt capture, storage and searchable naming, signature and image-quality checks, limits on tax assistance, and guidance-dependent filing scope and deadlines.",
+        "differences": "",
+        "reference_only": "Reference-only material addresses concealing a family medical reason in external scheduling, using photos and written messages as memory aids, and anticipating shorter year-end service hours."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "ebeab4d6-68c4-425f-a550-c1161e90b874"
+    },
+    "analysis_digest": "7f477b769b5fe0e13adbf5cd4fc1a9c07696ae99f561ec6e37b5a4e3bf62414c",
+    "key": "9cabea78498e75b9d461aaca3048c1167ac65e7cbe6c4f43b5cea92ab01412cf",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 49.35127795800145,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "9cabea78498e75b9d461aaca3048c1167ac65e7cbe6c4f43b5cea92ab01412cf",
+  "created_at": "2026-08-13T18:47:48.844592Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/11",
+  "pair_key": "03673cbfd7a547c4616d65338458b6fae59802faf5aa665fcd88539f45c1b004",
+  "provider_seconds": 49.35127795800145,
+  "right": "task-3/local/personal-memory/2026/03",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

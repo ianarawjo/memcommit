@@ -1,0 +1,406 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:42:40.068572+00:00",
+      "frames": [
+        {
+          "context_digest": "4f6b609414f921ca470614699bdac42e9f2932482375026def79956485b0569e",
+          "context_name": "task-3/local/personal-memory/2024/08",
+          "context_uid": "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+          "memories": [
+            {
+              "content": "The user has set a monthly limit in their budget record for spending other than living expenses.",
+              "content_digest": "5c0df9500947f7e044a8755d66d58adccca01db3aed42b43ab9748b8c4f431e9",
+              "position": 0,
+              "uid": "5f80c7ec-e294-5905-abab-91027c9d827b"
+            },
+            {
+              "content": "In a week when the user went grocery shopping and visited the bank separately, they made the same round trip twice.",
+              "content_digest": "4e814adad1a4c201f6348f1c14b14950b5c549bba64bf70cfccd08ca9efc5bd3",
+              "position": 1,
+              "uid": "2428ab2c-37ce-5de1-84dc-abcdfc8ce062"
+            },
+            {
+              "content": "The following week, the user completed both errands in one outing and reduced travel time.",
+              "content_digest": "ad5555ca7daa9d977cfcf5eb4f476eb5730cead6d307c986497716d69f1145b0",
+              "position": 2,
+              "uid": "bf30d1ef-d7cd-5aa3-b65b-ff04aae647e7"
+            },
+            {
+              "content": "When a bill alert arrived on the due date, the user postponed payment until after a meeting.",
+              "content_digest": "c62dda61c680da9ac1fd5ab9124fa05635d20ad9e4bbb7aef36723d289c05102",
+              "position": 3,
+              "uid": "442672e1-2188-5aa3-ad38-5e9c16f25bd5"
+            },
+            {
+              "content": "In a month when the user received an alert three days before the deadline, they finished payment before dinner.",
+              "content_digest": "939ac83da176d5bb1b7e2196402b9faacb962d947b85b9a61c31854867c1e62e",
+              "position": 4,
+              "uid": "c7385cce-ec43-5902-973c-5b8af54c3557"
+            },
+            {
+              "content": "The user collected cash receipts in their wallet and entered all the amounts at once at the end of the month.",
+              "content_digest": "3171a8128ed3855ac9a4c2b542516333fc3728ed1d7260974888b94d0b32c3e6",
+              "position": 5,
+              "uid": "d926c45c-ea49-589c-a7e4-491c9a1514f8"
+            },
+            {
+              "content": "After recording one large expense, the user ate out two fewer times that week.",
+              "content_digest": "af55fd94b01e0ece728347e9349f96b5733c57dae752f9559dc4e08bef7a3320",
+              "position": 6,
+              "uid": "9433523f-8c4e-5424-b370-d325ba5154d1"
+            },
+            {
+              "content": "The user's older sister prefers to settle the jointly paid cost of a meal by electronic transfer rather than cash.",
+              "content_digest": "d84d2ea68add4202e8c421e9c1702c29ca88bd6ae838588bd415fdbd1980cb2b",
+              "position": 7,
+              "uid": "d9531336-ac5f-5ba0-bf26-9c69c854578f"
+            },
+            {
+              "content": "Confirm the amount and account with the user before creating an automatic payment schedule.",
+              "content_digest": "b1d0c16fd880f4ae2657415ddc8fe0f223ccdd931248bb4412a6c95754d4cce1",
+              "position": 8,
+              "uid": "9941d390-8b40-5fee-8bcf-df6f36befcb0"
+            },
+            {
+              "content": "The timing of payment processing and late-payment recording may differ by billing institution.",
+              "content_digest": "203e65e4eb8451ec7551fb166357f107d17b8c89a2341b32fc25a3fb67ec7f98",
+              "position": 9,
+              "uid": "79aea8fd-5d48-50f7-adf6-b7ebe33bfb08"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "6ad256bd-d1fd-4bcc-8d5f-fb93b5050752"
+        },
+        {
+          "context_digest": "b727ef7cf1cb7ca0f00ea3598d36577397e092dcb632f55c3eafb942850922d7",
+          "context_name": "task-3/local/personal-memory/2025/04",
+          "context_uid": "720d2021-1ec5-52ab-ace4-a93e02b05ad9",
+          "memories": [
+            {
+              "content": "The user keeps the shared laundry-room access card in an entrance drawer.",
+              "content_digest": "3c98e367c99e0867f1217c891dc5d982c115fd9d1b4bc3957cca6dbb6338203b",
+              "position": 0,
+              "uid": "a1c67646-6a75-504a-9508-d69e1d04b3e5"
+            },
+            {
+              "content": "The user went downstairs 25 minutes after the laundry finished and received a note from another household.",
+              "content_digest": "44968f6f10c0ae2d1dd775eb066564dada6346c6f59bdacf90d687c57e6c1e0f",
+              "position": 1,
+              "uid": "9479e799-95d7-50d2-af62-d1e0914a389b"
+            },
+            {
+              "content": "For the next load, the user set a reminder five minutes before the end and removed the laundry immediately.",
+              "content_digest": "bc77b81f6126e44bbffeb4ae2dfbb641d31a9742b7a196a106ac385321b48958",
+              "position": 2,
+              "uid": "528cb5ea-8c36-5206-beaa-19432250ec4d"
+            },
+            {
+              "content": "The user washed light-colored clothes with new jeans, and color transferred onto white socks.",
+              "content_digest": "ed0f36cf5ebe8f9542ad39ba45fc109634d72f1cb2b266c15dfe6655e3df3add",
+              "position": 3,
+              "uid": "85fb1639-2176-5329-b490-3325ff030db4"
+            },
+            {
+              "content": "The user later washed the new jeans separately, and the color of the other clothes did not change.",
+              "content_digest": "6e47fe1a02ac39064ea9db2d06d8a1f01f80302825bbe412df745401612e4a84",
+              "position": 4,
+              "uid": "431d170a-863f-596d-97c0-0c9634524ee5"
+            },
+            {
+              "content": "On a day the user did not check the dryer filter, the clothes needed another drying cycle.",
+              "content_digest": "8127e9f3ea34724673517f1e260a73acfb70e287a7e7de84e196ad1cb815f5a7",
+              "position": 5,
+              "uid": "4df33adc-cfba-50f2-b141-e2ebed38b81c"
+            },
+            {
+              "content": "On the next use, after emptying the filter, the user finished drying in one cycle.",
+              "content_digest": "932cfb8fc93277783d8990dad62cfd3e1c9a86e39ad1bd019ce00dac632c53d5",
+              "position": 6,
+              "uid": "ba7daae9-938d-55a1-af20-21cd10d395d8"
+            },
+            {
+              "content": "The building manager judges that not leaving finished laundry for a long time is fair to other households.",
+              "content_digest": "5eabe2d3dff252bb250abcde8fe2d528362afb0e73e7628e839715c3e8a3cd56",
+              "position": 7,
+              "uid": "abbf8742-38e3-5810-b222-fe91e3340962"
+            },
+            {
+              "content": "When creating a shared laundry-room reminder, base it on the end time of the machine the user started.",
+              "content_digest": "e00bc6fe09fea6fde6a27817bd6824a141c1ac4a656b9659067b7e1af9881b1f",
+              "position": 8,
+              "uid": "06273d22-0b42-5c55-9d70-eda14084219a"
+            },
+            {
+              "content": "Even if the local agent knows where the card is kept, it cannot know which machines in the shared laundry room are currently available.",
+              "content_digest": "d03f5583c9e4c686307af90ff00ff54e5ac0990e34296b3d241e4f299d15f4b7",
+              "position": 9,
+              "uid": "03ac930e-d745-5c29-8c24-5ced669817f9"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "7194ac3a-f42b-462c-b124-b5e592170d25"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover independent domains: the reference frame concerns budgeting, errands, bills, expense tracking, and payment practices, while the compared frame concerns shared-laundry access, timing, sorting, drying efficiency, etiquette, reminders, and availability limits. No claims overlap enough for a cross-frame semantic relation.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6ad256bd-d1fd-4bcc-8d5f-fb93b5050752",
+              "memory_uid": "5f80c7ec-e294-5905-abab-91027c9d827b"
+            }
+          ],
+          "reason": "This is independently useful budgeting information found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user has a monthly spending limit for expenses other than living costs.",
+          "uid": "6eadc7a0-86e5-5d85-b8b1-cb17fa3156f2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6ad256bd-d1fd-4bcc-8d5f-fb93b5050752",
+              "memory_uid": "2428ab2c-37ce-5de1-84dc-abcdfc8ce062"
+            },
+            {
+              "frame_uid": "6ad256bd-d1fd-4bcc-8d5f-fb93b5050752",
+              "memory_uid": "bf30d1ef-d7cd-5aa3-b65b-ff04aae647e7"
+            }
+          ],
+          "reason": "The two reference memories form one before-and-after account of errand consolidation, with no corresponding compared-frame claim.",
+          "status": "RESOLVED",
+          "summary": "Combining grocery shopping and banking into one outing reduced travel compared with making the same round trip twice.",
+          "uid": "6adc6fae-2990-5376-8582-1e8654f5fb6d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6ad256bd-d1fd-4bcc-8d5f-fb93b5050752",
+              "memory_uid": "442672e1-2188-5aa3-ad38-5e9c16f25bd5"
+            },
+            {
+              "frame_uid": "6ad256bd-d1fd-4bcc-8d5f-fb93b5050752",
+              "memory_uid": "c7385cce-ec43-5902-973c-5b8af54c3557"
+            }
+          ],
+          "reason": "The memories jointly describe how alert lead time affected bill-payment timing, a subject absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A due-date alert led to delayed payment, whereas an alert three days early enabled payment before dinner.",
+          "uid": "64e42f67-0ac9-568e-a7ab-b7dfa8dbff0e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6ad256bd-d1fd-4bcc-8d5f-fb93b5050752",
+              "memory_uid": "d926c45c-ea49-589c-a7e4-491c9a1514f8"
+            }
+          ],
+          "reason": "This is a standalone expense-recording practice found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user stored cash receipts and entered their amounts together at month-end.",
+          "uid": "d0b06f87-db69-57e9-8059-66074135f810"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6ad256bd-d1fd-4bcc-8d5f-fb93b5050752",
+              "memory_uid": "9433523f-8c4e-5424-b370-d325ba5154d1"
+            }
+          ],
+          "reason": "This is independently useful behavioral information found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Recording a large expense was followed by eating out less during that week.",
+          "uid": "69245ec1-be75-53d8-a3f5-0191394640d9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6ad256bd-d1fd-4bcc-8d5f-fb93b5050752",
+              "memory_uid": "d9531336-ac5f-5ba0-bf26-9c69c854578f"
+            }
+          ],
+          "reason": "This payment preference appears only in the reference frame and is independent of its other claims.",
+          "status": "RESOLVED",
+          "summary": "The user’s older sister prefers electronic transfer over cash when settling a jointly paid meal.",
+          "uid": "765d46e6-47c8-5bd6-9c61-f155a823682a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6ad256bd-d1fd-4bcc-8d5f-fb93b5050752",
+              "memory_uid": "9941d390-8b40-5fee-8bcf-df6f36befcb0"
+            }
+          ],
+          "reason": "This is a one-sided operational safeguard with no matching policy in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The amount and account should be confirmed with the user before an automatic payment schedule is created.",
+          "uid": "a4dc0f21-f526-529e-8341-0340264cde4e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "6ad256bd-d1fd-4bcc-8d5f-fb93b5050752",
+              "memory_uid": "79aea8fd-5d48-50f7-adf6-b7ebe33bfb08"
+            }
+          ],
+          "reason": "This institution-dependent qualification is present only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Payment-processing timing and late-payment recording may vary by billing institution.",
+          "uid": "10ca6917-1b9e-512c-b6ec-2ca012a2e14e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7194ac3a-f42b-462c-b124-b5e592170d25",
+              "memory_uid": "a1c67646-6a75-504a-9508-d69e1d04b3e5"
+            }
+          ],
+          "reason": "This location information appears only in the compared frame and is independent of its other claims.",
+          "status": "RESOLVED",
+          "summary": "The shared laundry-room access card is kept in an entrance drawer.",
+          "uid": "465a7f53-4951-5c38-8b41-a6acc7f46d6d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7194ac3a-f42b-462c-b124-b5e592170d25",
+              "memory_uid": "9479e799-95d7-50d2-af62-d1e0914a389b"
+            },
+            {
+              "frame_uid": "7194ac3a-f42b-462c-b124-b5e592170d25",
+              "memory_uid": "528cb5ea-8c36-5206-beaa-19432250ec4d"
+            }
+          ],
+          "reason": "The two compared memories form one before-and-after account of improving laundry collection timing, with no corresponding reference-frame claim.",
+          "status": "RESOLVED",
+          "summary": "After a delayed pickup prompted a note from another household, an advance reminder enabled immediate laundry removal on the next load.",
+          "uid": "8d40c1bd-f9f6-5747-b74a-8a6186e5195b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7194ac3a-f42b-462c-b124-b5e592170d25",
+              "memory_uid": "85fb1639-2176-5329-b490-3325ff030db4"
+            },
+            {
+              "frame_uid": "7194ac3a-f42b-462c-b124-b5e592170d25",
+              "memory_uid": "431d170a-863f-596d-97c0-0c9634524ee5"
+            }
+          ],
+          "reason": "The memories jointly describe the observed effect of separating new jeans, a subject absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "New jeans transferred color when washed with light clothes, while washing them separately later avoided changes to other clothes.",
+          "uid": "b62cfdc6-01ba-52aa-b2ba-6c1e53dbbcf7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7194ac3a-f42b-462c-b124-b5e592170d25",
+              "memory_uid": "4df33adc-cfba-50f2-b141-e2ebed38b81c"
+            },
+            {
+              "frame_uid": "7194ac3a-f42b-462c-b124-b5e592170d25",
+              "memory_uid": "ba7daae9-938d-55a1-af20-21cd10d395d8"
+            }
+          ],
+          "reason": "The memories form one comparison linking filter maintenance with drying efficiency, with no reference-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "Skipping the dryer-filter check required another cycle, while emptying the filter before the next use allowed drying in one cycle.",
+          "uid": "1403c504-e84d-5ebf-8c39-92b170214675"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7194ac3a-f42b-462c-b124-b5e592170d25",
+              "memory_uid": "abbf8742-38e3-5810-b222-fe91e3340962"
+            }
+          ],
+          "reason": "This shared-room etiquette judgment appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The building manager regards prompt removal of finished laundry as fair to other households.",
+          "uid": "d62c43c6-d622-5e2a-8654-a348b453e6f4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7194ac3a-f42b-462c-b124-b5e592170d25",
+              "memory_uid": "06273d22-0b42-5c55-9d70-eda14084219a"
+            }
+          ],
+          "reason": "This is a one-sided operational instruction distinct from the observed reminder outcome.",
+          "status": "RESOLVED",
+          "summary": "A shared laundry-room reminder should be based on the end time of the machine the user started.",
+          "uid": "1cf515d0-1bc2-52c7-baa8-79e44854e775"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7194ac3a-f42b-462c-b124-b5e592170d25",
+              "memory_uid": "03ac930e-d745-5c29-8c24-5ced669817f9"
+            }
+          ],
+          "reason": "This capability limitation appears only in the compared frame and is independently useful.",
+          "status": "RESOLVED",
+          "summary": "Knowing the access-card location does not let the local agent know which shared laundry machines are currently available.",
+          "uid": "9f645548-a5df-53bf-894b-708e7fccb606"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame uniquely records laundry access, prompt collection, color separation, filter-related drying efficiency, shared-room etiquette, reminder timing, and limits on knowing machine availability.",
+        "differences": "",
+        "reference_only": "The reference uniquely records budgeting constraints, efficiency gains from combined errands and earlier bill alerts, expense-tracking behavior, a relative’s transfer preference, and safeguards and institutional variability around payments."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "46375562-e609-431e-be81-c567ffd39bfd"
+    },
+    "analysis_digest": "5c7a7770d4b3bf2eb17a1da24e8c58ae51611c92e85d1886479d1ad2e816b3d1",
+    "key": "629e4bd42c7be5423c7087c9e7fe3d6a4d8e546804d93910e680d774d0a70622",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 37.03419270899758,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "629e4bd42c7be5423c7087c9e7fe3d6a4d8e546804d93910e680d774d0a70622",
+  "created_at": "2026-08-13T18:43:17.102345Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/08",
+  "pair_key": "a51d1c1c9a3f89b0c16e78328b6b1e68c638ad89606814f90fcc5b6d0cfbf7b6",
+  "provider_seconds": 37.03419270899758,
+  "right": "task-3/local/personal-memory/2025/04",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

@@ -1,0 +1,411 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:22:40.633893+00:00",
+      "frames": [
+        {
+          "context_digest": "d216a114524e2b755fff42b8577d5027d3e528aed50c5f588cebf57767bb7fc8",
+          "context_name": "task-2/advisor1/methods",
+          "context_uid": "d2f78b99-5dcf-5876-89a9-1058bceca333",
+          "memories": [
+            {
+              "content": "Link each HCI research question directly to corresponding user data and analysis procedures.",
+              "content_digest": "21e2d5e7eb4ec06057a8405359656cd03a98f4ae67956016d98582af44bfb402",
+              "position": 0,
+              "uid": "c8bcefee-c64a-5a1f-911c-502cc4522701"
+            },
+            {
+              "content": "In preregistered studies, specify the conditions under which deviations from the plan are permissible.",
+              "content_digest": "0ecac6de4eb5e3eec39477c5a6324acb8a1bd6cefb17eacc2c73cdd53160b85f",
+              "position": 1,
+              "uid": "8747b27e-6c2b-5498-9eac-c403e26101a6"
+            },
+            {
+              "content": "In preregistered studies, specify how to record content that deviates from the plan.",
+              "content_digest": "821b3ad70335f24d96aeffd2260e3bc27bb6efd1108a68b00ecc5cb7e7adb242",
+              "position": 2,
+              "uid": "c3ad4ad8-4c5c-54c5-8d65-2dae15fa69a0"
+            },
+            {
+              "content": "Commit to one exact target number of participants so the schedule, workload, and budget can be checked against the same quantity.",
+              "content_digest": "7ff7f3d29fc21399565b4047d3f78e6415e1b51a9247139fc156ea7d4f6d2f13",
+              "position": 3,
+              "uid": "df53a41c-2fbf-532a-a5b0-560a196bf5cb"
+            },
+            {
+              "content": "Specify the interview protocols, recording devices, or log tools used to collect each type of user data.",
+              "content_digest": "0396cbcbfd6e96ef9fd2af507855c4b71eb3003a15fc79d240cd0b751b6b5788",
+              "position": 4,
+              "uid": "24d49198-fd7b-5810-bc56-1910a796f76e"
+            },
+            {
+              "content": "Specify whether each type of user data is collected before, during, or after the interaction.",
+              "content_digest": "80a3ff6e82631a044e8859709930b675163439d11564d1b59601bca0ee030fba",
+              "position": 5,
+              "uid": "2f367cf3-50c5-59bc-972e-6173e56343ac"
+            },
+            {
+              "content": "Readers cannot tell whether the schedule and budget agree when different sections imply different target counts.",
+              "content_digest": "9b5de55faa7e64cf1149ef1bb60cf990815e789e7d1c4a3c0e6297fbbd300aae",
+              "position": 6,
+              "uid": "91db3bd1-4417-5db6-b7a6-3e79c87ebe88"
+            },
+            {
+              "content": "In formative evaluation prototypes, implementation instability exists as an independent cause of task failure alongside design choices.",
+              "content_digest": "dab5f616c4354c0e9f381b0e860e5ec5ff1afc249a4ad427f194c559781b83a8",
+              "position": 7,
+              "uid": "49746579-92d7-51ea-b158-7d770443d101"
+            },
+            {
+              "content": "If a prototype safety signal occurs during formative evaluation, existing institutional safety procedures take precedence over planned data collection.",
+              "content_digest": "2f2768eb4fbce9367786ab13ca8a608e82104cee45200f4aa59854efcf2edc3e",
+              "position": 8,
+              "uid": "20d116ab-f9cc-5f61-808b-8555da09d707"
+            },
+            {
+              "content": "Reviewers judge answerability by tracing the path from each research question to the data and analysis.",
+              "content_digest": "0fac56a79481bdcd7b169c7e3d9ab8fbd0b4f76d33dfe9f4a2f703f80e84aea9",
+              "position": 9,
+              "uid": "881bc037-c099-50e4-b7e0-d38fba5146c9"
+            },
+            {
+              "content": "The author of this proposal tends to present implemented feature lists directly as design contributions.",
+              "content_digest": "6cf2a1292756154c2a0a045f1e4bd4889994faaa838f93e8a2b9c949957ed920",
+              "position": 10,
+              "uid": "9a969676-6093-5fac-bda8-92ebdac70c37"
+            },
+            {
+              "content": "Calculate the required sessions, facilitator hours, and participant payments from the same exact target rather than from separate rough estimates.",
+              "content_digest": "ea6c96c9e5e7d5db7bd2210fd484e715e35727bd1e6f7c2ea2a2c4c12e488f2a",
+              "position": 11,
+              "uid": "0ecc319a-ae60-5510-883d-52e613138164"
+            },
+            {
+              "content": "If recruitment falls below the exact target, state the shortfall explicitly and revise the affected schedule or deliverable.",
+              "content_digest": "bdf962f17a92886e7a5ec0003460dce9ed9c02d02473f66c6f6b4e97c0c304b9",
+              "position": 12,
+              "uid": "c4dfdb65-e673-52c0-a40c-e909d6014e00"
+            },
+            {
+              "content": "Do not use a wide range merely to postpone choosing the quantity that the rest of the proposal must support.",
+              "content_digest": "332385b05f91f97c398bc954b6fc9e62da182f7e42de6dd5691435df6922fd43",
+              "position": 13,
+              "uid": "a7c3a123-3f05-52e0-b33e-c450d1a070ac"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "a7537d14-2814-466f-8774-f1502d69bd23"
+        },
+        {
+          "context_digest": "bf5136a518ce85246184349a0194e446748710ed6da95e5c97d4a31d74ddc1b9",
+          "context_name": "task-2/advisor2/review",
+          "context_uid": "3398ba87-f01e-56bd-9da2-0ed0894524fa",
+          "memories": [
+            {
+              "content": "Conduct one review prior to submission focusing solely on the validity of user problems, system interventions, and field evaluation logic.",
+              "content_digest": "9b0b5596ec5924a6141926bfc337ec6e23d77dfb7b65facb26b42109f05f1fe4",
+              "position": 0,
+              "uid": "6d203c86-b6e0-586a-b896-b654fa319ed1"
+            },
+            {
+              "content": "Cross-check whether research questions align with the core functions of the system.",
+              "content_digest": "f7f9f49efe539881dae49a96adce0ec349435e4cc7f55229c88097e54fe03f93",
+              "position": 1,
+              "uid": "6b75bfb1-67f5-50bb-9e0c-04026062de96"
+            },
+            {
+              "content": "Cross-check whether field tasks align with representative measures.",
+              "content_digest": "3e993f6c978e14b5b0f6e8ada40d8a0067981e943c67636e9599fb652dca44a4",
+              "position": 2,
+              "uid": "3abfda89-82ab-5cc5-bdcd-5e2f274fd727"
+            },
+            {
+              "content": "Cross-check whether the evidence to be collected aligns with the design and operational decisions to be changed.",
+              "content_digest": "a4761a8dac6c60a2132619c8c8e963aca0d61216d689786b18574f5e30f1f3aa",
+              "position": 3,
+              "uid": "f14f1974-9035-5a2c-931a-89a5004a2567"
+            },
+            {
+              "content": "Finally verify that the user problem, system intervention, field evaluation, and expected contribution form one coherent logical flow.",
+              "content_digest": "47198a770770dc805e0f40a5f9b9c34ae1999f39ec2f9fa1c34b3280f21f5477",
+              "position": 4,
+              "uid": "6ba1d344-5d98-5c25-ba1e-b28c08d39747"
+            },
+            {
+              "content": "HCI reviewers view the validity of design interventions as low if research questions do not connect to system functions.",
+              "content_digest": "ffa754352dfecc597f84cff7cbf8607a12bbfd99ac22250cc84392bd85e37e73",
+              "position": 5,
+              "uid": "4a85ebbd-a4ee-5c88-9e93-5fc545f41c64"
+            },
+            {
+              "content": "HCI reviewers view the validity of evaluation plans as low if field tasks fail to generate representative measures.",
+              "content_digest": "f29eb5429d767b0fa171b7e9862b3d8d06dfd388739e95acd67b2321aaf1a91e",
+              "position": 6,
+              "uid": "75c4c71d-28e3-559c-99d1-f0dccc31a9e2"
+            },
+            {
+              "content": "HCI reviewers view the practical utility of contributions as low if collected evidence cannot change design or operational decisions.",
+              "content_digest": "6b9ae0bc59cda995d674479dfe95f43359ff04e68cb07633957885ee5cf1336c",
+              "position": 7,
+              "uid": "577e5506-78e8-5768-b288-7a5986347cce"
+            },
+            {
+              "content": "Before submission, conduct a sequential walkthrough with field liaisons of installation failures, operational interruptions, and recovery scenarios.",
+              "content_digest": "115fa1f22eb7f55918620418f89def51ba84bd36e102875a5f5e560de5305dda",
+              "position": 8,
+              "uid": "9ce34a9a-4ba2-5b32-a1de-b0469ddc3f95"
+            },
+            {
+              "content": "Verify in one sentence how each proposed contribution could actually alter specific design or operational decisions.",
+              "content_digest": "1c6ef38e42f40e9cd6ab5323deaa825efb1136b926b66af9337ea6debaf8600e",
+              "position": 9,
+              "uid": "f8253f92-c60c-57e1-a630-6b31abe080ae"
+            },
+            {
+              "content": "The user must distinguish unconfirmed field partners and equipment from finalized ones so remaining execution risks can be assessed.",
+              "content_digest": "c2eb0936c09d8796092950aba699664f79f2222f27523e37a1af5feabe2b8058",
+              "position": 10,
+              "uid": "f5ad6933-3e22-5c47-bdaf-bacc9c9a5b3c"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "f0919ba6-ed4e-4a56-bbc6-bd23c79cbded"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "Both frames emphasize proposal traceability and useful contribution claims. They complement each other on research-question alignment and decision-relevant evidence, while assigning different technical-failure practices to formative evaluation and pre-submission planning. Each also contains distinct methodological, safety, resourcing, review, and execution-risk guidance.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "a7537d14-2814-466f-8774-f1502d69bd23",
+              "memory_uid": "c8bcefee-c64a-5a1f-911c-502cc4522701"
+            },
+            {
+              "frame_uid": "a7537d14-2814-466f-8774-f1502d69bd23",
+              "memory_uid": "881bc037-c099-50e4-b7e0-d38fba5146c9"
+            },
+            {
+              "frame_uid": "f0919ba6-ed4e-4a56-bbc6-bd23c79cbded",
+              "memory_uid": "6b75bfb1-67f5-50bb-9e0c-04026062de96"
+            },
+            {
+              "frame_uid": "f0919ba6-ed4e-4a56-bbc6-bd23c79cbded",
+              "memory_uid": "4a85ebbd-a4ee-5c88-9e93-5fc545f41c64"
+            }
+          ],
+          "reason": "The reference requires question-to-data-and-analysis paths, while the compared frame requires question-to-system-function alignment and identifies its review consequence; these complementary checks govern research-question validity.",
+          "status": "RESOLVED",
+          "summary": "Research questions should be traceable to the system functions and evidentiary analysis needed to establish an answerable, valid design rationale.",
+          "uid": "1978131d-f8ee-59a0-855b-121a286cbeca"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "a7537d14-2814-466f-8774-f1502d69bd23",
+              "memory_uid": "9a969676-6093-5fac-bda8-92ebdac70c37"
+            },
+            {
+              "frame_uid": "f0919ba6-ed4e-4a56-bbc6-bd23c79cbded",
+              "memory_uid": "f14f1974-9035-5a2c-931a-89a5004a2567"
+            },
+            {
+              "frame_uid": "f0919ba6-ed4e-4a56-bbc6-bd23c79cbded",
+              "memory_uid": "577e5506-78e8-5768-b288-7a5986347cce"
+            },
+            {
+              "frame_uid": "f0919ba6-ed4e-4a56-bbc6-bd23c79cbded",
+              "memory_uid": "f8253f92-c60c-57e1-a630-6b31abe080ae"
+            }
+          ],
+          "reason": "The reference identifies feature-list presentation as a contribution-claim weakness, while the compared frame requires collected evidence and proposed contributions to show decision-changing utility.",
+          "status": "RESOLVED",
+          "summary": "Contribution claims should demonstrate practical relevance to specific design or operational decisions rather than rely on implemented features alone.",
+          "uid": "6f294a40-91c5-5347-bea1-0432d27a2e0b"
+        },
+        {
+          "kind": "SCOPED",
+          "members": [
+            {
+              "frame_uid": "a7537d14-2814-466f-8774-f1502d69bd23",
+              "memory_uid": "49746579-92d7-51ea-b158-7d770443d101"
+            },
+            {
+              "frame_uid": "f0919ba6-ed4e-4a56-bbc6-bd23c79cbded",
+              "memory_uid": "9ce34a9a-4ba2-5b32-a1de-b0469ddc3f95"
+            }
+          ],
+          "reason": "The explicit stages explain the different practices: implementation instability is an independent cause of formative task failure, whereas installation failures, interruptions, and recovery are walked through prospectively with field liaisons.",
+          "status": "RESOLVED",
+          "summary": "Technical failures require evaluation-stage attribution during formative studies and scenario-based operational review before submission.",
+          "uid": "44fd38f3-8150-50ff-8d8e-5ff5d4684ab1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a7537d14-2814-466f-8774-f1502d69bd23",
+              "memory_uid": "8747b27e-6c2b-5498-9eac-c403e26101a6"
+            },
+            {
+              "frame_uid": "a7537d14-2814-466f-8774-f1502d69bd23",
+              "memory_uid": "c3ad4ad8-4c5c-54c5-8d65-2dae15fa69a0"
+            }
+          ],
+          "reason": "These reference-side statements are complementary parts of one deviation-governance policy not supplied by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Preregistered studies should define when deviations are permissible and how deviating content is recorded.",
+          "uid": "d8061b07-5ce6-5a8a-b79c-39dd7c4542f4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a7537d14-2814-466f-8774-f1502d69bd23",
+              "memory_uid": "df53a41c-2fbf-532a-a5b0-560a196bf5cb"
+            },
+            {
+              "frame_uid": "a7537d14-2814-466f-8774-f1502d69bd23",
+              "memory_uid": "91db3bd1-4417-5db6-b7a6-3e79c87ebe88"
+            },
+            {
+              "frame_uid": "a7537d14-2814-466f-8774-f1502d69bd23",
+              "memory_uid": "0ecc319a-ae60-5510-883d-52e613138164"
+            },
+            {
+              "frame_uid": "a7537d14-2814-466f-8774-f1502d69bd23",
+              "memory_uid": "c4dfdb65-e673-52c0-a40c-e909d6014e00"
+            },
+            {
+              "frame_uid": "a7537d14-2814-466f-8774-f1502d69bd23",
+              "memory_uid": "a7c3a123-3f05-52e0-b33e-c450d1a070ac"
+            }
+          ],
+          "reason": "These reference-side statements jointly establish and justify one exact-target planning policy, including consequences of inconsistent estimates or recruitment shortfalls.",
+          "status": "RESOLVED",
+          "summary": "A proposal should use one exact participant target across schedule, workload, budget, payments, recruitment reporting, and deliverable revision.",
+          "uid": "b35746a2-71cc-59a3-b260-521125342744"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a7537d14-2814-466f-8774-f1502d69bd23",
+              "memory_uid": "24d49198-fd7b-5810-bc56-1910a796f76e"
+            },
+            {
+              "frame_uid": "a7537d14-2814-466f-8774-f1502d69bd23",
+              "memory_uid": "2f367cf3-50c5-59bc-972e-6173e56343ac"
+            }
+          ],
+          "reason": "These reference-side statements split the procedural and temporal components of one data-collection specification absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Each user-data type should identify its collection method or tool and its timing relative to interaction.",
+          "uid": "2fded42d-a35d-5d92-bbfb-f728b08d8b4b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a7537d14-2814-466f-8774-f1502d69bd23",
+              "memory_uid": "20d116ab-f9cc-5f61-808b-8555da09d707"
+            }
+          ],
+          "reason": "This conditional safety-priority rule appears only in the reference frame and is independently useful.",
+          "status": "RESOLVED",
+          "summary": "During formative evaluation, institutional safety procedures supersede planned data collection when a prototype safety signal occurs.",
+          "uid": "8ef8e24b-0365-5034-afa9-53616ff496c4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f0919ba6-ed4e-4a56-bbc6-bd23c79cbded",
+              "memory_uid": "6d203c86-b6e0-586a-b896-b654fa319ed1"
+            },
+            {
+              "frame_uid": "f0919ba6-ed4e-4a56-bbc6-bd23c79cbded",
+              "memory_uid": "6ba1d344-5d98-5c25-ba1e-b28c08d39747"
+            }
+          ],
+          "reason": "The compared-side statements describe complementary parts of one holistic validity and coherence review not supplied by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Before submission, the proposal should receive a focused review of the coherent logic linking user problems, interventions, field evaluation, and expected contributions.",
+          "uid": "8c0cfb9f-b2ed-5291-bb93-2013493680d9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f0919ba6-ed4e-4a56-bbc6-bd23c79cbded",
+              "memory_uid": "3abfda89-82ab-5cc5-bdcd-5e2f274fd727"
+            },
+            {
+              "frame_uid": "f0919ba6-ed4e-4a56-bbc6-bd23c79cbded",
+              "memory_uid": "75c4c71d-28e3-559c-99d1-f0dccc31a9e2"
+            }
+          ],
+          "reason": "The compared-side statements express the same task-to-measure validation claim as an instruction and its reviewer-facing rationale.",
+          "status": "RESOLVED",
+          "summary": "Field tasks should be checked for alignment with representative measures because misalignment weakens evaluation-plan validity.",
+          "uid": "37e37041-7e9f-5cfd-9cd1-045218725a37"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f0919ba6-ed4e-4a56-bbc6-bd23c79cbded",
+              "memory_uid": "f5ad6933-3e22-5c47-bdaf-bacc9c9a5b3c"
+            }
+          ],
+          "reason": "This compared-side disclosure requirement is independently useful and has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Unconfirmed field partners and equipment should be distinguished from finalized commitments so execution risks remain assessable.",
+          "uid": "36ad7988-608f-5abb-a6de-900198093601"
+        }
+      ],
+      "reports": {
+        "both": "Both connect research questions to defensible system or evidence pathways and assess contributions by their ability to influence design or operational decisions.",
+        "compared_only": "The compared frame adds holistic logic review, task-to-measure validation, and disclosure of unconfirmed partners and equipment.",
+        "differences": "Technical failures are treated as attribution factors during formative evaluation but as scenarios for pre-submission walkthroughs with field liaisons.",
+        "reference_only": "The reference adds preregistration deviation rules, exact participant-target planning, data-collection specifications, and safety-procedure precedence."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "4023320f-71a4-4448-8dc1-895fbc27159d"
+    },
+    "analysis_digest": "1e65dd66ed3c717b8ecfd9f2d2abc65944ce420191010836df690e73c91ea640",
+    "key": "e95e92d817aa3d27e0c038b1442844510aa3ae76b1d742c8bd159dbeb09ecf11",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 56.09709758300232,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "e95e92d817aa3d27e0c038b1442844510aa3ae76b1d742c8bd159dbeb09ecf11",
+  "created_at": "2026-08-13T18:23:36.730020Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/methods",
+  "pair_key": "d515e46366b5b19b236e9fe18311dd480e81c49fe3d90ded9534f1922b19641f",
+  "provider_seconds": 56.09709758300232,
+  "right": "task-2/advisor2/review",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

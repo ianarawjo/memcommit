@@ -1,0 +1,272 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:25:39.130176+00:00",
+      "frames": [
+        {
+          "context_digest": "d2c716d52357c4200adc8772d5823715ffd736eb766028c1c62bbb32852bc344",
+          "context_name": "task-2/advisor1/scope",
+          "context_uid": "6db29abe-5784-5eec-acaa-060bac0e11f1",
+          "memories": [
+            {
+              "content": "Define in one sentence the user groups and usage contexts to which the design knowledge does not apply.",
+              "content_digest": "3193ffe501a06d6148b39c333853b42bc0278b2ab3c3df88162b049548ff16bb",
+              "position": 0,
+              "uid": "e594a6ab-81e9-5e5f-8ef5-e6bb8f3760d7"
+            },
+            {
+              "content": "Reviewers judge the generalization boundary of results through explicitly excluded targets and situations.",
+              "content_digest": "a929649a7bd07f29f31a8cd1969a3c160ba5f61c0def76e204443c30234f84b0",
+              "position": 1,
+              "uid": "31cdacff-7c49-547d-9f97-598a07b67fb6"
+            },
+            {
+              "content": "Specify user goals, interaction conditions, and technological constraints under which the proposed design knowledge can be transferred.",
+              "content_digest": "6ae1bfaeadb1863db1997685527706d210a379a376a24d3de1168e952f847627",
+              "position": 2,
+              "uid": "1459d986-4dc9-51f3-bf13-dbb0b07045c8"
+            },
+            {
+              "content": "Small-scale formative studies can support analytic generalization distinct from statistical representativeness when results are expressed in terms of design conditions and mechanisms.",
+              "content_digest": "1963572a303acbf383890b7d97b52349f572df761e89ea3fd5116058cd2e1cea",
+              "position": 3,
+              "uid": "1db5fcd6-f93c-5630-9810-053c10b5ceba"
+            },
+            {
+              "content": "The author of this proposal tends to apply design knowledge derived from an accessible sample to a broader user population.",
+              "content_digest": "df2a7f1284c1994c6dec49eb7995acd1ed341a9e6b8f4b06c854d85fa9d77d6c",
+              "position": 4,
+              "uid": "fd29c315-521f-53c0-add5-c668ec318a43"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "c6ddadb4-cb2c-425e-a658-2385af748811"
+        },
+        {
+          "context_digest": "e70e4eaff26e4baf1b346a4ecd2b44ed9f9ccac9e205b7b82572dc8ef0e217c4",
+          "context_name": "task-2/advisor2/emphasis",
+          "context_uid": "398f9930-3a0f-5de0-a339-ceba7dd5d1c6",
+          "memories": [
+            {
+              "content": "Do not exceed two primary HCI contributions that readers must remember.",
+              "content_digest": "59786866cf953172c2697f09398356a861e8ea448093102c32c9149f16b2e5c5",
+              "position": 0,
+              "uid": "d59dc83b-ce6a-5ac7-ab64-e5436df1f945"
+            },
+            {
+              "content": "Present each design or operational contribution as a single named sentence.",
+              "content_digest": "e0de5a9f1c1ca585fe062d7e11f8d2536cbe5ec4eefc16da6f7a0b62c0247d45",
+              "position": 1,
+              "uid": "328de462-17a4-551f-9f74-cb3118519e45"
+            },
+            {
+              "content": "In studies recruiting organizational members, emphasize workflow constraints.",
+              "content_digest": "c46efadebd89f3d757993baea79a5ef1386bbf6b4769ae3704ae62102397fc3b",
+              "position": 2,
+              "uid": "eab1dac5-8b61-5793-a56f-c4e3e64af190"
+            },
+            {
+              "content": "In studies recruiting organizational members, emphasize manager approval constraints.",
+              "content_digest": "2387fb9f3ab907e671fc9dcc2e7f067a84bdf1f5713d8385a32e39eb1e14751d",
+              "position": 3,
+              "uid": "f90e616a-d5a4-5cc2-86e4-62534a1faf83"
+            },
+            {
+              "content": "HCI reviewers find it difficult to identify primary contributions when named design and operational contributions exceed two.",
+              "content_digest": "04e080bfdf7277d04f0efc1b1d6775d06cba88aab5ff78bfd430674b004722a5",
+              "position": 4,
+              "uid": "78a1c87a-6936-516c-b578-8e97dc2e91f4"
+            },
+            {
+              "content": "Highlight one primary field operational decision to be changed by evaluation results as the central claim.",
+              "content_digest": "9a6bda883e68a2553a1238114d5de2746dc220948aebc1c2965cbb435318fe9c",
+              "position": 5,
+              "uid": "7af2db41-9091-5452-9beb-8fd7b48b7872"
+            },
+            {
+              "content": "Specify prototype features unnecessary for reviewing the primary field problem as secondary scope.",
+              "content_digest": "419ed0b0bccf1af7b30e0351f5e87b9e37e469cfa567e684695ffe4b6d39178a",
+              "position": 6,
+              "uid": "2312f35d-c17d-5af3-b84f-d2e671d7663f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "7d884a4d-05f4-4574-9544-81d73176701a"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The reference frame concentrates on defensible generalization boundaries, transfer conditions, and overgeneralization risk. The compared frame instead governs contribution prioritization, organizational constraints, a central field decision, and secondary prototype scope. No claims safely collapse across frames, and neither frame contradicts the other.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c6ddadb4-cb2c-425e-a658-2385af748811",
+              "memory_uid": "e594a6ab-81e9-5e5f-8ef5-e6bb8f3760d7"
+            },
+            {
+              "frame_uid": "c6ddadb4-cb2c-425e-a658-2385af748811",
+              "memory_uid": "31cdacff-7c49-547d-9f97-598a07b67fb6"
+            }
+          ],
+          "reason": "The memories express the requirement and its reviewer-facing rationale as one one-sided claim, without a counterpart concerning applicability exclusions in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Explicitly identify excluded user groups and contexts so reviewers can assess the boundary of generalization.",
+          "uid": "f232ca86-e498-5ac4-b71b-95bb3fc73cc6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c6ddadb4-cb2c-425e-a658-2385af748811",
+              "memory_uid": "1459d986-4dc9-51f3-bf13-dbb0b07045c8"
+            }
+          ],
+          "reason": "This independently specifies positive applicability conditions, while the compared frame does not address when design knowledge transfers.",
+          "status": "RESOLVED",
+          "summary": "State the goals, interaction conditions, and technological constraints governing transfer of design knowledge.",
+          "uid": "2b9c7009-afce-5baf-8036-3f58a03380ba"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c6ddadb4-cb2c-425e-a658-2385af748811",
+              "memory_uid": "1db5fcd6-f93c-5630-9810-053c10b5ceba"
+            }
+          ],
+          "reason": "This is an independent methodological principle absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Small formative studies may support analytic generalization through stated design conditions and mechanisms rather than statistical representativeness.",
+          "uid": "111d1501-2cc0-5245-a010-ff2b1c014118"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c6ddadb4-cb2c-425e-a658-2385af748811",
+              "memory_uid": "fd29c315-521f-53c0-add5-c668ec318a43"
+            }
+          ],
+          "reason": "This diagnostic observation is independently useful and has no corresponding assessment in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to generalize design knowledge from an accessible sample to a broader population.",
+          "uid": "2fd939d0-a27d-5636-8223-6d766158c25f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d884a4d-05f4-4574-9544-81d73176701a",
+              "memory_uid": "d59dc83b-ce6a-5ac7-ab64-e5436df1f945"
+            },
+            {
+              "frame_uid": "7d884a4d-05f4-4574-9544-81d73176701a",
+              "memory_uid": "78a1c87a-6936-516c-b578-8e97dc2e91f4"
+            }
+          ],
+          "reason": "The memories state the limit and its reviewer-cognition rationale as one one-sided policy, with no contribution-count counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Limit memorable named HCI contributions to two so reviewers can identify the primary contributions.",
+          "uid": "bd03449f-2380-57be-ab52-9471c2159a06"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d884a4d-05f4-4574-9544-81d73176701a",
+              "memory_uid": "328de462-17a4-551f-9f74-cb3118519e45"
+            }
+          ],
+          "reason": "This contribution-formatting rule is independent of the numerical cap and is absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Present every design or operational contribution as one named sentence.",
+          "uid": "d769622f-8daa-54c2-8370-4c52ed790488"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d884a4d-05f4-4574-9544-81d73176701a",
+              "memory_uid": "eab1dac5-8b61-5793-a56f-c4e3e64af190"
+            },
+            {
+              "frame_uid": "7d884a4d-05f4-4574-9544-81d73176701a",
+              "memory_uid": "f90e616a-d5a4-5cc2-86e4-62534a1faf83"
+            }
+          ],
+          "reason": "The memories split complementary organizational constraints under the same explicit recruitment condition; the reference frame does not prescribe this emphasis.",
+          "status": "RESOLVED",
+          "summary": "For studies recruiting organizational members, emphasize constraints arising from workflow and manager approval.",
+          "uid": "d3f4fe92-912f-599b-9dce-e62dc9ff5e86"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d884a4d-05f4-4574-9544-81d73176701a",
+              "memory_uid": "7af2db41-9091-5452-9beb-8fd7b48b7872"
+            }
+          ],
+          "reason": "This independently sets the focus of the evaluation claim and has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Make one field operational decision that evaluation results should change the central claim.",
+          "uid": "f8f26afd-e1bd-533e-8720-962d83fff8a2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "7d884a4d-05f4-4574-9544-81d73176701a",
+              "memory_uid": "2312f35d-c17d-5af3-b84f-d2e671d7663f"
+            }
+          ],
+          "reason": "This independently separates secondary prototype scope from the primary field problem; applicability exclusions in the reference concern different objects and decisions.",
+          "status": "RESOLVED",
+          "summary": "Classify prototype features unnecessary for reviewing the primary field problem as secondary scope.",
+          "uid": "36c25332-2150-5adc-aa27-d55249a57794"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame uniquely limits and names primary contributions, foregrounds workflow and approval constraints for organizational members, centers evaluation on one field decision, and marks unnecessary prototype features as secondary.",
+        "differences": "",
+        "reference_only": "The reference uniquely requires explicit exclusions and transfer conditions, distinguishes analytic generalization from representativeness, and identifies overextension from an accessible sample to broader populations."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "4b73ff78-52bf-4309-8e78-b4fefe80fd90"
+    },
+    "analysis_digest": "68b8be50435daac4451bbaa100580cd895c197708081d8b0eaa563de6f0438d6",
+    "key": "8ab6517e002cd73db7b0010859cae8454710875c8b2491e1c9e55fa790f2d16b",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 52.02524920900032,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "8ab6517e002cd73db7b0010859cae8454710875c8b2491e1c9e55fa790f2d16b",
+  "created_at": "2026-08-13T18:26:31.155126Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/scope",
+  "pair_key": "9e71c2557e8df24c966b545c8fb5e621ef662e97774fcb3b9501a852a9460f90",
+  "provider_seconds": 52.02524920900032,
+  "right": "task-2/advisor2/emphasis",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

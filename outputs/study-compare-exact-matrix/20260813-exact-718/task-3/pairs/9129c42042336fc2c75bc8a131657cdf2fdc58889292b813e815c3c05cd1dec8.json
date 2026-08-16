@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:35:08.370338+00:00",
+      "frames": [
+        {
+          "context_digest": "2f00e067f4f35600b73e87b5555d405e2801a33ba18a54c91e63e23a79f27a4c",
+          "context_name": "task-3/local/personal-memory/2024/01",
+          "context_uid": "cbd2e4d6-2601-5d3f-8bf2-2f66b755b007",
+          "memories": [
+            {
+              "content": "The user's mother's birthday falls in the third week of January.",
+              "content_digest": "d635ded9b470acdd462156515700e66c23dcb513a7034bb365be0ac139ec0422",
+              "position": 0,
+              "uid": "2cd0229d-b7f1-581b-8019-25bdb485afd9"
+            },
+            {
+              "content": "At the user's last family meal out, noise from the next table made conversation nearly impossible.",
+              "content_digest": "dc337d32e4b09167289e19a6b1c8fe970e7eaa6fdd6868ed1c7c300e018fcd15",
+              "position": 1,
+              "uid": "c62f1669-11c9-5a81-b5f5-304acce69c23"
+            },
+            {
+              "content": "At a barbecue at home in the same month, the user was comfortable because no one had to raise their voice.",
+              "content_digest": "63763b293a491200bf1f7a251467c1fa8c2cb8d4d8450732c01666dcdea183e3",
+              "position": 2,
+              "uid": "674f4bdf-27c3-5870-a68e-91e4a093dd93"
+            },
+            {
+              "content": "During their mother's birthday meal, the user left a restaurant with loud music after 30 minutes.",
+              "content_digest": "560755c6f051ec6f85e32dc4ee9447dfc97418fca6f9f414f6910c518a52c2c0",
+              "position": 3,
+              "uid": "21509788-2e3d-548b-8303-f34cfea68c9b"
+            },
+            {
+              "content": "When discussing postponed matters with family, the user prefers a quiet, one-on-one dining environment.",
+              "content_digest": "f22bedcf60a64b3666a7e4363d6a55c48547535492010fcb205a182c1ee920a8",
+              "position": 4,
+              "uid": "74eaea9d-7640-51ba-aa77-9c050581dc46"
+            },
+            {
+              "content": "At a large banquet hall reserved by their older sister, the user remembered the surrounding noise more than the food.",
+              "content_digest": "566e443c69410f1672ab209ba2257604e373cd305ab27243a39574481407af71",
+              "position": 5,
+              "uid": "1384df1d-2173-5673-96f5-a4d86835d404"
+            },
+            {
+              "content": "On a day the user ate grilled food at home with their younger brother, conversation was easy to continue, so the user stayed another hour after the meal.",
+              "content_digest": "c93ccbe3524946f1def05a1b385fbe3387945f51164b00c56f1ff80b477d011f",
+              "position": 6,
+              "uid": "3cf68c8e-5da9-51d3-a402-c10f4137b1f4"
+            },
+            {
+              "content": "The user's mother considers having the whole family eat at the same time more important than receiving a birthday gift.",
+              "content_digest": "d302cf7db2b83b103ea11323ab1b9d36168d224b405d4d0dd51b46b494014291",
+              "position": 7,
+              "uid": "a1984768-d20d-59cd-84c9-cb08c6b7affb"
+            },
+            {
+              "content": "When proposing a birthday meal for the user's mother, check the schedule and attendees; if conversation is the purpose, first consider a low-noise location, then confirm the final choice with the user.",
+              "content_digest": "481169c62cf6fae6b4f29184ffacef9c3c9d825a34d1545ca592bc35537bc65c",
+              "position": 8,
+              "uid": "f52d11e2-2449-5c9d-887b-96c8b5cd0184"
+            },
+            {
+              "content": "The local agent can compare past dining environments and the user's responses, but those records alone cannot determine the location of the next gathering.",
+              "content_digest": "b05fef8420abe3c47c2cd9f2de9149c9c6bda7dca301f09ac7f94eac1a29d2fa",
+              "position": 9,
+              "uid": "c8fccfbe-7756-5d62-9cd7-403dd6741915"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "211ec2d9-193b-4755-8e97-0d1daa83bb75"
+        },
+        {
+          "context_digest": "df0924e320cd14a29eaed60f78e82fd509c4062949b35706b2a7cb94571fb599",
+          "context_name": "task-3/local/personal-memory/2026/04",
+          "context_uid": "16e860a8-7a90-5b7a-adc3-1c487ef97e03",
+          "memories": [
+            {
+              "content": "The user collects clothes for donation in a large bag beside the entrance.",
+              "content_digest": "39f2f01c59b7fa4ca7529d510e1b0a6ffab6706861042f771cfe97f6f806efac",
+              "position": 0,
+              "uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            },
+            {
+              "content": "After emptying an entire drawer at once, the user could not find a charger they needed.",
+              "content_digest": "674c33ba6475f42b29b03e6f8711e0216f983f3d37fee3dacf9336e3bb4596bf",
+              "position": 1,
+              "uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            },
+            {
+              "content": "During the next organizing session, the user sorted items by type and put only items to be discarded in the bag.",
+              "content_digest": "63104b5a7fd380f818c8758c51f9550c7a7fa41ff91f1dd314225d1824b69643",
+              "position": 2,
+              "uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            },
+            {
+              "content": "Even after photographing unworn clothes, the user did not take them out again for one month.",
+              "content_digest": "519f131096440719dcd3412f4439c5cfe44b7f402684170209708040692dc5fd",
+              "position": 3,
+              "uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            },
+            {
+              "content": "After moving those clothes to the donation bag, the user cleared one closet compartment.",
+              "content_digest": "45db58ae108a299344d982d8606fff26f733252da691cf01417e760909ff6057",
+              "position": 4,
+              "uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            },
+            {
+              "content": "The user nearly discarded an important paper with advertising and checked the recycling box again.",
+              "content_digest": "6bf928f67944656e5f3c68d8869c0cefd039a588f0ba735f94520231ef58017c",
+              "position": 5,
+              "uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            },
+            {
+              "content": "During the next organizing session, the user kept a separate document box and did not mix the papers.",
+              "content_digest": "adac8d4266c6b11e15d29c484665bc5dcc915f9aa319198b6a69d0e7b0131bb3",
+              "position": 6,
+              "uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            },
+            {
+              "content": "The user's mother asks the user to check whether she needs kitchen items in good condition before discarding them.",
+              "content_digest": "0752bc2ac00c0b1301c45ab4c2e73f63c57e6ebc4255dcc1c13330ffda906612",
+              "position": 7,
+              "uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            },
+            {
+              "content": "Confirm with the user before marking a personal document or another person's property as a disposal candidate.",
+              "content_digest": "17062e2cd4738619e81e211cb2f53d14e78c5f4eab9ae49053ce7e06935a7db5",
+              "position": 8,
+              "uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            },
+            {
+              "content": "The local agent cannot determine an object's emotional meaning from frequency of use alone.",
+              "content_digest": "9c86bcfe2b209bf7957dced0eab000b42f97b6a435d705ccaccb15e49be3691d",
+              "position": 9,
+              "uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "627ca2b7-0872-4069-9053-8260ba2bb5e1"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate domains: the reference frame concerns family birthday dining and sensitivity to noisy settings, while the compared frame concerns cautious household decluttering. Neither frame supplies a claim that directly governs or qualifies the other.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "211ec2d9-193b-4755-8e97-0d1daa83bb75",
+              "memory_uid": "2cd0229d-b7f1-581b-8019-25bdb485afd9"
+            }
+          ],
+          "reason": "Only the reference frame provides the birthday timing, which is independently useful scheduling context.",
+          "status": "RESOLVED",
+          "summary": "The user's mother's birthday occurs in the third week of January.",
+          "uid": "a18c4dfc-21be-519a-ae5a-ce8b0da66845"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "211ec2d9-193b-4755-8e97-0d1daa83bb75",
+              "memory_uid": "c62f1669-11c9-5a81-b5f5-304acce69c23"
+            }
+          ],
+          "reason": "Only the reference frame records this specific adverse dining-noise experience.",
+          "status": "RESOLVED",
+          "summary": "Noise from a neighboring table made conversation at the user's last family restaurant meal nearly impossible.",
+          "uid": "91b9e80e-e7ca-5e40-878b-c0ba7cd8e5f7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "211ec2d9-193b-4755-8e97-0d1daa83bb75",
+              "memory_uid": "674f4bdf-27c3-5870-a68e-91e4a093dd93"
+            }
+          ],
+          "reason": "Only the reference frame records this specific positive response to a quiet home meal.",
+          "status": "RESOLVED",
+          "summary": "The user was comfortable at a home barbecue where conversation did not require raised voices.",
+          "uid": "74557dd7-5181-59b8-a93b-f0ac13ad487c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "211ec2d9-193b-4755-8e97-0d1daa83bb75",
+              "memory_uid": "21509788-2e3d-548b-8303-f34cfea68c9b"
+            }
+          ],
+          "reason": "Only the reference frame records this specific reaction to a loud birthday venue.",
+          "status": "RESOLVED",
+          "summary": "The user left a loud-music restaurant after thirty minutes during their mother's birthday meal.",
+          "uid": "4d1d1d3f-daf2-5412-89bf-80594acca3d9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "211ec2d9-193b-4755-8e97-0d1daa83bb75",
+              "memory_uid": "74eaea9d-7640-51ba-aa77-9c050581dc46"
+            }
+          ],
+          "reason": "Only the reference frame states this purpose-specific environment preference.",
+          "status": "RESOLVED",
+          "summary": "For discussing postponed family matters, the user prefers quiet, one-on-one dining.",
+          "uid": "1624f4ad-befd-5a46-90bc-164e05245816"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "211ec2d9-193b-4755-8e97-0d1daa83bb75",
+              "memory_uid": "1384df1d-2173-5673-96f5-a4d86835d404"
+            }
+          ],
+          "reason": "Only the reference frame records this specific banquet experience and its lasting impression.",
+          "status": "RESOLVED",
+          "summary": "At a large banquet hall reserved by the user's older sister, surrounding noise overshadowed the food in the user's memory.",
+          "uid": "878d41fa-1909-5c93-98af-39e24c0e191c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "211ec2d9-193b-4755-8e97-0d1daa83bb75",
+              "memory_uid": "3cf68c8e-5da9-51d3-a402-c10f4137b1f4"
+            }
+          ],
+          "reason": "Only the reference frame records this specific link between conversational ease and staying longer.",
+          "status": "RESOLVED",
+          "summary": "Easy conversation during a home meal with the user's younger brother led the user to stay an additional hour.",
+          "uid": "5330bdad-8aed-5dec-80a8-a8f960037c12"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "211ec2d9-193b-4755-8e97-0d1daa83bb75",
+              "memory_uid": "a1984768-d20d-59cd-84c9-cb08c6b7affb"
+            }
+          ],
+          "reason": "Only the reference frame states the mother's birthday priority.",
+          "status": "RESOLVED",
+          "summary": "The user's mother values the whole family eating together more than receiving a birthday gift.",
+          "uid": "91f76ada-0bda-5f1e-9132-104fc63d96f7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "211ec2d9-193b-4755-8e97-0d1daa83bb75",
+              "memory_uid": "f52d11e2-2449-5c9d-887b-96c8b5cd0184"
+            }
+          ],
+          "reason": "Only the reference frame provides this multi-step planning policy.",
+          "status": "RESOLVED",
+          "summary": "Birthday-meal proposals should check schedules and attendees, favor low noise when conversation is the purpose, and obtain the user's final confirmation.",
+          "uid": "78ae1cc2-0ff2-573c-916b-e4644f2385fd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "211ec2d9-193b-4755-8e97-0d1daa83bb75",
+              "memory_uid": "c8fccfbe-7756-5d62-9cd7-403dd6741915"
+            }
+          ],
+          "reason": "Only the reference frame states this limit on venue inference.",
+          "status": "RESOLVED",
+          "summary": "Past dining environments and reactions can be compared but cannot alone determine the next gathering location.",
+          "uid": "73507184-3213-5e07-9b3d-a65a848f6318"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "627ca2b7-0872-4069-9053-8260ba2bb5e1",
+              "memory_uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            }
+          ],
+          "reason": "Only the compared frame records this donation-storage practice.",
+          "status": "RESOLVED",
+          "summary": "The user collects donation clothes in a large bag beside the entrance.",
+          "uid": "3831067f-e205-5a51-849c-7da5df61e999"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "627ca2b7-0872-4069-9053-8260ba2bb5e1",
+              "memory_uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            }
+          ],
+          "reason": "Only the compared frame records this organizing mistake and consequence.",
+          "status": "RESOLVED",
+          "summary": "After emptying a whole drawer at once, the user could not find a needed charger.",
+          "uid": "c265019f-95dd-5a22-baec-e76a580412a2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "627ca2b7-0872-4069-9053-8260ba2bb5e1",
+              "memory_uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            }
+          ],
+          "reason": "Only the compared frame records this revised sorting method.",
+          "status": "RESOLVED",
+          "summary": "In the next organizing session, the user sorted by item type and bagged only items meant for disposal.",
+          "uid": "f7ad1cce-407d-5979-8d54-c7794cc1a082"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "627ca2b7-0872-4069-9053-8260ba2bb5e1",
+              "memory_uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            }
+          ],
+          "reason": "Only the compared frame records this month-long nonuse after photographing the clothes.",
+          "status": "RESOLVED",
+          "summary": "Photographing unworn clothes did not lead the user to retrieve them during the following month.",
+          "uid": "1a5d10b1-8951-575d-b414-787cd635c94f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "627ca2b7-0872-4069-9053-8260ba2bb5e1",
+              "memory_uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            }
+          ],
+          "reason": "Only the compared frame records this concrete result of moving the clothes.",
+          "status": "RESOLVED",
+          "summary": "Moving the unworn clothes into the donation bag cleared a closet compartment.",
+          "uid": "79e494a2-a3c7-500e-b650-fcdcdf8d6e45"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "627ca2b7-0872-4069-9053-8260ba2bb5e1",
+              "memory_uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            }
+          ],
+          "reason": "Only the compared frame records this document-disposal near miss and response.",
+          "status": "RESOLVED",
+          "summary": "The user nearly discarded an important paper with advertising and consequently rechecked the recycling box.",
+          "uid": "a88a4777-0659-5287-a1d5-a4b4450b4c6f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "627ca2b7-0872-4069-9053-8260ba2bb5e1",
+              "memory_uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            }
+          ],
+          "reason": "Only the compared frame records this revised paper-sorting practice.",
+          "status": "RESOLVED",
+          "summary": "In the next organizing session, the user kept papers separate in a document box.",
+          "uid": "2a568d52-0a0c-5b14-a46d-9eb30aae6b1d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "627ca2b7-0872-4069-9053-8260ba2bb5e1",
+              "memory_uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            }
+          ],
+          "reason": "Only the compared frame states this family-property reuse check.",
+          "status": "RESOLVED",
+          "summary": "Before good kitchen items are discarded, the user's mother asks the user to check whether she needs them.",
+          "uid": "8c6bdd85-02ab-5d2f-907c-303c2bedd458"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "627ca2b7-0872-4069-9053-8260ba2bb5e1",
+              "memory_uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            }
+          ],
+          "reason": "Only the compared frame provides this confirmation requirement for sensitive disposal decisions.",
+          "status": "RESOLVED",
+          "summary": "The user should confirm before a personal document or another person's property is marked as a disposal candidate.",
+          "uid": "3558d313-fd44-50f5-a7d5-33bbd28550f7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "627ca2b7-0872-4069-9053-8260ba2bb5e1",
+              "memory_uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "reason": "Only the compared frame states this limit on interpreting an object's significance.",
+          "status": "RESOLVED",
+          "summary": "Frequency of use alone cannot determine an object's emotional meaning.",
+          "uid": "959e01fc-2063-5576-865e-d2475615f89b"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame records donation and sorting practices, mistakes that motivated safer organization, family-property checks, confirmation requirements for sensitive disposal, and limits on inferring emotional value from use frequency.",
+        "differences": "",
+        "reference_only": "The reference frame records birthday timing and family priorities, strong preferences and experiences favoring quiet dining, a user-confirmed meal-planning policy, and limits on inferring the next venue."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "70b414db-fcc4-40bd-9208-22c8c49d61f4"
+    },
+    "analysis_digest": "450c9ffebec508cfac7d0b3b3ec833271222c9e073d10dcd5e51477f135b5e9c",
+    "key": "94342fa8838b7ecc183d64979f02a90a06a8c8df1ed2bb936c1bb8c04580c35a",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 48.133297208998556,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "94342fa8838b7ecc183d64979f02a90a06a8c8df1ed2bb936c1bb8c04580c35a",
+  "created_at": "2026-08-13T18:35:56.503252Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/01",
+  "pair_key": "9129c42042336fc2c75bc8a131657cdf2fdc58889292b813e815c3c05cd1dec8",
+  "provider_seconds": 48.133297208998556,
+  "right": "task-3/local/personal-memory/2026/04",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

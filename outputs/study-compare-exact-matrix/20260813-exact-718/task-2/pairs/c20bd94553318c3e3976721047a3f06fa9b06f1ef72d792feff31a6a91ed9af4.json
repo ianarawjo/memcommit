@@ -1,0 +1,283 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:14:11.794619+00:00",
+      "frames": [
+        {
+          "context_digest": "30f0425cad991a5bb1b473f7e73c2c039db2d91dc0c95116413d0a8e7b6fed29",
+          "context_name": "task-2/advisor1/budget",
+          "context_uid": "d6d3ee9e-eb0f-5c28-9463-7a680d53b470",
+          "memories": [
+            {
+              "content": "Keep the total, major cost categories, and one-line estimate basis in the main text so the resource argument can be understood without leaving the proposal.",
+              "content_digest": "5dc9db0be6499fc408063be04c9e1cc344986512f4d24d5697f5c53a08529c9a",
+              "position": 0,
+              "uid": "05e0261e-5c52-5030-8176-0f02d4522931"
+            },
+            {
+              "content": "Place each major cost beside the activity or deliverable it enables in the main text.",
+              "content_digest": "b97219830051faf46cff7c9541c331012571866926740ed4d6a7925c12fb21a8",
+              "position": 1,
+              "uid": "1083e9b3-698a-57b1-91ab-ce04cec1e5e5"
+            },
+            {
+              "content": "State the quantity and unit-rate basis for each major cost in the same paragraph that requests it.",
+              "content_digest": "5ce37d95d9d037bbab71276fa8f0e8e383b472d0122817ab7b711c971b8cbf5d",
+              "position": 2,
+              "uid": "3652f268-d86f-55d6-935d-d3bdc487aae6"
+            },
+            {
+              "content": "Readers may question a proposed priority when its cost cannot be checked on the same page as the claimed benefit.",
+              "content_digest": "26fa14ff80ece7682cb51c7356a47a8e60e94edd4551f59ecd2fa3017bd9bffd",
+              "position": 3,
+              "uid": "4e1e1201-94b8-5a7a-8737-edc4c62881ff"
+            },
+            {
+              "content": "Update the cost sentence whenever the related activity changes so the narrative and requested amount cannot drift apart.",
+              "content_digest": "343c11198b38874476e0cda3707dd07436699852db0934e2e8f8c95a7ea3c3ea",
+              "position": 4,
+              "uid": "2f5f9039-e038-51c1-8af0-21a78772c512"
+            },
+            {
+              "content": "Accept a denser main-text paragraph when the estimate basis is essential to deciding whether the request is proportionate.",
+              "content_digest": "59ca1aafc11b37b097251b4b7c6b15e249262304f79b261bd4351d3ca89cb5fe",
+              "position": 5,
+              "uid": "f7a16d08-fbe2-5508-890d-cdbf70c1146e"
+            },
+            {
+              "content": "The user tends to revise the work plan but forget a detached budget table unless the key amount is repeated beside the activity.",
+              "content_digest": "393651043824d9e9c528e5de7618854b71970967d172ee1e9bc3c77aec3baab0",
+              "position": 6,
+              "uid": "2ca1d5a1-d78a-55b2-ab21-fd6ad73366b4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "f96fda7e-0859-468f-a7a5-b1dc9a1399f0"
+        },
+        {
+          "context_digest": "e70e4eaff26e4baf1b346a4ecd2b44ed9f9ccac9e205b7b82572dc8ef0e217c4",
+          "context_name": "task-2/advisor2/emphasis",
+          "context_uid": "398f9930-3a0f-5de0-a339-ceba7dd5d1c6",
+          "memories": [
+            {
+              "content": "Do not exceed two primary HCI contributions that readers must remember.",
+              "content_digest": "59786866cf953172c2697f09398356a861e8ea448093102c32c9149f16b2e5c5",
+              "position": 0,
+              "uid": "d59dc83b-ce6a-5ac7-ab64-e5436df1f945"
+            },
+            {
+              "content": "Present each design or operational contribution as a single named sentence.",
+              "content_digest": "e0de5a9f1c1ca585fe062d7e11f8d2536cbe5ec4eefc16da6f7a0b62c0247d45",
+              "position": 1,
+              "uid": "328de462-17a4-551f-9f74-cb3118519e45"
+            },
+            {
+              "content": "In studies recruiting organizational members, emphasize workflow constraints.",
+              "content_digest": "c46efadebd89f3d757993baea79a5ef1386bbf6b4769ae3704ae62102397fc3b",
+              "position": 2,
+              "uid": "eab1dac5-8b61-5793-a56f-c4e3e64af190"
+            },
+            {
+              "content": "In studies recruiting organizational members, emphasize manager approval constraints.",
+              "content_digest": "2387fb9f3ab907e671fc9dcc2e7f067a84bdf1f5713d8385a32e39eb1e14751d",
+              "position": 3,
+              "uid": "f90e616a-d5a4-5cc2-86e4-62534a1faf83"
+            },
+            {
+              "content": "HCI reviewers find it difficult to identify primary contributions when named design and operational contributions exceed two.",
+              "content_digest": "04e080bfdf7277d04f0efc1b1d6775d06cba88aab5ff78bfd430674b004722a5",
+              "position": 4,
+              "uid": "78a1c87a-6936-516c-b578-8e97dc2e91f4"
+            },
+            {
+              "content": "Highlight one primary field operational decision to be changed by evaluation results as the central claim.",
+              "content_digest": "9a6bda883e68a2553a1238114d5de2746dc220948aebc1c2965cbb435318fe9c",
+              "position": 5,
+              "uid": "7af2db41-9091-5452-9beb-8fd7b48b7872"
+            },
+            {
+              "content": "Specify prototype features unnecessary for reviewing the primary field problem as secondary scope.",
+              "content_digest": "419ed0b0bccf1af7b30e0351f5e87b9e37e469cfa567e684695ffe4b6d39178a",
+              "position": 6,
+              "uid": "2312f35d-c17d-5af3-b84f-d2e671d7663f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "a1e5b5ea-fca3-41ea-9f0d-0adeccbfad77"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate proposal-writing concerns. The reference frame focuses on keeping cost reasoning visible, checkable, and synchronized with activities, while the compared frame focuses on limiting and structuring HCI contributions, foregrounding field decisions, and clarifying study and prototype scope.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f96fda7e-0859-468f-a7a5-b1dc9a1399f0",
+              "memory_uid": "05e0261e-5c52-5030-8176-0f02d4522931"
+            },
+            {
+              "frame_uid": "f96fda7e-0859-468f-a7a5-b1dc9a1399f0",
+              "memory_uid": "1083e9b3-698a-57b1-91ab-ce04cec1e5e5"
+            },
+            {
+              "frame_uid": "f96fda7e-0859-468f-a7a5-b1dc9a1399f0",
+              "memory_uid": "3652f268-d86f-55d6-935d-d3bdc487aae6"
+            },
+            {
+              "frame_uid": "f96fda7e-0859-468f-a7a5-b1dc9a1399f0",
+              "memory_uid": "f7a16d08-fbe2-5508-890d-cdbf70c1146e"
+            }
+          ],
+          "reason": "These memories split one presentation policy: preserve enough cost detail in the proposal narrative for readers to understand the resource request without consulting detached material.",
+          "status": "RESOLVED",
+          "summary": "Major costs and their estimate bases should remain beside the activities they enable in the main text, even when this requires denser prose.",
+          "uid": "ae43d6e3-1659-507b-bf09-48c34d948115"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f96fda7e-0859-468f-a7a5-b1dc9a1399f0",
+              "memory_uid": "4e1e1201-94b8-5a7a-8737-edc4c62881ff"
+            }
+          ],
+          "reason": "This is a one-sided observation about reader scrutiny and the persuasive consequence of separating costs from benefits.",
+          "status": "RESOLVED",
+          "summary": "A proposed priority may lose credibility when readers cannot check its cost on the same page as its claimed benefit.",
+          "uid": "725c949e-62d9-50d6-bfed-7de511c31404"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "f96fda7e-0859-468f-a7a5-b1dc9a1399f0",
+              "memory_uid": "2f5f9039-e038-51c1-8af0-21a78772c512"
+            },
+            {
+              "frame_uid": "f96fda7e-0859-468f-a7a5-b1dc9a1399f0",
+              "memory_uid": "2ca1d5a1-d78a-55b2-ab21-fd6ad73366b4"
+            }
+          ],
+          "reason": "Both memories express one maintenance concern: co-locating and updating key amounts prevents narrative and budget drift during revision.",
+          "status": "RESOLVED",
+          "summary": "Cost wording should be revised with its related activity because detached budget information is prone to falling out of sync with work-plan changes.",
+          "uid": "44c07df1-6fb9-5571-a9ce-7d337af565d1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a1e5b5ea-fca3-41ea-9f0d-0adeccbfad77",
+              "memory_uid": "d59dc83b-ce6a-5ac7-ab64-e5436df1f945"
+            },
+            {
+              "frame_uid": "a1e5b5ea-fca3-41ea-9f0d-0adeccbfad77",
+              "memory_uid": "78a1c87a-6936-516c-b578-8e97dc2e91f4"
+            }
+          ],
+          "reason": "The memories state the same contribution-count policy and its reviewer-comprehension rationale.",
+          "status": "RESOLVED",
+          "summary": "Readers should be asked to remember no more than two primary HCI contributions.",
+          "uid": "53c484e0-3b26-51cb-9020-311d66381d7a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a1e5b5ea-fca3-41ea-9f0d-0adeccbfad77",
+              "memory_uid": "328de462-17a4-551f-9f74-cb3118519e45"
+            }
+          ],
+          "reason": "This is an independent one-sided formatting rule for making contributions identifiable.",
+          "status": "RESOLVED",
+          "summary": "Each design or operational contribution should be presented as one named sentence.",
+          "uid": "3db40208-9156-5594-babf-17b2e0f9c51b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a1e5b5ea-fca3-41ea-9f0d-0adeccbfad77",
+              "memory_uid": "eab1dac5-8b61-5793-a56f-c4e3e64af190"
+            },
+            {
+              "frame_uid": "a1e5b5ea-fca3-41ea-9f0d-0adeccbfad77",
+              "memory_uid": "f90e616a-d5a4-5cc2-86e4-62534a1faf83"
+            }
+          ],
+          "reason": "The memories split one scoped study-framing claim into two organizational constraints that should be foregrounded.",
+          "status": "RESOLVED",
+          "summary": "Studies recruiting organizational members should emphasize workflow and manager-approval constraints.",
+          "uid": "be457f53-9280-573e-80c4-9db0f17aaca4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a1e5b5ea-fca3-41ea-9f0d-0adeccbfad77",
+              "memory_uid": "7af2db41-9091-5452-9beb-8fd7b48b7872"
+            }
+          ],
+          "reason": "This is an independent one-sided policy for centering the proposal on an actionable operational decision.",
+          "status": "RESOLVED",
+          "summary": "One field operational decision that evaluation results could change should serve as the central claim.",
+          "uid": "7a9ab64b-1e23-5bdb-8e40-4b86d5ea7f77"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a1e5b5ea-fca3-41ea-9f0d-0adeccbfad77",
+              "memory_uid": "2312f35d-c17d-5af3-b84f-d2e671d7663f"
+            }
+          ],
+          "reason": "This is an independent one-sided scope rule separating peripheral prototype features from the primary field problem.",
+          "status": "RESOLVED",
+          "summary": "Prototype features unnecessary for reviewing the primary field problem should be identified as secondary scope.",
+          "uid": "c7f60650-47b6-5ba6-ab5c-d7f21279de8e"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame sharpens HCI contribution framing through a strict primary-contribution limit, named claims, organizational constraints, one central field decision, and explicit secondary prototype scope.",
+        "differences": "",
+        "reference_only": "The reference frame keeps major costs, estimate bases, and enabled activities together in the narrative, emphasizing same-page scrutiny and revision discipline to prevent budget drift."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "cf5a9529-b14a-4867-aa87-7780f7445fbd"
+    },
+    "analysis_digest": "83144c0a85e4fe3db2e49d91c332739e10741a00c6b47d45d2f3e5175b60936e",
+    "key": "ec200ec280ae22ba4a299719b1cfbbe7fdfd8911171ff26cde261dc72392324c",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 33.565793959001894,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "ec200ec280ae22ba4a299719b1cfbbe7fdfd8911171ff26cde261dc72392324c",
+  "created_at": "2026-08-13T18:14:45.360064Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/budget",
+  "pair_key": "c20bd94553318c3e3976721047a3f06fa9b06f1ef72d792feff31a6a91ed9af4",
+  "provider_seconds": 33.565793959001894,
+  "right": "task-2/advisor2/emphasis",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

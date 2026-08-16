@@ -1,0 +1,415 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:47:32.085303+00:00",
+      "frames": [
+        {
+          "context_digest": "0b8af0ea4e580cc332939d026149e543e9251c54de246e3eabb83c941e6c12f2",
+          "context_name": "task-3/local/personal-memory/2024/12",
+          "context_uid": "66c3e5de-61bb-5795-8e5a-4e28f64be857",
+          "memories": [
+            {
+              "content": "The user used an accessible entrance at a clinic in December 2024.",
+              "content_digest": "a940bc9fb7423a1bdb9dde547cd39eb8ad66d4fa3051649c62b042fc63935263",
+              "position": 0,
+              "uid": "a6923620-267d-5129-b8c4-cd9b1e1a1e7b"
+            },
+            {
+              "content": "On a day snow had accumulated and blocked the main-entrance ramp, the user went to a side entrance.",
+              "content_digest": "460c05d8e8b4b7443ff42cbeead66e07201846394bcbe5948f63e585a197006f",
+              "position": 1,
+              "uid": "fb0e1d1f-0ef5-5214-b6d7-f6ca5c68f582"
+            },
+            {
+              "content": "The user learned on site that the elevator was under inspection and delayed the appointment.",
+              "content_digest": "b5efa024c597b57651178431d22173d4ca1242c3a4c9607f8bd5a7ff681af6f4",
+              "position": 2,
+              "uid": "4cb45120-4376-5c7b-ae92-faa9e4b9330c"
+            },
+            {
+              "content": "The day before the next visit, the user called to check whether the elevator would be operating.",
+              "content_digest": "93c66066de480a4d2f30b7b7c4d955acfceb227ac898766b6375829804b580eb",
+              "position": 3,
+              "uid": "479f4434-879c-5335-b0c9-c0bfa19ecdcd"
+            },
+            {
+              "content": "The user waited for their turn in front of a ticket machine near the waiting chairs.",
+              "content_digest": "fada8c09d46af2e1bcbd2b1e97d9cb786ceca83fc13d1240627639dd6cb96e65",
+              "position": 4,
+              "uid": "0f2c78a7-8f92-573d-af8a-a360ceb77b24"
+            },
+            {
+              "content": "On a day the user waited in a corridor without chairs, they leaned against the wall and changed position several times.",
+              "content_digest": "0037afaeb85d94f985b1628b7b8f8194fb00d7d7e72e1746c6bae2c2ba66fe6f",
+              "position": 5,
+              "uid": "7b9197ac-4263-5169-8d3b-d34f5d893d36"
+            },
+            {
+              "content": "On a day their older sister accompanied them, the user found a place to sit immediately after reception.",
+              "content_digest": "1ae59de552a922fd3b4d39e7e5dc1ec65ff08ee68e3448f2152f27dfec710a5a",
+              "position": 6,
+              "uid": "7b0b7571-f29c-56e5-a27a-82d69a4a6982"
+            },
+            {
+              "content": "Reception staff expect that a first-time visitor may ask where the accessible entrance is.",
+              "content_digest": "7dc3300dc630b737c0f7b437eba30179aa6aaa03efd61c968604ee505a43aa73",
+              "position": 7,
+              "uid": "e9515d6b-10d9-579f-abf7-5030db64218a"
+            },
+            {
+              "content": "The local agent cannot infer the user's condition from a record of using an accessible route alone.",
+              "content_digest": "2d8a50f62f32c43ca62e1e23b75c34361ece43fd8367964174fdc73d66795df4",
+              "position": 8,
+              "uid": "8e57141d-c603-56cd-ab9e-c14b4e944b45"
+            },
+            {
+              "content": "Snow accumulation and snow-removal work can temporarily block an entrance route used under ordinary conditions.",
+              "content_digest": "4fb152c120860688789bdd4b825de45799e9fa00c0c18c334492dd4b274adde9",
+              "position": 9,
+              "uid": "a6076438-307c-56fe-9d2c-848181846ce5"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "cfd143a4-d92a-450e-a50a-459c6245ee03"
+        },
+        {
+          "context_digest": "14adbc31fc3a2dc50b7b980d1e24569b16fff058104a812c7f3b4e1542b7abf0",
+          "context_name": "task-3/local/personal-memory/2025/03",
+          "context_uid": "913e0bfd-f6d9-579e-9a37-ba5daa9d17f1",
+          "memories": [
+            {
+              "content": "The user stores prepared meals on the second shelf of the freezer.",
+              "content_digest": "cd837b62b643f752da54b21de2f4f7a3d963a7c658d5b83dff39d1d92e0fdbad",
+              "position": 0,
+              "uid": "5d989bab-c471-5de9-bb73-29cabc4753dd"
+            },
+            {
+              "content": "The user went to the market without a shopping list and bought onions that were already at home.",
+              "content_digest": "f667c860e046bb27662b26d7cc4ed083ee48d9d7915237dc4b92ec378481a093",
+              "position": 1,
+              "uid": "d1725ae4-3fd3-5250-92b3-73d84d9152a7"
+            },
+            {
+              "content": "On a day the user shopped after checking a refrigerator photo, they did not make a duplicate purchase.",
+              "content_digest": "7283d4afe58c0ab05d9cb426bb80bed0e26e0b1783ff7cdd00a5f6e89d21861b",
+              "position": 2,
+              "uid": "904ff225-26df-5424-8a82-23d733649106"
+            },
+            {
+              "content": "On a day the user made a spicy stew, they left part of one bowl uneaten.",
+              "content_digest": "2765ec701f8e058d35ddee4a485c40221523ee2d9b56301ec1658ec4e419cbc2",
+              "position": 3,
+              "uid": "67a003c7-648a-59dc-8e82-03f9e452ffce"
+            },
+            {
+              "content": "The next time the user cooked it, they used half as much chili powder and finished the meal.",
+              "content_digest": "bdd7df7c762bbce31a40a45c2124e49ae3a6439dfc2133c574443d7eb3a7b1bb",
+              "position": 4,
+              "uid": "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9"
+            },
+            {
+              "content": "When cooking with their younger brother, the user assigned the cooking sequence only verbally and they did the same task twice.",
+              "content_digest": "bd92611cfc05fd42bb5d25e8dd7838ca1b2f6d99869bf1f61921b46950a4b532",
+              "position": 5,
+              "uid": "64bf4401-e972-5d15-a526-21ca901a6a9f"
+            },
+            {
+              "content": "The next time, the user and their younger brother split ingredient preparation and heat control and finished the meal 20 minutes earlier.",
+              "content_digest": "c3a28e7256d781ecb2d8710145880ffe79495e32d47ae1949c4be54e52a44555",
+              "position": 6,
+              "uid": "57e09ea5-54ff-5fce-aada-68daffbacc8b"
+            },
+            {
+              "content": "When cooking together, the user's younger brother prefers to divide the cooking and dishwashing roles in advance.",
+              "content_digest": "3bbc428c4f3b4e28a8e2341206ac78b39240eea53a9862192528029b0a57d12b",
+              "position": 7,
+              "uid": "0a5d054f-94bd-5955-bdb7-9b5427e2260b"
+            },
+            {
+              "content": "The local agent can compare responses across several meals, but it cannot conclude from one unfinished food item that the user dislikes that ingredient.",
+              "content_digest": "5787c1636d9dd4a5cb5bd70533b7dd44b2d6cff1047f5c408f5bcaa1b6577fe1",
+              "position": 8,
+              "uid": "1f94b78b-1635-551c-b90c-bea2a67ca595"
+            },
+            {
+              "content": "The condition of frozen prepared food may vary with its packaging and storage duration.",
+              "content_digest": "84bdac276dce5b50b19bc0c7c471468a22cc9945b1da7357700a58c157cf4ca1",
+              "position": 9,
+              "uid": "f64ef6c4-7665-5574-9d58-fc124b0bfe3f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "2359cd25-835e-4612-b7a4-ddedb1d53093"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover largely independent domains: clinic accessibility and waiting experiences versus household food management and collaborative cooking. They share a compatible evidentiary caution against inferring stable personal traits from a single observation, while their remaining claims provide separate contextual and behavioral information.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "cfd143a4-d92a-450e-a50a-459c6245ee03",
+              "memory_uid": "8e57141d-c603-56cd-ab9e-c14b4e944b45"
+            },
+            {
+              "frame_uid": "2359cd25-835e-4612-b7a4-ddedb1d53093",
+              "memory_uid": "1f94b78b-1635-551c-b90c-bea2a67ca595"
+            }
+          ],
+          "reason": "Both claims establish the same operational evidence policy while explicitly retaining their different domains: accessible-route use and unfinished food.",
+          "status": "RESOLVED",
+          "summary": "A local agent must not infer a stable personal condition or preference from one isolated observed behavior.",
+          "uid": "c522b12e-a069-5bfa-9de3-37c92ebfd64f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cfd143a4-d92a-450e-a50a-459c6245ee03",
+              "memory_uid": "a6923620-267d-5129-b8c4-cd9b1e1a1e7b"
+            }
+          ],
+          "reason": "This dated clinic-access event is independently useful reference-side information and has no materially corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "The user used an accessible clinic entrance in December 2024.",
+          "uid": "f08751c9-3c5a-5a85-8c72-03255fa2a361"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cfd143a4-d92a-450e-a50a-459c6245ee03",
+              "memory_uid": "fb0e1d1f-0ef5-5214-b6d7-f6ca5c68f582"
+            }
+          ],
+          "reason": "This weather-conditioned entrance detour is independently useful reference-side information and is not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Snow blocking the main-entrance ramp led the user to use a side entrance.",
+          "uid": "ea133051-98f7-59ba-9ed4-4c792642f5c1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cfd143a4-d92a-450e-a50a-459c6245ee03",
+              "memory_uid": "4cb45120-4376-5c7b-ae92-faa9e4b9330c"
+            }
+          ],
+          "reason": "This accessibility-related appointment delay is independently useful reference-side information without a compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user discovered on site that an elevator inspection delayed the appointment.",
+          "uid": "da5ab07c-a648-57ca-92af-64156c76611a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cfd143a4-d92a-450e-a50a-459c6245ee03",
+              "memory_uid": "479f4434-879c-5335-b0c9-c0bfa19ecdcd"
+            }
+          ],
+          "reason": "This advance accessibility check is independently useful reference-side behavior and is not materially addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Before a later visit, the user called to verify that the elevator would operate.",
+          "uid": "0e3cf5bb-555a-5089-8663-9e8a4ae1c387"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cfd143a4-d92a-450e-a50a-459c6245ee03",
+              "memory_uid": "0f2c78a7-8f92-573d-af8a-a360ceb77b24"
+            }
+          ],
+          "reason": "This clinic waiting-location observation is independently useful reference-side information with no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user waited for their turn by a ticket machine near waiting chairs.",
+          "uid": "a9e04100-cccc-5db5-b857-c1effaf9a6e8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cfd143a4-d92a-450e-a50a-459c6245ee03",
+              "memory_uid": "7b9197ac-4263-5169-8d3b-d34f5d893d36"
+            }
+          ],
+          "reason": "This specific response to absent seating is independently useful reference-side information and is not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "While waiting in a chairless corridor, the user leaned against a wall and repeatedly changed position.",
+          "uid": "93360132-33a4-5ded-b31f-54fff977b99e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cfd143a4-d92a-450e-a50a-459c6245ee03",
+              "memory_uid": "7b0b7571-f29c-56e5-a27a-82d69a4a6982"
+            }
+          ],
+          "reason": "This accompanied clinic-seating event is independently useful reference-side information without a materially corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "When accompanied by an older sister, the user found seating immediately after reception.",
+          "uid": "825056be-cf99-5a83-afb4-ada18ad15159"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cfd143a4-d92a-450e-a50a-459c6245ee03",
+              "memory_uid": "e9515d6b-10d9-579f-abf7-5030db64218a"
+            }
+          ],
+          "reason": "This staff expectation about visitor guidance is an independently useful reference-side claim and has no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Reception staff anticipate that first-time visitors may request directions to the accessible entrance.",
+          "uid": "0f67c3c1-f340-5154-aafe-171d886a19f4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "cfd143a4-d92a-450e-a50a-459c6245ee03",
+              "memory_uid": "a6076438-307c-56fe-9d2c-848181846ce5"
+            }
+          ],
+          "reason": "This general clinic-route contingency is independently useful reference-side information and does not materially correspond to the compared frame's food-storage contingency.",
+          "status": "RESOLVED",
+          "summary": "Snow accumulation and removal work can temporarily obstruct an ordinarily used entrance route.",
+          "uid": "ada55d8c-2387-5acb-83df-a1b939b51a52"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2359cd25-835e-4612-b7a4-ddedb1d53093",
+              "memory_uid": "5d989bab-c471-5de9-bb73-29cabc4753dd"
+            }
+          ],
+          "reason": "This household storage-location fact is independently useful compared-side information and has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user stores prepared meals on the freezer's second shelf.",
+          "uid": "9a6f0485-a2f0-513c-b7df-9296c21b4104"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2359cd25-835e-4612-b7a4-ddedb1d53093",
+              "memory_uid": "d1725ae4-3fd3-5250-92b3-73d84d9152a7"
+            },
+            {
+              "frame_uid": "2359cd25-835e-4612-b7a4-ddedb1d53093",
+              "memory_uid": "904ff225-26df-5424-8a82-23d733649106"
+            }
+          ],
+          "reason": "The unchecked trip and photo-checked trip split one compared-side claim about inventory checking and duplicate purchasing; the reference frame does not address that claim.",
+          "status": "RESOLVED",
+          "summary": "The paired shopping observations associate checking current refrigerator contents with avoiding a duplicate purchase.",
+          "uid": "cc645c03-bec1-5d26-a5bd-4da9b326b666"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2359cd25-835e-4612-b7a4-ddedb1d53093",
+              "memory_uid": "67a003c7-648a-59dc-8e82-03f9e452ffce"
+            },
+            {
+              "frame_uid": "2359cd25-835e-4612-b7a4-ddedb1d53093",
+              "memory_uid": "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9"
+            }
+          ],
+          "reason": "The two cooking episodes split one compared-side claim about a spice adjustment and changed meal completion; the reference frame does not address it.",
+          "status": "RESOLVED",
+          "summary": "After leaving spicy stew unfinished, the user halved the chili powder on the next attempt and finished the meal.",
+          "uid": "8a4d4b21-90ff-501d-8271-fbcf349643ba"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2359cd25-835e-4612-b7a4-ddedb1d53093",
+              "memory_uid": "64bf4401-e972-5d15-a526-21ca901a6a9f"
+            },
+            {
+              "frame_uid": "2359cd25-835e-4612-b7a4-ddedb1d53093",
+              "memory_uid": "57e09ea5-54ff-5fce-aada-68daffbacc8b"
+            }
+          ],
+          "reason": "The two collaborative-cooking episodes split one compared-side claim about task allocation and efficiency; the reference frame does not address it.",
+          "status": "RESOLVED",
+          "summary": "After verbally assigned cooking produced duplicated work, dividing preparation and heat-control duties accompanied earlier completion.",
+          "uid": "c77be32d-4c31-5345-8316-4e6953eb4604"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2359cd25-835e-4612-b7a4-ddedb1d53093",
+              "memory_uid": "0a5d054f-94bd-5955-bdb7-9b5427e2260b"
+            }
+          ],
+          "reason": "This collaborator preference is independently useful compared-side information and is distinct from both the observed cooking-efficiency sequence and all reference-side claims.",
+          "status": "RESOLVED",
+          "summary": "The user's younger brother prefers agreeing in advance on separate cooking and dishwashing roles.",
+          "uid": "5095dd06-efd4-54c0-a4fb-e72a93a0c3d0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2359cd25-835e-4612-b7a4-ddedb1d53093",
+              "memory_uid": "f64ef6c4-7665-5574-9d58-fc124b0bfe3f"
+            }
+          ],
+          "reason": "This food-storage contingency is independently useful compared-side information and does not materially correspond to the reference frame's entrance-route contingency.",
+          "status": "RESOLVED",
+          "summary": "Packaging and storage duration may affect the condition of frozen prepared food.",
+          "uid": "b2d7c1f5-fe2e-5be0-87d4-98211e96743b"
+        }
+      ],
+      "reports": {
+        "both": "Both limit local-agent inference from isolated behavior, whether accessible-route use or an unfinished food item.",
+        "compared_only": "The compared frame covers freezer storage, inventory checks, spice adjustment, coordinated cooking roles, a sibling’s role preference, and storage-condition variability.",
+        "differences": "",
+        "reference_only": "The reference covers clinic entrances, snow obstruction, elevator disruption and advance checking, waiting and seating experiences, visitor guidance, and route variability."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "74cb0592-5ca9-4305-a050-b87e57a9311a"
+    },
+    "analysis_digest": "9cf463b6ac2fe8b3e46af6a8631b92bc760419d0e2b97b2bb9eba51a6c4ab5c6",
+    "key": "2839f0a0a461e30c3e8dcc6f6ae4a02a1195819ea59fd059c65e0f2b8277b045",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 50.36948470800053,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "2839f0a0a461e30c3e8dcc6f6ae4a02a1195819ea59fd059c65e0f2b8277b045",
+  "created_at": "2026-08-13T18:48:22.454831Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/12",
+  "pair_key": "34dd04114ce344a95f4a81c0dc18f91a788ae58362f8206f81977abff4f31a3c",
+  "provider_seconds": 50.36948470800053,
+  "right": "task-3/local/personal-memory/2025/03",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

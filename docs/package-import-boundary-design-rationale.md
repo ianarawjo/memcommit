@@ -122,6 +122,14 @@ verification is not reopened unless the import change alters its production
 path. `IMPORT-01` is reported independently rather than retroactively claiming
 that an earlier semantic boundary was invalid.
 
+The later internal Switch slice applies the same inward dependency direction
+without publishing a Python or agent surface. `switch_application.py` and
+`switch_runtime.py` import no command or terminal adapter; the Switch TUI
+depends on the typed request and neutral Context picker; and Ground imports the
+neutral picker rather than the Switch command. The eager Typer registry still
+loads the command adapter at console assembly, which remains the separate
+entrypoint migration described above.
+
 ## Alternatives considered
 
 - **Remove root-level public exports.** This would make the package root small

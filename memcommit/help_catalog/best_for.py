@@ -22,6 +22,10 @@ BEST_FOR_BY_OPERATION = {
     "config": "Inspecting or changing persistent MemCommit settings.",
     "contexts": "Exploring every Context currently available to the Profile.",
     "delete": "Removing a specific Context or item that is no longer needed.",
+    "dedup": (
+        "Collapsing confirmed equivalent Memories while preserving one existing "
+        "UID and its exact wording."
+    ),
     "diff": "Verifying exactly what a recorded operation changed.",
     "distill": "Extracting reusable rules from evidence-rich source material.",
     "elaborate": (

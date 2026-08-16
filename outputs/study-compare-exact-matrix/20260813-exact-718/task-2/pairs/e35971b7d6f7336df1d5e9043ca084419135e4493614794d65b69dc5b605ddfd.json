@@ -1,0 +1,291 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:25:27.589956+00:00",
+      "frames": [
+        {
+          "context_digest": "3dd1208c3f947a57bc5f1d490a28c999913d43cad775b2b01e50c6059d6b660e",
+          "context_name": "task-2/advisor1/safety",
+          "context_uid": "cd6c1fab-786a-52ea-9437-9a4d209ba419",
+          "memories": [
+            {
+              "content": "Specify the order and recipients for reporting serious discomfort during the study.",
+              "content_digest": "1de38a3ec5fc3267ebeb35482a458d4aaf50d2aea44c6dba334f184e50ddddd2",
+              "position": 0,
+              "uid": "9d6f5228-d182-571a-83d2-6a67becb7736"
+            },
+            {
+              "content": "Field staff rely on a pre-defined contact sequence when serious discomfort is reported.",
+              "content_digest": "ed3a3b19d92a50c7dd324981b702bac31e0130fda38fe37150e500481ed11d84",
+              "position": 1,
+              "uid": "00ed485d-66c2-59ad-9c5b-9ae445412690"
+            },
+            {
+              "content": "Establish criteria for halting the use of a design alternative if recurring severe errors appear during formative evaluation.",
+              "content_digest": "dcca56df756b89f89a0a9dbf2bf45aee6480392b368c9cf3402223d3084b801b",
+              "position": 2,
+              "uid": "9c6e1561-f671-52cb-aa67-245cc4987ad4"
+            },
+            {
+              "content": "Do not include a design alternative halted for safety reasons in subsequent evaluation iterations without modification.",
+              "content_digest": "01668098161666622f4d7ed8298e3e63a06fa9b10a4cfd53b200d820f96f5c50",
+              "position": 3,
+              "uid": "2381ecf7-2b11-583d-91d9-0a5cfc279ba1"
+            },
+            {
+              "content": "Even in controlled environments, delayed prototype recovery procedures increase session interruption time and alter data collection conditions for the same task.",
+              "content_digest": "fd0f364ef66cfa7be937779ed4ce3ffb1a406bc227d09c26b288a751c5e0d427",
+              "position": 4,
+              "uid": "c5ce1b00-36d9-5cdd-a318-93b88ca0e322"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "dfe4d391-bde9-4e20-8a00-4ddf63009399"
+        },
+        {
+          "context_digest": "1396f236b90acd99b836eb5367828f8319d0465ea25b66f696a7f583f4f5ecf6",
+          "context_name": "task-2/advisor2/terminology",
+          "context_uid": "a2976fe7-0e07-5045-9e91-6a214128a482",
+          "memories": [
+            {
+              "content": "Do not change names referring to the same user roles, system functions, or operational stages midway.",
+              "content_digest": "a0f821f4497e7518806857e9005d12e27f6043fda6dbd91ba33ef188e0a3be16",
+              "position": 0,
+              "uid": "e2ae95ed-9033-5625-9179-33f4cf4a95c1"
+            },
+            {
+              "content": "Use abbreviations only for long recurring terms in a two-page proposal.",
+              "content_digest": "e6cad365bd42a8327e3cac92b8cf49cc456fa3e2f5c6624797fa509c0aac6846",
+              "position": 1,
+              "uid": "4be60357-09fa-523d-8c8d-8e03ace8fde9"
+            },
+            {
+              "content": "Present the full term and abbreviation together when using an abbreviation for the first time.",
+              "content_digest": "7b7c1f90727c822edbc13af17d64d45552d1c7ddb5fa18e665369423fd93ffbe",
+              "position": 2,
+              "uid": "0dd5d707-7d13-5be0-8377-421507650cba"
+            },
+            {
+              "content": "Refer to participants based on the roles they perform in the study rather than their status.",
+              "content_digest": "d89feff6e3dad0eea0ba4b1b291b140048af9f0f89d84c8ac196ae547a7b03bd",
+              "position": 3,
+              "uid": "9b3f0cde-7c3e-5b6a-9500-855f31d65ef2"
+            },
+            {
+              "content": "Reviewers from different subfields find it difficult to infer an abbreviation from context alone when it is not defined at first use.",
+              "content_digest": "4ffe91fb52db337a4ad30dc56d0439e12851f17f411c414b6d673e79bd91e68b",
+              "position": 4,
+              "uid": "8c896114-85e6-5c3c-ae3f-6e8e6b59f2fe"
+            },
+            {
+              "content": "When introducing an operational role for the first time, define both the decisions it can make and the actions it performs.",
+              "content_digest": "916b66a818f988f69e2e3c90f0ed0dbb7d29fc9e030b3fc7f822b3817106cbc3",
+              "position": 5,
+              "uid": "dc9e3f25-7aac-500b-b431-f6d810dd09bb"
+            },
+            {
+              "content": "Individuals holding identical job titles may possess different system modification privileges and data access rights depending on their deployment site.",
+              "content_digest": "e0315abc2f42a8f2657aa52e04899096ce799ba790fcd77d22b4196f917790ac",
+              "position": 6,
+              "uid": "04956cab-eb3a-5b71-be45-b1edd6c4a216"
+            },
+            {
+              "content": "The user tends to group distinct field roles under the single label “user.”",
+              "content_digest": "ba75af998618324dbdfa225a2cd503c42888f77daf4d44eb4f79b3a7db8e4bbe",
+              "position": 7,
+              "uid": "fc8613e8-86ca-5322-bb5d-03dfbca71c46"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "8ba7680f-e767-436c-96bc-9b4e896da85a"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate concerns. The reference covers safety escalation, stopping unsafe alternatives, and prototype recovery effects; the compared frame covers consistent role terminology, abbreviation practices, participant labeling, role definitions, and site-dependent permissions. No scope-aligned overlap or conflict is present.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "dfe4d391-bde9-4e20-8a00-4ddf63009399",
+              "memory_uid": "9d6f5228-d182-571a-83d2-6a67becb7736"
+            },
+            {
+              "frame_uid": "dfe4d391-bde9-4e20-8a00-4ddf63009399",
+              "memory_uid": "00ed485d-66c2-59ad-9c5b-9ae445412690"
+            }
+          ],
+          "reason": "The two reference memories state complementary parts of one one-sided operational requirement: defining the contact order and relying on it in the field.",
+          "status": "RESOLVED",
+          "summary": "Serious discomfort reports require a predefined reporting sequence with specified recipients.",
+          "uid": "8f38b5da-4b4e-5bcc-9e61-07d253f534ce"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "dfe4d391-bde9-4e20-8a00-4ddf63009399",
+              "memory_uid": "9c6e1561-f671-52cb-aa67-245cc4987ad4"
+            }
+          ],
+          "reason": "This is an independently useful reference-only stopping rule with no corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "Formative evaluation should have criteria for halting a design alternative when severe errors recur.",
+          "uid": "33cf90c4-ec7e-525a-ba26-084d12c4fdf7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "dfe4d391-bde9-4e20-8a00-4ddf63009399",
+              "memory_uid": "2381ecf7-2b11-583d-91d9-0a5cfc279ba1"
+            }
+          ],
+          "reason": "This reference-only restriction governs subsequent reuse rather than the initial halting decision and has no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "A design alternative halted for safety reasons must be modified before later evaluation.",
+          "uid": "e7317864-0ca3-5e55-869a-d495780a3b38"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "dfe4d391-bde9-4e20-8a00-4ddf63009399",
+              "memory_uid": "c5ce1b00-36d9-5cdd-a318-93b88ca0e322"
+            }
+          ],
+          "reason": "This is a standalone reference-only observation about evaluation conditions with no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Delayed prototype recovery increases interruptions and changes data-collection conditions even in controlled settings.",
+          "uid": "be41e15e-1276-5cf3-884e-cb8c25b13740"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8ba7680f-e767-436c-96bc-9b4e896da85a",
+              "memory_uid": "e2ae95ed-9033-5625-9179-33f4cf4a95c1"
+            }
+          ],
+          "reason": "This compared-only naming policy has no scope-aligned reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "Names for the same roles, functions, and operational stages should remain consistent throughout a document.",
+          "uid": "8b913085-255a-594f-93f7-f32a2184d5b3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8ba7680f-e767-436c-96bc-9b4e896da85a",
+              "memory_uid": "4be60357-09fa-523d-8c8d-8e03ace8fde9"
+            }
+          ],
+          "reason": "This compared-only criterion determines when abbreviations are worthwhile and has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "In a two-page proposal, abbreviations should be reserved for long terms that recur.",
+          "uid": "25f2528a-0d3b-54b9-9725-bfe4b1fe425d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8ba7680f-e767-436c-96bc-9b4e896da85a",
+              "memory_uid": "0dd5d707-7d13-5be0-8377-421507650cba"
+            },
+            {
+              "frame_uid": "8ba7680f-e767-436c-96bc-9b4e896da85a",
+              "memory_uid": "8c896114-85e6-5c3c-ae3f-6e8e6b59f2fe"
+            }
+          ],
+          "reason": "The compared memories split one underlying claim into a first-use rule and its audience-based rationale; the reference has no counterpart.",
+          "status": "RESOLVED",
+          "summary": "An abbreviation should be paired with its full term at first use because context alone may not serve reviewers across subfields.",
+          "uid": "ec3dcc78-0c1d-5084-81ad-db6bf0738897"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8ba7680f-e767-436c-96bc-9b4e896da85a",
+              "memory_uid": "9b3f0cde-7c3e-5b6a-9500-855f31d65ef2"
+            },
+            {
+              "frame_uid": "8ba7680f-e767-436c-96bc-9b4e896da85a",
+              "memory_uid": "fc8613e8-86ca-5322-bb5d-03dfbca71c46"
+            }
+          ],
+          "reason": "The compared memories express the role-based labeling policy and the observed tendency it addresses; no reference-side claim covers participant naming.",
+          "status": "RESOLVED",
+          "summary": "Participants should be labeled by their study roles rather than collapsed into status-based or generic user labels.",
+          "uid": "a28634ae-8aa2-59fa-b298-7b1db4ba032a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8ba7680f-e767-436c-96bc-9b4e896da85a",
+              "memory_uid": "dc9e3f25-7aac-500b-b431-f6d810dd09bb"
+            }
+          ],
+          "reason": "This compared-only role-definition requirement has no corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "A newly introduced operational role should be defined by both its decision authority and its performed actions.",
+          "uid": "35ed6038-bcb1-5581-9a9a-5a88035ee52b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "8ba7680f-e767-436c-96bc-9b4e896da85a",
+              "memory_uid": "04956cab-eb3a-5b71-be45-b1edd6c4a216"
+            }
+          ],
+          "reason": "This is an independently useful compared-only scope observation about site-dependent authority, not merely a restatement of how roles should be introduced.",
+          "status": "RESOLVED",
+          "summary": "People with the same job title may have different modification privileges and data-access rights across deployment sites.",
+          "uid": "4bfb00e6-2134-5b7c-9439-7f2af6bf1f56"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame sets terminology and abbreviation practices, favors role-specific participant labels, requires operational-role definitions, and notes site-dependent permissions.",
+        "differences": "",
+        "reference_only": "The reference specifies serious-discomfort escalation, safety-based stopping and reuse rules, and the effects of delayed prototype recovery."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "011e65bf-f0fa-4a7b-9020-baad95257b0b"
+    },
+    "analysis_digest": "535c48ca452a813c48e34aa8159a4b3aa06684a7569231445a8bb5905016d122",
+    "key": "37c1ef8c8e1643129768319b54d14b8226672dba728a91820d95871d7edf6ece",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 34.685393749998184,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "37c1ef8c8e1643129768319b54d14b8226672dba728a91820d95871d7edf6ece",
+  "created_at": "2026-08-13T18:26:02.275054Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/safety",
+  "pair_key": "e35971b7d6f7336df1d5e9043ca084419135e4493614794d65b69dc5b605ddfd",
+  "provider_seconds": 34.685393749998184,
+  "right": "task-2/advisor2/terminology",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

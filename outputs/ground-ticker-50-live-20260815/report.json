@@ -1,0 +1,1636 @@
+{
+  "cases": [
+    {
+      "boundary": "ordinary multiword initials",
+      "expected": "NSE",
+      "input": "North Star Energy Inc.",
+      "ordinal": 1,
+      "proposition": "Applying the synthetic ticker policy to \"North Star Energy Inc.\" produces \"NSE\"."
+    },
+    {
+      "boundary": "ordinary legal suffix",
+      "expected": "BRL",
+      "input": "Blue River Logistics LLC",
+      "ordinal": 2,
+      "proposition": "Applying the synthetic ticker policy to \"Blue River Logistics LLC\" produces \"BRL\"."
+    },
+    {
+      "boundary": "single meaningful word",
+      "expected": "REDW",
+      "input": "Redwood",
+      "ordinal": 3,
+      "proposition": "Applying the synthetic ticker policy to \"Redwood\" produces \"REDW\"."
+    },
+    {
+      "boundary": "ordinary multiword initials",
+      "expected": "HLS",
+      "input": "Harbor Light Studios Ltd.",
+      "ordinal": 4,
+      "proposition": "Applying the synthetic ticker policy to \"Harbor Light Studios Ltd.\" produces \"HLS\"."
+    },
+    {
+      "boundary": "leading article",
+      "expected": "GVB",
+      "input": "The Green Valley Bank Corporation",
+      "ordinal": 5,
+      "proposition": "Applying the synthetic ticker policy to \"The Green Valley Bank Corporation\" produces \"GVB\"."
+    },
+    {
+      "boundary": "standalone conjunction",
+      "expected": "CSF",
+      "input": "Cedar & Stone Foods Co.",
+      "ordinal": 6,
+      "proposition": "Applying the synthetic ticker policy to \"Cedar & Stone Foods Co.\" produces \"CSF\"."
+    },
+    {
+      "boundary": "acronym-like component",
+      "expected": "AAT",
+      "input": "Axiom AI Technologies Inc.",
+      "ordinal": 7,
+      "proposition": "Applying the synthetic ticker policy to \"Axiom AI Technologies Inc.\" produces \"AAT\"."
+    },
+    {
+      "boundary": "legal suffix after meaningful Group",
+      "expected": "NHG",
+      "input": "Nova Health Group PLC",
+      "ordinal": 8,
+      "proposition": "Applying the synthetic ticker policy to \"Nova Health Group PLC\" produces \"NHG\"."
+    },
+    {
+      "boundary": "class suffix",
+      "expected": "NSE.B",
+      "input": "North Star Energy Inc. Class B",
+      "ordinal": 9,
+      "proposition": "Applying the synthetic ticker policy to \"North Star Energy Inc. Class B\" produces \"NSE.B\"."
+    },
+    {
+      "boundary": "class suffix",
+      "expected": "BRL.A",
+      "input": "Blue River Logistics LLC Class A",
+      "ordinal": 10,
+      "proposition": "Applying the synthetic ticker policy to \"Blue River Logistics LLC Class A\" produces \"BRL.A\"."
+    },
+    {
+      "boundary": "single word plus class suffix",
+      "expected": "REDW.C",
+      "input": "Redwood Class C",
+      "ordinal": 11,
+      "proposition": "Applying the synthetic ticker policy to \"Redwood Class C\" produces \"REDW.C\"."
+    },
+    {
+      "boundary": "class suffix",
+      "expected": "HLS.B",
+      "input": "Harbor Light Studios Ltd. Class B",
+      "ordinal": 12,
+      "proposition": "Applying the synthetic ticker policy to \"Harbor Light Studios Ltd. Class B\" produces \"HLS.B\"."
+    },
+    {
+      "boundary": "hyphenated components",
+      "expected": "NWT",
+      "input": "North-West Transit Inc.",
+      "ordinal": 13,
+      "proposition": "Applying the synthetic ticker policy to \"North-West Transit Inc.\" produces \"NWT\"."
+    },
+    {
+      "boundary": "apostrophe inside one component",
+      "expected": "OMG",
+      "input": "O'Brien Market Group",
+      "ordinal": 14,
+      "proposition": "Applying the synthetic ticker policy to \"O'Brien Market Group\" produces \"OMG\"."
+    },
+    {
+      "boundary": "numeric component",
+      "expected": "S5M",
+      "input": "Studio 54 Media LLC",
+      "ordinal": 15,
+      "proposition": "Applying the synthetic ticker policy to \"Studio 54 Media LLC\" produces \"S5M\"."
+    },
+    {
+      "boundary": "numeric component",
+      "expected": "SS2L",
+      "input": "Seven Seas 2 Logistics Inc.",
+      "ordinal": 16,
+      "proposition": "Applying the synthetic ticker policy to \"Seven Seas 2 Logistics Inc.\" produces \"SS2L\"."
+    },
+    {
+      "boundary": "hyphenated components",
+      "expected": "QXL",
+      "input": "Quantum-X Labs Corp.",
+      "ordinal": 17,
+      "proposition": "Applying the synthetic ticker policy to \"Quantum-X Labs Corp.\" produces \"QXL\"."
+    },
+    {
+      "boundary": "standalone conjunction",
+      "expected": "ARD",
+      "input": "Atlas Research & Development Ltd.",
+      "ordinal": 18,
+      "proposition": "Applying the synthetic ticker policy to \"Atlas Research & Development Ltd.\" produces \"ARD\"."
+    },
+    {
+      "boundary": "multi-digit component",
+      "expected": "OW3M",
+      "input": "One World 360 Media PLC",
+      "ordinal": 19,
+      "proposition": "Applying the synthetic ticker policy to \"One World 360 Media PLC\" produces \"OW3M\"."
+    },
+    {
+      "boundary": "diacritic normalization",
+      "expected": "EBS",
+      "input": "Élan Bio Systems Inc.",
+      "ordinal": 20,
+      "proposition": "Applying the synthetic ticker policy to \"Élan Bio Systems Inc.\" produces \"EBS\"."
+    },
+    {
+      "boundary": "legal suffix",
+      "expected": "SR",
+      "input": "Sunrise Robotics Company",
+      "ordinal": 21,
+      "proposition": "Applying the synthetic ticker policy to \"Sunrise Robotics Company\" produces \"SR\"."
+    },
+    {
+      "boundary": "long legal suffix",
+      "expected": "PDW",
+      "input": "Polar Data Works Incorporated",
+      "ordinal": 22,
+      "proposition": "Applying the synthetic ticker policy to \"Polar Data Works Incorporated\" produces \"PDW\"."
+    },
+    {
+      "boundary": "long legal suffix",
+      "expected": "MLF",
+      "input": "Maple Leaf Foods Limited",
+      "ordinal": 23,
+      "proposition": "Applying the synthetic ticker policy to \"Maple Leaf Foods Limited\" produces \"MLF\"."
+    },
+    {
+      "boundary": "ordinary multiword initials",
+      "expected": "UOA",
+      "input": "Urban Ocean Analytics LLC",
+      "ordinal": 24,
+      "proposition": "Applying the synthetic ticker policy to \"Urban Ocean Analytics LLC\" produces \"UOA\"."
+    },
+    {
+      "boundary": "acronym-like component",
+      "expected": "BAL",
+      "input": "BrightMind AI Labs Inc.",
+      "ordinal": 25,
+      "proposition": "Applying the synthetic ticker policy to \"BrightMind AI Labs Inc.\" produces \"BAL\"."
+    },
+    {
+      "boundary": "acronym-like component",
+      "expected": "DSXS",
+      "input": "Deep Space XR Studios Ltd.",
+      "ordinal": 26,
+      "proposition": "Applying the synthetic ticker policy to \"Deep Space XR Studios Ltd.\" produces \"DSXS\"."
+    },
+    {
+      "boundary": "hyphenated components",
+      "expected": "LVM",
+      "input": "Lake-View Materials Corp.",
+      "ordinal": 27,
+      "proposition": "Applying the synthetic ticker policy to \"Lake-View Materials Corp.\" produces \"LVM\"."
+    },
+    {
+      "boundary": "apostrophe inside one component",
+      "expected": "KRR",
+      "input": "King's Road Retail Company",
+      "ordinal": 28,
+      "proposition": "Applying the synthetic ticker policy to \"King's Road Retail Company\" produces \"KRR\"."
+    },
+    {
+      "boundary": "leading article",
+      "expected": "NG",
+      "input": "The Northern Grid Inc.",
+      "ordinal": 29,
+      "proposition": "Applying the synthetic ticker policy to \"The Northern Grid Inc.\" produces \"NG\"."
+    },
+    {
+      "boundary": "standalone conjunction",
+      "expected": "EWM",
+      "input": "East & West Mobility LLC",
+      "ordinal": 30,
+      "proposition": "Applying the synthetic ticker policy to \"East & West Mobility LLC\" produces \"EWM\"."
+    },
+    {
+      "boundary": "leading numeric component",
+      "expected": "2SE",
+      "input": "24 Seven Energy Ltd.",
+      "ordinal": 31,
+      "proposition": "Applying the synthetic ticker policy to \"24 Seven Energy Ltd.\" produces \"2SE\"."
+    },
+    {
+      "boundary": "numeric component",
+      "expected": "R6S",
+      "input": "Route 66 Systems Corp.",
+      "ordinal": 32,
+      "proposition": "Applying the synthetic ticker policy to \"Route 66 Systems Corp.\" produces \"R6S\"."
+    },
+    {
+      "boundary": "four meaningful components",
+      "expected": "ABGD",
+      "input": "Alpha Beta Gamma Delta Inc.",
+      "ordinal": 33,
+      "proposition": "Applying the synthetic ticker policy to \"Alpha Beta Gamma Delta Inc.\" produces \"ABGD\"."
+    },
+    {
+      "boundary": "single meaningful word",
+      "expected": "MONO",
+      "input": "Mono LLC",
+      "ordinal": 34,
+      "proposition": "Applying the synthetic ticker policy to \"Mono LLC\" produces \"MONO\"."
+    },
+    {
+      "boundary": "diacritic and legal suffix",
+      "expected": "ZC",
+      "input": "Zürich Cloud AG",
+      "ordinal": 35,
+      "proposition": "Applying the synthetic ticker policy to \"Zürich Cloud AG\" produces \"ZC\"."
+    },
+    {
+      "boundary": "hyphenated components",
+      "expected": "SPBT",
+      "input": "Silver Pine Bio-Tech Inc.",
+      "ordinal": 36,
+      "proposition": "Applying the synthetic ticker policy to \"Silver Pine Bio-Tech Inc.\" produces \"SPBT\"."
+    },
+    {
+      "boundary": "four meaningful components",
+      "expected": "OSNF",
+      "input": "Open Source Network Foundation",
+      "ordinal": 37,
+      "proposition": "Applying the synthetic ticker policy to \"Open Source Network Foundation\" produces \"OSNF\"."
+    },
+    {
+      "boundary": "meaningful Class plus class suffix",
+      "expected": "FCV.B",
+      "input": "First Class Ventures Class B",
+      "ordinal": 38,
+      "proposition": "Applying the synthetic ticker policy to \"First Class Ventures Class B\" produces \"FCV.B\"."
+    },
+    {
+      "boundary": "alphanumeric component",
+      "expected": "M2L",
+      "input": "MegaData 2X Labs LLC",
+      "ordinal": 39,
+      "proposition": "Applying the synthetic ticker policy to \"MegaData 2X Labs LLC\" produces \"M2L\"."
+    },
+    {
+      "boundary": "punctuation inside one component",
+      "expected": "CS",
+      "input": "C++ Systems Inc.",
+      "ordinal": 40,
+      "proposition": "Applying the synthetic ticker policy to \"C++ Systems Inc.\" produces \"CS\"."
+    },
+    {
+      "boundary": "punctuation inside one component",
+      "expected": "RSL",
+      "input": "R&D Signal Labs Ltd.",
+      "ordinal": 41,
+      "proposition": "Applying the synthetic ticker policy to \"R&D Signal Labs Ltd.\" produces \"RSL\"."
+    },
+    {
+      "boundary": "dot inside one component",
+      "expected": "AS",
+      "input": "Acme.com Services Corp.",
+      "ordinal": 42,
+      "proposition": "Applying the synthetic ticker policy to \"Acme.com Services Corp.\" produces \"AS\"."
+    },
+    {
+      "boundary": "hyphen and diacritic",
+      "expected": "NEM",
+      "input": "Neo-Élan Mobility PLC",
+      "ordinal": 43,
+      "proposition": "Applying the synthetic ticker policy to \"Neo-Élan Mobility PLC\" produces \"NEM\"."
+    },
+    {
+      "boundary": "repeated hyphen components",
+      "expected": "OOOH",
+      "input": "One-One-One Holdings Inc.",
+      "ordinal": 44,
+      "proposition": "Applying the synthetic ticker policy to \"One-One-One Holdings Inc.\" produces \"OOOH\"."
+    },
+    {
+      "boundary": "numeric component",
+      "expected": "D9BG",
+      "input": "Delta 9 Bio Group LLC",
+      "ordinal": 45,
+      "proposition": "Applying the synthetic ticker policy to \"Delta 9 Bio Group LLC\" produces \"D9BG\"."
+    },
+    {
+      "boundary": "acronym-like component",
+      "expected": "NYAE",
+      "input": "New York AI Exchange Inc.",
+      "ordinal": 46,
+      "proposition": "Applying the synthetic ticker policy to \"New York AI Exchange Inc.\" produces \"NYAE\"."
+    },
+    {
+      "boundary": "leading article and number",
+      "expected": "7H",
+      "input": "The 7 Hills Company",
+      "ordinal": 47,
+      "proposition": "Applying the synthetic ticker policy to \"The 7 Hills Company\" produces \"7H\"."
+    },
+    {
+      "boundary": "multiword plus class suffix",
+      "expected": "RR.A",
+      "input": "Redwood Research Class A",
+      "ordinal": 48,
+      "proposition": "Applying the synthetic ticker policy to \"Redwood Research Class A\" produces \"RR.A\"."
+    },
+    {
+      "boundary": "single-letter components",
+      "expected": "ABCN",
+      "input": "A B C Networks Ltd.",
+      "ordinal": 49,
+      "proposition": "Applying the synthetic ticker policy to \"A B C Networks Ltd.\" produces \"ABCN\"."
+    },
+    {
+      "boundary": "number plus class suffix",
+      "expected": "GQ3.C",
+      "input": "Global Quantum 360 Class C",
+      "ordinal": 50,
+      "proposition": "Applying the synthetic ticker policy to \"Global Quantum 360 Class C\" produces \"GQ3.C\"."
+    }
+  ],
+  "final": {
+    "accepted_example_count": 50,
+    "active_rule_count": 1,
+    "example_count": 50,
+    "ground_digest": "45fbb7631a6e650320af592664ab4b797ce7ef1fd00f04172f660f319344194d",
+    "ground_revision": 114,
+    "ground_uid": "6848208c-c01b-4ed0-bf3c-ec2d50d4d170",
+    "status": "OPEN"
+  },
+  "first_failure": {
+    "message": "One Memory cannot be both support and boundary for the same Rule.",
+    "traceback": "Traceback (most recent call last):\n  File \"/Users/KimMunyeong/Github/memcommit/outputs/ground-ticker-50-live-20260815/run_live_flow.py\", line 581, in <module>\n    raise SystemExit(main())\n                     ^^^^^^\n  File \"/Users/KimMunyeong/Github/memcommit/outputs/ground-ticker-50-live-20260815/run_live_flow.py\", line 372, in main\n    distill_result = execute_ground_distill(\n                     ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/KimMunyeong/Github/memcommit/memcommit/ground_distill.py\", line 237, in execute_ground_distill\n    result = run_distill(\n             ^^^^^^^^^^^^\n  File \"/Users/KimMunyeong/Github/memcommit/memcommit/distill_application.py\", line 127, in run_distill\n    analysis = analyze_distill(\n               ^^^^^^^^^^^^^^^^\n  File \"/Users/KimMunyeong/Github/memcommit/memcommit/distill.py\", line 452, in analyze_distill\n    raise DistillError(\nmemcommit.distill.DistillError: One Memory cannot be both support and boundary for the same Rule.\n",
+    "type": "DistillError"
+  },
+  "goal": "Invent compact, consistent symbols for organization names.",
+  "initial_goal_elaborate": {
+    "cases": [],
+    "mode": "GOAL_TO_RULES",
+    "origin": "LIVE",
+    "overview": "Suggested rules for creating compact, consistent organization symbols; all require review and validation.",
+    "rules": [
+      {
+        "content": "Define a single normalization pipeline for every organization name: trim surrounding whitespace, collapse repeated spaces, standardize case, and remove or map punctuation before deriving a symbol.",
+        "rationale": "A fixed preprocessing sequence makes identical or cosmetically different inputs produce consistent candidates."
+      },
+      {
+        "content": "Generate symbols with a documented priority order: use a widely recognized short form when explicitly provided; otherwise use initials from significant words; if that is impractical, use a compact truncation of the normalized name.",
+        "rationale": "A deterministic hierarchy reduces arbitrary choices while supporting common naming patterns."
+      },
+      {
+        "content": "Maintain a documented list of words that may be omitted when forming initials, and apply that list uniformly.",
+        "rationale": "Consistent treatment of articles, conjunctions, and legal suffixes keeps symbols compact and reproducible."
+      },
+      {
+        "content": "Set and document one allowed character set, casing convention, and preferred length range for all symbols.",
+        "rationale": "Explicit format constraints make proposed symbols easy to review and validate mechanically."
+      }
+    ],
+    "seconds": 8.206
+  },
+  "kind": "GROUND_TICKER_50_LIVE_FLOW",
+  "model": "gpt-5.6-sol",
+  "provider_connect_seconds": 0.024,
+  "reasoning": "none",
+  "rounds": [
+    {
+      "distill": {
+        "origin": "LIVE",
+        "outside_memory_uids": [],
+        "overview": "One reusable rule is directly supported by the example.",
+        "rules": [
+          {
+            "boundary_count": 0,
+            "content": "When applying the synthetic ticker policy to \"North Star Energy Inc.\", use the symbol \"NSE\".",
+            "rationale": "The supplied example explicitly establishes this input-to-symbol mapping, but does not provide enough evidence to generalize the construction method to other organization names.",
+            "support_count": 1
+          }
+        ],
+        "seconds": 7.934
+      },
+      "elaborate": {
+        "cases": [
+          {
+            "case_role": "FIT",
+            "expected": "NSE",
+            "proposition": "Applying the synthetic ticker policy to \"North Star Energy Inc.\" yields the symbol \"NSE\".",
+            "rationale": "Directly tests the company-to-symbol mapping stated by the rule.",
+            "source_rule_index": 1
+          },
+          {
+            "case_role": "BOUNDARY",
+            "expected": "NSE",
+            "proposition": "Applying the policy to the exact name \"North Star Energy Inc.\" with no normalization or alias substitution still yields \"NSE\".",
+            "rationale": "Tests the exact-name boundary without assuming how variants, aliases, or normalization should behave.",
+            "source_rule_index": 1
+          },
+          {
+            "case_role": "CONTRAST",
+            "expected": "Not established by Rule 1",
+            "proposition": "Applying the policy to a different company name should not infer \"NSE\" solely from this rule.",
+            "rationale": "Clarifies that the rule specifies only the mapping for \"North Star Energy Inc.\" and does not authorize reuse for other entities.",
+            "source_rule_index": 1
+          }
+        ],
+        "mode": "RULES_TO_CASES",
+        "origin": "LIVE",
+        "overview": "Suggested, unverified cases for testing the synthetic ticker policy.",
+        "rules": [],
+        "seconds": 9.951
+      },
+      "example_count": 1,
+      "fit": {
+        "current": true,
+        "ground_revision": 4,
+        "issue_count": 0,
+        "judgments": [
+          {
+            "example_uid": "1c1f0af3-7ef4-4b4e-966b-6e7f4afa19dc",
+            "reason": "Rule r1 explicitly requires the symbol \"NSE\" for \"North Star Energy Inc.\", and the example states that exact result.",
+            "status": "FIT"
+          }
+        ],
+        "overview": "The example exactly matches the deterministic symbol specified by the linked rule.",
+        "receipt_uid": "1afb92a9-aff3-4126-b6ae-ba461119977e",
+        "seconds": 4.863,
+        "status_counts": {
+          "FIT": 1
+        }
+      },
+      "ground_revision_after_rule_review": 4,
+      "ground_revision_before_semantics": 2,
+      "ground_revision_complete": 4,
+      "reviewed_rule": "Synthetic ticker policy: (1) When applying the synthetic ticker policy to \"North Star Energy Inc.\", use the symbol \"NSE\"."
+    },
+    {
+      "distill": {
+        "origin": "LIVE",
+        "outside_memory_uids": [],
+        "overview": "The examples support a reusable synthetic-ticker pattern for multiword organization names, but they do not establish a general rule for single-word names.",
+        "rules": [
+          {
+            "boundary_count": 1,
+            "content": "When generating a synthetic ticker for a multiword organization name, omit the legal entity suffix and concatenate the initial letters of the remaining words in uppercase.",
+            "rationale": "The demonstrated multiword names map consistently to uppercase initials after removing Inc., LLC, or Ltd.; the single-word example uses a different, unspecified pattern and therefore limits this rule to multiword names.",
+            "support_count": 3
+          }
+        ],
+        "seconds": 6.417
+      },
+      "elaborate": {
+        "cases": [
+          {
+            "case_role": "FIT",
+            "expected": "NSH",
+            "proposition": "For the multiword organization name “North Star Holdings LLC,” generate the synthetic ticker “NSH.”",
+            "rationale": "FIT: omit the legal entity suffix “LLC,” then concatenate the uppercase initials of “North,” “Star,” and “Holdings.”",
+            "source_rule_index": 1
+          },
+          {
+            "case_role": "BOUNDARY",
+            "expected": "BR",
+            "proposition": "For “Blue River Inc.,” generate the synthetic ticker “BR,” treating the punctuated abbreviation “Inc.” as a legal entity suffix to omit.",
+            "rationale": "BOUNDARY: tests whether suffix recognition is insensitive to punctuation in a common abbreviated legal entity suffix.",
+            "source_rule_index": 1
+          },
+          {
+            "case_role": "CONTRAST",
+            "expected": "Underspecified by the rule",
+            "proposition": "For the single-word organization name “Acme LLC,” the rule does not determine whether the ticker should be “A,” derived by extending the initials method, or require another policy because the rule explicitly applies to multiword names.",
+            "rationale": "CONTRAST: exposes the rule’s stated scope by contrasting a single-word organization name with the covered multiword case.",
+            "source_rule_index": 1
+          }
+        ],
+        "mode": "RULES_TO_CASES",
+        "origin": "LIVE",
+        "overview": "Suggested, unverified cases for testing and refining the synthetic ticker rule.",
+        "rules": [],
+        "seconds": 8.742
+      },
+      "example_count": 4,
+      "fit": {
+        "current": true,
+        "ground_revision": 12,
+        "issue_count": 1,
+        "judgments": [
+          {
+            "example_uid": "1c1f0af3-7ef4-4b4e-966b-6e7f4afa19dc",
+            "reason": "Omitting \"Inc.\" leaves North Star Energy, whose uppercase initials are NSE.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "6461ea73-9d7d-43bf-84ad-ad58cccc9e86",
+            "reason": "Omitting \"LLC\" leaves Blue River Logistics, whose uppercase initials are BRL.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "a54fe1c7-93fa-4661-b922-ad74fa5ae7cb",
+            "reason": "The rule governs multiword organization names, while \"Redwood\" is a single-word name.",
+            "status": "NOT_APPLICABLE"
+          },
+          {
+            "example_uid": "b7d58350-f293-4ac5-aee1-78eaa770be83",
+            "reason": "Omitting \"Ltd.\" leaves Harbor Light Studios, whose uppercase initials are HLS.",
+            "status": "FIT"
+          }
+        ],
+        "overview": "The rule determines tickers for multiword organization names by removing the legal suffix and concatenating initials; it does not determine a ticker for a single-word name.",
+        "receipt_uid": "8b491afd-fc11-44e9-8b56-7e06910ac405",
+        "seconds": 7.357,
+        "status_counts": {
+          "FIT": 3,
+          "NOT_APPLICABLE": 1
+        }
+      },
+      "ground_revision_after_rule_review": 12,
+      "ground_revision_before_semantics": 10,
+      "ground_revision_complete": 12,
+      "reviewed_rule": "Synthetic ticker policy: (1) When generating a synthetic ticker for a multiword organization name, omit the legal entity suffix and concatenate the initial letters of the remaining words in uppercase."
+    },
+    {
+      "distill": {
+        "origin": "LIVE",
+        "outside_memory_uids": [],
+        "overview": "The examples support a compact synthetic-ticker policy based on meaningful organization-name words, with a fallback for single-word names.",
+        "rules": [
+          {
+            "boundary_count": 1,
+            "content": "For a multiword organization name, form the synthetic ticker from the initial letters of the meaningful name words, excluding leading articles, legal entity suffixes, and connector symbols.",
+            "rationale": "The outputs consistently use initials from the substantive name words while omitting terms such as “The,” “Inc.,” “LLC,” “Ltd.,” “Corporation,” “Co.,” and “PLC,” as well as “&.”",
+            "support_count": 7
+          },
+          {
+            "boundary_count": 7,
+            "content": "For a single-word organization name, use a compact leading substring of that name rather than an initialism; the supplied example uses the first four letters.",
+            "rationale": "“Redwood” has only one meaningful word and maps to “REDW,” establishing a distinct fallback from the multiword initial-based pattern.",
+            "support_count": 1
+          },
+          {
+            "boundary_count": 0,
+            "content": "Render synthetic tickers in uppercase.",
+            "rationale": "Every supplied synthetic ticker is uppercase.",
+            "support_count": 8
+          }
+        ],
+        "seconds": 10.102
+      },
+      "elaborate": {
+        "cases": [
+          {
+            "case_role": "FIT",
+            "expected": "NRA",
+            "proposition": "For the multiword organization name “North River Analytics,” the synthetic ticker is “NRA.”",
+            "rationale": "Uses the initial letters of all meaningful words in a multiword name.",
+            "source_rule_index": 1
+          },
+          {
+            "case_role": "BOUNDARY",
+            "expected": "NRA",
+            "proposition": "For “The North River Analytics LLC,” the synthetic ticker is “NRA,” excluding the leading article and legal entity suffix.",
+            "rationale": "Tests both named exclusions while retaining the meaningful-word initials.",
+            "source_rule_index": 1
+          },
+          {
+            "case_role": "BOUNDARY",
+            "expected": "NRA",
+            "proposition": "For “North & River Analytics,” the synthetic ticker is “NRA,” excluding the connector symbol rather than giving it a ticker character.",
+            "rationale": "Tests the connector-symbol exclusion in a multiword name.",
+            "source_rule_index": 1
+          }
+        ],
+        "mode": "RULES_TO_CASES",
+        "origin": "LIVE",
+        "overview": "Suggested, unverified cases covering direct fits and rule boundaries for the synthetic ticker policy.",
+        "rules": [],
+        "seconds": 7.875
+      },
+      "example_count": 8,
+      "fit": {
+        "current": true,
+        "ground_revision": 22,
+        "issue_count": 0,
+        "judgments": [
+          {
+            "example_uid": "1c1f0af3-7ef4-4b4e-966b-6e7f4afa19dc",
+            "reason": "The meaningful words are North, Star, and Energy; their initials form NSE, while Inc. is excluded.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "6461ea73-9d7d-43bf-84ad-ad58cccc9e86",
+            "reason": "The meaningful words are Blue, River, and Logistics; their initials form BRL, while LLC is excluded.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "a54fe1c7-93fa-4661-b922-ad74fa5ae7cb",
+            "reason": "Redwood is a single-word name, so the compact leading substring illustrated by the rule is its first four letters, REDW.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "b7d58350-f293-4ac5-aee1-78eaa770be83",
+            "reason": "The meaningful words are Harbor, Light, and Studios; their initials form HLS, while Ltd. is excluded.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "33e9bec9-c3e9-4873-a489-687aed6a9e90",
+            "reason": "The leading article The and the legal suffix Corporation are excluded; Green, Valley, and Bank yield GVB.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "2c203665-a7e6-46e9-a472-b71e32a52c24",
+            "reason": "The connector symbol & and legal suffix Co. are excluded; Cedar, Stone, and Foods yield CSF.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "d1ddb2e2-302f-41c4-8df1-fbffc00f9c1f",
+            "reason": "The meaningful words Axiom, AI, and Technologies yield AAT, while Inc. is excluded.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "93bc250e-54f8-42ab-a577-e2481bc8c152",
+            "reason": "The meaningful words Nova, Health, and Group yield NHG, while PLC is excluded.",
+            "status": "FIT"
+          }
+        ],
+        "overview": "All examples follow the stated synthetic ticker policy.",
+        "receipt_uid": "d7dce906-e0b3-41ef-bdee-6831402ce35f",
+        "seconds": 13.734,
+        "status_counts": {
+          "FIT": 8
+        }
+      },
+      "ground_revision_after_rule_review": 22,
+      "ground_revision_before_semantics": 20,
+      "ground_revision_complete": 22,
+      "reviewed_rule": "Synthetic ticker policy: (1) For a multiword organization name, form the synthetic ticker from the initial letters of the meaningful name words, excluding leading articles, legal entity suffixes, and connector symbols. (2) For a single-word organization name, use a compact leading substring of that name rather than an initialism; the supplied example uses the first four letters. (3) Render synthetic tickers in uppercase."
+    },
+    {
+      "distill": {
+        "origin": "LIVE",
+        "outside_memory_uids": [],
+        "overview": "The examples support a compact synthetic-ticker policy based on meaningful name words, with a dot suffix for share classes.",
+        "rules": [
+          {
+            "boundary_count": 1,
+            "content": "For an organization name containing multiple meaningful words, form the base symbol from the initial letters of those words while omitting leading articles, legal/entity suffixes, and standalone connectors; preserve meaningful abbreviations such as “AI” as a single initial-bearing name element.",
+            "rationale": "The multiword examples consistently yield compact initialisms after excluding terms such as “The,” “Inc.,” “LLC,” “Ltd.,” “Corporation,” “Co.,” and “PLC,” as well as “&.” The Axiom AI example indicates that an abbreviation can contribute its initial without expanding it.",
+            "support_count": 7
+          },
+          {
+            "boundary_count": 7,
+            "content": "For a single-word organization name, use a compact prefix of that name as the base symbol rather than reducing it to one initial.",
+            "rationale": "The single-word name “Redwood” maps to the four-letter symbol “REDW,” contrasting with the initialism pattern supported by multiword names.",
+            "support_count": 1
+          },
+          {
+            "boundary_count": 4,
+            "content": "When an organization name ends with a share-class designation of the form “Class X,” retain the organization’s ordinary base symbol and append “.X.”",
+            "rationale": "Across multiword and single-word names, Class A, B, and C designations consistently become dot-letter suffixes without changing the base symbol.",
+            "support_count": 4
+          }
+        ],
+        "seconds": 11.691
+      },
+      "elaborate": {
+        "cases": [
+          {
+            "case_role": "FIT",
+            "expected": "AIF",
+            "proposition": "“The Artificial Intelligence Foundry, Inc.” should produce the base symbol “AIF”: omit the leading article and entity suffix, while treating the meaningful words as initial-bearing elements.",
+            "rationale": "Directly tests multiword initial formation and omission of a leading article and legal/entity suffix.",
+            "source_rule_index": 1
+          },
+          {
+            "case_role": "BOUNDARY",
+            "expected": "NAIS",
+            "proposition": "“North AI Systems LLC” should produce the base symbol “NAIS,” with “AI” preserved as one meaningful abbreviation element contributing its initial rather than being expanded or omitted.",
+            "rationale": "Tests the stated handling of a meaningful abbreviation inside a multiword name.",
+            "source_rule_index": 1
+          },
+          {
+            "case_role": "CONTRAST",
+            "expected": "RDG",
+            "proposition": "“Research and Development Group” should produce the base symbol “RDG,” omitting the standalone connector “and.”",
+            "rationale": "Isolates the connector-omission requirement from article and entity-suffix handling.",
+            "source_rule_index": 1
+          }
+        ],
+        "mode": "RULES_TO_CASES",
+        "origin": "LIVE",
+        "overview": "Suggested, unverified cases covering multiword initials, single-word prefixes, and share-class suffix handling, including key boundaries and contrasts.",
+        "rules": [],
+        "seconds": 8.791
+      },
+      "example_count": 12,
+      "fit": {
+        "current": true,
+        "ground_revision": 32,
+        "issue_count": 2,
+        "judgments": [
+          {
+            "example_uid": "1c1f0af3-7ef4-4b4e-966b-6e7f4afa19dc",
+            "reason": "The meaningful words North, Star, and Energy contribute N, S, and E; Inc. is omitted.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "6461ea73-9d7d-43bf-84ad-ad58cccc9e86",
+            "reason": "Blue, River, and Logistics contribute B, R, and L; LLC is omitted.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "a54fe1c7-93fa-4661-b922-ad74fa5ae7cb",
+            "reason": "The rule requires a compact prefix for a single-word name but does not determine that the prefix must be exactly REDW.",
+            "status": "UNDERDETERMINED"
+          },
+          {
+            "example_uid": "b7d58350-f293-4ac5-aee1-78eaa770be83",
+            "reason": "Harbor, Light, and Studios contribute H, L, and S; Ltd. is omitted.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "33e9bec9-c3e9-4873-a489-687aed6a9e90",
+            "reason": "The leading article The and entity suffix Corporation are omitted, while Green, Valley, and Bank contribute G, V, and B.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "2c203665-a7e6-46e9-a472-b71e32a52c24",
+            "reason": "The standalone connector & and entity suffix Co. are omitted, while Cedar, Stone, and Foods contribute C, S, and F.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "d1ddb2e2-302f-41c4-8df1-fbffc00f9c1f",
+            "reason": "Axiom, AI, and Technologies are meaningful elements contributing A, A, and T; Inc. is omitted.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "93bc250e-54f8-42ab-a577-e2481bc8c152",
+            "reason": "Nova, Health, and Group contribute N, H, and G; PLC is omitted.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "49cee4c6-53d6-446a-b34b-30ce7fdf6cdf",
+            "reason": "North Star Energy has base NSE after omitting Inc., and Class B requires appending .B.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "a90384c1-5638-466d-a5fb-783f91330eeb",
+            "reason": "Blue River Logistics has base BRL after omitting LLC, and Class A requires appending .A.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "e3ca6391-9d0c-417a-8c73-c2fcda3ead86",
+            "reason": "Class C determines the .C suffix, but the single-word rule does not determine that Redwood's exact base prefix is REDW.",
+            "status": "UNDERDETERMINED"
+          },
+          {
+            "example_uid": "838e85e5-6fa6-463f-b609-e92c8616af84",
+            "reason": "Harbor Light Studios has base HLS after omitting Ltd., and Class B requires appending .B.",
+            "status": "FIT"
+          }
+        ],
+        "overview": "The multiword and share-class examples are determined by the policy. The single-word Redwood examples are underdetermined because “compact prefix” does not specify an exact prefix length.",
+        "receipt_uid": "fbc4ace1-8cc8-416f-bfce-e5fc751c43ae",
+        "seconds": 12.767,
+        "status_counts": {
+          "FIT": 10,
+          "UNDERDETERMINED": 2
+        }
+      },
+      "ground_revision_after_rule_review": 32,
+      "ground_revision_before_semantics": 30,
+      "ground_revision_complete": 32,
+      "reviewed_rule": "Synthetic ticker policy: (1) For an organization name containing multiple meaningful words, form the base symbol from the initial letters of those words while omitting leading articles, legal/entity suffixes, and standalone connectors; preserve meaningful abbreviations such as “AI” as a single initial-bearing name element. (2) For a single-word organization name, use a compact prefix of that name as the base symbol rather than reducing it to one initial. (3) When an organization name ends with a share-class designation of the form “Class X,” retain the organization’s ordinary base symbol and append “.X.”"
+    },
+    {
+      "distill": {
+        "origin": "LIVE",
+        "outside_memory_uids": [],
+        "overview": "The examples support a compact synthetic-ticker policy based on normalized significant name tokens, with special handling for single-token names and share classes.",
+        "rules": [
+          {
+            "boundary_count": 2,
+            "content": "For an organization name with multiple significant tokens, form the base symbol by concatenating the uppercase first character of each significant token, preserving digits when they are significant tokens or token-leading characters.",
+            "rationale": "The multi-token examples consistently reduce names to initials, including names containing numeric elements.",
+            "support_count": 9
+          },
+          {
+            "boundary_count": 0,
+            "content": "Before forming a base symbol, omit leading articles, legal entity designators, and the conjunction or separator “&”; treat hyphens and apostrophes as internal punctuation rather than as sources of additional initials, and normalize accented letters to their unaccented equivalents.",
+            "rationale": "Examples omit “The,” entity suffixes such as Inc., LLC, Ltd., Corp., Corporation, and PLC, and “&”; punctuation does not create extra symbol characters, while É contributes E.",
+            "support_count": 11
+          },
+          {
+            "boundary_count": 7,
+            "content": "For a single significant-token organization name, use the first four uppercase letters of that token as the base symbol.",
+            "rationale": "The single-token name “Redwood” maps to “REDW,” including when a class designation is present.",
+            "support_count": 2
+          },
+          {
+            "boundary_count": 4,
+            "content": "When an organization name ends with “Class X,” append “.X” to the base symbol, using the class letter in uppercase; do not otherwise change the base-symbol construction.",
+            "rationale": "Class A, B, and C examples preserve the corresponding non-class base symbol and add a dot plus the class letter.",
+            "support_count": 4
+          }
+        ],
+        "seconds": 13.502
+      },
+      "elaborate": {
+        "cases": [
+          {
+            "case_role": "FIT",
+            "expected": "NRA",
+            "proposition": "Given the organization name “North River Analytics,” the base symbol is “NRA.”",
+            "rationale": "Directly exercises concatenation of the uppercase first character of each significant token.",
+            "source_rule_index": 1
+          },
+          {
+            "case_role": "BOUNDARY",
+            "expected": "S5M",
+            "proposition": "Given the organization name “Studio 54 Media,” the base symbol is “S5M.”",
+            "rationale": "Tests preservation of a digit when the digit itself is a significant token.",
+            "source_rule_index": 1
+          },
+          {
+            "case_role": "BOUNDARY",
+            "expected": "7L",
+            "proposition": "Given the organization name “7Seas Logistics,” the base symbol is “7L.”",
+            "rationale": "Tests preservation of a token-leading digit rather than replacing it with a letter-derived initial.",
+            "source_rule_index": 1
+          }
+        ],
+        "mode": "RULES_TO_CASES",
+        "origin": "LIVE",
+        "overview": "Suggested, unverified cases covering multi-token initials, omitted terms and punctuation normalization, single-token truncation, and share-class suffixes.",
+        "rules": [],
+        "seconds": 7.814
+      },
+      "example_count": 20,
+      "fit": {
+        "current": true,
+        "ground_revision": 50,
+        "issue_count": 0,
+        "judgments": [
+          {
+            "example_uid": "1c1f0af3-7ef4-4b4e-966b-6e7f4afa19dc",
+            "reason": "Omitting “Inc.” leaves three significant tokens whose initials form NSE.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "6461ea73-9d7d-43bf-84ad-ad58cccc9e86",
+            "reason": "Omitting “LLC” leaves Blue, River, and Logistics, forming BRL.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "a54fe1c7-93fa-4661-b922-ad74fa5ae7cb",
+            "reason": "The single significant token Redwood contributes its first four uppercase letters, REDW.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "b7d58350-f293-4ac5-aee1-78eaa770be83",
+            "reason": "Omitting “Ltd.” leaves Harbor, Light, and Studios, forming HLS.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "33e9bec9-c3e9-4873-a489-687aed6a9e90",
+            "reason": "Omitting the leading article “The” and designator “Corporation” leaves Green Valley Bank, forming GVB.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "2c203665-a7e6-46e9-a472-b71e32a52c24",
+            "reason": "Omitting “&” and “Co.” leaves Cedar, Stone, and Foods, forming CSF.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "d1ddb2e2-302f-41c4-8df1-fbffc00f9c1f",
+            "reason": "Omitting “Inc.” leaves Axiom, AI, and Technologies, forming AAT.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "93bc250e-54f8-42ab-a577-e2481bc8c152",
+            "reason": "Omitting “PLC” leaves Nova Health Group, forming NHG.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "49cee4c6-53d6-446a-b34b-30ce7fdf6cdf",
+            "reason": "The base is NSE after omitting “Inc.”, and the terminal Class B appends .B.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "a90384c1-5638-466d-a5fb-783f91330eeb",
+            "reason": "The base is BRL after omitting “LLC”, and the terminal Class A appends .A.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "e3ca6391-9d0c-417a-8c73-c2fcda3ead86",
+            "reason": "Redwood is a single significant token yielding REDW, and Class C appends .C.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "838e85e5-6fa6-463f-b609-e92c8616af84",
+            "reason": "The base is HLS after omitting “Ltd.”, and the terminal Class B appends .B.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "ffc1f140-2fe6-4472-b403-70f14301e181",
+            "reason": "The hyphen is internal punctuation, so North-West is one token contributing N; Transit contributes T, yielding NWT under the token-leading-character rule.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "a12a6258-b1f3-4fa4-b282-91010d15d4ad",
+            "reason": "The apostrophe is internal punctuation, so O'Brien contributes O; Market and Group contribute M and G, forming OMG.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "481330cb-ed38-4761-9284-54999f0da728",
+            "reason": "After omitting “LLC”, Studio contributes S, the significant digit token 54 contributes its leading digit 5, and Media contributes M.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "46677e36-affa-4c0a-adcc-0e46d780582c",
+            "reason": "After omitting “Inc.”, Seven and Seas contribute SS, significant token 2 contributes 2, and Logistics contributes L.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "3b99aa29-a809-4cb5-8d92-b4ee7ec00883",
+            "reason": "The hyphen is internal punctuation, so Quantum-X contributes Q rather than two initials; Labs contributes L, yielding QL, not QXL.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "2e199185-4ec5-4ff9-9136-ced9c7163d83",
+            "reason": "Omitting “&” and “Ltd.” leaves Atlas, Research, and Development, forming ARD.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "b794335b-fe0a-4fad-bef1-ba77128bc522",
+            "reason": "After omitting “PLC”, One and World contribute OW, significant token 360 contributes its leading digit 3, and Media contributes M.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "56e9799b-7468-4945-bbd3-84ab1168dbb8",
+            "reason": "Normalizing É to E and omitting “Inc.” leaves Élan, Bio, and Systems, forming EBS.",
+            "status": "FIT"
+          }
+        ],
+        "overview": "All examples are determined by and conform to the synthetic ticker policy.",
+        "receipt_uid": "830512b6-294a-4b7f-bbed-e0c193d9cea3",
+        "seconds": 17.87,
+        "status_counts": {
+          "FIT": 20
+        }
+      },
+      "ground_revision_after_rule_review": 50,
+      "ground_revision_before_semantics": 48,
+      "ground_revision_complete": 50,
+      "reviewed_rule": "Synthetic ticker policy: (1) For an organization name with multiple significant tokens, form the base symbol by concatenating the uppercase first character of each significant token, preserving digits when they are significant tokens or token-leading characters. (2) Before forming a base symbol, omit leading articles, legal entity designators, and the conjunction or separator “&”; treat hyphens and apostrophes as internal punctuation rather than as sources of additional initials, and normalize accented letters to their unaccented equivalents. (3) For a single significant-token organization name, use the first four uppercase letters of that token as the base symbol. (4) When an organization name ends with “Class X,” append “.X” to the base symbol, using the class letter in uppercase; do not otherwise change the base-symbol construction."
+    },
+    {
+      "distill": {
+        "origin": "LIVE",
+        "outside_memory_uids": [
+          "84e2a052-b579-4685-8e69-d2f686f85cd9"
+        ],
+        "overview": "The examples support a synthetic-ticker policy based on normalized significant name tokens, with special handling for single-word names, share classes, digits, and ticker length.",
+        "rules": [
+          {
+            "boundary_count": 2,
+            "content": "When generating a base ticker, remove leading articles, legal/entity suffixes, and standalone conjunctions; then concatenate the initials of the remaining significant tokens in uppercase.",
+            "rationale": "Across the examples, words such as “The,” “Inc.,” “LLC,” “Ltd.,” “Corporation,” “Company,” “PLC,” “Corp.,” “Incorporated,” “Limited,” and “AG” do not contribute characters. Standalone “&” is also omitted, while significant words contribute initials.",
+            "support_count": 17
+          },
+          {
+            "boundary_count": 2,
+            "content": "When a name has only one significant token after filtering, use the first four normalized letters of that token as the ticker, or the entire token when it has four letters.",
+            "rationale": "The single significant-token cases produce REDW from “Redwood” and MONO from “Mono,” rather than a one-character initial.",
+            "support_count": 2
+          },
+          {
+            "boundary_count": 0,
+            "content": "When an organization name includes a trailing share-class designation, generate the base ticker from the organization name and append a period followed by the class letter.",
+            "rationale": "Class A, B, and C examples consistently preserve the base ticker and encode the class as a dotted suffix.",
+            "support_count": 4
+          },
+          {
+            "boundary_count": 0,
+            "content": "Normalize punctuation and diacritics before deriving token initials: hyphens and apostrophes do not create ticker positions, and accented initial letters are reduced to their unaccented Latin equivalents.",
+            "rationale": "Hyphenated compounds contribute one initial per lexical word, possessive apostrophes do not add a character, and É/Zü contribute E/Z respectively.",
+            "support_count": 7
+          },
+          {
+            "boundary_count": 0,
+            "content": "For a significant token containing digits, contribute one character representing the token: preserve a single digit when present, and for a multi-digit numeral use its leading digit.",
+            "rationale": "Numeric tokens contribute 5, 2, 3, 2, and 6 in the observed tickers for 54, 2, 360, 24, and 66 respectively.",
+            "support_count": 5
+          },
+          {
+            "boundary_count": 2,
+            "content": "Keep the resulting base ticker compact, with the observed outputs ranging from two to four characters; do not truncate a four-character result formed from four significant tokens.",
+            "rationale": "The examples include two-, three-, and four-character base tickers, including DSXS and ABGD from four significant tokens.",
+            "support_count": 3
+          }
+        ],
+        "seconds": 17.129
+      },
+      "elaborate": {
+        "cases": [
+          {
+            "case_role": "FIT",
+            "expected": "NSH",
+            "proposition": "Given “The North Star Holdings LLC,” the generated ticker is “NSH.”",
+            "rationale": "After removing the leading article and legal suffix, the initials of the three remaining significant tokens are concatenated.",
+            "source_rule_index": 1
+          },
+          {
+            "case_role": "FIT",
+            "expected": "ORIO",
+            "proposition": "Given “Orion Ltd.,” the generated ticker is “ORIO.”",
+            "rationale": "Filtering leaves one significant token, so its first four normalized letters are used.",
+            "source_rule_index": 1
+          },
+          {
+            "case_role": "BOUNDARY",
+            "expected": "OAK",
+            "proposition": "Given “The Oak Inc.,” the generated ticker is “OAK.”",
+            "rationale": "This probes the underspecified case where the sole significant token contains fewer than four letters.",
+            "source_rule_index": 1
+          }
+        ],
+        "mode": "RULES_TO_CASES",
+        "origin": "LIVE",
+        "overview": "Suggested, unverified cases for testing and refining the synthetic ticker rules.",
+        "rules": [],
+        "seconds": 9.251
+      },
+      "example_count": 35,
+      "fit": {
+        "current": true,
+        "ground_revision": 82,
+        "issue_count": 0,
+        "judgments": [
+          {
+            "example_uid": "1c1f0af3-7ef4-4b4e-966b-6e7f4afa19dc",
+            "reason": "Removing the entity suffix leaves North, Star, Energy, whose initials form NSE.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "6461ea73-9d7d-43bf-84ad-ad58cccc9e86",
+            "reason": "Removing LLC leaves Blue, River, Logistics, whose initials form BRL.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "a54fe1c7-93fa-4661-b922-ad74fa5ae7cb",
+            "reason": "Redwood is the sole significant token, so its first four normalized letters form REDW.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "b7d58350-f293-4ac5-aee1-78eaa770be83",
+            "reason": "Removing Ltd. leaves Harbor, Light, Studios, whose initials form HLS.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "33e9bec9-c3e9-4873-a489-687aed6a9e90",
+            "reason": "Removing the leading article and Corporation leaves Green, Valley, Bank, whose initials form GVB.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "2c203665-a7e6-46e9-a472-b71e32a52c24",
+            "reason": "Removing the conjunction and Co. leaves Cedar, Stone, Foods, whose initials form CSF.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "d1ddb2e2-302f-41c4-8df1-fbffc00f9c1f",
+            "reason": "Removing Inc. leaves Axiom, AI, Technologies, whose initials form AAT.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "93bc250e-54f8-42ab-a577-e2481bc8c152",
+            "reason": "Removing PLC leaves Nova, Health, Group, whose initials form NHG.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "49cee4c6-53d6-446a-b34b-30ce7fdf6cdf",
+            "reason": "The organization base is NSE, and the trailing Class B designation appends .B.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "a90384c1-5638-466d-a5fb-783f91330eeb",
+            "reason": "The organization base is BRL, and the trailing Class A designation appends .A.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "e3ca6391-9d0c-417a-8c73-c2fcda3ead86",
+            "reason": "The single-token organization base is REDW, and the trailing Class C designation appends .C.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "838e85e5-6fa6-463f-b609-e92c8616af84",
+            "reason": "The organization base is HLS, and the trailing Class B designation appends .B.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "ffc1f140-2fe6-4472-b403-70f14301e181",
+            "reason": "The hyphen does not create an extra position; North-West contributes N and Transit contributes T, forming NWT.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "a12a6258-b1f3-4fa4-b282-91010d15d4ad",
+            "reason": "The apostrophe does not create a position; O'Brien, Market, and Group contribute O, M, and G.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "481330cb-ed38-4761-9284-54999f0da728",
+            "reason": "Studio contributes S, the single digit in 54 is not single but the multi-digit numeral contributes its leading 5, and Media contributes M, forming S5M.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "46677e36-affa-4c0a-adcc-0e46d780582c",
+            "reason": "Seven, Seas, 2, and Logistics contribute S, S, 2, and L, forming SS2L.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "3b99aa29-a809-4cb5-8d92-b4ee7ec00883",
+            "reason": "The hyphen does not create an additional position; Quantum-X contributes Q and X, while Labs contributes L, forming QXL.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "2e199185-4ec5-4ff9-9136-ced9c7163d83",
+            "reason": "Removing the conjunction and Ltd. leaves Atlas, Research, Development, whose initials form ARD.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "b794335b-fe0a-4fad-bef1-ba77128bc522",
+            "reason": "One, World, 360, and Media contribute O, W, the numeral's leading 3, and M, forming OW3M.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "56e9799b-7468-4945-bbd3-84ab1168dbb8",
+            "reason": "Normalizing É to E and removing Inc. yields the initials E, B, and S.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "1b7cf732-ef3f-40f3-bb38-b1680b7915dd",
+            "reason": "Removing the entity suffix Company leaves Sunrise and Robotics, whose initials form SR.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "0a44f7e1-98dd-46dc-afc8-340943cb1206",
+            "reason": "Removing Incorporated leaves Polar, Data, Works, whose initials form PDW.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "1746612e-1144-47fd-beb3-5230275c5524",
+            "reason": "Removing Limited leaves Maple, Leaf, Foods, whose initials form MLF.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "8841201c-63f8-43eb-850a-139aa89ac1cb",
+            "reason": "Removing LLC leaves Urban, Ocean, Analytics, whose initials form UOA.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "84e2a052-b579-4685-8e69-d2f686f85cd9",
+            "reason": "Removing Inc. leaves BrightMind, AI, Labs, whose initials form BAL.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "dba983d4-4a85-4686-8e24-90e624673602",
+            "reason": "Removing Ltd. leaves Deep, Space, XR, Studios, whose initials form DSXS.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "0954b29e-6082-41ac-8481-a32b04534d1f",
+            "reason": "The hyphen does not create an extra ticker position; Lake-View and Materials contribute L, V, and M, forming LVM.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "fc84b190-d602-4a87-9946-802bc8de8069",
+            "reason": "The apostrophe does not create a position; King's, Road, and Retail contribute K, R, and R after removing Company.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "fc7d9bd8-51b8-49fe-96c2-3b11f55de68d",
+            "reason": "Removing the leading article and Inc. leaves Northern and Grid, whose initials form NG.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "3fd3ff68-2003-4baa-a797-91f1844e3b8e",
+            "reason": "Removing the conjunction and LLC leaves East, West, Mobility, whose initials form EWM.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "3ed16001-405b-4322-8e8b-6c503ece93a9",
+            "reason": "The multi-digit numeral 24 contributes its leading 2, while Seven and Energy contribute S and E, forming 2SE.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "bf9df4dd-8a51-4abc-bc1f-f2f9e6948f27",
+            "reason": "Route contributes R, the multi-digit numeral 66 contributes its leading 6, and Systems contributes S, forming R6S.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "5e294d10-817f-469a-8b6f-0dd35a743108",
+            "reason": "Removing Inc. leaves four significant tokens whose initials form ABGD, and the rule forbids truncating this four-character result.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "89ed9cd0-40df-433c-9e48-d0af69d58609",
+            "reason": "Removing LLC leaves the sole four-letter token Mono, so the entire token becomes MONO.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "a410879c-ef54-48c4-80df-951ba4aab18b",
+            "reason": "Removing AG and normalizing ü leaves Zürich and Cloud contributing Z and C, forming ZC.",
+            "status": "FIT"
+          }
+        ],
+        "overview": "All 35 examples are determined by and conform to the synthetic ticker policy.",
+        "receipt_uid": "61f603f5-81c0-4f35-b8cb-fd3d78357e34",
+        "seconds": 25.14,
+        "status_counts": {
+          "FIT": 35
+        }
+      },
+      "ground_revision_after_rule_review": 82,
+      "ground_revision_before_semantics": 80,
+      "ground_revision_complete": 82,
+      "reviewed_rule": "Synthetic ticker policy: (1) When generating a base ticker, remove leading articles, legal/entity suffixes, and standalone conjunctions; then concatenate the initials of the remaining significant tokens in uppercase. (2) When a name has only one significant token after filtering, use the first four normalized letters of that token as the ticker, or the entire token when it has four letters. (3) When an organization name includes a trailing share-class designation, generate the base ticker from the organization name and append a period followed by the class letter. (4) Normalize punctuation and diacritics before deriving token initials: hyphens and apostrophes do not create ticker positions, and accented initial letters are reduced to their unaccented Latin equivalents. (5) For a significant token containing digits, contribute one character representing the token: preserve a single digit when present, and for a multi-digit numeral use its leading digit. (6) Keep the resulting base ticker compact, with the observed outputs ranging from two to four characters; do not truncate a four-character result formed from four significant tokens."
+    },
+    {
+      "distill": {
+        "attempt": 2,
+        "first_attempt_rejected": true,
+        "origin": "LIVE",
+        "outside_memory_uids": [
+          "dccd8d2e-1ee2-4cfd-ac0e-7956748e98fe"
+        ],
+        "overview": "Reusable rules supported by the synthetic-ticker examples.",
+        "rules": [
+          {
+            "boundary_count": 2,
+            "content": "When generating a base symbol, remove leading articles, conjunction-only tokens, and corporate or legal suffixes, then concatenate the initial alphanumeric character of each remaining word in uppercase.",
+            "rationale": "Multiword examples consistently omit terms such as “The,” “&,” and legal suffixes while retaining initials from the substantive name words.",
+            "support_count": 16
+          },
+          {
+            "boundary_count": 2,
+            "content": "When the normalized organization name has only one substantive word, use up to its first four letters in uppercase rather than a one-letter initial.",
+            "rationale": "The single-word names “Redwood” and “Mono” produce four-letter symbols.",
+            "support_count": 2
+          },
+          {
+            "boundary_count": 7,
+            "content": "Treat hyphens, apostrophes, periods, plus signs, and accented letters as normalization boundaries or removable punctuation, while preserving the initials of the resulting substantive components in transliterated uppercase form.",
+            "rationale": "Examples normalize punctuation-heavy and accented names into plain uppercase alphanumeric symbols without retaining punctuation in the base symbol.",
+            "support_count": 12
+          },
+          {
+            "boundary_count": 1,
+            "content": "For a numeric token, preserve a compact numeric contribution—typically its first digit—alongside the initials of substantive word tokens; if a token begins with digits followed by letters, retain the leading digit as that token’s contribution.",
+            "rationale": "Names containing 54, 2, 360, 24, 66, 2X, 9, or 7 consistently retain a leading digit in the generated symbol.",
+            "support_count": 9
+          },
+          {
+            "boundary_count": 1,
+            "content": "Preserve meaningful uppercase initialisms embedded in a name as their constituent letters when forming the compact symbol, subject to the demonstrated overall four-character base-symbol scale.",
+            "rationale": "Embedded terms such as AI and XR contribute multiple letters, while surrounding substantive words contribute initials.",
+            "support_count": 4
+          },
+          {
+            "boundary_count": 0,
+            "content": "When a name ends with “Class X,” generate the organization’s base symbol from the preceding name and append “.X” in uppercase; do not treat an internal occurrence of “Class” as a share-class suffix.",
+            "rationale": "Terminal class designations consistently become dot suffixes, while “Class” inside “First Class Ventures” remains part of the base name before the actual terminal class designation.",
+            "support_count": 7
+          }
+        ],
+        "seconds": 16.951
+      },
+      "elaborate": {
+        "cases": [
+          {
+            "case_role": "FIT",
+            "expected": "NS",
+            "proposition": "For the organization name “The North and South Holdings, Inc.”, generate the base symbol “NS”.",
+            "rationale": "Remove the leading article “The,” the conjunction-only token “and,” and the legal/corporate suffixes “Holdings” and “Inc.”; then concatenate the initials of the remaining substantive words “North” and “South.”",
+            "source_rule_index": 1
+          },
+          {
+            "case_role": "BOUNDARY",
+            "expected": "ELAN",
+            "proposition": "For the normalized single-word organization name “Élan,” generate the base symbol “ELAN”.",
+            "rationale": "This tests the single-substantive-word rule at its four-letter limit together with accented-letter transliteration to uppercase.",
+            "source_rule_index": 1
+          },
+          {
+            "case_role": "CONTRAST",
+            "expected": "Terminal “Class B” yields SUMM.B; internal/nonterminal “Class” in “Summit Class Systems” yields SCS.",
+            "proposition": "For “Summit Class B,” generate “SUMM.B”; for “Summit Class Systems,” do not append a share-class suffix and instead generate the ordinary base symbol “SCS”.",
+            "rationale": "This contrasts a terminal share-class marker with an occurrence of “Class” that remains part of the organization name.",
+            "source_rule_index": 1
+          }
+        ],
+        "mode": "RULES_TO_CASES",
+        "origin": "LIVE",
+        "overview": "Suggested, unverified cases covering standard normalization, a single-word boundary, and the distinction between terminal and internal “Class” occurrences.",
+        "rules": [],
+        "seconds": 9.043
+      },
+      "example_count": 50,
+      "fit": {
+        "current": true,
+        "ground_revision": 114,
+        "issue_count": 0,
+        "judgments": [
+          {
+            "example_uid": "1c1f0af3-7ef4-4b4e-966b-6e7f4afa19dc",
+            "reason": "Removing the legal suffix and taking the initials of North, Star, and Energy yields NSE.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "6461ea73-9d7d-43bf-84ad-ad58cccc9e86",
+            "reason": "Removing LLC and taking the initials of Blue, River, and Logistics yields BRL.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "a54fe1c7-93fa-4661-b922-ad74fa5ae7cb",
+            "reason": "Redwood is the sole substantive word, so its first four letters yield REDW.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "b7d58350-f293-4ac5-aee1-78eaa770be83",
+            "reason": "Removing Ltd. and taking the substantive-word initials yields HLS.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "33e9bec9-c3e9-4873-a489-687aed6a9e90",
+            "reason": "Removing the leading article and corporate suffix leaves Green Valley Bank, yielding GVB.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "2c203665-a7e6-46e9-a472-b71e32a52c24",
+            "reason": "The conjunction-only token and legal suffix are removed, leaving Cedar, Stone, and Foods, yielding CSF.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "d1ddb2e2-302f-41c4-8df1-fbffc00f9c1f",
+            "reason": "Removing Inc. and taking the initials of Axiom, AI, and Technologies yields AAT.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "93bc250e-54f8-42ab-a577-e2481bc8c152",
+            "reason": "Removing PLC and taking the remaining word initials yields NHG.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "49cee4c6-53d6-446a-b34b-30ce7fdf6cdf",
+            "reason": "The preceding organization has base NSE, and the terminal Class B suffix appends .B.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "a90384c1-5638-466d-a5fb-783f91330eeb",
+            "reason": "The preceding organization has base BRL, and terminal Class A appends .A.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "e3ca6391-9d0c-417a-8c73-c2fcda3ead86",
+            "reason": "The one-word base is REDW, and terminal Class C appends .C.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "838e85e5-6fa6-463f-b609-e92c8616af84",
+            "reason": "The preceding organization has base HLS, and terminal Class B appends .B.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "ffc1f140-2fe6-4472-b403-70f14301e181",
+            "reason": "The hyphen separates North and West into components; with Transit and removal of Inc., the initials yield NWT.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "a12a6258-b1f3-4fa4-b282-91010d15d4ad",
+            "reason": "Treating the apostrophe as removable punctuation keeps O'Brien as a substantive word contributing O; Market and Group contribute M and G, yielding OMG.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "481330cb-ed38-4761-9284-54999f0da728",
+            "reason": "Studio and Media contribute S and M, while numeric token 54 contributes its first digit 5, yielding S5M.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "46677e36-affa-4c0a-adcc-0e46d780582c",
+            "reason": "Seven, Seas, and Logistics contribute S, S, and L, while numeric token 2 contributes 2, yielding SS2L.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "3b99aa29-a809-4cb5-8d92-b4ee7ec00883",
+            "reason": "The hyphen splits Quantum-X into Q and X; Labs contributes L and Corp. is removed, yielding QXL.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "2e199185-4ec5-4ff9-9136-ced9c7163d83",
+            "reason": "Removing the conjunction and legal suffix leaves Atlas, Research, and Development, yielding ARD.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "b794335b-fe0a-4fad-bef1-ba77128bc522",
+            "reason": "One, World, and Media contribute O, W, and M, while 360 contributes its first digit 3, yielding OW3M.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "56e9799b-7468-4945-bbd3-84ab1168dbb8",
+            "reason": "Transliterating accented É to E and taking the remaining substantive initials yields EBS.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "1b7cf732-ef3f-40f3-bb38-b1680b7915dd",
+            "reason": "Company is a corporate suffix, so Sunrise and Robotics yield SR.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "0a44f7e1-98dd-46dc-afc8-340943cb1206",
+            "reason": "Incorporated is removed as a legal suffix, leaving Polar Data Works and yielding PDW.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "1746612e-1144-47fd-beb3-5230275c5524",
+            "reason": "Limited is removed as a legal suffix, leaving Maple Leaf Foods and yielding MLF.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "8841201c-63f8-43eb-850a-139aa89ac1cb",
+            "reason": "Removing LLC leaves Urban Ocean Analytics, whose initials yield UOA.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "84e2a052-b579-4685-8e69-d2f686f85cd9",
+            "reason": "BrightMind is one word contributing B, while AI and Labs contribute A and L; Inc. is removed, yielding BAL.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "dba983d4-4a85-4686-8e24-90e624673602",
+            "reason": "Deep and Space contribute D and S, embedded initialism XR is preserved as X, and Studios contributes S, yielding DSXS on the four-character scale.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "0954b29e-6082-41ac-8481-a32b04534d1f",
+            "reason": "The hyphen splits Lake-View into L and V; Materials contributes M and Corp. is removed, yielding LVM.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "fc84b190-d602-4a87-9946-802bc8de8069",
+            "reason": "Treating the apostrophe as removable punctuation keeps King's as a word contributing K; Road and Retail contribute R and R, while Company is removed, yielding KRR.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "fc7d9bd8-51b8-49fe-96c2-3b11f55de68d",
+            "reason": "Removing the leading article and Inc. leaves Northern Grid, yielding NG.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "3fd3ff68-2003-4baa-a797-91f1844e3b8e",
+            "reason": "Removing the conjunction-only token and LLC leaves East, West, and Mobility, yielding EWM.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "3ed16001-405b-4322-8e8b-6c503ece93a9",
+            "reason": "The numeric-leading token 24 contributes its leading digit 2; Seven and Energy contribute S and E, yielding 2SE.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "bf9df4dd-8a51-4abc-bc1f-f2f9e6948f27",
+            "reason": "Route and Systems contribute R and S, while numeric token 66 contributes its first digit 6, yielding R6S.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "5e294d10-817f-469a-8b6f-0dd35a743108",
+            "reason": "Removing Inc. and taking the four substantive initials yields ABGD.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "89ed9cd0-40df-433c-9e48-d0af69d58609",
+            "reason": "After removing LLC, Mono is the sole substantive word, so its first four letters yield MONO.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "a410879c-ef54-48c4-80df-951ba4aab18b",
+            "reason": "Removing AG and transliterating Zürich's initial to Z leaves initials Z and C, yielding ZC.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "86415dff-263e-4931-9ff9-2b578da55f6b",
+            "reason": "The hyphen splits Bio-Tech into B and T; with Silver and Pine and removal of Inc., the initials yield SPBT.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "0f51a883-4637-4b20-ba48-dbaef8958492",
+            "reason": "The four substantive words Open, Source, Network, and Foundation yield OSNF.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "fd63ed2b-7ad3-4957-a1cb-edbc7ffedba9",
+            "reason": "The internal word Class remains part of the base, so First Class Ventures yields FCV; terminal Class B appends .B.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "59f6631e-2e9d-472d-ba3d-ad43a6690341",
+            "reason": "MegaData contributes M, digit-leading token 2X contributes 2, and Labs contributes L; LLC is removed, yielding M2L.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "2da5f58c-d3c1-41cf-a7d6-b28b68d84043",
+            "reason": "The plus signs are removable punctuation, so C++ contributes C; Systems contributes S and Inc. is removed, yielding CS.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "dccd8d2e-1ee2-4cfd-ac0e-7956748e98fe",
+            "reason": "The punctuation-separated R&D expression contributes R while the conjunction-only D component is removed; Signal and Labs contribute S and L, yielding RSL.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "44c7c13b-dea3-4ae1-b03a-9e8989ec68d8",
+            "reason": "The period is removable punctuation within Acme.com, which contributes A; Services contributes S and Corp. is removed, yielding AS.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "0bc8aba9-2424-4706-abec-a61e6f588102",
+            "reason": "The hyphen creates Neo and Élan components contributing N and transliterated E; Mobility contributes M and PLC is removed, yielding NEM.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "f86ee230-742d-4dce-9e93-06986ad538f1",
+            "reason": "The hyphens split One-One-One into three substantive components contributing OOO; Holdings contributes H and Inc. is removed, yielding OOOH.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "410224e5-fa4b-460c-9478-c44f3db8c29f",
+            "reason": "Delta, Bio, and Group contribute D, B, and G, while numeric token 9 contributes 9; LLC is removed, yielding D9BG.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "3707f25b-6132-41eb-ad0a-e5c26d531268",
+            "reason": "New and York contribute N and Y, embedded AI is preserved as A on the four-character scale, and Exchange contributes E, yielding NYAE.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "94e498dc-5fd3-484e-8a27-10b2c64bb608",
+            "reason": "Removing the leading article and Company leaves numeric token 7 and Hills, yielding 7H.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "45d90322-eea8-48da-bd7c-04ad9d083783",
+            "reason": "Redwood Research yields base RR, and terminal Class A appends .A.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "9210dffd-a1e8-4228-b442-ad5dfddb7739",
+            "reason": "Removing Ltd. and taking the initials of A, B, C, and Networks yields ABCN.",
+            "status": "FIT"
+          },
+          {
+            "example_uid": "01ea670c-3493-4998-bc74-02d43ffe9c2b",
+            "reason": "Global and Quantum contribute G and Q, numeric token 360 contributes 3, and terminal Class C appends .C, yielding GQ3.C.",
+            "status": "FIT"
+          }
+        ],
+        "overview": "All 50 examples are supported by the synthetic ticker policy.",
+        "receipt_uid": "76030c67-32f0-49b5-b3a6-ed74025925b5",
+        "seconds": 36.241,
+        "status_counts": {
+          "FIT": 50
+        }
+      },
+      "ground_revision_after_rule_review": 114,
+      "ground_revision_before_semantics": 112,
+      "ground_revision_complete": 114,
+      "reviewed_rule": "Synthetic ticker policy: (1) When generating a base symbol, remove leading articles, conjunction-only tokens, and corporate or legal suffixes, then concatenate the initial alphanumeric character of each remaining word in uppercase. (2) When the normalized organization name has only one substantive word, use up to its first four letters in uppercase rather than a one-letter initial. (3) Treat hyphens, apostrophes, periods, plus signs, and accented letters as normalization boundaries or removable punctuation, while preserving the initials of the resulting substantive components in transliterated uppercase form. (4) For a numeric token, preserve a compact numeric contribution—typically its first digit—alongside the initials of substantive word tokens; if a token begins with digits followed by letters, retain the leading digit as that token’s contribution. (5) Preserve meaningful uppercase initialisms embedded in a name as their constituent letters when forming the compact symbol, subject to the demonstrated overall four-character base-symbol scale. (6) When a name ends with “Class X,” generate the organization’s base symbol from the preceding name and append “.X” in uppercase; do not treat an internal occurrence of “Class” as a share-class suffix."
+    }
+  ],
+  "stale_branch": {
+    "distill": {
+      "blocked_before_provider": true,
+      "error": "DistillError: Bound Context 'ticker/examples' changed after Ground binding."
+    },
+    "elaborate": {
+      "blocked_before_provider": false,
+      "error": "provider factory reached"
+    },
+    "fit": {
+      "blocked_before_provider": false,
+      "error": "provider factory reached"
+    },
+    "ground_example_edit": {
+      "blocked": true,
+      "error": "GroundError: Grounding workbench is stale. Create a new named Ground, or explicitly replace and rebind this one."
+    }
+  },
+  "status": "COMPLETED_AFTER_EXACT_RETRY",
+  "thresholds": [
+    1,
+    4,
+    8,
+    12,
+    20,
+    35,
+    50
+  ]
+}

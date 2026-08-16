@@ -1,0 +1,397 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:34:28.914452+00:00",
+      "frames": [
+        {
+          "context_digest": "2f00e067f4f35600b73e87b5555d405e2801a33ba18a54c91e63e23a79f27a4c",
+          "context_name": "task-3/local/personal-memory/2024/01",
+          "context_uid": "cbd2e4d6-2601-5d3f-8bf2-2f66b755b007",
+          "memories": [
+            {
+              "content": "The user's mother's birthday falls in the third week of January.",
+              "content_digest": "d635ded9b470acdd462156515700e66c23dcb513a7034bb365be0ac139ec0422",
+              "position": 0,
+              "uid": "2cd0229d-b7f1-581b-8019-25bdb485afd9"
+            },
+            {
+              "content": "At the user's last family meal out, noise from the next table made conversation nearly impossible.",
+              "content_digest": "dc337d32e4b09167289e19a6b1c8fe970e7eaa6fdd6868ed1c7c300e018fcd15",
+              "position": 1,
+              "uid": "c62f1669-11c9-5a81-b5f5-304acce69c23"
+            },
+            {
+              "content": "At a barbecue at home in the same month, the user was comfortable because no one had to raise their voice.",
+              "content_digest": "63763b293a491200bf1f7a251467c1fa8c2cb8d4d8450732c01666dcdea183e3",
+              "position": 2,
+              "uid": "674f4bdf-27c3-5870-a68e-91e4a093dd93"
+            },
+            {
+              "content": "During their mother's birthday meal, the user left a restaurant with loud music after 30 minutes.",
+              "content_digest": "560755c6f051ec6f85e32dc4ee9447dfc97418fca6f9f414f6910c518a52c2c0",
+              "position": 3,
+              "uid": "21509788-2e3d-548b-8303-f34cfea68c9b"
+            },
+            {
+              "content": "When discussing postponed matters with family, the user prefers a quiet, one-on-one dining environment.",
+              "content_digest": "f22bedcf60a64b3666a7e4363d6a55c48547535492010fcb205a182c1ee920a8",
+              "position": 4,
+              "uid": "74eaea9d-7640-51ba-aa77-9c050581dc46"
+            },
+            {
+              "content": "At a large banquet hall reserved by their older sister, the user remembered the surrounding noise more than the food.",
+              "content_digest": "566e443c69410f1672ab209ba2257604e373cd305ab27243a39574481407af71",
+              "position": 5,
+              "uid": "1384df1d-2173-5673-96f5-a4d86835d404"
+            },
+            {
+              "content": "On a day the user ate grilled food at home with their younger brother, conversation was easy to continue, so the user stayed another hour after the meal.",
+              "content_digest": "c93ccbe3524946f1def05a1b385fbe3387945f51164b00c56f1ff80b477d011f",
+              "position": 6,
+              "uid": "3cf68c8e-5da9-51d3-a402-c10f4137b1f4"
+            },
+            {
+              "content": "The user's mother considers having the whole family eat at the same time more important than receiving a birthday gift.",
+              "content_digest": "d302cf7db2b83b103ea11323ab1b9d36168d224b405d4d0dd51b46b494014291",
+              "position": 7,
+              "uid": "a1984768-d20d-59cd-84c9-cb08c6b7affb"
+            },
+            {
+              "content": "When proposing a birthday meal for the user's mother, check the schedule and attendees; if conversation is the purpose, first consider a low-noise location, then confirm the final choice with the user.",
+              "content_digest": "481169c62cf6fae6b4f29184ffacef9c3c9d825a34d1545ca592bc35537bc65c",
+              "position": 8,
+              "uid": "f52d11e2-2449-5c9d-887b-96c8b5cd0184"
+            },
+            {
+              "content": "The local agent can compare past dining environments and the user's responses, but those records alone cannot determine the location of the next gathering.",
+              "content_digest": "b05fef8420abe3c47c2cd9f2de9149c9c6bda7dca301f09ac7f94eac1a29d2fa",
+              "position": 9,
+              "uid": "c8fccfbe-7756-5d62-9cd7-403dd6741915"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "3d7e84e6-63a1-4ea0-9dcf-f92620dcf7ec"
+        },
+        {
+          "context_digest": "5e42fc3dcfbf5576148277f6841977ca8a5cabd4a3fc67a5581f6f6cc816c900",
+          "context_name": "task-3/local/personal-memory/2025/10",
+          "context_uid": "8130b676-dc51-5c31-b7dc-185afdf9cf07",
+          "memories": [
+            {
+              "content": "The user keeps waterproof shoes for rainy days to the left of the entrance.",
+              "content_digest": "5b9e5a20153c7865010318800d740a410faef0c13fe2278c20ce984a89b7dea5",
+              "position": 0,
+              "uid": "82c1e806-de3a-5633-8a08-175487e69fd6"
+            },
+            {
+              "content": "On a day the user walked in the rain wearing thin shoes, their socks became wet and they changed them after arrival.",
+              "content_digest": "fdbdab8c08a4b1d933ff8ac3ddedee8541ddf070e8c6e6020b6c1d14b992c621",
+              "position": 1,
+              "uid": "25df6384-836f-5f8e-bd97-73a1fb171c48"
+            },
+            {
+              "content": "On the next rainy day, the user wore waterproof shoes and their feet remained dry.",
+              "content_digest": "0e87d74fb93fe062cd12efe2f5a04fbae5ce13a60491fd9ad04c4e006acbd87f",
+              "position": 2,
+              "uid": "55abae4f-206a-586e-8b35-406d7525c0a1"
+            },
+            {
+              "content": "On a day the user walked for a long time in new shoes, their heel chafed and they shortened the route home.",
+              "content_digest": "aeb369b995cdf17ea73ae8546b454eab70f33bf6d3c67a09aee2805c1c598b6d",
+              "position": 3,
+              "uid": "c6d21ec4-6bdf-55df-b4d4-05cb531bf4bd"
+            },
+            {
+              "content": "The user wore the same shoes on two short outings before using them on a long walk.",
+              "content_digest": "0d7ed5656f35f4fe025c6ba80e4c829f5b9851c193f981de9a461f848317d60a",
+              "position": 4,
+              "uid": "a6424854-e51e-5afc-8b9f-9e2f0273f70e"
+            },
+            {
+              "content": "On a day the user dried an umbrella outside the entrance, they found it immediately before the next outing.",
+              "content_digest": "dbc2453ca5f895e2cfe7f58e5624cf4c5d6793468af3b25df7e9a4ddb7d50159",
+              "position": 5,
+              "uid": "1b436b46-3d1f-5aa2-99e3-94b7c2412bfd"
+            },
+            {
+              "content": "On a day the user put a folded wet umbrella in their bag, documents inside became wet.",
+              "content_digest": "1f63fbc8c6b491a734f0f7a4190e26aec22826c1ff839242e0ca71d933312c9c",
+              "position": 6,
+              "uid": "ccd1f422-6130-5f19-869e-681102a3a1fa"
+            },
+            {
+              "content": "When rain is forecast, the user's mother expects the user may forget an umbrella and sets out a spare at the entrance.",
+              "content_digest": "80bdfaefb6f781aa91ef7217331e75f09b4766650c2b078dfadf592b2eb27b08",
+              "position": 7,
+              "uid": "c69a8e87-2b6f-5514-ab0d-0037531592f8"
+            },
+            {
+              "content": "When proposing a long-distance walking plan, check both the weather that day and recent records of shoe discomfort.",
+              "content_digest": "f54a546d423099c3abbb65bb49e4ddf773a8191dcffbb8b3d5153dfd70553b73",
+              "position": 8,
+              "uid": "4567ea9f-1800-51ed-bfac-f4cdf674d4cf"
+            },
+            {
+              "content": "Even if the local agent knows a shoe's location, it cannot know its current condition or whether it is usable.",
+              "content_digest": "28202c222ca800a5e19dbaebea2b3c992748f530a695517cf123b10187a31bc8",
+              "position": 9,
+              "uid": "a4ff1b76-755d-530a-b24c-8655115e4fbe"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "58a59519-9b1a-4fd3-a055-85dfa2fd93aa"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames address separate practical domains: family birthday dining and rainy-weather walking preparation. Neither supplies an operational claim about the other domain, so their independently useful preferences, experiences, planning guidance, and agent limitations remain distinct without conflict.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3d7e84e6-63a1-4ea0-9dcf-f92620dcf7ec",
+              "memory_uid": "2cd0229d-b7f1-581b-8019-25bdb485afd9"
+            }
+          ],
+          "reason": "This is independently useful calendar information found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user's mother's birthday occurs in the third week of January.",
+          "uid": "35c6e2fb-cc28-578f-a371-6608abb27e9f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3d7e84e6-63a1-4ea0-9dcf-f92620dcf7ec",
+              "memory_uid": "c62f1669-11c9-5a81-b5f5-304acce69c23"
+            },
+            {
+              "frame_uid": "3d7e84e6-63a1-4ea0-9dcf-f92620dcf7ec",
+              "memory_uid": "21509788-2e3d-548b-8303-f34cfea68c9b"
+            },
+            {
+              "frame_uid": "3d7e84e6-63a1-4ea0-9dcf-f92620dcf7ec",
+              "memory_uid": "1384df1d-2173-5673-96f5-a4d86835d404"
+            }
+          ],
+          "reason": "These memories record parts of one consistent, reference-only pattern of adverse responses to loud group dining environments.",
+          "status": "RESOLVED",
+          "summary": "Noisy restaurant or banquet environments substantially harmed the user's dining experience and ability to converse.",
+          "uid": "5e1a3eb3-d0bf-5d52-9349-9623314f08be"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3d7e84e6-63a1-4ea0-9dcf-f92620dcf7ec",
+              "memory_uid": "674f4bdf-27c3-5870-a68e-91e4a093dd93"
+            },
+            {
+              "frame_uid": "3d7e84e6-63a1-4ea0-9dcf-f92620dcf7ec",
+              "memory_uid": "3cf68c8e-5da9-51d3-a402-c10f4137b1f4"
+            }
+          ],
+          "reason": "These memories split one reference-only experiential claim about conversational ease in low-noise home dining.",
+          "status": "RESOLVED",
+          "summary": "Quiet meals at home supported comfortable, sustained family conversation for the user.",
+          "uid": "4ca4de60-87d7-5f0f-8977-b644b923e4ce"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3d7e84e6-63a1-4ea0-9dcf-f92620dcf7ec",
+              "memory_uid": "74eaea9d-7640-51ba-aa77-9c050581dc46"
+            }
+          ],
+          "reason": "This is a specific reference-only preference not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "For postponed family discussions, the user prefers a quiet, one-on-one dining setting.",
+          "uid": "3a6428d2-a4b5-5e4d-ac80-63fe0802a2fa"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3d7e84e6-63a1-4ea0-9dcf-f92620dcf7ec",
+              "memory_uid": "a1984768-d20d-59cd-84c9-cb08c6b7affb"
+            }
+          ],
+          "reason": "This reference-only priority is independently relevant to birthday planning.",
+          "status": "RESOLVED",
+          "summary": "The user's mother values the whole family eating together more than receiving a birthday gift.",
+          "uid": "2549aebf-f847-5e52-a8e9-ef9bca00a377"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3d7e84e6-63a1-4ea0-9dcf-f92620dcf7ec",
+              "memory_uid": "f52d11e2-2449-5c9d-887b-96c8b5cd0184"
+            }
+          ],
+          "reason": "This is reference-only procedural guidance for a family dining decision.",
+          "status": "RESOLVED",
+          "summary": "Birthday-meal proposals should check schedules and attendees, prioritize low noise when conversation matters, and confirm the final choice with the user.",
+          "uid": "82c34ad6-7d93-5526-a4a0-3bb1d0fa817e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3d7e84e6-63a1-4ea0-9dcf-f92620dcf7ec",
+              "memory_uid": "c8fccfbe-7756-5d62-9cd7-403dd6741915"
+            }
+          ],
+          "reason": "This reference-only statement limits what may be inferred for venue selection.",
+          "status": "RESOLVED",
+          "summary": "Past dining environments and reactions can be compared but cannot alone determine the next gathering's location.",
+          "uid": "e5fcbcd3-2f24-5d00-8b56-0760b7dc0955"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "58a59519-9b1a-4fd3-a055-85dfa2fd93aa",
+              "memory_uid": "82c1e806-de3a-5633-8a08-175487e69fd6"
+            }
+          ],
+          "reason": "This is independently useful location information found only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user stores waterproof rainy-day shoes to the left of the entrance.",
+          "uid": "c805464a-eca2-5f55-b4ba-597ea3a30571"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "58a59519-9b1a-4fd3-a055-85dfa2fd93aa",
+              "memory_uid": "25df6384-836f-5f8e-bd97-73a1fb171c48"
+            },
+            {
+              "frame_uid": "58a59519-9b1a-4fd3-a055-85dfa2fd93aa",
+              "memory_uid": "55abae4f-206a-586e-8b35-406d7525c0a1"
+            }
+          ],
+          "reason": "These memories provide complementary parts of one compared-only claim about footwear performance in rain.",
+          "status": "RESOLVED",
+          "summary": "The user's rainy-day experiences distinguish wet socks from thin shoes and dry feet from waterproof shoes.",
+          "uid": "6270c2ea-db11-59b4-9487-e1b716c2106c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "58a59519-9b1a-4fd3-a055-85dfa2fd93aa",
+              "memory_uid": "c6d21ec4-6bdf-55df-b4d4-05cb531bf4bd"
+            },
+            {
+              "frame_uid": "58a59519-9b1a-4fd3-a055-85dfa2fd93aa",
+              "memory_uid": "a6424854-e51e-5afc-8b9f-9e2f0273f70e"
+            }
+          ],
+          "reason": "These memories split one compared-only sequence concerning new-shoe testing and later long-walk discomfort.",
+          "status": "RESOLVED",
+          "summary": "The user tried the same new shoes on short outings before a long walk on which heel chafing shortened the route home.",
+          "uid": "6f8eca53-95ab-568e-bccb-56f8de2cd05d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "58a59519-9b1a-4fd3-a055-85dfa2fd93aa",
+              "memory_uid": "1b436b46-3d1f-5aa2-99e3-94b7c2412bfd"
+            },
+            {
+              "frame_uid": "58a59519-9b1a-4fd3-a055-85dfa2fd93aa",
+              "memory_uid": "ccd1f422-6130-5f19-869e-681102a3a1fa"
+            }
+          ],
+          "reason": "These memories form one compared-only contrast about practical consequences of wet-umbrella storage.",
+          "status": "RESOLVED",
+          "summary": "Umbrella handling affected later readiness and belongings: drying one by the entrance aided retrieval, while bagging one wet damaged documents.",
+          "uid": "38ac9009-487a-5e0e-853b-5622f2fd030b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "58a59519-9b1a-4fd3-a055-85dfa2fd93aa",
+              "memory_uid": "c69a8e87-2b6f-5514-ab0d-0037531592f8"
+            }
+          ],
+          "reason": "This compared-only household support practice is independently useful.",
+          "status": "RESOLVED",
+          "summary": "When rain is forecast, the user's mother sets out a spare umbrella because the user may forget one.",
+          "uid": "7da08714-4e37-57d1-9017-003d5733fbb6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "58a59519-9b1a-4fd3-a055-85dfa2fd93aa",
+              "memory_uid": "4567ea9f-1800-51ed-bfac-f4cdf674d4cf"
+            }
+          ],
+          "reason": "This is compared-only procedural guidance for walking plans.",
+          "status": "RESOLVED",
+          "summary": "Long-distance walking proposals should check the day's weather and recent shoe-discomfort records.",
+          "uid": "b58b4d04-7875-5955-a860-8c9e2513b521"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "58a59519-9b1a-4fd3-a055-85dfa2fd93aa",
+              "memory_uid": "a4ff1b76-755d-530a-b24c-8655115e4fbe"
+            }
+          ],
+          "reason": "This compared-only statement limits what may be inferred when selecting footwear.",
+          "status": "RESOLVED",
+          "summary": "Knowing a shoe's location does not establish its current condition or usability.",
+          "uid": "b90dc065-14cc-517f-8de1-e5dbebe7cf40"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers rain footwear and umbrella handling, new-shoe discomfort, household preparation for forgotten umbrellas, weather-aware walking guidance, and limits on inferring shoe usability from location.",
+        "differences": "",
+        "reference_only": "The reference describes birthday timing, family attendance priorities, strong sensitivity to noisy dining, preference for quiet conversation, meal-planning guidance, and limits on inferring a future venue from past experiences."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "f167e4af-bd8b-4f53-baee-b474e2d1972f"
+    },
+    "analysis_digest": "cecedd25f2f0254131e66c914bfdea64c81feb975b8b9d97b238cf08889f683b",
+    "key": "5a9027ab5bfcb787af2a389afc53588a451e7eeeeaf4f9a6d00f7ed509861f71",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 40.37359854200258,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "5a9027ab5bfcb787af2a389afc53588a451e7eeeeaf4f9a6d00f7ed509861f71",
+  "created_at": "2026-08-13T18:35:09.287755Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/01",
+  "pair_key": "0c789c5e85a71564e50423166defda28b4b5f7b82ba0f933df6fe6079b88cd02",
+  "provider_seconds": 40.37359854200258,
+  "right": "task-3/local/personal-memory/2025/10",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

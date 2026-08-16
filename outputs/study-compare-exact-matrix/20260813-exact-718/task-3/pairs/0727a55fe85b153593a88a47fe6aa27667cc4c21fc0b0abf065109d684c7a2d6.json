@@ -1,0 +1,397 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:49:47.998237+00:00",
+      "frames": [
+        {
+          "context_digest": "3e738289251b9bdf3deb1c7a7540e6ce811b09e26a020af3a76d47b4c85c7ab1",
+          "context_name": "task-3/local/personal-memory/2025/02",
+          "context_uid": "ce7367b8-8532-5f43-972a-1665ca8e3e80",
+          "memories": [
+            {
+              "content": "The user reviewed their emergency-contact list in February 2025.",
+              "content_digest": "b2f108376dbbf53e8885b9c61080d4c873209d8c6e399c37412fa507fec08b0b",
+              "position": 0,
+              "uid": "3ff046b1-5810-51ca-8d43-c99ef6a90b41"
+            },
+            {
+              "content": "When preparation instructions arrived as a long paragraph, the user missed two items.",
+              "content_digest": "43bde452a403f85bcffa6f7ba6b3142ed45604730083327c6f57092b98f397aa",
+              "position": 1,
+              "uid": "e2a304e5-6100-5a5f-b508-0a7f28f6bda7"
+            },
+            {
+              "content": "After changing the same content into a checklist, the user marked every item they had prepared.",
+              "content_digest": "0f8115061b489894115fd252f079ee673504ed09dea4d88d558e64ed6189f1be",
+              "position": 2,
+              "uid": "51d03bff-3e33-5f68-9df6-ed7efa8e3de9"
+            },
+            {
+              "content": "The user called their mother on a weekend evening, but they spoke only briefly because the mother was out.",
+              "content_digest": "a9a1e7d87532667781677f4760beeb086f1e423365a915a0ec0b494892cbb361",
+              "position": 3,
+              "uid": "0987293e-3e21-5cbc-bb46-59245a5fa041"
+            },
+            {
+              "content": "The user called again on Saturday morning the following week and spoke for 40 minutes.",
+              "content_digest": "f08c9f170345686b2091e3b0ecd49f049e245d584886da62d586185010f713bf",
+              "position": 4,
+              "uid": "dc3de6ad-56ea-528a-a9b7-349e79af2326"
+            },
+            {
+              "content": "The user sent a text to an old number for an emergency contact and saw that delivery failed.",
+              "content_digest": "692321e996b9ac8e3500a2da7765f77e0d14c6f040cf2c33944cbdcb39c706de",
+              "position": 5,
+              "uid": "6546d41b-3d5b-5802-a9e7-ac028405e3f2"
+            },
+            {
+              "content": "After confirming the new number with their older sister, the user updated the contact list.",
+              "content_digest": "8d2e954a978e35c1da92948ccc8e45f38fcc25ea3fafe7c389ef546f6eda1ae1",
+              "position": 6,
+              "uid": "ea6eb9d2-9b01-5330-a4d5-886d4bc6cd85"
+            },
+            {
+              "content": "For nonurgent contact, the user's older sister prefers to reply by text when available rather than take a call immediately.",
+              "content_digest": "86639aee50903bc3261e6f88ac7d649c8197927fe214d5d17e0e6f5b3d69a59d",
+              "position": 7,
+              "uid": "12fe7e64-192e-5359-8f96-d2875f7e5399"
+            },
+            {
+              "content": "Before using an emergency contact, reconfirm the number and relationship information with the user.",
+              "content_digest": "78e41f61ba99eaf8840d5d318d08327ca6bb087addd6e22269e8b63281bb67c7",
+              "position": 8,
+              "uid": "e6f89ded-5687-5c25-8df8-88f288d450c6"
+            },
+            {
+              "content": "The user feels that a reminder the day before an appointment gives them enough time to recheck preparation items.",
+              "content_digest": "1a9fcc01df362c76b6d9c8e4fa2d33229a2ae2762c0c6d25e0fc89312a6e0ed4",
+              "position": 9,
+              "uid": "f9197c33-ff93-5215-a3a5-e4087bea2a0d"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "137ecc4d-ae05-4957-b82a-dec17d73347c"
+        },
+        {
+          "context_digest": "df0924e320cd14a29eaed60f78e82fd509c4062949b35706b2a7cb94571fb599",
+          "context_name": "task-3/local/personal-memory/2026/04",
+          "context_uid": "16e860a8-7a90-5b7a-adc3-1c487ef97e03",
+          "memories": [
+            {
+              "content": "The user collects clothes for donation in a large bag beside the entrance.",
+              "content_digest": "39f2f01c59b7fa4ca7529d510e1b0a6ffab6706861042f771cfe97f6f806efac",
+              "position": 0,
+              "uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            },
+            {
+              "content": "After emptying an entire drawer at once, the user could not find a charger they needed.",
+              "content_digest": "674c33ba6475f42b29b03e6f8711e0216f983f3d37fee3dacf9336e3bb4596bf",
+              "position": 1,
+              "uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            },
+            {
+              "content": "During the next organizing session, the user sorted items by type and put only items to be discarded in the bag.",
+              "content_digest": "63104b5a7fd380f818c8758c51f9550c7a7fa41ff91f1dd314225d1824b69643",
+              "position": 2,
+              "uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            },
+            {
+              "content": "Even after photographing unworn clothes, the user did not take them out again for one month.",
+              "content_digest": "519f131096440719dcd3412f4439c5cfe44b7f402684170209708040692dc5fd",
+              "position": 3,
+              "uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            },
+            {
+              "content": "After moving those clothes to the donation bag, the user cleared one closet compartment.",
+              "content_digest": "45db58ae108a299344d982d8606fff26f733252da691cf01417e760909ff6057",
+              "position": 4,
+              "uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            },
+            {
+              "content": "The user nearly discarded an important paper with advertising and checked the recycling box again.",
+              "content_digest": "6bf928f67944656e5f3c68d8869c0cefd039a588f0ba735f94520231ef58017c",
+              "position": 5,
+              "uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            },
+            {
+              "content": "During the next organizing session, the user kept a separate document box and did not mix the papers.",
+              "content_digest": "adac8d4266c6b11e15d29c484665bc5dcc915f9aa319198b6a69d0e7b0131bb3",
+              "position": 6,
+              "uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            },
+            {
+              "content": "The user's mother asks the user to check whether she needs kitchen items in good condition before discarding them.",
+              "content_digest": "0752bc2ac00c0b1301c45ab4c2e73f63c57e6ebc4255dcc1c13330ffda906612",
+              "position": 7,
+              "uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            },
+            {
+              "content": "Confirm with the user before marking a personal document or another person's property as a disposal candidate.",
+              "content_digest": "17062e2cd4738619e81e211cb2f53d14e78c5f4eab9ae49053ce7e06935a7db5",
+              "position": 8,
+              "uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            },
+            {
+              "content": "The local agent cannot determine an object's emotional meaning from frequency of use alone.",
+              "content_digest": "9c86bcfe2b209bf7957dced0eab000b42f97b6a435d705ccaccb15e49be3691d",
+              "position": 9,
+              "uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "976dd479-66d7-41a2-82b2-2fd156dca0df"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate practical domains: the reference centers on reliable communications and appointment preparation, while the compared frame centers on safer household sorting and disposal. Their broadly shared themes of error prevention and confirmation do not address the same operational decisions.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "137ecc4d-ae05-4957-b82a-dec17d73347c",
+              "memory_uid": "3ff046b1-5810-51ca-8d43-c99ef6a90b41"
+            }
+          ],
+          "reason": "This dated contact-maintenance fact has no operational counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user reviewed their emergency-contact list in February 2025.",
+          "uid": "ab37da25-39ed-59c1-8c25-476a739641c3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "137ecc4d-ae05-4957-b82a-dec17d73347c",
+              "memory_uid": "e2a304e5-6100-5a5f-b508-0a7f28f6bda7"
+            },
+            {
+              "frame_uid": "137ecc4d-ae05-4957-b82a-dec17d73347c",
+              "memory_uid": "51d03bff-3e33-5f68-9df6-ed7efa8e3de9"
+            }
+          ],
+          "reason": "These observations form one reference-only claim about checklist structure improving preparation tracking; the compared frame does not address instruction format.",
+          "status": "RESOLVED",
+          "summary": "For the same preparation content, a long paragraph led to missed items, whereas a checklist supported marking every prepared item.",
+          "uid": "0e049add-3cdc-5ba0-a82b-23bb2ab64ae6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "137ecc4d-ae05-4957-b82a-dec17d73347c",
+              "memory_uid": "0987293e-3e21-5cbc-bb46-59245a5fa041"
+            },
+            {
+              "frame_uid": "137ecc4d-ae05-4957-b82a-dec17d73347c",
+              "memory_uid": "dc3de6ad-56ea-528a-a9b7-349e79af2326"
+            }
+          ],
+          "reason": "These linked calls provide reference-only evidence that availability and timing affected conversation length; the compared frame contains no corresponding communication pattern.",
+          "status": "RESOLVED",
+          "summary": "A weekend-evening call with the user’s mother was brief because she was out, while a Saturday-morning call the next week lasted 40 minutes.",
+          "uid": "106c70ed-214e-565d-a80e-26f404cc0c24"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "137ecc4d-ae05-4957-b82a-dec17d73347c",
+              "memory_uid": "6546d41b-3d5b-5802-a9e7-ac028405e3f2"
+            },
+            {
+              "frame_uid": "137ecc4d-ae05-4957-b82a-dec17d73347c",
+              "memory_uid": "ea6eb9d2-9b01-5330-a4d5-886d4bc6cd85"
+            }
+          ],
+          "reason": "The failed delivery and subsequent correction are one reference-only contact-accuracy episode with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "After a text to an old emergency-contact number failed, the user confirmed the new number with their older sister and updated the list.",
+          "uid": "4dfa81ef-3c73-53dd-ba88-e6c1e11489e2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "137ecc4d-ae05-4957-b82a-dec17d73347c",
+              "memory_uid": "12fe7e64-192e-5359-8f96-d2875f7e5399"
+            }
+          ],
+          "reason": "This communication-channel preference is independently useful and absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "For nonurgent contact, the user’s older sister prefers replying by text when available instead of taking an immediate call.",
+          "uid": "e688f863-1041-5b3a-8578-ee60adf63c4b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "137ecc4d-ae05-4957-b82a-dec17d73347c",
+              "memory_uid": "e6f89ded-5687-5c25-8df8-88f288d450c6"
+            }
+          ],
+          "reason": "This safeguard governs emergency-contact use, a different operational decision from the compared frame’s disposal-confirmation rule, so broad similarity does not establish a relation.",
+          "status": "RESOLVED",
+          "summary": "Before using an emergency contact, the number and relationship information should be reconfirmed with the user.",
+          "uid": "39eede11-1918-5c1e-8606-17dda7f763d1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "137ecc4d-ae05-4957-b82a-dec17d73347c",
+              "memory_uid": "f9197c33-ff93-5215-a3a5-e4087bea2a0d"
+            }
+          ],
+          "reason": "This appointment-reminder timing preference has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user considers a reminder one day before an appointment sufficient for rechecking preparation items.",
+          "uid": "4e31754b-d6a7-514f-9bc4-a5b566fb19c7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "976dd479-66d7-41a2-82b2-2fd156dca0df",
+              "memory_uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            }
+          ],
+          "reason": "This household donation setup is independently useful and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user collects clothes for donation in a large bag beside the entrance.",
+          "uid": "e896cdf5-8147-5098-b991-05083976913c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "976dd479-66d7-41a2-82b2-2fd156dca0df",
+              "memory_uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            },
+            {
+              "frame_uid": "976dd479-66d7-41a2-82b2-2fd156dca0df",
+              "memory_uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            }
+          ],
+          "reason": "The problem and changed method form one compared-only claim about safer staged sorting; the reference frame does not address household organization.",
+          "status": "RESOLVED",
+          "summary": "After emptying a whole drawer caused difficulty finding a needed charger, the user’s next organizing session sorted by item type and placed only discard items in the bag.",
+          "uid": "8f05cf39-5524-5696-8ae6-c2b737152411"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "976dd479-66d7-41a2-82b2-2fd156dca0df",
+              "memory_uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            },
+            {
+              "frame_uid": "976dd479-66d7-41a2-82b2-2fd156dca0df",
+              "memory_uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            }
+          ],
+          "reason": "These linked observations form one compared-only claim about physical relocation enabling decluttering progress.",
+          "status": "RESOLVED",
+          "summary": "Photographing unworn clothes did not prompt action for a month, but moving them to the donation bag cleared a closet compartment.",
+          "uid": "dc6817d9-b09f-5851-9a51-7876670d6c60"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "976dd479-66d7-41a2-82b2-2fd156dca0df",
+              "memory_uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            },
+            {
+              "frame_uid": "976dd479-66d7-41a2-82b2-2fd156dca0df",
+              "memory_uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            }
+          ],
+          "reason": "The near-error and corrective practice form one compared-only document-sorting safeguard.",
+          "status": "RESOLVED",
+          "summary": "After nearly discarding an important paper with advertising, the user kept a separate document box during the next session and avoided mixing papers.",
+          "uid": "39a33831-14a3-5e24-9d5b-7b58b6b1dc40"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "976dd479-66d7-41a2-82b2-2fd156dca0df",
+              "memory_uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            }
+          ],
+          "reason": "This other-person-specific disposal preference has no counterpart governing the same property decision in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s mother asks to be consulted about whether she needs usable kitchen items before they are discarded.",
+          "uid": "a91f5917-6c3e-5c47-a999-0ff0e3105828"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "976dd479-66d7-41a2-82b2-2fd156dca0df",
+              "memory_uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            }
+          ],
+          "reason": "This safeguard governs disposal classification, not emergency-contact use, so the reference frame’s confirmation rule is not operationally related.",
+          "status": "RESOLVED",
+          "summary": "The user should be consulted before a personal document or another person’s property is marked as a disposal candidate.",
+          "uid": "8f62e1f0-e1a9-54e6-a972-c41d40b5a3d2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "976dd479-66d7-41a2-82b2-2fd156dca0df",
+              "memory_uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "reason": "This limitation on interpreting possessions is independently useful and has no reference-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "The local agent cannot infer an object’s emotional meaning from frequency of use alone.",
+          "uid": "2a037917-3f55-5ee3-a2cc-0954ee92ca18"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only material covers staged sorting, donation-bag use, document separation, consent before disposal, checking others’ interest in usable items, and limits on inferring emotional value.",
+        "differences": "",
+        "reference_only": "Reference-only material covers checklist-based preparation, day-before reminders, emergency-contact accuracy and verification, a sister’s texting preference, and call timing with the user’s mother."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "523e5906-bf9b-4f6b-ab8e-646e1d930ce6"
+    },
+    "analysis_digest": "c55889b21d805c83e568a4e7184dd0bd6f3261f4b09a824c4b3e49ef05679c49",
+    "key": "e71ec90a37097861e1acde6d96a4defccb81aaabbd566fe4d5c67126082af3fd",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 48.45197791700048,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "e71ec90a37097861e1acde6d96a4defccb81aaabbd566fe4d5c67126082af3fd",
+  "created_at": "2026-08-13T18:50:36.449718Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/02",
+  "pair_key": "0727a55fe85b153593a88a47fe6aa27667cc4c21fc0b0abf065109d684c7a2d6",
+  "provider_seconds": 48.45197791700048,
+  "right": "task-3/local/personal-memory/2026/04",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

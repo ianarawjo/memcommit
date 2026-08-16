@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:43:23.615682+00:00",
+      "frames": [
+        {
+          "context_digest": "4f6b609414f921ca470614699bdac42e9f2932482375026def79956485b0569e",
+          "context_name": "task-3/local/personal-memory/2024/08",
+          "context_uid": "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+          "memories": [
+            {
+              "content": "The user has set a monthly limit in their budget record for spending other than living expenses.",
+              "content_digest": "5c0df9500947f7e044a8755d66d58adccca01db3aed42b43ab9748b8c4f431e9",
+              "position": 0,
+              "uid": "5f80c7ec-e294-5905-abab-91027c9d827b"
+            },
+            {
+              "content": "In a week when the user went grocery shopping and visited the bank separately, they made the same round trip twice.",
+              "content_digest": "4e814adad1a4c201f6348f1c14b14950b5c549bba64bf70cfccd08ca9efc5bd3",
+              "position": 1,
+              "uid": "2428ab2c-37ce-5de1-84dc-abcdfc8ce062"
+            },
+            {
+              "content": "The following week, the user completed both errands in one outing and reduced travel time.",
+              "content_digest": "ad5555ca7daa9d977cfcf5eb4f476eb5730cead6d307c986497716d69f1145b0",
+              "position": 2,
+              "uid": "bf30d1ef-d7cd-5aa3-b65b-ff04aae647e7"
+            },
+            {
+              "content": "When a bill alert arrived on the due date, the user postponed payment until after a meeting.",
+              "content_digest": "c62dda61c680da9ac1fd5ab9124fa05635d20ad9e4bbb7aef36723d289c05102",
+              "position": 3,
+              "uid": "442672e1-2188-5aa3-ad38-5e9c16f25bd5"
+            },
+            {
+              "content": "In a month when the user received an alert three days before the deadline, they finished payment before dinner.",
+              "content_digest": "939ac83da176d5bb1b7e2196402b9faacb962d947b85b9a61c31854867c1e62e",
+              "position": 4,
+              "uid": "c7385cce-ec43-5902-973c-5b8af54c3557"
+            },
+            {
+              "content": "The user collected cash receipts in their wallet and entered all the amounts at once at the end of the month.",
+              "content_digest": "3171a8128ed3855ac9a4c2b542516333fc3728ed1d7260974888b94d0b32c3e6",
+              "position": 5,
+              "uid": "d926c45c-ea49-589c-a7e4-491c9a1514f8"
+            },
+            {
+              "content": "After recording one large expense, the user ate out two fewer times that week.",
+              "content_digest": "af55fd94b01e0ece728347e9349f96b5733c57dae752f9559dc4e08bef7a3320",
+              "position": 6,
+              "uid": "9433523f-8c4e-5424-b370-d325ba5154d1"
+            },
+            {
+              "content": "The user's older sister prefers to settle the jointly paid cost of a meal by electronic transfer rather than cash.",
+              "content_digest": "d84d2ea68add4202e8c421e9c1702c29ca88bd6ae838588bd415fdbd1980cb2b",
+              "position": 7,
+              "uid": "d9531336-ac5f-5ba0-bf26-9c69c854578f"
+            },
+            {
+              "content": "Confirm the amount and account with the user before creating an automatic payment schedule.",
+              "content_digest": "b1d0c16fd880f4ae2657415ddc8fe0f223ccdd931248bb4412a6c95754d4cce1",
+              "position": 8,
+              "uid": "9941d390-8b40-5fee-8bcf-df6f36befcb0"
+            },
+            {
+              "content": "The timing of payment processing and late-payment recording may differ by billing institution.",
+              "content_digest": "203e65e4eb8451ec7551fb166357f107d17b8c89a2341b32fc25a3fb67ec7f98",
+              "position": 9,
+              "uid": "79aea8fd-5d48-50f7-adf6-b7ebe33bfb08"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "af41f2ff-e7a5-4fb6-8dd9-d111b80d3604"
+        },
+        {
+          "context_digest": "d28031209c5edc768a592166e26351dd5bce0c7568d379fcaceab173450041c8",
+          "context_name": "task-3/local/personal-memory/2026/02",
+          "context_uid": "7ffcbc10-1703-54b0-9545-99742b51d333",
+          "memories": [
+            {
+              "content": "The user keeps basic repair tools in a box beneath the sink.",
+              "content_digest": "c2a23bace63735c502081b19682a8ceb3e37156b9aadd6f7739e2005c20469d6",
+              "position": 0,
+              "uid": "7d3daf76-a21e-5117-a534-6175ab2d2861"
+            },
+            {
+              "content": "On a day the faucet leaked, the user placed only a towel beneath it, and the floor became wet as well.",
+              "content_digest": "ad6baa7e1848e4e61bdaf22bc5c8665122330b5c70c8ae192216abbba17c6134",
+              "position": 1,
+              "uid": "70a6d9f5-180f-5174-b247-690e10baa23e"
+            },
+            {
+              "content": "After sending a photo to building management, the user finalized the time for a repair visit.",
+              "content_digest": "82b36c7a95e51a0dfa32768c2a437d509b75c0f93bc51a99a636f2c9739a20da",
+              "position": 2,
+              "uid": "9fcd922c-147c-517b-82b3-180fdfb13f33"
+            },
+            {
+              "content": "Before the technician's visit, the user emptied the area beneath the sink so work could begin immediately.",
+              "content_digest": "dbc3b48e5bc4b406dc17067dd93d92e845e3706f47c8706f9a5d5ef17bf64617",
+              "position": 3,
+              "uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5"
+            },
+            {
+              "content": "On a day the user wrote the visit time only in the calendar and turned off the reminder, they heard the doorbell late.",
+              "content_digest": "95fab6bcab815dd8bdd5fecb867f84c6d2f1a901771603b1dbf197cde3c1d19d",
+              "position": 4,
+              "uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65"
+            },
+            {
+              "content": "For the next visit, the user enabled a reminder 30 minutes beforehand and answered immediately at the entrance.",
+              "content_digest": "818783ff21b2d369935b9994c17b28f93f84ea7558dab9f2de20d0aad21f86a3",
+              "position": 5,
+              "uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a"
+            },
+            {
+              "content": "After the repair, the user called their maternal aunt to confirm that the spare key entrusted to her was still there.",
+              "content_digest": "ac01b9816dda2d6bf16f22b41157120b7ffdd75d19638f6313a88e1ce6e7a1f1",
+              "position": 6,
+              "uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441"
+            },
+            {
+              "content": "The user's maternal aunt considers it unsafe to hand the spare key to a repair technician without the user's explicit request.",
+              "content_digest": "f7c7c0306c81cc6de9f02aa1aed7d411db3f29757d024e7d5a1679b1ff308948",
+              "position": 7,
+              "uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd"
+            },
+            {
+              "content": "Obtain the user's reconfirmation before scheduling an external worker to enter the residential unit.",
+              "content_digest": "34382e40f4907bea82728787fdeb150e299d46a0079ae2847d4eda6d6d892d22",
+              "position": 8,
+              "uid": "4716a67b-8602-564c-9e89-85cd4ee158f9"
+            },
+            {
+              "content": "A multi-unit residential building's repair schedule may change because of emergency work or parts availability.",
+              "content_digest": "d701fdd1ffbf17ff0890c583b5bf39849e3c6e3cc296fde7e00d3d1ecc0ef196",
+              "position": 9,
+              "uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "d5987340-90a0-4d4c-a1f8-ceec49a11b64"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate practical domains: personal spending and bill management versus home-repair access and scheduling. No claims govern the same operational decision closely enough to establish equivalence, compatibility, scope variation, or conflict; each frame instead contributes independent one-sided information.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "af41f2ff-e7a5-4fb6-8dd9-d111b80d3604",
+              "memory_uid": "5f80c7ec-e294-5905-abab-91027c9d827b"
+            }
+          ],
+          "reason": "This is an independent budgeting constraint with no counterpart concerning the same spending decision in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user maintains a monthly cap on non-living spending.",
+          "uid": "65fd0d6b-838e-5e20-9242-165179e36353"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "af41f2ff-e7a5-4fb6-8dd9-d111b80d3604",
+              "memory_uid": "2428ab2c-37ce-5de1-84dc-abcdfc8ce062"
+            }
+          ],
+          "reason": "This travel-efficiency observation has no counterpart about errand routing in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Separate grocery and bank errands caused the user to repeat the same round trip.",
+          "uid": "fb65182e-6c41-5ecd-afbe-44ef7ffddacf"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "af41f2ff-e7a5-4fb6-8dd9-d111b80d3604",
+              "memory_uid": "bf30d1ef-d7cd-5aa3-b65b-ff04aae647e7"
+            }
+          ],
+          "reason": "This one-sided observation about consolidating errands is independently useful and is not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Combining grocery and bank errands into one outing reduced the user's travel time.",
+          "uid": "60f32c15-6273-56c5-82c9-9aacdf56007a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "af41f2ff-e7a5-4fb6-8dd9-d111b80d3604",
+              "memory_uid": "442672e1-2188-5aa3-ad38-5e9c16f25bd5"
+            }
+          ],
+          "reason": "This bill-payment timing behavior is not addressed by the compared frame's visit-reminder experiences.",
+          "status": "RESOLVED",
+          "summary": "A due-date bill alert led the user to defer payment until after a meeting.",
+          "uid": "98903c58-e92b-5f60-bbfe-26b443eb2741"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "af41f2ff-e7a5-4fb6-8dd9-d111b80d3604",
+              "memory_uid": "c7385cce-ec43-5902-973c-5b8af54c3557"
+            }
+          ],
+          "reason": "This one-sided experience concerns advance notice for bill payment, not repair-visit attendance.",
+          "status": "RESOLVED",
+          "summary": "An alert three days before a bill deadline enabled payment before dinner.",
+          "uid": "7684607d-4dc3-54fe-abfa-189cc4eaa041"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "af41f2ff-e7a5-4fb6-8dd9-d111b80d3604",
+              "memory_uid": "d926c45c-ea49-589c-a7e4-491c9a1514f8"
+            }
+          ],
+          "reason": "This expense-recording practice has no corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user accumulated cash receipts and batch-entered them at month end.",
+          "uid": "e096bd6a-b01c-559b-b1bb-0b71ab13e836"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "af41f2ff-e7a5-4fb6-8dd9-d111b80d3604",
+              "memory_uid": "9433523f-8c4e-5424-b370-d325ba5154d1"
+            }
+          ],
+          "reason": "This spending-response observation is independently useful and absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Recording a large expense was followed by fewer restaurant meals that week.",
+          "uid": "4c57d3fb-2b51-5e3e-bc7b-59d8abdb80c3"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "af41f2ff-e7a5-4fb6-8dd9-d111b80d3604",
+              "memory_uid": "d9531336-ac5f-5ba0-bf26-9c69c854578f"
+            }
+          ],
+          "reason": "This family member's settlement preference has no counterpart involving the same payment decision.",
+          "status": "RESOLVED",
+          "summary": "The user's older sister prefers electronic transfer for settling a jointly paid meal.",
+          "uid": "d8cb2657-fcb3-58c0-97f0-df32ca67747b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "af41f2ff-e7a5-4fb6-8dd9-d111b80d3604",
+              "memory_uid": "9941d390-8b40-5fee-8bcf-df6f36befcb0"
+            }
+          ],
+          "reason": "This safeguard governs financial automation, whereas the compared frame's reconfirmation rule governs residential entry and is a separate operational decision.",
+          "status": "RESOLVED",
+          "summary": "Automatic payment scheduling requires prior confirmation of the amount and account with the user.",
+          "uid": "e3365f06-580d-5b81-9961-3af3ee7ce9bb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "af41f2ff-e7a5-4fb6-8dd9-d111b80d3604",
+              "memory_uid": "79aea8fd-5d48-50f7-adf6-b7ebe33bfb08"
+            }
+          ],
+          "reason": "This institution-dependent billing qualification has no counterpart concerning payment processing in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Billing institutions may differ in payment-processing timing and late-payment recording.",
+          "uid": "b3ceca82-4246-5147-ba8a-cf707bdb5187"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d5987340-90a0-4d4c-a1f8-ceec49a11b64",
+              "memory_uid": "7d3daf76-a21e-5117-a534-6175ab2d2861"
+            }
+          ],
+          "reason": "This household-storage fact has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user stores basic repair tools beneath the sink.",
+          "uid": "41d2d104-2b3e-5923-9113-207131ab2aae"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d5987340-90a0-4d4c-a1f8-ceec49a11b64",
+              "memory_uid": "70a6d9f5-180f-5174-b247-690e10baa23e"
+            }
+          ],
+          "reason": "This leak-response outcome is independently useful and unaddressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Using only a towel beneath a leaking faucet allowed the floor to become wet.",
+          "uid": "72e1b5b7-c9c9-58b3-9465-2a11098e903a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d5987340-90a0-4d4c-a1f8-ceec49a11b64",
+              "memory_uid": "9fcd922c-147c-517b-82b3-180fdfb13f33"
+            }
+          ],
+          "reason": "This repair-coordination sequence has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Sending building management a photo preceded finalizing a repair-visit time.",
+          "uid": "1abe889a-f037-55a5-82a4-2f36496a20b9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d5987340-90a0-4d4c-a1f8-ceec49a11b64",
+              "memory_uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5"
+            }
+          ],
+          "reason": "This preparation for repair work is not addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user cleared the space beneath the sink before the technician arrived.",
+          "uid": "9b86bc39-f310-5ae5-b2bf-18ef83ec80ed"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d5987340-90a0-4d4c-a1f8-ceec49a11b64",
+              "memory_uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65"
+            }
+          ],
+          "reason": "Although the reference discusses bill alerts, it does not address reminders for admitting a visiting worker.",
+          "status": "RESOLVED",
+          "summary": "Recording a repair visit only in the calendar while disabling reminders led to a late door response.",
+          "uid": "b01d70a2-732e-51ab-a724-3ff745b6def6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d5987340-90a0-4d4c-a1f8-ceec49a11b64",
+              "memory_uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a"
+            }
+          ],
+          "reason": "This one-sided experience concerns readiness for a repair visit, a different operational setting from bill reminders.",
+          "status": "RESOLVED",
+          "summary": "A reminder thirty minutes before a later repair visit enabled an immediate entrance response.",
+          "uid": "8708ad1f-a4dc-5b95-b52f-b9ad50b11d4a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d5987340-90a0-4d4c-a1f8-ceec49a11b64",
+              "memory_uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441"
+            }
+          ],
+          "reason": "This spare-key custody check has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "After the repair, the user verified with their maternal aunt that she still held the spare key.",
+          "uid": "eef490be-a0bc-5940-b0f0-8c95243b56c8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d5987340-90a0-4d4c-a1f8-ceec49a11b64",
+              "memory_uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd"
+            }
+          ],
+          "reason": "This family member's access-safety view is independently useful and absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user's maternal aunt considers giving a repair technician the spare key unsafe without the user's explicit request.",
+          "uid": "0e78b644-077c-5ebe-b83b-299ff6c00e08"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d5987340-90a0-4d4c-a1f8-ceec49a11b64",
+              "memory_uid": "4716a67b-8602-564c-9e89-85cd4ee158f9"
+            }
+          ],
+          "reason": "This safeguard governs residential access, whereas the reference frame's confirmation rule governs automatic payments and is a separate operational decision.",
+          "status": "RESOLVED",
+          "summary": "Scheduling an external worker to enter the residence requires the user's reconfirmation.",
+          "uid": "89ca38fa-2f46-520d-a23f-a6a1b5b7a1b6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d5987340-90a0-4d4c-a1f8-ceec49a11b64",
+              "memory_uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+            }
+          ],
+          "reason": "This repair-scheduling qualification has no counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Emergency work or parts availability may change a multi-unit building's repair schedule.",
+          "uid": "6661c2d5-7a53-5585-b672-fde4c1f95980"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame describes leak response, repair coordination and preparation, visit reminders, spare-key safeguards, worker-entry confirmation, and schedule uncertainty.",
+        "differences": "",
+        "reference_only": "The reference describes budgeting, errand consolidation, bill reminders, receipt entry, spending adjustment, shared-meal settlement, payment-schedule confirmation, and institution-dependent processing."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "d7f035d8-2bec-4a91-a1cf-59657075f69c"
+    },
+    "analysis_digest": "7bc59b0355443e7b2dedb155e89097885da38eced1d601894fa534796347c08b",
+    "key": "b0039121fc20977ea07634ff4f30f43fc7999c092930641f4780ba402da06293",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 42.71176658300101,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "b0039121fc20977ea07634ff4f30f43fc7999c092930641f4780ba402da06293",
+  "created_at": "2026-08-13T18:44:06.327194Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/08",
+  "pair_key": "9c4fd98ebeda46dff7ca3effe8ae0268fe83a1b76ca21b5851d4cc3f79467794",
+  "provider_seconds": 42.71176658300101,
+  "right": "task-3/local/personal-memory/2026/02",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

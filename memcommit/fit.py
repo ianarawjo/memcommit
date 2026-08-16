@@ -1,10 +1,9 @@
-"""General Fit exports plus the legacy revision-bound Ground adapter.
+"""General Fit exports plus the revision-bound Ground graph adapter.
 
 The foundational YES/MAY/NO proposition judge lives in ``fit_judgment`` and
-is re-exported here as the public Fit core.  The older Ground report remains
-in this module for receipt compatibility; it projects the general verdicts
-into its historical per-Example vocabulary without making Ground the
-definition of Fit.
+is re-exported here as the public Fit core. The versioned Ground report keeps
+its historical per-Example judgments and adds an exhaustive Context, vertical,
+and peer coherence frame without making Ground the definition of Fit.
 """
 
 from __future__ import annotations
@@ -34,11 +33,14 @@ from memcommit.fit_judgment import (
     judge_fit as judge_fit,
     judge_fit_questions,
 )
+from memcommit.fit_coherence import FitCoherenceReport
 from memcommit.provider_types import CompletionRun, ProviderIdentity
 
 
-FIT_SCHEMA_VERSION = 1
-FIT_RULESET_VERSION = "ground-fit-v1"
+FIT_LEGACY_SCHEMA_VERSION = 1
+FIT_SCHEMA_VERSION = 2
+FIT_LEGACY_RULESET_VERSION = "ground-fit-v1"
+FIT_RULESET_VERSION = "ground-fit-v2"
 FIT_PROPOSITION_OPERATION = FIT_JUDGMENT_OPERATION
 FIT_TEXT_LIMIT = 20_000
 FIT_MAX_RULES = 200
@@ -337,8 +339,12 @@ class FitReport:
     overview: str
     created_at: str
     provider_identity: ProviderIdentity | None = None
-    schema_version: int = FIT_SCHEMA_VERSION
-    ruleset_version: str = FIT_RULESET_VERSION
+    coherence: FitCoherenceReport | None = None
+    # Direct ``fit_ground_examples`` callers retain the exact v1 adapter.
+    # The Store-backed Ground runtime adds coherence and explicitly upgrades
+    # the immutable receipt to v2 after both complete detectors succeed.
+    schema_version: int = FIT_LEGACY_SCHEMA_VERSION
+    ruleset_version: str = FIT_LEGACY_RULESET_VERSION
 
     def __post_init__(self) -> None:
         _uuid(self.uid, "report uid")
@@ -349,8 +355,20 @@ class FitReport:
         _digest(self.ground_digest, "Ground digest")
         _text(self.overview, "overview")
         _created_at(self.created_at)
-        if self.schema_version != FIT_SCHEMA_VERSION or self.ruleset_version != FIT_RULESET_VERSION:
+        contract = (self.schema_version, self.ruleset_version)
+        if contract not in {
+            (FIT_LEGACY_SCHEMA_VERSION, FIT_LEGACY_RULESET_VERSION),
+            (FIT_SCHEMA_VERSION, FIT_RULESET_VERSION),
+        }:
             raise FitError("Unsupported Fit schema or ruleset.")
+        if (
+            self.schema_version == FIT_LEGACY_SCHEMA_VERSION
+            and self.coherence is not None
+        ) or (
+            self.schema_version == FIT_SCHEMA_VERSION
+            and not isinstance(self.coherence, FitCoherenceReport)
+        ):
+            raise FitError("Invalid Fit coherence receipt shape.")
         if not self.rules or not self.examples:
             raise FitError("Fit requires active Rules and Examples.")
         rule_uids = {rule.uid for rule in self.rules}
@@ -366,10 +384,37 @@ class FitReport:
         for judgment in self.judgments:
             if judgment.rule_uids != example_by_uid[judgment.example_uid].rule_uids:
                 raise FitError("A Fit judgment changed its frozen Rule set.")
+        if self.coherence is not None:
+            coherence_goals = tuple(
+                (item.uid, item.alias)
+                for item in self.coherence.subjects
+                if item.layer == "GOAL"
+            )
+            coherence_rules = tuple(
+                (item.uid, item.alias)
+                for item in self.coherence.subjects
+                if item.layer == "RULE"
+            )
+            coherence_examples = tuple(
+                (item.uid, item.alias)
+                for item in self.coherence.subjects
+                if item.layer == "EXAMPLE"
+            )
+            if coherence_goals != ((self.ground_uid, "g1"),) or (
+                coherence_rules
+                != tuple((rule.uid, rule.alias) for rule in self.rules)
+            ) or coherence_examples != tuple(
+                (example.uid, example.alias) for example in self.examples
+            ):
+                raise FitError(
+                    "Fit coherence changed its frozen Ground subject frame."
+                )
 
     @property
     def issue_count(self) -> int:
-        return sum(judgment.status != "FIT" for judgment in self.judgments)
+        return sum(judgment.status != "FIT" for judgment in self.judgments) + (
+            self.coherence.issue_count if self.coherence is not None else 0
+        )
 
     @property
     def digest(self) -> str:
@@ -383,7 +428,7 @@ class FitReport:
         ).hexdigest()
 
     def to_dict(self) -> dict[str, object]:
-        return {
+        result = {
             "schema_version": self.schema_version,
             "ruleset_version": self.ruleset_version,
             "uid": self.uid,
@@ -398,12 +443,19 @@ class FitReport:
             "created_at": self.created_at,
             "provider_identity": _identity_dict(self.provider_identity),
         }
+        if self.schema_version == FIT_SCHEMA_VERSION:
+            result["coherence"] = (
+                self.coherence.to_dict() if self.coherence is not None else None
+            )
+        return result
 
     @classmethod
     def from_dict(cls, value: object) -> "FitReport":
-        data = _exact(
-            value,
-            {
+        if not isinstance(value, dict):
+            raise FitError("Invalid Fit report.")
+        schema_version = value.get("schema_version")
+        if schema_version == FIT_LEGACY_SCHEMA_VERSION:
+            keys = {
                 "schema_version",
                 "ruleset_version",
                 "uid",
@@ -417,7 +469,29 @@ class FitReport:
                 "overview",
                 "created_at",
                 "provider_identity",
-            },
+            }
+        elif schema_version == FIT_SCHEMA_VERSION:
+            keys = {
+                "schema_version",
+                "ruleset_version",
+                "uid",
+                "ground_uid",
+                "ground_name",
+                "ground_revision",
+                "ground_digest",
+                "rules",
+                "examples",
+                "judgments",
+                "overview",
+                "created_at",
+                "provider_identity",
+                "coherence",
+            }
+        else:
+            raise FitError("Unsupported Fit schema or ruleset.")
+        data = _exact(
+            value,
+            keys,
             "report",
         )
         for key in ("rules", "examples", "judgments"):
@@ -440,6 +514,11 @@ class FitReport:
             overview=_text(data["overview"], "overview"),
             created_at=_created_at(data["created_at"]),
             provider_identity=_identity(data["provider_identity"]),
+            coherence=(
+                FitCoherenceReport.from_dict(data["coherence"])
+                if schema_version == FIT_SCHEMA_VERSION
+                else None
+            ),
         )
 
 

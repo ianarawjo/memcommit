@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:53:00.600462+00:00",
+      "frames": [
+        {
+          "context_digest": "07c43eb0b8ecd9107f1d879a409b45289e236f48f620ff85f1d30ce594809149",
+          "context_name": "task-3/local/personal-memory/2025/09",
+          "context_uid": "5cd8ed5f-2f1f-5deb-8347-fc3bfa484d99",
+          "memories": [
+            {
+              "content": "The user keeps the book they are reading and a note-taking notebook on a small living-room desk.",
+              "content_digest": "d2c70cf4c27fe62f5915f2f5c669484c4a875e4ee21f8d7d89a5ff6746f14cf1",
+              "position": 0,
+              "uid": "3d3f7960-daf5-5a51-98b3-14261c5aa66c"
+            },
+            {
+              "content": "While reading in the living room with the television on, the user read the same paragraph three times.",
+              "content_digest": "00e41e6d5fe1dcfe961fa0f739860823ecf338dc55d5b9beea265ca823974582",
+              "position": 1,
+              "uid": "28714a4e-bc14-5703-b594-126471ae0585"
+            },
+            {
+              "content": "The next day, after turning off the television, the user read 40 pages without interruption.",
+              "content_digest": "c28ba9c872757b6683ab03d73e6ad61f71484d55986aae4c0976862a85e3a8b1",
+              "position": 2,
+              "uid": "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df"
+            },
+            {
+              "content": "On a day the phone was on the desk, the user stopped taking notes each time they checked a notification.",
+              "content_digest": "f95cb8b1b8abe89d7bf597ca5fb78f0862fe97a7cf0d8bc5a46c04026ebd6889",
+              "position": 3,
+              "uid": "1b1c9f90-2561-53d5-88fe-d54618450143"
+            },
+            {
+              "content": "During the next reading period, the user left the phone in another room and did not check it for an hour.",
+              "content_digest": "89dc50732e19b88a77657b285ce71c399d229b510265cc9adfbdf6ad706680cd",
+              "position": 4,
+              "uid": "076a7caa-5dcf-5f9d-8bee-efc952652efa"
+            },
+            {
+              "content": "A note attached to a paper book fell out, and the user had to find their place again.",
+              "content_digest": "723e48ceeba6c94e627c79af0518c811cfc8337f9eeae3a80ae388ec98786994",
+              "position": 5,
+              "uid": "1dad71ec-6a5d-550e-89d2-a86dc3dacb11"
+            },
+            {
+              "content": "With the next book, the user recorded the page number in the notebook and resumed reading immediately.",
+              "content_digest": "c74c2f80bf403da64f0a6de97ff04bc1f41cf68d0d33829fa926cc2549e8ea75",
+              "position": 6,
+              "uid": "58494743-fc7f-59e9-8e17-80b8a644470a"
+            },
+            {
+              "content": "The user's father expects that lowering the television volume while the user reads will make it easier for the user to concentrate.",
+              "content_digest": "281b1f8f55f8d22fbebdb2220405dc3e2300e29e0a568c1fac36d4bb1c39c186",
+              "position": 7,
+              "uid": "cce66589-892c-5d73-bdbc-2c6e94e0992e"
+            },
+            {
+              "content": "The local agent can summarize past reading environments and interruption records but cannot predict the next reading time.",
+              "content_digest": "50e5376e22f503048a7f1bf4055bfb31cb4aa3c75b1c816f2febce913716eb58",
+              "position": 8,
+              "uid": "20b2a27f-908f-5ed7-a288-f7c1030674fc"
+            },
+            {
+              "content": "The user feels that repeated notifications interrupt their flow of concentration.",
+              "content_digest": "d777b2a01cfac23e6ef7701c04c33592f8382fa78f8e307bae9ddbffc9a8e2ef",
+              "position": 9,
+              "uid": "310f4cfc-b117-5511-8e13-2bd2ebec9fe5"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "16befa50-5fc0-4d1f-bfab-f865b2ee1df3"
+        },
+        {
+          "context_digest": "4b8dc68a205171fe661b04620d0fba2bbb386ff21d494699c34a74dc2ab86080",
+          "context_name": "task-3/local/personal-memory/2026/03",
+          "context_uid": "97d36150-4792-5a5c-9332-5eb1de8bcf04",
+          "memories": [
+            {
+              "content": "The user stores tax-related receipts in digital folders by year.",
+              "content_digest": "778f983547572b31798b7041899812a7b0b574d74b585baf6883e94919dee6ec",
+              "position": 0,
+              "uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393"
+            },
+            {
+              "content": "The user found three paper receipts late and recalculated the expense total already prepared.",
+              "content_digest": "542368a141ec82a1bd7da4b534d88ea62c487d16a37f454569bf6400cbc749e9",
+              "position": 1,
+              "uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878"
+            },
+            {
+              "content": "Starting the next month, the user photographed receipts on the day they were received and reduced omissions.",
+              "content_digest": "b95e0a1afa1196a9bff117bf12b1630edcc4eb65bfdfeb3128ae5937563a492e",
+              "position": 2,
+              "uid": "ff436ea5-1b3e-55df-8302-bd8a96740671"
+            },
+            {
+              "content": "The user named every file with only the photo date and spent a long time looking for a needed receipt.",
+              "content_digest": "c3aa33e0b7e007bdfc5c12dcda659e2a52938548fbf53d5a1ab034487a528857",
+              "position": 3,
+              "uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e"
+            },
+            {
+              "content": "The user later included the expense category in the filename and found the receipt immediately through search.",
+              "content_digest": "cdae97761f614b932d3b330723627bee8b0e3d033e2bf1061b721367237acee1",
+              "position": 4,
+              "uid": "89d6fa9a-b795-59df-be34-1c05a9861d35"
+            },
+            {
+              "content": "While reviewing documents just before submission, the user discovered one blank signature field.",
+              "content_digest": "a525c117b97eec82c678f276b319158703bf9cc558fb83cb81c0820d5c9e3174",
+              "position": 5,
+              "uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2"
+            },
+            {
+              "content": "Before submitting an administrative document, the user checks the signature field as the final item on the checklist.",
+              "content_digest": "542bec3cbc3fc8b22c95da274e479e96bfbf061a3b644d0d7f213de5a030dbd5",
+              "position": 6,
+              "uid": "5551622f-66cf-5542-8c47-1cddadab5c02"
+            },
+            {
+              "content": "Staff at a tax-support counter expect to receive an electronic copy in which every item is legible rather than a blurred or cropped photo.",
+              "content_digest": "d328ca248fdeecf0756e23b1202e7007bc8c3c25ae769439b0fd2efdbbe47580",
+              "position": 7,
+              "uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f"
+            },
+            {
+              "content": "The local agent can organize receipts by date and category but cannot determine whether an expense is deductible.",
+              "content_digest": "bcc769721a99b099ca20e5e527fa8904d54ecbaf9ae7d7616b95e1adaf1f89a9",
+              "position": 8,
+              "uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094"
+            },
+            {
+              "content": "The accepted scope and submission deadlines for administrative documents may vary under that year's guidance.",
+              "content_digest": "1ab61126b8efb0c2a9c6114c367018158f2e136bafa87e33f60aadb0686d0537",
+              "position": 9,
+              "uid": "de398064-3179-590b-8c62-effb17060115"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "d6de8602-a0c4-4c7f-ae9d-df6a36914964"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate domains: the reference describes reading setup, interruptions, place-keeping, concentration, and agent limits, while the compared frame describes receipt capture and retrieval, document checks, submission expectations, changing guidance, and agent limits. No claims govern the same operational decision.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "16befa50-5fc0-4d1f-bfab-f865b2ee1df3",
+              "memory_uid": "3d3f7960-daf5-5a51-98b3-14261c5aa66c"
+            }
+          ],
+          "reason": "This is independently useful reference-only information about the location of reading materials; the compared frame contains no claim about that practice.",
+          "status": "RESOLVED",
+          "summary": "The user keeps their current book and note-taking notebook on a small living-room desk.",
+          "uid": "a778461a-f384-54b8-9270-dd12345bb84d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "16befa50-5fc0-4d1f-bfab-f865b2ee1df3",
+              "memory_uid": "28714a4e-bc14-5703-b594-126471ae0585"
+            }
+          ],
+          "reason": "This reference-only observation concerns a specific reading difficulty under television exposure, which the compared frame does not address.",
+          "status": "RESOLVED",
+          "summary": "With the television on during living-room reading, the user reread one paragraph three times.",
+          "uid": "3cd33890-8eb4-5e1b-b66a-e97542461385"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "16befa50-5fc0-4d1f-bfab-f865b2ee1df3",
+              "memory_uid": "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df"
+            }
+          ],
+          "reason": "This is a separate reference-only observation about uninterrupted reading with the television off; no compared claim addresses that circumstance.",
+          "status": "RESOLVED",
+          "summary": "After turning off the television the next day, the user read 40 pages without interruption.",
+          "uid": "07f03ff6-6df0-5b73-81dd-048dba34a311"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "16befa50-5fc0-4d1f-bfab-f865b2ee1df3",
+              "memory_uid": "1b1c9f90-2561-53d5-88fe-d54618450143"
+            }
+          ],
+          "reason": "This reference-only event describes notification-linked note-taking interruptions, an operational circumstance absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "When the phone was on the desk, checking each notification stopped the user’s note-taking.",
+          "uid": "c43601e3-b1f2-5e27-b858-766f2dda9f27"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "16befa50-5fc0-4d1f-bfab-f865b2ee1df3",
+              "memory_uid": "076a7caa-5dcf-5f9d-8bee-efc952652efa"
+            }
+          ],
+          "reason": "This is independently useful reference-only information about phone placement and checking behavior; the compared frame has no corresponding claim.",
+          "status": "RESOLVED",
+          "summary": "During the next reading period, leaving the phone in another room coincided with an hour without checking it.",
+          "uid": "adf774cb-a8f9-5d96-a335-3e4fa7cf85a8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "16befa50-5fc0-4d1f-bfab-f865b2ee1df3",
+              "memory_uid": "1dad71ec-6a5d-550e-89d2-a86dc3dacb11"
+            }
+          ],
+          "reason": "This reference-only incident concerns failure of a physical place-keeping method and is unrelated to the compared frame’s document-management claims.",
+          "status": "RESOLVED",
+          "summary": "A note fell from a paper book, requiring the user to find their reading place again.",
+          "uid": "ff193226-863c-5e4d-b95e-3049db0f33bc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "16befa50-5fc0-4d1f-bfab-f865b2ee1df3",
+              "memory_uid": "58494743-fc7f-59e9-8e17-80b8a644470a"
+            }
+          ],
+          "reason": "This reference-only practice and outcome concern preserving a reading position; the compared frame does not address that decision.",
+          "status": "RESOLVED",
+          "summary": "For the next book, recording the page number in the notebook allowed the user to resume immediately.",
+          "uid": "572ae50b-7c6c-5efa-9de2-3b4b0ee924d7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "16befa50-5fc0-4d1f-bfab-f865b2ee1df3",
+              "memory_uid": "cce66589-892c-5d73-bdbc-2c6e94e0992e"
+            }
+          ],
+          "reason": "This is a reference-only expectation from the father about reading conditions, with no same-decision claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s father expects lower television volume during reading to improve the user’s concentration.",
+          "uid": "4af46851-80a7-5ecd-b059-a6b8f41e807a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "16befa50-5fc0-4d1f-bfab-f865b2ee1df3",
+              "memory_uid": "20b2a27f-908f-5ed7-a288-f7c1030674fc"
+            }
+          ],
+          "reason": "This reference-only capability boundary applies specifically to reading history and prediction, whereas the compared agent claim governs receipt organization and deductibility.",
+          "status": "RESOLVED",
+          "summary": "The local agent can summarize prior reading environments and interruptions but cannot predict the next reading time.",
+          "uid": "d645c1dd-cd8f-5100-8a5f-0d917f8ec17d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "16befa50-5fc0-4d1f-bfab-f865b2ee1df3",
+              "memory_uid": "310f4cfc-b117-5511-8e13-2bd2ebec9fe5"
+            }
+          ],
+          "reason": "This reference-only subjective assessment concerns concentration under repeated notifications; no compared claim addresses that experience.",
+          "status": "RESOLVED",
+          "summary": "The user feels repeated notifications interrupt their concentration flow.",
+          "uid": "9b30adb0-a8de-5312-8a64-2d5fb10dfba0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6de8602-a0c4-4c7f-ae9d-df6a36914964",
+              "memory_uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393"
+            }
+          ],
+          "reason": "This is independently useful compared-only information about receipt storage structure; the reference frame contains no receipt-management claim.",
+          "status": "RESOLVED",
+          "summary": "The user stores tax-related receipts in digital folders organized by year.",
+          "uid": "5a11e5c0-89ee-5650-9c99-061292337c95"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6de8602-a0c4-4c7f-ae9d-df6a36914964",
+              "memory_uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878"
+            }
+          ],
+          "reason": "This compared-only event concerns omissions in expense preparation, a decision area absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Finding three paper receipts late caused the user to recalculate an already prepared expense total.",
+          "uid": "c9212f15-7c88-59ec-9466-683869933640"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6de8602-a0c4-4c7f-ae9d-df6a36914964",
+              "memory_uid": "ff436ea5-1b3e-55df-8302-bd8a96740671"
+            }
+          ],
+          "reason": "This is a compared-only receipt-capture practice and outcome; no reference claim concerns timely record capture.",
+          "status": "RESOLVED",
+          "summary": "Beginning the next month, the user photographed receipts on receipt day and reduced omissions.",
+          "uid": "f7eba169-e02c-5907-a17c-e4a93a9188f0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6de8602-a0c4-4c7f-ae9d-df6a36914964",
+              "memory_uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e"
+            }
+          ],
+          "reason": "This compared-only observation concerns inadequate receipt-file naming and retrieval, which the reference frame does not address.",
+          "status": "RESOLVED",
+          "summary": "Using only the photo date in every filename made locating a needed receipt time-consuming.",
+          "uid": "77e1515f-19c0-5d91-ad56-fef345f0760b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6de8602-a0c4-4c7f-ae9d-df6a36914964",
+              "memory_uid": "89d6fa9a-b795-59df-be34-1c05a9861d35"
+            }
+          ],
+          "reason": "This compared-only naming practice and retrieval outcome have no same-decision counterpart in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Adding the expense category to filenames later enabled immediate receipt retrieval through search.",
+          "uid": "db10a71e-fcf1-57df-9078-2940de8bcd21"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6de8602-a0c4-4c7f-ae9d-df6a36914964",
+              "memory_uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2"
+            }
+          ],
+          "reason": "This compared-only incident concerns document completeness before submission; the reference frame contains no administrative-submission claim.",
+          "status": "RESOLVED",
+          "summary": "During a pre-submission document review, the user found one blank signature field.",
+          "uid": "ff008f42-26f4-54ff-9acd-684c0934432c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6de8602-a0c4-4c7f-ae9d-df6a36914964",
+              "memory_uid": "5551622f-66cf-5542-8c47-1cddadab5c02"
+            }
+          ],
+          "reason": "This compared-only checklist practice is independently useful and has no corresponding operational claim in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Before submitting an administrative document, the user checks the signature field last on the checklist.",
+          "uid": "8cfd7cea-e030-5345-a9e2-2dbf204f49ed"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6de8602-a0c4-4c7f-ae9d-df6a36914964",
+              "memory_uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f"
+            }
+          ],
+          "reason": "This compared-only external expectation governs submission image quality, a topic absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Tax-support staff expect an electronic copy with every item legible rather than blurred or cropped.",
+          "uid": "9e8e8d9f-798c-58c3-a916-6c823146443d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6de8602-a0c4-4c7f-ae9d-df6a36914964",
+              "memory_uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094"
+            }
+          ],
+          "reason": "This compared-only capability boundary applies to receipt organization and tax judgment, whereas the reference agent claim governs reading-history summaries and time prediction.",
+          "status": "RESOLVED",
+          "summary": "The local agent can organize receipts by date and category but cannot decide whether an expense is deductible.",
+          "uid": "165e985f-7376-59c0-996a-1c3581ef54a4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d6de8602-a0c4-4c7f-ae9d-df6a36914964",
+              "memory_uid": "de398064-3179-590b-8c62-effb17060115"
+            }
+          ],
+          "reason": "This compared-only qualification concerns year-dependent administrative requirements; the reference frame contains no claim governing them.",
+          "status": "RESOLVED",
+          "summary": "Accepted scope and submission deadlines for administrative documents may vary with that year’s guidance.",
+          "uid": "882e8c99-257b-581c-bf45-474e043941e9"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers receipt storage, capture and naming practices, signature checks, submission quality and changing guidance, and the local agent’s limited receipt-management capabilities.",
+        "differences": "",
+        "reference_only": "The reference covers reading materials, television and phone distractions, place-keeping practices, concentration experiences, and the local agent’s limited reading-history capabilities."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "2aecca70-7b47-465a-b90c-c652e47b6379"
+    },
+    "analysis_digest": "4caa85715eb139abcb05c92d52a3db928b5fe34ab83521d34579f67a663ac725",
+    "key": "2ff8d32c8bc66dde54d9810c7c2aa32acc55ebfc87b016c48fe8394157338f11",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 42.97657979200085,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "2ff8d32c8bc66dde54d9810c7c2aa32acc55ebfc87b016c48fe8394157338f11",
+  "created_at": "2026-08-13T18:53:43.576135Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/09",
+  "pair_key": "461ed02d08baf568868e028960cf5733a8cbf24eda3bef9fac9cccb67ae10f91",
+  "provider_seconds": 42.97657979200085,
+  "right": "task-3/local/personal-memory/2026/03",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

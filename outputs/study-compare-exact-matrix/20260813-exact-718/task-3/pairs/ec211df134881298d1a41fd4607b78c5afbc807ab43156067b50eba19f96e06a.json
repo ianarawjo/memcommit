@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:42:26.478550+00:00",
+      "frames": [
+        {
+          "context_digest": "58f58090449931225a941a4219f3fce7ebcf23bbabc0e0aa93a8733d4ba32701",
+          "context_name": "task-3/local/personal-memory/2024/07",
+          "context_uid": "8747b4f6-d17c-5b02-83f4-fc3af73e2da0",
+          "memories": [
+            {
+              "content": "The user updated the utility account for their residence in July 2024.",
+              "content_digest": "89c6a8e8dd7ad799b9ef4cb2b10963ce0b9ad55e713716d9729f903e76c0f71a",
+              "position": 0,
+              "uid": "65a332a2-2707-55f8-b7a6-a7378e6fbb7a"
+            },
+            {
+              "content": "After putting a paper bill in a drawer, the user checked it one day after the payment date.",
+              "content_digest": "474d42322de3190caee3e4feeb831bcb6a7b57e58427667d74be084ee9c64257",
+              "position": 1,
+              "uid": "fb94e1fd-9b3d-567a-81d8-d7a0ee90e04e"
+            },
+            {
+              "content": "In the month after receiving an electronic billing alert, the user paid two days before the deadline.",
+              "content_digest": "c16cf32e0018eb1cdf94e3070036d7fb93b0ccc8adb633a057642ff41284eaa0",
+              "position": 2,
+              "uid": "7d8db31a-c330-5852-9d7c-c9da7f98d899"
+            },
+            {
+              "content": "The user saw a water-inspection notice late and started washing dishes during the scheduled shutoff.",
+              "content_digest": "d5bea20cc35a46502ba919c52bee7519453346789d4bb881c82a9c08e6840cb0",
+              "position": 3,
+              "uid": "008dd110-feb2-5b4b-b602-bb3e23475a95"
+            },
+            {
+              "content": "After transferring a management-office notice to their phone calendar, the user did not miss the inspection time.",
+              "content_digest": "ce2c06404fcb8988b61da98f2ddd58d3db6506ff74aa1c7dfd43f841fa6fb25d",
+              "position": 4,
+              "uid": "a03ed01a-3d15-5eaf-9415-529705fd1245"
+            },
+            {
+              "content": "During a boiler technician's visit, the user had not cleared boxes from the entrance in advance and had to rearrange the passage.",
+              "content_digest": "39f4ca86667c0622dce2b6fee2b04df73131bf9d98e81478f1fa818b5dfe70c2",
+              "position": 5,
+              "uid": "2fb4b0bd-1257-5e50-881a-7f312940e1c5"
+            },
+            {
+              "content": "The user cleared the entrance the day before the next visit so the inspection could begin immediately.",
+              "content_digest": "e99fb029e3ca864e4f293358a85f33d73f4d7d2b9fda7dcd437ffdf183350666",
+              "position": 6,
+              "uid": "d05286e8-f183-5f4a-99d8-3dcca1aeaa09"
+            },
+            {
+              "content": "The building manager expects that a one-day advance visit notice gives a resident enough time to prepare the work area.",
+              "content_digest": "f992e380bfa87fa04c9f7dde8eceee69eb6b0aa3ad79c180d9023dafd7dd2abd",
+              "position": 7,
+              "uid": "44d28aa3-1aa4-5276-b545-86ee2cb17078"
+            },
+            {
+              "content": "Confirm the user's available time before finalizing a service visit to the residence.",
+              "content_digest": "dee4efa145a0f8b25c47a1c6855c02feee2de292e78b2e3790763796981db1e5",
+              "position": 8,
+              "uid": "77f77450-ab10-5469-8e2f-5445060926bc"
+            },
+            {
+              "content": "The local agent can compare payment records with notice times but cannot verify whether a residential service problem was resolved.",
+              "content_digest": "09e052010507ce17344888df5171f58996245cceb9012e160d540f030e7ba98a",
+              "position": 9,
+              "uid": "fd7f98b4-d5b9-5196-ad5e-c4356681ecf4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "1e7abd91-693c-4be7-95f6-990a7c3e7e1b"
+        },
+        {
+          "context_digest": "5a45aaafce189f861f7195d3a753aa86812f64c689213961136327ca721c9d3e",
+          "context_name": "task-3/local/personal-memory/2026/06",
+          "context_uid": "f2e6c2e0-886a-52d8-98d4-03009ea37991",
+          "memories": [
+            {
+              "content": "The user keeps four folding chairs for family barbecues in storage.",
+              "content_digest": "7e2bb593a723adbac468184af4063e0ef74420baa03d6249ef77a84f2e6bc9df",
+              "position": 0,
+              "uid": "cce43b8e-c1c1-5208-8d9a-ee665b805d4c"
+            },
+            {
+              "content": "When six family members gathered in a noisy indoor restaurant, the user asked several times for the person across from them to repeat what was said.",
+              "content_digest": "d858d40478a37bed08580523df1915b85b4e2217b2fc506acedacaca55d2158d",
+              "position": 1,
+              "uid": "e682f0fd-e92f-566e-b1ec-1d5ebf091b60"
+            },
+            {
+              "content": "The user held the next gathering in their father's yard and moved between seats while speaking with everyone.",
+              "content_digest": "44843518c924955fa15e245dc41763a6fe21a95f6f590bd395f7b8a2d6357256",
+              "position": 2,
+              "uid": "c1f2b53e-6184-552b-a321-9796bb121055"
+            },
+            {
+              "content": "On a day the user started the barbecue at midday, sunlight led them to finish the meal quickly.",
+              "content_digest": "f275c2211b4bd69f40351800db57965b8ba44afbadb6e90a0291acae4e7a541b",
+              "position": 3,
+              "uid": "56d5befe-d5f4-59df-82e4-a66ba868dfc2"
+            },
+            {
+              "content": "The next time, the user started at 6 p.m. and remained outside until sunset.",
+              "content_digest": "13c413fbf16ea0704c10d09c5ee065a49ab789b0a3dadb1fc5068631dd95b292",
+              "position": 4,
+              "uid": "83d73ede-6f5a-550e-ba1c-c146b73a9917"
+            },
+            {
+              "content": "Because the side dishes brought by the user's mother and older sister had no labels, the user opened the same container twice.",
+              "content_digest": "5cc4205a743f5d8adca15876d7b0dd864089595ce729f4e3c1cc9a2272c6849b",
+              "position": 5,
+              "uid": "cf0947e8-c133-5259-bac2-e8ee6d74929e"
+            },
+            {
+              "content": "At the next gathering, the user wrote each food's name and who brought it on a small piece of paper.",
+              "content_digest": "6a93e0b5f7e3da8eff2e5c69a3f86c28dfc1a39c1ba7602a61cc1f6a96b837f9",
+              "position": 6,
+              "uid": "d42e48ca-39de-529f-bba2-332b779bd6c2"
+            },
+            {
+              "content": "After a barbecue, the user's younger brother prefers to divide leftover food into small containers to take home rather than discard it.",
+              "content_digest": "9febf1dab1f5000cddc636cd753d3c418b84810cbc6e394df7e8917d3fa29b72",
+              "position": 7,
+              "uid": "3958627e-a0fa-5e32-9e87-7ee874fc6fe7"
+            },
+            {
+              "content": "The local agent can summarize preparation and responses from prior family barbecues but cannot know the next attendees or weather.",
+              "content_digest": "6be2ed6916fc8a6200a4646b5db3b5ea0df7650e664bd098f973fb5229257cec",
+              "position": 8,
+              "uid": "1f24b5c2-554c-5356-b335-c6879e53ba7f"
+            },
+            {
+              "content": "The user's father's yard receives strong direct sunlight at midday; after 6 p.m., shade and wind lower the felt temperature.",
+              "content_digest": "a0bf855f5bb0422568bbed468e5299d111143362d7b9fe2dcf35dbaf8bcbf4c6",
+              "position": 9,
+              "uid": "d88b1b21-c58f-51d5-a60b-54bb11473d96"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "d0f8e5f4-2402-49aa-87ff-b23ee31ded36"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate domains: residential utilities and service visits versus family barbecue planning and outcomes. No operational claims overlap closely enough for equivalence, compatibility, scoped difference, or conflict; each frame instead contributes independent one-sided information.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1e7abd91-693c-4be7-95f6-990a7c3e7e1b",
+              "memory_uid": "65a332a2-2707-55f8-b7a6-a7378e6fbb7a"
+            }
+          ],
+          "reason": "This is independently useful residential-account history with no materially corresponding claim in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user updated the residence’s utility account in July 2024.",
+          "uid": "c434aec3-ad6f-53a4-af85-695b68b80fd8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1e7abd91-693c-4be7-95f6-990a7c3e7e1b",
+              "memory_uid": "fb94e1fd-9b3d-567a-81d8-d7a0ee90e04e"
+            }
+          ],
+          "reason": "This is a specific billing-handling outcome not addressed by the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A paper bill left in a drawer was checked one day after its payment date.",
+          "uid": "1cb8287a-a5ae-5684-a67a-d84cbf4fd9d0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1e7abd91-693c-4be7-95f6-990a7c3e7e1b",
+              "memory_uid": "7d8db31a-c330-5852-9d7c-c9da7f98d899"
+            }
+          ],
+          "reason": "This is a distinct payment-timing episode without a corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "After an electronic billing alert, the user paid two days before the next deadline.",
+          "uid": "eb8c3ba6-aff3-5457-8849-bf5b3e422486"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1e7abd91-693c-4be7-95f6-990a7c3e7e1b",
+              "memory_uid": "008dd110-feb2-5b4b-b602-bb3e23475a95"
+            }
+          ],
+          "reason": "This records a notice-related service disruption not covered in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user saw a water-inspection notice late and began washing dishes during the scheduled shutoff.",
+          "uid": "9aa249c4-f7c4-5eb3-bd84-78cb17395be5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1e7abd91-693c-4be7-95f6-990a7c3e7e1b",
+              "memory_uid": "a03ed01a-3d15-5eaf-9415-529705fd1245"
+            }
+          ],
+          "reason": "This is a specific notice-management outcome with no materially corresponding compared-side claim.",
+          "status": "RESOLVED",
+          "summary": "Transferring a management-office notice to the phone calendar helped the user avoid missing the inspection time.",
+          "uid": "d3e01a35-74af-5664-b31e-0a8ac76e418f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1e7abd91-693c-4be7-95f6-990a7c3e7e1b",
+              "memory_uid": "2fb4b0bd-1257-5e50-881a-7f312940e1c5"
+            }
+          ],
+          "reason": "This residential work-area preparation episode is absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Uncleared entrance boxes delayed access during a boiler technician’s visit.",
+          "uid": "ed5500fe-617e-5d03-bb39-db0fd8521797"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1e7abd91-693c-4be7-95f6-990a7c3e7e1b",
+              "memory_uid": "d05286e8-f183-5f4a-99d8-3dcca1aeaa09"
+            }
+          ],
+          "reason": "This improved service-visit preparation outcome has no compared-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "Before the next visit, the user cleared the entrance a day early so the inspection could start immediately.",
+          "uid": "5bd30d01-1ebe-5813-b950-ecd6569bd63f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1e7abd91-693c-4be7-95f6-990a7c3e7e1b",
+              "memory_uid": "44d28aa3-1aa4-5276-b545-86ee2cb17078"
+            }
+          ],
+          "reason": "This is a one-sided expectation governing residential visit preparation.",
+          "status": "RESOLVED",
+          "summary": "The building manager considers one day’s advance notice sufficient for a resident to prepare the work area.",
+          "uid": "88dbe896-c1bb-51ad-8590-54ec32f53f10"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1e7abd91-693c-4be7-95f6-990a7c3e7e1b",
+              "memory_uid": "77f77450-ab10-5469-8e2f-5445060926bc"
+            }
+          ],
+          "reason": "This scheduling instruction addresses an operational decision not present in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user’s availability should be confirmed before a residential service visit is finalized.",
+          "uid": "bcced228-213a-506b-9556-29945489d94b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1e7abd91-693c-4be7-95f6-990a7c3e7e1b",
+              "memory_uid": "fd7f98b4-d5b9-5196-ad5e-c4356681ecf4"
+            }
+          ],
+          "reason": "This capability boundary concerns residential billing and service verification, unlike the compared frame’s barbecue-specific boundary.",
+          "status": "RESOLVED",
+          "summary": "The local agent can compare payment records and notice times but cannot verify resolution of a residential service problem.",
+          "uid": "9be12266-56c3-5edf-91eb-f6504f8a9e1a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d0f8e5f4-2402-49aa-87ff-b23ee31ded36",
+              "memory_uid": "cce43b8e-c1c1-5208-8d9a-ee665b805d4c"
+            }
+          ],
+          "reason": "This inventory fact is independently useful and has no residential-frame counterpart.",
+          "status": "RESOLVED",
+          "summary": "The user stores four folding chairs for family barbecues.",
+          "uid": "9d4a8ffa-0ede-563c-9c15-1dbcce295b2a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d0f8e5f4-2402-49aa-87ff-b23ee31ded36",
+              "memory_uid": "e682f0fd-e92f-566e-b1ec-1d5ebf091b60"
+            }
+          ],
+          "reason": "This conversation and venue outcome is not materially addressed by the reference frame.",
+          "status": "RESOLVED",
+          "summary": "At a noisy indoor restaurant gathering of six family members, the user repeatedly requested repetition from the person across the table.",
+          "uid": "876f7bad-bd08-5ebe-868a-40543de3c9d0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d0f8e5f4-2402-49aa-87ff-b23ee31ded36",
+              "memory_uid": "c1f2b53e-6184-552b-a321-9796bb121055"
+            }
+          ],
+          "reason": "This outdoor gathering behavior has no corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "At the next gathering in the father’s yard, the user moved between seats to speak with everyone.",
+          "uid": "7fa86515-3192-5264-8ef7-5a411db1d2af"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d0f8e5f4-2402-49aa-87ff-b23ee31ded36",
+              "memory_uid": "56d5befe-d5f4-59df-82e4-a66ba868dfc2"
+            }
+          ],
+          "reason": "This weather-sensitive barbecue outcome is independent of the residential claims.",
+          "status": "RESOLVED",
+          "summary": "Strong midday sunlight caused the user to finish a barbecue meal quickly.",
+          "uid": "51080737-8202-5525-85f1-0e6d521d2927"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d0f8e5f4-2402-49aa-87ff-b23ee31ded36",
+              "memory_uid": "83d73ede-6f5a-550e-ba1c-c146b73a9917"
+            }
+          ],
+          "reason": "This gathering-timing outcome has no materially corresponding reference-side claim.",
+          "status": "RESOLVED",
+          "summary": "At the next barbecue, a 6 p.m. start allowed the user to remain outside until sunset.",
+          "uid": "371ac085-4272-571a-b38c-f2d882e9a92b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d0f8e5f4-2402-49aa-87ff-b23ee31ded36",
+              "memory_uid": "cf0947e8-c133-5259-bac2-e8ee6d74929e"
+            }
+          ],
+          "reason": "This food-organization problem is absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Unlabeled side dishes caused the user to open the same container twice.",
+          "uid": "c7616031-018e-59a8-88dc-e0ba87b8611a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d0f8e5f4-2402-49aa-87ff-b23ee31ded36",
+              "memory_uid": "d42e48ca-39de-529f-bba2-332b779bd6c2"
+            }
+          ],
+          "reason": "This food-labeling response has no materially corresponding residential claim.",
+          "status": "RESOLVED",
+          "summary": "At the next gathering, the user labeled each food with its name and contributor.",
+          "uid": "410fc4fa-7f9e-5f2e-b11b-71cd579b0b47"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d0f8e5f4-2402-49aa-87ff-b23ee31ded36",
+              "memory_uid": "3958627e-a0fa-5e32-9e87-7ee874fc6fe7"
+            }
+          ],
+          "reason": "This family member’s leftover-handling preference is one-sided information.",
+          "status": "RESOLVED",
+          "summary": "The user’s younger brother prefers dividing barbecue leftovers into small take-home containers rather than discarding them.",
+          "uid": "2ccd1ac1-a96d-540b-a480-3cace5b27f01"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d0f8e5f4-2402-49aa-87ff-b23ee31ded36",
+              "memory_uid": "1f24b5c2-554c-5356-b335-c6879e53ba7f"
+            }
+          ],
+          "reason": "This capability boundary concerns barbecue history and uncertain future conditions, not the reference frame’s residential verification task.",
+          "status": "RESOLVED",
+          "summary": "The local agent can summarize prior barbecue preparation and responses but cannot know future attendees or weather.",
+          "uid": "2175d706-e68b-5750-a834-5faedf26e3fc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "d0f8e5f4-2402-49aa-87ff-b23ee31ded36",
+              "memory_uid": "d88b1b21-c58f-51d5-a60b-54bb11473d96"
+            }
+          ],
+          "reason": "This location-specific weather pattern is independently useful and has no reference-side counterpart.",
+          "status": "RESOLVED",
+          "summary": "The father’s yard has strong direct sun at midday, while shade and wind reduce felt temperature after 6 p.m.",
+          "uid": "757a09fa-a40d-5cd8-a923-7ba4d5b4459a"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers barbecue seating, conversation and venue choices, sunlight-sensitive timing, food labeling and leftovers, stored chairs, weather conditions, and limits on predicting attendance or weather.",
+        "differences": "",
+        "reference_only": "The reference covers a utility-account update, billing and notice handling, visit preparation and scheduling, a manager’s notice expectation, and limits on verifying service resolution."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "e709735b-f08c-4346-a373-f6b9001ce4be"
+    },
+    "analysis_digest": "40c91bba9dfd37c992c86b0a1cf46a7e674a184ba042464e1b68b3503e498851",
+    "key": "066e290b430ac52d42e4306fde8bda591ea187e7ba9c8ba1a854088cbbe60075",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 43.41388249999727,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "066e290b430ac52d42e4306fde8bda591ea187e7ba9c8ba1a854088cbbe60075",
+  "created_at": "2026-08-13T18:43:09.892209Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/07",
+  "pair_key": "ec211df134881298d1a41fd4607b78c5afbc807ab43156067b50eba19f96e06a",
+  "provider_seconds": 43.41388249999727,
+  "right": "task-3/local/personal-memory/2026/06",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

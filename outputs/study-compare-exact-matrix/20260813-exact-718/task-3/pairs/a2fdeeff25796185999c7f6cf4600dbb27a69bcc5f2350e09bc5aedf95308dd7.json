@@ -1,0 +1,361 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:45:08.186424+00:00",
+      "frames": [
+        {
+          "context_digest": "17b940da39446a9f934dff43ea7db561d14060561065852a34658fe4aaa1702f",
+          "context_name": "task-3/local/personal-memory/2024/10",
+          "context_uid": "7c55b789-a7d0-5070-9cf8-6f5e205415dc",
+          "memories": [
+            {
+              "content": "The user renewed their local library membership in October 2024.",
+              "content_digest": "eb9209032856bdbc69fbfa67e053bf8cd2bc23f8e8e25c0be9a5aa3f7e05f4e9",
+              "position": 0,
+              "uid": "04711182-acef-52a9-bd58-7fe98a54854a"
+            },
+            {
+              "content": "On an evening walk, the user saw an unlit street and took a detour along a main road.",
+              "content_digest": "62d001de1c6c4599e51c4e0713f577a2838e95e03f26064778e64542f390a599",
+              "position": 1,
+              "uid": "0229d0b1-750c-521b-a126-22c9d9d001c4"
+            },
+            {
+              "content": "On a day the user chose a well-lit pedestrian route, the walk took 12 minutes longer than usual.",
+              "content_digest": "ad3770626bef71bc9a29ec7772aeebeb70231e89b417b05b4da9c62a65b89afe",
+              "position": 2,
+              "uid": "e310fe87-8cde-5399-be00-9f8d7ec44e94"
+            },
+            {
+              "content": "On a day the user sat by the library window, they heard vehicle noise with every page they read.",
+              "content_digest": "090a190c68a5166d84cde1eed20f9a03c2b99722ed383eb3b5703489c01d85e0",
+              "position": 3,
+              "uid": "4f37306b-08cd-512a-b92e-ca6761da1a5b"
+            },
+            {
+              "content": "On the next visit, the user sat farther inside and did not move for an hour.",
+              "content_digest": "a071b4c7699fe17f63f0ab6263da1259aea00ad635169a313d4821f57071a86a",
+              "position": 4,
+              "uid": "5897ffa4-cfc6-5012-8931-15420ec5cf7c"
+            },
+            {
+              "content": "The user wrote the due date of a borrowed book on paper and then lost the paper.",
+              "content_digest": "43ef22512c79634cb9e3dc59006c7d06c3513a9d5d1f89eedbb392964cc34f02",
+              "position": 5,
+              "uid": "ce38bd13-3d51-5bff-9eba-ed70a8217356"
+            },
+            {
+              "content": "After entering the due date on their phone, the user saw a reminder the day before and put the book in their bag.",
+              "content_digest": "38782cba2f3bf260d62cf8e80c4a7e4a3a196d4d29ced3c4fe19d050e12c1e0a",
+              "position": 6,
+              "uid": "a304315b-bc0a-591b-b8c2-7eea5145819d"
+            },
+            {
+              "content": "Library staff expect a person requesting a replacement membership card to bring identity-verification material.",
+              "content_digest": "1ac59309aedbfa946661bf5bbc4d5141c420df059937893caba88725dfe77d24",
+              "position": 7,
+              "uid": "ef060b89-6c54-5c20-86be-c07766a35daa"
+            },
+            {
+              "content": "Check recent lighting and pedestrian conditions before proposing an evening walking route.",
+              "content_digest": "1b247adfb3723d14979b2cc7ecf6786c457d60e521b8708a6d08d38d3d1af437",
+              "position": 8,
+              "uid": "7669e5eb-c0fd-5182-ae9a-5f9ae95ddf2f"
+            },
+            {
+              "content": "The local agent can compare past reasons for detours but cannot directly observe current lighting and pedestrian conditions.",
+              "content_digest": "8a5f0e4cbb2fa6c19f2cb5d4e500ed460189b515604c87c6c2a4c8348c4efc44",
+              "position": 9,
+              "uid": "e96f7007-5814-5986-b121-4ce3b22506e1"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "2ccb75a8-be36-4cdd-8ef6-9f12356bb5b4"
+        },
+        {
+          "context_digest": "b727ef7cf1cb7ca0f00ea3598d36577397e092dcb632f55c3eafb942850922d7",
+          "context_name": "task-3/local/personal-memory/2025/04",
+          "context_uid": "720d2021-1ec5-52ab-ace4-a93e02b05ad9",
+          "memories": [
+            {
+              "content": "The user keeps the shared laundry-room access card in an entrance drawer.",
+              "content_digest": "3c98e367c99e0867f1217c891dc5d982c115fd9d1b4bc3957cca6dbb6338203b",
+              "position": 0,
+              "uid": "a1c67646-6a75-504a-9508-d69e1d04b3e5"
+            },
+            {
+              "content": "The user went downstairs 25 minutes after the laundry finished and received a note from another household.",
+              "content_digest": "44968f6f10c0ae2d1dd775eb066564dada6346c6f59bdacf90d687c57e6c1e0f",
+              "position": 1,
+              "uid": "9479e799-95d7-50d2-af62-d1e0914a389b"
+            },
+            {
+              "content": "For the next load, the user set a reminder five minutes before the end and removed the laundry immediately.",
+              "content_digest": "bc77b81f6126e44bbffeb4ae2dfbb641d31a9742b7a196a106ac385321b48958",
+              "position": 2,
+              "uid": "528cb5ea-8c36-5206-beaa-19432250ec4d"
+            },
+            {
+              "content": "The user washed light-colored clothes with new jeans, and color transferred onto white socks.",
+              "content_digest": "ed0f36cf5ebe8f9542ad39ba45fc109634d72f1cb2b266c15dfe6655e3df3add",
+              "position": 3,
+              "uid": "85fb1639-2176-5329-b490-3325ff030db4"
+            },
+            {
+              "content": "The user later washed the new jeans separately, and the color of the other clothes did not change.",
+              "content_digest": "6e47fe1a02ac39064ea9db2d06d8a1f01f80302825bbe412df745401612e4a84",
+              "position": 4,
+              "uid": "431d170a-863f-596d-97c0-0c9634524ee5"
+            },
+            {
+              "content": "On a day the user did not check the dryer filter, the clothes needed another drying cycle.",
+              "content_digest": "8127e9f3ea34724673517f1e260a73acfb70e287a7e7de84e196ad1cb815f5a7",
+              "position": 5,
+              "uid": "4df33adc-cfba-50f2-b141-e2ebed38b81c"
+            },
+            {
+              "content": "On the next use, after emptying the filter, the user finished drying in one cycle.",
+              "content_digest": "932cfb8fc93277783d8990dad62cfd3e1c9a86e39ad1bd019ce00dac632c53d5",
+              "position": 6,
+              "uid": "ba7daae9-938d-55a1-af20-21cd10d395d8"
+            },
+            {
+              "content": "The building manager judges that not leaving finished laundry for a long time is fair to other households.",
+              "content_digest": "5eabe2d3dff252bb250abcde8fe2d528362afb0e73e7628e839715c3e8a3cd56",
+              "position": 7,
+              "uid": "abbf8742-38e3-5810-b222-fe91e3340962"
+            },
+            {
+              "content": "When creating a shared laundry-room reminder, base it on the end time of the machine the user started.",
+              "content_digest": "e00bc6fe09fea6fde6a27817bd6824a141c1ac4a656b9659067b7e1af9881b1f",
+              "position": 8,
+              "uid": "06273d22-0b42-5c55-9d70-eda14084219a"
+            },
+            {
+              "content": "Even if the local agent knows where the card is kept, it cannot know which machines in the shared laundry room are currently available.",
+              "content_digest": "d03f5583c9e4c686307af90ff00ff54e5ac0990e34296b3d241e4f299d15f4b7",
+              "position": 9,
+              "uid": "03ac930e-d745-5c29-8c24-5ced669817f9"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "fc8c3f1d-8fe5-486d-aa1c-4401d64d425c"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames contain separate, noncompeting domains: library use and evening walking in the reference frame, and shared-laundry practices in the compared frame. Each preserves independent observations, practical adaptations, policies, and limits on knowledge; no shared operational claim or scope-aligned disagreement is present.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2ccb75a8-be36-4cdd-8ef6-9f12356bb5b4",
+              "memory_uid": "04711182-acef-52a9-bd58-7fe98a54854a"
+            }
+          ],
+          "reason": "This is an independently useful reference-only membership event with no operational counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "The user renewed their local library membership in October 2024.",
+          "uid": "b95ee470-5865-55af-9807-bb80265d032d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2ccb75a8-be36-4cdd-8ef6-9f12356bb5b4",
+              "memory_uid": "0229d0b1-750c-521b-a126-22c9d9d001c4"
+            },
+            {
+              "frame_uid": "2ccb75a8-be36-4cdd-8ef6-9f12356bb5b4",
+              "memory_uid": "e310fe87-8cde-5399-be00-9f8d7ec44e94"
+            }
+          ],
+          "reason": "Both reference memories describe the same underlying one-sided pattern of choosing better-lit pedestrian routes and preserving the associated time tradeoff.",
+          "status": "RESOLVED",
+          "summary": "The user’s safer evening-route choices avoided an unlit street but could lengthen the walk.",
+          "uid": "63879f3d-24b9-59ac-8d16-32c7f3b033ac"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2ccb75a8-be36-4cdd-8ef6-9f12356bb5b4",
+              "memory_uid": "4f37306b-08cd-512a-b92e-ca6761da1a5b"
+            },
+            {
+              "frame_uid": "2ccb75a8-be36-4cdd-8ef6-9f12356bb5b4",
+              "memory_uid": "5897ffa4-cfc6-5012-8931-15420ec5cf7c"
+            }
+          ],
+          "reason": "The reference memories form one observation-and-adaptation sequence about selecting a less disruptive library seat.",
+          "status": "RESOLVED",
+          "summary": "After vehicle noise disrupted reading by the library window, the user sat farther inside and remained there for an hour.",
+          "uid": "a3618225-ead0-5821-b193-bd59ba2a1962"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2ccb75a8-be36-4cdd-8ef6-9f12356bb5b4",
+              "memory_uid": "ce38bd13-3d51-5bff-9eba-ed70a8217356"
+            },
+            {
+              "frame_uid": "2ccb75a8-be36-4cdd-8ef6-9f12356bb5b4",
+              "memory_uid": "a304315b-bc0a-591b-b8c2-7eea5145819d"
+            }
+          ],
+          "reason": "The reference memories jointly express one library-return reminder pattern contrasting an unsuccessful paper note with an effective phone reminder.",
+          "status": "RESOLVED",
+          "summary": "A paper due-date note was lost, while a phone reminder prompted the user to place the borrowed book in their bag the day before it was due.",
+          "uid": "f98ba8bb-d5e2-5c0a-b0ac-6df7ae964d15"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2ccb75a8-be36-4cdd-8ef6-9f12356bb5b4",
+              "memory_uid": "ef060b89-6c54-5c20-86be-c07766a35daa"
+            }
+          ],
+          "reason": "This is an independent reference-only procedural expectation with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Library staff expect identity-verification material when someone requests a replacement membership card.",
+          "uid": "75da4da4-fc7e-594b-83d7-7411676773c8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "2ccb75a8-be36-4cdd-8ef6-9f12356bb5b4",
+              "memory_uid": "7669e5eb-c0fd-5182-ae9a-5f9ae95ddf2f"
+            },
+            {
+              "frame_uid": "2ccb75a8-be36-4cdd-8ef6-9f12356bb5b4",
+              "memory_uid": "e96f7007-5814-5986-b121-4ce3b22506e1"
+            }
+          ],
+          "reason": "The reference memories split one operational requirement and its capability rationale: current route conditions must be checked beyond the agent’s historical knowledge.",
+          "status": "RESOLVED",
+          "summary": "Evening-route proposals should use recent lighting and pedestrian conditions because the local agent can compare past detours but cannot directly observe current conditions.",
+          "uid": "7745f67a-ab76-5336-92e1-e2ff9f755fb7"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fc8c3f1d-8fe5-486d-aa1c-4401d64d425c",
+              "memory_uid": "a1c67646-6a75-504a-9508-d69e1d04b3e5"
+            },
+            {
+              "frame_uid": "fc8c3f1d-8fe5-486d-aa1c-4401d64d425c",
+              "memory_uid": "03ac930e-d745-5c29-8c24-5ced669817f9"
+            }
+          ],
+          "reason": "The compared memories jointly distinguish stable access-card knowledge from unavailable real-time machine-status knowledge.",
+          "status": "RESOLVED",
+          "summary": "The laundry-room access card is kept in an entrance drawer, but knowing its location does not reveal which shared machines are currently available.",
+          "uid": "c4dc084d-e0b0-539f-ab2e-7a3e94045f1f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fc8c3f1d-8fe5-486d-aa1c-4401d64d425c",
+              "memory_uid": "9479e799-95d7-50d2-af62-d1e0914a389b"
+            },
+            {
+              "frame_uid": "fc8c3f1d-8fe5-486d-aa1c-4401d64d425c",
+              "memory_uid": "528cb5ea-8c36-5206-beaa-19432250ec4d"
+            },
+            {
+              "frame_uid": "fc8c3f1d-8fe5-486d-aa1c-4401d64d425c",
+              "memory_uid": "abbf8742-38e3-5810-b222-fe91e3340962"
+            },
+            {
+              "frame_uid": "fc8c3f1d-8fe5-486d-aa1c-4401d64d425c",
+              "memory_uid": "06273d22-0b42-5c55-9d70-eda14084219a"
+            }
+          ],
+          "reason": "These compared memories collectively state one timely-removal practice, its observed motivation, its fairness rationale, and its machine-specific reminder basis.",
+          "status": "RESOLVED",
+          "summary": "Laundry should be removed promptly using a reminder tied to the started machine’s end time, reflecting fairness to other households and the user’s improved outcome after an earlier delay.",
+          "uid": "b21ad22f-4e99-5438-97bd-3bec61c435fd"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fc8c3f1d-8fe5-486d-aa1c-4401d64d425c",
+              "memory_uid": "85fb1639-2176-5329-b490-3325ff030db4"
+            },
+            {
+              "frame_uid": "fc8c3f1d-8fe5-486d-aa1c-4401d64d425c",
+              "memory_uid": "431d170a-863f-596d-97c0-0c9634524ee5"
+            }
+          ],
+          "reason": "The compared memories form one cause-and-adaptation sequence supporting separation of new jeans from lighter clothing.",
+          "status": "RESOLVED",
+          "summary": "New jeans transferred color when washed with light clothes, whereas washing them separately avoided changing the other clothes’ color.",
+          "uid": "a21c040e-67f9-5149-b409-77e2d590c50e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "fc8c3f1d-8fe5-486d-aa1c-4401d64d425c",
+              "memory_uid": "4df33adc-cfba-50f2-b141-e2ebed38b81c"
+            },
+            {
+              "frame_uid": "fc8c3f1d-8fe5-486d-aa1c-4401d64d425c",
+              "memory_uid": "ba7daae9-938d-55a1-af20-21cd10d395d8"
+            }
+          ],
+          "reason": "The compared memories jointly describe one observed relationship between clearing the dryer filter and drying efficiency.",
+          "status": "RESOLVED",
+          "summary": "Skipping the dryer-filter check required another cycle, while emptying the filter allowed drying to finish in one cycle.",
+          "uid": "a1e838cf-e7ef-54b9-8dee-d96f471b2de1"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers laundry-room access and availability, timely removal reminders and fairness, separating new jeans, and clearing the dryer filter for efficient drying.",
+        "differences": "",
+        "reference_only": "The reference covers library membership and card replacement, quieter seating, due-date reminders, and evening-route safety, including the need for current conditions beyond the local agent’s direct observation."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "2578c70c-120a-4a6d-a2f3-0faeeff7ec85"
+    },
+    "analysis_digest": "c9562b15521f66dc658c1583d7a6a04cbe5bfefff05cacd56d86b11133caa41b",
+    "key": "53ac656f9381c328f7969440c4823adcf43b9a0845af9d06bb8de88083dfb62d",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 44.58285474999866,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "53ac656f9381c328f7969440c4823adcf43b9a0845af9d06bb8de88083dfb62d",
+  "created_at": "2026-08-13T18:45:52.769253Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/10",
+  "pair_key": "a2fdeeff25796185999c7f6cf4600dbb27a69bcc5f2350e09bc5aedf95308dd7",
+  "provider_seconds": 44.58285474999866,
+  "right": "task-3/local/personal-memory/2025/04",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

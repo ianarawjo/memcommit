@@ -1,0 +1,361 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:54:18.489059+00:00",
+      "frames": [
+        {
+          "context_digest": "0af669f138c2617a4b35c0974627a23c7e5cb2405da5e306648b130efac7fbdf",
+          "context_name": "task-3/local/personal-memory/2025/12",
+          "context_uid": "c54e9dde-005a-5d20-b41b-1313b4713061",
+          "memories": [
+            {
+              "content": "The user stores wrapping paper and empty gift boxes on the upper shelf of the bedroom closet.",
+              "content_digest": "8f3b67dea69e1fa656f1e42e39700a71ebc250c4f6ec18dc4d4f88d467e86ad2",
+              "position": 0,
+              "uid": "bd69b616-6e7c-5440-8b29-586de68bcff6"
+            },
+            {
+              "content": "From photographs, the user discovered that they had given their mother the same type of kitchen item two years in a row.",
+              "content_digest": "6962b8dc03fd90e1c8badfda0d827008cc675b940e5975a5833ebe504af7d635",
+              "position": 1,
+              "uid": "90c60e57-d7db-5783-9ca8-2fd27b94d847"
+            },
+            {
+              "content": "This year, the user went to the market with their mother and let her choose a needed item directly.",
+              "content_digest": "9a27aa187ad2964f985ffcf376490f4b69d3c83f2034591187273bd89f61637a",
+              "position": 2,
+              "uid": "53bc23b2-8242-58b5-b496-a45c70bb8e41"
+            },
+            {
+              "content": "The user once ordered a gift late and had it delivered the day after the gathering.",
+              "content_digest": "245bb316eb5d0b0203c63eb9a2832c6cf73cb9e7e368bdb48a08bb6b702642d7",
+              "position": 3,
+              "uid": "3b097446-2c73-5414-8c06-6bacdf00a4c1"
+            },
+            {
+              "content": "The next year, the user checked the expected delivery date and ordered one week before the gathering.",
+              "content_digest": "97aed11c6b4f7d03bd6a55e27ef34ef539da85204787bb0468f1e2df51d958fc",
+              "position": 4,
+              "uid": "ce18c7a5-d1e9-5e5c-8739-b14fa7298feb"
+            },
+            {
+              "content": "The user did not put names on wrapped boxes and handed their older sister and younger brother each other's gifts.",
+              "content_digest": "48464eb29ee2d2e01cda00f0e3a13d116d4aa121d424aecc59644431e89f8957",
+              "position": 5,
+              "uid": "7657f424-cd24-54dd-8409-e04974dd1531"
+            },
+            {
+              "content": "The next time the user wrapped gifts, they wrote the recipient on the bottom of each box.",
+              "content_digest": "551e74aebf85d4ffee86b960c520b17f3f7e4d50428493934831a774d9e31db6",
+              "position": 6,
+              "uid": "d8e82ad3-902e-5f0c-aa8e-b23ce874982a"
+            },
+            {
+              "content": "The user's younger brother welcomes a snack the family can share immediately more than an item for his use alone.",
+              "content_digest": "ec32111520e2f12afc684c6441c075dcc0715fc450d0ce8f20408dfb955634a9",
+              "position": 7,
+              "uid": "8a941bf1-73bd-51d3-a069-62ecc9d56439"
+            },
+            {
+              "content": "The local agent can find past gift records and flag duplicates but cannot know what is needed this year.",
+              "content_digest": "f7574c7f91999992680a7e88e79270747fd744a46355800012c63319c286d731",
+              "position": 8,
+              "uid": "036edf8f-4680-5822-924e-0fdc691c8135"
+            },
+            {
+              "content": "Year-end deliveries may take longer than usual or have their expected dates changed.",
+              "content_digest": "cc0955e132cf6f4bec7f416e54ed2ffdbac22169adeeae7372a6ddc496da4b9e",
+              "position": 9,
+              "uid": "b9e9e222-a559-56e3-93b5-1f49a0e0d3ab"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "a5da13fb-3c03-4b61-a619-50f13762941c"
+        },
+        {
+          "context_digest": "df0924e320cd14a29eaed60f78e82fd509c4062949b35706b2a7cb94571fb599",
+          "context_name": "task-3/local/personal-memory/2026/04",
+          "context_uid": "16e860a8-7a90-5b7a-adc3-1c487ef97e03",
+          "memories": [
+            {
+              "content": "The user collects clothes for donation in a large bag beside the entrance.",
+              "content_digest": "39f2f01c59b7fa4ca7529d510e1b0a6ffab6706861042f771cfe97f6f806efac",
+              "position": 0,
+              "uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            },
+            {
+              "content": "After emptying an entire drawer at once, the user could not find a charger they needed.",
+              "content_digest": "674c33ba6475f42b29b03e6f8711e0216f983f3d37fee3dacf9336e3bb4596bf",
+              "position": 1,
+              "uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            },
+            {
+              "content": "During the next organizing session, the user sorted items by type and put only items to be discarded in the bag.",
+              "content_digest": "63104b5a7fd380f818c8758c51f9550c7a7fa41ff91f1dd314225d1824b69643",
+              "position": 2,
+              "uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            },
+            {
+              "content": "Even after photographing unworn clothes, the user did not take them out again for one month.",
+              "content_digest": "519f131096440719dcd3412f4439c5cfe44b7f402684170209708040692dc5fd",
+              "position": 3,
+              "uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            },
+            {
+              "content": "After moving those clothes to the donation bag, the user cleared one closet compartment.",
+              "content_digest": "45db58ae108a299344d982d8606fff26f733252da691cf01417e760909ff6057",
+              "position": 4,
+              "uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            },
+            {
+              "content": "The user nearly discarded an important paper with advertising and checked the recycling box again.",
+              "content_digest": "6bf928f67944656e5f3c68d8869c0cefd039a588f0ba735f94520231ef58017c",
+              "position": 5,
+              "uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            },
+            {
+              "content": "During the next organizing session, the user kept a separate document box and did not mix the papers.",
+              "content_digest": "adac8d4266c6b11e15d29c484665bc5dcc915f9aa319198b6a69d0e7b0131bb3",
+              "position": 6,
+              "uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            },
+            {
+              "content": "The user's mother asks the user to check whether she needs kitchen items in good condition before discarding them.",
+              "content_digest": "0752bc2ac00c0b1301c45ab4c2e73f63c57e6ebc4255dcc1c13330ffda906612",
+              "position": 7,
+              "uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            },
+            {
+              "content": "Confirm with the user before marking a personal document or another person's property as a disposal candidate.",
+              "content_digest": "17062e2cd4738619e81e211cb2f53d14e78c5f4eab9ae49053ce7e06935a7db5",
+              "position": 8,
+              "uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            },
+            {
+              "content": "The local agent cannot determine an object's emotional meaning from frequency of use alone.",
+              "content_digest": "9c86bcfe2b209bf7957dced0eab000b42f97b6a435d705ccaccb15e49be3691d",
+              "position": 9,
+              "uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "1fd4e1eb-104d-4521-8afc-503a208aeb26"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames share a preference for checking human needs directly and limiting automated inferences about subjective value. Otherwise, the reference centers on gift selection and preparation, while the compared frame centers on cautious decluttering, donation, and disposal practices.",
+      "relations": [
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "a5da13fb-3c03-4b61-a619-50f13762941c",
+              "memory_uid": "90c60e57-d7db-5783-9ca8-2fd27b94d847"
+            },
+            {
+              "frame_uid": "a5da13fb-3c03-4b61-a619-50f13762941c",
+              "memory_uid": "53bc23b2-8242-58b5-b496-a45c70bb8e41"
+            },
+            {
+              "frame_uid": "1fd4e1eb-104d-4521-8afc-503a208aeb26",
+              "memory_uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+            }
+          ],
+          "reason": "The reference describes duplicate gifting followed by direct selection, while the compared frame requests consultation before useful kitchen items are discarded; these contexts support the same consultation policy without conflict.",
+          "status": "RESOLVED",
+          "summary": "Kitchen-item decisions involving the user’s mother are informed by checking her current needs rather than relying only on prior gift history.",
+          "uid": "f6e9465d-1f7a-595b-a7ac-f3b89f913508"
+        },
+        {
+          "kind": "COMPATIBLE",
+          "members": [
+            {
+              "frame_uid": "a5da13fb-3c03-4b61-a619-50f13762941c",
+              "memory_uid": "036edf8f-4680-5822-924e-0fdc691c8135"
+            },
+            {
+              "frame_uid": "1fd4e1eb-104d-4521-8afc-503a208aeb26",
+              "memory_uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+            }
+          ],
+          "reason": "The claims impose complementary limits on automated judgment and can jointly govern how the agent interprets behavioral evidence.",
+          "status": "RESOLVED",
+          "summary": "The local agent may use observable records or usage patterns for narrow signals but cannot infer current subjective need or emotional meaning from them alone.",
+          "uid": "0fc6b00c-ea6c-59cd-a5de-d0b2fe0358a5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a5da13fb-3c03-4b61-a619-50f13762941c",
+              "memory_uid": "bd69b616-6e7c-5440-8b29-586de68bcff6"
+            }
+          ],
+          "reason": "This is independently useful gift-supply location information found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "Wrapping paper and empty gift boxes are stored on the upper bedroom-closet shelf.",
+          "uid": "b8fb16da-0c33-59ee-934f-41b117e3fa2c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a5da13fb-3c03-4b61-a619-50f13762941c",
+              "memory_uid": "3b097446-2c73-5414-8c06-6bacdf00a4c1"
+            },
+            {
+              "frame_uid": "a5da13fb-3c03-4b61-a619-50f13762941c",
+              "memory_uid": "ce18c7a5-d1e9-5e5c-8739-b14fa7298feb"
+            },
+            {
+              "frame_uid": "a5da13fb-3c03-4b61-a619-50f13762941c",
+              "memory_uid": "b9e9e222-a559-56e3-93b5-1f49a0e0d3ab"
+            }
+          ],
+          "reason": "These reference memories form one delivery-planning lesson with no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "A late gift delivery led the user to check expected dates and order a week ahead, especially given uncertain year-end delivery timing.",
+          "uid": "ca2d9f67-c769-52a8-9eb2-c0e90eeb4ac0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a5da13fb-3c03-4b61-a619-50f13762941c",
+              "memory_uid": "7657f424-cd24-54dd-8409-e04974dd1531"
+            },
+            {
+              "frame_uid": "a5da13fb-3c03-4b61-a619-50f13762941c",
+              "memory_uid": "d8e82ad3-902e-5f0c-aa8e-b23ce874982a"
+            }
+          ],
+          "reason": "These reference memories describe one gift-labeling practice absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "After exchanging siblings’ unlabeled gifts by mistake, the user began writing each recipient’s name on the box bottom.",
+          "uid": "f4ff5219-cb73-50de-9934-6b433c79f8b5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a5da13fb-3c03-4b61-a619-50f13762941c",
+              "memory_uid": "8a941bf1-73bd-51d3-a069-62ecc9d56439"
+            }
+          ],
+          "reason": "This recipient preference appears only in the reference frame and is independently useful.",
+          "status": "RESOLVED",
+          "summary": "The younger brother prefers a snack the family can share immediately over an item intended only for him.",
+          "uid": "7c467e5c-fa67-5920-b25d-609a9b878165"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1fd4e1eb-104d-4521-8afc-503a208aeb26",
+              "memory_uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+            }
+          ],
+          "reason": "This donation-storage location appears only in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Clothes intended for donation are collected in a large bag beside the entrance.",
+          "uid": "d786bacc-dbce-5bb6-976e-3716ae3a011c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1fd4e1eb-104d-4521-8afc-503a208aeb26",
+              "memory_uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+            },
+            {
+              "frame_uid": "1fd4e1eb-104d-4521-8afc-503a208aeb26",
+              "memory_uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+            }
+          ],
+          "reason": "These compared memories form one organizing-method lesson absent from the reference frame.",
+          "status": "RESOLVED",
+          "summary": "After losing track of a needed charger during wholesale drawer emptying, the user adopted type-based sorting and reserved the bag for discard items.",
+          "uid": "655e576c-a08b-5cd5-bcfd-b5a32b329542"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1fd4e1eb-104d-4521-8afc-503a208aeb26",
+              "memory_uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+            },
+            {
+              "frame_uid": "1fd4e1eb-104d-4521-8afc-503a208aeb26",
+              "memory_uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+            }
+          ],
+          "reason": "These compared memories jointly describe the effect of physically advancing clothes toward donation.",
+          "status": "RESOLVED",
+          "summary": "Photographing unworn clothes did not prompt action, but moving them into the donation bag cleared a closet compartment.",
+          "uid": "264a5be1-cbac-5367-a0d8-d5ff420a9138"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1fd4e1eb-104d-4521-8afc-503a208aeb26",
+              "memory_uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+            },
+            {
+              "frame_uid": "1fd4e1eb-104d-4521-8afc-503a208aeb26",
+              "memory_uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+            },
+            {
+              "frame_uid": "1fd4e1eb-104d-4521-8afc-503a208aeb26",
+              "memory_uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+            }
+          ],
+          "reason": "The near-loss of an important paper, subsequent document-box separation, and confirmation rule form one compared-only disposal safeguard.",
+          "status": "RESOLVED",
+          "summary": "Documents and other people’s property require separation from ordinary discard materials and confirmation before disposal candidacy.",
+          "uid": "e55704f4-6da5-57d5-8c34-ab38fe50f521"
+        }
+      ],
+      "reports": {
+        "both": "Both favor direct consultation about the mother’s kitchen-item needs and recognize that observable history or usage cannot establish current personal meaning or need.",
+        "compared_only": "The compared frame covers staged sorting, donation follow-through, closet clearing, and safeguards for documents or other people’s property.",
+        "differences": "",
+        "reference_only": "The reference covers gift-supply storage, delivery planning, recipient labeling, and the younger brother’s preference for shareable snacks."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "e79a8a3d-6ba2-423d-9e4e-2014f7816262"
+    },
+    "analysis_digest": "6404c51c6e54a4e1f0f87b5869b9f0b5d55612306b5e746daeb7e11f4e1cd1c2",
+    "key": "d5d8dd31e5f4b64a5259afccba2265f0a9a56571b62e1fc8837ff0505e23ede9",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 55.8389770419999,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "d5d8dd31e5f4b64a5259afccba2265f0a9a56571b62e1fc8837ff0505e23ede9",
+  "created_at": "2026-08-13T18:55:14.327566Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2025/12",
+  "pair_key": "f3eee4265958185d7038c0cb1e92dff57cbbc74f4e1cf80402773d02896fced2",
+  "provider_seconds": 55.8389770419999,
+  "right": "task-3/local/personal-memory/2026/04",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

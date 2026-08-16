@@ -1,0 +1,300 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:26:14.530292+00:00",
+      "frames": [
+        {
+          "context_digest": "d2c716d52357c4200adc8772d5823715ffd736eb766028c1c62bbb32852bc344",
+          "context_name": "task-2/advisor1/scope",
+          "context_uid": "6db29abe-5784-5eec-acaa-060bac0e11f1",
+          "memories": [
+            {
+              "content": "Define in one sentence the user groups and usage contexts to which the design knowledge does not apply.",
+              "content_digest": "3193ffe501a06d6148b39c333853b42bc0278b2ab3c3df88162b049548ff16bb",
+              "position": 0,
+              "uid": "e594a6ab-81e9-5e5f-8ef5-e6bb8f3760d7"
+            },
+            {
+              "content": "Reviewers judge the generalization boundary of results through explicitly excluded targets and situations.",
+              "content_digest": "a929649a7bd07f29f31a8cd1969a3c160ba5f61c0def76e204443c30234f84b0",
+              "position": 1,
+              "uid": "31cdacff-7c49-547d-9f97-598a07b67fb6"
+            },
+            {
+              "content": "Specify user goals, interaction conditions, and technological constraints under which the proposed design knowledge can be transferred.",
+              "content_digest": "6ae1bfaeadb1863db1997685527706d210a379a376a24d3de1168e952f847627",
+              "position": 2,
+              "uid": "1459d986-4dc9-51f3-bf13-dbb0b07045c8"
+            },
+            {
+              "content": "Small-scale formative studies can support analytic generalization distinct from statistical representativeness when results are expressed in terms of design conditions and mechanisms.",
+              "content_digest": "1963572a303acbf383890b7d97b52349f572df761e89ea3fd5116058cd2e1cea",
+              "position": 3,
+              "uid": "1db5fcd6-f93c-5630-9810-053c10b5ceba"
+            },
+            {
+              "content": "The author of this proposal tends to apply design knowledge derived from an accessible sample to a broader user population.",
+              "content_digest": "df2a7f1284c1994c6dec49eb7995acd1ed341a9e6b8f4b06c854d85fa9d77d6c",
+              "position": 4,
+              "uid": "fd29c315-521f-53c0-add5-c668ec318a43"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "24bd3411-e0c3-4f16-ba8d-3d32bd7a7047"
+        },
+        {
+          "context_digest": "1396f236b90acd99b836eb5367828f8319d0465ea25b66f696a7f583f4f5ecf6",
+          "context_name": "task-2/advisor2/terminology",
+          "context_uid": "a2976fe7-0e07-5045-9e91-6a214128a482",
+          "memories": [
+            {
+              "content": "Do not change names referring to the same user roles, system functions, or operational stages midway.",
+              "content_digest": "a0f821f4497e7518806857e9005d12e27f6043fda6dbd91ba33ef188e0a3be16",
+              "position": 0,
+              "uid": "e2ae95ed-9033-5625-9179-33f4cf4a95c1"
+            },
+            {
+              "content": "Use abbreviations only for long recurring terms in a two-page proposal.",
+              "content_digest": "e6cad365bd42a8327e3cac92b8cf49cc456fa3e2f5c6624797fa509c0aac6846",
+              "position": 1,
+              "uid": "4be60357-09fa-523d-8c8d-8e03ace8fde9"
+            },
+            {
+              "content": "Present the full term and abbreviation together when using an abbreviation for the first time.",
+              "content_digest": "7b7c1f90727c822edbc13af17d64d45552d1c7ddb5fa18e665369423fd93ffbe",
+              "position": 2,
+              "uid": "0dd5d707-7d13-5be0-8377-421507650cba"
+            },
+            {
+              "content": "Refer to participants based on the roles they perform in the study rather than their status.",
+              "content_digest": "d89feff6e3dad0eea0ba4b1b291b140048af9f0f89d84c8ac196ae547a7b03bd",
+              "position": 3,
+              "uid": "9b3f0cde-7c3e-5b6a-9500-855f31d65ef2"
+            },
+            {
+              "content": "Reviewers from different subfields find it difficult to infer an abbreviation from context alone when it is not defined at first use.",
+              "content_digest": "4ffe91fb52db337a4ad30dc56d0439e12851f17f411c414b6d673e79bd91e68b",
+              "position": 4,
+              "uid": "8c896114-85e6-5c3c-ae3f-6e8e6b59f2fe"
+            },
+            {
+              "content": "When introducing an operational role for the first time, define both the decisions it can make and the actions it performs.",
+              "content_digest": "916b66a818f988f69e2e3c90f0ed0dbb7d29fc9e030b3fc7f822b3817106cbc3",
+              "position": 5,
+              "uid": "dc9e3f25-7aac-500b-b431-f6d810dd09bb"
+            },
+            {
+              "content": "Individuals holding identical job titles may possess different system modification privileges and data access rights depending on their deployment site.",
+              "content_digest": "e0315abc2f42a8f2657aa52e04899096ce799ba790fcd77d22b4196f917790ac",
+              "position": 6,
+              "uid": "04956cab-eb3a-5b71-be45-b1edd6c4a216"
+            },
+            {
+              "content": "The user tends to group distinct field roles under the single label “user.”",
+              "content_digest": "ba75af998618324dbdfa225a2cd503c42888f77daf4d44eb4f79b3a7db8e4bbe",
+              "position": 7,
+              "uid": "fc8613e8-86ca-5322-bb5d-03dfbca71c46"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "48b9321f-6403-40be-af5b-7d685c3761af"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The reference frame focuses on transfer boundaries, analytic generalization, and overextension from accessible samples. The compared frame independently addresses terminology, abbreviations, operational-role clarity, site-dependent permissions, and collapsing distinct roles under “user.” No substantive overlap or scope-aligned disagreement is established.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "24bd3411-e0c3-4f16-ba8d-3d32bd7a7047",
+              "memory_uid": "e594a6ab-81e9-5e5f-8ef5-e6bb8f3760d7"
+            },
+            {
+              "frame_uid": "24bd3411-e0c3-4f16-ba8d-3d32bd7a7047",
+              "memory_uid": "31cdacff-7c49-547d-9f97-598a07b67fb6"
+            }
+          ],
+          "reason": "The instruction to state exclusions and the account of how reviewers use them express complementary parts of one reference-only claim about defining applicability boundaries.",
+          "status": "RESOLVED",
+          "summary": "Explicitly excluded users and situations establish the boundary of generalization.",
+          "uid": "e9f1df9d-2cf5-59bd-a993-deb6f8a9509c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "24bd3411-e0c3-4f16-ba8d-3d32bd7a7047",
+              "memory_uid": "1459d986-4dc9-51f3-bf13-dbb0b07045c8"
+            }
+          ],
+          "reason": "This independently specifies the positive conditions under which design knowledge may transfer and has no counterpart in the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Transferability should be stated through user goals, interaction conditions, and technological constraints.",
+          "uid": "ee84132a-014a-5361-9969-ae03b0a298b6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "24bd3411-e0c3-4f16-ba8d-3d32bd7a7047",
+              "memory_uid": "1db5fcd6-f93c-5630-9810-053c10b5ceba"
+            }
+          ],
+          "reason": "This is an independent reference-only methodological claim about the basis and limits of generalization.",
+          "status": "RESOLVED",
+          "summary": "Small formative studies may support analytic generalization through design conditions and mechanisms without statistical representativeness.",
+          "uid": "cc29e50d-c26c-555a-8630-5d2a5132a8cc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "24bd3411-e0c3-4f16-ba8d-3d32bd7a7047",
+              "memory_uid": "fd29c315-521f-53c0-add5-c668ec318a43"
+            }
+          ],
+          "reason": "This reference-only observation identifies a specific overgeneralization tendency rather than prescribing transfer boundaries or terminology.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to extend knowledge from an accessible sample to a broader population.",
+          "uid": "b5f9a22b-9613-5c5e-a86d-63a92d03edfa"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "48b9321f-6403-40be-af5b-7d685c3761af",
+              "memory_uid": "e2ae95ed-9033-5625-9179-33f4cf4a95c1"
+            }
+          ],
+          "reason": "This is an independent compared-only rule about terminological continuity.",
+          "status": "RESOLVED",
+          "summary": "Names for the same roles, functions, and stages should remain consistent throughout the proposal.",
+          "uid": "26e8850f-30a0-5c96-adeb-65fe19203353"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "48b9321f-6403-40be-af5b-7d685c3761af",
+              "memory_uid": "4be60357-09fa-523d-8c8d-8e03ace8fde9"
+            }
+          ],
+          "reason": "This compared-only rule governs whether abbreviation is warranted, independently of first-use definition.",
+          "status": "RESOLVED",
+          "summary": "In a two-page proposal, abbreviations should be reserved for long recurring terms.",
+          "uid": "04f90ba6-e899-5834-9c24-a21f4a11e318"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "48b9321f-6403-40be-af5b-7d685c3761af",
+              "memory_uid": "0dd5d707-7d13-5be0-8377-421507650cba"
+            },
+            {
+              "frame_uid": "48b9321f-6403-40be-af5b-7d685c3761af",
+              "memory_uid": "8c896114-85e6-5c3c-ae3f-6e8e6b59f2fe"
+            }
+          ],
+          "reason": "The first-use rule and the reviewer-comprehension observation form one compared-only claim and its rationale.",
+          "status": "RESOLVED",
+          "summary": "An abbreviation should be paired with its full term at first use because context alone may not make it clear across subfields.",
+          "uid": "25f334da-6dd5-5820-b9b2-70d4bb13154d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "48b9321f-6403-40be-af5b-7d685c3761af",
+              "memory_uid": "9b3f0cde-7c3e-5b6a-9500-855f31d65ef2"
+            }
+          ],
+          "reason": "This is an independent compared-only naming principle for participants.",
+          "status": "RESOLVED",
+          "summary": "Study participants should be named by the roles they perform rather than by status.",
+          "uid": "d060e67a-3917-5436-8b1e-fd3d69d583a9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "48b9321f-6403-40be-af5b-7d685c3761af",
+              "memory_uid": "dc9e3f25-7aac-500b-b431-f6d810dd09bb"
+            }
+          ],
+          "reason": "This compared-only requirement concerns the substantive definition of roles, not merely their labels.",
+          "status": "RESOLVED",
+          "summary": "A newly introduced operational role should be defined by both its decisions and its actions.",
+          "uid": "a0b2d7cc-d66c-5476-b064-ecc354e8e0cb"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "48b9321f-6403-40be-af5b-7d685c3761af",
+              "memory_uid": "04956cab-eb3a-5b71-be45-b1edd6c4a216"
+            }
+          ],
+          "reason": "This compared-only observation identifies deployment site as a source of operational variation among nominally identical roles.",
+          "status": "RESOLVED",
+          "summary": "Identical job titles may conceal site-dependent differences in modification privileges and data access.",
+          "uid": "33703f36-13c0-520a-b97e-6675bdc47a5c"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "48b9321f-6403-40be-af5b-7d685c3761af",
+              "memory_uid": "fc8613e8-86ca-5322-bb5d-03dfbca71c46"
+            }
+          ],
+          "reason": "This compared-only observation identifies a specific role-collapsing tendency.",
+          "status": "RESOLVED",
+          "summary": "The user tends to collapse distinct field roles into the single label “user.”",
+          "uid": "3bc3b1e6-6cd1-5bee-9e9b-5929bb443a37"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame promotes stable, role-based terminology; disciplined abbreviation use; explicit role definitions; attention to site-specific permissions; and avoidance of collapsing distinct roles into “user.”",
+        "differences": "",
+        "reference_only": "The reference addresses exclusions and transfer conditions, distinguishes analytic from statistical generalization, and flags overextension from accessible samples."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "d6a6163a-a107-4f7f-85dd-0ad3c5dac583"
+    },
+    "analysis_digest": "4472eb39c4fb8c8977caffca7eae39abf61bdcbaec95625134b0a4573d791a32",
+    "key": "08509d27acef1b0f45860fcbe93245453a8b958c8554350db2227b1cbf13615f",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 35.45552237499942,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "08509d27acef1b0f45860fcbe93245453a8b958c8554350db2227b1cbf13615f",
+  "created_at": "2026-08-13T18:26:49.985410Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/scope",
+  "pair_key": "afa897941a69ea037a30672b365ac934397e22c4e2793f50226a3c4ff59e507e",
+  "provider_seconds": 35.45552237499942,
+  "right": "task-2/advisor2/terminology",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

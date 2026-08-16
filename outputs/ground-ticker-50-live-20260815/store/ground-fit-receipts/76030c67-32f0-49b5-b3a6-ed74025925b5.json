@@ -1,0 +1,1030 @@
+{
+  "schema_version": 1,
+  "ruleset_version": "ground-fit-v1",
+  "uid": "76030c67-32f0-49b5-b3a6-ed74025925b5",
+  "ground_uid": "6848208c-c01b-4ed0-bf3c-ec2d50d4d170",
+  "ground_name": "ticker-50-live",
+  "ground_revision": 114,
+  "ground_digest": "45fbb7631a6e650320af592664ab4b797ce7ef1fd00f04172f660f319344194d",
+  "rules": [
+    {
+      "uid": "bd3c6e30-167b-4522-afd3-0c357df60f58",
+      "alias": "r1",
+      "statement": "Synthetic ticker policy: (1) When generating a base symbol, remove leading articles, conjunction-only tokens, and corporate or legal suffixes, then concatenate the initial alphanumeric character of each remaining word in uppercase. (2) When the normalized organization name has only one substantive word, use up to its first four letters in uppercase rather than a one-letter initial. (3) Treat hyphens, apostrophes, periods, plus signs, and accented letters as normalization boundaries or removable punctuation, while preserving the initials of the resulting substantive components in transliterated uppercase form. (4) For a numeric token, preserve a compact numeric contribution—typically its first digit—alongside the initials of substantive word tokens; if a token begins with digits followed by letters, retain the leading digit as that token’s contribution. (5) Preserve meaningful uppercase initialisms embedded in a name as their constituent letters when forming the compact symbol, subject to the demonstrated overall four-character base-symbol scale. (6) When a name ends with “Class X,” generate the organization’s base symbol from the preceding name and append “.X” in uppercase; do not treat an internal occurrence of “Class” as a share-class suffix."
+    }
+  ],
+  "examples": [
+    {
+      "uid": "1c1f0af3-7ef4-4b4e-966b-6e7f4afa19dc",
+      "alias": "e1",
+      "statement": "Applying the synthetic ticker policy to \"North Star Energy Inc.\" produces \"NSE\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "6461ea73-9d7d-43bf-84ad-ad58cccc9e86",
+      "alias": "e2",
+      "statement": "Applying the synthetic ticker policy to \"Blue River Logistics LLC\" produces \"BRL\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "a54fe1c7-93fa-4661-b922-ad74fa5ae7cb",
+      "alias": "e3",
+      "statement": "Applying the synthetic ticker policy to \"Redwood\" produces \"REDW\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "b7d58350-f293-4ac5-aee1-78eaa770be83",
+      "alias": "e4",
+      "statement": "Applying the synthetic ticker policy to \"Harbor Light Studios Ltd.\" produces \"HLS\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "33e9bec9-c3e9-4873-a489-687aed6a9e90",
+      "alias": "e5",
+      "statement": "Applying the synthetic ticker policy to \"The Green Valley Bank Corporation\" produces \"GVB\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "2c203665-a7e6-46e9-a472-b71e32a52c24",
+      "alias": "e6",
+      "statement": "Applying the synthetic ticker policy to \"Cedar & Stone Foods Co.\" produces \"CSF\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "d1ddb2e2-302f-41c4-8df1-fbffc00f9c1f",
+      "alias": "e7",
+      "statement": "Applying the synthetic ticker policy to \"Axiom AI Technologies Inc.\" produces \"AAT\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "93bc250e-54f8-42ab-a577-e2481bc8c152",
+      "alias": "e8",
+      "statement": "Applying the synthetic ticker policy to \"Nova Health Group PLC\" produces \"NHG\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "49cee4c6-53d6-446a-b34b-30ce7fdf6cdf",
+      "alias": "e9",
+      "statement": "Applying the synthetic ticker policy to \"North Star Energy Inc. Class B\" produces \"NSE.B\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "a90384c1-5638-466d-a5fb-783f91330eeb",
+      "alias": "e10",
+      "statement": "Applying the synthetic ticker policy to \"Blue River Logistics LLC Class A\" produces \"BRL.A\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "e3ca6391-9d0c-417a-8c73-c2fcda3ead86",
+      "alias": "e11",
+      "statement": "Applying the synthetic ticker policy to \"Redwood Class C\" produces \"REDW.C\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "838e85e5-6fa6-463f-b609-e92c8616af84",
+      "alias": "e12",
+      "statement": "Applying the synthetic ticker policy to \"Harbor Light Studios Ltd. Class B\" produces \"HLS.B\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "ffc1f140-2fe6-4472-b403-70f14301e181",
+      "alias": "e13",
+      "statement": "Applying the synthetic ticker policy to \"North-West Transit Inc.\" produces \"NWT\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "a12a6258-b1f3-4fa4-b282-91010d15d4ad",
+      "alias": "e14",
+      "statement": "Applying the synthetic ticker policy to \"O'Brien Market Group\" produces \"OMG\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "481330cb-ed38-4761-9284-54999f0da728",
+      "alias": "e15",
+      "statement": "Applying the synthetic ticker policy to \"Studio 54 Media LLC\" produces \"S5M\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "46677e36-affa-4c0a-adcc-0e46d780582c",
+      "alias": "e16",
+      "statement": "Applying the synthetic ticker policy to \"Seven Seas 2 Logistics Inc.\" produces \"SS2L\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "3b99aa29-a809-4cb5-8d92-b4ee7ec00883",
+      "alias": "e17",
+      "statement": "Applying the synthetic ticker policy to \"Quantum-X Labs Corp.\" produces \"QXL\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "2e199185-4ec5-4ff9-9136-ced9c7163d83",
+      "alias": "e18",
+      "statement": "Applying the synthetic ticker policy to \"Atlas Research & Development Ltd.\" produces \"ARD\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "b794335b-fe0a-4fad-bef1-ba77128bc522",
+      "alias": "e19",
+      "statement": "Applying the synthetic ticker policy to \"One World 360 Media PLC\" produces \"OW3M\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "56e9799b-7468-4945-bbd3-84ab1168dbb8",
+      "alias": "e20",
+      "statement": "Applying the synthetic ticker policy to \"Élan Bio Systems Inc.\" produces \"EBS\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "1b7cf732-ef3f-40f3-bb38-b1680b7915dd",
+      "alias": "e21",
+      "statement": "Applying the synthetic ticker policy to \"Sunrise Robotics Company\" produces \"SR\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "0a44f7e1-98dd-46dc-afc8-340943cb1206",
+      "alias": "e22",
+      "statement": "Applying the synthetic ticker policy to \"Polar Data Works Incorporated\" produces \"PDW\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "1746612e-1144-47fd-beb3-5230275c5524",
+      "alias": "e23",
+      "statement": "Applying the synthetic ticker policy to \"Maple Leaf Foods Limited\" produces \"MLF\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "8841201c-63f8-43eb-850a-139aa89ac1cb",
+      "alias": "e24",
+      "statement": "Applying the synthetic ticker policy to \"Urban Ocean Analytics LLC\" produces \"UOA\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "84e2a052-b579-4685-8e69-d2f686f85cd9",
+      "alias": "e25",
+      "statement": "Applying the synthetic ticker policy to \"BrightMind AI Labs Inc.\" produces \"BAL\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "dba983d4-4a85-4686-8e24-90e624673602",
+      "alias": "e26",
+      "statement": "Applying the synthetic ticker policy to \"Deep Space XR Studios Ltd.\" produces \"DSXS\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "0954b29e-6082-41ac-8481-a32b04534d1f",
+      "alias": "e27",
+      "statement": "Applying the synthetic ticker policy to \"Lake-View Materials Corp.\" produces \"LVM\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "fc84b190-d602-4a87-9946-802bc8de8069",
+      "alias": "e28",
+      "statement": "Applying the synthetic ticker policy to \"King's Road Retail Company\" produces \"KRR\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "fc7d9bd8-51b8-49fe-96c2-3b11f55de68d",
+      "alias": "e29",
+      "statement": "Applying the synthetic ticker policy to \"The Northern Grid Inc.\" produces \"NG\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "3fd3ff68-2003-4baa-a797-91f1844e3b8e",
+      "alias": "e30",
+      "statement": "Applying the synthetic ticker policy to \"East & West Mobility LLC\" produces \"EWM\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "3ed16001-405b-4322-8e8b-6c503ece93a9",
+      "alias": "e31",
+      "statement": "Applying the synthetic ticker policy to \"24 Seven Energy Ltd.\" produces \"2SE\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "bf9df4dd-8a51-4abc-bc1f-f2f9e6948f27",
+      "alias": "e32",
+      "statement": "Applying the synthetic ticker policy to \"Route 66 Systems Corp.\" produces \"R6S\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "5e294d10-817f-469a-8b6f-0dd35a743108",
+      "alias": "e33",
+      "statement": "Applying the synthetic ticker policy to \"Alpha Beta Gamma Delta Inc.\" produces \"ABGD\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "89ed9cd0-40df-433c-9e48-d0af69d58609",
+      "alias": "e34",
+      "statement": "Applying the synthetic ticker policy to \"Mono LLC\" produces \"MONO\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "a410879c-ef54-48c4-80df-951ba4aab18b",
+      "alias": "e35",
+      "statement": "Applying the synthetic ticker policy to \"Zürich Cloud AG\" produces \"ZC\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "86415dff-263e-4931-9ff9-2b578da55f6b",
+      "alias": "e36",
+      "statement": "Applying the synthetic ticker policy to \"Silver Pine Bio-Tech Inc.\" produces \"SPBT\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "0f51a883-4637-4b20-ba48-dbaef8958492",
+      "alias": "e37",
+      "statement": "Applying the synthetic ticker policy to \"Open Source Network Foundation\" produces \"OSNF\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "fd63ed2b-7ad3-4957-a1cb-edbc7ffedba9",
+      "alias": "e38",
+      "statement": "Applying the synthetic ticker policy to \"First Class Ventures Class B\" produces \"FCV.B\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "59f6631e-2e9d-472d-ba3d-ad43a6690341",
+      "alias": "e39",
+      "statement": "Applying the synthetic ticker policy to \"MegaData 2X Labs LLC\" produces \"M2L\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "2da5f58c-d3c1-41cf-a7d6-b28b68d84043",
+      "alias": "e40",
+      "statement": "Applying the synthetic ticker policy to \"C++ Systems Inc.\" produces \"CS\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "dccd8d2e-1ee2-4cfd-ac0e-7956748e98fe",
+      "alias": "e41",
+      "statement": "Applying the synthetic ticker policy to \"R&D Signal Labs Ltd.\" produces \"RSL\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "44c7c13b-dea3-4ae1-b03a-9e8989ec68d8",
+      "alias": "e42",
+      "statement": "Applying the synthetic ticker policy to \"Acme.com Services Corp.\" produces \"AS\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "0bc8aba9-2424-4706-abec-a61e6f588102",
+      "alias": "e43",
+      "statement": "Applying the synthetic ticker policy to \"Neo-Élan Mobility PLC\" produces \"NEM\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "f86ee230-742d-4dce-9e93-06986ad538f1",
+      "alias": "e44",
+      "statement": "Applying the synthetic ticker policy to \"One-One-One Holdings Inc.\" produces \"OOOH\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "410224e5-fa4b-460c-9478-c44f3db8c29f",
+      "alias": "e45",
+      "statement": "Applying the synthetic ticker policy to \"Delta 9 Bio Group LLC\" produces \"D9BG\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "3707f25b-6132-41eb-ad0a-e5c26d531268",
+      "alias": "e46",
+      "statement": "Applying the synthetic ticker policy to \"New York AI Exchange Inc.\" produces \"NYAE\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "94e498dc-5fd3-484e-8a27-10b2c64bb608",
+      "alias": "e47",
+      "statement": "Applying the synthetic ticker policy to \"The 7 Hills Company\" produces \"7H\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "45d90322-eea8-48da-bd7c-04ad9d083783",
+      "alias": "e48",
+      "statement": "Applying the synthetic ticker policy to \"Redwood Research Class A\" produces \"RR.A\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "9210dffd-a1e8-4228-b442-ad5dfddb7739",
+      "alias": "e49",
+      "statement": "Applying the synthetic ticker policy to \"A B C Networks Ltd.\" produces \"ABCN\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    },
+    {
+      "uid": "01ea670c-3493-4998-bc74-02d43ffe9c2b",
+      "alias": "e50",
+      "statement": "Applying the synthetic ticker policy to \"Global Quantum 360 Class C\" produces \"GQ3.C\".",
+      "projection": "PROPOSITION",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "input_text": null,
+      "expected_output": null
+    }
+  ],
+  "judgments": [
+    {
+      "example_uid": "1c1f0af3-7ef4-4b4e-966b-6e7f4afa19dc",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "Removing the legal suffix and taking the initials of North, Star, and Energy yields NSE.",
+      "observed": ""
+    },
+    {
+      "example_uid": "6461ea73-9d7d-43bf-84ad-ad58cccc9e86",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "Removing LLC and taking the initials of Blue, River, and Logistics yields BRL.",
+      "observed": ""
+    },
+    {
+      "example_uid": "a54fe1c7-93fa-4661-b922-ad74fa5ae7cb",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "Redwood is the sole substantive word, so its first four letters yield REDW.",
+      "observed": ""
+    },
+    {
+      "example_uid": "b7d58350-f293-4ac5-aee1-78eaa770be83",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "Removing Ltd. and taking the substantive-word initials yields HLS.",
+      "observed": ""
+    },
+    {
+      "example_uid": "33e9bec9-c3e9-4873-a489-687aed6a9e90",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "Removing the leading article and corporate suffix leaves Green Valley Bank, yielding GVB.",
+      "observed": ""
+    },
+    {
+      "example_uid": "2c203665-a7e6-46e9-a472-b71e32a52c24",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "The conjunction-only token and legal suffix are removed, leaving Cedar, Stone, and Foods, yielding CSF.",
+      "observed": ""
+    },
+    {
+      "example_uid": "d1ddb2e2-302f-41c4-8df1-fbffc00f9c1f",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "Removing Inc. and taking the initials of Axiom, AI, and Technologies yields AAT.",
+      "observed": ""
+    },
+    {
+      "example_uid": "93bc250e-54f8-42ab-a577-e2481bc8c152",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "Removing PLC and taking the remaining word initials yields NHG.",
+      "observed": ""
+    },
+    {
+      "example_uid": "49cee4c6-53d6-446a-b34b-30ce7fdf6cdf",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "The preceding organization has base NSE, and the terminal Class B suffix appends .B.",
+      "observed": ""
+    },
+    {
+      "example_uid": "a90384c1-5638-466d-a5fb-783f91330eeb",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "The preceding organization has base BRL, and terminal Class A appends .A.",
+      "observed": ""
+    },
+    {
+      "example_uid": "e3ca6391-9d0c-417a-8c73-c2fcda3ead86",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "The one-word base is REDW, and terminal Class C appends .C.",
+      "observed": ""
+    },
+    {
+      "example_uid": "838e85e5-6fa6-463f-b609-e92c8616af84",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "The preceding organization has base HLS, and terminal Class B appends .B.",
+      "observed": ""
+    },
+    {
+      "example_uid": "ffc1f140-2fe6-4472-b403-70f14301e181",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "The hyphen separates North and West into components; with Transit and removal of Inc., the initials yield NWT.",
+      "observed": ""
+    },
+    {
+      "example_uid": "a12a6258-b1f3-4fa4-b282-91010d15d4ad",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "Treating the apostrophe as removable punctuation keeps O'Brien as a substantive word contributing O; Market and Group contribute M and G, yielding OMG.",
+      "observed": ""
+    },
+    {
+      "example_uid": "481330cb-ed38-4761-9284-54999f0da728",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "Studio and Media contribute S and M, while numeric token 54 contributes its first digit 5, yielding S5M.",
+      "observed": ""
+    },
+    {
+      "example_uid": "46677e36-affa-4c0a-adcc-0e46d780582c",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "Seven, Seas, and Logistics contribute S, S, and L, while numeric token 2 contributes 2, yielding SS2L.",
+      "observed": ""
+    },
+    {
+      "example_uid": "3b99aa29-a809-4cb5-8d92-b4ee7ec00883",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "The hyphen splits Quantum-X into Q and X; Labs contributes L and Corp. is removed, yielding QXL.",
+      "observed": ""
+    },
+    {
+      "example_uid": "2e199185-4ec5-4ff9-9136-ced9c7163d83",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "Removing the conjunction and legal suffix leaves Atlas, Research, and Development, yielding ARD.",
+      "observed": ""
+    },
+    {
+      "example_uid": "b794335b-fe0a-4fad-bef1-ba77128bc522",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "One, World, and Media contribute O, W, and M, while 360 contributes its first digit 3, yielding OW3M.",
+      "observed": ""
+    },
+    {
+      "example_uid": "56e9799b-7468-4945-bbd3-84ab1168dbb8",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "Transliterating accented É to E and taking the remaining substantive initials yields EBS.",
+      "observed": ""
+    },
+    {
+      "example_uid": "1b7cf732-ef3f-40f3-bb38-b1680b7915dd",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "Company is a corporate suffix, so Sunrise and Robotics yield SR.",
+      "observed": ""
+    },
+    {
+      "example_uid": "0a44f7e1-98dd-46dc-afc8-340943cb1206",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "Incorporated is removed as a legal suffix, leaving Polar Data Works and yielding PDW.",
+      "observed": ""
+    },
+    {
+      "example_uid": "1746612e-1144-47fd-beb3-5230275c5524",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "Limited is removed as a legal suffix, leaving Maple Leaf Foods and yielding MLF.",
+      "observed": ""
+    },
+    {
+      "example_uid": "8841201c-63f8-43eb-850a-139aa89ac1cb",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "Removing LLC leaves Urban Ocean Analytics, whose initials yield UOA.",
+      "observed": ""
+    },
+    {
+      "example_uid": "84e2a052-b579-4685-8e69-d2f686f85cd9",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "BrightMind is one word contributing B, while AI and Labs contribute A and L; Inc. is removed, yielding BAL.",
+      "observed": ""
+    },
+    {
+      "example_uid": "dba983d4-4a85-4686-8e24-90e624673602",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "Deep and Space contribute D and S, embedded initialism XR is preserved as X, and Studios contributes S, yielding DSXS on the four-character scale.",
+      "observed": ""
+    },
+    {
+      "example_uid": "0954b29e-6082-41ac-8481-a32b04534d1f",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "The hyphen splits Lake-View into L and V; Materials contributes M and Corp. is removed, yielding LVM.",
+      "observed": ""
+    },
+    {
+      "example_uid": "fc84b190-d602-4a87-9946-802bc8de8069",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "Treating the apostrophe as removable punctuation keeps King's as a word contributing K; Road and Retail contribute R and R, while Company is removed, yielding KRR.",
+      "observed": ""
+    },
+    {
+      "example_uid": "fc7d9bd8-51b8-49fe-96c2-3b11f55de68d",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "Removing the leading article and Inc. leaves Northern Grid, yielding NG.",
+      "observed": ""
+    },
+    {
+      "example_uid": "3fd3ff68-2003-4baa-a797-91f1844e3b8e",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "Removing the conjunction-only token and LLC leaves East, West, and Mobility, yielding EWM.",
+      "observed": ""
+    },
+    {
+      "example_uid": "3ed16001-405b-4322-8e8b-6c503ece93a9",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "The numeric-leading token 24 contributes its leading digit 2; Seven and Energy contribute S and E, yielding 2SE.",
+      "observed": ""
+    },
+    {
+      "example_uid": "bf9df4dd-8a51-4abc-bc1f-f2f9e6948f27",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "Route and Systems contribute R and S, while numeric token 66 contributes its first digit 6, yielding R6S.",
+      "observed": ""
+    },
+    {
+      "example_uid": "5e294d10-817f-469a-8b6f-0dd35a743108",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "Removing Inc. and taking the four substantive initials yields ABGD.",
+      "observed": ""
+    },
+    {
+      "example_uid": "89ed9cd0-40df-433c-9e48-d0af69d58609",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "After removing LLC, Mono is the sole substantive word, so its first four letters yield MONO.",
+      "observed": ""
+    },
+    {
+      "example_uid": "a410879c-ef54-48c4-80df-951ba4aab18b",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "Removing AG and transliterating Zürich's initial to Z leaves initials Z and C, yielding ZC.",
+      "observed": ""
+    },
+    {
+      "example_uid": "86415dff-263e-4931-9ff9-2b578da55f6b",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "The hyphen splits Bio-Tech into B and T; with Silver and Pine and removal of Inc., the initials yield SPBT.",
+      "observed": ""
+    },
+    {
+      "example_uid": "0f51a883-4637-4b20-ba48-dbaef8958492",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "The four substantive words Open, Source, Network, and Foundation yield OSNF.",
+      "observed": ""
+    },
+    {
+      "example_uid": "fd63ed2b-7ad3-4957-a1cb-edbc7ffedba9",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "The internal word Class remains part of the base, so First Class Ventures yields FCV; terminal Class B appends .B.",
+      "observed": ""
+    },
+    {
+      "example_uid": "59f6631e-2e9d-472d-ba3d-ad43a6690341",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "MegaData contributes M, digit-leading token 2X contributes 2, and Labs contributes L; LLC is removed, yielding M2L.",
+      "observed": ""
+    },
+    {
+      "example_uid": "2da5f58c-d3c1-41cf-a7d6-b28b68d84043",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "The plus signs are removable punctuation, so C++ contributes C; Systems contributes S and Inc. is removed, yielding CS.",
+      "observed": ""
+    },
+    {
+      "example_uid": "dccd8d2e-1ee2-4cfd-ac0e-7956748e98fe",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "The punctuation-separated R&D expression contributes R while the conjunction-only D component is removed; Signal and Labs contribute S and L, yielding RSL.",
+      "observed": ""
+    },
+    {
+      "example_uid": "44c7c13b-dea3-4ae1-b03a-9e8989ec68d8",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "The period is removable punctuation within Acme.com, which contributes A; Services contributes S and Corp. is removed, yielding AS.",
+      "observed": ""
+    },
+    {
+      "example_uid": "0bc8aba9-2424-4706-abec-a61e6f588102",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "The hyphen creates Neo and Élan components contributing N and transliterated E; Mobility contributes M and PLC is removed, yielding NEM.",
+      "observed": ""
+    },
+    {
+      "example_uid": "f86ee230-742d-4dce-9e93-06986ad538f1",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "The hyphens split One-One-One into three substantive components contributing OOO; Holdings contributes H and Inc. is removed, yielding OOOH.",
+      "observed": ""
+    },
+    {
+      "example_uid": "410224e5-fa4b-460c-9478-c44f3db8c29f",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "Delta, Bio, and Group contribute D, B, and G, while numeric token 9 contributes 9; LLC is removed, yielding D9BG.",
+      "observed": ""
+    },
+    {
+      "example_uid": "3707f25b-6132-41eb-ad0a-e5c26d531268",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "New and York contribute N and Y, embedded AI is preserved as A on the four-character scale, and Exchange contributes E, yielding NYAE.",
+      "observed": ""
+    },
+    {
+      "example_uid": "94e498dc-5fd3-484e-8a27-10b2c64bb608",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "Removing the leading article and Company leaves numeric token 7 and Hills, yielding 7H.",
+      "observed": ""
+    },
+    {
+      "example_uid": "45d90322-eea8-48da-bd7c-04ad9d083783",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "Redwood Research yields base RR, and terminal Class A appends .A.",
+      "observed": ""
+    },
+    {
+      "example_uid": "9210dffd-a1e8-4228-b442-ad5dfddb7739",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "Removing Ltd. and taking the initials of A, B, C, and Networks yields ABCN.",
+      "observed": ""
+    },
+    {
+      "example_uid": "01ea670c-3493-4998-bc74-02d43ffe9c2b",
+      "status": "FIT",
+      "rule_uids": [
+        "bd3c6e30-167b-4522-afd3-0c357df60f58"
+      ],
+      "reason": "Global and Quantum contribute G and Q, numeric token 360 contributes 3, and terminal Class C appends .C, yielding GQ3.C.",
+      "observed": ""
+    }
+  ],
+  "overview": "All 50 examples are supported by the synthetic ticker policy.",
+  "created_at": "2026-08-15T23:34:10.048652Z",
+  "provider_identity": {
+    "provider": "codex_chatgpt",
+    "model": "gpt-5.6-sol",
+    "model_digest": null,
+    "runtime": "codex-cli",
+    "endpoint": null,
+    "reasoning_effort": "none"
+  }
+}

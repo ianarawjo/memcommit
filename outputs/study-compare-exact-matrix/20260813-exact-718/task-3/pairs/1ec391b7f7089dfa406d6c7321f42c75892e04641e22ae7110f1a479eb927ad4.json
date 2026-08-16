@@ -1,0 +1,352 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:43:51.822642+00:00",
+      "frames": [
+        {
+          "context_digest": "e13d5ca14260d4cdee2047de1529bdadfb8f6c3ea1abf7b2fbc1cc2a4a3fa401",
+          "context_name": "task-3/local/personal-memory/2024/09",
+          "context_uid": "497036ef-19ef-5611-bf5a-a9eeaf1569a0",
+          "memories": [
+            {
+              "content": "The user's available days and times vary by week, making it difficult to apply last month's free time directly to the next appointment.",
+              "content_digest": "9883c185fcf05c7f7f2b427012701a926576130739a6a43f6cd4e94f26f7e87d",
+              "position": 0,
+              "uid": "84b4519d-ef17-5403-a866-4eb705951a09"
+            },
+            {
+              "content": "The user once canceled an appointment booked for the same weekday as in the previous month.",
+              "content_digest": "9d38149632b950760dbbfdf98630e74e48c0a2130b1293142adef0f9948485bb",
+              "position": 1,
+              "uid": "25994612-bebc-5643-8642-19b825f00f00"
+            },
+            {
+              "content": "When asked again about availability just before booking, the user provided three free times for that week.",
+              "content_digest": "6d7bf61d037b8f702b87eb75ca99670e46f8ed37eb3cd0588f232a63cbe7d97c",
+              "position": 2,
+              "uid": "9b667d0d-d97b-5dfa-af66-295b9c40403d"
+            },
+            {
+              "content": "On a day with two consecutive morning appointments, the user ate lunch at 3 p.m.",
+              "content_digest": "6cf4e59cc0449ecab23ac3e5b69e3993146fb9e31de4ddf7ddab1c81a47c2b8a",
+              "position": 3,
+              "uid": "54d29daf-7bd7-5221-ae65-8b46f7f4869b"
+            },
+            {
+              "content": "On a day the user left an hour between appointments, they ate while traveling.",
+              "content_digest": "f669cb3d5198e5eed84c2578c8810a8105d03b2d68064bd323dd6573339e2a3b",
+              "position": 4,
+              "uid": "375957b9-e051-5a94-bde1-d157f44cc343"
+            },
+            {
+              "content": "After seeing a private reason written directly in a calendar title, the user removed the wording.",
+              "content_digest": "6f32d03fd9854adaf5773fab91d96d94b8d50557dd7d3bf090caaf37488ad121",
+              "position": 5,
+              "uid": "d189ddb4-7014-5d19-b779-5f36c6bb4160"
+            },
+            {
+              "content": "The user checked that a calendar-sharing screen showed only the time and hid the details.",
+              "content_digest": "e182d94b728aa0057bf201f1caf924e715d12de484495d6bd653cd658c6fc091",
+              "position": 6,
+              "uid": "61ee4989-7372-5845-b14f-d8a6eb1e5300"
+            },
+            {
+              "content": "When evening plans on the same day must change, the user's mother wants advance notice on the weekend morning.",
+              "content_digest": "24ef090a587ad5f54aec84d231bed02577bfebc8ed2a487f0aea9eb3a6644f24",
+              "position": 7,
+              "uid": "f2b9f9b0-3d15-5411-9c40-ddce42288ed3"
+            },
+            {
+              "content": "The local agent cannot know the private reason for unavailability from the unavailable time alone.",
+              "content_digest": "a5ae072d060bfbae6e2d06ecaec6dad87039a14c3bee62dc0e3abd2a9096f5e2",
+              "position": 8,
+              "uid": "947e37c1-1235-54e1-8ddd-dcad7d725ede"
+            },
+            {
+              "content": "The user's shared calendar does not automatically reserve travel time between events.",
+              "content_digest": "44b0830b7ef31860d3bd70e859c449a2f8e5cecd94b4b571bf08e09da3f648eb",
+              "position": 9,
+              "uid": "1b2e9508-d9ce-5b27-bf66-ec7691061e13"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "a28820f2-ab21-4487-803a-a11a0d125cb4"
+        },
+        {
+          "context_digest": "b727ef7cf1cb7ca0f00ea3598d36577397e092dcb632f55c3eafb942850922d7",
+          "context_name": "task-3/local/personal-memory/2025/04",
+          "context_uid": "720d2021-1ec5-52ab-ace4-a93e02b05ad9",
+          "memories": [
+            {
+              "content": "The user keeps the shared laundry-room access card in an entrance drawer.",
+              "content_digest": "3c98e367c99e0867f1217c891dc5d982c115fd9d1b4bc3957cca6dbb6338203b",
+              "position": 0,
+              "uid": "a1c67646-6a75-504a-9508-d69e1d04b3e5"
+            },
+            {
+              "content": "The user went downstairs 25 minutes after the laundry finished and received a note from another household.",
+              "content_digest": "44968f6f10c0ae2d1dd775eb066564dada6346c6f59bdacf90d687c57e6c1e0f",
+              "position": 1,
+              "uid": "9479e799-95d7-50d2-af62-d1e0914a389b"
+            },
+            {
+              "content": "For the next load, the user set a reminder five minutes before the end and removed the laundry immediately.",
+              "content_digest": "bc77b81f6126e44bbffeb4ae2dfbb641d31a9742b7a196a106ac385321b48958",
+              "position": 2,
+              "uid": "528cb5ea-8c36-5206-beaa-19432250ec4d"
+            },
+            {
+              "content": "The user washed light-colored clothes with new jeans, and color transferred onto white socks.",
+              "content_digest": "ed0f36cf5ebe8f9542ad39ba45fc109634d72f1cb2b266c15dfe6655e3df3add",
+              "position": 3,
+              "uid": "85fb1639-2176-5329-b490-3325ff030db4"
+            },
+            {
+              "content": "The user later washed the new jeans separately, and the color of the other clothes did not change.",
+              "content_digest": "6e47fe1a02ac39064ea9db2d06d8a1f01f80302825bbe412df745401612e4a84",
+              "position": 4,
+              "uid": "431d170a-863f-596d-97c0-0c9634524ee5"
+            },
+            {
+              "content": "On a day the user did not check the dryer filter, the clothes needed another drying cycle.",
+              "content_digest": "8127e9f3ea34724673517f1e260a73acfb70e287a7e7de84e196ad1cb815f5a7",
+              "position": 5,
+              "uid": "4df33adc-cfba-50f2-b141-e2ebed38b81c"
+            },
+            {
+              "content": "On the next use, after emptying the filter, the user finished drying in one cycle.",
+              "content_digest": "932cfb8fc93277783d8990dad62cfd3e1c9a86e39ad1bd019ce00dac632c53d5",
+              "position": 6,
+              "uid": "ba7daae9-938d-55a1-af20-21cd10d395d8"
+            },
+            {
+              "content": "The building manager judges that not leaving finished laundry for a long time is fair to other households.",
+              "content_digest": "5eabe2d3dff252bb250abcde8fe2d528362afb0e73e7628e839715c3e8a3cd56",
+              "position": 7,
+              "uid": "abbf8742-38e3-5810-b222-fe91e3340962"
+            },
+            {
+              "content": "When creating a shared laundry-room reminder, base it on the end time of the machine the user started.",
+              "content_digest": "e00bc6fe09fea6fde6a27817bd6824a141c1ac4a656b9659067b7e1af9881b1f",
+              "position": 8,
+              "uid": "06273d22-0b42-5c55-9d70-eda14084219a"
+            },
+            {
+              "content": "Even if the local agent knows where the card is kept, it cannot know which machines in the shared laundry room are currently available.",
+              "content_digest": "d03f5583c9e4c686307af90ff00ff54e5ac0990e34296b3d241e4f299d15f4b7",
+              "position": 9,
+              "uid": "03ac930e-d745-5c29-8c24-5ced669817f9"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "9feedfb7-33e4-4372-a4bb-4a2c1ef688cc"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate operational domains: the reference concerns calendar scheduling, privacy, notification, and travel constraints, while the compared frame concerns shared-laundry access, timing, garment care, drying efficiency, and machine visibility. Neither supplies an overlapping policy or contradiction.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a28820f2-ab21-4487-803a-a11a0d125cb4",
+              "memory_uid": "84b4519d-ef17-5403-a866-4eb705951a09"
+            },
+            {
+              "frame_uid": "a28820f2-ab21-4487-803a-a11a0d125cb4",
+              "memory_uid": "25994612-bebc-5643-8642-19b825f00f00"
+            },
+            {
+              "frame_uid": "a28820f2-ab21-4487-803a-a11a0d125cb4",
+              "memory_uid": "9b667d0d-d97b-5dfa-af66-295b9c40403d"
+            }
+          ],
+          "reason": "Each memory bears on the unreliability of reusing earlier scheduling patterns and the value of asking again before booking.",
+          "status": "RESOLVED",
+          "summary": "Current weekly availability should be confirmed instead of inferred from the previous month.",
+          "uid": "4c67e3d5-f3e7-594d-96f5-375431bc98e4"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a28820f2-ab21-4487-803a-a11a0d125cb4",
+              "memory_uid": "54d29daf-7bd7-5221-ae65-8b46f7f4869b"
+            },
+            {
+              "frame_uid": "a28820f2-ab21-4487-803a-a11a0d125cb4",
+              "memory_uid": "375957b9-e051-5a94-bde1-d157f44cc343"
+            }
+          ],
+          "reason": "Both memories describe adverse meal consequences associated with limited spacing between appointments.",
+          "status": "RESOLVED",
+          "summary": "Closely spaced appointments can disrupt normal meal timing or force eating while traveling.",
+          "uid": "a162ce8b-70b0-59f7-ba8a-b8cb8a14e743"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a28820f2-ab21-4487-803a-a11a0d125cb4",
+              "memory_uid": "d189ddb4-7014-5d19-b779-5f36c6bb4160"
+            },
+            {
+              "frame_uid": "a28820f2-ab21-4487-803a-a11a0d125cb4",
+              "memory_uid": "61ee4989-7372-5845-b14f-d8a6eb1e5300"
+            },
+            {
+              "frame_uid": "a28820f2-ab21-4487-803a-a11a0d125cb4",
+              "memory_uid": "947e37c1-1235-54e1-8ddd-dcad7d725ede"
+            }
+          ],
+          "reason": "Each memory concerns keeping private details out of visible calendar information or unavailable-time inferences.",
+          "status": "RESOLVED",
+          "summary": "Calendar handling preserves private reasons while exposing only the time of unavailability.",
+          "uid": "9d395518-9267-5184-a8f4-c2c880160a7f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a28820f2-ab21-4487-803a-a11a0d125cb4",
+              "memory_uid": "f2b9f9b0-3d15-5411-9c40-ddce42288ed3"
+            }
+          ],
+          "reason": "This is an independently useful notification preference found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The user's mother wants weekend-morning advance notice when that evening's plans must change.",
+          "uid": "acfb8c36-cb17-51fc-82ff-e39d34e06b48"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "a28820f2-ab21-4487-803a-a11a0d125cb4",
+              "memory_uid": "1b2e9508-d9ce-5b27-bf66-ec7691061e13"
+            }
+          ],
+          "reason": "This is an independently useful calendar limitation found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The shared calendar does not automatically reserve travel time between events.",
+          "uid": "aaafcd5c-71fd-5f4f-85b2-62732c2978a1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9feedfb7-33e4-4372-a4bb-4a2c1ef688cc",
+              "memory_uid": "a1c67646-6a75-504a-9508-d69e1d04b3e5"
+            },
+            {
+              "frame_uid": "9feedfb7-33e4-4372-a4bb-4a2c1ef688cc",
+              "memory_uid": "03ac930e-d745-5c29-8c24-5ced669817f9"
+            }
+          ],
+          "reason": "The memories jointly distinguish physical access information from unavailable real-time machine-status information.",
+          "status": "RESOLVED",
+          "summary": "The laundry access card has a known storage place, but that knowledge does not reveal live machine availability.",
+          "uid": "a04fef2f-a932-5cfc-855c-bec90541cb29"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9feedfb7-33e4-4372-a4bb-4a2c1ef688cc",
+              "memory_uid": "9479e799-95d7-50d2-af62-d1e0914a389b"
+            },
+            {
+              "frame_uid": "9feedfb7-33e4-4372-a4bb-4a2c1ef688cc",
+              "memory_uid": "528cb5ea-8c36-5206-beaa-19432250ec4d"
+            },
+            {
+              "frame_uid": "9feedfb7-33e4-4372-a4bb-4a2c1ef688cc",
+              "memory_uid": "abbf8742-38e3-5810-b222-fe91e3340962"
+            },
+            {
+              "frame_uid": "9feedfb7-33e4-4372-a4bb-4a2c1ef688cc",
+              "memory_uid": "06273d22-0b42-5c55-9d70-eda14084219a"
+            }
+          ],
+          "reason": "Each memory concerns delayed or immediate collection, the fairness of prompt removal, or an end-time-based reminder supporting that practice.",
+          "status": "RESOLVED",
+          "summary": "Shared-laundry timing should follow machine completion so finished loads are removed promptly and do not inconvenience other households.",
+          "uid": "8e2f4fed-9828-50df-8c03-74e37ad70ff0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9feedfb7-33e4-4372-a4bb-4a2c1ef688cc",
+              "memory_uid": "85fb1639-2176-5329-b490-3325ff030db4"
+            },
+            {
+              "frame_uid": "9feedfb7-33e4-4372-a4bb-4a2c1ef688cc",
+              "memory_uid": "431d170a-863f-596d-97c0-0c9634524ee5"
+            }
+          ],
+          "reason": "The paired experiences contrast color transfer in a mixed load with stable colors after separate washing.",
+          "status": "RESOLVED",
+          "summary": "New jeans should be washed separately from light-colored clothes to avoid color transfer.",
+          "uid": "24420325-4cb7-5891-8f3a-414ca03a5561"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "9feedfb7-33e4-4372-a4bb-4a2c1ef688cc",
+              "memory_uid": "4df33adc-cfba-50f2-b141-e2ebed38b81c"
+            },
+            {
+              "frame_uid": "9feedfb7-33e4-4372-a4bb-4a2c1ef688cc",
+              "memory_uid": "ba7daae9-938d-55a1-af20-21cd10d395d8"
+            }
+          ],
+          "reason": "The paired experiences contrast extended drying without checking the filter with one-cycle drying after it was emptied.",
+          "status": "RESOLVED",
+          "summary": "Emptying the dryer filter can prevent an additional drying cycle.",
+          "uid": "3ad80c24-3c7e-5364-bbd7-658e6a23c7fd"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only content covers laundry-room access and machine visibility, prompt collection of finished loads, end-time reminders, separating new jeans from light clothes, and cleaning the dryer filter.",
+        "differences": "",
+        "reference_only": "Reference-only content emphasizes rechecking weekly availability, protecting calendar privacy, preserving meal and travel buffers, notifying family about same-day changes, and recognizing that shared calendars omit travel reservations."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "01bdb4db-0fb4-4ae0-882d-b2d4b0cfc47b"
+    },
+    "analysis_digest": "7cb10fd14301712f81bcab1ba2b97e7a07cb50bfba9500e82f5d0f0f5efbffe4",
+    "key": "d4ff094552dec4ab1492917a52306b6b36973557bb65fe63f0f8ba248ce77590",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 43.86819391699828,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "d4ff094552dec4ab1492917a52306b6b36973557bb65fe63f0f8ba248ce77590",
+  "created_at": "2026-08-13T18:44:35.690706Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/09",
+  "pair_key": "1ec391b7f7089dfa406d6c7321f42c75892e04641e22ae7110f1a479eb927ad4",
+  "provider_seconds": 43.86819391699828,
+  "right": "task-3/local/personal-memory/2025/04",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

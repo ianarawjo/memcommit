@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:40:22.226290+00:00",
+      "frames": [
+        {
+          "context_digest": "6cb54691fcd12037c24daa71882bad82cd67c16ea72979f2a41e1e1b8eae22a8",
+          "context_name": "task-3/local/personal-memory/2024/06",
+          "context_uid": "8c641e5b-01d9-560c-a8c0-b52cee7402c8",
+          "memories": [
+            {
+              "content": "The user stores copies of identity documents in an encrypted folder.",
+              "content_digest": "83efe427335c1415d4a8d601d6e1c5d7a129c6962b74468d313b123e045b052f",
+              "position": 0,
+              "uid": "79576c1e-fa88-5d6e-b5e2-3d4ec11c3e06"
+            },
+            {
+              "content": "On a day the user transferred between buses twice, they rested for an hour after the trip.",
+              "content_digest": "907b9cc4c16b4b3fe53c2323d31afc83347ddc63775bd865bc42b62ca539f5bb",
+              "position": 1,
+              "uid": "28a1ff0b-e2d4-5cb6-9c26-949d86f76bac"
+            },
+            {
+              "content": "On a day the user took a direct route with a similar travel time, they remained seated to the destination.",
+              "content_digest": "0c0d1b12aa0ad393ac43982fe7d36d08f75d9e634c933593ef6a0a96614bb9ea",
+              "position": 2,
+              "uid": "0ad4a1f9-e3e9-517e-8cfc-f8e6307f1d3e"
+            },
+            {
+              "content": "After arriving at an entrance with stairs only, the user went around to an entrance on the other side of the building.",
+              "content_digest": "775d4c0a211f4509a0488cb3b2a790ae22c1b2ba2e96ed6b9100ae3cfb454315",
+              "position": 3,
+              "uid": "f772b0c7-502f-55b7-b431-ee6b20518d38"
+            },
+            {
+              "content": "On a day the user checked the accessible entrance location in advance, they arrived before the agreed time.",
+              "content_digest": "4e087a4e0ca48a3414580ce0d974da4b2221b304302de01cf305945866320a6a",
+              "position": 4,
+              "uid": "0b2d800b-a4ab-5422-bf06-56d17b98f604"
+            },
+            {
+              "content": "On a rainy day, the user's clothes became wet while crossing an uncovered section at a transfer stop.",
+              "content_digest": "dad5c9f35f0469edc528091e47f22365c1cb5de1b32e70335826d67a576fb47d",
+              "position": 5,
+              "uid": "b233f332-4927-549b-8dab-b554977fe363"
+            },
+            {
+              "content": "On a day the user traveled with their maternal uncle, they agreed to meet at an entrance near the elevator.",
+              "content_digest": "c81b012ae6686f47d54809c50ab559077b0e170d54792d34038f0f8fc32c6a96",
+              "position": 6,
+              "uid": "b38d0d63-c4b0-5955-857d-03cbcfd27f5b"
+            },
+            {
+              "content": "The user's maternal uncle prefers an aisle seat from which it is easy to stand during long-distance travel.",
+              "content_digest": "3ea31753296866c1bf438b51eba4110b0c6ed2e907e86dc21796166ed19d82df",
+              "position": 7,
+              "uid": "4668d326-b11c-5467-bca4-e8d5e242e375"
+            },
+            {
+              "content": "The local agent cannot know whether an accessible entrance is operating that day from past route records alone.",
+              "content_digest": "00fc09badcb1d569e3cb1e392ad18406a032d17749f71b44ed7bc121d5d72b4c",
+              "position": 8,
+              "uid": "a77c985c-3986-5141-9805-e3321b3cfa2c"
+            },
+            {
+              "content": "The transfer route the user takes has more boarding and alighting events and walking segments than the direct route.",
+              "content_digest": "f9320e36494ea5beb854d6bbe38a817ae73cd9fe68b75977438d35e44fb38fe6",
+              "position": 9,
+              "uid": "988926a1-3e28-5b3e-a41c-d9338971643e"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "3fb722ff-91b4-4fb5-b7b3-4b0f23a10485"
+        },
+        {
+          "context_digest": "ca8765e237d85d9bf3ecb78fe1d9a2487066ae14dae9509e40b324ac1277d75a",
+          "context_name": "task-3/local/personal-memory/2025/06",
+          "context_uid": "870f7336-726a-5d9c-bae4-12585311463e",
+          "memories": [
+            {
+              "content": "The user keeps a portable fan charger on a living-room shelf.",
+              "content_digest": "5ab7fad8ae1b3f56bdbc1c3ebf593a3d452590341b6de115f830fdf0d994c12e",
+              "position": 0,
+              "uid": "853a158c-edf9-578a-8e75-3d5daff6e4db"
+            },
+            {
+              "content": "On a hot day, the user worked with only the window open and lost focus in the afternoon.",
+              "content_digest": "3c4225f055db293c53a5a137d0c6353005bcb55b71dbc61bc69831aa5c3c08de",
+              "position": 1,
+              "uid": "f7d5ebdc-0cae-5e07-a060-e129b5a05570"
+            },
+            {
+              "content": "In the room where the user closed the curtains the next morning, the temperature rose less.",
+              "content_digest": "4cb4d1892db8769f4c066859dbb021c67d5015114f8522dfd904057061600ab5",
+              "position": 2,
+              "uid": "99e5c522-535b-5015-8617-06f645147f8b"
+            },
+            {
+              "content": "The user took the portable fan out without charging it, and it turned off after an hour.",
+              "content_digest": "0e1e0e9e985bea5be6976010a390f484b60a931ea7dfaf50a73c66616a73d5da",
+              "position": 3,
+              "uid": "7b3bf50c-63aa-5a1e-9a53-7befea25a468"
+            },
+            {
+              "content": "Before the next outing, the user charged it the night before and used the fan throughout the trip.",
+              "content_digest": "fd4282d169da18d902fc5f766d4e38131240bf3a51e6fa0c5bad69f80f1492af",
+              "position": 4,
+              "uid": "ca8de091-afb2-537f-a83a-09769056879d"
+            },
+            {
+              "content": "On a hot weekend, the user was eating lunch in their father's yard and moved indoors.",
+              "content_digest": "44e7d3bc5eaecec68ad6e7c0979572102f3c717b37712fcfada769959443ae8e",
+              "position": 5,
+              "uid": "4a0604fb-10b4-5132-a6de-ab6a229ff2be"
+            },
+            {
+              "content": "When the user returned to the yard in the evening, shade and wind led them to stay another hour.",
+              "content_digest": "7495f1d4ba2d1d732ab5c962f45b5b0c9c765ee21767373552247a823cf90984",
+              "position": 6,
+              "uid": "1f90941e-776f-5cba-9783-c392983dd72c"
+            },
+            {
+              "content": "The user's father prefers to move an outdoor meal to the evening rather than proceed at midday when the temperature is high.",
+              "content_digest": "5f9628a28b5c6f3b20a371d1c039f37f26c50832970936c8a243f161fd8288f4",
+              "position": 7,
+              "uid": "63391d26-7417-5ea6-ac0a-460af7489963"
+            },
+            {
+              "content": "The local agent can compare past responses to heat but cannot know the current felt temperature without an indoor temperature record.",
+              "content_digest": "815f4fb2c833d75e30cb0e323f5708e356bf38e0bbb573865092be48fbf2746a",
+              "position": 8,
+              "uid": "31502797-1379-5ec4-bd1b-a2e1515fa56e"
+            },
+            {
+              "content": "A room with a west-facing window can warm rapidly in the late afternoon.",
+              "content_digest": "448908f6242021de6d41ddee8121714a1388db6e4e3d067de27e6950ee712c23",
+              "position": 9,
+              "uid": "68f85c30-62c4-579d-97cd-9f401c686e63"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "1714ccd5-35f3-4815-9356-bd16f3d26303"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate domains: accessible travel and route burden in one, and heat management, fan readiness, and outdoor timing in the other. Their similarly framed observations and uncertainty limits concern different decisions, so no substantive overlap or disagreement is established.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3fb722ff-91b4-4fb5-b7b3-4b0f23a10485",
+              "memory_uid": "79576c1e-fa88-5d6e-b5e2-3d4ec11c3e06"
+            }
+          ],
+          "reason": "Only the reference frame provides this security and storage practice; no compared-side claim addresses the same decision.",
+          "status": "RESOLVED",
+          "summary": "Identity-document copies are stored in an encrypted folder.",
+          "uid": "a79306ce-558d-52ff-84b6-70e685828e1a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3fb722ff-91b4-4fb5-b7b3-4b0f23a10485",
+              "memory_uid": "28a1ff0b-e2d4-5cb6-9c26-949d86f76bac"
+            }
+          ],
+          "reason": "Only the reference frame records this travel-and-recovery outcome; the heat-related compared memories do not address it.",
+          "status": "RESOLVED",
+          "summary": "After a trip involving two bus transfers, the user rested for an hour.",
+          "uid": "df4d849f-3601-54a3-95a0-2bf63b131531"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3fb722ff-91b4-4fb5-b7b3-4b0f23a10485",
+              "memory_uid": "0ad4a1f9-e3e9-517e-8cfc-f8e6307f1d3e"
+            }
+          ],
+          "reason": "Only the reference frame describes this direct-route outcome; no compared-side claim concerns route configuration or remaining seated.",
+          "status": "RESOLVED",
+          "summary": "On a similarly timed direct trip, the user remained seated through arrival.",
+          "uid": "eae04131-2418-5c49-ac58-f4b01e955e36"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3fb722ff-91b4-4fb5-b7b3-4b0f23a10485",
+              "memory_uid": "f772b0c7-502f-55b7-b431-ee6b20518d38"
+            }
+          ],
+          "reason": "Only the reference frame records this response to an inaccessible entrance.",
+          "status": "RESOLVED",
+          "summary": "Faced with a stairs-only entrance, the user went around to another entrance.",
+          "uid": "358207a2-5da1-5a49-8544-42a9c64886d8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3fb722ff-91b4-4fb5-b7b3-4b0f23a10485",
+              "memory_uid": "0b2d800b-a4ab-5422-bf06-56d17b98f604"
+            }
+          ],
+          "reason": "Only the reference frame describes advance entrance planning and its arrival outcome.",
+          "status": "RESOLVED",
+          "summary": "Checking the accessible entrance beforehand coincided with arriving early.",
+          "uid": "5f34d9a0-a186-589c-a12e-58ce64122bad"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3fb722ff-91b4-4fb5-b7b3-4b0f23a10485",
+              "memory_uid": "b233f332-4927-549b-8dab-b554977fe363"
+            }
+          ],
+          "reason": "Only the reference frame records weather exposure created by a transit-transfer setting; the compared frame concerns heat management in different settings.",
+          "status": "RESOLVED",
+          "summary": "Rain exposure at an uncovered transfer section left the user’s clothes wet.",
+          "uid": "df49dfd7-8bd2-5de6-b6cf-2b513bef1188"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3fb722ff-91b4-4fb5-b7b3-4b0f23a10485",
+              "memory_uid": "b38d0d63-c4b0-5955-857d-03cbcfd27f5b"
+            }
+          ],
+          "reason": "Only the reference frame supplies this travel meeting arrangement.",
+          "status": "RESOLVED",
+          "summary": "When traveling with a maternal uncle, the user arranged to meet near an elevator.",
+          "uid": "783f4e61-4648-53dc-8329-aba4aa76a82f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3fb722ff-91b4-4fb5-b7b3-4b0f23a10485",
+              "memory_uid": "4668d326-b11c-5467-bca4-e8d5e242e375"
+            }
+          ],
+          "reason": "Only the reference frame states this person-specific long-distance seating preference.",
+          "status": "RESOLVED",
+          "summary": "The user’s maternal uncle prefers an aisle seat that makes standing easier on long trips.",
+          "uid": "a29ebaca-25d5-5569-8633-5a957298e895"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3fb722ff-91b4-4fb5-b7b3-4b0f23a10485",
+              "memory_uid": "a77c985c-3986-5141-9805-e3321b3cfa2c"
+            }
+          ],
+          "reason": "Only the reference frame states this evidence limit for current entrance operation; the compared frame’s uncertainty concerns felt temperature and a different operational decision.",
+          "status": "RESOLVED",
+          "summary": "Past route records alone cannot establish whether an accessible entrance is operating that day.",
+          "uid": "5223a986-a7ea-5f9f-9c80-bf5c1b516faa"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "3fb722ff-91b4-4fb5-b7b3-4b0f23a10485",
+              "memory_uid": "988926a1-3e28-5b3e-a41c-d9338971643e"
+            }
+          ],
+          "reason": "Only the reference frame compares the physical and procedural burden of these route types.",
+          "status": "RESOLVED",
+          "summary": "The transfer route entails more boarding, alighting, and walking than the direct route.",
+          "uid": "5e00b566-9bd7-5bd7-9607-dfa678497bc2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1714ccd5-35f3-4815-9356-bd16f3d26303",
+              "memory_uid": "853a158c-edf9-578a-8e75-3d5daff6e4db"
+            }
+          ],
+          "reason": "Only the compared frame provides this device-storage fact.",
+          "status": "RESOLVED",
+          "summary": "The portable fan charger is kept on a living-room shelf.",
+          "uid": "127f59f3-80eb-5b9c-8505-d71bda648608"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1714ccd5-35f3-4815-9356-bd16f3d26303",
+              "memory_uid": "f7d5ebdc-0cae-5e07-a060-e129b5a05570"
+            }
+          ],
+          "reason": "Only the compared frame records this heat-management condition and work outcome.",
+          "status": "RESOLVED",
+          "summary": "Working with only an open window on a hot day preceded afternoon loss of focus.",
+          "uid": "ff633885-c8c0-539f-a312-cebcbac1e4ec"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1714ccd5-35f3-4815-9356-bd16f3d26303",
+              "memory_uid": "99e5c522-535b-5015-8617-06f645147f8b"
+            }
+          ],
+          "reason": "Only the compared frame records this indoor heat-control observation.",
+          "status": "RESOLVED",
+          "summary": "Closing the curtains the next morning was associated with a smaller temperature rise.",
+          "uid": "016d5458-7e16-5188-a47a-eb7eb3ab5927"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1714ccd5-35f3-4815-9356-bd16f3d26303",
+              "memory_uid": "7b3bf50c-63aa-5a1e-9a53-7befea25a468"
+            }
+          ],
+          "reason": "Only the compared frame describes this device-readiness failure and runtime outcome.",
+          "status": "RESOLVED",
+          "summary": "An uncharged portable fan turned off after an hour during an outing.",
+          "uid": "c2c72282-d27d-53f8-bf43-35eaf96207ae"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1714ccd5-35f3-4815-9356-bd16f3d26303",
+              "memory_uid": "ca8de091-afb2-537f-a83a-09769056879d"
+            }
+          ],
+          "reason": "Only the compared frame records this preparation step and successful trip-long use.",
+          "status": "RESOLVED",
+          "summary": "Charging the fan the night before enabled its use throughout the next trip.",
+          "uid": "11d83fa9-68c9-5f3a-bb72-519242762532"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1714ccd5-35f3-4815-9356-bd16f3d26303",
+              "memory_uid": "4a0604fb-10b4-5132-a6de-ab6a229ff2be"
+            }
+          ],
+          "reason": "Only the compared frame records this response to midday outdoor heat.",
+          "status": "RESOLVED",
+          "summary": "During a hot weekend lunch in the user’s father’s yard, the user moved indoors.",
+          "uid": "affa1e41-e231-583a-b1ff-51071740b3ea"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1714ccd5-35f3-4815-9356-bd16f3d26303",
+              "memory_uid": "1f90941e-776f-5cba-9783-c392983dd72c"
+            }
+          ],
+          "reason": "Only the compared frame records this evening outdoor-comfort outcome.",
+          "status": "RESOLVED",
+          "summary": "Evening shade and wind led the user to remain in the yard for another hour.",
+          "uid": "5b1f43d9-314b-5bd3-8273-43ca4d2d76f1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1714ccd5-35f3-4815-9356-bd16f3d26303",
+              "memory_uid": "63391d26-7417-5ea6-ac0a-460af7489963"
+            }
+          ],
+          "reason": "Only the compared frame states this person-specific heat-related meal-timing preference.",
+          "status": "RESOLVED",
+          "summary": "The user’s father prefers postponing an outdoor meal until evening when midday temperatures are high.",
+          "uid": "2d33efb1-900f-5edf-b4b9-86fc99ec6be5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1714ccd5-35f3-4815-9356-bd16f3d26303",
+              "memory_uid": "31502797-1379-5ec4-bd1b-a2e1515fa56e"
+            }
+          ],
+          "reason": "Only the compared frame states this evidence limit for assessing present indoor heat; the reference frame’s uncertainty concerns accessible-entrance operation and a different decision.",
+          "status": "RESOLVED",
+          "summary": "Past heat responses can be compared, but current felt temperature cannot be known without an indoor temperature record.",
+          "uid": "6fd3cad6-e5f6-5d0d-8947-af630ada7380"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "1714ccd5-35f3-4815-9356-bd16f3d26303",
+              "memory_uid": "68f85c30-62c4-579d-97cd-9f401c686e63"
+            }
+          ],
+          "reason": "Only the compared frame supplies this general indoor heat-risk condition.",
+          "status": "RESOLVED",
+          "summary": "A west-facing window can cause rapid room warming in the late afternoon.",
+          "uid": "f0cfe711-4b09-54e2-a6e1-579edfb91435"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame covers heat effects, curtains and room warming, portable-fan storage and charging, outdoor-meal timing, a relative’s preference, and limits of heat-response records.",
+        "differences": "",
+        "reference_only": "The reference covers encrypted identity-document storage, accessible entrances, transfer burden and weather exposure, travel outcomes, a relative’s seating preference, and limits of historical route data."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "178b0b6f-9e51-4eb6-a4e3-56fbeaf6f80d"
+    },
+    "analysis_digest": "1a9713564c257317aa9f0a338c06b34f8b7174a19a2eedcddc080d817da8f83a",
+    "key": "6e89f65748c262c8403dce6f9a38950037fef716d0948fb57c4ee39fefc23f5b",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 40.82279416699748,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "6e89f65748c262c8403dce6f9a38950037fef716d0948fb57c4ee39fefc23f5b",
+  "created_at": "2026-08-13T18:41:03.048722Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/06",
+  "pair_key": "4f231864ff47dcc8a02141932846d601fe510a983d876302c29b35169a6704c8",
+  "provider_seconds": 40.82279416699748,
+  "right": "task-3/local/personal-memory/2025/06",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

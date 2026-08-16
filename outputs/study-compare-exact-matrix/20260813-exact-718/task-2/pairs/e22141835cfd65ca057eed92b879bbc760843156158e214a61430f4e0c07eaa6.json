@@ -1,0 +1,196 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:26:01.660860+00:00",
+      "frames": [
+        {
+          "context_digest": "d2c716d52357c4200adc8772d5823715ffd736eb766028c1c62bbb32852bc344",
+          "context_name": "task-2/advisor1/scope",
+          "context_uid": "6db29abe-5784-5eec-acaa-060bac0e11f1",
+          "memories": [
+            {
+              "content": "Define in one sentence the user groups and usage contexts to which the design knowledge does not apply.",
+              "content_digest": "3193ffe501a06d6148b39c333853b42bc0278b2ab3c3df88162b049548ff16bb",
+              "position": 0,
+              "uid": "e594a6ab-81e9-5e5f-8ef5-e6bb8f3760d7"
+            },
+            {
+              "content": "Reviewers judge the generalization boundary of results through explicitly excluded targets and situations.",
+              "content_digest": "a929649a7bd07f29f31a8cd1969a3c160ba5f61c0def76e204443c30234f84b0",
+              "position": 1,
+              "uid": "31cdacff-7c49-547d-9f97-598a07b67fb6"
+            },
+            {
+              "content": "Specify user goals, interaction conditions, and technological constraints under which the proposed design knowledge can be transferred.",
+              "content_digest": "6ae1bfaeadb1863db1997685527706d210a379a376a24d3de1168e952f847627",
+              "position": 2,
+              "uid": "1459d986-4dc9-51f3-bf13-dbb0b07045c8"
+            },
+            {
+              "content": "Small-scale formative studies can support analytic generalization distinct from statistical representativeness when results are expressed in terms of design conditions and mechanisms.",
+              "content_digest": "1963572a303acbf383890b7d97b52349f572df761e89ea3fd5116058cd2e1cea",
+              "position": 3,
+              "uid": "1db5fcd6-f93c-5630-9810-053c10b5ceba"
+            },
+            {
+              "content": "The author of this proposal tends to apply design knowledge derived from an accessible sample to a broader user population.",
+              "content_digest": "df2a7f1284c1994c6dec49eb7995acd1ed341a9e6b8f4b06c854d85fa9d77d6c",
+              "position": 4,
+              "uid": "fd29c315-521f-53c0-add5-c668ec318a43"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "eb4255e3-be1d-41be-96b5-c6164c8d9e6b"
+        },
+        {
+          "context_digest": "bb54539faeedf2db9ada09643c11270aabf235d8e3e6df98500f90f9b82aed49",
+          "context_name": "task-2/advisor2/reproducibility",
+          "context_uid": "5f2f3c0f-4cb1-5151-b381-847df75b6457",
+          "memories": [
+            {
+              "content": "HCI reviewers find it difficult to assess result reproducibility if the system version used in the field deployment is not disclosed.",
+              "content_digest": "83ac18cb56f74dbeb7834909b999669bb9a46d320b288bf38fb7b6c9bd0812f2",
+              "position": 0,
+              "uid": "40f11374-d91b-546a-9e93-fcf98a0fde98"
+            },
+            {
+              "content": "Record changes in system configurations, field procedures, and data collection tools during deployment, along with their timestamps and rationales.",
+              "content_digest": "ac399146f49e6ae5d21272de0cd13db6346d4cd67b096ecfa9bd314b026f403e",
+              "position": 1,
+              "uid": "cc72ad54-4cf3-56cd-9119-46776f5b2184"
+            },
+            {
+              "content": "The history of deployment versions and configuration changes provides necessary evidence for interpreting results from different field sites.",
+              "content_digest": "39ae70de900b646362a96cfa7d734a6404604b468398b09da9fb05783b389d25",
+              "position": 2,
+              "uid": "75f22b45-fb1b-568c-bb05-080fdacdcab2"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "da21924f-e6ad-4ad4-9e9e-d375741707ad"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The reference frame addresses boundaries and justification for transferring design knowledge, including a concern about overgeneralization. The compared frame instead addresses deployment provenance needed to assess reproducibility and interpret findings across sites. These are independently useful, noncompeting concerns.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eb4255e3-be1d-41be-96b5-c6164c8d9e6b",
+              "memory_uid": "e594a6ab-81e9-5e5f-8ef5-e6bb8f3760d7"
+            },
+            {
+              "frame_uid": "eb4255e3-be1d-41be-96b5-c6164c8d9e6b",
+              "memory_uid": "31cdacff-7c49-547d-9f97-598a07b67fb6"
+            }
+          ],
+          "reason": "Both reference memories express the same one-sided claim: explicit exclusions define and communicate the limits of design knowledge.",
+          "status": "RESOLVED",
+          "summary": "Applicability boundaries should identify excluded user groups and usage situations so reviewers can judge where results do not generalize.",
+          "uid": "e8cc4a15-7241-5ec1-8702-7b68033ab1c8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eb4255e3-be1d-41be-96b5-c6164c8d9e6b",
+              "memory_uid": "1459d986-4dc9-51f3-bf13-dbb0b07045c8"
+            }
+          ],
+          "reason": "This independently specifies the positive conditions under which design knowledge may transfer, information absent from the compared frame.",
+          "status": "RESOLVED",
+          "summary": "Transferability should be bounded by stated user goals, interaction conditions, and technological constraints.",
+          "uid": "9812d081-6140-5175-ab54-e12ea5f33552"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eb4255e3-be1d-41be-96b5-c6164c8d9e6b",
+              "memory_uid": "1db5fcd6-f93c-5630-9810-053c10b5ceba"
+            }
+          ],
+          "reason": "This provides a distinct methodological basis for generalization that the compared frame does not address.",
+          "status": "RESOLVED",
+          "summary": "Small formative studies may support analytic rather than statistical generalization when findings are tied to design conditions and mechanisms.",
+          "uid": "f9f33dd5-cd38-540d-8fcd-d594cedc02e6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "eb4255e3-be1d-41be-96b5-c6164c8d9e6b",
+              "memory_uid": "fd29c315-521f-53c0-add5-c668ec318a43"
+            }
+          ],
+          "reason": "This is a distinct one-sided observation about overgeneralization behavior, not a deployment-provenance claim.",
+          "status": "RESOLVED",
+          "summary": "The proposal author tends to extend design knowledge from an accessible sample to a broader user population.",
+          "uid": "f8bcfd2d-c5e7-54fc-af10-d03ed0f43e56"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "da21924f-e6ad-4ad4-9e9e-d375741707ad",
+              "memory_uid": "40f11374-d91b-546a-9e93-fcf98a0fde98"
+            },
+            {
+              "frame_uid": "da21924f-e6ad-4ad4-9e9e-d375741707ad",
+              "memory_uid": "cc72ad54-4cf3-56cd-9119-46776f5b2184"
+            },
+            {
+              "frame_uid": "da21924f-e6ad-4ad4-9e9e-d375741707ad",
+              "memory_uid": "75f22b45-fb1b-568c-bb05-080fdacdcab2"
+            }
+          ],
+          "reason": "The compared memories jointly express one provenance claim, combining the evidentiary need with the specific records, timestamps, and rationales required.",
+          "status": "RESOLVED",
+          "summary": "Deployment versions and changes to configurations, procedures, and collection tools should be disclosed and historically recorded to support reproducibility and cross-site interpretation.",
+          "uid": "d821b21a-8099-5448-8060-6d06cb4d57db"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame requires disclosure and time-stamped tracking of deployment versions, configurations, procedures, and tools so reviewers can assess reproducibility and interpret results across field sites.",
+        "differences": "",
+        "reference_only": "The reference emphasizes explicit exclusions and transfer conditions, supports analytic generalization from formative studies, and identifies a tendency to extend findings from accessible samples too broadly."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "fc14797d-125d-43c7-872c-ed0718c6da6e"
+    },
+    "analysis_digest": "c7b8af11774e28949f1af798038dfbbe4b41ed6e7ebab50dbc657edd3521d906",
+    "key": "bee662bc4641b08dd8e8c8876a04429854a7f1f7448b9f857c038a396a91dddc",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 25.358556415998464,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "bee662bc4641b08dd8e8c8876a04429854a7f1f7448b9f857c038a396a91dddc",
+  "created_at": "2026-08-13T18:26:27.019317Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/scope",
+  "pair_key": "e22141835cfd65ca057eed92b879bbc760843156158e214a61430f4e0c07eaa6",
+  "provider_seconds": 25.358556415998464,
+  "right": "task-2/advisor2/reproducibility",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

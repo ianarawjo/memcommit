@@ -1,0 +1,368 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:15:39.548070+00:00",
+      "frames": [
+        {
+          "context_digest": "dd57f5a09e0271c33b7dccbe4935bf1a8d5be14dc7c618906e8af51709bbea89",
+          "context_name": "task-2/advisor1/claim-evidence",
+          "context_uid": "b0c4b50c-f70b-5b0c-a1eb-0fd63e0531bf",
+          "memories": [
+            {
+              "content": "Attach adjacent evidence or citations to verifiable claims about user behavior or technology effects.",
+              "content_digest": "3a856fbbda53df425705aaaff741896f5f5460a8feeb8fb8a73c03e592a80c62",
+              "position": 0,
+              "uid": "06f6c673-ea0c-5657-89d2-3f8711097cd7"
+            },
+            {
+              "content": "Distinguish between results observed in the pilot and expectations to be confirmed in the main user study using different expressions.",
+              "content_digest": "9117c0fd3d9cb713f035f9ae95118ae785af5fcf8909485b097f128ef8e12586",
+              "position": 1,
+              "uid": "58991ce7-d394-5087-b14f-0b014b0ec6ad"
+            },
+            {
+              "content": "Do not use verbs that imply proving causation if the design does not support causal inference.",
+              "content_digest": "5ee12e489ec1fd1af46a49cb05cc9447ed3fbf33ad7b4d8ce52ea700926ea29c",
+              "position": 2,
+              "uid": "f5adf029-a750-5a3a-8eb8-d68e43bb5c13"
+            },
+            {
+              "content": "For topics with sufficient HCI research evidence, prioritize citing recent comprehensive studies over listing individual cases.",
+              "content_digest": "2519cd2fca364ac6eef8577892b03d0a83509f6032874e30c30f36fb1e3dde5a",
+              "position": 3,
+              "uid": "b2a7ff8a-dfca-5857-8733-fe03cbd943ec"
+            },
+            {
+              "content": "Explain how each design choice was derived to address specific user needs.",
+              "content_digest": "fee6e06dfe0489b55ae0d75fe4e7b62facf78052a3136b7120d065e100f3b567",
+              "position": 4,
+              "uid": "1f0c95f4-69bb-5764-a358-d428ff7019d2"
+            },
+            {
+              "content": "Support each core claim with evidence that directly examined it rather than with indirect summaries.",
+              "content_digest": "372e0abff6997b041103fd71719c55549c2e3e0a3a5cdf2d4a1a24ec6538cbff",
+              "position": 5,
+              "uid": "cd475113-5354-5f80-b063-7628e4359afc"
+            },
+            {
+              "content": "Reviewers first check the direct evidence placed closest to the core claim.",
+              "content_digest": "61baa516115e1a5bf4f377358ead7c45bab5e666208b9cd6cd87426007493a49",
+              "position": 6,
+              "uid": "86fe1306-7650-58cc-a3df-79870c61784d"
+            },
+            {
+              "content": "Connect the proposed conceptual design principle to at least one observable user behavior.",
+              "content_digest": "d6c6f9dddd0cd99694df2f232e8a71957d53f77e8d10faf324927af679312acc",
+              "position": 7,
+              "uid": "5d022e45-09c0-515e-98f1-68b2aec686bc"
+            },
+            {
+              "content": "Identify which design judgment—retain, modify, or discard—each piece of evidence from formative evaluation supports.",
+              "content_digest": "a507db0052a4d9196c774a5df74c60fe9225bef49c5d9aece328bfb8dca48035",
+              "position": 8,
+              "uid": "9939e9e8-d97d-57db-974a-750566ca9e2b"
+            },
+            {
+              "content": "Results from controlled formative studies do not directly prove effects in actual long-term use.",
+              "content_digest": "aeeca3701d4ba297e928efc2034c474a2ae78101e440d515a57901e6814321a0",
+              "position": 9,
+              "uid": "41060e8e-95ff-58c1-8b71-36a501a9bd23"
+            },
+            {
+              "content": "The user can have an explanation approved as a conceptual contribution only if it is falsifiable with observable data.",
+              "content_digest": "171f4eeae9df2a0a739f90ed451a34a092093b9f6b0db7c6af04012bea734c5f",
+              "position": 10,
+              "uid": "ec54ce10-07db-5ae3-94a5-8f3621fed4a9"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "270376b6-b192-418e-8fa2-b11f7b274221"
+        },
+        {
+          "context_digest": "4371a72e6fb939731cb550ca5363a3b5210680482f84c18b36ba933f4454ecc1",
+          "context_name": "task-2/advisor2/expression",
+          "context_uid": "cf8e8baf-292e-57c3-8e2c-3f9b3d52f3d3",
+          "memories": [
+            {
+              "content": "Use a sequence table rather than a flow diagram when the procedure is likely to change repeatedly during drafting.",
+              "content_digest": "575bb4530af1e93b215ea57f0fd63e1e09136554da98aecf87288cc39ea9697c",
+              "position": 0,
+              "uid": "4264c20d-3e44-578d-866e-7787cc7b59e2"
+            },
+            {
+              "content": "The visual fidelity of a prototype and its level of connection to actual data and services may differ.",
+              "content_digest": "9478cb005a07ca7edfa924579b3d5221b1fa1143b5d8327369e7ee799b76aa9f",
+              "position": 1,
+              "uid": "70a8c3f0-0f6a-5881-abd6-29f52833b7bd"
+            },
+            {
+              "content": "Service flow diagrams indicate human-system transitions that are not revealed by individual screens alone.",
+              "content_digest": "5e3e18a38b1e62724d2ae0445549e214a219d205a80735bc6b4c0e643a96b8b3",
+              "position": 2,
+              "uid": "b410aa8d-db87-586b-a1cd-4af5767a9f7a"
+            },
+            {
+              "content": "HCI reviewers often scan system structure and service flow diagrams before the main text.",
+              "content_digest": "22a46440a6aeda0cb7d39cc6fedf6bbff6cac91232ec0cb163bf1fc17ff257d4",
+              "position": 3,
+              "uid": "a385fbb1-85b4-5132-bbc7-8fd8daedb715"
+            },
+            {
+              "content": "Give each step, actor, condition, and outcome a stable row in the sequence table.",
+              "content_digest": "2a073bf2ec4c5592ddc405d83cb438a5ed880699d3c157f310fb3dbff7851622",
+              "position": 4,
+              "uid": "22254f16-4628-5fd9-b1af-6e66dc2572b3"
+            },
+            {
+              "content": "Updating one row in a sequence table is usually faster than redrawing a branching diagram after a procedural change.",
+              "content_digest": "cf97dbf66018a6be1ee42dfc79ff8de44e8742db2b42c9d1ef70b3f252805a39",
+              "position": 5,
+              "uid": "32028269-5d43-5a65-b22b-9e570ceabfde"
+            },
+            {
+              "content": "Readers can check sequence tables step by step but may find the overall branching shape less immediate.",
+              "content_digest": "18b5de0cdd22ef1774151332afdbc408f9f591cf889e51271f81a372f74ef86d",
+              "position": 6,
+              "uid": "939ee3d0-b611-574a-a25b-82708394bd5e"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "659dc505-d090-4865-997f-195d70d4576a"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate but complementary documentation concerns. The reference frame focuses on evidentiary discipline, inference limits, and traceable design reasoning, while the compared frame addresses prototype characterization and choosing representations for procedures and service flows. No shared claim, scope-dependent difference, or conflict is established.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "270376b6-b192-418e-8fa2-b11f7b274221",
+              "memory_uid": "06f6c673-ea0c-5657-89d2-3f8711097cd7"
+            },
+            {
+              "frame_uid": "270376b6-b192-418e-8fa2-b11f7b274221",
+              "memory_uid": "cd475113-5354-5f80-b063-7628e4359afc"
+            },
+            {
+              "frame_uid": "270376b6-b192-418e-8fa2-b11f7b274221",
+              "memory_uid": "86fe1306-7650-58cc-a3df-79870c61784d"
+            }
+          ],
+          "reason": "Only the reference frame specifies evidence proximity and directness for core claims, with reviewer behavior providing the rationale.",
+          "status": "RESOLVED",
+          "summary": "Verifiable core claims should be supported by adjacent evidence that directly examined them, reflecting reviewers’ tendency to inspect the nearest direct evidence first.",
+          "uid": "62fff6cc-7979-57eb-973e-448297cbcec0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "270376b6-b192-418e-8fa2-b11f7b274221",
+              "memory_uid": "58991ce7-d394-5087-b14f-0b014b0ec6ad"
+            }
+          ],
+          "reason": "Only the reference frame establishes this reporting distinction between completed pilot observations and prospective main-study expectations.",
+          "status": "RESOLVED",
+          "summary": "Observed pilot results and expectations awaiting confirmation in the main study should be expressed differently.",
+          "uid": "0af78c8f-5722-56dc-af7e-6828904d106a"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "270376b6-b192-418e-8fa2-b11f7b274221",
+              "memory_uid": "f5adf029-a750-5a3a-8eb8-d68e43bb5c13"
+            },
+            {
+              "frame_uid": "270376b6-b192-418e-8fa2-b11f7b274221",
+              "memory_uid": "41060e8e-95ff-58c1-8b71-36a501a9bd23"
+            }
+          ],
+          "reason": "Only the reference frame states these related limits on inference from study design and setting.",
+          "status": "RESOLVED",
+          "summary": "Claims should not imply unsupported causation or treat controlled formative findings as direct proof of effects in long-term real-world use.",
+          "uid": "f4bdd976-f94b-537a-bed5-5ab8a77586f2"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "270376b6-b192-418e-8fa2-b11f7b274221",
+              "memory_uid": "b2a7ff8a-dfca-5857-8733-fe03cbd943ec"
+            }
+          ],
+          "reason": "Only the reference frame gives this source-selection policy for mature research topics.",
+          "status": "RESOLVED",
+          "summary": "Where sufficient HCI research exists, recent comprehensive studies should be prioritized over lists of individual cases.",
+          "uid": "0c3c3620-2200-5a64-a1ef-3f18b53d0d69"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "270376b6-b192-418e-8fa2-b11f7b274221",
+              "memory_uid": "1f0c95f4-69bb-5764-a358-d428ff7019d2"
+            }
+          ],
+          "reason": "Only the reference frame requires traceability from identified user needs to design choices.",
+          "status": "RESOLVED",
+          "summary": "Each design choice should be explained as a response to specific user needs.",
+          "uid": "892003c4-f8c6-5207-83e9-7c6e2317cd06"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "270376b6-b192-418e-8fa2-b11f7b274221",
+              "memory_uid": "5d022e45-09c0-515e-98f1-68b2aec686bc"
+            }
+          ],
+          "reason": "Only the reference frame requires behavioral grounding for conceptual design principles.",
+          "status": "RESOLVED",
+          "summary": "A proposed conceptual design principle should be connected to at least one observable user behavior.",
+          "uid": "485bda3c-b1a0-5561-bc80-3a2ec6c0eb93"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "270376b6-b192-418e-8fa2-b11f7b274221",
+              "memory_uid": "9939e9e8-d97d-57db-974a-750566ca9e2b"
+            }
+          ],
+          "reason": "Only the reference frame requires evaluation evidence to be mapped to an explicit design judgment.",
+          "status": "RESOLVED",
+          "summary": "Each item of formative-evaluation evidence should identify whether it supports retaining, modifying, or discarding a design.",
+          "uid": "e16f6e58-07c1-5edb-8a45-d920725b65e0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "270376b6-b192-418e-8fa2-b11f7b274221",
+              "memory_uid": "ec54ce10-07db-5ae3-94a5-8f3621fed4a9"
+            }
+          ],
+          "reason": "Only the reference frame states falsifiability with observable data as a condition for conceptual contribution.",
+          "status": "RESOLVED",
+          "summary": "An explanation qualifies as a conceptual contribution only when observable data could falsify it.",
+          "uid": "03a600f8-fa97-5700-92f5-67d9dcd40691"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "659dc505-d090-4865-997f-195d70d4576a",
+              "memory_uid": "4264c20d-3e44-578d-866e-7787cc7b59e2"
+            },
+            {
+              "frame_uid": "659dc505-d090-4865-997f-195d70d4576a",
+              "memory_uid": "22254f16-4628-5fd9-b1af-6e66dc2572b3"
+            },
+            {
+              "frame_uid": "659dc505-d090-4865-997f-195d70d4576a",
+              "memory_uid": "32028269-5d43-5a65-b22b-9e570ceabfde"
+            }
+          ],
+          "reason": "Only the compared frame provides this representation choice, its row structure, and its drafting-efficiency rationale.",
+          "status": "RESOLVED",
+          "summary": "Frequently changing procedures should use sequence tables with stable rows for steps, actors, conditions, and outcomes because individual rows are easier to update than branching diagrams.",
+          "uid": "ca3906de-aebf-50c3-9ac1-052c9cfa2eda"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "659dc505-d090-4865-997f-195d70d4576a",
+              "memory_uid": "70a8c3f0-0f6a-5881-abd6-29f52833b7bd"
+            }
+          ],
+          "reason": "Only the compared frame distinguishes these independent dimensions of prototype fidelity.",
+          "status": "RESOLVED",
+          "summary": "A prototype’s visual fidelity can differ from how fully it connects to actual data and services.",
+          "uid": "2e755b2f-32ab-56d2-9eb9-443f6a4b7087"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "659dc505-d090-4865-997f-195d70d4576a",
+              "memory_uid": "b410aa8d-db87-586b-a1cd-4af5767a9f7a"
+            }
+          ],
+          "reason": "Only the compared frame identifies this informational role for service-flow diagrams.",
+          "status": "RESOLVED",
+          "summary": "Service-flow diagrams expose human-system transitions that individual screens do not reveal.",
+          "uid": "ef4f46ed-314d-5526-94d1-8522403a998e"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "659dc505-d090-4865-997f-195d70d4576a",
+              "memory_uid": "a385fbb1-85b4-5132-bbc7-8fd8daedb715"
+            }
+          ],
+          "reason": "Only the compared frame describes this reviewer navigation behavior.",
+          "status": "RESOLVED",
+          "summary": "HCI reviewers often inspect system-structure and service-flow diagrams before reading the main text.",
+          "uid": "d33f7ff1-b423-54ec-ab0e-75e0c2be8eb6"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "659dc505-d090-4865-997f-195d70d4576a",
+              "memory_uid": "939ee3d0-b611-574a-a25b-82708394bd5e"
+            }
+          ],
+          "reason": "Only the compared frame states this reader-facing tradeoff of sequence tables.",
+          "status": "RESOLVED",
+          "summary": "Sequence tables support step-by-step checking but make the overall branching shape less immediately apparent.",
+          "uid": "c786d876-830e-5933-a50c-1cc8277d72a2"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame distinguishes prototype appearance from backend integration and explains how sequence tables and service-flow diagrams communicate procedures, branching, transitions, and system structure to authors, readers, and reviewers.",
+        "differences": "",
+        "reference_only": "The reference frame emphasizes direct and adjacent evidence, careful treatment of causal and generalizability limits, observable and falsifiable conceptual claims, and explicit links among user needs, evaluation evidence, and design judgments."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "69427095-1bd4-4d41-b32e-d05c13d06e07"
+    },
+    "analysis_digest": "9a9963b6a00453b14020fb2482f620bc7b07cce33e20c590119b582050a7d068",
+    "key": "3a94d0c147900b378585082eac4134488634178b8af62513c7ba825917fb1f28",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 39.44587912499992,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-2",
+    "task_description": {
+      "context_digest": "5d2df387c761b3e204fa5a560b9391855988b09fd2f1861440541bca25acc15c",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "name": "task-2/description"
+    }
+  },
+  "artifact_key": "3a94d0c147900b378585082eac4134488634178b8af62513c7ba825917fb1f28",
+  "created_at": "2026-08-13T18:16:18.993479Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-2/advisor1/claim-evidence",
+  "pair_key": "a4f7265e9652c2fb40149e3b58aefdcf009df9fb55621a4c81d92ec237c9582b",
+  "provider_seconds": 39.44587912499992,
+  "right": "task-2/advisor2/expression",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

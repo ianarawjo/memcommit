@@ -1,0 +1,451 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:41:53.714777+00:00",
+      "frames": [
+        {
+          "context_digest": "58f58090449931225a941a4219f3fce7ebcf23bbabc0e0aa93a8733d4ba32701",
+          "context_name": "task-3/local/personal-memory/2024/07",
+          "context_uid": "8747b4f6-d17c-5b02-83f4-fc3af73e2da0",
+          "memories": [
+            {
+              "content": "The user updated the utility account for their residence in July 2024.",
+              "content_digest": "89c6a8e8dd7ad799b9ef4cb2b10963ce0b9ad55e713716d9729f903e76c0f71a",
+              "position": 0,
+              "uid": "65a332a2-2707-55f8-b7a6-a7378e6fbb7a"
+            },
+            {
+              "content": "After putting a paper bill in a drawer, the user checked it one day after the payment date.",
+              "content_digest": "474d42322de3190caee3e4feeb831bcb6a7b57e58427667d74be084ee9c64257",
+              "position": 1,
+              "uid": "fb94e1fd-9b3d-567a-81d8-d7a0ee90e04e"
+            },
+            {
+              "content": "In the month after receiving an electronic billing alert, the user paid two days before the deadline.",
+              "content_digest": "c16cf32e0018eb1cdf94e3070036d7fb93b0ccc8adb633a057642ff41284eaa0",
+              "position": 2,
+              "uid": "7d8db31a-c330-5852-9d7c-c9da7f98d899"
+            },
+            {
+              "content": "The user saw a water-inspection notice late and started washing dishes during the scheduled shutoff.",
+              "content_digest": "d5bea20cc35a46502ba919c52bee7519453346789d4bb881c82a9c08e6840cb0",
+              "position": 3,
+              "uid": "008dd110-feb2-5b4b-b602-bb3e23475a95"
+            },
+            {
+              "content": "After transferring a management-office notice to their phone calendar, the user did not miss the inspection time.",
+              "content_digest": "ce2c06404fcb8988b61da98f2ddd58d3db6506ff74aa1c7dfd43f841fa6fb25d",
+              "position": 4,
+              "uid": "a03ed01a-3d15-5eaf-9415-529705fd1245"
+            },
+            {
+              "content": "During a boiler technician's visit, the user had not cleared boxes from the entrance in advance and had to rearrange the passage.",
+              "content_digest": "39f4ca86667c0622dce2b6fee2b04df73131bf9d98e81478f1fa818b5dfe70c2",
+              "position": 5,
+              "uid": "2fb4b0bd-1257-5e50-881a-7f312940e1c5"
+            },
+            {
+              "content": "The user cleared the entrance the day before the next visit so the inspection could begin immediately.",
+              "content_digest": "e99fb029e3ca864e4f293358a85f33d73f4d7d2b9fda7dcd437ffdf183350666",
+              "position": 6,
+              "uid": "d05286e8-f183-5f4a-99d8-3dcca1aeaa09"
+            },
+            {
+              "content": "The building manager expects that a one-day advance visit notice gives a resident enough time to prepare the work area.",
+              "content_digest": "f992e380bfa87fa04c9f7dde8eceee69eb6b0aa3ad79c180d9023dafd7dd2abd",
+              "position": 7,
+              "uid": "44d28aa3-1aa4-5276-b545-86ee2cb17078"
+            },
+            {
+              "content": "Confirm the user's available time before finalizing a service visit to the residence.",
+              "content_digest": "dee4efa145a0f8b25c47a1c6855c02feee2de292e78b2e3790763796981db1e5",
+              "position": 8,
+              "uid": "77f77450-ab10-5469-8e2f-5445060926bc"
+            },
+            {
+              "content": "The local agent can compare payment records with notice times but cannot verify whether a residential service problem was resolved.",
+              "content_digest": "09e052010507ce17344888df5171f58996245cceb9012e160d540f030e7ba98a",
+              "position": 9,
+              "uid": "fd7f98b4-d5b9-5196-ad5e-c4356681ecf4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "c631693c-1efd-4c0b-bb67-6009ebf0dfd0"
+        },
+        {
+          "context_digest": "5e42fc3dcfbf5576148277f6841977ca8a5cabd4a3fc67a5581f6f6cc816c900",
+          "context_name": "task-3/local/personal-memory/2025/10",
+          "context_uid": "8130b676-dc51-5c31-b7dc-185afdf9cf07",
+          "memories": [
+            {
+              "content": "The user keeps waterproof shoes for rainy days to the left of the entrance.",
+              "content_digest": "5b9e5a20153c7865010318800d740a410faef0c13fe2278c20ce984a89b7dea5",
+              "position": 0,
+              "uid": "82c1e806-de3a-5633-8a08-175487e69fd6"
+            },
+            {
+              "content": "On a day the user walked in the rain wearing thin shoes, their socks became wet and they changed them after arrival.",
+              "content_digest": "fdbdab8c08a4b1d933ff8ac3ddedee8541ddf070e8c6e6020b6c1d14b992c621",
+              "position": 1,
+              "uid": "25df6384-836f-5f8e-bd97-73a1fb171c48"
+            },
+            {
+              "content": "On the next rainy day, the user wore waterproof shoes and their feet remained dry.",
+              "content_digest": "0e87d74fb93fe062cd12efe2f5a04fbae5ce13a60491fd9ad04c4e006acbd87f",
+              "position": 2,
+              "uid": "55abae4f-206a-586e-8b35-406d7525c0a1"
+            },
+            {
+              "content": "On a day the user walked for a long time in new shoes, their heel chafed and they shortened the route home.",
+              "content_digest": "aeb369b995cdf17ea73ae8546b454eab70f33bf6d3c67a09aee2805c1c598b6d",
+              "position": 3,
+              "uid": "c6d21ec4-6bdf-55df-b4d4-05cb531bf4bd"
+            },
+            {
+              "content": "The user wore the same shoes on two short outings before using them on a long walk.",
+              "content_digest": "0d7ed5656f35f4fe025c6ba80e4c829f5b9851c193f981de9a461f848317d60a",
+              "position": 4,
+              "uid": "a6424854-e51e-5afc-8b9f-9e2f0273f70e"
+            },
+            {
+              "content": "On a day the user dried an umbrella outside the entrance, they found it immediately before the next outing.",
+              "content_digest": "dbc2453ca5f895e2cfe7f58e5624cf4c5d6793468af3b25df7e9a4ddb7d50159",
+              "position": 5,
+              "uid": "1b436b46-3d1f-5aa2-99e3-94b7c2412bfd"
+            },
+            {
+              "content": "On a day the user put a folded wet umbrella in their bag, documents inside became wet.",
+              "content_digest": "1f63fbc8c6b491a734f0f7a4190e26aec22826c1ff839242e0ca71d933312c9c",
+              "position": 6,
+              "uid": "ccd1f422-6130-5f19-869e-681102a3a1fa"
+            },
+            {
+              "content": "When rain is forecast, the user's mother expects the user may forget an umbrella and sets out a spare at the entrance.",
+              "content_digest": "80bdfaefb6f781aa91ef7217331e75f09b4766650c2b078dfadf592b2eb27b08",
+              "position": 7,
+              "uid": "c69a8e87-2b6f-5514-ab0d-0037531592f8"
+            },
+            {
+              "content": "When proposing a long-distance walking plan, check both the weather that day and recent records of shoe discomfort.",
+              "content_digest": "f54a546d423099c3abbb65bb49e4ddf773a8191dcffbb8b3d5153dfd70553b73",
+              "position": 8,
+              "uid": "4567ea9f-1800-51ed-bfac-f4cdf674d4cf"
+            },
+            {
+              "content": "Even if the local agent knows a shoe's location, it cannot know its current condition or whether it is usable.",
+              "content_digest": "28202c222ca800a5e19dbaebea2b3c992748f530a695517cf123b10187a31bc8",
+              "position": 9,
+              "uid": "a4ff1b76-755d-530a-b24c-8655115e4fbe"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "b7e459fb-d5f9-415b-b191-2a6934ee3c85"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate operational domains: residence utilities and service visits versus rain gear and walking preparation. No claim governs the same decision across both frames, and neither side contradicts or qualifies the other.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c631693c-1efd-4c0b-bb67-6009ebf0dfd0",
+              "memory_uid": "65a332a2-2707-55f8-b7a6-a7378e6fbb7a"
+            }
+          ],
+          "reason": "This historical account event appears only in the reference frame and is independently useful.",
+          "status": "RESOLVED",
+          "summary": "The residence utility account was updated in July 2024.",
+          "uid": "b0f6d73f-1e00-5cf1-94b5-b19ff164f2c8"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c631693c-1efd-4c0b-bb67-6009ebf0dfd0",
+              "memory_uid": "fb94e1fd-9b3d-567a-81d8-d7a0ee90e04e"
+            }
+          ],
+          "reason": "This reference-only episode records a specific billing-timeliness failure.",
+          "status": "RESOLVED",
+          "summary": "A paper bill stored in a drawer was checked after its payment date.",
+          "uid": "9c1d0f18-14ce-5ad0-a1a3-30fff42dc1a9"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c631693c-1efd-4c0b-bb67-6009ebf0dfd0",
+              "memory_uid": "7d8db31a-c330-5852-9d7c-c9da7f98d899"
+            }
+          ],
+          "reason": "This reference-only episode records a specific successful payment outcome.",
+          "status": "RESOLVED",
+          "summary": "An electronic billing alert was followed by payment before the deadline.",
+          "uid": "5ecb52ff-1156-53fe-9ba6-8fe0d0cea447"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c631693c-1efd-4c0b-bb67-6009ebf0dfd0",
+              "memory_uid": "008dd110-feb2-5b4b-b602-bb3e23475a95"
+            }
+          ],
+          "reason": "This reference-only episode records a specific consequence of missing a service notice.",
+          "status": "RESOLVED",
+          "summary": "A late-seen water-inspection notice led to dishwashing during the shutoff.",
+          "uid": "aca01e80-0b05-5730-85a0-6e59a08c0886"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c631693c-1efd-4c0b-bb67-6009ebf0dfd0",
+              "memory_uid": "a03ed01a-3d15-5eaf-9415-529705fd1245"
+            }
+          ],
+          "reason": "This reference-only episode records a specific successful reminder practice.",
+          "status": "RESOLVED",
+          "summary": "Moving a management notice to a phone calendar prevented missing an inspection.",
+          "uid": "f2390cc1-2efe-5684-ae81-b8cc0648f294"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c631693c-1efd-4c0b-bb67-6009ebf0dfd0",
+              "memory_uid": "2fb4b0bd-1257-5e50-881a-7f312940e1c5"
+            }
+          ],
+          "reason": "This reference-only episode records a specific access-preparation problem.",
+          "status": "RESOLVED",
+          "summary": "Uncleared entrance boxes delayed preparation during a boiler technician's visit.",
+          "uid": "66edfc1f-6710-5390-af9a-9394187417ca"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c631693c-1efd-4c0b-bb67-6009ebf0dfd0",
+              "memory_uid": "d05286e8-f183-5f4a-99d8-3dcca1aeaa09"
+            }
+          ],
+          "reason": "This reference-only episode records a specific successful visit-preparation practice.",
+          "status": "RESOLVED",
+          "summary": "Clearing the entrance a day early allowed the next inspection to start immediately.",
+          "uid": "1f3f9834-6115-5817-b4f1-fae77517621f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c631693c-1efd-4c0b-bb67-6009ebf0dfd0",
+              "memory_uid": "44d28aa3-1aa4-5276-b545-86ee2cb17078"
+            }
+          ],
+          "reason": "This reference-only expectation is a distinct stakeholder assumption about visit notice.",
+          "status": "RESOLVED",
+          "summary": "The building manager considers one day's notice sufficient for work-area preparation.",
+          "uid": "65056f2f-16ea-5fdc-b1f0-2e08844ec760"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c631693c-1efd-4c0b-bb67-6009ebf0dfd0",
+              "memory_uid": "77f77450-ab10-5469-8e2f-5445060926bc"
+            }
+          ],
+          "reason": "This scheduling policy appears only in the reference frame and governs residence visits.",
+          "status": "RESOLVED",
+          "summary": "A resident's availability should be confirmed before finalizing a service visit.",
+          "uid": "059858fb-0657-5f62-974e-d98870191ed0"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c631693c-1efd-4c0b-bb67-6009ebf0dfd0",
+              "memory_uid": "fd7f98b4-d5b9-5196-ad5e-c4356681ecf4"
+            }
+          ],
+          "reason": "This reference-only capability boundary concerns utility and residential service records.",
+          "status": "RESOLVED",
+          "summary": "The local agent can compare payment and notice timing but cannot verify service-problem resolution.",
+          "uid": "18aa98e7-e521-5858-a741-1cee93de2908"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7e459fb-d5f9-415b-b191-2a6934ee3c85",
+              "memory_uid": "82c1e806-de3a-5633-8a08-175487e69fd6"
+            }
+          ],
+          "reason": "This compared-only location fact supports access to rain footwear.",
+          "status": "RESOLVED",
+          "summary": "Waterproof shoes are kept to the left of the entrance for rainy days.",
+          "uid": "a9e2768b-8a69-5be3-ac8b-f3b0d1489a1f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7e459fb-d5f9-415b-b191-2a6934ee3c85",
+              "memory_uid": "25df6384-836f-5f8e-bd97-73a1fb171c48"
+            }
+          ],
+          "reason": "This compared-only episode records a specific consequence of unsuitable rain footwear.",
+          "status": "RESOLVED",
+          "summary": "Walking in rain with thin shoes resulted in wet socks.",
+          "uid": "a900d8bf-0300-5831-8ff2-b9ba079e8d6b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7e459fb-d5f9-415b-b191-2a6934ee3c85",
+              "memory_uid": "55abae4f-206a-586e-8b35-406d7525c0a1"
+            }
+          ],
+          "reason": "This compared-only episode records a specific successful rain-footwear choice.",
+          "status": "RESOLVED",
+          "summary": "Wearing waterproof shoes on the next rainy day kept the user's feet dry.",
+          "uid": "633f85cf-ab5a-55e1-9114-916335f67a32"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7e459fb-d5f9-415b-b191-2a6934ee3c85",
+              "memory_uid": "c6d21ec4-6bdf-55df-b4d4-05cb531bf4bd"
+            }
+          ],
+          "reason": "This compared-only episode records a specific footwear-discomfort outcome.",
+          "status": "RESOLVED",
+          "summary": "A long walk in new shoes caused heel chafing and a shortened return route.",
+          "uid": "e54b910e-4462-5e76-8ae2-6db640b71cb5"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7e459fb-d5f9-415b-b191-2a6934ee3c85",
+              "memory_uid": "a6424854-e51e-5afc-8b9f-9e2f0273f70e"
+            }
+          ],
+          "reason": "This compared-only history records prior limited trials of the footwear.",
+          "status": "RESOLVED",
+          "summary": "The same shoes were used on short outings before a long walk.",
+          "uid": "06c1623d-fd52-5079-9758-0c2c8d7a2517"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7e459fb-d5f9-415b-b191-2a6934ee3c85",
+              "memory_uid": "1b436b46-3d1f-5aa2-99e3-94b7c2412bfd"
+            }
+          ],
+          "reason": "This compared-only episode records a successful umbrella-storage outcome.",
+          "status": "RESOLVED",
+          "summary": "Drying an umbrella outside the entrance made it immediately findable for the next outing.",
+          "uid": "5b197400-7160-5a4e-8048-674dbb419566"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7e459fb-d5f9-415b-b191-2a6934ee3c85",
+              "memory_uid": "ccd1f422-6130-5f19-869e-681102a3a1fa"
+            }
+          ],
+          "reason": "This compared-only episode records a specific consequence of wet-umbrella storage.",
+          "status": "RESOLVED",
+          "summary": "Putting a folded wet umbrella in a bag caused documents to become wet.",
+          "uid": "7f068153-4220-5eb4-b439-cc9951710dc1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7e459fb-d5f9-415b-b191-2a6934ee3c85",
+              "memory_uid": "c69a8e87-2b6f-5514-ab0d-0037531592f8"
+            }
+          ],
+          "reason": "This compared-only expectation and assistance pattern concerns rain preparation.",
+          "status": "RESOLVED",
+          "summary": "When rain is forecast, the user's mother sets out a spare umbrella because the user may forget one.",
+          "uid": "613db59b-ea95-5f66-8fce-8a04d6311bab"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7e459fb-d5f9-415b-b191-2a6934ee3c85",
+              "memory_uid": "4567ea9f-1800-51ed-bfac-f4cdf674d4cf"
+            }
+          ],
+          "reason": "This planning policy appears only in the compared frame and governs walking plans.",
+          "status": "RESOLVED",
+          "summary": "Long-distance walking proposals should consider current weather and recent shoe discomfort.",
+          "uid": "c86ae7a2-810c-54f0-8a4c-3f6dbb369ac1"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "b7e459fb-d5f9-415b-b191-2a6934ee3c85",
+              "memory_uid": "a4ff1b76-755d-530a-b24c-8655115e4fbe"
+            }
+          ],
+          "reason": "This compared-only capability boundary concerns the current state of footwear.",
+          "status": "RESOLVED",
+          "summary": "Knowing a shoe's location does not let the local agent determine its condition or usability.",
+          "uid": "c8de0ef6-26d8-5e3a-9e1c-2d8d51efe16c"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "The compared frame records rain-footwear and umbrella lessons, walking-plan guidance, family assistance, gear locations, and limits on assessing shoe usability.",
+        "differences": "",
+        "reference_only": "The reference records billing-timeliness lessons, inspection and visit preparation, scheduling guidance, a manager expectation, and limits on verifying service resolution."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "cc57f934-0643-4f56-a31f-e993d48fd5ca"
+    },
+    "analysis_digest": "d0a37416718098da1573ab4b80ce9b1e7ed7ba447abc90ce8943177cd61c8405",
+    "key": "c799a83de6d27f155bcacace3769f1147d47de010235c544c94eb755f2dc4962",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 36.95042449999892,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "c799a83de6d27f155bcacace3769f1147d47de010235c544c94eb755f2dc4962",
+  "created_at": "2026-08-13T18:42:30.664853Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/07",
+  "pair_key": "c4ce9420421eb3a780b097df3044e8f5c486fc44ecdb2762a85889d18155aed9",
+  "provider_seconds": 36.95042449999892,
+  "right": "task-3/local/personal-memory/2025/10",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

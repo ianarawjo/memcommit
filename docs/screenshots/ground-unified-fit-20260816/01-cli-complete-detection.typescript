@@ -1,0 +1,10 @@
+$ mem fit --ground ticker-context-fit --plain
+PTY · 180×52
+MEM FIT · 1/1 · CHECKING THE COMPLETE GROUND GRAPH . · 0sMEM FIT · 1/1 · RECEIPT SAVED . · 0s                                                         ! ticker-context-fit · 4/6 checks · CONTEXT 1 · VERTICAL 1 · PEER 0
+READ-ONLY DETECTION VERIFICATION
+  GROUND REVISION · 2
+  GROUND UNCHANGED · True
+  FIT RECEIPTS · 1
+  LATEST CURRENT · True
+  PROVIDER CALLS · 2
+CAPTURE GATE · PRESS V

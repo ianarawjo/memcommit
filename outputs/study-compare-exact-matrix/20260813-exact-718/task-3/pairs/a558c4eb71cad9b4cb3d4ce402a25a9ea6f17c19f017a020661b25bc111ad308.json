@@ -1,0 +1,388 @@
+{
+  "artifact": {
+    "analysis": {
+      "created_at": "2026-08-13T18:42:11.182760+00:00",
+      "frames": [
+        {
+          "context_digest": "58f58090449931225a941a4219f3fce7ebcf23bbabc0e0aa93a8733d4ba32701",
+          "context_name": "task-3/local/personal-memory/2024/07",
+          "context_uid": "8747b4f6-d17c-5b02-83f4-fc3af73e2da0",
+          "memories": [
+            {
+              "content": "The user updated the utility account for their residence in July 2024.",
+              "content_digest": "89c6a8e8dd7ad799b9ef4cb2b10963ce0b9ad55e713716d9729f903e76c0f71a",
+              "position": 0,
+              "uid": "65a332a2-2707-55f8-b7a6-a7378e6fbb7a"
+            },
+            {
+              "content": "After putting a paper bill in a drawer, the user checked it one day after the payment date.",
+              "content_digest": "474d42322de3190caee3e4feeb831bcb6a7b57e58427667d74be084ee9c64257",
+              "position": 1,
+              "uid": "fb94e1fd-9b3d-567a-81d8-d7a0ee90e04e"
+            },
+            {
+              "content": "In the month after receiving an electronic billing alert, the user paid two days before the deadline.",
+              "content_digest": "c16cf32e0018eb1cdf94e3070036d7fb93b0ccc8adb633a057642ff41284eaa0",
+              "position": 2,
+              "uid": "7d8db31a-c330-5852-9d7c-c9da7f98d899"
+            },
+            {
+              "content": "The user saw a water-inspection notice late and started washing dishes during the scheduled shutoff.",
+              "content_digest": "d5bea20cc35a46502ba919c52bee7519453346789d4bb881c82a9c08e6840cb0",
+              "position": 3,
+              "uid": "008dd110-feb2-5b4b-b602-bb3e23475a95"
+            },
+            {
+              "content": "After transferring a management-office notice to their phone calendar, the user did not miss the inspection time.",
+              "content_digest": "ce2c06404fcb8988b61da98f2ddd58d3db6506ff74aa1c7dfd43f841fa6fb25d",
+              "position": 4,
+              "uid": "a03ed01a-3d15-5eaf-9415-529705fd1245"
+            },
+            {
+              "content": "During a boiler technician's visit, the user had not cleared boxes from the entrance in advance and had to rearrange the passage.",
+              "content_digest": "39f4ca86667c0622dce2b6fee2b04df73131bf9d98e81478f1fa818b5dfe70c2",
+              "position": 5,
+              "uid": "2fb4b0bd-1257-5e50-881a-7f312940e1c5"
+            },
+            {
+              "content": "The user cleared the entrance the day before the next visit so the inspection could begin immediately.",
+              "content_digest": "e99fb029e3ca864e4f293358a85f33d73f4d7d2b9fda7dcd437ffdf183350666",
+              "position": 6,
+              "uid": "d05286e8-f183-5f4a-99d8-3dcca1aeaa09"
+            },
+            {
+              "content": "The building manager expects that a one-day advance visit notice gives a resident enough time to prepare the work area.",
+              "content_digest": "f992e380bfa87fa04c9f7dde8eceee69eb6b0aa3ad79c180d9023dafd7dd2abd",
+              "position": 7,
+              "uid": "44d28aa3-1aa4-5276-b545-86ee2cb17078"
+            },
+            {
+              "content": "Confirm the user's available time before finalizing a service visit to the residence.",
+              "content_digest": "dee4efa145a0f8b25c47a1c6855c02feee2de292e78b2e3790763796981db1e5",
+              "position": 8,
+              "uid": "77f77450-ab10-5469-8e2f-5445060926bc"
+            },
+            {
+              "content": "The local agent can compare payment records with notice times but cannot verify whether a residential service problem was resolved.",
+              "content_digest": "09e052010507ce17344888df5171f58996245cceb9012e160d540f030e7ba98a",
+              "position": 9,
+              "uid": "fd7f98b4-d5b9-5196-ad5e-c4356681ecf4"
+            }
+          ],
+          "side": "REFERENCE",
+          "uid": "c6e40a13-37b3-4c5f-95b6-3a943e0a53ab"
+        },
+        {
+          "context_digest": "1d47d83944d91bc0316a61894412e9b4361758603b9532687cf68473f1d30198",
+          "context_name": "task-3/local/personal-memory/2026/01",
+          "context_uid": "e48e6eac-20f7-599d-9f76-4238bd9dd96d",
+          "memories": [
+            {
+              "content": "The user keeps gloves and scarves in a basket inside the entrance.",
+              "content_digest": "df54c52cb6bc89e2e66c747df9807c6892db272c2a23ac5ac91e3f64aaa2a5da",
+              "position": 0,
+              "uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409"
+            },
+            {
+              "content": "On a day the user could not find their gloves, they walked with their hands in their pockets and missed the bus.",
+              "content_digest": "d4205aee5fe3f2c18adc3622930cc7f74de231de9812ca594dbd95a0af7199ff",
+              "position": 1,
+              "uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5"
+            },
+            {
+              "content": "Before the next outing, the user put the gloves in the entrance basket the night before and left on time.",
+              "content_digest": "23a7026d7d1a7edd3278e7b8aa147ef0d315059663f78da5498ad6c1b4a5407c",
+              "position": 2,
+              "uid": "a11f0943-8ee1-5305-87fb-64982fb36f82"
+            },
+            {
+              "content": "On a snowy day, the user chose a shorter route but turned back at stairs that had not been cleared of snow.",
+              "content_digest": "e9e241d2bc4d7c2fa9a44471aa6d1c16d42d50fe2ed99ccfb50713107714be9b",
+              "position": 3,
+              "uid": "f623f245-cdd5-5080-8869-b52cf2914076"
+            },
+            {
+              "content": "The next day, the user took a cleared sidewalk along the main road and avoided slippery sections.",
+              "content_digest": "62c8ec8b38778e9922cf433af4ceb4d59f60bee52dc758e3b88bb1163637f108",
+              "position": 4,
+              "uid": "17ac56f1-1302-5350-99d5-b95ef7feb768"
+            },
+            {
+              "content": "The user fell asleep with the heat turned up, became too warm before dawn, and woke twice.",
+              "content_digest": "912dbbc88a0f4a174b714a794793781f4d2f6c889f73cd7f825338addcab5d6c",
+              "position": 5,
+              "uid": "96988fa9-44b1-511e-8c99-4372f902cfe3"
+            },
+            {
+              "content": "The next night, the user turned down the heat and used one additional thin blanket.",
+              "content_digest": "3d12a4609d4731ebe71bacc841c979ac3497553238c3b5c2191842bbf075ba89",
+              "position": 6,
+              "uid": "b628acaa-50da-552c-8665-244dc4ab8263"
+            },
+            {
+              "content": "On a morning with heavy snow, the user's father expects the user will worry about road conditions and sends a text before departure.",
+              "content_digest": "dcd6bcb23bee46e49813bb14dd8dcb91983d5830f0536d7f23fcdb3a8af0667c",
+              "position": 7,
+              "uid": "08dfb937-7b28-55b5-801c-c0da00cbd414"
+            },
+            {
+              "content": "Before proposing a winter travel route, check recent snow-clearing conditions and accessible entrances.",
+              "content_digest": "dcab87102a9979c51dd369d5ba5ed00b7445c8ccd14450edcb8bec7859689606",
+              "position": 8,
+              "uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d"
+            },
+            {
+              "content": "The local agent cannot know the actual condition of the sidewalk the user will take from a weather forecast alone.",
+              "content_digest": "6b4bcc2f2f508f130c047ff677cadae0eae5b4cc5e5dd6bb3a1fb3784d7793b1",
+              "position": 9,
+              "uid": "802c4031-57de-592a-9bc8-6ee3d54921c8"
+            }
+          ],
+          "side": "COMPARED",
+          "uid": "71a4fd83-d9cd-47c1-a84d-084bef9bda14"
+        }
+      ],
+      "include_descendants": [
+        true,
+        true
+      ],
+      "issues": [],
+      "overview": "The frames cover separate practical domains. The reference centers on utility billing, residential inspections, visit preparation, scheduling, and verification limits, while the compared frame centers on winter clothing, route safety, sleep temperature, travel checks, and forecast limitations. No shared operational claim or substantive disagreement is present.",
+      "relations": [
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c6e40a13-37b3-4c5f-95b6-3a943e0a53ab",
+              "memory_uid": "65a332a2-2707-55f8-b7a6-a7378e6fbb7a"
+            }
+          ],
+          "reason": "This is independently useful account-history information found only in the reference frame.",
+          "status": "RESOLVED",
+          "summary": "The utility account for the user's residence was updated in July 2024.",
+          "uid": "1eefca97-cee7-5805-b987-20a116c1c41b"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c6e40a13-37b3-4c5f-95b6-3a943e0a53ab",
+              "memory_uid": "fb94e1fd-9b3d-567a-81d8-d7a0ee90e04e"
+            },
+            {
+              "frame_uid": "c6e40a13-37b3-4c5f-95b6-3a943e0a53ab",
+              "memory_uid": "7d8db31a-c330-5852-9d7c-c9da7f98d899"
+            }
+          ],
+          "reason": "These episodes jointly express a reference-only contrast between notice handling and payment timeliness.",
+          "status": "RESOLVED",
+          "summary": "How the user handled paper versus electronic billing notices was associated with late checking in one month and early payment in the next.",
+          "uid": "47069715-fdb8-5cc5-9a01-2b5bf21556da"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c6e40a13-37b3-4c5f-95b6-3a943e0a53ab",
+              "memory_uid": "008dd110-feb2-5b4b-b602-bb3e23475a95"
+            },
+            {
+              "frame_uid": "c6e40a13-37b3-4c5f-95b6-3a943e0a53ab",
+              "memory_uid": "a03ed01a-3d15-5eaf-9415-529705fd1245"
+            }
+          ],
+          "reason": "These episodes jointly express a reference-only change in handling residential inspection notices.",
+          "status": "RESOLVED",
+          "summary": "Late attention to an inspection notice caused a shutoff-time mistake, while transferring a later notice to a phone calendar prevented another missed inspection time.",
+          "uid": "c9c079ad-624c-569d-8db6-c4e859bdd9dc"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c6e40a13-37b3-4c5f-95b6-3a943e0a53ab",
+              "memory_uid": "2fb4b0bd-1257-5e50-881a-7f312940e1c5"
+            },
+            {
+              "frame_uid": "c6e40a13-37b3-4c5f-95b6-3a943e0a53ab",
+              "memory_uid": "d05286e8-f183-5f4a-99d8-3dcca1aeaa09"
+            }
+          ],
+          "reason": "These episodes jointly express a reference-only change in advance preparation of the service work area.",
+          "status": "RESOLVED",
+          "summary": "Failure to clear the entrance delayed one technician visit, while clearing it before the next visit allowed work to begin immediately.",
+          "uid": "f497e1fa-d30b-5804-93dd-42f7ba9b988f"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c6e40a13-37b3-4c5f-95b6-3a943e0a53ab",
+              "memory_uid": "44d28aa3-1aa4-5276-b545-86ee2cb17078"
+            }
+          ],
+          "reason": "This is an independently useful reference-only expectation about residential visit notice.",
+          "status": "RESOLVED",
+          "summary": "The building manager expects one day's advance notice to provide enough preparation time.",
+          "uid": "de78177b-591f-5142-8425-d8ff509651ec"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c6e40a13-37b3-4c5f-95b6-3a943e0a53ab",
+              "memory_uid": "77f77450-ab10-5469-8e2f-5445060926bc"
+            }
+          ],
+          "reason": "This is an independently useful reference-only scheduling policy.",
+          "status": "RESOLVED",
+          "summary": "The user's availability should be confirmed before a residential service visit is finalized.",
+          "uid": "154a0800-6d07-5f0d-b8cf-591bc886a22d"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "c6e40a13-37b3-4c5f-95b6-3a943e0a53ab",
+              "memory_uid": "fd7f98b4-d5b9-5196-ad5e-c4356681ecf4"
+            }
+          ],
+          "reason": "This is an independently useful reference-only capability boundary.",
+          "status": "RESOLVED",
+          "summary": "The local agent can compare payment and notice timing but cannot verify resolution of a residential service problem.",
+          "uid": "c75923aa-1386-537f-90a7-038729b9c347"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "71a4fd83-d9cd-47c1-a84d-084bef9bda14",
+              "memory_uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409"
+            },
+            {
+              "frame_uid": "71a4fd83-d9cd-47c1-a84d-084bef9bda14",
+              "memory_uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5"
+            },
+            {
+              "frame_uid": "71a4fd83-d9cd-47c1-a84d-084bef9bda14",
+              "memory_uid": "a11f0943-8ee1-5305-87fb-64982fb36f82"
+            }
+          ],
+          "reason": "These details jointly express a compared-only pattern connecting glove organization with timely departure.",
+          "status": "RESOLVED",
+          "summary": "Keeping or placing gloves in the entrance basket supports finding them before departure, while failing to find them contributed to missing a bus.",
+          "uid": "9a13aefa-74da-5544-aea2-be16ccf15432"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "71a4fd83-d9cd-47c1-a84d-084bef9bda14",
+              "memory_uid": "f623f245-cdd5-5080-8869-b52cf2914076"
+            },
+            {
+              "frame_uid": "71a4fd83-d9cd-47c1-a84d-084bef9bda14",
+              "memory_uid": "17ac56f1-1302-5350-99d5-b95ef7feb768"
+            }
+          ],
+          "reason": "These episodes jointly express a compared-only change in winter route selection based on snow clearance.",
+          "status": "RESOLVED",
+          "summary": "An uncleared shortcut proved unusable, while a cleared main-road sidewalk avoided slippery sections.",
+          "uid": "d855d106-93ab-5a54-a97c-4f47adfe0b21"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "71a4fd83-d9cd-47c1-a84d-084bef9bda14",
+              "memory_uid": "96988fa9-44b1-511e-8c99-4372f902cfe3"
+            },
+            {
+              "frame_uid": "71a4fd83-d9cd-47c1-a84d-084bef9bda14",
+              "memory_uid": "b628acaa-50da-552c-8665-244dc4ab8263"
+            }
+          ],
+          "reason": "These episodes jointly express a compared-only adjustment to nighttime temperature management.",
+          "status": "RESOLVED",
+          "summary": "Excess heat disrupted sleep, followed by lowering the heat and adding a thin blanket the next night.",
+          "uid": "aded2d0a-f203-5091-a233-6b855981e220"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "71a4fd83-d9cd-47c1-a84d-084bef9bda14",
+              "memory_uid": "08dfb937-7b28-55b5-801c-c0da00cbd414"
+            }
+          ],
+          "reason": "This is an independently useful compared-only expectation about winter travel concern.",
+          "status": "RESOLVED",
+          "summary": "The user's father expects concern about heavy-snow road conditions and texts before departure.",
+          "uid": "ce7c3c0c-f812-5798-a353-f8b6a5bfb6ba"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "71a4fd83-d9cd-47c1-a84d-084bef9bda14",
+              "memory_uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d"
+            }
+          ],
+          "reason": "This is an independently useful compared-only travel-planning policy.",
+          "status": "RESOLVED",
+          "summary": "Recent snow-clearing conditions and accessible entrances should be checked before proposing a winter route.",
+          "uid": "5d44b5e8-8030-5cf6-8893-0b1d26193d89"
+        },
+        {
+          "kind": "DISTINCT",
+          "members": [
+            {
+              "frame_uid": "71a4fd83-d9cd-47c1-a84d-084bef9bda14",
+              "memory_uid": "802c4031-57de-592a-9bc8-6ee3d54921c8"
+            }
+          ],
+          "reason": "This is an independently useful compared-only information limit.",
+          "status": "RESOLVED",
+          "summary": "A weather forecast alone cannot establish the actual condition of the sidewalk the user will take.",
+          "uid": "401cc487-a135-5634-910f-cc9ea8d2edaf"
+        }
+      ],
+      "reports": {
+        "both": "",
+        "compared_only": "Compared-only material covers organized winter clothing, safer snow-route choices, nighttime heat adjustment, family concern, travel-condition checks, and limits of forecasts for sidewalk assessment.",
+        "differences": "",
+        "reference_only": "Reference-only material covers utility administration, billing-alert effects, inspection reminders, work-area preparation, service scheduling, and limits on verifying resolution."
+      },
+      "ruleset_version": "peer-relations-v3",
+      "schema_version": 3,
+      "uid": "007ffdeb-d65a-4820-8180-cb41d7682781"
+    },
+    "analysis_digest": "6ff33e462c183617a1a3e17898935801e6729a94b0422b18c9dd3afc188d454f",
+    "key": "8178e975d92eb5fcb8eaf1e199fd35f809ea14713c352dd56c0ded7e5ab94cf3",
+    "kind": "STUDY_COMPARE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 35.90613566599859,
+    "operation": "COMPARE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": "one-shot-exhaustive-v1",
+    "reasoning": "medium",
+    "ruleset_version": "peer-relations-v3",
+    "schema_version": 1,
+    "task": "task-3",
+    "task_description": {
+      "context_digest": "12b50a9b0748c1ed2b94eba5f85b3f11e9e962d60a0f01b15b4099ce1a69f0a7",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "name": "task-3/description"
+    }
+  },
+  "artifact_key": "8178e975d92eb5fcb8eaf1e199fd35f809ea14713c352dd56c0ded7e5ab94cf3",
+  "created_at": "2026-08-13T18:42:47.088130Z",
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_PAIR",
+  "left": "task-3/local/personal-memory/2024/07",
+  "pair_key": "a558c4eb71cad9b4cb3d4ce402a25a9ea6f17c19f017a020661b25bc111ad308",
+  "provider_seconds": 35.90613566599859,
+  "right": "task-3/local/personal-memory/2026/01",
+  "schema_version": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}
