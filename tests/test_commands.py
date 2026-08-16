@@ -1809,7 +1809,7 @@ class TestStatus:
     def test_shows_no_memories_message_when_empty(self, isolated_store):
         invoke("init", "ctx")
         result = invoke("status")
-        assert "no memories yet" in result.output
+        assert "no direct Memories" in result.output
 
     def test_no_current_context_exits_cleanly(self, isolated_store):
         result = invoke("status")

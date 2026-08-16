@@ -141,6 +141,13 @@
         ],
         "reason": "CLI, Python, agent, MCP, and Find follow-up routes share one live direct-inspection application boundary with one-snapshot targeting, READ-Grant projection, and structural query-only concealment."
       },
+      "status": {
+        "evidence": [
+          "docs/status-application-boundary-matrix.md",
+          "docs/mem-status-short-design-rationale.md"
+        ],
+        "reason": "Detailed, compact, recursive, lineage, local, and granted CLI routes share one typed read-only inventory, bounded preview, relationship, and recent-checkpoint application/runtime boundary."
+      },
       "summarize": {
         "evidence": [
           "docs/summarize-application-boundary-matrix.md",
@@ -206,7 +213,6 @@
       "review",
       "share",
       "shell-init",
-      "status",
       "trace",
       "translate",
       "undo",

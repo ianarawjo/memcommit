@@ -124,7 +124,10 @@
       "docs/show-application-boundary-matrix.md",
       "docs/show-application-design-rationale.md"
     ],
-    "status": [],
+    "status": [
+      "docs/status-application-boundary-matrix.md",
+      "docs/mem-status-short-design-rationale.md"
+    ],
     "summarize": [
       "docs/summarize-application-boundary-matrix.md",
       "docs/read-report-lifecycle-design-rationale.md"

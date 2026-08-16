@@ -94,7 +94,10 @@ BEST_FOR_BY_OPERATION = {
     "share": "Delivering an owned Context to an authorized receiver.",
     "shell-init": "Enabling optional shell-specific conveniences.",
     "show": "Reading the complete content of a known item or Context.",
-    "status": "Quickly checking the state and recent activity of the current Context.",
+    "status": (
+        "Getting oriented to what the current Context contains, how it is "
+        "connected, and which operations were recently applied."
+    ),
     "summarize": "Obtaining a concise overview of a Context or subtree.",
     "switch": "Moving the working position to another existing Context.",
     "trace": "Determining where a Memory came from and how it changed.",

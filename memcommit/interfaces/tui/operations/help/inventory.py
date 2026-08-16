@@ -622,6 +622,7 @@ COMMAND_FORMS = {
         "mem status (detailed current-Context status)",
         "mem status --short (one-line status)",
         "mem status --branch (include Profile and Context lineage)",
+        "mem status --recursive (include readable descendants and embedded Contexts)",
     ),
     "pwd": ("mem pwd (print the current canonical Context name)",),
     "summarize": (

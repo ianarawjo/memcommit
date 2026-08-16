@@ -460,11 +460,17 @@ _OPERATIONS = (
     ),
     _operation(
         "status",
-        "Show current Context counts, recent Memories, and checkpoints.",
-        "Current Context -> status report",
+        (
+            "Show the current Context's inventory, first five direct Memories, "
+            "relationships, and latest checkpoints."
+        ),
+        "Current Context state + history -> status report",
         ExecutionKind.DETERMINISTIC,
         "Read-only",
-        "Current exact Context",
+        (
+            "Current Context by default; -r includes readable descendants and "
+            "embedded Contexts"
+        ),
     ),
     _operation(
         "summarize",

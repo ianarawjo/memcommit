@@ -183,7 +183,11 @@ def test_status_keeps_read_only_projection_and_shows_granted_target_permissions(
     tmp_path,
     monkeypatch,
 ):
-    _grant_fixture(isolated_store, tmp_path, monkeypatch)
+    _authority, _editable, campus_grant, details_grant = _grant_fixture(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+    )
     store = MemoryStore()
     store.set_current_virtual_context_if("task-root", "campus-wiki")
 
@@ -197,6 +201,21 @@ def test_status_keeps_read_only_projection_and_shows_granted_target_permissions(
         "Access: READ GRANT · PERMISSIONS CREATE + READ + UPDATE · READ ONLY"
         in detailed.output
     )
+
+    store.set_current("task-root")
+    attached = runner.invoke(app, ["status"])
+
+    assert attached.exit_code == 0, attached.output
+    assert "Relationships:" in attached.output
+    assert (
+        f"GRANT [{campus_grant.uid[:8]} r1] campus-wiki · "
+        "PERMISSIONS CREATE + READ + UPDATE"
+    ) in attached.output
+    assert (
+        f"GRANT [{details_grant.uid[:8]} r1] "
+        "campus-wiki/construction-details · PERMISSIONS QUERY"
+    ) in attached.output
+    assert "Original campus note." not in attached.output
 
 
 def test_summarize_preserves_granted_read_projection_and_binding_freshness(

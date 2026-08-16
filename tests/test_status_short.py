@@ -41,7 +41,8 @@ def test_status_short_does_not_change_detailed_default(isolated_store):
     assert short.output.startswith("notes [OWNED] · Memories 0")
     assert detailed.exit_code == 0, detailed.output
     assert "On context: notes" in detailed.output
-    assert "(no memories yet)" in detailed.output
+    assert "Memory preview:" in detailed.output
+    assert "(no direct Memories)" in detailed.output
 
 
 def test_status_direct_flag_preserves_the_default_output(isolated_store):
@@ -115,3 +116,66 @@ def test_status_rejects_conflicting_scope_presets(isolated_store):
 
     assert result.exit_code == 2
     assert "Choose either --direct/-d or --recursive/-r" in result.output
+
+
+def test_status_previews_first_five_memories_and_latest_five_checkpoints(
+    isolated_store,
+):
+    store = MemoryStore()
+    context = ops.init("preview")
+    memories = [ops.add(context, f"Memory {index}") for index in range(7)]
+    store.save(context)
+    store.set_current(context.name)
+    for index in range(7):
+        store.checkpoint(
+            context,
+            message=f"Change {index}",
+            command="edit",
+            description=f"Change {index}",
+            auto=True,
+        )
+
+    result = runner.invoke(app, ["status"])
+
+    assert result.exit_code == 0, result.output
+    assert "Memory preview · first 5 of 7:" in result.output
+    for memory in memories[:5]:
+        assert f"[{memory.uid[:8]}]" in result.output
+    for memory in memories[5:]:
+        assert f"[{memory.uid[:8]}]" not in result.output
+    assert "Recent changes · latest 5 of 7 checkpoints:" in result.output
+    assert "Change 6" in result.output
+    assert "Change 2" in result.output
+    assert "Change 1" not in result.output
+    assert "Change 0" not in result.output
+
+
+def test_status_lists_direct_pointer_and_embed_relationships(isolated_store):
+    store = MemoryStore()
+    source = ops.init("source")
+    source_memory = ops.add(source, "Shared source Memory")
+    child = ops.init("child")
+    parent = ops.init("parent")
+    reference = ops.reference_memory(source_memory, source, parent)
+    ops.embed(child, parent)
+    for context in (source, child, parent):
+        store.save(context)
+    store.set_current(parent.name)
+
+    result = runner.invoke(app, ["status"])
+
+    assert result.exit_code == 0, result.output
+    assert "Relationships:" in result.output
+    assert f"MEMORY REF [{reference.uid[:8]}] source#{source_memory.uid[:8]}" in result.output
+    assert f"EMBEDDED CONTEXT [{child.uid[:8]}] child" in result.output
+
+
+def test_status_help_describes_inventory_preview_relationships_and_scope():
+    result = runner.invoke(app, ["status", "--help"])
+
+    assert result.exit_code == 0, result.output
+    assert "inventory, first five direct Memories" in result.output
+    assert "relationships, and latest checkpoints" in result.output
+    assert "Show orientation and item counts on one line" in result.output
+    assert "Include readable lexical descendants and embedded" in result.output
+    assert "Contexts in inventory totals" in result.output

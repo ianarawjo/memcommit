@@ -61,7 +61,7 @@ only from `docs/operation-evidence-index.json`.
 | `share` | `UNREVIEWED` | — | — |
 | `shell-init` | `UNREVIEWED` | — | — |
 | `show` | `CLOSED` | [`show-application-boundary-matrix.md`](../show-application-boundary-matrix.md)<br>[`show-application-design-rationale.md`](../show-application-design-rationale.md) | CLI, Python, agent, MCP, and Find follow-up routes share one live direct-inspection application boundary with one-snapshot targeting, READ-Grant projection, and structural query-only concealment. |
-| `status` | `UNREVIEWED` | — | — |
+| `status` | `CLOSED` | [`status-application-boundary-matrix.md`](../status-application-boundary-matrix.md)<br>[`mem-status-short-design-rationale.md`](../mem-status-short-design-rationale.md) | Detailed, compact, recursive, lineage, local, and granted CLI routes share one typed read-only inventory, bounded preview, relationship, and recent-checkpoint application/runtime boundary. |
 | `summarize` | `CLOSED` | [`summarize-application-boundary-matrix.md`](../summarize-application-boundary-matrix.md)<br>[`read-report-lifecycle-design-rationale.md`](../read-report-lifecycle-design-rationale.md) | Direct and recursive reads share one terminal-independent application result with independent plain and TUI presenters. |
 | `switch` | `CLOSED` | [`switch-application-boundary-matrix.md`](../switch-application-boundary-matrix.md) | Explicit CLI, interactive picker, and checkout-compatible selection share one typed global/relative locator, READ authorization, target validation, and current-pointer CAS boundary. |
 | `trace` | `UNREVIEWED` | [`read-report-lifecycle-design-rationale.md`](../read-report-lifecycle-design-rationale.md) | — |
