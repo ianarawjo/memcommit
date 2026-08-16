@@ -2,11 +2,11 @@
 
 ## Status
 
-Physical creation, loading, typed Memory editing, and Ground-local Undo are
-implemented at the domain/application/runtime boundary. Terminal adapters and
-the Distill, Elaborate, and Fit semantic projections remain integration gates.
-The legacy session Store remains available during that migration; existing
-prototype Ground session JSON is not a migration input for a new workspace.
+Physical creation, loading, typed Memory editing, Ground-local Undo, and the
+Distill, Elaborate, and Fit semantic projections are implemented. The Ground
+workspace terminal adapter remains an integration gate. The legacy session
+Store remains available during that migration; existing prototype Ground
+session JSON is not a migration input for a new workspace.
 
 Last reviewed: 2026-08-16.
 

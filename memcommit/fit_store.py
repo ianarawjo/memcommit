@@ -11,6 +11,15 @@ import uuid
 
 from memcommit.fit import FitError, FitReport
 from memcommit.ground import GroundSession, context_frame_digest
+from memcommit.ground_workspace import GroundWorkspace
+from memcommit.ground_workspace_fit import (
+    load_ground_workspace_fit_contexts,
+    workspace_fit_report_is_current,
+)
+from memcommit.ground_workspace_runtime import (
+    ground_workspace_exists,
+    load_ground_workspace,
+)
 from memcommit.store import MemoryStore, ground_session_record_digest
 
 
@@ -46,6 +55,32 @@ class FitStore:
 
         restored = FitReport.from_dict(report.to_dict())
         path = self._path(restored.uid)
+        if ground_workspace_exists(self.store, restored.ground_name):
+            with self.store._context_graph_lock(exclusive=False):  # noqa: SLF001
+                workspace = load_ground_workspace(self.store, restored.ground_name)
+                context_scope = load_ground_workspace_fit_contexts(
+                    self.store,
+                    workspace,
+                )
+                lock_names = (
+                    workspace.root.name,
+                    workspace.goals.name,
+                    workspace.rules.name,
+                    workspace.examples.name,
+                    *(context.name for context in context_scope),
+                )
+                with self.store._context_write_locks(lock_names):  # noqa: SLF001
+                    with self.store.profile_write_guard():
+                        if not workspace_fit_report_is_current(
+                            self.store,
+                            restored,
+                        ):
+                            raise FitError(
+                                "The consumed Ground workspace Memories changed "
+                                "before its Fit receipt could be saved."
+                            )
+                        self._write_new_report(restored, path)
+            return
         # Fit publication shares the Ground lock and, for v2, every exact
         # Context input lock so no mutation can land between freshness
         # validation and this receipt.
@@ -76,28 +111,33 @@ class FitStore:
                     "The Ground or a bound Context changed before its Fit "
                     "receipt could be saved."
                 )
-            if self.directory.exists() and (
-                not self.directory.is_dir() or self.directory.is_symlink()
-            ):
-                raise FitError("Fit receipt storage is invalid.")
-            self.directory.mkdir(parents=True, exist_ok=True, mode=0o700)
-            if path.exists() or path.is_symlink():
-                raise FitError("A Fit receipt with this uid already exists.")
-            temporary = self.directory / f".{path.name}.write-{uuid.uuid4().hex}"
-            try:
-                descriptor = os.open(
-                    temporary,
-                    os.O_WRONLY | os.O_CREAT | os.O_EXCL,
-                    0o600,
-                )
-                with os.fdopen(descriptor, "w", encoding="utf-8") as handle:
-                    json.dump(restored.to_dict(), handle, ensure_ascii=False, indent=2)
-                    handle.flush()
-                    os.fsync(handle.fileno())
-                os.replace(temporary, path)
-            finally:
-                if temporary.exists() and not temporary.is_symlink():
-                    temporary.unlink()
+            self._write_new_report(restored, path)
+
+    def _write_new_report(self, report: FitReport, path: Path) -> None:
+        """Create one immutable report while the caller owns freshness locks."""
+
+        if self.directory.exists() and (
+            not self.directory.is_dir() or self.directory.is_symlink()
+        ):
+            raise FitError("Fit receipt storage is invalid.")
+        self.directory.mkdir(parents=True, exist_ok=True, mode=0o700)
+        if path.exists() or path.is_symlink():
+            raise FitError("A Fit receipt with this uid already exists.")
+        temporary = self.directory / f".{path.name}.write-{uuid.uuid4().hex}"
+        try:
+            descriptor = os.open(
+                temporary,
+                os.O_WRONLY | os.O_CREAT | os.O_EXCL,
+                0o600,
+            )
+            with os.fdopen(descriptor, "w", encoding="utf-8") as handle:
+                json.dump(report.to_dict(), handle, ensure_ascii=False, indent=2)
+                handle.flush()
+                os.fsync(handle.fileno())
+            os.replace(temporary, path)
+        finally:
+            if temporary.exists() and not temporary.is_symlink():
+                temporary.unlink()
 
     def load(self, uid: str) -> FitReport:
         path = self._path(uid)
@@ -137,6 +177,19 @@ class FitStore:
         return GroundFitReceipt(
             report=report,
             current=_report_is_current(report, session, store=self.store),
+        )
+
+    def latest_for_workspace(
+        self,
+        workspace: GroundWorkspace,
+    ) -> GroundFitReceipt | None:
+        reports = self.list(ground_uid=workspace.uid)
+        if not reports:
+            return None
+        report = reports[-1]
+        return GroundFitReceipt(
+            report=report,
+            current=workspace_fit_report_is_current(self.store, report),
         )
 
 

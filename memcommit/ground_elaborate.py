@@ -3,12 +3,23 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import hashlib
+import json
 from typing import Literal, Protocol
 
 from memcommit.elaborate import ElaborateError, ElaborateProvider
 from memcommit.elaborate_application import ElaborateRequest, ElaborateResult
 from memcommit.elaborate_runtime import execute_elaborate
 from memcommit.ground import GroundSession, is_bound_ground_schema
+from memcommit.ground_workspace import GroundWorkspace
+from memcommit.ground_workspace_runtime import (
+    ground_workspace_exists,
+    load_ground_workspace,
+)
+from memcommit.ground_workspace_projection import (
+    GroundWorkspaceProjectionError,
+    project_ordinary_memories,
+)
 from memcommit.store import MemoryStore, ground_session_record_digest
 
 
@@ -71,6 +82,21 @@ def freeze_ground_elaborate(
 ) -> FrozenGroundElaborate:
     """Freeze the exact Ground input before semantic infrastructure opens."""
 
+    if ground_workspace_exists(store, ground_name):
+        workspace = load_ground_workspace(store, ground_name)
+        request, digest = _request_from_ground_workspace(
+            workspace,
+            direction=direction,
+        )
+        return FrozenGroundElaborate(
+            ground_name=workspace.name,
+            ground_uid=workspace.uid,
+            ground_revision=workspace.manifest.revision,
+            ground_digest=digest,
+            direction=direction,
+            request=request,
+        )
+
     session = store.load_ground_session(ground_name)
     if session is None:
         raise ElaborateError(f"Ground '{ground_name}' was not found.")
@@ -85,6 +111,57 @@ def freeze_ground_elaborate(
     )
 
 
+def _request_from_ground_workspace(
+    workspace: GroundWorkspace,
+    *,
+    direction: GroundElaborateDirection,
+) -> tuple[ElaborateRequest, str]:
+    if direction == "GOAL_TO_RULES":
+        try:
+            memories = project_ordinary_memories(
+                workspace.goals,
+                operation="Ground workspace Elaborate",
+            )
+        except GroundWorkspaceProjectionError as error:
+            raise ElaborateError(str(error)) from error
+        if len(memories) != 1:
+            raise ElaborateError(
+                "Ground workspace Elaborate requires exactly one Goal Memory."
+            )
+        request = ElaborateRequest(goal=memories[0].content)
+    elif direction == "RULES_TO_CASES":
+        try:
+            memories = project_ordinary_memories(
+                workspace.rules,
+                operation="Ground workspace Elaborate",
+            )
+        except GroundWorkspaceProjectionError as error:
+            raise ElaborateError(str(error)) from error
+        if not memories:
+            raise ElaborateError(
+                "The Ground workspace contains no Rule Memories to elaborate."
+            )
+        request = ElaborateRequest(rules=tuple(item.content for item in memories))
+    else:
+        raise ElaborateError("Ground Elaborate direction is invalid.")
+    digest = hashlib.sha256(
+        json.dumps(
+            {
+                "workspace_uid": workspace.uid,
+                "direction": direction,
+                "memories": [
+                    {"uid": item.uid, "content": item.content}
+                    for item in memories
+                ],
+            },
+            ensure_ascii=False,
+            separators=(",", ":"),
+            sort_keys=True,
+        ).encode("utf-8")
+    ).hexdigest()
+    return request, digest
+
+
 def execute_ground_elaborate(
     frozen: FrozenGroundElaborate,
     *,
@@ -95,6 +172,40 @@ def execute_ground_elaborate(
 
     if not isinstance(frozen, FrozenGroundElaborate):
         raise TypeError("Ground Elaborate requires a frozen request.")
+    if ground_workspace_exists(store, frozen.ground_name):
+        before_workspace = load_ground_workspace(store, frozen.ground_name)
+        before_request, before_digest = _request_from_ground_workspace(
+            before_workspace,
+            direction=frozen.direction,
+        )
+        if (
+            before_workspace.uid != frozen.ground_uid
+            or before_digest != frozen.ground_digest
+            or before_request != frozen.request
+        ):
+            raise ElaborateError(
+                "The consumed Ground workspace Memories changed before "
+                "Elaborate began."
+            )
+        result = execute_elaborate(
+            frozen.request,
+            provider_factory=provider_factory,
+        )
+        after_workspace = load_ground_workspace(store, frozen.ground_name)
+        after_request, after_digest = _request_from_ground_workspace(
+            after_workspace,
+            direction=frozen.direction,
+        )
+        if (
+            after_workspace.uid != frozen.ground_uid
+            or after_digest != frozen.ground_digest
+            or after_request != frozen.request
+        ):
+            raise ElaborateError(
+                "The consumed Ground workspace Memories changed while "
+                "Elaborate was running; no proposal was published."
+            )
+        return GroundElaborateResult(frozen=frozen, elaborate=result)
     before = store.load_ground_session(frozen.ground_name)
     if (
         before is None

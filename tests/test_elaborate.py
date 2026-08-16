@@ -14,6 +14,7 @@ from typer.testing import CliRunner
 
 import memcommit.commands.elaborate as elaborate_command
 import memcommit.elaborate_application as elaborate_application
+import memcommit.ops as ops
 from memcommit.cli import app
 from memcommit.context import Context, Memory
 from memcommit.elaborate import (
@@ -34,6 +35,14 @@ from memcommit.ground import (
 from memcommit.ground_elaborate import (
     execute_ground_elaborate,
     freeze_ground_elaborate,
+)
+from memcommit.ground_workspace_application import (
+    AddGroundWorkspaceMemoryRequest,
+    CreateGroundWorkspaceRequest,
+)
+from memcommit.ground_workspace_runtime import (
+    execute_ground_workspace_creation,
+    execute_ground_workspace_memory_add,
 )
 from memcommit.interfaces.tui.operations.elaborate import (
     project_elaborate_clipboard,
@@ -491,3 +500,102 @@ def test_mem_elaborate_plain_uses_the_typed_application(monkeypatch) -> None:
     assert "ELABORATE · GOAL → RULES" in result.output
     assert "[Suggested] [Unverified]" in result.output
     assert "Nothing has been saved or accepted." in result.output
+
+
+def test_physical_ground_goal_elaborate_freezes_only_the_goal_memory(
+    isolated_store,
+):
+    store = MemoryStore()
+    execute_ground_workspace_creation(
+        CreateGroundWorkspaceRequest(
+            name="physical-elaborate",
+            goal="Confirm a chosen option before acting.",
+        ),
+        store=store,
+    )
+    frozen = freeze_ground_elaborate(
+        store,
+        ground_name="physical-elaborate",
+        direction="GOAL_TO_RULES",
+    )
+    # An Example is outside this direction's consumed frame and must not make
+    # a safe cached/provider request stale.
+    execute_ground_workspace_memory_add(
+        AddGroundWorkspaceMemoryRequest(
+            workspace_name="physical-elaborate",
+            lane="examples",
+            content="A person explicitly confirms option A.",
+        ),
+        store=store,
+    )
+    provider = ElaborateProvider()
+
+    result = execute_ground_elaborate(
+        frozen,
+        store=store,
+        provider_factory=lambda: provider,
+    )
+
+    assert result.frozen.request == ElaborateRequest(
+        goal="Confirm a chosen option before acting."
+    )
+    assert len(provider.calls) == 1
+
+
+def test_physical_ground_rules_elaborate_and_fail_on_consumed_rule_drift(
+    isolated_store,
+):
+    store = MemoryStore()
+    execute_ground_workspace_creation(
+        CreateGroundWorkspaceRequest(name="physical-elaborate"),
+        store=store,
+    )
+    execute_ground_workspace_memory_add(
+        AddGroundWorkspaceMemoryRequest(
+            workspace_name="physical-elaborate",
+            lane="rules",
+            content="Act only after explicit confirmation.",
+        ),
+        store=store,
+    )
+    frozen = freeze_ground_elaborate(
+        store,
+        ground_name="physical-elaborate",
+        direction="RULES_TO_CASES",
+    )
+    rules = store.load_for_update("physical-elaborate/rules")
+    rules.add("A concurrent consumed Rule.")
+    store.save(rules)
+    provider = ElaborateProvider()
+
+    with pytest.raises(ElaborateError, match="consumed Ground workspace"):
+        execute_ground_elaborate(
+            frozen,
+            store=store,
+            provider_factory=lambda: provider,
+        )
+
+    assert provider.calls == []
+
+
+def test_physical_ground_elaborate_rejects_typed_rule_before_provider(
+    isolated_store,
+):
+    store = MemoryStore()
+    execute_ground_workspace_creation(
+        CreateGroundWorkspaceRequest(name="physical-elaborate"),
+        store=store,
+    )
+    source = ops.init("physical-elaborate/external-rules")
+    memory = ops.add(source, "Act only after explicit confirmation.")
+    store.create_context(source)
+    rules = store.load_for_update("physical-elaborate/rules")
+    ops.reference_memory(memory, source, rules)
+    store.save(rules)
+
+    with pytest.raises(ElaborateError, match="authority-aware Ground projection"):
+        freeze_ground_elaborate(
+            store,
+            ground_name="physical-elaborate",
+            direction="RULES_TO_CASES",
+        )

@@ -37,6 +37,11 @@ from memcommit.ground import (
     GroundSession,
     is_bound_ground_schema,
 )
+from memcommit.ground_workspace_fit import execute_ground_workspace_fit
+from memcommit.ground_workspace_runtime import (
+    ground_workspace_exists,
+    load_ground_workspace,
+)
 from memcommit.fit_store import FitStore
 from memcommit.store import MemoryStore, ground_session_record_digest
 
@@ -201,6 +206,13 @@ def execute_ground_fit(
 ) -> FitReport:
     """Execute Fit over one exact Ground revision and detect a concurrent edit."""
 
+    if ground_workspace_exists(store, ground_name):
+        return execute_ground_workspace_fit(
+            store=store,
+            ground_name=ground_name,
+            provider_factory=provider_factory,
+        )
+
     session = store.load_ground_session(ground_name)
     if session is None:
         raise FitError(f"Ground '{ground_name}' was not found.")
@@ -295,6 +307,18 @@ def run_fit_with_store(
     report = fit_store.load(request.receipt_uid)
     if report.ground_name != request.ground_name:
         raise FitError("The Fit receipt belongs to a different Ground.")
+    if ground_workspace_exists(store, request.ground_name):
+        latest = fit_store.latest_for_workspace(
+            load_ground_workspace(store, request.ground_name)
+        )
+        return FitResult(
+            report,
+            current=(
+                latest is not None
+                and latest.report.uid == report.uid
+                and latest.current
+            ),
+        )
     session = store.load_ground_session(request.ground_name)
     if session is None:
         raise FitError(f"Ground '{request.ground_name}' was not found.")

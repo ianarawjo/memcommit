@@ -22,6 +22,7 @@ from memcommit.fit_coherence import (
     FIT_COHERENCE_PAYLOAD_MARKER,
 )
 from memcommit.fit_runtime import execute_and_save_ground_fit, freeze_ground_fit
+from memcommit.fit_judgment import FIT_JUDGMENT_PAYLOAD_MARKER
 from memcommit.fit_store import FitStore
 from memcommit.ground import (
     GroundTargetSpec,
@@ -33,6 +34,15 @@ from memcommit.ground import (
     upgrade_ground_to_propositions,
 )
 from memcommit.store import MemoryStore, ground_session_record_digest
+from memcommit.ground_workspace_application import (
+    AddGroundWorkspaceMemoryRequest,
+    CreateGroundWorkspaceRequest,
+)
+from memcommit.ground_workspace_runtime import (
+    execute_ground_workspace_creation,
+    execute_ground_workspace_memory_add,
+    load_ground_workspace,
+)
 
 
 def _uid() -> str:
@@ -85,6 +95,56 @@ class _GroundProvider:
                         "predicted": "AAT",
                         "reason": "The initials produce the expected symbol.",
                     }
+                ],
+            }
+        )
+
+
+class _PhysicalGroundProvider:
+    """Return all-fitting proposition and coherence judgments."""
+
+    def __init__(self) -> None:
+        self.operations: list[str] = []
+
+    def complete(self, prompt: str, *, operation: str, output_schema=None) -> str:
+        self.operations.append(operation)
+        if operation == FIT_COHERENCE_OPERATION:
+            payload = json.loads(prompt.split(FIT_COHERENCE_PAYLOAD_MARKER, 1)[1])
+            return json.dumps(
+                {
+                    "overview": "The physical Ground graph stays aligned.",
+                    "findings": [
+                        {
+                            **check,
+                            "status": "FIT",
+                            "material_aliases": [],
+                            "reason": "The frozen relation stays coherent.",
+                        }
+                        for check in payload["checks"]
+                    ],
+                }
+            )
+        payload = json.loads(prompt.split(FIT_JUDGMENT_PAYLOAD_MARKER, 1)[1])
+        return json.dumps(
+            {
+                "overview": "Every Rule and Example can jointly hold.",
+                "judgments": [
+                    {
+                        "question_id": question["question_id"],
+                        "verdict": "YES",
+                        "reason": "The reviewed Example is compatible.",
+                        "considered_proposition_ids": [
+                            item["proposition_id"]
+                            for item in (
+                                *question["background"],
+                                *question["propositions"],
+                            )
+                        ],
+                        "material_proposition_ids": [],
+                        "consistent_reading": "",
+                        "inconsistent_reading": "",
+                    }
+                    for question in payload["questions"]
                 ],
             }
         )
@@ -502,3 +562,135 @@ def test_mem_fit_forced_tui_fails_before_opening_storage(monkeypatch) -> None:
 
     assert result.exit_code == 1
     assert "Interactive presentation requires a TTY" in result.output
+
+
+def _physical_fit_ground(store: MemoryStore) -> None:
+    execute_ground_workspace_creation(
+        CreateGroundWorkspaceRequest(
+            name="physical-fit",
+            goal="Learn how real US ticker symbols are assigned.",
+        ),
+        store=store,
+    )
+    for lane, content in (
+        ("contexts", "Use actual US-listed companies and their real symbols."),
+        ("rules", "Remove a trailing legal entity suffix when appropriate."),
+        ("examples", "Apple Inc. is listed under AAPL."),
+    ):
+        execute_ground_workspace_memory_add(
+            AddGroundWorkspaceMemoryRequest(
+                workspace_name="physical-fit",
+                lane=lane,
+                content=content,
+            ),
+            store=store,
+        )
+
+
+def test_physical_ground_fit_saves_and_reopens_an_input_bound_receipt(
+    isolated_store,
+):
+    store = MemoryStore()
+    _physical_fit_ground(store)
+    provider = _PhysicalGroundProvider()
+
+    report = execute_and_save_ground_fit(
+        store=store,
+        ground_name="physical-fit",
+        provider_factory=lambda: provider,
+    )
+    workspace = load_ground_workspace(store, "physical-fit")
+    latest = FitStore(store).latest_for_workspace(workspace)
+
+    assert latest is not None and latest.current
+    assert latest.report.uid == report.uid
+    assert report.schema_version == FIT_SCHEMA_VERSION
+    assert report.coherence is not None
+    assert report.issue_count == 0
+    assert provider.operations == ["fit_propositions", FIT_COHERENCE_OPERATION]
+
+
+def test_physical_fit_receipt_ignores_unconsumed_relation_but_tracks_rule(
+    isolated_store,
+):
+    store = MemoryStore()
+    _physical_fit_ground(store)
+    report = execute_and_save_ground_fit(
+        store=store,
+        ground_name="physical-fit",
+        provider_factory=_PhysicalGroundProvider,
+    )
+    execute_ground_workspace_memory_add(
+        AddGroundWorkspaceMemoryRequest(
+            workspace_name="physical-fit",
+            lane="relations",
+            content="The Goal is evaluated against all active Rules.",
+        ),
+        store=store,
+    )
+    after_relation = FitStore(store).latest_for_workspace(
+        load_ground_workspace(store, "physical-fit")
+    )
+    assert after_relation is not None and after_relation.current
+    assert after_relation.report.uid == report.uid
+
+    execute_ground_workspace_memory_add(
+        AddGroundWorkspaceMemoryRequest(
+            workspace_name="physical-fit",
+            lane="rules",
+            content="A later consumed Rule.",
+        ),
+        store=store,
+    )
+    after_rule = FitStore(store).latest_for_workspace(
+        load_ground_workspace(store, "physical-fit")
+    )
+    assert after_rule is not None and not after_rule.current
+
+
+def test_physical_fit_rejects_typed_context_input_before_provider_construction(
+    isolated_store,
+):
+    store = MemoryStore()
+    _physical_fit_ground(store)
+    source = ops.init("physical-fit/external-source")
+    memory = ops.add(source, "An externally owned market observation.")
+    store.create_context(source)
+    contexts = store.load_for_update("physical-fit/contexts")
+    ops.reference_memory(memory, source, contexts)
+    store.save(contexts)
+    provider_constructions = 0
+
+    def provider_factory():
+        nonlocal provider_constructions
+        provider_constructions += 1
+        return _PhysicalGroundProvider()
+
+    with pytest.raises(FitError, match="authority-aware Ground projection"):
+        execute_and_save_ground_fit(
+            store=store,
+            ground_name="physical-fit",
+            provider_factory=provider_factory,
+        )
+
+    assert provider_constructions == 0
+
+
+def test_mem_fit_plain_runs_against_physical_ground(monkeypatch, isolated_store):
+    store = MemoryStore()
+    _physical_fit_ground(store)
+    monkeypatch.setattr(
+        fit_command,
+        "connect_semantic_provider",
+        _PhysicalGroundProvider,
+    )
+
+    result = CliRunner().invoke(
+        app,
+        ["fit", "--ground", "physical-fit", "--plain"],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert result.output == (
+        "✓ physical-fit · 6/6 checks · CONTEXT 0 · VERTICAL 0 · PEER 0\n"
+    )

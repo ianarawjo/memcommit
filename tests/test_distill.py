@@ -30,6 +30,14 @@ from memcommit.ground import (
     create_ground_session,
 )
 from memcommit.ground_distill import execute_ground_distill, freeze_ground_distill
+from memcommit.ground_workspace_application import (
+    AddGroundWorkspaceMemoryRequest,
+    CreateGroundWorkspaceRequest,
+)
+from memcommit.ground_workspace_runtime import (
+    execute_ground_workspace_creation,
+    execute_ground_workspace_memory_add,
+)
 from memcommit.store import MemoryStore
 from memcommit.summarize import collect_summary_frame
 
@@ -593,6 +601,114 @@ def test_mem_distill_ground_plain_uses_frozen_ground(monkeypatch, isolated_store
     assert result.exit_code == 0, result.output
     assert "DISTILL · distill/candidates" in result.output
     assert "GOAL · RELEVANCE FOCUS ONLY" in result.output
+
+
+def _physical_ground_with_distill_examples(store: MemoryStore) -> None:
+    execute_ground_workspace_creation(
+        CreateGroundWorkspaceRequest(
+            name="physical-distill",
+            goal="Learn how real US ticker symbols are assigned.",
+        ),
+        store=store,
+    )
+    for content in (
+        "Apple Inc. is listed under AAPL.",
+        "Microsoft Corporation is listed under MSFT.",
+    ):
+        execute_ground_workspace_memory_add(
+            AddGroundWorkspaceMemoryRequest(
+                workspace_name="physical-distill",
+                lane="examples",
+                content=content,
+            ),
+            store=store,
+        )
+
+
+def test_physical_ground_distill_consumes_goal_and_example_memories(
+    isolated_store,
+):
+    store = MemoryStore()
+    _physical_ground_with_distill_examples(store)
+    frozen = freeze_ground_distill(store, ground_name="physical-distill")
+    provider = DistillProvider()
+
+    result = execute_ground_distill(
+        frozen,
+        store=store,
+        provider_factory=lambda: provider,
+    )
+
+    assert frozen.source_kind == "GROUND_WORKSPACE_INPUTS"
+    assert frozen.request.goal == "Learn how real US ticker symbols are assigned."
+    assert [source.content for source in frozen.candidate_frame.sources] == [
+        "Apple Inc. is listed under AAPL.",
+        "Microsoft Corporation is listed under MSFT.",
+    ]
+    assert result.distill.analysis.source == frozen.candidate_frame
+    assert len(provider.calls) == 1
+
+
+def test_physical_ground_distill_ignores_unconsumed_rule_revision_change(
+    isolated_store,
+):
+    store = MemoryStore()
+    _physical_ground_with_distill_examples(store)
+    frozen = freeze_ground_distill(store, ground_name="physical-distill")
+    execute_ground_workspace_memory_add(
+        AddGroundWorkspaceMemoryRequest(
+            workspace_name="physical-distill",
+            lane="rules",
+            content="An unrelated reviewed Rule.",
+        ),
+        store=store,
+    )
+    provider = DistillProvider()
+
+    execute_ground_distill(
+        frozen,
+        store=store,
+        provider_factory=lambda: provider,
+    )
+
+    assert len(provider.calls) == 1
+
+
+def test_physical_ground_distill_rejects_consumed_example_drift_before_provider(
+    isolated_store,
+):
+    store = MemoryStore()
+    _physical_ground_with_distill_examples(store)
+    frozen = freeze_ground_distill(store, ground_name="physical-distill")
+    examples = store.load_for_update("physical-distill/examples")
+    examples.add("A new consumed Example.")
+    store.save(examples)
+    provider = DistillProvider()
+
+    with pytest.raises(DistillError, match="consumed Ground workspace Memories"):
+        execute_ground_distill(
+            frozen,
+            store=store,
+            provider_factory=lambda: provider,
+        )
+
+    assert provider.calls == []
+
+
+def test_physical_ground_distill_rejects_unresolved_typed_context_input(
+    isolated_store,
+):
+    store = MemoryStore()
+    _physical_ground_with_distill_examples(store)
+    source = ops.init("physical-distill/external-source")
+    memory = ops.add(source, "An externally owned ticker observation.")
+    store.create_context(source)
+    contexts = store.load_for_update("physical-distill/contexts")
+    ops.reference_memory(memory, source, contexts)
+    store.save(contexts)
+
+    with pytest.raises(DistillError, match="authority-aware Ground projection"):
+        freeze_ground_distill(store, ground_name="physical-distill")
 
 
 def test_mem_distill_applies_the_exact_rendered_proposal(

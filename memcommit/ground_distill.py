@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from contextlib import contextmanager
 from dataclasses import dataclass
+import hashlib
+import json
 from typing import Iterator, Literal, Protocol
 
 from memcommit.context import Context, Memory
@@ -20,6 +22,14 @@ from memcommit.ground import (
     GroundSession,
     context_frame_digest,
     is_bound_ground_schema,
+)
+from memcommit.ground_workspace_runtime import (
+    ground_workspace_exists,
+    load_ground_workspace,
+)
+from memcommit.ground_workspace_projection import (
+    GroundWorkspaceProjectionError,
+    project_ordinary_memories,
 )
 from memcommit.store import MemoryStore, ground_session_record_digest
 from memcommit.summarize import SummaryFrame, collect_summary_scope
@@ -46,8 +56,22 @@ class FrozenGroundDistill:
 
 
 @dataclass(frozen=True)
+class FrozenGroundWorkspaceDistill:
+    """Exact consumed Goal, Example, and Context Memories from one workspace."""
+
+    ground_name: str
+    ground_uid: str
+    ground_revision: int
+    ground_digest: str
+    candidate_frame: SummaryFrame
+    request: DistillRequest
+    source_kind: Literal["GROUND_WORKSPACE_INPUTS"] = "GROUND_WORKSPACE_INPUTS"
+    example_frame: SummaryFrame | None = None
+
+
+@dataclass(frozen=True)
 class GroundDistillResult:
-    frozen: FrozenGroundDistill
+    frozen: FrozenGroundDistill | FrozenGroundWorkspaceDistill
     distill: DistillResult
 
 
@@ -140,8 +164,11 @@ def freeze_ground_distill(
     store: MemoryStore,
     *,
     ground_name: str,
-) -> FrozenGroundDistill:
+) -> FrozenGroundDistill | FrozenGroundWorkspaceDistill:
     """Freeze Ground identity and its exact candidate Context before inference."""
+
+    if ground_workspace_exists(store, ground_name):
+        return _freeze_ground_workspace_distill(store, ground_name)
 
     session = store.load_ground_session(ground_name)
     if session is None:
@@ -168,6 +195,100 @@ def freeze_ground_distill(
     )
 
 
+def _freeze_ground_workspace_distill(
+    store: MemoryStore,
+    ground_name: str,
+) -> FrozenGroundWorkspaceDistill:
+    workspace = load_ground_workspace(store, ground_name)
+    try:
+        goals = project_ordinary_memories(
+            workspace.goals,
+            operation="Ground workspace Distill",
+        )
+        examples = project_ordinary_memories(
+            workspace.examples,
+            operation="Ground workspace Distill",
+        )
+    except GroundWorkspaceProjectionError as error:
+        raise DistillError(str(error)) from error
+    if len(goals) > 1:
+        raise DistillError(
+            "Ground workspace Distill requires zero or one Goal Memory."
+        )
+    contexts_prefix = workspace.contexts.name + "/"
+    context_frame = (
+        workspace.contexts,
+        *(
+            store.load_direct(name)
+            for name in store.list_context_names()
+            if name.startswith(contexts_prefix)
+        ),
+    )
+    try:
+        for context in context_frame:
+            project_ordinary_memories(
+                context,
+                operation="Ground workspace Distill",
+            )
+    except GroundWorkspaceProjectionError as error:
+        raise DistillError(str(error)) from error
+    # Use the checked ordinary-Memory projection for Examples rather than
+    # relying on Summary's permissive typed-item filtering.
+    checked_examples = Context(
+        uid=workspace.examples.uid,
+        name=workspace.examples.name,
+    )
+    for memory in examples:
+        checked_examples.add(memory)
+    frame = collect_summary_scope(
+        (checked_examples, *context_frame),
+        root_context_uid=workspace.examples.uid,
+        root_context_name=workspace.examples.name,
+        include_descendants=False,
+        follow_embeds=False,
+    )
+    if not frame.sources:
+        raise DistillError(
+            "Ground workspace Distill requires an ordinary Memory in "
+            "/examples or /contexts."
+        )
+    digest = hashlib.sha256(
+        json.dumps(
+            {
+                "workspace_uid": workspace.uid,
+                "goal": (
+                    None
+                    if not goals
+                    else {"uid": goals[0].uid, "content": goals[0].content}
+                ),
+                "sources": [
+                    {
+                        "context_uid": source.context_uid,
+                        "memory_uid": source.memory_uid,
+                        "content": source.content,
+                    }
+                    for source in frame.sources
+                ],
+            },
+            ensure_ascii=False,
+            separators=(",", ":"),
+            sort_keys=True,
+        ).encode("utf-8")
+    ).hexdigest()
+    return FrozenGroundWorkspaceDistill(
+        ground_name=workspace.name,
+        ground_uid=workspace.uid,
+        ground_revision=workspace.manifest.revision,
+        ground_digest=digest,
+        candidate_frame=frame,
+        request=DistillRequest(
+            context_locator=workspace.examples.name,
+            goal=goals[0].content if goals else None,
+        ),
+        example_frame=frame,
+    )
+
+
 def _revalidate_ground(frozen: FrozenGroundDistill, store: MemoryStore) -> None:
     session = store.load_ground_session(frozen.ground_name)
     if (
@@ -181,16 +302,73 @@ def _revalidate_ground(frozen: FrozenGroundDistill, store: MemoryStore) -> None:
     _validate_candidate_frame(store, frozen.candidate_frame)
 
 
+def _revalidate_ground_workspace(
+    frozen: FrozenGroundWorkspaceDistill,
+    store: MemoryStore,
+) -> None:
+    current = _freeze_ground_workspace_distill(store, frozen.ground_name)
+    if (
+        current.ground_uid != frozen.ground_uid
+        or current.ground_digest != frozen.ground_digest
+        or current.request != frozen.request
+        or current.candidate_frame != frozen.candidate_frame
+    ):
+        raise DistillError(
+            "The consumed Ground workspace Memories changed while Distill was running."
+        )
+
+
 def execute_ground_distill(
-    frozen: FrozenGroundDistill,
+    frozen: FrozenGroundDistill | FrozenGroundWorkspaceDistill,
     *,
     store: MemoryStore,
     provider_factory: GroundDistillProviderFactory,
 ) -> GroundDistillResult:
     """Run the shared application without mutating Ground or bound Contexts."""
 
-    if not isinstance(frozen, FrozenGroundDistill):
+    if not isinstance(frozen, (FrozenGroundDistill, FrozenGroundWorkspaceDistill)):
         raise TypeError("Ground Distill requires a frozen request.")
+    if isinstance(frozen, FrozenGroundWorkspaceDistill):
+        _revalidate_ground_workspace(frozen, store)
+
+        class _GroundWorkspaceSourcePort:
+            def freeze(self, request: SummarizeRequest) -> FrozenSummarySource:
+                if (
+                    request.context_locator != frozen.request.context_locator
+                    or request.include_descendants
+                    or request.follow_embeds
+                ):
+                    raise DistillError(
+                        "Ground workspace Distill changed its frozen inputs."
+                    )
+                _revalidate_ground_workspace(frozen, store)
+                return FrozenSummarySource(
+                    frame=frozen.candidate_frame,
+                    token=frozen.ground_digest,
+                )
+
+            def revalidate(self, source: FrozenSummarySource) -> SummaryFrame:
+                if (
+                    source.token != frozen.ground_digest
+                    or source.frame != frozen.candidate_frame
+                ):
+                    raise DistillError(
+                        "Ground workspace Distill input binding is invalid."
+                    )
+                _revalidate_ground_workspace(frozen, store)
+                return frozen.candidate_frame
+
+        @contextmanager
+        def workspace_provider_session() -> Iterator[DistillProvider]:
+            yield provider_factory()
+
+        result = run_distill(
+            frozen.request,
+            source_port=_GroundWorkspaceSourcePort(),
+            provider_session_factory=workspace_provider_session,
+        )
+        _revalidate_ground_workspace(frozen, store)
+        return GroundDistillResult(frozen=frozen, distill=result)
     _revalidate_ground(frozen, store)
     if frozen.source_kind == "LEGACY_CANDIDATE_CONTEXT":
         result = execute_distill(
@@ -245,6 +423,7 @@ def execute_ground_distill(
 
 __all__ = [
     "FrozenGroundDistill",
+    "FrozenGroundWorkspaceDistill",
     "GroundDistillResult",
     "execute_ground_distill",
     "freeze_ground_distill",
