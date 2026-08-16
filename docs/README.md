@@ -170,6 +170,10 @@ considered sufficient design history.
 
 ## Atomize contract notes
 
+- [`atomize-public-python-api-design-rationale.md`](atomize-public-python-api-design-rationale.md)
+  defines the stable saved/prepared/provider analysis projection and exact
+  in-place `Apply as is` receipt, including cache origin, opaque revision,
+  retry recovery, stale conflict, and the intentional Save As exclusion.
 - [`semantic-result-workbench-design-rationale.md`](semantic-result-workbench-design-rationale.md)
   generalizes the result-explanation hierarchy shared by bounded semantic
   operations: compact counts, what was understood, what happened, what remains

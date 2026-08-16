@@ -129,6 +129,34 @@ class AtomizeGroundingExecutionError(AtomizeGroundingError):
     """Grounding failed before publishing one complete requested outcome."""
 
 
+class AtomizeError(MemCommitError):
+    """Base class for public structural Atomize failures."""
+
+
+class AtomizeInputError(AtomizeError):
+    """The caller supplied an invalid structural Atomize request."""
+
+
+class AtomizeContextError(AtomizeError):
+    """The requested local Atomize Context is unavailable."""
+
+
+class AtomizeProviderFailure(AtomizeError):
+    """The semantic provider could not complete structural analysis."""
+
+
+class AtomizeConflictError(AtomizeError):
+    """The Source or accepted analysis/workbench revision changed."""
+
+
+class AtomizeStorageError(AtomizeError):
+    """Atomize could not safely read or publish local durable state."""
+
+
+class AtomizeExecutionError(AtomizeError):
+    """Structural Atomize failed before one complete outcome was published."""
+
+
 class SemanticError(MemCommitError):
     """Base class for public Distill and Elaborate failures."""
 
@@ -176,6 +204,13 @@ __all__ = [
     "AtomizeGroundingInputError",
     "AtomizeGroundingProviderFailure",
     "AtomizeGroundingStorageError",
+    "AtomizeConflictError",
+    "AtomizeContextError",
+    "AtomizeError",
+    "AtomizeExecutionError",
+    "AtomizeInputError",
+    "AtomizeProviderFailure",
+    "AtomizeStorageError",
     "MemCommitError",
     "MeldAuthorityError",
     "MeldConflictError",

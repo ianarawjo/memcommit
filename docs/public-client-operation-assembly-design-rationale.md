@@ -75,6 +75,14 @@ application/runtime port as the CLI. The adapter deliberately requires an
 existing saved Atomize analysis/workbench rather than hiding a second semantic
 operation inside Grounding Start.
 
+Structural Atomize follows as a separate sibling adapter. Its open method
+delegates to the saved/prepared/provider analysis boundary and freezes the
+complete durable pair as an opaque proposal revision. Its public mutation is
+named `apply_atomize_as_is` because the slice does not edit responses or expose
+Save As. A different durable Output plan is visible in the result but blocks
+the in-place call, so public composition cannot silently reinterpret TUI review
+state.
+
 The Meld move also closes one accidental taxonomy leak: reading the current
 Context formerly reused a client helper that raised `QueryStorageError`. The
 Meld adapter projects that failure as `MeldStorageError`, matching every other
@@ -139,10 +147,11 @@ focused tests and the installed CLI gate.
 
 ## Remaining rollout
 
-Add, Query, the complete Meld lifecycle, Atomize Grounding, Fit, standalone
-Distill, Ground Distill, standalone Elaborate, and Ground Elaborate are now
-operation-owned assemblies. Their public facade methods contain delegation and
-shared runtime construction only. New public operations must add a sibling
-adapter and fresh-process import contract rather than restoring client-owned
-loaders or assembly. The CLI and agent registries remain independently
-composed and tested boundaries rather than client-owned assembly.
+Add, Query, the complete Meld lifecycle, structural Atomize analysis/in-place
+Apply, Atomize Grounding, Fit, standalone Distill, Ground Distill, standalone
+Elaborate, and Ground Elaborate are now operation-owned assemblies. Their
+public facade methods contain delegation and shared runtime construction only.
+New public operations must add a sibling adapter and fresh-process import
+contract rather than restoring client-owned loaders or assembly. The CLI and
+agent registries remain independently composed and tested boundaries rather
+than client-owned assembly.

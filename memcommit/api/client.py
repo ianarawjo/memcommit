@@ -17,6 +17,10 @@ from memcommit.api.atomize_grounding import (
     AtomizeGroundingApplyResult,
     AtomizeGroundingSessionResult,
 )
+from memcommit.api.atomize import (
+    AtomizeAnalysisResult,
+    AtomizeStructuralApplyResult,
+)
 from memcommit.api.errors import (
     QueryConfigurationError,
 )
@@ -338,6 +342,34 @@ class MemCommitClient:
         )
 
         return open_atomize_grounding(self._runtime, context_name)
+
+    def open_atomize_analysis(
+        self,
+        context_name: str | None = None,
+        *,
+        refresh: bool = False,
+        use_prepared: bool = True,
+    ) -> AtomizeAnalysisResult:
+        """Open one exact durable structural Atomize proposal."""
+
+        from memcommit.api._operations.atomize import open_atomize_analysis
+
+        return open_atomize_analysis(
+            self._runtime,
+            context_name,
+            refresh=refresh,
+            use_prepared=use_prepared,
+        )
+
+    def apply_atomize_as_is(
+        self,
+        analysis: AtomizeAnalysisResult,
+    ) -> AtomizeStructuralApplyResult:
+        """Apply or recover an accepted structural proposal in place."""
+
+        from memcommit.api._operations.atomize import apply_atomize_as_is
+
+        return apply_atomize_as_is(self._runtime, analysis)
 
     def start_atomize_grounding(
         self,

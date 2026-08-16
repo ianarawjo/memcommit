@@ -27,6 +27,22 @@ __all__ = [
     "AtomizeGroundingQuestionResult",
     "AtomizeGroundingSessionResult",
     "AtomizeGroundingStorageError",
+    "AtomizeAnalysisResult",
+    "AtomizeAppliedItemResult",
+    "AtomizeChildResult",
+    "AtomizeConflictError",
+    "AtomizeContextError",
+    "AtomizeError",
+    "AtomizeExecutionError",
+    "AtomizeInputError",
+    "AtomizeIssueResult",
+    "AtomizeItemResult",
+    "AtomizeOverviewResult",
+    "AtomizeOverviewSectionResult",
+    "AtomizeProviderFailure",
+    "AtomizeReadingResult",
+    "AtomizeStorageError",
+    "AtomizeStructuralApplyResult",
     "GrantedQueryResult",
     "MemCommitClient",
     "MemCommitError",
@@ -80,6 +96,20 @@ __all__ = [
 _LAZY_EXPORTS = {
     "AddMemoriesResult": ("memcommit.api.add", "AddMemoriesResult"),
     "AddedMemoryResult": ("memcommit.api.add", "AddedMemoryResult"),
+    **{
+        name: ("memcommit.api.atomize", name)
+        for name in (
+            "AtomizeAnalysisResult",
+            "AtomizeAppliedItemResult",
+            "AtomizeChildResult",
+            "AtomizeIssueResult",
+            "AtomizeItemResult",
+            "AtomizeOverviewResult",
+            "AtomizeOverviewSectionResult",
+            "AtomizeReadingResult",
+            "AtomizeStructuralApplyResult",
+        )
+    },
     "AtomizeGroundingApplyResult": (
         "memcommit.api.atomize_grounding",
         "AtomizeGroundingApplyResult",

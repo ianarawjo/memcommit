@@ -2,23 +2,24 @@
 
 ## Status
 
-`VERIFIED` for analysis open/create/reuse and local in-place structural Apply;
-`CHARACTERIZED` for the remaining save-as lifecycle, reviewed 2026-08-15.
+`VERIFIED` for analysis open/create/reuse, local in-place structural Apply, and
+their bounded public Python projection; reviewed 2026-08-15.
 
 This note records the first two Atomize application slices. Analysis
 open/create/reuse and local in-place Apply now cross typed,
 interface-independent boundaries. They preserve Atomize semantics, provider
 prompts, Study fixtures, saved schemas, and ordinary TUI navigation while
 making saved reuse, hidden-prewarm materialization, provider creation, and
-structural application independently callable. The require-new save-as route
-remains a later slice.
+structural application independently callable. The public projection exposes
+analysis plus in-place `Apply as is`; the require-new save-as route remains an
+internal reviewed lifecycle and is not part of that stable public contract.
 
 ## Current execution junction
 
 Atomize already separated its semantic records, strict provider decoder,
-mutable workbench model, and presentation. Analysis open and in-place Apply
-now have distinct application/runtime junctions while save-as still composes
-in the command:
+mutable workbench model, and presentation. Analysis open, in-place Apply, and
+Save As now have distinct application/runtime junctions; the stable Python
+surface deliberately exports only the first two:
 
 ```text
 CLI flags or TUI action
@@ -186,8 +187,9 @@ Suggested ownership:
 - `memcommit.atomize_analysis_runtime`: saved-pair and hidden-prewarm lookup,
   lazy provider analysis, freshness recheck, and pair publication/restoration.
 - `memcommit.commands.atomize`: CLI/TUI composition, progress and receipts,
-  mapping final workbench actions to the typed in-place use case; save-as
-  remains command-owned.
+  mapping final workbench actions to the typed in-place or Save As use case;
+  the command retains presentation policy but not either materialization
+  lifecycle.
 - existing `memcommit.atomize`, `atomize_workbench`, and grounding modules:
   semantic/domain records and their operation-specific validation; schemas are
   not merged merely because lifecycle mechanics become common.
@@ -211,8 +213,9 @@ session lock; the repository rechecks the token before terminal publication.
 5. **Done:** route save-as through a typed request/result, publish one final
    creation checkpoint, retain exact post-publication failures for idempotent
    retry, and restore Context/analysis/receipt as one Undo/Redo lifecycle.
-6. Move the remaining shared Resolution/save-as actions to typed use cases,
-   then remove duplicated command-owned policy.
+6. **Partial:** the stable Python projection now opens the exact durable pair
+   and applies in place; move the remaining shared Resolution/save-as actions
+   to independently reviewed typed public use cases before exporting them.
 7. **Done:** make new save-as histories one Atomize creation unit; leave
    pre-release legacy `init + atomize` histories uninterpreted.
 
@@ -264,6 +267,7 @@ explicit refresh, stale rejection, and analysis/workbench pair restoration.
 - no deletion or cleanup of a published save-as destination;
 - no change yet to save-as partial-publication or Undo semantics;
 - no unification of structural Atomize and grounding-proposal schemas;
-- no claim that structural Atomize analysis, workbench editing, or structural
-  Apply is a stable public Python API yet; only the separately reviewed
-  conversational Grounding lifecycle now has that public contract.
+- no claim that workbench response editing, compound reanalysis, or structural
+  Save As is a stable public Python API; the bounded analysis-open and in-place
+  `Apply as is` contract is recorded separately in
+  `atomize-public-python-api-design-rationale.md`.
