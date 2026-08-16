@@ -173,6 +173,22 @@ claim to `NOT_APPLICABLE`; unrelated but compatible propositions are `YES`.
 Legacy exact-output Grounds continue through deterministic conformance replay
 and retain their historic receipt vocabulary for compatibility.
 
+## Calibration boundary
+
+`memcommit/eval/fixtures/fit.json` is the first reviewed consumed-calibration
+corpus for this contract. Its 18 cases balance `YES`, `MAY`, and `NO` and cover
+explicit scope distinctions, unrelated claims, missing verification, role
+neutrality, Korean and English readings, genuine referential splits, direct
+contradiction, dominant antecedents, and a three-way inconsistency that cannot
+be reduced to isolated pairs. `memcommit.eval.fit_calibration` loads the corpus
+strictly and judges every case in one whole-frame provider call.
+
+The expected labels and rationales are scored locally and never enter the
+production Fit prompt. This is consumed calibration, not an independent
+holdout and not evidence of general accuracy. A separate pre-registered
+holdout, repeated runs, and recorded provider/model identity are required
+before making a stability or generalization claim.
+
 ## Limits and next work
 
 - Fit judges practical consistency under ordinary readings; it is not a
@@ -181,8 +197,9 @@ and retain their historic receipt vocabulary for compatibility.
   useful, ethical, authorized, or safe to apply.
 - Goal and Rule adapters must present their already-stated constraint meaning;
   Fit must not silently rewrite an imperative into a more convenient claim.
-- Provider quality still needs calibration cases. Exact contract validation
-  proves coverage and shape, not semantic correctness.
+- The consumed calibration locates known boundaries but does not prove provider
+  quality; exact contract validation proves coverage and shape, not semantic
+  correctness.
 - Other operations should adopt the theory through their own explicit design
   reviews. This decision records the shared premise; it does not silently
   change their current provider contracts.

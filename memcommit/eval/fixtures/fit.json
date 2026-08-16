@@ -1,0 +1,264 @@
+{
+  "operation": "fit",
+  "schema_version": 1,
+  "ruleset_version": "fit-ordinary-reader-v1",
+  "corpus_role": "CONSUMED_CALIBRATION",
+  "independent_holdout": false,
+  "description": "Reviewed calibration cases for set-level proposition Fit under materially ordinary readings. The balanced cases locate compatibility, contradiction, and genuine reading splits; they are consumed calibration, not an independent holdout and not production-prompt examples.",
+  "labels": [
+    "YES",
+    "MAY",
+    "NO"
+  ],
+  "cases": [
+    {
+      "id": "yes-explicit-distinct-entrances",
+      "scenario": "One building has a main entrance and a separate staff entrance during the same construction period.",
+      "background": [
+        {"alias": "k1", "role": "MEMORY", "content": "The main entrance and staff entrance are separate entrances to the same building."}
+      ],
+      "propositions": [
+        {"alias": "p1", "role": "MEMORY", "content": "The main entrance closes at 5 p.m."},
+        {"alias": "p2", "role": "MEMORY", "content": "The staff entrance remains open until 10 p.m."}
+      ],
+      "expected": {
+        "verdict": "YES",
+        "rationale": "The statements govern explicitly different entrances, so both schedules can hold."
+      }
+    },
+    {
+      "id": "yes-explicit-different-days",
+      "scenario": "The same entrance has different schedules on weekdays and weekends.",
+      "background": [],
+      "propositions": [
+        {"alias": "p1", "role": "RULE", "content": "The main entrance is closed after 5 p.m. on weekdays."},
+        {"alias": "p2", "role": "RULE", "content": "The main entrance remains open after 5 p.m. on weekends."}
+      ],
+      "expected": {
+        "verdict": "YES",
+        "rationale": "The explicit day scopes do not overlap."
+      }
+    },
+    {
+      "id": "yes-unrelated-propositions",
+      "scenario": "The propositions concern unrelated activities with no shared operational scope.",
+      "background": [],
+      "propositions": [
+        {"alias": "p1", "role": "PROPOSITION", "content": "The project kickoff is scheduled for Tuesday."},
+        {"alias": "p2", "role": "PROPOSITION", "content": "The archive stores photographs in acid-free folders."}
+      ],
+      "expected": {
+        "verdict": "YES",
+        "rationale": "Unrelated claims can coexist; lack of relevance is not contradiction."
+      }
+    },
+    {
+      "id": "yes-unverified-is-not-contradicted",
+      "scenario": "A Memory records what an archived plan depicts while separately recording that the depiction has not been verified against reality.",
+      "background": [],
+      "propositions": [
+        {"alias": "p1", "role": "MEMORY", "content": "The archived plan depicts a north entrance."},
+        {"alias": "p2", "role": "MEMORY", "content": "No reviewer has confirmed whether that depiction matches the current building."}
+      ],
+      "expected": {
+        "verdict": "YES",
+        "rationale": "A plan can depict something whose real-world accuracy remains unverified. Missing support is not a contradiction."
+      }
+    },
+    {
+      "id": "yes-role-neutral-goal-rule",
+      "scenario": "A Goal and Rule express compatible constraints for after-hours access.",
+      "background": [],
+      "propositions": [
+        {"alias": "goal", "role": "GOAL", "content": "Keep at least one employee entrance usable after 5 p.m."},
+        {"alias": "rule", "role": "RULE", "content": "Keep the staff entrance open until 10 p.m. while the main entrance closes at 5 p.m."}
+      ],
+      "expected": {
+        "verdict": "YES",
+        "rationale": "The Rule satisfies rather than conflicts with the Goal; semantic roles do not change Fit polarity."
+      }
+    },
+    {
+      "id": "yes-ko-explicit-audiences",
+      "scenario": "대학 공사 구역에서 학생과 등록된 공사 인력의 권한을 명시적으로 구분한다.",
+      "background": [],
+      "propositions": [
+        {"alias": "p1", "role": "RULE", "content": "학생은 공사 구역에 들어갈 수 없다."},
+        {"alias": "p2", "role": "RULE", "content": "등록된 공사 인력은 공사 구역에 들어갈 수 있다."}
+      ],
+      "expected": {
+        "verdict": "YES",
+        "rationale": "서로 다른 대상을 명시하므로 두 규칙은 함께 성립할 수 있다."
+      }
+    },
+    {
+      "id": "may-unspecified-entrance",
+      "scenario": "One building has a main entrance and a separate staff entrance; the second proposition does not identify which entrance it means.",
+      "background": [
+        {"alias": "k1", "role": "MEMORY", "content": "The building has a main entrance and a separate staff entrance, and both are live referents in this notice."}
+      ],
+      "propositions": [
+        {"alias": "p1", "role": "MEMORY", "content": "The main entrance is closed to everyone after 5 p.m."},
+        {"alias": "p2", "role": "MEMORY", "content": "Staff may use the entrance after 5 p.m."}
+      ],
+      "expected": {
+        "verdict": "MAY",
+        "rationale": "The propositions conflict when the entrance is the main entrance and coexist when it is the staff entrance."
+      }
+    },
+    {
+      "id": "may-pronoun-audience",
+      "scenario": "Students and staff are both being discussed, so the plural pronoun has two ordinary audience readings.",
+      "background": [
+        {"alias": "k1", "role": "MEMORY", "content": "The preceding discussion names both students and staff as possible users of the archive."}
+      ],
+      "propositions": [
+        {"alias": "p1", "role": "RULE", "content": "Students may not access the archive after 6 p.m."},
+        {"alias": "p2", "role": "RULE", "content": "They may access the archive after 6 p.m."}
+      ],
+      "expected": {
+        "verdict": "MAY",
+        "rationale": "The rules conflict if the pronoun denotes students and coexist if it denotes staff."
+      }
+    },
+    {
+      "id": "may-unspecified-desk",
+      "scenario": "A building has both a visitor desk and a security desk, and both remain ordinary referents.",
+      "background": [
+        {"alias": "k1", "role": "MEMORY", "content": "The lobby has a visitor desk and a separate security desk."}
+      ],
+      "propositions": [
+        {"alias": "p1", "role": "MEMORY", "content": "The visitor desk closes at 4 p.m."},
+        {"alias": "p2", "role": "MEMORY", "content": "The desk remains open until 8 p.m."}
+      ],
+      "expected": {
+        "verdict": "MAY",
+        "rationale": "The schedule conflicts for the visitor-desk reading and coexists for the security-desk reading."
+      }
+    },
+    {
+      "id": "may-review-stage",
+      "scenario": "The workflow has both a draft review and a final review; the unmodified phrase the review can ordinarily denote either stage.",
+      "background": [
+        {"alias": "k1", "role": "MEMORY", "content": "Each record receives a draft review and later a final review."}
+      ],
+      "propositions": [
+        {"alias": "p1", "role": "RULE", "content": "Records may not be archived before final review."},
+        {"alias": "p2", "role": "RULE", "content": "Archive the records after the review."}
+      ],
+      "expected": {
+        "verdict": "MAY",
+        "rationale": "Archiving after draft review conflicts with the first rule, while archiving after final review is compatible."
+      }
+    },
+    {
+      "id": "may-team-bank-shorthand",
+      "scenario": "A planning team ordinarily uses bank for both a financial branch and a river bank in the same discussion.",
+      "background": [
+        {"alias": "k1", "role": "MEMORY", "content": "The plan discusses a financial branch and a riverside path, and the team commonly calls each location the bank."}
+      ],
+      "propositions": [
+        {"alias": "p1", "role": "MEMORY", "content": "The financial bank is closed today."},
+        {"alias": "p2", "role": "MEMORY", "content": "The bank remains accessible today."}
+      ],
+      "expected": {
+        "verdict": "MAY",
+        "rationale": "The financial reading conflicts, while the river-bank reading can coexist."
+      }
+    },
+    {
+      "id": "may-ko-unspecified-entrance",
+      "scenario": "본관 정문과 직원 출입구가 모두 같은 안내문에서 언급되어 지시 대상이 둘 다 살아 있다.",
+      "background": [
+        {"alias": "k1", "role": "MEMORY", "content": "건물에는 본관 정문과 별도의 직원 출입구가 있으며 안내문은 두 곳을 모두 다룬다."}
+      ],
+      "propositions": [
+        {"alias": "p1", "role": "MEMORY", "content": "본관 정문은 오후 5시에 닫힌다."},
+        {"alias": "p2", "role": "MEMORY", "content": "그 출입구는 오후 10시까지 열린다."}
+      ],
+      "expected": {
+        "verdict": "MAY",
+        "rationale": "그 출입구가 정문이면 모순이고 직원 출입구이면 함께 성립한다."
+      }
+    },
+    {
+      "id": "no-direct-same-scope",
+      "scenario": "Both propositions govern the same entrance, building, day, and overlapping hours.",
+      "background": [],
+      "propositions": [
+        {"alias": "p1", "role": "MEMORY", "content": "The main entrance closes at 5 p.m."},
+        {"alias": "p2", "role": "MEMORY", "content": "The main entrance remains open until 10 p.m."}
+      ],
+      "expected": {
+        "verdict": "NO",
+        "rationale": "The same entrance cannot be closed from 5 p.m. and remain open through 10 p.m. in the same schedule."
+      }
+    },
+    {
+      "id": "no-universal-covers-exception",
+      "scenario": "The universal statement and the staff statement govern the same building and evening.",
+      "background": [],
+      "propositions": [
+        {"alias": "p1", "role": "RULE", "content": "Every entrance to the building closes at 5 p.m."},
+        {"alias": "p2", "role": "RULE", "content": "The staff entrance to that building remains open until 10 p.m."}
+      ],
+      "expected": {
+        "verdict": "NO",
+        "rationale": "Every entrance includes the staff entrance, so the overlapping schedules cannot both govern."
+      }
+    },
+    {
+      "id": "no-exact-cardinality",
+      "scenario": "Both propositions report approval of the same final revision in the same approval round.",
+      "background": [],
+      "propositions": [
+        {"alias": "p1", "role": "MEMORY", "content": "Exactly one reviewer approved the final revision."},
+        {"alias": "p2", "role": "MEMORY", "content": "Two distinct reviewers approved the final revision."}
+      ],
+      "expected": {
+        "verdict": "NO",
+        "rationale": "Exactly one and two distinct approvers are incompatible cardinalities for the same event."
+      }
+    },
+    {
+      "id": "no-set-level-three-way",
+      "scenario": "Each pair can hold in isolation, but the complete three-proposition frame cannot.",
+      "background": [],
+      "propositions": [
+        {"alias": "p1", "role": "MEMORY", "content": "The main entrance is open."},
+        {"alias": "p2", "role": "MEMORY", "content": "The staff entrance is open."},
+        {"alias": "p3", "role": "RULE", "content": "At most one of the main entrance and staff entrance may be open at a time."}
+      ],
+      "expected": {
+        "verdict": "NO",
+        "rationale": "The two open-state claims jointly violate the at-most-one constraint, demonstrating why Fit is set-level rather than pairwise."
+      }
+    },
+    {
+      "id": "no-dominant-antecedent-no-contrivance",
+      "scenario": "The second sentence immediately follows the first, and no other entrance has been introduced.",
+      "background": [],
+      "propositions": [
+        {"alias": "p1", "role": "MEMORY", "content": "The main entrance closes at 5 p.m."},
+        {"alias": "p2", "role": "MEMORY", "content": "It remains open until 10 p.m."}
+      ],
+      "expected": {
+        "verdict": "NO",
+        "rationale": "The ordinary antecedent of it is the main entrance; inventing an unmentioned entrance would be a contrived rescue."
+      }
+    },
+    {
+      "id": "no-ko-role-neutral-goal-rule",
+      "scenario": "동일한 최종 정책과 동일한 개인정보 범위를 다루는 Goal과 Rule이다.",
+      "background": [],
+      "propositions": [
+        {"alias": "goal", "role": "GOAL", "content": "이 정책에서는 개인정보를 보관하지 않는다."},
+        {"alias": "rule", "role": "RULE", "content": "이 정책에서는 동일한 개인정보를 30일간 보관한다."}
+      ],
+      "expected": {
+        "verdict": "NO",
+        "rationale": "같은 정책이 같은 정보를 보관하지 않으면서 동시에 30일간 보관할 수는 없다."
+      }
+    }
+  ]
+}
