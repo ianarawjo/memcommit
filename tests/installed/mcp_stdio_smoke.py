@@ -15,12 +15,56 @@ from mcp.client.stdio import StdioServerParameters, stdio_client
 
 import memcommit
 import memcommit.ops as ops
+from memcommit.api import MemCommitClient
 from memcommit.atomize_grounding import (
     AtomizeGroundingAnchor,
     AtomizeGroundingBindings,
     AtomizeGroundingSession,
 )
 from memcommit.store import MemoryStore
+
+
+_ATOMIZE_PAYLOAD_MARKER = "ATOMIZE IMPACT PAYLOAD:\n"
+
+
+class _AtomizeProvider:
+    def complete(self, prompt, *, operation, output_schema=None):
+        assert operation == "impact_atomize"
+        assert output_schema is not None
+        payload = json.loads(prompt.split(_ATOMIZE_PAYLOAD_MARKER, 1)[1])
+        items = []
+        for source in payload["memories"]:
+            left, right = source["content"].split(" and ", 1)
+            items.append(
+                {
+                    "candidate_id": source["candidate_id"],
+                    "classification": "COMPOSITE",
+                    "reason_codes": ["A01_ONE_FOCUS"],
+                    "children": [
+                        {"content": left, "source_spans": [left]},
+                        {"content": right, "source_spans": [right]},
+                    ],
+                    "reason": "The source contains two independent facts.",
+                }
+            )
+        aliases = [source["candidate_id"] for source in payload["memories"]]
+        return json.dumps(
+            {
+                "overview": {
+                    "understood": {
+                        "text": "The Memory contains two installed-smoke facts.",
+                        "source_ids": aliases,
+                    },
+                    "changed": {
+                        "text": "The composite Memory will be split.",
+                        "source_ids": aliases,
+                    },
+                    "unresolved": {"text": "", "source_ids": []},
+                },
+                "items": items,
+                "quality_issues": [],
+            }
+        )
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -67,7 +111,19 @@ def _prepare_store(root: Path) -> MemoryStore:
     )
     grounding.keep_review_only()
     store.save_atomize_grounding_session(grounding)
+    atomize_context = ops.init("smoke/atomize")
+    ops.add(
+        atomize_context,
+        "The installed library closes at five and the installed cafe closes at six.",
+    )
+    store.save(atomize_context)
+    prepared = MemCommitClient(
+        root=root,
+        semantic_provider_factory=_AtomizeProvider,
+    ).open_atomize_analysis(atomize_context.name)
+    assert prepared.origin == "PROVIDER"
     assert store.list_checkpoints(context.name) == []
+    assert store.list_checkpoints(atomize_context.name) == []
     return store
 
 
@@ -98,6 +154,33 @@ async def _exercise_stdio(command: str, root: Path, workdir: Path) -> dict[str, 
                     "context_name": "smoke/target",
                 },
             )
+            atomize = await session.call_tool(
+                "memcommit_atomize",
+                {
+                    "version": 1,
+                    "kind": "open",
+                    "context_name": "smoke/atomize",
+                },
+            )
+            atomize_version = atomize.structured_content["result"]["version"]
+            atomize_apply = await session.call_tool(
+                "memcommit_atomize",
+                {
+                    "version": 1,
+                    "kind": "apply_as_is",
+                    "context_name": "smoke/atomize",
+                    "expected_version": atomize_version,
+                },
+            )
+            atomize_retry = await session.call_tool(
+                "memcommit_atomize",
+                {
+                    "version": 1,
+                    "kind": "apply_as_is",
+                    "context_name": "smoke/atomize",
+                    "expected_version": atomize_version,
+                },
+            )
             unknown = await session.call_tool("not_registered", {})
 
     assert initialized.server_info.name == "memcommit"
@@ -105,6 +188,7 @@ async def _exercise_stdio(command: str, root: Path, workdir: Path) -> dict[str, 
         "memcommit_query",
         "memcommit_add_memories",
         "memcommit_meld",
+        "memcommit_atomize",
         "memcommit_atomize_grounding",
         "memcommit_distill",
         "memcommit_elaborate",
@@ -117,6 +201,17 @@ async def _exercise_stdio(command: str, root: Path, workdir: Path) -> dict[str, 
     assert grounding.structured_content["result"]["session"]["state"] == (
         "KEPT_REVIEW_ONLY"
     )
+    assert atomize.is_error is False
+    assert atomize.structured_content["result"]["origin"] == "SAVED"
+    assert atomize.structured_content["result"]["cache_used"] is True
+    assert atomize.structured_content["result"]["provider_used"] is False
+    assert atomize_apply.is_error is False
+    assert atomize_apply.structured_content["result"]["recovered"] is False
+    assert atomize_retry.is_error is False
+    assert atomize_retry.structured_content["result"]["recovered"] is True
+    assert atomize_retry.structured_content["result"]["checkpoint_uid"] == (
+        atomize_apply.structured_content["result"]["checkpoint_uid"]
+    )
     assert unknown.is_error is True
     assert unknown.structured_content["error"]["code"] == "unknown_tool"
     return {
@@ -125,6 +220,9 @@ async def _exercise_stdio(command: str, root: Path, workdir: Path) -> dict[str, 
         "tools": [tool.name for tool in listed.tools],
         "add": added.structured_content,
         "atomize_grounding": grounding.structured_content,
+        "atomize": atomize.structured_content,
+        "atomize_apply": atomize_apply.structured_content,
+        "atomize_retry": atomize_retry.structured_content,
         "unknown_error": unknown.structured_content["error"],
     }
 
@@ -151,6 +249,16 @@ def main() -> int:
     ]
     assert len(checkpoints) == 1
     assert checkpoints[0]["uid"] == protocol["add"]["result"]["checkpoint_uid"]
+    atomized = store.load_direct("smoke/atomize")
+    atomize_checkpoints = store.list_checkpoints(atomized.name)
+    assert [memory.content for memory in atomized.memories.values()] == [
+        "The installed library closes at five",
+        "the installed cafe closes at six.",
+    ]
+    assert len(atomize_checkpoints) == 1
+    assert atomize_checkpoints[0]["uid"] == (
+        protocol["atomize_apply"]["result"]["checkpoint_uid"]
+    )
 
     print(
         json.dumps(
@@ -160,6 +268,7 @@ def main() -> int:
                 "mcp_sdk_version": importlib.metadata.version("mcp"),
                 "entrypoint": command,
                 "checkpoint_count": len(checkpoints),
+                "atomize_checkpoint_count": len(atomize_checkpoints),
                 **protocol,
             },
             ensure_ascii=False,

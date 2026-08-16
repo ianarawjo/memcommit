@@ -912,6 +912,42 @@ def capture_atomize_session_snapshot(
     )
 
 
+def capture_atomize_session_snapshot_at_version(
+    *,
+    store: MemoryStore,
+    analysis: AtomizeAnalysisSession,
+    expected_version: str,
+) -> AtomizeSessionSnapshot:
+    """Recover one exact accepted revision without provider or interface state.
+
+    A transport retry can arrive after Apply committed its terminal receipt.
+    Accept only the current revision or the exact preterminal form of that
+    receipt; every other saved-session change remains a conflict.
+    """
+
+    repository = MemoryStoreAtomizeSessionRepository(store)
+    with store._atomize_session_write_lock(analysis.context_uid):  # noqa: SLF001
+        current = repository._load_unlocked(analysis)  # noqa: SLF001
+        if current.version_token == expected_version:
+            return current
+        workbench = current.workbench
+        if workbench is not None and workbench.application is not None:
+            accepted_workbench = replace(workbench, application=None)
+            accepted_version = _session_version_token(
+                current.analysis,
+                accepted_workbench,
+            )
+            if accepted_version == expected_version:
+                return AtomizeSessionSnapshot(
+                    analysis=current.analysis,
+                    workbench=accepted_workbench,
+                    version_token=accepted_version,
+                )
+        raise AtomizeApplicationError(
+            "The accepted Atomize version changed before Apply. Reopen the review."
+        )
+
+
 def execute_atomize_session_apply(
     request: AtomizePersistedApplyRequest,
     *,

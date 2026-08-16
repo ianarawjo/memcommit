@@ -1,8 +1,8 @@
 # MCP installed-wheel verification
 
-Last verified: 2026-08-15 against the current Atomize Grounding agent worktree.
+Last verified: 2026-08-15 against the structural Atomize agent worktree.
 
-## Current seven-tool and import-isolation gate
+## Current eight-tool and import-isolation gate
 
 A fresh wheel built from the current worktree was installed with its `[mcp]`
 extra into a new `uv` virtual environment. The official MCP
@@ -12,16 +12,19 @@ environment's `site-packages`, and discovered this exact registry order:
 1. `memcommit_query`
 2. `memcommit_add_memories`
 3. `memcommit_meld`
-4. `memcommit_atomize_grounding`
-5. `memcommit_distill`
-6. `memcommit_elaborate`
-7. `memcommit_fit`
+4. `memcommit_atomize`
+5. `memcommit_atomize_grounding`
+6. `memcommit_distill`
+7. `memcommit_elaborate`
+8. `memcommit_fit`
 
-The client then invoked Add, observed its structured success receipt, verified
-the same checkpoint through an independent Store read, opened a durable
-review-only Grounding dialogue through the new tool without a provider, and
-confirmed that an unknown tool returns the typed `unknown_tool` error. This
-proves that the seven
+The client then invoked Add, observed its structured success receipt, and
+verified the same checkpoint through an independent Store read. It opened a
+durable review-only Grounding dialogue without a provider, then opened a saved
+structural Atomize review without a provider, applied its exact version,
+recovered the same receipt on retry, and verified the split result and single
+checkpoint. Finally, it confirmed that an unknown tool returns the typed
+`unknown_tool` error. This proves that the eight
 registered adapters and their transitive modules ship in the wheel and cross
 the installed MCP discovery boundary. Provider-backed semantic execution remains
 covered by the in-process public-client, agent-registry, and MCP-projection
@@ -66,7 +69,7 @@ registry order:
 1. `memcommit_query`
 2. `memcommit_add_memories`
 
-The current seven-tool run above supersedes that historical discovery list for
+The current eight-tool run above supersedes that historical discovery list for
 package-completeness evidence while preserving the older run's clean-commit and
 invalid-HOME regression record.
 

@@ -79,9 +79,10 @@ class AtomizeIssueResult:
 class AtomizeAnalysisResult:
     """One exact durable structural proposal accepted by the caller.
 
-    ``version`` is an opaque analysis/workbench revision. Callers compare or
-    retain it for observability; Apply uses the private typed snapshot so a
-    forged or reconstructed revision cannot bypass the Store recheck.
+    ``version`` is an opaque analysis/workbench revision. Proposal-bound Apply
+    uses the private typed snapshot. A stateless transport may submit the same
+    version through the dedicated saved-Apply method, which reconstitutes only
+    the exact locked saved revision before the ordinary Store recheck.
     """
 
     analysis_uid: str

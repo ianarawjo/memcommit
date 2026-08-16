@@ -11,6 +11,7 @@ import pytest
 from memcommit.api import MemCommitClient
 from memcommit.interfaces.agent import (
     ADD_AGENT_TOOL_NAME,
+    ATOMIZE_AGENT_TOOL_NAME,
     ATOMIZE_GROUNDING_AGENT_TOOL_NAME,
     DISTILL_AGENT_TOOL_NAME,
     ELABORATE_AGENT_TOOL_NAME,
@@ -59,6 +60,7 @@ def test_default_registry_projects_parameters_to_fresh_mcp_input_schemas(tmp_pat
         QUERY_AGENT_TOOL_NAME,
         ADD_AGENT_TOOL_NAME,
         MELD_AGENT_TOOL_NAME,
+        ATOMIZE_AGENT_TOOL_NAME,
         ATOMIZE_GROUNDING_AGENT_TOOL_NAME,
         DISTILL_AGENT_TOOL_NAME,
         ELABORATE_AGENT_TOOL_NAME,

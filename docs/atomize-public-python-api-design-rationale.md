@@ -16,7 +16,7 @@ revision.
 
 ## Selected contract
 
-`MemCommitClient` exposes two structural methods:
+`MemCommitClient` exposes proposal-bound and stateless structural methods:
 
 ```python
 proposal = client.open_atomize_analysis(
@@ -25,6 +25,10 @@ proposal = client.open_atomize_analysis(
     use_prepared=True,
 )
 receipt = client.apply_atomize_as_is(proposal)
+transport_receipt = client.apply_saved_atomize_as_is(
+    context_name,
+    expected_version=proposal.version,
+)
 ```
 
 `open_atomize_analysis` resolves an explicit or current local Context once and
@@ -44,9 +48,10 @@ new refresh spelling.
 
 The immutable public proposal includes the overview, every direct-Memory
 classification, proposed split children and evidence spans, review findings,
-the durable Output plan, and an opaque version. It privately retains the typed
-`AtomizeSessionSnapshot`; Apply never reconstructs acceptance from public IDs or
-digests.
+the durable Output plan, and an opaque version. Proposal-bound Apply privately
+retains the typed `AtomizeSessionSnapshot`; stateless Apply uses the opaque
+version only to recover an exact locked saved snapshot, never acceptance
+reconstructed from public IDs or caller-supplied digests.
 
 `apply_atomize_as_is` means exactly the existing local in-place final action:
 
@@ -61,6 +66,13 @@ digests.
 - an exact retry adopts only the terminal application receipt added to the
   accepted workbench, recovers the same checkpoint, and creates no second
   effect. Any other workbench edit remains a conflict.
+
+`apply_saved_atomize_as_is` is the provider-free boundary for transports that
+cannot retain the private Python proposal object. It accepts the current exact
+opaque revision, or the exact preterminal revision after a successful Apply so
+a lost response can recover the same receipt. It does not accept another
+workbench change, reconstruct acceptance from public fields, or relax the
+Source recheck.
 
 ## Save As boundary
 
@@ -98,7 +110,8 @@ client facade, command modules, Typer, or prompt-toolkit.
 
 Focused tests cover public/root exports, provider creation, provider-free saved
 resume, exact hidden prewarm, refresh dominance, complete DTO projection,
-split Apply, all-preserved completion, exact retry recovery, Source and
+split Apply, all-preserved completion, proposal-bound and stateless exact retry
+recovery, invalid and stale transport versions, Source and
 workbench conflicts, Save As-plan rejection, provider/error projection, and
 fresh-process import isolation.
 
@@ -116,7 +129,6 @@ same checkpoint when the exact proposal was applied again.
 ## Intentional non-goals
 
 - no provider prompt, decoder, classification, or saved-schema change;
-- no new structural Atomize agent or MCP tool in this slice;
 - no public workbench response-editing or reanalysis API;
 - no public Save As method; and
 - no expansion from local ordinary Contexts to Grant-authorized mutation.

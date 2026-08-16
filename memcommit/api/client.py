@@ -371,6 +371,22 @@ class MemCommitClient:
 
         return apply_atomize_as_is(self._runtime, analysis)
 
+    def apply_saved_atomize_as_is(
+        self,
+        context_name: str | None = None,
+        *,
+        expected_version: str,
+    ) -> AtomizeStructuralApplyResult:
+        """Apply an exact saved structural revision without a provider turn."""
+
+        from memcommit.api._operations.atomize import apply_saved_atomize_as_is
+
+        return apply_saved_atomize_as_is(
+            self._runtime,
+            context_name,
+            expected_version=expected_version,
+        )
+
     def start_atomize_grounding(
         self,
         selector: str,

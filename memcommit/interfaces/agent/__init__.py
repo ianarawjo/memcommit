@@ -14,6 +14,13 @@ from memcommit.interfaces.agent.atomize_grounding import (
     AtomizeGroundingAgentKind,
     atomize_grounding_agent_tool_schema,
 )
+from memcommit.interfaces.agent.atomize import (
+    ATOMIZE_AGENT_CONTRACT_VERSION,
+    ATOMIZE_AGENT_TOOL_NAME,
+    AtomizeAgentAdapter,
+    AtomizeAgentKind,
+    atomize_agent_tool_schema,
+)
 from memcommit.interfaces.agent.query import (
     QUERY_AGENT_CONTRACT_VERSION,
     QUERY_AGENT_ERROR_MESSAGE_LIMIT,
@@ -59,12 +66,16 @@ __all__ = [
     "ADD_AGENT_ERROR_MESSAGE_LIMIT",
     "ADD_AGENT_TOOL_NAME",
     "AGENT_TOOL_REGISTRY_VERSION",
+    "ATOMIZE_AGENT_CONTRACT_VERSION",
+    "ATOMIZE_AGENT_TOOL_NAME",
     "ATOMIZE_GROUNDING_AGENT_CONTRACT_VERSION",
     "ATOMIZE_GROUNDING_AGENT_TOOL_NAME",
     "AddAgentAdapter",
     "AgentToolBinding",
     "AgentToolRegistrationError",
     "AgentToolRegistry",
+    "AtomizeAgentAdapter",
+    "AtomizeAgentKind",
     "AtomizeGroundingAgentAdapter",
     "AtomizeGroundingAgentKind",
     "MELD_AGENT_CONTRACT_VERSION",
@@ -85,6 +96,7 @@ __all__ = [
     "QUERY_AGENT_TOOL_NAME",
     "QueryAgentAdapter",
     "add_agent_tool_schema",
+    "atomize_agent_tool_schema",
     "atomize_grounding_agent_tool_schema",
     "build_default_agent_tool_registry",
     "meld_agent_tool_schema",

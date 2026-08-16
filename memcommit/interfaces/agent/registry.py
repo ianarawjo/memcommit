@@ -18,6 +18,11 @@ from memcommit.interfaces.agent.atomize_grounding import (
     AtomizeGroundingAgentAdapter,
     atomize_grounding_agent_tool_schema,
 )
+from memcommit.interfaces.agent.atomize import (
+    ATOMIZE_AGENT_TOOL_NAME,
+    AtomizeAgentAdapter,
+    atomize_agent_tool_schema,
+)
 from memcommit.interfaces.agent.contract import JsonObject, error_response
 from memcommit.interfaces.agent.distill import (
     DISTILL_AGENT_TOOL_NAME,
@@ -212,6 +217,7 @@ def build_default_agent_tool_registry(client: MemCommitClient) -> AgentToolRegis
     query = QueryAgentAdapter(client)
     add = AddAgentAdapter(client)
     meld = MeldAgentAdapter(client)
+    atomize = AtomizeAgentAdapter(client)
     atomize_grounding = AtomizeGroundingAgentAdapter(client)
     distill = DistillAgentAdapter(client)
     elaborate = ElaborateAgentAdapter(client)
@@ -232,6 +238,11 @@ def build_default_agent_tool_registry(client: MemCommitClient) -> AgentToolRegis
                 name=MELD_AGENT_TOOL_NAME,
                 schema_factory=meld_agent_tool_schema,
                 handler=meld.invoke,
+            ),
+            AgentToolBinding(
+                name=ATOMIZE_AGENT_TOOL_NAME,
+                schema_factory=atomize_agent_tool_schema,
+                handler=atomize.invoke,
             ),
             AgentToolBinding(
                 name=ATOMIZE_GROUNDING_AGENT_TOOL_NAME,

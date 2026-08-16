@@ -188,6 +188,10 @@ considered sufficient design history.
   defines the stable saved/prepared/provider analysis projection and exact
   in-place `Apply as is` receipt, including cache origin, opaque revision,
   retry recovery, stale conflict, and the intentional Save As exclusion.
+- [`atomize-agent-tool-design-rationale.md`](atomize-agent-tool-design-rationale.md)
+  defines the strict structural `open` and version-bound `apply_as_is` agent
+  actions, explicit cache/provider/effect reporting, stateless retry recovery,
+  registry/MCP projection, and the Save As/editing exclusions.
 - [`semantic-result-workbench-design-rationale.md`](semantic-result-workbench-design-rationale.md)
   generalizes the result-explanation hierarchy shared by bounded semantic
   operations: compact counts, what was understood, what happened, what remains

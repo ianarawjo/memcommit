@@ -120,11 +120,14 @@ without making the client facade or a generic semantic dispatcher their owner.
 
 ## Verification
 
-The extracted surface passed 194 focused tests after the Atomize Grounding and
-shared-interface changes were integrated. The set covers the QualityFind
+The prior extracted surface passed 194 focused tests after the Atomize
+Grounding and shared-interface changes were integrated. The structural
+Atomize rollout then passed 284 focused regressions with one skipped platform
+case. Together the sets cover the QualityFind
 source frame, Distill and Elaborate core/CLI/TUI behavior, Add, every Query
-route, the complete Meld and Atomize Grounding public lifecycles, all seven agent
-adapters, MCP projection, and fresh-process import isolation. Ruff passed for
+route, the complete Meld and Atomize Grounding public lifecycles, structural
+Atomize open and exact-version Apply, all eight agent adapters, MCP projection,
+and fresh-process import isolation. Ruff passed for
 every Python file changed by this rollout, the package compiled, and
 `python -m memcommit.cli --help` loaded the Fit, Distill, and Elaborate commands.
 
@@ -135,10 +138,11 @@ operation adapter. An invalid standalone Elaborate request then loaded only
 Ground Distill route loaded only `api._operations.ground_distill`, not the
 standalone Distill or Ground Elaborate adapter. The installed
 `mem` entry point listed Fit, Distill, and Elaborate. The installed `mem-mcp`
-stdio entry point initialized, listed Query, Add, Meld, Atomize Grounding,
-Distill, Elaborate, and Fit, opened one saved Grounding session, applied one
-two-Memory Add with exactly one checkpoint, and returned the typed unknown-tool
-error.
+stdio entry point initialized and listed Query, Add, Meld, structural Atomize,
+Atomize Grounding, Distill, Elaborate, and Fit. It opened one saved Grounding
+session, applied one two-Memory Add with exactly one checkpoint, ran a saved
+structural Atomize open/Apply/retry with one checkpoint, and returned the typed
+unknown-tool error.
 
 The earlier general `mem --help` blocker was a partial-commit mismatch between
 `quality_audit` and `QualityFindSourceFrame`. The committed aggregate

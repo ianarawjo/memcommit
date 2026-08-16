@@ -39,6 +39,7 @@ from memcommit.atomize_application import (
 )
 from memcommit.atomize_runtime import (
     capture_atomize_session_snapshot,
+    capture_atomize_session_snapshot_at_version,
     execute_atomize_session_apply,
 )
 from memcommit.atomize_workbench import (
@@ -385,4 +386,70 @@ def apply_atomize_as_is(
     )
 
 
-__all__ = ["apply_atomize_as_is", "open_atomize_analysis"]
+def apply_saved_atomize_as_is(
+    runtime: ClientRuntime,
+    context_name: str | None = None,
+    *,
+    expected_version: str,
+) -> AtomizeStructuralApplyResult:
+    """Apply one saved proposal by opaque version without provider access."""
+
+    if (
+        not isinstance(expected_version, str)
+        or len(expected_version) != 64
+        or any(character not in "0123456789abcdef" for character in expected_version)
+    ):
+        raise AtomizeInputError(
+            "expected_version must be a 64-character lowercase hexadecimal token."
+        )
+    if context_name is not None and (
+        not isinstance(context_name, str) or not context_name.strip()
+    ):
+        raise AtomizeInputError(
+            "context_name must be nonblank text when supplied."
+        )
+    context = _load_context(runtime, context_name)
+    try:
+        analysis = runtime.store.load_atomize_analysis(context.uid)
+        if analysis is None:
+            raise FileNotFoundError(
+                f"No saved atomize analysis exists for {context.name!r}."
+            )
+        snapshot = capture_atomize_session_snapshot_at_version(
+            store=runtime.store,
+            analysis=analysis,
+            expected_version=expected_version,
+        )
+        if snapshot.workbench is None:
+            raise FileNotFoundError(
+                f"No saved atomize workbench exists for {context.name!r}."
+            )
+        proposal = _project(
+            SimpleNamespace(
+                analysis=snapshot.analysis,
+                workbench=snapshot.workbench,
+                origin="SAVED",
+            ),
+            snapshot,
+        )
+    except FileNotFoundError as error:
+        raise_public(AtomizeContextError, error)
+    except OSError as error:
+        raise_public(AtomizeStorageError, error)
+    except (
+        AtomizeApplicationError,
+        AtomizeImpactError,
+        AtomizeWorkbenchError,
+        RuntimeError,
+        TypeError,
+        ValueError,
+    ) as error:
+        _raise_execution(error)
+    return apply_atomize_as_is(runtime, proposal)
+
+
+__all__ = [
+    "apply_atomize_as_is",
+    "apply_saved_atomize_as_is",
+    "open_atomize_analysis",
+]

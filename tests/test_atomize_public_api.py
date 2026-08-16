@@ -253,6 +253,60 @@ def test_apply_as_is_records_one_checkpoint_and_exact_retry_recovers(
     ]
 
 
+def test_saved_version_apply_is_provider_free_and_retryable(isolated_store):
+    client, store, context, _memory, _provider = _client_and_context(
+        composite=True
+    )
+    proposal = client.open_atomize_analysis(context.name)
+    provider_free = MemCommitClient(
+        root=store.store_dir,
+        semantic_provider_factory=lambda: (_ for _ in ()).throw(
+            AssertionError("version-bound Apply opened a provider")
+        ),
+    )
+
+    first = provider_free.apply_saved_atomize_as_is(
+        context.name,
+        expected_version=proposal.version,
+    )
+    retry = provider_free.apply_saved_atomize_as_is(
+        context.name,
+        expected_version=proposal.version,
+    )
+
+    assert first.recovered is False
+    assert retry.recovered is True
+    assert retry.checkpoint_uid == first.checkpoint_uid
+    assert len(store.list_checkpoints(context.name)) == 1
+
+
+def test_saved_version_apply_rejects_unknown_or_changed_revision(isolated_store):
+    client, store, context, _memory, _provider = _client_and_context()
+    proposal = client.open_atomize_analysis(context.name)
+
+    with pytest.raises(AtomizeInputError, match="64-character"):
+        client.apply_saved_atomize_as_is(
+            context.name,
+            expected_version="not-a-version",
+        )
+    with pytest.raises(AtomizeConflictError, match="version changed"):
+        client.apply_saved_atomize_as_is(
+            context.name,
+            expected_version="0" * 64,
+        )
+    assert store.list_checkpoints(context.name) == []
+
+    workbench = store.load_atomize_workbench(proposal._snapshot.analysis)
+    assert workbench is not None
+    workbench.layout = "STACKED"
+    store.save_atomize_workbench(workbench)
+    with pytest.raises(AtomizeConflictError, match="version changed"):
+        client.apply_saved_atomize_as_is(
+            context.name,
+            expected_version=proposal.version,
+        )
+
+
 def test_all_preserved_apply_still_records_deliberate_completion(
     isolated_store,
 ):

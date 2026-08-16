@@ -5,9 +5,9 @@ Last verified: 2026-08-15.
 ## Motivation
 
 Query and Add first supplied strict schemas and adapters, but a host still had
-to assemble them independently. Meld, Atomize Grounding, Distill, Elaborate,
-and Fit now use that same path rather than introducing operation-specific MCP
-handlers. The integration path covers tool
+to assemble them independently. Meld, structural Atomize, Atomize Grounding,
+Distill, Elaborate, and Fit now use that same path rather than introducing
+operation-specific MCP handlers. The integration path covers tool
 discovery, name dispatch, shared client ownership, JSON-safe output, and the
 transition from one durable mutation to a later read through the same process.
 
@@ -19,8 +19,9 @@ CLI or TUI and without choosing a wire protocol.
 
 `build_default_agent_tool_registry(client)` binds `memcommit_query`,
 `memcommit_add_memories`, `memcommit_meld`,
-`memcommit_atomize_grounding`, `memcommit_distill`, `memcommit_elaborate`, and
-`memcommit_fit` to one caller-owned `MemCommitClient`. The client has
+`memcommit_atomize`, `memcommit_atomize_grounding`, `memcommit_distill`,
+`memcommit_elaborate`, and `memcommit_fit` to one caller-owned
+`MemCommitClient`. The client has
 already frozen its Store/Profile root and provider configuration; the registry
 does not reconstruct or widen those choices.
 
@@ -95,10 +96,10 @@ fields, and prove that neither read-only tool creates a Context or accepts a
 proposal.
 
 The earlier clean-wheel check covered Query/Add discovery and a real Add
-invocation. On 2026-08-15 a fresh current-worktree wheel exposed all seven
-tools and executed a real Grounding `open` through the official stdio client
-outside the checkout. Provider-backed
-Distill/Elaborate execution remains in-process evidence. The registry is not a plugin, network endpoint,
-authentication service, skill installer, idempotency service, or dynamic
-runtime registry. Adding shipped operations remains an explicit code and
-compatibility change.
+invocation. On 2026-08-15 a fresh current-worktree wheel exposed all eight
+tools and executed a real Grounding `open` plus structural Atomize saved
+`open`, exact Apply, and retry through the official stdio client outside the
+checkout. Provider-backed Distill/Elaborate execution remains in-process
+evidence. The registry is not a plugin, network endpoint, authentication
+service, skill installer, idempotency service, or dynamic runtime registry.
+Adding shipped operations remains an explicit code and compatibility change.
