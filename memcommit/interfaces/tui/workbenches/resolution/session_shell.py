@@ -59,14 +59,14 @@ from memcommit.interfaces.tui.core.text_layout import (
     terminal_cell_width,
     wrap_terminal_text,
 )
-from memcommit.commands.save_location_control import (
+from memcommit.interfaces.tui.components.save_location import (
     SaveLocationEditorState,
     SaveLocationView,
     save_location_row_fragments,
     save_location_tree_fragments,
 )
-from memcommit.commands.session_help import bind_session_help
-from memcommit.commands.semantic_detail_renderer import (
+from memcommit.interfaces.tui.components.session_help import bind_session_help
+from memcommit.interfaces.tui.viewers.semantic.detail import (
     semantic_detail_block_fragments,
     semantic_detail_header_fragments,
     semantic_memory_row_fragments,
