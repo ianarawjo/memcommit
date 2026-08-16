@@ -368,9 +368,9 @@ def test_meld_style_setup_projects_coupled_reach_and_frozen_target() -> None:
 
 def test_meld_style_setup_returns_typed_recursive_request() -> None:
     with create_pipe_input() as pipe_input:
-        # Source owns first focus. Shift-Tab reaches the coupled shape,
-        # Right selects recursive, and two Tabs reach Continue.
-        pipe_input.send_text("\x1b[Z\x1b[C\t\t\r")
+        # A multi-shape setup starts on MODE. Right selects recursive, then
+        # Source and Continue are the next two visible focus surfaces.
+        pipe_input.send_text("\x1b[C\t\t\r")
         request = choose_merge_setup(
             _setup(),
             app_input=pipe_input,

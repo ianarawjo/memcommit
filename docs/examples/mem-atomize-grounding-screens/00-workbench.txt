@@ -19,12 +19,14 @@
 Analysis [<ANALYSIS>] · INPUT temp/grounding → OUTPUT temp/grounding · ORDER: SOURCE · 0/4 answered
 
 ACTIONABLE ISSUES
-›  1. · AMBIGUITY · COMPETING · REQUIRED  “Students should be guided to use a physical car…”
+›  1. · AMBIGUITY · INTERPRETATION · COMPETING
+CLARIFICATION · REQUIRED  “Students should be guided to use a physical car…”
       WHY · The note permits physical-card or app guidance, but the accepted Main Building method is unclear.
       ↳ R1 · Physical card only
       ↳ R2 · Physical card or app
    2. · ATOMIZE UNCERTAINTY · UNCERTAIN · REQUIRES CONTEXT  “Students should be guided to use a physical car…”
-   3. · AMBIGUITY · DOMINANT · REQUIRED  “The staff-only entrance uses the same NFC.”
+   3. · AMBIGUITY · INTERPRETATION · DOMINANT
+CLARIFICATION · REQUIRED  “The staff-only entrance uses the same NFC.”
       WHY · The phrase 'same NFC' does not say whether the staff-only entrance inherits the physical-card-only exception.
       ↳ R1 · Same physical card
       ↳ R2 · Same generic NFC
@@ -36,7 +38,8 @@ SOURCE [<STUDENT>]
 Students should be guided to use a physical card or the app.
 
 CLASSIFICATION
-COMPETING · REQUIRED
+INTERPRETATION · COMPETING
+CLARIFICATION · REQUIRED
 
 WHY THIS IS UNCLEAR
 The note permits physical-card or app guidance, but the accepted Main Building method is unclear.
