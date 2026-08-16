@@ -118,6 +118,7 @@ class QualityFindSetupReceipt:
             or len(set(self.target_names)) != len(self.target_names)
             or any(not isinstance(name, str) or not name for name in self.target_names)
             or not set(self.target_names) <= set(self.context_names)
+            or (self.profile_selected and self.target_names)
             or (not self.profile_selected and not self.target_names)
             or (
                 self.selection_mode == "SINGLE"
@@ -741,9 +742,14 @@ def run_interactive_quality_find(
                 "Quality Find launcher returned an unknown recent target."
             )
         target = revalidate_read_report_recent(store, matching)
+        # A Profile recent records what was readable during the old run for
+        # provenance only. PROFILE itself means all readable Contexts at this
+        # invocation, so expand it against the newly frozen catalog. Ordinary
+        # checked ranges remain exact and must not acquire new descendants.
+        replay_context_names = names if target.profile_selected else target.context_names
         receipt = QualityFindSetupReceipt(
             target_names=target.target_names,
-            context_names=target.context_names,
+            context_names=replay_context_names,
             selection_mode=target.selection_mode,
             include_descendants=target.include_descendants,
             profile_selected=target.profile_selected,

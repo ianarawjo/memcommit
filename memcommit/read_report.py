@@ -71,6 +71,13 @@ class ReadReportTarget:
         )
         if not set(targets) <= set(contexts):
             raise ReadReportError("Read Report targets are outside its Context set.")
+        if self.profile_selected and targets:
+            # PROFILE is the virtual all-readable target. Retaining ordinary
+            # roots beside it would make replay semantics depend on which of
+            # two contradictory target identities a caller happened to use.
+            raise ReadReportError(
+                "A Profile Read Report cannot retain ordinary target names."
+            )
         if self.selection_mode not in {"SINGLE", "MULTIPLE"}:
             raise ReadReportError("Read Report selection mode is invalid.")
         if (

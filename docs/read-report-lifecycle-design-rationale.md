@@ -81,6 +81,11 @@ as a compatibility projection over that neutral value.
   closed and returns the person to a fresh invocation.
 - Effective Context names remain explicit. Find execution does not apply a
   second hidden descendant expansion that could restore an unchecked row.
+- `PROFILE` is one exclusive virtual target, not an ordinary root plus a
+  marker. Replaying it expands the newly frozen readable catalog at request
+  construction, so newly readable or removed Contexts follow current
+  authority. Non-Profile recents retain their exact previously checked set and
+  never acquire a newly created lexical descendant implicitly.
 - No recent selection mutates global current Context or creates a saved
   analysis/session record.
 - Plain and explicitly targeted CLI routes retain their existing behavior.

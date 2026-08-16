@@ -241,6 +241,87 @@ def test_interactive_orchestration_replays_recent_target_without_saved_session(
     assert observed[0].include_descendants is True
 
 
+def test_profile_recent_reexpands_the_current_frozen_readable_catalog(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    original = ops.init("quality/profile/original")
+    added_later = ops.init("quality/profile/added-later")
+    ops.add(original, "An original Profile Memory.")
+    ops.add(added_later, "A newly readable Profile Memory.")
+    store.create_context(original)
+    store.create_context(added_later)
+    store.set_current(original.name)
+    target = ReadReportTarget(
+        operation="find-duplicates",
+        # This is the effective Profile membership recorded by the old run.
+        context_names=(original.name,),
+        target_names=(),
+        selection_mode="MULTIPLE",
+        ranges=("DIRECT",),
+        profile_selected=True,
+    )
+    recent = ReadReportRecent(
+        attempt_uid="profile-recent-attempt",
+        target=target,
+        started_at="2026-08-16T12:00:00+00:00",
+    )
+    observed: list[QualityFindSourceFrame] = []
+    monkeypatch.setattr(
+        "memcommit.commands.quality_find_workbench.read_report_recents",
+        lambda *_args, **_kwargs: (recent,),
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.quality_find_workbench.choose_read_report_recent",
+        lambda *_args, **_kwargs: target,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.quality_find_workbench.revalidate_read_report_recent",
+        lambda *_args, **_kwargs: target,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.quality_find_workbench."
+        "run_quality_find_resolution_workbench",
+        lambda *_args, **_kwargs: None,
+    )
+
+    completed = run_interactive_quality_find(
+        store,
+        current_name=original.name,
+        kind="duplicates",
+        analyze=lambda source: (
+            observed.append(source)
+            or DuplicateReport(memory_count=2, findings=())
+        ),
+    )
+
+    assert completed is True
+    assert set(observed[0].context_names) == {original.name, added_later.name}
+    assert observed[0].target_names == ()
+    assert observed[0].profile_selected is True
+
+
+def test_quality_find_profile_receipts_reject_mixed_ordinary_roots():
+    with pytest.raises(ValueError, match="valid Context range"):
+        QualityFindSetupReceipt(
+            target_names=("quality/profile",),
+            context_names=("quality/profile",),
+            selection_mode="MULTIPLE",
+            include_descendants=False,
+            profile_selected=True,
+        )
+
+    profile = ops.init("quality/profile")
+    with pytest.raises(QualityFindWorkbenchError, match="target roots"):
+        QualityFindSourceFrame.create(
+            (profile,),
+            target_names=(profile.name,),
+            selection_mode="MULTIPLE",
+            profile_selected=True,
+        )
+
+
 def test_ambiguity_projection_keeps_readings_and_process_local_response():
     ctx, first, _second = _context()
     report = AmbiguityReport(

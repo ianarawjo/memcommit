@@ -108,6 +108,7 @@ class QualityFindSourceFrame:
             len(set(targets)) != len(targets)
             or any(not isinstance(name, str) or not name for name in targets)
             or not set(targets) <= set(names)
+            or (profile_selected and targets)
             or (not profile_selected and not targets)
             or (
                 selection_mode == "SINGLE"

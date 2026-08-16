@@ -115,6 +115,28 @@ def test_empty_recent_catalog_skips_the_launcher():
     assert isinstance(selected, ReadReportSelectTarget)
 
 
+def test_profile_recent_has_one_exclusive_virtual_target():
+    target = ReadReportTarget(
+        operation="find-conflicts",
+        context_names=("team", "team/wiki"),
+        target_names=(),
+        selection_mode="MULTIPLE",
+        ranges=("DIRECT",),
+        profile_selected=True,
+    )
+
+    assert target.profile_selected is True
+    with pytest.raises(ReadReportError, match="cannot retain ordinary target"):
+        ReadReportTarget(
+            operation="find-conflicts",
+            context_names=("team", "team/wiki"),
+            target_names=("team",),
+            selection_mode="MULTIPLE",
+            ranges=("DIRECT",),
+            profile_selected=True,
+        )
+
+
 def test_selected_recent_is_revalidated_against_the_ledger(isolated_store):
     store = MemoryStore()
     target = ReadReportTarget(
