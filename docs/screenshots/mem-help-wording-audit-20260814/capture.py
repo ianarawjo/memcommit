@@ -45,6 +45,20 @@ def main() -> None:
     from memcommit.help_catalog import OPERATION_HELP_BY_NAME
 
     OUT.mkdir(parents=True, exist_ok=True)
+    operation_names = sorted(
+        OPERATION_HELP_BY_NAME,
+        key=lambda name: (name.casefold(), name),
+    )
+    expected_detail_names = {
+        f"detail-{operation_index:02d}-{operation_name}{suffix}"
+        for operation_index, operation_name in enumerate(operation_names, start=1)
+        for suffix in (".png", ".txt", ".typescript")
+    }
+    # Operation insertions change every following ordinal. Remove superseded
+    # generated captures so the directory remains one exact ordered sequence.
+    for existing in OUT.glob("detail-*"):
+        if existing.name not in expected_detail_names:
+            existing.unlink()
 
     category_child, category_recorder = _BASE._spawn(executable, interactive=True)
     _BASE._pump(category_child, seconds=0.8)
@@ -72,10 +86,6 @@ def main() -> None:
     # select A-Z, re-enter the command surface, and select its first row.
     detail_child.send("\x1b[Z\x1b[C\t\x1b[H")
     _BASE._pump(detail_child, seconds=0.4)
-    operation_names = sorted(
-        OPERATION_HELP_BY_NAME,
-        key=lambda name: (name.casefold(), name),
-    )
     for operation_index, operation_name in enumerate(operation_names, start=1):
         detail_child.send("\x1b[C")
         _BASE._pump(detail_child, seconds=0.22)

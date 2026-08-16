@@ -2,51 +2,51 @@
 ┌────────────────────────────────────────────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────────────────────────────────────────────┐
 │  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                                                                                                 │
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-┌ MEMORIES ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐^
-│ ▸ mem add        Add one or more Memories to the current or explicit Context.                                                                                                   │ 
-│ ▸ mem reference  Add a read-only Memory pointer; the Target stores identity metadata rather than copying content.                                                               │ 
-│ ▸ mem edit       Replace direct Memory content by UID or prefix in the current or explicit Context.                                                                             │ 
-│ ▸ mem chunk      Preview and split one direct Memory by headers, paragraphs, or sentences.                                                                                      │ 
-│ ▸ mem forget     Review keep/edit/delete decisions for one instruction, then apply the accepted batch.                                                                          │ 
-│ ▸ mem remove     Select a Context or direct item to delete, or name it by locator, name, or UID.                                                                                │ 
-│ ▸ mem delete     Select a Context or direct item to delete, or name it by locator, name, or UID.                                                                                │ 
-│ ▸ mem clear      Remove all direct items from the current or explicit Context after confirmation.                                                                               │ 
-└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
-                                                                                                                                                                                    
-┌ SEARCH & EXPLAIN ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
-│ ▸ mem find              Search selected Contexts with explicit lexical-descendant and embedded-Context reach.                                                                   │ 
-│ ▸ mem query             Ask readable Context knowledge or an authorized concealed query-only view.                                                                              │ 
-│ ▸ mem summarize         Show what Mem understands from a Context's visible ordinary Memories.                                                                                   │ 
-│ ▸ mem trace             Trace one retained Memory through its recorded lineage.                                                                                                 │ 
-│ ▸ mem rationale         Explain one Memory from recorded provenance and, when needed, inference.                                                                                │ 
-│ ▸ mem find-duplicates   Report duplicate direct Memories in the current or explicit Context; no Context changes.                                                                │ 
-│ ▸ mem find-ambiguities  Report ambiguous direct Memories in the current or explicit Context; no Context changes.                                                                │ 
-│ ▸ mem find-conflicts    Report conflicting direct Memory pairs in the current or explicit Context; no Context changes.                                                          │ 
-└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘^
                                                                                                                                                                                     
 ┌ ANALYZE & TRANSFORM ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
-│ ▸ mem audit      Run Duplicate, Ambiguity, and Conflict checks and review one saved report.                                                                                     │ 
-│ ▸ mem atomize    Split composite Memories for review; --evaluate performs an issue-scoped directional meld.                                                                     │ 
-│ ▸ mem compare    Compare two equal-authority Contexts without changing either one.                                                                                              │ 
-│ ▸ mem impact     Preview or inspect operation Impact; no Context changes occur before its reviewed Apply handoff.                                                               │ 
-│ ▸ mem review     Enter an interactive Review session or stage semantic review responses; never apply Memories.                                                                  │ 
-│ ▸ mem meld       Combine two equal-authority Contexts in the current empty Context; --from is normalized to INCOMING --into authoritative BASELINE.                             │ 
-│ ▸ mem update     Review a directional plan and apply it to a local target; no shared publication.                                                                               │ 
-│ ▸ mem sever      Review Source against Criteria and create a derived Result while leaving Source unchanged.                                                                     │ 
-│ ▸ mem translate  Show and save a reusable translation view; materialize it only through an explicit route.                                                                      │ 
-│ ▸ mem merge      Add UID-new direct items from another Context; no semantic reconciliation.                                                                                     │ 
+│ ▸ mem audit      DESCRIPTION  Run Duplicate, Ambiguity, and Conflict checks plus optional Rule Conformance, then review one saved report.                                       │ 
+│                  USE WHEN  Performing a combined quality review before revising a Context.                                                                                      │ 
+│ ▸ mem atomize    DESCRIPTION  Split composite Memories for review; --evaluate performs an issue-scoped directional meld.                                                        │ 
+│                  USE WHEN  Separating a composite Memory into independently reviewable requirements.                                                                            │ 
+│ ▸ mem distill    DESCRIPTION  Derive reusable Rules from Case or Example propositions in a selected Context scope, using an optional Goal to focus relevance.                   │ 
+│                  USE WHEN  Extracting reusable rules from evidence-rich source material.                                                                                        │ 
+│ ▸ mem elaborate  DESCRIPTION  Propose candidate Rules from a Goal, or concrete Case propositions from existing Rules.                                                           │ 
+│                  USE WHEN  An abstract Goal needs starter Rule candidates, or existing Rules need additional concrete Case propositions for review.                             │ 
+│ ▸ mem compare    DESCRIPTION  Compare Memories in two Contexts and report what they share, what differs, and what appears only on one side.                                     │ 
+│                  USE WHEN  Comparing two Contexts as a whole to understand where they align and differ.                                                                         │ 
+│ ▸ mem impact     DESCRIPTION  Preview or inspect operation Impact; no Context changes occur before its reviewed Apply handoff.                                                  │ 
+│                  USE WHEN  Checking expected consequences before accepting a transformation.                                                                                    │ 
+│ ▸ mem review     DESCRIPTION  Enter an interactive Review session or stage semantic review responses; never apply Memories.                                                     │ 
+│                  USE WHEN  Resolving issues in a saved analysis before a later Apply.                                                                                           │ 
+│ ▸ mem meld       DESCRIPTION  Semantically reconcile two Contexts into either a separate Result or an authoritative Baseline.                                                   │ 
+│                  USE WHEN  Combining separately developed Contexts into a shared Result, or incorporating proposed changes into an existing Baseline.                           │ 
+│ ▸ mem update     DESCRIPTION  Update Memories in the Target Context from Memories in the Source Context, asking the user to review and choose when needed.                      │ 
+│                  USE WHEN  Updating an existing Context using newly verified Memories.                                                                                          │ 
+│ ▸ mem sever      DESCRIPTION  Review Source against Criteria and create a derived Result while leaving Source unchanged.                                                        │ 
+│                  USE WHEN  Selecting or transforming part of a Source according to reusable criteria.                                                                           │ 
+│ ▸ mem translate  DESCRIPTION  Show and save a reusable translation view; materialize it only through an explicit route.                                                         │ 
+│                  USE WHEN  Translating material while preserving the original source.                                                                                           │ 
+│ ▸ mem merge      DESCRIPTION  Add Source-only items to the current Target, choosing Source or Target wherever stored items conflict.                                            │ 
+│                  USE WHEN  Bringing work from a copied or branched Context back into the current Context.                                                                       │ 
 └─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
                                                                                                                                                                                     
 ┌ HISTORY & RECOVERY ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
-│ ▸ mem log         Browse Context checkpoints, inspect one Memory lineage with --memory, search history, or list Profile command attempts.                                       │ 
-│ ▸ mem diff        Inspect recorded Context or Update changes without applying them.                                                                                             │ 
-│ ▸ mem checkpoint  Save the current Context as a manual recovery point for Diff or Revert.                                                                                       │ 
-│ ▸ mem undo        Undo the most recent recorded Context command across its affected Contexts.                                                                                   │ 
-│ ▸ mem redo        Redo the most recently undone recorded Context command.                                                                                                       │ 
-│ ▸ mem revert      Select a checkpoint and review restoration of one local Context.                                                                                              │ 
+│ ▸ mem log         DESCRIPTION  Browse Context checkpoints, inspect one Memory lineage with --memory, search history, or list Profile command attempts.                          │ 
+│                   USE WHEN  Investigating previous operations, checkpoints, or Memory history.                                                                                  │ 
+│ ▸ mem diff        DESCRIPTION  Inspect recorded Context or Update changes without applying them.                                                                                │ 
+│                   USE WHEN  Verifying exactly what a recorded operation changed.                                                                                                │ 
+│ ▸ mem checkpoint  DESCRIPTION  Save the current Context as a manual recovery point for Diff or Revert.                                                                          │ 
+│                   USE WHEN  Creating a recovery point before risky work.                                                                                                        │ 
+│ ▸ mem undo        DESCRIPTION  Undo the most recent recorded Context command across its affected Contexts.                                                                      │ 
+│                   USE WHEN  Reversing the latest recorded mutation as one operation.                                                                                            │ 
+│ ▸ mem redo        DESCRIPTION  Redo the most recently undone recorded Context command.                                                                                          │ 
+│                   USE WHEN  Reapplying a command that was undone accidentally.                                                                                                  │ 
+│ ▸ mem revert      DESCRIPTION  Select a checkpoint and review restoration of one local Context.                                                                                 │ 
+│                   USE WHEN  Restoring a Context to a deliberately saved recovery point.                                                                                         │ 
 └─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
                                                                                                                                                                                     
 ┏ GROUND & EVALUATION ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
-┃ ▸ mem ground      Create or continue a reviewed Goal-Rules-Memories Ground workbench.                                                                                           ┃v
+┃ ▸ mem ground             DESCRIPTION  Create or continue a reviewed Goal-Rules-Memories Ground workbench.                                                                       ┃v
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
  ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H full help

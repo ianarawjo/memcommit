@@ -1,0 +1,52 @@
+ mem help · command inventory                                                                                                                                                       
+┌────────────────────────────────────────────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────────────────────────────────────────────┐
+│  VIEW · [   BY KIND ]  [ ✓ A–Z ] · ←/→ TO SELECT                                                                                                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┃                          USE WHEN  Extracting reusable rules from evidence-rich source material.                                                                                ┃^
+┃ ▸ mem edit               DESCRIPTION  Replace direct Memory content by UID or prefix in the current or explicit Context.                                                        ┃ 
+┃                          USE WHEN  Correcting or revising a known Memory in place.                                                                                              ┃ 
+┃ ▸ mem elaborate          DESCRIPTION  Propose candidate Rules from a Goal, or concrete Case propositions from existing Rules.                                                   ┃ 
+┃                          USE WHEN  An abstract Goal needs starter Rule candidates, or existing Rules need additional concrete Case propositions for review.                     ┃ 
+┃ ▸ mem embed              DESCRIPTION  Place a Child Context inside a target while retaining its identity and ownership.                                                         ┃ 
+┃                          USE WHEN  Reusing a Context inside another Context without copying it.                                                                                 ┃ 
+┃ ▸ mem eval               DESCRIPTION  Run and inspect staged semantic evaluation campaigns.                                                                                     ┃ 
+┃                          USE WHEN  Measuring operation behavior against repeatable fixtures.                                                                                    ┃ 
+┃ ▸ mem find               DESCRIPTION  Search selected Contexts with explicit lexical-descendant and embedded-Context reach.                                                     ┃ 
+┃                          USE WHEN  Finding relevant Memories across a selected Context scope.                                                                                   ┃ 
+┃ ▸ mem find-ambiguities   DESCRIPTION  Report ambiguous direct Memories in the current or explicit Context; no Context changes.                                                  ┃ 
+┃                          USE WHEN  Finding Memories that permit unclear or multiple interpretations.                                                                            ┃ 
+┃ ▸ mem find-conflicts     DESCRIPTION  Report conflicting direct Memory pairs in the current or explicit Context; no Context changes.                                            ┃ 
+┃                          USE WHEN  Finding mutually incompatible claims or instructions.                                                                                        ┃ 
+┃ ▸ mem find-duplicates    DESCRIPTION  Report duplicate direct Memories in the current or explicit Context; no Context changes.                                                  ┃ 
+┃                          USE WHEN  Locating semantically redundant Memories before cleanup.                                                                                     ┃ 
+┃ ▸ mem fit                DESCRIPTION  Judge whether two or more propositions can jointly hold under ordinary readings.                                                          ┃ 
+┃                          USE WHEN  Checking whether Memories, Rules, Goals, or other propositions can coexist without contradiction.                                            ┃ 
+┃ ▸ mem forget             DESCRIPTION  Review keep/edit/delete decisions for one instruction, then apply the accepted batch.                                                     ┃ 
+┃                          USE WHEN  Removing or transforming material according to a semantic criterion.                                                                         ┃ 
+┃ ▸ mem ground             DESCRIPTION  Create or continue a reviewed Goal-Rules-Memories Ground workbench.                                                                       ┃ 
+┃                          USE WHEN  Building a reviewed evaluation or behavior contract from evidence.                                                                           ┃ 
+┃ ▸ mem help               DESCRIPTION  Enter the interactive command browser and open syntax help.                                                                               ┃ 
+┃                          USE WHEN  Discovering available operations and their invocation forms.                                                                                 ┃ 
+┃ ▸ mem impact             DESCRIPTION  Preview or inspect operation Impact; no Context changes occur before its reviewed Apply handoff.                                          ┃ 
+┃                          USE WHEN  Checking expected consequences before accepting a transformation.                                                                            ┃ 
+┃ ▸ mem import             DESCRIPTION  Import a clean-baseline Profile, Context tree, or Memory by value while preserving resource identity.                                     ┃ 
+┃                          USE WHEN  Bringing externally supplied material into a locally managed store.                                                                          ┃ 
+┃ ▸ mem init               DESCRIPTION  Create a named Context, optionally ensure its parents, and switch to it.                                                                  ┃ 
+┃                          USE WHEN  Starting a new empty Context hierarchy.                                                                                                      ┃ 
+┃ ▸ mem init-study         DESCRIPTION  Copy one Study baseline into an isolated participant/authority Profile pair.                                                              ┃ 
+┃                          USE WHEN  Preparing a reproducible, isolated user-study environment.                                                                                   ┃ 
+┃ ▸ mem list (ls)          DESCRIPTION  Browse child Contexts and direct items; ls is the equivalent compact spelling.                                                            ┃ 
+┃                          USE WHEN  Inspecting the structure and direct contents of a Context.                                                                                   ┃ 
+┃ ▸ mem lock               DESCRIPTION  Lock the current Context, a recursive Context set, Memory, or Profile.                                                                    ┃ 
+┃                          USE WHEN  Preventing accidental modification of stable material.                                                                                       ┃ 
+┃ ▸ mem log                DESCRIPTION  Browse Context checkpoints, inspect one Memory lineage with --memory, search history, or list Profile command attempts.                   ┃ 
+┃                          USE WHEN  Investigating previous operations, checkpoints, or Memory history.                                                                           ┃ 
+┃ ▾ mem meld               DESCRIPTION  Semantically reconcile two Contexts into either a separate Result or an authoritative Baseline.                                           ┃ 
+┃                          USE WHEN  Combining separately developed Contexts into a shared Result, or incorporating proposed changes into an existing Baseline.                   ┃ 
+┃   FLOW      · PEER A + PEER B -> RESULT; INCOMING -> BASELINE                                                                                                                   ┃ 
+┃   EXECUTION · SEMANTIC                                                                                                                                                          ┃ 
+┃   EFFECT    · Symmetric mode requires a distinct empty Result; directional mode changes only the Baseline after reviewed Apply                                                  ┃ 
+┃   RANGE     · Each side exact or readable descendants                                                                                                                           ┃ 
+┃   FORM 1 · mem meld (enter the interactive Meld session launcher)                                                                                                               ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter prefill command line  Tab surface  H full help

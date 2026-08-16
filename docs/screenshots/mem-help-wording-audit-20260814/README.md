@@ -30,9 +30,14 @@ Each category image has matching raw `.typescript` and terminal-text `.txt`
 artifacts. The selected first row is only the keyboard target; it does not mean
 that operation was invoked.
 
+The collapsed command rows use the same one-column reading order at wide and
+compact widths: a bold `DESCRIPTION` label and summary are followed by a bold
+`USE WHEN` label and its use case. This avoids changing the semantic reading
+order merely because the terminal becomes wider.
+
 ## Expanded operation sequence
 
-The 55 `detail-NN-*.png` files follow A–Z command order. After `mem help`, the
+The 58 `detail-NN-*.png` files follow A–Z command order. After `mem help`, the
 capture presses `Shift-Tab` to reach `VIEW`, selects `A–Z`, enters the command
 surface, presses `Home`, and repeats this read-only sequence for each operation:
 
@@ -47,6 +52,6 @@ operations own more Forms than fit in one 52-row viewport; this set audits the
 meaning fields and visible leading Forms, while the Forms remain fully covered
 by the existing Help inventory tests.
 
-`wording-matrix.md` contains the same 55 interface-neutral records in one table
+`wording-matrix.md` contains the same 58 interface-neutral records in one table
 for line-by-line editing. Neither the matrix nor these images add a second Help
 source; both are generated from the current registered catalog.

@@ -830,10 +830,7 @@ def _entry_line(
     return f"{label:<{name_width}} - {entry.description}"
 
 
-_HELP_SIDE_BY_SIDE_MIN_BODY_WIDTH = 108
-_HELP_WIDE_COLUMN_GUTTER = "    "
 _HELP_USE_WHEN_LABEL = "USE WHEN:"
-_HELP_USE_WHEN_PREFIX = _HELP_USE_WHEN_LABEL + " "
 
 
 def _wrapped_help_text(value: str, *, width: int) -> list[str]:
@@ -850,8 +847,8 @@ def _help_command_rows(
     *,
     command_prefix: str,
     content_width: int,
-) -> list[tuple[str, str, int | None]]:
-    """Project summary and use case beside each other when space permits."""
+) -> list[tuple[str, str, tuple[tuple[int, str], ...]]]:
+    """Project an unlabelled summary followed by an explicit use-case row."""
 
     body_width = max(1, content_width - len(command_prefix))
     best_for = None if entry.operation_help is None else entry.operation_help.best_for
@@ -861,77 +858,35 @@ def _help_command_rows(
             (
                 command_prefix if index == 0 else " " * len(command_prefix),
                 line.ljust(body_width),
-                None,
+                (),
             )
             for index, line in enumerate(summary_lines)
         ]
 
-    if body_width >= _HELP_SIDE_BY_SIDE_MIN_BODY_WIDTH:
-        # The labels and fixed column geometry already distinguish explanation
-        # from use case. A blank gutter keeps the wide view readable without
-        # making every operation look like a rigid table.
-        column_width = content_width - len(_HELP_WIDE_COLUMN_GUTTER)
-        left_width = column_width // 2
-        summary_width = max(1, left_width - len(command_prefix))
-        best_for_width = max(1, column_width - left_width)
-        summary_lines = _wrapped_help_text(
-            entry.description,
-            width=summary_width,
-        )
-        best_for_lines = textwrap.wrap(
-            _HELP_USE_WHEN_PREFIX + display_escape_text(best_for),
-            width=best_for_width,
-            subsequent_indent=" " * len(_HELP_USE_WHEN_PREFIX),
-            break_long_words=True,
-            break_on_hyphens=False,
-        ) or [_HELP_USE_WHEN_LABEL]
-        row_count = max(len(summary_lines), len(best_for_lines))
-        rows: list[tuple[str, str]] = []
-        for row_index in range(row_count):
-            prefix = command_prefix if row_index == 0 else " " * len(command_prefix)
-            summary = summary_lines[row_index] if row_index < len(summary_lines) else ""
-            use_case = (
-                best_for_lines[row_index] if row_index < len(best_for_lines) else ""
-            )
-            rows.append(
-                (
-                    prefix,
-                    summary.ljust(summary_width)
-                    + _HELP_WIDE_COLUMN_GUTTER
-                    + use_case.ljust(best_for_width),
-                    summary_width + len(_HELP_WIDE_COLUMN_GUTTER)
-                    if row_index == 0
-                    else None,
-                )
-            )
-        return rows
-
     summary_lines = _wrapped_help_text(entry.description, width=body_width)
-    rows = [
+    rows: list[tuple[str, str, tuple[tuple[int, str], ...]]] = []
+    rows.extend(
         (
             command_prefix if index == 0 else " " * len(command_prefix),
             line.ljust(body_width),
-            None,
+            (),
         )
         for index, line in enumerate(summary_lines)
-    ]
-    stacked_prefix = " " * min(
-        len(command_prefix),
-        max(0, content_width - 1),
     )
-    use_case_prefix = stacked_prefix + _HELP_USE_WHEN_PREFIX
+
+    use_case_prefix = f"{_HELP_USE_WHEN_LABEL} "
     best_for_lines = textwrap.wrap(
         use_case_prefix + display_escape_text(best_for),
-        width=content_width,
+        width=body_width,
         subsequent_indent=" " * len(use_case_prefix),
         break_long_words=True,
         break_on_hyphens=False,
-    ) or [stacked_prefix + _HELP_USE_WHEN_LABEL]
+    ) or [use_case_prefix.rstrip()]
     rows.extend(
         (
-            "",
-            line.ljust(content_width),
-            len(stacked_prefix) if index == 0 else None,
+            " " * len(command_prefix),
+            line.ljust(body_width),
+            (),
         )
         for index, line in enumerate(best_for_lines)
     )
@@ -990,7 +945,7 @@ def _help_group_fragments(
         command_prefix = (
             f"{'▾' if expanded else '▸'} mem {labels[index]:<{name_width}}  "
         )
-        for prefix, body, use_when_offset in _help_command_rows(
+        for prefix, body, bold_spans in _help_command_rows(
             entry,
             command_prefix=command_prefix,
             content_width=content_width,
@@ -1003,20 +958,23 @@ def _help_group_fragments(
                 else "class:help-command"
             )
             fragments.append((prefix_style, f" {prefix}"))
-            if use_when_offset is None:
+            if not bold_spans:
                 fragments.append((body_style, f"{body} "))
             else:
-                label_end = use_when_offset + len(_HELP_USE_WHEN_LABEL)
-                fragments.extend(
-                    [
-                        (body_style, body[:use_when_offset]),
-                        (
-                            f"{body_style} bold".strip(),
-                            body[use_when_offset:label_end],
-                        ),
-                        (body_style, body[label_end:] + " "),
-                    ]
-                )
+                body_offset = 0
+                for label_offset, label in bold_spans:
+                    label_end = label_offset + len(label)
+                    fragments.extend(
+                        [
+                            (body_style, body[body_offset:label_offset]),
+                            (
+                                f"{body_style} bold".strip(),
+                                body[label_offset:label_end],
+                            ),
+                        ]
+                    )
+                    body_offset = label_end
+                fragments.append((body_style, body[body_offset:] + " "))
             fragments.append((border_style, vertical + "\n"))
         if expanded:
             if entry.operation_help is not None:

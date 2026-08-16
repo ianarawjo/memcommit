@@ -4,7 +4,7 @@
 [0m│  VIEW · [[0;38;5;234;48;5;117m ✓ BY KIND [0m]  [   A–Z ] · ←/→ TO SELECT                                                                                                                                 [179C│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
 [0m┌ CORE CONCEPTS ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[179C[0;1m^[0m
-[0m│ [0;1mMEMORY      [0mAn atomic unit of information stored in a Context.                                                                                                                  [0m│[179C[0;48;5;238m [0m
+[0m│ [0;38;5;189mMEMORY      [0mAn atomic unit of information stored in a Context.                                                                                                                  [0m│[179C[0;48;5;238m [0m
 [0m│ [0;1mCONTEXT     [0mA named workspace that organizes Memories and other Contexts.                                                                                                       [0m│[179C[0;48;5;238m [0m
 [0m│ [0;1mPROFILE     [0mAn ownership and storage boundary for Contexts.                                                                                                                     [0m│[179C[0;48;5;238m [0m
 [0m│ [0;1mGRANT       [0mA permission relationship that can be given or received, selectively allowing someone without direct ownership to read or query a Context and its Memories, or run  [0m│[179C[0;48;5;238m [0m
@@ -17,93 +17,94 @@
 [0m│ [0;1mTab / Shift-Tab  [0mMove focus between visible surfaces.                                                                                                                           [0m│[179C[0;48;5;238m [0m
 [0m│ [0;1mEnter            [0mOpen, select, or submit the focused action.                                                                                                                    [0m│[179C[0;48;5;238m [0m
 [0m│ [0;1mH                [0mOpen or hide Help from a session's read-only navigation surface.                                                                                               [0m│[179C[0;48;5;238m [0m
-[0m│ [0;1mEsc / Backspace  [0mGo back one layer; Backspace edits text in writable fields.                                                                                                    [0m│[179C[0;48;5;238m [0m
-[0m└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[179C[0;48;5;238m [0m
-[179C[0;48;5;238m [0m
-[0;38;5;117;1m┏ CONTEXTS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[179C[0;48;5;238m [0m
-[0;38;5;117;1m┃[0;38;5;234;48;5;117;1;7m ▸ mem status     Show current Context counts, recent Memories, and checkpoints.                                                                                                 [0;38;5;117;1m┃[179C[0;48;5;238m [0m
-[0;38;5;117;1m┃[0;1m ▸ mem pwd        [0mPrint the current canonical Context name without loading its contents.                                                                                         [0;38;5;117;1m┃[179C[0;48;5;238m [0m
-[0;38;5;117;1m┃[0;1m ▸ mem contexts   [0mBrowse local Contexts and readable cross-Profile Context views without switching.                                                                              [0;38;5;117;1m┃[179C[0;48;5;238m [0m
-[0;38;5;117;1m┃[0;1m ▸ mem list (ls)  [0mBrowse child Contexts and direct items; ls is the equivalent compact spelling.                                                                                 [0;38;5;117;1m┃[179C[0;48;5;238m [0m
-[0;38;5;117;1m┃[0;1m ▸ mem show       [0mShow a Memory, reference, embedded Context, or the direct contents of a current/explicit Context.                                                              [0;38;5;117;1m┃[179C[0;48;5;238m [0m
-[0;38;5;117;1m┃[0;1m ▸ mem switch     [0mEnter the interactive Context picker, or switch to an explicit Context.                                                                                        [0;38;5;117;1m┃[179C[0;48;5;248m [0m
-[0;38;5;117;1m┃[0;1m ▸ mem checkout   [0mSwitch Contexts using Git-style syntax; with -b, create and switch to a new Context branch.                                                                    [0;38;5;117;1m┃[179C[0;48;5;248m [0m
-[0;38;5;117;1m┃[0;1m ▸ mem init       [0mCreate a named Context, optionally ensure its parents, and switch to it.                                                                                       [0;38;5;117;1m┃[179C[0;48;5;248m [0m
-[0;38;5;117;1m┃[0;1m ▸ mem branch     [0mCopy a Context or subtree into a new branch and switch to it.                                                                                                  [0;38;5;117;1m┃[179C[0;48;5;248m [0m
-[0;38;5;117;1m┃[0;1m ▸ mem import     [0mImport a clean-baseline Profile, Context tree, or Memory by value while preserving resource identity.                                                          [0;38;5;117;1m┃[179C[0;48;5;248m [0m
-[0;38;5;117;1m┃[0;1m ▸ mem embed      [0mPlace a Child Context inside a target while retaining its identity and ownership.                                                                              [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0m│ [0;1mEsc / Backspace  [0mGo back one layer; Backspace edits text in writable fields.                                                                                                    [0m│[179C[0;48;5;248m [0m
+[0m└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[179C[0;48;5;248m [0m
+[179C[0;48;5;248m [0m
+[0;38;5;117;1m┏ CONTEXTS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;38;5;234;48;5;117;1m ▸ mem status     DESCRIPTION  Show current Context counts, recent Memories, and checkpoints.                                                                                    [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;38;5;234;48;5;117;1m                  USE WHEN  Quickly checking the state and recent activity of the current Context.                                                                               [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem pwd        DESCRIPTION[0m  Print the current canonical Context name without loading its contents.                                                                            [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m                  USE WHEN[0m  Confirming the active Context in a script or terminal.                                                                                               [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem contexts   DESCRIPTION[0m  Browse local Contexts and readable cross-Profile Context views without switching.                                                                 [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m                  USE WHEN[0m  Exploring every Context currently available to the Profile.                                                                                          [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem list (ls)  DESCRIPTION[0m  Browse child Contexts and direct items; ls is the equivalent compact spelling.                                                                    [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m                  USE WHEN[0m  Inspecting the structure and direct contents of a Context.                                                                                           [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem show       DESCRIPTION[0m  Show a Memory, reference, embedded Context, or the direct contents of a current/explicit Context.                                                 [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m                  USE WHEN[0m  Reading the complete content of a known item or Context.                                                                                             [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem switch     DESCRIPTION[0m  Enter the interactive Context picker, or switch to an explicit Context.                                                                           [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m                  USE WHEN[0m  Moving the working position to another existing Context.                                                                                             [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem checkout   DESCRIPTION[0m  Switch Contexts using Git-style syntax; with -b, create and switch to a new Context branch.                                                       [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m                  USE WHEN[0m  Using a Git-like workflow to switch or create a branch.                                                                                              [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem init       DESCRIPTION[0m  Create a named Context, optionally ensure its parents, and switch to it.                                                                          [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m                  USE WHEN[0m  Starting a new empty Context hierarchy.                                                                                                              [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem branch     DESCRIPTION[0m  Copy a Context or subtree into a new branch and switch to it.                                                                                     [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m                  USE WHEN[0m  Experimenting without modifying the original Context tree.                                                                                           [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem import     DESCRIPTION[0m  Import a clean-baseline Profile, Context tree, or Memory by value while preserving resource identity.                                             [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m                  USE WHEN[0m  Bringing externally supplied material into a locally managed store.                                                                                  [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem embed      DESCRIPTION[0m  Place a Child Context inside a target while retaining its identity and ownership.                                                                 [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m                  USE WHEN[0m  Reusing a Context inside another Context without copying it.                                                                                         [0;38;5;117;1m┃[179C[0;48;5;248m [0m
 [0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[179C[0;48;5;248m [0m
 [179C[0;48;5;248m [0m
 [0m┌ MEMORIES ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[179C[0;48;5;248m [0m
-[0m│[0;1m ▸ mem add        [0mAdd one or more Memories to the current or explicit Context.                                                                                                   [0m│[179C[0;48;5;248m [0m
-[0m│[0;1m ▸ mem reference  [0mAdd a read-only Memory pointer; the Target stores identity metadata rather than copying content.                                                               [0m│[179C[0;48;5;248m [0m
-[0m│[0;1m ▸ mem edit       [0mReplace direct Memory content by UID or prefix in the current or explicit Context.                                                                             [0m│[179C[0;48;5;248m [0m
-[0m│[0;1m ▸ mem chunk      [0mPreview and split one direct Memory by headers, paragraphs, or sentences.                                                                                      [0m│[179C[0;48;5;248m [0m
-[0m│[0;1m ▸ mem forget     [0mReview keep/edit/delete decisions for one instruction, then apply the accepted batch.                                                                          [0m│[179C[0;48;5;248m [0m
-[0m│[0;1m ▸ mem remove     [0mSelect a Context or direct item to delete, or name it by locator, name, or UID.                                                                                [0m│[179C[0;48;5;248m [0m
-[0m│[0;1m ▸ mem delete     [0mSelect a Context or direct item to delete, or name it by locator, name, or UID.                                                                                [0m│[179C[0;48;5;248m [0m
-[0m│[0;1m ▸ mem clear      [0mRemove all direct items from the current or explicit Context after confirmation.                                                                               [0m│[179C[0;48;5;248m [0m
-[0m└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[179C[0;48;5;248m [0m
-[179C[0;48;5;248m [0m
-[0m┌ SEARCH & EXPLAIN ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[179C[0;48;5;248m [0m
-[0m│[0;1m ▸ mem find              [0mSearch selected Contexts with explicit lexical-descendant and embedded-Context reach.                                                                   [0m│[179C[0;48;5;248m [0m
-[0m│[0;1m ▸ mem query             [0mAsk readable Context knowledge or an authorized concealed query-only view.                                                                              [0m│[179C[0;48;5;248m [0m
-[0m│[0;1m ▸ mem summarize         [0mShow what Mem understands from a Context's visible ordinary Memories.                                                                                   │[179C[0;1mv[0m
+[0m│[0;1m ▸ mem add              DESCRIPTION[0m  Add one or more Memories to the current or explicit Context.                                                                                [0m│[179C[0;48;5;248m [0m
+[0m│[0;1m                        USE WHEN[0m  Saving new facts, instructions, or source material.                                                                                            [0m│[179C[0;48;5;248m [0m
+[0m│[0;1m ▸ mem reference        DESCRIPTION[0m  Add a read-only Memory pointer; the Target stores identity metadata rather than copying content.                                            │[179C[0;1mv[0m
 [0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
 [0m ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H full help[98D[29A[0m[20A[11C[0m   BY KIND [4C[0;38;5;234;48;5;117m ✓ A–Z [0m
 
 [0;38;5;117;1m┏ A–Z ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[0m
-[0;38;5;117;1m┃[0;38;5;234;48;5;117;1;7m ▸ mem add               Add one or more Memories to the current or explicit Context.                                                                                            [0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m ▸ mem atomize           [0mS[Clit[Ccomposite Memori[Cs for review; --evaluate performs[Can[Cissue-scoped[Cdirectional[Cmeld.[62C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m ▸ mem audit             [0mRu[C Duplicate, Ambiguity,[Cand Conflict[Cchecks[Cand[Creview[Cone[Csaved[Creport.[78C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m ▸ mem branch            [0mCopy a Context or subtre[2Cinto a new branch and switch to it.    [C       [C       [C      [C         [C  [C    [C  [C     [C [C       [C   [C   [C         [C  [C   [2C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m ▸ mem checkout          [0mSwi[Cch Contexts using Gi[C-style syntax; with -b,[Ccreate[Cand[Cswitch[Cto[Ca[Cnew[CContext[Cbranch.[61C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m ▸ mem checkpoint        [0mSave the[Ccurrent C[Cntext as[Ca manual[Crecovery[Cpoint for Diff or Revert. [C  [C    [C   [C      [C    [C       [C       [C    [C        [26C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m ▸ mem chunk             [0mPreview and split one direct Memory[Cby hea[Cers, paragr[Cphs, or s[Cntences.      [C        [64C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m ▸ mem clear             [0mRemove all direct items from the current or explicit Context after confirmation.                                                                        [0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m ▸ mem compare           [0mCompare[Ctwo equal-authority Contexts[Cwithout[Cchanging[Ceither[Cone.[87C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m ▸ mem config (legacy)   [0mRead and write global configurati[Cn.   [C         [C  [C      [93C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m ▸ mem contexts          [0mBrows[C local Context[C and readable[Ccross-Profile[CContext[Cviews[Cwithout[Cswitching.[71C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m ▸ mem delete            [0mSelect[Ca Contex[2Cor direct item t[C delete,[Cor[Cname[Cit[Cby[Clocator,[Cname,[Cor[CUID.[73C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m ▸ mem diff              [0mInsp[Cct reco[Cded Context or[CUpdate cha[Cges without applying[Cthem.[87C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m ▸ mem edit              [0mReplace direct Memory[Ccon[Cen[C by[CUID or prefix in the[Ccurrent[Cor[Cexplicit[CContext.[70C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m ▸ mem embed             [0mPlace a Child Context inside a target while retaining its identity and ownership.                                                                       [0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m ▸ mem eval              [0mRun and inspect staged semantic evaluation campaigns.                                                                                                   [0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m ▸ mem find              [0mSearch selected Contexts with explicit lexical-descendant and embedded-Context reach.                                                                   [0;38;5;117;1m┃[0m
-[C[0;1m ▸ mem find-ambiguities  [0mReport ambiguous direct Memories in the current or explicit Context; no Context changes.                                                                [0m
-[8C[0;1mfind-conflicts    [0mR[Cport conflicting direc[C Memory pa[Crs in[Cthe current[Cor explicit[CContext;[Cno[CContext[Cchanges.[0m
-[8C[0;1mfi[Cd-duplicates   [0mReport duplicate [Ci[2Cct Memorie[C in the current or explic[2C Context; no Context[Cchanges.[0m
-[8C[0;1mforget   [2C       [0mReview keep/edit/[Celet[C decisions for one instruction, then apply the accepted[Cbatch.[0m
-[8C[0;1mgr[Cund[5C       [0mCreate o[C continue[Ca r[Cvi[Cwed Goal-Rules-M[Cmori[Cs Gr[Cund workbench.              [C        [63C[0;48;5;238m [0m
-[8C[0;1mhelp  [5C       [0mEnter the int[Cractive command brow[Cer and [Cpe[2Csyntax help.     [89C[0;48;5;238m [0m
-[8C[0;1mimpact  [3C       [0mPreview or [2Cspec[C operatio[C Impact; no Cont[Cx[C changes o[Ccur before[Cits reviewed Apply[Chandoff.[57C[0;48;5;238m [0m
-[9C[0;1mmport[5C       [0mImport a clean-basel[Cne Profile, Con[Cext tree, or Memory by value[Cwhile[Cpreserving[Cresource[Cidentity.[52C[0;48;5;238m [0m
-[8C[0;1minit  [5C       [C[0mreate a named Contex[C,[Coptionally ensure its parents,[Cand[Cswitch[Cto[Cit.[81C[0;48;5;238m [0m
-[9C[0;1mnit-study[C       [0mCopy o[Ce Study baseline int[C an isolated participant/authority Profil[C pair.        [C         [59C[0;48;5;238m [0m
-[8C[0;1mlist (ls)[2C       [0mBrowse[Cchild Contexts[2Cnd direct [Ct[Cms; ls [Cs the equivalent compact [Cpelling.[75C[0;48;5;238m [0m
-[0;38;5;117;1m┃[0;1m ▸ mem lock              [0mLock the current Context, a recursive Context set, Memory, or Profile.                                                                                  [0;38;5;117;1m┃[179C[0;48;5;238m [0m
-[0;38;5;117;1m┃[0;1m ▸ mem log               [0mBrowse Context checkpoints, inspect one Memory lineage with --memory, search history, or list Profile command attempts.                                 [0;38;5;117;1m┃[179C[0;48;5;238m [0m
-[0;38;5;117;1m┃[0;1m ▸ mem meld              [0mCombine two equal-authority Contexts in the current empty Context; --from is normalized to INCOMING --into authoritative BASELINE.                      [0;38;5;117;1m┃[179C[0;48;5;238m [0m
-[0;38;5;117;1m┃[7C[0;1mmerge[6C       [0mAdd[CUID-new dir[Cct items[Cfrom another Context; [Co semantic[Creconciliation.[78C[0;38;5;117;1m┃[179C[0;48;5;238m [0m
-[0;38;5;117;1m┃[7C[0;1mprofile  [2C       [0mEnter the interact[Cve Profile sel[Cctor, or[Cmanage co[Cplete loc[Cl MemoryStore Profiles.   [63C[0;38;5;117;1m┃[179C[0;48;5;238m [0m
-[0;38;5;117;1m┃[7C[0;1mprovider[3C       [0mSelect and verify Codex, Ollama,[Co[C OpenRou[Cer[Csemantic ex[Ccut[Con.[C        [77C[0;38;5;117;1m┃[179C[0;48;5;238m [0m
-[0;38;5;117;1m┃[7C[0;1mpwd  [6C       [0mPrint the current canonical Context name[Cwithout loading its contents.[82C[0;38;5;117;1m┃[179C[0;48;5;238m [0m
-[0;38;5;117;1m┃[7C[0;1mquery [5C       [0mAsk r[Cadabl[C Context kn[Cwledge[2Cr an author[Czed[Cconce[Cled query-only view.    [74C[0;38;5;117;1m┃[179C[0;48;5;238m [0m
-[0;38;5;117;1m┃[8C[0;1mationale[2C       [0mExplain one Memory from recorded provenanc[2Cand, when needed, infe[Cence[81C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[7C[0;1mr[Cdo  [5C       [0mRed[C [Che m[Cst recently und[Cne r[Ccorded[CContex[2Ccommand.   [C     [C  [C    [80C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[7C[0;1mrefe[Cence[2C       [0mAdd[Ca [2Cad-only Mem[Cry pointe[C; [Che Target s[Cores identi[Cy metadata rather[Cthan[Ccopying[Ccontent.[56C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m ▸ mem remove            [0mSelect a Context or direct item to delete, or name it by locator, name, or UID.                                                                         [0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m ▸ mem rename            [0mRename the current or an explicit managed Profile without moving or rewriting its store; mem profile rename is the explicit equivalent.                 [0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m ▸ mem revert            [0mSelect a checkpoint and review restoration of one local Context.                                                                                        [0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[7C[0;1mreview[12C[0mEnter an interactive Review session or[Cstage semantic review r[Cspons[Cs; nev[Cr apply Memories.[59C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[7C[0;1msever[13C[0mReview Source against Crit[Cria[Cand crea[Ce a d[Crived Result while leaving Source[Cunchanged.[62C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[8C[0;1mhare    [10C[0mend[Cone ordinary Context[Cthrough a grant-backed receiver endpoint.  [83C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;234;48;5;117;1m ▸ mem add                DESCRIPTION  Add one or more Memories to the current or explicit Context.                                                                              [0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;234;48;5;117;1m                          USE WHEN  Saving new facts, instructions, or source material.                                                                                          [0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m ▸ mem atomize            DESCRIPTION[C[0m Split composite Memories[Cfor[Creview;[C--evaluate[Cperforms[Can[Cissue-scoped[Cdirectional[Cmeld.[48C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m                          USE WHEN[0m  Separ[2Cing a composite Memory into independently reviewabl[C r[Cqu[Crements.    [C         [C  [C    [C  [C     [C [C       [C   [C   [C         [C  [C   [2C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m ▸ mem audit              DESCRIPTION[0m  Run[CDup[Cicat[C, Ambiguity, and Conflict[Cchecks[Cplus[Coptional[CRule[CConformance,[Cthen[Creview[Cone[Csaved[Creport.[31C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m                          USE WHEN[0m  Performing a combined quality review bef[Cr[C revising a Context. [C    [C   [C      [C    [C       [C       [C    [C        [26C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m ▸ mem branch             DESCRIPTION[0m  Cop[2Ca Context or subtree [Cnto a new branch[Cand switch to it.    [C        [64C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m                          USE WHEN[0m  Experimenting without modifying the original Context tree.                                                                                   [0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m ▸ mem check-conformance  DESCRIPTION[0m  Check Groun[2Cexampl[Cs[Cor[Cone[CContext[Cagainst[Cexplicit[CRules.[78C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m                          USE WHEN[0m  Check[Cng a Context or saved Ground against explicit[CRules.[83C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m ▸ mem checkout           DESCRIPTION[0m  Switch Contexts[Cusing[CGit-style[Csyntax;[Cwith[C-b,[Ccreate[Cand[Cswitch[Cto[Ca[Cnew[CContext[Cbranch.[47C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m                          USE WHEN[C[0m Using[Ca Git-lik[C workflow[Cto[Cswitch[Cor[Ccreate[Ca[Cbranch.[86C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m ▸ mem checkpoint         DESCRIPTION[0m  Save the current Context [Cs a manual [Cecovery[Cpoint[Cfor[CDiff[Cor[CRevert.[67C[0;38;5;117;1m┃[179C[0;48;5;238m [0m
+[0;38;5;117;1m┃[0;1m                          USE WHEN[0m  Creating a[Crecovery po[2Ct before risky work.[97C[0;38;5;117;1m┃[179C[0;48;5;238m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem chunk              DESCRIPTION[0m  Preview and split one direct Memory by headers, paragraphs, or sentences.                                                                 [0;38;5;117;1m┃[179C[0;48;5;238m [0m
+[0;38;5;117;1m┃[0;1m                          USE WHEN[0m  Mechanically splitting a long Memory at structural boundaries.                                                                               [0;38;5;117;1m┃[179C[0;48;5;238m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem clear              DESCRIPTION[0m  Remove all direct items from the current or explicit Context after confirmation.                                                          [0;38;5;117;1m┃[179C[0;48;5;238m [0m
+[C[0;1m                          USE WHEN[0m  Emptying a Context while retaining the Context itself.                                                                                       [C[0;48;5;238m [0m
+[C[0;1m ▸ mem compare            DESCRIPTION[0m  Compare Memories in two Contexts and report what they share, what differs, and what appears only on one side.                             [0m
+[2C[0;1m [C   [C   [8C        USE WHEN[0m  Comparing two Contexts[Cas a whole to understand where they align and[Cdiffer.[0m
+[2C[0;1m▸[Cmem[Cconfig[C(legacy)    DESCRIPTION[0m [CRead and write global[Cconfiguration.       [0m
+[2C[0;1m [C   [C        [3C        USE WHEN[0m  Inspecting or changing persistent MemC[Cmmit[Cset[Cings.    [C       [C          [0m
+[2C[0;1m▸[Cmem[Ccontexts[3C        DESCRIPTION[C[0m Browse local[CCont[Cx[Cs and re[Cdable cross-Profile[CContext[Cviews[Cwithout[Cswitching.[0m
+[2C[0;1m [C   [C    [C    [2C        USE WHEN[0m  Exploring ev[Cry Co[Ctext currently available to the Profile.    [C         [0m
+[2C[0;1m▸[Cmem[Cdelete[C(remove)    DESCRIPTION[0m [CSelec[C a Context or direct i[2Cm to delete, or name[Cit[Cby[Clocator,[Cname,[Cor[CUID.[0m
+[2C[0;1m [C   [C    [7C        USE WHEN[0m [CRemoving a sp[Ccific Cont[Cxt or item [Chat is no longer needed.[C  [C [C                [C        [0m
+[2C[0;1m▸[Cmem[Cdiff[7C        DESCRIPTION[0m  Inspect re[2Crd[Cd C[Cntext [Cr Update changes without[Capplying[Cthem.[0m
+[2C[0;1m [C   [C      [5C        USE WHEN[0m  Verifying exactly what a[Cre[Corded opera[Cion ch[2Cg[Cd.     [C        [0m
+[2C[0;1m▸[Cmem[Cdistill[4C        DESCRIPTION[0m [CDe[Cive reu[Cable Rules from Case or Exampl[C propositions[Cin[Ca[Cselected[CContext[Cscope,[Cusing[Can[Coptional[CGoal[Cto[Cfocus[Crelevance.[0m
+[2C[0;1m [C   [C        [3C        USE WHEN[0m  Extracting[Creusable rules from evidence-rich source mater[Cal.[C  [C [C   [C       [C       [0m
+[2C[0;1m▸[Cmem[Cedit[7C        DESCRIPTION[0m  Replace direct[CMemory [Content by UID[Co[C prefix[Cin[Cthe[Ccurrent[Cor[Cexplicit[CContext.[0m
+[2C[0;1m [C   [C    [7C        USE WHEN[0m  Correcting [Cr revising a known Memory in[2Clace.  [C   [C      [C  [C   [0m
+[2C[0;1m▸[Cmem[Celaborate[2C        DESCRIPTION[0m [CPropose candidate[CRules from[Ca[CGoal,[Cor[Cconcrete[CCase[Cpropositions[Cfrom[Cexisting[CRules.[0m
+[2C[0;1m [C   [C      [5C        USE WHEN[0m [CAn abstract Goal n[2Cds starter Rule [Candi[Cates, or ex[Csting[CRules[Cneed[Cadditional[Cconcrete[CCase[Cpropositions[Cfor[Creview.[0m
+[2C[0;1m▸[Cmem[Cembed[6C        DESCRIPTION[0m  Place a Child Context inside a target while r[Ctaining[Cits[Cidentity[Cand[Cownership.[0m
+[2C[0;1m [C   [C      [5C        USE WHEN[0m  Reusing a Context inside another Con[Cext without copying it.[C     [C          [C        [C         [0m
+[2C[0;1m▸[Cmem[Ceval[7C        DESCRIPTION[0m  Run [Cnd ins[Cect staged semantic[Cevalu[Ction campaigns.   [0m
+[2C[0;1m [C   [C     [6C        USE WHEN[0m  Measuring [Cpera[Cio[C behavior against rep[Catable f[Cxtures.    [C   [C          [0m
+[2C[0;1m▸[Cmem[Cfind[7C        DESCRIPTION[C[0m Search[Cselected Contexts with[Cexplicit lex[Ccal-descendant[Cand[Cembedded-Context[Creach.[0m
+[0;38;5;117;1m┃[0;1m                          USE WHEN[0m  Finding relevant Memories across a selected Context scope.                                                                                   [0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m ▸ mem find-ambiguities   DESCRIPTION[0m  Report ambiguous direct Memories in the current or explicit Context; no Context changes.                                                  [0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m                          USE WHEN[0m  Finding Memories that permit unclear or multiple interpretations.                                                                            [0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[7C[0;1mfind-conflicts[3C  DESCRIPTION[0m  Report conflicting direct[CMemory pairs in the [Current or explicit[CContext;[Cno[CContext[Cchanges.[44C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[24C[0;1m  USE WHEN[0m  F[2Cdi[Cg mutually incompatible[Cclaims or[Cinst[Cuctions.[88C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[7C[0;1mfind-duplicates[2C  DESCRIPTION[0m  Repo[Ct [Cuplicat[C direct Memories in th[C current[Cor explicit Con[Cext; no Context cha[2Ces.      [44C[0;38;5;117;1m┃[0m
 
-[76C[0msurface  H[Cfull help[0m[K[46A[96D[0m[C[0;1m ▾ mem add               [0mAdd one or more Memories to the current or explicit Context.                                                                                            [0m
-[C[0m   FLOW      · Text or file ->[CC[Cntext Memories  [C   [C       [C          [C        [C  [C            [C           [C     [0m
-[C[0m   EXECUTION · DETERMINISTIC[C          [C          [C   [C        [C      [C   [C      [C   [C     [C       [0m
-[C[0m   EFFECT    · Changes the selected Context       [C    [C [C   [C      [C   [C      [C  [C   [0m
-[C[0m   RANGE     · One exact target[8C [C     [C         [C       [C    [C   [C      [C   [C      [C  [C [C   [C       [C       [0m
+[76C[0msurface  H[Cfull help[0m[K[46A[96D[0m[C[0;1m ▾ mem add                DESCRIPTION[0m  Add one or more Memories to the current or explicit Context.                                                                              [0m
+[C[0;1m                          USE WHEN[0m  Saving new facts, instructions, or source material.                                                                                          [0m
+[C[0m   FLOW      · Text or file -> Context[CMemories       [C        [C   [C       [C          [C        [C  [C            [C           [C     [0m
+[C[0m   EXECUTION · DETERMINISTIC      [2C          [C [C         [C      [C    [C             [C          [C             [0m
+[C[0m   EFFECT    · Changes the selected Context          [C          [C   [C        [C      [C    [C        [C    [C            [C    [C      [C   [C     [C       [0m
+[C[0m   RANGE     · One exact target Context       [C [C        [C       [C      [C      [C        [C [C        [0m
 [C[0;38;5;234;48;5;117;1;7m   FORM 1 · mem add "[memory]" (add one Memory to the current Context)                                                                                                           [0m
 [C[0;38;5;189m   FORM 2 · mem add (open the interactive multi-Memory editor)                                                                                                                   [0m
 [C[0;38;5;189m   FORM 3 · mem add --memory "[memory]" --memory "[memory]" (add an explicit batch)                                                                                              [0m
@@ -112,37 +113,36 @@
 [C[0;38;5;189m   FORM 6 · mem add "[memory]" --context [context] (add to an explicit Context)                                                                                                  [0m
 [C[0;38;5;189m   FORM 7 · mem add --input [file] --context [context] (batch-add to an explicit Context)                                                                                        [0m
 [C[0;38;5;189m   FORM 8 · mem add --paste --context [context] (paste into an explicit Context)                                                                                                 [0m
-[8C[0;1matomize[11C[0mSplit composi[Ce Memories for review;[C--evaluate performs an issue-scoped directional[Cmeld.[0m
-[8C[0;1maudit[13C[0mRun Duplicate, Ambiguity, and Conflict checks and review one saved[Creport.       [0m
-[8C[0;1mbr[Cnch[12C[0mCopy a Co[Ctext or subtre[C i[2Co a new branch [Cnd switch[Cto[Cit.[0m
-[8C[0;1mcheckout[11C[0mwit[3CContexts[Cusing Git-s[Cyl[C syntax; with -b, cr[Cate and switch to a new Cont[Cxt branch.[0m
-[8C[0;1mcheckpoint      [2C[0mSave [Che current[CContext as a manual r[Ccove[Cy point for D[Cff [Cr Revert.[C       [C        [0m
-[8C[0;1mchunk         [4C[0mPreview a[Cd spl[Ct one direct Memory by[Cheaders, paragraphs, or sente[Cc[Cs. [C  [C       [C        [0m
-[8C[0;1mclear          [5C[0mm[Cve[Call direct [Ct[Cms[Cfrom the[Ccurrent o[C [Cxplicit Context af[2Cr co[Cfirma[Cion.        [0m
-[8C[0;1mc[Cmpare[11C[0mCompare two [Cqual-authority Contexts without chang[Cng either one.[C   [C        [C      [0m
-[8C[0;1mconfig[C(legacy)[3C[0mRead and write glob[Cl configuration.             [C      [C          [0m
-[8C[0;1mcontexts[10C[0mBrowse local Contexts[Cand readable c[Coss-Profile Context views[Cwithout[Cswitching.[0m
-[8C[0;1mdelete[12C[0mSelect a Context or di[Cect ite[C to delete, or name it by locator, name, o[C UID.  [C     [C        [0m
-[8C[0;1mdiff  [13C[0mnspect recorded Context or Update changes with[Cut appl[Cing[Cthem.[C     [C          [C        [C         [0m
-[8C[0;1med[16C[0mReplace direct[CMemory content by UID or prefix in the current or expl[Ccit[CContext.[0m
-[8C[0;1membed     [8C[0mPlace a Chil[C Cont[Cxt inside[2C target while retaining i[Cs identity and[Cownership.[0m
-[8C[0;1meval[C    [9C[0mRun and inspect staged semanti[C evaluation[Ccampaigns.       [C       [C         [0m
-[8C[0;1mfind[14C[0mSearch select[Cd Contexts with expl[Ccit lexical-descendant and[Cembedd[Cd-Context[Creach.[0m
-[8C[0;1mfind-ambiguities[2C[0mReport[Cambiguous direct Memories in[Cth[2Ccurrent or explicit[CContext; no Context changes.[C    [C       [C       [C         [34C[0;48;5;238m [0m
-[8C[0;1mfin[C-conflicts[4C[0mReport conflicting direct Mem[Cry pairs in the current or explici[C Context; no Context changes.     [C      [C             [C         [23C[0;48;5;248m [0m
-[8C[0;1mfind-duplicates[3C[0mReport duplicat[C direct Mem[Cries in the current [Cr [Cxplicit Context; no Context[Cchanges.[65C[0;48;5;248m [0m
-[8C[0;1mforget [11C[0mReview k[Cep/edit/del[Cte decisions for one instructi[Cn, th[Cn app[Cy the accepted batch. [67C[0;48;5;248m [0m
-[8C[0;1mg[2Cun[C  [10C[0mCreate[Cor cont[Cnue a reviewed Goal-Rul[Cs-Memo[Cies Ground workbench.[86C[0;48;5;248m [0m
-[8C[0;1mhelp[14C[0mEnter[5Cinteractive command browser and open synt[Cx help. [C         [83C[0;48;5;248m [0m
-[8C[0;1mimpact[12C[0mPrevi[Cw or inspect operation Impact;[Cno C[Cntext[2Changes occ[Cr before[Cits reviewed[CApply[Chandoff.[57C[0;48;5;248m [0m
-[8C[0;1mimport   [9C[0mIm[Cort a clean-baseline[CProfil[C,[CCont[Cxt tree, or M[Cmory by value whil[C preserving[Cresource[Cidentity.[0m
-[8C[0;1minit[14C[0mCreate a[Cnamed Context, optionally ensure its parents, and[Cswitch[Cto[Cit.[0m
-[8C[0;1minit-study[8C[0mCopy on[C Study baseline into an[Cisolated par[Cicipant/authority Profile pair.   [C       [C        [0m
-[8C[0;1mlist (ls)[9C[0mBrowse[Cchild Contexts and d[Cr[Cct items; ls[Cis[Cthe equivalent c[Cmpact spelling. [0m
-[8C[0;1mlock  [12C[0mLock the current Context, a re[Cursive Context set, Mem[Cry, [Cr Profile.       [C   [C      [C   [C       [C      [C  [C   [C        [C           [0m
-[8C[0;1mlog   [12C[0mBrowse[CCont[Cxt checkpoints, insp[Cc[C one Mem[Cry lineage with --memory,[Csearch[Chistory,[Cor[Clist[CProfile[Ccommand[Cattempts.[0m
-[8C[0;1mm[Cld  [12C[0mCombine two [Cqual-author[Cty[CContexts in [Che curre[2C empty Cont[Cxt; --from is normaliz[Cd to INCOMING[C--into[Cauthoritative[CBASELINE.[0m
-[8C[0;1mm[Crge[13C[0mAdd UID-new direct i[Cems from anothe[C Context; no semantic[Creconciliation.     [C          [0m
-[8C[0;1mprofile[11C[0mEnter the interactive Profile selecto[C, or manage compl[Cte local MemoryStore[CProfiles.[0m
+[8C[0;1matomize[25C[0mSplit composite Memories for[Cr[Cview; --ev[Cluate[2Ce[Cfo[Cms an[Cissu[C-scop[Cd directional[Cmeld.[0m
+[37C[0mS[Cparating a[Ccompos[Cte[CMem[Cry[Cint[C independen[Cly reviewable requirements.[69C[0;48;5;238m [0m
+[8C[0;1maudit[28C[0mun Duplicate, Amb[Cguity, and Conflict checks [2Cus optional Rule Conformance, then[Creview[Cone[Csaved[Creport.[32C[0;48;5;248m [0m
+[37C[0mPerforming[Ca combined quali[Cy review bef[Cre rev[Csing a[CContext.[79C[0;48;5;248m [0m
+[8C[0;1mbranch [27C[0mpy a Context or subtree into a[Cnew[Cbranch[Cand switch to it.    [C        [C   [C    [C       [C    [C  [C   [C     [0m
+[37C[0mExperimenting[Cwithou[C modifying the original Context tre[C.[C     [C   [C       [0m
+[9C[0;1mheck-conformance[15C[0mCheck Ground [Cxamples[Cor one Context[Cagainst[Cexplicit[CRules.[0m
+[37C[0mChecking a[CContext or saved Ground against explicit Rules.[0m
+[9C[0;1mheckout[24C[0mSwitch[CC[Cntexts using[CGit-style syntax; with -b,[Ccreate and switch to a new Co[Ctext[Cbranch.[0m
+[37C[0mUsing a Git-like workflow to switch or create a branch.    [0m
+[8C[0;1mcheckpoint     [18C[0mav[C [Che[Ccurr[Cn[2CContext as a [Canual r[Ccovery[Cpoint for Diff or Revert.[C  [C    [0m
+[37C[0mCreat[6Crecovery[Cp[Cint before risky work.  [C      [C       [0m
+[8C[0;1mchunk[27C[0mPreview[Cand split [2Ce direct Memory by h[Caders, par[Cgraphs,[Cor sentences.[0m
+[37C[0mM[Cchan[Ccally sp[Citting[3Clong M[Cmory at stru[Ctural boundaries.[0m
+[8C[0;1mclear  [25C[0mR[Cmo[3Call dir[Cct items from the current or ex[Clicit Context[Caft[Cr confirmation.    [C     [C  [C        [C    [C  [C     [C          [0m
+[38C[0mmptying a[CContext whi[2C retaining the Context its[Clf.       [0m
+[8C[0;1mcompare[25C[0mComp[Cr[2CMemories in two Contexts[Cand[Crepo[Ct what they[Csha[2C, what differs, a[Cd what[Cappears[Conly[Con[Cone[Cside.[0m
+[39C[0mmparing two[CContexts[2Cs a [Chol[C to understand[Cwhere[Cthey[Calign[Cand[Cdiffer.[0m
+[8C[0;1mconfig (legacy)[17C[0mRead and write globa[C configuration.[C  [C        [C    [C            [C    [C        [C      [0m
+[37C[0mI[Cspec[Cing or cha[Cging[Cpersistent MemCommit settings.      [C     [C    [C          [C        [C    [C            [C   [C       [0m
+[8C[0;1mcontexts[24C[0mBrowse loca[C Contexts[Ca[Cd r[Cadable cross-Profile Co[Ctex[C v[Cews without[Cs[Citching[0m
+[37C[0mExploring[Cevery Context currently available t[C [Che Profile. [0m
+[8C[0;1mdelete[C(remove)[17C[0mSelect a Context or direct i[Cem[Cto delete,[Cor n[Cme it[Cby[Clocator,[Cname,[Cor[CUID.[0m
+[37C[0mR[Cmoving a specific[CContext or item that is no longer needed.[0m
+[8C[0;1md[Cff[28C[0mInspect recorded Context[Cor Update [Chang[Cs without applying th[2C.             [C      [0m
+[37C[0mVerifying exactly what a re[Corded op[Cration[Cchanged.      [0m
+[8C[0;1md[Cstill         [16C[0mD[Crive[Creusable Rules from Cas[C or Example propositions in a sel[Cc[Ced Context scope, u[Cing[Can[Coptional[CGoal[Cto[Cfocus[Crelevance.[0m
+[37C[0mExtracting reusable rul[Cs from evidence-rich source materi[Cl.    [0m
+[8C[0;1medit          [21C[0mlace direct Memory content b[2CUID or prefix in the[Ccurrent or explici[C Context.   [C        [0m
+[37C[0mCorrecting or rev[Csing [C known Memory in place.      [0m
+[8C[0;1melaborate      [17C[0mPropose candidate Rules[Cfrom a Goal, or[2Concre[Ce Case propositions from[Cexisting Rules. [0m
 
-[60C[0mpr[Cfill command[Cline  Tab surface  H[Cfull help[41A[106D[0m
+[60C[0mpr[Cfill command[Cline  Tab surface  H[Cfull help[40A[106D[0m

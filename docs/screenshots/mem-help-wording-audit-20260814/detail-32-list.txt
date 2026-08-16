@@ -1,0 +1,52 @@
+ mem help · command inventory                                                                                                                                                       
+┌────────────────────────────────────────────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────────────────────────────────────────────┐
+│  VIEW · [   BY KIND ]  [ ✓ A–Z ] · ←/→ TO SELECT                                                                                                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┃                          USE WHEN  Exploring every Context currently available to the Profile.                                                                                  ┃^
+┃ ▸ mem delete (remove)    DESCRIPTION  Select a Context or direct item to delete, or name it by locator, name, or UID.                                                           ┃ 
+┃                          USE WHEN  Removing a specific Context or item that is no longer needed.                                                                                ┃ 
+┃ ▸ mem diff               DESCRIPTION  Inspect recorded Context or Update changes without applying them.                                                                         ┃ 
+┃                          USE WHEN  Verifying exactly what a recorded operation changed.                                                                                         ┃ 
+┃ ▸ mem distill            DESCRIPTION  Derive reusable Rules from Case or Example propositions in a selected Context scope, using an optional Goal to focus relevance.           ┃ 
+┃                          USE WHEN  Extracting reusable rules from evidence-rich source material.                                                                                ┃ 
+┃ ▸ mem edit               DESCRIPTION  Replace direct Memory content by UID or prefix in the current or explicit Context.                                                        ┃ 
+┃                          USE WHEN  Correcting or revising a known Memory in place.                                                                                              ┃ 
+┃ ▸ mem elaborate          DESCRIPTION  Propose candidate Rules from a Goal, or concrete Case propositions from existing Rules.                                                   ┃ 
+┃                          USE WHEN  An abstract Goal needs starter Rule candidates, or existing Rules need additional concrete Case propositions for review.                     ┃ 
+┃ ▸ mem embed              DESCRIPTION  Place a Child Context inside a target while retaining its identity and ownership.                                                         ┃ 
+┃                          USE WHEN  Reusing a Context inside another Context without copying it.                                                                                 ┃ 
+┃ ▸ mem eval               DESCRIPTION  Run and inspect staged semantic evaluation campaigns.                                                                                     ┃ 
+┃                          USE WHEN  Measuring operation behavior against repeatable fixtures.                                                                                    ┃ 
+┃ ▸ mem find               DESCRIPTION  Search selected Contexts with explicit lexical-descendant and embedded-Context reach.                                                     ┃ 
+┃                          USE WHEN  Finding relevant Memories across a selected Context scope.                                                                                   ┃ 
+┃ ▸ mem find-ambiguities   DESCRIPTION  Report ambiguous direct Memories in the current or explicit Context; no Context changes.                                                  ┃ 
+┃                          USE WHEN  Finding Memories that permit unclear or multiple interpretations.                                                                            ┃ 
+┃ ▸ mem find-conflicts     DESCRIPTION  Report conflicting direct Memory pairs in the current or explicit Context; no Context changes.                                            ┃ 
+┃                          USE WHEN  Finding mutually incompatible claims or instructions.                                                                                        ┃ 
+┃ ▸ mem find-duplicates    DESCRIPTION  Report duplicate direct Memories in the current or explicit Context; no Context changes.                                                  ┃ 
+┃                          USE WHEN  Locating semantically redundant Memories before cleanup.                                                                                     ┃ 
+┃ ▸ mem fit                DESCRIPTION  Judge whether two or more propositions can jointly hold under ordinary readings.                                                          ┃ 
+┃                          USE WHEN  Checking whether Memories, Rules, Goals, or other propositions can coexist without contradiction.                                            ┃ 
+┃ ▸ mem forget             DESCRIPTION  Review keep/edit/delete decisions for one instruction, then apply the accepted batch.                                                     ┃ 
+┃                          USE WHEN  Removing or transforming material according to a semantic criterion.                                                                         ┃ 
+┃ ▸ mem ground             DESCRIPTION  Create or continue a reviewed Goal-Rules-Memories Ground workbench.                                                                       ┃ 
+┃                          USE WHEN  Building a reviewed evaluation or behavior contract from evidence.                                                                           ┃ 
+┃ ▸ mem help               DESCRIPTION  Enter the interactive command browser and open syntax help.                                                                               ┃ 
+┃                          USE WHEN  Discovering available operations and their invocation forms.                                                                                 ┃ 
+┃ ▸ mem impact             DESCRIPTION  Preview or inspect operation Impact; no Context changes occur before its reviewed Apply handoff.                                          ┃ 
+┃                          USE WHEN  Checking expected consequences before accepting a transformation.                                                                            ┃ 
+┃ ▸ mem import             DESCRIPTION  Import a clean-baseline Profile, Context tree, or Memory by value while preserving resource identity.                                     ┃ 
+┃                          USE WHEN  Bringing externally supplied material into a locally managed store.                                                                          ┃ 
+┃ ▸ mem init               DESCRIPTION  Create a named Context, optionally ensure its parents, and switch to it.                                                                  ┃ 
+┃                          USE WHEN  Starting a new empty Context hierarchy.                                                                                                      ┃ 
+┃ ▸ mem init-study         DESCRIPTION  Copy one Study baseline into an isolated participant/authority Profile pair.                                                              ┃ 
+┃                          USE WHEN  Preparing a reproducible, isolated user-study environment.                                                                                   ┃ 
+┃ ▾ mem list (ls)          DESCRIPTION  Browse child Contexts and direct items; ls is the equivalent compact spelling.                                                            ┃ 
+┃                          USE WHEN  Inspecting the structure and direct contents of a Context.                                                                                   ┃ 
+┃   FLOW      · Context -> Context and direct-item listing                                                                                                                        ┃ 
+┃   EXECUTION · DETERMINISTIC                                                                                                                                                     ┃ 
+┃   EFFECT    · Read-only                                                                                                                                                         ┃ 
+┃   RANGE     · One exact Context or lexical descendants                                                                                                                          ┃ 
+┃   FORM 1 · mem list (enter the interactive Context browser in a TTY; print otherwise)                                                                                           ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter prefill command line  Tab surface  H full help

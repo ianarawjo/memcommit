@@ -1,0 +1,52 @@
+ mem help · command inventory                                                                                                                                                       
+┌────────────────────────────────────────────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────────────────────────────────────────────┐
+│  VIEW · [   BY KIND ]  [ ✓ A–Z ] · ←/→ TO SELECT                                                                                                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┃                          USE WHEN  Discovering available operations and their invocation forms.                                                                                 ┃^
+┃ ▸ mem impact             DESCRIPTION  Preview or inspect operation Impact; no Context changes occur before its reviewed Apply handoff.                                          ┃ 
+┃                          USE WHEN  Checking expected consequences before accepting a transformation.                                                                            ┃ 
+┃ ▸ mem import             DESCRIPTION  Import a clean-baseline Profile, Context tree, or Memory by value while preserving resource identity.                                     ┃ 
+┃                          USE WHEN  Bringing externally supplied material into a locally managed store.                                                                          ┃ 
+┃ ▸ mem init               DESCRIPTION  Create a named Context, optionally ensure its parents, and switch to it.                                                                  ┃ 
+┃                          USE WHEN  Starting a new empty Context hierarchy.                                                                                                      ┃ 
+┃ ▸ mem init-study         DESCRIPTION  Copy one Study baseline into an isolated participant/authority Profile pair.                                                              ┃ 
+┃                          USE WHEN  Preparing a reproducible, isolated user-study environment.                                                                                   ┃ 
+┃ ▸ mem list (ls)          DESCRIPTION  Browse child Contexts and direct items; ls is the equivalent compact spelling.                                                            ┃ 
+┃                          USE WHEN  Inspecting the structure and direct contents of a Context.                                                                                   ┃ 
+┃ ▸ mem lock               DESCRIPTION  Lock the current Context, a recursive Context set, Memory, or Profile.                                                                    ┃ 
+┃                          USE WHEN  Preventing accidental modification of stable material.                                                                                       ┃ 
+┃ ▸ mem log                DESCRIPTION  Browse Context checkpoints, inspect one Memory lineage with --memory, search history, or list Profile command attempts.                   ┃ 
+┃                          USE WHEN  Investigating previous operations, checkpoints, or Memory history.                                                                           ┃ 
+┃ ▸ mem meld               DESCRIPTION  Semantically reconcile two Contexts into either a separate Result or an authoritative Baseline.                                           ┃ 
+┃                          USE WHEN  Combining separately developed Contexts into a shared Result, or incorporating proposed changes into an existing Baseline.                   ┃ 
+┃ ▸ mem merge              DESCRIPTION  Add Source-only items to the current Target, choosing Source or Target wherever stored items conflict.                                    ┃ 
+┃                          USE WHEN  Bringing work from a copied or branched Context back into the current Context.                                                               ┃ 
+┃ ▸ mem profile            DESCRIPTION  Enter the interactive Profile selector, or manage complete local MemoryStore Profiles.                                                    ┃ 
+┃                          USE WHEN  Managing separate users, environments, or Memory stores.                                                                                     ┃ 
+┃ ▸ mem provider           DESCRIPTION  Select and verify Codex, Ollama, or OpenRouter semantic execution.                                                                        ┃ 
+┃                          USE WHEN  Selecting and validating the semantic execution backend.                                                                                     ┃ 
+┃ ▸ mem pwd                DESCRIPTION  Print the current canonical Context name without loading its contents.                                                                    ┃ 
+┃                          USE WHEN  Confirming the active Context in a script or terminal.                                                                                       ┃ 
+┃ ▸ mem query              DESCRIPTION  Ask readable Context knowledge or an authorized concealed query-only view.                                                                ┃ 
+┃                          USE WHEN  Getting a cited answer from readable or query-authorized knowledge.                                                                          ┃ 
+┃ ▸ mem rationale          DESCRIPTION  Explain one Memory from recorded provenance and, when needed, inference.                                                                  ┃ 
+┃                          USE WHEN  Understanding why a Memory exists or reached its current form.                                                                               ┃ 
+┃ ▸ mem redo               DESCRIPTION  Redo the most recently undone recorded Context command.                                                                                   ┃ 
+┃                          USE WHEN  Reapplying a command that was undone accidentally.                                                                                           ┃ 
+┃ ▸ mem reference          DESCRIPTION  Add a read-only Memory pointer; the Target stores identity metadata rather than copying content.                                          ┃ 
+┃                          USE WHEN  Reusing a Memory while keeping one authoritative copy.                                                                                       ┃ 
+┃ ▸ mem rename             DESCRIPTION  Rename the current or an explicit managed Profile without moving or rewriting its store; mem profile rename is the explicit equivalent.   ┃ 
+┃                          USE WHEN  Giving an existing managed Profile a clearer name.                                                                                           ┃ 
+┃ ▸ mem revert             DESCRIPTION  Select a checkpoint and review restoration of one local Context.                                                                          ┃ 
+┃                          USE WHEN  Restoring a Context to a deliberately saved recovery point.                                                                                  ┃ 
+┃ ▸ mem review             DESCRIPTION  Enter an interactive Review session or stage semantic review responses; never apply Memories.                                             ┃ 
+┃                          USE WHEN  Resolving issues in a saved analysis before a later Apply.                                                                                   ┃ 
+┃ ▾ mem sever              DESCRIPTION  Review Source against Criteria and create a derived Result while leaving Source unchanged.                                                ┃ 
+┃                          USE WHEN  Selecting or transforming part of a Source according to reusable criteria.                                                                   ┃ 
+┃   FLOW      · Source Context + Criteria Context -> new Result Context                                                                                                           ┃ 
+┃   EXECUTION · SEMANTIC                                                                                                                                                          ┃ 
+┃   EFFECT    · Creates reviewed Result; Source remains unchanged                                                                                                                 ┃ 
+┃   RANGE     · Source exact or descendants; Criteria exact scoped frame                                                                                                          ┃ 
+┃   FORM 1 · mem sever (enter the interactive Sever session launcher)                                                                                                             ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter prefill command line  Tab surface  H full help
