@@ -12,7 +12,11 @@ import memcommit.ops as ops
 from memcommit.api import MemCommitClient
 from memcommit.interfaces.agent import (
     ADD_AGENT_TOOL_NAME,
+    ATOMIZE_GROUNDING_AGENT_TOOL_NAME,
     MELD_AGENT_TOOL_NAME,
+    DISTILL_AGENT_TOOL_NAME,
+    ELABORATE_AGENT_TOOL_NAME,
+    FIT_AGENT_TOOL_NAME,
     QUERY_AGENT_TOOL_NAME,
     AgentToolBinding,
     AgentToolRegistrationError,
@@ -70,6 +74,10 @@ def test_default_registry_discovers_fresh_frozen_shipped_schemas(tmp_path):
         QUERY_AGENT_TOOL_NAME,
         ADD_AGENT_TOOL_NAME,
         MELD_AGENT_TOOL_NAME,
+        ATOMIZE_GROUNDING_AGENT_TOOL_NAME,
+        DISTILL_AGENT_TOOL_NAME,
+        ELABORATE_AGENT_TOOL_NAME,
+        FIT_AGENT_TOOL_NAME,
     )
     first = registry.tool_schemas()
     second = registry.tool_schemas()
@@ -307,4 +315,5 @@ def test_registry_depends_only_on_public_client_and_agent_adapters():
     assert not any(name.startswith(forbidden) for name in imported)
     assert "memcommit.api" in imported
     assert "memcommit.interfaces.agent.add" in imported
+    assert "memcommit.interfaces.agent.atomize_grounding" in imported
     assert "memcommit.interfaces.agent.query" in imported

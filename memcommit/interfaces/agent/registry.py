@@ -13,7 +13,27 @@ from memcommit.interfaces.agent.add import (
     AddAgentAdapter,
     add_agent_tool_schema,
 )
+from memcommit.interfaces.agent.atomize_grounding import (
+    ATOMIZE_GROUNDING_AGENT_TOOL_NAME,
+    AtomizeGroundingAgentAdapter,
+    atomize_grounding_agent_tool_schema,
+)
 from memcommit.interfaces.agent.contract import JsonObject, error_response
+from memcommit.interfaces.agent.distill import (
+    DISTILL_AGENT_TOOL_NAME,
+    DistillAgentAdapter,
+    distill_agent_tool_schema,
+)
+from memcommit.interfaces.agent.elaborate import (
+    ELABORATE_AGENT_TOOL_NAME,
+    ElaborateAgentAdapter,
+    elaborate_agent_tool_schema,
+)
+from memcommit.interfaces.agent.fit import (
+    FIT_AGENT_TOOL_NAME,
+    FitAgentAdapter,
+    fit_agent_tool_schema,
+)
 from memcommit.interfaces.agent.query import (
     QUERY_AGENT_TOOL_NAME,
     QueryAgentAdapter,
@@ -185,13 +205,17 @@ class AgentToolRegistry:
 
 
 def build_default_agent_tool_registry(client: MemCommitClient) -> AgentToolRegistry:
-    """Bind the shipped Query and Add contracts to one public client."""
+    """Bind shipped contracts to one public client and application graph."""
 
     if not isinstance(client, MemCommitClient):
         raise TypeError("Default agent tool registry requires a MemCommitClient.")
     query = QueryAgentAdapter(client)
     add = AddAgentAdapter(client)
     meld = MeldAgentAdapter(client)
+    atomize_grounding = AtomizeGroundingAgentAdapter(client)
+    distill = DistillAgentAdapter(client)
+    elaborate = ElaborateAgentAdapter(client)
+    fit = FitAgentAdapter(client)
     return AgentToolRegistry(
         (
             AgentToolBinding(
@@ -208,6 +232,26 @@ def build_default_agent_tool_registry(client: MemCommitClient) -> AgentToolRegis
                 name=MELD_AGENT_TOOL_NAME,
                 schema_factory=meld_agent_tool_schema,
                 handler=meld.invoke,
+            ),
+            AgentToolBinding(
+                name=ATOMIZE_GROUNDING_AGENT_TOOL_NAME,
+                schema_factory=atomize_grounding_agent_tool_schema,
+                handler=atomize_grounding.invoke,
+            ),
+            AgentToolBinding(
+                name=DISTILL_AGENT_TOOL_NAME,
+                schema_factory=distill_agent_tool_schema,
+                handler=distill.invoke,
+            ),
+            AgentToolBinding(
+                name=ELABORATE_AGENT_TOOL_NAME,
+                schema_factory=elaborate_agent_tool_schema,
+                handler=elaborate.invoke,
+            ),
+            AgentToolBinding(
+                name=FIT_AGENT_TOOL_NAME,
+                schema_factory=fit_agent_tool_schema,
+                handler=fit.invoke,
             ),
         )
     )

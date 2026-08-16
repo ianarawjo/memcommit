@@ -47,12 +47,13 @@ values rather than interpreting the operation again.
 
 ## Verification and next boundary
 
-Focused tests prove exact Query/Add schema translation, discovery isolation,
-successful structured/text parity, unchanged operation and registry failures,
+Focused tests prove exact Query/Add/Meld/Atomize Grounding/Distill/Elaborate/Fit
+schema translation, discovery isolation, successful structured/text parity,
+unchanged operation and registry failures,
 startup failure for malformed schemas, nested-key rejection, and the absence
 of SDK, terminal, Store, provider, or operation-runtime imports.
 
-This commit does not install the MCP SDK, create protocol objects, open stdio,
-register a console entrypoint, parse JSON-RPC, or choose Store/Profile/provider
-configuration. The next layer binds this projection to the stable v2 MCP Python
-SDK while keeping that dependency optional.
+The projection still does not own the MCP SDK, stdio, JSON-RPC, or
+Store/Profile/provider configuration. A separate optional v2 SDK server binds
+these values to `mem-mcp`; adding a registry tool therefore reaches MCP without
+adding a second operation handler.

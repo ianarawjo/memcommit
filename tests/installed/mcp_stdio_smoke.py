@@ -7,7 +7,7 @@ import importlib.metadata
 import json
 from pathlib import Path
 import shutil
-import sys
+import uuid
 
 import anyio
 from mcp.client.session import ClientSession
@@ -15,6 +15,11 @@ from mcp.client.stdio import StdioServerParameters, stdio_client
 
 import memcommit
 import memcommit.ops as ops
+from memcommit.atomize_grounding import (
+    AtomizeGroundingAnchor,
+    AtomizeGroundingBindings,
+    AtomizeGroundingSession,
+)
 from memcommit.store import MemoryStore
 
 
@@ -40,6 +45,28 @@ def _prepare_store(root: Path) -> MemoryStore:
     context = ops.init("smoke/target")
     store.save(context)
     store.set_current(context.name)
+    digest = "0" * 64
+    grounding = AtomizeGroundingSession.create(
+        bindings=AtomizeGroundingBindings(
+            context_uid=context.uid,
+            context_name=context.name,
+            context_digest=digest,
+            analysis_uid=str(uuid.uuid4()),
+            analysis_digest=digest,
+            workbench_uid=str(uuid.uuid4()),
+            workbench_digest=digest,
+            response_digest=digest,
+        ),
+        anchor=AtomizeGroundingAnchor(
+            issue_uid="ambiguity:installed-smoke",
+            kind="AMBIGUITY",
+            arity="UNARY",
+            source_uids=(str(uuid.uuid4()),),
+            issue_digest=digest,
+        ),
+    )
+    grounding.keep_review_only()
+    store.save_atomize_grounding_session(grounding)
     assert store.list_checkpoints(context.name) == []
     return store
 
@@ -63,6 +90,14 @@ async def _exercise_stdio(command: str, root: Path, workdir: Path) -> dict[str, 
                     "context_name": "smoke/target",
                 },
             )
+            grounding = await session.call_tool(
+                "memcommit_atomize_grounding",
+                {
+                    "version": 1,
+                    "kind": "open",
+                    "context_name": "smoke/target",
+                },
+            )
             unknown = await session.call_tool("not_registered", {})
 
     assert initialized.server_info.name == "memcommit"
@@ -70,9 +105,18 @@ async def _exercise_stdio(command: str, root: Path, workdir: Path) -> dict[str, 
         "memcommit_query",
         "memcommit_add_memories",
         "memcommit_meld",
+        "memcommit_atomize_grounding",
+        "memcommit_distill",
+        "memcommit_elaborate",
+        "memcommit_fit",
     ]
     assert added.is_error is False
     assert added.structured_content["ok"] is True
+    assert grounding.is_error is False
+    assert grounding.structured_content["ok"] is True
+    assert grounding.structured_content["result"]["session"]["state"] == (
+        "KEPT_REVIEW_ONLY"
+    )
     assert unknown.is_error is True
     assert unknown.structured_content["error"]["code"] == "unknown_tool"
     return {
@@ -80,6 +124,7 @@ async def _exercise_stdio(command: str, root: Path, workdir: Path) -> dict[str, 
         "server_version": initialized.server_info.version,
         "tools": [tool.name for tool in listed.tools],
         "add": added.structured_content,
+        "atomize_grounding": grounding.structured_content,
         "unknown_error": unknown.structured_content["error"],
     }
 

@@ -1,6 +1,41 @@
 # MCP installed-wheel verification
 
-Last verified: 2026-08-15 against source commit `7aad0230`.
+Last verified: 2026-08-15 against the current Atomize Grounding agent worktree.
+
+## Current seven-tool and import-isolation gate
+
+A fresh wheel built from the current worktree was installed with its `[mcp]`
+extra into a new `uv` virtual environment. The official MCP
+2.0.0 stdio client ran from outside the checkout, imported MemCommit from that
+environment's `site-packages`, and discovered this exact registry order:
+
+1. `memcommit_query`
+2. `memcommit_add_memories`
+3. `memcommit_meld`
+4. `memcommit_atomize_grounding`
+5. `memcommit_distill`
+6. `memcommit_elaborate`
+7. `memcommit_fit`
+
+The client then invoked Add, observed its structured success receipt, verified
+the same checkpoint through an independent Store read, opened a durable
+review-only Grounding dialogue through the new tool without a provider, and
+confirmed that an unknown tool returns the typed `unknown_tool` error. This
+proves that the seven
+registered adapters and their transitive modules ship in the wheel and cross
+the installed MCP discovery boundary. Provider-backed semantic execution remains
+covered by the in-process public-client, agent-registry, and MCP-projection
+tests; the installed smoke intentionally makes no external provider call.
+
+From a second process whose working directory was outside the checkout,
+`import memcommit` did not load `memcommit.api`; resolving the real public
+client loaded no Add, Fit, Distill, Elaborate, Ground, Meld, or Query
+application implementation. The resolved root/API client objects retained
+identity and the module origin remained under `site-packages`.
+
+The wheel was version `0.0.1`, CPython was `3.13.5`, and the loaded module origin
+was under the new temporary environment rather than this source checkout. No
+build artifact was written into the repository.
 
 ## Gate and environment
 
@@ -9,7 +44,7 @@ for release: can a wheel containing the committed MCP transport be installed
 with its optional dependency and complete a real stdio session without
 importing the source checkout?
 
-The successful run used:
+The earlier clean-commit run used:
 
 - MemCommit wheel version `0.0.1`;
 - CPython `3.13.5`;
@@ -25,11 +60,15 @@ explicit Store root, and communicates only through the SDK's stdio client and
 
 ## Verified path
 
-The client completed MCP initialization and discovered, in frozen registry
-order:
+The earlier client completed MCP initialization and discovered the then-shipped
+registry order:
 
 1. `memcommit_query`
 2. `memcommit_add_memories`
+
+The current seven-tool run above supersedes that historical discovery list for
+package-completeness evidence while preserving the older run's clean-commit and
+invalid-HOME regression record.
 
 It invoked Add with two exact Memory texts and an explicit `smoke/target`
 Context. The MCP result contained matching success and receipt data; an

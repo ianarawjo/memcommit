@@ -4,8 +4,10 @@ Last verified: 2026-08-15.
 
 ## Motivation
 
-Query and Add had strict schemas and adapters, but a host still had to assemble
-them independently. That left the first real integration path untested: tool
+Query and Add first supplied strict schemas and adapters, but a host still had
+to assemble them independently. Meld, Atomize Grounding, Distill, Elaborate,
+and Fit now use that same path rather than introducing operation-specific MCP
+handlers. The integration path covers tool
 discovery, name dispatch, shared client ownership, JSON-safe output, and the
 transition from one durable mutation to a later read through the same process.
 
@@ -15,8 +17,10 @@ CLI or TUI and without choosing a wire protocol.
 
 ## Frozen host contract
 
-`build_default_agent_tool_registry(client)` binds `memcommit_query` and
-`memcommit_add_memories` to one caller-owned `MemCommitClient`. The client has
+`build_default_agent_tool_registry(client)` binds `memcommit_query`,
+`memcommit_add_memories`, `memcommit_meld`,
+`memcommit_atomize_grounding`, `memcommit_distill`, `memcommit_elaborate`, and
+`memcommit_fit` to one caller-owned `MemCommitClient`. The client has
 already frozen its Store/Profile root and provider configuration; the registry
 does not reconstruct or widen those choices.
 
@@ -37,8 +41,8 @@ host. Registration order is retained for deterministic discovery.
 ## Dispatch and effect boundary
 
 `AgentToolRegistry.invoke(name, payload)` accepts an already-decoded payload.
-For a known tool it invokes exactly one frozen handler. Query and Add adapters
-then perform their existing strict parsing and call exactly one public client
+For a known tool it invokes exactly one frozen handler. Every adapter then
+performs strict versioned parsing and calls exactly one public client
 method. The registry adds no route inference, authority, provider, cache,
 receipt, retry, or persistence policy.
 
@@ -56,7 +60,7 @@ operation contract was entered.
 | `AgentToolRegistry.__init__` | bindings → frozen registry | schema factories once | duplicate/malformed contracts fail before host start |
 | `tool_schemas` | none → fresh schema objects | none | frozen order and content; caller mutation is isolated |
 | `invoke` | tool name + decoded payload → JSON object | exactly the selected adapter's effects | unknown names have no effects; every result is JSON-safe |
-| `build_default_agent_tool_registry` | public client → Query/Add registry | none at construction | one shared frozen client; no terminal dependency |
+| `build_default_agent_tool_registry` | public client → shipped tool registry | none at construction | one shared frozen client; no terminal dependency |
 
 ## MCP and transport boundary
 
@@ -82,8 +86,19 @@ and one checkpoint, then invokes ordinary Query through the same registry and
 public client. Query observes both the newly added Memories and the ordinary
 checkpoint evidence while leaving the post-Add Store byte-for-byte unchanged.
 
-The clean wheel is also tested outside the repository for discovery and a real
-Add invocation. This layer is not yet an MCP server, plugin, network endpoint,
-subprocess protocol, authentication service, skill installer, idempotency
-service, or dynamic runtime registry. Adding new shipped operations remains an
-explicit code and compatibility change.
+Grounding integration tests project all five lifecycle actions, call one
+provider-free real saved dialogue through MCP, and preserve typed issue,
+question, proposal, and Apply receipt data. Separate semantic integration tests
+invoke Distill and Elaborate through the
+same registry and MCP projection, verify typed evidence and verification
+fields, and prove that neither read-only tool creates a Context or accepts a
+proposal.
+
+The earlier clean-wheel check covered Query/Add discovery and a real Add
+invocation. On 2026-08-15 a fresh current-worktree wheel exposed all seven
+tools and executed a real Grounding `open` through the official stdio client
+outside the checkout. Provider-backed
+Distill/Elaborate execution remains in-process evidence. The registry is not a plugin, network endpoint,
+authentication service, skill installer, idempotency service, or dynamic
+runtime registry. Adding shipped operations remains an explicit code and
+compatibility change.
