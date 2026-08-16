@@ -8,6 +8,8 @@ import pytest
 
 from memcommit.eval.task2_discovery_lock import (
     DEFAULT_TASK2_DISCOVERY_LOCK,
+    LEGACY_TASK2_DISCOVERY_LOCK,
+    TASK2_DISCOVERY_LOCK_REVISION,
     TASK2_DISCOVERY_LOCK_SLICES,
     Task2DiscoveryLockError,
     load_and_validate_task2_discovery_lock,
@@ -24,11 +26,13 @@ def test_task2_discovery_lock_replays_all_progressive_slices() -> None:
     lock, corpus = load_and_validate_task2_discovery_lock()
 
     assert lock.language == "en"
+    assert lock.schema_version == 2
+    assert lock.revision == TASK2_DISCOVERY_LOCK_REVISION
     assert lock.corpus_digest == (
-        "d98dd2bb55aa81efb692d9cd3e72aec4403d6ff5548437a17f81821c168f6ac9"
+        "2e42279f3f78e4e033d0ba951b2d90ba0859e7564dea3ea8302a422f68beef8d"
     )
     assert lock.sidecar_digest == (
-        "0f6244e75fc739c752105ec02f9c5e9bee6eab8d883169644024f288676bff0c"
+        "fb0f6652f665fd65fe3b3df2468d9e04a5115efe10e578c60a588825389b9642"
     )
     assert (len(corpus.left), len(corpus.right), len(corpus.relations)) == (
         150,
@@ -43,13 +47,28 @@ def test_task2_discovery_lock_replays_all_progressive_slices() -> None:
         for item in lock.slices
     ] == [(29, 27), (58, 56), (112, 111), (150, 150)]
     assert [item.input_digest for item in lock.slices] == [
-        "90ba30ad9f89dbe0c6c894913c7a786f4b9ccabf53194abb1532563870dcaa1a",
-        "ae890afbba0a2aff1927bc9e0ed15a82dc34d61e9e988d151891346fee6ae46a",
-        "ee384ab503ef6692ab0fc9a0fa5df7fb382dbef2523be31e0244bd1567eca8f5",
-        "50ebd46986c267b1350021f38c9c28159c8cac3443109a3194f02c27ffbff08d",
+        "1a4771f87747ec2a64a3fb204366931f6bd3ec0e880531795034fe55bc12f44a",
+        "7fcfac5377dea5a0a753ccea566be75029f176d757876ad0ced8b541acb4f4fe",
+        "7e4b7fab7b6ab70dfe5d14544064aed168a3a231adb84cd4abe5557ac70ec82f",
+        "8b32452536f1344582432dbc04e88a1e0772523c45ad515ecd2606c34cfd545c",
     ]
     assert lock.independent_holdout is False
     assert lock.consumed_during_optimization is True
+
+
+def test_task2_discovery_v1_identity_is_archived_without_false_replay() -> None:
+    lock = load_task2_discovery_lock(LEGACY_TASK2_DISCOVERY_LOCK)
+
+    assert lock.schema_version == 1
+    assert lock.revision == "task2-relation-discovery-calibration-v1"
+    assert lock.corpus_digest == (
+        "d98dd2bb55aa81efb692d9cd3e72aec4403d6ff5548437a17f81821c168f6ac9"
+    )
+    assert lock.sidecar_digest == (
+        "0f6244e75fc739c752105ec02f9c5e9bee6eab8d883169644024f288676bff0c"
+    )
+    with pytest.raises(Task2DiscoveryLockError, match="no longer matches"):
+        validate_task2_discovery_lock(lock)
 
 
 def test_task2_discovery_lock_rejects_duplicate_json_keys(tmp_path) -> None:

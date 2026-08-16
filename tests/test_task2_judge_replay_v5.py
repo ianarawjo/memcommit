@@ -141,33 +141,43 @@ class JudgeTeacher:
         self.last_run: CompletionRun | None = None
         self.calls: list[tuple[str, str, dict[str, object] | None]] = []
         self.mutations = dict(mutations or {})
+        # Diagnostic subclasses use fixture identity only to inject deliberate
+        # pair-level mistakes.  Exact teacher labels below remain text-pair
+        # based so identical cross-side text cannot overwrite its own mapping.
         self.fixture_by_text = {
             (item["topic"], item["content"]): value.alias_to_fixture_id[item["id"]]
             for item in (*value.left_items, *value.right_items)
         }
-        self.expected: dict[str, tuple[frozenset[str], str]] = {}
+        left_text = {
+            value.alias_to_fixture_id[item["id"]]: (item["topic"], item["content"])
+            for item in value.left_items
+        }
+        right_text = {
+            value.alias_to_fixture_id[item["id"]]: (item["topic"], item["content"])
+            for item in value.right_items
+        }
+        self.expected_by_text_pair: dict[
+            tuple[tuple[str, str], tuple[str, str]], str
+        ] = {}
         for relation in value.expected:
-            left = frozenset(relation.left_fixture_ids)
-            right = frozenset(relation.right_fixture_ids)
             label = judge_v5._BAND_TO_LABEL[relation.band]
-            self.expected.update({member: (right, label) for member in left})
-            self.expected.update({member: (left, label) for member in right})
+            for left in relation.left_fixture_ids:
+                for right in relation.right_fixture_ids:
+                    self.expected_by_text_pair[(left_text[left], right_text[right])] = label
+                    self.expected_by_text_pair[(right_text[right], left_text[left])] = label
 
     def _answer(self, prompt: str) -> str:
         payload = json.loads(prompt.split(judge_v5._PAYLOAD_MARKER, 1)[1])
         judgments = []
         for pair in payload["pairs"]:
-            source = self.fixture_by_text[
-                (pair["source"]["topic"], pair["source"]["content"])
-            ]
-            target = self.fixture_by_text[
-                (pair["target"]["topic"], pair["target"]["content"])
-            ]
-            counterparts, label = self.expected[source]
+            source = (pair["source"]["topic"], pair["source"]["content"])
+            target = (pair["target"]["topic"], pair["target"]["content"])
             judgments.append(
                 {
                     "pair_id": pair["pair_id"],
-                    "label": label if target in counterparts else "UNRELATED",
+                    "label": self.expected_by_text_pair.get(
+                        (source, target), "UNRELATED"
+                    ),
                 }
             )
         return json.dumps({"judgments": judgments})

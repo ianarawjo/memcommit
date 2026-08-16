@@ -96,9 +96,9 @@ def test_full_corpus_is_the_reviewed_exhaustive_150_by_150_partition():
     assert len(corpus.right) == 150
     assert len(corpus.relations) == 138
     assert Counter(relation.band for relation in corpus.relations) == {
-        "Near Duplicate": 64,
+        "Near Duplicate": 65,
         "Same-Principle Variant": 26,
-        "Context-Dependent Variant": 38,
+        "Context-Dependent Variant": 37,
         "Conflict": 8,
         "Compatible Complement": 2,
     }

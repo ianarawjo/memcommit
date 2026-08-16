@@ -180,17 +180,23 @@ class EvidenceTeacher:
         self.abstain_first = abstain_first
         self.impossible_first = impossible_first
         self.alternate_context_evidence = alternate_context_evidence
-        self.fixture_by_text = {
-            (item["topic"], item["content"]): value.alias_to_fixture_id[item["id"]]
-            for item in (*value.left_items, *value.right_items)
+        left_text = {
+            value.alias_to_fixture_id[item["id"]]: (item["topic"], item["content"])
+            for item in value.left_items
         }
-        self.expected: dict[str, tuple[frozenset[str], str]] = {}
+        right_text = {
+            value.alias_to_fixture_id[item["id"]]: (item["topic"], item["content"])
+            for item in value.right_items
+        }
+        self.expected_by_text_pair: dict[
+            tuple[tuple[str, str], tuple[str, str]], str
+        ] = {}
         for relation in value.expected:
-            left = frozenset(relation.left_fixture_ids)
-            right = frozenset(relation.right_fixture_ids)
             label = judge_v5._BAND_TO_LABEL[relation.band]
-            self.expected.update({member: (right, label) for member in left})
-            self.expected.update({member: (left, label) for member in right})
+            for left in relation.left_fixture_ids:
+                for right in relation.right_fixture_ids:
+                    self.expected_by_text_pair[(left_text[left], right_text[right])] = label
+                    self.expected_by_text_pair[(right_text[right], left_text[left])] = label
 
     def complete(self, prompt, *, operation, output_schema=None):
         call_index = len(self.calls)
@@ -200,14 +206,9 @@ class EvidenceTeacher:
         payload = json.loads(prompt.split(judge_v7._PAYLOAD_MARKER, 1)[1])
         result = []
         for pair_index, pair in enumerate(payload["pairs"]):
-            left = self.fixture_by_text[
-                (pair["left"]["topic"], pair["left"]["content"])
-            ]
-            right = self.fixture_by_text[
-                (pair["right"]["topic"], pair["right"]["content"])
-            ]
-            counterparts, expected_label = self.expected[left]
-            label = expected_label if right in counterparts else "UNRELATED"
+            left = (pair["left"]["topic"], pair["left"]["content"])
+            right = (pair["right"]["topic"], pair["right"]["content"])
+            label = self.expected_by_text_pair.get((left, right), "UNRELATED")
             anchor, polarity, context, composition = _EVIDENCE_BY_LABEL[label]
             if label == "CONTEXT_VARIANT" and self.alternate_context_evidence:
                 anchor = "SAME_GOVERNING_PRINCIPLE"

@@ -677,24 +677,33 @@ this workload: their frames are direct-only and their provider contracts cap
 the total source count at 200. The evaluation path does not silently raise
 those production limits or claim persistence compatibility.
 
-The consumed English ladder is frozen by
-`memcommit/eval/fixtures/task2_discovery.lock.json`. The lock binds corpus
-digest `d98dd2bb55aa81efb692d9cd3e72aec4403d6ff5548437a17f81821c168f6ac9`,
-sidecar digest
-`0f6244e75fc739c752105ec02f9c5e9bee6eab8d883169644024f288676bff0c`,
-the `CONTENT_PLUS_TOPIC` condition, and separate input, alias-map, Gold, count,
-and band-distribution manifests for 26, 50, 100, and 138 groups. It explicitly
-records `consumed_during_optimization=true` and `independent_holdout=false`.
-English campaigns replay this lock before inference; the unreviewed Korean
-translation is a separate robustness condition rather than interchangeable
-Gold.
+The consumed English ladder has explicit calibration revisions. The original
+2026-08-04 identity is preserved verbatim as
+`memcommit/eval/fixtures/task2_discovery.v1.lock.json`, binding corpus digest
+`d98dd2bb55aa81efb692d9cd3e72aec4403d6ff5548437a17f81821c168f6ac9`
+and sidecar digest
+`0f6244e75fc739c752105ec02f9c5e9bee6eab8d883169644024f288676bff0c`.
+The exact corpus bytes for that identity are no longer present in the
+repository, so V1 is an archival provenance record and intentionally fails
+replay against current fixtures. Recovering those exact inputs remains a
+limitation; the V1 identity must not be silently rebound to new bytes.
 
-The lock was re-frozen on 2026-08-04 after eight reviewed Conflict groups were
-grounded in participant-accessible authoring and planning choices. The corpus
-still contains 150 Memories per Advisor and 138 reviewed groups, now with eight
-Conflicts and two Compatible Complements. This is a new consumed calibration
-revision, not an independent holdout or continuity claim for results produced
-against either earlier research-method conflict corpus.
+The default `memcommit/eval/fixtures/task2_discovery.lock.json` is schema 2 and
+names revision `task2-relation-discovery-calibration-v2`. It freezes the
+currently checked-in 150-by-150, 138-group corpus at digest
+`2e42279f3f78e4e033d0ba951b2d90ba0859e7564dea3ea8302a422f68beef8d`
+and sidecar digest
+`fb0f6652f665fd65fe3b3df2468d9e04a5115efe10e578c60a588825389b9642`,
+including separate input, alias-map, Gold, count, and band-distribution
+manifests for 26, 50, 100, and 138 groups. The full revision contains eight
+Conflicts, two Compatible Complements, 65 Near Duplicates, and 37
+Context-Dependent Variants. English campaigns replay V2 before inference.
+
+Both revisions explicitly record `consumed_during_optimization=true` and
+`independent_holdout=false`. V2 is a new consumed calibration baseline, not a
+continuity claim for V1 results; existing V1 result ledgers must remain labelled
+with their recorded lock provenance. The unreviewed Korean translation remains
+a separate robustness condition rather than interchangeable Gold.
 
 If one-shot discovery fails, V2 must localize the cause instead of adding a
 larger monolithic prompt:

@@ -27,8 +27,13 @@ from memcommit.eval.task2_discovery import (
 DEFAULT_TASK2_DISCOVERY_LOCK = (
     Path(__file__).parent / "fixtures" / "task2_discovery.lock.json"
 )
+LEGACY_TASK2_DISCOVERY_LOCK = (
+    Path(__file__).parent / "fixtures" / "task2_discovery.v1.lock.json"
+)
 TASK2_DISCOVERY_LOCK_KIND = "memcommit.semantic-eval.task2-discovery-lock"
-TASK2_DISCOVERY_LOCK_SCHEMA_VERSION = 1
+TASK2_DISCOVERY_LOCK_SCHEMA_VERSION = 2
+TASK2_DISCOVERY_LEGACY_SCHEMA_VERSION = 1
+TASK2_DISCOVERY_LOCK_REVISION = "task2-relation-discovery-calibration-v2"
 TASK2_DISCOVERY_LOCK_SLICES = (26, 50, 100, 138)
 TASK2_DISCOVERY_EVALUATION_CONDITION = "CONTENT_PLUS_TOPIC"
 TASK2_DISCOVERY_SELECTION = "FIRST_REVIEWED_GROUPS_CALIBRATION"
@@ -52,6 +57,8 @@ class Task2DiscoverySliceLock:
 @dataclass(frozen=True)
 class Task2DiscoveryLock:
     path: Path
+    schema_version: int
+    revision: str
     language: str
     corpus_digest: str
     sidecar_fixture: str
@@ -170,7 +177,7 @@ def load_task2_discovery_lock(path: Path | None = None) -> Task2DiscoveryLock:
         raise Task2DiscoveryLockError(
             "The Task 2 discovery lock is not valid strict UTF-8 JSON."
         ) from error
-    required = {
+    common_required = {
         "kind",
         "schema_version",
         "operation",
@@ -190,13 +197,31 @@ def load_task2_discovery_lock(path: Path | None = None) -> Task2DiscoveryLock:
         "independent_holdout",
         "consumed_during_optimization",
     }
-    if not isinstance(value, dict) or set(value) != required:
+    if not isinstance(value, dict):
+        raise Task2DiscoveryLockError(
+            "The Task 2 discovery lock has an invalid top-level contract."
+        )
+    schema_version = value.get("schema_version")
+    if schema_version == TASK2_DISCOVERY_LEGACY_SCHEMA_VERSION:
+        required = common_required
+        revision = "task2-relation-discovery-calibration-v1"
+    elif schema_version == TASK2_DISCOVERY_LOCK_SCHEMA_VERSION:
+        required = common_required | {"revision"}
+        revision = value.get("revision")
+        if revision != TASK2_DISCOVERY_LOCK_REVISION:
+            raise Task2DiscoveryLockError(
+                "The Task 2 discovery lock revision is invalid."
+            )
+    else:
+        raise Task2DiscoveryLockError(
+            "The Task 2 discovery lock schema version is unsupported."
+        )
+    if set(value) != required:
         raise Task2DiscoveryLockError(
             "The Task 2 discovery lock has an invalid top-level contract."
         )
     if (
         value["kind"] != TASK2_DISCOVERY_LOCK_KIND
-        or value["schema_version"] != TASK2_DISCOVERY_LOCK_SCHEMA_VERSION
         or value["operation"] != "task2-relation-discovery"
         or value["corpus_role"] != "CALIBRATION"
         or value["language"] != "en"
@@ -243,6 +268,8 @@ def load_task2_discovery_lock(path: Path | None = None) -> Task2DiscoveryLock:
         )
     return Task2DiscoveryLock(
         path=lock_path,
+        schema_version=schema_version,
+        revision=revision,
         language="en",
         corpus_digest=_sha256(value["corpus_digest"], "corpus_digest"),
         sidecar_fixture=sidecar_fixture,

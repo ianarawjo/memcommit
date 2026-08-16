@@ -1,7 +1,6 @@
 {
   "kind": "memcommit.semantic-eval.task2-discovery-lock",
-  "schema_version": 2,
-  "revision": "task2-relation-discovery-calibration-v2",
+  "schema_version": 1,
   "operation": "task2-relation-discovery",
   "corpus_role": "CALIBRATION",
   "language": "en",
@@ -11,9 +10,9 @@
     "content",
     "topic"
   ],
-  "corpus_digest": "2e42279f3f78e4e033d0ba951b2d90ba0859e7564dea3ea8302a422f68beef8d",
+  "corpus_digest": "d98dd2bb55aa81efb692d9cd3e72aec4403d6ff5548437a17f81821c168f6ac9",
   "sidecar_fixture": "task-2-pair-relations-en.tsv",
-  "sidecar_sha256": "fb0f6652f665fd65fe3b3df2468d9e04a5115efe10e578c60a588825389b9642",
+  "sidecar_sha256": "0f6244e75fc739c752105ec02f9c5e9bee6eab8d883169644024f288676bff0c",
   "full_left_count": 150,
   "full_right_count": 150,
   "full_group_count": 138,
@@ -22,8 +21,8 @@
       "group_count": 26,
       "selected_left_count": 29,
       "selected_right_count": 27,
-      "input_digest": "1a4771f87747ec2a64a3fb204366931f6bd3ec0e880531795034fe55bc12f44a",
-      "alias_mapping_digest": "ac39eedb18595991c018c5a3ee19506007ce9ed545ab3d3db402eaa0d5917985",
+      "input_digest": "90ba30ad9f89dbe0c6c894913c7a786f4b9ccabf53194abb1532563870dcaa1a",
+      "alias_mapping_digest": "96e0c4412de01daa3b16ef3828e052d06d7f8de407861ecfa1141f35f65f1efd",
       "gold_relations_digest": "f9b629008b668b091ab58d28ad8ad48ca5bbfefa73d1e4fdf14788acbe58ba2f",
       "band_distribution": {
         "Compatible Complement": 1,
@@ -37,8 +36,8 @@
       "group_count": 50,
       "selected_left_count": 58,
       "selected_right_count": 56,
-      "input_digest": "7fcfac5377dea5a0a753ccea566be75029f176d757876ad0ced8b541acb4f4fe",
-      "alias_mapping_digest": "d9ea65f83d23cce9edddc82bf49ad8ea11fab3be3c15d1de5e390553d4736917",
+      "input_digest": "ae890afbba0a2aff1927bc9e0ed15a82dc34d61e9e988d151891346fee6ae46a",
+      "alias_mapping_digest": "c693927ecca290836f77aafb8598ecd04f4b3ee07807ff97173977cdfc312df7",
       "gold_relations_digest": "7e8640164a237e3cb8549dc73a67f5f0cababfb8a61869d5847111d6d5b394b2",
       "band_distribution": {
         "Compatible Complement": 2,
@@ -52,14 +51,14 @@
       "group_count": 100,
       "selected_left_count": 112,
       "selected_right_count": 111,
-      "input_digest": "7e4b7fab7b6ab70dfe5d14544064aed168a3a231adb84cd4abe5557ac70ec82f",
-      "alias_mapping_digest": "0d8d449b4edda21ece1eae3b796618b7b996bc2bbc36866b972c0b184510369f",
-      "gold_relations_digest": "e2a93bce531475b0c7835f0990b63b6c9ce603b279cde960cb433d5601ac989a",
+      "input_digest": "ee384ab503ef6692ab0fc9a0fa5df7fb382dbef2523be31e0244bd1567eca8f5",
+      "alias_mapping_digest": "c221d138349ba7f8e1bb37ada82111d5e509d8a96fea15f7c84fe2e3f90d21ac",
+      "gold_relations_digest": "84983176db014a27190291413d9c04ac19a353fac6f2d5c11af984b2a46ddc10",
       "band_distribution": {
         "Compatible Complement": 2,
         "Conflict": 8,
-        "Context-Dependent Variant": 22,
-        "Near Duplicate": 51,
+        "Context-Dependent Variant": 23,
+        "Near Duplicate": 50,
         "Same-Principle Variant": 17
       }
     },
@@ -67,19 +66,19 @@
       "group_count": 138,
       "selected_left_count": 150,
       "selected_right_count": 150,
-      "input_digest": "8b32452536f1344582432dbc04e88a1e0772523c45ad515ecd2606c34cfd545c",
-      "alias_mapping_digest": "ff3de991d8c125912dc261409b074d99557dcdd2a179f51755ff799c5a399ef3",
-      "gold_relations_digest": "a7ffddad3dc8e89af374e299b58eeda6249eaafb4be0df673f76cc7cb059ed5a",
+      "input_digest": "50ebd46986c267b1350021f38c9c28159c8cac3443109a3194f02c27ffbff08d",
+      "alias_mapping_digest": "3e99d7da283a440d946438cbf69044099daaecfd65e29a0e96bbe908c54137b1",
+      "gold_relations_digest": "c084005adf02ef17f78bf08da0f689bf795505511842f4eb15e6076c2138ff32",
       "band_distribution": {
         "Compatible Complement": 2,
         "Conflict": 8,
-        "Context-Dependent Variant": 37,
-        "Near Duplicate": 65,
+        "Context-Dependent Variant": 38,
+        "Near Duplicate": 64,
         "Same-Principle Variant": 26
       }
     }
   ],
-  "frozen_at": "2026-08-16T20:24:39Z",
+  "frozen_at": "2026-08-04T16:17:36Z",
   "independent_holdout": false,
   "consumed_during_optimization": true
 }

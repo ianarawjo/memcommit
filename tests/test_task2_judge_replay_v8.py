@@ -53,17 +53,23 @@ class HierarchicalTeacher:
         self.malformed_run_at = malformed_run_at
         self.bad_provenance_stage = bad_provenance_stage
         self.route_unrelated_through_b = route_unrelated_through_b
-        self.fixture_by_text = {
-            (item["topic"], item["content"]): value.alias_to_fixture_id[item["id"]]
-            for item in (*value.left_items, *value.right_items)
+        left_text = {
+            value.alias_to_fixture_id[item["id"]]: (item["topic"], item["content"])
+            for item in value.left_items
         }
-        self.expected: dict[str, tuple[frozenset[str], str]] = {}
+        right_text = {
+            value.alias_to_fixture_id[item["id"]]: (item["topic"], item["content"])
+            for item in value.right_items
+        }
+        self.expected_by_text_pair: dict[
+            tuple[tuple[str, str], tuple[str, str]], str
+        ] = {}
         for relation in value.expected:
-            left = frozenset(relation.left_fixture_ids)
-            right = frozenset(relation.right_fixture_ids)
             label = judge_v5._BAND_TO_LABEL[relation.band]
-            self.expected.update({member: (right, label) for member in left})
-            self.expected.update({member: (left, label) for member in right})
+            for left in relation.left_fixture_ids:
+                for right in relation.right_fixture_ids:
+                    self.expected_by_text_pair[(left_text[left], right_text[right])] = label
+                    self.expected_by_text_pair[(right_text[right], left_text[left])] = label
 
     def _stage(self, operation: str) -> str:
         return next(
@@ -73,10 +79,9 @@ class HierarchicalTeacher:
         )
 
     def _label(self, pair) -> str:
-        left = self.fixture_by_text[(pair["left"]["topic"], pair["left"]["content"])]
-        right = self.fixture_by_text[(pair["right"]["topic"], pair["right"]["content"])]
-        counterparts, label = self.expected[left]
-        return label if right in counterparts else "UNRELATED"
+        left = (pair["left"]["topic"], pair["left"]["content"])
+        right = (pair["right"]["topic"], pair["right"]["content"])
+        return self.expected_by_text_pair.get((left, right), "UNRELATED")
 
     def _choice(self, stage: str, label: str) -> str:
         if stage == judge_v8.STAGE_A:
