@@ -11,6 +11,7 @@ import pytest
 from memcommit.api import MemCommitClient
 from memcommit.interfaces.agent import (
     ADD_AGENT_TOOL_NAME,
+    MELD_AGENT_TOOL_NAME,
     QUERY_AGENT_TOOL_NAME,
     AgentToolBinding,
     AgentToolRegistry,
@@ -53,6 +54,7 @@ def test_default_registry_projects_parameters_to_fresh_mcp_input_schemas(tmp_pat
     assert tuple(tool.name for tool in first) == (
         QUERY_AGENT_TOOL_NAME,
         ADD_AGENT_TOOL_NAME,
+        MELD_AGENT_TOOL_NAME,
     )
     registry_schemas = registry.tool_schemas()
     for tool, schema in zip(first, registry_schemas, strict=True):

@@ -69,6 +69,7 @@ async def _exercise_stdio(command: str, root: Path, workdir: Path) -> dict[str, 
     assert [tool.name for tool in listed.tools] == [
         "memcommit_query",
         "memcommit_add_memories",
+        "memcommit_meld",
     ]
     assert added.is_error is False
     assert added.structured_content["ok"] is True
