@@ -61,6 +61,34 @@ class FindExecutionError(FindError):
     """Authorized Find did not return one complete deterministic result."""
 
 
+class ReplaceError(MemCommitError):
+    """Base class for public deterministic Replace failures."""
+
+
+class ReplaceInputError(ReplaceError):
+    """The caller supplied an invalid Replace request or reviewed plan."""
+
+
+class ReplaceContextError(ReplaceError):
+    """A requested local Replace Context is unavailable."""
+
+
+class ReplaceAuthorityError(ReplaceError):
+    """The active Profile does not authorize this local Replace."""
+
+
+class ReplaceConflictError(ReplaceError):
+    """The frozen Replace scope changed before Apply."""
+
+
+class ReplaceStorageError(ReplaceError):
+    """Replace could not safely read or publish local durable state."""
+
+
+class ReplaceExecutionError(ReplaceError):
+    """Replace failed before a complete atomic result was published."""
+
+
 class AddError(MemCommitError):
     """Base class for public Add failures."""
 

@@ -45,6 +45,7 @@ from memcommit.api.query import (
     QueryProviderConfig,
     ReferenceQueryResult,
 )
+from memcommit.api.replace import ReplaceApplyReceipt, ReplacePlanResult
 from memcommit.api.quality_find import QualityFindResult
 from memcommit.api.resolve import ResolveAnalysisResult, ResolveApplyResult
 from memcommit.api.search import SearchResult
@@ -237,6 +238,39 @@ class MemCommitClient:
             regex=regex,
             ignore_case=ignore_case,
         )
+
+    def plan_replace(
+        self,
+        pattern: str,
+        replacement: str,
+        context_names: Sequence[str] = (),
+        *,
+        include_descendants: bool = False,
+        follow_embeds: bool = False,
+        regex: bool = False,
+        ignore_case: bool = False,
+    ) -> ReplacePlanResult:
+        """Freeze and preview every deterministic replacement without mutation."""
+
+        from memcommit.api._operations.replace import plan_replace
+
+        return plan_replace(
+            self._runtime,
+            pattern,
+            replacement,
+            context_names,
+            include_descendants=include_descendants,
+            follow_embeds=follow_embeds,
+            regex=regex,
+            ignore_case=ignore_case,
+        )
+
+    def apply_replace(self, reviewed: ReplacePlanResult) -> ReplaceApplyReceipt:
+        """Apply one exact plan created by this client or publish no effect."""
+
+        from memcommit.api._operations.replace import apply_replace
+
+        return apply_replace(self._runtime, reviewed)
 
     def fit(
         self,

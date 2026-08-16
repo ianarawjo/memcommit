@@ -103,6 +103,13 @@ from memcommit.interfaces.agent.find import (
     FindAgentKind,
     find_agent_tool_schema,
 )
+from memcommit.interfaces.agent.replace import (
+    REPLACE_AGENT_CONTRACT_VERSION,
+    REPLACE_AGENT_TOOL_NAME,
+    ReplaceAgentAdapter,
+    ReplaceAgentKind,
+    replace_agent_tool_schema,
+)
 from memcommit.interfaces.agent.registry import (
     AGENT_TOOL_REGISTRY_VERSION,
     AgentToolBinding,
@@ -170,6 +177,10 @@ __all__ = [
     "FIND_AGENT_TOOL_NAME",
     "FindAgentAdapter",
     "FindAgentKind",
+    "REPLACE_AGENT_CONTRACT_VERSION",
+    "REPLACE_AGENT_TOOL_NAME",
+    "ReplaceAgentAdapter",
+    "ReplaceAgentKind",
     "ForgetAgentAdapter",
     "ForgetAgentKind",
     "HELP_AGENT_CONTRACT_VERSION",
@@ -207,6 +218,7 @@ __all__ = [
     "fit_agent_tool_schema",
     "forget_agent_tool_schema",
     "find_agent_tool_schema",
+    "replace_agent_tool_schema",
     "help_agent_tool_schema",
     "query_agent_tool_schema",
     "quality_find_agent_tool_schema",
