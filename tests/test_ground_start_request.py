@@ -106,7 +106,7 @@ def test_tty_sentence_passes_exact_working_goal_to_blank_shell(
     monkeypatch,
 ):
     request = "Split Task 1 into wiki and user-facing Contexts."
-    seen: list[str] = []
+    seen: list[tuple[str, str | None]] = []
     monkeypatch.setattr(
         ground_command,
         "_interactive_terminal",
@@ -114,14 +114,21 @@ def test_tty_sentence_passes_exact_working_goal_to_blank_shell(
     )
     monkeypatch.setattr(
         ground_command,
+        "_choose_ground_workspace_save_location",
+        lambda _store: "work/ground",
+    )
+    monkeypatch.setattr(
+        ground_command,
         "_run_new_ground_shell",
-        lambda initial_request="": seen.append(initial_request),
+        lambda initial_request="", *, ground_name=None: seen.append(
+            (initial_request, ground_name)
+        ),
     )
 
     result = runner.invoke(app, ["ground", request])
 
     assert result.exit_code == 0, result.output
-    assert seen == [request]
+    assert seen == [(request, "work/ground")]
     assert not isolated_store.exists()
 
 
@@ -189,6 +196,45 @@ def test_new_ground_shell_without_store_has_no_current_snapshot(
     assert seen[0]["current_context_name"] is None
     assert "context_catalog_count" not in seen[0]
     assert not isolated_store.exists()
+
+
+def test_fixed_ground_shell_uses_save_location_without_context_recommendations(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    store.save(ops.init("existing/context"))
+    store.set_current("existing/context")
+    seen = []
+
+    monkeypatch.setattr(
+        ground_command,
+        "_interpret_new_ground_turn",
+        lambda text, *, context_names=(), ground_name=None: seen.append(
+            (text, tuple(context_names), ground_name)
+        ),
+    )
+
+    def fake_shell(**kwargs):
+        assert kwargs["ground_name"] == "projects/ticker-ground"
+        assert "context_catalog_count" not in kwargs
+        kwargs["interpret"]("Find real ticker rules.")
+        return GroundShellResult(status="CANCELLED")
+
+    monkeypatch.setattr(ground_command, "run_ground_shell", fake_shell)
+
+    ground_command._run_new_ground_shell(
+        "Find real ticker rules.",
+        ground_name="projects/ticker-ground",
+    )
+
+    assert seen == [
+        (
+            "Find real ticker rules.",
+            (),
+            "projects/ticker-ground",
+        )
+    ]
 
 
 def test_new_context_suggestion_is_checked_without_creating_or_switching(

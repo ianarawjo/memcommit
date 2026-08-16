@@ -1681,6 +1681,39 @@ def test_approval_applies_the_frozen_proposal_exactly_once():
     assert not hasattr(applied[0], "command")
 
 
+def test_fixed_workspace_location_skips_context_planning_and_approves_exact_root():
+    applied: list[GroundShellProposal] = []
+
+    def fixed_proposal(_text: str) -> Propose:
+        return Propose(
+            kind="PROPOSE",
+            understanding="Build a physical ticker Ground.",
+            question="Approve this Goal?",
+            ground_name="projects/ticker-ground",
+            goal="Find how real US ticker symbols are assigned.",
+        )
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\r")
+        result = run_ground_shell(
+            interpret=fixed_proposal,
+            apply=lambda value: applied.append(value) or "created",
+            ground_name="projects/ticker-ground",
+            initial_request="Find ticker rules.",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+            background_interpretation=False,
+        )
+
+    assert result.status == "APPLIED"
+    assert result.selected_context_names == ()
+    assert result.new_context_name_hint is None
+    assert [value.ground_name for value in applied] == [
+        "projects/ticker-ground"
+    ]
+
+
 def test_approval_is_modal_and_tab_cannot_detach_exact_apply():
     applied: list[GroundShellProposal] = []
 

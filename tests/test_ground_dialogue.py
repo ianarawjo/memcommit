@@ -214,6 +214,48 @@ def test_context_catalog_is_name_only_and_suggestions_resolve_local_aliases():
     assert "Do not ask the user to approve or confirm MAIN" in prompt
 
 
+def test_fixed_ground_save_location_replaces_provider_naming_and_context_ranking():
+    provider = FakeProvider(
+        _proposal(
+            ground_name="projects/ticker-ground",
+            context_suggestions=[],
+            new_context_suggestions=[],
+        )
+    )
+
+    turn = interpret_ground_dialogue(
+        "Find how real US ticker symbols are assigned.",
+        provider,
+        ground_name="projects/ticker-ground",
+    )
+
+    assert turn.ground_name == "projects/ticker-ground"
+    assert turn.context_suggestions == ()
+    assert turn.new_context_suggestions == ()
+    prompt = provider.calls[0][0]
+    payload = json.loads(prompt.split("GROUND DIALOGUE PAYLOAD:\n", 1)[1])
+    assert payload == {
+        "user_text": "Find how real US ticker symbols are assigned.",
+        "context_catalog": [],
+        "ground_name": "projects/ticker-ground",
+    }
+    assert "do not recommend, rank, select, or invent another Context" in prompt
+
+
+def test_fixed_ground_save_location_fails_if_provider_changes_it():
+    provider = FakeProvider(_proposal(ground_name="different-ground"))
+
+    with pytest.raises(
+        GroundDialogueError,
+        match="changed the exact Ground Save Location",
+    ):
+        interpret_ground_dialogue(
+            "Find ticker rules.",
+            provider,
+            ground_name="projects/ticker-ground",
+        )
+
+
 def test_first_turn_can_preview_new_context_rules_and_memories_without_saving():
     user_text = (
         "Find a reusable company-name to ticker Rule. "

@@ -587,6 +587,24 @@ def render_ground_contexts_pane(
     return "\n".join(lines)
 
 
+def render_ground_workspace_pane(ground_name: str) -> str:
+    """Render one already chosen, still-uncreated physical workspace root."""
+
+    name = validate_context_name(ground_name)
+    return "\n".join(
+        (
+            f"SAVE LOCATION · {safe_terminal_text(name)} · NOT CREATED",
+            "PHYSICAL CONTEXTS AFTER APPROVAL",
+            f"  {safe_terminal_text(name)}/goals",
+            f"  {safe_terminal_text(name)}/rules",
+            f"  {safe_terminal_text(name)}/examples",
+            f"  {safe_terminal_text(name)}/contexts",
+            f"  {safe_terminal_text(name)}/relations",
+            "Existing Contexts are not recommended or selected here.",
+        )
+    )
+
+
 def _preview_card_value(value: str) -> str:
     normalized = value.replace("\r\n", "\n").replace("\r", "\n")
     return (
@@ -828,7 +846,11 @@ def _response_kind(value: object) -> str:
     return kind
 
 
-def _freeze_proposal(response: object) -> GroundShellProposal:
+def _freeze_proposal(
+    response: object,
+    *,
+    expected_ground_name: str | None = None,
+) -> GroundShellProposal:
     nested = _field(response, "proposal")
     source = nested if nested is not None else response
     understanding = _field(response, "understanding")
@@ -837,9 +859,18 @@ def _freeze_proposal(response: object) -> GroundShellProposal:
     question = _field(response, "question")
     if question is None:
         question = _field(source, "question")
-    ground_name = validate_ground_contract_name(
-        _command_text(_field(source, "ground_name"), "Ground name")
+    proposed_ground_name = _command_text(
+        _field(source, "ground_name"),
+        "Ground name",
     )
+    if expected_ground_name is None:
+        ground_name = validate_ground_contract_name(proposed_ground_name)
+    else:
+        ground_name = validate_context_name(expected_ground_name)
+        if proposed_ground_name != ground_name:
+            raise ValueError(
+                "Chat response changed the exact Ground Save Location."
+            )
     try:
         goal = validate_ground_goal(
             _command_text(_field(source, "goal"), "Goal"),
@@ -1098,6 +1129,7 @@ def run_ground_shell(
     *,
     interpret: GroundInterpreter,
     apply: GroundApplier,
+    ground_name: str | None = None,
     initial_request: str = "",
     current_context_name: str | None = None,
     context_catalog_count: int = 0,
@@ -1115,6 +1147,18 @@ def run_ground_shell(
             snapshot_hint=(
                 "Run 'mem ground' in a terminal or use a snapshot mode."
             ),
+        )
+
+    fixed_ground_name = (
+        validate_context_name(ground_name)
+        if ground_name is not None
+        else None
+    )
+    if fixed_ground_name is not None and (
+        context_catalog_count or tuple(context_catalog_names)
+    ):
+        raise ValueError(
+            "A fixed Ground Save Location cannot use Context recommendations."
         )
 
     working_goal = initial_request.strip()
@@ -1246,6 +1290,8 @@ def run_ground_shell(
         return _THINKING_SUFFIXES[thinking_phase["value"]]
 
     def ordered_context_rows() -> tuple[_GroundShellContextRow, ...]:
+        if fixed_ground_name is not None:
+            return ()
         suggestions = context_suggestions["value"]
         current = tuple(
             item
@@ -1329,12 +1375,16 @@ def run_ground_shell(
         notification=lambda: pane_notifications["GOAL"],
     )
     contexts_pane = build_scrollable_text_pane(
-        "CONTEXTS",
-        render_ground_contexts_pane(
-            current_context_name=current_context_name,
-            catalog_count=context_catalog_count,
-            discovery_in_progress=context_discovery_in_progress["value"],
-            thinking_suffix=current_thinking_suffix(),
+        "WORKSPACE" if fixed_ground_name is not None else "CONTEXTS",
+        (
+            render_ground_workspace_pane(fixed_ground_name)
+            if fixed_ground_name is not None
+            else render_ground_contexts_pane(
+                current_context_name=current_context_name,
+                catalog_count=context_catalog_count,
+                discovery_in_progress=context_discovery_in_progress["value"],
+                thinking_suffix=current_thinking_suffix(),
+            )
         ),
         buffer_name="ground-new-contexts",
         height=GROUND_CONTEXTS_FRAME_HEIGHT,
@@ -1702,6 +1752,12 @@ def run_ground_shell(
         )
 
     def sync_contexts_pane(*, align_candidate: bool = False) -> None:
+        if fixed_ground_name is not None:
+            contexts_pane.set_text(
+                render_ground_workspace_pane(fixed_ground_name),
+                anchor="preserve",
+            )
+            return
         cursor_row = context_cursor_row()
         cursor_name = (
             cursor_row.context_name if cursor_row is not None else None
@@ -1840,6 +1896,13 @@ def run_ground_shell(
         )
         frozen_contexts = _freeze_context_suggestions(response)
         frozen_new_contexts = _freeze_new_context_suggestions(response)
+        if fixed_ground_name is not None and (
+            frozen_contexts or frozen_new_contexts
+        ):
+            raise ValueError(
+                "Chat response added Context recommendations after the exact "
+                "Ground Save Location was fixed."
+            )
         frozen_rule_drafts = _freeze_rule_drafts(response)
         frozen_memory_drafts = _freeze_memory_drafts(
             response,
@@ -1899,7 +1962,10 @@ def run_ground_shell(
                 focus_contexts()
                 application.invalidate()
             return
-        frozen = _freeze_proposal(response)
+        frozen = _freeze_proposal(
+            response,
+            expected_ground_name=fixed_ground_name,
+        )
         exact_goal = required_direct_goal["value"]
         if exact_goal is not None and frozen.goal != exact_goal:
             raise ValueError(

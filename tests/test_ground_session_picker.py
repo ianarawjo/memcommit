@@ -188,6 +188,28 @@ def test_ground_session_entries_do_not_create_missing_storage(isolated_store):
     assert not isolated_store.exists()
 
 
+def test_empty_ground_catalog_still_opens_launcher_with_new_context_action(
+    isolated_store,
+    monkeypatch,
+):
+    seen = []
+
+    def choose(entries, **kwargs):
+        seen.append((tuple(entries), kwargs))
+        return None
+
+    monkeypatch.setattr(ground_command, "choose_session", choose)
+
+    ground_command._run_ground_session_picker(MemoryStore(create=False))
+
+    assert len(seen) == 1
+    entries, kwargs = seen[0]
+    assert entries == ()
+    assert kwargs["new_receipt"].action_label == "CREATE NEW GROUND CONTEXT"
+    assert "exact Save Location" in kwargs["new_receipt"].action_description
+    assert not isolated_store.exists()
+
+
 def test_ground_picker_location_matches_frozen_store_not_live_active_profile(
     tmp_path,
     monkeypatch,

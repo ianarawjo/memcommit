@@ -2,12 +2,13 @@
 
 ## Status
 
-Physical creation, loading, typed Memory editing, the read-only workspace TUI,
-Ground-local Undo, and the Distill, Elaborate, and Fit semantic projections are
-implemented. The CLI retains a transitional legacy-session route only for an
-already existing legacy name; a physical workspace never reads or writes that
-parallel JSON. Existing prototype Ground session JSON is not a migration input
-for a new workspace.
+Physical creation, loading, typed Memory editing, the saved-work launcher,
+exact Save Location setup, the read-only workspace TUI, Ground-local Undo, and
+the Distill, Elaborate, and Fit semantic projections are implemented. The CLI
+retains a transitional legacy-session route only for an already existing
+legacy name; a physical workspace never reads or writes that parallel JSON.
+Existing prototype Ground session JSON is not a migration input for a new
+workspace.
 
 Last reviewed: 2026-08-16.
 
@@ -88,6 +89,39 @@ boundary. The creation unit is the workspace genesis and is not removable by
 the in-workspace Undo action; workspace deletion remains a separately reviewed
 structural command.
 
+### Interactive entry and Save Location
+
+Bare interactive `mem ground` always opens the common Operation Launcher, even
+when no saved Ground exists. The pinned action is `CREATE NEW GROUND CONTEXT`,
+not a synthetic unsaved session row. Existing physical workspaces and
+transitional legacy Grounds remain independently typed saved entries.
+
+Choosing New next opens the common exact Context-name control as
+`NEW GROUND · SAVE LOCATION`. The field starts focused and a frozen local
+Context tree is available only as a lexical parent browser. Selecting a parent
+rewrites the unedited leaf; it does not select that existing Context as Ground
+input. Validation covers the root and all five fixed child names before the
+provider is connected, but the setup writes nothing and does not switch global
+Current.
+
+The accepted Save Location is then frozen as the only possible Ground root for
+the new dialogue. The provider receives that exact name and an intentionally
+empty Context catalog. It may clarify or propose the Goal and provisional Rule
+or Example material, but it cannot rank existing Contexts, suggest another
+Context, or rename the root. Any such output fails closed. The creation review
+therefore has one locally owned command identity:
+
+```text
+mem ground <exact-save-location> --goal <reviewed-goal>
+```
+
+The earlier blank-TUI flow that asked a model to rank locator-only Context
+names conflated two decisions: where this new physical object lives and what
+external material it may later reference. It is retained only in historical
+tests and documentation while old code is removed; it is not a production
+entry route. External material enters `/contexts` later through an explicit
+typed relationship or structural operation.
+
 ## External material
 
 External structure is prepared outside Ground through existing commands. For
@@ -152,12 +186,14 @@ selected command fails closed rather than overwriting a later external edit.
 
 ## Presentation and component ownership
 
-The Ground workbench's top navigator displays the real workspace Context
-subtree. It reuses common Context tree/list, cursor, scrolling, focus, row, and
-clipboard mechanics. It does not call or import the Switch operation. The
-current physical-workspace view is deliberately read-only; exact CLI edit
-actions exercise the application boundary while the future conversational
-editor is rebuilt over the same use cases.
+The Ground launcher reuses the operation-neutral saved-work catalog, and New
+reuses the common Context parent locator plus exact-name field. The Ground
+workbench's top navigator then displays the real workspace Context subtree. It
+reuses common Context tree/list, cursor, scrolling, focus, row, and clipboard
+mechanics. It does not call or import the Switch operation. The current
+physical-workspace view is deliberately read-only; exact CLI edit actions
+exercise the application boundary while the future conversational editor is
+rebuilt over the same use cases.
 
 - `interfaces.tui.operations.switch` interprets a row as a requested global
   current-Context change.

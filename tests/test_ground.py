@@ -868,14 +868,19 @@ def test_cli_ground_tty_picker_new_receipt_keeps_new_flow_explicit(
     )
     monkeypatch.setattr(
         ground_command,
+        "_choose_ground_workspace_save_location",
+        lambda _store: "projects/new-ground",
+    )
+    monkeypatch.setattr(
+        ground_command,
         "_run_new_ground_shell",
-        lambda *_args, **_kwargs: started.append(True),
+        lambda *_args, **kwargs: started.append(kwargs.get("ground_name")),
     )
 
     result = runner.invoke(app, ["ground"])
 
     assert result.exit_code == 0, result.output
-    assert started == [True]
+    assert started == ["projects/new-ground"]
 
 
 def test_cli_ground_picker_does_not_recreate_a_disappeared_selection(
@@ -930,9 +935,11 @@ def test_cli_ground_without_name_uses_tui_and_applies_one_frozen_command(
         interpret,
         apply,
         validate_new_context,
+        ground_name=None,
         current_context_name=None,
     ):
         assert current_context_name is None
+        assert ground_name == "task-1-report-coverage"
         assert callable(validate_new_context)
         new_name = "test/ground/ticker-rule-examples"
         assert validate_new_context(new_name) == new_name
@@ -958,6 +965,19 @@ def test_cli_ground_without_name_uses_tui_and_applies_one_frozen_command(
         ground_command,
         "_interactive_terminal",
         lambda: True,
+    )
+    monkeypatch.setattr(
+        ground_command,
+        "choose_session",
+        lambda *_args, **_kwargs: ground_command.SessionNewReceipt(
+            kind="ground",
+            argv=("mem", "ground"),
+        ),
+    )
+    monkeypatch.setattr(
+        ground_command,
+        "_choose_ground_workspace_save_location",
+        lambda _store: "task-1-report-coverage",
     )
     monkeypatch.setattr(
         ground_command,
@@ -1056,6 +1076,19 @@ def test_cli_ground_tui_cancel_creates_nothing(
         ground_command,
         "_interactive_terminal",
         lambda: True,
+    )
+    monkeypatch.setattr(
+        ground_command,
+        "choose_session",
+        lambda *_args, **_kwargs: ground_command.SessionNewReceipt(
+            kind="ground",
+            argv=("mem", "ground"),
+        ),
+    )
+    monkeypatch.setattr(
+        ground_command,
+        "_choose_ground_workspace_save_location",
+        lambda _store: "cancelled-ground",
     )
     monkeypatch.setattr(
         ground_command,

@@ -14,6 +14,14 @@
 > Existing prototype JSON has no migration promise. Keep this historical flow
 > only until its remaining CLI/TUI and semantic consumers move; do not extend
 > the old frame schema.
+>
+> **Interactive-entry correction (2026-08-16).** The Context-recommendation
+> flow documented below is also historical. New production Ground entry now
+> opens the shared saved-work launcher, then a shared exact Save Location
+> control for the new physical Context root. The accepted root is fixed before
+> provider dialogue; the provider receives no Context catalog and cannot rank
+> existing Contexts, suggest another location, or rename it. External Context
+> membership is built later under the physical `/contexts` lane.
 
 The implementation has two explicit stages. It first creates or resumes a
 named empty version-1 scaffold, then an explicit binding action upgrades that

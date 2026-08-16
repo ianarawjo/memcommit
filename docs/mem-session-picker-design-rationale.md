@@ -106,16 +106,20 @@ headings cannot hide the selected session.
 
 ### Ground
 
-In an interactive terminal, bare `mem ground` shows saved Grounds when any
-exist and retains the existing blank flow through `N`. `mem ground --sessions`
-opens the launcher explicitly, while `mem ground NAME` remains direct. A
-selected name is loaded again after the picker closes and must still exist;
-the selection never passes through the create-or-resume fallback. Non-TTY bare
-output remains the stable unsaved Ground frame. The Ground launcher also shows
-the frozen process profile and store root above the list. It identifies the
-profile by matching that root against every registered profile rather than by
-trusting the registry's live active pointer, which another process can change
-after this command has imported and frozen its store.
+In an interactive terminal, bare `mem ground` always shows the launcher,
+including for an empty catalog. Its pinned action is `CREATE NEW GROUND
+CONTEXT`: it opens the common exact Save Location control and then starts a
+blank Goal dialogue with that physical root fixed. It does not ask a provider
+to recommend an existing Context or invent the root. `mem ground --sessions`
+opens the same launcher explicitly, while `mem ground NAME` remains direct. A
+selected saved name is loaded again after the picker closes and must still
+exist; the selection never passes through the create-or-resume fallback.
+Non-TTY bare output remains the stable unsaved Ground frame. The Ground
+launcher also shows the frozen process profile and store root above the list.
+It identifies the profile by matching that root against every registered
+profile rather than by trusting the registry's live active pointer, which
+another process can change after this command has imported and frozen its
+store.
 
 ### Meld
 

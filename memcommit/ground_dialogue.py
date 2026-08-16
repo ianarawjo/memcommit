@@ -417,14 +417,13 @@ def _build_prompt(
     *,
     ground_name: str | None = None,
 ) -> str:
-    payload = json.dumps(
-        {
-            "user_text": user_text,
-            "context_catalog": list(context_catalog),
-            "ground_name": ground_name,
-        },
-        ensure_ascii=False,
-    )
+    payload_value: dict[str, object] = {
+        "user_text": user_text,
+        "context_catalog": list(context_catalog),
+    }
+    if ground_name is not None:
+        payload_value["ground_name"] = ground_name
+    payload = json.dumps(payload_value, ensure_ascii=False)
     if ground_name is None:
         context_contract = (
             "The Context catalog contains locator-only local names disclosed for "

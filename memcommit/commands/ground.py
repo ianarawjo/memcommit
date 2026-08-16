@@ -40,6 +40,8 @@ from memcommit.interfaces.console.text import (
 )
 from memcommit.interfaces.cli.ground_workspace import render_ground_workspace
 from memcommit.interfaces.tui.operations.ground_workspace import (
+    GroundWorkspaceLocationSetup,
+    run_ground_workspace_location_tui,
     run_ground_workspace_tui,
 )
 from memcommit.context import Context, Memory
@@ -72,6 +74,7 @@ from memcommit.ground import (
     validate_ground_goal,
 )
 from memcommit.ground_dialogue import (
+    GROUND_DIALOGUE_NAME_LIMIT,
     GROUND_DIALOGUE_USER_TEXT_LIMIT,
     GroundDialogueError,
     GroundDialogueProposal,
@@ -81,7 +84,10 @@ from memcommit.ground_context_catalog import (
     discover_ground_context_locators,
     select_ground_context_locators,
 )
-from memcommit.ground_workspace import GroundWorkspaceError
+from memcommit.ground_workspace import (
+    GroundWorkspaceError,
+    ground_workspace_context_names,
+)
 from memcommit.ground_workspace_application import (
     AddGroundWorkspaceMemoryRequest,
     CreateGroundWorkspaceRequest,
@@ -220,11 +226,84 @@ def _current_context_name_for_ground(store: MemoryStore) -> str | None:
     return value if isinstance(value, str) and value else None
 
 
+def _validate_ground_workspace_save_location(
+    store: MemoryStore,
+    name: str,
+) -> str:
+    """Validate one exact require-new root without creating Store records."""
+
+    canonical = validate_context_name(name)
+    if len(canonical) > GROUND_DIALOGUE_NAME_LIMIT:
+        raise ValueError(
+            "Ground Save Location is too long for one dialogue turn."
+        )
+    for context_name in ground_workspace_context_names(canonical):
+        store.assert_context_creatable(context_name)
+    try:
+        legacy = store.load_ground_session(canonical)
+    except GroundError:
+        legacy = None
+    if legacy is not None:
+        raise FileExistsError(
+            f"A legacy Ground session already uses '{canonical}'."
+        )
+    return canonical
+
+
+def _suggest_ground_workspace_save_location(
+    store: MemoryStore,
+    *,
+    current_context_name: str | None,
+) -> str:
+    """Suggest one collision-free root beneath Current when available."""
+
+    stem = (
+        f"{current_context_name}/ground"
+        if current_context_name is not None
+        else "ground"
+    )
+    candidate = stem
+    suffix = 2
+    while True:
+        try:
+            return _validate_ground_workspace_save_location(store, candidate)
+        except FileExistsError:
+            candidate = f"{stem}-{suffix}"
+            suffix += 1
+
+
+def _choose_ground_workspace_save_location(
+    store: MemoryStore,
+) -> str | None:
+    """Collect one exact new root through the shared Context-name control."""
+
+    context_names = tuple(store.list_context_names())
+    current_context_name = _current_context_name_for_ground(store)
+    initial_name = _suggest_ground_workspace_save_location(
+        store,
+        current_context_name=current_context_name,
+    )
+    return run_ground_workspace_location_tui(
+        GroundWorkspaceLocationSetup(
+            initial_name=initial_name,
+            current_context=current_context_name,
+            context_names=context_names,
+            validate_name=lambda name: _validate_ground_workspace_save_location(
+                store,
+                name,
+            ),
+        )
+    )
+
+
 def _interpret_new_ground_turn(
     text: str,
     *,
     context_names: Sequence[str] | None = None,
+    ground_name: str | None = None,
 ):
+    if ground_name is not None:
+        context_names = ()
     if context_names is None:
         locators = discover_ground_context_locators(
             MemoryStore(create=False)
@@ -237,8 +316,9 @@ def _interpret_new_ground_turn(
         text,
         connect_codex_chatgpt_provider,
         context_names=context_names,
+        ground_name=ground_name,
     )
-    store = MemoryStore()
+    store = MemoryStore(create=False)
     for suggestion in turn.new_context_suggestions:
         try:
             # This is a read-only early check. A future approved `mem init`
@@ -251,14 +331,17 @@ def _interpret_new_ground_turn(
                 "creatable."
             ) from error
     if isinstance(turn, GroundDialogueProposal):
-        existing = store.load_ground_session(
-            turn.ground_name
-        )
-        if existing is not None:
+        try:
+            existing_legacy = store.load_ground_session(turn.ground_name)
+        except GroundError:
+            existing_legacy = None
+        if existing_legacy is not None or ground_workspace_exists(
+            store,
+            turn.ground_name,
+        ):
             raise GroundDialogueError(
                 f"Ground '{turn.ground_name}' already exists. Refine the "
-                "description so the agent can propose a different portable "
-                "name, or resume that named Ground explicitly."
+                "Save Location or resume that Ground explicitly."
             )
     return turn
 
@@ -268,7 +351,14 @@ def _apply_new_ground_proposal(
 ) -> str:
     """Run the exact creation argv frozen by the approval screen."""
     store = MemoryStore(create=False)
-    if store.load_ground_session(proposal.ground_name) is not None:
+    try:
+        existing_legacy = store.load_ground_session(proposal.ground_name)
+    except GroundError:
+        existing_legacy = None
+    if existing_legacy is not None or ground_workspace_exists(
+        store,
+        proposal.ground_name,
+    ):
         raise GroundError(
             f"Ground '{proposal.ground_name}' was created before approval; "
             "nothing was overwritten."
@@ -310,9 +400,17 @@ def _run_approved_ground_command(
 GroundViewExit = Literal["CLOSED", "BACK_TO_PICKER"]
 
 
-def _run_new_ground_shell(initial_request: str = "") -> GroundViewExit:
+def _run_new_ground_shell(
+    initial_request: str = "",
+    *,
+    ground_name: str | None = None,
+) -> GroundViewExit:
     store = MemoryStore(create=False)
-    locators = discover_ground_context_locators(store)
+    locators = (
+        ()
+        if ground_name is not None
+        else discover_ground_context_locators(store)
+    )
     # Current is only an at-launch orientation snapshot. It remains local to
     # the shell: the provider sees the same bounded name catalog as before,
     # without a mutable "this one is current" marker or any Context content.
@@ -323,10 +421,10 @@ def _run_new_ground_shell(initial_request: str = "") -> GroundViewExit:
             locator.name
             for locator in select_ground_context_locators(text, locators)
         )
-        return _interpret_new_ground_turn(
-            text,
-            context_names=context_names,
-        )
+        kwargs = {"context_names": context_names}
+        if ground_name is not None:
+            kwargs["ground_name"] = ground_name
+        return _interpret_new_ground_turn(text, **kwargs)
 
     def validate_new_context(name: str) -> str:
         # This is only a read-only early check for the local editor. The
@@ -340,6 +438,8 @@ def _run_new_ground_shell(initial_request: str = "") -> GroundViewExit:
         "current_context_name": current_context_name,
         "validate_new_context": validate_new_context,
     }
+    if ground_name is not None:
+        shell_kwargs["ground_name"] = ground_name
     if locators:
         shell_kwargs["context_catalog_count"] = len(locators)
         shell_kwargs["context_catalog_names"] = tuple(
@@ -1582,13 +1682,20 @@ def _run_ground_session_picker(
                 *(entry.picker_entry for entry in workspace_catalog),
                 *(entry.picker_entry for entry in frozen_catalog),
             ),
-            title="MEM GROUND · SAVED WORK",
+            title="MEM GROUND · SAVED GROUNDS OR NEW CONTEXT",
             new_receipt=SessionNewReceipt(
                 kind="ground",
                 argv=("mem", "ground"),
+                action_label="CREATE NEW GROUND CONTEXT",
+                action_description=(
+                    "Choose an exact Save Location for a new physical Ground "
+                    "workspace, then state its Goal before creation approval."
+                ),
             ),
             initial_sort_mode="recent",
             initial_group_mode="context",
+            catalog_label="saved Grounds",
+            enter_action="open Ground",
             location=ground_session_picker_location(),
         )
         if receipt is None:
@@ -1599,7 +1706,12 @@ def _run_ground_session_picker(
                 raise GroundError(
                     "Ground picker returned an invalid new receipt."
                 )
-            outcome = _run_new_ground_shell()
+            ground_name = _choose_ground_workspace_save_location(store)
+            if ground_name is None:
+                # Save Location cancellation returns to a freshly discovered
+                # launcher; it never falls through to provider naming.
+                continue
+            outcome = _run_new_ground_shell(ground_name=ground_name)
         else:
             if (
                 not isinstance(receipt, SessionOpenReceipt)
@@ -2793,9 +2905,17 @@ def cmd(
             )
             raise typer.Exit(1)
         if _interactive_terminal():
-            outcome = _run_new_ground_shell(initial_request)
+            store = MemoryStore(create=False)
+            chosen_ground_name = _choose_ground_workspace_save_location(store)
+            if chosen_ground_name is None:
+                typer.echo("Ground Save Location cancelled. Nothing was created.")
+                return
+            outcome = _run_new_ground_shell(
+                initial_request,
+                ground_name=chosen_ground_name,
+            )
             if outcome == "BACK_TO_PICKER":
-                _run_ground_session_picker(MemoryStore(create=False))
+                _run_ground_session_picker(store)
         else:
             typer.echo(render_ground_start(initial_request))
         return
@@ -2920,12 +3040,10 @@ def cmd(
             try:
                 store = MemoryStore(create=False)
                 catalog = list_ground_session_catalog(store)
-                if catalog or list_ground_workspace_catalog(store) or sessions:
-                    _run_ground_session_picker(store, catalog=catalog)
-                else:
-                    outcome = _run_new_ground_shell()
-                    if outcome == "BACK_TO_PICKER":
-                        _run_ground_session_picker(store)
+                # The launcher is the stable first screen even for an empty
+                # Store. New Ground is a pinned creation action, not an
+                # implicit provider-named session.
+                _run_ground_session_picker(store, catalog=catalog)
             except (GroundError, OSError, TypeError, ValueError) as error:
                 typer.secho(
                     f"Ground error: {error}",

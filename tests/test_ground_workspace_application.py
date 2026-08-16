@@ -37,7 +37,9 @@ from memcommit.ground_workspace_history import (
 )
 from memcommit.ground_workspace_application import AddGroundWorkspaceMemoryRequest
 from memcommit.interfaces.tui.operations.ground_workspace import (
+    GroundWorkspaceLocationSetup,
     GroundWorkspaceTuiResult,
+    run_ground_workspace_location_tui,
     run_ground_workspace_tui,
 )
 import memcommit.ops as ops
@@ -281,6 +283,28 @@ def test_workspace_tui_escape_closes_from_the_initial_real_goals_context():
         )
 
     assert result.context_name == "project111/goals"
+
+
+def test_workspace_location_adapter_uses_shared_exact_context_name_contract():
+    seen = []
+    setup = GroundWorkspaceLocationSetup(
+        initial_name="projects/new-ground",
+        current_context="projects",
+        context_names=("projects", "other"),
+        validate_name=lambda value: value,
+    )
+
+    result = run_ground_workspace_location_tui(
+        setup,
+        chooser=lambda view: seen.append(view) or view.value,
+    )
+
+    assert result == "projects/new-ground"
+    [view] = seen
+    assert view.label == "NEW GROUND · SAVE LOCATION"
+    assert view.state == "NOT CREATED"
+    assert view.context_names == ("projects", "other")
+    assert "created only after exact command approval" in view.detail
 
 
 def test_cli_creates_and_reopens_the_physical_workspace_without_current_change(
