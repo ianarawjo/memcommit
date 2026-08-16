@@ -2371,8 +2371,9 @@ def test_directional_meld_grammar_help_and_to_boundary(
     assert "--into" in help_result.output
     assert "--from" in help_result.output
     assert "--to" in help_result.output
-    assert "authoritative BASELINE" in help_result.output
-    assert "normalized to INCOMING" in help_result.output
+    normalized_help = " ".join(help_result.output.replace("│", " ").split())
+    assert "authoritative BASELINE" in normalized_help
+    assert "normalized to INCOMING" in normalized_help
 
     missing_peers = runner.invoke(
         app,

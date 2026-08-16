@@ -47,9 +47,11 @@ objects and isolated temporary stores; no provider connection is constructed.
 The setup flows deliberately stop at their process-local receipt: they prove
 that setup itself cannot create C, connect a provider, save a Meld session, or
 apply B. Runtime/application/cache/Grant behavior is covered by the Meld test
-matrix (`177` Meld tests, `10` Grant-focused tests, and `27` Study-prewarm
-tests at this migration). Existing full-replay captures continue to cover
-provider reconciliation, exact application, Undo/Redo, and durable Result
+matrix (`340` Meld/component/Resolution boundary tests, `10` Grant-focused
+tests, and `35` Study-prewarm tests at this migration). The boundary suite also
+parses every module under `memcommit/interfaces` and verifies that no interface
+imports a legacy command adapter. Existing full-replay captures continue to
+cover provider reconciliation, exact application, Undo/Redo, and durable Result
 inspection because the relocated screen did not change those semantics.
 
 Reproduce from the repository root with:

@@ -21,7 +21,7 @@
 │  WHOLE CONTEXT                                                                                                                                                                  ^│
 │  Use every direct Memory in this exact Context.                                                                                                                                  │
 │                                                                                                                                                                                  │
-│✓ MEMORY · a0cee7f4                                                                                                                                                               │
+│✓ MEMORY · dde63546                                                                                                                                                               │
 │  Only the south vehicle entrance closes during construction.                                                                                                                    v│
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌────────────────────────────────────────────────────────────────| B · BASELINE + RESULT · ALL READABLE CONTEXTS |─────────────────────────────────────────────────────────────────┐
@@ -43,7 +43,7 @@
 ┌──────────────────────────────────────────────────────────────────────────────| TO DO · SETUP ONLY |──────────────────────────────────────────────────────────────────────────────┐
 │SETUP · NOT RUN                                                                                                                                                                   │
 │MODE · DIRECTIONAL                                                                                                                                                                │
-│A · capture/incoming · THIS CONTEXT ONLY · MEMORY a0cee7f4                                                                                                                        │
+│A · capture/incoming · THIS CONTEXT ONLY · MEMORY dde63546                                                                                                                        │
 │B · capture/baseline · INCLUDE DESCENDANTS                                                                                                                                        │
 │                                                                                                                                                                                  │
 │[ CONTINUE TO MELD PLANNING ]                                                                                                                                                     │

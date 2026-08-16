@@ -20,7 +20,7 @@
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ A · INCOMING · ALL READABLE CONTEXTS · MEMORY FOCUS ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃  Use every direct Memory in this exact Context.                                                                                                                                 ^┃
 ┃                                                                                                                                                                                  ┃
-┃✓ MEMORY · a0cee7f4                                                                                                                                                               ┃
+┃✓ MEMORY · dde63546                                                                                                                                                               ┃
 ┃  Only the south vehicle entrance closes during construction.                                                                                                                     ┃
 ┃                                                                                                                                                                                 v┃
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
@@ -37,13 +37,13 @@
 │✓ WHOLE CONTEXT                                                                                                                                                                  ^│
 │  Use every direct Memory in this exact Context.                                                                                                                                  │
 │                                                                                                                                                                                  │
-│  MEMORY · fa273962                                                                                                                                                               │
+│  MEMORY · 463a1653                                                                                                                                                               │
 │  The south entrance is closed during construction.                                                                                                                              v│
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌──────────────────────────────────────────────────────────────────────────────| TO DO · SETUP ONLY |──────────────────────────────────────────────────────────────────────────────┐
 │SETUP · NOT RUN                                                                                                                                                                   │
 │MODE · DIRECTIONAL                                                                                                                                                                │
-│A · capture/incoming · THIS CONTEXT ONLY · MEMORY a0cee7f4                                                                                                                        │
+│A · capture/incoming · THIS CONTEXT ONLY · MEMORY dde63546                                                                                                                        │
 │B · capture/baseline · THIS CONTEXT ONLY · WHOLE CONTEXT                                                                                                                          │
 │                                                                                                                                                                                  │
 │[ CONTINUE TO MELD PLANNING ]                                                                                                                                                     │

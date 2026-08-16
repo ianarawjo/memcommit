@@ -13,10 +13,10 @@
 ┃ SOURCE CLAIMS                                                                                                                                                                    ┃
 ┃                                                                                                                                                                                  ┃
 ┃ CLAIM 1 · FROM capture/advisor-a                                                                                                                                                 ┃
-┃   [26828592] Budget CAD 20–30 per hour, including travel time.                                                                                                                   ┃
+┃   [b2c1ec90] Budget CAD 20–30 per hour, including travel time.                                                                                                                   ┃
 ┃                                                                                                                                                                                  ┃
 ┃ CLAIM 2 · FROM capture/advisor-b                                                                                                                                                 ┃
-┃   [fb0b729a] Pay in cash, by e-transfer, or by gift card.                                                                                                                        ┃
+┃   [f928e884] Pay in cash, by e-transfer, or by gift card.                                                                                                                        ┃
 ┃                                                                                                                                                                                  ┃
 ┃ WHY THESE MEMORIES CONFLICT                                                                                                                                                      ┃
 ┃ The sources can be retained together only after their scope and allowed methods are settled.                                                                                     ┃

@@ -54,8 +54,9 @@ def _spec() -> EndpointSetupSpec:
 
 def test_endpoint_setup_returns_default_shape_and_frozen_target() -> None:
     with create_pipe_input() as pipe_input:
-        # The editable Source owns first focus; one Tab reaches Continue.
-        pipe_input.send_text("\t\r")
+        # A multi-mode setup starts on Operation Shape; Source and Continue
+        # are the next two visible focus surfaces.
+        pipe_input.send_text("\t\t\r")
         returned = run_endpoint_setup(
             _spec(),
             app_input=pipe_input,
@@ -74,9 +75,9 @@ def test_endpoint_setup_returns_default_shape_and_frozen_target() -> None:
 
 def test_endpoint_setup_switches_coupled_operation_shape() -> None:
     with create_pipe_input() as pipe_input:
-        # Shift-Tab reaches Operation Shape, Right stages Recursive, and two
-        # Tabs cross Source to Continue. The frozen target is not a focus stop.
-        pipe_input.send_text("\x1b[Z\x1b[C\t\t\r")
+        # Operation Shape owns first focus. Right stages Recursive and two
+        # Tabs cross Source to Continue; the frozen target is not a focus stop.
+        pipe_input.send_text("\x1b[C\t\t\r")
         returned = run_endpoint_setup(
             _spec(),
             app_input=pipe_input,

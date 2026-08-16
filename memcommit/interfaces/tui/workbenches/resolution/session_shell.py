@@ -36,22 +36,31 @@ from memcommit.interfaces.tui.components.tree_row import navigable_tree_row_pref
 from memcommit.interfaces.tui.components.multiline_input import (
     build_framed_multiline_input,
 )
-from memcommit.interfaces.console.terminal import require_interactive_terminal
-from memcommit.interfaces.console.text import safe_terminal_text
-from memcommit.interfaces.tui.components.frame import (
-    TuiRegion,
-    bind_focused_frame_style,
-    build_tui_frame,
-)
-from memcommit.interfaces.tui.components.scrollable_pane import WrappedScrollbarMargin
-from memcommit.interfaces.tui.core.keybindings import (
-    NavigationAccelerator,
-    bind_case_insensitive_key,
+from memcommit.interfaces.tui.components.plain_text_clipboard import (
+    copy_plain_text,
 )
 from memcommit.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
     focused_control_style,
+)
+from memcommit.interfaces.tui.core.keybindings import (
+    NavigationAccelerator,
+    bind_case_insensitive_key,
+)
+from memcommit.interfaces.tui.components.frame import (
+    TuiRegion,
+    bind_focused_frame_style,
+    build_tui_frame,
+)
+from memcommit.interfaces.tui.components.scrollable_pane import (
+    WrappedScrollbarMargin,
+)
+from memcommit.interfaces.console.terminal import (
+    require_interactive_terminal,
+)
+from memcommit.interfaces.console.text import (
+    safe_terminal_text,
 )
 from memcommit.interfaces.tui.core.text_layout import (
     elide_terminal_text,
@@ -2907,6 +2916,39 @@ def run_resolution_workbench_shell(
         right_margins=[WrappedScrollbarMargin(display_arrows=True)],
     )
 
+    def current_viewer_plain_text(*, whole_document: bool) -> str:
+        """Project current rendered Viewer chrome to the shared y/Y contract."""
+
+        fragments = (
+            split_view_fragments()
+            if split_viewer_items
+            else resolution_workbench_fragments(
+                current_view(),
+                current_navigation,
+                other_direction_focused=other_direction["focused"],
+            )
+        )
+        text_parts: list[str] = []
+        anchors: list[int] = []
+        offset = 0
+        for style, text in fragments:
+            if style == "[SetCursorPosition]":
+                anchors.append(offset)
+                continue
+            text_parts.append(text)
+            offset += len(text)
+        complete = "".join(text_parts)
+        if whole_document or not anchors:
+            return complete.strip()
+        if len(anchors) >= 2 and anchors[-1] > anchors[0]:
+            focused = complete[anchors[0] : anchors[-1]].strip()
+            if focused:
+                return focused
+        anchor = min(anchors[0], len(complete))
+        line_start = complete.rfind("\n", 0, anchor) + 1
+        line_end = complete.find("\n", anchor)
+        return complete[line_start : line_end if line_end >= 0 else None].strip()
+
     def responses_fragments() -> list[tuple[str, str]]:
         target = sync_response_state()
         if target is None:
@@ -3587,6 +3629,26 @@ def run_resolution_workbench_shell(
         navigation_accelerator.reset()
         move(-1_000_000)
         event.app.invalidate()
+
+    def copy_current_viewer(event, *, whole_document: bool) -> None:
+        copied = copy_plain_text(
+            current_viewer_plain_text(whole_document=whole_document),
+            success_message=(
+                "complete current document"
+                if whole_document
+                else "focused semantic unit"
+            ),
+        )
+        set_status(copied.message)
+        event.app.invalidate()
+
+    @bindings.add("y", filter=has_focus(body_control), eager=True)
+    def _copy_focused_viewer(event) -> None:
+        copy_current_viewer(event, whole_document=False)
+
+    @bindings.add("Y", filter=has_focus(body_control), eager=True)
+    def _copy_complete_viewer(event) -> None:
+        copy_current_viewer(event, whole_document=True)
 
     @bindings.add("right", filter=~writable_input_focused)
     def _right(event) -> None:
@@ -4516,6 +4578,8 @@ def run_resolution_workbench_shell(
             or get_app().layout.has_focus(destination_input)
         ):
             actions.append("H Help")
+        if get_app().layout.has_focus(body_control):
+            actions.append("y/Y copy")
         actions.append("Q close")
         state_label = (
             f" READ ONLY · {safe_terminal_text(active_view.status)} ·"

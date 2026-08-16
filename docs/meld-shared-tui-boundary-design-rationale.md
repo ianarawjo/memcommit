@@ -70,6 +70,11 @@ The screenshots are behavior evidence, not a second implementation. They must
 record exact keys, terminal size, profile/current Context, and durable mutation
 at each step.
 
+The relocated Resolution Viewer also follows the shared read-only clipboard
+contract: lowercase `y` copies the focused semantic unit and uppercase `Y`
+copies the complete current document. Both keys are active only while the
+Viewer owns focus; they do not submit a response or change session state.
+
 ## Progress
 
 - `1b0e6ae8` extended the shared Endpoint Setup contract and proved symmetric
@@ -85,9 +90,21 @@ at each step.
   directly, while `commands.meld_shell` is an import-only compatibility facade.
   The relocation preserves the current Resolution Workbench projection and
   does not move provider, cache, receipt, or Apply semantics into presentation.
+- `bb61fd9d` recorded the physical TUI migration separately from the still
+  command-owned provider, cache, session-lifecycle, and Apply boundaries.
+- `ef48b073` moved Compare report rendering to a neutral presenter, and
+  `adad4cda` moved the established Resolution Session implementation under the
+  interface workbench owner. Both old command paths remain import-only
+  compatibility facades.
+- `84bd82a3` split the terminal primitive facade into narrow interface-owned
+  frame, input, report-card, tree-row, and viewport components.
+- `935ec9b5` moved the remaining Resolution dependencies—Help, Save Location,
+  and semantic detail—under `interfaces.tui`. An AST-based regression test now
+  rejects every `memcommit.interfaces` import of `memcommit.commands`.
 - `docs/screenshots/mem-meld-shared-tui-20260815` records 20 ordered 180x52
   true-color PTY states for both setup shapes and the relocated session screen.
   The captured setup receipts are process-local, sources and Result remain
   byte-identical, no checkpoint or Meld session is created, and provider calls
-  remain zero. The migration regression sets pass with 171 component/operation
-  tests, 177 Meld tests, 10 Grant-focused tests, and 27 Study-prewarm tests.
+  remain zero. The final migration regression sets pass with 340
+  Meld/component/Resolution boundary tests, 10 Grant-focused tests, and 35
+  Study-prewarm tests.

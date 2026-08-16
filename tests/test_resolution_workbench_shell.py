@@ -11,7 +11,9 @@ import memcommit.interfaces.tui.workbenches.resolution.session_shell as resoluti
 from memcommit.commands.semantic_detail_renderer import (
     semantic_detail_block_fragments,
 )
-from memcommit.interfaces.tui.core.theme import MEMCOMMIT_TUI_STYLE
+from memcommit.interfaces.tui.core.theme import (
+    MEMCOMMIT_TUI_STYLE,
+)
 from memcommit.commands.resolution_workbench_shell import (
     RESOLUTION_WORKBENCH_STYLE,
     ResolutionDestination,
@@ -107,6 +109,28 @@ def _run(
             app_output=DummyOutput(),
             require_tty=False,
         )
+
+
+def test_resolution_viewer_y_and_Y_share_focused_and_complete_copy_contract(
+    monkeypatch,
+):
+    copied: list[tuple[str, str]] = []
+
+    def fake_copy(text: str, *, success_message: str, writer=None):
+        del writer
+        copied.append((text, success_message))
+        return type("Receipt", (), {"message": "COPIED"})()
+
+    monkeypatch.setattr(resolution_shell_module, "copy_plain_text", fake_copy)
+
+    action = _run(_view(_item("issue-1")), "yYq")
+
+    assert action.kind == "CLOSE"
+    assert copied[0][1] == "focused semantic unit"
+    assert "Issue issue-1" in copied[0][0]
+    assert copied[1][1] == "complete current document"
+    assert "Resolve Meld" in copied[1][0]
+    assert "Review the current resolution" in copied[1][0]
 
 
 def test_nested_arrow_and_enter_option_selection_returns_uid_bound_comment():
