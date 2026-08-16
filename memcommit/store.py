@@ -4585,6 +4585,101 @@ class MemoryStore:
         ctx._store_digest = context_record_digest(ctx)
         return checkpoint
 
+    def save_context_command_batch(
+        self,
+        entries: Iterable[tuple[Context, AutoCheckpoint, str]],
+    ) -> tuple[Checkpoint, ...]:
+        """Persist one existing multi-Context command with exception rollback.
+
+        Each entry carries its own already-reviewed Context digest.  The
+        complete name set remains locked from the first revalidation through
+        the final write, so application adapters can publish a command unit
+        without inventing a whole-graph digest.  This is exception-atomic;
+        like the other multi-Context prototype paths, a durable crash journal
+        is intentionally deferred.
+        """
+
+        records = tuple(entries)
+        if not records:
+            raise ValueError("At least one Context command entry is required.")
+        if any(
+            not isinstance(context, Context)
+            or not isinstance(checkpoint, AutoCheckpoint)
+            or not isinstance(expected_digest, str)
+            for context, checkpoint, expected_digest in records
+        ):
+            raise TypeError("Invalid Context command batch entry.")
+        names = tuple(context.name for context, _, _ in records)
+        if len(names) != len(set(names)):
+            raise ValueError("Context command batch contains duplicate names.")
+        for name in names:
+            validate_context_name(name)
+
+        with self._command_write_lock():
+            with self._context_graph_lock(exclusive=False):
+                with self._context_write_locks(names):
+                    original_records: dict[str, dict[str, object]] = {}
+                    for context, _, expected_digest in records:
+                        try:
+                            current = self.load_direct(context.name)
+                        except FileNotFoundError as error:
+                            raise ConcurrentContextUpdateError(
+                                f"Context '{context.name}' no longer exists."
+                            ) from error
+                        if (
+                            current.uid != context.uid
+                            or context_record_digest(current) != expected_digest
+                        ):
+                            raise ConcurrentContextUpdateError(
+                                f"Context '{context.name}' changed before the "
+                                "command could be saved."
+                            )
+                        original_records[context.name] = current.to_dict()
+
+                    created: list[tuple[str, Checkpoint]] = []
+                    written: list[str] = []
+                    try:
+                        for context, auto_checkpoint, expected_digest in records:
+                            checkpoint = self._save_locked(
+                                context,
+                                auto_checkpoint,
+                                expected_context_digest=expected_digest,
+                            )
+                            if checkpoint is None:
+                                raise RuntimeError(
+                                    "Context command batch created no checkpoint."
+                                )
+                            written.append(context.name)
+                            created.append((context.name, checkpoint))
+                    except Exception:
+                        rollback_error: Exception | None = None
+                        for name in written:
+                            try:
+                                _write_json_atomic(
+                                    self._context_file(name),
+                                    original_records[name],
+                                )
+                            except Exception as candidate:
+                                rollback_error = rollback_error or candidate
+                        for name, checkpoint in created:
+                            try:
+                                self._remove_checkpoint_uid_locked(
+                                    name,
+                                    checkpoint.uid,
+                                )
+                            except Exception as candidate:
+                                rollback_error = rollback_error or candidate
+                        if rollback_error is not None:
+                            raise RuntimeError(
+                                "Context command batch failed and could not be "
+                                "fully rolled back."
+                            ) from rollback_error
+                        raise
+
+        for context, _, _ in records:
+            context._store_digest = context_record_digest(context)
+        return tuple(checkpoint for _, checkpoint in created)
+
     def save_meld_target(
         self,
         ctx: Context,

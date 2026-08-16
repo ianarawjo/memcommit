@@ -378,6 +378,14 @@ def _context_parts(
             effective = snapshot
             continue
 
+        if command in {"ground", "ground-undo"}:
+            # Ground owns a root-scoped command stack over its physical lane
+            # Contexts.  Letting these checkpoints enter the Profile-global
+            # stack would make ``mem undo`` consume an in-workspace action and
+            # would couple unrelated Ground roots by timestamp.
+            effective = snapshot
+            continue
+
         if command == "revert":
             target_uid = args.get("target_uid")
             target = records.get(target_uid) if isinstance(target_uid, str) else None
