@@ -152,6 +152,14 @@ async def _exercise_stdio(command: str, root: Path, workdir: Path) -> dict[str, 
                     "context_name": "smoke/target",
                 },
             )
+            shown = await session.call_tool(
+                "memcommit_show",
+                {
+                    "version": 1,
+                    "kind": "inspect",
+                    "context_name": "smoke/target",
+                },
+            )
             grounding = await session.call_tool(
                 "memcommit_atomize_grounding",
                 {
@@ -247,6 +255,7 @@ async def _exercise_stdio(command: str, root: Path, workdir: Path) -> dict[str, 
     assert initialized.server_info.name == "memcommit"
     assert [tool.name for tool in listed.tools] == [
         "memcommit_help",
+        "memcommit_show",
         "memcommit_query",
         "memcommit_quality_find",
         "memcommit_add_memories",
@@ -265,6 +274,12 @@ async def _exercise_stdio(command: str, root: Path, workdir: Path) -> dict[str, 
     assert help_result.structured_content["result"]["effect"] == "NONE"
     assert added.is_error is False
     assert added.structured_content["ok"] is True
+    assert shown.is_error is False
+    assert shown.structured_content["result"]["kind"] == "context"
+    assert [
+        item["content"] for item in shown.structured_content["result"]["items"]
+    ] == ["First installed MCP Memory.", "Second Memory."]
+    assert shown.structured_content["result"]["effect"] == "NONE"
     assert grounding.is_error is False
     assert grounding.structured_content["ok"] is True
     assert grounding.structured_content["result"]["session"]["state"] == (
@@ -304,6 +319,7 @@ async def _exercise_stdio(command: str, root: Path, workdir: Path) -> dict[str, 
         "tools": [tool.name for tool in listed.tools],
         "help": help_result.structured_content,
         "add": added.structured_content,
+        "show": shown.structured_content,
         "atomize_grounding": grounding.structured_content,
         "atomize": atomize.structured_content,
         "atomize_apply": atomize_apply.structured_content,

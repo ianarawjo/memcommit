@@ -59,7 +59,7 @@ architectural-closure conclusion. `Curated state` comes from the reviewed
 | `sever` | `memcommit.commands.sever:cmd` | `memcommit.sever_application`<br>`memcommit.sever_runtime` | — | — | — | `docs/sever-application-boundary-matrix.md` | `BOUNDED_INTERNAL` | `CLOSED` |
 | `share` | `memcommit.commands.share:cmd` | — | — | — | — | — | `COMMAND_ONLY` | `UNREVIEWED` |
 | `shell-init` | `memcommit.commands.shell_init:cmd` | — | — | — | — | — | `COMMAND_ONLY` | `UNREVIEWED` |
-| `show` | `memcommit.commands.show:cmd` | — | — | — | — | — | `COMMAND_ONLY` | `UNREVIEWED` |
+| `show` | `memcommit.commands.show:cmd` | `memcommit.show_application`<br>`memcommit.show_runtime` | — | `show` | `memcommit.interfaces.agent.show` | `docs/show-application-boundary-matrix.md` | `BOUNDED_INTERNAL` | `CLOSED` |
 | `status` | `memcommit.commands.status:cmd` | — | — | — | — | — | `COMMAND_ONLY` | `UNREVIEWED` |
 | `summarize` | `memcommit.commands.summarize:cmd` | `memcommit.summarize_application`<br>`memcommit.summarize_runtime` | `memcommit.interfaces.tui.operations.summarize`<br>`memcommit.interfaces.tui.operations.summarize.adapter`<br>`memcommit.interfaces.tui.operations.summarize.model`<br>`memcommit.interfaces.tui.operations.summarize.screen` | — | — | `docs/summarize-application-boundary-matrix.md` | `BOUNDED_INTERNAL` | `CLOSED` |
 | `switch` | `memcommit.commands.switch:cmd` | `memcommit.switch_application`<br>`memcommit.switch_runtime` | `memcommit.interfaces.tui.operations.switch`<br>`memcommit.interfaces.tui.operations.switch.model`<br>`memcommit.interfaces.tui.operations.switch.screen` | — | — | `docs/switch-application-boundary-matrix.md` | `BOUNDED_INTERNAL` | `CLOSED` |

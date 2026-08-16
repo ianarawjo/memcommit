@@ -111,6 +111,13 @@
         ],
         "reason": "Analysis, cache reuse, saved-session review, destination revision, and Apply execute through typed application/runtime boundaries."
       },
+      "show": {
+        "evidence": [
+          "docs/show-application-boundary-matrix.md",
+          "docs/show-application-design-rationale.md"
+        ],
+        "reason": "CLI, Python, agent, MCP, and Find follow-up routes share one live direct-inspection application boundary with one-snapshot targeting, READ-Grant projection, and structural query-only concealment."
+      },
       "summarize": {
         "evidence": [
           "docs/summarize-application-boundary-matrix.md"
@@ -177,7 +184,6 @@
       "review",
       "share",
       "shell-init",
-      "show",
       "status",
       "trace",
       "translate",

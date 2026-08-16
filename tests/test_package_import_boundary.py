@@ -54,6 +54,7 @@ blocked = (
     'memcommit.api._operations.ground_elaborate',
     'memcommit.api._operations.meld',
     'memcommit.api._operations.query',
+    'memcommit.api._operations.show',
     'memcommit.add_application',
     'memcommit.comparison_execution',
     'memcommit.distill_application',
@@ -64,6 +65,7 @@ blocked = (
     'memcommit.ground_elaborate',
     'memcommit.meld_application',
     'memcommit.operations.query.ordinary_application',
+    'memcommit.show_application',
 )
 assert MemCommitClient.__name__ == 'MemCommitClient'
 assert not [name for name in blocked if name in sys.modules]
@@ -89,10 +91,46 @@ for name in (
     'memcommit.api._operations.ground_elaborate',
     'memcommit.api._operations.meld',
     'memcommit.api._operations.query',
+    'memcommit.api._operations.show',
 ):
     importlib.import_module(name)
 assert 'memcommit.api.client' not in sys.modules
 """
+    )
+
+    assert completed.returncode == 0, completed.stderr
+
+
+def test_selected_show_loads_only_its_read_operation_assembly(tmp_path):
+    environment = os.environ.copy()
+    environment["MEMCOMMIT_IMPORT_TEST_ROOT"] = str(tmp_path / "store")
+    completed = _run_fresh(
+        """
+import os
+from pathlib import Path
+import sys
+import memcommit.ops as ops
+from memcommit.api import MemCommitClient
+from memcommit.store import MemoryStore
+
+root = Path(os.environ['MEMCOMMIT_IMPORT_TEST_ROOT'])
+store = MemoryStore(root=root)
+context = ops.init('show/import-boundary')
+ops.add(context, 'visible')
+store.save(context)
+store.set_current(context.name)
+result = MemCommitClient(root=root).show()
+assert result.name == context.name
+assert 'memcommit.api._operations.show' in sys.modules
+assert 'memcommit.show_application' in sys.modules
+assert 'memcommit.show_runtime' in sys.modules
+assert 'memcommit.api._operations.add' not in sys.modules
+assert 'memcommit.api._operations.query' not in sys.modules
+assert 'memcommit.api._operations.compare' not in sys.modules
+assert 'memcommit.api._operations.meld' not in sys.modules
+assert 'memcommit.operations.query.ordinary_application' not in sys.modules
+""",
+        environment=environment,
     )
 
     assert completed.returncode == 0, completed.stderr

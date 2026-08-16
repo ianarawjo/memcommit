@@ -80,6 +80,10 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
     assert by_operation["compare"].curated_state == "CLOSED"
     assert by_operation["help"].curated_state == "CLOSED"
     assert by_operation["switch"].curated_state == "CLOSED"
+    assert "memcommit.show_application" in by_operation["show"].application_modules
+    assert "show" in by_operation["show"].public_methods
+    assert "memcommit.interfaces.agent.show" in by_operation["show"].agent_modules
+    assert by_operation["show"].curated_state == "CLOSED"
     assert by_operation["branch"].curated_state == "UNREVIEWED"
     assert {record.curated_state for record in snapshot.operations} == {
         "CLOSED",
@@ -95,9 +99,9 @@ def test_curated_classification_covers_all_operations_conservatively() -> None:
         for state in {record.curated_state for record in snapshot.operations}
     }
 
-    assert len(states["CLOSED"]) == 18
+    assert len(states["CLOSED"]) == 19
     assert states["MIXED"] == {"find", "update"}
-    assert len(states["UNREVIEWED"]) == 40
+    assert len(states["UNREVIEWED"]) == 39
     assert not states.keys() & {"LEGACY", "N/A"}
 
 

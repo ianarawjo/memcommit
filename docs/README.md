@@ -148,6 +148,11 @@ considered sufficient design history.
   records the typed locator/READ/current-CAS use case, neutral Context picker,
   independent Switch TUI adapter, and Ground's process-local direct-picker
   reuse without sharing its locator-only recommendation policy.
+- [`show-application-design-rationale.md`](show-application-design-rationale.md)
+  and [`show-application-boundary-matrix.md`](show-application-boundary-matrix.md)
+  define one live direct-inspection use case shared by CLI, Python, agent, and
+  MCP routes, including one-snapshot Context targeting, READ-Grant projection,
+  and structural query-only concealment.
 - [`tui-component-architecture-design-rationale.md`](tui-component-architecture-design-rationale.md)
   records the interface-owned frame, focus, scrollable-pane, and Viewer
   hierarchy, the no-facade consumer migration, Summarize routing contract,

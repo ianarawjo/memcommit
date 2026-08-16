@@ -42,6 +42,7 @@ from memcommit.api.query import (
 )
 from memcommit.api.quality_find import QualityFindResult
 from memcommit.api.resolve import ResolveAnalysisResult, ResolveApplyResult
+from memcommit.api.show import ShowResult
 from memcommit.api.semantic import (
     DistillApplyResult,
     DistillProposal,
@@ -172,6 +173,18 @@ class MemCommitClient:
         from memcommit.api._operations.help import describe_operation
 
         return describe_operation(operation_name)
+
+    def show(
+        self,
+        selector: str | None = None,
+        *,
+        context_name: str | None = None,
+    ) -> ShowResult:
+        """Inspect one readable Context or direct item without side effects."""
+
+        from memcommit.api._operations.show import show
+
+        return show(self._runtime, selector, context_name=context_name)
 
     def fit(
         self,

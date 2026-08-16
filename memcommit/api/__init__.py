@@ -125,6 +125,20 @@ __all__ = [
     "SemanticInputError",
     "SemanticProviderFailure",
     "SemanticStorageError",
+    "ShowAuthorityError",
+    "ShowContextError",
+    "ShowContextResult",
+    "ShowDirectItemResult",
+    "ShowEmbeddedContextResult",
+    "ShowError",
+    "ShowExecutionError",
+    "ShowInputError",
+    "ShowMemoryReferenceResult",
+    "ShowMemoryResult",
+    "ShowQueryViewResult",
+    "ShowResult",
+    "ShowSourceResult",
+    "ShowStorageError",
 ]
 
 
@@ -167,6 +181,19 @@ _LAZY_EXPORTS = {
     "MemCommitClient": ("memcommit.api.client", "MemCommitClient"),
     "HelpCatalogResult": ("memcommit.api.help", "HelpCatalogResult"),
     "OperationHelpResult": ("memcommit.api.help", "OperationHelpResult"),
+    **{
+        name: ("memcommit.api.show", name)
+        for name in (
+            "ShowContextResult",
+            "ShowDirectItemResult",
+            "ShowEmbeddedContextResult",
+            "ShowMemoryReferenceResult",
+            "ShowMemoryResult",
+            "ShowQueryViewResult",
+            "ShowResult",
+            "ShowSourceResult",
+        )
+    },
     **{
         f"Comparison{name}": ("memcommit.api.compare", f"Comparison{name}")
         for name in (

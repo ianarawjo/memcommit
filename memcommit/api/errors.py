@@ -13,6 +13,30 @@ class HelpInputError(HelpError):
     """The caller requested an unknown or malformed operation name."""
 
 
+class ShowError(MemCommitError):
+    """Base class for public read-only Show failures."""
+
+
+class ShowInputError(ShowError):
+    """The caller supplied an invalid or ambiguous direct-item selector."""
+
+
+class ShowContextError(ShowError):
+    """The requested Show Context is unavailable."""
+
+
+class ShowAuthorityError(ShowError):
+    """The active Profile or Grant does not authorize Show."""
+
+
+class ShowStorageError(ShowError):
+    """Show could not safely read local durable state."""
+
+
+class ShowExecutionError(ShowError):
+    """Authorized Show execution returned no valid immutable result."""
+
+
 class AddError(MemCommitError):
     """Base class for public Add failures."""
 
@@ -287,4 +311,10 @@ __all__ = [
     "SemanticInputError",
     "SemanticProviderFailure",
     "SemanticStorageError",
+    "ShowAuthorityError",
+    "ShowContextError",
+    "ShowError",
+    "ShowExecutionError",
+    "ShowInputError",
+    "ShowStorageError",
 ]

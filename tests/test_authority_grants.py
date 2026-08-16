@@ -11,6 +11,7 @@ import memcommit.ops as ops
 import memcommit.commands.find as find_command
 import memcommit.commands.query as query_command
 import memcommit.commands.rationale as rationale_command
+from memcommit.api import MemCommitClient, ShowContextResult
 from memcommit.cli import app
 from memcommit.authority.access import resolve_context_access
 from memcommit.commands.memory_picker import MemoryReportTargetSelection
@@ -150,6 +151,31 @@ def test_ls_projects_read_view_and_masks_narrower_query_view(
     assert "READ GRANT · PERMISSIONS CREATE + READ + UPDATE" in contexts.output
     assert "QUERY GRANT · PERMISSIONS QUERY" in contexts.output
     assert "FROM task-1-campus-authority" in contexts.output
+
+
+def test_public_show_reuses_the_same_read_grant_and_concealment_boundary(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    _grant_fixture(isolated_store, tmp_path, monkeypatch)
+
+    result = MemCommitClient().show(context_name="campus-wiki")
+
+    assert isinstance(result, ShowContextResult)
+    assert result.name == "campus-wiki"
+    assert result.source.access == "READ_GRANT"
+    assert result.source.states == ("READ_ONLY",)
+    assert PUBLIC in [
+        nested.content
+        for item in result.items
+        if item.kind == "context" and item.name == "campus-wiki/public"
+        for nested in MemCommitClient().show(context_name=item.name).items
+    ]
+    assert "campus-wiki/construction-details" in [
+        item.name for item in result.items if item.kind == "query_view"
+    ]
+    assert SECRET not in repr(result)
 
 
 def test_status_keeps_read_only_projection_and_shows_granted_target_permissions(
