@@ -84,6 +84,15 @@ def test_meld_command_contains_no_initial_cache_or_provisional_session_logic():
     )
 
 
+def test_meld_command_calls_the_operation_owned_apply_service_directly():
+    command_path = Path(meld_runtime.__file__).with_name("commands") / "meld.py"
+    source = command_path.read_text(encoding="utf-8")
+
+    assert "execute_meld_apply(" in source
+    assert "run_application_flow" not in source
+    assert "MeldApplicationFlowPort" not in source
+
+
 def test_python_client_uses_the_combined_meld_turn_runtime():
     client_path = Path(meld_runtime.__file__).with_name("api") / "client.py"
     operation_path = client_path.with_name("_operations") / "meld.py"

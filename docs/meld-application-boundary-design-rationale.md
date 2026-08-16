@@ -119,3 +119,12 @@ to decide whether to show progress and then executes that same value; the
 Python facade calls the combined `execute_meld_turn` service. Provider
 connection timeout policy also moved into `meld_runtime`, so an interface can
 observe progress but cannot silently choose a weaker semantic-call bound.
+
+The final CLI Apply wrapper now calls `execute_meld_apply` directly. The
+discarded outer application flow contributed only an identity review step and
+duplicated the receipt checks already enforced by `run_meld_apply`; it owned no
+authorization, CAS, recovery, rollback, or checkpoint behavior. Keeping that
+wrapper would therefore create a second apparent lifecycle without adding a
+safety boundary. The standalone generic flow and legacy Meld adapter remain
+available for compatibility, but they are no longer part of production Meld
+command execution.

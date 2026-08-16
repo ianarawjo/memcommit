@@ -91,6 +91,10 @@ validation.
   that exact version; it never deletes the prior review or creates a target.
 - Apply never calls the provider and consumes only the exact reviewed session
   version. Recovery must match its checkpoint and complete post-image.
+- CLI Apply calls the same typed `execute_meld_apply` service as Python and
+  agent adapters. It does not wrap that service in a second review/apply flow;
+  route selection, CAS, recovery, rollback, and receipt validation remain in
+  the operation boundary.
 - `commands.meld` contains no target/session publication primitive. The CLI
   retains locator grammar, progress, rendering, and TUI orchestration. It also
   contains no ordered-Compare cache lookup, directional prewarm lookup, or
@@ -113,11 +117,11 @@ validation.
 - Grant-owner authority cases are additionally selected from
   `test_granted_impact.py` and `test_authority_grants.py`.
 
-## Remaining verification boundary
+## Completion status
 
 The interactive Meld screen and Endpoint Setup are now owned by
 `interfaces.tui`; compatibility command paths are import-only. Session and
-Apply execution are terminal-independent. The remaining pass is an audit of
-the command wrappers around follow-up turns and Apply, followed by the complete
-regression and import-boundary suite; it must not invent another session schema
-or move presentation again.
+Apply execution are terminal-independent. Follow-up turns use one prepared
+cache/provider/CAS lifecycle, and CLI Apply enters the typed operation service
+directly. The final complete regression and import-boundary pass closes this
+audit without introducing another session schema or moving presentation.
