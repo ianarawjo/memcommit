@@ -139,6 +139,10 @@ async def _exercise_stdio(command: str, root: Path, workdir: Path) -> dict[str, 
         async with ClientSession(*streams) as session:
             initialized = await session.initialize()
             listed = await session.list_tools()
+            help_result = await session.call_tool(
+                "memcommit_help",
+                {"version": 1, "kind": "describe", "operation": "compare"},
+            )
             added = await session.call_tool(
                 "memcommit_add_memories",
                 {
@@ -242,6 +246,7 @@ async def _exercise_stdio(command: str, root: Path, workdir: Path) -> dict[str, 
 
     assert initialized.server_info.name == "memcommit"
     assert [tool.name for tool in listed.tools] == [
+        "memcommit_help",
         "memcommit_query",
         "memcommit_quality_find",
         "memcommit_add_memories",
@@ -254,6 +259,9 @@ async def _exercise_stdio(command: str, root: Path, workdir: Path) -> dict[str, 
         "memcommit_fit",
         "memcommit_resolve",
     ]
+    assert help_result.is_error is False
+    assert help_result.structured_content["result"]["operation"]["name"] == "compare"
+    assert help_result.structured_content["result"]["effect"] == "NONE"
     assert added.is_error is False
     assert added.structured_content["ok"] is True
     assert grounding.is_error is False
@@ -293,6 +301,7 @@ async def _exercise_stdio(command: str, root: Path, workdir: Path) -> dict[str, 
         "server_name": initialized.server_info.name,
         "server_version": initialized.server_info.version,
         "tools": [tool.name for tool in listed.tools],
+        "help": help_result.structured_content,
         "add": added.structured_content,
         "atomize_grounding": grounding.structured_content,
         "atomize": atomize.structured_content,

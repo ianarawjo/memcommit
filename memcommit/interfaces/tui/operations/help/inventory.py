@@ -46,11 +46,10 @@ from memcommit.interfaces.tui.components.horizontal_choice import (
     render_horizontal_choice,
 )
 from memcommit.help_catalog import (
-    OPERATION_HELP_BY_NAME,
     OperationHelp,
     compose_operation_help,
-    operation_help,
 )
+from memcommit.help_application import list_operation_help
 
 
 COMMAND_ANNOTATIONS = {
@@ -721,6 +720,9 @@ def command_entries(root: typer.Context) -> list[CommandEntry]:
 
     commands = _visible_commands(root)
     visible_names = {name for name, _ in commands}
+    operation_help_by_name = {
+        operation.name: operation for operation in list_operation_help()
+    }
     configured_names = (
         COMMAND_ANNOTATIONS.keys()
         | COMMAND_DISPLAY_ALIASES.keys()
@@ -770,8 +772,8 @@ def command_entries(root: typer.Context) -> list[CommandEntry]:
         )
         raise typer.Exit(1)
 
-    missing_operation_help = sorted(visible_names - OPERATION_HELP_BY_NAME.keys())
-    stale_operation_help = sorted(OPERATION_HELP_BY_NAME.keys() - visible_names)
+    missing_operation_help = sorted(visible_names - operation_help_by_name.keys())
+    stale_operation_help = sorted(operation_help_by_name.keys() - visible_names)
     if missing_operation_help or stale_operation_help:
         details = []
         if missing_operation_help:
@@ -791,7 +793,7 @@ def command_entries(root: typer.Context) -> list[CommandEntry]:
         name
         for name, command in commands
         if " ".join((getattr(command, "help", None) or "").split())
-        != operation_help(name).summary
+        != operation_help_by_name[name].summary
     )
     if description_mismatches:
         typer.secho(
@@ -815,7 +817,7 @@ def command_entries(root: typer.Context) -> list[CommandEntry]:
                 + COMMAND_RELATED_FORMS.get(name, ())
             ),
             aliases=COMMAND_DISPLAY_ALIASES.get(name, ()),
-            operation_help=operation_help(name),
+            operation_help=operation_help_by_name[name],
         )
         for name, command in commands
     ]

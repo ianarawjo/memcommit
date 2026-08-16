@@ -139,6 +139,11 @@ considered sufficient design history.
   records the first verified internal TUI-independent use case plus its plain
   and TUI console adapters, callable and provider-security matrices,
   compatibility evidence, and remaining public API gates.
+- [`help-application-design-rationale.md`](help-application-design-rationale.md)
+  and [`help-application-boundary-matrix.md`](help-application-boundary-matrix.md)
+  define one Store-free operation-discovery query shared by plain/TUI Help,
+  public Python, agent, and MCP projections while keeping CLI syntax and layout
+  interface-owned.
 - [`tui-component-architecture-design-rationale.md`](tui-component-architecture-design-rationale.md)
   records the interface-owned frame, focus, scrollable-pane, and Viewer
   hierarchy, the no-facade consumer migration, Summarize routing contract,

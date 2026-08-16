@@ -44,6 +44,11 @@ from memcommit.interfaces.agent.fit import (
     FitAgentAdapter,
     fit_agent_tool_schema,
 )
+from memcommit.interfaces.agent.help import (
+    HELP_AGENT_TOOL_NAME,
+    HelpAgentAdapter,
+    help_agent_tool_schema,
+)
 from memcommit.interfaces.agent.query import (
     QUERY_AGENT_TOOL_NAME,
     QueryAgentAdapter,
@@ -229,6 +234,7 @@ def build_default_agent_tool_registry(client: MemCommitClient) -> AgentToolRegis
 
     if not isinstance(client, MemCommitClient):
         raise TypeError("Default agent tool registry requires a MemCommitClient.")
+    help_adapter = HelpAgentAdapter(client)
     query = QueryAgentAdapter(client)
     quality_find = QualityFindAgentAdapter(client)
     add = AddAgentAdapter(client)
@@ -242,6 +248,11 @@ def build_default_agent_tool_registry(client: MemCommitClient) -> AgentToolRegis
     resolve = ResolveAgentAdapter(client)
     return AgentToolRegistry(
         (
+            AgentToolBinding(
+                name=HELP_AGENT_TOOL_NAME,
+                schema_factory=help_agent_tool_schema,
+                handler=help_adapter.invoke,
+            ),
             AgentToolBinding(
                 name=QUERY_AGENT_TOOL_NAME,
                 schema_factory=query_agent_tool_schema,

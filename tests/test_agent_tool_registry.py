@@ -20,6 +20,7 @@ from memcommit.interfaces.agent import (
     ELABORATE_AGENT_TOOL_NAME,
     FIT_AGENT_TOOL_NAME,
     QUALITY_FIND_AGENT_TOOL_NAME,
+    HELP_AGENT_TOOL_NAME,
     QUERY_AGENT_TOOL_NAME,
     RESOLVE_AGENT_TOOL_NAME,
     AgentToolBinding,
@@ -75,6 +76,7 @@ def test_default_registry_discovers_fresh_frozen_shipped_schemas(tmp_path):
     )
 
     assert registry.tool_names == (
+        HELP_AGENT_TOOL_NAME,
         QUERY_AGENT_TOOL_NAME,
         QUALITY_FIND_AGENT_TOOL_NAME,
         ADD_AGENT_TOOL_NAME,
@@ -94,14 +96,29 @@ def test_default_registry_discovers_fresh_frozen_shipped_schemas(tmp_path):
     json.dumps(first)
 
     first[0]["name"] = "changed"
-    first[2]["parameters"]["required"].clear()
+    first[3]["parameters"]["required"].clear()
     third = registry.tool_schemas()
-    assert third[0]["name"] == QUERY_AGENT_TOOL_NAME
-    assert third[2]["parameters"]["required"] == [
+    assert third[0]["name"] == HELP_AGENT_TOOL_NAME
+    assert third[3]["parameters"]["required"] == [
         "version",
         "kind",
         "contents",
     ]
+
+
+def test_default_registry_help_is_a_provider_free_entrypoint(tmp_path):
+    root = tmp_path / "missing-store"
+    registry = build_default_agent_tool_registry(MemCommitClient(root=root))
+
+    response = registry.invoke(
+        HELP_AGENT_TOOL_NAME,
+        {"version": 1, "kind": "describe", "operation": "query"},
+    )
+
+    assert response["ok"] is True
+    assert response["result"]["operation"]["name"] == "query"
+    assert response["result"]["effect"] == "NONE"
+    assert not root.exists()
 
 
 def test_registration_freezes_schema_factory_once():
@@ -327,3 +344,4 @@ def test_registry_depends_only_on_public_client_and_agent_adapters():
     assert "memcommit.interfaces.agent.atomize_grounding" in imported
     assert "memcommit.interfaces.agent.query" in imported
     assert "memcommit.interfaces.agent.resolve" in imported
+    assert "memcommit.interfaces.agent.help" in imported

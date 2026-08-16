@@ -60,6 +60,13 @@ from memcommit.interfaces.agent.fit import (
     FitAgentAdapter,
     fit_agent_tool_schema,
 )
+from memcommit.interfaces.agent.help import (
+    HELP_AGENT_CONTRACT_VERSION,
+    HELP_AGENT_TOOL_NAME,
+    HelpAgentAdapter,
+    HelpAgentKind,
+    help_agent_tool_schema,
+)
 from memcommit.interfaces.agent.registry import (
     AGENT_TOOL_REGISTRY_VERSION,
     AgentToolBinding,
@@ -116,6 +123,10 @@ __all__ = [
     "FIT_AGENT_CONTRACT_VERSION",
     "FIT_AGENT_TOOL_NAME",
     "FitAgentAdapter",
+    "HELP_AGENT_CONTRACT_VERSION",
+    "HELP_AGENT_TOOL_NAME",
+    "HelpAgentAdapter",
+    "HelpAgentKind",
     "QUERY_AGENT_CONTRACT_VERSION",
     "QUERY_AGENT_ERROR_MESSAGE_LIMIT",
     "QUERY_AGENT_TOOL_NAME",
@@ -136,6 +147,7 @@ __all__ = [
     "distill_agent_tool_schema",
     "elaborate_agent_tool_schema",
     "fit_agent_tool_schema",
+    "help_agent_tool_schema",
     "query_agent_tool_schema",
     "quality_find_agent_tool_schema",
     "quality_finding_handoff_agent_schema",

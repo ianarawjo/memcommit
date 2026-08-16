@@ -25,6 +25,7 @@ from memcommit.api.atomize import (
     AtomizeStructuralApplyResult,
 )
 from memcommit.api.compare import ComparisonResult
+from memcommit.api.help import HelpCatalogResult, OperationHelpResult
 from memcommit.api.errors import (
     QueryConfigurationError,
 )
@@ -156,6 +157,20 @@ class MemCommitClient:
     @property
     def query_config(self) -> QueryProviderConfig:
         return self._query_config
+
+    def list_operations(self) -> HelpCatalogResult:
+        """List stable public operation meanings without Store or provider access."""
+
+        from memcommit.api._operations.help import list_operations
+
+        return list_operations()
+
+    def describe_operation(self, operation_name: str) -> OperationHelpResult:
+        """Describe one exact public operation without executing it."""
+
+        from memcommit.api._operations.help import describe_operation
+
+        return describe_operation(operation_name)
 
     def fit(
         self,

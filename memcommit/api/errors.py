@@ -5,6 +5,14 @@ class MemCommitError(RuntimeError):
     """Base class for failures exposed by the public Python API."""
 
 
+class HelpError(MemCommitError):
+    """Base class for public operation-discovery failures."""
+
+
+class HelpInputError(HelpError):
+    """The caller requested an unknown or malformed operation name."""
+
+
 class AddError(MemCommitError):
     """Base class for public Add failures."""
 
@@ -251,6 +259,8 @@ __all__ = [
     "CompareInputError",
     "CompareProviderFailure",
     "CompareStorageError",
+    "HelpError",
+    "HelpInputError",
     "MemCommitError",
     "MeldAuthorityError",
     "MeldConflictError",

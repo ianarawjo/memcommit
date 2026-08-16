@@ -49,6 +49,7 @@ blocked = (
     'memcommit.api._operations.distill',
     'memcommit.api._operations.elaborate',
     'memcommit.api._operations.fit',
+    'memcommit.api._operations.help',
     'memcommit.api._operations.ground_distill',
     'memcommit.api._operations.ground_elaborate',
     'memcommit.api._operations.meld',
@@ -58,6 +59,7 @@ blocked = (
     'memcommit.distill_application',
     'memcommit.elaborate_application',
     'memcommit.fit_application',
+    'memcommit.help_application',
     'memcommit.ground_distill',
     'memcommit.ground_elaborate',
     'memcommit.meld_application',
@@ -82,6 +84,7 @@ for name in (
     'memcommit.api._operations.distill',
     'memcommit.api._operations.elaborate',
     'memcommit.api._operations.fit',
+    'memcommit.api._operations.help',
     'memcommit.api._operations.ground_distill',
     'memcommit.api._operations.ground_elaborate',
     'memcommit.api._operations.meld',
@@ -90,6 +93,36 @@ for name in (
     importlib.import_module(name)
 assert 'memcommit.api.client' not in sys.modules
 """
+    )
+
+    assert completed.returncode == 0, completed.stderr
+
+
+def test_selected_help_loads_only_catalog_discovery_and_never_the_store(tmp_path):
+    environment = os.environ.copy()
+    environment["MEMCOMMIT_IMPORT_TEST_ROOT"] = str(tmp_path / "missing-store")
+    completed = _run_fresh(
+        """
+import os
+from pathlib import Path
+import sys
+from memcommit.api import MemCommitClient
+
+root = Path(os.environ['MEMCOMMIT_IMPORT_TEST_ROOT'])
+client = MemCommitClient(root=root)
+result = client.describe_operation('compare')
+assert result.name == 'compare'
+assert not root.exists()
+assert 'memcommit.api._operations.help' in sys.modules
+assert 'memcommit.help_application' in sys.modules
+assert 'memcommit.api._operations.add' not in sys.modules
+assert 'memcommit.api._operations.query' not in sys.modules
+assert 'memcommit.api._operations.compare' not in sys.modules
+assert 'memcommit.api._operations.meld' not in sys.modules
+assert 'memcommit.comparison_execution' not in sys.modules
+assert 'memcommit.meld_application' not in sys.modules
+""",
+        environment=environment,
     )
 
     assert completed.returncode == 0, completed.stderr

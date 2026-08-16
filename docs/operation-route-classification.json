@@ -52,6 +52,13 @@
         ],
         "reason": "General and Ground Fit routes share typed application/runtime execution and independent plain and TUI projections."
       },
+      "help": {
+        "evidence": [
+          "docs/help-application-boundary-matrix.md",
+          "docs/help-application-design-rationale.md"
+        ],
+        "reason": "Plain and interactive CLI, Python, agent, and MCP discovery routes share one Store-free, provider-free list/describe application boundary over the canonical 59-operation catalog."
+      },
       "init": {
         "evidence": [
           "docs/context-init-application-boundary-matrix.md"
@@ -141,7 +148,6 @@
       "find-duplicates",
       "forget",
       "ground",
-      "help",
       "impact",
       "import",
       "init-study",

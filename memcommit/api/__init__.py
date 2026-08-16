@@ -62,6 +62,9 @@ __all__ = [
     "ComparisonReportsResult",
     "ComparisonResult",
     "GrantedQueryResult",
+    "HelpCatalogResult",
+    "HelpError",
+    "HelpInputError",
     "MemCommitClient",
     "MemCommitError",
     "MeldApplyResult",
@@ -78,6 +81,7 @@ __all__ = [
     "MeldSessionResult",
     "MeldStorageError",
     "OrdinaryQueryResult",
+    "OperationHelpResult",
     "QueryAuthorityError",
     "QueryCatalogEntry",
     "QueryCitation",
@@ -156,6 +160,8 @@ _LAZY_EXPORTS = {
         "AtomizeGroundingSessionResult",
     ),
     "MemCommitClient": ("memcommit.api.client", "MemCommitClient"),
+    "HelpCatalogResult": ("memcommit.api.help", "HelpCatalogResult"),
+    "OperationHelpResult": ("memcommit.api.help", "OperationHelpResult"),
     **{
         f"Comparison{name}": ("memcommit.api.compare", f"Comparison{name}")
         for name in (
