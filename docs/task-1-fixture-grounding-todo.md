@@ -214,29 +214,28 @@ recoverable without requiring knowledge of a real campus.
 These are stable world facts. Construction updates may change availability or
 routing temporarily without rewriting the underlying campus geometry.
 
-## Rename capability implemented after fixture work
+## Context relocation capability retained after fixture work
 
 Task 1 fixture construction exposed a need for an explicit Context rename or
 namespace-migration operation. The existing empty roots used legacy names,
 while the naming contract now gives the ordinary wiki the exact top-level
 name `campus-wiki`.
 
-`mem rename OLD NEW [-f|--force]` now provides the minimal ordinary-Context
-contract needed for that migration. It moves the exact slash-delimited source
+The store's internal Context relocation plan provides the graph migration that
+was needed for that fixture work. It moves the exact slash-delimited source
 root and all lexical descendants, preserves Context and Memory UIDs, rewrites
 typed ordinary references and current state, keeps existing checkpoint
 identity while repairing future-restorable pointer locators, and records an
 automatic checkpoint for every changed live owner. Named Ground frames and
 translation artifacts have explicit UID-bound continuity rules; unrelated
-semantic caches retain their own freshness boundaries.
+semantic caches retain their own freshness boundaries. This is no longer the
+public `mem rename` command; that spelling now changes a Profile display name.
 
-`OLD` is an existing Context locator resolved against one current-state
-snapshot. `NEW` is an exact new canonical identifier. The command displays the
-canonical names and subtree size before its default confirmation, then
-requires the applied graph to equal the reviewed graph. `--force` skips only
-the prompt. Occupied or overlapping destinations, unsafe or inconsistent
-storage, identity/name disagreement, and ambiguous ordinary/query selectors
-fail closed.
+An owning internal operation supplies exact canonical old and new names,
+freezes the complete graph plan, and requires the applied graph to equal that
+plan. Occupied or overlapping destinations, unsafe or inconsistent storage,
+identity/name disagreement, and ambiguous ordinary/query selectors fail
+closed.
 
 The operation does not open or rename query-only sources and does not rewrite
 `QueryContextRef`. Fixture provisioning must therefore create the separate
@@ -402,9 +401,9 @@ automatically creates or accepts Ground Memories.
 
 ## Ordered TODO
 
-1. Review and run the implemented `mem rename` migrations for the legacy empty
-   roots, moving them to the canonical Task 1 writable names without
-   populating them merely from this planning note.
+1. If fixture roots still require relocation, run a focused internal migration
+   using the stored Context relocation plan; do not use the Profile-oriented
+   public `mem rename` command.
 2. Verify the resulting Context UIDs, descendants, references, current state,
    and rename checkpoints before fixture population.
 3. Specify `mem impact sort` and the eventual UID-preserving `mem sort`

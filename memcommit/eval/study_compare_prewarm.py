@@ -21,7 +21,7 @@ import time
 from typing import Protocol
 import uuid
 
-from memcommit.commands.comparison_execution import (
+from memcommit.comparison_execution import (
     ComparisonExecutionResult,
     ensure_comparison_analysis,
     load_comparison_context,

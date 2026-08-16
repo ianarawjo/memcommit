@@ -42,6 +42,72 @@ The strict gate is the slowest of three repeated runs at or below 30 seconds,
 not merely a favorable median. Cold-start inclusion must be stated with every
 result.
 
+## Research premise: one Context is interpreted together
+
+The paper's semantic unit is a Context, not an independently routed sequence
+of Memories or criteria. When an operation claims to interpret one Context,
+every frozen Memory in that Context must remain available in the same semantic
+frame so neighboring items can qualify, disambiguate, or constrain one
+another. An optimization must not silently replace that premise with
+item-at-a-time or criterion-at-a-time inference merely because those calls are
+smaller.
+
+Background preparation is compatible with this premise. A complete
+Context-bound analysis may be computed before the foreground command, cached
+by exact Context revision, and projected immediately when the revision still
+matches. Add, remove, Sever, or Forget maintenance may invalidate and repair a
+derived artifact internally, but an artifact presented as complete must still
+mean that the whole current Context was interpreted together. Candidate-only,
+incremental, or projected results are distinct experimental approximations
+unless a later whole-Context reconciliation restores that invariant.
+
+User-study fixtures may therefore start with prewarmed exact-revision
+artifacts. Such a condition measures foreground interaction latency, not a
+claim that the hidden precomputation completed within 30 seconds. Reports must
+record foreground latency and precomputation or convergence work separately.
+
+## Deferred Forget and Sever prewarm plan
+
+Forget and Sever remain future work while Compare establishes the cache and
+projection method. Their eventual optimization must retain the one-Context
+premise above.
+
+For Forget, 300 independent `1:1` provider calls are not an authoritative fast
+path. They could overlap and lower foreground wall time in a synthetic test,
+but each call would lose neighboring Memory context, repeat the same
+instruction, multiply total provider work, and require a new reconciliation
+contract. The failed full-context Compare parallel experiment also shows that
+overlap alone is not evidence of a valid semantic speedup. Per-Memory calls may
+later serve as a diagnostic approximation, but not as the operation whose
+result is described as interpreting the Context together.
+
+The leading Forget experiment keeps the complete Source and one
+instruction in one turn while requesting only a fixed-length action vector
+(`KEEP`, `TRANSFORM`, or `DROP`) plus replacement text for the sparse
+`TRANSFORM` positions. An exact Source-revision plus exact-instruction artifact
+may be prewarmed for a fixed study fixture. Arbitrary future instructions
+cannot be fully predicted, so a product implementation may precompute only
+Context-internal semantic state and must still perform instruction-specific
+work. A lower reasoning effort is a separate axis, not part of the cache or
+output-representation claim. The evaluation-only implementation and its
+fail-closed host reconstruction are specified in
+[`forget-compact-output-design-rationale.md`](forget-compact-output-design-rationale.md).
+
+For Sever, cache the complete whole-frame decision artifact by exact Source
+revision, exact Criteria revision, semantic ruleset, model identity, and
+reasoning setting. An unchanged request is a direct cache hit. Removing Source
+members may support a provider-free projection of surviving decisions for an
+explicit fast study condition; transformed content, changed Criteria, or an
+artifact advertised as newly complete still requires whole-Context refresh or
+an explicitly named approximate status. Add is not a timed user-study path.
+In a later product path it should invalidate the artifact and schedule a
+debounced whole-Context refresh rather than treating an item-at-a-time decision
+as authoritative.
+
+This section authorizes only the separate compact-output Forget evaluation
+runner. It does not change production Forget, apply a benchmark result, enable
+staged Forget, or authorize a Sever provider run.
+
 ## Existing evidence
 
 The following figures were observed in earlier local study sessions. They are
@@ -59,6 +125,34 @@ historical baselines, not controlled measurements from a single benchmark run.
 | Forget, larger frames | 126-308 s | — |
 | Sever, 66,553 input characters | 296.8 s | 1,082.4 s end to end |
 | Impact/Atomize, 25,064 input characters | 60.2 s | 657.3 s end to end |
+
+The Task 3 incremental-Forget run gives the retained Forget range a concrete
+whole-Context interpretation. Four successive one-Context turns processed
+`300`, `251`, `231`, and `187` Source Memories in 308, 271, 230, and 126
+provider seconds. Their responses contained 71,681, 68,155, 59,150, and 34,282
+characters. Even the smallest retained turn was therefore not a 20-30-second
+operation; short per-Memory semantic-gate cases are not representative of this
+complete-coverage command.
+
+The later compact-output corpus matrix kept the full 300-Memory input and one
+whole-frame call while removing repeated Source text and per-Memory prose from
+the response. Thirty-five of 64 model/reasoning-by-instruction cells completed
+within 30 provider seconds; Luna none did so in 8/8, Terra none and Sol none in
+7/8 each. This is direct evidence that output obligation can be a dominant
+latency factor for classification-heavy Forget requests. It is not a complete
+solution: model outputs ranged from keep-all to delete-all for `SENSITIVE`, and
+the sparse EDIT field required 324 conservative cross-field repairs across 25
+cells. Full tables and interpretation boundaries are in
+[`outputs/forget-latency/compact-corpus-matrix-v1/`](../outputs/forget-latency/compact-corpus-matrix-v1/README.md).
+
+The prototype subsequently adopted `gpt-5.6-sol` reasoning `none` as the
+Forget-only provider policy. It was the least obviously collapsed compromise
+in that unlabelled matrix: seven of eight compact cells met 30 seconds with a
+19.9-second median, while Luna none kept all `SENSITIVE` items and Terra none
+deleted all of them. The selection does not change other operations, skip
+Forget review, establish semantic accuracy, or promote the compact evaluation
+contract into production. It only fixes the model/reasoning axis for current
+Forget work while those separate boundaries remain.
 
 These observations support three limited conclusions:
 
@@ -78,6 +172,18 @@ still leaves 66 relations covering 249 of 300 members, so a sparse-positive
 relation list is not especially sparse for this workload. A positional or
 indexed decision representation is therefore a more promising compression
 candidate than merely omitting DISTINCT records.
+
+The later controlled medium baseline gives a more exact relation-shape view.
+Its production exhaustive analysis returned 101 primary groups: 34 one-sided
+DISTINCT groups and 67 cross-source groups. The cross-source shapes were 37
+`1:1`, two `1:N`, five `N:1`, and 23 true `N:M` groups. The `N:M` groups were
+nine `2:2`, five `3:3`, two `4:4`, and one each of `2:3`, `3:2`, `5:4`, `5:7`,
+`6:6`, `7:7`, and `9:8`. There was no very large `50:50`-style group, and the
+largest contained 17 members, but the 23 `N:M` groups collectively covered 156
+of the 300 source memberships. They are therefore locally bounded in shape but
+not negligible as a maintenance surface. The compact same-input condition
+returned a similar 26 `N:M` groups, while differing semantically in individual
+placements.
 
 ## Is one-shot execution the bottleneck?
 
@@ -511,25 +617,44 @@ reviewed ground truth, but it does show that a very terse task representation
 changes grouping behavior. The current conclusion concerns latency causality,
 not semantic acceptance.
 
-## Next reasoning-axis experiments
+## Reasoning-axis result — 2026-08-10
 
-The next controlled condition should preserve C's exact input, prompt, schema,
-and output contract and change only the Codex reasoning-effort setting. The
-local provider adapter accepts `low` and `minimal` in addition to the measured
-`medium`; current official account-specific latency and availability are not
-assumed by this note.
+The controlled condition preserved C's exact input, prompt, schema, and output
+contract and changed only the Codex reasoning-effort setting. Current OpenAI
+GPT-5.6 documentation names `none` as the lowest-latency baseline and `low` as
+the latency-sensitive reasoning setting; it does not name `minimal` as a
+GPT-5.6 effort. The local memcommit adapter therefore exposes `none` for this
+documented GPT-5.6 setting while retaining `minimal` only for older configured
+models.
 
-1. **R0 — C at medium:** the retained 140.225-second control.
-2. **R1 — C at low:** one diagnostic run, then three repetitions only if it is
-   contract-valid and materially closer to 30 seconds.
-3. **R2 — C at minimal:** run only if low remains above the target or if the
-   difference between low and medium is too small to explain the remaining
-   latency.
+This fixture is `150:150`, or 300 total Memories. It is not a `300:300`
+600-Memory fixture. Duplicating the existing inputs merely to reach 600 would
+change the semantic workload and produce a misleading latency result, so that
+larger condition remains unmeasured.
 
-Each condition must retain exact 300/300 coverage, valid group side shape, no
-unused group, and local typed reconstruction. Semantic agreement remains a
-descriptive measure rather than a gate until reviewed ground truth or an
-explicit acceptable-loss threshold exists.
+| Effort | Provider time | Contract | Observation |
+| --- | ---: | --- | --- |
+| `medium` | 140.225 s | Valid | Retained C control |
+| `none`, diagnostic 1 | 23.342 s | Invalid | Call completed, but a mistaken reference-ledger path prevented retaining the response ledger |
+| `none`, diagnostic 2 | 23.563 s | Invalid | `b` referenced a group ID not represented by `k` |
+| `low` | 149.947 s | Invalid | `b` ended with group ID `670000000000`, outside the 86-entry `k` vector |
+
+Both `none` calls met the 30-second wall-time target and failed the same typed
+reconstruction boundary. They therefore produced no actionable Compare
+result. The retained `none` run sent all 300 Memories in order in a
+36,482-character prompt and returned 1,668 characters, but the host could not
+assign a valid relation kind to every referenced group. `low` missed both
+gates: it was 9.722 seconds slower than the valid `medium` control and was also
+structurally invalid.
+
+This rejects reasoning-effort reduction alone as the next Compare strategy.
+The effort-to-latency relationship was not monotonic on this workload, and the
+only setting below 30 seconds twice failed complete disposition. Do not spend
+more study-preparation calls repeating this axis unless the output contract or
+model changes and receives its own explicit evaluation condition. Semantic
+agreement remains descriptive rather than a gate until reviewed ground truth
+or an explicit acceptable-loss threshold exists, but structural completeness
+is non-negotiable.
 
 ## Full-context parallel medium result — 2026-08-10
 
@@ -719,7 +844,237 @@ reasoning-effort experiment may still isolate the effort axis, while a future
 parallel experiment must change the semantic unit of work and add explicit
 reconciliation.
 
-## Acceptance record for each 300-item run
+## Next Compare experiment: prewarmed full-to-full
+
+The next implementation should test precomputation before another provider
+optimization. Freeze the complete Task 2 `advisor1` and `advisor2` frames at
+150 Memories each and retain the production exhaustive `ComparisonAnalysis`
+for that exact ordered pair and exact pair of revisions. In this experiment,
+`full-to-full` means the complete `150:150` Context pair was analyzed before
+the foreground timer; it does not mean every possible pair in the repository
+was precomputed.
+
+Run three separate lanes so a trivial cache hit is not mistaken for a new
+semantic algorithm:
+
+1. **W0 — exact warm `150:150`.** Seed or reuse the exact production artifact,
+   invoke Compare with unchanged revisions, and verify zero provider calls,
+   exact artifact identity, valid 300-item coverage, and foreground display
+   latency. This validates the intended user-study experience.
+2. **W1 — deletion projection.** Starting from the same retained artifact,
+   remove a deterministic subset from one side, such as the `75:150` case, and
+   project surviving members locally. Record projection time, untouched and
+   cut relation groups, empty groups, orphaned members, changed side shapes,
+   and especially touched `N:M` groups. Publish this only as an
+   evaluation-only projected artifact because the present primary partition
+   may hide secondary relations that become relevant after deletion.
+3. **W2 — fresh whole-Context audit.** Outside the foreground latency path,
+   compare the projection with a newly computed exhaustive result for the
+   surviving full frames. This measures semantic drift and determines whether
+   bounded group repair can ever be promoted beyond an approximation. It is
+   intentionally deferred until W0 and W1 prove the host-side mechanics.
+
+The first implementation should be an evaluation runner and fixture artifact,
+not a new global relationship store or a production cache migration. The
+existing exact ordered-pair Compare cache already supplies W0's basic reuse
+mechanism. Reusing it avoids inventing a second cache before the experiment
+shows what deletion metadata is actually missing. Study setup should prewarm
+only the exact Context pairs participants can invoke; universal precomputation
+would grow quadratically with the number of Contexts and is not required by
+the foreground-latency hypothesis.
+
+## First prewarm, projection, and fresh audit — 2026-08-10
+
+`memcommit.eval.compare_prewarm_projection` implemented the three lanes above
+without changing production Compare. It replayed the retained production
+exhaustive response only to reconstruct and seed the existing exact cache;
+the replay did not contact a provider. The new W2 audit used
+`codex_chatgpt:gpt-5.6-sol` with reasoning `medium`, matching the retained
+baseline's requested model and effort. The invocation was:
+
+```console
+python -m memcommit.eval.compare_prewarm_projection \
+  --model gpt-5.6-sol \
+  --reasoning medium \
+  --timeout 900 \
+  --output \
+    outputs/compare-latency-ab/20260810-gpt-5.6-sol-medium-prewarm-projection-audit.json
+```
+
+W1 kept the odd one-based REFERENCE positions `1, 3, ..., 149`, yielding the
+deterministic `75:150` surviving frame. This distributed deletion through the
+ordered fixture rather than removing one contiguous half.
+
+| Condition | Provider calls | Critical wall time | Result |
+| --- | ---: | ---: | --- |
+| W0 exact warm `150:150` | 0 | 5.11-5.18 ms across three reads | Exact saved analysis UID reused |
+| W1 primary-ledger projection `75:150` | 0 | 0.225-0.269 ms across three runs | 225/225 coverage, but structurally invalid |
+| W2 fresh whole-Context `75:150` | 1 | 241.869 s | Valid 225-item production analysis |
+
+W0's isolated seed write took 11.10 ms, then every measured foreground lookup
+reused the exact artifact without invoking the analyzer. This confirms the
+narrow foreground hypothesis: an unchanged prewarmed full-to-full Compare can
+be effectively immediate. It does not reduce or erase the retained 341.945
+provider seconds used to create that exhaustive artifact.
+
+W1 projected the 101 retained primary groups to 92 nonempty groups. Nine groups
+became empty, 60 were cut, and only 41 were untouched. Coverage remained exact
+with no missing, duplicate, or unknown source. All 23 original true `N:M`
+groups were touched, but `N:M` was not the only repair surface: 23 projected
+relations lost one complete side and became structurally invalid, and only one
+of those 23 came from a true `N:M` group. Twenty came from `1:1`, one from
+`1:2`, one from `2:1`, and one from `2:2`. Reconsidering only `N:M` groups is
+therefore insufficient even for structural validity under this deletion.
+
+A deterministic shape repair changed each one-sided cross-source remnant to
+DISTINCT. This made the partition decodable but did not make it semantically
+equivalent to W2:
+
+| Agreement with fresh W2 | Raw projection | Shape-repaired projection |
+| --- | ---: | ---: |
+| Source relation-kind agreement | 49.3% | 52.4% |
+| Exact source group-and-kind agreement | 34.2% | 37.3% |
+| Exact relation-signature overlap | 28 of 92/72 | 35 of 92/72 |
+| Pairwise same-group precision / recall / F1 | 0.815 / 0.755 / 0.784 | 0.815 / 0.755 / 0.784 |
+
+Pairwise membership does not change when only a group kind is relabeled, which
+is why the shape repair leaves pairwise scores unchanged. As in the earlier
+A/B runs, these figures measure agreement with one stochastic fresh result,
+not reviewed semantic accuracy. They nevertheless reject the claim that the
+retained primary partition can simply be filtered and relabeled after a large
+deletion while preserving current Compare behavior.
+
+W2 returned 72 relations and four required issues from a 60,437-character
+prompt and a 43,648-character response. Its provider completion was 241.857
+seconds and local validation added about 0.011 seconds. Relative to the
+retained `150:150` production completion of 341.945 seconds, removing half of
+one side reduced provider time by only 29.3%; the fresh audit remained more
+than eight times the 30-second target.
+
+The evidence selects an asymmetric design boundary. Exact-revision prewarming
+is useful for the controlled study and any unchanged pair. Large-deletion
+projection is useful as an immediate preview or invalidation diagnostic, but
+not as a complete Compare result. A product path must either refresh the whole
+surviving pair in the background or introduce a wider candidate and
+reconciliation method whose scope includes affected non-`N:M` groups and
+possible secondary relations absent from the old primary partition.
+
+### Production Study-run full-to-full prewarm — 2026-08-10
+
+The earlier W0 condition used an isolated temporary store. A later run tested
+the actual participant path in active Study Profile
+`study-20260810T180141Z-641b669e`. Both sources were granted Contexts with
+`RETAINED` analysis authority. `task-2/advisor1` contributed 16 Memories from
+its selected root and 134 from descendants; `task-2/advisor2` likewise
+contributed 16 root and 134 descendant Memories. Compare loaded each selected
+root plus all descendants as one 150-Memory recursive projection and sent one
+complete `150:150` provider turn with `gpt-5.6-sol` reasoning `medium`.
+
+That first production run prepared only the study's expected root-to-root
+operation. A later task-local graph experiment broadens preparation to every
+root, intermediate, and leaf view pair inside each task. Each view still
+includes its complete requested descendant scope in one provider turn; the
+graph does not split one selected Context across calls. The broadened cache is
+documented separately in
+`docs/study-compare-graph-prewarm-design-rationale.md`.
+
+`memcommit.eval.study_compare_prewarm` resolves the same local or granted
+accesses as production Compare, uses the same recursive source projection and
+atomic execution boundary, and keeps the semantic artifact inside the active
+Profile's authorized store. Its repository receipt is content-free. The first
+actual preparation produced analysis `6bbd2ff9-3b5f-4a09-b333-7669224ed5f0`:
+
+| Measure | Cold prewarm | Exact reuse |
+| --- | ---: | ---: |
+| Provider calls | 1 | 0 |
+| Provider completion | 256.097 s | 0 s |
+| Host work | 0.103 s | 0.00578 s |
+| Total setup/lookup | 256.200 s | 0.00578 s |
+| Saved state | `RETAINED` | Same analysis UID reused |
+
+The participant-facing production command then rendered
+`REUSED · SAVED · RETAINED` without a provider call. It reported 150+150
+Memories, 98 relations, and five potential conflicts. This confirms the actual
+Study hierarchy and grant path rather than only an evaluation fixture.
+
+The production follow-up separates declared Study preparation from ordinary
+run-local caches. A content-free registry in the editable baseline names the
+exact portable semantic seed, while `init-study` regenerates its granted
+artifact wrapper from each new run's current Profile and Grant identities.
+It never copies the old wrapper, sessions, checkpoints, logs, or ad-hoc
+caches. A changed Source, task description, scope, provider contract, model,
+or reasoning setting fails the exact installation and leaves the ordinary live
+path available. The original content-free preparation receipts remain under
+`outputs/compare-prewarm/`.
+
+One new run, `study-prewarm-proof-20260810`, installed the declared Task 2
+seed with zero provider calls. Its two saved binding records use the new
+participant UID `683468b8-6310-4e46-8f85-6eff5823bb47`, new authority UID
+`c694f340-80ec-494c-b277-c4be6056ecc4`, and new Grant UIDs rather than the
+source run's identities. The participant-facing snapshot command completed in
+`0.44` wall-clock seconds including process startup and printed
+`EXACT PREWARM · SAVED · RETAINED` for the same 150+150 Memories, 98 relations,
+and five issues.
+
+A separate audit projected this actual retained analysis to 75+150 Memories.
+Host projection remained essentially free at a `0.234` ms median and retained
+225/225 source coverage, but agreement with the existing fresh partial result
+was only 27.1% by source relation kind, 7.1% by exact group and kind, and 0.166
+pairwise F1. This does not establish accuracy for either stochastic run. The
+study accepts that semantic-loss tradeoff for speed, but production does not
+present the current projection as an exact or freshly interpreted result. It
+renders `PROJECTED · NOT SAVED · PREVIEW`, keeps the result out of durable
+sessions and Meld, and sends additions, edits, same-side pairs, cross-task
+pairs, ambiguity, and `--refresh` through the live path. An actual 13+13 Task 2
+descendant projection completed in `0.46` wall-clock seconds with five groups,
+zero provider calls, and complete input coverage.
+
+### HCI study scope and out-of-scope NLP research discussion
+
+Semantic equality with one fresh stochastic provider run is not the primary
+outcome of the present qualitative study. The study asks whether prepared
+relationship artifacts can remove foreground waiting and which user-visible
+or background actions are required when the underlying Context changes. The
+W1/W2 agreement figures are diagnostic observations, not accuracy scores and
+not an acceptance threshold for this study. Deleted Memories were excluded
+from the agreement denominator; the 52.4% shape-repaired kind agreement means
+118 of the same 225 surviving Memories received the same primary relation kind
+in one projection and one fresh run.
+
+For the current study, the useful result is the action inventory exposed by a
+deletion: remove deleted members, discard empty groups, detect groups that lose
+one side, mark the retained artifact as projected or stale, keep the foreground
+interaction immediate, and offer or schedule refresh. A projected view need
+not reproduce one fresh run exactly to support observation of those actions.
+It must still avoid claiming that a mechanically updated artifact is a newly
+complete whole-Context interpretation.
+
+The scope boundary should be carried into the paper explicitly:
+
+| Current HCI study scope | Paper Discussion: out-of-scope NLP research opportunity |
+| --- | --- |
+| Foreground latency and waiting | Semantic accuracy for hundreds-versus-hundreds comparison |
+| Prewarmed artifact interaction | Fresh-to-fresh stochastic consistency |
+| Actions after Context change | Human-reviewed relation and regrouping ground truth |
+| Projected/stale status communication | Recovery of secondary relations hidden by a primary partition |
+| Background or person-requested refresh flow | Candidate recall and local-repair quality |
+| Qualitative response to these mechanics | Criteria for choosing local repair versus whole-Context reconciliation |
+
+The right column is not a current implementation TODO, a blocker, or an
+acceptance gate for the qualitative study. It is a Discussion contribution:
+the experiment exposes that reliable semantic regrouping at
+hundreds-versus-hundreds scale remains limited and identifies concrete NLP
+research opportunities for later work. The current project need not solve
+those problems before studying latency, state, interaction mechanics, and the
+actions people require. The present single fresh run must therefore not be
+used to claim 52.4% semantic accuracy; its disagreement is evidence motivating
+the out-of-scope discussion.
+
+## Deferred provider-path benchmark record
+
+This record applies only if later work resumes approximate or faster-provider
+semantic execution. It is not an acceptance gate or current work list for the
+HCI qualitative study.
 
 Each run should record:
 
@@ -744,7 +1099,23 @@ publication. The latency gate is all three actionable results at or below 30
 seconds. A quality-loss threshold is intentionally not invented here; it must
 be selected explicitly before an approximate method can be accepted.
 
-## Open questions
+## Current HCI implementation questions
+
+The task-local cache eligibility and fallback policy is recorded in
+[`study-semantic-prewarm-registry-design-rationale.md`](study-semantic-prewarm-registry-design-rationale.md).
+
+- Which exact Context pairs can appear in the study and must be prewarmed?
+- Where does study setup record hidden precomputation separately from
+  foreground waiting?
+- How should the interface distinguish exact, projected, stale, and refreshing
+  artifacts without interrupting the person's current action?
+- Which Context changes schedule background refresh, and which expose a
+  person-requested refresh action?
+
+## Deferred provider and NLP engineering questions
+
+The questions below belong to the paper Discussion or later systems work. They
+are not blockers or current implementation TODOs for the qualitative study.
 
 - Can the current Codex-CLI-backed provider select an Instant model, and can it
   record a stable resolved identity?
@@ -757,7 +1128,6 @@ be selected explicitly before an approximate method can be accepted.
   enough, or should it retain periodic identity anchors?
 - Which explanations are required for the first review decision, and which can
   safely be generated or requested afterward?
-- What measured quality loss is acceptable for a fast mode?
 
 ## Current decision
 
@@ -766,9 +1136,29 @@ output materially reduced one-shot latency, but minimal I/O remained at
 140.225 seconds. Reject the tested six-worker source-position ownership split:
 it increased total provider work 3.81 times, reduced observed wall time only
 3.3%, and could not reconstruct a globally consistent result. Do not try to
-recover this contract merely by shrinking batches. The next scheduling design
-must partition genuinely local semantic judgments and include an explicit
-operation-owned reconciler; candidate-edge judgment is the current leading
-hypothesis, with candidate recall named as an approximation boundary. Do not
-transfer parallel staging to another operation until Compare's reconstruction
-and reconciliation invariants are demonstrated.
+recover this contract merely by shrinking batches. Also reject reasoning
+effort as the remaining shortcut: `none` completed twice in about 23.5 seconds
+but produced invalid group vectors both times, while `low` took 149.947 seconds
+and was also invalid. A fast non-actionable response does not meet the
+foreground latency target.
+
+The W0/W1/W2 experiment now establishes both sides of the cache boundary. An
+unchanged exact `150:150` artifact was reused in at most 5.18 ms with zero
+provider calls. The `75:150` deletion projection ran in at most 0.269 ms and
+retained exact source coverage, but it broke 23 relation side shapes and agreed
+poorly with the fresh whole-Context grouping. The corresponding fresh medium
+analysis took 241.857 provider seconds. Therefore prewarm exact study pairs,
+but do not present a large-deletion projection as a refreshed complete
+Compare result.
+
+The next foreground design question is how to surface artifact freshness and
+background refresh without delaying an unchanged user-study path. If cache
+preparation or refresh itself must meet 30 seconds, candidate-edge judgment
+remains the leading later provider-time hypothesis. Its candidate-recall and
+whole-Context reconciliation boundaries are unchanged. Forget and Sever retain
+the deferred plan above; they may reuse the exact-revision prewarm pattern, but
+this experiment gives no basis for transferring primary-ledger deletion
+projection as complete semantics. Exact fresh equivalence and projection
+accuracy belong in the paper's out-of-scope NLP research Discussion described
+above. They are not current implementation TODOs or gates for the qualitative
+study.

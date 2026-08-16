@@ -147,6 +147,23 @@ def test_compact_response_rejects_invalid_coverage_or_group_shape(mutator, messa
         )
 
 
+def test_compact_response_rejects_more_groups_than_source_memories():
+    comparison_input = _comparison_input()
+    response = copy.deepcopy(_compact_response())
+    response["groups"].extend(
+        [
+            {"kind": "DISTINCT", "note": ""},
+            {"kind": "DISTINCT", "note": ""},
+        ]
+    )
+
+    with pytest.raises(CompareLatencyABError, match="Invalid compact group count"):
+        parse_compact_analysis(
+            json.dumps(response),
+            comparison_input=comparison_input,
+        )
+
+
 def test_compact_unresolved_group_requires_required_issue():
     comparison_input = _comparison_input()
     response = _compact_response()

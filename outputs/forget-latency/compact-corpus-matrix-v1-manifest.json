@@ -1,0 +1,36 @@
+{
+  "kind": "memcommit.semantic-eval.forget-compact-corpus-matrix-manifest-v1",
+  "source": {
+    "profile": "study-alt-20260810-t3-forget",
+    "count": 300,
+    "checkpoint_directory": "/Users/KimMunyeong/.mem-profiles/stores/fb248286-3986-47a5-8700-d721e9b234a8/contexts/task-3/participant/forget-working/checkpoints"
+  },
+  "contract": "COMPACT_ACTION_VECTOR_AND_SPARSE_EDITS",
+  "production_behavior_changed": false,
+  "source_mutated": false,
+  "schedule": {
+    "rounds": "one criterion at a time",
+    "parallel_calls_per_round": 8,
+    "note": "All model-effort conditions for one criterion start together. Parallel timings are screening measurements and may include contention."
+  },
+  "conditions": [
+    {"model": "gpt-5.6-luna", "reasoning": "none"},
+    {"model": "gpt-5.6-luna", "reasoning": "low"},
+    {"model": "gpt-5.6-terra", "reasoning": "none"},
+    {"model": "gpt-5.6-terra", "reasoning": "low"},
+    {"model": "gpt-5.6-terra", "reasoning": "medium"},
+    {"model": "gpt-5.6-sol", "reasoning": "none"},
+    {"model": "gpt-5.6-sol", "reasoning": "low"},
+    {"model": "gpt-5.6-sol", "reasoning": "medium"}
+  ],
+  "criteria": [
+    {"id": "SENSITIVE", "slug": "sensitive", "instruction": "민감한 정보는 지워줘."},
+    {"id": "DESCRIPTION_MATCH", "slug": "description-match", "instruction": "지금 보이는 Task 3 설명은 정부의 새 AI 의료 에이전트에 넘길 개인 기억을 고르는 상황이다. 그 설명에서 말하는 의료 지원과 관련된 정보는 지워줘."},
+    {"id": "HEALTH", "slug": "health", "instruction": "건강 관련 정보는 지워줘."},
+    {"id": "HEALTH_EXCEPT", "slug": "health-except", "instruction": "건강 관련 정보만 남기고 나머지는 지워줘."},
+    {"id": "THIRD_PARTY", "slug": "third-party", "instruction": "가족이나 다른 사람에 관한 정보처럼 내 정보가 아닌 것은 지워줘. 내 정보와 섞여 있으면 내 정보만 남겨줘."},
+    {"id": "SECURITY_AND_ACCESS", "slug": "security-access", "instruction": "열쇠, 출입, 비밀번호, 신분증, 문서 보관 위치 같은 보안 관련 정보는 지워줘."},
+    {"id": "FINANCIAL_AND_ADMIN", "slug": "financial-admin", "instruction": "돈, 세금, 청구서, 납부, 행정 서류와 관련된 정보는 지워줘."},
+    {"id": "COMPLETED_EVENT", "slug": "completed-event", "instruction": "이미 끝난 일정이나 지난 약속의 구체적인 내용은 지워줘."}
+  ]
+}

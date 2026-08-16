@@ -1,0 +1,12 @@
+{
+  "completed_count": 718,
+  "created_at": "2026-08-13T18:56:21.657508Z",
+  "failures": [],
+  "kind": "STUDY_COMPARE_EXACT_MATRIX_SUMMARY",
+  "pair_count": 718,
+  "provider_seconds": 49694.31527521901,
+  "published": true,
+  "published_count": 713,
+  "reused_existing_count": 5,
+  "schema_version": 1
+}

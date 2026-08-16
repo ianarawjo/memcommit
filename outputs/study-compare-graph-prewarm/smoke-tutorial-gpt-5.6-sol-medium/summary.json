@@ -1,0 +1,25 @@
+{
+  "completed_count": 3,
+  "created_at": "2026-08-10T23:43:25.021296Z",
+  "elapsed_seconds": 11.240710957994452,
+  "failed_count": 0,
+  "failures": [],
+  "kind": "STUDY_COMPARE_GRAPH_PREWARM_SUMMARY",
+  "method_counts": {
+    "COMPACT_DECISION_VECTOR_V1": 3
+  },
+  "output_root": "outputs/study-compare-graph-prewarm/smoke-tutorial-gpt-5.6-sol-medium",
+  "pair_count": 3,
+  "participant_report_visible": false,
+  "profile_name": "study-20260810T180141Z-641b669e",
+  "profile_uid": "2608e3fc-0597-48e8-8a93-671752dca222",
+  "provider_seconds": 30.961439332997543,
+  "retries": 1,
+  "reused_count": 0,
+  "schema_version": 1,
+  "task_completed_counts": {
+    "tutorial": 3
+  },
+  "view_count": 3,
+  "workers": 3
+}

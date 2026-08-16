@@ -12,7 +12,9 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.interfaces.console.text import display_escape_text
+from memcommit.interfaces.console.text import (
+    display_escape_text,
+)
 from memcommit.config import Config
 from memcommit.eval.semantic_campaign import (
     CORPUS_CHOICES,

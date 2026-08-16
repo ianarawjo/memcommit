@@ -27,7 +27,7 @@ from typing import Protocol
 import uuid
 
 import memcommit.store as store_module
-from memcommit.commands.comparison_execution import ensure_comparison_analysis
+from memcommit.comparison_execution import ensure_comparison_analysis
 from memcommit.authority.access import ContextAccess
 from memcommit.comparison import ComparisonAnalysis, ComparisonInput
 from memcommit.comparison_provider import analyze_comparison

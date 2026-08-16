@@ -15,7 +15,7 @@ from pathlib import Path
 import sys
 from typing import Sequence
 
-from memcommit.commands.comparison_execution import load_comparison_context
+from memcommit.comparison_execution import load_comparison_context
 from memcommit.authority.access import resolve_context_access
 from memcommit.comparison_store import load_comparison_analysis
 from memcommit.granted_comparison_store import load_granted_comparison_artifact
