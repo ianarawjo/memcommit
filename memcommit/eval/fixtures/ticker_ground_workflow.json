@@ -1,0 +1,529 @@
+{
+  "operation": "ground",
+  "schema_version": 1,
+  "ruleset_version": "synthetic-ticker-ground-v1",
+  "corpus_role": "ITERATIVE_GROUND_BENCHMARK",
+  "provider_visibility": "GOAL_AND_REVEALED_PROPOSITIONS_ONLY",
+  "vague_goal": "티커가 어떻게 만들어지는지 규칙을 알고 싶어",
+  "stage_sizes": [5, 10, 20, 35, 50],
+  "coverage_categories": [
+    "acronym_token",
+    "basic_multiword",
+    "collision",
+    "connector",
+    "foreign_legal_suffix",
+    "hyphenated_token",
+    "leading_article",
+    "legal_suffix",
+    "mixed_alphanumeric",
+    "numeric_token",
+    "preferred_share",
+    "share_class",
+    "single_word",
+    "unsupported_security_descriptor",
+    "unsupported_separator",
+    "unsupported_transliteration"
+  ],
+  "examples": [
+    {
+      "id": "t01",
+      "reveal_round": 1,
+      "company": "North Star Energy Inc.",
+      "proposition": "Applying the synthetic ticker Rules to \"North Star Energy Inc.\" produces \"NSE\".",
+      "expected_output": "NSE",
+      "role": "FIT",
+      "resolution": "DETERMINED",
+      "categories": ["basic_multiword", "legal_suffix"]
+    },
+    {
+      "id": "t02",
+      "reveal_round": 1,
+      "company": "Blue River Holdings LLC",
+      "proposition": "Applying the synthetic ticker Rules to \"Blue River Holdings LLC\" produces \"BRH\".",
+      "expected_output": "BRH",
+      "role": "FIT",
+      "resolution": "DETERMINED",
+      "categories": ["basic_multiword", "legal_suffix"]
+    },
+    {
+      "id": "t03",
+      "reveal_round": 1,
+      "company": "Cedar Valley Technologies Corporation",
+      "proposition": "Applying the synthetic ticker Rules to \"Cedar Valley Technologies Corporation\" produces \"CVT\".",
+      "expected_output": "CVT",
+      "role": "FIT",
+      "resolution": "DETERMINED",
+      "categories": ["basic_multiword", "legal_suffix"]
+    },
+    {
+      "id": "t04",
+      "reveal_round": 1,
+      "company": "The Meridian Group Inc.",
+      "proposition": "Applying the synthetic ticker Rules to \"The Meridian Group Inc.\" produces \"MG\".",
+      "expected_output": "MG",
+      "role": "BOUNDARY",
+      "resolution": "DETERMINED",
+      "categories": ["leading_article", "legal_suffix"]
+    },
+    {
+      "id": "t05",
+      "reveal_round": 1,
+      "company": "Quanta Systems & Services Inc.",
+      "proposition": "Applying the synthetic ticker Rules to \"Quanta Systems & Services Inc.\" produces \"QSS\".",
+      "expected_output": "QSS",
+      "role": "BOUNDARY",
+      "resolution": "DETERMINED",
+      "categories": ["connector", "legal_suffix"]
+    },
+    {
+      "id": "t06",
+      "reveal_round": 2,
+      "company": "Redwood Inc.",
+      "proposition": "Applying the synthetic ticker Rules to \"Redwood Inc.\" produces \"RED\".",
+      "expected_output": "RED",
+      "role": "BOUNDARY",
+      "resolution": "DETERMINED",
+      "categories": ["single_word", "legal_suffix"]
+    },
+    {
+      "id": "t07",
+      "reveal_round": 2,
+      "company": "Solstice Ltd.",
+      "proposition": "Applying the synthetic ticker Rules to \"Solstice Ltd.\" produces \"SOL\".",
+      "expected_output": "SOL",
+      "role": "FIT",
+      "resolution": "DETERMINED",
+      "categories": ["single_word", "legal_suffix"]
+    },
+    {
+      "id": "t08",
+      "reveal_round": 2,
+      "company": "Aurora Robotics Ltd.",
+      "proposition": "Applying the synthetic ticker Rules to \"Aurora Robotics Ltd.\" produces \"AR\".",
+      "expected_output": "AR",
+      "role": "CONTRAST",
+      "resolution": "DETERMINED",
+      "categories": ["basic_multiword", "legal_suffix"]
+    },
+    {
+      "id": "t09",
+      "reveal_round": 2,
+      "company": "Atlas 7 Networks Corp.",
+      "proposition": "Applying the synthetic ticker Rules to \"Atlas 7 Networks Corp.\" produces \"A7N\".",
+      "expected_output": "A7N",
+      "role": "BOUNDARY",
+      "resolution": "DETERMINED",
+      "categories": ["numeric_token", "legal_suffix"]
+    },
+    {
+      "id": "t10",
+      "reveal_round": 2,
+      "company": "North Star Energy Inc. Class B",
+      "proposition": "Applying the synthetic ticker Rules to \"North Star Energy Inc. Class B\" produces \"NSE.B\".",
+      "expected_output": "NSE.B",
+      "role": "BOUNDARY",
+      "resolution": "DETERMINED",
+      "categories": ["share_class", "legal_suffix"]
+    },
+    {
+      "id": "t11",
+      "reveal_round": 3,
+      "company": "Blue River Holdings LLC Preferred",
+      "proposition": "Applying the synthetic ticker Rules to \"Blue River Holdings LLC Preferred\" produces \"BRH.P\".",
+      "expected_output": "BRH.P",
+      "role": "BOUNDARY",
+      "resolution": "DETERMINED",
+      "categories": ["preferred_share", "legal_suffix"]
+    },
+    {
+      "id": "t12",
+      "reveal_round": 3,
+      "company": "North Star Energy Inc. Class A",
+      "proposition": "Applying the synthetic ticker Rules to \"North Star Energy Inc. Class A\" produces \"NSE.A\".",
+      "expected_output": "NSE.A",
+      "role": "CONTRAST",
+      "resolution": "DETERMINED",
+      "categories": ["share_class", "legal_suffix"]
+    },
+    {
+      "id": "t13",
+      "reveal_round": 3,
+      "company": "Axiom AI Technologies Inc.",
+      "proposition": "Applying the synthetic ticker Rules to \"Axiom AI Technologies Inc.\" produces \"AAT\".",
+      "expected_output": "AAT",
+      "role": "BOUNDARY",
+      "resolution": "DETERMINED",
+      "categories": ["acronym_token", "legal_suffix"]
+    },
+    {
+      "id": "t14",
+      "reveal_round": 3,
+      "company": "The 5th Avenue Retail Group LLC",
+      "proposition": "Applying the synthetic ticker Rules to \"The 5th Avenue Retail Group LLC\" produces \"5ARG\".",
+      "expected_output": "5ARG",
+      "role": "BOUNDARY",
+      "resolution": "DETERMINED",
+      "categories": ["leading_article", "numeric_token", "legal_suffix"]
+    },
+    {
+      "id": "t15",
+      "reveal_round": 3,
+      "company": "Acme & Sons Ltd.",
+      "proposition": "Applying the synthetic ticker Rules to \"Acme & Sons Ltd.\" produces \"AS\".",
+      "expected_output": "AS",
+      "role": "FIT",
+      "resolution": "DETERMINED",
+      "categories": ["connector", "legal_suffix"]
+    },
+    {
+      "id": "t16",
+      "reveal_round": 3,
+      "company": "Neo-Works Corporation",
+      "proposition": "Applying the synthetic ticker Rules to \"Neo-Works Corporation\" produces \"NW\".",
+      "expected_output": "NW",
+      "role": "BOUNDARY",
+      "resolution": "DETERMINED",
+      "categories": ["hyphenated_token", "legal_suffix"]
+    },
+    {
+      "id": "t17",
+      "reveal_round": 3,
+      "company": "Oak-Brim Fabrication Inc.",
+      "proposition": "Applying the synthetic ticker Rules to \"Oak-Brim Fabrication Inc.\" produces \"OBF\".",
+      "expected_output": "OBF",
+      "role": "FIT",
+      "resolution": "DETERMINED",
+      "categories": ["hyphenated_token", "legal_suffix"]
+    },
+    {
+      "id": "t18",
+      "reveal_round": 3,
+      "company": "Delta of the North PLC",
+      "proposition": "Applying the synthetic ticker Rules to \"Delta of the North PLC\" produces \"DN\".",
+      "expected_output": "DN",
+      "role": "BOUNDARY",
+      "resolution": "DETERMINED",
+      "categories": ["connector", "legal_suffix"]
+    },
+    {
+      "id": "t19",
+      "reveal_round": 3,
+      "company": "3 Rivers Logistics LLC",
+      "proposition": "Applying the synthetic ticker Rules to \"3 Rivers Logistics LLC\" produces \"3RL\".",
+      "expected_output": "3RL",
+      "role": "FIT",
+      "resolution": "DETERMINED",
+      "categories": ["numeric_token", "legal_suffix"]
+    },
+    {
+      "id": "t20",
+      "reveal_round": 3,
+      "company": "Helix GmbH",
+      "proposition": "Applying the synthetic ticker Rules to \"Helix GmbH\" produces \"HEL\".",
+      "expected_output": "HEL",
+      "role": "BOUNDARY",
+      "resolution": "DETERMINED",
+      "categories": ["single_word", "foreign_legal_suffix"]
+    },
+    {
+      "id": "t21",
+      "reveal_round": 4,
+      "company": "Vega SA",
+      "proposition": "Applying the synthetic ticker Rules to \"Vega SA\" produces \"VEG\".",
+      "expected_output": "VEG",
+      "role": "BOUNDARY",
+      "resolution": "DETERMINED",
+      "categories": ["single_word", "foreign_legal_suffix"]
+    },
+    {
+      "id": "t22",
+      "reveal_round": 4,
+      "company": "Orion and Ember Foods Inc.",
+      "proposition": "Applying the synthetic ticker Rules to \"Orion and Ember Foods Inc.\" produces \"OEF\".",
+      "expected_output": "OEF",
+      "role": "FIT",
+      "resolution": "DETERMINED",
+      "categories": ["connector", "legal_suffix"]
+    },
+    {
+      "id": "t23",
+      "reveal_round": 4,
+      "company": "Beta X5 Labs LLC",
+      "proposition": "Applying the synthetic ticker Rules to \"Beta X5 Labs LLC\" produces \"BXL\".",
+      "expected_output": "BXL",
+      "role": "BOUNDARY",
+      "resolution": "DETERMINED",
+      "categories": ["mixed_alphanumeric", "legal_suffix"]
+    },
+    {
+      "id": "t24",
+      "reveal_round": 4,
+      "company": "Gamma 24 Seven Corp.",
+      "proposition": "Applying the synthetic ticker Rules to \"Gamma 24 Seven Corp.\" produces \"G2S\".",
+      "expected_output": "G2S",
+      "role": "CONTRAST",
+      "resolution": "DETERMINED",
+      "categories": ["numeric_token", "legal_suffix"]
+    },
+    {
+      "id": "t25",
+      "reveal_round": 4,
+      "company": "Amber-Field-Ridge Ltd.",
+      "proposition": "Applying the synthetic ticker Rules to \"Amber-Field-Ridge Ltd.\" produces \"AFR\".",
+      "expected_output": "AFR",
+      "role": "FIT",
+      "resolution": "DETERMINED",
+      "categories": ["hyphenated_token", "legal_suffix"]
+    },
+    {
+      "id": "t26",
+      "reveal_round": 4,
+      "company": "The Copper & Pine Group PLC",
+      "proposition": "Applying the synthetic ticker Rules to \"The Copper & Pine Group PLC\" produces \"CPG\".",
+      "expected_output": "CPG",
+      "role": "FIT",
+      "resolution": "DETERMINED",
+      "categories": ["leading_article", "connector", "legal_suffix"]
+    },
+    {
+      "id": "t27",
+      "reveal_round": 4,
+      "company": "Nova AI LLC",
+      "proposition": "Applying the synthetic ticker Rules to \"Nova AI LLC\" produces \"NA\".",
+      "expected_output": "NA",
+      "role": "CONTRAST",
+      "resolution": "DETERMINED",
+      "categories": ["acronym_token", "collision", "legal_suffix"]
+    },
+    {
+      "id": "t28",
+      "reveal_round": 4,
+      "company": "AI Nova LLC",
+      "proposition": "Applying the synthetic ticker Rules to \"AI Nova LLC\" produces \"AN\".",
+      "expected_output": "AN",
+      "role": "CONTRAST",
+      "resolution": "DETERMINED",
+      "categories": ["acronym_token", "legal_suffix"]
+    },
+    {
+      "id": "t29",
+      "reveal_round": 4,
+      "company": "Lumen Labs LLC Class A",
+      "proposition": "Applying the synthetic ticker Rules to \"Lumen Labs LLC Class A\" produces \"LL.A\".",
+      "expected_output": "LL.A",
+      "role": "FIT",
+      "resolution": "DETERMINED",
+      "categories": ["share_class", "legal_suffix"]
+    },
+    {
+      "id": "t30",
+      "reveal_round": 4,
+      "company": "Harbor Point Foods PLC Preferred",
+      "proposition": "Applying the synthetic ticker Rules to \"Harbor Point Foods PLC Preferred\" produces \"HPF.P\".",
+      "expected_output": "HPF.P",
+      "role": "FIT",
+      "resolution": "DETERMINED",
+      "categories": ["preferred_share", "legal_suffix"]
+    },
+    {
+      "id": "t31",
+      "reveal_round": 4,
+      "company": "Zephyr Corporation",
+      "proposition": "Applying the synthetic ticker Rules to \"Zephyr Corporation\" produces \"ZEP\".",
+      "expected_output": "ZEP",
+      "role": "FIT",
+      "resolution": "DETERMINED",
+      "categories": ["single_word", "legal_suffix"]
+    },
+    {
+      "id": "t32",
+      "reveal_round": 4,
+      "company": "Umbra LLC",
+      "proposition": "Applying the synthetic ticker Rules to \"Umbra LLC\" produces \"UMB\".",
+      "expected_output": "UMB",
+      "role": "FIT",
+      "resolution": "DETERMINED",
+      "categories": ["single_word", "legal_suffix"]
+    },
+    {
+      "id": "t33",
+      "reveal_round": 4,
+      "company": "Quartz-Qube Inc.",
+      "proposition": "Applying the synthetic ticker Rules to \"Quartz-Qube Inc.\" produces \"QQ\".",
+      "expected_output": "QQ",
+      "role": "BOUNDARY",
+      "resolution": "DETERMINED",
+      "categories": ["hyphenated_token", "legal_suffix"]
+    },
+    {
+      "id": "t34",
+      "reveal_round": 4,
+      "company": "Seven 7 Studios Ltd.",
+      "proposition": "Applying the synthetic ticker Rules to \"Seven 7 Studios Ltd.\" produces \"S7S\".",
+      "expected_output": "S7S",
+      "role": "FIT",
+      "resolution": "DETERMINED",
+      "categories": ["numeric_token", "legal_suffix"]
+    },
+    {
+      "id": "t35",
+      "reveal_round": 4,
+      "company": "One of One Design Corp.",
+      "proposition": "Applying the synthetic ticker Rules to \"One of One Design Corp.\" produces \"OOD\".",
+      "expected_output": "OOD",
+      "role": "FIT",
+      "resolution": "DETERMINED",
+      "categories": ["connector", "legal_suffix"]
+    },
+    {
+      "id": "t36",
+      "reveal_round": 5,
+      "company": "Polar Bio-Tech Inc.",
+      "proposition": "Applying the synthetic ticker Rules to \"Polar Bio-Tech Inc.\" produces \"PBT\".",
+      "expected_output": "PBT",
+      "role": "FIT",
+      "resolution": "DETERMINED",
+      "categories": ["hyphenated_token", "legal_suffix"]
+    },
+    {
+      "id": "t37",
+      "reveal_round": 5,
+      "company": "The AI & Data Forge LLC",
+      "proposition": "Applying the synthetic ticker Rules to \"The AI & Data Forge LLC\" produces \"ADF\".",
+      "expected_output": "ADF",
+      "role": "BOUNDARY",
+      "resolution": "DETERMINED",
+      "categories": ["leading_article", "acronym_token", "connector", "legal_suffix"]
+    },
+    {
+      "id": "t38",
+      "reveal_round": 5,
+      "company": "Arc 9 Robotics Corporation",
+      "proposition": "Applying the synthetic ticker Rules to \"Arc 9 Robotics Corporation\" produces \"A9R\".",
+      "expected_output": "A9R",
+      "role": "FIT",
+      "resolution": "DETERMINED",
+      "categories": ["numeric_token", "legal_suffix"]
+    },
+    {
+      "id": "t39",
+      "reveal_round": 5,
+      "company": "Kestrel-Blue 3 Labs PLC",
+      "proposition": "Applying the synthetic ticker Rules to \"Kestrel-Blue 3 Labs PLC\" produces \"KB3L\".",
+      "expected_output": "KB3L",
+      "role": "BOUNDARY",
+      "resolution": "DETERMINED",
+      "categories": ["hyphenated_token", "numeric_token", "legal_suffix"]
+    },
+    {
+      "id": "t40",
+      "reveal_round": 5,
+      "company": "Mica and Moss SA",
+      "proposition": "Applying the synthetic ticker Rules to \"Mica and Moss SA\" produces \"MM\".",
+      "expected_output": "MM",
+      "role": "FIT",
+      "resolution": "DETERMINED",
+      "categories": ["connector", "foreign_legal_suffix"]
+    },
+    {
+      "id": "t41",
+      "reveal_round": 5,
+      "company": "Redwood Inc. Class B",
+      "proposition": "Applying the synthetic ticker Rules to \"Redwood Inc. Class B\" produces \"RED.B\".",
+      "expected_output": "RED.B",
+      "role": "BOUNDARY",
+      "resolution": "DETERMINED",
+      "categories": ["single_word", "share_class", "legal_suffix"]
+    },
+    {
+      "id": "t42",
+      "reveal_round": 5,
+      "company": "Vega SA Preferred",
+      "proposition": "Applying the synthetic ticker Rules to \"Vega SA Preferred\" produces \"VEG.P\".",
+      "expected_output": "VEG.P",
+      "role": "BOUNDARY",
+      "resolution": "DETERMINED",
+      "categories": ["single_word", "preferred_share", "foreign_legal_suffix"]
+    },
+    {
+      "id": "t43",
+      "reveal_round": 5,
+      "company": "Axiom AI Technologies Inc. Class A",
+      "proposition": "Applying the synthetic ticker Rules to \"Axiom AI Technologies Inc. Class A\" produces \"AAT.A\".",
+      "expected_output": "AAT.A",
+      "role": "BOUNDARY",
+      "resolution": "DETERMINED",
+      "categories": ["acronym_token", "share_class", "legal_suffix"]
+    },
+    {
+      "id": "t44",
+      "reveal_round": 5,
+      "company": "North Star Energy Inc. Preferred",
+      "proposition": "Applying the synthetic ticker Rules to \"North Star Energy Inc. Preferred\" produces \"NSE.P\".",
+      "expected_output": "NSE.P",
+      "role": "FIT",
+      "resolution": "DETERMINED",
+      "categories": ["preferred_share", "legal_suffix"]
+    },
+    {
+      "id": "t45",
+      "reveal_round": 5,
+      "company": "North Arc LLC",
+      "proposition": "Applying the synthetic ticker Rules to \"North Arc LLC\" produces \"NA\".",
+      "expected_output": "NA",
+      "role": "CONTRAST",
+      "resolution": "DETERMINED",
+      "categories": ["collision", "legal_suffix"]
+    },
+    {
+      "id": "t46",
+      "reveal_round": 5,
+      "company": "Élan Groupe SA",
+      "proposition": "The synthetic ticker for \"Élan Groupe SA\" remains unresolved until a transliteration policy is approved.",
+      "expected_output": "",
+      "role": "BOUNDARY",
+      "resolution": "UNRESOLVED",
+      "categories": ["unsupported_transliteration", "foreign_legal_suffix"]
+    },
+    {
+      "id": "t47",
+      "reveal_round": 5,
+      "company": "Kappa/Delta Ventures LLC",
+      "proposition": "The synthetic ticker for \"Kappa/Delta Ventures LLC\" remains unresolved until slash-separated name handling is approved.",
+      "expected_output": "",
+      "role": "BOUNDARY",
+      "resolution": "UNRESOLVED",
+      "categories": ["unsupported_separator", "legal_suffix"]
+    },
+    {
+      "id": "t48",
+      "reveal_round": 5,
+      "company": "Cobalt Holdings 2028 Note",
+      "proposition": "The synthetic ticker for \"Cobalt Holdings 2028 Note\" remains unresolved until debt-security descriptors are in scope.",
+      "expected_output": "",
+      "role": "CONTRAST",
+      "resolution": "UNRESOLVED",
+      "categories": ["unsupported_security_descriptor"]
+    },
+    {
+      "id": "t49",
+      "reveal_round": 5,
+      "company": "Northwind Series Q",
+      "proposition": "The synthetic ticker for \"Northwind Series Q\" remains unresolved until unsupported series designations are classified.",
+      "expected_output": "",
+      "role": "CONTRAST",
+      "resolution": "UNRESOLVED",
+      "categories": ["unsupported_security_descriptor"]
+    },
+    {
+      "id": "t50",
+      "reveal_round": 5,
+      "company": "The 8-Bit Orchard Company Inc.",
+      "proposition": "Applying the synthetic ticker Rules to \"The 8-Bit Orchard Company Inc.\" produces \"8BOC\".",
+      "expected_output": "8BOC",
+      "role": "BOUNDARY",
+      "resolution": "DETERMINED",
+      "categories": ["leading_article", "hyphenated_token", "numeric_token", "legal_suffix"]
+    }
+  ]
+}

@@ -2,51 +2,102 @@
 
 ## Decision and order
 
+The ticker replay is an evaluation of the Ground authoring loop, not a shortcut
+that imports an already known Rule set. It begins with the exact vague Goal
+`티커가 어떻게 만들어지는지 규칙을 알고 싶어`, then reveals reviewed
+Example propositions in frozen rounds of 5, 10, 20, 35, and 50. Elaborate may
+suggest unverified candidate Rules, Distill may induce evidence-bound Rule
+proposals from the included Examples, and Fit may judge the accepted Rules
+against those Examples. None of those read-only results revises the Ground.
+
+Before automating the replay, add a typed Resolve boundary that can turn one
+exact semantic artifact into one reviewed Ground action. Resolve must retain
+the source artifact's verification status, freeze the Ground identity, and use
+the existing exact command and CAS boundary for application.
+
 Finish and commit the current Distill application/result contract before
 adding a persisted hidden receipt. The receipt is a later runtime/prewarm
 adapter over `DistillPreparedLookup`; it must not change Distill's meaning,
 whole-frame validation, proposal schema, evidence coverage, or Apply contract.
 
-The next Ground slice should instead prove the iterative authoring loop that
-the ticker scenario requires. A person must be able to grow concrete Example
-propositions toward roughly twenty reviewed cases, revise Rules as boundaries
-appear, and deliberately change or extend the bound Contexts without losing
-the history that explains those revisions. Twenty is a representative stress
-case, not an automatic completion or approval threshold.
+## Frozen benchmark
+
+`memcommit/eval/fixtures/ticker_ground_workflow.json` is the authoritative
+staged corpus and `memcommit.eval.ticker_ground_workflow` is its strict loader.
+Only the vague Goal and Examples revealed through the current round may be sent
+to a provider. Host-side category and expected-resolution labels are scoring
+evidence, not prompt hints.
+
+The corpus uses fictional names and synthetic tickers. It contains 46 exact
+mapping propositions plus four late boundary propositions that must remain
+explicitly unresolved until a policy is supplied:
+
+- transliteration of non-ASCII names;
+- slash-separated name components;
+- debt-security descriptors; and
+- unsupported series designations.
+
+This means convergence is not synonymous with inventing 50 ticker strings. A
+successful final Ground explains every determined mapping, preserves all four
+unknowns as visible boundaries, and does not claim official or unique market
+symbols. The fixed categories also cover leading articles, legal suffixes,
+connectors, single-word mnemonics, numeric and mixed tokens, hyphens, acronym
+tokens, share classes, preferred shares, and permitted collisions.
 
 ## Representative progression
 
-Use synthetic company names and generated ticker expectations so the fixture
-tests transformation policy rather than asserting official market symbols.
-Exercise at least these visible rounds:
+Exercise these visible rounds:
 
-1. create a Ground with a Goal and one reviewed INCLUDE Example;
-2. Distill an initial Rule proposal, review the Rule separately, then run Fit;
-3. grow to four ordinary Examples and expose the first contradiction;
-4. add boundary and contrast Examples, including legal suffixes, class suffixes,
-   acronym-like words, punctuation, and a deliberately ambiguous expectation;
-5. revise or split Rules and rerun Fit without silently rewriting a failing
-   Example to agree with the Rules;
-6. add or edit ordinary Context Memories outside Ground, making the saved
-   binding stale;
+1. create a proposition-schema Ground with the vague Goal and the first five
+   reviewed INCLUDE Examples;
+2. Elaborate the Goal, review no suggestion implicitly, select one candidate
+   through Resolve, then Fit the separately accepted Rule;
+3. reveal Examples 6–10, Distill an evidence-bound delta, Resolve one exact
+   proposal, and rerun Fit after the resulting Ground revision;
+4. repeat at 20 and 35 Examples, revising or splitting Rules when boundary or
+   contrast Examples expose an overgeneralization;
+5. reveal all 50, including the four intentionally unresolved policies, and
+   refuse any Resolve proposal that fabricates their outcomes;
+6. optionally add or edit ordinary Context Memories outside Ground, making the
+   saved binding stale;
 7. explicitly refresh or replace the affected binding, showing the old and new
-   frame identities and which Ground judgments require review;
-8. continue through eight, twelve, and approximately twenty reviewed Examples,
-   alternating Distill, human Rule review, and Fit; and
-9. verify that the final Ground remains open until the person explicitly
+   frame identities and which Ground judgments require review; and
+8. verify that the final Ground remains open until the person explicitly
    approves it and all required unresolved boundaries have been handled.
 
 Every round must show the current Goal, accepted Rules, active INCLUDE Example
-set, Context binding freshness, latest Fit freshness, and whether a Distill
-proposal is LIVE or PREPARED_EXACT. Distill remains proposal-only inside the
-Ground: it cannot promote its own Rules.
+set, Context binding freshness, latest Fit freshness, and exact analysis origin
+(`LIVE` or `PREPARED_EXACT`). Distill and Elaborate remain proposal-only: they
+cannot promote their own Rules or Examples.
 
-## Missing Ground capability
+## Resolve contract still required
+
+Resolve consumes exactly one frozen source artifact:
+
+- a current immutable Fit receipt bound to the same Ground UID, revision, and
+  digest;
+- a Distill result whose complete source and Goal still match; or
+- an Elaborate result explicitly labelled `UNVERIFIED`.
+
+It produces at most one deterministic Ground action or one explicit
+no-action/defer outcome. An action may revise the Goal, propose or refine one
+Rule, propose or refine one Example, or change one Example's USE state. It may
+not bundle several revisions, approve its own proposal, widen evidence, or
+silently rewrite a failing Example to agree with the Rules. A proposal derived
+from Elaborate remains unverified after projection; selection does not turn it
+into evidence.
+
+Application must freeze and revalidate the source artifact and Ground
+UID/revision/digest, display the exact action before approval, and use the
+existing Ground store CAS. A successful action creates exactly one Ground
+revision and makes every prior Fit receipt stale. Stale artifacts fail before
+provider connection or mutation.
+
+## Missing Context-binding capability
 
 The current binding contract correctly marks a Ground stale after a bound
 Context changes, but it has no non-destructive refresh path. Design one typed,
-reviewed application action before automating the ticker flow. Its exact name
-is not fixed; `refresh binding` is used here as the semantic description.
+reviewed application action after Resolve's single-revision contract is proven.
 
 That action must:
 
@@ -86,16 +137,18 @@ be proved as a separate Distill compatibility rule.
 
 ## Verification gates
 
-- deterministic domain tests for binding-refresh classification and CAS;
+- strict corpus tests for exact size, monotonic stages, category coverage, and
+  the four non-inventable boundaries;
+- deterministic Resolve planning tests for source identity, verification
+  labels, action cardinality, revision/digest freshness, and no-op outcomes;
 - provider-spy tests proving stale/all-off/unauthorized inputs fail before
   connection;
-- a complete 1-to-approximately-20 ticker replay with stored per-round Ground
-  revisions and Fit receipts;
-- explicit Context-addition, Context-edit, Context-replacement, and unchanged
-  rebind cases;
+- a complete 5-to-50 replay with stored per-round Ground revisions, semantic
+  artifacts, reviewed Resolve commands, and Fit receipts;
 - regression evidence that earlier Examples remain visible and are not
   silently reclassified after a Rule or binding revision;
-- CLI/TUI parity through the same typed application action; and
-- an ordered `180x52` PTY capture covering entry, Example growth, contradiction,
-  Rule revision, stale binding, reviewed refresh, new Fit, Distill proposal,
-  and final read-only verification.
+- Python, agent, CLI, and TUI parity through the same typed application action;
+  and
+- an ordered `180x52` PTY capture covering entry, Example growth,
+  contradiction, Rule revision, explicit unresolved boundaries, stale receipt,
+  reviewed Resolve, new Fit, and final read-only verification.
