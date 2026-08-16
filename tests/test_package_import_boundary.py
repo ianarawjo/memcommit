@@ -45,6 +45,7 @@ import sys
 from memcommit.api import MemCommitClient
 blocked = (
     'memcommit.api._operations.add',
+    'memcommit.api._operations.compare',
     'memcommit.api._operations.distill',
     'memcommit.api._operations.elaborate',
     'memcommit.api._operations.fit',
@@ -53,6 +54,7 @@ blocked = (
     'memcommit.api._operations.meld',
     'memcommit.api._operations.query',
     'memcommit.add_application',
+    'memcommit.comparison_execution',
     'memcommit.distill_application',
     'memcommit.elaborate_application',
     'memcommit.fit_application',
@@ -76,6 +78,7 @@ import importlib
 import sys
 for name in (
     'memcommit.api._operations.add',
+    'memcommit.api._operations.compare',
     'memcommit.api._operations.distill',
     'memcommit.api._operations.elaborate',
     'memcommit.api._operations.fit',
@@ -146,6 +149,7 @@ assert 'memcommit.api._operations.add' in sys.modules
 assert 'memcommit.add_application' in sys.modules
 assert 'memcommit.api._operations.query' not in sys.modules
 assert 'memcommit.api._operations.meld' not in sys.modules
+assert 'memcommit.api._operations.compare' not in sys.modules
 assert 'memcommit.api._operations.fit' not in sys.modules
 assert 'memcommit.api._operations.distill' not in sys.modules
 assert 'memcommit.api._operations.elaborate' not in sys.modules
@@ -184,6 +188,7 @@ assert 'memcommit.operations.query.ordinary_application' in sys.modules
 assert 'memcommit.api._operations.add' not in sys.modules
 assert 'memcommit.add_application' not in sys.modules
 assert 'memcommit.api._operations.meld' not in sys.modules
+assert 'memcommit.api._operations.compare' not in sys.modules
 assert 'memcommit.api._operations.fit' not in sys.modules
 assert 'memcommit.api._operations.distill' not in sys.modules
 assert 'memcommit.api._operations.elaborate' not in sys.modules
@@ -221,6 +226,41 @@ assert 'memcommit.api._operations.add' not in sys.modules
 assert 'memcommit.add_application' not in sys.modules
 assert 'memcommit.api._operations.query' not in sys.modules
 assert 'memcommit.operations.query.ordinary_application' not in sys.modules
+""",
+        environment=environment,
+    )
+
+    assert completed.returncode == 0, completed.stderr
+
+
+def test_selected_compare_loads_only_its_operation_assembly(tmp_path):
+    environment = os.environ.copy()
+    environment["MEMCOMMIT_IMPORT_TEST_ROOT"] = str(tmp_path / "store")
+    completed = _run_fresh(
+        """
+import os
+from pathlib import Path
+import sys
+from memcommit.api import CompareContextError, MemCommitClient
+
+client = MemCommitClient(
+    root=Path(os.environ['MEMCOMMIT_IMPORT_TEST_ROOT']),
+    create=True,
+)
+try:
+    client.open_comparison('00000000-0000-0000-0000-000000000001')
+except CompareContextError:
+    pass
+else:
+    raise AssertionError('missing Compare analysis unexpectedly opened')
+assert 'memcommit.api._operations.compare' in sys.modules
+assert 'memcommit.comparison_execution' in sys.modules
+assert 'memcommit.api._operations.add' not in sys.modules
+assert 'memcommit.add_application' not in sys.modules
+assert 'memcommit.api._operations.query' not in sys.modules
+assert 'memcommit.operations.query.ordinary_application' not in sys.modules
+assert 'memcommit.api._operations.meld' not in sys.modules
+assert 'memcommit.meld_application' not in sys.modules
 """,
         environment=environment,
     )

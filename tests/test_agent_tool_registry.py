@@ -14,6 +14,7 @@ from memcommit.interfaces.agent import (
     ADD_AGENT_TOOL_NAME,
     ATOMIZE_AGENT_TOOL_NAME,
     ATOMIZE_GROUNDING_AGENT_TOOL_NAME,
+    COMPARE_AGENT_TOOL_NAME,
     MELD_AGENT_TOOL_NAME,
     DISTILL_AGENT_TOOL_NAME,
     ELABORATE_AGENT_TOOL_NAME,
@@ -75,6 +76,7 @@ def test_default_registry_discovers_fresh_frozen_shipped_schemas(tmp_path):
     assert registry.tool_names == (
         QUERY_AGENT_TOOL_NAME,
         ADD_AGENT_TOOL_NAME,
+        COMPARE_AGENT_TOOL_NAME,
         MELD_AGENT_TOOL_NAME,
         ATOMIZE_AGENT_TOOL_NAME,
         ATOMIZE_GROUNDING_AGENT_TOOL_NAME,

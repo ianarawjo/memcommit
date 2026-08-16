@@ -101,6 +101,38 @@ class MeldExecutionError(MeldError):
     """An authorized Meld failed before a complete result was published."""
 
 
+class CompareError(MemCommitError):
+    """Base class for public Compare failures."""
+
+
+class CompareInputError(CompareError):
+    """The caller supplied an invalid Compare request."""
+
+
+class CompareContextError(CompareError):
+    """A requested Compare source or saved analysis is unavailable."""
+
+
+class CompareAuthorityError(CompareError):
+    """The active Profile or Grants do not authorize this Compare."""
+
+
+class CompareProviderFailure(CompareError):
+    """The semantic provider could not complete Compare."""
+
+
+class CompareConflictError(CompareError):
+    """A Compare source or saved analysis changed concurrently."""
+
+
+class CompareStorageError(CompareError):
+    """Compare could not safely read or publish local durable state."""
+
+
+class CompareExecutionError(CompareError):
+    """An authorized Compare failed before a complete result was published."""
+
+
 class AtomizeGroundingError(MemCommitError):
     """Base class for public conversational Atomize Grounding failures."""
 
@@ -211,6 +243,14 @@ __all__ = [
     "AtomizeInputError",
     "AtomizeProviderFailure",
     "AtomizeStorageError",
+    "CompareAuthorityError",
+    "CompareConflictError",
+    "CompareContextError",
+    "CompareError",
+    "CompareExecutionError",
+    "CompareInputError",
+    "CompareProviderFailure",
+    "CompareStorageError",
     "MemCommitError",
     "MeldAuthorityError",
     "MeldConflictError",

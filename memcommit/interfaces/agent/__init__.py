@@ -21,6 +21,13 @@ from memcommit.interfaces.agent.atomize import (
     AtomizeAgentKind,
     atomize_agent_tool_schema,
 )
+from memcommit.interfaces.agent.compare import (
+    COMPARE_AGENT_CONTRACT_VERSION,
+    COMPARE_AGENT_TOOL_NAME,
+    CompareAgentAdapter,
+    CompareAgentKind,
+    compare_agent_tool_schema,
+)
 from memcommit.interfaces.agent.query import (
     QUERY_AGENT_CONTRACT_VERSION,
     QUERY_AGENT_ERROR_MESSAGE_LIMIT,
@@ -85,6 +92,10 @@ __all__ = [
     "AtomizeAgentKind",
     "AtomizeGroundingAgentAdapter",
     "AtomizeGroundingAgentKind",
+    "COMPARE_AGENT_CONTRACT_VERSION",
+    "COMPARE_AGENT_TOOL_NAME",
+    "CompareAgentAdapter",
+    "CompareAgentKind",
     "MELD_AGENT_CONTRACT_VERSION",
     "MELD_AGENT_TOOL_NAME",
     "MeldAgentAdapter",
@@ -110,6 +121,7 @@ __all__ = [
     "atomize_agent_tool_schema",
     "atomize_grounding_agent_tool_schema",
     "build_default_agent_tool_registry",
+    "compare_agent_tool_schema",
     "meld_agent_tool_schema",
     "distill_agent_tool_schema",
     "elaborate_agent_tool_schema",

@@ -216,6 +216,10 @@ considered sufficient design history.
   defines Meld's open-version-mutate contract, stale-before-provider boundary,
   exact Apply retry reconstruction, and Python/agent parity without merging its
   operation-owned session schema with other saved analyses.
+- [`compare-session-lifecycle-design-rationale.md`](compare-session-lifecycle-design-rationale.md)
+  and [`compare-application-boundary-matrix.md`](compare-application-boundary-matrix.md)
+  define Compare's targetless Run/Open/Refresh lifecycle, exact digest CAS,
+  hidden-cache parity, and intentional absence of a synthetic Apply step.
 - [`mem-atomize-design-rationale.md`](mem-atomize-design-rationale.md) defines
   atomicity, source grounding, preview/application boundaries, and lineage.
 - [`mem-atomize-workbench-design-rationale.md`](mem-atomize-workbench-design-rationale.md)

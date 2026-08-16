@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from contextlib import contextmanager
 from datetime import datetime, timezone
 import uuid
 
@@ -7,10 +8,12 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.config as config_module
+import memcommit.api._operations.compare as compare_operation
 import memcommit.meld_runtime as meld_runtime
 import memcommit.ops as ops
 import memcommit.store as store_module
 from memcommit.cli import app
+from memcommit.api import MemCommitClient
 from memcommit.commands.compare import render_comparison
 from memcommit.commands.comparison_execution import ensure_comparison_analysis
 from memcommit.authority.access import ContextAccess
@@ -380,6 +383,55 @@ def test_exact_compare_cli_materializes_hidden_receipt_without_provider(
     assert result.exit_code == 0, result.stderr or result.output
     assert "EXACT PREWARM" in result.output
     saved = load_comparison_analysis(reference.uid, compared.uid)
+    assert saved is not None
+    assert saved.to_dict() == prepared.to_dict()
+
+
+def test_exact_compare_public_api_materializes_hidden_receipt_without_provider(
+    tmp_path,
+    monkeypatch,
+):
+    store, profile, registry, reference, compared, prepared = _fixture(
+        tmp_path,
+        monkeypatch,
+    )
+    install_declared_compare_prewarms(
+        store=store,
+        profile=profile,
+        registry_snapshot=registry,
+    )
+
+    @contextmanager
+    def registry_lock():
+        yield registry
+
+    monkeypatch.setattr(
+        compare_operation,
+        "authority_grant_snapshot_lock",
+        registry_lock,
+    )
+    client = MemCommitClient(
+        root=store.store_dir,
+        semantic_provider_factory=lambda: (_ for _ in ()).throw(
+            AssertionError("hidden exact Compare receipt opened a provider")
+        ),
+    )
+
+    result = client.compare_contexts(
+        reference.name,
+        compared.name,
+        reference_descendants=True,
+        compared_descendants=True,
+    )
+
+    assert result.origin == "EXACT_PREWARM"
+    assert result.durable is True
+    assert result.analysis_uid == prepared.uid
+    saved = load_comparison_analysis(
+        reference.uid,
+        compared.uid,
+        store=store,
+    )
     assert saved is not None
     assert saved.to_dict() == prepared.to_dict()
 

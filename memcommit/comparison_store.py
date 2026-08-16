@@ -12,6 +12,7 @@ import memcommit.store as store_module
 from memcommit.comparison import (
     ComparisonAnalysis,
     ComparisonError,
+    comparison_canonical_digest,
 )
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.context_targeting.loading import load_context_scope
@@ -125,6 +126,7 @@ def save_comparison_analysis(
     analysis: ComparisonAnalysis,
     *,
     expected_analysis_uid: str | None,
+    expected_analysis_version: str | None = None,
 ) -> None:
     """CAS-save one analysis while every frozen local source stays locked."""
     if not isinstance(store, store_module.MemoryStore):
@@ -139,6 +141,15 @@ def save_comparison_analysis(
             expected_analysis_uid,
             "expected comparison analysis uid",
         )
+    if expected_analysis_version is not None and (
+        not isinstance(expected_analysis_version, str)
+        or len(expected_analysis_version) != 64
+        or any(
+            character not in "0123456789abcdef"
+            for character in expected_analysis_version
+        )
+    ):
+        raise ValueError("Invalid expected comparison analysis version.")
 
     reference_frame, compared_frame = analysis.frames
     path = comparison_analysis_path(
@@ -201,7 +212,15 @@ def save_comparison_analysis(
             store=store,
         )
         current_uid = current.uid if current is not None else None
-        if current_uid != expected_analysis_uid:
+        current_version = (
+            comparison_canonical_digest(current.to_dict())
+            if current is not None
+            else None
+        )
+        if current_uid != expected_analysis_uid or (
+            expected_analysis_version is not None
+            and current_version != expected_analysis_version
+        ):
             raise ConcurrentComparisonUpdateError(
                 "The ordered comparison slot changed before this analysis "
                 "could be saved."

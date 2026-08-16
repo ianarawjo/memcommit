@@ -14,7 +14,11 @@ from memcommit.authority.access import (
     freeze_granted_context_binding,
     revalidate_granted_context_binding,
 )
-from memcommit.comparison import ComparisonAnalysis, ComparisonError
+from memcommit.comparison import (
+    ComparisonAnalysis,
+    ComparisonError,
+    comparison_canonical_digest,
+)
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.context_targeting.loading import load_context_scope
 from memcommit.derived_policy import AnalysisRetention, authorize_analysis_save
@@ -170,6 +174,7 @@ def save_granted_comparison_artifact(
     *,
     retention: AnalysisRetention,
     expected_analysis_uid: str | None,
+    expected_analysis_version: str | None = None,
 ) -> GrantedComparisonArtifact:
     values = tuple(accesses)
     if len(values) != 2:
@@ -185,6 +190,15 @@ def save_granted_comparison_artifact(
         bindings=bindings,  # type: ignore[arg-type]
     )
     restored = GrantedComparisonArtifact.from_dict(artifact.to_dict())
+    if expected_analysis_version is not None and (
+        not isinstance(expected_analysis_version, str)
+        or len(expected_analysis_version) != 64
+        or any(
+            character not in "0123456789abcdef"
+            for character in expected_analysis_version
+        )
+    ):
+        raise ValueError("Invalid expected comparison analysis version.")
     path = granted_comparison_analysis_path(
         store,
         analysis.frames[0].context_uid,
@@ -206,7 +220,15 @@ def save_granted_comparison_artifact(
             current_uid = (
                 current.analysis.uid if current is not None else None
             )
-            if current_uid != expected_analysis_uid:
+            current_version = (
+                comparison_canonical_digest(current.analysis.to_dict())
+                if current is not None
+                else None
+            )
+            if current_uid != expected_analysis_uid or (
+                expected_analysis_version is not None
+                and current_version != expected_analysis_version
+            ):
                 raise ValueError(
                     "The granted comparison slot changed before this analysis "
                     "could be saved."
@@ -225,7 +247,13 @@ def granted_artifact_contexts(
         contexts: list[Context] = []
         for frame in artifact.analysis.frames:
             context = Context(uid=frame.context_uid, name=frame.context_name)
-            for memory in frame.memories:
+            # Focused Compare frames keep non-actionable neighbors as Context
+            # evidence, but that evidence remains part of the frozen Context
+            # digest and must be restored for exact session revalidation.
+            for memory in sorted(
+                (*frame.memories, *frame.context_evidence),
+                key=lambda item: item.position,
+            ):
                 context.add(Memory(uid=memory.uid, content=memory.content))
             contexts.append(context)
         return contexts[0], contexts[1]

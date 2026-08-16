@@ -23,6 +23,11 @@ from memcommit.interfaces.agent.atomize import (
     AtomizeAgentAdapter,
     atomize_agent_tool_schema,
 )
+from memcommit.interfaces.agent.compare import (
+    COMPARE_AGENT_TOOL_NAME,
+    CompareAgentAdapter,
+    compare_agent_tool_schema,
+)
 from memcommit.interfaces.agent.contract import JsonObject, error_response
 from memcommit.interfaces.agent.distill import (
     DISTILL_AGENT_TOOL_NAME,
@@ -221,6 +226,7 @@ def build_default_agent_tool_registry(client: MemCommitClient) -> AgentToolRegis
         raise TypeError("Default agent tool registry requires a MemCommitClient.")
     query = QueryAgentAdapter(client)
     add = AddAgentAdapter(client)
+    compare = CompareAgentAdapter(client)
     meld = MeldAgentAdapter(client)
     atomize = AtomizeAgentAdapter(client)
     atomize_grounding = AtomizeGroundingAgentAdapter(client)
@@ -239,6 +245,11 @@ def build_default_agent_tool_registry(client: MemCommitClient) -> AgentToolRegis
                 name=ADD_AGENT_TOOL_NAME,
                 schema_factory=add_agent_tool_schema,
                 handler=add.invoke,
+            ),
+            AgentToolBinding(
+                name=COMPARE_AGENT_TOOL_NAME,
+                schema_factory=compare_agent_tool_schema,
+                handler=compare.invoke,
             ),
             AgentToolBinding(
                 name=MELD_AGENT_TOOL_NAME,

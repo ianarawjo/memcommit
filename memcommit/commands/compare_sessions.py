@@ -4,17 +4,13 @@ from __future__ import annotations
 
 from datetime import datetime
 from pathlib import Path
-import re
 import sys
-import uuid
 
-from memcommit.comparison import (
-    COMPARISON_RULESET_VERSION,
-    ComparisonAnalysis,
-)
-from memcommit.comparison_store import (
-    comparison_analyses_dir,
-    load_comparison_analysis,
+from memcommit.comparison import ComparisonAnalysis
+from memcommit.comparison_session_application import (
+    iter_saved_comparisons,
+    load_saved_comparison,
+    revalidate_saved_comparison,
 )
 from memcommit.commands.session_picker import (
     SessionNewReceipt,
@@ -22,30 +18,7 @@ from memcommit.commands.session_picker import (
     SessionPickerEntry,
     choose_session,
 )
-from memcommit.granted_comparison_store import (
-    granted_artifact_contexts,
-    iter_granted_comparison_artifacts,
-)
 from memcommit.store import MemoryStore
-
-
-_FINAL_ANALYSIS_NAME = re.compile(
-    r"^([0-9a-f-]{36})--([0-9a-f-]{36})\.json$"
-)
-_ATOMIC_TEMP_NAME = re.compile(
-    r"^\.([0-9a-f-]{36})--([0-9a-f-]{36})"
-    r"\.json\.write-([0-9a-f]{32})$"
-)
-
-
-def _canonical_uuid(value: str, label: str) -> str:
-    try:
-        canonical = str(uuid.UUID(value))
-    except (AttributeError, TypeError, ValueError) as error:
-        raise ValueError(f"Invalid {label}.") from error
-    if canonical != value:
-        raise ValueError(f"Invalid {label}.")
-    return canonical
 
 
 def _created_timestamp(value: str) -> float:
@@ -65,109 +38,6 @@ def _artifact_timestamp(analysis: ComparisonAnalysis, path: Path) -> float:
         # here only removes a presentation timestamp from this frozen catalog.
         pass
     return timestamp
-
-
-def iter_saved_comparisons(
-    store: MemoryStore | None = None,
-) -> tuple[tuple[ComparisonAnalysis, Path], ...]:
-    """Strictly load ordinary and visible granted latest-pair analyses."""
-    root = comparison_analyses_dir()
-    records: list[tuple[ComparisonAnalysis, Path]] = []
-    if root.exists():
-        if not root.is_dir() or root.is_symlink():
-            raise ValueError("Comparison analysis storage is invalid.")
-        for path in root.iterdir():
-            if path.is_symlink() or not path.is_file():
-                raise ValueError("Comparison analysis storage is invalid.")
-            if _ATOMIC_TEMP_NAME.fullmatch(path.name) is not None:
-                continue
-            match = _FINAL_ANALYSIS_NAME.fullmatch(path.name)
-            if match is None:
-                raise ValueError("Comparison analysis storage is invalid.")
-            reference_uid = _canonical_uuid(
-                match.group(1),
-                "comparison reference Context uid",
-            )
-            compared_uid = _canonical_uuid(
-                match.group(2),
-                "comparison compared Context uid",
-            )
-            analysis = load_comparison_analysis(reference_uid, compared_uid)
-            if analysis is not None:
-                records.append((analysis, path))
-    if store is not None:
-        records.extend(
-            (artifact.analysis, path)
-            for artifact, path in iter_granted_comparison_artifacts(store)
-        )
-    return tuple(sorted(records, key=lambda record: record[0].uid))
-
-
-def load_saved_comparison(
-    analysis_uid: str,
-    *,
-    store: MemoryStore | None = None,
-) -> ComparisonAnalysis:
-    """Resolve an exact analysis UID without selecting or refreshing a pair."""
-    expected_uid = _canonical_uuid(analysis_uid, "comparison analysis uid")
-    matches = [
-        analysis
-        for analysis, _path in iter_saved_comparisons(store)
-        if analysis.uid == expected_uid
-    ]
-    if not matches:
-        raise ValueError(
-            f"Saved comparison analysis '{analysis_uid}' is no longer available."
-        )
-    if len(matches) != 1:
-        raise ValueError("Saved comparison analysis identity is not unique.")
-    return matches[0]
-
-
-def revalidate_saved_comparison(
-    store: MemoryStore,
-    analysis: ComparisonAnalysis,
-) -> None:
-    """Fail closed if either exact source no longer matches the analysis."""
-    granted = next(
-        (
-            artifact
-            for artifact, _path in iter_granted_comparison_artifacts(store)
-            if artifact.analysis.uid == analysis.uid
-        ),
-        None,
-    )
-    if granted is not None:
-        reference, compared = granted_artifact_contexts(store, granted)
-        if not analysis.matches(reference, compared):
-            raise ValueError(
-                "A granted source changed after this comparison was saved."
-            )
-        if analysis.ruleset_version != COMPARISON_RULESET_VERSION:
-            raise ValueError(
-                "This comparison uses an older semantic ruleset. Refresh the "
-                "explicit ordered pair before reopening it as current analysis."
-            )
-        return
-    reference_frame, compared_frame = analysis.frames
-    try:
-        reference = store.load_direct(reference_frame.context_name)
-        compared = store.load_direct(compared_frame.context_name)
-    except FileNotFoundError as error:
-        raise ValueError(
-            "A source Context for this saved comparison no longer exists."
-        ) from error
-    if not analysis.matches(reference, compared):
-        raise ValueError(
-            "A source Context changed after this comparison was saved. Run "
-            "an explicit 'mem compare --refresh --to CONTEXT' before using "
-            "it as current analysis."
-        )
-    if analysis.ruleset_version != COMPARISON_RULESET_VERSION:
-        raise ValueError(
-            "This comparison uses an older semantic ruleset. Refresh the "
-            "explicit ordered pair before reopening it as current analysis."
-        )
 
 
 def comparison_session_entries(
@@ -250,3 +120,12 @@ def choose_comparison_session(
     if selected is None or receipt.argv != selected.reopen_argv:
         raise ValueError("Compare session picker returned a forged receipt.")
     return receipt
+
+
+__all__ = [
+    "choose_comparison_session",
+    "comparison_session_entries",
+    "iter_saved_comparisons",
+    "load_saved_comparison",
+    "revalidate_saved_comparison",
+]

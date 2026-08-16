@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from concurrent.futures import ThreadPoolExecutor
+from dataclasses import replace
 import hashlib
 import json
 from pathlib import Path
@@ -15,7 +16,7 @@ import memcommit.ops as ops
 import memcommit.commands.compare as compare_command
 import memcommit.commands.compare_sessions as compare_sessions_module
 from memcommit.cli import app
-from memcommit.comparison import ComparisonInput
+from memcommit.comparison import ComparisonInput, comparison_canonical_digest
 from memcommit.comparison_provider import (
     COMPARISON_PAYLOAD_MARKER,
     ComparisonProviderError,
@@ -1073,6 +1074,46 @@ def test_ordered_slot_cas_rejects_stale_competing_refresh(
     saved = load_comparison_analysis(reference.uid, compared.uid)
     assert saved is not None
     assert saved.uid == winner.uid
+
+
+def test_ordered_slot_exact_version_rejects_same_uid_content_replacement(
+    isolated_store,
+):
+    store = MemoryStore()
+    reference, compared = _task2_contexts(store)
+    initial = analyze_comparison(
+        ComparisonInput.from_contexts(reference, compared),
+        ExhaustiveCompareProvider(),
+    )
+    save_comparison_analysis(store, initial, expected_analysis_uid=None)
+    reviewed_version = comparison_canonical_digest(initial.to_dict())
+    same_identity = replace(
+        initial,
+        understanding=replace(
+            initial.understanding,
+            text="A separately written summary with the same analysis UID.",
+        ),
+    )
+    save_comparison_analysis(
+        store,
+        same_identity,
+        expected_analysis_uid=initial.uid,
+    )
+    replacement = analyze_comparison(
+        ComparisonInput.from_contexts(reference, compared),
+        ExhaustiveCompareProvider(),
+    )
+
+    with pytest.raises(
+        ConcurrentComparisonUpdateError,
+        match="ordered comparison slot changed",
+    ):
+        save_comparison_analysis(
+            store,
+            replacement,
+            expected_analysis_uid=initial.uid,
+            expected_analysis_version=reviewed_version,
+        )
 
 
 def test_explicit_store_controls_local_comparison_slot(tmp_path):

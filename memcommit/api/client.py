@@ -24,6 +24,7 @@ from memcommit.api.atomize import (
     AtomizeSaveAsApplyResult,
     AtomizeStructuralApplyResult,
 )
+from memcommit.api.compare import ComparisonResult
 from memcommit.api.errors import (
     QueryConfigurationError,
 )
@@ -165,6 +166,53 @@ class MemCommitClient:
         from memcommit.api._operations.fit import fit
 
         return fit(self._runtime, propositions, background=background)
+
+    def compare_contexts(
+        self,
+        reference_context: str,
+        compared_context: str,
+        *,
+        reference_descendants: bool = False,
+        compared_descendants: bool = False,
+        reference_memory: str | None = None,
+        compared_memory: str | None = None,
+    ) -> ComparisonResult:
+        """Reuse or create one complete ordered read-only Compare analysis."""
+
+        from memcommit.api._operations.compare import compare_contexts
+
+        return compare_contexts(
+            self._runtime,
+            reference_context,
+            compared_context,
+            reference_descendants=reference_descendants,
+            compared_descendants=compared_descendants,
+            reference_memory=reference_memory,
+            compared_memory=compared_memory,
+        )
+
+    def open_comparison(self, analysis_uid: str) -> ComparisonResult:
+        """Open one exact current durable analysis without provider or mutation."""
+
+        from memcommit.api._operations.compare import open_comparison
+
+        return open_comparison(self._runtime, analysis_uid)
+
+    def refresh_comparison(
+        self,
+        analysis_uid: str,
+        *,
+        expected_version: str,
+    ) -> ComparisonResult:
+        """Refresh exactly one reviewed latest-pair slot and replace it by CAS."""
+
+        from memcommit.api._operations.compare import refresh_comparison
+
+        return refresh_comparison(
+            self._runtime,
+            analysis_uid,
+            expected_version=expected_version,
+        )
 
     def resolve_context(
         self,

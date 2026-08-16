@@ -76,6 +76,7 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
     assert by_operation["resolve"].curated_state == "CLOSED"
     assert by_operation["find"].curated_state == "MIXED"
     assert by_operation["meld"].curated_state == "CLOSED"
+    assert by_operation["compare"].curated_state == "CLOSED"
     assert by_operation["branch"].curated_state == "UNREVIEWED"
     assert {record.curated_state for record in snapshot.operations} == {
         "CLOSED",
@@ -91,9 +92,9 @@ def test_curated_classification_covers_all_operations_conservatively() -> None:
         for state in {record.curated_state for record in snapshot.operations}
     }
 
-    assert len(states["CLOSED"]) == 14
+    assert len(states["CLOSED"]) == 15
     assert states["MIXED"] == {"find", "update"}
-    assert len(states["UNREVIEWED"]) == 43
+    assert len(states["UNREVIEWED"]) == 42
     assert not states.keys() & {"LEGACY", "N/A"}
 
 

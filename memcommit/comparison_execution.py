@@ -11,6 +11,7 @@ from memcommit.comparison import (
     ComparisonAnalysis,
     ComparisonError,
     ComparisonInput,
+    comparison_canonical_digest,
     comparison_analysis_matches_input,
 )
 from memcommit.comparison_store import (
@@ -145,6 +146,7 @@ def ensure_comparison_analysis(
     include_descendants: tuple[bool, bool] = (False, False),
     memory_selectors: tuple[str | None, str | None] = (None, None),
     refresh: bool = False,
+    expected_version: str | None = None,
     require_durable: bool = False,
     analyze: Callable[[ComparisonInput], ComparisonAnalysis],
     equivalent: Callable[[ComparisonInput], ComparisonAnalysis | None] | None = None,
@@ -192,6 +194,32 @@ def ensure_comparison_analysis(
             compared.uid,
             store=store,
         )
+    if expected_version is not None:
+        if (
+            not isinstance(expected_version, str)
+            or len(expected_version) != 64
+            or any(
+                character not in "0123456789abcdef"
+                for character in expected_version
+            )
+        ):
+            raise ComparisonError(
+                "Compare refresh requires a valid opaque saved version."
+            )
+        if existing is None or comparison_canonical_digest(
+            existing.to_dict()
+        ) != expected_version:
+            # This check intentionally precedes every prewarm/provider hook.
+            # An external refresh is an action on a reviewed artifact, not an
+            # instruction to replace whichever pair revision is latest.
+            raise ConcurrentComparisonUpdateError(
+                "The saved comparison changed after this refresh was reviewed."
+            )
+    existing_version = (
+        comparison_canonical_digest(existing.to_dict())
+        if existing is not None
+        else None
+    )
     if (
         existing is not None
         and comparison_analysis_matches_input(existing, comparison_input)
@@ -358,6 +386,7 @@ def ensure_comparison_analysis(
                     expected_analysis_uid=(
                         existing.uid if existing is not None else None
                     ),
+                    expected_analysis_version=existing_version,
                 )
         return ComparisonExecutionResult(
             analysis=analysis,
@@ -371,6 +400,7 @@ def ensure_comparison_analysis(
         store,
         analysis,
         expected_analysis_uid=(existing.uid if existing is not None else None),
+        expected_analysis_version=existing_version,
     )
     return ComparisonExecutionResult(
         analysis=analysis,

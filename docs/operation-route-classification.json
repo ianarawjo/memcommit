@@ -21,6 +21,13 @@
         ],
         "reason": "Analysis, saved review, reanalysis, both Apply directions, recovery, and public projection are verified as one structural lifecycle."
       },
+      "compare": {
+        "evidence": [
+          "docs/compare-application-boundary-matrix.md",
+          "docs/compare-session-lifecycle-design-rationale.md"
+        ],
+        "reason": "CLI, TUI, Python, agent, and MCP routes share one targetless Run, exact Open, and version-bound Refresh lifecycle with production cache ordering and no Context Apply."
+      },
       "distill": {
         "evidence": [
           "docs/distill-elaborate-application-boundary-matrix.md"
@@ -123,7 +130,6 @@
       "checkpoint",
       "chunk",
       "clear",
-      "compare",
       "config",
       "contexts",
       "delete",

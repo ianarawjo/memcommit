@@ -244,6 +244,7 @@ class ComparisonFrame:
     side: ComparisonSide
     memories: tuple[ComparisonMemory, ...]
     context_evidence: tuple[ComparisonMemory, ...] = ()
+    selected_memory_uid: str | None = None
 
     @classmethod
     def from_context(
@@ -315,6 +316,11 @@ class ComparisonFrame:
                 "context_evidence": [
                     memory.to_dict() for memory in focus.context_only
                 ],
+                # Evidence is empty when the Context has only one Memory, so
+                # selection identity must be stored independently. Otherwise
+                # a later Refresh could silently broaden an explicit focus
+                # after neighboring Memories are added.
+                "selected_memory_uid": focus.selected_uid,
             }
         )
         return frame, frame.context_evidence
@@ -332,6 +338,8 @@ class ComparisonFrame:
             result["context_evidence"] = [
                 memory.to_dict() for memory in self.context_evidence
             ]
+        if self.selected_memory_uid is not None:
+            result["selected_memory_uid"] = self.selected_memory_uid
         return result
 
     @classmethod
@@ -346,6 +354,8 @@ class ComparisonFrame:
         }
         if isinstance(value, dict) and "context_evidence" in value:
             keys.add("context_evidence")
+        if isinstance(value, dict) and "selected_memory_uid" in value:
+            keys.add("selected_memory_uid")
         data = _exact_dict(
             value,
             keys,
@@ -365,6 +375,22 @@ class ComparisonFrame:
                 "comparison Context evidence",
             )
         )
+        selected_memory_uid = (
+            _canonical_uuid(
+                data["selected_memory_uid"],
+                "selected comparison Memory uid",
+            )
+            if "selected_memory_uid" in data
+            else (
+                # Older focused frames can be identified by their neighboring
+                # evidence. Singleton legacy frames remain intentionally
+                # unmarked because whole-Context and explicit-focus intent
+                # cannot be reconstructed from their payload.
+                memories[0].uid
+                if context_evidence and len(memories) == 1
+                else None
+            )
+        )
         all_memories = (*memories, *context_evidence)
         if (
             not memories
@@ -379,6 +405,13 @@ class ComparisonFrame:
         ):
             raise ComparisonError(
                 "Invalid comparison frame Memory order."
+            )
+        if selected_memory_uid is not None and (
+            len(memories) != 1
+            or memories[0].uid != selected_memory_uid
+        ):
+            raise ComparisonError(
+                "Selected comparison Memory does not match its frame."
             )
         result = cls(
             uid=_canonical_uuid(data["uid"], "comparison frame uid"),
@@ -402,6 +435,7 @@ class ComparisonFrame:
             ),
             memories=memories,
             context_evidence=context_evidence,
+            selected_memory_uid=selected_memory_uid,
         )
         snapshot = Context(
             uid=result.context_uid,
@@ -789,6 +823,7 @@ def comparison_analysis_matches_input(
                 saved.context_name,
                 saved.context_digest,
                 saved.side,
+                saved.selected_memory_uid,
                 tuple(
                     (
                         memory.uid,
@@ -804,6 +839,7 @@ def comparison_analysis_matches_input(
                 requested.context_name,
                 requested.context_digest,
                 requested.side,
+                requested.selected_memory_uid,
                 tuple(
                     (
                         memory.uid,

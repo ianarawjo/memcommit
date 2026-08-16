@@ -17,7 +17,7 @@ architectural-closure conclusion. `Curated state` comes from the reviewed
 | `checkpoint` | `memcommit.commands.checkpoint:cmd` | — | — | — | — | — | `COMMAND_ONLY` | `UNREVIEWED` |
 | `chunk` | `memcommit.commands.chunk:cmd` | — | — | — | — | — | `COMMAND_ONLY` | `UNREVIEWED` |
 | `clear` | `memcommit.commands.clear:cmd` | — | — | — | — | — | `COMMAND_ONLY` | `UNREVIEWED` |
-| `compare` | `memcommit.commands.compare:cmd` | — | `memcommit.interfaces.tui.operations.compare`<br>`memcommit.interfaces.tui.operations.compare.model`<br>`memcommit.interfaces.tui.operations.compare.setup` | — | — | — | `PARTIAL_SURFACE` | `UNREVIEWED` |
+| `compare` | `memcommit.commands.compare:cmd` | — | `memcommit.interfaces.tui.operations.compare`<br>`memcommit.interfaces.tui.operations.compare.model`<br>`memcommit.interfaces.tui.operations.compare.setup` | `compare_contexts`<br>`open_comparison`<br>`refresh_comparison` | `memcommit.interfaces.agent.compare` | `docs/compare-application-boundary-matrix.md` | `PARTIAL_SURFACE` | `CLOSED` |
 | `config` | `memcommit.commands.config:app` | — | — | — | — | — | `COMMAND_ONLY` | `UNREVIEWED` |
 | `contexts` | `memcommit.commands.contexts:cmd` | — | — | — | — | — | `COMMAND_ONLY` | `UNREVIEWED` |
 | `delete` | `memcommit.commands.delete:cmd` | — | — | — | — | — | `COMMAND_ONLY` | `UNREVIEWED` |

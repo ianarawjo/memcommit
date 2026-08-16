@@ -76,3 +76,24 @@ def test_focused_compare_identity_retains_complete_context_freshness() -> None:
     )
 
     assert not comparison_analysis_matches_input(_analysis_shape(before), after)
+
+
+def test_singleton_explicit_focus_remains_distinct_from_whole_context() -> None:
+    reference = ops.init("reference")
+    focus = ops.add(reference, "Only reference claim.")
+    peer = ops.init("peer")
+    peer_memory = ops.add(peer, "Only peer claim.")
+
+    focused = ComparisonInput.from_contexts(
+        reference,
+        peer,
+        reference_memory_selector=focus.uid,
+        compared_memory_selector=peer_memory.uid,
+    )
+    whole = ComparisonInput.from_contexts(reference, peer)
+
+    assert focused.frames[0].selected_memory_uid == focus.uid
+    assert focused.frames[1].selected_memory_uid == peer_memory.uid
+    assert focused.frames[0].context_evidence == ()
+    assert not comparison_analysis_matches_input(_analysis_shape(focused), whole)
+    assert not comparison_analysis_matches_input(_analysis_shape(whole), focused)
