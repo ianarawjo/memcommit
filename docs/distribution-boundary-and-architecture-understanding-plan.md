@@ -14,16 +14,16 @@ test, installed-artifact check, or operation trace. A row marked `VERIFIED`
 means its stated completion gate passed, not merely that implementation code
 exists.
 
-Last reviewed: 2026-08-15.
+Last reviewed: 2026-08-16.
 
 | Workstream | Current state | Evidence now recorded | Next gate |
 | --- | --- | --- | --- |
 | Target application boundary | `VERIFIED` for nine principal slices | The seven prior Summarize/Add/Sever/Find/Query slices retain their boundaries. Distill and Elaborate now add shared CLI/TUI/public/agent/MCP paths, exact Ground adapters, ordered terminal evidence, and installed-wheel discovery. | Keep their no-session/no-persisted-cache limits explicit while completing human Help review. |
 | Console composition and TUI isolation | `VERIFIED` for read-only and first writable slices | Summarize proves independent typed read presenters. Add, Query, Distill, and Elaborate have independent interface projections; their shared registry imports only the public client and agent adapters. | Continue moving command-hosted screens behind the same console composition boundary. |
-| Callable and operation matrices | `PARTIAL` | `operation-consistency-matrix.md` catalogs all 58 visible operations against cross-operation application, semantic, cache/session/effect, TUI, Help, and configuration contracts. | Generate the mechanical callable catalog and classify every candidate operation as applicable or tested `N/A`. |
+| Callable and operation matrices | `GENERATED; INITIAL ROUTE CURATION` | `operation-consistency-matrix.md` catalogs all 59 visible operations against cross-operation contracts. The [mechanical callable catalog](callable-catalog-design-rationale.md) inventories 8,306 source callables across 607 modules and resolves every Help operation to a CLI entry plus statically observed application, TUI, Python, agent, and boundary evidence. The separate [reviewed classification](operation-route-classification.json) conservatively records 13 `CLOSED`, 3 `MIXED`, and 43 `UNREVIEWED` routes; none is called `LEGACY` or `N/A` without route evidence. | Curate the contract-affecting callable subset, reconcile the conflicting Meld records, and trace `UNREVIEWED` operations before assigning stronger states. |
 | Package import and operation assembly | `VERIFIED` for the first public-slice audit | `package-import-boundary-design-rationale.md` separates application isolation from Python package loading. Lazy real root/API exports, operation-selected client assembly, Ground-blocked fresh imports, 112 public/agent/MCP regressions, and an outside-checkout installed-wheel check preserve the existing names and object identity. | Apply `IMPORT-01` to each newly public slice; keep Typer command registration as a separate console migration. |
 | Shared TUI component system | `MIGRATING` | Shared core, components, viewers, and workbenches now serve Distill's Context Summary plus semantic Viewer and Elaborate's semantic Viewer, in addition to the earlier adapters. Command-hosted and legacy Endpoint/Resolution screens remain explicit parallel paths. | Capture the new operation traces, then close duplicate mechanics component family by component family. |
-| Operation Help catalog | `CHARACTERIZED` for structural coverage | All 58 visible operations share one interface-neutral summary, flow, execution, effect, range, and use-case record. Distill and Elaborate are structurally covered, but their complete human wording and wide/compact rendering review remains in progress. | Finish per-operation Help review and keep runtime forms aligned with Ground and public routes. |
+| Operation Help catalog | `CHARACTERIZED` for structural coverage | All 59 visible operations share one interface-neutral summary, flow, execution, effect, range, and use-case record. Distill and Elaborate are structurally covered, but their complete human wording and wide/compact rendering review remains in progress. | Finish per-operation Help review and keep runtime forms aligned with Ground and public routes. |
 | Semantic provider trust boundary | `DISCOVERY RECORDED` | The existing provider-neutral protocol, allowlisted adapters, endpoint restrictions, strict output handling, and known command-local calls are documented here and in the provider rationale. | Inventory every provider connection/completion path and prove the pre-disclosure gates. |
 | Typed runtime configuration | `DISCOVERY RECORDED` | Typed semantic accessors exist, but duplicated defaults and operation-local overrides remain. | Freeze the key catalog, precedence, validation bounds, secret sources, and effective per-request snapshot. |
 | Distribution baseline | `CHARACTERIZED` | Package discovery now includes `memcommit*`; a built wheel contained the new interfaces and existing subpackages, and an isolated `uvx --from <wheel>` environment resolved both `mem` and the frame component from site-packages. | Repeat the complete smoke suite from a clean checkout and record cross-platform artifact results. |
@@ -519,6 +519,19 @@ private functions do not disappear from review. It records at least module and
 qualified name, visibility/export status, current inbound references,
 decorators, signature, and source location. Generated data is inventory, not an
 architectural conclusion.
+
+The current generator, limitations, and reproducibility contract are recorded
+in [`callable-catalog-design-rationale.md`](callable-catalog-design-rationale.md).
+The checked-in outputs are
+[`generated/callable-catalog.jsonl`](generated/callable-catalog.jsonl), its
+compact
+[`generated/callable-catalog-summary.json`](generated/callable-catalog-summary.json),
+and the 59-row
+[`generated/operation-route-catalog.md`](generated/operation-route-catalog.md).
+Its curated state is loaded from
+[`operation-route-classification.json`](operation-route-classification.json),
+which must cover exactly the same canonical operation set. Mechanical presence
+and human-reviewed closure remain separate fields.
 
 The **curated boundary matrix** classifies every callable that can affect an
 external contract or cross a trust/durability boundary. It must include:

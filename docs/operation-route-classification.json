@@ -1,0 +1,164 @@
+{
+  "schema_version": 1,
+  "definitions": {
+    "CLOSED": "Every currently implemented route in the stated operation scope enters one reviewed terminal-independent application boundary; missing future adapters do not make a current route mixed.",
+    "MIXED": "A reviewed application boundary exists, but at least one current route, lifecycle phase, or conflicting evidence still leaves ownership outside that boundary.",
+    "LEGACY": "Review proved that the command or presentation layer remains the effective owner of application policy.",
+    "N/A": "Review and tests proved that the application-boundary question does not apply to this operation.",
+    "UNREVIEWED": "No route-closure conclusion has been made; this is not evidence that the operation is legacy."
+  },
+  "classifications": {
+    "CLOSED": {
+      "add": {
+        "evidence": [
+          "docs/add-callable-boundary-matrix.md"
+        ],
+        "reason": "The typed batch, authority, mutation, CLI, TUI, public, and agent routes are verified against one application/runtime boundary."
+      },
+      "atomize": {
+        "evidence": [
+          "docs/atomize-application-boundary-matrix.md"
+        ],
+        "reason": "Analysis, saved review, reanalysis, both Apply directions, recovery, and public projection are verified as one structural lifecycle."
+      },
+      "distill": {
+        "evidence": [
+          "docs/distill-elaborate-application-boundary-matrix.md"
+        ],
+        "reason": "CLI, TUI, public, agent, MCP, Ground, provider, and prepared-result routes share the reviewed Distill application contract."
+      },
+      "elaborate": {
+        "evidence": [
+          "docs/distill-elaborate-application-boundary-matrix.md"
+        ],
+        "reason": "CLI, TUI, public, agent, MCP, Ground, provider, and prepared-result routes share the reviewed Elaborate application contract."
+      },
+      "embed": {
+        "evidence": [
+          "docs/embed-application-boundary-matrix.md"
+        ],
+        "reason": "The mutable relationship plan, freeze, CAS Apply, plain CLI, and interactive setup point to one terminal-independent use case."
+      },
+      "fit": {
+        "evidence": [
+          "docs/fit-application-boundary-matrix.md"
+        ],
+        "reason": "General and Ground Fit routes share typed application/runtime execution and independent plain and TUI projections."
+      },
+      "init": {
+        "evidence": [
+          "docs/context-init-application-boundary-matrix.md"
+        ],
+        "reason": "Ordinary Context initialization has one typed terminal-free transaction and independent exact-name CLI/TUI presenters; Study initialization remains a separate operation."
+      },
+      "merge": {
+        "evidence": [
+          "docs/merge-application-boundary-matrix.md"
+        ],
+        "reason": "Direct and recursive Merge planning, review, application, and presentation use the same frozen typed plan and runtime."
+      },
+      "pwd": {
+        "evidence": [
+          "docs/mem-pwd-design-rationale.md",
+          "docs/distribution-boundary-and-architecture-understanding-plan.md"
+        ],
+        "reason": "The only current route is a typed terminal-independent current-Context read with a one-line CLI presenter."
+      },
+      "query": {
+        "evidence": [
+          "docs/query-callable-boundary-matrix.md"
+        ],
+        "reason": "Ordinary, granted, and query-only families plus CLI, TUI, public, and agent projections have a verified operation package."
+      },
+      "resolve": {
+        "evidence": [
+          "docs/resolve-fit-repair-design-rationale.md",
+          "docs/resolution-lifecycle-design-rationale.md"
+        ],
+        "reason": "Direct-Memory Fit repair exposes CLI, TUI, public, agent, and MCP projections over one typed analysis, exact replay, authority, and checkpointed Apply boundary."
+      },
+      "sever": {
+        "evidence": [
+          "docs/sever-application-boundary-matrix.md"
+        ],
+        "reason": "Analysis, cache reuse, saved-session review, destination revision, and Apply execute through typed application/runtime boundaries."
+      },
+      "summarize": {
+        "evidence": [
+          "docs/summarize-application-boundary-matrix.md"
+        ],
+        "reason": "Direct and recursive reads share one terminal-independent application result with independent plain and TUI presenters."
+      }
+    },
+    "MIXED": {
+      "find": {
+        "evidence": [
+          "docs/find-search-application-boundary-matrix.md",
+          "docs/distribution-boundary-and-architecture-understanding-plan.md"
+        ],
+        "reason": "Search and materialization are verified, but the progress ledger still names Find dialogue as an unclosed route."
+      },
+      "meld": {
+        "evidence": [
+          "docs/meld-application-boundary-matrix.md",
+          "docs/distribution-boundary-and-architecture-understanding-plan.md"
+        ],
+        "reason": "The focused matrix says Start boundaries are closed, while the progress ledger still reports command-owned semantic preparation; the contradiction must be resolved before closure."
+      },
+      "update": {
+        "evidence": [
+          "docs/update-application-boundary-matrix.md",
+          "docs/distribution-boundary-and-architecture-understanding-plan.md"
+        ],
+        "reason": "Apply policy and recovery are verified, but the complete Update application slice is still recorded as not started."
+      }
+    },
+    "LEGACY": {},
+    "N/A": {},
+    "UNREVIEWED": [
+      "audit",
+      "branch",
+      "check-conformance",
+      "checkout",
+      "checkpoint",
+      "chunk",
+      "clear",
+      "compare",
+      "config",
+      "contexts",
+      "delete",
+      "diff",
+      "edit",
+      "eval",
+      "find-ambiguities",
+      "find-conflicts",
+      "find-duplicates",
+      "forget",
+      "ground",
+      "help",
+      "impact",
+      "import",
+      "init-study",
+      "list",
+      "lock",
+      "log",
+      "profile",
+      "provider",
+      "rationale",
+      "redo",
+      "reference",
+      "rename",
+      "revert",
+      "review",
+      "share",
+      "shell-init",
+      "show",
+      "status",
+      "switch",
+      "trace",
+      "translate",
+      "undo",
+      "unlock"
+    ]
+  }
+}
