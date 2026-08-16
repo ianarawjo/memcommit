@@ -48,7 +48,12 @@ from memcommit.meld_runtime import (
     load_meld_source,
     prepare_pending_meld_turn,
 )
-from memcommit.meld_session_application import prepare_meld_preservation_turn
+from memcommit.meld_session_application import (
+    MeldSessionVersionError,
+    MeldSessionVersionInputError,
+    prepare_meld_preservation_turn,
+    require_meld_session_version,
+)
 from memcommit.meld_start_application import MeldStartError, MeldStartRequest
 from memcommit.profiles import ProfileError
 from memcommit.store import ConcurrentContextUpdateError
@@ -144,6 +149,23 @@ def _meld_snapshot(runtime: ClientRuntime, target_name: str):
     )
     target = load_meld_source(access, project=False)
     return execute_meld_session_open(target.uid, store=runtime.store)
+
+
+def _expected_meld_snapshot(
+    runtime: ClientRuntime,
+    target_name: str,
+    expected_version: str,
+    *,
+    allow_applied_predecessor: bool = False,
+):
+    """Load once and bind a public mutation to the caller's reviewed version."""
+
+    snapshot = _meld_snapshot(runtime, target_name)
+    return require_meld_session_version(
+        snapshot,
+        expected_version,
+        allow_applied_predecessor=allow_applied_predecessor,
+    )
 
 
 def start_meld(
@@ -334,9 +356,9 @@ def comment_meld(
     target_context: str,
     comment: str = "",
     *,
+    expected_version: str,
     issue_uid: str | None = None,
     option_uid: str | None = None,
-    expected_version: str | None = None,
     revision: str = "EXTEND",
     revises_turn_uids: Sequence[str] = (),
 ) -> MeldSessionResult:
@@ -345,17 +367,13 @@ def comment_meld(
     try:
         if not isinstance(comment, str):
             raise MeldResolutionError("comment must be text.")
-        if expected_version is not None and (
-            not isinstance(expected_version, str) or not expected_version
-        ):
-            raise MeldResolutionError("expected_version must be nonblank text.")
         if not isinstance(revision, str):
             raise MeldResolutionError("revision must be text.")
-        snapshot = _meld_snapshot(runtime, target_context)
-        if expected_version is not None and expected_version != snapshot.version_token:
-            raise MeldConflictError(
-                "The saved Meld changed after the submitted response was reviewed."
-            )
+        snapshot = _expected_meld_snapshot(
+            runtime,
+            target_context,
+            expected_version,
+        )
         pending = prepare_meld_resolution_turn(
             MeldResolutionTurnRequest(
                 snapshot=snapshot,
@@ -372,8 +390,10 @@ def comment_meld(
         )
     except MeldProviderFailure:
         raise
-    except MeldConflictError:
-        raise
+    except MeldSessionVersionInputError as error:
+        _raise(MeldInputError, error)
+    except MeldSessionVersionError as error:
+        _raise(MeldConflictError, error)
     except MeldProviderError as error:
         _raise(MeldProviderFailure, error)
     except FileNotFoundError as error:
@@ -391,11 +411,20 @@ def comment_meld(
     return _project_meld(result.session, origin=result.origin)
 
 
-def preserve_meld(runtime: ClientRuntime, target_context: str) -> MeldSessionResult:
+def preserve_meld(
+    runtime: ClientRuntime,
+    target_context: str,
+    *,
+    expected_version: str,
+) -> MeldSessionResult:
     """Preserve every remaining distinction under the saved-session CAS."""
 
     try:
-        snapshot = _meld_snapshot(runtime, target_context)
+        snapshot = _expected_meld_snapshot(
+            runtime,
+            target_context,
+            expected_version,
+        )
         pending = prepare_meld_preservation_turn(
             snapshot,
             guidance=(
@@ -420,6 +449,10 @@ def preserve_meld(runtime: ClientRuntime, target_context: str) -> MeldSessionRes
         )
     except MeldProviderFailure:
         raise
+    except MeldSessionVersionInputError as error:
+        _raise(MeldInputError, error)
+    except MeldSessionVersionError as error:
+        _raise(MeldConflictError, error)
     except MeldProviderError as error:
         _raise(MeldProviderFailure, error)
     except FileNotFoundError as error:
@@ -435,12 +468,25 @@ def preserve_meld(runtime: ClientRuntime, target_context: str) -> MeldSessionRes
     return _project_meld(result.session, origin=result.origin)
 
 
-def defer_meld(runtime: ClientRuntime, target_context: str) -> MeldSessionResult:
+def defer_meld(
+    runtime: ClientRuntime,
+    target_context: str,
+    *,
+    expected_version: str,
+) -> MeldSessionResult:
     """Close one saved review without changing its target."""
 
     try:
-        snapshot = _meld_snapshot(runtime, target_context)
+        snapshot = _expected_meld_snapshot(
+            runtime,
+            target_context,
+            expected_version,
+        )
         saved = execute_meld_session_defer(snapshot, store=runtime.store)
+    except MeldSessionVersionInputError as error:
+        _raise(MeldInputError, error)
+    except MeldSessionVersionError as error:
+        _raise(MeldConflictError, error)
     except FileNotFoundError as error:
         _raise(MeldContextError, error)
     except ConcurrentContextUpdateError as error:
@@ -452,11 +498,21 @@ def defer_meld(runtime: ClientRuntime, target_context: str) -> MeldSessionResult
     return _project_meld(saved.session, origin="LOCAL")
 
 
-def apply_meld(runtime: ClientRuntime, target_context: str) -> PublicMeldApplyResult:
+def apply_meld(
+    runtime: ClientRuntime,
+    target_context: str,
+    *,
+    expected_version: str,
+) -> PublicMeldApplyResult:
     """Apply exactly one ready saved proposal without another provider turn."""
 
     try:
-        snapshot = _meld_snapshot(runtime, target_context)
+        snapshot = _expected_meld_snapshot(
+            runtime,
+            target_context,
+            expected_version,
+            allow_applied_predecessor=True,
+        )
         applied = execute_meld_apply(
             MeldApplyRequest(
                 session=snapshot.session,
@@ -464,6 +520,10 @@ def apply_meld(runtime: ClientRuntime, target_context: str) -> PublicMeldApplyRe
             ),
             store=runtime.store,
         )
+    except MeldSessionVersionInputError as error:
+        _raise(MeldInputError, error)
+    except MeldSessionVersionError as error:
+        _raise(MeldConflictError, error)
     except FileNotFoundError as error:
         _raise(MeldContextError, error)
     except ProfileError as error:

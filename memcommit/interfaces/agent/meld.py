@@ -119,13 +119,12 @@ def _parse_request(payload: object) -> tuple[MeldAgentKind, dict[str, object]]:
     if kind == "comment":
         exact_fields(
             value,
-            required={"version", "kind", "target_context"},
+            required={"version", "kind", "target_context", "expected_version"},
             optional=frozenset(
                 {
                     "comment",
                     "issue_uid",
                     "option_uid",
-                    "expected_version",
                     "revision",
                     "revises_turn_uids",
                 }
@@ -149,18 +148,13 @@ def _parse_request(payload: object) -> tuple[MeldAgentKind, dict[str, object]]:
             optional=True,
         )
         expected_version = text_value(
-            value.get("expected_version"),
+            value["expected_version"],
             field="expected_version",
-            optional=True,
         )
         if not comment and option_uid is None:
             raise AgentRequestError("Meld comment requires comment or option_uid.")
         if option_uid is not None and issue_uid is None:
             raise AgentRequestError("option_uid requires issue_uid.")
-        if option_uid is not None and expected_version is None:
-            raise AgentRequestError(
-                "option_uid requires the expected_version returned by open."
-            )
         return kind, {
             "target_context": text_value(
                 value["target_context"],
@@ -216,16 +210,32 @@ def _parse_request(payload: object) -> tuple[MeldAgentKind, dict[str, object]]:
                 field="right_descendants",
             ),
         }
+    if kind == "open":
+        exact_fields(
+            value,
+            required={"version", "kind", "target_context"},
+            label="Meld open request",
+        )
+        return kind, {
+            "target_context": text_value(
+                value["target_context"],
+                field="target_context",
+            )
+        }
     exact_fields(
         value,
-        required={"version", "kind", "target_context"},
+        required={"version", "kind", "target_context", "expected_version"},
         label=f"Meld {kind} request",
     )
     return kind, {
         "target_context": text_value(
             value["target_context"],
             field="target_context",
-        )
+        ),
+        "expected_version": text_value(
+            value["expected_version"],
+            field="expected_version",
+        ),
     }
 
 
@@ -376,7 +386,8 @@ def meld_agent_tool_schema() -> JsonObject:
         "name": MELD_AGENT_TOOL_NAME,
         "description": (
             "Start or continue a reviewed MemCommit Meld through stable "
-            "application operations; Apply never calls the provider."
+            "application operations. Every saved-session mutation requires "
+            "the expected_version returned by open; Apply never calls the provider."
         ),
         "parameters": {
             "type": "object",
@@ -388,7 +399,13 @@ def meld_agent_tool_schema() -> JsonObject:
                 "left_context": text,
                 "right_context": text,
                 "target_context": {"type": ["string", "null"], "minLength": 1},
-                "expected_version": text,
+                "expected_version": {
+                    **text,
+                    "description": (
+                        "Opaque version returned by open; required by restart, "
+                        "comment, preserve, defer, and apply."
+                    ),
+                },
                 "mode": {"type": "string", "enum": ["directional", "symmetric"]},
                 "create_target": {"type": "boolean"},
                 "left_descendants": {"type": "boolean"},
@@ -399,8 +416,7 @@ def meld_agent_tool_schema() -> JsonObject:
                     "type": ["string", "null"],
                     "minLength": 1,
                     "description": (
-                        "Exact option UID returned by open; requires issue_uid "
-                        "and expected_version."
+                        "Exact option UID returned by open; requires issue_uid."
                     ),
                 },
                 "revision": {

@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 
+import pytest
+
 import memcommit.meld_assessment_application as assessment_application
 import memcommit.meld_session_application as session_application
 from memcommit.meld_assessment_application import (
@@ -12,8 +14,10 @@ from memcommit.meld_assessment_application import (
 )
 from memcommit.meld_session_application import (
     MeldSessionSnapshot,
+    MeldSessionVersionError,
     MeldTurnRequest,
     prepare_meld_turn,
+    require_meld_session_version,
 )
 
 
@@ -22,6 +26,8 @@ class _Session:
         self.current_turn = SimpleNamespace(uid="turn-1")
         self.recorded = None
         self.started = None
+        self.state = "AWAITING_REPLY"
+        self.application = None
 
     def to_dict(self):
         return {"session": "one"}
@@ -31,6 +37,11 @@ class _Session:
 
     def start_turn(self, comment, **kwargs):
         self.started = (comment, kwargs)
+
+    def clear_application(self, **kwargs):
+        self.cleared = kwargs
+        self.state = "READY_TO_APPLY"
+        self.application = None
 
 
 class _AssessmentPort:
@@ -144,3 +155,51 @@ def test_prepare_turn_clones_saved_session_and_retains_cas_token(monkeypatch):
             "revises_turn_uids": (),
         },
     )
+
+
+def test_saved_mutation_requires_the_exact_reviewed_version():
+    snapshot = MeldSessionSnapshot(_Session(), "version-1")
+
+    assert require_meld_session_version(snapshot, "version-1") is snapshot
+    with pytest.raises(MeldSessionVersionError, match="changed"):
+        require_meld_session_version(snapshot, "older-version")
+
+
+def test_apply_retry_accepts_only_the_reconstructed_reviewed_predecessor(
+    monkeypatch,
+):
+    applied = _Session()
+    applied.state = "APPLIED"
+    applied.application = SimpleNamespace(
+        change_set_digest="change-set",
+        checkpoint_uid="checkpoint-1",
+        checkpoints=(),
+    )
+    reviewed = _Session()
+    monkeypatch.setattr(
+        session_application.MeldSession,
+        "from_dict",
+        lambda value: reviewed,
+    )
+    monkeypatch.setattr(
+        session_application,
+        "meld_canonical_digest",
+        lambda value: "reviewed-version",
+    )
+    snapshot = MeldSessionSnapshot(applied, "applied-version")
+
+    assert (
+        require_meld_session_version(
+            snapshot,
+            "reviewed-version",
+            allow_applied_predecessor=True,
+        )
+        is snapshot
+    )
+    assert reviewed.cleared == {
+        "change_set_digest": "change-set",
+        "checkpoint_uid": "checkpoint-1",
+        "checkpoints": (),
+    }
+    with pytest.raises(MeldSessionVersionError):
+        require_meld_session_version(snapshot, "reviewed-version")

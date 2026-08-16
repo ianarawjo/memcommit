@@ -70,9 +70,11 @@ same decoder, then promoted into the participant's hidden profile cache only
 after the live Context and session checks pass. New-session construction now
 has a terminal-independent runtime. `MemCommitClient` projects immutable Meld
 review values and exposes start, open, comment, preserve, defer, and exact
-Apply without importing terminal code. The shipped `memcommit_meld` agent adapter
-now maps a strict versioned JSON action union to that facade and returns bounded
-errors without exposing provider responses or host paths. CLI routing remains
+Apply without importing terminal code. Every saved-session mutation requires
+the opaque version returned by `open`; only Start and read-only Open omit it.
+The shipped `memcommit_meld` agent adapter now maps a strict versioned JSON
+action union to that facade and returns bounded errors without exposing
+provider responses or host paths. CLI routing remains
 visually compatible while no longer owning new-session persistence. Restart is
 an explicit replacement of an existing target-bound session and remains a
 separate CAS operation exposed by the CLI, Python facade, and agent adapter; it
@@ -129,10 +131,13 @@ the interface, then converted that ordinal back to provider text in the CLI.
 The CLI's scripted `--choice` path did the same independently, while Python and
 agent callers could submit only free-form text. The corrected boundary carries
 the exact option UID into `meld_resolution_application`; only that operation
-layer reads its frozen option text. Python exposes option UID and optional
-expected version, while the agent requires `expected_version` for an exact
-option submission. This prevents a reordered presentation or stale reviewed
-assessment from silently changing a machine-submitted answer.
+layer reads its frozen option text. Python exposes option UID and requires the
+expected version for every comment, while the agent requires
+`expected_version` for comment, preserve, defer, and Apply. Apply alone accepts
+the exact reconstructed predecessor of an already applied receipt so a
+repeated identical request recovers instead of creating a second checkpoint.
+This prevents a reordered presentation or stale reviewed assessment from
+silently changing a machine-submitted answer.
 
 The final CLI Apply wrapper now calls `execute_meld_apply` directly. The
 discarded outer application flow contributed only an identity review step and

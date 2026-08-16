@@ -43,11 +43,11 @@ construction, provider decoder, session publication, or Apply transaction.
 | New symmetric review | `MeldStartRequest` | source/transfer checks, exact ordered Compare, empty Result, atomic new target plus session when requested | `start_meld(mode="symmetric")` | `start` | current Result or `--to`; Compare handoff uses the same runtime |
 | Replace saved review | `MeldRestartRequest` with opaque expected version | fail stale before provider, then share start authorization/Compare/cache construction and CAS-replace the session | `restart_meld` | `restart` | `--restart` |
 | Open saved review | `MeldSessionRepository.load` | target UID lookup and canonical-digest version | `open_meld` | `open` | direct resume or saved-session picker |
-| Semantic follow-up | `MeldResolutionTurnRequest`, common `ResolutionCase`, then `FrozenMeldAssessment` | exact issue/option UID validation, operation-owned guidance composition, cache replay or provider/repair, source/target revalidation, session CAS | `comment_meld` with optional option UID and expected version | `comment`; exact option requires version returned by `open` | visible issue ordinal is translated once to exact UID; TUI response actions already emit UID |
-| Preserve remaining distinctions | `MeldPreservationRequest` | provider-free current symmetric schema; legacy/directional sessions use the ordinary assessment boundary | `preserve_meld` | `preserve` | `--preserve-all` or TUI action |
-| Defer review | `MeldSessionSnapshot` | provider-free session transition and CAS | `defer_meld` | `defer` | `--defer-all` or TUI action |
+| Semantic follow-up | `MeldResolutionTurnRequest`, common `ResolutionCase`, then `FrozenMeldAssessment` | exact saved version and issue/option UID validation, operation-owned guidance composition, cache replay or provider/repair, source/target revalidation, session CAS | `comment_meld(..., expected_version=...)` | `comment` requires version returned by `open` | visible issue ordinal is translated once to exact UID; TUI response actions already emit UID |
+| Preserve remaining distinctions | `MeldPreservationRequest` | exact saved version; provider-free current symmetric schema; legacy/directional sessions use the ordinary assessment boundary | `preserve_meld(..., expected_version=...)` | `preserve` requires version | `--preserve-all` or TUI action |
+| Defer review | `MeldSessionSnapshot` | exact saved version, provider-free session transition, and CAS | `defer_meld(..., expected_version=...)` | `defer` requires version | `--defer-all` or TUI action |
 | Change symmetric destination | `MeldDestinationRequest` | empty-target validation and atomic Context/session relocation | not yet public | not yet exposed | TUI destination action |
-| Apply reviewed proposal | `MeldApplyRequest` | complete local or Grant-owner transaction, recovery, checkpoint receipts, rollback, and session CAS | `apply_meld` | `apply` | `--accept` or exact TUI Apply |
+| Apply reviewed proposal | `MeldApplyRequest` | exact reviewed version, complete local or Grant-owner transaction, recovery, checkpoint receipts, rollback, and session CAS | `apply_meld(..., expected_version=...)` | `apply` requires version | `--accept` or exact TUI Apply |
 
 ## Cache matrix
 
@@ -91,8 +91,13 @@ validation.
   ordered basis; directional misses retain their compatible Meld-only path.
 - Restart observes one opaque saved version before expensive work and replaces
   that exact version; it never deletes the prior review or creates a target.
+- Every nonterminal saved-session mutation requires the version returned by
+  `open`; stale comment, preserve, defer, and Apply requests stop before their
+  provider/cache or mutation boundary.
 - Apply never calls the provider and consumes only the exact reviewed session
-  version. Recovery must match its checkpoint and complete post-image.
+  version. A repeated exact Apply may also name the reconstructable reviewed
+  predecessor of the current APPLIED receipt; recovery must match its
+  checkpoint and complete post-image and cannot publish another checkpoint.
 - CLI Apply calls the same typed `execute_meld_apply` service as Python and
   agent adapters. It does not wrap that service in a second review/apply flow;
   route selection, CAS, recovery, rollback, and receipt validation remain in

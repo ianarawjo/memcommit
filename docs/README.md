@@ -212,6 +212,10 @@ considered sufficient design history.
   defines public Resolve's whole-frame Fit repair, grounded effect generation,
   independent verification, Pareto minimum-change choices, Grant capability
   intersection, exact replay, and one-checkpoint Apply boundary.
+- [`meld-session-lifecycle-design-rationale.md`](meld-session-lifecycle-design-rationale.md)
+  defines Meld's open-version-mutate contract, stale-before-provider boundary,
+  exact Apply retry reconstruction, and Python/agent parity without merging its
+  operation-owned session schema with other saved analyses.
 - [`mem-atomize-design-rationale.md`](mem-atomize-design-rationale.md) defines
   atomicity, source grounding, preview/application boundaries, and lineage.
 - [`mem-atomize-workbench-design-rationale.md`](mem-atomize-workbench-design-rationale.md)

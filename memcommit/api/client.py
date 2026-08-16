@@ -337,9 +337,9 @@ class MemCommitClient:
         target_context: str,
         comment: str = "",
         *,
+        expected_version: str,
         issue_uid: str | None = None,
         option_uid: str | None = None,
-        expected_version: str | None = None,
         revision: str = "EXTEND",
         revises_turn_uids: Sequence[str] = (),
     ) -> MeldSessionResult:
@@ -351,33 +351,60 @@ class MemCommitClient:
             self._runtime,
             target_context,
             comment,
+            expected_version=expected_version,
             issue_uid=issue_uid,
             option_uid=option_uid,
-            expected_version=expected_version,
             revision=revision,
             revises_turn_uids=revises_turn_uids,
         )
 
-    def preserve_meld(self, target_context: str) -> MeldSessionResult:
+    def preserve_meld(
+        self,
+        target_context: str,
+        *,
+        expected_version: str,
+    ) -> MeldSessionResult:
         """Preserve every remaining distinction under the saved-session CAS."""
 
         from memcommit.api._operations.meld import preserve_meld
 
-        return preserve_meld(self._runtime, target_context)
+        return preserve_meld(
+            self._runtime,
+            target_context,
+            expected_version=expected_version,
+        )
 
-    def defer_meld(self, target_context: str) -> MeldSessionResult:
+    def defer_meld(
+        self,
+        target_context: str,
+        *,
+        expected_version: str,
+    ) -> MeldSessionResult:
         """Close one saved review without changing its target."""
 
         from memcommit.api._operations.meld import defer_meld
 
-        return defer_meld(self._runtime, target_context)
+        return defer_meld(
+            self._runtime,
+            target_context,
+            expected_version=expected_version,
+        )
 
-    def apply_meld(self, target_context: str) -> PublicMeldApplyResult:
+    def apply_meld(
+        self,
+        target_context: str,
+        *,
+        expected_version: str,
+    ) -> PublicMeldApplyResult:
         """Apply exactly one ready saved proposal without another provider turn."""
 
         from memcommit.api._operations.meld import apply_meld
 
-        return apply_meld(self._runtime, target_context)
+        return apply_meld(
+            self._runtime,
+            target_context,
+            expected_version=expected_version,
+        )
 
     def open_atomize_grounding(
         self,

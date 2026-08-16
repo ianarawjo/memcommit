@@ -10,7 +10,16 @@ from memcommit.meld import (
     MeldRevision,
     MeldSession,
     MeldTurnScope,
+    meld_canonical_digest,
 )
+
+
+class MeldSessionVersionError(MeldError):
+    """A saved-session action no longer matches the reviewed Meld revision."""
+
+
+class MeldSessionVersionInputError(ValueError):
+    """A caller did not supply a valid opaque Meld version token."""
 
 
 @dataclass(frozen=True)
@@ -82,6 +91,45 @@ class MeldDestinationPort(Protocol):
 
 def _clone(session: MeldSession) -> MeldSession:
     return MeldSession.from_dict(session.to_dict())
+
+
+def require_meld_session_version(
+    snapshot: MeldSessionSnapshot,
+    expected_version: str,
+    *,
+    allow_applied_predecessor: bool = False,
+) -> MeldSessionSnapshot:
+    """Bind an external mutation to its reviewed version.
+
+    Apply alone may replay the version immediately before a completed Apply.
+    The applied session retains enough typed receipt state to reconstruct that
+    exact predecessor, while ordinary dialogue and defer actions must match the
+    current version literally.
+    """
+
+    if not isinstance(snapshot, MeldSessionSnapshot):
+        raise TypeError("Meld version validation requires a saved snapshot.")
+    if not isinstance(expected_version, str) or not expected_version:
+        raise MeldSessionVersionInputError(
+            "A saved Meld action requires an opaque expected version."
+        )
+    if snapshot.version_token == expected_version:
+        return snapshot
+    session = snapshot.session
+    if allow_applied_predecessor and session.state == "APPLIED":
+        application = session.application
+        assert application is not None
+        reviewed = _clone(session)
+        reviewed.clear_application(
+            change_set_digest=application.change_set_digest,
+            checkpoint_uid=application.checkpoint_uid,
+            checkpoints=application.checkpoints,
+        )
+        if meld_canonical_digest(reviewed.to_dict()) == expected_version:
+            return snapshot
+    raise MeldSessionVersionError(
+        "The saved Meld changed after this action was reviewed."
+    )
 
 
 def run_meld_session_open(
@@ -187,10 +235,13 @@ __all__ = [
     "MeldPreservationPort",
     "MeldSessionRepository",
     "MeldSessionSnapshot",
+    "MeldSessionVersionError",
+    "MeldSessionVersionInputError",
     "MeldTurnRequest",
     "PendingMeldTurn",
     "prepare_meld_preservation_turn",
     "prepare_meld_turn",
+    "require_meld_session_version",
     "run_meld_destination_change",
     "run_meld_preservation",
     "run_meld_session_defer",

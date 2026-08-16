@@ -14,6 +14,7 @@ from typer.testing import CliRunner
 
 import memcommit.ops as ops
 import memcommit.commands.meld as meld_command
+from memcommit.api import MemCommitClient
 from memcommit.commands.endpoint_setup_flows import MeldSetupReceipt
 from memcommit.atomize_grounding import (
     AtomizeGroundingAnchor,
@@ -2506,6 +2507,40 @@ def test_zero_change_directional_meld_checkpoints_and_repeats_provider_free(
     redone = runner.invoke(app, ["redo"])
     assert redone.exit_code == 0, redone.output
     assert store.load_meld_session(baseline.uid).state == "APPLIED"
+
+
+def test_public_meld_apply_replays_the_reviewed_version_without_duplicate_checkpoint(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    incoming, baseline, _ = _zero_change_directional_contexts(store)
+    provider = ZeroChangeDirectionalProvider()
+    _patch_provider(monkeypatch, provider)
+    initial = runner.invoke(
+        app,
+        ["meld", incoming.name, "--into", baseline.name],
+    )
+    assert initial.exit_code == 0, initial.output
+
+    client = MemCommitClient(root=store.store_dir)
+    reviewed = client.open_meld(baseline.name)
+
+    applied = client.apply_meld(
+        baseline.name,
+        expected_version=reviewed.version,
+    )
+    repeated = client.apply_meld(
+        baseline.name,
+        expected_version=reviewed.version,
+    )
+
+    assert applied.recovered is False
+    assert repeated.recovered is True
+    assert repeated.checkpoint_uid == applied.checkpoint_uid
+    assert repeated.session.state == "APPLIED"
+    assert len(store.list_checkpoints(baseline.name)) == 1
+    assert len(provider.payloads) == 1
 
 
 def test_zero_change_directional_meld_recovers_checkpoint_after_receipt_failure(

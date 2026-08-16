@@ -107,6 +107,7 @@ def test_provider_failure_is_bounded_and_retryable(client, monkeypatch):
             "kind": "comment",
             "target_context": "baseline",
             "comment": "Use the first reading.",
+            "expected_version": "saved-version",
         }
     )
 
@@ -170,9 +171,59 @@ def test_exact_issue_option_requires_the_reviewed_version(client):
     assert "expected_version" in result["error"]["message"]
 
 
+@pytest.mark.parametrize("kind", ("comment", "preserve", "defer", "apply"))
+def test_every_saved_session_mutation_requires_the_reviewed_version(client, kind):
+    payload = {
+        "version": 1,
+        "kind": kind,
+        "target_context": "baseline",
+    }
+    if kind == "comment":
+        payload["comment"] = "Keep the reviewed interpretation."
+
+    result = MeldAgentAdapter(client).invoke(payload)
+
+    assert result["ok"] is False
+    assert result["error"]["code"] == "invalid_request"
+    assert "expected_version" in result["error"]["message"]
+
+
+@pytest.mark.parametrize("kind", ("preserve", "defer", "apply"))
+def test_saved_session_actions_forward_the_exact_reviewed_version(
+    client,
+    monkeypatch,
+    kind,
+):
+    calls = []
+    monkeypatch.setattr(
+        client,
+        f"{kind}_meld",
+        lambda **kwargs: (calls.append(kwargs) or _session()),
+    )
+
+    result = MeldAgentAdapter(client).invoke(
+        {
+            "version": 1,
+            "kind": kind,
+            "target_context": "baseline",
+            "expected_version": "saved-version",
+        }
+    )
+
+    assert result["ok"] is True
+    assert calls == [
+        {
+            "target_context": "baseline",
+            "expected_version": "saved-version",
+        }
+    ]
+
+
 def test_schema_is_fresh_and_uses_stable_tool_name():
     first = meld_agent_tool_schema()
     first["name"] = "changed"
 
     assert meld_agent_tool_schema()["name"] == MELD_AGENT_TOOL_NAME
-    assert "option_uid" in meld_agent_tool_schema()["parameters"]["properties"]
+    properties = meld_agent_tool_schema()["parameters"]["properties"]
+    assert "option_uid" in properties
+    assert "required by restart" in properties["expected_version"]["description"]

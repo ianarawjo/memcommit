@@ -14,6 +14,7 @@ from memcommit.api import (
     MeldStorageError,
     MemCommitClient,
 )
+from memcommit.meld_session_application import MeldSessionSnapshot
 
 
 def _review_session():
@@ -148,9 +149,18 @@ def test_remaining_meld_lifecycle_methods_delegate_to_the_operation_owner(
         )
         == "comment_meld"
     )
-    assert client.preserve_meld("result") == "preserve_meld"
-    assert client.defer_meld("result") == "defer_meld"
-    assert client.apply_meld("result") == "apply_meld"
+    assert (
+        client.preserve_meld("result", expected_version="saved-version")
+        == "preserve_meld"
+    )
+    assert (
+        client.defer_meld("result", expected_version="saved-version")
+        == "defer_meld"
+    )
+    assert (
+        client.apply_meld("result", expected_version="saved-version")
+        == "apply_meld"
+    )
 
     assert calls[0][1][0] is client._runtime
     assert calls[0][1][1:] == ("result", "Keep both.")
@@ -167,6 +177,12 @@ def test_remaining_meld_lifecycle_methods_delegate_to_the_operation_owner(
         "defer_meld",
         "apply_meld",
     ]
+    assert [call[2]["expected_version"] for call in calls] == [
+        "saved-version",
+        "saved-version",
+        "saved-version",
+        "saved-version",
+    ]
 
 
 def test_comment_meld_rejects_a_stale_review_before_provider_connection(
@@ -177,7 +193,7 @@ def test_comment_meld_rejects_a_stale_review_before_provider_connection(
     monkeypatch.setattr(
         meld_operation,
         "_meld_snapshot",
-        lambda runtime, target: SimpleNamespace(
+        lambda runtime, target: MeldSessionSnapshot(
             session=session,
             version_token="current-version",
         ),
@@ -195,6 +211,40 @@ def test_comment_meld_rejects_a_stale_review_before_provider_connection(
             "result",
             issue_uid="issue-1",
             option_uid="option-1",
+            expected_version="reviewed-version",
+        )
+
+
+@pytest.mark.parametrize("method_name", ("preserve_meld", "defer_meld", "apply_meld"))
+def test_saved_meld_mutations_reject_stale_reviews_before_execution(
+    tmp_path,
+    monkeypatch,
+    method_name,
+):
+    session = _review_session()
+    monkeypatch.setattr(
+        meld_operation,
+        "_meld_snapshot",
+        lambda runtime, target: MeldSessionSnapshot(session, "current-version"),
+    )
+    for boundary in (
+        "execute_meld_preservation",
+        "execute_prepared_meld_turn",
+        "execute_meld_session_defer",
+        "execute_meld_apply",
+    ):
+        monkeypatch.setattr(
+            meld_operation,
+            boundary,
+            lambda *args, _boundary=boundary, **kwargs: (_ for _ in ()).throw(
+                AssertionError(f"stale action crossed {_boundary}")
+            ),
+        )
+    client = MemCommitClient(root=tmp_path / "store", create=True)
+
+    with pytest.raises(MeldConflictError, match="changed"):
+        getattr(client, method_name)(
+            "result",
             expected_version="reviewed-version",
         )
 
