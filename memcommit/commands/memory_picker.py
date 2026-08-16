@@ -5,7 +5,7 @@ from __future__ import annotations
 import sys
 from collections.abc import Sequence
 from dataclasses import dataclass
-from typing import Literal, Protocol, runtime_checkable
+from typing import Literal, Mapping, Protocol, runtime_checkable
 
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
@@ -254,6 +254,42 @@ def choose_memory_report_target(
         memory_uid=memory.selector,
         include_descendants=include_descendants,
     )
+
+
+def choose_memory_report_context(
+    names: Sequence[str],
+    *,
+    current: str | None,
+    operation: MemoryPickerOperation,
+    virtual_names: Sequence[str] = (),
+    virtual_annotations: Mapping[str, object] | None = None,
+    app_input: Input | None = None,
+    app_output: Output | None = None,
+    require_tty: bool = True,
+) -> str | None:
+    """Choose a report root before opening its exact/subtree Memory range."""
+
+    selected = choose_context(
+        names,
+        current=current,
+        virtual_names=virtual_names,
+        selectable_virtual_names=frozenset(virtual_names),
+        virtual_annotations=virtual_annotations,
+        title=(
+            f"{operation.upper()} · SELECT A CONTEXT · "
+            + ("PROFILE" if operation == "rationale" else "LOCAL CONTEXTS")
+        ),
+        accept_label="open Memories",
+        initially_expand_selected=True,
+        app_input=app_input,
+        app_output=app_output,
+        require_tty=require_tty,
+    )
+    if selected is None:
+        return None
+    if not isinstance(selected, str):
+        raise ValueError("Memory report location did not return a Context.")
+    return selected
 
 
 def choose_memory(

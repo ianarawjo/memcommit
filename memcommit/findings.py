@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import unicodedata
+from collections.abc import Mapping
 from dataclasses import dataclass
 from importlib import resources
 from typing import Callable, Literal, Protocol
@@ -100,6 +101,7 @@ class FindingsProvider(Protocol):
 class MemoryCandidate:
     candidate_id: str
     memory: Memory
+    context_name: str
 
 
 @dataclass(frozen=True)
@@ -200,15 +202,29 @@ def _short_string(
     return value
 
 
-def collect_direct_memories(ctx: Context) -> list[MemoryCandidate]:
+def collect_direct_memories(
+    ctx: Context,
+    *,
+    context_name_by_uid: Mapping[str, str] | None = None,
+) -> list[MemoryCandidate]:
     """Collect only directly owned Memories in canonical Context order."""
     memories = [
         item
         for item in ctx.iter_items()
         if isinstance(item, Memory)
     ]
+    owners = dict(context_name_by_uid or {})
+    if any(
+        not isinstance(uid, str) or not isinstance(name, str) or not name
+        for uid, name in owners.items()
+    ):
+        raise FindingsError("Quality finder received invalid Memory ownership.")
     return [
-        MemoryCandidate(candidate_id=f"m{index:06d}", memory=memory)
+        MemoryCandidate(
+            candidate_id=f"m{index:06d}",
+            memory=memory,
+            context_name=owners.get(memory.uid, ctx.name),
+        )
         for index, memory in enumerate(memories, start=1)
     ]
 
@@ -237,6 +253,7 @@ def _memory_payload(
         {
             "candidate_id": candidate.candidate_id,
             "content": candidate.memory.content,
+            "context_name": candidate.context_name,
         }
         for candidate in candidates
     ]
@@ -499,9 +516,14 @@ def _ordered_duplicate_findings(
 def find_duplicates(
     ctx: Context,
     provider_factory: Callable[[], FindingsProvider],
+    *,
+    context_name_by_uid: Mapping[str, str] | None = None,
 ) -> DuplicateReport:
     """Discover duplicate components without enumerating candidate pairs."""
-    candidates = collect_direct_memories(ctx)
+    candidates = collect_direct_memories(
+        ctx,
+        context_name_by_uid=context_name_by_uid,
+    )
     mechanical, semantic_candidates = _mechanical_duplicate_forest(candidates)
     findings = list(mechanical)
 
@@ -542,7 +564,9 @@ def find_duplicates(
             operation="find_duplicates",
             instructions=(
                 "You discover semantically duplicate atomic Memories inside "
-                "one selected Context. The supplied Memories are one "
+                "one selected Context frame. The frame may combine several "
+                "readable Contexts, and each candidate carries its original "
+                "context_name. The supplied Memories are one "
                 "representative from each exact/surface-equivalent component; "
                 "do not construct or request an all-pairs comparison table. "
                 "Return disjoint groups of two or more candidate IDs only when "
@@ -656,9 +680,14 @@ def find_duplicates(
 def find_ambiguities(
     ctx: Context,
     provider_factory: Callable[[], FindingsProvider],
+    *,
+    context_name_by_uid: Mapping[str, str] | None = None,
 ) -> AmbiguityReport:
     """Find ambiguous or underspecified direct Memories in one provider call."""
-    candidates = collect_direct_memories(ctx)
+    candidates = collect_direct_memories(
+        ctx,
+        context_name_by_uid=context_name_by_uid,
+    )
     if not candidates:
         return AmbiguityReport(memory_count=0, findings=())
     by_id = {
@@ -714,8 +743,10 @@ def find_ambiguities(
         operation="find_ambiguities",
         instructions=(
             "You find ambiguous or underspecified atomic Memories in one "
-            "selected Context. Interpret each Memory using the complete "
-            "Context as its local frame and ordinary common-sense reading; do "
+            "selected Context frame. The frame may combine several readable "
+            "Contexts, and each candidate carries its original context_name. "
+            "Interpret each Memory using the complete combined frame and "
+            "ordinary common-sense reading; do "
             "not invent remote possible worlds merely to create or remove an "
             "ambiguity. First resolve ordinary antecedents, ellipsis, deixis, "
             "and shared scope against every supplied Memory. A target that is "
@@ -860,9 +891,14 @@ def find_ambiguities(
 def find_conflicts(
     ctx: Context,
     provider_factory: Callable[[], FindingsProvider],
+    *,
+    context_name_by_uid: Mapping[str, str] | None = None,
 ) -> ConflictReport:
     """Find conflicting unordered Memory pairs in one provider call."""
-    candidates = collect_direct_memories(ctx)
+    candidates = collect_direct_memories(
+        ctx,
+        context_name_by_uid=context_name_by_uid,
+    )
     pairs = enumerate_pairs(candidates)
     if not pairs:
         return ConflictReport(
@@ -914,8 +950,10 @@ def find_conflicts(
         operation="find_conflicts",
         instructions=(
             "You find semantically conflicting pairs of atomic Memories inside "
-            "one selected Context. Inspect every supplied unordered pair under "
-            "ordinary common-sense readings of the complete local Context. "
+            "one selected Context frame. The frame may combine several readable "
+            "Contexts, and each candidate carries its original context_name. "
+            "Inspect every supplied unordered pair, including cross-Context "
+            "pairs, under ordinary common-sense readings of the complete frame. "
             "Return YES when the pair conflicts across its ordinary readings. "
             "Return MAY only when multiple ordinary readings or an unstated "
             "scope distinction make the pair conflicting under some readings "

@@ -13,6 +13,7 @@ from prompt_toolkit.filters import has_focus
 from prompt_toolkit.input import Input
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.layout import Dimension, FormattedTextControl, Layout, Window
+from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
@@ -33,8 +34,10 @@ from memcommit.interfaces.tui.components.focus import (
     SurfaceMoveResult,
     bind_surface_navigation,
 )
-from memcommit.interfaces.console.terminal import require_interactive_terminal
-from memcommit.interfaces.console.text import safe_terminal_text
+from memcommit.interfaces.tui.core.theme import (
+    MEMCOMMIT_TUI_STYLE,
+    SEMANTIC_VIEWER_STYLE,
+)
 from memcommit.interfaces.tui.components.frame import (
     TuiRegion,
     build_focused_frame,
@@ -44,18 +47,27 @@ from memcommit.interfaces.tui.core.keybindings import (
     bind_case_insensitive_key,
     dispatch_tui_back,
 )
-from memcommit.interfaces.tui.core.theme import (
-    MEMCOMMIT_TUI_STYLE,
-    SEMANTIC_VIEWER_STYLE,
+from memcommit.interfaces.console.terminal import (
+    require_interactive_terminal,
+)
+from memcommit.interfaces.console.text import (
+    safe_terminal_text,
 )
 from memcommit.context import Context
+from memcommit.context_targeting.tui.range_selection import (
+    ContextRangeSelectionState,
+)
+from memcommit.context_targeting.tui.reach import render_context_reach
+from memcommit.context_targeting.tui.selection import render_context_target_mode
 from memcommit.context_targeting.tui.selector import (
     ContextSelectorControl,
     ContextSelectorView,
 )
+from memcommit.derived_policy import authorize_combination
 from memcommit.quality_find_workbench import (
     QualityFindKind,
     QualityFindReport,
+    QualityFindSourceFrame,
     QualityFindWorkbenchError,
     QualityFindWorkbenchSession,
     create_quality_find_workbench,
@@ -70,16 +82,44 @@ from memcommit.store import MemoryStore
 
 @dataclass(frozen=True)
 class QualityFindSetupReceipt:
-    """The exact readable Context approved for one quality-finder run."""
+    """The exact visible Context set and range settings approved for execution."""
 
-    context_name: str
+    target_names: tuple[str, ...]
+    context_names: tuple[str, ...]
+    selection_mode: Literal["SINGLE", "MULTIPLE"]
+    include_descendants: bool
+    profile_selected: bool = False
 
     def __post_init__(self) -> None:
-        if not isinstance(self.context_name, str) or not self.context_name.strip():
-            raise ValueError("Quality Find setup requires a Context name.")
+        if (
+            not self.context_names
+            or len(set(self.context_names)) != len(self.context_names)
+            or any(not isinstance(name, str) or not name for name in self.context_names)
+            or len(set(self.target_names)) != len(self.target_names)
+            or any(not isinstance(name, str) or not name for name in self.target_names)
+            or not set(self.target_names) <= set(self.context_names)
+            or (not self.profile_selected and not self.target_names)
+            or (
+                self.selection_mode == "SINGLE"
+                and not self.profile_selected
+                and len(self.target_names) != 1
+            )
+            or self.selection_mode not in {"SINGLE", "MULTIPLE"}
+            or type(self.include_descendants) is not bool
+            or type(self.profile_selected) is not bool
+        ):
+            raise ValueError("Quality Find setup requires a valid Context range.")
+
+    @property
+    def context_name(self) -> str:
+        """Return the sole exact Context for fixed-cardinality Audit callers."""
+
+        if len(self.context_names) != 1:
+            raise ValueError("This Quality Find receipt contains multiple Contexts.")
+        return self.context_names[0]
 
 
-QualityFindAnalyzer = Callable[[Context], QualityFindReport]
+QualityFindAnalyzer = Callable[[QualityFindSourceFrame], QualityFindReport]
 QualitySetupKind = QualityFindKind | Literal["audit"]
 
 
@@ -103,7 +143,7 @@ def choose_quality_find_setup(
     app_output: Output | None = None,
     require_tty: bool = True,
 ) -> QualityFindSetupReceipt | None:
-    """Choose one exact Source and approve execution in a two-surface TUI."""
+    """Choose a frozen readable Context range and explicitly approve execution."""
 
     catalog = tuple(names)
     if (
@@ -122,24 +162,105 @@ def choose_quality_find_setup(
             snapshot_hint="Pass --context NAME for one-shot terminal output.",
         )
 
-    selector = ContextSelectorControl(
-        ContextSelectorView(
-            names=catalog,
-            selected=(current,),
-            mode="SINGLE",
-            label="SOURCE · ALL READABLE CONTEXTS · * CURRENT",
-            current_context=current,
-            annotations=tuple((annotations or {}).items()),
-        ),
-        height=min(9, max(3, len(catalog))),
-    )
     operation = _operation_label(kind)
     error_message = {"value": ""}
     bindings = KeyBindings()
+    labels = dict(annotations or {})
+    if set(labels) - set(catalog):
+        raise ValueError("Quality Find annotations are outside the catalog.")
+
+    # Durable Audit deliberately retains its existing one-direct-Context
+    # contract. The three process-local finders expose the shared range family
+    # and execute the exact visible checked set as one semantic frame.
+    selector: ContextSelectorControl | None = None
+    target_state: ContextRangeSelectionState | None = None
+    scope_control: FormattedTextControl | None = None
+    scope_frame = None
+    scope_row = {"value": 0}
+    if kind == "audit":
+        selector = ContextSelectorControl(
+            ContextSelectorView(
+                names=catalog,
+                selected=(current,),
+                mode="SINGLE",
+                label="SOURCE · ALL READABLE CONTEXTS · * CURRENT",
+                current_context=current,
+                annotations=tuple(labels.items()),
+            ),
+            height=min(9, max(3, len(catalog))),
+        )
+        target_control = selector.control
+        target_frame = selector.frame
+    else:
+        target_state = ContextRangeSelectionState.create(
+            catalog,
+            current_name=current,
+            initial_target=current,
+            multiple=True,
+            include_descendants=False,
+        )
+
+        def render_targets() -> list[tuple[str, str]]:
+            assert target_state is not None
+            return target_state.render_rows(
+                focused=get_app().layout.has_focus(target_control),
+                annotations=labels,
+            )
+
+        target_control = FormattedTextControl(
+            render_targets,
+            focusable=True,
+            show_cursor=False,
+        )
+        target_frame = build_focused_frame(
+            Window(
+                target_control,
+                wrap_lines=False,
+                right_margins=[ScrollbarMargin(display_arrows=True)],
+            ),
+            title="TARGETS · PROFILE/CONTEXT · * CURRENT · ENTER/SPACE TO SELECT",
+            is_focused=lambda: get_app().layout.has_focus(target_control),
+            height=Dimension.exact(min(11, max(5, len(catalog) + 3))),
+        )
+
+        def render_scope() -> list[tuple[str, str]]:
+            assert target_state is not None and scope_control is not None
+            focused = get_app().layout.has_focus(scope_control)
+            fragments = render_context_target_mode(
+                target_state.target_mode,
+                focused=focused and scope_row["value"] == 0,
+            )
+            fragments.append(("", "\n"))
+            fragments.extend(
+                render_context_reach(
+                    target_state.reach,
+                    title="CONTEXT RANGE",
+                    focused=focused and scope_row["value"] == 1,
+                )
+            )
+            return fragments
+
+        scope_control = FormattedTextControl(
+            render_scope,
+            focusable=True,
+            show_cursor=False,
+        )
+        scope_frame = build_focused_frame(
+            Window(scope_control, height=Dimension.exact(2), wrap_lines=False),
+            title="SCOPE",
+            is_focused=lambda: get_app().layout.has_focus(scope_control),
+            height=Dimension.exact(4),
+        )
+
+    def selected_context_names() -> tuple[str, ...]:
+        if selector is not None:
+            return (selector.selection.selected_name,)
+        assert target_state is not None
+        return target_state.effective_names
 
     def render_todo() -> list[tuple[str, str]]:
         focused = get_app().layout.has_focus(todo_control)
-        selected = safe_terminal_text(selector.selection.selected_name)
+        selected = selected_context_names()
         if focused:
             cursor = [("[SetCursorPosition]", "")]
         else:
@@ -150,7 +271,13 @@ def choose_quality_find_setup(
             "Run Duplicate, Ambiguity, and Conflict finders over the same "
             "frozen direct Source."
             if kind == "audit"
-            else f"Analyze direct Memories in {selected}; Source unchanged."
+            else (
+                f"Analyze direct Memories across {len(selected)} selected "
+                f"{'Context' if len(selected) == 1 else 'Contexts'} as one frame; "
+                "Sources unchanged."
+                if selected
+                else "Select at least one readable Context before running."
+            )
         )
         return [
             *cursor,
@@ -170,10 +297,30 @@ def choose_quality_find_setup(
         height=Dimension.exact(4),
     )
 
+    def render_header() -> str:
+        if target_state is None:
+            return f" MEM {operation} · SETUP\n ONE DIRECT CONTEXT · SOURCE UNCHANGED"
+        target_label = (
+            "PROFILE"
+            if target_state.profile_selected
+            else (
+                "MULTIPLE TARGETS"
+                if target_state.target_mode.multiple
+                else "SINGLE TARGET"
+            )
+        )
+        reach = (
+            "INCLUDE DESCENDANTS"
+            if target_state.reach.include_descendants
+            else "THIS CONTEXT ONLY"
+        )
+        return (
+            f" MEM {operation} · SETUP\n {target_label} · {reach} · "
+            f"{len(target_state.effective_names)} CONTEXT(S) · SOURCE UNCHANGED"
+        )
+
     header = Window(
-        FormattedTextControl(
-            f" MEM {operation} · SETUP\n ONE DIRECT CONTEXT · SOURCE UNCHANGED"
-        ),
+        FormattedTextControl(render_header),
         height=Dimension.exact(2),
         dont_extend_height=True,
     )
@@ -182,8 +329,11 @@ def choose_quality_find_setup(
         if error_message["value"]:
             return f" {safe_terminal_text(error_message['value'])}"
         if get_app().layout.has_focus(todo_control):
-            return " Enter run · ↑ Source · Tab/Shift-Tab pane · Esc/Q cancel"
-        expansion = "A restore tree" if selector.tree.all_expanded else "A expand all"
+            return " Enter run · ↑ setup · Tab/Shift-Tab pane · Esc/Q cancel"
+        if scope_control is not None and get_app().layout.has_focus(scope_control):
+            return " ↑/↓ setting/cross · ←/→ choose · Tab/Shift-Tab pane · Esc/Q cancel"
+        tree = selector.tree if selector is not None else target_state.tree
+        expansion = "A restore tree" if tree.all_expanded else "A expand all"
         return (
             " ↑/↓ move/cross · ←/→ collapse/expand · Enter/Space select · "
             f"{expansion} · Tab/Shift-Tab pane · Esc/Q cancel"
@@ -194,14 +344,13 @@ def choose_quality_find_setup(
         height=Dimension.exact(1),
         dont_extend_height=True,
     )
-    root = build_tui_frame(
-        TuiRegion(header),
-        TuiRegion(selector.frame),
-        TuiRegion(todo_frame),
-        TuiRegion(footer),
-    )
+    regions = [TuiRegion(header), TuiRegion(target_frame)]
+    if scope_frame is not None:
+        regions.append(TuiRegion(scope_frame))
+    regions.extend((TuiRegion(todo_frame), TuiRegion(footer)))
+    root = build_tui_frame(*regions)
     app: Application[QualityFindSetupReceipt | None] = Application(
-        layout=Layout(root, focused_element=selector.control),
+        layout=Layout(root, focused_element=target_control),
         key_bindings=bindings,
         full_screen=True,
         erase_when_done=True,
@@ -212,13 +361,20 @@ def choose_quality_find_setup(
     )
 
     def move_context(_event, delta: int) -> SurfaceMoveResult:
-        before = selector.tree.selected_name
-        selector.move(delta)
-        return "MOVED" if selector.tree.selected_name != before else "BOUNDARY"
+        if selector is not None:
+            before = selector.tree.selected_name
+            selector.move(delta)
+            return "MOVED" if selector.tree.selected_name != before else "BOUNDARY"
+        assert target_state is not None
+        return "MOVED" if target_state.move_cursor(delta) else "BOUNDARY"
 
     def choose_context(_event) -> str:
         try:
-            selector.choose_cursor()
+            if selector is not None:
+                selector.choose_cursor()
+            else:
+                assert target_state is not None
+                target_state.toggle_cursor()
         except ValueError as error:
             error_message["value"] = str(error)
         else:
@@ -226,54 +382,134 @@ def choose_quality_find_setup(
         return "HANDLED"
 
     def enter_context(delta: int) -> None:
-        rows = selector.tree.visible_rows()
-        selector.tree.selected_name = rows[0 if delta > 0 else -1].name
+        if selector is not None:
+            rows = selector.tree.visible_rows()
+            selector.tree.selected_name = rows[0 if delta > 0 else -1].name
+        else:
+            assert target_state is not None
+            target_state.enter_from_boundary(delta)
+
+    def move_scope(_event, delta: int) -> SurfaceMoveResult:
+        previous = scope_row["value"]
+        scope_row["value"] = max(0, min(previous + delta, 1))
+        return "MOVED" if scope_row["value"] != previous else "BOUNDARY"
+
+    def enter_scope(delta: int) -> None:
+        scope_row["value"] = 0 if delta > 0 else 1
+
+    def adjust_scope(delta: int) -> None:
+        assert target_state is not None
+        if scope_row["value"] == 0:
+            target_state.move_target_mode(delta)
+        else:
+            target_state.move_reach(delta)
+        error_message["value"] = ""
 
     def run_selected(event) -> str:
-        event.app.exit(result=QualityFindSetupReceipt(selector.selection.selected_name))
+        effective = selected_context_names()
+        if not effective:
+            error_message["value"] = (
+                "Select at least one readable Context before running."
+            )
+            event.app.invalidate()
+            return "HANDLED"
+        if selector is not None:
+            receipt = QualityFindSetupReceipt(
+                target_names=effective,
+                context_names=effective,
+                selection_mode="SINGLE",
+                include_descendants=False,
+            )
+        else:
+            assert target_state is not None
+            receipt = QualityFindSetupReceipt(
+                target_names=target_state.explicit_context_names,
+                context_names=effective,
+                selection_mode=(
+                    "MULTIPLE" if target_state.target_mode.multiple else "SINGLE"
+                ),
+                include_descendants=target_state.reach.include_descendants,
+                profile_selected=target_state.profile_selected,
+            )
+        event.app.exit(result=receipt)
         return "HANDLED"
 
-    surfaces = SurfaceFocusController(
-        (
+    surface_values = [
+        FocusSurface(
+            "TARGETS",
+            target_control,
+            move_vertical=move_context,
+            activate=choose_context,
+            on_vertical_enter=enter_context,
+        )
+    ]
+    if scope_control is not None:
+        surface_values.append(
             FocusSurface(
-                "SOURCE",
-                selector.control,
-                move_vertical=move_context,
-                activate=choose_context,
-                on_vertical_enter=enter_context,
-            ),
-            FocusSurface(
-                "TO_DO",
-                todo_control,
-                move_vertical=lambda _event, _delta: "BOUNDARY",
-                activate=run_selected,
-            ),
+                "SCOPE",
+                scope_control,
+                move_vertical=move_scope,
+                activate=lambda _event: "HANDLED",
+                on_vertical_enter=enter_scope,
+            )
+        )
+    surface_values.append(
+        FocusSurface(
+            "TO_DO",
+            todo_control,
+            move_vertical=lambda _event, _delta: "BOUNDARY",
+            activate=run_selected,
         )
     )
+    surfaces = SurfaceFocusController(tuple(surface_values))
     bind_surface_navigation(bindings, surfaces)
 
-    @bindings.add("left", filter=has_focus(selector.control), eager=True)
+    @bindings.add("left", filter=has_focus(target_control), eager=True)
     def _collapse(event) -> None:
-        selector.collapse()
+        if selector is not None:
+            selector.collapse()
+        else:
+            assert target_state is not None
+            target_state.collapse_cursor()
         error_message["value"] = ""
         event.app.invalidate()
 
-    @bindings.add("right", filter=has_focus(selector.control), eager=True)
+    @bindings.add("right", filter=has_focus(target_control), eager=True)
     def _expand(event) -> None:
-        selector.expand()
+        if selector is not None:
+            selector.expand()
+        else:
+            assert target_state is not None
+            target_state.expand_cursor()
         error_message["value"] = ""
         event.app.invalidate()
 
-    @bindings.add(" ", filter=has_focus(selector.control), eager=True)
+    @bindings.add(" ", filter=has_focus(target_control), eager=True)
     def _choose(event) -> None:
         choose_context(event)
         event.app.invalidate()
 
-    @bind_case_insensitive_key(bindings, "a", filter=has_focus(selector.control))
+    @bind_case_insensitive_key(bindings, "a", filter=has_focus(target_control))
     def _toggle_expand_all(event) -> None:
-        selector.toggle_expand_all()
+        if selector is not None:
+            selector.toggle_expand_all()
+        else:
+            assert target_state is not None
+            target_state.toggle_expand_all()
         error_message["value"] = ""
         event.app.invalidate()
+
+    if scope_control is not None:
+
+        @bindings.add("left", filter=has_focus(scope_control), eager=True)
+        def _scope_left(event) -> None:
+            adjust_scope(-1)
+            event.app.invalidate()
+
+        @bindings.add("right", filter=has_focus(scope_control), eager=True)
+        def _scope_right(event) -> None:
+            adjust_scope(1)
+            event.app.invalidate()
 
     def close(event) -> None:
         event.app.exit(result=None)
@@ -296,7 +532,7 @@ def choose_quality_find_setup(
 
 def run_quality_find_resolution_workbench(
     session: QualityFindWorkbenchSession,
-    ctx: Context,
+    source: Context | QualityFindSourceFrame,
     *,
     app_input: Input | None = None,
     app_output: Output | None = None,
@@ -313,7 +549,7 @@ def run_quality_find_resolution_workbench(
 
     def save_draft(item_uid: str, option_uid: str | None, text: str) -> None:
         validate_quality_find_response(text)
-        item = quality_find_resolution_view(session, ctx).item(item_uid)
+        item = quality_find_resolution_view(session, source).item(item_uid)
         if option_uid is not None:
             item.option(option_uid)
         response = session.response_for(item_uid)
@@ -322,7 +558,7 @@ def run_quality_find_resolution_workbench(
 
     while True:
         action = run_resolution_workbench_shell(
-            lambda: quality_find_resolution_view(session, ctx),
+            lambda: quality_find_resolution_view(session, source),
             navigation=navigation,
             workbench_navigation=workbench_navigation,
             app_input=app_input,
@@ -382,16 +618,30 @@ def run_interactive_quality_find(
     )
     if receipt is None:
         return False
-    # Resolve through the same frozen catalog used by the selector. A cursor
-    # cannot smuggle a raw locator or a different Grant into execution.
-    catalog.access_for(receipt.context_name)
-    ctx = catalog.load_direct(receipt.context_name)
+    # Resolve every effective checked row through the same frozen catalog used
+    # by setup. Descendant projection has already happened in the visible tree,
+    # so execution must not apply a second hidden expansion.
+    accesses = tuple(catalog.access_for(name) for name in receipt.context_names)
+    if len(accesses) > 1:
+        authorize_combination(accesses)
+    contexts = tuple(catalog.load_direct(name) for name in receipt.context_names)
+    source = QualityFindSourceFrame.create(
+        contexts,
+        context_names=receipt.context_names,
+        target_names=receipt.target_names,
+        selection_mode=receipt.selection_mode,
+        include_descendants=receipt.include_descendants,
+        profile_selected=receipt.profile_selected,
+    )
     with CommandProgress(
         _operation_label(kind),
-        "analyzing direct memories",
+        (
+            f"analyzing {source.memory_count} direct memories across "
+            f"{len(source.contexts)} contexts"
+        ),
         total=1,
     ):
-        report = analyze(ctx)
-    session = create_quality_find_workbench(kind, ctx, report)
-    run_quality_find_resolution_workbench(session, ctx)
+        report = analyze(source)
+    session = create_quality_find_workbench(kind, source, report)
+    run_quality_find_resolution_workbench(session, source)
     return True

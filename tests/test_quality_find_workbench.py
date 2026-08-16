@@ -24,6 +24,7 @@ from memcommit.findings import (
     DuplicateReport,
 )
 from memcommit.quality_find_workbench import (
+    QualityFindSourceFrame,
     QualityFindWorkbenchError,
     create_quality_find_workbench,
     quality_find_resolution_view,
@@ -41,20 +42,44 @@ def _context():
     return ctx, first, second
 
 
-def test_flagless_setup_uses_one_common_checked_context_and_explicit_todo():
+def test_flagless_setup_exposes_multiple_targets_and_descendant_range():
     with create_pipe_input() as pipe_input:
-        # Move the cursor, explicitly check beta, then Tab to the Run action.
-        pipe_input.send_text("\x1b[B\r\t\r")
+        # Scope row 1 keeps MULTIPLE; row 2 selects INCLUDE DESCENDANTS.
+        pipe_input.send_text("\t\x1b[B\x1b[C\t\r")
         receipt = choose_quality_find_setup(
-            ("alpha", "beta"),
-            current="alpha",
+            ("root", "root/child", "peer"),
+            current="root",
             kind="conflicts",
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,
         )
 
-    assert receipt == QualityFindSetupReceipt("beta")
+    assert receipt == QualityFindSetupReceipt(
+        target_names=("root",),
+        context_names=("root", "root/child"),
+        selection_mode="MULTIPLE",
+        include_descendants=True,
+    )
+
+
+def test_flagless_setup_can_check_multiple_independent_contexts():
+    with create_pipe_input() as pipe_input:
+        # Peer is the next visible row while root remains collapsed.
+        pipe_input.send_text("\x1b[B\r\t\t\r")
+        receipt = choose_quality_find_setup(
+            ("root", "root/child", "peer"),
+            current="root",
+            kind="duplicates",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert receipt is not None
+    assert receipt.context_names == ("root", "peer")
+    assert receipt.selection_mode == "MULTIPLE"
+    assert receipt.include_descendants is False
 
 
 def test_flagless_setup_escape_cancels_without_a_receipt():
@@ -91,11 +116,64 @@ def test_interactive_orchestration_does_not_analyze_a_cancelled_setup(
         store,
         current_name=ctx.name,
         kind="conflicts",
-        analyze=lambda selected: analyzed.append(selected.name),
+        analyze=lambda selected: analyzed.append(selected.context_name),
     )
 
     assert completed is False
     assert analyzed == []
+
+
+def test_interactive_orchestration_builds_one_cross_context_analysis_frame(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    root = ops.init("quality/root")
+    child = ops.init("quality/root/child")
+    root_memory = ops.add(root, "The entrance opens at 8:00.")
+    child_memory = ops.add(child, "The entrance opens at eight.")
+    store.create_context(root)
+    store.create_context(child)
+    store.set_current(root.name)
+    observed: list[QualityFindSourceFrame] = []
+
+    monkeypatch.setattr(
+        "memcommit.commands.quality_find_workbench.choose_quality_find_setup",
+        lambda *_args, **_kwargs: QualityFindSetupReceipt(
+            target_names=(root.name,),
+            context_names=(root.name, child.name),
+            selection_mode="SINGLE",
+            include_descendants=True,
+        ),
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.quality_find_workbench."
+        "run_quality_find_resolution_workbench",
+        lambda *_args, **_kwargs: None,
+    )
+
+    def analyze(source):
+        observed.append(source)
+        return ConflictReport(memory_count=2, pair_count=1, findings=())
+
+    completed = run_interactive_quality_find(
+        store,
+        current_name=root.name,
+        kind="conflicts",
+        analyze=analyze,
+    )
+
+    assert completed is True
+    source = observed[0]
+    assert source.context_names == (root.name, child.name)
+    assert [memory.content for memory in source.analysis_context().iter_items()] == [
+        root_memory.content,
+        child_memory.content,
+    ]
+    assert source.memory_context_names == {
+        root_memory.uid: root.name,
+        child_memory.uid: child.name,
+    }
 
 
 def test_ambiguity_projection_keeps_readings_and_process_local_response():
@@ -165,6 +243,44 @@ def test_conflict_projection_keeps_pair_scope_and_no_fabricated_choices():
         second.content,
     ]
     assert evidence.classification == "YES · PLACE · TIME"
+
+
+def test_cross_context_finding_keeps_each_memorys_source_context():
+    left_context = ops.init("quality/left")
+    right_context = ops.init("quality/right")
+    ops.add(left_context, "The entrance opens at 8:00.")
+    ops.add(right_context, "The entrance stays closed until 9:00.")
+    source = QualityFindSourceFrame.create(
+        (left_context, right_context),
+        selection_mode="MULTIPLE",
+    )
+    aggregate = source.analysis_context()
+    aggregate_memories = tuple(aggregate.iter_items())
+    report = ConflictReport(
+        memory_count=2,
+        pair_count=1,
+        findings=(
+            ConflictFinding(
+                aggregate_memories[0],
+                aggregate_memories[1],
+                "YES",
+                ("TIME",),
+                "The opening states conflict.",
+                "Which schedule applies?",
+            ),
+        ),
+    )
+
+    item = quality_find_resolution_view(
+        create_quality_find_workbench("conflicts", source, report),
+        source,
+    ).items[0]
+
+    assert item.issue_presentation is not None
+    assert [
+        evidence.context_name
+        for evidence in item.issue_presentation.evidence[0].sources
+    ] == [left_context.name, right_context.name]
 
 
 def test_duplicate_projection_reviews_emitted_links_without_choosing_survivor():

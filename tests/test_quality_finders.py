@@ -372,6 +372,32 @@ def test_find_conflicts_sends_every_pair_once_and_sorts_findings():
     ]
 
 
+def test_aggregate_finder_payload_keeps_original_context_for_each_memory():
+    aggregate = ops.init("quality-find-frame")
+    left = ops.add(aggregate, "The entrance opens at 8:00.")
+    right = ops.add(aggregate, "The entrance stays closed until 9:00.")
+    provider = PayloadProvider(lambda operation, payload: {"findings": []})
+
+    report = find_conflicts(
+        aggregate,
+        lambda: provider,
+        context_name_by_uid={
+            left.uid: "schedule/public",
+            right.uid: "schedule/staff",
+        },
+    )
+
+    assert report.pair_count == 1
+    assert [
+        (memory["content"], memory["context_name"])
+        for memory in provider.calls[0][3]["memories"]
+    ] == [
+        (left.content, "schedule/public"),
+        (right.content, "schedule/staff"),
+    ]
+    assert "including cross-Context pairs" in provider.calls[0][0]
+
+
 def test_empty_and_singleton_inputs_do_not_connect_provider():
     empty = ops.init("empty")
     singleton = ops.init("singleton")

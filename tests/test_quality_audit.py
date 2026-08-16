@@ -168,7 +168,12 @@ def test_audit_setup_is_one_context_and_one_run_action():
             require_tty=False,
         )
 
-    assert receipt == QualityFindSetupReceipt("audit/source")
+    assert receipt == QualityFindSetupReceipt(
+        target_names=("audit/source",),
+        context_names=("audit/source",),
+        selection_mode="SINGLE",
+        include_descendants=False,
+    )
 
 
 def test_run_quality_audit_calls_all_three_independent_finders_once():

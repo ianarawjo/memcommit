@@ -8,9 +8,11 @@ Memory mutation.
 
 from __future__ import annotations
 
+import hashlib
+import json
 import uuid
 from dataclasses import dataclass, field
-from typing import Literal
+from typing import Literal, Sequence
 
 from memcommit.context import Context, Memory
 from memcommit.findings import (
@@ -38,10 +40,173 @@ from memcommit.review import REVIEW_RESPONSE_CHAR_LIMIT, direct_context_digest
 
 QualityFindKind = Literal["duplicates", "ambiguities", "conflicts"]
 QualityFindReport = DuplicateReport | AmbiguityReport | ConflictReport
+QualityFindSelectionMode = Literal["SINGLE", "MULTIPLE"]
 
 
 class QualityFindWorkbenchError(ValueError):
     """Invalid process-local quality-finder review state."""
+
+
+@dataclass(frozen=True)
+class QualityFindSourceFrame:
+    """One frozen, provenance-preserving aggregate quality-analysis frame.
+
+    Context cardinality and lexical reach are setup choices. Execution uses the
+    exact effective Context set recorded here and flattens only directly owned
+    Memories into one provider frame. The owner map remains local so findings
+    can show the real Context for each Memory without fabricating ownership on
+    the temporary aggregate Context.
+    """
+
+    contexts: tuple[Context, ...]
+    context_names: tuple[str, ...]
+    context_digests: tuple[str, ...]
+    target_names: tuple[str, ...]
+    selection_mode: QualityFindSelectionMode
+    include_descendants: bool
+    profile_selected: bool
+    digest: str
+
+    @classmethod
+    def create(
+        cls,
+        contexts: Sequence[Context],
+        *,
+        context_names: Sequence[str] | None = None,
+        target_names: Sequence[str] | None = None,
+        selection_mode: QualityFindSelectionMode = "SINGLE",
+        include_descendants: bool = False,
+        profile_selected: bool = False,
+    ) -> "QualityFindSourceFrame":
+        values = tuple(contexts)
+        names = (
+            tuple(context.name for context in values)
+            if context_names is None
+            else tuple(context_names)
+        )
+        targets = names if target_names is None else tuple(target_names)
+        if (
+            not values
+            or len(values) != len(names)
+            or len(set(names)) != len(names)
+            or any(not isinstance(name, str) or not name for name in names)
+        ):
+            raise QualityFindWorkbenchError(
+                "Quality finder source requires distinct readable Context names."
+            )
+        if len({context.uid for context in values}) != len(values):
+            raise QualityFindWorkbenchError(
+                "Quality finder targets resolve the same Context more than once."
+            )
+        if (
+            selection_mode not in {"SINGLE", "MULTIPLE"}
+            or type(include_descendants) is not bool
+            or type(profile_selected) is not bool
+        ):
+            raise QualityFindWorkbenchError("Invalid quality finder range settings.")
+        if (
+            len(set(targets)) != len(targets)
+            or any(not isinstance(name, str) or not name for name in targets)
+            or not set(targets) <= set(names)
+            or (not profile_selected and not targets)
+            or (
+                selection_mode == "SINGLE"
+                and not profile_selected
+                and len(targets) != 1
+            )
+        ):
+            raise QualityFindWorkbenchError("Invalid quality finder target roots.")
+
+        memory_uids: set[str] = set()
+        for context in values:
+            for memory in _direct_memories(context):
+                if memory.uid in memory_uids:
+                    # Findings identify inputs by durable Memory UID. Allowing
+                    # an alias collision would make owner provenance ambiguous.
+                    raise QualityFindWorkbenchError(
+                        "Quality finder source contains a repeated Memory uid."
+                    )
+                memory_uids.add(memory.uid)
+        digests = tuple(direct_context_digest(context) for context in values)
+        encoded = json.dumps(
+            {
+                "contexts": [
+                    {"uid": context.uid, "name": name, "digest": digest}
+                    for context, name, digest in zip(values, names, digests)
+                ],
+                "targets": list(targets),
+                "selection_mode": selection_mode,
+                "include_descendants": include_descendants,
+                "profile_selected": profile_selected,
+            },
+            ensure_ascii=False,
+            separators=(",", ":"),
+            sort_keys=True,
+        )
+        return cls(
+            contexts=values,
+            context_names=names,
+            context_digests=digests,
+            target_names=targets,
+            selection_mode=selection_mode,
+            include_descendants=include_descendants,
+            profile_selected=profile_selected,
+            digest=hashlib.sha256(encoded.encode("utf-8")).hexdigest(),
+        )
+
+    @property
+    def memory_count(self) -> int:
+        return sum(len(_direct_memories(context)) for context in self.contexts)
+
+    @property
+    def route(self) -> str:
+        if len(self.context_names) == 1:
+            return self.context_names[0]
+        return f"{len(self.context_names)} CONTEXTS"
+
+    @property
+    def memory_context_names(self) -> dict[str, str]:
+        return {
+            memory.uid: context_name
+            for context, context_name in zip(self.contexts, self.context_names)
+            for memory in _direct_memories(context)
+        }
+
+    @property
+    def memory_ordinals(self) -> dict[str, int]:
+        return {
+            memory.uid: ordinal
+            for context in self.contexts
+            for ordinal, memory in enumerate(_direct_memories(context), start=1)
+        }
+
+    def analysis_context(self) -> Context:
+        """Build the temporary direct-Memory Context supplied to one finder."""
+
+        aggregate = Context(
+            uid=str(uuid.uuid5(uuid.NAMESPACE_URL, f"memcommit:quality:{self.digest}")),
+            name=(
+                self.context_names[0]
+                if len(self.context_names) == 1
+                else f"QUALITY FIND FRAME · {len(self.context_names)} CONTEXTS"
+            ),
+        )
+        for context in self.contexts:
+            for memory in _direct_memories(context):
+                aggregate.add(Memory(memory.uid, memory.content))
+        return aggregate
+
+    def matches(self, contexts: Sequence[Context]) -> bool:
+        values = tuple(contexts)
+        return (
+            len(values) == len(self.contexts)
+            and tuple(context.uid for context in values)
+            == tuple(context.uid for context in self.contexts)
+            and tuple(context.name for context in values)
+            == tuple(context.name for context in self.contexts)
+            and tuple(direct_context_digest(context) for context in values)
+            == self.context_digests
+        )
 
 
 @dataclass
@@ -62,11 +227,21 @@ class QualityFindWorkbenchSession:
 
     uid: str
     kind: QualityFindKind
-    context_uid: str
-    context_name: str
-    context_digest: str
+    source: QualityFindSourceFrame
     report: QualityFindReport
     responses: dict[str, QualityFindResponse] = field(default_factory=dict)
+
+    @property
+    def context_uid(self) -> str:
+        return self.source.analysis_context().uid
+
+    @property
+    def context_name(self) -> str:
+        return self.source.route
+
+    @property
+    def context_digest(self) -> str:
+        return self.source.digest
 
     def response_for(self, item_uid: str) -> QualityFindResponse:
         response = self.responses.get(item_uid)
@@ -102,10 +277,10 @@ def _report_memories(report: QualityFindReport) -> tuple[Memory, ...]:
 
 def create_quality_find_workbench(
     kind: QualityFindKind,
-    ctx: Context,
+    source: Context | QualityFindSourceFrame,
     report: QualityFindReport,
 ) -> QualityFindWorkbenchSession:
-    """Bind one validated one-shot report to its exact direct Context frame."""
+    """Bind one validated one-shot report to its exact aggregate source frame."""
 
     expected_type = {
         "duplicates": DuplicateReport,
@@ -116,7 +291,14 @@ def create_quality_find_workbench(
         raise QualityFindWorkbenchError(
             "Quality finder kind does not match its report type."
         )
-    memories = _direct_memories(ctx)
+    frame = (
+        QualityFindSourceFrame.create((source,))
+        if isinstance(source, Context)
+        else source
+    )
+    if not isinstance(frame, QualityFindSourceFrame):
+        raise QualityFindWorkbenchError("Invalid quality finder source frame.")
+    memories = _direct_memories(frame.analysis_context())
     if report.memory_count != len(memories):
         raise QualityFindWorkbenchError(
             "Quality finder report does not match its direct Context frame."
@@ -137,9 +319,7 @@ def create_quality_find_workbench(
     return QualityFindWorkbenchSession(
         uid=str(uuid.uuid4()),
         kind=kind,
-        context_uid=ctx.uid,
-        context_name=ctx.name,
-        context_digest=direct_context_digest(ctx),
+        source=frame,
         report=report,
     )
 
@@ -170,12 +350,12 @@ def _source(
     memory: Memory,
     *,
     label: str,
-    context_name: str,
+    context_name_by_uid: dict[str, str],
     ordinal_by_uid: dict[str, int],
 ) -> ResolutionIssueSource:
     return ResolutionIssueSource(
         label=label,
-        context_name=context_name,
+        context_name=context_name_by_uid[memory.uid],
         memory_uid=memory.uid,
         content=memory.content,
         ordinal=ordinal_by_uid[memory.uid],
@@ -201,6 +381,7 @@ def _ambiguity_item(
     finding: AmbiguityFinding,
     *,
     ordinal_by_uid: dict[str, int],
+    context_name_by_uid: dict[str, str],
 ) -> ResolutionItem:
     item_uid = _ambiguity_item_uid(finding)
     state, text, selected = _response_state(session, item_uid)
@@ -218,7 +399,7 @@ def _ambiguity_item(
     source = _source(
         finding.memory,
         label="SOURCE 1",
-        context_name=session.context_name,
+        context_name_by_uid=context_name_by_uid,
         ordinal_by_uid=ordinal_by_uid,
     )
     return ResolutionItem(
@@ -260,6 +441,7 @@ def _conflict_item(
     finding: ConflictFinding,
     *,
     ordinal_by_uid: dict[str, int],
+    context_name_by_uid: dict[str, str],
 ) -> ResolutionItem:
     item_uid = _pair_item_uid("conflict", finding.left, finding.right)
     state, text, selected = _response_state(session, item_uid)
@@ -267,13 +449,13 @@ def _conflict_item(
         _source(
             finding.left,
             label="SOURCE 1",
-            context_name=session.context_name,
+            context_name_by_uid=context_name_by_uid,
             ordinal_by_uid=ordinal_by_uid,
         ),
         _source(
             finding.right,
             label="SOURCE 2",
-            context_name=session.context_name,
+            context_name_by_uid=context_name_by_uid,
             ordinal_by_uid=ordinal_by_uid,
         ),
     )
@@ -318,6 +500,7 @@ def _duplicate_item(
     finding: DuplicateFinding,
     *,
     ordinal_by_uid: dict[str, int],
+    context_name_by_uid: dict[str, str],
 ) -> ResolutionItem:
     item_uid = _pair_item_uid("duplicate", finding.left, finding.right)
     state, text, selected = _response_state(session, item_uid)
@@ -325,13 +508,13 @@ def _duplicate_item(
         _source(
             finding.left,
             label="SOURCE 1",
-            context_name=session.context_name,
+            context_name_by_uid=context_name_by_uid,
             ordinal_by_uid=ordinal_by_uid,
         ),
         _source(
             finding.right,
             label="SOURCE 2",
-            context_name=session.context_name,
+            context_name_by_uid=context_name_by_uid,
             ordinal_by_uid=ordinal_by_uid,
         ),
     )
@@ -389,33 +572,43 @@ def _duplicate_item(
 
 def quality_find_resolution_view(
     session: QualityFindWorkbenchSession,
-    ctx: Context,
+    source: Context | QualityFindSourceFrame,
 ) -> ResolutionWorkbenchView:
-    """Project one exact quality report into the common Resolution contract."""
+    """Project one exact aggregate quality report into the Resolution contract."""
 
+    current_contexts = (
+        source.contexts if isinstance(source, QualityFindSourceFrame) else (source,)
+    )
     if (
-        ctx.uid != session.context_uid
-        or ctx.name != session.context_name
-        or direct_context_digest(ctx) != session.context_digest
-    ):
+        isinstance(source, QualityFindSourceFrame)
+        and source.digest != session.source.digest
+    ) or not session.source.matches(current_contexts):
         raise QualityFindWorkbenchError(
             "Quality finder workbench no longer matches its Context frame."
         )
-    memories = _direct_memories(ctx)
-    ordinal_by_uid = {
-        memory.uid: index for index, memory in enumerate(memories, start=1)
-    }
+    ordinal_by_uid = session.source.memory_ordinals
+    context_name_by_uid = session.source.memory_context_names
     if session.kind == "ambiguities":
         assert isinstance(session.report, AmbiguityReport)
         items = tuple(
-            _ambiguity_item(session, finding, ordinal_by_uid=ordinal_by_uid)
+            _ambiguity_item(
+                session,
+                finding,
+                ordinal_by_uid=ordinal_by_uid,
+                context_name_by_uid=context_name_by_uid,
+            )
             for finding in session.report.findings
         )
         finding_label = "ambiguity"
     elif session.kind == "conflicts":
         assert isinstance(session.report, ConflictReport)
         items = tuple(
-            _conflict_item(session, finding, ordinal_by_uid=ordinal_by_uid)
+            _conflict_item(
+                session,
+                finding,
+                ordinal_by_uid=ordinal_by_uid,
+                context_name_by_uid=context_name_by_uid,
+            )
             for finding in session.report.findings
         )
         finding_label = "conflict"
@@ -423,27 +616,45 @@ def quality_find_resolution_view(
         assert session.kind == "duplicates"
         assert isinstance(session.report, DuplicateReport)
         items = tuple(
-            _duplicate_item(session, finding, ordinal_by_uid=ordinal_by_uid)
+            _duplicate_item(
+                session,
+                finding,
+                ordinal_by_uid=ordinal_by_uid,
+                context_name_by_uid=context_name_by_uid,
+            )
             for finding in session.report.findings
         )
         finding_label = "duplicate"
 
     report = session.report
     metrics = [
+        ResolutionMetric("CONTEXTS", str(len(session.source.contexts))),
         ResolutionMetric("SOURCE MEMORIES", str(report.memory_count)),
         ResolutionMetric("FINDINGS", str(len(items))),
         ResolutionMetric("ANSWERED", str(session.answered_count)),
     ]
     if isinstance(report, ConflictReport):
-        metrics.insert(1, ResolutionMetric("PAIRS", str(report.pair_count)))
+        metrics.insert(2, ResolutionMetric("PAIRS", str(report.pair_count)))
+    reach = (
+        "INCLUDE DESCENDANTS"
+        if session.source.include_descendants
+        else "THIS CONTEXT ONLY"
+    )
+    target_mode = (
+        "PROFILE"
+        if session.source.profile_selected
+        else f"{session.source.selection_mode} TARGET SELECTION"
+    )
     sections = (
         ResolutionOverviewSection(
             "scope",
             "SCOPE",
             (
-                f"Inspected {report.memory_count} direct Memories in "
-                f"{session.context_name}. Descendants and embedded Contexts "
-                "were not analyzed."
+                f"Inspected {report.memory_count} direct Memories across "
+                f"{len(session.source.contexts)} frozen readable "
+                f"{'Context' if len(session.source.contexts) == 1 else 'Contexts'} "
+                f"as one analysis frame. {target_mode} · {reach}. "
+                "Embedded Context edges were not followed."
             ),
         ),
         ResolutionOverviewSection(
@@ -468,10 +679,18 @@ def quality_find_resolution_view(
         artifact_uid=session.uid,
         revision=session.context_digest,
         title=f"MEM FIND {session.kind.upper()}",
-        route=session.context_name,
+        route=session.source.route,
         status=f"PROCESS LOCAL · {session.answered_count}/{len(items)} ANSWERED",
         metrics=tuple(metrics),
-        context_locations=(ResolutionContextLocation("SOURCE", session.context_name),),
+        context_locations=tuple(
+            ResolutionContextLocation(
+                "SOURCE"
+                if len(session.source.context_names) == 1
+                else f"SOURCE {index}",
+                name,
+            )
+            for index, name in enumerate(session.source.context_names, start=1)
+        ),
         overview=resolution_overview_text(sections),
         overview_sections=sections,
         list_label="ACTIONABLE FINDINGS",
