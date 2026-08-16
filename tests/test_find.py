@@ -255,7 +255,7 @@ def test_explicit_find_repeats_context_for_the_same_multi_root_request(
     result = runner.invoke(
         app,
         [
-            "find",
+            "search",
             "--context",
             first.name,
             "--context",
@@ -313,7 +313,7 @@ def test_find_cli_multi_roots_keep_descendants_and_embeds_independent(
         result = runner.invoke(
             app,
             [
-                "find",
+                "search",
                 "-c",
                 "multi/a",
                 "-c",
@@ -491,7 +491,7 @@ def test_rank_candidates_preserves_model_order_and_dedupes_repeats():
 
     class Provider:
         def complete(self, prompt, *, operation, output_schema=None):
-            assert operation == "find"
+            assert operation == "search"
             assert output_schema["properties"]["matches"]["items"]["properties"][
                 "candidate_id"
             ]["enum"] == ["c000001", "c000002"]
@@ -698,7 +698,7 @@ def test_find_cli_recurses_renders_local_content_and_does_not_checkpoint(
         lambda: provider,
     )
 
-    result = runner.invoke(app, ["find", "-r", "parking"])
+    result = runner.invoke(app, ["search", "-r", "parking"])
 
     assert result.exit_code == 0
     assert "1 match" not in result.output
@@ -708,7 +708,7 @@ def test_find_cli_recurses_renders_local_content_and_does_not_checkpoint(
     ) in result.output
     assert store.list_checkpoints("facilities-reference") == checkpoints_before
 
-    direct = runner.invoke(app, ["find", "parking", "--direct"])
+    direct = runner.invoke(app, ["search", "parking", "--direct"])
     assert direct.exit_code == 0
     assert direct.output == "facilities-reference\n  (no matching items)\n"
     assert "Temporary parking" not in direct.output
@@ -740,7 +740,7 @@ def test_find_cli_recursive_searches_materialized_namespace_descendants(
         lambda: provider,
     )
 
-    result = runner.invoke(app, ["find", "-r", "healthcare"])
+    result = runner.invoke(app, ["search", "-r", "healthcare"])
 
     assert result.exit_code == 0, result.output
     assert "task-3/personal-memory\n" in result.output
@@ -750,7 +750,7 @@ def test_find_cli_recursive_searches_materialized_namespace_descendants(
     assert memory.content in candidate_text
     assert sibling_memory.content not in candidate_text
 
-    direct = runner.invoke(app, ["find", "healthcare", "--direct"])
+    direct = runner.invoke(app, ["search", "healthcare", "--direct"])
 
     assert direct.exit_code == 0
     assert direct.output == "task-3\n  (no matching items)\n"
@@ -789,7 +789,7 @@ def test_find_cli_labels_related_fallback_when_primary_matches_are_empty(
         lambda: RelatedProvider(),
     )
 
-    result = runner.invoke(app, ["find", "health insurance memories"])
+    result = runner.invoke(app, ["search", "health insurance memories"])
 
     assert result.exit_code == 0, result.output
     assert "task-3\n  (no primary matches)" in result.output
@@ -845,7 +845,7 @@ def test_find_cli_tty_prints_static_results_without_opening_chat(
         ),
     )
 
-    result = runner.invoke(app, ["find", "cafe"])
+    result = runner.invoke(app, ["search", "cafe"])
 
     assert result.exit_code == 0, result.output
     assert ctx.name in result.output
@@ -874,8 +874,8 @@ def test_find_without_query_opens_blank_interactive_search_in_a_tty(
         ),
     )
 
-    result = runner.invoke(app, ["find"])
-    scoped = runner.invoke(app, ["find", "--context-only", "--follow-embeds"])
+    result = runner.invoke(app, ["search"])
+    scoped = runner.invoke(app, ["search", "--context-only", "--follow-embeds"])
 
     assert result.exit_code == 0, result.output
     assert scoped.exit_code == 0, scoped.output
@@ -909,14 +909,14 @@ def test_find_without_query_requires_a_terminal(isolated_store):
     store.save(ctx)
     store.set_current(ctx.name)
 
-    result = runner.invoke(app, ["find"])
+    result = runner.invoke(app, ["search"])
 
     assert result.exit_code == 1
     assert "QUERY is required outside a terminal" in result.stderr
 
 
 def test_find_help_explains_the_bare_route_and_default_scope():
-    result = runner.invoke(app, ["find", "--help"])
+    result = runner.invoke(app, ["search", "--help"])
 
     assert result.exit_code == 0, result.output
     assert "[QUERY]" in result.output
@@ -961,7 +961,7 @@ def test_find_cli_tty_static_results_include_namespace_descendants(
         ),
     )
 
-    result = runner.invoke(app, ["find", "-r", "healthcare"])
+    result = runner.invoke(app, ["search", "-r", "healthcare"])
 
     assert result.exit_code == 0, result.output
     assert child.name in result.output
@@ -995,7 +995,7 @@ def test_zero_result_follow_up_refines_and_replaces_search_results(
 
         def complete(self, prompt, *, operation, output_schema=None):
             self.operations.append(operation)
-            if operation == "find turn":
+            if operation == "search turn":
                 assert output_schema["properties"]["kind"]["enum"] == [
                     "ASK",
                     "REFINE",
@@ -1012,7 +1012,7 @@ def test_zero_result_follow_up_refines_and_replaces_search_results(
                         "scope": "CONTEXT",
                     }
                 )
-            assert operation == "find"
+            assert operation == "search"
             payload = json.loads(prompt.split("FIND PAYLOAD:\n", 1)[1])
             selected = next(
                 candidate["candidate_id"]
@@ -1047,7 +1047,7 @@ def test_zero_result_follow_up_refines_and_replaces_search_results(
         text="related to health/healthcare/medicine",
     )
     assert "I found 1 matching Memory" in updated.messages[-1].text
-    assert provider.operations == ["find turn", "find"]
+    assert provider.operations == ["search turn", "search"]
 
 
 def test_refine_can_replace_zero_results_with_a_labeled_related_fallback(
@@ -1062,7 +1062,7 @@ def test_refine_can_replace_zero_results_with_a_labeled_related_fallback(
 
     class Provider:
         def complete(self, prompt, *, operation, output_schema=None):
-            if operation == "find turn":
+            if operation == "search turn":
                 return json.dumps(
                     {
                         "kind": "REFINE",
@@ -1190,7 +1190,7 @@ def test_general_parking_question_gets_a_grounded_answer_without_a_command(
 
         def complete(self, _prompt, *, operation, output_schema=None):
             self.operations.append(operation)
-            if operation == "find turn":
+            if operation == "search turn":
                 return json.dumps(
                     {
                         "kind": "ANSWER",
@@ -1203,7 +1203,7 @@ def test_general_parking_question_gets_a_grounded_answer_without_a_command(
                         "scope": "CONTEXT",
                     }
                 )
-            assert operation == "find answer"
+            assert operation == "search answer"
             return json.dumps(
                 {
                     "visible_text": (
@@ -1253,7 +1253,7 @@ def test_general_parking_question_gets_a_grounded_answer_without_a_command(
     assert supplemental.content in answer_text
     assert f"[1] m1 · memory · {visible.uid[:8]}" in answer_text
     assert f"[2] c1 · memory · {supplemental.uid[:8]}" in answer_text
-    assert provider.operations == ["find turn", "find answer"]
+    assert provider.operations == ["search turn", "search answer"]
 
 
 def test_explicit_other_context_answer_collects_and_references_outside_memory(
@@ -1283,7 +1283,7 @@ def test_explicit_other_context_answer_collects_and_references_outside_memory(
 
         def complete(self, prompt, *, operation, output_schema=None):
             self.operations.append(operation)
-            if operation == "find turn":
+            if operation == "search turn":
                 return json.dumps(
                     {
                         "kind": "ANSWER",
@@ -1331,7 +1331,7 @@ def test_explicit_other_context_answer_collects_and_references_outside_memory(
     assert pending.pending_answer is not None
     assert FIND_OUTSIDE_CONFIRMATION in pending.messages[-1].text
     assert outside.content not in pending.messages[-1].text
-    assert provider.operations == ["find turn"]
+    assert provider.operations == ["search turn"]
 
     updated = _handle_find_turn(
         pending,
@@ -1348,7 +1348,7 @@ def test_explicit_other_context_answer_collects_and_references_outside_memory(
         f"[2] x1 · memory · {outside.uid[:8]} · " "Context: facilities-calendar"
     ) in answer_text
     assert outside.content in answer_text
-    assert provider.operations == ["find turn", "find answer"]
+    assert provider.operations == ["search turn", "search answer"]
 
 
 def test_provider_cannot_expand_to_other_contexts_without_user_request(
@@ -1397,13 +1397,13 @@ def test_provider_cannot_expand_to_other_contexts_without_user_request(
 
     assert pending.status == "WAITING FOR OTHER CONTEXTS CONFIRMATION"
     assert pending.pending_answer is not None
-    assert provider.operations == ["find turn"]
+    assert provider.operations == ["search turn"]
 
     still_pending = _handle_find_turn(pending, "yes")
     assert still_pending.status == "WAITING FOR OTHER CONTEXTS CONFIRMATION"
     assert still_pending.pending_answer == pending.pending_answer
     assert "not confirmed" in still_pending.messages[-1].text
-    assert provider.operations == ["find turn"]
+    assert provider.operations == ["search turn"]
 
     cancelled = _handle_find_turn(
         still_pending,
@@ -1412,7 +1412,7 @@ def test_provider_cannot_expand_to_other_contexts_without_user_request(
     assert cancelled.pending_answer is None
     assert cancelled.status == "OTHER CONTEXTS CANCELLED · RESULTS UNCHANGED"
 
-    assert provider.operations == ["find turn"]
+    assert provider.operations == ["search turn"]
 
 
 def test_read_only_find_runner_rejects_every_non_show_shape():
@@ -1492,7 +1492,7 @@ def test_find_cli_groups_contexts_and_aligns_multiline_content(
         lambda: InterleavedProvider(),
     )
 
-    result = runner.invoke(app, ["find", "-r", "anything"])
+    result = runner.invoke(app, ["search", "-r", "anything"])
 
     assert result.exit_code == 0
     first_label = f"[memory {first_child.uid[:8]}]"
@@ -1529,7 +1529,7 @@ def test_find_cli_groups_memory_ref_and_renders_target_inline(
         lambda: KeywordProvider(),
     )
 
-    result = runner.invoke(app, ["find", "-r", "parking"])
+    result = runner.invoke(app, ["search", "-r", "parking"])
 
     assert result.exit_code == 0
     assert result.output == (
@@ -1557,7 +1557,7 @@ def test_find_cli_explicit_context_does_not_switch_current(
 
     result = runner.invoke(
         app,
-        ["find", "parking", "--context", "searchable"],
+        ["search", "parking", "--context", "searchable"],
     )
 
     assert result.exit_code == 0
@@ -1587,7 +1587,7 @@ def test_find_cli_query_ref_hit_prints_hint_without_hidden_content(
         lambda: KeywordProvider(),
     )
 
-    result = runner.invoke(app, ["find", "contractor"])
+    result = runner.invoke(app, ["search", "contractor"])
 
     assert result.exit_code == 0
     assert "facilities-reference\n" in result.output
@@ -1619,7 +1619,7 @@ def test_query_ref_hint_shell_quotes_untrusted_names(
         lambda: KeywordProvider(),
     )
 
-    result = runner.invoke(app, ["find", "policy"])
+    result = runner.invoke(app, ["search", "policy"])
 
     assert result.exit_code == 0
     assert "'policy$(unsafe)'" in result.output
@@ -1635,10 +1635,10 @@ def test_find_cli_errors_for_missing_context_without_current_or_bad_limit(
         lambda: pytest.fail("provider should not be called"),
     )
 
-    no_current = runner.invoke(app, ["find", "anything"])
+    no_current = runner.invoke(app, ["search", "anything"])
     missing = runner.invoke(
         app,
-        ["find", "anything", "--context", "missing"],
+        ["search", "anything", "--context", "missing"],
     )
     assert no_current.exit_code == 1
     assert missing.exit_code == 1
@@ -1648,6 +1648,6 @@ def test_find_cli_errors_for_missing_context_without_current_or_bad_limit(
     ops.add(ctx, "searchable")
     store.save(ctx)
     store.set_current("ctx")
-    bad_limit = runner.invoke(app, ["find", "anything", "--limit", "0"])
+    bad_limit = runner.invoke(app, ["search", "anything", "--limit", "0"])
     assert bad_limit.exit_code == 1
     assert "between 1 and 20" in bad_limit.stderr

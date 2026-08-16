@@ -27,7 +27,6 @@ only from `docs/operation-evidence-index.json`.
 | `elaborate` | `CLOSED` | [`distill-elaborate-application-boundary-matrix.md`](../distill-elaborate-application-boundary-matrix.md) | CLI, TUI, public, agent, MCP, Ground, provider, and prepared-result routes share the reviewed Elaborate application contract. |
 | `embed` | `CLOSED` | [`embed-application-boundary-matrix.md`](../embed-application-boundary-matrix.md) | The mutable relationship plan, freeze, CAS Apply, plain CLI, and interactive setup point to one terminal-independent use case. |
 | `eval` | `UNREVIEWED` | — | — |
-| `find` | `MIXED` | [`find-search-application-boundary-matrix.md`](../find-search-application-boundary-matrix.md) | Search and materialization are verified, but the current Find dialogue route remains outside the reviewed application boundary. |
 | `find-ambiguities` | `UNREVIEWED` | [`read-report-lifecycle-design-rationale.md`](../read-report-lifecycle-design-rationale.md) | — |
 | `find-conflicts` | `UNREVIEWED` | [`read-report-lifecycle-design-rationale.md`](../read-report-lifecycle-design-rationale.md) | — |
 | `find-duplicates` | `UNREVIEWED` | [`read-report-lifecycle-design-rationale.md`](../read-report-lifecycle-design-rationale.md) | — |
@@ -55,6 +54,7 @@ only from `docs/operation-evidence-index.json`.
 | `resolve` | `CLOSED` | [`resolve-fit-repair-design-rationale.md`](../resolve-fit-repair-design-rationale.md)<br>[`resolution-lifecycle-design-rationale.md`](../resolution-lifecycle-design-rationale.md) | Direct-Memory Fit repair exposes CLI, TUI, public, agent, and MCP projections over one typed analysis, exact replay, authority, and checkpointed Apply boundary. |
 | `revert` | `UNREVIEWED` | — | — |
 | `review` | `UNREVIEWED` | — | — |
+| `search` | `MIXED` | [`find-search-application-boundary-matrix.md`](../find-search-application-boundary-matrix.md)<br>[`search-find-replace-design-rationale.md`](../search-find-replace-design-rationale.md) | Search and materialization are verified, but the current Search dialogue route remains outside the reviewed application boundary. |
 | `sever` | `CLOSED` | [`sever-application-boundary-matrix.md`](../sever-application-boundary-matrix.md) | Analysis, cache reuse, saved-session review, destination revision, and Apply execute through typed application/runtime boundaries. |
 | `share` | `UNREVIEWED` | — | — |
 | `shell-init` | `UNREVIEWED` | — | — |

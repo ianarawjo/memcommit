@@ -2,7 +2,7 @@
 
 Updated: 2026-08-15
 
-This is the compact session ledger for the 58 public operations. The reviewed
+This is the compact session ledger for the 60 public operations. The reviewed
 English and Korean copy remains in
 [`mem-help-content-review-20260815.md`](mem-help-content-review-20260815.md);
 this file records only what has and has not completed the Help review.
@@ -16,9 +16,9 @@ closed.
 | Category | Reviewed | In progress | Pending |
 |---|---|---|---|
 | Contexts | — | — | status, pwd, contexts, list, show, switch, checkout, init, branch, import, embed |
-| Memories | — | — | add, reference, edit, chunk, forget, delete, clear |
-| Search & Explain | — | — | find, query, summarize, trace, rationale, find-duplicates, find-ambiguities, find-conflicts |
-| Analyze & Transform | compare, meld, update, distill, elaborate, merge | — | audit, atomize, impact, review, sever, translate |
+| Mechanical Memory Operations | merge | — | add, reference, edit, chunk, delete, clear, dedup |
+| Search & Explain | — | — | search, query, summarize, trace, rationale, find-duplicates, find-ambiguities, find-conflicts |
+| Semantic Memory Operations | compare, meld, update, distill, elaborate | — | audit, atomize, impact, review, sever, translate, resolve, forget |
 | History & Recovery | — | — | log, diff, checkpoint, undo, redo, revert |
 | Ground & Evaluation | — | — | ground, fit, check-conformance, init-study, eval |
 | Profile & Sharing | — | — | profile, rename, share, lock, unlock |
@@ -29,6 +29,7 @@ closed.
 | Contract | Status |
 |---|---|
 | BY KIND and A–Z share the same operation copy | Reviewed |
+| Mechanical/Semantic boxes identify the LLM basis and cache/replay caveat | Reviewed |
 | Wide view uses equal summary/use-case columns | Reviewed |
 | Compact view stacks the use case below the summary | Reviewed |
 | `USE WHEN:` aligns with the summary body; only the label is bold; wrapped use-case text aligns after the label | Reviewed |

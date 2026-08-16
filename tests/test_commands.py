@@ -259,9 +259,25 @@ class TestHelp:
 
     def test_by_kind_preserves_workflow_order_while_a_z_sorts_names(self):
         assert (
-            help_inventory.HELP_CATEGORY_BY_COMMAND["atomize"] == "ANALYZE & TRANSFORM"
+            help_inventory.HELP_CATEGORY_BY_COMMAND["atomize"]
+            == "SEMANTIC MEMORY OPERATIONS"
         )
-        assert help_inventory.HELP_CATEGORY_BY_COMMAND["reference"] == "MEMORIES"
+        assert (
+            help_inventory.HELP_CATEGORY_BY_COMMAND["forget"]
+            == "SEMANTIC MEMORY OPERATIONS"
+        )
+        assert (
+            help_inventory.HELP_CATEGORY_BY_COMMAND["reference"]
+            == "MECHANICAL MEMORY OPERATIONS"
+        )
+        assert (
+            help_inventory.HELP_CATEGORY_BY_COMMAND["merge"]
+            == "MECHANICAL MEMORY OPERATIONS"
+        )
+        assert (
+            help_inventory.HELP_CATEGORY_BY_COMMAND["dedup"]
+            == "MECHANICAL MEMORY OPERATIONS"
+        )
         names = (
             "clear",
             "branch",
@@ -588,14 +604,14 @@ class TestHelp:
             }
             assert f"mem {command_name}" in selectable
 
-    def test_find_history_form_uses_the_temporal_query_contract(self):
-        forms = help_inventory.COMMAND_FORMS["find"]
+    def test_search_history_form_uses_the_temporal_query_contract(self):
+        forms = help_inventory.COMMAND_FORMS["search"]
 
         assert not any("--history" in form for form in forms)
-        assert any('mem find "[temporal_query]"' in form for form in forms)
+        assert any('mem search "[temporal_query]"' in form for form in forms)
 
-    def test_find_forms_expose_independent_multi_root_scope_axes(self):
-        forms = help_inventory.COMMAND_FORMS["find"]
+    def test_search_forms_expose_independent_multi_root_scope_axes(self):
+        forms = help_inventory.COMMAND_FORMS["search"]
 
         assert any(
             "--context [context1] --context [context2] --descendants" in form
@@ -612,9 +628,9 @@ class TestHelp:
         )
         assert (
             help_inventory._selectable_form_line(
-                help_inventory.COMMAND_FORMS["find"][1]
+                help_inventory.COMMAND_FORMS["search"][1]
             )
-            == 'mem find "[query]"'
+            == 'mem search "[query]"'
         )
         request_form = next(
             form

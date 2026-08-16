@@ -20,7 +20,7 @@ from memcommit.commands import (
     distill,
     elaborate,
     edit,
-    find,
+    find as semantic_search,
     find_ambiguities,
     find_conflicts,
     find_duplicates,
@@ -268,9 +268,13 @@ app.command(
     help=operation_summary("forget"),
 )(forget.cmd)
 app.command(
-    "find",
-    help=operation_summary("find"),
-)(find.cmd)
+    "search",
+    help=operation_summary("search"),
+)(semantic_search.cmd)
+# Keep the former semantic spelling callable during the staged migration. It
+# is intentionally hidden because the public `find` name is reserved for the
+# provider-free literal operation introduced by the next reviewed slice.
+app.command("find", hidden=True)(semantic_search.cmd)
 app.command(
     "find-duplicates",
     help=operation_summary("find-duplicates"),

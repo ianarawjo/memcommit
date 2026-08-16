@@ -149,21 +149,22 @@ HELP_CATEGORY_GROUPS = (
         ),
     ),
     (
-        "MEMORIES",
+        "MECHANICAL MEMORY OPERATIONS",
         (
             "add",
             "reference",
             "edit",
             "chunk",
-            "forget",
             "delete",
             "clear",
+            "merge",
+            "dedup",
         ),
     ),
     (
         "SEARCH & EXPLAIN",
         (
-            "find",
+            "search",
             "query",
             "summarize",
             "trace",
@@ -174,7 +175,7 @@ HELP_CATEGORY_GROUPS = (
         ),
     ),
     (
-        "ANALYZE & TRANSFORM",
+        "SEMANTIC MEMORY OPERATIONS",
         (
             "audit",
             "atomize",
@@ -187,9 +188,8 @@ HELP_CATEGORY_GROUPS = (
             "update",
             "sever",
             "translate",
-            "merge",
             "resolve",
-            "dedup",
+            "forget",
         ),
     ),
     (
@@ -209,6 +209,21 @@ HELP_CATEGORY_GROUPS = (
         ("help", "provider", "shell-init", "config"),
     ),
 )
+
+# These descriptions classify where an operation's meaning comes from, not
+# whether every invocation starts a new provider call. Semantic operations may
+# replay an exact cache or saved analysis while retaining LLM-derived meaning.
+HELP_CATEGORY_DESCRIPTIONS = {
+    "MECHANICAL MEMORY OPERATIONS": (
+        "NO LLM",
+        "Explicit inputs and reviewed deterministic choices determine the result.",
+    ),
+    "SEMANTIC MEMORY OPERATIONS": (
+        "LLM-BASED",
+        "Uses LLM-produced semantic analysis; a run may call a provider or reuse "
+        "exact cached or saved analysis.",
+    ),
+}
 
 HELP_CATEGORY_BY_COMMAND = {
     command_name: category
@@ -361,16 +376,16 @@ COMMAND_FORMS = {
         "mem eval semantic status (show retained semantic campaign status)",
         "mem eval semantic run [campaign] (run a semantic evaluation campaign)",
     ),
-    "find": (
-        "mem find (interactive search, checked COPY/REFERENCE, and Save Location)",
-        'mem find "[query]" (direct current Context scope)',
-        'mem find -r "[query]" (namespace descendants and embedded Contexts)',
-        'mem find "[temporal_query]" (retained history when the query explicitly asks about time)',
-        'mem find --context [context] "[query]" (direct explicit Context root)',
-        'mem find --context [context1] --context [context2] --descendants "[query]" (multiple roots with lexical descendants)',
-        'mem find --context-only --follow-embeds "[query]" (exact lexical roots while following embedded Contexts)',
-        'mem find --descendants --exclude-embeds "[query]" (lexical subtrees without embedded traversal)',
-        'mem find -d "[query]" (direct preset: context-only plus exclude-embeds)',
+    "search": (
+        "mem search (interactive semantic search, checked COPY/REFERENCE, and Save Location)",
+        'mem search "[query]" (semantic search in the direct current Context)',
+        'mem search -r "[query]" (namespace descendants and embedded Contexts)',
+        'mem search "[temporal_query]" (retained history when the query explicitly asks about time)',
+        'mem search --context [context] "[query]" (direct explicit Context root)',
+        'mem search --context [context1] --context [context2] --descendants "[query]" (multiple roots with lexical descendants)',
+        'mem search --context-only --follow-embeds "[query]" (exact lexical roots while following embedded Contexts)',
+        'mem search --descendants --exclude-embeds "[query]" (lexical subtrees without embedded traversal)',
+        'mem search -d "[query]" (direct preset: context-only plus exclude-embeds)',
     ),
     "find-ambiguities": (
         "mem find-ambiguities (current Context; no changes)",
@@ -995,6 +1010,40 @@ def _help_group_fragments(
     top += "┓" if focused else "┐"
     fragments: list[tuple[str, str]] = [(border_style, top + "\n")]
     vertical = "┃" if focused else "│"
+    category_description = HELP_CATEGORY_DESCRIPTIONS.get(title)
+    if category_description is not None:
+        classification, description = category_description
+        prefix = f"{classification} · "
+        lines = textwrap.wrap(
+            prefix + display_escape_text(description),
+            width=content_width,
+            subsequent_indent=" " * len(prefix),
+            break_long_words=True,
+            break_on_hyphens=False,
+        ) or [prefix]
+        for line_index, line in enumerate(lines):
+            fragments.extend([(border_style, vertical), ("", " ")])
+            if line_index == 0:
+                fragments.extend(
+                    [
+                        (
+                            "class:help-category-description bold",
+                            line[: len(classification)],
+                        ),
+                        (
+                            "class:help-category-description",
+                            line[len(classification) :],
+                        ),
+                    ]
+                )
+            else:
+                fragments.append(("class:help-category-description", line))
+            fragments.extend(
+                [
+                    ("", " " * (content_width - len(line) + 1)),
+                    (border_style, vertical + "\n"),
+                ]
+            )
     labels = {
         index: display_escape_text(_entry_label(entry)) for index, entry in entries
     }

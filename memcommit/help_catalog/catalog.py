@@ -89,7 +89,7 @@ _OPERATIONS = (
     ),
     _operation(
         "chunk",
-        "Preview and split one direct Memory by headers, paragraphs, or sentences.",
+        "Mechanically split one direct Memory at header, paragraph, or approximate sentence boundaries.",
         "Memory -> ordered Memory chunks",
         ExecutionKind.DETERMINISTIC,
         "Changes the Source Context after confirmation",
@@ -163,11 +163,11 @@ _OPERATIONS = (
     ),
     _operation(
         "edit",
-        "Replace direct Memory content by UID or prefix in the current or explicit Context.",
-        "Memory -> replacement Memory content",
+        "Directly replace the content of one or more Memories selected by UID or prefix.",
+        "Memory or Memory batch -> replacement content",
         ExecutionKind.DETERMINISTIC,
-        "Changes one direct Memory",
-        "One direct Memory in one exact Context",
+        "Changes only the selected directly owned Memories",
+        "One or more direct Memories in one exact Context",
     ),
     _operation(
         "embed",
@@ -185,7 +185,7 @@ _OPERATIONS = (
         "Changes evaluation ledgers, not Context content",
     ),
     _operation(
-        "find",
+        "search",
         "Search selected Contexts with explicit lexical-descendant and embedded-Context reach.",
         "Context set + query -> ranked Memories",
         ExecutionKind.SEMANTIC,

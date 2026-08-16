@@ -1,4 +1,4 @@
-"""CLI routing for temporal ``mem find`` queries."""
+"""CLI routing for temporal ``mem search`` queries."""
 from __future__ import annotations
 
 import json
@@ -68,7 +68,7 @@ def test_temporal_find_prints_versioned_transition_outside_tty(
         lambda: LatestEditProvider(),
     )
 
-    result = invoke("find", "the last updated Memory")
+    result = invoke("search", "the last updated Memory")
 
     assert result.exit_code == 0
     assert "transport" in result.output
@@ -140,7 +140,7 @@ def test_temporal_find_uses_shared_read_only_picker_in_tty(
         choose,
     )
 
-    result = invoke("find", "the latest changed Memory")
+    result = invoke("search", "the latest changed Memory")
 
     assert result.exit_code == 0
     assert observed["context_name"] == "transport"
@@ -186,7 +186,7 @@ def test_non_temporal_find_keeps_the_existing_current_state_path(
         ),
     )
 
-    result = invoke("find", "parking information")
+    result = invoke("search", "parking information")
 
     assert result.exit_code == 0
     assert observed == {
@@ -216,7 +216,7 @@ def test_temporal_find_also_descends_the_visible_embedded_context_graph(
         lambda: LatestEditProvider(),
     )
 
-    result = invoke("find", "the last updated Memory", "-r")
+    result = invoke("search", "the last updated Memory", "-r")
 
     assert result.exit_code == 0
     assert "transport" in result.output
@@ -241,13 +241,13 @@ def test_temporal_find_searches_materialized_namespace_descendants_recursively(
         lambda: LatestEditProvider(),
     )
 
-    result = invoke("find", "the last updated Memory", "-r")
+    result = invoke("search", "the last updated Memory", "-r")
 
     assert result.exit_code == 0, result.output
     assert "task-3/personal-memory" in result.output
     assert "The clinic appointment is at 10 a.m." in result.output
 
-    direct = invoke("find", "the last updated Memory")
+    direct = invoke("search", "the last updated Memory")
 
     assert direct.exit_code == 0, direct.output
     assert "task-3/personal-memory" not in direct.output
@@ -289,7 +289,7 @@ def test_temporal_find_does_not_resolve_memory_refs_or_query_sources(
         lambda: PrivacyProvider(),
     )
 
-    result = invoke("find", "the last updated Memory")
+    result = invoke("search", "the last updated Memory")
 
     assert result.exit_code == 0
     assert "SECRET TARGET" not in result.output

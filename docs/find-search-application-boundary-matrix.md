@@ -1,26 +1,26 @@
-# Find Search application-boundary matrix
+# Search application-boundary matrix
 
 Last reviewed: 2026-08-14.
 
 ## Purpose
 
-Find Search is the next read-only vertical slice after Summarize and Sever. It
+Search is the next read-only vertical slice after Summarize and Sever. It
 tests whether one application use case can serve the plain CLI and interactive
 search workbench while preserving readable Context targeting, local-only
 activity artifacts, query-view privacy, and the separate temporal-history
 contract.
 
 Search and result materialization remain two separate use cases. The
-conversational Find controller, answer synthesis, and broader-scope
+conversational Search controller, answer synthesis, and broader-scope
 confirmation remain outside both. The new callables are internal architectural
 evidence, not a versioned public Python API.
 
 ## Intended call path
 
 ```text
-plain mem find QUERY -----------\
+plain mem search QUERY ---------\
                                  -> FindSearchRequest
-interactive Find workbench -----/          |
+interactive Search workbench ---/          |
                                             v
                               run_find_search
                               (application)
@@ -66,7 +66,7 @@ imports the application owner directly.
 | Temporal local query | Local timelines for selected owners | Bounded history-search catalog | HISTORY rows with local recovery evidence |
 | Temporal granted query | No timeline | No provider connection | Safe failure |
 
-Find Search has no prepared-result cache or durable search receipt in this
+Search has no prepared-result cache or durable search receipt in this
 slice. Provider/model configuration and secrets remain owned by the existing
 composition adapter. COPY/REFERENCE crosses a separate typed write boundary
 and is intentionally not evidence that `run_find_search` mutates state.
@@ -99,7 +99,7 @@ reviewed FindSearchResponse + checked rows + mode + destination
 | Destination | Store require-new creation | An existing or concurrently created owner is never overwritten; materialization never switches the current Context |
 | Source freshness | local source lock set or external authority snapshot lock | Every successful receipt describes the exact source bytes used to construct the output |
 | Output | COPY or REFERENCE | COPY creates fresh Memory UIDs; REFERENCE uses the ordinary live pointer primitive; both preserve checked ranked order and leave Source unchanged |
-| Receipt | `FindMaterializationResult` plus automatic `find` checkpoint | Context, checkpoint, and item identities must match the reviewed plan; the checkpoint retains query, mode, and source/output identities |
+| Receipt | `FindMaterializationResult` plus automatic `search` checkpoint | Context, checkpoint, and item identities must match the reviewed plan; the checkpoint retains query, mode, and source/output identities |
 | Failure | Store rollback | A stale source, revoked authority, destination collision, or write failure publishes no partial Context or checkpoint |
 
 The TUI owns selection and Save Location presentation only. Once its `TO DO`
@@ -133,26 +133,26 @@ reaches this same application path.
 - a typed TUI-to-application request with no direct persistence call; and
 - no command, Typer, TUI, or provider import in the application module.
 
-Existing Find, Find history, search-workbench, result-materialization,
+Existing Search, Search history, search-workbench, result-materialization,
 source-projection, authority, and Context-operand tests remain the parity gate
 for CLI and TUI adapters. The combined focused run passed 324 tests. An
 expanded run passed 476 tests after excluding one unrelated untracked
-provider-policy test whose name and implementation specify Find=`terra/low`
+provider-policy test whose compatibility name and implementation specify Search=`terra/low`
 and Query=`sol/none` while its assertion
 expects those two policies in the reverse order.
 
 The exact isolated commit tree also passed Ruff, the four application/runtime
-module type checks, and 146 Find application, materialization, workbench,
+module type checks, and 146 Search application, materialization, workbench,
 history-search, dialogue, and projection tests. CLI-importing tests in that
 isolated tree remain gated by a pre-existing repository mismatch: committed
 Summarize code imports `declared_artifact_available`, while its implementation
 is still outside `HEAD`. The larger workspace runs above included that existing
-implementation; this Find slice does not absorb it merely to make an unrelated
+implementation; this Search slice does not absorb it merely to make an unrelated
 commit self-contained.
 
 ## Remaining boundaries and non-goals
 
-1. A Find result is a frozen moment-in-time search outcome. This slice does not
+1. A Search result is a frozen moment-in-time search outcome. This slice does not
    re-open every source after semantic ranking, and it does not claim the
    source remained unchanged while the provider ran.
 2. `execute_find_search` requires an already frozen readable catalog. Stable

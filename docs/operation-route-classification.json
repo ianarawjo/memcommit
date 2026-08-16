@@ -142,11 +142,12 @@
       }
     },
     "MIXED": {
-      "find": {
+      "search": {
         "evidence": [
-          "docs/find-search-application-boundary-matrix.md"
+          "docs/find-search-application-boundary-matrix.md",
+          "docs/search-find-replace-design-rationale.md"
         ],
-        "reason": "Search and materialization are verified, but the current Find dialogue route remains outside the reviewed application boundary."
+        "reason": "Search and materialization are verified, but the current Search dialogue route remains outside the reviewed application boundary."
       },
       "update": {
         "evidence": [

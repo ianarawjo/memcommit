@@ -104,7 +104,7 @@ def _state(**changes) -> FindChatState:
 def test_snapshot_exposes_chat_state_without_searching_or_mutating():
     snapshot = render_find_chat_snapshot(_state())
 
-    assert "MEM FIND · INTERACTIVE · temp/task-1-atomized-en" in snapshot
+    assert "MEM SEARCH · INTERACTIVE · temp/task-1-atomized-en" in snapshot
     assert "QUERY · related to cafe and store" in snapshot
     assert "RESULTS 5 · KEPT 2" in snapshot
     assert "YOU" in snapshot
@@ -290,7 +290,7 @@ def test_empty_state_starts_with_an_open_find_question():
     snapshot = render_find_chat_snapshot(FindChatState(context_name="task-1"))
 
     assert "QUERY · (not asked yet)" in snapshot
-    assert "OPEN QUESTION · FIND" in snapshot
+    assert "OPEN QUESTION · SEARCH" in snapshot
     assert "What are you trying to locate" in snapshot
 
 
@@ -536,9 +536,9 @@ def test_busy_indicator_cycles_dot_frames_until_the_turn_finishes(monkeypatch):
     assert feeder_errors == []
     assert not feeder.is_alive()
     assert rendered_frames == {
-        " PROCESSING FIND TURN .",
-        " PROCESSING FIND TURN ..",
-        " PROCESSING FIND TURN …",
+        " PROCESSING SEARCH TURN .",
+        " PROCESSING SEARCH TURN ..",
+        " PROCESSING SEARCH TURN …",
     }
     assert result.state.status == "REFINED"
 

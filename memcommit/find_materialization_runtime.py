@@ -247,7 +247,7 @@ class MemoryStoreFindMaterializationPort(FindMaterializationPort):
             )
 
         checkpoint = AutoCheckpoint(
-            command="find",
+            command="search",
             args={
                 "context_creation": {
                     "version": 1,

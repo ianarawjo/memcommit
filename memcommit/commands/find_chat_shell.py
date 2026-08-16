@@ -1,4 +1,4 @@
-"""Operation-neutral, long-lived chat surface for interactive ``mem find``.
+"""Operation-neutral, long-lived chat surface for interactive Search.
 
 The production session keeps one prompt-toolkit application alive while a
 controller handles submitted turns in a worker thread. A one-turn wrapper
@@ -67,7 +67,7 @@ _FIND_BUSY_INTERVAL_SECONDS = BUSY_INTERVAL_SECONDS
 
 def _processing_find_turn_label(frame_index: int) -> str:
     """Render one deterministic frame of the in-process busy indicator."""
-    return " PROCESSING FIND TURN " + busy_suffix(frame_index)
+    return " PROCESSING SEARCH TURN " + busy_suffix(frame_index)
 
 
 @dataclass(frozen=True)
@@ -247,7 +247,7 @@ def render_find_chat_header(state: FindChatState) -> str:
     )
     return "\n".join(
         [
-            (f"MEM FIND · INTERACTIVE · {safe_terminal_text(state.context_name)}"),
+            (f"MEM SEARCH · INTERACTIVE · {safe_terminal_text(state.context_name)}"),
             f"QUERY · {safe_terminal_text(query)}",
             result_summary,
             f"STATUS · {safe_terminal_text(state.status)}",
@@ -300,10 +300,10 @@ def _dialogue_blocks(state: FindChatState) -> tuple[str, ...]:
         blocks.append(
             "\n".join(
                 [
-                    "OPEN QUESTION · FIND",
+                    "OPEN QUESTION · SEARCH",
                     "  What are you trying to locate in this Context?",
                     "",
-                    "Describe it in your own words. The Find controller handles",
+                    "Describe it in your own words. The Search controller handles",
                     "the turn while this view remains open.",
                 ]
             )
@@ -330,7 +330,7 @@ def render_find_chat_snapshot(state: FindChatState) -> str:
         [
             render_find_chat_header(state),
             "\n\n".join(_body_blocks(state)),
-            "ASK OR REFINE THE FIND\n  (interactive input not shown)",
+            "ASK OR REFINE THE SEARCH\n  (interactive input not shown)",
         ]
     )
 
@@ -369,8 +369,8 @@ def _run_find_chat_application(
     """Run one shell action or one long-lived controller-backed session."""
     if require_tty:
         require_interactive_terminal(
-            "Interactive Find chat",
-            snapshot_hint="Use ordinary 'mem find' output outside a terminal.",
+            "Interactive Search chat",
+            snapshot_hint="Use ordinary 'mem search' output outside a terminal.",
         )
 
     committed_state = initial_state
@@ -429,7 +429,7 @@ def _run_find_chat_application(
                     lambda: (
                         _processing_find_turn_label(background_turn.frame)
                         if background_turn.busy
-                        else " ASK OR REFINE THE FIND"
+                        else " ASK OR REFINE THE SEARCH"
                     )
                 ),
                 height=Dimension.exact(1),
@@ -506,12 +506,12 @@ def _run_find_chat_application(
     def _submit(event) -> None:
         nonlocal committed_state
         if background_turn.busy:
-            status_message["value"] = "A Find turn is already running."
+            status_message["value"] = "A Search turn is already running."
             event.app.invalidate()
             return
         text = input_area.text.strip()
         if not text:
-            status_message["value"] = "Enter a nonblank Find turn first."
+            status_message["value"] = "Enter a nonblank Search turn first."
             event.app.invalidate()
             return
         if handle_turn is None:
@@ -568,7 +568,7 @@ def _run_find_chat_application(
     @bindings.add("c-j", filter=has_focus(input_area), eager=True)
     def _insert_newline(event) -> None:
         if background_turn.busy:
-            status_message["value"] = "Wait for the current Find turn."
+            status_message["value"] = "Wait for the current Search turn."
         else:
             input_area.buffer.insert_text("\n")
         event.app.invalidate()

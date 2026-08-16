@@ -40,9 +40,6 @@
       "docs/embed-application-boundary-matrix.md"
     ],
     "eval": [],
-    "find": [
-      "docs/find-search-application-boundary-matrix.md"
-    ],
     "find-ambiguities": [
       "docs/read-report-lifecycle-design-rationale.md"
     ],
@@ -106,6 +103,10 @@
     ],
     "revert": [],
     "review": [],
+    "search": [
+      "docs/find-search-application-boundary-matrix.md",
+      "docs/search-find-replace-design-rationale.md"
+    ],
     "sever": [
       "docs/sever-application-boundary-matrix.md"
     ],

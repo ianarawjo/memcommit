@@ -1,8 +1,8 @@
-"""Typed natural-language follow-up plans for interactive ``mem find``.
+"""Typed natural-language follow-up plans for interactive ``mem search``.
 
 The provider may request same-frame reranking, grounded answer research, choose
 one visible result alias, or ask a question. It cannot return a UID, construct
-argv, execute a command, search another Context itself, or mutate Find state.
+argv, execute a command, search another Context itself, or mutate Search state.
 """
 from __future__ import annotations
 
@@ -18,7 +18,7 @@ from memcommit.query_provider import QueryProviderError
 FIND_TURN_USER_TEXT_LIMIT = 20_000
 FIND_TURN_RESPONSE_CHAR_LIMIT = 20_000
 FIND_TURN_TEXT_LIMIT = 2_000
-FIND_TURN_OPERATION = "find turn"
+FIND_TURN_OPERATION = "search turn"
 _OUTPUT_KEYS = {
     "kind",
     "understanding",
@@ -30,7 +30,7 @@ _OUTPUT_KEYS = {
 
 
 class FindTurnError(RuntimeError):
-    """Safe failure at the interactive Find interpretation boundary."""
+    """Safe failure at the interactive Search interpretation boundary."""
 
 
 class FindTurnProvider(Protocol):
@@ -41,7 +41,7 @@ class FindTurnProvider(Protocol):
         operation: str,
         output_schema: dict[str, object] | None = None,
     ) -> str:
-        """Return one structured Find-turn interpretation."""
+        """Return one structured Search-turn interpretation."""
 
 
 FindTurnProviderInput: TypeAlias = (
@@ -96,7 +96,7 @@ def _allowed_find_turn_kinds(state: FindChatState) -> list[str]:
 
 
 def find_turn_output_schema(state: FindChatState) -> dict[str, object]:
-    """Return a strict schema limited to aliases visible in this Find view."""
+    """Return a strict schema limited to aliases visible in this Search view."""
     aliases = [result.alias for result in state.results]
     return {
         "type": "object",
@@ -153,7 +153,7 @@ def _strict_json_object(
 def _bounded_text(value: object, label: str) -> str:
     text = _optional_bounded_text(value, label)
     if not text:
-        raise FindTurnError(f"Find turn returned invalid {label}.")
+        raise FindTurnError(f"Search turn returned invalid {label}.")
     return text
 
 
@@ -167,7 +167,7 @@ def _optional_bounded_text(value: object, label: str) -> str:
             for character in value
         )
     ):
-        raise FindTurnError(f"Find turn returned invalid {label}.")
+        raise FindTurnError(f"Search turn returned invalid {label}.")
     return value.strip()
 
 
@@ -178,17 +178,17 @@ def _provider_from(
     if callable(complete):
         return cast(FindTurnProvider, provider_or_factory)
     if not callable(provider_or_factory):
-        raise FindTurnError("Find turn provider is not available.")
+        raise FindTurnError("Search turn provider is not available.")
     try:
         provider = provider_or_factory()
     except QueryProviderError as error:
         raise FindTurnError(str(error)) from error
     except Exception as error:
         raise FindTurnError(
-            "Find turn provider could not be connected."
+            "Search turn provider could not be connected."
         ) from error
     if not callable(getattr(provider, "complete", None)):
-        raise FindTurnError("Find turn provider is not available.")
+        raise FindTurnError("Search turn provider is not available.")
     return provider
 
 
@@ -230,7 +230,7 @@ def _build_prompt(state: FindChatState, user_text: str) -> str:
     )
     allowed = ", ".join(_allowed_find_turn_kinds(state))
     return (
-        "Interpret one follow-up turn in an interactive semantic Find.\n"
+        "Interpret one follow-up turn in an interactive semantic Search.\n"
         "Do not use shell, filesystem, web, MCP, apps, external tools, or "
         "commands. Do not construct, quote, or run a mem command. The host "
         "alone resolves one visible alias and constructs an allowlisted "
@@ -285,17 +285,17 @@ def _parse_turn(raw: object, state: FindChatState) -> FindTurn:
         or len(raw) > FIND_TURN_RESPONSE_CHAR_LIMIT
     ):
         raise FindTurnError(
-            "Find turn returned invalid structured output."
+            "Search turn returned invalid structured output."
         )
     try:
         value = json.loads(raw, object_pairs_hook=_strict_json_object)
     except (json.JSONDecodeError, ValueError) as error:
         raise FindTurnError(
-            "Find turn returned invalid structured output."
+            "Search turn returned invalid structured output."
         ) from error
     if not isinstance(value, dict) or set(value) != _OUTPUT_KEYS:
         raise FindTurnError(
-            "Find turn returned invalid structured output."
+            "Search turn returned invalid structured output."
         )
     understanding = _bounded_text(
         value["understanding"],
@@ -309,7 +309,7 @@ def _parse_turn(raw: object, state: FindChatState) -> FindTurn:
     if kind == "ASK":
         if not question or query or selector != "" or scope != "NONE":
             raise FindTurnError(
-                "Find turn ASK returned incompatible fields."
+                "Search turn ASK returned incompatible fields."
             )
         return FindTurnAsk(
             understanding=understanding,
@@ -318,7 +318,7 @@ def _parse_turn(raw: object, state: FindChatState) -> FindTurn:
     if kind == "REFINE":
         if question or not query or selector != "" or scope != "CONTEXT":
             raise FindTurnError(
-                "Find turn REFINE returned incompatible fields."
+                "Search turn REFINE returned incompatible fields."
             )
         return FindTurnRefine(
             understanding=understanding,
@@ -335,7 +335,7 @@ def _parse_turn(raw: object, state: FindChatState) -> FindTurn:
             or scope not in {"CONTEXT", "ALL_CONTEXTS"}
         ):
             raise FindTurnError(
-                "Find turn ANSWER returned incompatible fields."
+                "Search turn ANSWER returned incompatible fields."
             )
         return FindTurnAnswer(
             understanding=understanding,
@@ -351,7 +351,7 @@ def _parse_turn(raw: object, state: FindChatState) -> FindTurn:
         or scope != "NONE"
     ):
         raise FindTurnError(
-            "Find turn returned an unknown result action."
+            "Search turn returned an unknown result action."
         )
     return FindTurnAction(
         understanding=understanding,
@@ -365,14 +365,14 @@ def interpret_find_turn(
     user_text: str,
     provider_or_factory: FindTurnProviderInput,
 ) -> FindTurn:
-    """Interpret one Find follow-up with exactly one provider completion."""
+    """Interpret one Search follow-up with exactly one provider completion."""
     if (
         not isinstance(user_text, str)
         or not user_text.strip()
         or len(user_text) > FIND_TURN_USER_TEXT_LIMIT
     ):
         raise FindTurnError(
-            "Find turn requires bounded nonblank text."
+            "Search turn requires bounded nonblank text."
         )
     provider = _provider_from(provider_or_factory)
     try:
@@ -384,5 +384,5 @@ def interpret_find_turn(
     except QueryProviderError as error:
         raise FindTurnError(str(error)) from error
     except Exception as error:
-        raise FindTurnError("Find turn provider failed.") from error
+        raise FindTurnError("Search turn provider failed.") from error
     return _parse_turn(raw, state)

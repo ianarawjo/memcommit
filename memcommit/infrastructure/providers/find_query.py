@@ -26,7 +26,7 @@ class OperationProviderPolicy:
 
 
 FIND_PROVIDER_POLICY = OperationProviderPolicy(
-    operation="find",
+    operation="search",
     model="gpt-5.6-terra",
     reasoning_effort="low",
 )

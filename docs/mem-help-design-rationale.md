@@ -82,9 +82,20 @@ prompt-toolkit selector:
   separately presented compatibility commands remain adjacent. This order
   comes from `HELP_CATEGORY_GROUPS`; the renderer must not alphabetize it
   again. `A–Z` alone provides lexical lookup.
-  `ANALYZE & TRANSFORM` intentionally covers both read-only inspection and
-  operations that reshape or reconcile Memory material; `TRANSFORM` is broad
-  enough for Atomize, Translate, Merge, and Update where `RESOLVE` was not.
+  `MECHANICAL MEMORY OPERATIONS` groups provider-free actions whose result is
+  determined by explicit identities, text boundaries, replacement values, or
+  reviewed deterministic choices. `SEMANTIC MEMORY OPERATIONS` groups
+  meaning-based analysis, transformation, and review workflows. The latter
+  label does not promise a provider call for every form: an exact cache hit or
+  saved-artifact replay may remain local, and each operation's `EXECUTION` row
+  is authoritative. The two category boxes expose that distinction directly:
+  Mechanical says `NO LLM`, while Semantic says `LLM-BASED` and explicitly
+  allows either a provider call or reuse of exact cached or saved analysis.
+  This text classifies the source of meaning rather than promising a fresh
+  call. Forget belongs to the semantic group because it interprets one
+  natural-language criterion over a complete Memory frame; Merge and Dedup
+  belong to the mechanical group because their application choices are exact
+  and provider-free.
   An exact alternate spelling that adds no operation may instead be folded into
   its canonical label, as in `list (ls)` and `delete (remove)`, while remaining
   directly executable. `remove` is therefore not a second deletion operation:

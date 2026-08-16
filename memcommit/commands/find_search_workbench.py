@@ -1,4 +1,4 @@
-"""Interactive search, multi-target, and scope surface for ``mem find``."""
+"""Interactive semantic Search, multi-target, and scope surface."""
 
 from __future__ import annotations
 
@@ -182,15 +182,15 @@ FindSaveLocationValidator = Callable[[str], object]
 def _find_save_location_stem(context_name: str, query: str) -> str:
     """Build one editable local name suggestion without assigning identity."""
 
-    words = "-".join(query.strip().split()) or "find"
+    words = "-".join(query.strip().split()) or "search"
     safe = "".join(
         "-" if character in "/\\:" or ord(character) < 32 else character
         for character in words
     ).strip("-.")
     if not safe:
-        safe = "find"
+        safe = "search"
     if len(safe) > 48:
-        safe = safe[:48].rstrip("-.") or "find"
+        safe = safe[:48].rstrip("-.") or "search"
     return f"{context_name}/results/{safe}"
 
 
@@ -350,8 +350,8 @@ def run_find_search_workbench(
         raise ValueError("Find requires a search controller.")
     if require_tty:
         require_interactive_terminal(
-            "Interactive Find",
-            snapshot_hint='Pass a query, for example: mem find "parking".',
+            "Interactive Search",
+            snapshot_hint='Pass a query, for example: mem search "parking".',
         )
 
     labels = dict(annotations or {})
@@ -425,7 +425,7 @@ def run_find_search_workbench(
         name="find-search-query",
     )
     initial_save_location = suggest_fresh_context_name(
-        _find_save_location_stem(initial_target, "find"),
+        _find_save_location_stem(initial_target, "search"),
         local_catalog,
     )
     save_location = ContextNameControl.create(
@@ -585,7 +585,7 @@ def run_find_search_workbench(
             follow_embeds=embed_choice.selected_uid == "FOLLOW",
         )
         mode = response.mode if response is not None else "AUTO FROM QUERY"
-        return f" MEM FIND · INTERACTIVE · {mode}\n {summary}"
+        return f" MEM SEARCH · INTERACTIVE · {mode}\n {summary}"
 
     header = Window(
         FormattedTextControl(render_header),
@@ -892,7 +892,7 @@ def run_find_search_workbench(
     def _search(event) -> SurfaceActionResult:
         nonlocal copy_receipt, response, result_selection
         if background_turn.busy:
-            status["value"] = "A Find search is already running."
+            status["value"] = "A Search is already running."
             return "HANDLED"
         try:
             request_targets, request_descendants = request_target_scope()
@@ -1090,7 +1090,7 @@ def run_find_search_workbench(
             status["value"] = "Wait for the current search to finish."
             return "HANDLED"
         if response is None or result_selection is None:
-            status["value"] = "RUN FIND AND CHECK AT LEAST ONE RESULT"
+            status["value"] = "RUN SEARCH AND CHECK AT LEAST ONE RESULT"
             return "HANDLED"
         selected_indices = tuple(int(uid) for uid in result_selection.selected_uids)
         if not selected_indices:

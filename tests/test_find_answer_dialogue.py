@@ -1,4 +1,4 @@
-"""Strict three-scope synthesis tests for interactive Find answers."""
+"""Strict three-scope synthesis tests for interactive Search answers."""
 from __future__ import annotations
 
 import json

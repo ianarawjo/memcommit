@@ -1012,7 +1012,7 @@ def _run_interactive_find(
         handle_turn=controller,
     )
     typer.echo(
-        f"Find dialogue closed with {len(result.state.results)} visible "
+        f"Search dialogue closed with {len(result.state.results)} visible "
         f"result(s) after {len(result.submitted_turns)} follow-up turn(s)."
     )
     return result
@@ -1164,7 +1164,7 @@ def _open_find_search_workbench(
         catalog=catalog,
     )
     typer.secho(
-        f"Saved {len(materialized.item_uids)} checked Find result(s) as "
+        f"Saved {len(materialized.item_uids)} checked Search result(s) as "
         f"{materialized.mode} in new Context "
         f"'{display_escape_text(materialized.context_name)}' "
         f"[{materialized.context_uid[:8]}]; sources unchanged.",
@@ -1267,7 +1267,7 @@ def cmd(
         follow_embeds = traversal.follow_embeds
     except (TypeError, ValueError) as error:
         typer.secho(
-            f"Find error: {display_escape_text(str(error))}",
+            f"Search error: {display_escape_text(str(error))}",
             fg=typer.colors.RED,
             err=True,
         )
@@ -1312,7 +1312,7 @@ def cmd(
 
     if not 1 <= limit <= 20:
         typer.secho(
-            "Find error: Find limit must be between 1 and 20.",
+            "Search error: Search limit must be between 1 and 20.",
             fg=typer.colors.RED,
             err=True,
         )
@@ -1320,8 +1320,8 @@ def cmd(
     if query is None:
         if not _interactive_terminal():
             typer.secho(
-                "Find error: QUERY is required outside a terminal. In a "
-                "terminal, run 'mem find' to open the interactive search.",
+                "Search error: QUERY is required outside a terminal. In a "
+                "terminal, run 'mem search' to open the interactive search.",
                 fg=typer.colors.RED,
                 err=True,
             )
@@ -1348,7 +1348,7 @@ def cmd(
             ValueError,
         ) as error:
             typer.secho(
-                f"Find error: {display_escape_text(str(error))}",
+                f"Search error: {display_escape_text(str(error))}",
                 fg=typer.colors.RED,
                 err=True,
             )
@@ -1380,7 +1380,7 @@ def cmd(
                 include_query_routes=follow_embeds,
             )
             with CommandProgress(
-                "FIND HISTORY" if temporal_query else "FIND",
+                "SEARCH HISTORY" if temporal_query else "SEARCH",
                 "connecting provider",
                 total=2 if temporal_query else 3,
             ) as progress:
@@ -1416,9 +1416,9 @@ def cmd(
         ValueError,
     ) as error:
         error_label = (
-            "Find history error"
+            "Search history error"
             if len(target_names) == 1 and temporal_query
-            else "Find error"
+            else "Search error"
         )
         typer.secho(
             f"{error_label}: {display_escape_text(str(error))}",

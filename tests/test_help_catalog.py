@@ -159,7 +159,7 @@ def test_collapsed_by_kind_row_shows_summary_and_best_for_side_by_side():
 
     fragments = _help_group_fragments(
         [(0, entry)],
-        title="ANALYZE & TRANSFORM",
+        title="SEMANTIC MEMORY OPERATIONS",
         width=180,
         focused=True,
         selected_index=0,
@@ -183,6 +183,59 @@ def test_collapsed_by_kind_row_shows_summary_and_best_for_side_by_side():
     )
     assert "BEST FOR" not in rendered
     assert "FORM 1" not in rendered
+
+
+def test_memory_operation_categories_explain_llm_use_without_promising_a_call():
+    root, context = _root_context()
+    try:
+        entries = command_entries(context)
+        add_entry = next(entry for entry in entries if entry.name == "add")
+        compare_entry = next(entry for entry in entries if entry.name == "compare")
+    finally:
+        context.close()
+
+    mechanical = "".join(
+        text
+        for _style, text in _help_group_fragments(
+            [(0, add_entry)],
+            title="MECHANICAL MEMORY OPERATIONS",
+            width=120,
+            focused=False,
+            selected_index=0,
+            expanded_index=None,
+            selected_form=None,
+        )
+    )
+    semantic = "".join(
+        text
+        for _style, text in _help_group_fragments(
+            [(0, compare_entry)],
+            title="SEMANTIC MEMORY OPERATIONS",
+            width=120,
+            focused=False,
+            selected_index=0,
+            expanded_index=None,
+            selected_form=None,
+        )
+    )
+    a_z = "".join(
+        text
+        for _style, text in _help_group_fragments(
+            [(0, add_entry)],
+            title="A–Z",
+            width=120,
+            focused=False,
+            selected_index=0,
+            expanded_index=None,
+            selected_form=None,
+        )
+    )
+
+    assert "NO LLM · Explicit inputs" in mechanical
+    assert "LLM-BASED · Uses LLM-produced semantic analysis" in semantic
+    assert "call a provider or reuse exact cached or saved analysis" in semantic
+    assert "NO LLM" not in a_z
+    assert "LLM-BASED" not in a_z
 
 
 def test_collapsed_a_z_rows_use_the_same_best_for_column():
@@ -227,7 +280,7 @@ def test_collapsed_narrow_row_stacks_best_for_below_the_summary():
         text
         for _style, text in _help_group_fragments(
             [(0, entry)],
-            title="ANALYZE & TRANSFORM",
+            title="SEMANTIC MEMORY OPERATIONS",
             width=90,
             focused=False,
             selected_index=0,
@@ -270,7 +323,7 @@ def test_expanded_tui_entry_projects_composed_meaning_before_cli_forms():
         text
         for _style, text in _help_group_fragments(
             [(0, entry)],
-            title="ANALYZE & TRANSFORM",
+            title="SEMANTIC MEMORY OPERATIONS",
             width=120,
             focused=True,
             selected_index=0,

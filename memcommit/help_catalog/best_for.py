@@ -4,7 +4,7 @@ from __future__ import annotations
 
 
 BEST_FOR_BY_OPERATION = {
-    "add": "Saving new facts, instructions, or source material.",
+    "add": "Adding one or more facts, instructions, or notes directly to a Context.",
     "atomize": (
         "Separating a composite Memory into independently reviewable " "requirements."
     ),
@@ -13,7 +13,10 @@ BEST_FOR_BY_OPERATION = {
     "check-conformance": ("Checking a Context or saved Ground against explicit Rules."),
     "checkout": "Using a Git-like workflow to switch or create a branch.",
     "checkpoint": "Creating a recovery point before risky work.",
-    "chunk": "Mechanically splitting a long Memory at structural boundaries.",
+    "chunk": (
+        "A Memory already has clear text boundaries that should become "
+        "separate Memories."
+    ),
     "clear": "Emptying a Context while retaining the Context itself.",
     "compare": (
         "Comparing two Contexts as a whole to understand where they align and "
@@ -32,10 +35,13 @@ BEST_FOR_BY_OPERATION = {
         "An abstract Goal needs starter Rule candidates, or existing Rules need "
         "additional concrete Case propositions for review."
     ),
-    "edit": "Correcting or revising a known Memory in place.",
+    "edit": (
+        "Directly correcting or replacing the content of specific existing "
+        "Memories."
+    ),
     "embed": "Reusing a Context inside another Context without copying it.",
     "eval": "Measuring operation behavior against repeatable fixtures.",
-    "find": "Finding relevant Memories across a selected Context scope.",
+    "search": "Finding relevant Memories across a selected Context scope.",
     "find-ambiguities": (
         "Finding Memories that permit unclear or multiple interpretations."
     ),
@@ -46,7 +52,10 @@ BEST_FOR_BY_OPERATION = {
         "Turning one non-fitting direct-Memory frame into a grounded, independently "
         "verified Fit-YES post-image before exact Apply."
     ),
-    "forget": ("Removing or transforming material according to a semantic criterion."),
+    "forget": (
+        "Removing or rewriting Memories according to a natural-language "
+        "instruction whose meaning must be interpreted."
+    ),
     "ground": "Building a reviewed evaluation or behavior contract from evidence.",
     "help": "Discovering available operations and their invocation forms.",
     "impact": "Checking expected consequences before accepting a transformation.",
@@ -70,7 +79,10 @@ BEST_FOR_BY_OPERATION = {
     "query": "Getting a cited answer from readable or query-authorized knowledge.",
     "rationale": "Understanding why a Memory exists or reached its current form.",
     "redo": "Reapplying a command that was undone accidentally.",
-    "reference": "Reusing a Memory while keeping one authoritative copy.",
+    "reference": (
+        "Using the same Memory in another Context while keeping its Source as "
+        "the single place to edit it."
+    ),
     "rename": "Giving an existing managed Profile a clearer name.",
     "revert": "Restoring a Context to a deliberately saved recovery point.",
     "review": "Resolving issues in a saved analysis before a later Apply.",

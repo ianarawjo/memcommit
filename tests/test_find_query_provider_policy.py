@@ -59,8 +59,8 @@ def test_find_pins_terra_low_query_pins_sol_none_and_keep_timeout(monkeypatch):
         },
     ]
     assert events == [
-        ("started", "find"),
-        ("finished", "find", 1.0, {"provider": "codex_chatgpt"}),
+        ("started", "search"),
+        ("finished", "search", 1.0, {"provider": "codex_chatgpt"}),
         ("started", "query"),
         ("finished", "query", 1.0, {"provider": "codex_chatgpt"}),
     ]
