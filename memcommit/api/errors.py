@@ -37,6 +37,30 @@ class ShowExecutionError(ShowError):
     """Authorized Show execution returned no valid immutable result."""
 
 
+class FindError(MemCommitError):
+    """Base class for public provider-free text Find failures."""
+
+
+class FindInputError(FindError):
+    """The caller supplied an invalid Find pattern or scope."""
+
+
+class FindContextError(FindError):
+    """A requested Find Context is unavailable."""
+
+
+class FindAuthorityError(FindError):
+    """The active Profile or Grant does not authorize this Find."""
+
+
+class FindStorageError(FindError):
+    """Find could not safely read local durable state."""
+
+
+class FindExecutionError(FindError):
+    """Authorized Find did not return one complete deterministic result."""
+
+
 class AddError(MemCommitError):
     """Base class for public Add failures."""
 

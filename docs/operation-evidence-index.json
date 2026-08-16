@@ -40,6 +40,10 @@
       "docs/embed-application-boundary-matrix.md"
     ],
     "eval": [],
+    "find": [
+      "docs/find-application-boundary-matrix.md",
+      "docs/search-find-replace-design-rationale.md"
+    ],
     "find-ambiguities": [
       "docs/read-report-lifecycle-design-rationale.md"
     ],

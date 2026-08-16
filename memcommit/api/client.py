@@ -30,6 +30,7 @@ from memcommit.api.forget import (
     ForgetApplyResult,
     ForgetReviewResult,
 )
+from memcommit.api.find import FindResult
 from memcommit.api.help import HelpCatalogResult, OperationHelpResult
 from memcommit.api.errors import (
     QueryConfigurationError,
@@ -211,6 +212,30 @@ class MemCommitClient:
             include_descendants=include_descendants,
             follow_embeds=follow_embeds,
             limit=limit,
+        )
+
+    def find(
+        self,
+        pattern: str,
+        context_names: Sequence[str] = (),
+        *,
+        include_descendants: bool = False,
+        follow_embeds: bool = False,
+        regex: bool = False,
+        ignore_case: bool = False,
+    ) -> FindResult:
+        """Find literal or regex text spans without semantic inference."""
+
+        from memcommit.api._operations.find import find
+
+        return find(
+            self._runtime,
+            pattern,
+            context_names,
+            include_descendants=include_descendants,
+            follow_embeds=follow_embeds,
+            regex=regex,
+            ignore_case=ignore_case,
         )
 
     def fit(

@@ -96,6 +96,13 @@ from memcommit.interfaces.agent.search import (
     SearchAgentKind,
     search_agent_tool_schema,
 )
+from memcommit.interfaces.agent.find import (
+    FIND_AGENT_CONTRACT_VERSION,
+    FIND_AGENT_TOOL_NAME,
+    FindAgentAdapter,
+    FindAgentKind,
+    find_agent_tool_schema,
+)
 from memcommit.interfaces.agent.registry import (
     AGENT_TOOL_REGISTRY_VERSION,
     AgentToolBinding,
@@ -159,6 +166,10 @@ __all__ = [
     "FORGET_AGENT_CONTRACT_VERSION",
     "FORGET_AGENT_REVIEW_LIMIT",
     "FORGET_AGENT_TOOL_NAME",
+    "FIND_AGENT_CONTRACT_VERSION",
+    "FIND_AGENT_TOOL_NAME",
+    "FindAgentAdapter",
+    "FindAgentKind",
     "ForgetAgentAdapter",
     "ForgetAgentKind",
     "HELP_AGENT_CONTRACT_VERSION",
@@ -195,6 +206,7 @@ __all__ = [
     "elaborate_agent_tool_schema",
     "fit_agent_tool_schema",
     "forget_agent_tool_schema",
+    "find_agent_tool_schema",
     "help_agent_tool_schema",
     "query_agent_tool_schema",
     "quality_find_agent_tool_schema",

@@ -164,6 +164,7 @@ HELP_CATEGORY_GROUPS = (
     (
         "SEARCH & EXPLAIN",
         (
+            "find",
             "search",
             "query",
             "summarize",
@@ -375,6 +376,15 @@ COMMAND_FORMS = {
     "eval": (
         "mem eval semantic status (show retained semantic campaign status)",
         "mem eval semantic run [campaign] (run a semantic evaluation campaign)",
+    ),
+    "find": (
+        "mem find (interactive provider-free pattern, Context scope, and complete results)",
+        'mem find "[text]" (literal text in the direct current Context)',
+        'mem find -i "[text]" (case-insensitive literal text)',
+        'mem find --regex "[expression]" (explicit regular-expression matching)',
+        'mem find -r "[text]" (lexical descendants and embedded Contexts)',
+        'mem find --context [context1] --context [context2] "[text]" (multiple roots)',
+        'mem find --descendants --exclude-embeds "[text]" (lexical subtrees only)',
     ),
     "search": (
         "mem search (interactive semantic search, checked COPY/REFERENCE, and Save Location)",

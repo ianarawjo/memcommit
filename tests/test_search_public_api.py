@@ -87,7 +87,7 @@ def test_explicit_root_search_does_not_inherit_profile_grants(tmp_path, monkeypa
         raise AssertionError("Explicit-root Search consulted global Profiles")
 
     monkeypatch.setattr(
-        "memcommit.api._operations.search.load_profile_registry",
+        "memcommit.api._support.readable.load_profile_registry",
         forbidden,
     )
 

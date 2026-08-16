@@ -19,6 +19,7 @@ from memcommit.interfaces.agent import (
     ELABORATE_AGENT_TOOL_NAME,
     FIT_AGENT_TOOL_NAME,
     FORGET_AGENT_TOOL_NAME,
+    FIND_AGENT_TOOL_NAME,
     HELP_AGENT_TOOL_NAME,
     MELD_AGENT_TOOL_NAME,
     QUALITY_FIND_AGENT_TOOL_NAME,
@@ -67,6 +68,7 @@ def test_default_registry_projects_parameters_to_fresh_mcp_input_schemas(tmp_pat
     assert tuple(tool.name for tool in first) == (
         HELP_AGENT_TOOL_NAME,
         SHOW_AGENT_TOOL_NAME,
+        FIND_AGENT_TOOL_NAME,
         SEARCH_AGENT_TOOL_NAME,
         QUERY_AGENT_TOOL_NAME,
         QUALITY_FIND_AGENT_TOOL_NAME,

@@ -75,14 +75,16 @@ The rollout is intentionally staged:
 
 1. promote the existing semantic route to canonical Search without changing
    its result meaning;
-2. add provider-free Find and verify it never constructs a provider;
+2. add provider-free Find and verify it never constructs a provider (complete;
+   see `find-application-boundary-matrix.md`);
 3. add frozen-plan Replace and its atomic Apply/Undo boundary;
 4. expose and verify every adapter, Help projection, and real-terminal flow.
 
 Search retains the current route conclusion until its conversational controller
-also enters the reviewed application boundary. Find and Replace begin
-`UNREVIEWED` and receive their own focused matrices before any stronger route
-claim is made.
+also enters the reviewed application boundary. Find is now `CLOSED`: every
+implemented CLI, TUI, Python, agent, and MCP route enters its reviewed
+application/runtime boundary. Replace remains unreviewed until its own focused
+matrix proves planning, Apply, recovery, and adapters.
 
 ## Intentional non-goals
 

@@ -27,6 +27,7 @@ only from `docs/operation-evidence-index.json`.
 | `elaborate` | `CLOSED` | [`distill-elaborate-application-boundary-matrix.md`](../distill-elaborate-application-boundary-matrix.md) | CLI, TUI, public, agent, MCP, Ground, provider, and prepared-result routes share the reviewed Elaborate application contract. |
 | `embed` | `CLOSED` | [`embed-application-boundary-matrix.md`](../embed-application-boundary-matrix.md) | The mutable relationship plan, freeze, CAS Apply, plain CLI, and interactive setup point to one terminal-independent use case. |
 | `eval` | `UNREVIEWED` | — | — |
+| `find` | `CLOSED` | [`find-application-boundary-matrix.md`](../find-application-boundary-matrix.md)<br>[`search-find-replace-design-rationale.md`](../search-find-replace-design-rationale.md) | CLI, TUI, Python, agent, and MCP routes share one provider-free readable-source freeze and complete literal or explicit-regex span result with no cache, session, or effect. |
 | `find-ambiguities` | `UNREVIEWED` | [`read-report-lifecycle-design-rationale.md`](../read-report-lifecycle-design-rationale.md) | — |
 | `find-conflicts` | `UNREVIEWED` | [`read-report-lifecycle-design-rationale.md`](../read-report-lifecycle-design-rationale.md) | — |
 | `find-duplicates` | `UNREVIEWED` | [`read-report-lifecycle-design-rationale.md`](../read-report-lifecycle-design-rationale.md) | — |

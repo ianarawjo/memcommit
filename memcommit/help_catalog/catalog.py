@@ -185,6 +185,14 @@ _OPERATIONS = (
         "Changes evaluation ledgers, not Context content",
     ),
     _operation(
+        "find",
+        "Find literal text or explicit regular-expression matches in readable Memories.",
+        "Text pattern + Context scope -> exact Memory spans",
+        ExecutionKind.DETERMINISTIC,
+        "Read-only; no provider, semantic cache, session, or Context change",
+        "One or more readable roots; lexical descendants and embedded reach are independent",
+    ),
+    _operation(
         "search",
         "Search selected Contexts with explicit lexical-descendant and embedded-Context reach.",
         "Context set + query -> ranked Memories",

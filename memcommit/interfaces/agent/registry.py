@@ -69,6 +69,11 @@ from memcommit.interfaces.agent.search import (
     SearchAgentAdapter,
     search_agent_tool_schema,
 )
+from memcommit.interfaces.agent.find import (
+    FIND_AGENT_TOOL_NAME,
+    FindAgentAdapter,
+    find_agent_tool_schema,
+)
 from memcommit.interfaces.agent.query import (
     QUERY_AGENT_TOOL_NAME,
     QueryAgentAdapter,
@@ -257,6 +262,7 @@ def build_default_agent_tool_registry(client: MemCommitClient) -> AgentToolRegis
     help_adapter = HelpAgentAdapter(client)
     show_adapter = ShowAgentAdapter(client)
     search = SearchAgentAdapter(client)
+    find = FindAgentAdapter(client)
     query = QueryAgentAdapter(client)
     quality_find = QualityFindAgentAdapter(client)
     add = AddAgentAdapter(client)
@@ -281,6 +287,11 @@ def build_default_agent_tool_registry(client: MemCommitClient) -> AgentToolRegis
                 name=SHOW_AGENT_TOOL_NAME,
                 schema_factory=show_agent_tool_schema,
                 handler=show_adapter.invoke,
+            ),
+            AgentToolBinding(
+                name=FIND_AGENT_TOOL_NAME,
+                schema_factory=find_agent_tool_schema,
+                handler=find.invoke,
             ),
             AgentToolBinding(
                 name=SEARCH_AGENT_TOOL_NAME,

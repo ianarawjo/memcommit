@@ -46,6 +46,13 @@
         ],
         "reason": "The mutable relationship plan, freeze, CAS Apply, plain CLI, and interactive setup point to one terminal-independent use case."
       },
+      "find": {
+        "evidence": [
+          "docs/find-application-boundary-matrix.md",
+          "docs/search-find-replace-design-rationale.md"
+        ],
+        "reason": "CLI, TUI, Python, agent, and MCP routes share one provider-free readable-source freeze and complete literal or explicit-regex span result with no cache, session, or effect."
+      },
       "fit": {
         "evidence": [
           "docs/fit-application-boundary-matrix.md"

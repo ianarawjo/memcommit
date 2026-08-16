@@ -41,6 +41,7 @@ BEST_FOR_BY_OPERATION = {
     ),
     "embed": "Reusing a Context inside another Context without copying it.",
     "eval": "Measuring operation behavior against repeatable fixtures.",
+    "find": "Locating exact words, identifiers, or text patterns without semantic interpretation.",
     "search": "Finding relevant Memories across a selected Context scope.",
     "find-ambiguities": (
         "Finding Memories that permit unclear or multiple interpretations."

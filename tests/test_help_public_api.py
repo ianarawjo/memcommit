@@ -18,7 +18,7 @@ def test_client_lists_operations_without_store_or_provider_access(tmp_path):
         semantic_provider_factory=provider,
     ).list_operations()
 
-    assert len(result.operations) == 60
+    assert len(result.operations) == 61
     assert result.operations[0].name == "add"
     assert result.operations[-1].name == "update"
     assert not root.exists()
