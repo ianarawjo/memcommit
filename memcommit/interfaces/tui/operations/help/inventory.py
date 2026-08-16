@@ -313,6 +313,8 @@ COMMAND_FORMS = {
         "(review without creating the Result)",
         "mem distill [context] --save-as [result_context] --apply "
         "(create the exact reviewed Rule Context)",
+        "mem distill --ground [name] "
+        "(review Rules from its exact Goal and working-candidate frame)",
     ),
     "edit": (
         'mem edit [memory] "[new_content]" (replace one direct Memory)',
