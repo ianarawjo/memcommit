@@ -52,6 +52,7 @@ only from `docs/operation-evidence-index.json`.
 | `redo` | `UNREVIEWED` | — | — |
 | `reference` | `UNREVIEWED` | — | — |
 | `rename` | `UNREVIEWED` | — | — |
+| `replace` | `CLOSED` | [`replace-callable-boundary-matrix.md`](../replace-callable-boundary-matrix.md)<br>[`search-find-replace-design-rationale.md`](../search-find-replace-design-rationale.md) | CLI, TUI, Python, agent, and MCP routes share one complete local-scope frozen plan, exact-digest review, atomic multi-Context Apply, and operation-unit Undo/Redo boundary without provider or cache use. |
 | `resolve` | `CLOSED` | [`resolve-fit-repair-design-rationale.md`](../resolve-fit-repair-design-rationale.md)<br>[`resolution-lifecycle-design-rationale.md`](../resolution-lifecycle-design-rationale.md) | Direct-Memory Fit repair exposes CLI, TUI, public, agent, and MCP projections over one typed analysis, exact replay, authority, and checkpointed Apply boundary. |
 | `revert` | `UNREVIEWED` | — | — |
 | `review` | `UNREVIEWED` | — | — |

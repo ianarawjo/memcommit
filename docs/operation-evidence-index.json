@@ -101,6 +101,10 @@
     "redo": [],
     "reference": [],
     "rename": [],
+    "replace": [
+      "docs/replace-callable-boundary-matrix.md",
+      "docs/search-find-replace-design-rationale.md"
+    ],
     "resolve": [
       "docs/resolve-fit-repair-design-rationale.md",
       "docs/resolution-lifecycle-design-rationale.md"

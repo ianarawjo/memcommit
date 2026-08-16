@@ -161,6 +161,28 @@ async def _exercise_stdio(command: str, root: Path, workdir: Path) -> dict[str, 
                     "context_name": "smoke/target",
                 },
             )
+            replace_plan = await session.call_tool(
+                "memcommit_replace",
+                {
+                    "version": 1,
+                    "kind": "plan",
+                    "pattern": "Memory",
+                    "replacement": "Record",
+                    "context_names": ["smoke/target"],
+                },
+            )
+            replace_plan_result = replace_plan.structured_content["result"]
+            replaced = await session.call_tool(
+                "memcommit_replace",
+                {
+                    "version": 1,
+                    "kind": "apply",
+                    "pattern": "Memory",
+                    "replacement": "Record",
+                    "context_names": ["smoke/target"],
+                    "expected_plan_digest": replace_plan_result["plan_digest"],
+                },
+            )
             grounding = await session.call_tool(
                 "memcommit_atomize_grounding",
                 {
@@ -309,6 +331,15 @@ async def _exercise_stdio(command: str, root: Path, workdir: Path) -> dict[str, 
         item["content"] for item in shown.structured_content["result"]["items"]
     ] == ["First installed MCP Memory.", "Second Memory."]
     assert shown.structured_content["result"]["effect"] == "NONE"
+    assert replace_plan.is_error is False
+    assert replace_plan_result["changed_memory_count"] == 2
+    assert replace_plan_result["occurrence_count"] == 2
+    assert replace_plan_result["effect"] == "NONE"
+    assert replace_plan_result["provider_used"] is False
+    assert replaced.is_error is False
+    assert replaced.structured_content["result"]["applied"] is True
+    assert replaced.structured_content["result"]["effect"] == "CONTEXTS_CHANGED"
+    assert replaced.structured_content["result"]["provider_used"] is False
     assert grounding.is_error is False
     assert grounding.structured_content["ok"] is True
     assert grounding.structured_content["result"]["session"]["state"] == (
@@ -322,8 +353,9 @@ async def _exercise_stdio(command: str, root: Path, workdir: Path) -> dict[str, 
     assert atomize_apply.structured_content["result"]["recovered"] is False
     assert atomize_retry.is_error is False
     assert atomize_retry.structured_content["result"]["recovered"] is True
-    assert atomize_retry.structured_content["result"]["checkpoint_uid"] == (
-        atomize_apply.structured_content["result"]["checkpoint_uid"]
+    assert (
+        atomize_retry.structured_content["result"]["checkpoint_uid"]
+        == (atomize_apply.structured_content["result"]["checkpoint_uid"])
     )
     assert atomize_save_source.is_error is False
     assert save_source_result["cache_used"] is True
@@ -337,8 +369,9 @@ async def _exercise_stdio(command: str, root: Path, workdir: Path) -> dict[str, 
     assert atomize_save.structured_content["result"]["recovered"] is False
     assert atomize_save_retry.is_error is False
     assert atomize_save_retry.structured_content["result"]["recovered"] is True
-    assert atomize_save_retry.structured_content["result"]["checkpoint_uid"] == (
-        atomize_save.structured_content["result"]["checkpoint_uid"]
+    assert (
+        atomize_save_retry.structured_content["result"]["checkpoint_uid"]
+        == (atomize_save.structured_content["result"]["checkpoint_uid"])
     )
     assert forget.is_error is False
     assert forget_result["retention"] == "PROCESS_LOCAL"
@@ -362,6 +395,8 @@ async def _exercise_stdio(command: str, root: Path, workdir: Path) -> dict[str, 
         "help": help_result.structured_content,
         "add": added.structured_content,
         "show": shown.structured_content,
+        "replace_plan": replace_plan.structured_content,
+        "replace": replaced.structured_content,
         "atomize_grounding": grounding.structured_content,
         "atomize": atomize.structured_content,
         "atomize_apply": atomize_apply.structured_content,
@@ -395,11 +430,21 @@ def main() -> int:
     saved = store.load_direct("smoke/target")
     checkpoints = store.list_checkpoints(saved.name)
     assert [memory.content for memory in saved.memories.values()] == [
-        "First installed MCP Memory.",
-        "Second Memory.",
+        "First installed MCP Record.",
+        "Second Record.",
     ]
-    assert len(checkpoints) == 1
-    assert checkpoints[0]["uid"] == protocol["add"]["result"]["checkpoint_uid"]
+    assert len(checkpoints) == 2
+    checkpoints_by_command = {
+        checkpoint["command"]: checkpoint for checkpoint in checkpoints
+    }
+    assert (
+        checkpoints_by_command["add"]["uid"]
+        == (protocol["add"]["result"]["checkpoint_uid"])
+    )
+    assert (
+        checkpoints_by_command["replace"]["uid"]
+        == (protocol["replace"]["result"]["checkpoints"][0]["checkpoint_uid"])
+    )
     atomized = store.load_direct("smoke/atomize")
     atomize_checkpoints = store.list_checkpoints(atomized.name)
     assert [memory.content for memory in atomized.memories.values()] == [
@@ -407,8 +452,9 @@ def main() -> int:
         "the installed cafe closes at six.",
     ]
     assert len(atomize_checkpoints) == 1
-    assert atomize_checkpoints[0]["uid"] == (
-        protocol["atomize_apply"]["result"]["checkpoint_uid"]
+    assert (
+        atomize_checkpoints[0]["uid"]
+        == (protocol["atomize_apply"]["result"]["checkpoint_uid"])
     )
     save_source = store.load_direct("smoke/atomize-save-as")
     assert [memory.content for memory in save_source.memories.values()] == [
@@ -422,8 +468,9 @@ def main() -> int:
         "the installed cafe closes at six.",
     ]
     assert len(save_checkpoints) == 1
-    assert save_checkpoints[0]["uid"] == (
-        protocol["atomize_save"]["result"]["checkpoint_uid"]
+    assert (
+        save_checkpoints[0]["uid"]
+        == (protocol["atomize_save"]["result"]["checkpoint_uid"])
     )
     assert store.current_context_name() == "smoke/atomize-output"
     forgotten = store.load_direct("smoke/forget-empty")

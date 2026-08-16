@@ -260,7 +260,11 @@ class ContextRangeSelectionState:
         *,
         focused: bool,
         annotations: Mapping[str, SourceDisplayValue] | None = None,
+        profile_label: str = "PROFILE",
+        profile_description: str = "ALL READABLE CONTEXTS",
     ) -> list[tuple[str, str]]:
+        if not profile_label or not profile_description:
+            raise ValueError("Context range Profile labels must be nonblank.")
         labels = dict(annotations or {})
         effective = frozenset(self.effective_names)
         profile_cursor_style, profile_value_style = tree_choice_styles(
@@ -278,8 +282,8 @@ class ContextRangeSelectionState:
                     f"{'›' if self.profile_cursor else ' '} "
                     f"{tree_choice_marker(selected=self.profile_selected)}   ",
                 ),
-                (profile_value_style, "PROFILE"),
-                ("", "  ALL READABLE CONTEXTS\n"),
+                (profile_value_style, profile_label),
+                ("", f"  {profile_description}\n"),
             ]
         )
 

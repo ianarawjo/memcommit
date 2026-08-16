@@ -1,8 +1,8 @@
 # MCP installed-wheel verification
 
-Last verified: 2026-08-16 against the Forget application-boundary worktree.
+Last verified: 2026-08-16 against the Replace callable-boundary worktree.
 
-## Current fifteen-tool and import-isolation gate
+## Current eighteen-tool and import-isolation gate
 
 A fresh wheel built from the current worktree was installed with its `[mcp]`
 extra into a new `uv` virtual environment. The official MCP
@@ -11,21 +11,27 @@ environment's `site-packages`, and discovered this exact registry order:
 
 1. `memcommit_help`
 2. `memcommit_show`
-3. `memcommit_query`
-4. `memcommit_quality_find`
-5. `memcommit_add_memories`
-6. `memcommit_compare`
-7. `memcommit_meld`
-8. `memcommit_atomize`
-9. `memcommit_atomize_grounding`
-10. `memcommit_distill`
-11. `memcommit_elaborate`
-12. `memcommit_fit`
-13. `memcommit_forget`
-14. `memcommit_resolve`
-15. `memcommit_dedup`
+3. `memcommit_find`
+4. `memcommit_replace`
+5. `memcommit_search`
+6. `memcommit_query`
+7. `memcommit_quality_find`
+8. `memcommit_add_memories`
+9. `memcommit_compare`
+10. `memcommit_meld`
+11. `memcommit_atomize`
+12. `memcommit_atomize_grounding`
+13. `memcommit_distill`
+14. `memcommit_elaborate`
+15. `memcommit_fit`
+16. `memcommit_forget`
+17. `memcommit_resolve`
+18. `memcommit_dedup`
 
 The client then invoked Add and verified its checkpoint independently. It
+planned provider-free Replace over both added Memories, applied the exact
+reviewed digest, independently verified both changed texts and the second
+checkpoint, and confirmed `provider_used: false` across plan and Apply. It
 opened a durable review-only Grounding dialogue without a provider. For
 structural Atomize it exercised two saved sessions without provider access:
 one exact in-place Apply/retry, plus response replacement, require-new Output
@@ -34,7 +40,7 @@ single-checkpoint outcomes. It also invoked Forget Analyze on an empty direct
 Source without constructing a provider, applied the explicit no-op, retried
 the exact version in the same process, and verified zero Forget checkpoints.
 Finally, it confirmed that an unknown tool returns the typed `unknown_tool`
-error. This proves that the fifteen
+error. This proves that the eighteen
 registered adapters and their transitive modules ship in the wheel and cross
 the installed MCP discovery boundary. Provider-backed semantic execution remains
 covered by the in-process public-client, agent-registry, and MCP-projection
@@ -83,7 +89,7 @@ registry order:
 1. `memcommit_query`
 2. `memcommit_add_memories`
 
-The current fifteen-tool run above supersedes that historical discovery list for
+The current eighteen-tool run above supersedes that historical discovery list for
 package-completeness evidence while preserving the older run's clean-commit and
 invalid-HOME regression record.
 

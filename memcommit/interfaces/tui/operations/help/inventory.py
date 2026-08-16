@@ -154,6 +154,7 @@ HELP_CATEGORY_GROUPS = (
             "add",
             "reference",
             "edit",
+            "replace",
             "chunk",
             "delete",
             "clear",
@@ -366,6 +367,14 @@ COMMAND_FORMS = {
         "mem edit --input [file] (replace Memories from a batch file)",
         'mem edit [memory] "[new_content]" --context [context] (explicit Context)',
         "mem edit --input [file] --context [context] (batch-edit an explicit Context)",
+    ),
+    "replace": (
+        "mem replace (choose text, local scope, and review exact changes interactively)",
+        'mem replace "[text]" "[replacement]" --plain (preview literal replacements)',
+        'mem replace "[text]" --delete-match --plain (preview exact text removal)',
+        'mem replace "[expression]" "[replacement]" --regex --plain (explicit regex matching with literal replacement)',
+        'mem replace "[text]" "[replacement]" --context [context1] --context [context2] --descendants (multiple local roots)',
+        'mem replace "[text]" "[replacement]" --apply [plan_digest] (re-freeze and atomically Apply the reviewed plan)',
     ),
     "embed": (
         "mem embed (choose Child, target, and insertion gap interactively)",

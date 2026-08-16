@@ -43,6 +43,7 @@ from memcommit.commands import (
     rationale,
     redo,
     reference,
+    replace,
     rename,
     remove,
     resolve,
@@ -193,6 +194,10 @@ app.command(
     "edit",
     help=operation_summary("edit"),
 )(edit.cmd)
+app.command(
+    "replace",
+    help=operation_summary("replace"),
+)(replace.cmd)
 app.command(
     "remove",
     help=operation_summary("delete"),

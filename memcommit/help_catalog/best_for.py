@@ -6,7 +6,7 @@ from __future__ import annotations
 BEST_FOR_BY_OPERATION = {
     "add": "Adding one or more facts, instructions, or notes directly to a Context.",
     "atomize": (
-        "Separating a composite Memory into independently reviewable " "requirements."
+        "Separating a composite Memory into independently reviewable requirements."
     ),
     "audit": "Performing a combined quality review before revising a Context.",
     "branch": "Experimenting without modifying the original Context tree.",
@@ -19,8 +19,7 @@ BEST_FOR_BY_OPERATION = {
     ),
     "clear": "Emptying a Context while retaining the Context itself.",
     "compare": (
-        "Comparing two Contexts as a whole to understand where they align and "
-        "differ."
+        "Comparing two Contexts as a whole to understand where they align and differ."
     ),
     "config": "Inspecting or changing persistent MemCommit settings.",
     "contexts": "Exploring every Context currently available to the Profile.",
@@ -36,8 +35,7 @@ BEST_FOR_BY_OPERATION = {
         "additional concrete Case propositions for review."
     ),
     "edit": (
-        "Directly correcting or replacing the content of specific existing "
-        "Memories."
+        "Directly correcting or replacing the content of specific existing Memories."
     ),
     "embed": "Reusing a Context inside another Context without copying it.",
     "eval": "Measuring operation behavior against repeatable fixtures.",
@@ -71,8 +69,7 @@ BEST_FOR_BY_OPERATION = {
         "incorporating proposed changes into an existing Baseline."
     ),
     "merge": (
-        "Bringing work from a copied or branched Context back into the current "
-        "Context."
+        "Bringing work from a copied or branched Context back into the current Context."
     ),
     "profile": "Managing separate users, environments, or Memory stores.",
     "provider": "Selecting and validating the semantic execution backend.",
@@ -84,11 +81,15 @@ BEST_FOR_BY_OPERATION = {
         "Using the same Memory in another Context while keeping its Source as "
         "the single place to edit it."
     ),
+    "replace": (
+        "Correcting, renaming, or redacting exact text throughout a known local "
+        "Context scope."
+    ),
     "rename": "Giving an existing managed Profile a clearer name.",
     "revert": "Restoring a Context to a deliberately saved recovery point.",
     "review": "Resolving issues in a saved analysis before a later Apply.",
     "sever": (
-        "Selecting or transforming part of a Source according to reusable " "criteria."
+        "Selecting or transforming part of a Source according to reusable criteria."
     ),
     "share": "Delivering an owned Context to an authorized receiver.",
     "shell-init": "Enabling optional shell-specific conveniences.",

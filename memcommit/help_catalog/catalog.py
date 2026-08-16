@@ -170,6 +170,14 @@ _OPERATIONS = (
         "One or more direct Memories in one exact Context",
     ),
     _operation(
+        "replace",
+        "Preview and replace every literal or explicit regular-expression match in ordinary local Memories.",
+        "Text pattern + replacement + local Context scope -> reviewed exact changes -> atomic Apply",
+        ExecutionKind.DETERMINISTIC,
+        "Read-only preview; Apply changes matched local Memories in one Undo/Redo command unit",
+        "One or more local roots; lexical descendants and embedded owners are independent",
+    ),
+    _operation(
         "embed",
         "Place a Child Context inside a target while retaining its identity and ownership.",
         "Child Context -> parent Context placement",

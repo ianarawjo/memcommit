@@ -107,6 +107,13 @@
         ],
         "reason": "Ordinary, granted, and query-only families plus CLI, TUI, public, and agent projections have a verified operation package."
       },
+      "replace": {
+        "evidence": [
+          "docs/replace-callable-boundary-matrix.md",
+          "docs/search-find-replace-design-rationale.md"
+        ],
+        "reason": "CLI, TUI, Python, agent, and MCP routes share one complete local-scope frozen plan, exact-digest review, atomic multi-Context Apply, and operation-unit Undo/Redo boundary without provider or cache use."
+      },
       "resolve": {
         "evidence": [
           "docs/resolve-fit-repair-design-rationale.md",

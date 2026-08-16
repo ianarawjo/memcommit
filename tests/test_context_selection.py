@@ -206,9 +206,7 @@ def test_context_reach_view_offers_both_before_individual_scopes():
     )
 
     assert rendered.index("BOTH") < rendered.index("THIS CONTEXT ONLY")
-    assert rendered.index("THIS CONTEXT ONLY") < rendered.index(
-        "INCLUDE DESCENDANTS"
-    )
+    assert rendered.index("THIS CONTEXT ONLY") < rendered.index("INCLUDE DESCENDANTS")
     assert state.mode == "BOTH"
     assert state.move(1) is True
     assert state.mode == "EXACT"
@@ -217,9 +215,7 @@ def test_context_reach_view_offers_both_before_individual_scopes():
 
 
 def test_checked_context_projection_shows_effective_reachable_rows_only():
-    tree = build_context_tree(
-        ("task", "task/readable", "task/query-only", "other")
-    )
+    tree = build_context_tree(("task", "task/readable", "task/query-only", "other"))
 
     assert project_checked_context_names(
         tree,
@@ -286,3 +282,25 @@ def test_context_range_profile_is_process_local_and_can_be_cleared_while_editing
     assert state.toggle_cursor() is True
     assert state.profile_selected is False
     assert state.effective_names == ()
+
+
+def test_context_range_can_present_a_local_all_scope_without_changing_mechanics():
+    state = ContextRangeSelectionState.create(
+        ("task", "other"),
+        current_name="task",
+        initial_target="task",
+        multiple=True,
+        include_descendants=False,
+    )
+
+    rendered = "".join(
+        text
+        for _style, text in state.render_rows(
+            focused=False,
+            profile_label="ALL",
+            profile_description="ALL LOCAL CONTEXTS",
+        )
+    )
+
+    assert "ALL  ALL LOCAL CONTEXTS" in rendered
+    assert state.effective_names == ("task",)

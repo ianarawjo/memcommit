@@ -98,15 +98,16 @@ The rollout is intentionally staged:
    its result meaning;
 2. add provider-free Find and verify it never constructs a provider (complete;
    see `find-application-boundary-matrix.md`);
-3. add frozen-plan Replace and its atomic Apply/Undo boundary (application and
-   Store core complete; exposed adapters remain next);
-4. expose and verify every adapter, Help projection, and real-terminal flow.
+3. add frozen-plan Replace and its atomic Apply/Undo boundary (complete);
+4. expose and verify every adapter, Help projection, and real-terminal flow
+   (complete; see `replace-callable-boundary-matrix.md`).
 
 Search retains the current route conclusion until its conversational controller
 also enters the reviewed application boundary. Find is now `CLOSED`: every
 implemented CLI, TUI, Python, agent, and MCP route enters its reviewed
-application/runtime boundary. Replace remains unreviewed until its own focused
-matrix proves planning, Apply, recovery, and adapters.
+application/runtime boundary. Replace is now `CLOSED`: its CLI, TUI, Python,
+agent, and MCP routes share the reviewed plan, stale-scope rejection, atomic
+Apply, and operation-unit recovery boundary.
 
 ## Intentional non-goals
 
