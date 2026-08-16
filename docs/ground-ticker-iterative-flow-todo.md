@@ -70,7 +70,7 @@ set, Context binding freshness, latest Fit freshness, and exact analysis origin
 (`LIVE` or `PREPARED_EXACT`). Distill and Elaborate remain proposal-only: they
 cannot promote their own Rules or Examples.
 
-## Resolve contract still required
+## Resolve contract
 
 Resolve consumes exactly one frozen source artifact:
 
@@ -87,11 +87,36 @@ silently rewrite a failing Example to agree with the Rules. A proposal derived
 from Elaborate remains unverified after projection; selection does not turn it
 into evidence.
 
-Application must freeze and revalidate the source artifact and Ground
+Application freezes and revalidates the source artifact and Ground
 UID/revision/digest, display the exact action before approval, and use the
 existing Ground store CAS. A successful action creates exactly one Ground
 revision and makes every prior Fit receipt stale. Stale artifacts fail before
 provider connection or mutation.
+
+## Executable replay contract
+
+`memcommit.eval.ticker_ground_replay` now exercises the deterministic
+application path against an injected semantic provider. It creates and binds a
+fresh proposition-schema Ground, adds and separately accepts every frozen
+Example, and records every read-only artifact, Resolve plan, Resolve apply,
+ordinary Rule acceptance, Fit receipt, and revision transition in one
+JSON-serializable ledger.
+
+The replay deliberately selects only one candidate from each semantic result.
+The first Elaborate Rule is selected during the five-Example round; each
+Distill round selects the non-duplicate Rule with the widest cited Example
+coverage. Resolve leaves that Rule proposed, and an ordinary Ground review
+accepts it as a separate revision. Suggested Elaborate Cases remain
+`UNVERIFIED` and unapplied because inserting them would change the frozen
+benchmark rather than evaluate it. If a Fit issue has no reviewed repair, the
+replay records an explicit no-mutation `DEFER` instead of changing an Example
+to make the test pass.
+
+Host fixture roles, coverage categories, and expected-resolution labels are
+added only to the returned evaluation ledger after provider-facing work. They
+are never semantic prompt input. This keeps the real-provider run diagnostic:
+it may converge, expose regressions, or leave boundaries unresolved, but it
+cannot receive the answer key from the harness.
 
 ## Missing Context-binding capability
 
@@ -166,5 +191,8 @@ be proved as a separate Distill compatibility rule.
 - [x] compose the same action into the Ground workbench and exact approval UI,
   with ordered 180×52 PTY evidence for non-FIT selection, cited-Rule edit,
   exact command/effects review, one-revision Apply, and stale receipt;
+- [x] execute the complete 5→10→20→35→50 path against a deterministic semantic
+  provider and verify proposal-only artifacts, one-revision mutations, stale
+  Fit projection, separately reviewed acceptance, and prompt-label isolation;
 - [ ] run and capture the complete provider-backed ticker progression; and
 - [ ] evaluate convergence, regressions, and explicit unresolved coverage.
