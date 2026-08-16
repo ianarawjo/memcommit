@@ -76,3 +76,18 @@ separate CAS operation exposed by the CLI, Python facade, and agent adapter; it
 is not implemented as a new start that first deletes or hides the durable prior
 review. The public immutable session projection includes its opaque version so
 nonterminal callers can make the same reviewed replacement decision.
+
+## Post-TUI audit correction
+
+The first extraction correctly removed durable session and Apply primitives
+from the command, but its completion claim was too broad. `commands.meld`
+continued to acquire or install an ordered Compare basis, construct a
+provisional directional session, and repeat initial prewarm lookup before
+calling `execute_meld_start` or `execute_meld_restart`. Python and agent starts
+did not execute that identical preparation path, and new direct-Memory scope
+controls had no typed application field.
+
+The completion pass therefore preserves the existing application services and
+adds one frozen Prepare/Execute boundary for Start and Restart. Provider
+progress remains interface-owned, but whether provider work is required must
+come from the prepared value rather than a second interface-side cache query.

@@ -7,6 +7,27 @@ it is invoked through the CLI, Python facade, or agent tool. Terminal adapters
 may collect values and present progress or review state, but they are not an
 independent source of provider, cache, session, or Apply behavior.
 
+## Post-TUI completion audit (2026-08-15)
+
+The original application extraction is real: assessment publication, saved
+session CAS, restart replacement, destination relocation, and all four Apply
+routes already execute outside `commands.meld`. The TUI relocation exposed a
+narrower remaining problem, however: the CLI still prepares the initial
+semantic basis before it calls that application boundary. Treating the earlier
+matrix as fully closed would therefore hide adapter drift.
+
+| Remaining boundary | Current command-owned behavior | Required terminal-independent result |
+| --- | --- | --- |
+| Start scope | direct-Memory selectors are parsed and used in a provisional directional session but are absent from `MeldStartRequest` | selectors are typed request fields, validated against descendant reach, and preserved in the durable session |
+| Compare basis | symmetric Compare creation and directional exact/equivalent/projected lookup occur in command helpers | one application/runtime resolver owns ordered Compare reuse, installation, provider fallback, and origin |
+| Provider prediction | the CLI constructs a provisional session and repeats prewarm lookup to decide whether to open a progress surface | a typed prepared Start/Restart value reports whether semantic provider work remains without publishing state |
+| Adapter parity | Python and agent Start enter the runtime without the CLI's Compare-preparation path | CLI, Python, and agent requests enter the same Prepare/Execute path and expose the same scope controls |
+
+The remaining work must not replace the already extracted session or Apply
+services. It removes only these start-time parallel decisions and then proves
+that command code contains no semantic cache lookup, provisional `MeldSession`
+construction, provider decoder, session publication, or Apply transaction.
+
 ## Operation routes
 
 | Route | Application contract | Production runtime | Public Python | Agent action | CLI |
@@ -73,12 +94,10 @@ validation.
 - Grant-owner authority cases are additionally selected from
   `test_granted_impact.py` and `test_authority_grants.py`.
 
-## Remaining presentation boundary
+## Remaining boundary
 
-The interactive Meld shell and the mode-dependent A/B/C setup adapter are still
-physically hosted under `memcommit.commands`. They call the application/runtime
-boundary and contain no durable authority, so CLI-free execution is complete.
-Their later relocation under `interfaces.tui.operations.meld` is intentionally
-a presentation-only migration. It should be done with the shared Endpoint Setup
-capabilities for mode-dependent roles and new Result names, plus refreshed
-ordered PTY snapshots; it must not introduce another Meld application path.
+The interactive Meld screen and Endpoint Setup are now owned by
+`interfaces.tui`; compatibility command paths are import-only. Session and
+Apply execution are terminal-independent. Completion therefore means removing
+the audited start-time parallel decisions above, not moving presentation again
+or inventing another session schema.
