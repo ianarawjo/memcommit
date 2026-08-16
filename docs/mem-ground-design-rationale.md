@@ -173,9 +173,25 @@ independently scrollable viewport:
 
 The Message field belongs inside Chat's outer frame, not in a second adjacent
 frame. When the person enters Goal, Contexts, Rules, or Memories, that same
-buffer moves into the selected outer frame as `COMMENT (FOR THE AGENT)` and
-returns to Chat on collapse. The exchange therefore reads as a conversation
-inside the Ground component whose uncertainty is being discussed.
+buffer moves into the selected outer frame and returns to Chat on collapse.
+The selected pane supplies an action-specific title such as
+`GOAL REVISION REQUEST`; `COMMENT (FOR THE AGENT)` remains the provider
+payload label and the secondary rationale field beside an exact direct edit.
+After submission, the originating pane owns the request, liveness cue, and
+semantic result. The same turn is not copied into Chat. Chat owns only turns
+that began in Chat, while the structured submitted-turn transcript still
+retains the exact provider payload independently of presentation.
+
+Target ownership also determines vertical placement. While a Goal request is
+running, the top border reads `GOAL · THINKING… · REVISING`, the Goal body
+retains the submitted revision request, and focus stays on Goal. Rules,
+Memories, Contexts/Workspace, and Chat use the same target-local pattern with
+their own verbs. A proposal becomes `PROPOSED GOAL REVISION` in Goal; an ASK
+becomes `GOAL REVISION · NEEDS CLARIFICATION` there. The global footer no
+longer presents a Context-ranking message for every provider call. Exact Goal
+editing through `E` and exact command approval remain separate authority
+boundaries: a semantic revision is only proposed until the reviewed command is
+applied.
 
 The cap prevents an almost-always-short Goal from reserving empty rows while
 the evidence panes and the Chat pane need space. The raw starting request is
@@ -319,7 +335,7 @@ bounded discovery-and-interpretation turn before waiting for another message:
 submit the desired outcome
 → show one local CURRENT pointer immediately
 → discover ordinary Context storage locators without opening their files
-→ cycle THINKING. → THINKING.. → THINKING… while the provider compares names
+→ cycle THINKING. → THINKING.. → THINKING… in the pane that owns the turn
 → give aliases and bounded local path names to the first provider interpretation
 → show exactly one MAIN? and up to three ALTERNATIVE names
 → optionally show one separate NEW? name below the existing alternatives
@@ -420,13 +436,13 @@ contents. Query-only public aliases are embedded inside a parent
 or metadata index rather than opening that record during blank Ground startup.
 
 The provider call runs in a daemon worker after the full-screen application
-has started. This is necessary for `CURRENT` and an animated
-`THINKING.` / `THINKING..` / `THINKING…` cue to be visible rather than
+has started. This is necessary for the originating pane and its animated
+`THINKING.` / `THINKING..` / `THINKING…` title to be visible rather than
 printing a completed result after an unexplained pause. The animation is only
 a liveness cue: it does not claim semantic progress or expose provider state.
-It updates only the Context viewport, preserving the independent scroll
-positions of Goal, Rules, Memories, and Chat, and stops when interpretation
-finishes, fails, or the shell closes. The daemon worker also prevents
+It updates only the active pane's title, preserving every independent scroll
+position, and stops when interpretation finishes, fails, or the shell closes.
+The daemon worker also prevents
 application-loop shutdown from joining a blocking provider call. While a call
 is running, another submission is not accepted. `Escape` and `Ctrl-C` close
 the TUI immediately. A synchronous provider process may finish after that

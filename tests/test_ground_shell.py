@@ -338,8 +338,8 @@ def test_blank_goal_inline_tab_submits_comment_only_to_agent():
 @pytest.mark.parametrize(
     ("tabs", "focus"),
     [
-        (3, "RULES"),
-        (4, "MEMORIES"),
+        (2, "RULES"),
+        (3, "MEMORIES"),
     ],
 )
 def test_blank_rule_and_memory_focused_comments_exclude_agent_previews(
@@ -411,10 +411,10 @@ def test_blank_rule_and_memory_focused_comments_exclude_agent_previews(
 @pytest.mark.parametrize(
     ("tabs", "focus"),
     [
-        (1, "GOAL"),
-        (2, "CONTEXTS"),
-        (3, "RULES"),
-        (4, "MEMORIES"),
+        (0, "GOAL"),
+        (1, "CONTEXTS"),
+        (2, "RULES"),
+        (3, "MEMORIES"),
     ],
 )
 def test_blank_enter_opens_conversation_inside_each_semantic_pane(
@@ -447,6 +447,53 @@ def test_blank_enter_opens_conversation_inside_each_semantic_pane(
     assert len(seen) == 2
     assert f"FOCUS · {focus}" in seen[1]
     assert comment in seen[1]
+
+
+def test_goal_revision_result_stays_in_goal_without_chat_duplication(
+    monkeypatch,
+):
+    original_builder = ground_shell_module.build_scrollable_text_pane
+    panes = {}
+    request = "Make the Goal about real US ticker assignment."
+    revised = "Learn how real US ticker symbols are assigned."
+
+    def capturing_builder(title, *args, **kwargs):
+        pane = original_builder(title, *args, **kwargs)
+        panes[title] = pane
+        return pane
+
+    monkeypatch.setattr(
+        ground_shell_module,
+        "build_scrollable_text_pane",
+        capturing_builder,
+    )
+
+    with create_pipe_input() as pipe_input:
+        # MESSAGE -> GOAL -> target-owned revision request -> proposed Goal.
+        pipe_input.send_text(f"\t\r{request}\rq")
+        result = run_ground_shell(
+            interpret=lambda _text: Propose(
+                kind="PROPOSE",
+                understanding="The Goal should cover real US companies.",
+                question="Review the revised Goal.",
+                ground_name="ticker-rules",
+                goal=revised,
+            ),
+            apply=lambda _value: pytest.fail("must not apply"),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result.status == "CANCELLED"
+    goal = panes["GOAL"].text_area.text
+    chat = panes["CHAT"].text_area.text
+    assert "PROPOSED GOAL REVISION" in goal
+    assert request in goal
+    assert revised in goal
+    assert request not in chat
+    assert "FOCUS · GOAL" not in chat
+    assert "The Goal should cover real US companies." not in chat
 
 
 def test_blank_inline_goal_keeps_five_panes_and_both_fields_at_24_rows(
@@ -960,7 +1007,8 @@ def test_initial_results_mark_unseen_panes_until_the_person_visits_one(
     assert notifications["CONTEXTS"]()
     assert not notifications["RULES"]()
     assert notifications["MEMORIES"]()
-    assert notifications["CHAT"]()
+    # The initial Goal turn is not duplicated into general Chat.
+    assert not notifications["CHAT"]()
 
 
 def test_blank_ground_keeps_every_pane_and_message_body_visible_at_24_rows(
@@ -1404,9 +1452,9 @@ def test_approval_can_suspend_into_empty_store_add_context_editor():
     exact_name = "test/ground/ticker-rule-examples"
 
     with create_pipe_input() as pipe_input:
-        # APPROVAL starts on Chat. Tab reaches Goal then Contexts; N
+        # The Goal-owned proposal remains on Goal. Tab reaches Contexts; N
         # suspends the receipt, opens blank ADD, and restores it after review.
-        pipe_input.send_text(f"\t\tn{exact_name}\ra")
+        pipe_input.send_text(f"\tn{exact_name}\ra")
         result = run_ground_shell(
             interpret=proposal,
             apply=lambda value: applied.append(value) or "created",
@@ -1487,10 +1535,10 @@ def test_approval_down_arrow_stays_in_focused_memories(monkeypatch):
     applied = []
 
     with create_pipe_input() as pipe_input:
-        # APPROVAL starts on CHAT. Four Tabs reach MEMORIES. V opens the
+        # The Goal-owned proposal stays on GOAL. Three Tabs reach MEMORIES. V opens the
         # grid; Down/Right move cells without replacing the frozen command.
         pipe_input.send_text(
-            "\t\t\t\tv\x1b[B" + ("\x1b[C" * 7) + "a"
+            "\t\t\tv\x1b[B" + ("\x1b[C" * 7) + "a"
         )
         result = run_ground_shell(
             interpret=lambda _text: frozen,
@@ -1553,9 +1601,9 @@ def test_blank_memory_table_toggles_back_to_the_same_list_row(monkeypatch):
     )
 
     with create_pipe_input() as pipe_input:
-        # ASK returns to MESSAGE. Four Tabs reach MEMORIES; the selected row
+        # The Goal-owned ASK stays on GOAL. Three Tabs reach MEMORIES; the selected row
         # survives TABLE -> LIST while the remembered table column stays local.
-        pipe_input.send_text("\t\t\t\tv\x1b[B\x1b[Cv\x1b")
+        pipe_input.send_text("\t\t\tv\x1b[B\x1b[Cv\x1b")
         result = run_ground_shell(
             interpret=lambda _text: response,
             apply=lambda _value: pytest.fail("must not apply"),
@@ -1694,7 +1742,9 @@ def test_fixed_workspace_location_skips_context_planning_and_approves_exact_root
         )
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\r")
+        # The initial Goal turn stays on GOAL. Traverse the read panes to CHAT,
+        # where the separately frozen exact creation command is reviewed.
+        pipe_input.send_text("\t\t\t\t\r")
         result = run_ground_shell(
             interpret=fixed_proposal,
             apply=lambda value: applied.append(value) or "created",
@@ -2271,15 +2321,19 @@ def test_starting_request_is_already_submitted_before_tui_input():
 def test_initial_name_check_renders_thinking_and_escape_discards_late_result(
     monkeypatch,
 ):
-    original_renderer = ground_shell_module.render_ground_contexts_pane
+    original_builder = ground_shell_module.build_scrollable_text_pane
     thinking_cycle_rendered = threading.Event()
     interpreter_started = threading.Event()
     release_interpreter = threading.Event()
     feeder_errors: list[Exception] = []
     applied: list[GroundShellProposal] = []
-    rendered: list[str] = []
+    panes = {}
     thinking_labels: list[str] = []
-    expected_cycle = ["THINKING.", "THINKING..", "THINKING…"]
+    expected_cycle = [
+        "GOAL · THINKING. · REVISING",
+        "GOAL · THINKING.. · REVISING",
+        "GOAL · THINKING… · REVISING",
+    ]
 
     monkeypatch.setattr(
         ground_shell_module,
@@ -2287,25 +2341,15 @@ def test_initial_name_check_renders_thinking_and_escape_discards_late_result(
         0.01,
     )
 
-    def capturing_renderer(*args, **kwargs):
-        value = original_renderer(*args, **kwargs)
-        rendered.append(value)
-        if kwargs.get("discovery_in_progress"):
-            label = next(
-                line.split(" ·", 1)[0]
-                for line in value.splitlines()
-                if line.startswith("THINKING")
-            )
-            if not thinking_labels or thinking_labels[-1] != label:
-                thinking_labels.append(label)
-            if thinking_labels[-3:] == expected_cycle:
-                thinking_cycle_rendered.set()
-        return value
+    def capturing_builder(title, *args, **kwargs):
+        pane = original_builder(title, *args, **kwargs)
+        panes[title] = pane
+        return pane
 
     monkeypatch.setattr(
         ground_shell_module,
-        "render_ground_contexts_pane",
-        capturing_renderer,
+        "build_scrollable_text_pane",
+        capturing_builder,
     )
 
     def blocked_interpreter(text: str):
@@ -2319,8 +2363,19 @@ def test_initial_name_check_renders_thinking_and_escape_discards_late_result(
             try:
                 if not interpreter_started.wait(2):
                     raise AssertionError("interpreter did not start")
-                if not thinking_cycle_rendered.wait(2):
-                    raise AssertionError("thinking cycle was not rendered")
+                deadline = time.monotonic() + 2
+                while time.monotonic() < deadline:
+                    goal = panes.get("GOAL")
+                    if goal is not None:
+                        title = str(goal.frame.title)
+                        if not thinking_labels or thinking_labels[-1] != title:
+                            thinking_labels.append(title)
+                        if thinking_labels[-3:] == expected_cycle:
+                            thinking_cycle_rendered.set()
+                            break
+                    time.sleep(0.005)
+                if not thinking_cycle_rendered.is_set():
+                    raise AssertionError("Goal-owned thinking cycle was not rendered")
                 pipe_input.send_text("\x1b")
             except Exception as error:  # pragma: no cover - assertion relay
                 feeder_errors.append(error)
@@ -2340,7 +2395,6 @@ def test_initial_name_check_renders_thinking_and_escape_discards_late_result(
             require_tty=False,
         )
         elapsed = time.monotonic() - started_at
-        renders_after_exit = len(rendered)
         release_interpreter.set()
         time.sleep(0.05)
         feeder.join(timeout=2)
@@ -2350,17 +2404,14 @@ def test_initial_name_check_renders_thinking_and_escape_discards_late_result(
     assert result.status == "CANCELLED"
     assert elapsed < 0.5
     assert applied == []
-    assert thinking_labels[:3] == expected_cycle
-    assert len(rendered) == renders_after_exit
-    assert any(
-        "CURRENT · test/update/from · STATE POINTER ONLY · NOT BOUND" in value
-        and (
-            "THINKING. · ranking 16 Context locator names; "
-            "CURRENT stays local"
-        )
-        in value
-        for value in rendered
+    assert all(label in thinking_labels for label in expected_cycle)
+    assert "GOAL REVISION REQUEST · SUBMITTED" in panes["GOAL"].text_area.text
+    assert "Separate Task 1 into usable Contexts." in panes["GOAL"].text_area.text
+    assert (
+        "CURRENT · test/update/from · STATE POINTER ONLY · NOT BOUND"
+        in panes["CONTEXTS"].text_area.text
     )
+    assert "THINKING" not in panes["CONTEXTS"].text_area.text
 
 
 def test_completed_name_check_replaces_thinking_with_one_main_and_alternatives(
@@ -2461,7 +2512,7 @@ def test_starting_request_escape_closes_after_one_read_only_agent_turn():
     assert seen == ["A Working Goal that is not sent yet."]
 
 
-def test_initial_agent_question_leaves_message_empty_for_user_turn_two():
+def test_initial_goal_question_leaves_goal_revision_request_empty_for_turn_two():
     seen: list[str] = []
 
     def interpret(text: str):
@@ -2476,7 +2527,7 @@ def test_initial_agent_question_leaves_message_empty_for_user_turn_two():
 
     with create_pipe_input() as pipe_input:
         # There is no Ctrl-U here: the follow-up starts in an empty composer.
-        pipe_input.send_text("Use it as the target.\rq")
+        pipe_input.send_text("\rUse it as the target.\rq")
         result = run_ground_shell(
             interpret=interpret,
             apply=lambda _value: pytest.fail("must not apply"),
@@ -2491,12 +2542,13 @@ def test_initial_agent_question_leaves_message_empty_for_user_turn_two():
         (
             "USER TURN 1\n"
             "Split Task 1 into wiki and user-facing outputs.\n\n"
-            "USER TURN 2\nUse it as the target."
+            "USER TURN 2\nFOCUS · GOAL\n"
+            "COMMENT (FOR THE AGENT)\nUse it as the target."
         ),
     ]
     assert result.submitted_turns == (
         "Split Task 1 into wiki and user-facing outputs.",
-        "Use it as the target.",
+        "FOCUS · GOAL\nCOMMENT (FOR THE AGENT)\nUse it as the target.",
     )
 
 

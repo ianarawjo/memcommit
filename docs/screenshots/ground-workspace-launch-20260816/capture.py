@@ -9,6 +9,7 @@ from pathlib import Path
 import subprocess
 import sys
 import tempfile
+import time
 
 import pexpect
 
@@ -73,6 +74,9 @@ def _run_child() -> None:
         def fixed_turn(_text, _provider, *, context_names=(), ground_name=None):
             assert context_names == ()
             assert ground_name == "projects/ticker-ground"
+            # Keep the provider turn open long enough to capture the real
+            # target-owned liveness title before returning a proposal.
+            time.sleep(1)
             return GroundDialogueProposal(
                 understanding=(
                     "The Ground will develop rules explaining how real US "
@@ -174,20 +178,33 @@ def _capture() -> None:
         _BASE._settle(child)
         _snapshot(recorder, "04-unsaved-workspace")
 
-        child.send("Find how real US ticker symbols are assigned.\r")
-        child.expect("exact approval")
-        _BASE._settle(child)
-        _snapshot(recorder, "05-exact-creation-review")
+        # Move from the general Chat composer into Goal, open its revision
+        # request field, and submit from that semantic owner.
+        child.send("\t\rFind how real US ticker symbols are assigned.\r")
+        # Focus styling inserts ANSI boundaries inside the frame title, so
+        # capture by bounded provider delay rather than matching a de-styled
+        # substring that is not contiguous in the raw PTY stream.
+        time.sleep(0.15)
+        _BASE._settle(child, seconds=0.1)
+        _snapshot(recorder, "05-goal-thinking")
+
+        time.sleep(1.1)
+        _BASE._settle(child, seconds=0.2)
+        _snapshot(recorder, "06-goal-revision-proposed")
+
+        child.send("\t\t\t\t")
+        _BASE._settle(child, seconds=0.25)
+        _snapshot(recorder, "07-exact-creation-review")
 
         child.send("\r")
         child.expect("CONTEXT-ROOTED WORKSPACE")
         _BASE._settle(child)
-        _snapshot(recorder, "06-physical-workspace")
+        _snapshot(recorder, "08-physical-workspace")
 
         child.send("q")
         child.expect("GROUND CLOSED")
         child.expect(pexpect.EOF)
-        _snapshot(recorder, "07-durable-verification")
+        _snapshot(recorder, "09-durable-verification")
     finally:
         if child.isalive():
             child.close(force=True)
@@ -197,13 +214,16 @@ def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     _capture()
     raw = "".join(path.read_text(encoding="utf-8") for path in OUT.glob("*.typescript"))
+    plain = "".join(path.read_text(encoding="utf-8") for path in OUT.glob("*.txt"))
     assert "PTY 180 52" in raw
-    assert "CREATE NEW GROUND CONTEXT" in raw
-    assert "NEW GROUND · SAVE LOCATION" in raw
-    assert "Existing Contexts are not recommended or selected here." in raw
-    assert "PROPOSED COMMAND · NOT RUN" in raw
-    assert "CONTEXT-ROOTED WORKSPACE" in raw
-    assert "SIX PHYSICAL CONTEXTS SAVED" in raw
+    assert "CREATE NEW GROUND CONTEXT" in plain
+    assert "NEW GROUND · SAVE LOCATION" in plain
+    assert "Existing Contexts are not recommended or selected here." in plain
+    assert "GOAL · THINKING" in plain
+    assert "PROPOSED GOAL REVISION" in plain
+    assert "PROPOSED COMMAND · NOT RUN" in plain
+    assert "CONTEXT-ROOTED WORKSPACE" in plain
+    assert "SIX PHYSICAL CONTEXTS SAVED" in plain
     assert "\x1b[" in raw and "38;" in raw
 
 

@@ -108,6 +108,14 @@ GROUND_CONTEXTS_FRAME_HEIGHT = Dimension(min=3, preferred=7, max=10)
 # shares the same liveness vocabulary and cadence as blocking commands.
 _THINKING_SUFFIXES = BUSY_FRAMES
 _THINKING_INTERVAL_SECONDS = BUSY_INTERVAL_SECONDS
+_GroundPane = Literal["GOAL", "CONTEXTS", "RULES", "MEMORIES", "CHAT"]
+_GroundPaneActivityPhase = Literal[
+    "IDLE",
+    "THINKING",
+    "PROPOSED",
+    "NEEDS_CLARIFICATION",
+    "FAILED",
+]
 _CONTEXT_SUGGESTION_ROLES = {
     "MAIN",
     "ALTERNATIVE",
@@ -126,6 +134,15 @@ _BLANK_MEMORY_TABLE_COLUMNS = (
     TuiTableColumn("decision", "DECISION", 14),
     TuiTableColumn("rule", "RULE", 8),
 )
+
+
+@dataclass
+class _GroundPaneActivity:
+    """One target-owned semantic turn projected inside its originating pane."""
+
+    phase: _GroundPaneActivityPhase = "IDLE"
+    request: str = ""
+    detail: str = ""
 
 
 class GroundInterpreter(Protocol):
@@ -1170,7 +1187,7 @@ def run_ground_shell(
     inline_context_original = {"value": ""}
     panel_comment_target: dict[
         str,
-        Literal["GOAL", "CONTEXTS", "RULES", "MEMORIES", "CHAT"] | None,
+        _GroundPane | None,
     ] = {"value": None}
     panel_comment_focus = {"value": ""}
     pending_inline_goal: dict[
@@ -1208,13 +1225,25 @@ def run_ground_shell(
     local_new_context_name = {"value": ""}
     context_selection_finished = {"value": False}
     context_discovery_complete = {"value": False}
-    context_discovery_in_progress = {"value": bool(working_goal)}
+    # Liveness begins only when ``begin_interpretation`` records the owning
+    # pane. Rendering it earlier would briefly revive the legacy assumption
+    # that every initial Goal turn belongs to Context discovery.
+    context_discovery_in_progress = {"value": False}
     thinking_phase = {"value": 0}
     interpretation_generation = {"value": 0}
+    active_turn_target: dict[str, _GroundPane] = {"value": "CHAT"}
+    pane_activities: dict[_GroundPane, _GroundPaneActivity] = {
+        pane: _GroundPaneActivity()
+        for pane in ("GOAL", "CONTEXTS", "RULES", "MEMORIES", "CHAT")
+    }
     shell_closed = {"value": False}
     error_message = {"value": ""}
     status_message = {"value": ""}
     last_submission = {"value": working_goal}
+    last_submission_target: dict[str, _GroundPane] = {
+        "value": "GOAL" if working_goal else "CHAT"
+    }
+    last_submission_display = {"value": working_goal}
     # A badge means that this process received a new result for a pane after
     # the person's last explicit visit. It deliberately does not mean that a
     # Ground layer is complete or agreed: Ground has no implicit completion
@@ -1288,6 +1317,71 @@ def run_ground_shell(
 
     def current_thinking_suffix() -> str:
         return _THINKING_SUFFIXES[thinking_phase["value"]]
+
+    def pane_turn_label(target: _GroundPane) -> str:
+        return {
+            "GOAL": "GOAL REVISION REQUEST",
+            "CONTEXTS": "WORKSPACE REVISION REQUEST",
+            "RULES": "RULE REVISION REQUEST",
+            "MEMORIES": "MEMORY REVISION REQUEST",
+            "CHAT": "MESSAGE",
+        }[target]
+
+    def pane_thinking_verb(target: _GroundPane) -> str:
+        return {
+            "GOAL": "REVISING",
+            "CONTEXTS": "RECONSIDERING",
+            "RULES": "REVISING",
+            "MEMORIES": "REVISING",
+            "CHAT": "RESPONDING",
+        }[target]
+
+    def pane_activity_text(target: _GroundPane, base: str) -> str:
+        """Keep a focused semantic turn in the pane that originated it."""
+
+        activity = pane_activities[target]
+        if activity.phase == "IDLE" or target == "CHAT":
+            return base
+        if activity.phase == "THINKING":
+            heading = f"{pane_turn_label(target)} · SUBMITTED"
+        elif activity.phase == "PROPOSED":
+            heading = f"PROPOSED {target} REVISION"
+        elif activity.phase == "NEEDS_CLARIFICATION":
+            heading = f"{target} REVISION · NEEDS CLARIFICATION"
+        else:
+            heading = f"{target} REVISION · FAILED · NOTHING APPLIED"
+        lines = [heading]
+        if activity.phase == "PROPOSED":
+            # A compact Goal viewport must show the revised semantic value
+            # before its provenance. Otherwise the request fills all visible
+            # rows and makes a successful revision look unchanged.
+            visible_result = (
+                base.removeprefix("PROPOSED\n")
+                if target == "GOAL"
+                else base
+            )
+            lines.append(visible_result)
+            if activity.request:
+                lines.extend(
+                    [
+                        "",
+                        "REQUEST",
+                        safe_terminal_text(activity.request),
+                    ]
+                )
+            return "\n".join(lines)
+        if activity.detail:
+            lines.extend([safe_terminal_text(activity.detail), ""])
+        if activity.request:
+            lines.extend(
+                [
+                    "REQUEST",
+                    safe_terminal_text(activity.request),
+                    "",
+                ]
+            )
+        lines.append(base)
+        return "\n".join(lines)
 
     def ordered_context_rows() -> tuple[_GroundShellContextRow, ...]:
         if fixed_ground_name is not None:
@@ -1437,7 +1531,10 @@ def run_ground_shell(
                 blocks.append(
                     _render_proposal_command_block(proposal),
                 )
-        if error_message["value"]:
+        if (
+            error_message["value"]
+            and active_turn_target["value"] == "CHAT"
+        ):
             blocks.append(
                 "INTERPRETATION FAILED · NOTHING APPLIED\n"
                 f"  {safe_terminal_text(error_message['value'])}"
@@ -1515,8 +1612,10 @@ def run_ground_shell(
     def footer_text() -> str:
         active_mode = mode["value"]
         if panel_comment_target["value"] is not None:
+            target = panel_comment_target["value"]
             return (
-                " Enter · send focused comment    Ctrl-J · newline    "
+                f" Enter · send {pane_turn_label(target).lower()}    "
+                "Ctrl-J · newline    "
                 "Esc · collapse"
             )
         if inline_context_open["value"]:
@@ -1569,8 +1668,8 @@ def run_ground_shell(
             )
         if active_mode == "INTERPRETING":
             return (
-                f" Thinking{current_thinking_suffix()} · ranking Context "
-                "names; Current stays local    B · Grounds    Q · quit"
+                f" Waiting in {active_turn_target['value']}    "
+                "B · Grounds    Q · quit"
             )
         if (
             active_mode in {"INPUT", "CONTEXT_SELECTION"}
@@ -1647,7 +1746,7 @@ def run_ground_shell(
         dialogue_pane,
     )
 
-    def pane_for_layer(layer: str):
+    def pane_for_layer(layer: _GroundPane):
         return {
             "GOAL": goal_pane,
             "CONTEXTS": contexts_pane,
@@ -1655,6 +1754,25 @@ def run_ground_shell(
             "MEMORIES": cases_pane,
             "CHAT": dialogue_pane,
         }.get(layer, dialogue_pane)
+
+    def sync_pane_titles() -> None:
+        base_titles: dict[_GroundPane, str] = {
+            "GOAL": "GOAL",
+            "CONTEXTS": (
+                "WORKSPACE" if fixed_ground_name is not None else "CONTEXTS"
+            ),
+            "RULES": "RULES",
+            "MEMORIES": "MEMORIES",
+            "CHAT": "CHAT",
+        }
+        for target, title in base_titles.items():
+            activity = pane_activities[target]
+            pane_for_layer(target).frame.title = (
+                f"{title} · THINKING{current_thinking_suffix()} · "
+                f"{pane_thinking_verb(target)}"
+                if activity.phase == "THINKING"
+                else title
+            )
 
     def sync_input_host() -> None:
         input_manager.clear()
@@ -1691,10 +1809,11 @@ def run_ground_shell(
             )
             return
         if panel_comment_target["value"] is not None:
+            target = panel_comment_target["value"]
             input_manager.show(
-                pane_for_layer(panel_comment_target["value"]),
+                pane_for_layer(target),
                 InFrameInputSection(
-                    INLINE_AGENT_COMMENT_TITLE,
+                    pane_turn_label(target),
                     input_area,
                     height=embedded_field_height,
                 ),
@@ -1754,7 +1873,10 @@ def run_ground_shell(
     def sync_contexts_pane(*, align_candidate: bool = False) -> None:
         if fixed_ground_name is not None:
             contexts_pane.set_text(
-                render_ground_workspace_pane(fixed_ground_name),
+                pane_activity_text(
+                    "CONTEXTS",
+                    render_ground_workspace_pane(fixed_ground_name),
+                ),
                 anchor="preserve",
             )
             return
@@ -1768,9 +1890,10 @@ def run_ground_shell(
             current_context_name=current_context_name,
             catalog_count=context_catalog_count,
             discovery_complete=context_discovery_complete["value"],
-            discovery_in_progress=(
-                context_discovery_in_progress["value"]
-            ),
+            # The active pane's title owns the liveness cue. Keeping the old
+            # Context-body spinner as well would duplicate THINKING and make a
+            # Goal-owned turn look like Context discovery.
+            discovery_in_progress=False,
             thinking_suffix=current_thinking_suffix(),
             candidate_cursor_name=cursor_name,
             candidate_cursor_kind=(
@@ -1781,12 +1904,10 @@ def run_ground_shell(
             selection_finished=context_selection_finished["value"],
             direct_context_names=context_catalog_names,
         )
-        contexts_pane.set_text(
-            rendered,
-            anchor="preserve",
-        )
+        projected = pane_activity_text("CONTEXTS", rendered)
+        contexts_pane.set_text(projected, anchor="preserve")
         if align_candidate and cursor_name is not None:
-            marker = rendered.find("› ")
+            marker = projected.find("› ")
             if marker >= 0:
                 # The TextArea stays read-only; moving its cursor only asks
                 # prompt-toolkit to keep the highlighted logical row visible.
@@ -1808,31 +1929,46 @@ def run_ground_shell(
                 selected_memory_column=column,
             )
             memory_table_render["value"] = rendered
-            cases_pane.set_text(rendered.text, anchor="preserve")
+            projected = pane_activity_text("MEMORIES", rendered.text)
+            cases_pane.set_text(
+                projected,
+                anchor="preserve",
+            )
             if align_selection and rendered.selected_span is not None:
                 cases_pane.text_area.buffer.cursor_position = (
-                    rendered.cursor_position
+                    len(projected) - len(rendered.text) + rendered.cursor_position
                 )
             return
         memory_table_render["value"] = None
         rendered_text = render_ground_memories_pane(memory_drafts["value"])
-        cases_pane.set_text(rendered_text, anchor="preserve")
+        projected = pane_activity_text("MEMORIES", rendered_text)
+        cases_pane.set_text(
+            projected,
+            anchor="preserve",
+        )
         if align_selection and memory_drafts["value"]:
-            marker = rendered_text.find(f"c{row + 1} ")
+            marker = projected.find(f"c{row + 1} ")
             if marker >= 0:
                 cases_pane.text_area.buffer.cursor_position = marker
 
     def sync_panes(*, dialogue_anchor: str = "end") -> None:
+        sync_pane_titles()
         goal_pane.set_text(
-            render_ground_goal_pane(
-                pending["value"],
-                working_goal=editable_goal["value"],
+            pane_activity_text(
+                "GOAL",
+                render_ground_goal_pane(
+                    pending["value"],
+                    working_goal=editable_goal["value"],
+                ),
             ),
             anchor="preserve",
         )
         sync_contexts_pane()
         rules_pane.set_text(
-            render_ground_rules_pane(rule_drafts["value"]),
+            pane_activity_text(
+                "RULES",
+                render_ground_rules_pane(rule_drafts["value"]),
+            ),
             anchor="preserve",
         )
         sync_memories_pane(
@@ -1848,6 +1984,10 @@ def run_ground_shell(
 
     def focus_contexts() -> None:
         application.layout.focus(contexts_pane.text_area)
+
+    def focus_turn_target(target: _GroundPane) -> None:
+        application.layout.focus(pane_for_layer(target).text_area)
+        acknowledge_pane(target)
 
     def focus_input(*, restore: bool) -> None:
         mode["value"] = "INPUT"
@@ -1884,6 +2024,7 @@ def run_ground_shell(
         *,
         append_user: bool,
         initial: bool,
+        turn_target: _GroundPane,
     ) -> None:
         kind = _response_kind(response)
         understanding = _required_text(
@@ -1916,11 +2057,12 @@ def run_ground_shell(
         new_context_suggestions["value"] = frozen_new_contexts
         rule_drafts["value"] = frozen_rule_drafts
         memory_drafts["value"] = frozen_memory_drafts
-        # Discovery completion is itself new Context information, even when
-        # it reports no candidate. Rule/Memory badges appear only when the
-        # provider produced reviewable previews; Chat always received a new
-        # response. A proposed creation also changes the visible Goal state.
-        mark_pane_updates("CONTEXTS", "CHAT")
+        # A focused turn belongs to its originating pane. Other panes receive
+        # badges only when the response actually changed their semantic data;
+        # the same request is never duplicated into Chat as presentation.
+        mark_pane_updates(turn_target)
+        if fixed_ground_name is None:
+            mark_pane_updates("CONTEXTS")
         if frozen_rule_drafts:
             mark_pane_updates("RULES")
         if frozen_memory_drafts:
@@ -1934,14 +2076,19 @@ def run_ground_shell(
         context_selection_finished["value"] = False
         context_discovery_in_progress["value"] = False
         context_discovery_complete["value"] = True
-        if append_user or initial:
+        activity = pane_activities[turn_target]
+        activity.phase = (
+            "NEEDS_CLARIFICATION" if kind == "ASK" else "PROPOSED"
+        )
+        activity.detail = question if kind == "ASK" else ""
+        if turn_target == "CHAT" and (append_user or initial):
             conversation.append(
                 _agent_block(
                     understanding=understanding,
                     question=question,
                 )
             )
-        else:
+        elif turn_target == "CHAT":
             conversation.append(
                 "\n".join(
                     [
@@ -1960,6 +2107,14 @@ def run_ground_shell(
             if frozen_contexts or frozen_new_contexts:
                 sync_contexts_pane(align_candidate=True)
                 focus_contexts()
+                application.invalidate()
+            elif turn_target != "CHAT":
+                status_message["value"] = (
+                    f"{turn_target.title()} revision needs clarification · "
+                    "Enter to continue in this pane."
+                )
+                sync_panes(dialogue_anchor="preserve")
+                focus_turn_target(turn_target)
                 application.invalidate()
             return
         frozen = _freeze_proposal(
@@ -1988,11 +2143,17 @@ def run_ground_shell(
         if frozen_contexts or frozen_new_contexts:
             sync_contexts_pane(align_candidate=True)
             focus_contexts()
+        elif turn_target != "CHAT":
+            status_message["value"] = (
+                f"{turn_target.title()} revision proposed · inspect this pane; "
+                "Tab to CHAT for the exact command review."
+            )
+            focus_turn_target(turn_target)
         else:
             focus_conversation()
         application.invalidate()
 
-    def fail_interpretation(error: Exception) -> None:
+    def fail_interpretation(error: Exception, *, turn_target: _GroundPane) -> None:
         pending["value"] = None
         suspended_context_proposal["value"] = None
         context_suggestions["value"] = ()
@@ -2011,12 +2172,17 @@ def run_ground_shell(
         error_message["value"] = (
             f"{type(error).__name__}: {error}"
         )
+        activity = pane_activities[turn_target]
+        activity.phase = "FAILED"
+        activity.detail = error_message["value"]
         status_message["value"] = ""
-        mark_pane_updates("CONTEXTS", "CHAT")
+        mark_pane_updates(turn_target)
+        if fixed_ground_name is None:
+            mark_pane_updates("CONTEXTS")
         mode["value"] = "ERROR"
         sync_input_host()
         sync_panes(dialogue_anchor="end")
-        focus_conversation()
+        focus_turn_target(turn_target)
         application.invalidate()
 
     async def interpret_in_background(
@@ -2024,6 +2190,7 @@ def run_ground_shell(
         *,
         append_user: bool,
         initial: bool,
+        turn_target: _GroundPane,
     ) -> None:
         try:
             response = await _interpret_from_daemon_thread(
@@ -2036,15 +2203,16 @@ def run_ground_shell(
                 response,
                 append_user=append_user,
                 initial=initial,
+                turn_target=turn_target,
             )
         except asyncio.CancelledError:
             raise
         except Exception as error:
             if not shell_closed["value"]:
-                fail_interpretation(error)
+                fail_interpretation(error, turn_target=turn_target)
 
     async def animate_thinking(generation: int) -> None:
-        """Animate only the Context viewport while one interpretation runs."""
+        """Animate the title of the pane that owns the active semantic turn."""
         while (
             not shell_closed["value"]
             and context_discovery_in_progress["value"]
@@ -2060,9 +2228,9 @@ def run_ground_shell(
             thinking_phase["value"] = (
                 thinking_phase["value"] + 1
             ) % len(_THINKING_SUFFIXES)
-            # Rewriting only this buffer preserves the independent scroll
-            # positions of Goal, Rules, Memories, and Chat.
-            sync_contexts_pane()
+            # Title-only liveness preserves every pane's independent viewport
+            # and keeps the cue above, rather than below, the owned request.
+            sync_pane_titles()
             application.invalidate()
 
     def begin_interpretation(
@@ -2071,12 +2239,20 @@ def run_ground_shell(
         append_user: bool,
         initial: bool = False,
         preserve_local_new_context: bool = False,
+        turn_target: _GroundPane = "CHAT",
+        turn_display: str | None = None,
     ) -> None:
         if append_user:
             submitted_turns.append(text)
-            conversation.append(
-                f"YOU\n  {safe_terminal_text(text)}"
-            )
+            if turn_target == "CHAT":
+                conversation.append(
+                    f"YOU\n  {safe_terminal_text(turn_display or text)}"
+                )
+        active_turn_target["value"] = turn_target
+        activity = pane_activities[turn_target]
+        activity.phase = "THINKING"
+        activity.request = (turn_display or text).strip()
+        activity.detail = ""
         payload = dialogue_payload()
         pending["value"] = None
         suspended_context_proposal["value"] = None
@@ -2102,7 +2278,7 @@ def run_ground_shell(
         mode["value"] = "INTERPRETING"
         sync_input_host()
         sync_panes(dialogue_anchor="end")
-        focus_conversation()
+        focus_turn_target(turn_target)
         application.invalidate()
         if background_interpretation:
             application.create_background_task(
@@ -2113,6 +2289,7 @@ def run_ground_shell(
                     payload,
                     append_user=append_user,
                     initial=initial,
+                    turn_target=turn_target,
                 )
             )
             return
@@ -2121,9 +2298,10 @@ def run_ground_shell(
                 interpret(payload),
                 append_user=append_user,
                 initial=initial,
+                turn_target=turn_target,
             )
         except Exception as error:
-            fail_interpretation(error)
+            fail_interpretation(error, turn_target=turn_target)
 
     def collapse_inline_goal(
         event: object | None = None,
@@ -2202,7 +2380,7 @@ def run_ground_shell(
 
     def open_panel_comment(
         *,
-        target: Literal["GOAL", "CONTEXTS", "RULES", "MEMORIES", "CHAT"],
+        target: _GroundPane,
         focus: str,
     ) -> None:
         if mode["value"] not in {"INPUT", "CONTEXT_SELECTION"}:
@@ -2218,7 +2396,7 @@ def run_ground_shell(
         input_area.text = ""
         panel_comment_target["value"] = target
         panel_comment_focus["value"] = focus
-        composer.frame.title = INLINE_AGENT_COMMENT_TITLE
+        composer.frame.title = pane_turn_label(target)
         status_message["value"] = ""
         sync_input_host()
         application.layout.focus(input_area)
@@ -2247,7 +2425,14 @@ def run_ground_shell(
         suspended_message["value"] = ""
         collapse_panel_comment(focus_owner=False)
         last_submission["value"] = payload
-        begin_interpretation(payload, append_user=True)
+        last_submission_target["value"] = target
+        last_submission_display["value"] = comment
+        begin_interpretation(
+            payload,
+            append_user=True,
+            turn_target=target,
+            turn_display=comment,
+        )
 
     def restore_suspended_context_approval(
         event: object | None = None,
@@ -2400,10 +2585,14 @@ def run_ground_shell(
             ]
             payload = "\n".join(blocks)
             last_submission["value"] = payload
+            last_submission_target["value"] = "CONTEXTS"
+            last_submission_display["value"] = comment
             begin_interpretation(
                 payload,
                 append_user=True,
                 preserve_local_new_context=bool(exact_name),
+                turn_target="CONTEXTS",
+                turn_display=comment,
             )
             return
         sync_panes(dialogue_anchor="end")
@@ -2471,6 +2660,11 @@ def run_ground_shell(
                     ]
                 )
             payload = "\n".join(blocks)
+            turn_display = (
+                f"DIRECT GOAL\n{exact_goal}\n\n{comment}"
+                if comment
+                else f"DIRECT GOAL\n{exact_goal}"
+            )
         else:
             pending_inline_goal["value"] = None
             blocks = ["FOCUS · GOAL"]
@@ -2483,10 +2677,18 @@ def run_ground_shell(
                 )
             blocks.extend([INLINE_AGENT_COMMENT_TITLE, comment])
             payload = "\n".join(blocks)
+            turn_display = comment
         suspended_message["value"] = ""
         collapse_inline_goal(focus_goal=False)
         last_submission["value"] = payload
-        begin_interpretation(payload, append_user=True)
+        last_submission_target["value"] = "GOAL"
+        last_submission_display["value"] = turn_display
+        begin_interpretation(
+            payload,
+            append_user=True,
+            turn_target="GOAL",
+            turn_display=turn_display,
+        )
 
     input_mode = Condition(lambda: mode["value"] == "INPUT")
     context_selection_mode = Condition(
@@ -2954,8 +3156,15 @@ def run_ground_shell(
         status_message["value"] = ""
         acknowledge_pane("CHAT")
         last_submission["value"] = text
+        last_submission_target["value"] = "CHAT"
+        last_submission_display["value"] = text
         input_area.text = ""
-        begin_interpretation(text, append_user=True)
+        begin_interpretation(
+            text,
+            append_user=True,
+            turn_target="CHAT",
+            turn_display=text,
+        )
 
     @bindings.add(
         "c-j",
@@ -3109,6 +3318,8 @@ def run_ground_shell(
         begin_interpretation(
             last_submission["value"],
             append_user=False,
+            turn_target=last_submission_target["value"],
+            turn_display=last_submission_display["value"],
         )
 
     def cancel(event) -> None:
@@ -3173,13 +3384,14 @@ def run_ground_shell(
 
     def start_initial_turn() -> None:
         # The positional request is already USER TURN 1. Scheduling provider
-        # work only after the event loop starts makes Current and THINKING
+        # work only after the event loop starts makes target-owned THINKING
         # visible, while keeping Escape responsive during the read-only call.
-        application.layout.focus(dialogue_pane.text_area)
         begin_interpretation(
             working_goal,
             append_user=False,
             initial=True,
+            turn_target="GOAL",
+            turn_display=working_goal,
         )
 
     try:
