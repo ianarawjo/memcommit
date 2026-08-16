@@ -57,6 +57,13 @@
         ],
         "reason": "Direct and recursive Merge planning, review, application, and presentation use the same frozen typed plan and runtime."
       },
+      "meld": {
+        "evidence": [
+          "docs/meld-application-boundary-matrix.md",
+          "docs/meld-session-lifecycle-design-rationale.md"
+        ],
+        "reason": "CLI, TUI, Python, and agent routes share typed Start, Restart, saved-turn, cache/provider, CAS, and Apply lifecycles with exact/equivalent/projected reuse and one reviewed-session version contract."
+      },
       "pwd": {
         "evidence": [
           "docs/mem-pwd-design-rationale.md",
@@ -97,13 +104,6 @@
           "docs/distribution-boundary-and-architecture-understanding-plan.md"
         ],
         "reason": "Search and materialization are verified, but the progress ledger still names Find dialogue as an unclosed route."
-      },
-      "meld": {
-        "evidence": [
-          "docs/meld-application-boundary-matrix.md",
-          "docs/distribution-boundary-and-architecture-understanding-plan.md"
-        ],
-        "reason": "The focused matrix says Start boundaries are closed, while the progress ledger still reports command-owned semantic preparation; the contradiction must be resolved before closure."
       },
       "update": {
         "evidence": [

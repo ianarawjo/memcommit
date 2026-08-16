@@ -1,5 +1,13 @@
 # Meld application boundary matrix
 
+## Status
+
+`VERIFIED` for the currently implemented CLI, TUI, public Python, agent, and
+MCP routes. The operation owns one typed Start/Restart, saved-turn,
+cache/provider, session-CAS, and Apply lifecycle. A future public destination
+relocation adapter is not part of the current route set and does not create a
+second implementation today.
+
 ## Goal
 
 Meld must produce the same authorized, cache-aware, versioned result whether
@@ -30,10 +38,10 @@ provisional read-only view come from the same frozen cache decision that is
 later executed. `comparison_execution` is terminal-neutral; its old command
 path is only a wait-view compatibility facade.
 
-The remaining work must not replace the already extracted session or Apply
-services. It removes only these start-time parallel decisions and then proves
-that command code contains no semantic cache lookup, provisional `MeldSession`
-construction, provider decoder, session publication, or Apply transaction.
+The completion pass preserved the already extracted session and Apply services,
+removed only the start-time parallel decisions, and proved that command code
+contains no semantic cache lookup, provisional `MeldSession` construction,
+provider decoder, session publication, or Apply transaction.
 
 ## Operation routes
 
@@ -134,3 +142,10 @@ preparer and then use one prepared cache/provider/CAS lifecycle. CLI Apply
 enters the typed operation service directly. The final complete regression and
 import-boundary pass closes this audit without introducing another session
 schema or moving presentation.
+
+On 2026-08-16, an isolated clean worktree passed 361 focused Meld, Study-cache,
+registry, package, Resolution, semantic-policy, scope, and Grant tests. The
+audit covered exact, equivalent, and projected cache hits without provider
+construction; stale mutation rejection; all reviewed session actions; four
+authority/storage shapes; zero-change and ordinary checkpoint recovery;
+rollback; and Undo/Redo.
