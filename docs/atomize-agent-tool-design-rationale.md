@@ -70,13 +70,30 @@ separate conversational `memcommit_atomize_grounding` tool. MCP projects the
 same schema and result without importing commands, TUI code, Store internals,
 or Atomize runtimes into the transport adapter.
 
+## Companion Skill boundary
+
+`skills/memcommit-atomize/` is checked-in host guidance rather than another
+operation implementation. It directs an agent to the registered tool, keeps
+saved/prepared/provider origin distinct, requires the complete returned
+proposal to be shown before mutation, and copies the exact reviewed version
+into `apply_as_is`. It permits one byte-for-byte Apply retry only when the
+transport response was lost, because that exact revision has a recovery
+contract; a typed stale or operation failure is not an invitation to retry.
+
+The Skill does not run the CLI, read the Store, emulate Save As, edit review
+responses, or redirect conversational issue resolution away from the separate
+Grounding tool. It is a distributable source artifact, not evidence that a
+particular agent host has installed the Skill or registered the MCP tool.
+
 ## Verification and limits
 
 Focused tests cover strict parsing, complete JSON projection, cache/provider
 and effect fields, error redaction, one-public-call ownership, adapter import
 isolation, registry/MCP discovery, provider-backed first open, saved second
 open, exact Apply, transport retry recovery, stale-version rejection, one
-provider call, and one checkpoint.
+provider call, one checkpoint, and the companion Skill's review, cache,
+version, retry, and no-fallback instructions. The Skill also passes the
+canonical Skill Creator structural validator.
 
 A fresh installed wheel is also exercised from outside the checkout through
 the official MCP stdio client. The smoke opens a pre-created saved structural

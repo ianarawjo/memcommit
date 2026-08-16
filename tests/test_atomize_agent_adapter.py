@@ -480,3 +480,26 @@ def test_adapter_imports_only_public_api_and_shared_agent_contract():
         )
         for name in imported
     )
+
+
+def test_companion_skill_preserves_review_cache_and_exact_apply_boundaries():
+    root = Path(__file__).parents[1]
+    skill = (root / "skills" / "memcommit-atomize" / "SKILL.md").read_text(
+        encoding="utf-8"
+    )
+    metadata = (
+        root / "skills" / "memcommit-atomize" / "agents" / "openai.yaml"
+    ).read_text(encoding="utf-8")
+    normalized = " ".join(skill.split())
+
+    assert "name: memcommit-atomize" in normalized
+    assert "Invoke `memcommit_atomize` directly." in normalized
+    assert "Always send `version: 1` and `kind: open`" in normalized
+    assert "`EXACT_PREWARM` is cached" in normalized
+    assert "Do not call `apply_as_is` merely because `open` succeeded." in normalized
+    assert "Copy its `apply_as_is.expected_version` exactly" in normalized
+    assert "repeat the exact same" in normalized
+    assert "For `stale_state`, do not retry Apply." in normalized
+    assert "Save As and response editing" in normalized
+    assert "Do not fall back to shell access" in normalized
+    assert "$memcommit-atomize" in metadata
