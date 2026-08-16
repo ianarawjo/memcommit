@@ -24,6 +24,7 @@ from memcommit.interfaces.agent.contract import (
     object_value,
     text_value,
 )
+from memcommit.interfaces.agent.ground_artifacts import GroundArtifactRegistry
 
 
 ELABORATE_AGENT_CONTRACT_VERSION = 1
@@ -94,10 +95,16 @@ def _serialize(result: ElaborateProposal) -> JsonObject:
 
 
 class ElaborateAgentAdapter:
-    def __init__(self, client: MemCommitClient) -> None:
+    def __init__(
+        self,
+        client: MemCommitClient,
+        *,
+        artifacts: GroundArtifactRegistry | None = None,
+    ) -> None:
         if not isinstance(client, MemCommitClient):
             raise TypeError("ElaborateAgentAdapter requires a MemCommitClient.")
         self._client = client
+        self._artifacts = artifacts
 
     def invoke(self, payload: object) -> JsonObject:
         kind: ElaborateAgentKind | None = None
@@ -159,6 +166,10 @@ class ElaborateAgentAdapter:
                 message="The Elaborate tool failed internally.",
                 retryable=False,
             )
+        if kind in {"ground_goal_to_rules", "ground_rules_to_cases"} and (
+            self._artifacts is not None
+        ):
+            self._artifacts.retain_artifact(result)
         return {
             "version": ELABORATE_AGENT_CONTRACT_VERSION,
             "ok": True,

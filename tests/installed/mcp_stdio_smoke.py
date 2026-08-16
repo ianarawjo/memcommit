@@ -250,6 +250,7 @@ async def _exercise_stdio(command: str, root: Path, workdir: Path) -> dict[str, 
         "memcommit_distill",
         "memcommit_elaborate",
         "memcommit_fit",
+        "memcommit_ground_resolve",
     ]
     assert added.is_error is False
     assert added.structured_content["ok"] is True

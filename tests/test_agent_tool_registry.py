@@ -18,6 +18,7 @@ from memcommit.interfaces.agent import (
     DISTILL_AGENT_TOOL_NAME,
     ELABORATE_AGENT_TOOL_NAME,
     FIT_AGENT_TOOL_NAME,
+    GROUND_RESOLUTION_AGENT_TOOL_NAME,
     QUERY_AGENT_TOOL_NAME,
     AgentToolBinding,
     AgentToolRegistrationError,
@@ -80,6 +81,7 @@ def test_default_registry_discovers_fresh_frozen_shipped_schemas(tmp_path):
         DISTILL_AGENT_TOOL_NAME,
         ELABORATE_AGENT_TOOL_NAME,
         FIT_AGENT_TOOL_NAME,
+        GROUND_RESOLUTION_AGENT_TOOL_NAME,
     )
     first = registry.tool_schemas()
     second = registry.tool_schemas()

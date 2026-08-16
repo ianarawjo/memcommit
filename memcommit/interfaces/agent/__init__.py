@@ -46,6 +46,13 @@ from memcommit.interfaces.agent.fit import (
     FitAgentAdapter,
     fit_agent_tool_schema,
 )
+from memcommit.interfaces.agent.ground_artifacts import GroundArtifactRegistry
+from memcommit.interfaces.agent.ground_resolution import (
+    GROUND_RESOLUTION_AGENT_CONTRACT_VERSION,
+    GROUND_RESOLUTION_AGENT_TOOL_NAME,
+    GroundResolutionAgentAdapter,
+    ground_resolution_agent_tool_schema,
+)
 from memcommit.interfaces.agent.registry import (
     AGENT_TOOL_REGISTRY_VERSION,
     AgentToolBinding,
@@ -91,6 +98,10 @@ __all__ = [
     "FIT_AGENT_CONTRACT_VERSION",
     "FIT_AGENT_TOOL_NAME",
     "FitAgentAdapter",
+    "GROUND_RESOLUTION_AGENT_CONTRACT_VERSION",
+    "GROUND_RESOLUTION_AGENT_TOOL_NAME",
+    "GroundArtifactRegistry",
+    "GroundResolutionAgentAdapter",
     "QUERY_AGENT_CONTRACT_VERSION",
     "QUERY_AGENT_ERROR_MESSAGE_LIMIT",
     "QUERY_AGENT_TOOL_NAME",
@@ -103,5 +114,6 @@ __all__ = [
     "distill_agent_tool_schema",
     "elaborate_agent_tool_schema",
     "fit_agent_tool_schema",
+    "ground_resolution_agent_tool_schema",
     "query_agent_tool_schema",
 ]

@@ -50,6 +50,7 @@ blocked = (
     'memcommit.api._operations.fit',
     'memcommit.api._operations.ground_distill',
     'memcommit.api._operations.ground_elaborate',
+    'memcommit.api._operations.ground_resolution',
     'memcommit.api._operations.meld',
     'memcommit.api._operations.query',
     'memcommit.add_application',
@@ -58,6 +59,7 @@ blocked = (
     'memcommit.fit_application',
     'memcommit.ground_distill',
     'memcommit.ground_elaborate',
+    'memcommit.ground_resolution_application',
     'memcommit.meld_application',
     'memcommit.operations.query.ordinary_application',
 )
@@ -270,8 +272,10 @@ assert 'memcommit.api._operations.distill' not in sys.modules
 assert 'memcommit.api._operations.elaborate' not in sys.modules
 assert 'memcommit.api._operations.ground_distill' not in sys.modules
 assert 'memcommit.api._operations.ground_elaborate' not in sys.modules
+assert 'memcommit.api._operations.ground_resolution' not in sys.modules
 assert 'memcommit.ground_distill' not in sys.modules
 assert 'memcommit.ground_elaborate' not in sys.modules
+assert 'memcommit.ground_resolution_application' not in sys.modules
 """,
         environment=environment,
     )
@@ -311,8 +315,10 @@ assert result.rules[0].content == 'Confirm the option before acting.'
 assert 'memcommit.api._operations.elaborate' in sys.modules
 assert 'memcommit.elaborate_application' in sys.modules
 assert 'memcommit.api._operations.ground_elaborate' not in sys.modules
+assert 'memcommit.api._operations.ground_resolution' not in sys.modules
 assert 'memcommit.api._operations.ground_distill' not in sys.modules
 assert 'memcommit.ground_elaborate' not in sys.modules
+assert 'memcommit.ground_resolution_application' not in sys.modules
 assert 'memcommit.ground_distill' not in sys.modules
 assert 'memcommit.distill_application' not in sys.modules
 assert 'memcommit.meld_application' not in sys.modules

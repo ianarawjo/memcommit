@@ -125,11 +125,25 @@ identity and is rejected as a Resolve source. Ground Fit additionally supports
 reopening an exact receipt UID so an older receipt remains auditable and is
 projected as stale after a successful Resolve revision.
 
-Resolve does not yet persist plans, expose a CLI/TUI screen, call a provider to
-suggest a Fit response, or provide a cross-call agent artifact registry. The
-next slice should expose the same public service through an agent boundary,
-then compose it into the Ground workbench. Those adapters must not recreate the
-planning or mutation logic.
+The default agent/MCP registry exposes `memcommit_ground_resolve` with four
+closed request kinds: `fit_ground`, `plan_candidate`, `plan_fit`, and `apply`.
+Ground Distill and Elaborate adapters retain their returned opaque public value
+in one shared bounded process-local registry; Ground Fit does the same inside
+the Resolve adapter. Planning returns the complete action plus the exact
+`apply` request and has effect `NONE`. Applying requires that separately
+submitted plan digest and reports either `GROUND_REVISION` or `NONE` for an
+explicit defer.
+
+The registry is intentionally process-local, capacity-bounded, and opaque. It
+does not serialize hidden application objects or make a semantic proposal
+durable. Restart or eviction returns `artifact_expired`/`plan_expired` and the
+agent must rerun analysis or planning. Ground and Context freshness checks
+remain authoritative even while an item is retained.
+
+Resolve does not yet persist plans, expose a CLI/TUI screen, or call a provider
+to suggest a Fit response. The next slice should compose the same service into
+the Ground workbench. That adapter must not recreate the planning or mutation
+logic.
 
 The staged ticker benchmark in
 [`ground-ticker-iterative-flow-todo.md`](ground-ticker-iterative-flow-todo.md)
